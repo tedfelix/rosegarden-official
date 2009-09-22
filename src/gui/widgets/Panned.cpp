@@ -100,15 +100,6 @@ Panned::slotSetPannedRect(QRectF pr)
 }
 
 void
-Panned::slotAdjustVertPannedRectPos(QRectF pr)
-{
-    pr.setX(0);
-    pr.setWidth(width());
-
-    centerOn(pr.center());
-}
-
-void
 Panned::slotShowPositionPointer(float x) // scene coord; full height
 {
     if (m_pointerVisible) {

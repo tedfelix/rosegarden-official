@@ -146,6 +146,7 @@ protected slots:
     void slotShowHeaderToolTip(QString toolTipText);
     void slotHeadersResized(int width);
     void slotAdjustHeadersHorizontalPos(bool last);
+    void slotAdjustHeadersVerticalPos(QRectF r);
     void slotCloseHeaders();
 
 signals :
@@ -175,6 +176,7 @@ private:
     Panned *m_headersView; // I own this
     QGraphicsScene *m_headersScene; // I own this
     QWidget *m_headersButtons; // I own this
+    double m_headersLastY;
 
     QGridLayout *m_layout; // I own this
 

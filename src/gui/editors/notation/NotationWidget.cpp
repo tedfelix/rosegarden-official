@@ -75,6 +75,8 @@ NotationWidget::NotationWidget() :
     m_headersGroup(0),
     m_headersView(0),
     m_headersScene(0),
+    m_headersButtons(0),
+    m_headersLastY(0),
     m_layout(0),
     m_linearMode(true),
     m_tempoRulerIsVisible(false),
@@ -164,7 +166,7 @@ NotationWidget::NotationWidget() :
             m_view, SLOT(slotSetPannedRect(QRectF)));
 
     connect(m_hpanner, SIGNAL(pannerChanged(QRectF)),
-             m_headersView, SLOT(slotAdjustVertPannedRectPos(QRectF)));
+             this, SLOT(slotAdjustHeadersVerticalPos(QRectF)));
 
     connect(m_view, SIGNAL(pannedContentsScrolled()),
             this, SLOT(slotHScroll()));
@@ -745,6 +747,27 @@ NotationWidget::slotAdjustHeadersHorizontalPos(bool last)
     // only once.
     // (See comment at the beginning of the slotAdjustHeadersHorizontalPos.)
     if (!last && xinit < 0.001) emit adjustNeeded(true);
+}
+
+void
+NotationWidget::slotAdjustHeadersVerticalPos(QRectF r)
+{
+    r.setX(0);
+    r.setWidth(m_headersView->sceneRect().width());
+
+    // Misalignment between staffs and headers depends of the vertical
+    // scrolling direction.
+    // This is a hack : The symptoms are fixed (more or less) but still the
+    //                  cause of the problem is unknown.
+    double y = r.y();
+    double delta = y > m_headersLastY ? - 2 : - 4;
+    m_headersLastY = y;
+
+    QRectF vr = m_view->mapToScene(m_view->rect()).boundingRect();
+    r.setY(vr.y() + delta);
+    r.setHeight(vr.height());
+
+    m_headersView->setSceneRect(r);
 }
 
 double
