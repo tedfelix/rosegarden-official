@@ -183,8 +183,10 @@ protected slots:
     
     // --
     // end of slots, formerly in located in EditView.h (which is obsolete now)
-    
-   
+
+    void slotStepBackward();
+    void slotStepForward();
+ 
     /** Update the window title.  If m is true (normally comes from a signal)
      * display a * at the extreme left of the title to indicate modified status
      */ 

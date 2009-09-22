@@ -1381,6 +1381,21 @@ NewMatrixView::slotHelpAbout()
     new AboutDialog(this);
 }
 
+void
+NewMatrixView::slotStepBackward()
+{
+    timeT time = getInsertionTime();
+    m_document->slotSetPointerPosition(getSnapGrid()->snapTime
+                                       (time - 1, SnapGrid::SnapLeft));
+}
+
+void NewMatrixView::slotStepForward()
+{
+    timeT time = getInsertionTime();
+    m_document->slotSetPointerPosition(getSnapGrid()->snapTime
+                                       (time + 1, SnapGrid::SnapRight));
+}
+
 /*
 
 void NewMatrixView::slotJogLeft()
