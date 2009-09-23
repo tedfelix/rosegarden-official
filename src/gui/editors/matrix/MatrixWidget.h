@@ -159,6 +159,12 @@ protected slots:
     /// Reset the zoom to 100% and reset the zoomy wheels
     void slotResetZoomClicked();
 
+    /// Trap a zoom in from the panner and sync it to the primary thumb wheel
+    void slotSyncPannerZoomIn();
+
+    /// Trap a zoom out from the panner and sync it to the primary thumb wheel
+    void slotSyncPannerZoomOut();
+
 protected :
     virtual void showEvent(QShowEvent * event);
 
@@ -189,6 +195,7 @@ private:
      * last setting and comparing it to see which way it moved.
      */
     int m_lastHVzoomValue;
+    bool m_lastZoomWasHV;
 
     PitchRuler *m_pitchRuler; // I own this
     Panned *m_pianoView; // I own this

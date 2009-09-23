@@ -88,6 +88,7 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     m_currentVelocity(100),
     m_referenceScale(0),
     m_inMove(false),
+    m_lastZoomWasHV(true),
     m_pitchRuler(0),
     m_pianoView(0),
     m_pianoScene(0),
@@ -231,10 +232,10 @@ MatrixWidget::MatrixWidget(bool drumMode) :
             this, SLOT(slotHScroll()));
 
     connect(m_hpanner, SIGNAL(zoomIn()),
-            this, SLOT(slotZoomInFromPanner()));
+            this, SLOT(slotSyncPannerZoomIn()));
 
     connect(m_hpanner, SIGNAL(zoomOut()),
-            this, SLOT(slotZoomOutFromPanner()));
+            this, SLOT(slotSyncPannerZoomOut()));
 
     connect(m_pianoView, SIGNAL(wheelEventReceived(QWheelEvent *)),
             m_view, SLOT(slotEmulateWheelEvent(QWheelEvent *)));
@@ -792,12 +793,34 @@ MatrixWidget::slotVerticalThumbwheelMoved(int v)
 void
 MatrixWidget::slotPrimaryThumbwheelMoved(int v)
 {
-    if (v < m_lastHVzoomValue && v != -20) slotZoomInFromPanner();
-    else if (v > m_lastHVzoomValue && v != 20) slotZoomOutFromPanner();
+    std::cout << "primary wheel debug (before): v == " << v << " m_lastHVzoomValue == " << m_lastHVzoomValue
+              << " m_hZoomFactor == " << m_hZoomFactor << " m_vZoomFactor == " << m_vZoomFactor  << std::endl;
+
+    // little bit of kludge work to deal with value manipulations that are
+    // outside of the constraints imposed by the primary zoom wheel itself
+    if (v < -20) v = -20;
+    if (v > 20) v = 20;
+    if (m_lastHVzoomValue < -20) m_lastHVzoomValue = -20;
+    if (m_lastHVzoomValue > 20) m_lastHVzoomValue = 20;
+
+    // When dragging the wheel up and down instead of mouse wheeling it, it
+    // steps according to its speed.  I don't see a sure way (and after all
+    // there are no docs!) to make sure dragging results in a smooth 1:1
+    // relationship when compared with mouse wheeling, and we are just hijacking
+    // slotZoomInFromPanner() here, so we will look at the number of steps
+    // between the old value and the last one, and call the slot that many times
+    // in order to enforce the 1:1 relationship.
+    int steps = v - m_lastHVzoomValue;
+    if (steps < 0) steps *= -1;
+
+    for (int i = 0; i < steps; ++i) {
+        if (v < m_lastHVzoomValue) slotZoomInFromPanner();
+        else if (v > m_lastHVzoomValue) slotZoomOutFromPanner();
+    }
 
     m_lastHVzoomValue = v;
-
-    //std::cout << "V == " << v << std::endl;
+    std::cout << "primary wheel debug (after): v == " << v << " m_lastHVzoomValue == " << m_lastHVzoomValue
+              << " m_hZoomFactor == " << m_hZoomFactor << " m_vZoomFactor == " << m_vZoomFactor  << std::endl;
 }
 
 void
@@ -815,10 +838,28 @@ MatrixWidget::slotResetZoomClicked()
     m_view->scale(m_hZoomFactor, m_vZoomFactor);
     slotHScroll();
 
-    //!!! not sure what the real 100% 1:1 value should be
+    // scale factor 1.0 = 100% zoom
     m_Hzoom->setValue(1);
     m_Vzoom->setValue(1);
     m_HVzoom->setValue(0);
+}
+
+void
+MatrixWidget::slotSyncPannerZoomIn()
+{
+    int v = m_lastHVzoomValue - 1;
+
+    m_HVzoom->setValue(v);
+    slotPrimaryThumbwheelMoved(v);
+}
+
+void
+MatrixWidget::slotSyncPannerZoomOut()
+{
+    int v = m_lastHVzoomValue + 1;
+
+    m_HVzoom->setValue(v);
+    slotPrimaryThumbwheelMoved(v);
 }
 
 
