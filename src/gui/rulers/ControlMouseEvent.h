@@ -42,8 +42,13 @@ public:
 
     ControlMouseEvent() :
         itemList(),
-        x(0), y(0),
+        x(0), y(0), 
         modifiers(0), buttons(0) { }
+    
+    ControlMouseEvent(const ControlMouseEvent *e) :
+        itemList(e->itemList),
+        x(e->x), y(e->y),
+        modifiers(e->modifiers), buttons(e->buttons) { }
 };
 
 }

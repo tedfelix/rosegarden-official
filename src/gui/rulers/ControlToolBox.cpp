@@ -23,6 +23,7 @@
 #include "ControlSelector.h"
 #include "ControlPainter.h"
 #include "ControlEraser.h"
+#include "ControlMover.h"
 
 #include <QString>
 #include <QMessageBox>
@@ -51,6 +52,8 @@ ControlToolBox::createTool(QString toolName)
         tool = new ControlEraser(m_ruler);
     else if (toolNamelc == ControlSelector::ToolName)
         tool = new ControlSelector(m_ruler);
+    else if (toolNamelc == ControlMover::ToolName)
+        tool = new ControlMover(m_ruler);
     else
     {
         QMessageBox::critical(0, "", QString("ControlToolBox::createTool : unrecognised toolname %1 (%2)")

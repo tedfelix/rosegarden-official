@@ -77,7 +77,9 @@ public:
 //    virtual void viewSegmentDeleted(const ViewSegment *);
     virtual void segmentDeleted(const Segment *);
 
-    virtual void addControlItem(float,float);
+    virtual ControlItem* addControlItem(float,float);
+    virtual ControlItem* addControlItem(Event *);
+
     virtual Event * insertEvent(float,float);
     virtual void eraseEvent(Event *event);
     virtual void eraseControllerEvent();
@@ -92,7 +94,6 @@ public slots:
 protected:
     virtual void init();
     virtual bool isOnThisRuler(Event *);
-    virtual void addControlItem(Event *);
 
 //    virtual void drawBackground(); Implemented in paintEvent
 

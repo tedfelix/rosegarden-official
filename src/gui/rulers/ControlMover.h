@@ -15,10 +15,10 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_CONTROLSELECTOR_H_
-#define _RG_CONTROLSELECTOR_H_
+#ifndef _RG_CONTROLMOVER_H_
+#define _RG_CONTROLMOVER_H_
 
-#include "ControlMover.h"
+#include "ControlTool.h"
 //#include <QString>
 //#include "base/Event.h"
 #include "ControlItem.h"
@@ -33,13 +33,14 @@ namespace Rosegarden
 class Event;
 class ControlRuler;
 
-class ControlSelector : public ControlMover
+class ControlMover : public ControlTool
 {
     Q_OBJECT
 
     friend class ControlToolBox;
 
 public:
+    ControlMover(ControlRuler *ruler, QString menuName = "ControlMover");
     virtual void handleLeftButtonPress(const ControlMouseEvent *);
     virtual FollowMode handleMouseMove(const ControlMouseEvent *);
     virtual void handleMouseRelease(const ControlMouseEvent *);
@@ -50,6 +51,9 @@ public:
      */
 //    virtual void handleEventRemoved(Event *event);
 
+    virtual void ready();
+    virtual void stow();
+
     static const QString ToolName;
 
 signals:
@@ -59,9 +63,14 @@ protected slots:
 //    void slotMatrixScrolled(int x, int y); //!!! do we need this? probably not
 
 protected:
-    ControlSelector(ControlRuler *);
+    void setCursor(const ControlMouseEvent *);
+    float m_mouseStartX;
+    float m_mouseStartY;
+    float m_lastDScreenX;
+    float m_lastDScreenY;
     QRectF *m_selectionRect;
     ControlItemList m_addedItems;
+    std::vector <QPointF> m_startPointList;
 };
 
 }

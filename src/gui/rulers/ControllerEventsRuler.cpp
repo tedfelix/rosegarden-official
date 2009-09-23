@@ -327,15 +327,16 @@ void ControllerEventsRuler::segmentDeleted(const Segment *)
     m_segment = 0;
 }
 
-void ControllerEventsRuler::addControlItem(Event *event)
+ControlItem* ControllerEventsRuler::addControlItem(Event *event)
 {
     EventControlItem *controlItem = new EventControlItem(this, new ControllerEventAdapter(event), QPolygonF());
     controlItem->updateFromEvent();
 
     ControlRuler::addControlItem(controlItem);
+    return controlItem;
 }
 
-void ControllerEventsRuler::addControlItem(float x, float y)
+ControlItem* ControllerEventsRuler::addControlItem(float x, float y)
 {
     // Adds a ControlItem in the absence of an event (used by ControlPainter)
     clearSelectedItems();
@@ -347,6 +348,8 @@ void ControllerEventsRuler::addControlItem(float x, float y)
 //        m_visibleItems.push_back(item);
 //    }
     ControlRuler::addControlItem(item);
+    
+    return item;
 }
 
 //void ControllerEventsRuler::removeControlItem(Event *event)
@@ -374,6 +377,7 @@ void ControllerEventsRuler::slotSetTool(const QString &matrixtoolname)
     if (matrixtoolname == "painter") controltoolname = "painter";
     if (matrixtoolname == "eraser") controltoolname = "eraser";
     if (matrixtoolname == "velocity") controltoolname = "adjuster";
+    if (matrixtoolname == "mover") controltoolname = "mover";
 
     ControlTool *tool = dynamic_cast<ControlTool *>(m_toolBox->getTool(controltoolname));
     if (!tool) return;
@@ -458,6 +462,7 @@ void ControllerEventsRuler::eraseControllerEvent()
                                         m_eventSelection->getStartTime(),
                                         m_eventSelection->getEndTime());
     CommandHistory::getInstance()->addCommand(command);
+    m_selectedItems.clear();
     updateSelection();
 }
 

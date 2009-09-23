@@ -40,7 +40,7 @@ namespace Rosegarden
 {
 
 ControlPainter::ControlPainter(ControlRuler *parent) :
-    ControlTool("", "ControlPainter", parent)
+    ControlMover(parent, "ControlPainter")
 {
 //    createAction("select", SLOT(slotSelectSelected()));
 //    createAction("draw", SLOT(slotDrawSelected()));
@@ -68,100 +68,15 @@ ControlPainter::handleLeftButtonPress(const ControlMouseEvent *e)
         ControllerEventsRuler* ruler = dynamic_cast <ControllerEventsRuler*>(m_ruler);
         //if (ruler) ruler->insertControllerEvent(e->x,e->y);
         if (ruler) {
-            ruler->addControlItem(e->x,e->y);
+            ControlItem *item = ruler->addControlItem(e->x,e->y);
+            ControlMouseEvent *newevent = new ControlMouseEvent(e);
+            newevent->itemList.push_back(item);
+            m_overItem = true;
+            ControlMover::handleLeftButtonPress(newevent);
         }
-    }
-}
-
-ControlTool::FollowMode
-ControlPainter::handleMouseMove(const ControlMouseEvent *e)
-{
-    if (e->buttons == Qt::NoButton) {
-        // No button pressed, set cursor style
-        setCursor(e);
-    }
-
-    if ((e->buttons & Qt::LeftButton) && m_overItem) {
-        // A property drag action is in progress
-//        float delta = (e->value-m_mouseLastY);
-//        m_mouseLastY = e->value;
-//        ControlItemList *selected = m_ruler->getSelectedItems();
-//        for (ControlItemList::iterator it = selected->begin(); it != selected->end(); ++it) {
-//            (*it)->setValue((*it)->getValue()+delta);
-//        }
     }
     
-    return NoFollow;
 }
-
-void
-ControlPainter::handleMouseRelease(const ControlMouseEvent *e)
-{
-    if (m_overItem) {
-        // This is the end of a drag event, reset the cursor to the state that it started
-        m_ruler->setCursor(Qt::PointingHandCursor);
-    }
-
-    // May have moved off the item during a drag so use setCursor to correct its state
-    setCursor(e);
-
-    // Bring the segment up to date with the control ruler (this will add a new event if necessary)
-    m_ruler->updateSegment();
-}
-
-void ControlPainter::setCursor(const ControlMouseEvent *e)
-{
-    bool isOverItem = false;
-
-    if (e->itemList.size()) isOverItem = true;
-
-    if (!m_overItem) {
-        if (isOverItem) {
-            m_ruler->setCursor(Qt::PointingHandCursor);
-            m_overItem = true;
-        }
-    } else {
-        if (!isOverItem) {
-            m_ruler->setCursor(Qt::CrossCursor);
-            m_overItem = false;
-        }
-    }
-}
-
-void ControlPainter::ready()
-{
-    m_ruler->setCursor(Qt::CrossCursor);
-    m_overItem = false;
-//    connect(this, SIGNAL(hoveredOverNoteChanged(int, bool, timeT)),
-//            m_widget, SLOT(slotHoveredOverNoteChanged(int, bool, timeT)));
-
-//    m_widget->setCanvasCursor(Qt::sizeAllCursor);
-//    setBasicContextHelp();
-}
-
-void ControlPainter::stow()
-{
-//    disconnect(this, SIGNAL(hoveredOverNoteChanged(int, bool, timeT)),
-//               m_widget, SLOT(slotHoveredOverNoteChanged(int, bool, timeT)));
-}
-
-//void PropertyAdjuster::setBasicContextHelp(bool ctrlPressed)
-//{
-//    EventSelection *selection = m_scene->getSelection();
-//    if (!selection || selection->getAddedEvents() < 2) {
-//        if (!ctrlPressed) {
-//            setContextHelp(tr("Click and drag to move a note; hold Ctrl as well to copy it"));
-//        } else {
-//            setContextHelp(tr("Click and drag to copy a note"));
-//        }
-//    } else {
-//        if (!ctrlPressed) {
-//            setContextHelp(tr("Click and drag to move selected notes; hold Ctrl as well to copy"));
-//        } else {
-//            setContextHelp(tr("Click and drag to copy selected notes"));
-//        }
-//    }
-//}
 
 const QString ControlPainter::ToolName = "painter";
 

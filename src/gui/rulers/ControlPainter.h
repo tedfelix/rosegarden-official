@@ -18,7 +18,7 @@
 #ifndef _RG_CONTROLPAINTER_H_
 #define _RG_CONTROLPAINTER_H_
 
-#include "ControlTool.h"
+#include "ControlMover.h"
 //#include <QString>
 //#include "base/Event.h"
 
@@ -29,7 +29,7 @@ namespace Rosegarden
 class Event;
 class ControlRuler;
 
-class ControlPainter : public ControlTool
+class ControlPainter : public ControlMover
 {
     Q_OBJECT
 
@@ -37,17 +37,12 @@ class ControlPainter : public ControlTool
 
 public:
     virtual void handleLeftButtonPress(const ControlMouseEvent *);
-    virtual FollowMode handleMouseMove(const ControlMouseEvent *);
-    virtual void handleMouseRelease(const ControlMouseEvent *);
 
     /**
      * Respond to an event being deleted -- it may be the one the tool
      * is remembering as the current event.
      */
 //    virtual void handleEventRemoved(Event *event);
-
-    virtual void ready();
-    virtual void stow();
 
     static const QString ToolName;
 
@@ -59,9 +54,6 @@ protected slots:
 
 protected:
     ControlPainter(ControlRuler *);
-    void setCursor(const ControlMouseEvent *);
-    float m_mouseStartY;
-    float m_mouseLastY;
 };
 
 }
