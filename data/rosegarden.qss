@@ -1846,8 +1846,3 @@ QFileDialog
     rightarrow-icon: url(:pixmaps/style/arrow-right-inverted.png);
     uparrow-icon: url(:pixmaps/style/arrow-up-inverted.png);
 }
-
-#bloopy_dooo QLabel {
-    background: red;
-    color: blue;
-}
