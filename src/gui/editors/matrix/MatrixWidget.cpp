@@ -38,7 +38,7 @@
 #include <QWheelEvent>
 #include <QStackedLayout>
 #include <QWidget>
-#include <QToolButton>
+#include <QPushButton>
 
 #include "document/RosegardenDocument.h"
 
@@ -163,12 +163,12 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     m_Hzoom->setFixedSize(QSize(50, 16));
     m_Hzoom->setToolTip(tr("Horizontal Zoom"));
 
-    // not sure how this is supposed to work, let's assume a scale of 0%
-    // to 5000% represented by wheel_setting * 10; 10 * 10 == 100%
-    //  500 * 10 == 5000% looks about right
-    m_Hzoom->setMinimumValue(0);
-    m_Hzoom->setMaximumValue(500);
-    m_Hzoom->setDefaultValue(10);
+    // not sure how the ruler scales work, but experimentation shows we never
+    // want to go below 1, and 100 is a few clicks beyond reason for horizontal,
+    // 50 clicks for vertical
+    m_Hzoom->setMinimumValue(1);
+    m_Hzoom->setMaximumValue(100);
+    m_Hzoom->setDefaultValue(10); //!!! this isn't quite right
     controlsLayout->addWidget(m_Hzoom, 1, 0);
     connect(m_Hzoom, SIGNAL(valueChanged(int)), this,
             SLOT(slotHorizontalThumbwheelMoved(int)));
@@ -177,18 +177,22 @@ MatrixWidget::MatrixWidget(bool drumMode) :
 //    m_Vzoom->setFixedSize(QSize(16, 40));
     m_Vzoom->setFixedSize(QSize(16, 50));
     m_Vzoom->setToolTip(tr("Vertical Zoom"));
+    m_Vzoom->setMinimumValue(1);
+    m_Vzoom->setMaximumValue(50);
+    m_Vzoom->setDefaultValue(10); //!!! this isn't quite right
     controlsLayout->addWidget(m_Vzoom, 0, 1, Qt::AlignRight);
 
     connect(m_Vzoom, SIGNAL(valueChanged(int)), this,
             SLOT(slotVerticalThumbwheelMoved(int)));
 
-    m_reset = new QToolButton;
+    // a blank QPushButton forced square looks better than the tool button did
+    m_reset = new QPushButton;
     m_reset->setFixedSize(QSize(10, 10));
     m_reset->setToolTip(tr("Reset Zoom"));
-    m_reset->setIcon(IconLoader().loadPixmap("tab-scroll-button"));
     controlsLayout->addWidget(m_reset, 1, 1, Qt::AlignCenter);
 
-    // connect to slotResetZoom or something
+    connect(m_reset, SIGNAL(clicked()), this, 
+            SLOT(slotResetZoomClicked()));
 
     pannerLayout->addWidget(controls);
 
@@ -422,6 +426,17 @@ MatrixWidget::setHorizontalZoomFactor(double factor)
     m_view->resetMatrix();
     m_view->scale(m_hZoomFactor, m_vZoomFactor);
     slotHScroll();
+}
+
+void
+MatrixWidget::setVerticalZoomFactor(double factor)
+{
+    m_vZoomFactor = factor;
+    if (m_referenceScale) m_referenceScale->setYZoomFactor(m_vZoomFactor);
+    m_view->resetMatrix();
+    m_view->scale(m_hZoomFactor, m_vZoomFactor);
+// I don't think we need a slotVScroll
+//    slotVScroll();
 }
 
 double
@@ -763,11 +778,15 @@ MatrixWidget::showEvent(QShowEvent * event)
 void
 MatrixWidget::slotHorizontalThumbwheelMoved(int v)
 {
+    std::cout << "horizontal wheel V == " << v << std::endl;
+    setHorizontalZoomFactor(v);
 }
 
 void
 MatrixWidget::slotVerticalThumbwheelMoved(int v)
 {
+    std::cout << "vertical wheel V == " << v << std::endl;
+    setVerticalZoomFactor(v);
 }
 
 void
@@ -779,6 +798,27 @@ MatrixWidget::slotPrimaryThumbwheelMoved(int v)
     m_lastHVzoomValue = v;
 
     //std::cout << "V == " << v << std::endl;
+}
+
+void
+MatrixWidget::slotResetZoomClicked()
+{
+    std::cout << "reset clicked" << std::endl;
+    // just taking a potshot at this one, let's see if this works
+    m_hZoomFactor = 1.0;
+    m_vZoomFactor = 1.0;
+    if (m_referenceScale) {
+        m_referenceScale->setXZoomFactor(m_hZoomFactor);
+        m_referenceScale->setYZoomFactor(m_vZoomFactor);
+    }
+    m_view->resetMatrix();
+    m_view->scale(m_hZoomFactor, m_vZoomFactor);
+    slotHScroll();
+
+    //!!! not sure what the real 100% 1:1 value should be
+    m_Hzoom->setValue(1);
+    m_Vzoom->setValue(1);
+    m_HVzoom->setValue(0);
 }
 
 

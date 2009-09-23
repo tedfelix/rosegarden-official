@@ -19,7 +19,7 @@
 #define _RG_MATRIX_WIDGET_H_
 
 #include <QWidget>
-#include <QToolButton>
+#include <QPushButton>
 
 #include "base/Event.h" // for timeT
 #include "gui/general/SelectionManager.h"
@@ -74,7 +74,10 @@ public:
     Panned *getView() { return m_view; }
 
     void setHorizontalZoomFactor(double factor);
+    void setVerticalZoomFactor(double factor);
+
     double getHorizontalZoomFactor() const;
+    double getVerticalZoomFactor() const;
 
     int getCurrentVelocity() const { return m_currentVelocity; }
 
@@ -153,6 +156,9 @@ protected slots:
     /// The primary (combined axes) thumbwheel moved
     void slotPrimaryThumbwheelMoved(int);
 
+    /// Reset the zoom to 100% and reset the zoomy wheels
+    void slotResetZoomClicked();
+
 protected :
     virtual void showEvent(QShowEvent * event);
 
@@ -175,7 +181,7 @@ private:
     Thumbwheel  *m_HVzoom;
     Thumbwheel  *m_Hzoom;
     Thumbwheel  *m_Vzoom;
-    QToolButton *m_reset;
+    QPushButton *m_reset;
 
     /** The primary zoom wheel behaves just like using the mouse wheel over any
      * part of the Panner.  We don't need to keep track of absolute values here,
