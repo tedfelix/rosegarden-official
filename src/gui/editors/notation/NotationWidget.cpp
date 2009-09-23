@@ -95,7 +95,7 @@ NotationWidget::NotationWidget() :
 
     // Remove black margins around the notation
     //m_layout->setContentsMargins(0, 0, 0, 0);
-
+    
     m_view = new Panned;
     m_view->setBackgroundBrush(Qt::white);
     m_view->setRenderHints(QPainter::Antialiasing |
@@ -108,8 +108,6 @@ NotationWidget::NotationWidget() :
     m_hpanner->setMaximumHeight(80);
     m_hpanner->setBackgroundBrush(Qt::white);
     m_hpanner->setRenderHints(0);
-//    m_hpanner->setRenderHints(QPainter::TextAntialiasing |
-//                              QPainter::SmoothPixmapTransform);
     m_layout->addWidget(m_hpanner, PANNER_ROW, HEADER_COL, 1, 2);
 
     m_headersView = new Panned;
@@ -345,9 +343,28 @@ NotationWidget::segmentsContainNotes() const
 }
 
 void
+NotationWidget::locatePanner(bool tall)
+{
+    m_layout->removeWidget(m_hpanner);
+    if (tall) {
+        m_hpanner->setMaximumHeight(QWIDGETSIZE_MAX);
+        m_hpanner->setMaximumWidth(80);
+        m_layout->addWidget(m_hpanner, PANNED_ROW, VPANNER_COL);
+    } else {
+        m_hpanner->setMaximumHeight(80);
+        m_hpanner->setMaximumWidth(QWIDGETSIZE_MAX);
+        m_layout->addWidget(m_hpanner, PANNER_ROW, HEADER_COL, 1, 2);
+    }
+}
+
+void
 NotationWidget::slotSetLinearMode()
 {
-    if (m_scene) m_scene->setPageMode(StaffLayout::LinearMode);
+    if (!m_scene) return;
+    m_scene->setPageMode(StaffLayout::LinearMode);
+    if (m_scene->getPageMode() == StaffLayout::ContinuousPageMode) {
+        locatePanner(false);
+    }
     m_linearMode = true;
     hideOrShowRulers();
 }
@@ -355,7 +372,10 @@ NotationWidget::slotSetLinearMode()
 void
 NotationWidget::slotSetContinuousPageMode()
 {
-    if (m_scene) m_scene->setPageMode(StaffLayout::ContinuousPageMode);
+    if (!m_scene) return;
+    if (m_scene->getPageMode() == StaffLayout::ContinuousPageMode) return;
+    locatePanner(true);
+    m_scene->setPageMode(StaffLayout::ContinuousPageMode);
     m_linearMode = false;
     hideOrShowRulers();
 }
@@ -363,7 +383,11 @@ NotationWidget::slotSetContinuousPageMode()
 void
 NotationWidget::slotSetMultiPageMode()
 {
-    if (m_scene) m_scene->setPageMode(StaffLayout::MultiPageMode);
+    if (!m_scene) return;
+    if (m_scene->getPageMode() == StaffLayout::ContinuousPageMode) {
+        locatePanner(false);
+    }
+    m_scene->setPageMode(StaffLayout::MultiPageMode);
     m_linearMode = false;
     hideOrShowRulers();
 }

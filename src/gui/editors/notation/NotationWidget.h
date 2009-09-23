@@ -189,6 +189,9 @@ private:
     bool m_chordMode;
     bool m_tripletMode;
     bool m_graceMode;
+
+    void locatePanner(bool vertical);
+
     /**
      * Widgets vertical positions inside the main QGridLayout
      */
@@ -208,7 +211,8 @@ private:
      */
     enum {
         HEADER_COL,
-        MAIN_COL
+        MAIN_COL,
+        VPANNER_COL
     };
 
 };
