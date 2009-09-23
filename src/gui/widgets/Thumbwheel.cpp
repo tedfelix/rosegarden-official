@@ -18,6 +18,7 @@
 #include "Thumbwheel.h"
 
 #include "base/Profiler.h"
+#include "misc/ConfigGroups.h"
 
 #include <QMouseEvent>
 #include <QPaintEvent>
@@ -25,6 +26,7 @@
 #include <QInputDialog>
 #include <QPainter>
 #include <QPainterPath>
+#include <QSettings>
 
 #include <cmath>
 #include <iostream>
@@ -49,6 +51,19 @@ Thumbwheel::Thumbwheel(Qt::Orientation orientation,
     m_clickRotation(m_rotation),
     m_showTooltip(true)
 {
+    // this widget was not even remotely trying to pay attention to anything I
+    // attempted in the stylesheet, so what we'll do is use the old code for the
+    // no stylesheet case, and hard code the Thorn version beside it
+    //
+    // NOTE: we should avoid using highlight() and mid() and so on, even though
+    // they happen to produce nice results on my everyday setup, because these
+    // will change according to external color preferences, and can produce
+    // horrible results with the Thorn style.  (I need to fix this in the Rotary
+    // and Fader code, and anywhere else it appears.)
+    QSettings settings;
+    settings.beginGroup(GeneralOptionsConfigGroup);
+    m_Thorn = settings.value("use_thorn_style", true).toBool();
+    settings.endGroup();
 }
 
 Thumbwheel::~Thumbwheel()
@@ -336,7 +351,8 @@ Thumbwheel::paintEvent(QPaintEvent *)
 
     QPainter paint(&m_cache);
     paint.setClipRect(rect());
-    paint.fillRect(subclip, palette().background().color());
+    QColor bg = (m_Thorn ? QColor(0xEE, 0xEE, 0xEE) : palette().background().color());
+    paint.fillRect(subclip, bg);
 
     paint.setRenderHint(QPainter::Antialiasing, true);
 
@@ -411,7 +427,7 @@ Thumbwheel::paintEvent(QPaintEvent *)
         int grey = lrintf(120 * depth);
 
         QColor fc = QColor(grey, grey, grey);
-        QColor oc = palette().highlight().color();
+        QColor oc = (m_Thorn ? QColor(0xAA, 0xAA, 0xFF) : palette().highlight().color());
 
         paint.setPen(fc);
 
@@ -436,7 +452,8 @@ Thumbwheel::paintEvent(QPaintEvent *)
         }
 
         paint.setPen(fc);
-        paint.setBrush(palette().background().color());
+        // calculated above, takes Thorn state into account
+        paint.setBrush(bg);
 
         if (m_orientation == Qt::Horizontal) {
             paint.drawRect(QRectF(x0, bw, x1 - x0, height() - bw*2));

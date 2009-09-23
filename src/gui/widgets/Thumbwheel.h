@@ -88,6 +88,7 @@ protected:
     float m_clickRotation;
     bool m_showTooltip;
     QImage m_cache;
+    bool m_Thorn;
 };
 
 }

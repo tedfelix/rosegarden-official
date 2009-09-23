@@ -38,6 +38,7 @@
 #include <QWheelEvent>
 #include <QStackedLayout>
 #include <QWidget>
+#include <QToolButton>
 
 #include "document/RosegardenDocument.h"
 
@@ -48,6 +49,7 @@
 
 #include "gui/widgets/Panner.h"
 #include "gui/widgets/Panned.h"
+#include "gui/widgets/Thumbwheel.h"
 
 #include "gui/rulers/PitchRuler.h"
 #include "gui/rulers/PercussionPitchRuler.h"
@@ -57,6 +59,8 @@
 #include "gui/rulers/StandardRuler.h"
 #include "gui/rulers/TempoRuler.h"
 #include "gui/rulers/ChordNameRuler.h"
+
+#include "gui/general/IconLoader.h"
 
 #include "misc/Debug.h"
 #include "misc/Strings.h"
@@ -115,12 +119,80 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     m_controlsWidget = new ControlRulerWidget;
     m_layout->addWidget(m_controlsWidget, CONTROLS_ROW, MAIN_COL, 1, 1);
 
-    m_hpanner = new Panner;
-    m_hpanner->setMaximumHeight(50);
-    m_hpanner->setBackgroundBrush(Qt::white);
+    // the panner along with zoom controls in one strip at one grid location
+    QWidget *panner = new QWidget;
+    QHBoxLayout *pannerLayout = new QHBoxLayout;
+    pannerLayout->setContentsMargins(0, 0, 0, 0);
+    pannerLayout->setSpacing(0);
+    panner->setLayout(pannerLayout);
 
+    m_hpanner = new Panner;
+// EXPERIMENTAL: make the Panner 10 px taller so there is more room for wheels
+//    m_hpanner->setMaximumHeight(50);
+    m_hpanner->setMaximumHeight(60);
+    m_hpanner->setBackgroundBrush(Qt::white);
     m_hpanner->setOptimizationFlag(QGraphicsView::DontAdjustForAntialiasing, true);
-    m_layout->addWidget(m_hpanner, PANNER_ROW, MAIN_COL, 1, 1);
+
+    pannerLayout->addWidget(m_hpanner);
+
+    // row, col, row span, col span
+    QFrame *controls = new QFrame;
+
+    QGridLayout *controlsLayout = new QGridLayout;
+    controlsLayout->setSpacing(0);
+    controlsLayout->setContentsMargins(0, 0, 0, 0);
+    controls->setLayout(controlsLayout);
+
+    m_HVzoom = new Thumbwheel(Qt::Vertical);
+//    m_HVzoom->setFixedSize(QSize(30, 30));
+    m_HVzoom->setFixedSize(QSize(40, 40));
+    m_HVzoom->setToolTip(tr("Zoom"));
+
+    // +/- 20 clicks seems to be the reasonable limit
+    m_HVzoom->setMinimumValue(-20);
+    m_HVzoom->setMaximumValue(20);
+    m_HVzoom->setDefaultValue(0);
+    m_lastHVzoomValue = m_HVzoom->getValue();
+    controlsLayout->addWidget(m_HVzoom, 0, 0, Qt::AlignCenter);
+
+    connect(m_HVzoom, SIGNAL(valueChanged(int)), this,
+            SLOT(slotPrimaryThumbwheelMoved(int)));
+
+    m_Hzoom = new Thumbwheel(Qt::Horizontal);
+//    m_Hzoom->setFixedSize(QSize(40, 16));
+    m_Hzoom->setFixedSize(QSize(50, 16));
+    m_Hzoom->setToolTip(tr("Horizontal Zoom"));
+
+    // not sure how this is supposed to work, let's assume a scale of 0%
+    // to 5000% represented by wheel_setting * 10; 10 * 10 == 100%
+    //  500 * 10 == 5000% looks about right
+    m_Hzoom->setMinimumValue(0);
+    m_Hzoom->setMaximumValue(500);
+    m_Hzoom->setDefaultValue(10);
+    controlsLayout->addWidget(m_Hzoom, 1, 0);
+    connect(m_Hzoom, SIGNAL(valueChanged(int)), this,
+            SLOT(slotHorizontalThumbwheelMoved(int)));
+
+    m_Vzoom = new Thumbwheel(Qt::Vertical);
+//    m_Vzoom->setFixedSize(QSize(16, 40));
+    m_Vzoom->setFixedSize(QSize(16, 50));
+    m_Vzoom->setToolTip(tr("Vertical Zoom"));
+    controlsLayout->addWidget(m_Vzoom, 0, 1, Qt::AlignRight);
+
+    connect(m_Vzoom, SIGNAL(valueChanged(int)), this,
+            SLOT(slotVerticalThumbwheelMoved(int)));
+
+    m_reset = new QToolButton;
+    m_reset->setFixedSize(QSize(10, 10));
+    m_reset->setToolTip(tr("Reset Zoom"));
+    m_reset->setIcon(IconLoader().loadPixmap("tab-scroll-button"));
+    controlsLayout->addWidget(m_reset, 1, 1, Qt::AlignCenter);
+
+    // connect to slotResetZoom or something
+
+    pannerLayout->addWidget(controls);
+
+    m_layout->addWidget(panner, PANNER_ROW, MAIN_COL, 1, 1);
 
     // Rulers being not defined still, they can't be added to m_layout.
     // This will be done in setSegments().
@@ -687,6 +759,28 @@ MatrixWidget::showEvent(QShowEvent * event)
     QWidget::showEvent(event);
     slotHScroll();
 }
+
+void
+MatrixWidget::slotHorizontalThumbwheelMoved(int v)
+{
+}
+
+void
+MatrixWidget::slotVerticalThumbwheelMoved(int v)
+{
+}
+
+void
+MatrixWidget::slotPrimaryThumbwheelMoved(int v)
+{
+    if (v < m_lastHVzoomValue && v != -20) slotZoomInFromPanner();
+    else if (v > m_lastHVzoomValue && v != 20) slotZoomOutFromPanner();
+
+    m_lastHVzoomValue = v;
+
+    //std::cout << "V == " << v << std::endl;
+}
+
 
 }
 

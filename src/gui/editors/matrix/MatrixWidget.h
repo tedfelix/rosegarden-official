@@ -19,9 +19,11 @@
 #define _RG_MATRIX_WIDGET_H_
 
 #include <QWidget>
+#include <QToolButton>
 
 #include "base/Event.h" // for timeT
 #include "gui/general/SelectionManager.h"
+#include "gui/widgets/Thumbwheel.h"
 
 #include <vector>
 
@@ -141,6 +143,16 @@ protected slots:
 
     void slotHScrollBarRangeChanged(int min, int max);
 
+
+    /// The horizontal zoom thumbwheel moved
+    void slotHorizontalThumbwheelMoved(int);
+
+    /// The vertical zoom thumbwheel moved
+    void slotVerticalThumbwheelMoved(int);
+
+    /// The primary (combined axes) thumbwheel moved
+    void slotPrimaryThumbwheelMoved(int);
+
 protected :
     virtual void showEvent(QShowEvent * event);
 
@@ -159,6 +171,18 @@ private:
     ZoomableRulerScale *m_referenceScale; // m_scene own this (refers to scene scale)
     bool m_inMove;
     QPointF m_lastMouseMoveScenePos;
+
+    Thumbwheel  *m_HVzoom;
+    Thumbwheel  *m_Hzoom;
+    Thumbwheel  *m_Vzoom;
+    QToolButton *m_reset;
+
+    /** The primary zoom wheel behaves just like using the mouse wheel over any
+     * part of the Panner.  We don't need to keep track of absolute values here,
+     * just whether we rolled up or down.  We'll do that by keeping track of the
+     * last setting and comparing it to see which way it moved.
+     */
+    int m_lastHVzoomValue;
 
     PitchRuler *m_pitchRuler; // I own this
     Panned *m_pianoView; // I own this
@@ -194,7 +218,7 @@ private:
      */
     enum {
         HEADER_COL,
-        MAIN_COL
+        MAIN_COL,
     };
 
 };

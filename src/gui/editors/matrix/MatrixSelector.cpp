@@ -148,6 +148,10 @@ MatrixSelector::handleLeftButtonPress(const MatrixMouseEvent *e)
 
     } else {
 
+        // NOTE: if we ever have axis-independent zoom, this (and similar code
+        // elsewhere) will have to be refactored to draw a series of lines using
+        // two different widths, based on calculating 200 / axisZoomPercent
+        // to solve ((w * axisZoomPercent) / 100) = 2
         if (!m_selectionRect) {
             m_selectionRect = new QGraphicsRectItem;
             m_scene->addItem(m_selectionRect);
