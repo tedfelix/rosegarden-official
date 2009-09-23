@@ -361,10 +361,10 @@ void
 NotationWidget::slotSetLinearMode()
 {
     if (!m_scene) return;
-    m_scene->setPageMode(StaffLayout::LinearMode);
     if (m_scene->getPageMode() == StaffLayout::ContinuousPageMode) {
         locatePanner(false);
     }
+    m_scene->setPageMode(StaffLayout::LinearMode);
     m_linearMode = true;
     hideOrShowRulers();
 }
