@@ -428,15 +428,21 @@ MatrixWidget::segmentsContainNotes() const
 void
 MatrixWidget::setHorizontalZoomFactor(double factor)
 {
+    // NOTE: scaling the keyboard up and down works well for the primary zoom
+    // because it maintains the same aspect ratio for each step.  I tried a few
+    // different ways to deal with this before deciding that since
+    // independent-axis zoom is a separate and mutually exclusive subsystem,
+    // about the only sensible thing we can do is keep the keyboard scaled at
+    // 1.0 horizontally, and only scale it vertically.  Git'r done.
+
     m_hZoomFactor = factor;
     if (m_referenceScale) m_referenceScale->setXZoomFactor(m_hZoomFactor);
     m_view->resetMatrix();
     m_view->scale(m_hZoomFactor, m_vZoomFactor);
-    // leave piano alone for independent horizontal zoom
-    /*QMatrix m;
-    m.scale(m_hZoomFactor, m_vZoomFactor);
+    QMatrix m;
+    m.scale(1.0, m_vZoomFactor);
     m_pianoView->setMatrix(m);
-    m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width() * m_vZoomFactor);*/
+    m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width());
     slotHScroll();
 }
 
@@ -448,9 +454,9 @@ MatrixWidget::setVerticalZoomFactor(double factor)
     m_view->resetMatrix();
     m_view->scale(m_hZoomFactor, m_vZoomFactor);
     QMatrix m;
-    m.scale(m_hZoomFactor, m_vZoomFactor);
+    m.scale(1.0, m_vZoomFactor);
     m_pianoView->setMatrix(m);
-    m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width()/* * m_vZoomFactor */);
+    m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width());
 }
 
 double
@@ -798,7 +804,7 @@ MatrixWidget::showEvent(QShowEvent * event)
 void
 MatrixWidget::slotHorizontalThumbwheelMoved(int v)
 {
-    std::cout << "horizontal wheel V == " << v << std::endl;
+//    std::cout << "horizontal wheel V == " << v << std::endl;
     if (m_lastZoomWasHV) slotResetZoomClicked();
     setHorizontalZoomFactor(v);
     m_lastZoomWasHV = false;
@@ -807,7 +813,7 @@ MatrixWidget::slotHorizontalThumbwheelMoved(int v)
 void
 MatrixWidget::slotVerticalThumbwheelMoved(int v)
 {
-    std::cout << "vertical wheel V == " << v << std::endl;
+//    std::cout << "vertical wheel V == " << v << std::endl;
     if (m_lastZoomWasHV) slotResetZoomClicked();
     setVerticalZoomFactor(v);
     m_lastZoomWasHV = false;
@@ -821,7 +827,7 @@ MatrixWidget::slotPrimaryThumbwheelMoved(int v)
 
     // not sure what else to do; you can get things grotesquely out of whack
     // changing H or V independently and then trying to use the big zoom, so now
-    // we reset when changing to the big zoom
+    // we reset when changing to the big zoom, and this behaves independently
     if (!m_lastZoomWasHV) slotResetZoomClicked();
 
     // little bit of kludge work to deal with value manipulations that are
@@ -856,8 +862,8 @@ MatrixWidget::slotPrimaryThumbwheelMoved(int v)
 void
 MatrixWidget::slotResetZoomClicked()
 {
-    std::cout << "reset clicked" << std::endl;
-    // just taking a potshot at this one, let's see if this works
+    std::cerr << "MatrixWidget::slotResetZoomClicked()" << std::endl;
+
     m_hZoomFactor = 1.0;
     m_vZoomFactor = 1.0;
     if (m_referenceScale) {
@@ -865,10 +871,12 @@ MatrixWidget::slotResetZoomClicked()
         m_referenceScale->setYZoomFactor(m_vZoomFactor);
     }
     m_view->resetMatrix();
-    m_view->scale(m_hZoomFactor, m_vZoomFactor);
     QMatrix m;
     m.scale(m_hZoomFactor, m_vZoomFactor);
+    m_view->setMatrix(m);
+    m_view->scale(m_hZoomFactor, m_vZoomFactor);
     m_pianoView->setMatrix(m);
+    m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width());
     slotHScroll();
 
     // scale factor 1.0 = 100% zoom

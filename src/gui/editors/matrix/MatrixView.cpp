@@ -598,6 +598,9 @@ NewMatrixView::initRulersToolbar()
 void
 NewMatrixView::initZoomToolbar()
 {
+    // just return for now; this code is on the way out
+    return;
+
     QToolBar *zoomToolbar = findToolbar("Zoom Toolbar");
     if (!zoomToolbar) {
         MATRIX_DEBUG << "MatrixView::initZoomToolbar - "
