@@ -167,6 +167,12 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     // not sure how the ruler scales work, but experimentation shows we never
     // want to go below 1, and 100 is a few clicks beyond reason for horizontal,
     // 50 clicks for vertical
+    //
+    // NOTE: the old horizontal zoom slider did let us go below 100%, and this
+    // bottoms out at 100%, but if I go below 1 for this value, the display
+    // turns black.  Hence the limits.  This is kind of ugly since
+    // axis-independent zoom has a floor of 100%, but you can still use the
+    // dual-axis zoom to go lower than that.  Not sure if it's workable or not.
     m_Hzoom->setMinimumValue(1);
     m_Hzoom->setMaximumValue(100);
     m_Hzoom->setDefaultValue(10); //!!! this isn't quite right
@@ -426,6 +432,11 @@ MatrixWidget::setHorizontalZoomFactor(double factor)
     if (m_referenceScale) m_referenceScale->setXZoomFactor(m_hZoomFactor);
     m_view->resetMatrix();
     m_view->scale(m_hZoomFactor, m_vZoomFactor);
+    // leave piano alone for independent horizontal zoom
+    /*QMatrix m;
+    m.scale(m_hZoomFactor, m_vZoomFactor);
+    m_pianoView->setMatrix(m);
+    m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width() * m_vZoomFactor);*/
     slotHScroll();
 }
 
@@ -436,14 +447,22 @@ MatrixWidget::setVerticalZoomFactor(double factor)
     if (m_referenceScale) m_referenceScale->setYZoomFactor(m_vZoomFactor);
     m_view->resetMatrix();
     m_view->scale(m_hZoomFactor, m_vZoomFactor);
-// I don't think we need a slotVScroll
-//    slotVScroll();
+    QMatrix m;
+    m.scale(m_hZoomFactor, m_vZoomFactor);
+    m_pianoView->setMatrix(m);
+    m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width()/* * m_vZoomFactor */);
 }
 
 double
 MatrixWidget::getHorizontalZoomFactor() const
 {
     return m_hZoomFactor;
+}
+
+double
+MatrixWidget::getVerticalZoomFactor() const
+{
+    return m_vZoomFactor;
 }
 
 void
@@ -780,21 +799,30 @@ void
 MatrixWidget::slotHorizontalThumbwheelMoved(int v)
 {
     std::cout << "horizontal wheel V == " << v << std::endl;
+    if (m_lastZoomWasHV) slotResetZoomClicked();
     setHorizontalZoomFactor(v);
+    m_lastZoomWasHV = false;
 }
 
 void
 MatrixWidget::slotVerticalThumbwheelMoved(int v)
 {
     std::cout << "vertical wheel V == " << v << std::endl;
+    if (m_lastZoomWasHV) slotResetZoomClicked();
     setVerticalZoomFactor(v);
+    m_lastZoomWasHV = false;
 }
 
 void
 MatrixWidget::slotPrimaryThumbwheelMoved(int v)
 {
-    std::cout << "primary wheel debug (before): v == " << v << " m_lastHVzoomValue == " << m_lastHVzoomValue
-              << " m_hZoomFactor == " << m_hZoomFactor << " m_vZoomFactor == " << m_vZoomFactor  << std::endl;
+    //std::cout << "primary wheel debug (before): v == " << v << " m_lastHVzoomValue == " << m_lastHVzoomValue
+    //          << " m_hZoomFactor == " << m_hZoomFactor << " m_vZoomFactor == " << m_vZoomFactor  << std::endl;
+
+    // not sure what else to do; you can get things grotesquely out of whack
+    // changing H or V independently and then trying to use the big zoom, so now
+    // we reset when changing to the big zoom
+    if (!m_lastZoomWasHV) slotResetZoomClicked();
 
     // little bit of kludge work to deal with value manipulations that are
     // outside of the constraints imposed by the primary zoom wheel itself
@@ -819,8 +847,10 @@ MatrixWidget::slotPrimaryThumbwheelMoved(int v)
     }
 
     m_lastHVzoomValue = v;
-    std::cout << "primary wheel debug (after): v == " << v << " m_lastHVzoomValue == " << m_lastHVzoomValue
-              << " m_hZoomFactor == " << m_hZoomFactor << " m_vZoomFactor == " << m_vZoomFactor  << std::endl;
+    m_lastZoomWasHV = true;
+
+    //std::cout << "primary wheel debug (after): v == " << v << " m_lastHVzoomValue == " << m_lastHVzoomValue
+    //          << " m_hZoomFactor == " << m_hZoomFactor << " m_vZoomFactor == " << m_vZoomFactor  << std::endl;
 }
 
 void
@@ -836,12 +866,16 @@ MatrixWidget::slotResetZoomClicked()
     }
     m_view->resetMatrix();
     m_view->scale(m_hZoomFactor, m_vZoomFactor);
+    QMatrix m;
+    m.scale(m_hZoomFactor, m_vZoomFactor);
+    m_pianoView->setMatrix(m);
     slotHScroll();
 
     // scale factor 1.0 = 100% zoom
     m_Hzoom->setValue(1);
     m_Vzoom->setValue(1);
     m_HVzoom->setValue(0);
+    m_lastHVzoomValue = 0;
 }
 
 void
