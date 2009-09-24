@@ -41,6 +41,7 @@ public:
     bool getTracking() const;
     bool getShowScale() const;
     int getValue() const;
+    void setBright(const bool v);
 
     void setShowToolTip(bool show);
 
@@ -89,6 +90,7 @@ protected:
     bool m_showTooltip;
     QImage m_cache;
     bool m_Thorn;
+    bool m_bright;
 };
 
 }

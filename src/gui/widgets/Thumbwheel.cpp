@@ -49,7 +49,8 @@ Thumbwheel::Thumbwheel(Qt::Orientation orientation,
     m_clicked(false),
     m_atDefault(true),
     m_clickRotation(m_rotation),
-    m_showTooltip(true)
+    m_showTooltip(true),
+    m_bright(true)
 {
     // this widget was not even remotely trying to pay attention to anything I
     // attempted in the stylesheet, so what we'll do is use the old code for the
@@ -351,7 +352,8 @@ Thumbwheel::paintEvent(QPaintEvent *)
 
     QPainter paint(&m_cache);
     paint.setClipRect(rect());
-    QColor bg = (m_Thorn ? QColor(0xEE, 0xEE, 0xEE) : palette().background().color());
+    QColor bg = (m_Thorn ? QColor(0xED, 0xED, 0xFF) : palette().background().color());
+    if (!m_bright) bg = bg.darker(125);
     paint.fillRect(subclip, bg);
 
     paint.setRenderHint(QPainter::Antialiasing, true);
@@ -428,6 +430,7 @@ Thumbwheel::paintEvent(QPaintEvent *)
 
         QColor fc = QColor(grey, grey, grey);
         QColor oc = (m_Thorn ? QColor(0xAA, 0xAA, 0xFF) : palette().highlight().color());
+        if (!m_bright) oc = oc.darker(125);
 
         paint.setPen(fc);
 
@@ -475,6 +478,14 @@ Thumbwheel::sizeHint() const
         return QSize(12, 80);
     }
 }
+
+void
+Thumbwheel::setBright(const bool v)
+{
+    m_bright = v;
+    update();
+}
+
 
 }
 

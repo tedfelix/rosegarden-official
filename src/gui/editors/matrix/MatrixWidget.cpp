@@ -153,6 +153,7 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     m_HVzoom->setMinimumValue(-20);
     m_HVzoom->setMaximumValue(20);
     m_HVzoom->setDefaultValue(0);
+    m_HVzoom->setBright(true);
     m_lastHVzoomValue = m_HVzoom->getValue();
     controlsLayout->addWidget(m_HVzoom, 0, 0, Qt::AlignCenter);
 
@@ -176,6 +177,7 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     m_Hzoom->setMinimumValue(1);
     m_Hzoom->setMaximumValue(100);
     m_Hzoom->setDefaultValue(10); //!!! this isn't quite right
+    m_Hzoom->setBright(false);
     controlsLayout->addWidget(m_Hzoom, 1, 0);
     connect(m_Hzoom, SIGNAL(valueChanged(int)), this,
             SLOT(slotHorizontalThumbwheelMoved(int)));
@@ -187,6 +189,7 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     m_Vzoom->setMinimumValue(1);
     m_Vzoom->setMaximumValue(50);
     m_Vzoom->setDefaultValue(10); //!!! this isn't quite right
+    m_Vzoom->setBright(false);
     controlsLayout->addWidget(m_Vzoom, 0, 1, Qt::AlignRight);
 
     connect(m_Vzoom, SIGNAL(valueChanged(int)), this,
@@ -804,8 +807,13 @@ MatrixWidget::showEvent(QShowEvent * event)
 void
 MatrixWidget::slotHorizontalThumbwheelMoved(int v)
 {
-//    std::cout << "horizontal wheel V == " << v << std::endl;
-    if (m_lastZoomWasHV) slotResetZoomClicked();
+    // switching from primary/panner to axis-independent
+    if (m_lastZoomWasHV) {
+        slotResetZoomClicked();
+        m_HVzoom->setBright(false);
+        m_Hzoom->setBright(true);
+        m_Vzoom->setBright(true);
+    }
     setHorizontalZoomFactor(v);
     m_lastZoomWasHV = false;
 }
@@ -813,8 +821,13 @@ MatrixWidget::slotHorizontalThumbwheelMoved(int v)
 void
 MatrixWidget::slotVerticalThumbwheelMoved(int v)
 {
-//    std::cout << "vertical wheel V == " << v << std::endl;
-    if (m_lastZoomWasHV) slotResetZoomClicked();
+    // switching from primary/panner to axis-independent
+    if (m_lastZoomWasHV) {
+        slotResetZoomClicked();
+        m_HVzoom->setBright(false);
+        m_Hzoom->setBright(true);
+        m_Vzoom->setBright(true);
+    }
     setVerticalZoomFactor(v);
     m_lastZoomWasHV = false;
 }
@@ -828,7 +841,14 @@ MatrixWidget::slotPrimaryThumbwheelMoved(int v)
     // not sure what else to do; you can get things grotesquely out of whack
     // changing H or V independently and then trying to use the big zoom, so now
     // we reset when changing to the big zoom, and this behaves independently
-    if (!m_lastZoomWasHV) slotResetZoomClicked();
+   
+    // switching from axi-independent to primary/panner
+    if (!m_lastZoomWasHV) {
+        slotResetZoomClicked();
+        m_HVzoom->setBright(true);
+        m_Hzoom->setBright(false);
+        m_Vzoom->setBright(false);
+    }
 
     // little bit of kludge work to deal with value manipulations that are
     // outside of the constraints imposed by the primary zoom wheel itself
