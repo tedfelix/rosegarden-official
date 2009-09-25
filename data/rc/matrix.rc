@@ -60,20 +60,6 @@
       <Action name="snap_bar" text="Snap to &amp;Bar" shortcut="5"/>
     </Menu>
   <Separator/>
-    <Action name="show_inst_parameters" text="Show &amp;Instrument Parameters" checked="true" append="show_merge" />
-    <Action name="show_velocity_control_ruler" text="&amp;Show Velocity Property Ruler" checked="false" />
-    <!-- JAS don't see any text associated with "show_controller_evnents_ruler" action -->
-    <!-- obsolete?: Action name="show_controller_events_ruler" text="Show &amp;Controller Ruler" />
-< ! - -    <Action name="add_control_ruler"/> - - >
-    <Menu name="add_control_ruler">
-      <text>&amp;Add Event Ruler</text>
-      <! - - JAS custom coded menu - - >
-    </Menu>
-    -->
-    
-    
-    
-  <Separator/>
     <!-- JAS deviated from RG.svn since menu items are duplicated in "toolbars" submenu -->
     <Menu name="toolbars" append="show_merge">
       <text>&amp;Toolbars</text>
@@ -292,55 +278,19 @@
 
   <Menu name="rulers">
     <text>&amp;Rulers</text>
-      <Menu noMerge="1" name="controller_events_ruler_menu">
-          <text>Control Ruler</text>
-          <Action name="insert_control_ruler_item" text="Insert Controler Item" />
-          <Action name="erase_control_ruler_item" text="Erase Selected Items" />
-          <Action name="clear_control_ruler_item" text="Clear Ruler" />
-          <Separator/>
-          <Action name="start_control_line_item" text="Insert Line of Controllers" />
-          <Separator/>
-          <Action name="flip_control_events_forward" text="Flip Forward" shortcut="]" /> 
-          <Action name="flip_control_events_back" text="Flip Backwards" shortcut="[" /> 
-      </Menu>
-      
-      <Menu noMerge="1" name="property_ruler_menu">
-          <text>Property Ruler</text>
-          <Action name="draw_property_line" text="Draw Property Line" />
-          <Action name="select_all_properties" text="Select All Property Values" />
-          <Separator/>
-          <Action name="flip_property_events_forward" text="Flip Propertyvalue-Bar Forward" shortcut="[" />
-          <Action name="flip_property_events_back" text="Flip Propertyvalue-Bar Backwards" shortcut="]" />
-      </Menu>
-      <Separator/>
     <Action name="show_chords_ruler" text="Show Ch&amp;ord Name Ruler" checked="false" />
     <Action name="show_tempo_ruler" text="Show &amp;Tempo Ruler" checked="true" />
+    <Separator/>
     <Action name="toggle_velocity_ruler" text="Show &amp;Velocity Ruler" icon="ruler-velocity" checked="false" />
     <Action name="toggle_pitchbend_ruler" text="Show Pitch &amp;Bend Ruler" icon="ruler-pitch" checked="false" />
     <Action name="add_control_ruler" text="Add &amp;Control Ruler..." icon="ruler-controller" checked="false" />
-  </Menu>
-
-  
+  </Menu>  
   
   <Menu name="help" append="about_merge">
     <text>&amp;Help</text>
-    <Action name="help_contents" text="Rosegarden &amp;Handbook" icon="contents" shortcut="F1" />
-    <Action name="help_whats_this" text="&amp;What's This?" icon="contexthelp" shortcut="Shift+F1" />
-  <Separator/>
-    <Action name="tutorial" text="&amp;Rosegarden Tutorial" />
-    <Action name="guidelines" text="&amp;Bug Reporting Guidelines" />
-    <Action name="help_show_tip" text="Tip of the &amp;Day" icon="idea" />
-  <Separator/>
-    <!-- JAS invented "language_switch" action name -->
-    <Action name="language_switch" text="Switch application &amp;language..." />
-  <Separator/>
-    <!-- JAS invented "help_online" action name, and used KDE launch icon: can't fing right one -->
-    <Action name="help_online" text="Get Help &amp;Online" icon="launch" />
-    <!-- JAS invented "language_translate" action name and used KDE translate icon: can't fiond right one -->
-    <Action name="language_translate" text="&amp;Translate This Application" icon="translate" />
-  <Separator/> 
+    <!-- we'll just start with a clean help menu if/when we ever get around to
+having help again -->
     <Action name="help_about_app" text="&amp;About Rosegarden" icon="rg-rwb-rose3-16x16" />
-    <Action name="help_about_qt" text="About &amp;QT" icon="about_kde" />
   </Menu>
 
 </MenuBar>
@@ -390,12 +340,6 @@
   <text>Actions Toolbar</text>
   <!-- JAS custom toolbar found at src/gui/editors/matrix/Matrixview.cpp -->
 </ToolBar>
-
-
-<ToolBar name="Zoom Toolbar">
-  <text>Zoom Toolbar</text>
-</ToolBar>
-
 
 <ToolBar name="Rulers Toolbar">
   <text>Rulers Toolbar</text>

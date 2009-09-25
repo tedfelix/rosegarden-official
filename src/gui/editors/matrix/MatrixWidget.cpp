@@ -89,6 +89,8 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     m_referenceScale(0),
     m_inMove(false),
     m_lastZoomWasHV(true),
+    m_lastV(0),
+    m_lastH(0),
     m_pitchRuler(0),
     m_pianoView(0),
     m_pianoScene(0),
@@ -106,7 +108,7 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     m_layout->setSpacing(0);
 
     // Remove black margins around the matrix
-    //m_layout->setContentsMargins(0, 0, 0, 0);
+    m_layout->setContentsMargins(0, 0, 0, 0);
 
     m_view = new Panned;
     m_view->setBackgroundBrush(Qt::white);
@@ -128,8 +130,6 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     panner->setLayout(pannerLayout);
 
     m_hpanner = new Panner;
-// EXPERIMENTAL: make the Panner 10 px taller so there is more room for wheels
-//    m_hpanner->setMaximumHeight(50);
     m_hpanner->setMaximumHeight(60);
     m_hpanner->setBackgroundBrush(Qt::white);
     m_hpanner->setOptimizationFlag(QGraphicsView::DontAdjustForAntialiasing, true);
@@ -145,7 +145,6 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     controls->setLayout(controlsLayout);
 
     m_HVzoom = new Thumbwheel(Qt::Vertical);
-//    m_HVzoom->setFixedSize(QSize(30, 30));
     m_HVzoom->setFixedSize(QSize(40, 40));
     m_HVzoom->setToolTip(tr("Zoom"));
 
@@ -154,6 +153,7 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     m_HVzoom->setMaximumValue(20);
     m_HVzoom->setDefaultValue(0);
     m_HVzoom->setBright(true);
+    m_HVzoom->setShowScale(true);
     m_lastHVzoomValue = m_HVzoom->getValue();
     controlsLayout->addWidget(m_HVzoom, 0, 0, Qt::AlignCenter);
 
@@ -161,34 +161,23 @@ MatrixWidget::MatrixWidget(bool drumMode) :
             SLOT(slotPrimaryThumbwheelMoved(int)));
 
     m_Hzoom = new Thumbwheel(Qt::Horizontal);
-//    m_Hzoom->setFixedSize(QSize(40, 16));
     m_Hzoom->setFixedSize(QSize(50, 16));
     m_Hzoom->setToolTip(tr("Horizontal Zoom"));
 
-    // not sure how the ruler scales work, but experimentation shows we never
-    // want to go below 1, and 100 is a few clicks beyond reason for horizontal,
-    // 50 clicks for vertical
-    //
-    // NOTE: the old horizontal zoom slider did let us go below 100%, and this
-    // bottoms out at 100%, but if I go below 1 for this value, the display
-    // turns black.  Hence the limits.  This is kind of ugly since
-    // axis-independent zoom has a floor of 100%, but you can still use the
-    // dual-axis zoom to go lower than that.  Not sure if it's workable or not.
-    m_Hzoom->setMinimumValue(1);
-    m_Hzoom->setMaximumValue(100);
-    m_Hzoom->setDefaultValue(10); //!!! this isn't quite right
+    m_Hzoom->setMinimumValue(-25);
+    m_Hzoom->setMaximumValue(60);
+    m_Hzoom->setDefaultValue(0); 
     m_Hzoom->setBright(false);
     controlsLayout->addWidget(m_Hzoom, 1, 0);
     connect(m_Hzoom, SIGNAL(valueChanged(int)), this,
             SLOT(slotHorizontalThumbwheelMoved(int)));
 
     m_Vzoom = new Thumbwheel(Qt::Vertical);
-//    m_Vzoom->setFixedSize(QSize(16, 40));
     m_Vzoom->setFixedSize(QSize(16, 50));
     m_Vzoom->setToolTip(tr("Vertical Zoom"));
-    m_Vzoom->setMinimumValue(1);
-    m_Vzoom->setMaximumValue(50);
-    m_Vzoom->setDefaultValue(10); //!!! this isn't quite right
+    m_Vzoom->setMinimumValue(-25);
+    m_Vzoom->setMaximumValue(60);
+    m_Vzoom->setDefaultValue(0);
     m_Vzoom->setBright(false);
     controlsLayout->addWidget(m_Vzoom, 0, 1, Qt::AlignRight);
 
@@ -807,6 +796,23 @@ MatrixWidget::showEvent(QShowEvent * event)
 void
 MatrixWidget::slotHorizontalThumbwheelMoved(int v)
 {
+    // limits sanity check
+    if (v < -25) v = -25;
+    if (v > 60) v = 60;
+    if (m_lastH < -25) m_lastH = -25;
+    if (m_lastH > 60) m_lastH = 60;
+
+    int steps = v - m_lastH;
+    if (steps < 0) steps *= -1;
+
+    bool zoomingIn = (v > m_lastH);
+    double newZoom = m_hZoomFactor;
+
+    for (int i = 0; i < steps; ++i) {
+        if (zoomingIn) newZoom *= 1.1;
+        else newZoom /= 1.1;
+    }
+
     // switching from primary/panner to axis-independent
     if (m_lastZoomWasHV) {
         slotResetZoomClicked();
@@ -814,13 +820,34 @@ MatrixWidget::slotHorizontalThumbwheelMoved(int v)
         m_Hzoom->setBright(true);
         m_Vzoom->setBright(true);
     }
-    setHorizontalZoomFactor(v);
+
+    //std::cout << "v is: " << v << " h zoom factor was: " << m_lastH << " now: " << newZoom << " zooming " << (zoomingIn ? "IN" : "OUT") << std::endl;
+
+    setHorizontalZoomFactor(newZoom);
+    m_lastH = v;
     m_lastZoomWasHV = false;
 }
 
 void
 MatrixWidget::slotVerticalThumbwheelMoved(int v)
 {
+    // limits sanity check
+    if (v < -25) v = -25;
+    if (v > 60) v = 60;
+    if (m_lastV < -25) m_lastV = -25;
+    if (m_lastV > 60) m_lastV = 60;
+
+    int steps = v - m_lastV;
+    if (steps < 0) steps *= -1;
+
+    bool zoomingIn = (v > m_lastV);
+    double newZoom = m_vZoomFactor;
+
+    for (int i = 0; i < steps; ++i) {
+        if (zoomingIn) newZoom *= 1.1;
+        else newZoom /= 1.1;
+    }
+
     // switching from primary/panner to axis-independent
     if (m_lastZoomWasHV) {
         slotResetZoomClicked();
@@ -828,16 +855,17 @@ MatrixWidget::slotVerticalThumbwheelMoved(int v)
         m_Hzoom->setBright(true);
         m_Vzoom->setBright(true);
     }
-    setVerticalZoomFactor(v);
+
+    //std::cout << "v is: " << v << " z zoom factor was: " << m_lastV << " now: " << newZoom << " zooming " << (zoomingIn ? "IN" : "OUT") << std::endl;
+
+    setVerticalZoomFactor(newZoom);
+    m_lastV = v;
     m_lastZoomWasHV = false;
 }
 
 void
 MatrixWidget::slotPrimaryThumbwheelMoved(int v)
 {
-    //std::cout << "primary wheel debug (before): v == " << v << " m_lastHVzoomValue == " << m_lastHVzoomValue
-    //          << " m_hZoomFactor == " << m_hZoomFactor << " m_vZoomFactor == " << m_vZoomFactor  << std::endl;
-
     // not sure what else to do; you can get things grotesquely out of whack
     // changing H or V independently and then trying to use the big zoom, so now
     // we reset when changing to the big zoom, and this behaves independently
@@ -874,9 +902,6 @@ MatrixWidget::slotPrimaryThumbwheelMoved(int v)
 
     m_lastHVzoomValue = v;
     m_lastZoomWasHV = true;
-
-    //std::cout << "primary wheel debug (after): v == " << v << " m_lastHVzoomValue == " << m_lastHVzoomValue
-    //          << " m_hZoomFactor == " << m_hZoomFactor << " m_vZoomFactor == " << m_vZoomFactor  << std::endl;
 }
 
 void
@@ -904,6 +929,8 @@ MatrixWidget::slotResetZoomClicked()
     m_Vzoom->setValue(1);
     m_HVzoom->setValue(0);
     m_lastHVzoomValue = 0;
+    m_lastH = 0;
+    m_lastV = 0;
 }
 
 void

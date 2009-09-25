@@ -196,6 +196,8 @@ private:
      */
     int m_lastHVzoomValue;
     bool m_lastZoomWasHV;
+    int m_lastV;
+    int m_lastH;
 
     PitchRuler *m_pitchRuler; // I own this
     Panned *m_pianoView; // I own this
