@@ -24,6 +24,7 @@
 #include "base/Composition.h"
 #include "gui/general/SelectionManager.h"
 #include "StaffLayout.h"
+#include "NotePixmapFactory.h"
 
 class QGraphicsItem;
 class QGraphicsTextItem;
@@ -62,6 +63,7 @@ public:
     void setStaffs(RosegardenDocument *document, std::vector<Segment *> segments);
 
     std::vector<NotationStaff *> *getStaffs() { return &m_staffs; }
+    unsigned int getStaffCount() { return m_staffs.size(); }
 
     Segment *getCurrentSegment();
 

@@ -647,14 +647,16 @@ NotationStaff::positionElements(timeT from, timeT to)
     emit setValue(0);
     throwIfCancelled();
 
-    const NotationProperties &properties(getProperties());
+// not used
+//    const NotationProperties &properties(getProperties());
 
     int elementsPositioned = 0;
     int elementsRendered = 0; // diagnostic
 
     Composition *composition = getSegment().getComposition();
 
-    timeT nextBarTime = composition->getBarEndForTime(to);
+// not used
+//     timeT nextBarTime = composition->getBarEndForTime(to);
 
     NotationElementList::iterator beginAt =
         getViewElementList()->findTime(composition->getBarStartForTime(from));

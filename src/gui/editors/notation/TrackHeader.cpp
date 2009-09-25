@@ -420,8 +420,11 @@ StaffHeader::paintEvent(QPaintEvent *)
 }
 
 
+//!!!  I have no idea what this used to do.  I found it disabled like this, and
+// simply shut up the compiler warning about the unused variable 'current'
 void
-StaffHeader::setCurrent(bool current)
+//StaffHeader::setCurrent(bool current)
+StaffHeader::setCurrent(bool)
 {
     /// TODO : use colours from GUIPalette
 

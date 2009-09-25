@@ -751,10 +751,10 @@ NewNotationView::setupActions()
 
     //&&& add fontActionMenu to the appropriate super-menu
 
-      QMenu *fontSizeActionMenu = new QMenu(tr("Si&ze"), this);
-      fontSizeActionMenu->setObjectName("note_font_size_actionmenu");
-      ag = new QActionGroup(this);
-      int defaultFontSize = NoteFontFactory::getDefaultSize(defaultFontName);
+    QMenu *fontSizeActionMenu = new QMenu(tr("Si&ze"), this);
+    fontSizeActionMenu->setObjectName("note_font_size_actionmenu");
+    ag = new QActionGroup(this);
+    int defaultFontSize = NoteFontFactory::getDefaultSize(defaultFontName);
 
     //setupFontSizeMenu();
 
@@ -959,11 +959,6 @@ NewNotationView::initLayoutToolbar()
         value.setNum(*i);
         m_fontSizeCombo->addItem(value);
     }
-    // set combo's current value to default
-    value.setNum(m_fontSize);
-//     m_fontSizeCombo->setItemText(value);
-    m_fontSizeCombo->setCurrentText(value);
-//     m_fontSizeCombo->setCurrentIndex( m_fontSizeCombo->indexOf(value) );
     
     connect(m_fontSizeCombo, SIGNAL(activated(const QString&)),
             this, SLOT(slotChangeFontSizeFromStringValue(const QString&)));
@@ -1054,7 +1049,8 @@ NewNotationView::initStatusBar()
 }
 
 
-bool NewNotationView::exportLilyPondFile(QString file, bool forPreview)
+bool
+NewNotationView::exportLilyPondFile(QString file, bool forPreview)
 {
     QString caption = "", heading = "";
     if (forPreview) {
@@ -1077,7 +1073,8 @@ bool NewNotationView::exportLilyPondFile(QString file, bool forPreview)
     return true;
 }
 
-void NewNotationView::slotPrintLilyPond()
+void
+NewNotationView::slotPrintLilyPond()
 {
     TmpStatusMsg msg(tr("Printing with LilyPond..."), this);
 
@@ -1094,7 +1091,8 @@ void NewNotationView::slotPrintLilyPond()
     dialog->exec();
 }
 
-void NewNotationView::slotPreviewLilyPond()
+void
+NewNotationView::slotPreviewLilyPond()
 {
     TmpStatusMsg msg(tr("Previewing with LilyPond..."), this);
 
@@ -1390,7 +1388,8 @@ NewNotationView::slotEditGeneralPaste()
     settings.endGroup();
 }
 
-void NewNotationView::slotPreviewSelection()
+void
+NewNotationView::slotPreviewSelection()
 {
     if (getSelection())
         return ;
@@ -2017,7 +2016,8 @@ NewNotationView::getPitchFromNoteInsertAction(QString name,
     }
 }
 
-void NewNotationView::slotInsertNoteFromAction()
+void
+NewNotationView::slotInsertNoteFromAction()
 {
     const QObject *s = sender();
     QString name = s->objectName();
@@ -2074,7 +2074,8 @@ void NewNotationView::slotInsertNoteFromAction()
     }
 }
 
-void NewNotationView::slotInsertRestFromAction()
+void
+NewNotationView::slotInsertRestFromAction()
 {
     Segment *segment = getCurrentSegment();
     if (!segment) return;
@@ -3293,8 +3294,14 @@ NewNotationView::slotInsertableNoteOffReceived(int pitch, int velocity)
 }
 
 void
-NewNotationView::slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn)
+//!!! shut up compiler warning about unused 'velocity' but left original intact
+// because it would be a good thing to make use of velocity one day
+//NewNotationView::slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn)
+NewNotationView::slotInsertableNoteEventReceived(int pitch, int, bool noteOn)
 {
+    // NOTE: these next comments are from before 1.0, and that should be
+    // understood when considering them in relation to Thorn
+    //
     //!!! Problematic.  Ideally we wouldn't insert events into windows
     //that weren't actually visible, otherwise all hell could break
     //loose (metaphorically speaking, I should probably add).  I did
