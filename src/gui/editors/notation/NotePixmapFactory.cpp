@@ -73,7 +73,7 @@ using namespace Accidentals;
 
 static clock_t drawBeamsTime = 0;
 static clock_t makeNotesTime = 0;
-static int drawBeamsCount = 0;
+//static int drawBeamsCount = 0;
 static int drawBeamsBeamCount = 0;
 
 const char* const NotePixmapFactory::defaultSerifFontFamily = "Bitstream Vera Serif";
@@ -2790,7 +2790,7 @@ NotePixmapFactory::drawTrillLineAux(int length, QPainter *painter, int x, int y)
                                          PlainColour, false));
     int height = character.getHeight();
 
-    // create a pixmap of a suitable width and height to contain our tr /\/\
+    // create a pixmap of a suitable width and height to contain our tr~~~
     //
     // I think the "if (painter)" bit is a block-copied hold-over that shouldn't
     // be necessary in new code, but I'm not completely sure.  A lot of my
@@ -2844,6 +2844,7 @@ void
 NotePixmapFactory::drawBracket(int length, bool left, bool curly, int x, int y)
 {
     // curly mode not yet implemented
+    curly = curly;  // shut up compiler warning
 
     int thickness = getStemThickness() * 2;
 

@@ -42,10 +42,10 @@ public:
         m_selection(&selection), m_semitones(semitones), m_diatonic(false) { }
 
     TransposeCommand(int semitones, int steps, EventSelection &selection) :
-        BasicSelectionCommand(getDiatonicGlobalName(semitones, steps), selection, true),
+        BasicSelectionCommand(getDiatonicGlobalName(semitones), selection, true),
         m_selection(&selection), m_semitones(semitones), m_steps(steps), m_diatonic(true) { }
 
-    static QString getDiatonicGlobalName(int semitones = 0, int step = 0) {
+    static QString getDiatonicGlobalName(int semitones = 0) {
         switch (semitones) {
         default:  return tr("Transpose by &Interval...");
         }

@@ -101,7 +101,7 @@ NotationWidget::NotationWidget() :
     m_layout->setSpacing(0);
 
     // Remove black margins around the notation
-    //m_layout->setContentsMargins(0, 0, 0, 0);
+    m_layout->setContentsMargins(0, 0, 0, 0);
     
     m_view = new Panned;
     m_view->setBackgroundBrush(Qt::white);
@@ -643,7 +643,8 @@ NotationWidget::slotDispatchMousePress(const NotationMouseEvent *e)
 {
     if (e->buttons & Qt::LeftButton) {
         if (e->modifiers & Qt::ControlModifier) {
-            if (m_scene) m_scene->slotSetInsertCursorPosition(e->time, true, true); //!!!
+            // the function this used was an empty NOP
+            // if (m_scene) m_scene->slotSetInsertCursorPosition(e->time, true, true); //!!!
             return;
         }
     }
@@ -1017,7 +1018,7 @@ NotationWidget::slotShowHeaderToolTip(QString toolTipText)
 }
 
 void
-NotationWidget::slotHeadersResized(int width)
+NotationWidget::slotHeadersResized(int)
 {
     // Set headers view width to accomodate headers width.   
     m_headersView->setFixedWidth(

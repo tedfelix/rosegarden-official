@@ -65,13 +65,6 @@
       <!-- JAS See src/gui/editors/notation/NotationView.cpp -->
       <!-- JAS action name="note_font_size_" + sizes[i] (1, 2, etc. ) -->
     </Menu>
-    <!-- JAS original <Action name="proportion_actionmenu" /> -->
-    <Menu name="proportion_actionmenu">
-      <text>Du&amp;ration Factor</text>
-      <!-- JAS Custom coded menu actions created based on available proportions -->
-      <!-- JAS See src/gui/editors/notation/NotationView.cpp -->
-      <!-- JAS action name="proportion_" + proportions list names (0, 20, 40, etc.) -->
-    </Menu>
   <Separator/>
     <Menu name="layout">
       <text>&amp;Layout Mode</text>
@@ -81,15 +74,6 @@
     </Menu>
   <Separator/>
     <Action name="lyric_editor" text="Open L&amp;yric Editor" />
-  <Separator/>
-    <Action name="show_velocity_control_ruler" text="&amp;Show Velocity Property Ruler" />
-    <!-- JAS No text in menus for 'show_controller_event_ruler' action name. -->
-    <Action name="show_controller_events_ruler" />
-<!--    <Action name="add_control_ruler"/> -->
-    <Menu name="add_control_ruler">
-      <text>Add Event Ruler</text>
-      <!-- JAS custom coded menu -->
-    </Menu>
   <Separator/>
     <!-- JAS 'show_track_headers' is determined by states -->
     <Action name="show_track_headers" text="Show &amp;Track Headers" />
@@ -544,14 +528,15 @@
       <Action name="show_symbol_toolbar" text="Show &amp;Symbols Toolbar" icon="palette-symbol" checked="true" append="show_merge" />
       <Action name="show_transport_toolbar" text="Show Trans&amp;port Toolbar" checked="true" append="show_merge" />
       <Action name="show_layout_toolbar" text="Show &amp;Layout Toolbar" checked="true" append="show_merge" />
+      <Action name="show_rulers_toolbar" text="Show &amp;Rulers Toolbar" checked="true" append="show_merge" />
       <!-- JAS 'options_show_statusbar' determined by state -->
       <Action name="options_show_statusbar" text="Hide St&amp;atusbar" append="show_merge" />
     </Menu>
     <Menu name="rulers" append="show_merge">
       <text>&amp;Rulers</text>
-      <Action name="show_chords_ruler" text="Show Cho&amp;rd Name Ruler" checked="false" append="show_merge" />
-      <Action name="show_raw_note_ruler" text="Show Ra&amp;w Note Ruler" checked="false" append="show_merge" />
-      <Action name="show_tempo_ruler" text="Show &amp;Tempo Ruler" checked="true" append="show_merge" />
+      <Action name="toggle_velocity_ruler" text="Show &amp;Velocity Ruler" icon="ruler-velocity" checked="false" />
+      <Action name="toggle_pitchbend_ruler" text="Show Pitch &amp;Bend Ruler" icon="ruler-pitch" checked="false" />
+      <Action name="add_control_ruler" text="Add &amp;Control Ruler..." icon="ruler-controller" checked="false" />
     </Menu>
   <Separator append="show_merge" />
     <Action name="show_annotations" text="Show &amp;Annotations" checked="true" append="show_merge" />
@@ -755,6 +740,13 @@
   <Action name="continuous_page_mode" />
   <Action name="multi_page_mode" />
 <!-- the remainder filled at runtime -->
+</ToolBar>
+
+<ToolBar name="Rulers Toolbar">
+  <text>Rulers Toolbar</text>
+  <Action name="toggle_velocity_ruler" />
+  <Action name="toggle_pitchbend_ruler" />
+  <Action name="add_control_ruler" />
 </ToolBar>
 
 <State name="note_rest_tool_current">
@@ -963,21 +955,6 @@
   <enable>
    <Action name="draw_property_line"/>
   </enable>
-</State>
-
-<State name="have_control_ruler">
-  <enable>
-    <Action name="show_control_rulers"/>
-  </enable>
-</State>
-
-<State name="have_controller_item_selected">
-  <enable>
-    <Action name="erase_control_ruler_item"/>
-  </enable>
-  <disable>
-   <Action name="insert_control_ruler_item"/>
-  </disable>
 </State>
 
 <State name="note_0_dot_mode">

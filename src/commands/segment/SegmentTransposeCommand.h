@@ -44,7 +44,7 @@ public:
 
     virtual ~SegmentTransposeCommand();
 
-    static QString getGlobalName(int semitones = 0, int step = 0) {
+    static QString getGlobalName(int semitones = 0) {
         switch (semitones) {
         default:  return tr("Transpose by &Interval...");
         }

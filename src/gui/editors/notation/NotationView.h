@@ -26,6 +26,7 @@
 
 #include <QMainWindow>
 #include <QLabel>
+#include <QComboBox>
 
 #include <vector>
 
@@ -55,6 +56,7 @@ public:
     virtual EventSelection *getSelection() const;
     virtual void setSelection(EventSelection* s, bool preview = false);
 
+    virtual void initLayoutToolbar();
     virtual void initStatusBar();
     virtual timeT getInsertionTime() const;
 
@@ -211,6 +213,7 @@ protected slots:
     void slotToggleGroupToolBar();
     void slotToggleSymbolsToolBar();
     void slotToggleLayoutToolBar();
+    void slotToggleRulersToolBar();
     void slotToggleTransportToolBar();
 
     void slotToggleTracking();
@@ -354,6 +357,14 @@ private:
 
     /// Displayed in the status bar, shows the absolute time the cursor is at
     QLabel* m_hoveredOverAbsoluteTime;
+
+    QComboBox       *m_fontCombo;
+    QComboBox       *m_fontSizeCombo;
+    QComboBox       *m_spacingCombo;
+    QString          m_fontName;
+    int              m_fontSize;
+
+    bool m_Thorn;
 };
 
 }

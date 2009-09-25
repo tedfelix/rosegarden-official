@@ -46,7 +46,7 @@ const Rosegarden::Clef clefIndexToClef(int index)
     return clef;
 }
 
-const int clefNameToClefIndex(QString s)
+int clefNameToClefIndex(QString s)
 {
     int m_elClef = 0;
 	if (!s.isEmpty()) {

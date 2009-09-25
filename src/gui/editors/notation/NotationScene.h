@@ -120,11 +120,6 @@ public:
 
     bool constrainToSegmentArea(QPointF &scenePos);
 
-    //!!! remove
-    void slotSetInsertCursorPosition(timeT position,
-                                     bool scroll, bool updateNow) { }
-
-
     // more dubious:
     void handleEventRemoved(Event *);
     bool areAnnotationsVisible() { return true; }

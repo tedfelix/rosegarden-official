@@ -25,7 +25,6 @@
 
 #include "misc/ConfigGroups.h"
 #include "document/RosegardenDocument.h"
-// #include "document/Command.h"
 #include "document/CommandHistory.h"
 
 #include "gui/dialogs/AboutDialog.h"
@@ -68,7 +67,6 @@
 #include "base/SnapGrid.h"
 #include "base/Clipboard.h"
 
-// #include "base/Composition.h"
 #include "base/AnalysisTypes.h"
 #include "base/CompositionTimeSliceAdapter.h"
 #include "gui/dialogs/RescaleDialog.h"
@@ -148,6 +146,11 @@ NewMatrixView::NewMatrixView(RosegardenDocument *doc,
     // Set initial visibility ...
     bool view;
     QSettings settings;
+
+    settings.beginGroup(GeneralOptionsConfigGroup);
+    m_Thorn = settings.value("use_thorn_style", true).toBool();
+    settings.endGroup();
+
     settings.beginGroup(MatrixViewConfigGroup);
 
     // ... of chord name ruler ...
@@ -471,9 +474,6 @@ NewMatrixView::setupActions()
     createAction("retrograde_invert", SLOT(slotRetrogradeInvert()));    
 //     createAction("jog_left", SLOT(slotJogLeft()));
 //     createAction("jog_right", SLOT(slotJogRight()));
-//     createAction("show_velocity_control_ruler", SLOT(slotShowVelocityControlRuler()));
-//     createAction("draw_property_line", SLOT(slotDrawPropertyLine()));
-//     createAction("select_all_properties", SLOT(slotSelectAllProperties()));    
     
 }
 
@@ -509,7 +509,7 @@ NewMatrixView::initActionsToolbar()
     QPixmap noMap = NotePixmapFactory::makeToolbarPixmap("menu-no-note");
 
     m_snapGridCombo = new QComboBox(actionsToolbar);
-    m_snapGridCombo->setStyleSheet(comboStyle);
+    if (m_Thorn) m_snapGridCombo->setStyleSheet(comboStyle);
     actionsToolbar->addWidget(m_snapGridCombo);
 
     for (unsigned int i = 0; i < m_snapValues.size(); i++) {
@@ -549,7 +549,7 @@ NewMatrixView::initActionsToolbar()
     actionsToolbar->addWidget(vlabel);
 
     m_velocityCombo = new QComboBox(actionsToolbar);
-    m_velocityCombo->setStyleSheet(comboStyle);
+    if (m_Thorn) m_velocityCombo->setStyleSheet(comboStyle);
     actionsToolbar->addWidget(m_velocityCombo);
 
     for (int i = 0; i <= 127; ++i) {
@@ -567,7 +567,7 @@ NewMatrixView::initActionsToolbar()
     actionsToolbar->addWidget(qLabel);
 
     m_quantizeCombo = new QComboBox(actionsToolbar);
-    m_quantizeCombo->setStyleSheet(comboStyle);
+    if (m_Thorn) m_quantizeCombo->setStyleSheet(comboStyle);
     actionsToolbar->addWidget(m_quantizeCombo);
 
     for (unsigned int i = 0; i < m_quantizations.size(); ++i) {

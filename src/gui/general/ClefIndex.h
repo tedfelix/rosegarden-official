@@ -46,7 +46,7 @@ namespace Rosegarden
 
 const Clef clefIndexToClef(int index);
 
-const int clefNameToClefIndex(QString s);
+int clefNameToClefIndex(QString s);
 
 }
 

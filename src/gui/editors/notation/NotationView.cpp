@@ -121,6 +121,7 @@
 #include <QProgressBar>
 
 #include <algorithm>
+#include <set>
 
 namespace Rosegarden
 {
@@ -132,9 +133,9 @@ NewNotationView::NewNotationView(RosegardenDocument *doc,
                                  QWidget *parent) :
     EditViewBase(doc, segments, parent),
     m_document(doc),
+    m_durationMode(InsertingRests),
     m_durationPressed(0),
-    m_accidentalPressed(0),
-    m_durationMode(InsertingRests) //Fool morphDurationToolbar during first call
+    m_accidentalPressed(0)
 {
     m_notationWidget = new NotationWidget();
     setCentralWidget(m_notationWidget);
@@ -179,6 +180,11 @@ NewNotationView::NewNotationView(RosegardenDocument *doc,
     // Set display configuration
     bool visible;
     QSettings settings;
+
+    settings.beginGroup(GeneralOptionsConfigGroup);
+    m_Thorn = settings.value("use_thorn_style", true).toBool();
+    settings.endGroup();
+
     settings.beginGroup(NotationViewConfigGroup);
 
     // Set initial notation layout mode
@@ -233,6 +239,7 @@ NewNotationView::NewNotationView(RosegardenDocument *doc,
 
     settings.endGroup();
 
+    initLayoutToolbar();
     initStatusBar();
 
     updateWindowTitle();
@@ -329,12 +336,6 @@ NewNotationView::setupActions()
     createAction("multi_page_mode", SLOT(slotMultiPageMode()));
 
     createAction("lyric_editor", SLOT(slotEditLyrics()));
-    createAction("show_velocity_control_ruler", SLOT(slotShowVelocityControlRuler()));
-
-    // "add_control_ruler" subMenu
-    // was disabled in kde3 version:
-    // createAction("add_control_ruler", SLOT(slotShowPropertyControlRuler()));
-
     createAction("show_track_headers", SLOT(slotShowHeadersGroup()));
 
     //"document" Menubar menu
@@ -623,6 +624,10 @@ NewNotationView::setupActions()
     createAction("grace_mode", SLOT(slotUpdateInsertModeStatus()));
     createAction("toggle_step_by_step", SLOT(slotToggleStepByStep()));
 
+    createAction("toggle_velocity_ruler", SLOT(slotToggleVelocityRuler()));
+    createAction("toggle_pitchbend_ruler", SLOT(slotTogglePitchbendRuler()));
+    createAction("add_control_ruler", SLOT(slotAddControlRuler()));
+
     //Actions first appear in "settings" Menubar menu
     //"toolbars" subMenu
     //Where is "options_show_toolbar" created?
@@ -636,6 +641,7 @@ NewNotationView::setupActions()
     createAction("show_symbol_toolbar", SLOT(slotToggleSymbolsToolBar()));
     createAction("show_transport_toolbar", SLOT(slotToggleTransportToolBar()));
     createAction("show_layout_toolbar", SLOT(slotToggleLayoutToolBar()));
+    createAction("show_rulers_toolbar", SLOT(slotToggleRulersToolBar()));
 
     //"rulers" subMenu
     createAction("show_chords_ruler", SLOT(slotToggleChordsRuler()));
@@ -874,6 +880,133 @@ NewNotationView::slotUpdateMenuStates()
 }
 
 void
+NewNotationView::initLayoutToolbar()
+{
+    QToolBar *layoutToolbar = findToolbar("Layout Toolbar");
+
+    if (!layoutToolbar) {
+        std::cerr << "NewNotationView::initLayoutToolbar() : layout toolbar not found"
+                  << std::endl;
+        return;
+    }
+
+    // something missed in the stylesheet and at this point I feel like just
+    // whacking the mole in the head with a hammer and moving on
+    QString labelStyle("color: black");
+
+    QLabel *label = new QLabel(tr("  Font:  "), layoutToolbar);
+    if (m_Thorn) label->setStyleSheet("color: black");
+    layoutToolbar->addWidget(label);
+
+
+    // There's some way to do this kind of thing with states or properties or
+    // something, but I couldn't ever get it to work.  So, again, I'll just use
+    // another hacky hard coded internal stylesheet.
+    //
+    QString comboStyle("QComboBox::enabled,QComboBox{ border: 1px solid #AAAAAA; border-radius: 3px; padding: 0 5px 0 5px; min-width: 2em; color: #000000; } QComboBox::enabled:hover, QComboBox:hover, QComboBox::drop-down:hover { background-color: #CCDFFF; } QComboBox::!editable, QComboBox::drop-down:!editable { background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #EEEEEE, stop:1 #DDDDDD); } QComboBox::!editable:on, QComboBox::drop-down:editable:on, { background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #E0E0E0, stop:1 #EEEEEE); } QComboBox::on { padding-top: 3px; padding-left: 4px; } QComboBox::drop-down { subcontrol-origin: padding; subcontrol-position: top right; width: 15px; } QComboBox::down-arrow { image: url(:pixmaps/style/arrow-down-small.png); } QComboBox::down-arrow:on { top: 1px; left: 1px; } QComboBox QAbstractItemView { border-image: url(:pixmaps/style/combo-dropdown.png) 1; selection-background-color: #80AFFF; selection-color: #FFFFFF; color: #000000; }");
+
+    //
+    // font combo
+    //
+    m_fontCombo = new QComboBox(layoutToolbar);
+    m_fontCombo->setEditable(false);
+    if (m_Thorn) m_fontCombo->setStyleSheet(comboStyle);
+    layoutToolbar->addWidget(m_fontCombo);
+
+    std::set<QString> fs(NoteFontFactory::getFontNames());
+    std::vector<std::string> f(fs.begin(), fs.end());
+    std::sort(f.begin(), f.end());
+
+    bool foundFont = false;
+
+    for (std::vector<std::string>::iterator i = f.begin(); i != f.end(); ++i) {
+
+        QString fontQName(strtoqstr(*i));
+
+        m_fontCombo->addItem(fontQName);
+        if (fontQName.toLower() == m_fontName.toLower()) {
+            m_fontCombo->setCurrentIndex(m_fontCombo->count() - 1);
+            foundFont = true;
+        }
+    }
+
+    if (!foundFont) {
+        // don't annoy user with stupid internal warning dialog
+//        QMessageBox::warning (this, "", tr("Unknown font \"%1\", using default")
+//                .arg(m_fontName) );
+        m_fontName = NoteFontFactory::getDefaultFontName();
+    }
+
+    connect(m_fontCombo, SIGNAL(activated(const QString &)),
+            this, SLOT(slotChangeFont(const QString &)));
+
+    label = new QLabel(tr("  Size:  "), layoutToolbar);
+    if (m_Thorn) label->setStyleSheet("color: black");
+    layoutToolbar->addWidget(label);
+
+    QString value;
+
+    //
+    // font size combo
+    //
+    std::vector<int> sizes = NoteFontFactory::getScreenSizes(m_fontName);
+    m_fontSizeCombo = new QComboBox(layoutToolbar);
+    if (m_Thorn) m_fontSizeCombo->setStyleSheet(comboStyle);
+    layoutToolbar->addWidget(m_fontSizeCombo);
+
+    for (std::vector<int>::iterator i = sizes.begin(); i != sizes.end(); ++i) {
+
+        value.setNum(*i);
+        m_fontSizeCombo->addItem(value);
+    }
+    // set combo's current value to default
+    value.setNum(m_fontSize);
+//     m_fontSizeCombo->setItemText(value);
+    m_fontSizeCombo->setCurrentText(value);
+//     m_fontSizeCombo->setCurrentIndex( m_fontSizeCombo->indexOf(value) );
+    
+    connect(m_fontSizeCombo, SIGNAL(activated(const QString&)),
+            this, SLOT(slotChangeFontSizeFromStringValue(const QString&)));
+
+    label = new QLabel(tr("  Spacing:  "), layoutToolbar);
+    if (m_Thorn) label->setStyleSheet("color: black");
+
+    layoutToolbar->addWidget(label);
+    
+//!!!
+//
+// The Spacing menu hasn't been implemented either.  I haven't researched this,
+// but assume it's probably tricky/ugly/nasty, so we'll just comment this out
+// too and move along for now.
+//
+//    //
+//    // spacing combo
+//    //
+//    int defaultSpacing = m_hlayout->getSpacing();
+//    std::vector<int> spacings = NotationHLayout::getAvailableSpacings();
+//
+//    m_spacingCombo = new QComboBox(layoutToolbar);
+//    if (m_Thorn) m_spacingCombo->setStyleSheet(comboStyle);
+//    for (std::vector<int>::iterator i = spacings.begin(); i != spacings.end(); ++i) {
+//
+//        value.setNum(*i);
+//        value += "%";
+//        m_spacingCombo->addItem(value);
+//    }
+//    // set combo's current value to default
+//    value.setNum(defaultSpacing);
+//    value += "%";
+////     m_spacingCombo->setItemText(value);
+//    m_spacingCombo->setCurrentText(value);
+////     m_spacingCombo->setCurrentIndex( m_spacingCombo->indexOf(value) );
+//
+//    connect(m_spacingCombo, SIGNAL(activated(const QString&)),
+//            this, SLOT(slotChangeSpacingFromStringValue(const QString&)));
+//
+//    layoutToolbar->addWidget(m_spacingCombo);
+}
+
+void
 NewNotationView::initStatusBar()
 {
     QStatusBar* sb = statusBar();
@@ -906,7 +1039,7 @@ NewNotationView::initStatusBar()
     sb->addWidget(hbox);
 
     sb->showMessage(TmpStatusMsg::getDefaultMsg(), TmpStatusMsg::getDefaultId());
-	
+    
     m_selectionCounter = new QLabel(sb);
     sb->addWidget(m_selectionCounter);
 
@@ -1266,12 +1399,14 @@ void NewNotationView::slotPreviewSelection()
                                getSelection()->getEndTime());
 }
 
-void NewNotationView::slotClearLoop()
+void
+NewNotationView::slotClearLoop()
 {
     getDocument()->slotSetLoop(0, 0);
 }
 
-void NewNotationView::slotClearSelection()
+void
+NewNotationView::slotClearSelection()
 {
     // Actually we don't clear the selection immediately: if we're
     // using some tool other than the select tool, then the first
@@ -1286,7 +1421,8 @@ void NewNotationView::slotClearSelection()
     }
 }
 
-void NewNotationView::slotEditSelectFromStart()
+void
+NewNotationView::slotEditSelectFromStart()
 {
     timeT t = getInsertionTime();
     Segment *segment = getCurrentSegment();
@@ -1296,7 +1432,8 @@ void NewNotationView::slotEditSelectFromStart()
                  false);
 }
 
-void NewNotationView::slotEditSelectToEnd()
+void
+NewNotationView::slotEditSelectToEnd()
 {
     timeT t = getInsertionTime();
     Segment *segment = getCurrentSegment();
@@ -1306,7 +1443,8 @@ void NewNotationView::slotEditSelectToEnd()
                  false);
 }
 
-void NewNotationView::slotEditSelectWholeStaff()
+void
+NewNotationView::slotEditSelectWholeStaff()
 {
     Segment *segment = getCurrentSegment();
     setSelection(new EventSelection(*segment,
@@ -1315,7 +1453,8 @@ void NewNotationView::slotEditSelectWholeStaff()
                  false);
 }
 
-void NewNotationView::slotFilterSelection()
+void
+NewNotationView::slotFilterSelection()
 {
     NOTATION_DEBUG << "NewNotationView::slotFilterSelection" << endl;
 
@@ -1349,7 +1488,8 @@ void NewNotationView::slotFilterSelection()
     }
 }
 
-void NewNotationView::slotVelocityUp()
+void
+NewNotationView::slotVelocityUp()
 {
     if (getSelection())
         return ;
@@ -1359,7 +1499,8 @@ void NewNotationView::slotVelocityUp()
             10, *getSelection()));
 }
 
-void NewNotationView::slotVelocityDown()
+void
+NewNotationView::slotVelocityDown()
 {
     if (!getSelection())
         return ;
@@ -1369,7 +1510,8 @@ void NewNotationView::slotVelocityDown()
             -10, *getSelection()));
 }
 
-int NewNotationView::getVelocityFromSelection()
+int
+NewNotationView::getVelocityFromSelection()
 {
     if (!getSelection()) return 0;
 
@@ -1392,7 +1534,8 @@ int NewNotationView::getVelocityFromSelection()
     return 0;
 }
 
-void NewNotationView::slotSetVelocities()
+void
+NewNotationView::slotSetVelocities()
 {
     if (!getSelection())
         return ;
@@ -1414,60 +1557,77 @@ void NewNotationView::slotSetVelocities()
     }
 }
 
-void NewNotationView::slotToggleGeneralToolBar()
+void
+NewNotationView::slotToggleGeneralToolBar()
 {
     toggleNamedToolBar("General Toolbar");
 }
 
-void NewNotationView::slotToggleToolsToolBar()
+void
+NewNotationView::slotToggleToolsToolBar()
 {
     toggleNamedToolBar("Tools Toolbar");
 }
 
-void NewNotationView::slotToggleDurationToolBar()
+void
+NewNotationView::slotToggleDurationToolBar()
 {
     toggleNamedToolBar("Duration Toolbar");
 }
 
-void NewNotationView::slotToggleAccidentalsToolBar()
+void
+NewNotationView::slotToggleAccidentalsToolBar()
 {
     toggleNamedToolBar("Accidentals Toolbar");
 }
 
-void NewNotationView::slotToggleClefsToolBar()
+void
+NewNotationView::slotToggleClefsToolBar()
 {
     toggleNamedToolBar("Clefs Toolbar");
 }
 
-void NewNotationView::slotToggleMarksToolBar()
+void
+NewNotationView::slotToggleMarksToolBar()
 {
     toggleNamedToolBar("Marks Toolbar");
 }
 
-void NewNotationView::slotToggleGroupToolBar()
+void
+NewNotationView::slotToggleGroupToolBar()
 {
     toggleNamedToolBar("Group Toolbar");
 }
 
-void NewNotationView::slotToggleSymbolsToolBar()
+void
+NewNotationView::slotToggleSymbolsToolBar()
 {
     toggleNamedToolBar("Symbols Toolbar");
 }
 
-void NewNotationView::slotToggleLayoutToolBar()
+void
+NewNotationView::slotToggleLayoutToolBar()
 {
     toggleNamedToolBar("Layout Toolbar");
 }
 
-void NewNotationView::slotToggleTransportToolBar()
+void
+NewNotationView::slotToggleRulersToolBar()
+{
+    toggleNamedToolBar("Rulers Toolbar");
+}
+
+void
+NewNotationView::slotToggleTransportToolBar()
 {
     toggleNamedToolBar("Transport Toolbar");
 }
 
-void NewNotationView::toggleNamedToolBar(const QString& toolBarName, bool* force)
+void
+NewNotationView::toggleNamedToolBar(const QString& toolBarName, bool* force)
 {
-// 	QToolBar *namedToolBar = toolBar(toolBarName);
-	QToolBar *namedToolBar = findChild<QToolBar*>(toolBarName);
+//     QToolBar *namedToolBar = toolBar(toolBarName);
+    QToolBar *namedToolBar = findChild<QToolBar*>(toolBarName);
 
     if (!namedToolBar) {
         NOTATION_DEBUG << "NewNotationView::toggleNamedToolBar() : toolBar "
@@ -1489,7 +1649,7 @@ void NewNotationView::toggleNamedToolBar(const QString& toolBarName, bool* force
             namedToolBar->hide();
     }
 
-//     setSettingsDirty();	//&&& not required ?
+//     setSettingsDirty();    //&&& not required ?
 
 }
 
@@ -2709,7 +2869,7 @@ NewNotationView::updateWindowTitle(bool m)
         int trackPosition = -1;
         if (track)
             trackPosition = track->getPosition();
-        //	std::cout << std::endl << std::endl << std::endl << "DEBUG TITLE BAR: " << getDocument()->getTitle() << std::endl << std::endl << std::endl;
+        //    std::cout << std::endl << std::endl << std::endl << "DEBUG TITLE BAR: " << getDocument()->getTitle() << std::endl << std::endl << std::endl;
         setWindowTitle(tr("%1%2 - Segment Track #%3 - Notation")
                       .arg(indicator)
                       .arg(getDocument()->getTitle())
