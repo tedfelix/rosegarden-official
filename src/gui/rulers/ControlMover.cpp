@@ -60,7 +60,7 @@ void
 ControlMover::handleLeftButtonPress(const ControlMouseEvent *e)
 {
     if (m_overItem) {
-        m_ruler->setCursor(Qt::ClosedHandCursor);
+        m_ruler->setCursor(Qt::BlankCursor);
 
         //for (std::vector<ControlItem*>::const_iterator it = e->itemList.begin(); it != e->itemList.end(); it++) {
         std::vector<ControlItem*>::const_iterator it = e->itemList.begin();
@@ -86,12 +86,6 @@ ControlMover::handleLeftButtonPress(const ControlMouseEvent *e)
             // No add to selection modifiers so clear the current selection
             m_ruler->clearSelectedItems();
         }
-//
-//        // Start selection rectangle
-//        m_ruler->setSelectionRect(new QRectF(e->x,e->y,0.0,0.0));
-//
-//        // Clear the added items list because we have yet to add any
-//        m_addedItems.clear();
     }
 
     m_mouseStartX = e->x;
@@ -109,36 +103,6 @@ ControlMover::handleMouseMove(const ControlMouseEvent *e)
         // No button pressed, set cursor style
         setCursor(e);
     }
-
-//    QRectF *pRectF = m_ruler->getSelectionRectangle();
-//    if (pRectF) {
-//        // Selection drag is in progress
-//        // Clear the list of items that this tool has added
-//        for (ControlItemList::iterator it = m_addedItems.begin(); it != m_addedItems.end(); it++) {
-//            (*it)->setSelected(false);
-//        }
-//        m_addedItems.clear();
-//
-//        // Update selection rectangle
-//        pRectF->setBottomRight(QPointF(e->x,e->y));
-//
-//        // Find items within the range of the new rectangle
-//        ControlItemMap::iterator itmin =
-//            m_ruler->findControlItem(std::min(pRectF->left(),
-//                pRectF->right()));
-//        ControlItemMap::iterator itmax =
-//            m_ruler->findControlItem(std::max(pRectF->left(),
-//                pRectF->right()));
-//
-//        // Add them if they're within the rectangle
-//        for (ControlItemMap::iterator it = itmin; it != itmax; it++) {
-//            if (pRectF->contains(it->second->boundingRect().center())) {
-//                m_addedItems.push_back(it->second);
-//                it->second->setSelected(true);
-//            }
-//        }
-//
-//    }
 
     if ((e->buttons & Qt::LeftButton) && m_overItem) {
         // A drag action is in progress        
@@ -175,11 +139,11 @@ ControlMover::handleMouseMove(const ControlMouseEvent *e)
         std::vector<QPointF>::iterator pIt = m_startPointList.begin();
         for (ControlItemList::iterator it = selected->begin(); it != selected->end(); ++it) {
             item = dynamic_cast <EventControlItem*> (*it);
-//            float x = item->xStart()+deltaX;
+
             float x = pIt->x()+deltaX;
             x = std::max(x,m_ruler->getXMin());
             x = std::min(x,m_ruler->getXMax());
-//            float y = item->y()+deltaY;
+
             float y = pIt->y()+deltaY;
             y = std::max(y,0.0f);
             y = std::min(y,1.0f);
@@ -196,18 +160,6 @@ ControlMover::handleMouseMove(const ControlMouseEvent *e)
 void
 ControlMover::handleMouseRelease(const ControlMouseEvent *e)
 {
-//    QRectF *pRectF = m_ruler->getSelectionRectangle();
-//    if (pRectF) {
-//        // Selection drag is now complete
-//        delete pRectF;
-//        m_ruler->setSelectionRect(0);
-//
-//        // Add the selected items to the current selection
-//        for (ControlItemList::iterator it = m_addedItems.begin(); it != m_addedItems.end(); it++) {
-//            m_ruler->addToSelection(*it);
-//        }
-//    }
-
     if (m_overItem) {
         // This is the end of a drag event
         // Update the segment to reflect changes
