@@ -26,6 +26,7 @@
 
 #include <QWidget>
 #include <QPushButton>
+#include <QBoxLayout>
 
 #include <vector>
 
@@ -194,6 +195,8 @@ private:
     bool m_inMove;
     QPointF m_lastMouseMoveScenePos;
 
+    QWidget     *m_panner;
+    QBoxLayout  *m_pannerLayout;
     Thumbwheel  *m_HVzoom;
     Thumbwheel  *m_Hzoom;
     Thumbwheel  *m_Vzoom;

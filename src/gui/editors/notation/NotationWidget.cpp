@@ -52,6 +52,7 @@
 
 #include <QGraphicsView>
 #include <QGridLayout>
+#include <QBoxLayout>
 #include <QScrollBar>
 #include <QTimer>
 #include <QGraphicsProxyWidget>
@@ -110,19 +111,11 @@ NotationWidget::NotationWidget() :
     m_view->setBackgroundBrush(QBrush(IconLoader().loadPixmap("bg-paper-grey")));
     m_layout->addWidget(m_view, PANNED_ROW, MAIN_COL, 1, 1);
 
-    m_hpanner = new Panner;
-    m_hpanner->setMaximumHeight(80);
-    m_hpanner->setBackgroundBrush(Qt::white);
-    m_hpanner->setRenderHints(0);
-
-    // the panner along with zoom controls in one strip at one grid location
-    // (note this needs to adapt when the panner goes vertical--port code first
-    // fix later)
-    QWidget *panner = new QWidget;
-    QHBoxLayout *pannerLayout = new QHBoxLayout;
-    pannerLayout->setContentsMargins(0, 0, 0, 0);
-    pannerLayout->setSpacing(0);
-    panner->setLayout(pannerLayout);
+    m_panner = new QWidget;
+    m_pannerLayout = new QBoxLayout(QBoxLayout::LeftToRight);
+    m_pannerLayout->setContentsMargins(0, 0, 0, 0);
+    m_pannerLayout->setSpacing(0);
+    m_panner->setLayout(m_pannerLayout);
 
     m_hpanner = new Panner;
     m_hpanner->setMaximumHeight(80);
@@ -130,7 +123,7 @@ NotationWidget::NotationWidget() :
     m_hpanner->setOptimizationFlag(QGraphicsView::DontAdjustForAntialiasing, true);
     m_hpanner->setRenderHints(0);
 
-    pannerLayout->addWidget(m_hpanner);
+    m_pannerLayout->addWidget(m_hpanner);
 
     QFrame *controls = new QFrame;
 
@@ -188,9 +181,9 @@ NotationWidget::NotationWidget() :
     connect(m_reset, SIGNAL(clicked()), this, 
             SLOT(slotResetZoomClicked()));
 
-    pannerLayout->addWidget(controls);
+    m_pannerLayout->addWidget(controls);
 
-    m_layout->addWidget(panner, PANNER_ROW, HEADER_COL, 1, 2);
+    m_layout->addWidget(m_panner, PANNER_ROW, HEADER_COL, 1, 2);
 
     m_headersView = new Panned;
     m_headersView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -427,15 +420,21 @@ NotationWidget::segmentsContainNotes() const
 void
 NotationWidget::locatePanner(bool tall)
 {
-    m_layout->removeWidget(m_hpanner);
+    m_layout->removeWidget(m_panner);
     if (tall) {
+        m_panner->setMaximumHeight(QWIDGETSIZE_MAX);
         m_hpanner->setMaximumHeight(QWIDGETSIZE_MAX);
+        m_panner->setMaximumWidth(80);
         m_hpanner->setMaximumWidth(80);
-        m_layout->addWidget(m_hpanner, PANNED_ROW, VPANNER_COL);
+        m_pannerLayout->setDirection(QBoxLayout::TopToBottom);
+        m_layout->addWidget(m_panner, PANNED_ROW, VPANNER_COL);
     } else {
+        m_panner->setMaximumHeight(80);
         m_hpanner->setMaximumHeight(80);
+        m_panner->setMaximumWidth(QWIDGETSIZE_MAX);
         m_hpanner->setMaximumWidth(QWIDGETSIZE_MAX);
-        m_layout->addWidget(m_hpanner, PANNER_ROW, HEADER_COL, 1, 2);
+        m_pannerLayout->setDirection(QBoxLayout::LeftToRight);
+        m_layout->addWidget(m_panner, PANNER_ROW, HEADER_COL, 1, 2);
     }
 }
 
