@@ -184,7 +184,7 @@ protected:
     virtual void removeCheckVisibleLimits(const ControlItemMap::iterator&);
     virtual void eraseControlItem(const Event*);
     virtual void eraseControlItem(const ControlItemMap::iterator&);
-    virtual bool isVisible(ControlItem*);
+    virtual int visiblePosition(ControlItem*);
 
     // Stacking of the SegmentItems on the canvas
     //
@@ -228,6 +228,7 @@ protected:
     //   m_visibleItems list all includes items that are actually visible.
     ControlItemMap::iterator m_firstVisibleItem;
     ControlItemMap::iterator m_lastVisibleItem;
+    ControlItemMap::iterator m_nextItemLeft;
     
     ControlItemList m_selectedItems;
     ControlItemList m_visibleItems;

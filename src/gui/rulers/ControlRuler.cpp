@@ -187,17 +187,31 @@ void ControlRuler::addCheckVisibleLimits(ControlItemMap::iterator it)
     // visible item iterators
     ControlItem *item = it->second;
     
-    if (isVisible(item)) {
+    // If this new item is visible
+    if (visiblePosition(item)==0) {
+        // put it in the visible list
         m_visibleItems.push_back(item);
+        // If there is no first visible item or this one is further left
         if (m_firstVisibleItem == m_controlItemMap.end() || 
                 item->xStart() < m_firstVisibleItem->second->xStart()) {
+            // make it the first visible item
             m_firstVisibleItem = it;
         }
 
+        // If there is no last visible item or this is further right
         if (m_lastVisibleItem == m_controlItemMap.end() ||
                 item->xStart() > m_lastVisibleItem->second->xStart()) {
-            // This item is the last visible, set m_lastVisibleItem to it
+            // make it the last visible item
             m_lastVisibleItem = it;
+        }
+    }
+
+    // If the new item is invisible to the left
+    if (visiblePosition(item) == -1) {
+        if (m_nextItemLeft == m_controlItemMap.end() ||
+                item->xStart() > m_nextItemLeft->second->xStart()) {
+            // make it the next item to the left
+            m_nextItemLeft = it;
         }
     }
 }
@@ -245,19 +259,39 @@ void ControlRuler::removeCheckVisibleLimits(const ControlItemMap::iterator &it)
     m_visibleItems.remove(it->second);
     
     // If necessary, correct the first and lastVisibleItem iterators 
+    // If this was the first visible item
     if (it == m_firstVisibleItem) {
+        // Check the next item to the right
         m_firstVisibleItem++;
+        // If the next item to the right is invisible, there are no visible items
+        // Note we have to check .end() before we dereference ->second
         if (m_firstVisibleItem != m_controlItemMap.end() &&
-                !isVisible(m_firstVisibleItem->second))
+                visiblePosition(m_firstVisibleItem->second)!=0)
             m_firstVisibleItem = m_controlItemMap.end();
     }
     
+    // If this was the last visible item
     if (it == m_lastVisibleItem) {
+        // and not the first in the list
         if (it != m_controlItemMap.begin()) {
+            // check the next item to the left
             m_lastVisibleItem--;
-            if (!isVisible(m_lastVisibleItem->second)) m_lastVisibleItem = m_controlItemMap.end();
+            // If this is invisible, there are no visible items
+            if (visiblePosition(m_lastVisibleItem->second)!=0) m_lastVisibleItem = m_controlItemMap.end();
         }
+        // if it's first in the list then there are no visible items
         else m_lastVisibleItem = m_controlItemMap.end();
+    }
+    
+    // If this was the first invisible item left (could be part of a selection moved off screen)
+    if (it == m_nextItemLeft) {
+        // and not the first in the list
+        if (it != m_controlItemMap.begin()) {
+            // use the next to the left (we know it is invisible)
+            m_nextItemLeft--;
+        }
+        // if it's first in the list then there are no invisible items to the left
+        else m_nextItemLeft = m_controlItemMap.end();
     }
 }
 
@@ -286,12 +320,16 @@ void ControlRuler::moveItem(ControlItem* item)
     addCheckVisibleLimits(it);
 }
 
-bool ControlRuler::isVisible(ControlItem* item)
+int ControlRuler::visiblePosition(ControlItem* item)
 {
-    if (item->xEnd() > m_pannedRect.left() && item->xStart() < m_pannedRect.right())
-        return true;
+    // Check visibility of an item
+    // Returns: -1 - item is off screen left
+    //           0 - item is visible
+    //          +1 - item is off screen right
+    if (item->xEnd() < m_pannedRect.left()) return -1;
+    if (item->xStart() > m_pannedRect.right()) return 1;
 
-    return false;
+    return 0;
 }
 
 float ControlRuler::getXMax()
@@ -512,9 +550,18 @@ void ControlRuler::slotSetPannedRect(QRectF pr)
 	///TODO Improve efficiency using xstart and xstop ordered lists of control items
 	m_visibleItems.clear();
 	bool anyVisibleYet = false;
-	ControlItemMap::iterator it;
+
+	m_nextItemLeft = m_controlItemMap.end();
+    m_firstVisibleItem = m_controlItemMap.end();
+    m_lastVisibleItem = m_controlItemMap.end();
+
+    ControlItemMap::iterator it;
 	for (it = m_controlItemMap.begin();it != m_controlItemMap.end(); ++it) {
-	    if (isVisible(it->second)) {
+	    int visPos = visiblePosition(it->second);
+	    
+	    if (visPos == -1) m_nextItemLeft = it;
+	    
+	    if (visPos == 0) {
 	        if (!anyVisibleYet) {
 	            m_firstVisibleItem = it;
 	            anyVisibleYet = true;
@@ -522,16 +569,9 @@ void ControlRuler::slotSetPannedRect(QRectF pr)
 	            
 	        m_visibleItems.push_back(it->second);
 	        m_lastVisibleItem = it;
-	    } else {
-	        if (anyVisibleYet) {
-	            break;
-	        }
 	    }
-	}
-	
-    if (!anyVisibleYet) {
-        m_firstVisibleItem = m_controlItemMap.end();
-        m_lastVisibleItem = m_controlItemMap.end();
+	    
+	    if (visPos == 1) break;
 	}
 	
     RG_DEBUG << "ControlRuler::slotSetPannedRect - visible items: " << m_visibleItems.size();

@@ -190,19 +190,12 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
 //    str = QString::fromStdString(m_controller->getName());
 //    painter.drawText(10,20,str.toUpper());
     
-    if (m_firstVisibleItem == m_controlItemMap.end()) {
-        ///@TODO Draw a line irrespective of whether an item is visible
-        // There are no visible items
-        return;
-    }
-
     ControlItemMap::iterator mapIt;
     float lastX, lastY;
     lastX = m_rulerScale->getXForTime(m_segment->getStartTime());
-    if (m_firstVisibleItem != m_controlItemMap.begin()) {
-        mapIt = m_firstVisibleItem;
-        mapIt--;
-        EventControlItem *item = static_cast<EventControlItem*> (mapIt->second);
+
+    if (m_nextItemLeft != m_controlItemMap.end()) {
+        EventControlItem *item = static_cast<EventControlItem*> (m_nextItemLeft->second);
         lastY = item->y();
     } else {
         lastY = valueToY(m_controller->getDefault());
