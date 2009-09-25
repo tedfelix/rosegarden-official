@@ -14655,7 +14655,7 @@ Doble clic para abrir el editor de marcadores.</translation>
         <location filename="../../src/gui/editors/matrix/OldMatrixView.cpp" line="1142"/>
         <source>  %n event(s) selected </source>
         <translation type="unfinished">
-            <numerusform></numerusform>
+            <numerusform>  %n evento seleccionado</numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
@@ -14684,182 +14684,182 @@ Doble clic para abrir el editor de marcadores.</translation>
     <message>
         <location filename="../../src/gui/editors/matrix/OldMatrixView.cpp" line="1390"/>
         <source>Note: %1 (%2.%3s)</source>
-        <translation type="unfinished">Nota: %1 (%2,%3s)</translation>
+        <translation>Nota: %1 (%2,%3s)</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/OldMatrixView.cpp" line="1404"/>
         <source>%1 (%2)</source>
-        <translation type="unfinished">%1 (%2)</translation>
+        <translation>%1 (%2)</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/OldMatrixView.cpp" line="1445"/>
         <source>Time: %1 (%2.%3s)</source>
-        <translation type="unfinished">Tiempo: %1 (%2.%3s)</translation>
+        <translation>Tiempo: %1 (%2.%3s)</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/OldMatrixView.cpp" line="1523"/>
         <source>Cutting selection to clipboard...</source>
-        <translation type="unfinished">Cortando la selección al portapapeles...</translation>
+        <translation>Cortando la selección al portapapeles...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/OldMatrixView.cpp" line="1533"/>
         <source>Copying selection to clipboard...</source>
-        <translation type="unfinished">Copiando la selección al portapapeles...</translation>
+        <translation>Copiando la selección al portapapeles...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/OldMatrixView.cpp" line="1544"/>
         <source>Clipboard is empty</source>
-        <translation type="unfinished">Portapapeles vacío</translation>
+        <translation>Portapapeles vacío</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/OldMatrixView.cpp" line="1548"/>
         <source>Inserting clipboard contents...</source>
-        <translation type="unfinished">Insertando el contenido del portapapeles...</translation>
+        <translation>Insertando el contenido del portapapeles...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/OldMatrixView.cpp" line="1555"/>
         <source>Couldn&apos;t paste at this point</source>
-        <translation type="unfinished">No se puede pegar en este punto</translation>
+        <translation>No se puede pegar en este punto</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/OldMatrixView.cpp" line="1566"/>
         <source>Deleting selection...</source>
-        <translation type="unfinished">Eliminando selección...</translation>
+        <translation>Eliminando selección...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/OldMatrixView.cpp" line="1757"/>
         <source>Unknown note insert action %1</source>
-        <translation type="unfinished">Acción de insertar nota desconocida: %1</translation>
+        <translation>Acción de insertar nota desconocida: %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/OldMatrixView.cpp" line="1761"/>
         <location filename="../../src/gui/editors/matrix/OldMatrixView.cpp" line="2807"/>
         <source>Inserting note</source>
-        <translation type="unfinished">Insertando nota</translation>
+        <translation>Insertando nota</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/OldMatrixView.cpp" line="2021"/>
         <source>Unquantizing...</source>
-        <translation type="unfinished">Descuantificando...</translation>
+        <translation>Descuantificando...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/OldMatrixView.cpp" line="2052"/>
         <source> Grid: </source>
-        <translation type="unfinished"> Rejilla: </translation>
+        <translation> Rejilla: </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/OldMatrixView.cpp" line="2066"/>
         <source>None</source>
-        <translation type="unfinished">Nada</translation>
+        <translation>Nada</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/OldMatrixView.cpp" line="2068"/>
         <source>Unit</source>
-        <translation type="unfinished">Unidad</translation>
+        <translation>Unidad</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/OldMatrixView.cpp" line="2070"/>
         <source>Beat</source>
-        <translation type="unfinished">Parte</translation>
+        <translation>Parte</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/OldMatrixView.cpp" line="2072"/>
         <source>Bar</source>
-        <translation type="unfinished">Compás</translation>
+        <translation>Compás</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/OldMatrixView.cpp" line="2092"/>
         <source> Velocity: </source>
-        <translation type="unfinished"> Velocidad: </translation>
+        <translation> Velocidad: </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/OldMatrixView.cpp" line="2106"/>
         <source> Quantize: </source>
-        <translation type="unfinished"> Cuantificación: </translation>
+        <translation> Cuantificación: </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/OldMatrixView.cpp" line="2122"/>
         <source>Off</source>
-        <translation type="unfinished">Ningún</translation>
+        <translation>Ningún</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/OldMatrixView.cpp" line="2166"/>
         <source>  Zoom:  </source>
-        <translation type="unfinished">  Ampliar:  </translation>
+        <translation>  Ampliar:  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/OldMatrixView.cpp" line="2172"/>
         <location filename="../../src/gui/editors/matrix/OldMatrixView.cpp" line="2188"/>
         <source>%1%</source>
-        <translation type="unfinished">%1%</translation>
+        <translation>%1%</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/OldMatrixView.cpp" line="2535"/>
         <source>Raising velocities...</source>
-        <translation type="unfinished">Subiendo velocidades...</translation>
+        <translation>Subiendo velocidades...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/OldMatrixView.cpp" line="2547"/>
         <source>Lowering velocities...</source>
-        <translation type="unfinished">Bajando velocidades...</translation>
+        <translation>Bajando velocidades...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/OldMatrixView.cpp" line="2562"/>
         <source>Set Event Velocities</source>
-        <translation type="unfinished">Establecer Velocidades de los Eventos</translation>
+        <translation>Establecer Velocidades de los Eventos</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/OldMatrixView.cpp" line="2567"/>
         <source>Setting Velocities...</source>
-        <translation type="unfinished">Estableciendo Velocidades...</translation>
+        <translation>Estableciendo Velocidades...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/OldMatrixView.cpp" line="2606"/>
         <source>Trigger Segment</source>
-        <translation type="unfinished">Activar Segmento</translation>
+        <translation>Activar Segmento</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/OldMatrixView.cpp" line="2616"/>
         <source>Remove Triggers</source>
-        <translation type="unfinished">Eliminar Activadores</translation>
+        <translation>Eliminar Activadores</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/OldMatrixView.cpp" line="2660"/>
         <source>Matrix</source>
-        <translation type="unfinished">Matriz</translation>
+        <translation>Matriz</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/OldMatrixView.cpp" line="2662"/>
         <source>Percussion</source>
-        <translation type="unfinished">Percusión</translation>
+        <translation>Percusión</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/OldMatrixView.cpp" line="2674"/>
         <source>%1 - Segment Track #%2 - %3</source>
-        <translation type="unfinished">%1 - Segmento Pista #%2 - %3</translation>
+        <translation>%1 - Segmento Pista #%2 - %3</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/OldMatrixView.cpp" line="2681"/>
         <source>%1 - All Segments - %2</source>
-        <translation type="unfinished">%1 - Todos los segmentos - %2</translation>
+        <translation>%1 - Todos los segmentos - %2</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/gui/editors/matrix/OldMatrixView.cpp" line="2687"/>
         <source>%1 - %n Segment(s) - %2</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1 - %n Segmento - %2</numerusform>
+            <numerusform>%1 - %n Segmentos - %2</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/OldMatrixView.cpp" line="2835"/>
         <source>Can&apos;t insert note: No grid duration selected</source>
-        <translation type="unfinished">No es posible insertar nota: No hay una duración de rejilla seleccionada</translation>
+        <translation>No es posible insertar nota: No hay una duración de rejilla seleccionada</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/OldMatrixView.cpp" line="2885"/>
         <source> Chord </source>
-        <translation type="unfinished"> Acorde </translation>
+        <translation> Acorde </translation>
     </message>
 </context>
 <context>
@@ -14867,22 +14867,22 @@ Doble clic para abrir el editor de marcadores.</translation>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="149"/>
         <source>Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Ampliar</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="165"/>
         <source>Horizontal Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Ampliación horizontal</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="177"/>
         <source>Vertical Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Ampliación vertical</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="190"/>
         <source>Reset Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Reiniciar ampliación</translation>
     </message>
 </context>
 <context>
@@ -14891,13 +14891,13 @@ Doble clic para abrir el editor de marcadores.</translation>
         <location filename="../../src/gui/studio/MidiBankTreeWidgetItem.cpp" line="40"/>
         <location filename="../../src/gui/studio/MidiBankTreeWidgetItem.cpp" line="50"/>
         <source>Percussion Bank</source>
-        <translation type="unfinished">Banco de Percusión</translation>
+        <translation>Banco de Percusión</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/MidiBankTreeWidgetItem.cpp" line="40"/>
         <location filename="../../src/gui/studio/MidiBankTreeWidgetItem.cpp" line="50"/>
         <source>Bank</source>
-        <translation type="unfinished">Banco</translation>
+        <translation>Banco</translation>
     </message>
 </context>
 <context>
@@ -14905,17 +14905,17 @@ Doble clic para abrir el editor de marcadores.</translation>
     <message>
         <location filename="../../src/gui/studio/MidiDeviceTreeWidgetItem.cpp" line="44"/>
         <source>Percussion Bank</source>
-        <translation type="unfinished">Banco de Percusión</translation>
+        <translation>Banco de Percusión</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/MidiDeviceTreeWidgetItem.cpp" line="44"/>
         <source>Bank</source>
-        <translation type="unfinished">Banco</translation>
+        <translation>Banco</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/MidiDeviceTreeWidgetItem.cpp" line="55"/>
         <source>Key Mapping</source>
-        <translation type="unfinished">Mapa del teclado</translation>
+        <translation>Mapa del teclado</translation>
     </message>
 </context>
 <context>
@@ -14923,59 +14923,59 @@ Doble clic para abrir el editor de marcadores.</translation>
     <message>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="49"/>
         <source>Modify MIDI filters...</source>
-        <translation type="unfinished">Modificar filtros MIDI...</translation>
+        <translation>Modificar filtros MIDI...</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="59"/>
         <source>THRU events to ignore</source>
-        <translation type="unfinished">Eventos THRU para ignorar</translation>
+        <translation>Eventos THRU para ignorar</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="63"/>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="108"/>
         <source>Note</source>
-        <translation type="unfinished">Nota</translation>
+        <translation>Nota</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="64"/>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="109"/>
         <source>Program Change</source>
-        <translation type="unfinished">Cambio de Programa</translation>
+        <translation>Cambio de Programa</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="65"/>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="110"/>
         <source>Key Pressure</source>
-        <translation type="unfinished">Presión de Tecla</translation>
+        <translation>Presión de Tecla</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="66"/>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="111"/>
         <source>Channel Pressure</source>
-        <translation type="unfinished">Presión de Canal</translation>
+        <translation>Presión de Canal</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="67"/>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="112"/>
         <source>Pitch Bend</source>
-        <translation type="unfinished">Inflexión de Tono</translation>
+        <translation>Inflexión de Tono</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="68"/>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="113"/>
         <source>Controller</source>
-        <translation type="unfinished">Controlador</translation>
+        <translation>Controlador</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="69"/>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="114"/>
         <source>System Exclusive</source>
-        <translation type="unfinished">Sistema Exclusivo</translation>
+        <translation>Sistema Exclusivo</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="104"/>
         <source>RECORD events to ignore</source>
-        <translation type="unfinished">Eventos RECORD para ignorar</translation>
+        <translation>Eventos RECORD para ignorar</translation>
     </message>
 </context>
 <context>
@@ -14983,7 +14983,7 @@ Doble clic para abrir el editor de marcadores.</translation>
     <message>
         <location filename="../../src/gui/studio/MidiKeyMapTreeWidgetItem.cpp" line="42"/>
         <source>Key Mapping</source>
-        <translation type="unfinished">Mapa del teclado</translation>
+        <translation>Mapa del teclado</translation>
     </message>
 </context>
 <context>
@@ -14992,12 +14992,12 @@ Doble clic para abrir el editor de marcadores.</translation>
         <location filename="../../src/gui/studio/MidiKeyMappingEditor.cpp" line="50"/>
         <location filename="../../src/gui/studio/MidiKeyMappingEditor.cpp" line="74"/>
         <source>Key Mapping details</source>
-        <translation type="unfinished">Detalles de Mapa del Teclado</translation>
+        <translation>Detalles de Mapa del Teclado</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/MidiKeyMappingEditor.cpp" line="51"/>
         <source>Pitches</source>
-        <translation type="unfinished">Tonos</translation>
+        <translation>Tonos</translation>
     </message>
 </context>
 <context>
@@ -15005,17 +15005,17 @@ Doble clic para abrir el editor de marcadores.</translation>
     <message>
         <location filename="../../src/gui/studio/MidiMixerWindow.cpp" line="108"/>
         <source>MIDI Mixer</source>
-        <translation type="unfinished">Mezclador MIDI</translation>
+        <translation>Mezclador MIDI</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/MidiMixerWindow.cpp" line="148"/>
         <source>Volume</source>
-        <translation type="unfinished">Volumen</translation>
+        <translation>Volumen</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/MidiMixerWindow.cpp" line="153"/>
         <source>Instrument</source>
-        <translation type="unfinished">Instrumento</translation>
+        <translation>Instrumento</translation>
     </message>
 </context>
 <context>
@@ -15024,48 +15024,48 @@ Doble clic para abrir el editor de marcadores.</translation>
         <location filename="../../src/gui/studio/MidiProgramsEditor.cpp" line="65"/>
         <location filename="../../src/gui/studio/MidiProgramsEditor.cpp" line="162"/>
         <source>Bank and Program details</source>
-        <translation type="unfinished">Detalles de Bancos y Programas</translation>
+        <translation>Detalles de Bancos y Programas</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/MidiProgramsEditor.cpp" line="66"/>
         <source>Programs</source>
-        <translation type="unfinished">Programas</translation>
+        <translation>Programas</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/MidiProgramsEditor.cpp" line="90"/>
         <source>Percussion</source>
-        <translation type="unfinished">Percusión</translation>
+        <translation>Percusión</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/MidiProgramsEditor.cpp" line="96"/>
         <source>MSB Value</source>
-        <translation type="unfinished">Valor MSB</translation>
+        <translation>Valor MSB</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/MidiProgramsEditor.cpp" line="102"/>
         <source>Selects a MSB controller Bank number (MSB/LSB pairs are always unique for any Device)</source>
-        <translation type="unfinished">Selecciona un número MSB de controlador (los pares MSB/LSB son siempre únicos para cualquier dispositivo)</translation>
+        <translation>Selecciona un número MSB de controlador (los pares MSB/LSB son siempre únicos para cualquier dispositivo)</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/MidiProgramsEditor.cpp" line="104"/>
         <source>Selects a LSB controller Bank number (MSB/LSB pairs are always unique for any Device)</source>
-        <translation type="unfinished">Selecciona un número LSB de controlador (los pares MSB/LSB son siempre únicos para cualquier dispositivo)</translation>
+        <translation>Selecciona un número LSB de controlador (los pares MSB/LSB son siempre únicos para cualquier dispositivo)</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/MidiProgramsEditor.cpp" line="109"/>
         <source>LSB Value</source>
-        <translation type="unfinished">Valor LSB</translation>
+        <translation>Valor LSB</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/MidiProgramsEditor.cpp" line="246"/>
         <location filename="../../src/gui/studio/MidiProgramsEditor.cpp" line="554"/>
         <source>Key Mapping: %1</source>
-        <translation type="unfinished">Mapa del teclado: %1 </translation>
+        <translation>Mapa del teclado: %1 </translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/MidiProgramsEditor.cpp" line="482"/>
         <source>&lt;no key mapping&gt;</source>
-        <translation type="unfinished">&lt;sin Mapa del Teclado&gt;</translation>
+        <translation>&lt;sin Mapa del Teclado&gt;</translation>
     </message>
 </context>
 <context>
@@ -15073,7 +15073,7 @@ Doble clic para abrir el editor de marcadores.</translation>
     <message>
         <location filename="../../src/commands/studio/ModifyControlParameterCommand.h" line="56"/>
         <source>&amp;Modify Control Parameter</source>
-        <translation type="unfinished">&amp;Modificar Parámetro de Control</translation>
+        <translation>&amp;Modificar Parámetro de Control</translation>
     </message>
 </context>
 <context>
@@ -15081,7 +15081,7 @@ Doble clic para abrir el editor de marcadores.</translation>
     <message>
         <location filename="../../src/commands/segment/ModifyDefaultTempoCommand.h" line="46"/>
         <source>Modify &amp;Default Tempo...</source>
-        <translation type="unfinished">Mo&amp;dificar Tempo Predeterminado...</translation>
+        <translation>Mo&amp;dificar Tempo Predeterminado...</translation>
     </message>
 </context>
 <context>
@@ -15089,7 +15089,7 @@ Doble clic para abrir el editor de marcadores.</translation>
     <message>
         <location filename="../../src/commands/studio/ModifyDeviceCommand.h" line="63"/>
         <source>Modify &amp;MIDI Bank</source>
-        <translation type="unfinished">&amp;Modificar Banco MIDI</translation>
+        <translation>&amp;Modificar Banco MIDI</translation>
     </message>
 </context>
 <context>
@@ -15097,7 +15097,7 @@ Doble clic para abrir el editor de marcadores.</translation>
     <message>
         <location filename="../../src/commands/studio/ModifyDeviceMappingCommand.h" line="50"/>
         <source>Modify &amp;Device Mapping</source>
-        <translation type="unfinished">Mo&amp;dificar Mapeado del Dispositivo</translation>
+        <translation>Mo&amp;dificar Mapeado del Dispositivo</translation>
     </message>
 </context>
 <context>
@@ -15105,7 +15105,7 @@ Doble clic para abrir el editor de marcadores.</translation>
     <message>
         <location filename="../../src/commands/studio/ModifyInstrumentMappingCommand.h" line="50"/>
         <source>Modify &amp;Instrument Mapping</source>
-        <translation type="unfinished">Mod&amp;ificar mapeado del instrumento</translation>
+        <translation>Mod&amp;ificar mapeado del instrumento</translation>
     </message>
 </context>
 <context>
@@ -15113,7 +15113,7 @@ Doble clic para abrir el editor de marcadores.</translation>
     <message>
         <location filename="../../src/commands/edit/ModifyMarkerCommand.h" line="50"/>
         <source>&amp;Modify Marker</source>
-        <translation type="unfinished">&amp;Modificar marcador</translation>
+        <translation>&amp;Modificar marcador</translation>
     </message>
 </context>
 <context>
@@ -15121,7 +15121,7 @@ Doble clic para abrir el editor de marcadores.</translation>
     <message>
         <location filename="../../src/commands/edit/MoveAcrossSegmentsCommand.cpp" line="65"/>
         <source>&amp;Move Events to Other Segment</source>
-        <translation type="unfinished">&amp;Mover Eventos a Otro Segmento</translation>
+        <translation>&amp;Mover Eventos a Otro Segmento</translation>
     </message>
 </context>
 <context>
@@ -15129,7 +15129,7 @@ Doble clic para abrir el editor de marcadores.</translation>
     <message>
         <location filename="../../src/commands/segment/MoveTracksCommand.h" line="46"/>
         <source>Move Tracks...</source>
-        <translation type="unfinished">Mover Pistas...</translation>
+        <translation>Mover Pistas...</translation>
     </message>
 </context>
 <context>
@@ -15137,12 +15137,12 @@ Doble clic para abrir el editor de marcadores.</translation>
     <message>
         <location filename="../../src/commands/notation/MultiKeyInsertionCommand.h" line="58"/>
         <source>Change all to &amp;Key %1...</source>
-        <translation type="unfinished">Cambiar todo al &amp;Tono %1...</translation>
+        <translation>Cambiar todo al &amp;Tono %1...</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/MultiKeyInsertionCommand.h" line="60"/>
         <source>Add &amp;Key Change...</source>
-        <translation type="unfinished">Añadir Cambio de &amp;Tono...</translation>
+        <translation>Añadir Cambio de &amp;Tono...</translation>
     </message>
 </context>
 <context>
@@ -15150,17 +15150,17 @@ Doble clic para abrir el editor de marcadores.</translation>
     <message>
         <location filename="../../src/gui/studio/NameSetEditor.cpp" line="64"/>
         <source>Librarian</source>
-        <translation type="unfinished">Bibliotecario</translation>
+        <translation>Bibliotecario</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/NameSetEditor.cpp" line="70"/>
         <source>Name</source>
-        <translation type="unfinished">Nombre</translation>
+        <translation>Nombre</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/NameSetEditor.cpp" line="74"/>
         <source>Email</source>
-        <translation type="unfinished">Correo electrónico</translation>
+        <translation>Correo electrónico</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/NameSetEditor.cpp" line="79"/>
@@ -15168,7 +15168,7 @@ Doble clic para abrir el editor de marcadores.</translation>
 If you&apos;ve made modifications to suit your own device, it might be worth
 liaising with the librarian in order to publish your information for the benefit
 of others.</source>
-        <translation type="unfinished">El bibliotecario mantiene la información  de Bancos y Programas para este dispositivo.
+        <translation>El bibliotecario mantiene la información  de Bancos y Programas para este dispositivo.
 Si hace modificaciones a un Banco para adecuarlo a su propio dispositivo, 
 puede ser valioso comunicarlo al bibliotecario para beneficio de otros.</translation>
     </message>
@@ -15178,12 +15178,12 @@ puede ser valioso comunicarlo al bibliotecario para beneficio de otros.</transla
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="212"/>
         <source>Matrix</source>
-        <translation type="unfinished">Matriz</translation>
+        <translation>Matriz</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="236"/>
         <source>&lt;untitled&gt;</source>
-        <translation type="unfinished">&lt;sin título&gt;</translation>
+        <translation>&lt;sin título&gt;</translation>
     </message>
     <message>
         <source>%1 - All Segments - %2</source>
@@ -15192,106 +15192,106 @@ puede ser valioso comunicarlo al bibliotecario para beneficio de otros.</transla
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="242"/>
         <source>%1%2 - Segment%3Track%4#%5 - %6</source>
-        <translation type="unfinished"></translation>
+        <translation>%1%2 - Segmento%3Pista%4#%5 - %6</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="252"/>
         <source>%1%2 - All Segments - %3</source>
-        <translation type="unfinished"></translation>
+        <translation>%1%2 - Todos los Segmentos - %3</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="259"/>
         <source>%1%2 - %n Segment(s) - %3</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1%2 - %n Segmento - %3</numerusform>
+            <numerusform>%1%2 - %n Segmentos - %3</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="504"/>
         <source> Grid: </source>
-        <translation type="unfinished"> Rejilla: </translation>
+        <translation> Rejilla: </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="520"/>
         <source>None</source>
-        <translation type="unfinished">Nada</translation>
+        <translation>Nada</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="522"/>
         <source>Unit</source>
-        <translation type="unfinished">Unidad</translation>
+        <translation>Unidad</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="524"/>
         <source>Beat</source>
-        <translation type="unfinished">Parte</translation>
+        <translation>Parte</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="526"/>
         <source>Bar</source>
-        <translation type="unfinished">Compás</translation>
+        <translation>Compás</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="546"/>
         <source> Velocity: </source>
-        <translation type="unfinished"> Velocidad: </translation>
+        <translation> Velocidad: </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="564"/>
         <source> Quantize: </source>
-        <translation type="unfinished"> Cuantificación: </translation>
+        <translation> Cuantificación: </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="582"/>
         <source>Off</source>
-        <translation type="unfinished">Ningún</translation>
+        <translation>Ningún</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="625"/>
         <source>  Zoom:  </source>
-        <translation type="unfinished">  Ampliar:  </translation>
+        <translation>  Ampliar:  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="633"/>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="648"/>
         <source>%1%</source>
-        <translation type="unfinished">%1%</translation>
+        <translation>%1%</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="938"/>
         <source>Set Event Velocities</source>
-        <translation type="unfinished">Establecer Velocidades de los Eventos</translation>
+        <translation>Establecer Velocidades de los Eventos</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="982"/>
         <source>Trigger Segment</source>
-        <translation type="unfinished">Activar Segmento</translation>
+        <translation>Activar Segmento</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="992"/>
         <source>Remove Triggers</source>
-        <translation type="unfinished">Eliminar Activadores</translation>
+        <translation>Eliminar Activadores</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1203"/>
         <source>Estimated time signature shown</source>
-        <translation type="unfinished">Se muestra la estimación de la medida del compás</translation>
+        <translation>Se muestra la estimación de la medida del compás</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1286"/>
         <source>Transpose</source>
-        <translation type="unfinished">Transportar</translation>
+        <translation>Transportar</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1287"/>
         <source>By number of semitones: </source>
-        <translation type="unfinished">Por número de semitonos: </translation>
+        <translation>Por número de semitonos: </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1483"/>
         <source>Can&apos;t insert note: No grid duration selected</source>
-        <translation type="unfinished">No es posible insertar nota: No hay una duración de rejilla seleccionada</translation>
+        <translation>No es posible insertar nota: No hay una duración de rejilla seleccionada</translation>
     </message>
 </context>
 <context>
@@ -15299,50 +15299,50 @@ puede ser valioso comunicarlo al bibliotecario para beneficio de otros.</transla
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="730"/>
         <source>Note &amp;Font</source>
-        <translation type="unfinished">&amp;Fuente tipográfica de Nota</translation>
+        <translation>&amp;Fuente tipográfica de Nota</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="754"/>
         <source>Si&amp;ze</source>
-        <translation type="unfinished">&amp;Tamaño</translation>
+        <translation>&amp;Tamaño</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="770"/>
         <source>%n pixel(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n pixel</numerusform>
+            <numerusform>%n pixeles</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="897"/>
         <source>  Font:  </source>
-        <translation type="unfinished">  Tipografía:  </translation>
+        <translation>  Tipografía:  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="943"/>
         <source>  Size:  </source>
-        <translation type="unfinished">  Tamaño:  </translation>
+        <translation>  Tamaño:  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="971"/>
         <source>  Spacing:  </source>
-        <translation type="unfinished">  Espaciado:  </translation>
+        <translation>  Espaciado:  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1061"/>
         <source>LilyPond Preview Options</source>
-        <translation type="unfinished">Opciones de previsualización con LilyPond </translation>
+        <translation>Opciones de previsualización con LilyPond </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1062"/>
         <source>LilyPond preview options</source>
-        <translation type="unfinished">Opciones de previsualización con LilyPond </translation>
+        <translation>Opciones de previsualización con LilyPond </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1073"/>
         <source>Export failed.  The file could not be opened for writing.</source>
-        <translation type="unfinished">Ha fallado la exportación. El archivo no se ha podido abrir para escritura.</translation>
+        <translation>Ha fallado la exportación. El archivo no se ha podido abrir para escritura.</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1082"/>
@@ -16100,289 +16100,289 @@ Esto es un bug (el programa debería haber fallado ya)</translation>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="492"/>
         <source>Close track headers</source>
-        <translation type="unfinished">Cerrar cabeceras de pista</translation>
+        <translation>Cerrar cabeceras de pista</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="528"/>
         <source>Starting...</source>
-        <translation type="unfinished">Iniciando...</translation>
+        <translation>Iniciando...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="894"/>
         <source>Preparing to print...</source>
-        <translation type="unfinished">Preparación para imprimir...</translation>
+        <translation>Preparación para imprimir...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="1607"/>
         <source>Note &amp;Font</source>
-        <translation type="unfinished">&amp;Fuente tipográfica de Nota</translation>
+        <translation>&amp;Fuente tipográfica de Nota</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="1630"/>
         <source>Si&amp;ze</source>
-        <translation type="unfinished">&amp;Tamaño</translation>
+        <translation>&amp;Tamaño</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="1638"/>
         <source>S&amp;pacing</source>
-        <translation type="unfinished">Espa&amp;ciado</translation>
+        <translation>Espa&amp;ciado</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="1663"/>
         <source>Du&amp;ration Factor</source>
-        <translation type="unfinished">Factor de Du&amp;ración</translation>
+        <translation>Factor de Du&amp;ración</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="1675"/>
         <source>None</source>
-        <translation type="unfinished">Nada</translation>
+        <translation>Nada</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="1781"/>
         <source>%n pixel(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n pixel</numerusform>
+            <numerusform>%n pixeles</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="1829"/>
         <source>  Font:  </source>
-        <translation type="unfinished">  Tipografía:  </translation>
+        <translation>  Tipografía:  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="1858"/>
         <source>Unknown font &quot;%1&quot;, using default</source>
-        <translation type="unfinished">Tipografía &quot;%1&quot; desconocida, usando predeterminada</translation>
+        <translation>Tipografía &quot;%1&quot; desconocida, usando predeterminada</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="1866"/>
         <source>  Size:  </source>
-        <translation type="unfinished">  Tamaño:  </translation>
+        <translation>  Tamaño:  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="1892"/>
         <source>  Spacing:  </source>
-        <translation type="unfinished">  Espaciado:  </translation>
+        <translation>  Espaciado:  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="2226"/>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="3086"/>
         <source>  Ready.</source>
-        <translation type="unfinished">  Listo.</translation>
+        <translation>  Listo.</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="2231"/>
         <source>Laying out score...</source>
-        <translation type="unfinished">Dando formato a la partitura...</translation>
+        <translation>Dando formato a la partitura...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="2244"/>
         <source>Laying out staff %1...</source>
-        <translation type="unfinished">Dando formato al pentagrama %1...</translation>
+        <translation>Dando formato al pentagrama %1...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="2253"/>
         <source>Reconciling staffs...</source>
-        <translation type="unfinished">Reconciliando pentagramas...</translation>
+        <translation>Reconciliando pentagramas...</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="2483"/>
         <source>  %n event(s) selected </source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>  %n evento seleccionado </numerusform>
+            <numerusform>  %n eventos seleccionados</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="2485"/>
         <source>  No selection </source>
-        <translation type="unfinished">  Sin selección </translation>
+        <translation>  Sin selección </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="2767"/>
         <source>Nothing to print</source>
-        <translation type="unfinished"></translation>
+        <translation>Nada para imprimir</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="3151"/>
         <source>Sizing and allocating canvas...</source>
-        <translation type="unfinished">Creando y dimensionando lienzo...</translation>
+        <translation>Creando y dimensionando lienzo...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="3305"/>
         <source>note</source>
-        <translation type="unfinished">nota</translation>
+        <translation>nota</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="3305"/>
         <source>rest</source>
-        <translation type="unfinished">silencio</translation>
+        <translation>silencio</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="3452"/>
         <source>%1 - Segment Track #%2 - Notation</source>
-        <translation type="unfinished">%1 - Segmento Pista #%2 - Partitura</translation>
+        <translation>%1 - Segmento Pista #%2 - Partitura</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="3458"/>
         <source>%1 - All Segments - Notation</source>
-        <translation type="unfinished">%1 - Todos los segmentos - Partitura</translation>
+        <translation>%1 - Todos los segmentos - Partitura</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="3463"/>
         <source>%1 - %n Segment(s) - Notation</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1 - %n Segmento - Partitura</numerusform>
+            <numerusform>%1 - %n Segmentos - Partitura</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="3480"/>
         <source>Triplet</source>
-        <translation type="unfinished">Tresillo</translation>
+        <translation>Tresillo</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="3481"/>
         <source>Chord</source>
-        <translation type="unfinished"> Acorde</translation>
+        <translation> Acorde</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="3482"/>
         <source>Grace</source>
-        <translation type="unfinished">Apoyatura</translation>
+        <translation>Apoyatura</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="3486"/>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="3490"/>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="3494"/>
         <source>%1 %2</source>
-        <translation type="unfinished">%1 %2</translation>
+        <translation>%1 %2</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="3510"/>
         <source>Hidden annotations</source>
-        <translation type="unfinished">Anotaciones ocultas</translation>
+        <translation>Anotaciones ocultas</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="3532"/>
         <source>Hidden LilyPond directives</source>
-        <translation type="unfinished">Directivas LilyPond ocultas</translation>
+        <translation>Directivas LilyPond ocultas</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="3565"/>
         <source>Unknown spacing action %1</source>
-        <translation type="unfinished">Acción de espaciado desconocida %1</translation>
+        <translation>Acción de espaciado desconocida %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="3626"/>
         <source>Unknown proportion action %1</source>
-        <translation type="unfinished">Acción de proporción desconocida %1</translation>
+        <translation>Acción de proporción desconocida %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="3676"/>
         <source>Unknown font action %1</source>
-        <translation type="unfinished">Acción de tipografía desconocida %1</translation>
+        <translation>Acción de tipografía desconocida %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="3694"/>
         <source>Unknown font size %1</source>
-        <translation type="unfinished">Tamaño de tipografía desconocido %1</translation>
+        <translation>Tamaño de tipografía desconocido %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="3698"/>
         <source>Unknown font size action %1</source>
-        <translation type="unfinished">Acción de tamaño de tipografía desconocido %1</translation>
+        <translation>Acción de tamaño de tipografía desconocido %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="3872"/>
         <source>Printing...</source>
-        <translation type="unfinished">Imprimiendo...</translation>
+        <translation>Imprimiendo...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="3889"/>
         <source>Previewing...</source>
-        <translation type="unfinished">Pre-visualización...</translation>
+        <translation>Pre-visualización...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="3907"/>
         <source>Printing LilyPond file...</source>
-        <translation type="unfinished">Imprimiendo archivo.LilyPond...</translation>
+        <translation>Imprimiendo archivo.LilyPond...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="3913"/>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="3944"/>
         <source>Failed to open a temporary file for LilyPond export.</source>
-        <translation type="unfinished">Fallo al abrir un archivo temporario para exportar a LilyPond. </translation>
+        <translation>Fallo al abrir un archivo temporario para exportar a LilyPond. </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="3937"/>
         <source>Previewing LilyPond file...</source>
-        <translation type="unfinished">Previsualizando archivo.LilyPond...</translation>
+        <translation>Previsualizando archivo.LilyPond...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="3976"/>
         <source>LilyPond Preview Options</source>
-        <translation type="unfinished">Opciones de previsualización con LilyPond </translation>
+        <translation>Opciones de previsualización con LilyPond </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="3977"/>
         <source>LilyPond preview options</source>
-        <translation type="unfinished">Opciones de previsualización con LilyPond </translation>
+        <translation>Opciones de previsualización con LilyPond </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="3985"/>
         <source>Exporting LilyPond file...</source>
-        <translation type="unfinished">Exportando archivo.LilyPond... </translation>
+        <translation>Exportando archivo.LilyPond... </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="4000"/>
         <source>Export failed.  The file could not be opened for writing.</source>
-        <translation type="unfinished">Ha fallado la exportación. El archivo no se ha podido abrir para escritura.</translation>
+        <translation>Ha fallado la exportación. El archivo no se ha podido abrir para escritura.</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="4011"/>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="4040"/>
         <source>Cutting selection to clipboard...</source>
-        <translation type="unfinished">Cortando la selección al portapapeles...</translation>
+        <translation>Cortando la selección al portapapeles...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="4021"/>
         <source>Deleting selection...</source>
-        <translation type="unfinished">Eliminando selección...</translation>
+        <translation>Eliminando selección...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="4030"/>
         <source>Copying selection to clipboard...</source>
-        <translation type="unfinished">Copiando la selección al portapapeles...</translation>
+        <translation>Copiando la selección al portapapeles...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="4063"/>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="4111"/>
         <source>Clipboard is empty</source>
-        <translation type="unfinished">Portapapeles vacío</translation>
+        <translation>Portapapeles vacío</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="4067"/>
         <source>Can&apos;t paste multiple Segments into one</source>
-        <translation type="unfinished">No es posible pegar múltiples segmentos en uno</translation>
+        <translation>No es posible pegar múltiples segmentos en uno</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="4071"/>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="4115"/>
         <source>Inserting clipboard contents...</source>
-        <translation type="unfinished">Insertando el contenido del portapapeles...</translation>
+        <translation>Insertando el contenido del portapapeles...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="4096"/>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="4147"/>
         <source>Couldn&apos;t paste at this point.</source>
-        <translation type="unfinished">No se puede pegar en este punto.</translation>
+        <translation>No se puede pegar en este punto.</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="4167"/>
         <source>Move Events to Staff Above</source>
-        <translation type="unfinished">&amp;Mover eventos hacia pentagrama arriba</translation>
+        <translation>Mover eventos hacia pentagrama arriba</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="4195"/>
@@ -16520,7 +16520,7 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="137"/>
         <source>Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Ampliar</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="153"/>
@@ -21189,12 +21189,12 @@ Por favor, configura el directorio de archivos de audio hacia un directorio vál
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1117"/>
         <source>The instrument preset database is corrupt.  Check your installation.</source>
-        <translation type="unfinished">Hay un problema catastrófico con los parametros preprogramados.</translation>
+        <translation>Hay un problema catastrófico con los parametros preprogramados.</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1161"/>
         <source>Segment</source>
-        <translation type="unfinished">Segmento</translation>
+        <translation>Segmento</translation>
     </message>
 </context>
 <context>
@@ -21202,13 +21202,13 @@ Por favor, configura el directorio de archivos de audio hacia un directorio vál
     <message>
         <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="95"/>
         <source>Rosegarden Transport</source>
-        <translation type="unfinished">Transporte de Rosegarden</translation>
+        <translation>Transporte de Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="923"/>
         <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="983"/>
         <source>PITCH WHEEL</source>
-        <translation type="unfinished">RUEDA TONAL</translation>
+        <translation>RUEDA TONAL</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="927"/>
@@ -21220,25 +21220,25 @@ Por favor, configura el directorio de archivos de audio hacia un directorio vál
         <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="931"/>
         <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="991"/>
         <source>PROG CHNGE</source>
-        <translation type="unfinished">CAMBIO DE PR.</translation>
+        <translation>CAMBIO DE PR</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="936"/>
         <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="996"/>
         <source>PRESSURE</source>
-        <translation type="unfinished">PRESIÓN</translation>
+        <translation>PRESIÓN</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="940"/>
         <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="1000"/>
         <source>SYS MESSAGE</source>
-        <translation type="unfinished">MENSAJE SIST.</translation>
+        <translation>MENSAJE SIST</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="960"/>
         <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="1020"/>
         <source>NO EVENTS</source>
-        <translation type="unfinished">SIN EVENTOS</translation>
+        <translation>SIN EVENTOS</translation>
     </message>
 </context>
 <context>
@@ -21246,32 +21246,32 @@ Por favor, configura el directorio de archivos de audio hacia un directorio vál
     <message>
         <location filename="../../src/commands/edit/TransposeCommand.h" line="50"/>
         <source>Transpose by &amp;Interval...</source>
-        <translation type="unfinished">Transporte por intervalo...</translation>
+        <translation>Transporte por &amp;intervalo...</translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/TransposeCommand.h" line="56"/>
         <source>&amp;Up a Semitone</source>
-        <translation type="unfinished">S&amp;ubir un Semitono</translation>
+        <translation>S&amp;ubir un Semitono</translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/TransposeCommand.h" line="57"/>
         <source>&amp;Down a Semitone</source>
-        <translation type="unfinished">&amp;Bajar un Semitono</translation>
+        <translation>&amp;Bajar un Semitono</translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/TransposeCommand.h" line="58"/>
         <source>Up an &amp;Octave</source>
-        <translation type="unfinished">Subir una &amp;Octava</translation>
+        <translation>Subir una &amp;Octava</translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/TransposeCommand.h" line="59"/>
         <source>Down an Octa&amp;ve</source>
-        <translation type="unfinished">Bajar una Octa&amp;va</translation>
+        <translation>Bajar una Octa&amp;va</translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/TransposeCommand.h" line="60"/>
         <source>&amp;Transpose by Semitones...</source>
-        <translation type="unfinished">Transporte por semitonos...</translation>
+        <translation>&amp;Transporte por semitonos...</translation>
     </message>
 </context>
 <context>
@@ -21279,42 +21279,42 @@ Por favor, configura el directorio de archivos de audio hacia un directorio vál
     <message>
         <location filename="../../src/gui/dialogs/TriggerSegmentDialog.cpp" line="49"/>
         <source>Trigger Segment</source>
-        <translation type="unfinished">Activar Segmento</translation>
+        <translation>Activar Segmento</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TriggerSegmentDialog.cpp" line="61"/>
         <source>Trigger segment: </source>
-        <translation type="unfinished">Activar segmento: </translation>
+        <translation>Activar segmento: </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TriggerSegmentDialog.cpp" line="75"/>
         <source>Perform with timing: </source>
-        <translation type="unfinished">Interpretar con tiempo: </translation>
+        <translation>Interpretar con tiempo: </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TriggerSegmentDialog.cpp" line="81"/>
         <source>As stored</source>
-        <translation type="unfinished">Como se almacenó</translation>
+        <translation>Como se almacenó</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TriggerSegmentDialog.cpp" line="82"/>
         <source>Truncate if longer than note</source>
-        <translation type="unfinished">Truncar si es más largo que la nota</translation>
+        <translation>Truncar si es más largo que la nota</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TriggerSegmentDialog.cpp" line="83"/>
         <source>End at same time as note</source>
-        <translation type="unfinished">Finalizar al mismo tiempo que la nota</translation>
+        <translation>Finalizar al mismo tiempo que la nota</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TriggerSegmentDialog.cpp" line="84"/>
         <source>Stretch or squash segment to note duration</source>
-        <translation type="unfinished">Estirar o comprimir el segmento a la duración de la nota</translation>
+        <translation>Estirar o comprimir el segmento a la duración de la nota</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TriggerSegmentDialog.cpp" line="86"/>
         <source>Adjust pitch to note</source>
-        <translation type="unfinished">Ajustar altura de nota</translation>
+        <translation>Ajustar altura de nota</translation>
     </message>
 </context>
 <context>
@@ -21322,62 +21322,62 @@ Por favor, configura el directorio de archivos de audio hacia un directorio vál
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="81"/>
         <source>Manage Triggered Segments</source>
-        <translation type="unfinished">Gestionar Segmentos Activados</translation>
+        <translation>Gestionar Segmentos Activados</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="88"/>
         <source>ID</source>
-        <translation type="unfinished">ID</translation>
+        <translation>ID</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="89"/>
         <source>Label</source>
-        <translation type="unfinished">Etiqueta</translation>
+        <translation>Etiqueta</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="90"/>
         <source>Duration</source>
-        <translation type="unfinished">Duración</translation>
+        <translation>Duración</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="91"/>
         <source>Base pitch</source>
-        <translation type="unfinished">Altura base</translation>
+        <translation>Altura base</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="92"/>
         <source>Base velocity</source>
-        <translation type="unfinished">Velocidad base</translation>
+        <translation>Velocidad base</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="93"/>
         <source>Triggers</source>
-        <translation type="unfinished">Activadores</translation>
+        <translation>Activadores</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="109"/>
         <source>Delete</source>
-        <translation type="unfinished">Borrar</translation>
+        <translation>Borrar</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="112"/>
         <source>Delete All</source>
-        <translation type="unfinished">Borrar todo</translation>
+        <translation>Borrar todo</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="110"/>
         <source>Delete a Triggered Segment</source>
-        <translation type="unfinished">Borrar un Segmento Activado</translation>
+        <translation>Borrar un Segmento Activado</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="113"/>
         <source>Delete All Triggered Segments</source>
-        <translation type="unfinished">Borrar Todos los Segmentos Activados</translation>
+        <translation>Borrar Todos los Segmentos Activados</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="231"/>
         <source>&lt;no label&gt;</source>
-        <translation type="unfinished">&lt;sin etiqueta&gt;</translation>
+        <translation>&lt;sin etiqueta&gt;</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="233"/>
@@ -21390,22 +21390,22 @@ Por favor, configura el directorio de archivos de audio hacia un directorio vál
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="260"/>
         <source>&lt;none&gt;</source>
-        <translation type="unfinished">&lt;nada&gt;</translation>
+        <translation>&lt;nada&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="277"/>
         <source>This will remove all triggered segments from the whole composition.  Are you sure?</source>
-        <translation type="unfinished">Esto borrará todos los segmentos activados de toda la composición. ¿Está seguro?</translation>
+        <translation>Esto borrará todos los segmentos activados de toda la composición. ¿Está seguro?</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="281"/>
         <source>Remove all triggered segments</source>
-        <translation type="unfinished">Eliminar todos los segmentos activados</translation>
+        <translation>Eliminar todos los segmentos activados</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="307"/>
         <source>Trigger Segment Duration</source>
-        <translation type="unfinished">Duración de Segmento Activado</translation>
+        <translation>Duración de Segmento Activado</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="329"/>
@@ -21418,7 +21418,7 @@ Por favor, configura el directorio de archivos de audio hacia un directorio vál
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="347"/>
         <source>Clipboard is empty</source>
-        <translation type="unfinished">Portapapeles vacío</translation>
+        <translation>Portapapeles vacío</translation>
     </message>
 </context>
 <context>
@@ -21426,12 +21426,12 @@ Por favor, configura el directorio de archivos de audio hacia un directorio vál
     <message>
         <location filename="../../src/commands/notation/TupletCommand.h" line="48"/>
         <source>&amp;Triplet</source>
-        <translation type="unfinished">&amp;Tresillo</translation>
+        <translation>&amp;Tresillo</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/TupletCommand.h" line="49"/>
         <source>Tu&amp;plet...</source>
-        <translation type="unfinished">Grupo &amp;Irregular...</translation>
+        <translation>Grupo &amp;Irregular...</translation>
     </message>
 </context>
 <context>
@@ -21439,57 +21439,57 @@ Por favor, configura el directorio de archivos de audio hacia un directorio vál
     <message>
         <location filename="../../src/gui/dialogs/TupletDialog.cpp" line="49"/>
         <source>Tuplet</source>
-        <translation type="unfinished">Grupo irregular</translation>
+        <translation>Grupo irregular</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TupletDialog.cpp" line="58"/>
         <source>New timing for tuplet group</source>
-        <translation type="unfinished">Nuevo tiempo para grupo irregular</translation>
+        <translation>Nuevo tiempo para grupo irregular</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TupletDialog.cpp" line="77"/>
         <source>Play </source>
-        <translation type="unfinished">Ejecutar</translation>
+        <translation>Ejecutar</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TupletDialog.cpp" line="98"/>
         <source>in the time of  </source>
-        <translation type="unfinished">en el tiempo de  </translation>
+        <translation>en el tiempo de  </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TupletDialog.cpp" line="104"/>
         <source>Timing is already correct: update display only</source>
-        <translation type="unfinished">El tiempo ya es correcto: actualizar sólo representación</translation>
+        <translation>El tiempo ya es correcto: actualizar sólo representación</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TupletDialog.cpp" line="115"/>
         <source>Timing calculations</source>
-        <translation type="unfinished">Calculos de tiempo</translation>
+        <translation>Calculos de tiempo</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TupletDialog.cpp" line="123"/>
         <source>Selected region:</source>
-        <translation type="unfinished">Región seleccionada:</translation>
+        <translation>Región seleccionada:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TupletDialog.cpp" line="135"/>
         <source>Group with current timing:</source>
-        <translation type="unfinished">Agrupar con el tiempo actual:</translation>
+        <translation>Agrupar con el tiempo actual:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TupletDialog.cpp" line="146"/>
         <source>Group with new timing:</source>
-        <translation type="unfinished">Agrupar con nuevo tiempo:</translation>
+        <translation>Agrupar con nuevo tiempo:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TupletDialog.cpp" line="157"/>
         <source>Gap created by timing change:</source>
-        <translation type="unfinished">Hueco creado por cambio de tiempo:</translation>
+        <translation>Hueco creado por cambio de tiempo:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TupletDialog.cpp" line="170"/>
         <source>Unchanged at end of selection:</source>
-        <translation type="unfinished">Sin cambio al final de la selección:</translation>
+        <translation>Sin cambio al final de la selección:</translation>
     </message>
 </context>
 <context>
@@ -21497,7 +21497,7 @@ Por favor, configura el directorio de archivos de audio hacia un directorio vál
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="70"/>
         <source>[ No port ]</source>
-        <translation type="unfinished"></translation>
+        <translation>[ningún]</translation>
     </message>
 </context>
 <context>
@@ -21505,7 +21505,7 @@ Por favor, configura el directorio de archivos de audio hacia un directorio vál
     <message>
         <location filename="../../src/commands/notation/UnGraceCommand.h" line="43"/>
         <source>Ung&amp;race</source>
-        <translation type="unfinished">&amp;Quitar Notas de Adorno</translation>
+        <translation>&amp;Quitar Notas de Adorno</translation>
     </message>
 </context>
 <context>
@@ -21513,7 +21513,7 @@ Por favor, configura el directorio de archivos de audio hacia un directorio vál
     <message>
         <location filename="../../src/commands/notation/UnTupletCommand.h" line="46"/>
         <source>&amp;Untuplet</source>
-        <translation type="unfinished">&amp;Dividir Grupos Irregulares...</translation>
+        <translation>&amp;Dividir Grupos Irregulares</translation>
     </message>
 </context>
 <context>
@@ -21521,7 +21521,7 @@ Por favor, configura el directorio de archivos de audio hacia un directorio vál
     <message>
         <location filename="../../src/commands/notation/UntieNotesCommand.h" line="45"/>
         <source>&amp;Untie</source>
-        <translation type="unfinished">&amp;Desligar Notas</translation>
+        <translation>&amp;Desligar Notas</translation>
     </message>
 </context>
 <context>
@@ -21529,27 +21529,27 @@ Por favor, configura el directorio de archivos de audio hacia un directorio vál
     <message>
         <location filename="../../src/gui/dialogs/UnusedAudioSelectionDialog.cpp" line="46"/>
         <source>Select Unused Audio Files</source>
-        <translation type="unfinished">Seleccionar Archivo de Audio no Usados</translation>
+        <translation>Seleccionar Archivo de Audio no Usados</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UnusedAudioSelectionDialog.cpp" line="62"/>
         <source>File name</source>
-        <translation type="unfinished">Nombre de archivo</translation>
+        <translation>Nombre de archivo</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UnusedAudioSelectionDialog.cpp" line="62"/>
         <source>File size</source>
-        <translation type="unfinished">Tamaño del archivo</translation>
+        <translation>Tamaño del archivo</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UnusedAudioSelectionDialog.cpp" line="62"/>
         <source>Last modified date</source>
-        <translation type="unfinished">Fecha de última modificación</translation>
+        <translation>Fecha de última modificación</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UnusedAudioSelectionDialog.cpp" line="74"/>
         <source> (not found) </source>
-        <translation type="unfinished">(no encontrado)</translation>
+        <translation>(no encontrado)</translation>
     </message>
 </context>
 <context>
@@ -21557,107 +21557,107 @@ Por favor, configura el directorio de archivos de audio hacia un directorio vál
     <message>
         <location filename="../../src/gui/dialogs/UseOrnamentDialog.cpp" line="54"/>
         <source>Use Ornament</source>
-        <translation type="unfinished">Usar Ornamento</translation>
+        <translation>Usar Ornamento</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UseOrnamentDialog.cpp" line="64"/>
         <source>Notation</source>
-        <translation type="unfinished">Partitura</translation>
+        <translation>Partitura</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UseOrnamentDialog.cpp" line="71"/>
         <source>Display as:  </source>
-        <translation type="unfinished">Mostrar como:  </translation>
+        <translation>Mostrar como:  </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UseOrnamentDialog.cpp" line="87"/>
         <source>Trill</source>
-        <translation type="unfinished">Trino</translation>
+        <translation>Trino</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UseOrnamentDialog.cpp" line="87"/>
         <source>Trill with line</source>
-        <translation type="unfinished">Trino con línea</translation>
+        <translation>Trino con línea</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UseOrnamentDialog.cpp" line="87"/>
         <source>Trill line only</source>
-        <translation type="unfinished">Línea de trino sólamente</translation>
+        <translation>Línea de trino sólamente</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UseOrnamentDialog.cpp" line="88"/>
         <source>Turn</source>
-        <translation type="unfinished">Grupeto</translation>
+        <translation>Grupeto</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UseOrnamentDialog.cpp" line="88"/>
         <source>Mordent</source>
-        <translation type="unfinished">Mordente</translation>
+        <translation>Mordente</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UseOrnamentDialog.cpp" line="88"/>
         <source>Inverted mordent</source>
-        <translation type="unfinished">Mordente Invertido</translation>
+        <translation>Mordente Invertido</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UseOrnamentDialog.cpp" line="89"/>
         <source>Long mordent</source>
-        <translation type="unfinished">Mordente largo</translation>
+        <translation>Mordente largo</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UseOrnamentDialog.cpp" line="89"/>
         <source>Long inverted mordent</source>
-        <translation type="unfinished">Mordente largo invertido</translation>
+        <translation>Mordente largo invertido</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UseOrnamentDialog.cpp" line="96"/>
         <source>Text mark</source>
-        <translation type="unfinished">Marca de texto</translation>
+        <translation>Marca de texto</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UseOrnamentDialog.cpp" line="100"/>
         <source>   Text:  </source>
-        <translation type="unfinished">   Texto:  </translation>
+        <translation>   Texto:  </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UseOrnamentDialog.cpp" line="107"/>
         <source>Performance</source>
-        <translation type="unfinished">Interpretación</translation>
+        <translation>Interpretación</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UseOrnamentDialog.cpp" line="115"/>
         <source>Perform using triggered segment: </source>
-        <translation type="unfinished">Interpretar usando segmento activado: </translation>
+        <translation>Interpretar usando segmento activado: </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UseOrnamentDialog.cpp" line="129"/>
         <source>Perform with timing: </source>
-        <translation type="unfinished">Interpretar con tiempo: </translation>
+        <translation>Interpretar con tiempo: </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UseOrnamentDialog.cpp" line="135"/>
         <source>As stored</source>
-        <translation type="unfinished">Como se almacenó</translation>
+        <translation>Como se almacenó</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UseOrnamentDialog.cpp" line="136"/>
         <source>Truncate if longer than note</source>
-        <translation type="unfinished">Truncar si es más largo que la nota</translation>
+        <translation>Truncar si es más largo que la nota</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UseOrnamentDialog.cpp" line="137"/>
         <source>End at same time as note</source>
-        <translation type="unfinished">Finalizar al mismo tiempo que la nota</translation>
+        <translation>Finalizar al mismo tiempo que la nota</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UseOrnamentDialog.cpp" line="138"/>
         <source>Stretch or squash segment to note duration</source>
-        <translation type="unfinished">Estirar o comprimir el segmento a la duración de la nota</translation>
+        <translation>Estirar o comprimir el segmento a la duración de la nota</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UseOrnamentDialog.cpp" line="140"/>
         <source>Adjust pitch to note</source>
-        <translation type="unfinished">Ajustar altura de nota</translation>
+        <translation>Ajustar altura de nota</translation>
     </message>
 </context>
 <context>
