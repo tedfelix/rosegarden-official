@@ -17686,7 +17686,7 @@ Haluatko tallentaa sen?</translation>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="346"/>
         <source>&lt;qt&gt;&lt;p&gt;The current file has been modified.&lt;/p&gt;&lt;p&gt;Do you want to save it?&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Nykyistä tiedostoa on muokattu.&lt;/p&gt;&lt;p&gt;Haluatko tallentaa sen?&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="367"/>
