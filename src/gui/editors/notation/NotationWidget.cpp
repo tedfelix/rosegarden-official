@@ -38,6 +38,8 @@
 
 #include "gui/widgets/Panner.h"
 #include "gui/widgets/Panned.h"
+#include "gui/widgets/Thumbwheel.h"
+
 #include "gui/general/IconLoader.h"
 
 #include "gui/rulers/StandardRuler.h"
@@ -64,9 +66,13 @@ NotationWidget::NotationWidget() :
     m_view(0),
     m_scene(0),
     m_playTracking(true),
-    m_hZoomFactor(1),
-    m_vZoomFactor(1),
+    m_hZoomFactor(1.0),
+    m_vZoomFactor(1.0),
     m_referenceScale(0),
+    m_inMove(false),
+    m_lastZoomWasHV(true),
+    m_lastV(0),
+    m_lastH(0),
     m_topStandardRuler(0),
     m_bottomStandardRuler(0),
     m_tempoRuler(0),
@@ -108,7 +114,83 @@ NotationWidget::NotationWidget() :
     m_hpanner->setMaximumHeight(80);
     m_hpanner->setBackgroundBrush(Qt::white);
     m_hpanner->setRenderHints(0);
-    m_layout->addWidget(m_hpanner, PANNER_ROW, HEADER_COL, 1, 2);
+
+    // the panner along with zoom controls in one strip at one grid location
+    // (note this needs to adapt when the panner goes vertical--port code first
+    // fix later)
+    QWidget *panner = new QWidget;
+    QHBoxLayout *pannerLayout = new QHBoxLayout;
+    pannerLayout->setContentsMargins(0, 0, 0, 0);
+    pannerLayout->setSpacing(0);
+    panner->setLayout(pannerLayout);
+
+    m_hpanner = new Panner;
+    m_hpanner->setMaximumHeight(80);
+    m_hpanner->setBackgroundBrush(Qt::white);
+    m_hpanner->setOptimizationFlag(QGraphicsView::DontAdjustForAntialiasing, true);
+    m_hpanner->setRenderHints(0);
+
+    pannerLayout->addWidget(m_hpanner);
+
+    QFrame *controls = new QFrame;
+
+    QGridLayout *controlsLayout = new QGridLayout;
+    controlsLayout->setSpacing(0);
+    controlsLayout->setContentsMargins(0, 0, 0, 0);
+    controls->setLayout(controlsLayout);
+
+    m_HVzoom = new Thumbwheel(Qt::Vertical);
+    m_HVzoom->setFixedSize(QSize(40, 40));
+    m_HVzoom->setToolTip(tr("Zoom"));
+
+    // +/- 20 clicks seems to be the reasonable limit
+    m_HVzoom->setMinimumValue(-20);
+    m_HVzoom->setMaximumValue(20);
+    m_HVzoom->setDefaultValue(0);
+    m_HVzoom->setBright(true);
+    m_HVzoom->setShowScale(true);
+    m_lastHVzoomValue = m_HVzoom->getValue();
+    controlsLayout->addWidget(m_HVzoom, 0, 0, Qt::AlignCenter);
+
+    connect(m_HVzoom, SIGNAL(valueChanged(int)), this,
+            SLOT(slotPrimaryThumbwheelMoved(int)));
+
+    m_Hzoom = new Thumbwheel(Qt::Horizontal);
+    m_Hzoom->setFixedSize(QSize(50, 16));
+    m_Hzoom->setToolTip(tr("Horizontal Zoom"));
+
+    m_Hzoom->setMinimumValue(-25);
+    m_Hzoom->setMaximumValue(60);
+    m_Hzoom->setDefaultValue(0); 
+    m_Hzoom->setBright(false);
+    controlsLayout->addWidget(m_Hzoom, 1, 0);
+    connect(m_Hzoom, SIGNAL(valueChanged(int)), this,
+            SLOT(slotHorizontalThumbwheelMoved(int)));
+
+    m_Vzoom = new Thumbwheel(Qt::Vertical);
+    m_Vzoom->setFixedSize(QSize(16, 50));
+    m_Vzoom->setToolTip(tr("Vertical Zoom"));
+    m_Vzoom->setMinimumValue(-25);
+    m_Vzoom->setMaximumValue(60);
+    m_Vzoom->setDefaultValue(0);
+    m_Vzoom->setBright(false);
+    controlsLayout->addWidget(m_Vzoom, 0, 1, Qt::AlignRight);
+
+    connect(m_Vzoom, SIGNAL(valueChanged(int)), this,
+            SLOT(slotVerticalThumbwheelMoved(int)));
+
+    // a blank QPushButton forced square looks better than the tool button did
+    m_reset = new QPushButton;
+    m_reset->setFixedSize(QSize(10, 10));
+    m_reset->setToolTip(tr("Reset Zoom"));
+    controlsLayout->addWidget(m_reset, 1, 1, Qt::AlignCenter);
+
+    connect(m_reset, SIGNAL(clicked()), this, 
+            SLOT(slotResetZoomClicked()));
+
+    pannerLayout->addWidget(controls);
+
+    m_layout->addWidget(panner, PANNER_ROW, HEADER_COL, 1, 2);
 
     m_headersView = new Panned;
     m_headersView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -170,10 +252,10 @@ NotationWidget::NotationWidget() :
             this, SLOT(slotHScroll()));
 
     connect(m_hpanner, SIGNAL(zoomIn()),
-            this, SLOT(slotZoomInFromPanner()));
+            this, SLOT(slotSyncPannerZoomIn()));
 
     connect(m_hpanner, SIGNAL(zoomOut()),
-            this, SLOT(slotZoomOutFromPanner()));
+            this, SLOT(slotSyncPannerZoomOut()));
 
     connect(m_headersView, SIGNAL(wheelEventReceived(QWheelEvent *)),
             m_view, SLOT(slotEmulateWheelEvent(QWheelEvent *)));
@@ -960,6 +1042,211 @@ void
 NotationWidget::setPointerPosition(timeT t)
 {
     m_document->slotSetPointerPosition(t);
+}
+
+void
+NotationWidget::slotHorizontalThumbwheelMoved(int v)
+{
+    // limits sanity check
+    if (v < -25) v = -25;
+    if (v > 60) v = 60;
+    if (m_lastH < -25) m_lastH = -25;
+    if (m_lastH > 60) m_lastH = 60;
+
+    int steps = v - m_lastH;
+    if (steps < 0) steps *= -1;
+
+    bool zoomingIn = (v > m_lastH);
+    double newZoom = m_hZoomFactor;
+
+    for (int i = 0; i < steps; ++i) {
+        if (zoomingIn) newZoom *= 1.1;
+        else newZoom /= 1.1;
+    }
+
+    // switching from primary/panner to axis-independent
+    if (m_lastZoomWasHV) {
+        slotResetZoomClicked();
+        m_HVzoom->setBright(false);
+        m_Hzoom->setBright(true);
+        m_Vzoom->setBright(true);
+    }
+
+    //std::cout << "v is: " << v << " h zoom factor was: " << m_lastH << " now: " << newZoom << " zooming " << (zoomingIn ? "IN" : "OUT") << std::endl;
+
+    setHorizontalZoomFactor(newZoom);
+    m_lastH = v;
+    m_lastZoomWasHV = false;
+}
+
+void
+NotationWidget::slotVerticalThumbwheelMoved(int v)
+{
+    // limits sanity check
+    if (v < -25) v = -25;
+    if (v > 60) v = 60;
+    if (m_lastV < -25) m_lastV = -25;
+    if (m_lastV > 60) m_lastV = 60;
+
+    int steps = v - m_lastV;
+    if (steps < 0) steps *= -1;
+
+    bool zoomingIn = (v > m_lastV);
+    double newZoom = m_vZoomFactor;
+
+    for (int i = 0; i < steps; ++i) {
+        if (zoomingIn) newZoom *= 1.1;
+        else newZoom /= 1.1;
+    }
+
+    // switching from primary/panner to axis-independent
+    if (m_lastZoomWasHV) {
+        slotResetZoomClicked();
+        m_HVzoom->setBright(false);
+        m_Hzoom->setBright(true);
+        m_Vzoom->setBright(true);
+    }
+
+    //std::cout << "v is: " << v << " z zoom factor was: " << m_lastV << " now: " << newZoom << " zooming " << (zoomingIn ? "IN" : "OUT") << std::endl;
+
+    setVerticalZoomFactor(newZoom);
+    m_lastV = v;
+    m_lastZoomWasHV = false;
+}
+
+void
+NotationWidget::slotPrimaryThumbwheelMoved(int v)
+{
+    // not sure what else to do; you can get things grotesquely out of whack
+    // changing H or V independently and then trying to use the big zoom, so now
+    // we reset when changing to the big zoom, and this behaves independently
+   
+    // switching from axi-independent to primary/panner
+    if (!m_lastZoomWasHV) {
+        slotResetZoomClicked();
+        m_HVzoom->setBright(true);
+        m_Hzoom->setBright(false);
+        m_Vzoom->setBright(false);
+    }
+
+    // little bit of kludge work to deal with value manipulations that are
+    // outside of the constraints imposed by the primary zoom wheel itself
+    if (v < -20) v = -20;
+    if (v > 20) v = 20;
+    if (m_lastHVzoomValue < -20) m_lastHVzoomValue = -20;
+    if (m_lastHVzoomValue > 20) m_lastHVzoomValue = 20;
+
+    // When dragging the wheel up and down instead of mouse wheeling it, it
+    // steps according to its speed.  I don't see a sure way (and after all
+    // there are no docs!) to make sure dragging results in a smooth 1:1
+    // relationship when compared with mouse wheeling, and we are just hijacking
+    // slotZoomInFromPanner() here, so we will look at the number of steps
+    // between the old value and the last one, and call the slot that many times
+    // in order to enforce the 1:1 relationship.
+    int steps = v - m_lastHVzoomValue;
+    if (steps < 0) steps *= -1;
+
+    for (int i = 0; i < steps; ++i) {
+        if (v < m_lastHVzoomValue) slotZoomInFromPanner();
+        else if (v > m_lastHVzoomValue) slotZoomOutFromPanner();
+    }
+
+    m_lastHVzoomValue = v;
+    m_lastZoomWasHV = true;
+}
+
+void
+NotationWidget::slotResetZoomClicked()
+{
+    std::cerr << "NotationWidget::slotResetZoomClicked()" << std::endl;
+
+    m_hZoomFactor = 1.0;
+    m_vZoomFactor = 1.0;
+    if (m_referenceScale) {
+        m_referenceScale->setXZoomFactor(m_hZoomFactor);
+        m_referenceScale->setYZoomFactor(m_vZoomFactor);
+    }
+    m_view->resetMatrix();
+    QMatrix m;
+    m.scale(m_hZoomFactor, m_vZoomFactor);
+    m_view->setMatrix(m);
+    m_view->scale(m_hZoomFactor, m_vZoomFactor);
+    m_headersView->setMatrix(m);
+    m_headersView->setFixedWidth(m_headersView->sizeHint().width());
+    slotHScroll();
+
+    // scale factor 1.0 = 100% zoom
+    m_Hzoom->setValue(1);
+    m_Vzoom->setValue(1);
+    m_HVzoom->setValue(0);
+    m_lastHVzoomValue = 0;
+    m_lastH = 0;
+    m_lastV = 0;
+}
+
+void
+NotationWidget::slotSyncPannerZoomIn()
+{
+    int v = m_lastHVzoomValue - 1;
+
+    m_HVzoom->setValue(v);
+    slotPrimaryThumbwheelMoved(v);
+}
+
+void
+NotationWidget::slotSyncPannerZoomOut()
+{
+    int v = m_lastHVzoomValue + 1;
+
+    m_HVzoom->setValue(v);
+    slotPrimaryThumbwheelMoved(v);
+}
+
+
+void
+NotationWidget::setHorizontalZoomFactor(double factor)
+{
+    // NOTE: scaling the keyboard up and down works well for the primary zoom
+    // because it maintains the same aspect ratio for each step.  I tried a few
+    // different ways to deal with this before deciding that since
+    // independent-axis zoom is a separate and mutually exclusive subsystem,
+    // about the only sensible thing we can do is keep the keyboard scaled at
+    // 1.0 horizontally, and only scale it vertically.  Git'r done.
+
+    m_hZoomFactor = factor;
+    if (m_referenceScale) m_referenceScale->setXZoomFactor(m_hZoomFactor);
+    m_view->resetMatrix();
+    m_view->scale(m_hZoomFactor, m_vZoomFactor);
+    QMatrix m;
+    m.scale(1.0, m_vZoomFactor);
+    m_headersView->setMatrix(m);
+    m_headersView->setFixedWidth(m_headersView->sizeHint().width());
+    slotHScroll();
+}
+
+void
+NotationWidget::setVerticalZoomFactor(double factor)
+{
+    m_vZoomFactor = factor;
+    if (m_referenceScale) m_referenceScale->setYZoomFactor(m_vZoomFactor);
+    m_view->resetMatrix();
+    m_view->scale(m_hZoomFactor, m_vZoomFactor);
+    QMatrix m;
+    m.scale(1.0, m_vZoomFactor);
+    m_headersView->setMatrix(m);
+    m_headersView->setFixedWidth(m_headersView->sizeHint().width());
+}
+
+double
+NotationWidget::getHorizontalZoomFactor() const
+{
+    return m_hZoomFactor;
+}
+
+double
+NotationWidget::getVerticalZoomFactor() const
+{
+    return m_vZoomFactor;
 }
 
 }

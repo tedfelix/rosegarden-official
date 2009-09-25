@@ -19,10 +19,14 @@
 #define _RG_NOTATION_WIDGET_H_
 
 #include "StaffLayout.h"
+
 #include "base/NotationTypes.h"
 #include "gui/general/SelectionManager.h"
+#include "gui/widgets/Thumbwheel.h"
 
 #include <QWidget>
+#include <QPushButton>
+
 #include <vector>
 
 class QGridLayout;
@@ -97,6 +101,12 @@ public:
 
     void setPointerPosition(timeT);
 
+    void setHorizontalZoomFactor(double factor);
+    void setVerticalZoomFactor(double factor);
+
+    double getHorizontalZoomFactor() const;
+    double getVerticalZoomFactor() const;
+
 signals:
     void segmentDeleted(Segment *);
     void sceneDeleted();
@@ -143,6 +153,24 @@ protected slots:
     void slotHScroll();
     void slotHScrollBarRangeChanged(int min, int max);
 
+    /// The horizontal zoom thumbwheel moved
+    void slotHorizontalThumbwheelMoved(int);
+
+    /// The vertical zoom thumbwheel moved
+    void slotVerticalThumbwheelMoved(int);
+
+    /// The primary (combined axes) thumbwheel moved
+    void slotPrimaryThumbwheelMoved(int);
+
+    /// Reset the zoom to 100% and reset the zoomy wheels
+    void slotResetZoomClicked();
+
+    /// Trap a zoom in from the panner and sync it to the primary thumb wheel
+    void slotSyncPannerZoomIn();
+
+    /// Trap a zoom out from the panner and sync it to the primary thumb wheel
+    void slotSyncPannerZoomOut();
+
     void slotShowHeaderToolTip(QString toolTipText);
     void slotHeadersResized(int width);
     void slotAdjustHeadersHorizontalPos(bool last);
@@ -165,6 +193,21 @@ private:
     NotationTool *m_currentTool;
     bool m_inMove;
     QPointF m_lastMouseMoveScenePos;
+
+    Thumbwheel  *m_HVzoom;
+    Thumbwheel  *m_Hzoom;
+    Thumbwheel  *m_Vzoom;
+    QPushButton *m_reset;
+
+    /** The primary zoom wheel behaves just like using the mouse wheel over any
+     * part of the Panner.  We don't need to keep track of absolute values here,
+     * just whether we rolled up or down.  We'll do that by keeping track of the
+     * last setting and comparing it to see which way it moved.
+     */
+    int m_lastHVzoomValue;
+    bool m_lastZoomWasHV;
+    int m_lastV;
+    int m_lastH;
 
     StandardRuler *m_topStandardRuler; // I own this
     StandardRuler *m_bottomStandardRuler; // I own this
