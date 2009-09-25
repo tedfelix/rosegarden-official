@@ -17604,7 +17604,7 @@ Do you want to save it?</source>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="346"/>
         <source>&lt;qt&gt;&lt;p&gt;The current file has been modified.&lt;/p&gt;&lt;p&gt;Do you want to save it?&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;El archivo actual ha sido modificado.&lt;/p&gt;&lt;p&gt;¿Desea guardarlo?&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="367"/>
@@ -17653,37 +17653,37 @@ Por favor, decida si quiere borrarlos permanentemente del disco duro.
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="539"/>
         <source>File %1 could not be deleted.</source>
-        <translation type="unfinished">El archivo %1 no pudo ser borrado</translation>
+        <translation>El archivo %1 no pudo ser borrado.</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="555"/>
         <source>Untitled</source>
-        <translation type="unfinished"></translation>
+        <translation>Sin título</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="591"/>
         <source>Can&apos;t open file &apos;%1&apos;</source>
-        <translation type="unfinished">No se puede abrir el archivo &apos;%1&apos;</translation>
+        <translation>No se puede abrir el archivo &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="613"/>
         <source>Could not open Rosegarden file</source>
-        <translation type="unfinished">No se ha podido abrir archivo de Rosegarden</translation>
+        <translation>No se ha podido abrir archivo de Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="621"/>
         <source>Error when parsing file &apos;%1&apos;: &quot;%2&quot;</source>
-        <translation type="unfinished">Error al interpretar el archivo &apos;%1&apos;: &quot;%2&quot;</translation>
+        <translation>Error al interpretar el archivo &apos;%1&apos;: &quot;%2&quot;</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="668"/>
         <source>Generating audio previews...</source>
-        <translation type="unfinished">Generando previsualizaciones de audio...</translation>
+        <translation>Generando previsualizaciones de audio...</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="711"/>
         <source>Merge</source>
-        <translation type="unfinished">Mezclar</translation>
+        <translation>Mezclar</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="1179"/>
