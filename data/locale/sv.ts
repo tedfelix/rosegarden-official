@@ -79,7 +79,7 @@
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="503"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Radera</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="504"/>
@@ -113,7 +113,7 @@
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="522"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="562"/>
         <source>Refresh</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Uppdatera</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="557"/>
@@ -139,7 +139,7 @@
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="531"/>
         <source>Delete</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Radera</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="533"/>
@@ -198,7 +198,7 @@
         <location filename="../QMenuStrings.cpp" line="967"/>
         <location filename="../QMenuStrings.cpp" line="1005"/>
         <source>&amp;File</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Arkiv</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="31"/>
@@ -225,7 +225,7 @@
         <location filename="../QMenuStrings.cpp" line="969"/>
         <location filename="../QMenuStrings.cpp" line="1006"/>
         <source>&amp;Close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Stäng</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="34"/>
@@ -286,7 +286,7 @@
         <location filename="../QMenuStrings.cpp" line="989"/>
         <location filename="../QMenuStrings.cpp" line="1015"/>
         <source>&amp;Help</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Hjälp</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="42"/>
@@ -456,7 +456,7 @@
         <location filename="../QMenuStrings.cpp" line="434"/>
         <location filename="../QMenuStrings.cpp" line="835"/>
         <source>&amp;Copy</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Kopiera</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="59"/>
@@ -465,7 +465,7 @@
         <location filename="../QMenuStrings.cpp" line="435"/>
         <location filename="../QMenuStrings.cpp" line="836"/>
         <source>&amp;Paste</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Klistra &amp;in</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="68"/>
@@ -515,7 +515,7 @@
         <location filename="../QMenuStrings.cpp" line="821"/>
         <location filename="../QMenuStrings.cpp" line="968"/>
         <source>&amp;Save</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Spara</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="103"/>
@@ -857,7 +857,7 @@
         <location filename="../QMenuStrings.cpp" line="837"/>
         <location filename="../QMenuStrings.cpp" line="975"/>
         <source>&amp;Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Ta bort</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="196"/>
@@ -1147,7 +1147,7 @@
         <location filename="../QMenuStrings.cpp" line="609"/>
         <location filename="../QMenuStrings.cpp" line="905"/>
         <source>&amp;Tools</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Verktyg</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="254"/>
@@ -2832,7 +2832,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="801"/>
         <source>&amp;New</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Nytt</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="802"/>
@@ -2912,7 +2912,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="819"/>
         <source>&amp;Open...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Öppna...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="820"/>
@@ -2952,7 +2952,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="830"/>
         <source>&amp;Quit</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Avsluta</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="838"/>
@@ -5091,7 +5091,7 @@ Om du ändå vill klistra in, fundera på att använda en av de andra inklistrin
     <message>
         <location filename="../InstrumentStrings.cpp" line="361"/>
         <source>Miscellaneous</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Ouml;vrigt</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="362"/>
@@ -8823,7 +8823,7 @@ Om du ändå vill klistra in, fundera på att använda en av de andra inklistrin
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="63"/>
         <source>&amp;Open</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Öppna</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="65"/>
@@ -9230,7 +9230,7 @@ Om du ändå vill klistra in, fundera på att använda en av de andra inklistrin
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="161"/>
         <source>File</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fil</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="268"/>
@@ -9916,7 +9916,7 @@ Välj de du vill ta bort permanent från hårddisken.
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="103"/>
         <source>Apply</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Verkställ</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="104"/>
@@ -9958,7 +9958,7 @@ Välj de du vill ta bort permanent från hårddisken.
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="156"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Radera</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="157"/>
@@ -10038,7 +10038,7 @@ Välj de du vill ta bort permanent från hårddisken.
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="328"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Stäng</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1111"/>
@@ -10472,7 +10472,7 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
         <location filename="../../src/document/CommandHistory.cpp" line="56"/>
         <location filename="../../src/document/CommandHistory.cpp" line="60"/>
         <source>&amp;Undo</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Ångra</translation>
     </message>
     <message>
         <location filename="../../src/document/CommandHistory.cpp" line="52"/>
@@ -10642,13 +10642,13 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="136"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Radera</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="138"/>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="375"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Stäng</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="140"/>
@@ -10796,7 +10796,7 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/commands/edit/CopyCommand.h" line="62"/>
         <source>&amp;Copy</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Kopiera</translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/CopyCommand.cpp" line="41"/>
@@ -10829,7 +10829,7 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/gui/dialogs/CountdownDialog.cpp" line="68"/>
         <source>Stop</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Stoppa</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/CountdownDialog.cpp" line="121"/>
@@ -11070,7 +11070,7 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.h" line="48"/>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.h" line="49"/>
         <source>About</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Om Album Shaper</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.h" line="61"/>
@@ -11190,12 +11190,12 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="254"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ja</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="254"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nej</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="267"/>
@@ -11539,7 +11539,7 @@ Att ta bort egenskaper som krävs kan orsaka oväntat beteende.</translation>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="523"/>
         <source>&amp;Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Ta bort</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="552"/>
@@ -12496,12 +12496,12 @@ Vill du försöka söka efter filen eller hoppa över den?</translation>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="79"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Radera</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="80"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Redigera</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="83"/>
@@ -13498,7 +13498,7 @@ Vill du använda
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="143"/>
         <source>Landscape</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Liggande</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="144"/>
@@ -13609,17 +13609,17 @@ Vill du använda
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="202"/>
         <source>Left</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vänster</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="203"/>
         <source>Center</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mitten</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="204"/>
         <source>Right</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Höger</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="229"/>
@@ -13677,7 +13677,7 @@ Vill du använda
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="68"/>
         <source>Print</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Skriv ut</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="70"/>
@@ -13687,7 +13687,7 @@ Vill du använda
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="81"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Avbryt</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="104"/>
@@ -14331,7 +14331,7 @@ fördröjning vid uppspelningens start, på grund av mängden data som skickas.<
     <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="119"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Radera</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="120"/>
@@ -14342,7 +14342,7 @@ fördröjning vid uppspelningens start, på grund av mängden data som skickas.<
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="122"/>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="390"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Stäng</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="124"/>
@@ -15790,7 +15790,7 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="464"/>
         <source>View</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Visa</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="485"/>
@@ -16627,7 +16627,7 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
     <message>
         <location filename="../../src/commands/edit/PasteEventsCommand.h" line="85"/>
         <source>&amp;Paste</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Klistra &amp;in</translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/PasteEventsCommand.cpp" line="91"/>
@@ -16691,7 +16691,7 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
     <message>
         <location filename="../../src/commands/edit/PasteSegmentsCommand.h" line="55"/>
         <source>&amp;Paste</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Klistra &amp;in</translation>
     </message>
 </context>
 <context>
@@ -16751,12 +16751,12 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
     <message>
         <location filename="../../src/gui/editors/segment/PlayList.cpp" line="87"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Radera</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/PlayList.cpp" line="88"/>
         <source>Clear</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Töm</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/PlayList.cpp" line="127"/>
@@ -16918,7 +16918,7 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="98"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Avbryt</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="259"/>
@@ -18538,7 +18538,7 @@ Vill du ställa in den nu?</translation>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5006"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fel</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5007"/>
@@ -18851,7 +18851,7 @@ Error was : %2</source>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="146"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Redigera</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="148"/>
@@ -21348,7 +21348,7 @@ Vill du ställa in den nu?</translation>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="109"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Radera</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="112"/>
@@ -21879,7 +21879,7 @@ Vill du ställa in den nu?</translation>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1138"/>
         <source>Stop</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Stoppa</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1141"/>

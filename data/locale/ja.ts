@@ -79,7 +79,7 @@
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="503"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">削除</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="504"/>
@@ -113,7 +113,7 @@
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="522"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="562"/>
         <source>Refresh</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">リフレッシュ</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="557"/>
@@ -139,7 +139,7 @@
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="531"/>
         <source>Delete</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">削除</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="533"/>
@@ -198,7 +198,7 @@
         <location filename="../QMenuStrings.cpp" line="967"/>
         <location filename="../QMenuStrings.cpp" line="1005"/>
         <source>&amp;File</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ファイル(&amp;F)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="31"/>
@@ -225,7 +225,7 @@
         <location filename="../QMenuStrings.cpp" line="969"/>
         <location filename="../QMenuStrings.cpp" line="1006"/>
         <source>&amp;Close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">閉じる(&amp;C)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="34"/>
@@ -239,7 +239,7 @@
         <location filename="../QMenuStrings.cpp" line="970"/>
         <location filename="../QMenuStrings.cpp" line="1007"/>
         <source>&amp;Edit</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">編集(&amp;E)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="35"/>
@@ -286,7 +286,7 @@
         <location filename="../QMenuStrings.cpp" line="989"/>
         <location filename="../QMenuStrings.cpp" line="1015"/>
         <source>&amp;Help</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ヘルプ(&amp;H)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="42"/>
@@ -316,7 +316,7 @@
         <location filename="../QMenuStrings.cpp" line="991"/>
         <location filename="../QMenuStrings.cpp" line="1017"/>
         <source>&amp;What&apos;s This?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ヒント(&amp;W)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="44"/>
@@ -456,7 +456,7 @@
         <location filename="../QMenuStrings.cpp" line="434"/>
         <location filename="../QMenuStrings.cpp" line="835"/>
         <source>&amp;Copy</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">コピー(&amp;C)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="59"/>
@@ -465,7 +465,7 @@
         <location filename="../QMenuStrings.cpp" line="435"/>
         <location filename="../QMenuStrings.cpp" line="836"/>
         <source>&amp;Paste</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">貼り付け(&amp;P)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="68"/>
@@ -515,7 +515,7 @@
         <location filename="../QMenuStrings.cpp" line="821"/>
         <location filename="../QMenuStrings.cpp" line="968"/>
         <source>&amp;Save</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">保存(&amp;S)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="103"/>
@@ -581,7 +581,7 @@
         <location filename="../QMenuStrings.cpp" line="979"/>
         <location filename="../QMenuStrings.cpp" line="1011"/>
         <source>&amp;View</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">表示(&amp;V)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="116"/>
@@ -857,7 +857,7 @@
         <location filename="../QMenuStrings.cpp" line="837"/>
         <location filename="../QMenuStrings.cpp" line="975"/>
         <source>&amp;Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">削除(&amp;D)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="196"/>
@@ -1147,7 +1147,7 @@
         <location filename="../QMenuStrings.cpp" line="609"/>
         <location filename="../QMenuStrings.cpp" line="905"/>
         <source>&amp;Tools</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ツール(&amp;T)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="254"/>
@@ -1664,7 +1664,7 @@
         <location filename="../QMenuStrings.cpp" line="428"/>
         <location filename="../QMenuStrings.cpp" line="826"/>
         <source>&amp;Print...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">印刷(&amp;P)...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="427"/>
@@ -2828,7 +2828,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="801"/>
         <source>&amp;New</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">新規(&amp;N)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="802"/>
@@ -2918,7 +2918,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="822"/>
         <source>Save &amp;As...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">名前を付けて保存(&amp;A)...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="823"/>
@@ -2948,7 +2948,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="830"/>
         <source>&amp;Quit</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">終了(&amp;Q)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="838"/>
@@ -8819,7 +8819,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="63"/>
         <source>&amp;Open</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">オープン(&amp;O)...</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="65"/>
@@ -9226,7 +9226,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="161"/>
         <source>File</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ファイル</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="268"/>
@@ -9555,7 +9555,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="183"/>
         <source>Paste</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">貼り付け</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="188"/>
@@ -9910,7 +9910,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="103"/>
         <source>Apply</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">適用</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="104"/>
@@ -9952,7 +9952,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="156"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">削除</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="157"/>
@@ -10007,7 +10007,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="184"/>
         <source>Paste</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">貼り付け</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="192"/>
@@ -10022,7 +10022,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="215"/>
         <source>Options</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">オプション</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="225"/>
@@ -10032,7 +10032,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="328"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">閉じる</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1111"/>
@@ -10466,12 +10466,12 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
         <location filename="../../src/document/CommandHistory.cpp" line="56"/>
         <location filename="../../src/document/CommandHistory.cpp" line="60"/>
         <source>&amp;Undo</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">元に戻す(&amp;U)</translation>
     </message>
     <message>
         <location filename="../../src/document/CommandHistory.cpp" line="52"/>
         <source>Ctrl+Z</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ctrl+Z</translation>
     </message>
     <message>
         <location filename="../../src/document/CommandHistory.cpp" line="53"/>
@@ -10631,18 +10631,18 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="135"/>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">追加</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="136"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">削除</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="138"/>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="375"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">閉じる</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="140"/>
@@ -10790,7 +10790,7 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/commands/edit/CopyCommand.h" line="62"/>
         <source>&amp;Copy</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">コピー(&amp;C)</translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/CopyCommand.cpp" line="41"/>
@@ -11064,7 +11064,7 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.h" line="48"/>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.h" line="49"/>
         <source>About</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">について</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.h" line="61"/>
@@ -11533,7 +11533,7 @@ Removing necessary properties may cause unexpected behavior.</source>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="523"/>
         <source>&amp;Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">削除(&amp;D)</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="552"/>
@@ -12100,7 +12100,7 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location filename="../../src/gui/general/FileSource.cpp" line="304"/>
         <source>Downloading %1...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%1 をダウンロード中...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/FileSource.cpp" line="582"/>
@@ -12489,12 +12489,12 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="79"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">削除</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="80"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">編集</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="83"/>
@@ -12834,7 +12834,7 @@ Example text from file:</source>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="171"/>
         <source>Options</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">オプション</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="175"/>
@@ -13674,7 +13674,7 @@ Would you like to use
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="81"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">キャンセル</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="104"/>
@@ -14313,12 +14313,12 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="118"/>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">追加</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="119"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">削除</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="120"/>
@@ -14329,7 +14329,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="122"/>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="390"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">閉じる</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="124"/>
@@ -14849,7 +14849,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="149"/>
         <source>Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ズーム</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="165"/>
@@ -15822,7 +15822,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="602"/>
         <source>Font</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">フォント</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="700"/>
@@ -16489,7 +16489,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="137"/>
         <source>Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ズーム</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="153"/>
@@ -16605,7 +16605,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/edit/PasteEventsCommand.h" line="85"/>
         <source>&amp;Paste</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">貼り付け(&amp;P)</translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/PasteEventsCommand.cpp" line="91"/>
@@ -16638,7 +16638,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/dialogs/PasteNotationDialog.cpp" line="43"/>
         <source>Paste</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">貼り付け</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PasteNotationDialog.cpp" line="52"/>
@@ -16648,7 +16648,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/dialogs/PasteNotationDialog.cpp" line="73"/>
         <source>Options</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">オプション</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PasteNotationDialog.cpp" line="79"/>
@@ -16669,7 +16669,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/edit/PasteSegmentsCommand.h" line="55"/>
         <source>&amp;Paste</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">貼り付け(&amp;P)</translation>
     </message>
 </context>
 <context>
@@ -16729,7 +16729,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/editors/segment/PlayList.cpp" line="87"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">削除</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/PlayList.cpp" line="88"/>
@@ -16896,7 +16896,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="98"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">キャンセル</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="259"/>
@@ -17408,7 +17408,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/dialogs/RescaleDialog.cpp" line="62"/>
         <source>Options</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">オプション</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RescaleDialog.cpp" line="66"/>
@@ -18099,7 +18099,7 @@ Error was : %2</source>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2411"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4955"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">警告</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2412"/>
@@ -18824,7 +18824,7 @@ Error was : %2</source>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="146"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">編集</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="148"/>
@@ -18991,7 +18991,7 @@ Error was : %2</source>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="148"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">警告</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="149"/>
@@ -20576,7 +20576,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="194"/>
         <source>Options</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">オプション</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="200"/>
@@ -20724,7 +20724,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="405"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">警告</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="406"/>
@@ -21321,7 +21321,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="109"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">削除</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="112"/>

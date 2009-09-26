@@ -79,7 +79,7 @@
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="503"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Usuń</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="504"/>
@@ -113,7 +113,7 @@
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="522"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="562"/>
         <source>Refresh</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Odśwież</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="557"/>
@@ -139,7 +139,7 @@
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="531"/>
         <source>Delete</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Usuń</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="533"/>
@@ -198,7 +198,7 @@
         <location filename="../QMenuStrings.cpp" line="967"/>
         <location filename="../QMenuStrings.cpp" line="1005"/>
         <source>&amp;File</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Plik</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="31"/>
@@ -225,7 +225,7 @@
         <location filename="../QMenuStrings.cpp" line="969"/>
         <location filename="../QMenuStrings.cpp" line="1006"/>
         <source>&amp;Close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Zamknij</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="34"/>
@@ -239,7 +239,7 @@
         <location filename="../QMenuStrings.cpp" line="970"/>
         <location filename="../QMenuStrings.cpp" line="1007"/>
         <source>&amp;Edit</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Edycja</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="35"/>
@@ -286,7 +286,7 @@
         <location filename="../QMenuStrings.cpp" line="989"/>
         <location filename="../QMenuStrings.cpp" line="1015"/>
         <source>&amp;Help</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Pomoc</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="42"/>
@@ -316,7 +316,7 @@
         <location filename="../QMenuStrings.cpp" line="991"/>
         <location filename="../QMenuStrings.cpp" line="1017"/>
         <source>&amp;What&apos;s This?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Co to jest?</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="44"/>
@@ -456,7 +456,7 @@
         <location filename="../QMenuStrings.cpp" line="434"/>
         <location filename="../QMenuStrings.cpp" line="835"/>
         <source>&amp;Copy</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Kopiuj</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="59"/>
@@ -465,7 +465,7 @@
         <location filename="../QMenuStrings.cpp" line="435"/>
         <location filename="../QMenuStrings.cpp" line="836"/>
         <source>&amp;Paste</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Wklej</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="68"/>
@@ -515,7 +515,7 @@
         <location filename="../QMenuStrings.cpp" line="821"/>
         <location filename="../QMenuStrings.cpp" line="968"/>
         <source>&amp;Save</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Zapisz</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="103"/>
@@ -548,7 +548,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="110"/>
         <source>&amp;Select All</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Zaznacz wszystko</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="111"/>
@@ -581,7 +581,7 @@
         <location filename="../QMenuStrings.cpp" line="979"/>
         <location filename="../QMenuStrings.cpp" line="1011"/>
         <source>&amp;View</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Przeglądaj</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="116"/>
@@ -857,7 +857,7 @@
         <location filename="../QMenuStrings.cpp" line="837"/>
         <location filename="../QMenuStrings.cpp" line="975"/>
         <source>&amp;Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Kasuj</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="196"/>
@@ -1147,7 +1147,7 @@
         <location filename="../QMenuStrings.cpp" line="609"/>
         <location filename="../QMenuStrings.cpp" line="905"/>
         <source>&amp;Tools</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Narzędzia</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="254"/>
@@ -1568,7 +1568,7 @@
         <location filename="../QMenuStrings.cpp" line="397"/>
         <location filename="../QMenuStrings.cpp" line="727"/>
         <source>&amp;Settings</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">U&amp;stawienia</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="398"/>
@@ -1664,7 +1664,7 @@
         <location filename="../QMenuStrings.cpp" line="428"/>
         <location filename="../QMenuStrings.cpp" line="826"/>
         <source>&amp;Print...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Drukuj...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="427"/>
@@ -2828,7 +2828,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="801"/>
         <source>&amp;New</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Nowy</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="802"/>
@@ -2908,17 +2908,17 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="819"/>
         <source>&amp;Open...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Otwórz...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="820"/>
         <source>Open &amp;Recent</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Otwórz O&amp;statnie</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="822"/>
         <source>Save &amp;As...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zapisz j&amp;ako...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="823"/>
@@ -2948,7 +2948,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="830"/>
         <source>&amp;Quit</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Wyjście</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="838"/>
@@ -5090,7 +5090,7 @@ jeśli chcesz.</translation>
     <message>
         <location filename="../InstrumentStrings.cpp" line="361"/>
         <source>Miscellaneous</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Różne</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="362"/>
@@ -5161,7 +5161,7 @@ jeśli chcesz.</translation>
         <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="35"/>
         <location filename="../InstrumentStrings.cpp" line="375"/>
         <source>C</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">T</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="35"/>
@@ -5222,7 +5222,7 @@ jeśli chcesz.</translation>
         <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="36"/>
         <location filename="../InstrumentStrings.cpp" line="385"/>
         <source>G</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">G</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="37"/>
@@ -5256,7 +5256,7 @@ jeśli chcesz.</translation>
         <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="37"/>
         <location filename="../InstrumentStrings.cpp" line="391"/>
         <source>B</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">B</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="392"/>
@@ -6511,7 +6511,7 @@ jeśli chcesz.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="318"/>
         <source>blue</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">niebieski</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="319"/>
@@ -8822,7 +8822,7 @@ jeśli chcesz.</translation>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="63"/>
         <source>&amp;Open</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Otwórz</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="65"/>
@@ -9229,7 +9229,7 @@ jeśli chcesz.</translation>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="161"/>
         <source>File</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Plik</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="268"/>
@@ -9551,7 +9551,7 @@ Proszę zaznaczyć te, które mają być skasowane na zawsze z twardego dysku.
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="176"/>
         <source>Copy</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kopiuj</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="181"/>
@@ -9561,7 +9561,7 @@ Proszę zaznaczyć te, które mają być skasowane na zawsze z twardego dysku.
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="183"/>
         <source>Paste</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wklej</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="188"/>
@@ -9916,7 +9916,7 @@ Proszę zaznaczyć te, które mają być skasowane na zawsze z twardego dysku.
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="103"/>
         <source>Apply</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zapisz</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="104"/>
@@ -9958,7 +9958,7 @@ Proszę zaznaczyć te, które mają być skasowane na zawsze z twardego dysku.
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="156"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Usuń</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="157"/>
@@ -10008,12 +10008,12 @@ Proszę zaznaczyć te, które mają być skasowane na zawsze z twardego dysku.
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="183"/>
         <source>Copy</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kopiuj</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="184"/>
         <source>Paste</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wklej</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="192"/>
@@ -10028,7 +10028,7 @@ Proszę zaznaczyć te, które mają być skasowane na zawsze z twardego dysku.
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="215"/>
         <source>Options</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Opcje</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="225"/>
@@ -10038,7 +10038,7 @@ Proszę zaznaczyć te, które mają być skasowane na zawsze z twardego dysku.
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="328"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zamknij</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1111"/>
@@ -10472,12 +10472,12 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
         <location filename="../../src/document/CommandHistory.cpp" line="56"/>
         <location filename="../../src/document/CommandHistory.cpp" line="60"/>
         <source>&amp;Undo</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Cofnij</translation>
     </message>
     <message>
         <location filename="../../src/document/CommandHistory.cpp" line="52"/>
         <source>Ctrl+Z</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ctrl+Z</translation>
     </message>
     <message>
         <location filename="../../src/document/CommandHistory.cpp" line="53"/>
@@ -10637,18 +10637,18 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="135"/>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dodaj</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="136"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Usuń</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="138"/>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="375"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zamknij</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="140"/>
@@ -10765,7 +10765,7 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/gui/rulers/ControlRulerWidget.cpp" line="256"/>
         <source>Velocity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Predkość uderzenia (velocity)</translation>
     </message>
 </context>
 <context>
@@ -10796,7 +10796,7 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/commands/edit/CopyCommand.h" line="62"/>
         <source>&amp;Copy</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Kopiuj</translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/CopyCommand.cpp" line="41"/>
@@ -10829,7 +10829,7 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/gui/dialogs/CountdownDialog.cpp" line="68"/>
         <source>Stop</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Stop</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/CountdownDialog.cpp" line="121"/>
@@ -10948,7 +10948,7 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="59"/>
         <source>C</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">T</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="60"/>
@@ -10968,7 +10968,7 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="63"/>
         <source>G</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">G</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="64"/>
@@ -10978,7 +10978,7 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="65"/>
         <source>B</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">B</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="70"/>
@@ -11070,7 +11070,7 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.h" line="48"/>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.h" line="49"/>
         <source>About</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">O programie</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.h" line="61"/>
@@ -11190,17 +11190,17 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="254"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tak</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="254"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nie</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="267"/>
         <source>Off</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wył.</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="298"/>
@@ -11538,7 +11538,7 @@ Usunięcie potrzebnych właściwości może spowodować nieoczekiwane zachowanie
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="523"/>
         <source>&amp;Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Kasuj</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="552"/>
@@ -12106,7 +12106,7 @@ Czy chciałbyś spróbować sam go zlokalizować, czy pominąć go?</translation
     <message>
         <location filename="../../src/gui/general/FileSource.cpp" line="304"/>
         <source>Downloading %1...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pobieranie %1...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/FileSource.cpp" line="582"/>
@@ -12454,7 +12454,7 @@ Czy chciałbyś spróbować sam go zlokalizować, czy pominąć go?</translation
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordEditorDialog.cpp" line="56"/>
         <source>Root</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">W dodatkowym oknie (Root)</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordEditorDialog.cpp" line="60"/>
@@ -12480,7 +12480,7 @@ Czy chciałbyś spróbować sam go zlokalizować, czy pominąć go?</translation
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="68"/>
         <source>Root</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">W dodatkowym oknie (Root)</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="73"/>
@@ -12495,12 +12495,12 @@ Czy chciałbyś spróbować sam go zlokalizować, czy pominąć go?</translation
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="79"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Usuń</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="80"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Edycja</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="83"/>
@@ -12840,7 +12840,7 @@ Przykładowy tekst z pliku:</translation>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="171"/>
         <source>Options</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Opcje</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="175"/>
@@ -13499,7 +13499,7 @@ zamiast?</translation>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="143"/>
         <source>Landscape</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pejzaż</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="144"/>
@@ -13610,17 +13610,17 @@ zamiast?</translation>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="202"/>
         <source>Left</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lewo</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="203"/>
         <source>Center</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Środek</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="204"/>
         <source>Right</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Prawo</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="229"/>
@@ -13678,7 +13678,7 @@ zamiast?</translation>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="68"/>
         <source>Print</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Drukuj</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="70"/>
@@ -13688,7 +13688,7 @@ zamiast?</translation>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="81"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Anuluj</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="104"/>
@@ -13907,7 +13907,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="251"/>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="271"/>
         <source>Off</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wył.</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="232"/>
@@ -14326,12 +14326,12 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="118"/>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dodaj</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="119"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Usuń</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="120"/>
@@ -14342,7 +14342,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="122"/>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="390"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zamknij</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="124"/>
@@ -14400,7 +14400,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location filename="../../src/gui/dialogs/MarkerModifyDialog.cpp" line="111"/>
         <source>Comment:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Opis:</translation>
     </message>
 </context>
 <context>
@@ -14776,7 +14776,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/editors/matrix/OldMatrixView.cpp" line="2122"/>
         <source>Off</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wył.</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/OldMatrixView.cpp" line="2166"/>
@@ -14864,7 +14864,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="149"/>
         <source>Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Powiększenie</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="165"/>
@@ -14879,7 +14879,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="190"/>
         <source>Reset Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Normalny rozmiar</translation>
     </message>
 </context>
 <context>
@@ -15244,7 +15244,7 @@ warto by było opublikować te informację, by służyły
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="582"/>
         <source>Off</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wył.</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="625"/>
@@ -15795,7 +15795,7 @@ Proszę sprawdzić, czy urządzenie jest poprawnie skonfigurowane w oknie Zarzą
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="464"/>
         <source>View</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Widok</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="485"/>
@@ -15845,7 +15845,7 @@ Proszę sprawdzić, czy urządzenie jest poprawnie skonfigurowane w oknie Zarzą
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="602"/>
         <source>Font</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Czcionka</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="700"/>
@@ -16518,7 +16518,7 @@ Proszę sprawdzić, czy urządzenie jest poprawnie skonfigurowane w oknie Zarzą
     <message>
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="137"/>
         <source>Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Powiększenie</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="153"/>
@@ -16533,7 +16533,7 @@ Proszę sprawdzić, czy urządzenie jest poprawnie skonfigurowane w oknie Zarzą
     <message>
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="178"/>
         <source>Reset Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Normalny rozmiar</translation>
     </message>
 </context>
 <context>
@@ -16634,7 +16634,7 @@ Proszę sprawdzić, czy urządzenie jest poprawnie skonfigurowane w oknie Zarzą
     <message>
         <location filename="../../src/commands/edit/PasteEventsCommand.h" line="85"/>
         <source>&amp;Paste</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Wklej</translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/PasteEventsCommand.cpp" line="91"/>
@@ -16667,7 +16667,7 @@ Proszę sprawdzić, czy urządzenie jest poprawnie skonfigurowane w oknie Zarzą
     <message>
         <location filename="../../src/gui/dialogs/PasteNotationDialog.cpp" line="43"/>
         <source>Paste</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wklej</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PasteNotationDialog.cpp" line="52"/>
@@ -16677,7 +16677,7 @@ Proszę sprawdzić, czy urządzenie jest poprawnie skonfigurowane w oknie Zarzą
     <message>
         <location filename="../../src/gui/dialogs/PasteNotationDialog.cpp" line="73"/>
         <source>Options</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Opcje</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PasteNotationDialog.cpp" line="79"/>
@@ -16698,7 +16698,7 @@ Proszę sprawdzić, czy urządzenie jest poprawnie skonfigurowane w oknie Zarzą
     <message>
         <location filename="../../src/commands/edit/PasteSegmentsCommand.h" line="55"/>
         <source>&amp;Paste</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Wklej</translation>
     </message>
 </context>
 <context>
@@ -16758,12 +16758,12 @@ Proszę sprawdzić, czy urządzenie jest poprawnie skonfigurowane w oknie Zarzą
     <message>
         <location filename="../../src/gui/editors/segment/PlayList.cpp" line="87"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Usuń</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/PlayList.cpp" line="88"/>
         <source>Clear</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wyczyść</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/PlayList.cpp" line="127"/>
@@ -16925,7 +16925,7 @@ Proszę sprawdzić, czy urządzenie jest poprawnie skonfigurowane w oknie Zarzą
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="98"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Anuluj</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="259"/>
@@ -17437,7 +17437,7 @@ Proszę sprawdzić, czy urządzenie jest poprawnie skonfigurowane w oknie Zarzą
     <message>
         <location filename="../../src/gui/dialogs/RescaleDialog.cpp" line="62"/>
         <source>Options</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Opcje</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RescaleDialog.cpp" line="66"/>
@@ -17658,7 +17658,7 @@ Proszę wybrać, które chcesz na zawsze skasować z dysku twardego.
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="555"/>
         <source>Untitled</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nienazwany</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="591"/>
@@ -17912,7 +17912,7 @@ Chcesz go otworzyć zamiast tego?</translation>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1512"/>
         <source>Untitled</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nienazwany</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1525"/>
@@ -18136,7 +18136,7 @@ Error was : %2</source>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2411"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4955"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ostrzeżenie</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2412"/>
@@ -18544,7 +18544,7 @@ Czy chciałbyś ją teraz ustawić?</translation>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5006"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Błąd</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5007"/>
@@ -18857,7 +18857,7 @@ Error was : %2</source>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="146"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Edycja</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="148"/>
@@ -18887,7 +18887,7 @@ Error was : %2</source>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="295"/>
         <source>Off</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wył.</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="333"/>
@@ -18898,7 +18898,7 @@ Error was : %2</source>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="400"/>
         <source>Default</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Domyślny</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="413"/>
@@ -19024,7 +19024,7 @@ Error was : %2</source>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="148"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ostrzeżenie</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="149"/>
@@ -19796,7 +19796,7 @@ Zamknięcie innych programów może spowodować wzrost wydajności Różanego Og
     <message>
         <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="452"/>
         <source>C</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">T</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="453"/>
@@ -19831,7 +19831,7 @@ Zamknięcie innych programów może spowodować wzrost wydajności Różanego Og
     <message>
         <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="459"/>
         <source>G</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">G</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="460"/>
@@ -19851,7 +19851,7 @@ Zamknięcie innych programów może spowodować wzrost wydajności Różanego Og
     <message>
         <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="463"/>
         <source>B</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">B</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="574"/>
@@ -20610,7 +20610,7 @@ Zamknięcie innych programów może spowodować wzrost wydajności Różanego Og
     <message>
         <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="194"/>
         <source>Options</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Opcje</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="200"/>
@@ -20758,7 +20758,7 @@ Zamknięcie innych programów może spowodować wzrost wydajności Różanego Og
     <message>
         <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="405"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ostrzeżenie</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="406"/>
@@ -20888,7 +20888,7 @@ Czy chciałbyś ją teraz ustawić?</translation>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="258"/>
         <source>Tiny</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Miniaturowe</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="265"/>
@@ -21152,7 +21152,7 @@ Czy chciałbyś ją teraz ustawić?</translation>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="960"/>
         <source>Default</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Domyślny</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="973"/>
@@ -21355,7 +21355,7 @@ Czy chciałbyś ją teraz ustawić?</translation>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="109"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Usuń</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="112"/>
@@ -21888,7 +21888,7 @@ Czy chciałbyś ją teraz ustawić?</translation>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1138"/>
         <source>Stop</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Stop</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1141"/>
