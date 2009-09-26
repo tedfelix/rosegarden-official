@@ -189,15 +189,15 @@ NewNotationView::NewNotationView(RosegardenDocument *doc,
 
     // Set font size for single or multiple staffs (hopefully this happens
     // before we've drawn anything, so there's no penalty changing it)
-    int size = 8;
+    m_fontSize =  NoteFontFactory::getDefaultSize(m_fontName);
     if (m_notationWidget->getScene()->getStaffCount() > 1) {
-        size = settings.value("multistaffnotesize", 6).toInt();
+        m_fontSize = settings.value("multistaffnotesize", 6).toInt();
         //std::cout << "setting multi staff size to " << size << std::endl;
     } else {
-        size = settings.value("singlestaffnotesize", 8).toInt();
+        m_fontSize = settings.value("singlestaffnotesize", 8).toInt();
         //std::cout << "setting single staff size to " << size << std::endl;
     }
-    m_notationWidget->slotSetFontSize(size);
+    m_notationWidget->slotSetFontSize(m_fontSize);
 
 
     // Set initial notation layout mode
@@ -768,7 +768,6 @@ NewNotationView::setupActions()
     QMenu *fontSizeActionMenu = new QMenu(tr("Si&ze"), this);
     fontSizeActionMenu->setObjectName("note_font_size_actionmenu");
     ag = new QActionGroup(this);
-    int defaultFontSize = NoteFontFactory::getDefaultSize(m_fontName);
 
     m_availableFontSizes = NoteFontFactory::getScreenSizes(m_fontName);
 
@@ -782,7 +781,7 @@ NewNotationView::setupActions()
         sizeAction->setCheckable(true);
         ag->addAction(sizeAction);
 
-        sizeAction->setChecked(m_availableFontSizes[i] == defaultFontSize);
+        sizeAction->setChecked(m_availableFontSizes[i] == m_fontSize);
         fontSizeActionMenu->addAction(sizeAction);
     }
 
@@ -955,19 +954,20 @@ NewNotationView::initLayoutToolbar()
     //
     // font size combo
     //
-    std::vector<int> sizes = NoteFontFactory::getScreenSizes(m_fontName);
     m_fontSizeCombo = new QComboBox(layoutToolbar);
     if (m_Thorn) m_fontSizeCombo->setStyleSheet(comboStyle);
     layoutToolbar->addWidget(m_fontSizeCombo);
 
-    for (std::vector<int>::iterator i = sizes.begin(); i != sizes.end(); ++i) {
-
+    for (std::vector<int>::iterator i = m_availableFontSizes.begin(); i != m_availableFontSizes.end(); ++i) {
         value.setNum(*i);
         m_fontSizeCombo->addItem(value);
+        if ((*i) == m_fontSize) {
+            m_fontSizeCombo->setCurrentIndex(m_fontSizeCombo->count() - 1);
+        }
     }
-    
-    connect(m_fontSizeCombo, SIGNAL(activated(const QString&)),
-            this, SLOT(slotChangeFontSizeFromStringValue(const QString&)));
+
+    connect(m_fontSizeCombo, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(slotSizeComboChanged(int)));
 
     label = new QLabel(tr("  Spacing:  "), layoutToolbar);
     if (m_Thorn) label->setStyleSheet("color: black");
@@ -3519,10 +3519,6 @@ NewNotationView::slotHoveredOverAbsoluteTimeChanged(unsigned int time)
 void
 NewNotationView::slotFontComboChanged(int index)
 {
-//    std::cout << "FONT COMBO CHANGED value " << index
-//              << " == " << m_availableFontNames[index].toStdString()
-//              << std::endl;
-
     // (and this replaces about 500 lines of crusty code)
     if (m_notationWidget) m_notationWidget->slotSetFontName(m_availableFontNames[index]);
 }
@@ -3530,6 +3526,7 @@ NewNotationView::slotFontComboChanged(int index)
 void
 NewNotationView::slotSizeComboChanged(int index)
 {
+    if (m_notationWidget) m_notationWidget->slotSetFontSize(m_availableFontSizes[index]);
 }
 
 void
