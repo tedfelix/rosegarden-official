@@ -53,7 +53,13 @@ public:
     static std::vector<int> getScreenSizes(QString fontName); // sorted
 
     static QString getDefaultFontName();
+
+    /// Return the default single staff size (prefers 8)
     static int getDefaultSize(QString fontName);
+
+    /// Return the default multi-staff size (prefers 6)
+    static int getDefaultMultiSize(QString fontName);
+
     static bool isAvailableInSize(QString fontName, int size);
 
 private:

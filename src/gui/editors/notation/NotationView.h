@@ -248,6 +248,14 @@ protected slots:
      */
     void slotHoveredOverAbsoluteTimeChanged(unsigned int);
 
+    /** The old font size combo handling code was convoluted and unhappy in this
+     * new home.  This is a new implementation that takes advantage of the fact
+     * that someone already got the View -> Font Size menu working.
+     */
+    void slotFontComboChanged(int);
+    void slotSizeComboChanged(int);
+    void slotSpacingComboChanged(int);
+
 private:
     /**
      * export a LilyPond file (used by slotPrintLilyPond and
@@ -365,6 +373,10 @@ private:
     int              m_fontSize;
 
     bool m_Thorn;
+
+    QVector<QString> m_availableFontNames;
+    QVector<int>     m_availableFontSizes;
+    QVector<int>     m_availableSpacings;
 };
 
 }

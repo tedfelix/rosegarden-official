@@ -187,6 +187,19 @@ NewNotationView::NewNotationView(RosegardenDocument *doc,
 
     settings.beginGroup(NotationViewConfigGroup);
 
+    // Set font size for single or multiple staffs (hopefully this happens
+    // before we've drawn anything, so there's no penalty changing it)
+    int size = 8;
+    if (m_notationWidget->getScene()->getStaffCount() > 1) {
+        size = settings.value("multistaffnotesize", 6).toInt();
+        //std::cout << "setting multi staff size to " << size << std::endl;
+    } else {
+        size = settings.value("singlestaffnotesize", 8).toInt();
+        //std::cout << "setting single staff size to " << size << std::endl;
+    }
+    m_notationWidget->slotSetFontSize(size);
+
+
     // Set initial notation layout mode
     int layoutMode = settings.value("layoutmode", 0).toInt();
     switch(layoutMode) {
@@ -737,6 +750,8 @@ NewNotationView::setupActions()
 
         QString fontQName(*i);
 
+        m_availableFontNames.append(fontQName);
+
         QAction *a = createAction("note_font_" + fontQName,
                                   SLOT(slotChangeFontFromAction()));
 
@@ -913,21 +928,17 @@ NewNotationView::initLayoutToolbar()
     if (m_Thorn) m_fontCombo->setStyleSheet(comboStyle);
     layoutToolbar->addWidget(m_fontCombo);
 
-    std::set<QString> fs(NoteFontFactory::getFontNames());
-    std::vector<std::string> f(fs.begin(), fs.end());
-    std::sort(f.begin(), f.end());
-
     bool foundFont = false;
 
-    for (std::vector<std::string>::iterator i = f.begin(); i != f.end(); ++i) {
+    for (QVector<QString>::const_iterator i = m_availableFontNames.begin(); i != m_availableFontNames.end(); ++i) {
 
-        QString fontQName(strtoqstr(*i));
+        QString fontQName(*i);
 
         m_fontCombo->addItem(fontQName);
-        if (fontQName.toLower() == m_fontName.toLower()) {
-            m_fontCombo->setCurrentIndex(m_fontCombo->count() - 1);
-            foundFont = true;
-        }
+//        if (fontQName.toLower() == m_fontName.toLower()) {
+//            m_fontCombo->setCurrentIndex(m_fontCombo->count() - 1);
+//            foundFont = true;
+//        }
     }
 
     if (!foundFont) {
@@ -937,8 +948,8 @@ NewNotationView::initLayoutToolbar()
         m_fontName = NoteFontFactory::getDefaultFontName();
     }
 
-    connect(m_fontCombo, SIGNAL(activated(const QString &)),
-            this, SLOT(slotChangeFont(const QString &)));
+    connect(m_fontCombo, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(slotFontComboChanged(int)));
 
     label = new QLabel(tr("  Size:  "), layoutToolbar);
     if (m_Thorn) label->setStyleSheet("color: black");
@@ -3510,6 +3521,27 @@ NewNotationView::slotHoveredOverAbsoluteTimeChanged(unsigned int time)
     m_hoveredOverAbsoluteTime->setText(message);
 }
 
+void
+NewNotationView::slotFontComboChanged(int index)
+{
+//    std::cout << "FONT COMBO CHANGED value " << index
+//              << " == " << m_availableFontNames[index].toStdString()
+//              << std::endl;
+
+    // (and this replaces about 500 lines of crusty code)
+    if (m_notationWidget) m_notationWidget->slotSetFontName(m_availableFontNames[index]);
 }
+
+void
+NewNotationView::slotSizeComboChanged(int index)
+{
+}
+
+void
+NewNotationView::slotSpacingComboChanged(int index)
+{
+}
+
+} // end namespace Rosegarden
 
 #include "NotationView.moc"

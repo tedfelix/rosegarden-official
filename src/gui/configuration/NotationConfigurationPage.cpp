@@ -90,7 +90,7 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
     if (defaultLayoutMode >= 0 && defaultLayoutMode <= 2) {
         m_layoutMode->setCurrentIndex(defaultLayoutMode);
     }
-    layout->addWidget(m_layoutMode, row, 1, row- row+1, 2);
+    layout->addWidget(m_layoutMode, row, 1, 1, 2);
     ++row;
 
     layout->addWidget(new QLabel(tr("Default spacing"), frame), row, 0);
@@ -114,7 +114,7 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
         }
     }
 
-    layout->addWidget(m_spacing, row, 1, row- row+1, 2);
+    layout->addWidget(m_spacing, row, 1, 1, 2);
 
     ++row;
 
@@ -143,7 +143,7 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
         }
     }
 
-    layout->addWidget(m_proportion, row, 1, row- row+1, 2);
+    layout->addWidget(m_proportion, row, 1, 1, 2);
     ++row;
 
     layout->addWidget(new QLabel(tr("Show track headers (linear layout only)"),
@@ -167,7 +167,7 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
         "\"When needed\" means \"when staves are too many to all fit"
         " in the current window\"")));
 
-    layout->addWidget(m_showTrackHeaders, row, 1, row- row+1, 2);
+    layout->addWidget(m_showTrackHeaders, row, 1, 1, 2);
     ++row;
 
     layout->setRowMinimumHeight(row, 20);
@@ -302,7 +302,7 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
     m_insertType->addItem(tr("Ignore existing durations"));
     m_insertType->setCurrentIndex(defaultInsertType);
 
-    layout->addWidget(m_insertType, row, 1, row- row+1, 2);
+    layout->addWidget(m_insertType, row, 1, 1, 2);
     ++row;
 
     bool autoBeam = qStrToBool( settings.value("autobeam", "true" ) ) ;
@@ -314,7 +314,7 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
     m_autoBeam = new QCheckBox(frame);
     connect(m_autoBeam, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
     m_autoBeam->setChecked(autoBeam);
-    layout->addWidget(m_autoBeam, row, 2, row- row+1, 1);
+    layout->addWidget(m_autoBeam, row, 2, 1, 1);
 
     ++row;
 
@@ -327,7 +327,7 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
     m_collapseRests = new QCheckBox(frame);
     connect(m_collapseRests, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
     m_collapseRests->setChecked(collapse);
-    layout->addWidget(m_collapseRests, row, 2, row- row+1, 1);
+    layout->addWidget(m_collapseRests, row, 2, 1, 1);
     ++row;
 
     layout->setRowMinimumHeight(row, 20);
@@ -352,7 +352,7 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
     }
 
     m_pasteType->setCurrentIndex(defaultPasteType);
-    layout->addWidget(m_pasteType, row, 1, row- row+1, 2);
+    layout->addWidget(m_pasteType, row, 1, 1, 2);
     ++row;
 
     layout->setRowStretch(row, 10);
@@ -462,12 +462,12 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
 
 #ifdef HAVE_XFT
     m_viewButton = new QPushButton(tr("View"), frame);
-    layout->addWidget(m_font, row, 1, row- row+1, 2);
+    layout->addWidget(m_font, row, 1, 1, 2);
     layout->addWidget(m_viewButton, row, 3);
     QObject::connect(m_viewButton, SIGNAL(clicked()),
                      this, SLOT(slotViewButtonPressed()));
 #else
-    layout->addWidget(m_font, row, 1, row- row+1, 3);
+    layout->addWidget(m_font, row, 1, 1, 3);
 #endif
     m_font->setEditable(false);
     QObject::connect(m_font, SIGNAL(activated(int)),
@@ -518,11 +518,7 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
     subLayout->setColumnStretch(1, 10);
     subFrame->setLayout(subLayout);
 
-    layout->addWidget(subFrame,
-                               row,
-                               0, row-
-                               row+1, 3-
-                      0+1);
+    layout->addWidget(subFrame, row, 0, 1, 4);
     ++row;
 
     layout->addWidget
@@ -531,7 +527,7 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
     m_singleStaffSize = new QComboBox(frame);
     connect(m_singleStaffSize, SIGNAL(activated(int)), this, SLOT(slotModified()));
     m_singleStaffSize->setEditable(false);
-    layout->addWidget(m_singleStaffSize, row, 2, row- row+1, 1);
+    layout->addWidget(m_singleStaffSize, row, 2, 1, 1);
     ++row;
 
     layout->addWidget
@@ -540,17 +536,19 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
     m_multiStaffSize = new QComboBox(frame);
     connect(m_multiStaffSize, SIGNAL(activated(int)), this, SLOT(slotModified()));
     m_multiStaffSize->setEditable(false);
-    layout->addWidget(m_multiStaffSize, row, 2, row- row+1, 1);
+    layout->addWidget(m_multiStaffSize, row, 2, 1, 1);
     ++row;
 
-    layout->addWidget
-        (new QLabel(tr("Font size for printing (pt)"), frame),
-         row, 0, 1, 2);
-    m_printingSize = new QComboBox(frame);
-    connect(m_printingSize, SIGNAL(activated(int)), this, SLOT(slotModified()));
-    m_printingSize->setEditable(false);
-    layout->addWidget(m_printingSize, row, 2, row- row+1, 1);
-    ++row;
+    //!!! native printing is deprecated
+    //
+//    layout->addWidget
+//        (new QLabel(tr("Font size for printing (pt)"), frame),
+//         row, 0, 1, 2);
+//    m_printingSize = new QComboBox(frame);
+//    connect(m_printingSize, SIGNAL(activated(int)), this, SLOT(slotModified()));
+//    m_printingSize->setEditable(false);
+//    layout->addWidget(m_printingSize, row, 2, 1, 1);
+//    ++row;
 
     slotPopulateFontCombo(false);
 
@@ -564,23 +562,25 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
     layout->addWidget
         (new QLabel(tr("Text font"), frame), row, 0);
     m_textFont = new FontRequester(frame);
+    m_textFont->setStyleSheet("color: black; background: white");
     connect(m_textFont, SIGNAL(fontChanged(QFont)), this, SLOT(slotModified()));
     QFont textFont = defaultTextFont;
     QVariant fv = settings.value("textfont", textFont);
     if (fv.canConvert(QVariant::Font)) textFont = fv.value<QFont>();
     m_textFont->setFont(textFont);
-    layout->addWidget(m_textFont, row, 1, row- row+1, 3);
+    layout->addWidget(m_textFont, row, 1, 1, 3);
     ++row;
 
     layout->addWidget
         (new QLabel(tr("Sans-serif font"), frame), row, 0);
     m_sansFont = new FontRequester(frame);
+    m_sansFont->setStyleSheet("color: black; background: white");
     connect(m_sansFont, SIGNAL(fontChanged(QFont)), this, SLOT(slotModified()));
     QFont sansFont = defaultTextFont;
     fv = settings.value("sansfont", sansFont);
     if (fv.canConvert(QVariant::Font)) sansFont = fv.value<QFont>();
     m_sansFont->setFont(sansFont);
-    layout->addWidget(m_sansFont, row, 1, row- row+1, 3);
+    layout->addWidget(m_sansFont, row, 1, 1, 3);
     ++row;
 
 /*!!! No -- not much point in having the time sig font here: it's only
@@ -592,7 +592,7 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
     m_timeSigFont = new FontRequester(frame);
     QFont timeSigFont = settings->readFontEntry("timesigfont", &defaultTimeSigFont);
     m_timeSigFont->setFont(timeSigFont);
-    layout->addWidget(m_timeSigFont, row, 1, row- row+1, 3);
+    layout->addWidget(m_timeSigFont, row, 1, 1, 3);
     ++row;
 */
 
@@ -676,18 +676,24 @@ NotationConfigurationPage::slotFontComboChanged(int index)
         (m_singleStaffSize, fontStr,
          settings.value("singlestaffnotesize",
                         NoteFontFactory::getDefaultSize(fontStr)).toInt());
+    // I remember Chris talking recently about how the default for multiple
+    // staffs was supposed to be 6 instead of 8 or something like that.
+    // getDefaultMultiSize didn't exist until just now, and this was true in
+    // Classic.  That never would have worked.
     populateSizeCombo
         (m_multiStaffSize, fontStr,
          settings.value("multistaffnotesize",
-                        NoteFontFactory::getDefaultSize(fontStr)).toInt());
+                        NoteFontFactory::getDefaultMultiSize(fontStr)).toInt());
 
-    int printpt = settings.value("printingnotesize", 5).toUInt() ;
-    for (int i = 2; i < 16; ++i) {
-        m_printingSize->addItem(QString("%1").arg(i));
-        if (i == printpt) {
-            m_printingSize->setCurrentIndex(m_printingSize->count() - 1);
-        }
-    }
+    //!!! native printing is deprecated
+    //
+//    int printpt = settings.value("printingnotesize", 5).toUInt() ;
+//    for (int i = 2; i < 16; ++i) {
+//        m_printingSize->addItem(QString("%1").arg(i));
+//        if (i == printpt) {
+//            m_printingSize->setCurrentIndex(m_printingSize->count() - 1);
+//        }
+//    }
 
     try {
         NoteFont *noteFont = NoteFontFactory::getFont
@@ -735,8 +741,8 @@ NotationConfigurationPage::apply()
                       m_singleStaffSize->currentText().toUInt());
     settings.setValue("multistaffnotesize",
                       m_multiStaffSize->currentText().toUInt());
-    settings.setValue("printingnotesize",
-                      m_printingSize->currentText().toUInt());
+//    settings.setValue("printingnotesize",
+//                      m_printingSize->currentText().toUInt());
     settings.setValue("textfont",
                       m_textFont->font());
     settings.setValue("sansfont",

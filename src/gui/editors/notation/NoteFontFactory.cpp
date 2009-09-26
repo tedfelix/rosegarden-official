@@ -200,6 +200,17 @@ NoteFontFactory::getDefaultSize(QString fontName)
     return sizes[sizes.size() / 2];
 }
 
+int
+NoteFontFactory::getDefaultMultiSize(QString fontName)
+{
+    // always return 6 if it's supported!
+    std::vector<int> sizes(getScreenSizes(fontName));
+    for (unsigned int i = 0; i < sizes.size(); ++i) {
+        if (sizes[i] == 6) return sizes[i];
+    }
+    return sizes[sizes.size() / 2];
+}
+
 bool
 NoteFontFactory::isAvailableInSize(QString fontName, int size)
 {

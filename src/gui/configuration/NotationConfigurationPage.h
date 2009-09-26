@@ -66,7 +66,7 @@ protected:
     QComboBox *m_font;
     QComboBox *m_singleStaffSize;
     QComboBox *m_multiStaffSize;
-    QComboBox *m_printingSize;
+//    QComboBox *m_printingSize; deprecated!
     FontRequester* m_textFont;
     FontRequester* m_sansFont;
     FontRequester* m_timeSigFont;
