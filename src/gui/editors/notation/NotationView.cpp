@@ -26,6 +26,7 @@
 #include "NoteRestInserter.h"
 #include "NotationSelector.h"
 #include "HeadersGroup.h"
+#include "NotationHLayout.h"
 
 #include "document/RosegardenDocument.h"
 #include "document/CommandHistory.h"
@@ -745,8 +746,6 @@ NewNotationView::setupActions()
 
     m_fontName = settings.value("notefont", NoteFontFactory::getDefaultFontName()).toString();
 
-    settings.endGroup();
-
     for (std::vector<QString>::iterator i = f.begin(); i != f.end(); ++i) {
 
         QString fontQName(*i);
@@ -785,17 +784,17 @@ NewNotationView::setupActions()
         fontSizeActionMenu->addAction(sizeAction);
     }
 
-/*!!!
     QMenu *spacingActionMenu = new QMenu(tr("S&pacing"), this);
     spacingActionMenu->setObjectName("stretch_actionmenu");
 
-    int defaultSpacing = m_hlayout->getSpacing();
-    std::vector<int> spacings = NotationHLayout::getAvailableSpacings();
+    m_spacing = settings.value("spacing", m_notationWidget->getScene()->getHSpacing()).toInt();
+    m_notationWidget->getScene()->setHSpacing(m_spacing);
+    m_availableSpacings = NotationHLayout::getAvailableSpacings();
 
     ag = new QActionGroup(this);
 
-    for (std::vector<int>::iterator i = spacings.begin();
-         i != spacings.end(); ++i) {
+    for (std::vector<int>::iterator i = m_availableSpacings.begin();
+         i != m_availableSpacings.end(); ++i) {
 
         QAction *a = createAction(QString("spacing_%1").arg(*i),
                                   SLOT(slotChangeSpacingFromAction()));
@@ -803,41 +802,14 @@ NewNotationView::setupActions()
         ag->addAction(a);
         a->setText(QString("%1%").arg(*i));
         a->setCheckable(true);
-        a->setChecked(*i == defaultSpacing);
+        a->setChecked(*i == m_spacing);
 
         spacingActionMenu->addAction(a);
     }
 
-    //&&& add spacingActionMenu to the appropriate super-menu
+    // no more duration factor controls
 
-
-    QMenu *proportionActionMenu = new QMenu(tr("Du&ration Factor"), this);
-    proportionActionMenu->setObjectName("proportion_actionmenu");
-
-    int defaultProportion = m_hlayout->getProportion();
-    std::vector<int> proportions = NotationHLayout::getAvailableProportions();
-
-    ag = new QActionGroup(this);
-
-    for (std::vector<int>::iterator i = proportions.begin();
-         i != proportions.end(); ++i) {
-
-        QString name = QString("%1%").arg(*i);
-        if (*i == 0) name = tr("None");
-
-        QAction *a = createAction(QString("proportion_%1").arg(*i),
-                                  SLOT(slotChangeSpacingFromAction()));
-
-        ag->addAction(a);
-        a->setText(name);
-        a->setCheckable(true);
-        a->setChecked(*i == defaultProportion);
-
-        proportionActionMenu->addAction(a);
-    }
-*/
-    //&&& add proportionActionMenu to the appropriate super-menu
-
+    settings.endGroup();
 }
 
 void 
@@ -974,37 +946,28 @@ NewNotationView::initLayoutToolbar()
 
     layoutToolbar->addWidget(label);
     
-//!!!
-//
-// The Spacing menu hasn't been implemented either.  I haven't researched this,
-// but assume it's probably tricky/ugly/nasty, so we'll just comment this out
-// too and move along for now.
-//
-//    //
-//    // spacing combo
-//    //
-//    int defaultSpacing = m_hlayout->getSpacing();
-//    std::vector<int> spacings = NotationHLayout::getAvailableSpacings();
-//
-//    m_spacingCombo = new QComboBox(layoutToolbar);
-//    if (m_Thorn) m_spacingCombo->setStyleSheet(comboStyle);
-//    for (std::vector<int>::iterator i = spacings.begin(); i != spacings.end(); ++i) {
-//
-//        value.setNum(*i);
-//        value += "%";
-//        m_spacingCombo->addItem(value);
-//    }
-//    // set combo's current value to default
-//    value.setNum(defaultSpacing);
-//    value += "%";
-////     m_spacingCombo->setItemText(value);
-//    m_spacingCombo->setCurrentText(value);
-////     m_spacingCombo->setCurrentIndex( m_spacingCombo->indexOf(value) );
-//
-//    connect(m_spacingCombo, SIGNAL(activated(const QString&)),
-//            this, SLOT(slotChangeSpacingFromStringValue(const QString&)));
-//
-//    layoutToolbar->addWidget(m_spacingCombo);
+    //
+    // spacing combo
+    //
+    int m_spacing = m_notationWidget->getScene()->getHSpacing();
+    m_availableSpacings = NotationHLayout::getAvailableSpacings();
+
+    m_spacingCombo = new QComboBox(layoutToolbar);
+    if (m_Thorn) m_spacingCombo->setStyleSheet(comboStyle);
+    for (std::vector<int>::iterator i = m_availableSpacings.begin(); i != m_availableSpacings.end(); ++i) {
+
+        value.setNum(*i);
+        value += "%";
+        m_spacingCombo->addItem(value);
+        if ((*i) == m_spacing) {
+            m_spacingCombo->setCurrentIndex(m_spacingCombo->count() - 1);
+        }
+    }
+
+    connect(m_spacingCombo, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(slotSpacingComboChanged(int)));
+
+    layoutToolbar->addWidget(m_spacingCombo);
 }
 
 void
@@ -1199,6 +1162,25 @@ NewNotationView::slotChangeFontSizeFromAction()
     }
     QMessageBox::warning
         (this, tr("Rosegarden"), tr("Unknown font size action %1").arg(name));
+}
+
+void
+NewNotationView::slotChangeSpacingFromAction()
+{
+    const QObject *s = sender();
+    QString name = s->objectName();
+
+    if (name.left(8) == "spacing_") {
+        name = name.right(name.length() - 8);
+        bool ok = false;
+        int spacing = name.toInt(&ok);
+        if (ok) {
+            if (m_notationWidget) m_notationWidget->getScene()->setHSpacing(spacing);
+            return;
+        } 
+    }
+    QMessageBox::warning
+        (this, tr("Rosegarden"), tr("Unknown spacing action %1").arg(name));
 }
 
 Segment *
@@ -3519,19 +3501,25 @@ NewNotationView::slotHoveredOverAbsoluteTimeChanged(unsigned int time)
 void
 NewNotationView::slotFontComboChanged(int index)
 {
-    // (and this replaces about 500 lines of crusty code)
-    if (m_notationWidget) m_notationWidget->slotSetFontName(m_availableFontNames[index]);
+    QString name = m_availableFontNames[index];
+    if (m_notationWidget) m_notationWidget->slotSetFontName(name);
+    m_fontName = name;
 }
 
 void
 NewNotationView::slotSizeComboChanged(int index)
 {
-    if (m_notationWidget) m_notationWidget->slotSetFontSize(m_availableFontSizes[index]);
+    int size = m_availableFontSizes[index];
+    if (m_notationWidget) m_notationWidget->slotSetFontSize(size);
+    m_fontSize = size;
 }
 
 void
 NewNotationView::slotSpacingComboChanged(int index)
 {
+    int spacing = m_availableSpacings[index];
+    if (m_notationWidget) m_notationWidget->getScene()->setHSpacing(spacing);
+    m_spacing = spacing;
 }
 
 } // end namespace Rosegarden

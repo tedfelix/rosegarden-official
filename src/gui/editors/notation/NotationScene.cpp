@@ -155,6 +155,21 @@ NotationScene::setFontSize(int size)
     layoutAll();
 }
 
+int
+NotationScene::getHSpacing() const
+{
+    return m_hlayout->getSpacing();
+}
+
+void
+NotationScene::setHSpacing(int spacing)
+{
+    if (spacing == getHSpacing()) return;
+    m_hlayout->setSpacing(spacing);
+    positionStaffs();
+    layoutAll();
+}
+
 void
 NotationScene::setNotationWidget(NotationWidget *w)
 {

@@ -163,6 +163,7 @@ protected slots:
 
     void slotChangeFontFromAction();
     void slotChangeFontSizeFromAction();
+    void slotChangeSpacingFromAction();
 
     void slotUpdateMenuStates();
 
@@ -371,6 +372,7 @@ private:
     QComboBox       *m_spacingCombo;
     QString          m_fontName;
     int              m_fontSize;
+    int              m_spacing;
 
     bool m_Thorn;
 

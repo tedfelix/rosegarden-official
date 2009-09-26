@@ -101,6 +101,9 @@ public:
 
     int getFontSize() const;
     void setFontSize(int);
+
+    int getHSpacing() const;
+    void setHSpacing(int);
     
     const RulerScale *getRulerScale() const;
 

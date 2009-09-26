@@ -118,34 +118,6 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
 
     ++row;
 
-    layout->addWidget(new QLabel(tr("Default duration factor"), frame), row, 0);
-
-    m_proportion = new QComboBox(frame);
-    connect(m_proportion, SIGNAL(activated(int)), this, SLOT(slotModified()));
-    m_proportion->setEditable(false);
-
-    s = NotationHLayout::getAvailableProportions();
-    int defaultProportion = settings.value("proportion", 60).toInt() ;
-
-    for (std::vector<int>::iterator i = s.begin(); i != s.end(); ++i) {
-
-        QString text = QString("%1 %").arg(*i);
-        if (*i == 40)
-            text = tr("%1 % (normal)").arg(*i);
-        else if (*i == 0)
-            text = tr("None");
-        else if (*i == 100)
-            text = tr("Full");
-        m_proportion->addItem(text);
-
-        if (*i == defaultProportion) {
-            m_proportion->setCurrentIndex(m_proportion->count() - 1);
-        }
-    }
-
-    layout->addWidget(m_proportion, row, 1, 1, 2);
-    ++row;
-
     layout->addWidget(new QLabel(tr("Show track headers (linear layout only)"),
                                       frame), row, 0);
 
@@ -685,16 +657,6 @@ NotationConfigurationPage::slotFontComboChanged(int index)
          settings.value("multistaffnotesize",
                         NoteFontFactory::getDefaultMultiSize(fontStr)).toInt());
 
-    //!!! native printing is deprecated
-    //
-//    int printpt = settings.value("printingnotesize", 5).toUInt() ;
-//    for (int i = 2; i < 16; ++i) {
-//        m_printingSize->addItem(QString("%1").arg(i));
-//        if (i == printpt) {
-//            m_printingSize->setCurrentIndex(m_printingSize->count() - 1);
-//        }
-//    }
-
     try {
         NoteFont *noteFont = NoteFontFactory::getFont
                              (fontStr, NoteFontFactory::getDefaultSize(fontStr));
@@ -741,21 +703,12 @@ NotationConfigurationPage::apply()
                       m_singleStaffSize->currentText().toUInt());
     settings.setValue("multistaffnotesize",
                       m_multiStaffSize->currentText().toUInt());
-//    settings.setValue("printingnotesize",
-//                      m_printingSize->currentText().toUInt());
     settings.setValue("textfont",
                       m_textFont->font());
     settings.setValue("sansfont",
                       m_sansFont->font());
-/*!!!
-    settings.setValue("timesigfont",
-                      m_timeSigFont->font());
-*/
     std::vector<int> s = NotationHLayout::getAvailableSpacings();
     settings.setValue("spacing", s[m_spacing->currentIndex()]);
-
-    s = NotationHLayout::getAvailableProportions();
-    settings.setValue("proportion", s[m_proportion->currentIndex()]);
 
     settings.setValue("layoutmode", m_layoutMode->currentIndex());
     settings.setValue("colourquantize", m_colourQuantize->isChecked());

@@ -66,7 +66,6 @@ protected:
     QComboBox *m_font;
     QComboBox *m_singleStaffSize;
     QComboBox *m_multiStaffSize;
-//    QComboBox *m_printingSize; deprecated!
     FontRequester* m_textFont;
     FontRequester* m_sansFont;
     FontRequester* m_timeSigFont;
@@ -77,7 +76,6 @@ protected:
     QLabel *m_fontTypeLabel;
     QComboBox *m_layoutMode;
     QComboBox *m_spacing;
-    QComboBox *m_proportion;
     QCheckBox *m_colourQuantize;
     QCheckBox *m_showUnknowns;
     QCheckBox *m_showInvisibles;
