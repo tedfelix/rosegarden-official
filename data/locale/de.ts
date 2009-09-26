@@ -688,25 +688,28 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="472"/>
         <source>S&amp;ymbol</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>S&amp;ymbol</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="473"/>
         <location filename="../QMenuStrings.cpp" line="767"/>
         <source>Add &amp;Segno</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>&amp;Segno hinzufügen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="474"/>
         <location filename="../QMenuStrings.cpp" line="768"/>
         <source>Add &amp;Coda</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>&amp;Coda hinzufügen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="475"/>
         <location filename="../QMenuStrings.cpp" line="769"/>
         <source>Add &amp;Breath mark</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Atemmarkierung hinzufügen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="483"/>
@@ -721,46 +724,51 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="659"/>
         <source>Dotted Ha&amp;lf Note</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Gepunktete ha&amp;lbe Note</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="664"/>
         <location filename="../QMenuStrings.cpp" line="788"/>
         <source>Switch To &amp;Notes</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Zu &amp;Noten umschalten</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="665"/>
         <location filename="../QMenuStrings.cpp" line="789"/>
         <source>Switch To &amp;Rests</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zu Pausen umschalten</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="666"/>
         <location filename="../QMenuStrings.cpp" line="790"/>
         <source>To&amp;ggle Dot On</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Umschaltun&amp;g Punktierung ein</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="667"/>
         <location filename="../QMenuStrings.cpp" line="791"/>
         <source>To&amp;ggle Dot Off</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Umschaltun&amp;g Punktierung aus</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="735"/>
         <source>Show &amp;Symbols Toolbar</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>&amp;Symbole-Werkzeugleiste</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="763"/>
         <source>Duration Toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>Dauer Werkzeugleiste</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="766"/>
         <source>Symbols Toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>Symbole Werkzeugleiste</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="984"/>
@@ -1364,7 +1372,7 @@
         <location filename="../QMenuStrings.cpp" line="912"/>
         <source>T&amp;ransport</source>
         <translatorcomment>amp ok</translatorcomment>
-        <translation>&amp;Bedieneinheit</translation>
+        <translation>&amp;Bedienfeld</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="273"/>
@@ -2248,7 +2256,8 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="495"/>
         <source>Add &amp;Harmonic</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>&amp;Harmonische hinzufügen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="496"/>
@@ -2625,7 +2634,8 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="559"/>
         <source>Add Trill With &amp;Line</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Triller mit &amp;Linie hinzufügen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="560"/>
@@ -2801,47 +2811,51 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="611"/>
         <source>Draw &amp;Notes and Rests</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>&amp;Noten und Pausen malen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="628"/>
         <source>&amp;Navigation</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>&amp;Navigation</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="633"/>
         <source>Next Staff &amp;Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Nächste Notenzeile a&amp;ufwärts</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="634"/>
         <source>Next Staff &amp;Down</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nächste Notenzeile abwärts</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="635"/>
         <source>Pre&amp;vious Segment</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>&amp;Vorheriges Segment</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="636"/>
         <source>Ne&amp;xt Segment</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nächstes Segment</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="640"/>
         <source>Step &amp;Back</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Schritt zurück</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="641"/>
         <source>Step &amp;Forward</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Schritt vorwärts</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="649"/>
         <source>&amp;Durations</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>&amp;Dauer</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="650"/>
@@ -3143,7 +3157,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="738"/>
         <source>Show &amp;Rulers Toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lineal-Werkzeugleiste</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="772"/>
@@ -9152,7 +9166,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../../src/gui/general/ActionFileParser.cpp" line="629"/>
         <source>%1 (%2)</source>
-        <translation type="unfinished">%1 (%2)</translation>
+        <translation>%1 (%2)</translation>
     </message>
 </context>
 <context>
@@ -9289,7 +9303,8 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../../src/commands/notation/AddIndicationCommand.cpp" line="248"/>
         <source>Add Tri&amp;ll With Line</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Triller mit &amp;Linie hinzufügen</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddIndicationCommand.cpp" line="251"/>
@@ -9358,17 +9373,18 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="63"/>
         <source>&amp;Open</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>&amp;Offen</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="65"/>
         <source>&amp;Stopped</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Angehalten</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="67"/>
         <source>&amp;Harmonic</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Harmonisch</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="69"/>
@@ -10801,7 +10817,8 @@ Möchten Sie die Änderungen vor dem verlassen des Bank-Editors anwenden?</trans
     <message>
         <location filename="../../src/commands/edit/ClearTriggersCommand.h" line="46"/>
         <source>&amp;Clear Triggers</source>
-        <translation type="unfinished">Trigger löschen</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Trigger lös&amp;chen</translation>
     </message>
 </context>
 <context>
@@ -11325,7 +11342,7 @@ Möchten Sie die Änderungen vor dem verlassen des Bank-Editors anwenden?</trans
     <message>
         <location filename="../../src/gui/rulers/ControlRulerWidget.cpp" line="256"/>
         <source>Velocity</source>
-        <translation type="unfinished"></translation>
+        <translation>Anschlagstärke</translation>
     </message>
 </context>
 <context>
@@ -12533,17 +12550,17 @@ Dies könnte Probleme verursachen, wenn so später ein berechneter Wert übersch
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="1810"/>
         <source>%1%2 - Triggered Segment: %3</source>
-        <translation type="unfinished"></translation>
+        <translation>%1%2 - Getriggertes Segment: %3</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="1826"/>
         <source>%1%2 - Segment Track #%3 - Event List</source>
-        <translation type="unfinished"></translation>
+        <translation>%1%2 - Segment Spur #%3 - Ereignis Liste</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="1833"/>
         <source>%1%2 - %3 Segments - Event List</source>
-        <translation type="unfinished"></translation>
+        <translation>%1%2 - %3 Segmente - Ereignis Liste</translation>
     </message>
     <message>
         <source>%1 - Triggered Segment: %2</source>
@@ -12986,7 +13003,7 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="337"/>
         <source>HPLIP (QT4)</source>
-        <translation type="unfinished"></translation>
+        <translation>HPLIP (QT4)</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="338"/>
@@ -14378,7 +14395,7 @@ Wollen Sie stattdessen
     <message>
         <location filename="../../src/gui/rulers/LoopRuler.cpp" line="87"/>
         <source>&lt;qt&gt;&lt;p&gt;Click and drag to move the playback pointer.&lt;/p&gt;&lt;p&gt;Shift-click and drag to set a range for looping or editing.&lt;/p&gt;&lt;p&gt;Shift-click to clear the loop or range.&lt;/p&gt;&lt;p&gt;Double-click to start playback.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Klick und ziehen um den Wiedergabe Zeiger zu verschieben.&lt;/p&gt;&lt;p&gt;Shift-Klick und ziehen um einen Bereich für Schleifen oder Bearbeitung zu definieren.&lt;/p&gt;&lt;p&gt;Shift-Klick um eine Schleife oder Bereich zu löschen.&lt;/p&gt;&lt;p&gt;Doppelklick um die Wiedergabe zu starten.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -15447,22 +15464,22 @@ Doppel-Klick öffnet den Marker Editor.</translation>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="149"/>
         <source>Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Vergößerung</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="165"/>
         <source>Horizontal Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Horizontale Vergrößerung</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="177"/>
         <source>Vertical Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Vertikale Vergrößerung</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="190"/>
         <source>Reset Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Vergrößerung zurücksetzen</translation>
     </message>
 </context>
 <context>
@@ -15585,7 +15602,7 @@ Doppel-Klick öffnet den Marker Editor.</translation>
     <message>
         <location filename="../../src/gui/studio/MidiMixerWindow.cpp" line="108"/>
         <source>MIDI Mixer</source>
-        <translation>MIDI Mischer</translation>
+        <translation>MIDI Mixer</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/MidiMixerWindow.cpp" line="148"/>
@@ -15790,19 +15807,19 @@ möglicherweise auch Andere von Ihren Anpassungen profitieren können.</translat
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="242"/>
         <source>%1%2 - Segment%3Track%4#%5 - %6</source>
-        <translation type="unfinished"></translation>
+        <translation>%1%2 - Segment%3Spur%4#%5 - %6</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="252"/>
         <source>%1%2 - All Segments - %3</source>
-        <translation type="unfinished"></translation>
+        <translation>%1%2 - Alle Segmente - %3</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="259"/>
         <source>%1%2 - %n Segment(s) - %3</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1%2 - %n Segment - %3</numerusform>
+            <numerusform>%1%2 - %n Segmente - %3</numerusform>
         </translation>
     </message>
     <message>
@@ -15889,7 +15906,7 @@ möglicherweise auch Andere von Ihren Anpassungen profitieren können.</translat
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1483"/>
         <source>Can&apos;t insert note: No grid duration selected</source>
-        <translation type="unfinished">Kann Note nicht einfügen: Keine Rasterdauer gewählt</translation>
+        <translation>Kann Note nicht einfügen: Keine Rasterdauer gewählt</translation>
     </message>
 </context>
 <context>
@@ -15916,17 +15933,17 @@ möglicherweise auch Andere von Ihren Anpassungen profitieren können.</translat
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="897"/>
         <source>  Font:  </source>
-        <translation type="unfinished">  Font:  </translation>
+        <translation>  Schriftart:  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="943"/>
         <source>  Size:  </source>
-        <translation type="unfinished">  Größe:  </translation>
+        <translation>  Größe:  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="971"/>
         <source>  Spacing:  </source>
-        <translation type="unfinished">  Abstände:  </translation>
+        <translation>  Abstand:  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1061"/>
@@ -15951,12 +15968,12 @@ möglicherweise auch Andere von Ihren Anpassungen profitieren können.</translat
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1099"/>
         <source>Previewing with LilyPond...</source>
-        <translation type="unfinished"></translation>
+        <translation>Vorschau mit LilyPond...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1127"/>
         <source>&lt;qt&gt;&lt;p&gt;Failed to open a temporary file for LilyPond export.&lt;/p&gt;&lt;p&gt;This probably means you have run out of disk space on &lt;pre&gt;%1&lt;/pre&gt;&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Es konnte kein temporäres File für den Export von LilyPond angelegt werden.&lt;/p&gt;&lt;p&gt;Dies bedeutet möglicherweise, dass der Speicherplatz auf &lt;pre&gt;%1&lt;/pre&gt; komplett belegt ist.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Es konnte kein temporäres File für den Export von LilyPond angelegt werden.&lt;/p&gt;&lt;p&gt;Dies bedeutet möglicherweise, dass der Speicherplatz auf &lt;pre&gt;%1&lt;/pre&gt; komplett belegt ist.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1177"/>
@@ -15983,7 +16000,7 @@ möglicherweise auch Andere von Ihren Anpassungen profitieren können.</translat
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2064"/>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2640"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1306"/>
@@ -16041,12 +16058,12 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2064"/>
         <source>Unknown note insert action %1</source>
-        <translation type="unfinished">Unbekannte Noten-Einfügeaktion %1</translation>
+        <translation>Unbekannte Noten-Einfügeaktion %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2068"/>
         <source>Inserting note</source>
-        <translation type="unfinished">Note einfügen</translation>
+        <translation>Note einfügen</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2441"/>
@@ -16093,35 +16110,35 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2813"/>
         <source>Estimated time signature shown</source>
-        <translation type="unfinished">Ermittelte Taktart wird angezeigt</translation>
+        <translation>Ermittelte Taktart wird angezeigt</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2873"/>
         <source>%1%2 - Segment Track #%3 - Notation</source>
-        <translation type="unfinished"></translation>
+        <translation>%1%2 - Segment Spur #%3 - Notation</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2880"/>
         <source>%1%2 - All Segments - Notation</source>
-        <translation type="unfinished"></translation>
+        <translation>%1%2 - Alle Segmente - Notation</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2886"/>
         <source>%1%2 - %n Segment(s) - Notation</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1%2 - %n Segment - Notation</numerusform>
+            <numerusform>%1%2 - %n Segmente - Notation</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3330"/>
         <source>Can&apos;t insert note: No note duration selected</source>
-        <translation type="unfinished">Note kann nicht eingefügt werden: Keine Dauer ausgewählt</translation>
+        <translation>Note kann nicht eingefügt werden: Keine Dauer ausgewählt</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3494"/>
         <source>Time: %1 (%2.%3s)</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeit: %1 (%2.%3s)</translation>
     </message>
     <message>
         <source>%1 - Segment Track #%2 - Notation</source>
@@ -16141,27 +16158,27 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2979"/>
         <source>Triplet</source>
-        <translation type="unfinished">Triole</translation>
+        <translation>Triole</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2980"/>
         <source>Chord</source>
-        <translation type="unfinished">Akkord</translation>
+        <translation>Akkord</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2981"/>
         <source>Grace</source>
-        <translation type="unfinished">Vorschlag</translation>
+        <translation>Vorschlag</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3137"/>
         <source>Transpose</source>
-        <translation type="unfinished">Transponieren</translation>
+        <translation>Transponieren</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3138"/>
         <source>By number of semitones: </source>
-        <translation type="unfinished">Anzahl der Halbtöne, um die transponiert werden soll:</translation>
+        <translation>Anzahl der Halbtöne, um die transponiert werden soll:</translation>
     </message>
 </context>
 <context>
@@ -17126,22 +17143,22 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="137"/>
         <source>Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zoom</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="153"/>
         <source>Horizontal Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Horizontale Vergrößerung</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="165"/>
         <source>Vertical Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Vertikale Vergrößerung</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="178"/>
         <source>Reset Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Vergrößerung zurücksetzen</translation>
     </message>
 </context>
 <context>
@@ -17546,12 +17563,13 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="259"/>
         <source>&lt;qt&gt;&lt;pUnable to read %1.&lt;/p&gt;&lt;p&gt;Processing aborted.&lt;/p&gt;&lt;/qt&gt;</source>
+        <translatorcomment>XXX falsches Original</translatorcomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="466"/>
         <source>Checking for flac...</source>
-        <translation type="unfinished"></translation>
+        <translation>Answesenheit von flac überprüfen...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="468"/>
@@ -17562,7 +17580,7 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="530"/>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="732"/>
         <source>Packing project...</source>
-        <translation type="unfinished"></translation>
+        <translation>Projekt wird gepackt...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="131"/>
@@ -17572,18 +17590,19 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="132"/>
         <source>Rosegarden - Fatal Processing Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Rosegarden - Fataler Fehler bei der Verarbeitung</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="429"/>
         <source>&lt;qt&gt;&lt;pCould not write&lt;br&gt;%1.&lt;/p&gt;&lt;p&gt;Processing aborted.&lt;/p&gt;&lt;/qt&gt;</source>
+        <translatorcomment>XXX fehler im original</translatorcomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="435"/>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="814"/>
         <source>&lt;qt&gt;Could not remove&lt;br&gt;%1&lt;br&gt;&lt;br&gt;Processing aborted.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;%1&lt;br&gt;kann nicht entfernt werden&lt;br&gt;&lt;br&gt;Verarbeitung abgebrochen.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="440"/>
@@ -17591,17 +17610,18 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="649"/>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="716"/>
         <source>&lt;qt&gt;Could not copy&lt;br&gt;%1&lt;br&gt;  to&lt;br&gt;%2&lt;br&gt;&lt;br&gt;Processing aborted.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;%1&lt;br&gt;kann nicht nach&lt;br&gt;%2&lt;br&gt;kopiert werden&lt;br&gt;&lt;br&gt;Verarbeitung abgebrochen.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="444"/>
         <source>&lt;qt&gt;&lt;pCould not remove&lt;br&gt;%1.&lt;/p&gt;&lt;p&gt;Processing aborted.&lt;/p&gt;&lt;/qt&gt;</source>
+        <translatorcomment>XXX original falsch</translatorcomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="484"/>
         <source>Checking for wavpack...</source>
-        <translation type="unfinished"></translation>
+        <translation>Anwesenheit von wavpack überprüfen...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="486"/>
@@ -17611,7 +17631,7 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="495"/>
         <source>Checking for wvunpack...</source>
-        <translation type="unfinished"></translation>
+        <translation>Anwesenheit von wvunpack überprüfen...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="497"/>
@@ -17621,19 +17641,19 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="565"/>
         <source>&lt;qt&gt;&lt;p&gt;Could not create temporary working directory.&lt;/p&gt;&lt;p&gt;Processing aborted.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Temporäres Verzeichnis kann nicht angelegt werden.&lt;/p&gt;&lt;p&gt;Verarbeitung abgebrochen.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="569"/>
         <source>Copying audio files...</source>
-        <translation type="unfinished"></translation>
+        <translation>Audio Dateien kopieren...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="654"/>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="684"/>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="918"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="655"/>
@@ -17643,23 +17663,23 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="676"/>
         <source>All files</source>
-        <translation type="unfinished">Alle Dateien</translation>
+        <translation>Alle Dateien</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="685"/>
         <source>&lt;qt&gt;&lt;p&gt;Would you like to include any additional files?&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Sollen alle zusätzlichen Dateien hinzugefügt werden?&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="689"/>
         <source>Copying plugin data and extra files...</source>
-        <translation type="unfinished"></translation>
+        <translation>Plugin Daten and extra Dateien werden kopiert...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="748"/>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="947"/>
         <source>&lt;qt&gt;&lt;p&gt;Unable to write to temporary backend processing script %1.&lt;/p&gt;&lt;p&gt;Processing aborted.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Temporäres Skript &amp;1 kann nicht geschrieben werden.&lt;/p&gt;&lt;p&gt;Verarbeitung abgebrochen.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="799"/>
@@ -17684,7 +17704,7 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="833"/>
         <source>Unpacking project...</source>
-        <translation type="unfinished"></translation>
+        <translation>Projekt wird ausgepackt...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="919"/>
@@ -17694,7 +17714,7 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="1018"/>
         <source>Decoding audio files...</source>
-        <translation type="unfinished"></translation>
+        <translation>Audio Dateien dekodieren...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="1020"/>
@@ -18229,12 +18249,12 @@ Wollen Sie sie speichern?</translation>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="346"/>
         <source>Rosegarden - Warning</source>
-        <translation type="unfinished">Rosegarden - Warnung</translation>
+        <translation>Rosegarden - Warnung</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="346"/>
         <source>&lt;qt&gt;&lt;p&gt;The current file has been modified.&lt;/p&gt;&lt;p&gt;Do you want to save it?&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Die aktuelle Datei wurde verändert.&lt;/p&gt;&lt;p&gt;Möchten Sie abspeichern?&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="367"/>
@@ -18633,7 +18653,7 @@ Fehler war: %2</translation>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1655"/>
         <source>%1%2 - %3</source>
-        <translation type="unfinished"></translation>
+        <translation>%1%2 - %3</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1704"/>
@@ -18647,7 +18667,7 @@ Fehler war: %2</translation>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3941"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7528"/>
         <source>Cannot open file %1</source>
-        <translation type="unfinished">Datei %1 kann nicht geöfnet werden &apos;</translation>
+        <translation>Datei %1 kann nicht geöfnet werden</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1847"/>
@@ -18905,12 +18925,12 @@ Segmente-&gt;Segmente zusammenfassen.
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7767"/>
         <source>&lt;h3&gt;Newer version available&lt;/h3&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;h3&gt;Neuere Version verfügbar&lt;/h3&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7768"/>
         <source>&lt;p&gt;You are using version %1.  Version %2 is now available.&lt;/p&gt;&lt;p&gt;Please consult the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;Rosegarden website&lt;/a&gt; for more information.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;SIe benutzen Version %1.  Version %2 ist nun verfügbar.&lt;/p&gt;&lt;p&gt;Bitte schauen SIe auf der &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;Webseite von Rosegarden&lt;/a&gt; nach weiteren Infomationen.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3470"/>
@@ -19942,7 +19962,7 @@ Das Beenden anderer laufender Anwendung könnte u.U. die Leistung von Rosegarden
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1058"/>
         <source>&lt;h3&gt;System timer resolution is too low!&lt;/h3&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;h3&gt;Die Auflösung des System-Timers ist zu gering!&lt;/h3&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1093"/>
@@ -19957,7 +19977,7 @@ Das Beenden anderer laufender Anwendung könnte u.U. die Leistung von Rosegarden
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1229"/>
         <source>&lt;h3&gt;Sequencer engine unavailable!&lt;/h3&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;h3&gt;Sequenzer nicht verfügbar!&lt;/h3&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1230"/>
@@ -20412,7 +20432,7 @@ Das Beenden anderer laufender Anwendung könnte u.U. die Leistung von Rosegarden
     <message>
         <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="120"/>
         <source>Track %1 : &quot;%2&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>Spur %1 : &quot;%2&quot;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="126"/>
@@ -20516,12 +20536,12 @@ Das Beenden anderer laufender Anwendung könnte u.U. die Leistung von Rosegarden
     <message>
         <location filename="../../src/base/Studio.cpp" line="53"/>
         <source>Audio</source>
-        <translation type="unfinished">Audio</translation>
+        <translation>Audio</translation>
     </message>
     <message>
         <location filename="../../src/base/Studio.cpp" line="56"/>
         <source>Synth plugin</source>
-        <translation type="unfinished">Synthesizer Plugin</translation>
+        <translation>Synthesizer Plugin</translation>
     </message>
 </context>
 <context>
@@ -20544,7 +20564,8 @@ Das Beenden anderer laufender Anwendung könnte u.U. die Leistung von Rosegarden
     <message>
         <location filename="../../src/commands/notation/SymbolInsertionCommand.cpp" line="62"/>
         <source>Insert &amp;Symbol...</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>&amp;Symbol einfügen</translation>
     </message>
 </context>
 <context>
@@ -20983,7 +21004,7 @@ Das Beenden anderer laufender Anwendung könnte u.U. die Leistung von Rosegarden
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="205"/>
         <source>accel.</source>
-        <translation type="unfinished"></translation>
+        <translation>accel.</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="206"/>
@@ -21189,12 +21210,12 @@ Das Beenden anderer laufender Anwendung könnte u.U. die Leistung von Rosegarden
     <message>
         <location filename="../../src/gui/widgets/Thumbwheel.cpp" line="266"/>
         <source>Enter new value</source>
-        <translation type="unfinished"></translation>
+        <translation>Anderen Wert eingeben</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/Thumbwheel.cpp" line="267"/>
         <source>Enter a new value from %1 to %2:</source>
-        <translation type="unfinished"></translation>
+        <translation>Anderen Wert im Bereich von %1 bis %2 eingeben:</translation>
     </message>
 </context>
 <context>
@@ -22337,17 +22358,17 @@ Möchten Sie den Pfad jetzt setzen?</translation>
     <message>
         <location filename="../../src/gui/widgets/WarningWidget.cpp" line="87"/>
         <source>MIDI OK</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI OK</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/WarningWidget.cpp" line="99"/>
         <source>audio OK</source>
-        <translation type="unfinished"></translation>
+        <translation>Audio OK</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/WarningWidget.cpp" line="111"/>
         <source>timer OK</source>
-        <translation type="unfinished"></translation>
+        <translation>Timer OK</translation>
     </message>
 </context>
 <context>
