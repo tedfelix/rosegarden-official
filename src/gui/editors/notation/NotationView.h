@@ -374,9 +374,9 @@ private:
 
     bool m_Thorn;
 
-    QVector<QString> m_availableFontNames;
-    QVector<int>     m_availableFontSizes;
-    QVector<int>     m_availableSpacings;
+    std::vector<QString> m_availableFontNames;
+    std::vector<int>     m_availableFontSizes;
+    std::vector<int>     m_availableSpacings;
 };
 
 }

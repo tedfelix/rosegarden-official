@@ -273,11 +273,6 @@ NewNotationView::NewNotationView(RosegardenDocument *doc,
 NewNotationView::~NewNotationView()
 {
     NOTATION_DEBUG << "Deleting notation view" << endl;
-
-    //!!! Odd that the window geometry save bit didn't work in here.  The little
-    // message printed to std::cerr didn't fire, so unless I'm just really
-    // obtuse and illiterate about something, I don't think this dtor ever fires
-    // and we probably have a memory leak.
     delete m_commandRegistry;
 }
 
@@ -744,13 +739,19 @@ NewNotationView::setupActions()
     fontActionMenu->setObjectName("note_font_actionmenu");
 
     QActionGroup *ag = new QActionGroup(this);
-    QString defaultFontName = NoteFontFactory::getDefaultFontName();
+
+    QSettings settings;
+    settings.beginGroup(NotationViewConfigGroup);
+
+    m_fontName = settings.value("notefont", NoteFontFactory::getDefaultFontName()).toString();
+
+    settings.endGroup();
 
     for (std::vector<QString>::iterator i = f.begin(); i != f.end(); ++i) {
 
         QString fontQName(*i);
 
-        m_availableFontNames.append(fontQName);
+        m_availableFontNames.push_back(fontQName);
 
         QAction *a = createAction("note_font_" + fontQName,
                                   SLOT(slotChangeFontFromAction()));
@@ -759,38 +760,31 @@ NewNotationView::setupActions()
 
         a->setText(fontQName);
         a->setCheckable(true);
-        a->setChecked(*i == defaultFontName);
+        a->setChecked(*i == m_fontName);
 
         fontActionMenu->addAction(a);        
     }
 
-    //&&& add fontActionMenu to the appropriate super-menu
-
     QMenu *fontSizeActionMenu = new QMenu(tr("Si&ze"), this);
     fontSizeActionMenu->setObjectName("note_font_size_actionmenu");
     ag = new QActionGroup(this);
-    int defaultFontSize = NoteFontFactory::getDefaultSize(defaultFontName);
+    int defaultFontSize = NoteFontFactory::getDefaultSize(m_fontName);
 
-    //setupFontSizeMenu();
+    m_availableFontSizes = NoteFontFactory::getScreenSizes(m_fontName);
 
-    //JAS from OldNotationView::setupFontSizeMenu()
-    std::vector<int> sizes = NoteFontFactory::getScreenSizes(defaultFontName);
+    for (unsigned int i = 0; i < m_availableFontSizes.size(); ++i) {
 
-    for (unsigned int i = 0; i < sizes.size(); ++i) {
-
-        QString actionName = QString("note_font_size_%1").arg(sizes[i]);
+        QString actionName = QString("note_font_size_%1").arg(m_availableFontSizes[i]);
 
         QAction *sizeAction = createAction(actionName,
                                 SLOT(slotChangeFontSizeFromAction()));
-        sizeAction->setText(tr("%n pixel(s)", "", sizes[i]));
+        sizeAction->setText(tr("%n pixel(s)", "", m_availableFontSizes[i]));
         sizeAction->setCheckable(true);
         ag->addAction(sizeAction);
 
-        sizeAction->setChecked(sizes[i] == defaultFontSize);
+        sizeAction->setChecked(m_availableFontSizes[i] == defaultFontSize);
         fontSizeActionMenu->addAction(sizeAction);
     }
-
-    //&&& add m_fontSizeActionMenu to the appropriate super-menu
 
 /*!!!
     QMenu *spacingActionMenu = new QMenu(tr("S&pacing"), this);
@@ -930,21 +924,22 @@ NewNotationView::initLayoutToolbar()
 
     bool foundFont = false;
 
-    for (QVector<QString>::const_iterator i = m_availableFontNames.begin(); i != m_availableFontNames.end(); ++i) {
+    for (std::vector<QString>::const_iterator i = m_availableFontNames.begin(); i != m_availableFontNames.end(); ++i) {
 
         QString fontQName(*i);
 
         m_fontCombo->addItem(fontQName);
-//        if (fontQName.toLower() == m_fontName.toLower()) {
-//            m_fontCombo->setCurrentIndex(m_fontCombo->count() - 1);
-//            foundFont = true;
-//        }
+        if (fontQName.toLower() == m_fontName.toLower()) {
+            m_fontCombo->setCurrentIndex(m_fontCombo->count() - 1);
+            foundFont = true;
+        }
     }
 
     if (!foundFont) {
-        // don't annoy user with stupid internal warning dialog
-//        QMessageBox::warning (this, "", tr("Unknown font \"%1\", using default")
-//                .arg(m_fontName) );
+        // don't annoy user with stupid internal warning dialog (except while
+        // debugging)
+        QMessageBox::warning (this, "", tr("Unknown font \"%1\", using default")
+                             .arg(m_fontName) );
         m_fontName = NoteFontFactory::getDefaultFontName();
     }
 
