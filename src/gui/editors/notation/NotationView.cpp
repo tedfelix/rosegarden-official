@@ -3504,6 +3504,8 @@ NewNotationView::slotFontComboChanged(int index)
     QString name = m_availableFontNames[index];
     if (m_notationWidget) m_notationWidget->slotSetFontName(name);
     m_fontName = name;
+    QString action = QString("note_font_%1").arg(name);
+    findAction(action)->setChecked(true);
 }
 
 void
@@ -3512,6 +3514,8 @@ NewNotationView::slotSizeComboChanged(int index)
     int size = m_availableFontSizes[index];
     if (m_notationWidget) m_notationWidget->slotSetFontSize(size);
     m_fontSize = size;
+    QString action = QString("note_font_size_%1").arg(size);
+    findAction(action)->setChecked(true);
 }
 
 void
@@ -3520,7 +3524,10 @@ NewNotationView::slotSpacingComboChanged(int index)
     int spacing = m_availableSpacings[index];
     if (m_notationWidget) m_notationWidget->getScene()->setHSpacing(spacing);
     m_spacing = spacing;
+    QString action = QString("spacing_%1").arg(spacing);
+    findAction(action)->setChecked(true);
 }
+
 
 } // end namespace Rosegarden
 
