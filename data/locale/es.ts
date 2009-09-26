@@ -6,70 +6,70 @@
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="472"/>
         <source>Manage MIDI Devices</source>
-        <translation type="unfinished">Gestionar Dispositivos MIDI</translation>
+        <translation>Gestionar Dispositivos MIDI</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="473"/>
         <source>MIDI Playback</source>
-        <translation type="unfinished"></translation>
+        <translation>Reproducción MIDI</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="475"/>
         <source>Sends its data through</source>
-        <translation type="unfinished"></translation>
+        <translation>Transmite su data por</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="476"/>
         <source>Rosegarden playback device</source>
-        <translation type="unfinished"></translation>
+        <translation>Dispositivo de reproducción de Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="481"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="513"/>
         <source>Internal Synth</source>
-        <translation type="unfinished"></translation>
+        <translation>Sinte Interno</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="482"/>
         <source>Default playback device</source>
-        <translation type="unfinished"></translation>
+        <translation>Dispositivo de reproducción predeterminado</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="486"/>
         <source>&lt;qt&gt;&lt;p&gt;Create new playback devices here. Click the device name to change it. Select a device here and connect it to an ALSA MIDI output port by clicking on a port to the right.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Hacer dispositivos de reproducción nuevos ahí.  Hacer clic en el nombre del dispositivo para cambiarlo. Seleccionar un dispositivo por ahí y conectarlo a un pueto de salida MIDI de ALSA haciendo clic en un puerto hacia el derecho&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="489"/>
         <source>&lt;qt&gt;&lt;p&gt;Bank definitions allow you to tell Rosegarden about the programs or patches available for use on the equipment (hardware or software synth) connected to this device.&lt;/p&gt;&lt;p&gt;You must have something defined for any program or bank changes you wish to transmit, as Rosegarden hides all bank and program numbers that are undefined.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Definiciones de banco describen los programas o parches que están disponibles en el sinte conectado a este dispositivo.&lt;p&gt;Hay que definir qualquier programa o banco que desea transmitir, porque los números de programa o banco que no tienen un nombre definido no están disponibles para seleccionar desde los Parámetros de Instrumento&lt;/p&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="491"/>
         <source>Banks...</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
-        <translation type="unfinished">Bancos...</translation>
+        <translation>Bancos...</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="493"/>
         <source>&lt;qt&gt;&lt;p&gt;Edit the controllers associated with this device.&lt;/p&gt;&lt;p&gt;You must define controllers here in order to use them anywhere in Rosegarden, such as on control rulers or in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box,  You can change which controllers are displayed in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box, and rearrange their layout&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Editar los controladores vinculados con este dispositivo.&lt;/p&gt;&lt;p&gt;Es necesario definir controladores por ahí para utilizarlos con Rosegarden.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="495"/>
         <source>Controllers...</source>
-        <translation type="unfinished"></translation>
+        <translation>Controladores...</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="497"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new playback device&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Hacer un dispositivo de reproducción nuevo&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="499"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="527"/>
         <source>New</source>
-        <translation type="unfinished">Nuevo</translation>
+        <translation>Nuevo</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="501"/>
@@ -79,24 +79,24 @@
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="503"/>
         <source>Delete</source>
-        <translation type="unfinished">Borrar</translation>
+        <translation>Borrar</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="504"/>
         <source>MIDI outputs</source>
-        <translation type="unfinished"></translation>
+        <translation>Salidas MIDI</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="506"/>
         <source>Available outputs</source>
-        <translation type="unfinished"></translation>
+        <translation>Salidas disponibles</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="511"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="539"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="553"/>
         <source>No port</source>
-        <translation type="unfinished"></translation>
+        <translation>Ningún puerto</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="517"/>
@@ -113,7 +113,7 @@
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="522"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="562"/>
         <source>Refresh</source>
-        <translation type="unfinished">Actualizar</translation>
+        <translation>Actualizar</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="557"/>
@@ -8666,7 +8666,7 @@ así lo desea.</translation>
     <message>
         <location filename="../../src/gui/general/ActionCommandRegistry.cpp" line="115"/>
         <source>Rosegarden - Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Rosegarden--Aviso</translation>
     </message>
 </context>
 <context>
@@ -8763,7 +8763,7 @@ así lo desea.</translation>
     <message>
         <location filename="../../src/commands/notation/AddIndicationCommand.cpp" line="248"/>
         <source>Add Tri&amp;ll With Line</source>
-        <translation type="unfinished"></translation>
+        <translation>Añadir trino &amp;con línea</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddIndicationCommand.cpp" line="251"/>
@@ -8831,17 +8831,17 @@ así lo desea.</translation>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="63"/>
         <source>&amp;Open</source>
-        <translation type="unfinished">&amp;Abrir</translation>
+        <translation>&amp;Abrir</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="65"/>
         <source>&amp;Stopped</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Taponado</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="67"/>
         <source>&amp;Harmonic</source>
-        <translation type="unfinished"></translation>
+        <translation>Ar&amp;monico</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="69"/>
@@ -9356,7 +9356,7 @@ Por favor, seleccione cuáles de ellos quiere borrar permanentemente del disco d
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="946"/>
         <source>File %1 could not be deleted.</source>
-        <translation>El archivo %1 no pudo ser borrado</translation>
+        <translation>El archivo %1 no pudo ser borrado.</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="979"/>
@@ -10176,7 +10176,7 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/commands/segment/ChangeCompositionLengthCommand.h" line="48"/>
         <source>Change &amp;Composition Start and End...</source>
-        <translation>&amp;Cambiar comienzo y final de la composición</translation>
+        <translation>&amp;Cambiar comienzo y final de la composición...</translation>
     </message>
 </context>
 <context>
@@ -10252,7 +10252,7 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/commands/edit/ClearTriggersCommand.h" line="46"/>
         <source>&amp;Clear Triggers</source>
-        <translation type="unfinished">&amp;Limpiar Activadores</translation>
+        <translation>&amp;Limpiar Activadores</translation>
     </message>
 </context>
 <context>
@@ -10383,7 +10383,7 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/commands/edit/CollapseNotesCommand.h" line="45"/>
         <source>Collapse &amp;Equal-Pitch Notes</source>
-        <translation type="unfinished">Fusionar Notas d&amp;e Igual Altura</translation>
+        <translation>Fusionar Notas d&amp;e Igual Altura</translation>
     </message>
 </context>
 <context>
@@ -10391,7 +10391,7 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/commands/notation/CollapseRestsCommand.h" line="50"/>
         <source>&amp;Collapse Rests</source>
-        <translation type="unfinished">&amp;Fusionar Silencios</translation>
+        <translation>&amp;Fusionar Silencios</translation>
     </message>
 </context>
 <context>
@@ -10399,42 +10399,42 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/gui/configuration/ColourConfigurationPage.h" line="52"/>
         <source>Color</source>
-        <translation type="unfinished">Color</translation>
+        <translation>Color</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/ColourConfigurationPage.h" line="53"/>
         <source>Color Settings</source>
-        <translation type="unfinished">Opciones de Color</translation>
+        <translation>Opciones de Color</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/ColourConfigurationPage.cpp" line="67"/>
         <source>Add New Color</source>
-        <translation type="unfinished">Añadir Nuevo Color</translation>
+        <translation>Añadir Nuevo Color</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/ColourConfigurationPage.cpp" line="71"/>
         <source>Delete Color</source>
-        <translation type="unfinished">Borrar Color</translation>
+        <translation>Borrar Color</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/ColourConfigurationPage.cpp" line="90"/>
         <source>Color Map</source>
-        <translation type="unfinished">Mapa de Color</translation>
+        <translation>Mapa de Color</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/ColourConfigurationPage.cpp" line="125"/>
         <source>New Color Name</source>
-        <translation type="unfinished">Nombre del Nuevo Color</translation>
+        <translation>Nombre del Nuevo Color</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/ColourConfigurationPage.cpp" line="126"/>
         <source>Enter new name</source>
-        <translation type="unfinished">Introducir nuevo nombre</translation>
+        <translation>Introducir nuevo nombre</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/ColourConfigurationPage.cpp" line="127"/>
         <source>New</source>
-        <translation type="unfinished">Nuevo</translation>
+        <translation>Nuevo</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/ColourConfigurationPage.cpp" line="161"/>
@@ -10482,7 +10482,7 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/document/CommandHistory.cpp" line="52"/>
         <source>Ctrl+Z</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Z</translation>
     </message>
     <message>
         <location filename="../../src/document/CommandHistory.cpp" line="53"/>
@@ -10494,12 +10494,12 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
         <location filename="../../src/document/CommandHistory.cpp" line="71"/>
         <location filename="../../src/document/CommandHistory.cpp" line="75"/>
         <source>Re&amp;do</source>
-        <translation type="unfinished">Re&amp;hacer</translation>
+        <translation>Re&amp;hacer</translation>
     </message>
     <message>
         <location filename="../../src/document/CommandHistory.cpp" line="67"/>
         <source>Ctrl+Shift+Z</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Mayúsculas+Z</translation>
     </message>
     <message>
         <location filename="../../src/document/CommandHistory.cpp" line="68"/>
@@ -10509,12 +10509,12 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/document/CommandHistory.cpp" line="495"/>
         <source>Nothing to undo</source>
-        <translation type="unfinished">Nada que deshacer</translation>
+        <translation>Nada que deshacer</translation>
     </message>
     <message>
         <location filename="../../src/document/CommandHistory.cpp" line="495"/>
         <source>Nothing to redo</source>
-        <translation type="unfinished">Nada que rehacer</translation>
+        <translation>Nada que rehacer</translation>
     </message>
     <message>
         <location filename="../../src/document/CommandHistory.cpp" line="511"/>
@@ -10534,7 +10534,7 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/gui/dialogs/CompositionLengthDialog.cpp" line="43"/>
         <source>Change Composition Length</source>
-        <translation type="unfinished">Cambiar Duración de la Composición</translation>
+        <translation>Cambiar Duración de la Composición</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/CompositionLengthDialog.cpp" line="59"/>
@@ -10544,12 +10544,12 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/gui/dialogs/CompositionLengthDialog.cpp" line="76"/>
         <source>Start Bar</source>
-        <translation type="unfinished">Compás Inicial</translation>
+        <translation>Compás Inicial</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/CompositionLengthDialog.cpp" line="94"/>
         <source>End Bar</source>
-        <translation type="unfinished">Compás Final</translation>
+        <translation>Compás Final</translation>
     </message>
 </context>
 <context>
@@ -10558,7 +10558,7 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
         <location filename="../../src/gui/dialogs/ConfigureDialog.cpp" line="48"/>
         <source>Configure Rosegarden</source>
         <extracomment>QDialog(parent) //, tr(&quot;Configure Rosegarden&quot;), name)</extracomment>
-        <translation type="unfinished">Configurar Rosegarden</translation>
+        <translation>Configurar Rosegarden</translation>
     </message>
 </context>
 <context>
@@ -10566,7 +10566,7 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/gui/dialogs/ConfigureDialogBase.cpp" line="45"/>
         <source>Configure Rosegarden</source>
-        <translation type="unfinished">Configurar Rosegarden</translation>
+        <translation>Configurar Rosegarden</translation>
     </message>
 </context>
 <context>
@@ -10574,7 +10574,7 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/gui/rulers/ControlChangeCommand.cpp" line="29"/>
         <source>Control Change</source>
-        <translation type="unfinished">Controlador</translation>
+        <translation>Cambio de Controlador</translation>
     </message>
 </context>
 <context>
@@ -10592,27 +10592,27 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="84"/>
         <source>Manage Controllers</source>
-        <translation type="unfinished"></translation>
+        <translation>Gestionar Controladores</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="94"/>
         <source>  Controllers for %1 (device %2)</source>
-        <translation type="unfinished"></translation>
+        <translation>  Controladores de %1 (dispositivo %2)</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="100"/>
         <source>Name  </source>
-        <translation type="unfinished"></translation>
+        <translation>Nombre</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="101"/>
         <source>Type  </source>
-        <translation type="unfinished">Tipo  </translation>
+        <translation>Tipo  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="102"/>
         <source>Number  </source>
-        <translation type="unfinished"></translation>
+        <translation>Número</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="104"/>
@@ -21664,7 +21664,7 @@ Por favor, configura el directorio de archivos de audio hacia un directorio vál
     <message>
         <location filename="../../src/gui/widgets/WarningDialog.cpp" line="50"/>
         <source>Performance Problems Detected</source>
-        <translation type="unfinished"></translation>
+        <translation>Problemas de rendimiento detectados</translation>
     </message>
 </context>
 <context>
@@ -21672,22 +21672,22 @@ Por favor, configura el directorio de archivos de audio hacia un directorio vál
     <message>
         <location filename="../../src/gui/widgets/WarningWidget.cpp" line="64"/>
         <source>&lt;qt&gt;&lt;p&gt;Performance problems detected!&lt;/p&gt;&lt;p&gt;Click to display details&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;¡Se han detectado unos problemas de rendimiento del sistema!&lt;/p&gt;&lt;p&gt;Hacer clic para ver los detalles&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/WarningWidget.cpp" line="87"/>
         <source>MIDI OK</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI OK</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/WarningWidget.cpp" line="99"/>
         <source>audio OK</source>
-        <translation type="unfinished"></translation>
+        <translation>audio OK</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/WarningWidget.cpp" line="111"/>
         <source>timer OK</source>
-        <translation type="unfinished"></translation>
+        <translation>temporización OK</translation>
     </message>
 </context>
 <context>
@@ -21695,22 +21695,22 @@ Por favor, configura el directorio de archivos de audio hacia un directorio vál
     <message>
         <location filename="../../src/gui/application/main.cpp" line="318"/>
         <source>Rosegarden - A sequencer and musical notation editor</source>
-        <translation type="unfinished">Rosegarden - Un secuenciador y editor de partituras</translation>
+        <translation>Rosegarden - Un secuenciador y editor de partituras</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/main.cpp" line="431"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/main.cpp" line="695"/>
         <source>Welcome!</source>
-        <translation type="unfinished">¡Bienvenido!</translation>
+        <translation>¡Bienvenido!</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/main.cpp" line="711"/>
         <source>&lt;h2&gt;Welcome to Rosegarden!&lt;/h2&gt;&lt;p&gt;Welcome to the Rosegarden audio and MIDI sequencer and musical notation editor.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;If you have not already done so, you may wish to install some DSSI synth plugins, or a separate synth program such as QSynth.  Rosegarden does not synthesize sounds from MIDI on its own, so without these you will hear nothing.&lt;/li&gt;&lt;li&gt;Rosegarden uses the JACK audio server for recording and playback of audio, and for playback from DSSI synth plugins.  These features will only be available if the JACK server is running.&lt;/li&gt;&lt;li&gt;Rosegarden has comprehensive documentation: see the &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&gt;Rosegarden website&lt;/a&gt; for the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/doc/en/&quot;&gt;handbook&lt;/a&gt;, &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;tutorials&lt;/a&gt;, and other information!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  To learn more, go to the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;Rosegarden website&lt;/a&gt;.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;h2&gt;¡Bienvenido a Rosegarden!&lt;/h2&gt;&lt;p&gt;Bienvenido a Rosegarden, un secuenciador de audio y MIDI y editor de partituras.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;If you have not already done so, you may wish to install some DSSI synth plugins, or a separate synth program such as QSynth.  Rosegarden does not synthesize sounds from MIDI on its own, so without these you will hear nothing.&lt;/li&gt;&lt;li&gt;Rosegarden uses the JACK audio server for recording and playback of audio, and for playback from DSSI synth plugins.  These features will only be available if the JACK server is running.&lt;/li&gt;&lt;li&gt;Rosegarden has comprehensive documentation: see the &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&gt;Rosegarden website&lt;/a&gt; for the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/doc/en/&quot;&gt;handbook&lt;/a&gt;, &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;tutorials&lt;/a&gt;, and other information!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  To learn more, go to the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;Rosegarden website&lt;/a&gt;.&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
@@ -21718,7 +21718,7 @@ Por favor, configura el directorio de archivos de audio hacia un directorio vál
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="2488"/>
         <source>(recorded)</source>
-        <translation type="unfinished">(grabado)</translation>
+        <translation>(grabado)</translation>
     </message>
 </context>
 <context>
@@ -21726,198 +21726,198 @@ Por favor, configura el directorio de archivos de audio hacia un directorio vál
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1047"/>
         <source>Rosegarden Transport</source>
-        <translation type="unfinished">Transporte de Rosegarden</translation>
+        <translation>Transporte de Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1049"/>
         <source>Hide additional controls</source>
-        <translation type="unfinished">Ocultar controles adicionales</translation>
+        <translation>Ocultar controles adicionales</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1053"/>
         <source>Panic Button</source>
-        <translation type="unfinished">Botón de Pánico</translation>
+        <translation>Botón de Pánico</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1056"/>
         <source>Resets all MIDI devices if you&apos;ve got stuck notes</source>
-        <translation type="unfinished">Restablece todos los dispositivos MIDI cuando hay notas colgadas</translation>
+        <translation>Restablece todos los dispositivos MIDI cuando hay notas colgadas</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1060"/>
         <source>Metronome</source>
-        <translation type="unfinished">Metrónomo</translation>
+        <translation>Metrónomo</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1063"/>
         <source>Provides a metronome click for you to play along with</source>
-        <translation type="unfinished">Proporciona una señal de metrónomo para tocar con ella</translation>
+        <translation>Proporciona una señal de metrónomo para tocar con ella</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1067"/>
         <source>Shows MIDI activity in and out of Rosegarden</source>
-        <translation type="unfinished">Muestra actividad de entrada y salida MIDI en Rosegarden</translation>
+        <translation>Muestra actividad de entrada y salida MIDI en Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1069"/>
         <source>IN</source>
-        <translation type="unfinished">IN</translation>
+        <translation>IN</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1070"/>
         <source>OUT</source>
-        <translation type="unfinished">OUT</translation>
+        <translation>OUT</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1071"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1072"/>
         <source>NO EVENTS</source>
-        <translation type="unfinished">SIN EVENTOS</translation>
+        <translation>SIN EVENTOS</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1074"/>
         <source>Record</source>
-        <translation type="unfinished">Grabación</translation>
+        <translation>Grabar</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1077"/>
         <source>Record either MIDI or audio</source>
-        <translation type="unfinished">Grabar tanto MIDI como audio</translation>
+        <translation>Grabar tanto MIDI como audio</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1081"/>
         <source>Loop</source>
-        <translation type="unfinished">Repetir</translation>
+        <translation>Repetir</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1084"/>
         <source>Turn on and off the loop markers (if set)</source>
-        <translation type="unfinished">Activa y desactiva las marcas de repetición (si hay)</translation>
+        <translation>Activa y desactiva las marcas de repetición (si hay)</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1088"/>
         <source>Solo</source>
-        <translation type="unfinished">Solo</translation>
+        <translation>Solo</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1091"/>
         <source>Mutes all but the currently selected track</source>
-        <translation type="unfinished">Silencia todas las pistas excepto la seleccionada</translation>
+        <translation>Silencia todas las pistas excepto la seleccionada</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1095"/>
         <source>Start loop or range here</source>
-        <translation type="unfinished">Comenzar bucle o ámbito ahí</translation>
+        <translation>Comenzar bucle o ámbito ahí</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1099"/>
         <source>End loop or range here</source>
-        <translation type="unfinished">Terminar bucle o ámbito ahí</translation>
+        <translation>Terminar bucle o ámbito ahí</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1102"/>
         <source>SIG</source>
-        <translation type="unfinished">SIG</translation>
+        <translation>SIG</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1103"/>
         <source>DIV</source>
-        <translation type="unfinished">DIV</translation>
+        <translation>DIV</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1104"/>
         <source>/16</source>
-        <translation type="unfinished">/16</translation>
+        <translation>/16</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1105"/>
         <source>TEMPO</source>
-        <translation type="unfinished">TEMPO</translation>
+        <translation>TEMPO</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1106"/>
         <source>END</source>
-        <translation type="unfinished">FIN</translation>
+        <translation>FIN</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1107"/>
         <source>BAR</source>
-        <translation type="unfinished">COMPÁS</translation>
+        <translation>COMPÁS</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1109"/>
         <source>Switch between real time, musical time, and frame count</source>
-        <translation type="unfinished">Conmutar entre tiempo real, tiempo musical y cuadros</translation>
+        <translation>Conmutar entre tiempo real, tiempo musical y cuadros</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1113"/>
         <source>Show additional controls</source>
-        <translation type="unfinished">Mostrar controles adicionales</translation>
+        <translation>Mostrar controles adicionales</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1117"/>
         <source>Rewind</source>
-        <translation type="unfinished">Rebobinar</translation>
+        <translation>Rebobinar</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1120"/>
         <source>Moves the current pointer position back one bar.</source>
-        <translation type="unfinished">Mueve la posición actual del cursor un compás hacia atrás</translation>
+        <translation>Mueve la posición actual del cursor un compás hacia atrás.</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1124"/>
         <source>Rewind to beginning</source>
-        <translation type="unfinished">Rebobinar al principio</translation>
+        <translation>Rebobinar al principio</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1127"/>
         <source>Moves the pointer position to the start of the composition. (This may mean going forwards if the pointer is currently before the start.)</source>
-        <translation type="unfinished">Mueve la posición del cursor al comienzo de la composición (esto puede significar adelantarlo si el cursor está actualmente antes del comienzo)</translation>
+        <translation>Mueve la posición del cursor al comienzo de la composición (esto puede significar adelantarlo si el cursor está actualmente antes del comienzo)</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1131"/>
         <source>Play/Pause</source>
-        <translation type="unfinished">Reproducción/Pausa</translation>
+        <translation>Reproducción/Pausa</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1134"/>
         <source>Plays from the current pointer position, or pauses playback if already in progress.</source>
-        <translation type="unfinished">Toca desde la posición actual del cursor, o para la reproducción si ya está tocando.</translation>
+        <translation>Toca desde la posición actual del cursor, o para la reproducción si ya está tocando.</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1138"/>
         <source>Stop</source>
-        <translation type="unfinished">Parar</translation>
+        <translation>Parar</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1141"/>
         <source>Stops playback or recording.</source>
-        <translation type="unfinished">Para la grabación o reproducción</translation>
+        <translation>Para la grabación o reproducción.</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1145"/>
         <source>Fast forward</source>
-        <translation type="unfinished">Avance rápido</translation>
+        <translation>Avance rápido</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1148"/>
         <source>Moves the current pointer position forwards one bar.</source>
-        <translation type="unfinished">Mueve la posición actual del cursor un compás hacia delante</translation>
+        <translation>Mueve la posición actual del cursor un compás hacia delante.</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1152"/>
         <source>Fast forward to end</source>
-        <translation type="unfinished">Avance rápido hacia el final</translation>
+        <translation>Avance rápido hacia el final</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1155"/>
         <source>Moves the pointer position to the end of the composition.  (This may mean going backwards if the pointer is already beyond the end.)</source>
-        <translation type="unfinished">Mueve la posición del cursor al final de la composición. (Esto puede significar rebobinado si la posición ya está más allá del final.)</translation>
+        <translation>Mueve la posición del cursor al final de la composición. (Esto puede significar rebobinado si la posición ya está más allá del final.)</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1159"/>
         <source>Display time to end</source>
-        <translation type="unfinished">Muestra tiempo restante</translation>
+        <translation>Muestra tiempo restante</translation>
     </message>
 </context>
 </TS>
