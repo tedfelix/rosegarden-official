@@ -10824,7 +10824,7 @@ Haluatko saattaa muutokset voimaan ennen pankkimuokkaimen sulkemista?</translati
     <message>
         <location filename="../../src/gui/rulers/ControlRulerWidget.cpp" line="256"/>
         <source>Velocity</source>
-        <translation type="unfinished"></translation>
+        <translation>Voimakkuus</translation>
     </message>
 </context>
 <context>
@@ -11734,7 +11734,7 @@ Tämä voi aiheuttaa ongelmia, mikäli asetus ylikirjoitetaan myöhemmin toisess
     <message>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="60"/>
         <source>Set the %1 property of the event selection:</source>
-        <translation>Aseta tapahtumavalinnan ominaisuus %1</translation>
+        <translation>Aseta tapahtumavalinnan ominaisuus %1:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="70"/>
@@ -15262,12 +15262,12 @@ hyödyttämään muitakin.</translation>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="242"/>
         <source>%1%2 - Segment%3Track%4#%5 - %6</source>
-        <translation type="unfinished"></translation>
+        <translation>%1%2 - Osa%3Raita%4#%5 - %6</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="252"/>
         <source>%1%2 - All Segments - %3</source>
-        <translation type="unfinished"></translation>
+        <translation>%1%2 - Kaikki osat - %3</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="259"/>
@@ -15361,7 +15361,7 @@ hyödyttämään muitakin.</translation>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1483"/>
         <source>Can&apos;t insert note: No grid duration selected</source>
-        <translation type="unfinished">Ei voitu syöttää nuottia: Ruudukon kestoa ei oltu valittu</translation>
+        <translation>Ei voida syöttää nuottia: Ruudukon kestoa ei ole valittu</translation>
     </message>
 </context>
 <context>
@@ -15387,17 +15387,17 @@ hyödyttämään muitakin.</translation>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="897"/>
         <source>  Font:  </source>
-        <translation type="unfinished">  Kirjasin:  </translation>
+        <translation>  Kirjasin:  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="943"/>
         <source>  Size:  </source>
-        <translation type="unfinished">  Koko:  </translation>
+        <translation>  Koko:  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="971"/>
         <source>  Spacing:  </source>
-        <translation type="unfinished">  Välit:  </translation>
+        <translation>  Välit:  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1061"/>
@@ -15432,12 +15432,12 @@ hyödyttämään muitakin.</translation>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1177"/>
         <source>Unknown font action %1</source>
-        <translation type="unfinished">Tuntematon kirjasintoiminto %1</translation>
+        <translation>Tuntematon kirjasintoiminto %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1197"/>
         <source>Unknown font size action %1</source>
-        <translation type="unfinished">Tuntematon kirjasinkokotoiminto %1</translation>
+        <translation>Tuntematon kirjasinkokotoiminto %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1269"/>
@@ -15474,7 +15474,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1307"/>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1376"/>
         <source>&lt;qt&gt;&lt;p&gt;The Restricted paste type requires enough empty space (containing only rests) at the paste position to hold all of the events to be pasted.&lt;/p&gt;&lt;p&gt;Not enough space was found.&lt;/p&gt;&lt;p&gt;If you want to paste anyway, consider using one of the other paste types from the &lt;b&gt;Paste...&lt;/b&gt; option on the Edit menu.  You can also change the default paste type to something other than Restricted if you wish.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Rajoitettu liittämistyyppi vaatii liitäntäpaikan kohdalla riittävästi tyhjää tilaa (jossa on vain taukoja), jotta kaikki tapahtumat voitaisiin liittää.&lt;/p&gt;&lt;p&gt;Tyhjää tilaa ei löytynyt riittävästi.&lt;/p&gt;&lt;p&gt;Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käyttöä &quot;Muokkaa&quot;-valikon&lt;b&gt; &quot;Liitä...&quot;&lt;/b&gt;-valinnasta.  Voit myös halutessasi vaihtaa oletusliitäntätyypin myös joksikin muuksi kuin Rajoitettu.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1328"/>
@@ -15584,12 +15584,12 @@ Ole hyvä ja varmista, että laite on määritetty oikein pääikkunan Hallitse 
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3330"/>
         <source>Can&apos;t insert note: No note duration selected</source>
-        <translation type="unfinished">Ei voitu lisätä nuottia: Kestoa ei oltu valittu</translation>
+        <translation>Ei voitu lisätä nuottia: Kestoa ei oltu valittu</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3494"/>
         <source>Time: %1 (%2.%3s)</source>
-        <translation type="unfinished">Aika: %1 (%2.%3s)</translation>
+        <translation>Aika: %1 (%2.%3s)</translation>
     </message>
     <message>
         <source>%1 - Segment Track #%2 - Notation</source>
