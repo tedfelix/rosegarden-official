@@ -4,167 +4,17 @@
 <context>
     <name>DeviceManagerDialogUi</name>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="472"/>
         <source>Manage MIDI Devices</source>
-        <translation type="unfinished">MIDI Dispositiboak Kudeatu</translation>
+        <translation type="obsolete">MIDI Dispositiboak Kudeatu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="473"/>
-        <source>MIDI Playback</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="475"/>
-        <source>Sends its data through</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="476"/>
-        <source>Rosegarden playback device</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="481"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="513"/>
-        <source>Internal Synth</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="482"/>
-        <source>Default playback device</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="486"/>
-        <source>&lt;qt&gt;&lt;p&gt;Create new playback devices here. Click the device name to change it. Select a device here and connect it to an ALSA MIDI output port by clicking on a port to the right.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="489"/>
-        <source>&lt;qt&gt;&lt;p&gt;Bank definitions allow you to tell Rosegarden about the programs or patches available for use on the equipment (hardware or software synth) connected to this device.&lt;/p&gt;&lt;p&gt;You must have something defined for any program or bank changes you wish to transmit, as Rosegarden hides all bank and program numbers that are undefined.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="491"/>
         <source>Banks...</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
-        <translation type="unfinished">Bankuak...</translation>
+        <translation type="obsolete">Bankuak...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="493"/>
-        <source>&lt;qt&gt;&lt;p&gt;Edit the controllers associated with this device.&lt;/p&gt;&lt;p&gt;You must define controllers here in order to use them anywhere in Rosegarden, such as on control rulers or in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box,  You can change which controllers are displayed in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box, and rearrange their layout&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="495"/>
-        <source>Controllers...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="497"/>
-        <source>&lt;qt&gt;&lt;p&gt;Create a new playback device&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="499"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="527"/>
         <source>New</source>
-        <translation type="unfinished">Berria</translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="501"/>
-        <source>&lt;qt&gt;&lt;p&gt;Delete the selected playback device.  Any tracks using this device will need to be reassigned, and any program or bank changes on those tracks will be lost permanently&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="503"/>
-        <source>Delete</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="504"/>
-        <source>MIDI outputs</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="506"/>
-        <source>Available outputs</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="511"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="539"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="553"/>
-        <source>No port</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="517"/>
-        <source>&lt;qt&gt;&lt;p&gt;Available ALSA MIDI outputs for any hardware detected and supported by your distribution, and any available soft synths such as QSynth, ZynAddSubFX, etc.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="520"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="560"/>
-        <source>&lt;qt&gt;&lt;p&gt;Click to refresh the port list after connecting a new piece of equipment or starting a new soft synth&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="522"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="562"/>
-        <source>Refresh</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="557"/>
-        <source>&lt;qt&gt;&lt;p&gt;Available ALSA MIDI inputs for any hardware MIDI inputs detected by your distribution&apos;s hardware autodetection, plus any ALSA MIDI software that exposes output ports, such as VMPK&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="523"/>
-        <source>MIDI Recording</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="525"/>
-        <source>&lt;qt&gt;&lt;p&gt;Create a new recording device&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="529"/>
-        <source>&lt;qt&gt;&lt;p&gt;Delete the selected recording device&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="531"/>
-        <source>Delete</source>
-        <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="533"/>
-        <source>Receives its data from</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="534"/>
-        <source>Rosegarden recording device</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="540"/>
-        <source>Default record device</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="546"/>
-        <source>MIDI inputs</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="548"/>
-        <source>Available inputs</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Berria</translation>
     </message>
 </context>
 <context>
@@ -10771,22 +10621,22 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
 <context>
     <name>Rosegarden::ControllerEventsRuler</name>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="283"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="276"/>
         <source>Unsupported Event Type</source>
         <translation type="unfinished">Kontroladorearen Gertaera ez jasota</translation>
     </message>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="293"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="286"/>
         <source>Pitch Bend</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="298"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="291"/>
         <source>Controller Events</source>
         <translation type="unfinished">Kontroladorearen Gertaerak</translation>
     </message>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="413"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="406"/>
         <source>Controller Event Number</source>
         <translation type="unfinished">Kontroladorearen Gertaera Zenbakia</translation>
     </message>
@@ -15292,17 +15142,17 @@ onerako.</translation>
 <context>
     <name>Rosegarden::NewNotationView</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="730"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="739"/>
         <source>Note &amp;Font</source>
         <translation type="unfinished">Notaren &amp;Letra-Tipoa</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="754"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="767"/>
         <source>Si&amp;ze</source>
         <translation type="unfinished">&amp;Tamaina</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="770"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="779"/>
         <source>%n pixel(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -15310,80 +15160,96 @@ onerako.</translation>
         </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="897"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="787"/>
+        <source>S&amp;pacing</source>
+        <translation type="unfinished">&amp;Hutsuneen Tartekatzea</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="877"/>
         <source>  Font:  </source>
         <translation type="unfinished">  Letra-Tipoa:  </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="943"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="912"/>
+        <source>Unknown font &quot;%1&quot;, using default</source>
+        <translation type="unfinished">&quot;%1&quot; Letra-Tipo ezezaguna, lehenetsia erabiliko da</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="920"/>
         <source>  Size:  </source>
         <translation type="unfinished">  Tamaina:  </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="971"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="944"/>
         <source>  Spacing:  </source>
         <translation type="unfinished">  Hutsuneen Tartekatzea:  </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1061"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1026"/>
         <source>LilyPond Preview Options</source>
         <translation type="unfinished">Lilypond Aurrebista Opzioak</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1062"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1027"/>
         <source>LilyPond preview options</source>
         <translation type="unfinished">Lilypond aurrebista opzioak</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1073"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1038"/>
         <source>Export failed.  The file could not be opened for writing.</source>
         <translation type="unfinished">Esportatzeak huts egin du. Artxiboa ezin izan da ireki idazteko.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1082"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1048"/>
         <source>Printing with LilyPond...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1099"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1066"/>
         <source>Previewing with LilyPond...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1127"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1094"/>
         <source>&lt;qt&gt;&lt;p&gt;Failed to open a temporary file for LilyPond export.&lt;/p&gt;&lt;p&gt;This probably means you have run out of disk space on &lt;pre&gt;%1&lt;/pre&gt;&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1177"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1144"/>
         <source>Unknown font action %1</source>
         <translation type="unfinished">Letra tiporako akzio ezezaguna %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1197"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1164"/>
         <source>Unknown font size action %1</source>
         <translation type="unfinished">Letra-Tiporako tamaina eragiketa ezezaguna %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1269"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1183"/>
+        <source>Unknown spacing action %1</source>
+        <translation type="unfinished">Hutsuneak tartekatzeko eragiketa ezezaguna %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1255"/>
         <source>Can&apos;t paste multiple Segments into one</source>
         <translation type="unfinished">Ezin dira segmentu asko batean itsatsi</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1073"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1126"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1177"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1197"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1304"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1373"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2064"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2640"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1038"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1093"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1144"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1164"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1183"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1290"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1359"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2052"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2629"/>
         <source>Rosegarden</source>
         <translation type="unfinished">Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1306"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1375"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1292"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1361"/>
         <source>Couldn&apos;t paste at this point.</source>
         <translation type="unfinished">Ezin da puntu honetan itsatsi.</translation>
     </message>
@@ -15401,110 +15267,110 @@ menuan. Era berean, lehenetsitako itsasketa mota Mugatutakoa
 ez den beste batera alda dezakezu, nahi baduzu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1307"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1376"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1293"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1362"/>
         <source>&lt;qt&gt;&lt;p&gt;The Restricted paste type requires enough empty space (containing only rests) at the paste position to hold all of the events to be pasted.&lt;/p&gt;&lt;p&gt;Not enough space was found.&lt;/p&gt;&lt;p&gt;If you want to paste anyway, consider using one of the other paste types from the &lt;b&gt;Paste...&lt;/b&gt; option on the Edit menu.  You can also change the default paste type to something other than Restricted if you wish.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1328"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1314"/>
         <source>Clipboard is empty</source>
         <translation type="unfinished">Arbela hutsik</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1332"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1318"/>
         <source>Inserting clipboard contents...</source>
         <translation type="unfinished">Arbelaren edukia txertatzen...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1496"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1483"/>
         <source>Raising velocities...</source>
         <translation type="unfinished">Abiadurak igotzen...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1507"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1494"/>
         <source>Lowering velocities...</source>
         <translation type="unfinished">Abiadurak jaisten...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1544"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1531"/>
         <source>Set Event Velocities</source>
         <translation type="unfinished">Gertaeren Abiadurak Ezarri</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1549"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1536"/>
         <source>Setting Velocities...</source>
         <translation type="unfinished">Abiadurak Ezartzen...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2064"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2052"/>
         <source>Unknown note insert action %1</source>
         <translation type="unfinished">Nota ezezaguna txertatzeko eragiketa: %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2068"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2056"/>
         <source>Inserting note</source>
         <translation type="unfinished">Nota txertatzen</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2441"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2430"/>
         <source>Ornament track %1 bar %2</source>
         <translation type="unfinished">%1 Apaindura Pista konpas %2</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2443"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2432"/>
         <source>Ornament bar %1</source>
         <translation type="unfinished">Apaindura konpasa %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2453"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2442"/>
         <source>Make Ornament</source>
         <translation type="unfinished">Apaindura Sortu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2498"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2487"/>
         <source>Use Ornament</source>
         <translation type="unfinished">Apaindura Erabili</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2509"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2498"/>
         <source>Remove Ornaments</source>
         <translation type="unfinished">Apaindurak Ezabatu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2567"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2556"/>
         <source>Estimated key signature shown</source>
         <translation type="unfinished">Estimatutako armadura erakusten da</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2624"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2613"/>
         <source>Sustain</source>
         <translation type="unfinished">Diesea</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2640"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2629"/>
         <source>There is no sustain controller defined for this device.
 Please ensure the device is configured correctly in the Manage MIDI Devices dialog in the main window.</source>
         <translation type="unfinished">Ez dago sustain kontroladore definitu bat dispositibo honetarako.
 Mesdez, egiaztatu dispositiboa modu egokian konfiguratuta dagoela &quot;MIDI Dispositiboak Kudeatu&quot; dialogoan, leiho nagusian. </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2813"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2802"/>
         <source>Estimated time signature shown</source>
         <translation type="unfinished">Konpasaren iraupen estimatua erakusten da</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2873"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2862"/>
         <source>%1%2 - Segment Track #%3 - Notation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2880"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2869"/>
         <source>%1%2 - All Segments - Notation</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2886"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2875"/>
         <source>%1%2 - %n Segment(s) - Notation</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -15512,12 +15378,12 @@ Mesdez, egiaztatu dispositiboa modu egokian konfiguratuta dagoela &quot;MIDI Dis
         </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3330"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3325"/>
         <source>Can&apos;t insert note: No note duration selected</source>
         <translation type="unfinished">Ezin da nota txertatu: notaren iraupena ez dago hautatuta</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3494"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3489"/>
         <source>Time: %1 (%2.%3s)</source>
         <translation type="unfinished">Denbora: %1 (%2.%3s)</translation>
     </message>
@@ -15530,27 +15396,27 @@ Mesdez, egiaztatu dispositiboa modu egokian konfiguratuta dagoela &quot;MIDI Dis
         <translation type="obsolete">%1 - Segmentu Guztiak - Partitura</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2979"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2968"/>
         <source>Triplet</source>
         <translation type="unfinished">Hirukotxoa</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2980"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2969"/>
         <source>Chord</source>
         <translation type="unfinished">Akordea</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2981"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2970"/>
         <source>Grace</source>
         <translation type="unfinished">Grave</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3137"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3126"/>
         <source>Transpose</source>
         <translation type="unfinished">Transposatu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3138"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3127"/>
         <source>By number of semitones: </source>
         <translation type="unfinished">Sartu transposatu beharreko tonuerdien kopurua:</translation>
     </message>
@@ -15598,258 +15464,253 @@ Mesdez, egiaztatu dispositiboa modu egokian konfiguratuta dagoela &quot;MIDI Dis
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="109"/>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="134"/>
         <source>%1 % (normal)</source>
         <translation type="unfinished">Normala</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="121"/>
         <source>Default duration factor</source>
-        <translation type="unfinished">Iraupen faktore lehenetsia</translation>
+        <translation type="obsolete">Iraupen faktore lehenetsia</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="136"/>
         <source>None</source>
-        <translation type="unfinished">Ezer Ez</translation>
+        <translation type="obsolete">Ezer Ez</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="138"/>
         <source>Full</source>
-        <translation type="unfinished">Beteta</translation>
+        <translation type="obsolete">Beteta</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="149"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="121"/>
         <source>Show track headers (linear layout only)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="156"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="128"/>
         <source>Never</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="157"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="129"/>
         <source>When needed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="158"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="130"/>
         <source>Always</source>
         <translation type="unfinished">Aliasak</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="165"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="137"/>
         <source>&quot;Always&quot; and &quot;Never&quot; mean what they usually mean
 &quot;When needed&quot; means &quot;when staves are too many to all fit in the current window&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="178"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="150"/>
         <source>Show non-notation events as question marks</source>
         <translation type="unfinished">Irudikatu ezin daitezkeen ez-notazio gertaerak galdera ikur bezala irudikatu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="189"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="161"/>
         <source>Show notation-quantized notes in a different color</source>
         <translation type="unfinished">Kuantifikatutako notak kolore ezberdin batean erakutsi</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="200"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="172"/>
         <source>Show &quot;invisible&quot; events in grey</source>
         <translation type="unfinished">Gertaera &quot;ikustezinak&quot; grisez erakutsi</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="211"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="183"/>
         <source>Show notes outside suggested playable range in red</source>
         <translation type="unfinished">Erreproduzitu daitekeen tartetik kanpo dauden notak gorriz erakutsi</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="222"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="194"/>
         <source>Highlight superimposed notes with a halo effect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="236"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="208"/>
         <source>When recording MIDI, split-and-tie long notes at barlines</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="248"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="220"/>
         <source>Layout</source>
         <translation type="unfinished">Formatoa</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="261"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="233"/>
         <source>Default note style for new notes</source>
         <translation type="unfinished">Nota berrietarako nota estilo lehenetsia</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="293"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="265"/>
         <source>When inserting notes...</source>
         <translation type="unfinished">Notak txertatzerakoan...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="301"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="273"/>
         <source>Split notes into ties to make durations match</source>
         <translation type="unfinished">Zatitu notak ligutaretan iraupenak bat etorri daitezen</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="302"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="274"/>
         <source>Ignore existing durations</source>
         <translation type="unfinished">Aurretik dauden iraupenak kontuan ez hartu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="312"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="284"/>
         <source>Auto-beam on insert when appropriate</source>
         <translation type="unfinished">Txertatzean, plikak automatikoki zatitu egokia denean</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="325"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="297"/>
         <source>Collapse rests after erase</source>
         <translation type="unfinished">Ezabatu ondoren, isiluneak batu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="337"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="309"/>
         <source>Default paste type</source>
         <translation type="unfinished">Itsasteko mota lehenetsia</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="361"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="333"/>
         <source>Editing</source>
         <translation type="unfinished">Edizioa</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="373"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="345"/>
         <source>Accidentals in one octave...</source>
         <translation type="unfinished">Oktaba baten alterazioak...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="376"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="348"/>
         <source>Affect only that octave</source>
         <translation type="unfinished">Eragin bakarri oktaba horri</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="377"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="349"/>
         <source>Require cautionaries in other octaves</source>
         <translation type="unfinished">Zuhurtziazkoak eskatu beste oktabetan</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="378"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="350"/>
         <source>Affect all subsequent octaves</source>
         <translation type="unfinished">Datozen oktaba guztiei eragin</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="386"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="358"/>
         <source>Accidentals in one bar...</source>
         <translation type="unfinished">Konpas baten alterazioak...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="389"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="361"/>
         <source>Affect only that bar</source>
         <translation type="unfinished">Eragin bakarrik konpas horri</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="390"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="362"/>
         <source>Require cautionary resets in following bar</source>
         <translation type="unfinished">Zuhurtziazko ezeztapenak eskatu hurrengo konpasean</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="391"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="363"/>
         <source>Require explicit resets in following bar</source>
         <translation type="unfinished">Ezeztapen esplizituak eskatu hurrengo konpasean</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="399"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="371"/>
         <source>Key signature cancellation style</source>
         <translation type="unfinished">Armaduraren eta ezeztapenaren estiloa:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="402"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="374"/>
         <source>Cancel only when entering C major or A minor</source>
         <translation type="unfinished">Ezeztatu bakarrik Do Maior edo La Menor sartzerakoan</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="403"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="375"/>
         <source>Cancel whenever removing sharps or flats</source>
         <translation type="unfinished">Dieseak edo bemolak ezabatzean ezeztatu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="404"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="376"/>
         <source>Cancel always</source>
         <translation type="unfinished">Ezeztatu beti</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="415"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="387"/>
         <source>Accidentals</source>
         <translation type="unfinished">Alterazioak</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="458"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="430"/>
         <source>Notation font</source>
         <translation type="unfinished">Partituraren tipografia</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="464"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="436"/>
         <source>View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="485"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="457"/>
         <source>Origin:</source>
         <translation type="unfinished">Jatorria: </translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="489"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="461"/>
         <source>Copyright:</source>
         <translation type="unfinished">Copyright: </translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="493"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="465"/>
         <source>Mapped by:</source>
         <translation type="unfinished">Mapeatu duena:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="497"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="469"/>
         <source>Type:</source>
         <translation type="unfinished">Mota: </translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="529"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="497"/>
         <source>Font size for single-staff views</source>
         <translation type="unfinished">Tipografiaren tamaina pentagrama bakar batentzat</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="538"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="506"/>
         <source>Font size for multi-staff views</source>
         <translation type="unfinished">Tipografiaren tamaina pentagrama asko ikusteko</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="547"/>
         <source>Font size for printing (pt)</source>
-        <translation type="unfinished">Tipografiaren tamaina inprimatzeko(pt)</translation>
+        <translation type="obsolete">Tipografiaren tamaina inprimatzeko(pt)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="565"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="535"/>
         <source>Text font</source>
         <translation type="unfinished">Testuaren tipografia</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="576"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="547"/>
         <source>Sans-serif font</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="602"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="574"/>
         <source>Font</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="700"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="668"/>
         <source>%1 (smooth)</source>
         <translation type="unfinished">%1 (leuna)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="702"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="670"/>
         <source>%1 (jaggy)</source>
         <translation type="unfinished">%1 (hortz modukoa)</translation>
     </message>
@@ -15872,7 +15733,7 @@ Mesdez, egiaztatu dispositiboa modu egokian konfiguratuta dagoela &quot;MIDI Dis
         <translation type="unfinished">%1 pentagrama kokatzen...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="1201"/>
+        <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="1203"/>
         <source>Sustain</source>
         <translation type="unfinished">Diesea</translation>
     </message>
@@ -19780,72 +19641,72 @@ Beste programa batzuk ixteak hobetu dezake Rosegardenen errendimendua.</translat
         <translation type="unfinished">...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="452"/>
+        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="455"/>
         <source>C</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="453"/>
+        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="456"/>
         <source>C#</source>
         <translation type="unfinished">Do#%1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="454"/>
+        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="457"/>
         <source>D</source>
         <translation type="unfinished">ID</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="455"/>
+        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="458"/>
         <source>Eb</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="456"/>
+        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="459"/>
         <source>E</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="457"/>
+        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="460"/>
         <source>F</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="458"/>
+        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="461"/>
         <source>F#</source>
         <translation type="unfinished">Fa#%1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="459"/>
+        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="462"/>
         <source>G</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="460"/>
+        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="463"/>
         <source>G#</source>
         <translation type="unfinished">Sol#%1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="461"/>
+        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="464"/>
         <source>A</source>
         <translation type="unfinished">A4</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="462"/>
+        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="465"/>
         <source>Bb</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="463"/>
+        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="466"/>
         <source>B</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="574"/>
+        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="577"/>
         <source>%1: %2</source>
         <translation type="unfinished">%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="577"/>
+        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="580"/>
         <source> in %1</source>
         <translation type="unfinished">Sarrera %1</translation>
     </message>
@@ -21709,200 +21570,156 @@ Konfiguratu nahi duzu orain?</translation>
 <context>
     <name>RosegardenTransport</name>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1047"/>
         <source>Rosegarden Transport</source>
-        <translation type="unfinished">Rosegardenen Transportea</translation>
+        <translation type="obsolete">Rosegardenen Transportea</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1049"/>
         <source>Hide additional controls</source>
-        <translation type="unfinished">Kontrol gehigarriak ezkutatu</translation>
+        <translation type="obsolete">Kontrol gehigarriak ezkutatu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1053"/>
         <source>Panic Button</source>
-        <translation type="unfinished">Izuaren Botoia</translation>
+        <translation type="obsolete">Izuaren Botoia</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1056"/>
         <source>Resets all MIDI devices if you&apos;ve got stuck notes</source>
-        <translation type="unfinished">MIDI dispositibo guztiak berrasten ditu, nota blokeatuak baldin badauzkazu</translation>
+        <translation type="obsolete">MIDI dispositibo guztiak berrasten ditu, nota blokeatuak baldin badauzkazu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1060"/>
         <source>Metronome</source>
-        <translation type="unfinished">Metronomoa</translation>
+        <translation type="obsolete">Metronomoa</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1063"/>
         <source>Provides a metronome click for you to play along with</source>
-        <translation type="unfinished">Metronomo seinale bat ematen du, berarekin batera jotzeko</translation>
+        <translation type="obsolete">Metronomo seinale bat ematen du, berarekin batera jotzeko</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1067"/>
         <source>Shows MIDI activity in and out of Rosegarden</source>
-        <translation type="unfinished">Rosegardenen kanpoko eta barruko MIDI aktibitatea erakusten du</translation>
+        <translation type="obsolete">Rosegardenen kanpoko eta barruko MIDI aktibitatea erakusten du</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1069"/>
         <source>IN</source>
-        <translation type="unfinished">IN</translation>
+        <translation type="obsolete">IN</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1070"/>
         <source>OUT</source>
-        <translation type="unfinished">OUT</translation>
+        <translation type="obsolete">OUT</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1071"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1072"/>
         <source>NO EVENTS</source>
-        <translation type="unfinished">GERTAERARIK GABE</translation>
+        <translation type="obsolete">GERTAERARIK GABE</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1074"/>
         <source>Record</source>
-        <translation type="unfinished">Grabaketa</translation>
+        <translation type="obsolete">Grabaketa</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1077"/>
         <source>Record either MIDI or audio</source>
-        <translation type="unfinished">Bai MIDI eta baita audioa ere grabatu</translation>
+        <translation type="obsolete">Bai MIDI eta baita audioa ere grabatu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1081"/>
         <source>Loop</source>
-        <translation type="unfinished">Errepikatu</translation>
+        <translation type="obsolete">Errepikatu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1084"/>
         <source>Turn on and off the loop markers (if set)</source>
-        <translation type="unfinished">Errepikapen markatzaileak aktibatu eta desaktibatu egiten ditu (baldin badaude)</translation>
+        <translation type="obsolete">Errepikapen markatzaileak aktibatu eta desaktibatu egiten ditu (baldin badaude)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1088"/>
         <source>Solo</source>
-        <translation type="unfinished">Solo</translation>
+        <translation type="obsolete">Solo</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1091"/>
         <source>Mutes all but the currently selected track</source>
-        <translation type="unfinished">Hautatutakoa izan ezik, gainerako pistak mututzen ditu</translation>
+        <translation type="obsolete">Hautatutakoa izan ezik, gainerako pistak mututzen ditu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1095"/>
         <source>Start loop or range here</source>
-        <translation type="unfinished">Buklea edo esparrua hemen hasi</translation>
+        <translation type="obsolete">Buklea edo esparrua hemen hasi</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1099"/>
         <source>End loop or range here</source>
-        <translation type="unfinished">Buklea edo esparrua hemen bukatu</translation>
+        <translation type="obsolete">Buklea edo esparrua hemen bukatu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1102"/>
         <source>SIG</source>
-        <translation type="unfinished">SIG</translation>
+        <translation type="obsolete">SIG</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1103"/>
         <source>DIV</source>
-        <translation type="unfinished">DIV</translation>
+        <translation type="obsolete">DIV</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1104"/>
         <source>/16</source>
-        <translation type="unfinished">/16</translation>
+        <translation type="obsolete">/16</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1105"/>
         <source>TEMPO</source>
-        <translation type="unfinished">TENPOA</translation>
+        <translation type="obsolete">TENPOA</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1106"/>
         <source>END</source>
-        <translation type="unfinished">BUKAERA</translation>
+        <translation type="obsolete">BUKAERA</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1107"/>
         <source>BAR</source>
-        <translation type="unfinished">KONPASA</translation>
+        <translation type="obsolete">KONPASA</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1109"/>
         <source>Switch between real time, musical time, and frame count</source>
-        <translation type="unfinished">Denbora errealaren, denbora musikalaren eta koadroen kontaketaren artean aldatu.</translation>
+        <translation type="obsolete">Denbora errealaren, denbora musikalaren eta koadroen kontaketaren artean aldatu.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1113"/>
         <source>Show additional controls</source>
-        <translation type="unfinished">Kontrol gehigarriak erakutsi.</translation>
+        <translation type="obsolete">Kontrol gehigarriak erakutsi.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1117"/>
         <source>Rewind</source>
-        <translation type="unfinished">Birbobinatu</translation>
+        <translation type="obsolete">Birbobinatu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1120"/>
         <source>Moves the current pointer position back one bar.</source>
-        <translation type="unfinished">Punteroaren oraingo posizioa konpas bat atzera mugitzen du</translation>
+        <translation type="obsolete">Punteroaren oraingo posizioa konpas bat atzera mugitzen du</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1124"/>
         <source>Rewind to beginning</source>
-        <translation type="unfinished">Hasierara birbobinatu</translation>
+        <translation type="obsolete">Hasierara birbobinatu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1127"/>
         <source>Moves the pointer position to the start of the composition. (This may mean going forwards if the pointer is currently before the start.)</source>
-        <translation type="unfinished">Kurtsorearen posizioa konposizoaren hasieraramugitzen du. (Hau izan daiteke aurrera joatea punteroa hasiera baino lehenago baldin badago)</translation>
+        <translation type="obsolete">Kurtsorearen posizioa konposizoaren hasieraramugitzen du. (Hau izan daiteke aurrera joatea punteroa hasiera baino lehenago baldin badago)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1131"/>
         <source>Play/Pause</source>
-        <translation type="unfinished">Jo/Pausa</translation>
+        <translation type="obsolete">Jo/Pausa</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1134"/>
         <source>Plays from the current pointer position, or pauses playback if already in progress.</source>
-        <translation type="unfinished">Punteroaren oraingo posiziotik jotzen du, edo jotzen badabil erreprodukzioa gelditzen du.</translation>
+        <translation type="obsolete">Punteroaren oraingo posiziotik jotzen du, edo jotzen badabil erreprodukzioa gelditzen du.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1138"/>
-        <source>Stop</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1141"/>
         <source>Stops playback or recording.</source>
-        <translation type="unfinished">Grabaketa edo erreprodukzioa gelditu.</translation>
+        <translation type="obsolete">Grabaketa edo erreprodukzioa gelditu.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1145"/>
         <source>Fast forward</source>
-        <translation type="unfinished">Aurreratze arina</translation>
+        <translation type="obsolete">Aurreratze arina</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1148"/>
         <source>Moves the current pointer position forwards one bar.</source>
-        <translation type="unfinished">Kurtsorearen oraingo posizioa konpas bat aurrera mugitzen du.</translation>
+        <translation type="obsolete">Kurtsorearen oraingo posizioa konpas bat aurrera mugitzen du.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1152"/>
         <source>Fast forward to end</source>
-        <translation type="unfinished">Aurreratze arina bukaerarantz</translation>
+        <translation type="obsolete">Aurreratze arina bukaerarantz</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1155"/>
         <source>Moves the pointer position to the end of the composition.  (This may mean going backwards if the pointer is already beyond the end.)</source>
-        <translation type="unfinished">Kurtsorearen posizioa konposizoaren bukaerara mugitzen du. (Hau izan daiteke birbobinatzea punteroa bukaeraz haraindi baldin badago)</translation>
+        <translation type="obsolete">Kurtsorearen posizioa konposizoaren bukaerara mugitzen du. (Hau izan daiteke birbobinatzea punteroa bukaeraz haraindi baldin badago)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1159"/>
         <source>Display time to end</source>
-        <translation type="unfinished">Falta den denbora erakusten du</translation>
+        <translation type="obsolete">Falta den denbora erakusten du</translation>
     </message>
 </context>
 </TS>

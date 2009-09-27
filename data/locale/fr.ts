@@ -4,168 +4,114 @@
 <context>
     <name>DeviceManagerDialogUi</name>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="472"/>
         <source>Manage MIDI Devices</source>
-        <translation>Gestion des périphériques MIDI</translation>
+        <translation type="obsolete">Gestion des périphériques MIDI</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="473"/>
         <source>MIDI Playback</source>
-        <translation>Execution MIDI</translation>
+        <translation type="obsolete">Execution MIDI</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="475"/>
-        <source>Sends its data through</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="476"/>
         <source>Rosegarden playback device</source>
-        <translation>Périphérique d&apos;exécution Rosegarden</translation>
+        <translation type="obsolete">Périphérique d&apos;exécution Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="481"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="513"/>
         <source>Internal Synth</source>
-        <translation>Synthétiseur interne</translation>
+        <translation type="obsolete">Synthétiseur interne</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="482"/>
         <source>Default playback device</source>
-        <translation>Périphérique d&apos;exécution par défaut</translation>
+        <translation type="obsolete">Périphérique d&apos;exécution par défaut</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="486"/>
-        <source>&lt;qt&gt;&lt;p&gt;Create new playback devices here. Click the device name to change it. Select a device here and connect it to an ALSA MIDI output port by clicking on a port to the right.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="489"/>
         <source>&lt;qt&gt;&lt;p&gt;Bank definitions allow you to tell Rosegarden about the programs or patches available for use on the equipment (hardware or software synth) connected to this device.&lt;/p&gt;&lt;p&gt;You must have something defined for any program or bank changes you wish to transmit, as Rosegarden hides all bank and program numbers that are undefined.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;La gestion des banques permet de spécifier les programmes ou timbres disponibles sur l&apos;équipement (synthétiseur matériel ou logiciel) connecté à ce périphérique.&lt;/p&gt;&lt;p&gt;Il est nécessaire d&apos;avoir défini quelque chose pour tout changement de programme ou de banque que vous désirez transmettre, car Rosegarden cache les numéros des banques et des programmes non définis.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;La gestion des banques permet de spécifier les programmes ou timbres disponibles sur l&apos;équipement (synthétiseur matériel ou logiciel) connecté à ce périphérique.&lt;/p&gt;&lt;p&gt;Il est nécessaire d&apos;avoir défini quelque chose pour tout changement de programme ou de banque que vous désirez transmettre, car Rosegarden cache les numéros des banques et des programmes non définis.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="491"/>
         <source>Banks...</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
-        <translation>Banques...</translation>
+        <translation type="obsolete">Banques...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="493"/>
         <source>&lt;qt&gt;&lt;p&gt;Edit the controllers associated with this device.&lt;/p&gt;&lt;p&gt;You must define controllers here in order to use them anywhere in Rosegarden, such as on control rulers or in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box,  You can change which controllers are displayed in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box, and rearrange their layout&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Edition des contrôleurs associés à ce périphérique.&lt;/p&gt;&lt;p&gt;Il est nécessaire de définir les contrôleurs ici pour pouvoir les utiliser ensuite dans Rosegarden, par exemple sur une règlette de contrôle ou dans la boîte des &lt;b&gt;Paramètres d&apos;Instruments&lt;/b&gt;,  Vous pouvez définir quels contrôleurs sont affichés dans la boîte des &lt;b&gt;Paramètres d&apos;Instruments&lt;/b&gt; et leurs positions dans cette boîte&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Edition des contrôleurs associés à ce périphérique.&lt;/p&gt;&lt;p&gt;Il est nécessaire de définir les contrôleurs ici pour pouvoir les utiliser ensuite dans Rosegarden, par exemple sur une règlette de contrôle ou dans la boîte des &lt;b&gt;Paramètres d&apos;Instruments&lt;/b&gt;,  Vous pouvez définir quels contrôleurs sont affichés dans la boîte des &lt;b&gt;Paramètres d&apos;Instruments&lt;/b&gt; et leurs positions dans cette boîte&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="495"/>
         <source>Controllers...</source>
-        <translation>Contrôleurs...</translation>
+        <translation type="obsolete">Contrôleurs...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="497"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new playback device&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Créer un nouveau périphérique d&apos;exécution&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Créer un nouveau périphérique d&apos;exécution&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="499"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="527"/>
         <source>New</source>
-        <translation>Nouveau</translation>
+        <translation type="obsolete">Nouveau</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="501"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected playback device.  Any tracks using this device will need to be reassigned, and any program or bank changes on those tracks will be lost permanently&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Supprimer le périphérique sélectionné.  Toutes les pistes connectées à ce périphérique devront être réassignées et tout changement de programme ou de banque placé sur l&apos;une de ces pistes sera définitivement perdu.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Supprimer le périphérique sélectionné.  Toutes les pistes connectées à ce périphérique devront être réassignées et tout changement de programme ou de banque placé sur l&apos;une de ces pistes sera définitivement perdu.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="503"/>
         <source>Delete</source>
-        <translation>Supprimer</translation>
+        <translation type="obsolete">Supprimer</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="504"/>
         <source>MIDI outputs</source>
-        <translation>Sorties MIDI</translation>
+        <translation type="obsolete">Sorties MIDI</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="506"/>
         <source>Available outputs</source>
-        <translation>Sorties disponibles</translation>
+        <translation type="obsolete">Sorties disponibles</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="511"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="539"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="553"/>
-        <source>No port</source>
-        <translatorcomment>A good translation for &quot;port&quot; is still to be found.</translatorcomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="517"/>
         <source>&lt;qt&gt;&lt;p&gt;Available ALSA MIDI outputs for any hardware detected and supported by your distribution, and any available soft synths such as QSynth, ZynAddSubFX, etc.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Sorties MIDI ALSA disponibles sur les matériels détectés et supportés par la distribution utilisée et sur tous les synthétiseurs logiciels disponibles comme QSynth, ZynAddSubFX, etc.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Sorties MIDI ALSA disponibles sur les matériels détectés et supportés par la distribution utilisée et sur tous les synthétiseurs logiciels disponibles comme QSynth, ZynAddSubFX, etc.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="520"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="560"/>
         <source>&lt;qt&gt;&lt;p&gt;Click to refresh the port list after connecting a new piece of equipment or starting a new soft synth&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Cliquer pour rafraîchir la liste des ports après avoir connecté un nouveau matériel ou démarré un nouveau synthétiseur logiciel&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Cliquer pour rafraîchir la liste des ports après avoir connecté un nouveau matériel ou démarré un nouveau synthétiseur logiciel&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="522"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="562"/>
         <source>Refresh</source>
-        <translation>Rafraîchir</translation>
+        <translation type="obsolete">Rafraîchir</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="523"/>
         <source>MIDI Recording</source>
-        <translation>Enregistrement MIDI</translation>
+        <translation type="obsolete">Enregistrement MIDI</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="525"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new recording device&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Créer un nouveau périphérique d&apos;enregistrement&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Créer un nouveau périphérique d&apos;enregistrement&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="529"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected recording device&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Supprimer le périphérique d&apos;enregistrement sélectionné&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Supprimer le périphérique d&apos;enregistrement sélectionné&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="531"/>
         <source>Delete</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
-        <translation>Supprimer</translation>
+        <translation type="obsolete">Supprimer</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="533"/>
         <source>Receives its data from</source>
-        <translation>Réception des données depuis</translation>
+        <translation type="obsolete">Réception des données depuis</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="534"/>
         <source>Rosegarden recording device</source>
-        <translation>Périphérique d&apos;enregistrement de Rosegarden</translation>
+        <translation type="obsolete">Périphérique d&apos;enregistrement de Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="540"/>
         <source>Default record device</source>
-        <translation>Périphérique d&apos;enregistrement par défaut</translation>
+        <translation type="obsolete">Périphérique d&apos;enregistrement par défaut</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="546"/>
         <source>MIDI inputs</source>
-        <translation>Entrées MIDI</translation>
+        <translation type="obsolete">Entrées MIDI</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="548"/>
         <source>Available inputs</source>
-        <translation>Entrées disponibles</translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="557"/>
-        <source>&lt;qt&gt;&lt;p&gt;Available ALSA MIDI inputs for any hardware MIDI inputs detected by your distribution&apos;s hardware autodetection, plus any ALSA MIDI software that exposes output ports, such as VMPK&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Entrées disponibles</translation>
     </message>
 </context>
 <context>
@@ -10794,22 +10740,22 @@ Souhaitez vous les enregistrer avant de quitter l&apos;éditeur de banques?</tra
 <context>
     <name>Rosegarden::ControllerEventsRuler</name>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="283"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="276"/>
         <source>Unsupported Event Type</source>
         <translation>Type d&apos;événement non supporté</translation>
     </message>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="293"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="286"/>
         <source>Pitch Bend</source>
         <translation type="unfinished">Modifier la hauteur</translation>
     </message>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="298"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="291"/>
         <source>Controller Events</source>
         <translation>Événements contrôleurs</translation>
     </message>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="413"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="406"/>
         <source>Controller Event Number</source>
         <translation>Numéro de l&apos;événement contrôleur</translation>
     </message>
@@ -15339,17 +15285,17 @@ d&apos;autres puissent aussi en bénéficier.</translation>
 <context>
     <name>Rosegarden::NewNotationView</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="730"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="739"/>
         <source>Note &amp;Font</source>
         <translation>&amp;Police des Notes</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="754"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="767"/>
         <source>Si&amp;ze</source>
         <translation>&amp;Taille</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="770"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="779"/>
         <source>%n pixel(s)</source>
         <translation>
             <numerusform>%n pixel</numerusform>
@@ -15357,80 +15303,96 @@ d&apos;autres puissent aussi en bénéficier.</translation>
         </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="897"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="787"/>
+        <source>S&amp;pacing</source>
+        <translation type="unfinished">Es&amp;pacement</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="877"/>
         <source>  Font:  </source>
         <translation type="unfinished">  Police:  </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="943"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="912"/>
+        <source>Unknown font &quot;%1&quot;, using default</source>
+        <translation type="unfinished">Police inconnue &quot;%1&quot;, utilisation de la police par défaut</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="920"/>
         <source>  Size:  </source>
         <translation type="unfinished">  Taille:  </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="971"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="944"/>
         <source>  Spacing:  </source>
         <translation type="unfinished">  Espacement:  </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1061"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1026"/>
         <source>LilyPond Preview Options</source>
         <translation>Options de Prévisualisation Lilypond</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1062"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1027"/>
         <source>LilyPond preview options</source>
         <translation>Options de prévisualisation Lilypond</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1073"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1038"/>
         <source>Export failed.  The file could not be opened for writing.</source>
         <translation>Échec d&apos;exportation.  Le fichier n&apos;a pas put être ouvert en écriture.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1082"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1048"/>
         <source>Printing with LilyPond...</source>
         <translation>Impression avec LilyPond...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1099"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1066"/>
         <source>Previewing with LilyPond...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1127"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1094"/>
         <source>&lt;qt&gt;&lt;p&gt;Failed to open a temporary file for LilyPond export.&lt;/p&gt;&lt;p&gt;This probably means you have run out of disk space on &lt;pre&gt;%1&lt;/pre&gt;&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1177"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1144"/>
         <source>Unknown font action %1</source>
         <translation type="unfinished">Action de police inconnue %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1197"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1164"/>
         <source>Unknown font size action %1</source>
         <translation type="unfinished">Action de taille de police inconnue %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1269"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1183"/>
+        <source>Unknown spacing action %1</source>
+        <translation type="unfinished">Action d&apos;espacement inconnue %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1255"/>
         <source>Can&apos;t paste multiple Segments into one</source>
         <translation>Ne peut pas coller plusieurs segments dans un seul</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1073"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1126"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1177"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1197"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1304"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1373"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2064"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2640"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1038"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1093"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1144"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1164"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1183"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1290"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1359"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2052"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2629"/>
         <source>Rosegarden</source>
         <translation type="unfinished">Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1306"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1375"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1292"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1361"/>
         <source>Couldn&apos;t paste at this point.</source>
         <translation>Ne peut pas coller ici.</translation>
     </message>
@@ -15443,110 +15405,110 @@ L&apos;espace disponible est insuffisant.
 Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélectionner un autre mode de collage en utilisant les options &quot;Coller...&quot; du menu &quot;dÉition&quot;.  Vous pouvez également, si vous le désirez, remplacer le mode de collage par défaut par autre chose que &quot;dans un silence existant&quot; [restricted].</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1307"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1376"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1293"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1362"/>
         <source>&lt;qt&gt;&lt;p&gt;The Restricted paste type requires enough empty space (containing only rests) at the paste position to hold all of the events to be pasted.&lt;/p&gt;&lt;p&gt;Not enough space was found.&lt;/p&gt;&lt;p&gt;If you want to paste anyway, consider using one of the other paste types from the &lt;b&gt;Paste...&lt;/b&gt; option on the Edit menu.  You can also change the default paste type to something other than Restricted if you wish.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1328"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1314"/>
         <source>Clipboard is empty</source>
         <translation>Le presse-papiers est vide</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1332"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1318"/>
         <source>Inserting clipboard contents...</source>
         <translation>Insertion du contenu du presse-papiers...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1496"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1483"/>
         <source>Raising velocities...</source>
         <translation>Augmentation de la vélocité...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1507"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1494"/>
         <source>Lowering velocities...</source>
         <translation>Diminution de la vélocité...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1544"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1531"/>
         <source>Set Event Velocities</source>
         <translation>Définir une variation de vélocité</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1549"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1536"/>
         <source>Setting Velocities...</source>
         <translation>Réglages Vélocités...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2064"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2052"/>
         <source>Unknown note insert action %1</source>
         <translation type="unfinished">Action d&apos;insertion de note %1 inconnue</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2068"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2056"/>
         <source>Inserting note</source>
         <translation type="unfinished">Insérer Note</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2441"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2430"/>
         <source>Ornament track %1 bar %2</source>
         <translation>Ornement piste %1 mesure %2</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2443"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2432"/>
         <source>Ornament bar %1</source>
         <translation>Ornement mesure %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2453"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2442"/>
         <source>Make Ornament</source>
         <translation>Réaliser un ornement</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2498"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2487"/>
         <source>Use Ornament</source>
         <translation>Utiliser un ornement</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2509"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2498"/>
         <source>Remove Ornaments</source>
         <translation>Enlever les ornements</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2567"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2556"/>
         <source>Estimated key signature shown</source>
         <translation>Montre l&apos;armature estimée</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2624"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2613"/>
         <source>Sustain</source>
         <translation>Sustain</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2640"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2629"/>
         <source>There is no sustain controller defined for this device.
 Please ensure the device is configured correctly in the Manage MIDI Devices dialog in the main window.</source>
         <translation>Il n&apos;y a pas de contrôleur de maintien (sustain) défini pour ce périphérique.
 Veuillez vérifier que le périphérique est configuré correctement dans le dialogue &quot;Gestion des périphériques MIDI&quot; de la fenêtre principale.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2813"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2802"/>
         <source>Estimated time signature shown</source>
         <translation type="unfinished">Afficher le chiffrage de la mesure estimé</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2873"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2862"/>
         <source>%1%2 - Segment Track #%3 - Notation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2880"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2869"/>
         <source>%1%2 - All Segments - Notation</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2886"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2875"/>
         <source>%1%2 - %n Segment(s) - Notation</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -15554,12 +15516,12 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
         </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3330"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3325"/>
         <source>Can&apos;t insert note: No note duration selected</source>
         <translation type="unfinished">Impossible d&apos;insérer la note: Pas de durée de note sélectionnée</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3494"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3489"/>
         <source>Time: %1 (%2.%3s)</source>
         <translation type="unfinished">Temps: %1 (%2.%3s)</translation>
     </message>
@@ -15579,27 +15541,27 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
         </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2979"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2968"/>
         <source>Triplet</source>
         <translation type="unfinished">Triolet</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2980"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2969"/>
         <source>Chord</source>
         <translation type="unfinished">Accord</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2981"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2970"/>
         <source>Grace</source>
         <translation type="unfinished">Ornement</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3137"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3126"/>
         <source>Transpose</source>
         <translation type="unfinished">Transposer</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3138"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3127"/>
         <source>By number of semitones: </source>
         <translation type="unfinished">Par nombre de demi-tons :</translation>
     </message>
@@ -15647,260 +15609,255 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="109"/>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="134"/>
         <source>%1 % (normal)</source>
         <translation>%1 % (normale)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="121"/>
         <source>Default duration factor</source>
-        <translation>Facteur de durée par défaut</translation>
+        <translation type="obsolete">Facteur de durée par défaut</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="136"/>
         <source>None</source>
-        <translation>Aucun</translation>
+        <translation type="obsolete">Aucun</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="138"/>
         <source>Full</source>
-        <translation>Plein</translation>
+        <translation type="obsolete">Plein</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="149"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="121"/>
         <source>Show track headers (linear layout only)</source>
         <translation>Afficher les en-têtes des pistes (mise en page linéaire uniquement)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="156"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="128"/>
         <source>Never</source>
         <translation>Jamais</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="157"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="129"/>
         <source>When needed</source>
         <translation>Si nécessaire</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="158"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="130"/>
         <source>Always</source>
         <translation>Toujours</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="165"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="137"/>
         <source>&quot;Always&quot; and &quot;Never&quot; mean what they usually mean
 &quot;When needed&quot; means &quot;when staves are too many to all fit in the current window&quot;</source>
         <translation>&quot;Toujours&quot; et &quot;Jamais&quot; ont leur signification habituelle
 &quot;Si nécessaire&quot;  signifie &quot;Si les portées sont trop nombreuses pour tenir toutes dans la fenêtre courante&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="178"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="150"/>
         <source>Show non-notation events as question marks</source>
         <translation>Afficher sous forme de points d&apos;interrogation les événements non représentables sur une partition</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="189"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="161"/>
         <source>Show notation-quantized notes in a different color</source>
         <translation>Afficher les notes quantifiées dans une couleur différente</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="200"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="172"/>
         <source>Show &quot;invisible&quot; events in grey</source>
         <translation>Afficher en gris les événements &quot;invisibles&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="211"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="183"/>
         <source>Show notes outside suggested playable range in red</source>
         <translation>Afficher en rouge les notes qui sortent de l&apos;étendue proposée comme &quot;jouable&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="222"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="194"/>
         <source>Highlight superimposed notes with a halo effect</source>
         <translation>Entourer d&apos;un halo les notes surimposées</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="236"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="208"/>
         <source>When recording MIDI, split-and-tie long notes at barlines</source>
         <translation>Pendant les enregistrements MIDI, couper-et-lier les notes longues aux barres de mesure</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="248"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="220"/>
         <source>Layout</source>
         <translation>Mise en page</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="261"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="233"/>
         <source>Default note style for new notes</source>
         <translation>Style par défaut pour les nouvelles notes</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="293"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="265"/>
         <source>When inserting notes...</source>
         <translation>Quand on insère des notes...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="301"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="273"/>
         <source>Split notes into ties to make durations match</source>
         <translation>Séparer les notes et les lier pour les rendre compatibles avec la mesure</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="302"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="274"/>
         <source>Ignore existing durations</source>
         <translation>Ignorer les durées existantes</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="312"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="284"/>
         <source>Auto-beam on insert when appropriate</source>
         <translation>Ligaturer automatiquement les croches à leur insertion</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="325"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="297"/>
         <source>Collapse rests after erase</source>
         <translation>Fusionner les silences après effacement</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="337"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="309"/>
         <source>Default paste type</source>
         <translation>Type de collage par défaut</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="361"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="333"/>
         <source>Editing</source>
         <translation>Édition</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="373"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="345"/>
         <source>Accidentals in one octave...</source>
         <translation>Altérations dans une octave...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="376"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="348"/>
         <source>Affect only that octave</source>
         <translation>Affecter uniquement cette octave</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="377"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="349"/>
         <source>Require cautionaries in other octaves</source>
         <translation>Imposer les altérations prudentes dans les autres octaves</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="378"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="350"/>
         <source>Affect all subsequent octaves</source>
         <translation>Affecter toutes les octaves suivantes</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="386"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="358"/>
         <source>Accidentals in one bar...</source>
         <translation>Altérations dans une mesure...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="389"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="361"/>
         <source>Affect only that bar</source>
         <translation>Affecter seulement cette mesure</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="390"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="362"/>
         <source>Require cautionary resets in following bar</source>
         <translation>Imposer des altérations prudentes dans les mesures suivantes</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="391"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="363"/>
         <source>Require explicit resets in following bar</source>
         <translation>Imposer une remise à zéro explicite dans la mesure suivante</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="399"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="371"/>
         <source>Key signature cancellation style</source>
         <translation>Style d&apos;annulation d&apos;une armature</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="402"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="374"/>
         <source>Cancel only when entering C major or A minor</source>
         <translation>Annuler en cas de passage en do majeur ou la mineur</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="403"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="375"/>
         <source>Cancel whenever removing sharps or flats</source>
         <translation>Annuler en cas de suppression de dièses ou de bémols</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="404"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="376"/>
         <source>Cancel always</source>
         <translation>Toujours annuler explicitement</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="415"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="387"/>
         <source>Accidentals</source>
         <translation>Altérations</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="458"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="430"/>
         <source>Notation font</source>
         <translation>Police de Partition</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="464"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="436"/>
         <source>View</source>
         <translation>Montrer</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="485"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="457"/>
         <source>Origin:</source>
         <translation>Origine:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="489"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="461"/>
         <source>Copyright:</source>
         <translation>Copyright:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="493"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="465"/>
         <source>Mapped by:</source>
         <translatorcomment>&quot;Mappé&quot; : traduction à revoir</translatorcomment>
         <translation>Mappé par:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="497"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="469"/>
         <source>Type:</source>
         <translation>Type :</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="529"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="497"/>
         <source>Font size for single-staff views</source>
         <translation>Taille de la police pour une portée isolée</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="538"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="506"/>
         <source>Font size for multi-staff views</source>
         <translation>Taille de la police pour des portées multiples</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="547"/>
         <source>Font size for printing (pt)</source>
-        <translation>Taille de police pour l&apos;impression (en pt)</translation>
+        <translation type="obsolete">Taille de police pour l&apos;impression (en pt)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="565"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="535"/>
         <source>Text font</source>
         <translation>Police de texte</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="576"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="547"/>
         <source>Sans-serif font</source>
         <translation>Police sans serif</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="602"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="574"/>
         <source>Font</source>
         <translation>Police</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="700"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="668"/>
         <source>%1 (smooth)</source>
         <translation>%1 (arrondies)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="702"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="670"/>
         <source>%1 (jaggy)</source>
         <translation>%1 (anguleuses)</translation>
     </message>
@@ -15923,7 +15880,7 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
         <translation>Positionnement de la portée %1...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="1201"/>
+        <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="1203"/>
         <source>Sustain</source>
         <translatorcomment>&quot;Sustain&quot; n&apos;est pas du français. &quot;Maintien&quot; : ???</translatorcomment>
         <translation>Maintien (sustain)</translation>
@@ -19855,72 +19812,72 @@ Si d&apos;autres applications sont actuellement en fonctionnement, les arrêter 
         <translation type="unfinished">...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="452"/>
+        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="455"/>
         <source>C</source>
         <translation type="unfinished">Do</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="453"/>
+        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="456"/>
         <source>C#</source>
         <translation type="unfinished">Do#</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="454"/>
+        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="457"/>
         <source>D</source>
         <translation type="unfinished">Ré</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="455"/>
+        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="458"/>
         <source>Eb</source>
         <translation type="unfinished">Mib</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="456"/>
+        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="459"/>
         <source>E</source>
         <translation type="unfinished">Mi</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="457"/>
+        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="460"/>
         <source>F</source>
         <translation type="unfinished">Fa</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="458"/>
+        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="461"/>
         <source>F#</source>
         <translation type="unfinished">Fa#</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="459"/>
+        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="462"/>
         <source>G</source>
         <translation type="unfinished">Sol</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="460"/>
+        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="463"/>
         <source>G#</source>
         <translation type="unfinished">Sol#</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="461"/>
+        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="464"/>
         <source>A</source>
         <translation type="unfinished">La</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="462"/>
+        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="465"/>
         <source>Bb</source>
         <translation type="unfinished">Sib</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="463"/>
+        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="466"/>
         <source>B</source>
         <translation type="unfinished">Si</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="574"/>
+        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="577"/>
         <source>%1: %2</source>
         <translation type="unfinished">%1: %2</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="577"/>
+        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="580"/>
         <source> in %1</source>
         <translation type="unfinished"> en %1</translation>
     </message>
@@ -21784,200 +21741,160 @@ Souhaitez vous le faire tout de suite ?</translation>
 <context>
     <name>RosegardenTransport</name>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1047"/>
         <source>Rosegarden Transport</source>
-        <translation type="unfinished">Transport</translation>
+        <translation type="obsolete">Transport</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1049"/>
         <source>Hide additional controls</source>
-        <translation type="unfinished">Cacher Autres Contrôles</translation>
+        <translation type="obsolete">Cacher Autres Contrôles</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1053"/>
         <source>Panic Button</source>
-        <translation type="unfinished">Panique</translation>
+        <translation type="obsolete">Panique</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1056"/>
         <source>Resets all MIDI devices if you&apos;ve got stuck notes</source>
-        <translation type="unfinished">Mise à zèro de tous les périphériques. MIDI si vous avez des notes bloquées</translation>
+        <translation type="obsolete">Mise à zèro de tous les périphériques. MIDI si vous avez des notes bloquées</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1060"/>
         <source>Metronome</source>
-        <translation type="unfinished">Métronome</translation>
+        <translation type="obsolete">Métronome</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1063"/>
         <source>Provides a metronome click for you to play along with</source>
-        <translation type="unfinished">Vous fournit un clic de métronome</translation>
+        <translation type="obsolete">Vous fournit un clic de métronome</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1067"/>
         <source>Shows MIDI activity in and out of Rosegarden</source>
-        <translation type="unfinished">Affiche l&apos;activité MIDI, au sein de Rosegarden, ou en dehors</translation>
+        <translation type="obsolete">Affiche l&apos;activité MIDI, au sein de Rosegarden, ou en dehors</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1069"/>
         <source>IN</source>
-        <translation type="unfinished">IN</translation>
+        <translation type="obsolete">IN</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1070"/>
         <source>OUT</source>
-        <translation type="unfinished">OUT</translation>
+        <translation type="obsolete">OUT</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1071"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1072"/>
         <source>NO EVENTS</source>
-        <translation type="unfinished">PAS D&apos;ÉVÉNEMENT</translation>
+        <translation type="obsolete">PAS D&apos;ÉVÉNEMENT</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1074"/>
         <source>Record</source>
-        <translation type="unfinished">Enregistrer</translation>
+        <translation type="obsolete">Enregistrer</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1077"/>
         <source>Record either MIDI or audio</source>
-        <translation type="unfinished">Enregistrer audio ou MIDI</translation>
+        <translation type="obsolete">Enregistrer audio ou MIDI</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1081"/>
         <source>Loop</source>
-        <translation type="unfinished">Boucle</translation>
+        <translation type="obsolete">Boucle</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1084"/>
         <source>Turn on and off the loop markers (if set)</source>
-        <translation type="unfinished">Activer ou non les marqueurs de boucle (si existants)</translation>
+        <translation type="obsolete">Activer ou non les marqueurs de boucle (si existants)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1088"/>
         <source>Solo</source>
-        <translation type="unfinished">Solo</translation>
+        <translation type="obsolete">Solo</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1091"/>
         <source>Mutes all but the currently selected track</source>
-        <translation type="unfinished">Assourdir les autres pistes</translation>
+        <translation type="obsolete">Assourdir les autres pistes</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1095"/>
         <source>Start loop or range here</source>
-        <translation type="unfinished">Commencer ici la plage ou la boucle</translation>
+        <translation type="obsolete">Commencer ici la plage ou la boucle</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1099"/>
         <source>End loop or range here</source>
-        <translation type="unfinished">Terminer ici la plage ou la boucle</translation>
+        <translation type="obsolete">Terminer ici la plage ou la boucle</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1102"/>
         <source>SIG</source>
-        <translation type="unfinished">SIG</translation>
+        <translation type="obsolete">SIG</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1103"/>
         <source>DIV</source>
-        <translation type="unfinished">DIV</translation>
+        <translation type="obsolete">DIV</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1104"/>
         <source>/16</source>
-        <translation type="unfinished">/16</translation>
+        <translation type="obsolete">/16</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1105"/>
         <source>TEMPO</source>
-        <translation type="unfinished">TEMPO</translation>
+        <translation type="obsolete">TEMPO</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1106"/>
         <source>END</source>
-        <translation type="unfinished">FIN</translation>
+        <translation type="obsolete">FIN</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1107"/>
         <source>BAR</source>
-        <translation type="unfinished">MESURE</translation>
+        <translation type="obsolete">MESURE</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1109"/>
         <source>Switch between real time, musical time, and frame count</source>
-        <translation type="unfinished">Choisir entre temps réel, temps musical et compteur de trame</translation>
+        <translation type="obsolete">Choisir entre temps réel, temps musical et compteur de trame</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1113"/>
         <source>Show additional controls</source>
-        <translation type="unfinished">Afficher autres contrôles</translation>
+        <translation type="obsolete">Afficher autres contrôles</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1117"/>
         <source>Rewind</source>
-        <translation type="unfinished">Retour</translation>
+        <translation type="obsolete">Retour</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1120"/>
         <source>Moves the current pointer position back one bar.</source>
-        <translation type="unfinished">Déplace le pointeur d&apos;une mesure vers l&apos;arrière.</translation>
+        <translation type="obsolete">Déplace le pointeur d&apos;une mesure vers l&apos;arrière.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1124"/>
         <source>Rewind to beginning</source>
-        <translation type="unfinished">Revenir au Début</translation>
+        <translation type="obsolete">Revenir au Début</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1127"/>
         <source>Moves the pointer position to the start of the composition. (This may mean going forwards if the pointer is currently before the start.)</source>
-        <translation type="unfinished">Déplace le pointeur au début de la composition (cela peut le déplacer vers l&apos;avant si le pointeur est actuellement placé avant le début de la composition)</translation>
+        <translation type="obsolete">Déplace le pointeur au début de la composition (cela peut le déplacer vers l&apos;avant si le pointeur est actuellement placé avant le début de la composition)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1131"/>
         <source>Play/Pause</source>
-        <translation type="unfinished">Jouer/Pause</translation>
+        <translation type="obsolete">Jouer/Pause</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1134"/>
         <source>Plays from the current pointer position, or pauses playback if already in progress.</source>
-        <translation type="unfinished">Joue à partir de la position actuelle du pointeur, ou met en pause si le séquenceur est déjà en train de jouer.</translation>
+        <translation type="obsolete">Joue à partir de la position actuelle du pointeur, ou met en pause si le séquenceur est déjà en train de jouer.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1138"/>
         <source>Stop</source>
-        <translation type="unfinished">Arrêter</translation>
+        <translation type="obsolete">Arrêter</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1141"/>
         <source>Stops playback or recording.</source>
-        <translation type="unfinished">Arrêter l&apos;exécution ou l&apos;enregistrement.</translation>
+        <translation type="obsolete">Arrêter l&apos;exécution ou l&apos;enregistrement.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1145"/>
         <source>Fast forward</source>
-        <translation type="unfinished">Avance rapide</translation>
+        <translation type="obsolete">Avance rapide</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1148"/>
         <source>Moves the current pointer position forwards one bar.</source>
-        <translation type="unfinished">Avance le pointeur d&apos;une mesure.</translation>
+        <translation type="obsolete">Avance le pointeur d&apos;une mesure.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1152"/>
         <source>Fast forward to end</source>
-        <translation type="unfinished">Aller à la fin</translation>
+        <translation type="obsolete">Aller à la fin</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1155"/>
         <source>Moves the pointer position to the end of the composition.  (This may mean going backwards if the pointer is already beyond the end.)</source>
-        <translation type="unfinished">Déplace le pointeur à la fin de la composition (cela peut le déplacer vers l&apos;arrière si le pointeur est déjà au delà de la fin de la composition)</translation>
+        <translation type="obsolete">Déplace le pointeur à la fin de la composition (cela peut le déplacer vers l&apos;arrière si le pointeur est déjà au delà de la fin de la composition)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1159"/>
         <source>Display time to end</source>
-        <translation type="unfinished">Montrer le temps restant</translation>
+        <translation type="obsolete">Montrer le temps restant</translation>
     </message>
 </context>
 </TS>
