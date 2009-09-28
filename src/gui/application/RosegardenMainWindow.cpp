@@ -1280,13 +1280,13 @@ RosegardenMainWindow::createDocument(QString filePath, ImportType importType)
     if (!info.exists()) {
         // can happen with command-line arg, so...
 //        StartupLogo::hideIfStillThere();  //&&& TODO: use QSplashScreen instead
-        QMessageBox::warning(dynamic_cast<QWidget*>(this), filePath, tr("File \"%1\" does not exist"), QMessageBox::Ok, QMessageBox::Ok);
+        QMessageBox::warning(dynamic_cast<QWidget*>(this), filePath, tr("File \"%1\" does not exist").arg(filePath), QMessageBox::Ok, QMessageBox::Ok);
         return 0;
     }
     
     if (info.isDir()) {
 //        StartupLogo::hideIfStillThere();  //&&& TODO: use QSplashScreen instead
-        QMessageBox::warning(dynamic_cast<QWidget*>(this), filePath, tr("File \"%1\" is actually a directory"), QMessageBox::Ok, QMessageBox::Ok);
+        QMessageBox::warning(dynamic_cast<QWidget*>(this), filePath, tr("File \"%1\" is actually a directory").arg(filePath), QMessageBox::Ok, QMessageBox::Ok);
         return 0;
     }
 
@@ -1445,7 +1445,6 @@ RosegardenMainWindow::readOptions()
     opt = qStrToBool(settings.value("Expanded Transport", "true")) ;
 
 #ifdef SETTING_LOG_DEBUG
-
     _settingLog(QString("SETTING 3 : transport flap extended = %1").arg(opt));
 #endif
 
@@ -1457,7 +1456,6 @@ RosegardenMainWindow::readOptions()
     opt = qStrToBool(settings.value("Show Track labels", "true")) ;
 
 #ifdef SETTING_LOG_DEBUG
-
     _settingLog(QString("SETTING 3 : show track labels = %1").arg(opt));
 #endif
 
