@@ -1139,6 +1139,12 @@ NewNotationView::slotChangeFontFromAction()
     if (name.left(10) == "note_font_") {
         name = name.right(name.length() - 10);
         if (m_notationWidget) m_notationWidget->slotSetFontName(name);
+        for (int i = 0; i < m_availableFontNames.size(); ++i) {
+            if (m_availableFontNames[i] == name) {
+                m_fontCombo->setCurrentIndex(i);
+                break;
+            }
+        }
     } else {
         QMessageBox::warning
             (this, tr("Rosegarden"), tr("Unknown font action %1").arg(name));
@@ -1157,6 +1163,12 @@ NewNotationView::slotChangeFontSizeFromAction()
         int size = name.toInt(&ok);
         if (ok) {
             if (m_notationWidget) m_notationWidget->slotSetFontSize(size);
+            for (int i = 0; i < m_availableFontSizes.size(); ++i) {
+                if (m_availableFontSizes[i] == size) {
+                    m_fontSizeCombo->setCurrentIndex(i);
+                    break;
+                }
+            }
             return;
         } 
     }
@@ -1176,6 +1188,12 @@ NewNotationView::slotChangeSpacingFromAction()
         int spacing = name.toInt(&ok);
         if (ok) {
             if (m_notationWidget) m_notationWidget->getScene()->setHSpacing(spacing);
+            for (int i = 0; i < m_availableSpacings.size(); ++i) {
+                if (m_availableSpacings[i] == spacing) {
+                    m_spacingCombo->setCurrentIndex(i);
+                    break;
+                }
+            }
             return;
         } 
     }
