@@ -150,8 +150,8 @@ void CompositionModelImpl::makeNotationPreviewRects(RectRanges* npRects, QPoint 
 
     // move iterator forward
     //
-    rectlist::iterator npii = npi;
-    while (npi->x() < xLim && (++npii) != npEnd) npi = npii;
+    while (npi != npEnd && npi->x() < xLim)
+        ++npi;
 
     interval.range.second = npi;
     interval.basePoint.setX(0);
@@ -199,7 +199,7 @@ void CompositionModelImpl::makeNotationPreviewRectsMovingSegment(RectRanges* npR
 
     // move iterator forward
     //
-    while (npi->x() < xLim && npi != npEnd)
+    while (npi != npEnd && npi->x() < xLim)
         ++npi;
 
     interval.range.second = npi;
@@ -357,18 +357,18 @@ void CompositionModelImpl::updatePreviewCacheForNotationSegment(const Segment* s
         // 	}
 
         int x = int(nearbyint(m_grid.getRulerScale()->getXForTime(eventStart)));
-        int width = int(nearbyint(m_grid.getRulerScale()->getWidthForDuration(eventStart,
-                                  eventEnd - eventStart)));
+        int width = int(nearbyint(m_grid.getRulerScale()->getWidthForDuration
+                                  (eventStart,
+                                   eventEnd - eventStart)));
+
+        RG_DEBUG << "CompositionModelImpl::updatePreviewCacheForNotationSegment: x = " << x << ", width = " << width << " (time = " << eventStart << ", duration = " << eventEnd - eventStart << ")" << endl;
 
         if (x <= segStartX) {
             ++x;
-            if (width > 1)
-                --width;
+            if (width > 1) --width;
         }
-        if (width > 1)
-            --width;
-        if (width < 1)
-            ++width;
+        if (width > 1) --width;
+        if (width < 1) ++width;
 
         double y0 = 0;
         double y1 = m_grid.getYSnap();
@@ -381,19 +381,13 @@ void CompositionModelImpl::updatePreviewCacheForNotationSegment(const Segment* s
             if (width > 2) width = 2;
         }
 
-        if (y < y0)
-            y = y0;
-        if (y > y1 - height + 1)
-            y = y1 - height + 1;
+        if (y < y0) y = y0;
+        if (y > y1 - height + 1) y = y1 - height + 1;
 
         QRect r(x, (int)y, width, height);
 
-        //         RG_DEBUG << "CompositionModelImpl::updatePreviewCacheForNotationSegment() : npData = "
-        //                  << npData << ", preview rect = "
-        //                  << r << endl;
         npData->push_back(r);
     }
-
 }
 
 QColor CompositionModelImpl::computeSegmentPreviewColor(const Segment* segment)

@@ -801,8 +801,9 @@ void CompositionView::drawArea(QPainter *p, const QRect& clipRect)
     //
     // Fetch segment rectangles to draw
     //
-    const CompositionModel::rectcontainer& rects = getModel()->getRectanglesIn(clipRect,
-            notationPreviewData, audioPreviewData);
+    const CompositionModel::rectcontainer& rects =
+        getModel()->getRectanglesIn(clipRect,
+                                    notationPreviewData, audioPreviewData);
     CompositionModel::rectcontainer::const_iterator i = rects.begin();
     CompositionModel::rectcontainer::const_iterator end = rects.end();
 
@@ -844,15 +845,14 @@ void CompositionView::drawArea(QPainter *p, const QRect& clipRect)
             CompositionModel::RectRange interval = *npi;
             p->save();
             p->translate(interval.basePoint.x(), interval.basePoint.y());
-            //             RG_DEBUG << "CompositionView::drawArea : translating to x = " << interval.basePoint.x() << endl;
+            RG_DEBUG << "CompositionView::drawArea : translating to x = " << interval.basePoint.x() << endl;
             for (; interval.range.first != interval.range.second; ++interval.range.first) {
-
                 const PreviewRect& pr = *(interval.range.first);
                 QColor defaultCol = CompositionColourCache::getInstance()->SegmentInternalPreview;
                 QColor col = interval.color.isValid() ? interval.color : defaultCol;
                 p->setBrush(col);
                 p->setPen(col);
-                //                RG_DEBUG << "CompositionView::drawArea : drawing preview rect at x = " << pr.x() << endl;
+                RG_DEBUG << "CompositionView::drawArea : drawing preview rect at x = " << pr.x() << endl;
                 p->drawRect(pr);
             }
             p->restore();
