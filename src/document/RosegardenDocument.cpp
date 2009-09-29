@@ -1991,16 +1991,17 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
             int tracking = settings.value("recordtracking", 0).toUInt() ;
             settings.endGroup();
             if (tracking == 1) { // notation
-                for ( RecordingSegmentMap::const_iterator it = m_recordMIDISegments.begin();
-                        it != m_recordMIDISegments.end(); ++it) {
+                for (RecordingSegmentMap::const_iterator it = m_recordMIDISegments.begin();
+                     it != m_recordMIDISegments.end(); ++it) {
+
                     Segment *recordMIDISegment = it->second;
 
                     EventQuantizeCommand *command = new EventQuantizeCommand
-                                                    (*recordMIDISegment,
-                                                     updateFrom,
-                                                     recordMIDISegment->getEndTime(),
-                                                     "Notation Options",
-                                                     true);
+                        (*recordMIDISegment,
+                         updateFrom,
+                         recordMIDISegment->getEndTime(),
+                         "Notation Options",
+                         EventQuantizeCommand::QUANTIZE_NOTATION_ONLY);
                     // don't add to history
                     command->execute();
                 }
@@ -2283,7 +2284,7 @@ RosegardenDocument::stopRecordingMidi()
                              s->getStartTime(),
                              s->getEndTime(),
                              "Notation Options",
-                             true));
+                             EventQuantizeCommand::QUANTIZE_NOTATION_ONLY));
 
         command->addCommand(new NormalizeRestsCommand
                             (*s,

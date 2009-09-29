@@ -38,6 +38,12 @@ class EventQuantizeCommand : public QObject, public BasicCommand
     Q_OBJECT
 
 public:
+    enum QuantizeScope {
+        QUANTIZE_NORMAL,            /// Quantize the event's performed times
+        QUANTIZE_NOTATION_DEFAULT,  /// Notation only unless overridden by settings
+        QUANTIZE_NOTATION_ONLY      /// Notation only always
+    };
+
     /// Quantizer must be on heap (EventQuantizeCommand dtor will delete)
     EventQuantizeCommand(Segment &segment,
                          timeT startTime,
@@ -53,12 +59,12 @@ public:
                          timeT startTime,
                          timeT endTime,
                          QString settingsGroup,
-                         bool notationDefault);
+                         QuantizeScope scope);
     
     /// Constructs own quantizer based on QSettings data in given group
     EventQuantizeCommand(EventSelection &selection,
                          QString settingsGroup,
-                         bool notationDefault);
+                         QuantizeScope scope);
 
     ~EventQuantizeCommand();
     
@@ -78,7 +84,7 @@ private:
     int m_progressTotal;
 
     /// Sets to m_quantizer as well as returning value
-    Quantizer *makeQuantizer(QString, bool);
+    Quantizer *makeQuantizer(QString, QuantizeScope);
 };
 
 // Collapse equal-pitch notes into one event

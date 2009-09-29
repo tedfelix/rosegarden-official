@@ -2253,7 +2253,8 @@ RosegardenMainWindow::slotRepeatQuantizeSelection()
             i != selection.end(); ++i) {
         command->addCommand(new EventQuantizeCommand
                             (**i, (*i)->getStartTime(), (*i)->getEndTime(),
-                             "Quantize Dialog Grid", false)); // no tr (config group name)
+                             "Quantize Dialog Grid", // no tr (config group name)
+                             EventQuantizeCommand::QUANTIZE_NORMAL));
     }
 
     m_view->slotAddCommandToHistory(command);
@@ -3632,8 +3633,7 @@ RosegardenMainWindow::createDocumentFromMIDIFile(QString file)
                                200,
                                this);
 
-    CurrentProgressDialog::set
-        (&progressDlg);
+    CurrentProgressDialog::set(&progressDlg);
 
     connect(&midiFile, SIGNAL(setValue(int)),
             m_progressBar, SLOT(setValue(int)));
@@ -3671,13 +3671,13 @@ RosegardenMainWindow::createDocumentFromMIDIFile(QString file)
     Composition *comp = &newDoc->getComposition();
 
     for (Composition::iterator i = comp->begin();
-            i != comp->end(); ++i) {
+         i != comp->end(); ++i) {
 
         Segment &segment = **i;
         SegmentNotationHelper helper(segment);
         segment.insert(helper.guessClef(segment.begin(),
-                                        segment.getEndMarker()).getAsEvent
-                       (segment.getStartTime()));
+                                        segment.getEndMarker())
+                       .getAsEvent(segment.getStartTime()));
     }
 
     //was: progressDlg.progressBar()
@@ -3693,7 +3693,7 @@ RosegardenMainWindow::createDocumentFromMIDIFile(QString file)
         timeT firstKeyTime = segment.getEndMarkerTime();
 
         for (Segment::iterator si = segment.begin();
-                segment.isBeforeEndMarker(si); ++si) {
+             segment.isBeforeEndMarker(si); ++si) {
             if ((*si)->isa(Rosegarden::Key::EventType)) {
                 firstKeyTime = (*si)->getAbsoluteTime();
                 break;
@@ -3702,7 +3702,7 @@ RosegardenMainWindow::createDocumentFromMIDIFile(QString file)
 
         if (firstKeyTime > segment.getStartTime()) {
             CompositionTimeSliceAdapter adapter
-            (comp, timeT(0), firstKeyTime);
+                (comp, timeT(0), firstKeyTime);
             AnalysisHelper helper;
             segment.insert(helper.guessKey(adapter).getAsEvent
                            (segment.getStartTime()));
@@ -3715,8 +3715,7 @@ RosegardenMainWindow::createDocumentFromMIDIFile(QString file)
 
     MacroCommand *command = new MacroCommand(tr("Calculate Notation"));
 
-    for (Composition::iterator i = comp->begin();
-            i != comp->end(); ++i) {
+    for (Composition::iterator i = comp->begin(); i != comp->end(); ++i) {
 
         Segment &segment = **i;
         timeT startTime(segment.getStartTime());
@@ -3725,7 +3724,8 @@ RosegardenMainWindow::createDocumentFromMIDIFile(QString file)
 //        std::cerr << "segment: start time " << segment.getStartTime() << ", end time " << segment.getEndTime() << ", end marker time " << segment.getEndMarkerTime() << ", events " << segment.size() << std::endl;
 
         EventQuantizeCommand *subCommand = new EventQuantizeCommand
-                                           (segment, startTime, endTime, "Notation Options", true);
+            (segment, startTime, endTime, "Notation Options",
+             EventQuantizeCommand::QUANTIZE_NOTATION_ONLY);
 
         subCommand->setProgressTotal(progressPer + 1);
         QObject::connect(subCommand, SIGNAL(incrementProgress(int)),

@@ -43,54 +43,54 @@ namespace Rosegarden
 using namespace BaseProperties;
 
 EventQuantizeCommand::EventQuantizeCommand(Segment &segment,
-        timeT startTime,
-        timeT endTime,
-        Quantizer *quantizer):
-        BasicCommand(getGlobalName(quantizer), segment, startTime, endTime,
-                     true),  // bruteForceRedo
-        m_quantizer(quantizer),
-        m_selection(0)
+                                           timeT startTime,
+                                           timeT endTime,
+                                           Quantizer *quantizer):
+    BasicCommand(getGlobalName(quantizer), segment, startTime, endTime,
+                 true),  // bruteForceRedo
+    m_quantizer(quantizer),
+    m_selection(0)
 {
     // nothing else
 }
 
 EventQuantizeCommand::EventQuantizeCommand(EventSelection &selection,
-        Quantizer *quantizer):
-        BasicCommand(getGlobalName(quantizer),
-                     selection.getSegment(),
-                     selection.getStartTime(),
-                     selection.getEndTime(),
-                     true),  // bruteForceRedo
-        m_quantizer(quantizer),
-        m_selection(&selection)
+                                           Quantizer *quantizer):
+    BasicCommand(getGlobalName(quantizer),
+                 selection.getSegment(),
+                 selection.getStartTime(),
+                 selection.getEndTime(),
+                 true),  // bruteForceRedo
+    m_quantizer(quantizer),
+    m_selection(&selection)
 {
     // nothing else
 }
 
 EventQuantizeCommand::EventQuantizeCommand(Segment &segment,
-        timeT startTime,
-        timeT endTime,
-        QString settingsGroup,
-        bool notation):
-        BasicCommand(getGlobalName(makeQuantizer(settingsGroup, notation)),
-                     segment, startTime, endTime,
-                     true),  // bruteForceRedo
-        m_selection(0),
-        m_settingsGroup(settingsGroup)
+                                           timeT startTime,
+                                           timeT endTime,
+                                           QString settingsGroup,
+                                           QuantizeScope scope):
+    BasicCommand(getGlobalName(makeQuantizer(settingsGroup, scope)),
+                 segment, startTime, endTime,
+                 true),  // bruteForceRedo
+    m_selection(0),
+    m_settingsGroup(settingsGroup)
 {
     // nothing else -- m_quantizer set by makeQuantizer
 }
 
 EventQuantizeCommand::EventQuantizeCommand(EventSelection &selection,
-        QString settingsGroup,
-        bool notation):
-        BasicCommand(getGlobalName(makeQuantizer(settingsGroup, notation)),
-                     selection.getSegment(),
-                     selection.getStartTime(),
-                     selection.getEndTime(),
-                     true),  // bruteForceRedo
-        m_selection(&selection),
-        m_settingsGroup(settingsGroup)
+                                           QString settingsGroup,
+                                           QuantizeScope scope) :
+    BasicCommand(getGlobalName(makeQuantizer(settingsGroup, scope)),
+                 selection.getSegment(),
+                 selection.getStartTime(),
+                 selection.getEndTime(),
+                 true),  // bruteForceRedo
+    m_selection(&selection),
+    m_settingsGroup(settingsGroup)
 {
     // nothing else -- m_quantizer set by makeQuantizer
 }
@@ -194,27 +194,38 @@ EventQuantizeCommand::modifySegment()
 
 Quantizer *
 EventQuantizeCommand::makeQuantizer(QString settingsGroup,
-                                    bool notationDefault)
+                                    QuantizeScope scope)
 {
     //!!! Excessive duplication with
     // QuantizeParameters::getQuantizer in widgets.cpp
 
     QSettings settings;
-    settings.beginGroup( settingsGroup );
+    settings.beginGroup(settingsGroup);
 
     timeT defaultUnit =
         Note(Note::Demisemiquaver).getDuration();
 
-    int type = settings.value("quantizetype", notationDefault ? 2 : 0).toInt() ;
-	timeT unit = settings.value("quantizeunit",  static_cast<uint>(defaultUnit) ).toInt() ;
-    bool notateOnly = qStrToBool( settings.value("quantizenotationonly", "notationDefault" ) ) ;
-    bool durations = qStrToBool( settings.value("quantizedurations", "false" ) ) ;
-    int simplicity = settings.value("quantizesimplicity", 13).toInt() ;
-    int maxTuplet = settings.value("quantizemaxtuplet", 3).toInt() ;
-    bool counterpoint = settings.value("quantizecounterpoint", false).toInt() ;
-    bool articulate = qStrToBool( settings.value("quantizearticulate", "true" ) ) ;
-    int swing = settings.value("quantizeswing", 0).toInt() ;
-    int iterate = settings.value("quantizeiterate", 100).toInt() ;
+    bool notationDefault =
+        (scope == QUANTIZE_NOTATION_ONLY ||
+         scope == QUANTIZE_NOTATION_DEFAULT);
+
+    int type = settings.value("quantizetype", notationDefault ? 2 : 0).toInt();
+    timeT unit = settings.value("quantizeunit", (int)defaultUnit).toInt();
+
+    bool notateOnly;
+    if (scope == QUANTIZE_NOTATION_ONLY) {
+        notateOnly = true;
+    } else {
+        notateOnly = qStrToBool(settings.value("quantizenotationonly", notationDefault));
+    }
+
+    bool durations = qStrToBool(settings.value("quantizedurations", false));
+    int simplicity = settings.value("quantizesimplicity", 13).toInt();
+    int maxTuplet = settings.value("quantizemaxtuplet", 3).toInt();
+    bool counterpoint = qStrToBool(settings.value("quantizecounterpoint", false));
+    bool articulate = qStrToBool(settings.value("quantizearticulate", true));
+    int swing = settings.value("quantizeswing", 0).toInt();
+    int iterate = settings.value("quantizeiterate", 100).toInt();
 
     settings.endGroup();
 

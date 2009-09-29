@@ -886,7 +886,8 @@ NewMatrixView::slotRepeatQuantize()
     CommandHistory::getInstance()->addCommand
         (new EventQuantizeCommand
          (*getSelection(),
-          "Quantize Dialog Grid", false)); // no i18n (config group name)
+          "Quantize Dialog Grid", // no tr (config group name)
+          EventQuantizeCommand::QUANTIZE_NORMAL));
 }
 
 void
