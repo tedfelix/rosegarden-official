@@ -37,11 +37,9 @@
 #include <limits.h>
 
 
-#define MIDI_DEBUG 1
+//#define MIDI_DEBUG 1
 
 #include <sstream>
-
-//#include <kmainWindow.h>
 
 namespace Rosegarden
 {
