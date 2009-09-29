@@ -37,7 +37,7 @@
 #include <limits.h>
 
 
-//#define MIDI_DEBUG 1
+#define MIDI_DEBUG 1
 
 #include <sstream>
 
@@ -56,7 +56,10 @@ using std::ios;
 
 MidiFile::MidiFile(Studio *studio):
         SoundFile(std::string("unnamed.mid")),
+        m_timingFormat(MIDI_TIMING_PPQ_TIMEBASE),
         m_timingDivision(0),
+        m_fps(0),
+        m_subframes(0),
         m_format(MIDI_FILE_NOT_LOADED),
         m_numberOfTracks(0),
         m_containsTimeChanges(false),
@@ -68,7 +71,10 @@ MidiFile::MidiFile(Studio *studio):
 MidiFile::MidiFile(const std::string &fn,
                    Studio *studio):
         SoundFile(fn),
+        m_timingFormat(MIDI_TIMING_PPQ_TIMEBASE),
         m_timingDivision(0),
+        m_fps(0),
+        m_subframes(0),
         m_format(MIDI_FILE_NOT_LOADED),
         m_numberOfTracks(0),
         m_containsTimeChanges(false),
@@ -432,37 +438,35 @@ MidiFile::parseHeader(const string &midiHeader)
         return (false);
     }
 
-    m_format = (MIDIFileFormatType) midiBytesToInt(midiHeader.substr(8, 2));
+    m_format = (FileFormatType)midiBytesToInt(midiHeader.substr(8, 2));
     m_numberOfTracks = midiBytesToInt(midiHeader.substr(10, 2));
     m_timingDivision = midiBytesToInt(midiHeader.substr(12, 2));
+    m_timingFormat = MIDI_TIMING_PPQ_TIMEBASE;
 
-    if ( m_format == MIDI_SEQUENTIAL_TRACK_FILE ) {
+    if (m_format == MIDI_SEQUENTIAL_TRACK_FILE) {
 #ifdef MIDI_DEBUG
         std::cerr << "MidiFile::parseHeader()"
-        << "- can't load sequential track file"
-        << endl;
+                  << "- can't load sequential track file"
+                  << endl;
 #endif
-
         return (false);
     }
 
-
+    if (m_timingDivision > 32767) {
 #ifdef MIDI_DEBUG
-    if ( m_timingDivision < 0 ) {
-        std::cerr << "MidiFile::parseHeader()"
-        << " - file uses SMPTE timing"
-        << endl;
-    }
+        std::cerr << "MidiFile::parseHeader() - file uses SMPTE timing" << endl;
 #endif
+        m_timingFormat = MIDI_TIMING_SMPTE;
+        m_fps = 256 - (m_timingDivision >> 8);
+        m_subframes = (m_timingDivision & 0xff);
+    }
 
-    return (true);
+    return true;
 }
-
 
 
 // Extract the contents from a MIDI file track and places it into
 // our local map of MIDI events.
-//
 //
 bool
 MidiFile::parseTrack(ifstream* midiFile, TrackId &lastTrackNum)
@@ -801,20 +805,63 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
     std::vector<Segment *> addedSegments;
 
 #ifdef MIDI_DEBUG
-
     std::cerr << "NUMBER OF TRACKS = " << m_numberOfTracks << endl;
     std::cerr << "MIDI COMP SIZE = " << m_midiComposition.size() << endl;
 #endif
 
-    for (TrackId i = 0; i < m_numberOfTracks; i++ ) {
+    if (m_timingFormat == MIDI_TIMING_SMPTE) {
+        
+        // If we have SMPTE timecode (i.e. seconds and frames, roughly
+        // equivalent to RealTime timestamps) then we need to add any
+        // tempo change events _first_ before we can do any conversion
+        // from SMPTE to musical time, because this conversion depends
+        // on tempo.  Also we need to add tempo changes in time order,
+        // not track order, because their own timestamps depend on all
+        // prior tempo changes.
+
+        // In principle there's no harm in doing this for non-SMPTE
+        // files as well, but there's no gain and it's probably not a
+        // good idea to mess with file loading just for the sake of
+        // slightly simpler code.  So, SMPTE only.
+
+        std::map<int, tempoT> tempi;
+        for (TrackId i = 0; i < m_numberOfTracks; ++i) {
+            for (midiEvent = m_midiComposition[i].begin();
+                 midiEvent != m_midiComposition[i].end();
+                 midiEvent++) {        
+                if ((*midiEvent)->isMeta()) {
+                    if ((*midiEvent)->getMetaEventCode() == MIDI_SET_TEMPO) {
+                        MidiByte m0 = (*midiEvent)->getMetaMessage()[0];
+                        MidiByte m1 = (*midiEvent)->getMetaMessage()[1];
+                        MidiByte m2 = (*midiEvent)->getMetaMessage()[2];
+                        long tempo = (((m0 << 8) + m1) << 8) + m2;
+                        if (tempo != 0) {
+                            double qpm = 60000000.0 / double(tempo);
+                            tempoT rgt(Composition::getTempoForQpm(qpm));
+                            tempi[(*midiEvent)->getTime()] = rgt;
+                        }
+                    }
+                }
+            }
+        }
+        for (std::map<int, tempoT>::const_iterator i = tempi.begin();
+             i != tempi.end(); ++i) {
+            timeT t = composition.getElapsedTimeForRealTime
+                (RealTime::frame2RealTime(i->first, m_fps * m_subframes));
+            composition.addTempoAtTime(t, i->second);
+        }
+    }
+
+    for (TrackId i = 0; i < m_numberOfTracks; ++i) {
+
         segmentTime = 0;
         trackName = string("Imported MIDI");
 
         // progress - 20% total in file import itself and then 80%
         // split over these tracks
         emit setValue(20 +
-                         (int)((80.0 * double(i) / double(m_numberOfTracks))));
-		qApp->processEvents(QEventLoop::AllEvents);
+                      (int)((80.0 * double(i) / double(m_numberOfTracks))));
+        qApp->processEvents(QEventLoop::AllEvents);
 
         // Convert the deltaTime to an absolute time since
         // the start of the segment.  The addTime method
@@ -822,8 +869,8 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
         // time plus the argument.
         //
         for (midiEvent = m_midiComposition[i].begin();
-                midiEvent != m_midiComposition[i].end();
-                ++midiEvent) {
+             midiEvent != m_midiComposition[i].end();
+             ++midiEvent) {
             segmentTime = (*midiEvent)->addTime(segmentTime);
         }
 
@@ -860,45 +907,67 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
         for (midiEvent = m_midiComposition[i].begin();
 	     midiEvent != m_midiComposition[i].end();
 	     midiEvent++) {
+
             rosegardenEvent = 0;
 
             // [cc] -- avoid floating-point where possible
 
             timeT rawTime = (*midiEvent)->getTime();
+            timeT rawDuration = (*midiEvent)->getDuration();
 
-            if (rawTime < maxRawTime) {
-                rosegardenTime = origin +
-                                 timeT((rawTime * multiplier) / divisor);
+            if (m_timingFormat == MIDI_TIMING_PPQ_TIMEBASE) {
+
+                if (rawTime < maxRawTime) {
+                    rosegardenTime = origin +
+                        timeT((rawTime * multiplier) / divisor);
+                } else {
+                    rosegardenTime = origin +
+                        timeT((double(rawTime) * multiplier) / double(divisor) + 0.01);
+                }
+
+                rosegardenDuration =
+                    timeT((rawDuration * multiplier) / divisor);
+
             } else {
-                rosegardenTime = origin +
-                                 timeT((double(rawTime) * multiplier) / double(divisor) + 0.01);
+
+                // SMPTE timestamps are a count of the number of
+                // subframes, where the number of subframes per frame
+                // and frames per second have been defined in the file
+                // header (stored as m_subframes, m_fps).  We need to
+                // go through a realtime -> musical time conversion
+                // for these, having added our tempo changes earlier
+                
+                rosegardenTime = composition.getElapsedTimeForRealTime
+                    (RealTime::frame2RealTime(rawTime,
+                                              m_fps * m_subframes));
+
+                rosegardenDuration = composition.getElapsedTimeForRealTime
+                    (RealTime::frame2RealTime(rawTime + rawDuration,
+                                              m_fps * m_subframes))
+                    - rosegardenTime;
             }
 
-            rosegardenDuration =
-                timeT(((*midiEvent)->getDuration() * multiplier) / divisor);
-
 #ifdef MIDI_DEBUG
-
             std::cerr << "MIDI file import: origin " << origin
-            << ", event time " << rosegardenTime
-            << ", duration " << rosegardenDuration
-            << ", event type " << (int)(*midiEvent)->getMessageType()
-            << ", previous max time " << maxTime
-            << ", potential max time " << (rosegardenTime + rosegardenDuration)
-            << ", ev raw time " << (*midiEvent)->getTime()
-            << ", crotchet " << crotchetTime
-            << ", multiplier " << multiplier
-            << ", divisor " << divisor
-            << std::endl;
+                      << ", event time " << rosegardenTime
+                      << ", duration " << rosegardenDuration
+                      << ", event type " << (int)(*midiEvent)->getMessageType()
+                      << ", previous max time " << maxTime
+                      << ", potential max time " << (rosegardenTime + rosegardenDuration)
+                      << ", ev raw time " << (*midiEvent)->getTime()
+                      << ", ev raw duration " << (*midiEvent)->getDuration()
+                      << ", crotchet " << crotchetTime
+                      << ", multiplier " << multiplier
+                      << ", divisor " << divisor
+                      << ", sfps " << m_fps * m_subframes
+                      << std::endl;
 #endif
 
             if (rosegardenTime + rosegardenDuration > maxTime) {
                 maxTime = rosegardenTime + rosegardenDuration;
             }
 
-            //	    timeT fillFromTime = rosegardenTime;
             if (rosegardenSegment->empty()) {
-                //		fillFromTime = composition.getBarStartForTime(rosegardenTime);
                 endOfLastNote = composition.getBarStartForTime(rosegardenTime);
             }
 
@@ -915,8 +984,6 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
 
                 case MIDI_LYRIC: {
                         std::string text = (*midiEvent)->getMetaMessage();
-//		    std::cerr << "lyric event: text=\""
-//			      << text << "\", time=" << rosegardenTime << std::endl;
                         rosegardenEvent =
                             Text(text, Text::Lyric).
                             getAsEvent(rosegardenTime);
@@ -946,22 +1013,25 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
 		    break;
 
                 case MIDI_END_OF_TRACK: {
-                        timeT trackEndTime = rosegardenTime;
-                        if (trackEndTime <= 0) {
-                            trackEndTime = crotchetTime * 4 * numerator / denominator;
-                        }
-                        if (endOfLastNote < trackEndTime) {
-                            //If there's nothing in the segment yet, then we
-                            //shouldn't fill with rests because we don't want
-                            //to cause the otherwise empty segment to be created
-                            if (rosegardenSegment->size() > 0) {
-                                rosegardenSegment->fillWithRests(trackEndTime);
-                            }
+                    timeT trackEndTime = rosegardenTime;
+                    if (trackEndTime <= 0) {
+                        trackEndTime = crotchetTime * 4 * numerator / denominator;
+                    }
+                    if (endOfLastNote < trackEndTime) {
+                        // If there's nothing in the segment yet, then we
+                        // shouldn't fill with rests because we don't want
+                        // to cause the otherwise empty segment to be created
+                        if (rosegardenSegment->size() > 0) {
+                            rosegardenSegment->fillWithRests(trackEndTime);
                         }
                     }
+                }
                     break;
 
-                case MIDI_SET_TEMPO: {
+                case MIDI_SET_TEMPO:
+                    if (m_timingFormat == MIDI_TIMING_PPQ_TIMEBASE) {
+                        // (if we have smpte, we have already done this)
+
                         MidiByte m0 = (*midiEvent)->getMetaMessage()[0];
                         MidiByte m1 = (*midiEvent)->getMetaMessage()[1];
                         MidiByte m2 = (*midiEvent)->getMetaMessage()[2];
@@ -984,14 +1054,12 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
                     // NB. a MIDI time signature also has
                     // metamessage[2] and [3], containing some timing data
 
-                    if (numerator == 0)
-                        numerator = 4;
-                    if (denominator == 0)
-                        denominator = 4;
+                    if (numerator == 0) numerator = 4;
+                    if (denominator == 0) denominator = 4;
 
                     composition.addTimeSignature
-                    (rosegardenTime,
-                     TimeSignature(numerator, denominator));
+                        (rosegardenTime,
+                         TimeSignature(numerator, denominator));
                     haveTimeSignatures = true;
                     break;
 
@@ -1014,7 +1082,6 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
                         << " badly formed key signature"
                         << std::endl;
 #endif
-
                         break;
                     }
                     break;
@@ -1027,12 +1094,10 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
                 case MIDI_SMPTE_OFFSET:
                 default:
 #ifdef MIDI_DEBUG
-
                     std::cerr << "MidiFile::convertToRosegarden - "
-                    << "unsupported META event code "
-                    << (int)((*midiEvent)->getMetaEventCode()) << endl;
+                              << "unsupported META event code "
+                              << (int)((*midiEvent)->getMetaEventCode()) << endl;
 #endif
-
                     break;
                 }
 
@@ -1043,23 +1108,20 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
                     // A zero velocity here is a virtual "NOTE OFF"
                     // so we ignore this event
                     //
-                    if ((*midiEvent)->getVelocity() == 0)
-                        break;
+                    if ((*midiEvent)->getVelocity() == 0) break;
 
                     endOfLastNote = rosegardenTime + rosegardenDuration;
 
-                    //std::cerr << "MidiFile::convertToRosegarden: note at " << rosegardenTime << ", midi time " << (*midiEvent)->getTime() << std::endl;
+                    std::cerr << "MidiFile::convertToRosegarden: note at " << rosegardenTime << ", duration " << rosegardenDuration << ", midi time " << (*midiEvent)->getTime() << " and duration " << (*midiEvent)->getDuration() << std::endl;
 
                     // create and populate event
                     rosegardenEvent = new Event(Note::EventType,
                                                 rosegardenTime,
                                                 rosegardenDuration);
-                    rosegardenEvent->set
-			<Int>(BaseProperties::PITCH,
-			      (*midiEvent)->getPitch());
-                    rosegardenEvent->set
-			<Int>(BaseProperties::VELOCITY,
-			      (*midiEvent)->getVelocity());
+                    rosegardenEvent->set<Int>(BaseProperties::PITCH,
+                                              (*midiEvent)->getPitch());
+                    rosegardenEvent->set<Int>(BaseProperties::VELOCITY,
+                                              (*midiEvent)->getVelocity());
                     break;
 
                     // We ignore any NOTE OFFs here as we've already
@@ -1084,8 +1146,8 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
 
                     if (!instrument) {
 
-			bool percussion = (*midiEvent)->getChannelNumber() ==
-			    MIDI_PERCUSSION_CHANNEL;
+			bool percussion = ((*midiEvent)->getChannelNumber() ==
+                                           MIDI_PERCUSSION_CHANNEL);
 			int program = (*midiEvent)->getData1();
 
 			if (type == CONVERT_REPLACE) {

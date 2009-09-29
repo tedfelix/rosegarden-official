@@ -61,21 +61,24 @@ class MidiFile : public QObject, public SoundFile
     Q_OBJECT
 public:
 
-    typedef enum
-    {
+    enum FileFormatType {
         MIDI_SINGLE_TRACK_FILE          = 0x00,
         MIDI_SIMULTANEOUS_TRACK_FILE    = 0x01,
         MIDI_SEQUENTIAL_TRACK_FILE      = 0x02,
         MIDI_CONVERTED_TO_APPLICATION   = 0xFE,
         MIDI_FILE_NOT_LOADED            = 0xFF
-    } MIDIFileFormatType;
+    };
 
-    typedef enum
-    {
+    enum TimingFormat {
+        MIDI_TIMING_PPQ_TIMEBASE,
+        MIDI_TIMING_SMPTE
+    };
+
+    enum ConversionType {
         CONVERT_REPLACE,
         CONVERT_AUGMENT,
         CONVERT_APPEND
-    } ConversionType;
+    };
 
     MidiFile(Studio *studio);
     MidiFile (const std::string &fn, Studio *studio);
@@ -87,8 +90,10 @@ public:
     virtual bool write();
     virtual void close();
 
-    int timingDivision() { return m_timingDivision; }
-    MIDIFileFormatType format() { return m_format; }
+    TimingFormat timingFormat() { return m_timingFormat; }
+    int timingDivision() { return m_timingDivision; } // only valid if timing format is PPQ timebase
+    void smpteFrameSpecification(int &fps, int &subframes) { fps = m_fps; subframes = m_subframes; } // only valid if timing format is SMPTE
+    FileFormatType fileFormat() { return m_format; }
     unsigned int numberOfTracks() { return m_numberOfTracks; }
     bool hasTimeChanges() { return m_containsTimeChanges; }
 
@@ -113,8 +118,11 @@ signals:
     
 private:
 
+    TimingFormat           m_timingFormat;
     int                    m_timingDivision;   // pulses per quarter note
-    MIDIFileFormatType     m_format;
+    int                    m_fps;
+    int                    m_subframes;
+    FileFormatType         m_format;
     unsigned int           m_numberOfTracks;
     bool                   m_containsTimeChanges;
 
