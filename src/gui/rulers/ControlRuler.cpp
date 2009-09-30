@@ -64,7 +64,7 @@ const int ControlRuler::MinItemHeight = 5;
 const int ControlRuler::MaxItemHeight = 64 + 5;
 const int ControlRuler::ItemHeightRange = 64;
 
-ControlRuler::ControlRuler(MatrixViewSegment *viewsegment,
+ControlRuler::ControlRuler(ViewSegment *viewsegment,
                            RulerScale* rulerScale,
                            QWidget* parent
 						  ) :
@@ -120,7 +120,7 @@ void ControlRuler::setSegment(Segment *segment)
     m_eventSelection = new EventSelection(*segment);
 }
 
-void ControlRuler::setViewSegment(MatrixViewSegment *viewSegment)
+void ControlRuler::setViewSegment(ViewSegment *viewSegment)
 {
 //    if (m_viewSegment) m_viewSegment->removeObserver(this);
 

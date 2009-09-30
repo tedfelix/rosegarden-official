@@ -19,15 +19,17 @@
 #include "ControlRuler.h"
 #include "gui/editors/matrix/MatrixElement.h"
 #include "gui/rulers/DefaultVelocityColour.h"
+#include "base/ViewElement.h"
 #include "base/BaseProperties.h"
 #include "base/Event.h"
 #include "base/PropertyName.h"
+#include "base/RulerScale.h"
 
 namespace Rosegarden {
 
 PropertyControlItem::PropertyControlItem(ControlRuler *controlRuler,
         PropertyName propertyname,
-        MatrixElement *element,
+        ViewElement *element,
         QPolygonF polygon)
 : ControlItem(controlRuler,element->event(),polygon),
     m_element(element),
@@ -46,17 +48,25 @@ PropertyControlItem::~PropertyControlItem()
 void PropertyControlItem::update()
 {
     if (!m_element) return;
-
-    double x0 = m_element->getLayoutX();
-    double x1 = m_element->getWidth() + x0;
+    RulerScale *rulerScale = m_controlRuler->getRulerScale();    
+    double x0,x1;
+    
+    MatrixElement *matrixelement = dynamic_cast<MatrixElement*>(m_element);
+    if (matrixelement) {
+        x0 = matrixelement->getLayoutX();
+        x1 = matrixelement->getWidth() + x0;
+    } else {
+        ///@TODO erm ... Notation?
+        x0 = rulerScale->getXForTime(m_element->getViewAbsoluteTime());
+        x1 = x0 + rulerScale->getXForTime(m_element->getViewDuration());
+    }
 
     long val = 0;
+    m_element->event()->get<Rosegarden::Int>(m_propertyname, val);
     if (m_propertyname == BaseProperties::VELOCITY) {
-        val = (long)m_element->getElementVelocity();
         m_colour = DefaultVelocityColour::getInstance()->getColour(val);
-    } else {
-        m_element->event()->get<Rosegarden::Int>(m_propertyname, val);
     }
+    
     m_y = m_controlRuler->valueToY(val);
 
     reconfigure(x0,x1,m_y);
@@ -68,8 +78,12 @@ void PropertyControlItem::setValue(float y)
     if (y < 0) y = 0;
 
     if (m_propertyname == BaseProperties::VELOCITY) {
-        m_element->reconfigure(m_controlRuler->yToValue(y));
-        m_element->setSelected(true);
+        MatrixElement *matrixelement = dynamic_cast<MatrixElement*> (m_element);       
+        if (matrixelement) {        
+            matrixelement->reconfigure(m_controlRuler->yToValue(y));
+            matrixelement->setSelected(true);
+        }
+        
         m_colour = DefaultVelocityColour::getInstance()->getColour(
                 m_controlRuler->yToValue(y));
     }

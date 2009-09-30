@@ -48,7 +48,7 @@ class ControlItem;
 class ControllerEventsRuler : public ControlRuler, public SegmentObserver
 {
 public:
-    ControllerEventsRuler(MatrixViewSegment*,
+    ControllerEventsRuler(ViewSegment*,
                           RulerScale*,
 //                          EditViewBase* parentView,
 //                          Q3Canvas*,
@@ -66,7 +66,7 @@ public:
     // Allow something external to reset the selection of Events
     // that this ruler is displaying
     //
-    virtual void setViewSegment(MatrixViewSegment *);
+    virtual void setViewSegment(ViewSegment *);
     virtual void setSegment(Segment *);
 
     // SegmentObserver interface

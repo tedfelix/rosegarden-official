@@ -39,9 +39,9 @@
 #include "document/CommandHistory.h"
 #include "gui/general/EditViewBase.h"
 #include "gui/general/GUIPalette.h"
-#include "gui/editors/matrix/MatrixScene.h"
-#include "gui/editors/matrix/MatrixViewSegment.h"
-#include "gui/editors/matrix/MatrixElement.h"
+//#include "gui/editors/matrix/MatrixScene.h"
+//#include "gui/editors/matrix/MatrixViewSegment.h"
+//#include "gui/editors/matrix/MatrixElement.h"
 #include "gui/widgets/TextFloat.h"
 #include <QColor>
 #include <QPoint>
@@ -54,7 +54,7 @@ namespace Rosegarden
 {
 
 PropertyControlRuler::PropertyControlRuler(PropertyName propertyName,
-                                           MatrixViewSegment *segment,
+                                           ViewSegment *segment,
                                            RulerScale *rulerScale,
                                            QWidget *parent,
                                            const char *name) :
@@ -120,7 +120,7 @@ void PropertyControlRuler::paintEvent(QPaintEvent *event)
 }
 
 void
-PropertyControlRuler::setViewSegment(MatrixViewSegment *segment)
+PropertyControlRuler::setViewSegment(ViewSegment *segment)
 {
     if (m_viewSegment) m_viewSegment->removeObserver(this);
     m_viewSegment = segment;
@@ -142,7 +142,7 @@ QString PropertyControlRuler::getName()
     return getPropertyName().c_str();
 }
 
-void PropertyControlRuler::addControlItem(MatrixElement *el)
+void PropertyControlRuler::addControlItem(ViewElement *el)
 {
 //    double x0 = el->getLayoutX();
 //    double x1 = el->getWidth() + x0;
@@ -150,8 +150,8 @@ void PropertyControlRuler::addControlItem(MatrixElement *el)
 //    el->event()->get<Rosegarden::Int>(getPropertyName(), val);
 //    double y = (double) val / MIDI_CONTROL_MAX_VALUE;
 
-    size_t s = sizeof(MatrixElement);
-    RG_DEBUG << "PropertyControlRuler::addControlItem sizeof(MatrixElement): " << s;
+//    size_t s = sizeof(MatrixElement);
+//    RG_DEBUG << "PropertyControlRuler::addControlItem sizeof(MatrixElement): " << s;
 
     PropertyControlItem *controlItem = new PropertyControlItem(this, getPropertyName(), el, QPolygonF());
     controlItem->update();
@@ -195,9 +195,9 @@ void PropertyControlRuler::init()
 
     ViewElementList *viewElementList = m_viewSegment->getViewElementList();
     for (ViewElementList::iterator it = viewElementList->begin(); it != viewElementList->end(); ++it) {
-        if (MatrixElement *el = dynamic_cast<MatrixElement*>(*it)) {
-            addControlItem(el);
-        }
+//        if (MatrixElement *el = dynamic_cast<MatrixElement*>(*it)) {
+        addControlItem(*it);
+//        }
     }
 
     RG_DEBUG << "PropertyControlRuler::init - Segment size: " << m_segment->size();
@@ -314,9 +314,9 @@ void PropertyControlRuler::elementAdded(const ViewSegment *, ViewElement *el)
 
     RG_DEBUG << "PropertyControlRuler::eventAdded()";
 //    addControlItem(el->event());
-    if (MatrixElement *mel = dynamic_cast<MatrixElement*>(el)) {
-        addControlItem(mel);
-    }
+//    if (MatrixElement *mel = dynamic_cast<MatrixElement*>(el)) {
+    addControlItem(el);
+//    }
 
     update();
 //    double x = m_rulerScale->getXForTime(el->getViewAbsoluteTime());

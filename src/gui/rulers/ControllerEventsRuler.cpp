@@ -55,7 +55,7 @@
 namespace Rosegarden
 {
 
-ControllerEventsRuler::ControllerEventsRuler(MatrixViewSegment *segment,
+ControllerEventsRuler::ControllerEventsRuler(ViewSegment *segment,
         RulerScale* rulerScale,
 //        EditViewBase* parentView,
 //        Q3Canvas* c,
@@ -133,7 +133,7 @@ ControllerEventsRuler::setSegment(Segment *segment)
 }
 
 void
-ControllerEventsRuler::setViewSegment(MatrixViewSegment *segment)
+ControllerEventsRuler::setViewSegment(ViewSegment *segment)
 {
     RG_DEBUG << "ControllerEventsRuler::setSegment(" << segment << ")" << endl;
     setSegment(&segment->getSegment());

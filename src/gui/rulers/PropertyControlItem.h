@@ -25,20 +25,20 @@ namespace Rosegarden {
 
 class ControlRuler;
 class PropertyName;
-class MatrixElement;
+//class MatrixElement;
 
 class PropertyControlItem : public ControlItem
 {
 public:
     PropertyControlItem(ControlRuler* controlRuler,
                 PropertyName propertyname,
-                MatrixElement* element,
+                ViewElement* element,
                 QPolygonF polygon);
 
     ~PropertyControlItem();
 
     virtual void update();
-    MatrixElement* getElement() { return m_element; }
+    ViewElement* getElement() { return m_element; }
 
     void setValue(float y);
     void updateSegment();
@@ -47,7 +47,7 @@ protected:
     void reconfigure(float x0,float x1,float y);
 
     //--------------- Data members ---------------------------------
-    MatrixElement* m_element;
+    ViewElement* m_element;
     PropertyName m_propertyname;
 };
 

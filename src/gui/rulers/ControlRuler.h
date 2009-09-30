@@ -25,7 +25,7 @@
 #include "base/Segment.h"
 #include "base/Selection.h"
 //#include "gui/general/RosegardenCanvasView.h"
-#include "gui/editors/matrix/MatrixViewSegment.h"
+#include "base/ViewSegment.h"
 #include <QColor>
 #include <QPoint>
 #include <QString>
@@ -72,7 +72,7 @@ class ControlRuler : public QWidget //, public ViewSegmentObserver
     friend class ControlItem;
 
 public:
-    ControlRuler(MatrixViewSegment*,
+    ControlRuler(ViewSegment*,
                  RulerScale*,
 //                 EditViewBase* parentView,
 //                 Q3Canvas*,
@@ -103,7 +103,7 @@ public:
     void setSelectionRect(QRectF *rect) { m_selectionRect = rect; }
 
     virtual void setSegment(Segment *);
-    virtual void setViewSegment(MatrixViewSegment *);
+    virtual void setViewSegment(ViewSegment *);
     Segment* getSegment() { return m_segment; }
 
     void updateSegment();
@@ -214,9 +214,9 @@ protected:
     RulerScale*     m_rulerScale;
     EventSelection* m_eventSelection; //,*m_assignedEventSelection;
 
-    MatrixScene *m_scene;
+//    MatrixScene *m_scene;
 
-    MatrixViewSegment *m_viewSegment;
+    ViewSegment *m_viewSegment;
     Segment *m_segment;
 
     ControlItemMap m_controlItemMap;

@@ -39,8 +39,8 @@ namespace Rosegarden
 {
 
 class ViewElement;
-class MatrixScene;
-class MatrixViewSegment;
+//class MatrixScene;
+class ViewSegment;
 class Segment;
 class RulerScale;
 //class EditViewBase;
@@ -54,7 +54,7 @@ class PropertyControlRuler :  public ControlRuler, public ViewSegmentObserver
 {
 public:
     PropertyControlRuler(PropertyName propertyName,
-                        MatrixViewSegment*,
+                        ViewSegment*,
                         RulerScale*,
                         QWidget* parent=0, const char* name=0);
 
@@ -69,7 +69,7 @@ public:
     // Allow something external to reset the selection of Events
     // that this ruler is displaying
     //
-    virtual void setViewSegment(MatrixViewSegment *);
+    virtual void setViewSegment(ViewSegment *);
 
     // ViewSegmentObserver interface
     virtual void elementAdded(const ViewSegment *, ViewElement*);
@@ -94,7 +94,7 @@ public slots:
 
 protected:
 //    void addControlItem(Event *);
-    void addControlItem(MatrixElement *);
+    void addControlItem(ViewElement *);
 
     virtual void mousePressEvent(QMouseEvent*);
     virtual void mouseReleaseEvent(QMouseEvent*);
