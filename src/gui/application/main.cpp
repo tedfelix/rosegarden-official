@@ -472,6 +472,19 @@ int main(int argc, char *argv[])
             if (Thorn) {
                 QString styleSheet = QLatin1String(file.readAll());
                 theApp.setStyleSheet(styleSheet);
+
+                //  QPalette::QPalette ( const QBrush & windowText, const QBrush & button, const QBrush & light,
+                //                       const QBrush & dark, const QBrush & mid, const QBrush & text,
+                //                       const QBrush & bright_text, const QBrush & base, const QBrush & window )
+                //
+                // Let's try attacking all these assorted problems with Qt
+                // taking cues from the underlying system colors instead of
+                // those defined in the Thorn stylesheet by setting an
+                // application-wide fake palette to help Qt make better choices
+                // in all the bits we have no direct control over (such as
+                // disabled button texts)
+                QPalette pal(Qt::white, Qt::gray, Qt::white, Qt::black, Qt::gray, Qt::white, Qt::white, Qt::black, Qt::black);
+                theApp.setPalette(pal);
             } else {
                 std::cerr << "Not loading stylesheet per user request.  Caveat emptor." << std::endl;
             }
