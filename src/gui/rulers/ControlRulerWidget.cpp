@@ -46,7 +46,7 @@ namespace Rosegarden
 ControlRulerWidget::ControlRulerWidget() :
 m_controlList(0),
 m_segment(0),
-m_scene(0),
+m_viewSegment(0),
 m_scale(0)
 {
     m_tabBar = new QTabBar;
@@ -125,9 +125,9 @@ void ControlRulerWidget::setSegments(RosegardenDocument *document, std::vector<S
     }
 }
 
-void ControlRulerWidget::setScene(MatrixScene *scene)
+void ControlRulerWidget::setViewSegment(ViewSegment *viewSegment)
 {
-    m_scene = scene;
+    m_viewSegment = viewSegment;
 
     PropertyControlRuler *propertyruler;
     if (m_controlRulerList.size()) {
@@ -135,7 +135,7 @@ void ControlRulerWidget::setScene(MatrixScene *scene)
         for (it = m_controlRulerList.begin(); it != m_controlRulerList.end(); ++it) {
             propertyruler = dynamic_cast<PropertyControlRuler *> (*it);
             if (propertyruler) {
-                propertyruler->setViewSegment(m_scene->getCurrentViewSegment());
+                propertyruler->setViewSegment(m_viewSegment);
             }
         }
     }
@@ -224,12 +224,9 @@ void ControlRulerWidget::slotAddRuler()
 
 void ControlRulerWidget::slotAddControlRuler(const ControlParameter &controlParameter)
 {
-    if (!m_scene) return;
+    if (!m_viewSegment) return;
 
-    MatrixViewSegment *viewSegment = m_scene->getCurrentViewSegment();
-    if (!viewSegment) return;
-
-    ControlRuler *controlruler = new ControllerEventsRuler(viewSegment, m_scale, this, &controlParameter);
+    ControlRuler *controlruler = new ControllerEventsRuler(m_viewSegment, m_scale, this, &controlParameter);
     connect(controlruler,SIGNAL(dragScroll(timeT)),
             this,SLOT(slotDragScroll(timeT)));
 
@@ -240,12 +237,9 @@ void ControlRulerWidget::slotAddControlRuler(const ControlParameter &controlPara
 
 void ControlRulerWidget::slotAddPropertyRuler(const PropertyName &propertyName)
 {
-    if (!m_scene) return;
+    if (!m_viewSegment) return;
 
-    MatrixViewSegment *viewSegment = m_scene->getCurrentViewSegment();
-    if (!viewSegment) return;
-
-    PropertyControlRuler *controlruler = new PropertyControlRuler(propertyName, viewSegment, m_scale, this);
+    PropertyControlRuler *controlruler = new PropertyControlRuler(propertyName, m_viewSegment, m_scale, this);
     controlruler->updateSelection(&m_selectedElements);
 
     // little kludge here, we only have the one property ruler, and the string
@@ -286,15 +280,14 @@ void ControlRulerWidget::slotSelectionChanged(EventSelection *s)
 {
 //    ViewElementList *selectedElements = new ViewElementList();
     m_selectedElements.clear();
-    ViewSegment *viewSegment = m_scene->getCurrentViewSegment();
 
     for (EventSelection::eventcontainer::iterator it =
             s->getSegmentEvents().begin();
             it != s->getSegmentEvents().end(); ++it) {
         MatrixElement *element = 0;
-        ViewElementList::iterator vi = viewSegment->findEvent(*it);
-        if (vi != viewSegment->getViewElementList()->end()) {
-            element = static_cast<MatrixElement *>(*vi);
+        ViewElementList::iterator vi = m_viewSegment->findEvent(*it);
+        if (vi != m_viewSegment->getViewElementList()->end()) {
+            element = dynamic_cast<MatrixElement *>(*vi);
         }
         if (!element) continue;
         m_selectedElements.push_back(element);

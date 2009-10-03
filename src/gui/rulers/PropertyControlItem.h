@@ -21,6 +21,8 @@
 #include "base/ViewElement.h"
 #include "gui/rulers/ControlItem.h"
 
+#define PROPERTYCONTROLITEM_NOTATION_ITEMWIDTH 20
+
 namespace Rosegarden {
 
 class ControlRuler;

@@ -42,6 +42,7 @@
 
 #include "gui/general/IconLoader.h"
 
+#include "gui/rulers/ControlRulerWidget.h"
 #include "gui/rulers/StandardRuler.h"
 #include "gui/rulers/TempoRuler.h"
 #include "gui/rulers/ChordNameRuler.h"
@@ -110,6 +111,9 @@ NotationWidget::NotationWidget() :
                            QPainter::SmoothPixmapTransform);
     m_view->setBackgroundBrush(QBrush(IconLoader().loadPixmap("bg-paper-grey")));
     m_layout->addWidget(m_view, PANNED_ROW, MAIN_COL, 1, 1);
+
+    m_controlsWidget = new ControlRulerWidget;
+    m_layout->addWidget(m_controlsWidget, CONTROLS_ROW, MAIN_COL, 1, 1);
 
     m_panner = new QWidget;
     m_pannerLayout = new QBoxLayout(QBoxLayout::LeftToRight);
@@ -235,8 +239,14 @@ NotationWidget::NotationWidget() :
     connect(m_view, SIGNAL(pannedRectChanged(QRectF)),
             m_hpanner, SLOT(slotSetPannedRect(QRectF)));
 
+    connect(m_view, SIGNAL(pannedRectChanged(QRectF)),
+            m_controlsWidget, SLOT(slotSetPannedRect(QRectF)));
+
     connect(m_hpanner, SIGNAL(pannedRectChanged(QRectF)),
             m_view, SLOT(slotSetPannedRect(QRectF)));
+
+    connect(m_hpanner, SIGNAL(pannedRectChanged(QRectF)),
+            m_controlsWidget, SLOT(slotSetPannedRect(QRectF)));
 
     connect(m_hpanner, SIGNAL(pannerChanged(QRectF)),
              this, SLOT(slotAdjustHeadersVerticalPos(QRectF)));
@@ -244,6 +254,9 @@ NotationWidget::NotationWidget() :
     connect(m_view, SIGNAL(pannedContentsScrolled()),
             this, SLOT(slotHScroll()));
 
+    connect(m_controlsWidget, SIGNAL(dragScroll(timeT)),
+            this, SLOT(slotEnsureTimeVisible(timeT)));
+    
     connect(m_hpanner, SIGNAL(zoomIn()),
             this, SLOT(slotSyncPannerZoomIn()));
 
@@ -264,6 +277,9 @@ NotationWidget::NotationWidget() :
         (m_toolBox->getTool(NoteRestInserter::ToolName));
     m_currentTool = noteRestInserter;
     m_currentTool->ready();
+
+    connect(this, SIGNAL(toolChanged(QString)),
+            m_controlsWidget, SLOT(slotSetToolName(QString)));
 }
 
 NotationWidget::~NotationWidget()
@@ -315,6 +331,13 @@ NotationWidget::setSegments(RosegardenDocument *document,
 
     m_hpanner->setScene(m_scene);
     m_hpanner->fitInView(m_scene->sceneRect(), Qt::KeepAspectRatio);
+
+    m_controlsWidget->setSegments(document, segments);
+    m_controlsWidget->setViewSegment((ViewSegment *) m_scene->getCurrentStaff());
+
+    // For some reason this doesn't work in the constructor - not looked in detail
+    connect(m_scene, SIGNAL(selectionChanged(EventSelection *)),
+            m_controlsWidget, SLOT(slotSelectionChanged(EventSelection *)));
 
     m_topStandardRuler = new StandardRuler(document,
                                            m_referenceScale, 0, 25,

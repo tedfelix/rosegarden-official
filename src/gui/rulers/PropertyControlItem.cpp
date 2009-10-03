@@ -57,8 +57,8 @@ void PropertyControlItem::update()
         x1 = matrixelement->getWidth() + x0;
     } else {
         ///@TODO erm ... Notation?
-        x0 = rulerScale->getXForTime(m_element->getViewAbsoluteTime());
-        x1 = x0 + rulerScale->getXForTime(m_element->getViewDuration());
+        x0 = m_element->getLayoutX();
+        x1 = x0 + PROPERTYCONTROLITEM_NOTATION_ITEMWIDTH;
     }
 
     long val = 0;

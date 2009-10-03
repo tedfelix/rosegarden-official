@@ -35,7 +35,7 @@ class ControlRuler;
 class ControlParameter;
 class RulerScale;
 class PropertyName;
-class MatrixScene;
+class ViewSegment;
 class EventSelection;
 
 class ControlRulerWidget : public QWidget //, Observer
@@ -49,7 +49,7 @@ public:
     void setSegments(RosegardenDocument *document,
                      std::vector<Segment *> segments);
 
-    void setScene(MatrixScene *);
+    void setViewSegment(ViewSegment *);
     QString getCurrentToolName() { return m_currentToolName; }
     void removeRuler(std::list<ControlRuler*>::iterator);
 
@@ -78,7 +78,7 @@ protected:
 
     RosegardenDocument *m_document;
     Segment *m_segment;
-    MatrixScene *m_scene;
+    ViewSegment *m_viewSegment;
     RulerScale *m_scale;
     QString m_currentToolName;
     QRectF m_pannedRect;

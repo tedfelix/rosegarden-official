@@ -182,6 +182,15 @@ NotationScene::getRulerScale() const
     return m_hlayout;
 }
 
+NotationStaff *
+NotationScene::getCurrentStaff()
+{
+    if (m_currentStaff < (int)m_staffs.size()) {
+        return m_staffs[m_currentStaff];
+    } else
+        return 0;
+}
+
 void
 NotationScene::setStaffs(RosegardenDocument *document,
                           vector<Segment *> segments)

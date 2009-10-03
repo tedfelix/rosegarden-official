@@ -359,7 +359,7 @@ MatrixWidget::setSegments(RosegardenDocument *document,
     m_pianoScene->setSceneRect(pianoRect);
 
     m_controlsWidget->setSegments(document, segments);
-    m_controlsWidget->setScene(m_scene);
+    m_controlsWidget->setViewSegment((ViewSegment *)m_scene->getCurrentViewSegment());
 
     // For some reason this doesn't work in the constructor - not looked in detail
     connect(m_scene, SIGNAL(selectionChanged(EventSelection *)),

@@ -51,6 +51,7 @@ class StandardRuler;
 class TempoRuler;
 class ChordNameRuler;
 class RawNoteRuler;
+class ControlRulerWidget;
 class HeadersGroup;
 
 class NotationWidget : public QWidget,
@@ -217,6 +218,7 @@ private:
     TempoRuler *m_tempoRuler; // I own this
     ChordNameRuler *m_chordNameRuler; // I own this
     RawNoteRuler *m_rawNoteRuler; // I own this
+    ControlRulerWidget *m_controlsWidget; // I own this
 
     HeadersGroup *m_headersGroup; // I own this
     Panned *m_headersView; // I own this
@@ -248,6 +250,7 @@ private:
         TOPRULER_ROW,
         PANNED_ROW,
         BOTTOMRULER_ROW,
+        CONTROLS_ROW,
         HSLIDER_ROW,
         PANNER_ROW
     };

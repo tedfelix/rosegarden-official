@@ -64,7 +64,8 @@ public:
 
     std::vector<NotationStaff *> *getStaffs() { return &m_staffs; }
     unsigned int getStaffCount() { return m_staffs.size(); }
-
+    NotationStaff *getCurrentStaff();
+    
     Segment *getCurrentSegment();
 
     bool segmentsContainNotes() const;
