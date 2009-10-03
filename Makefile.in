@@ -29,6 +29,7 @@ CXXFLAGS	:= @CXXFLAGS@ \
 		   @liblo_CFLAGS@ \
 		   @lrdf_CFLAGS@ \
 		   @fftw3f_CFLAGS@ \
+		   @samplerate_CFLAGS@ \
 		   @ENDIANNESS@ \
 		   -D'VERSION="$(VERSION)"' \
 		   -D'CODENAME="$(CODENAME)"' \
@@ -49,6 +50,7 @@ LIBS		:= @QT_LIBS@ \
 		   @liblo_LIBS@ \
 		   @lrdf_LIBS@ \
 		   @fftw3f_LIBS@ \
+		   @samplerate_LIBS@ \
 		   @LIBS@
 
 INSTBINDIR	:= $(DESTDIR)$(PREFIX)/bin

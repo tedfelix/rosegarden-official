@@ -79,6 +79,16 @@ public:
     void resize(size_t newSize);
 
     /**
+     * Return a new ring buffer (allocated with "new" -- called must
+     * delete when no longer needed) of the given size, containing the
+     * same data as this one.  If another thread reads from or writes
+     * to this buffer during the call, the results may be incomplete
+     * or inconsistent.  If this buffer's data will not fit in the new
+     * size, the contents are undefined.
+     */
+    RingBuffer<T, N> *resized(int newSize, int R = 0) const;
+
+    /**
      * Lock the ring buffer into physical memory.  Returns true
      * for success.
      */
@@ -266,6 +276,24 @@ RingBuffer<T, N>::resize(size_t newSize)
             m_mlocked = false;
         }
     }
+}
+
+template <typename T, int N>
+RingBuffer<T, N> *
+RingBuffer<T, N>::resized(int newSize, int R) const
+{
+    RingBuffer<T, N> *newBuffer = new RingBuffer<T, N>(newSize);
+
+    int w = m_writer;
+    int r = m_readers[R];
+
+    while (r != w) {
+        T value = m_buffer[r];
+        newBuffer->write(&value, 1);
+        if (++r == m_size) r = 0;
+    }
+
+    return newBuffer;
 }
 
 template <typename T, int N>
