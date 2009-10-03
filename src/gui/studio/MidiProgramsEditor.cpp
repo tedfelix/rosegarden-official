@@ -392,13 +392,14 @@ MidiProgramsEditor::slotNameChanged(const QString& programName)
     RG_DEBUG << "MidiProgramsEditor::slotNameChanged(" << programName << ") : id = " << id << endl;
     
     MidiBank* currBank;
-    std::cout << "GLEE" << std::endl;
     currBank = getCurrentBank();
-    std::cout << "BUBBLES" << std::endl;
-    if( ! currBank ){
+    if (!currBank) {
         RG_DEBUG << "Error: currBank is NULL in MidiProgramsEditor::slotNameChanged() " << endl;
         return;
+    } else {
+        RG_DEBUG << "currBank: " << currBank << endl;
     }
+
     MidiProgram *program = getProgram(*currBank, id);
 //     MidiProgram *program = getProgram(*currBank, id);
 
@@ -435,9 +436,11 @@ MidiProgramsEditor::slotNameChanged(const QString& programName)
         }
     }
 
-    if( ! program ){
-        RG_DEBUG << "Error:: program is NULL in MidiProgramsEditor::slotNameChanged() " << endl;
+    if (!program) {
+        RG_DEBUG << "Error: program is NULL in MidiProgramsEditor::slotNameChanged() " << endl;
         return;
+    } else {
+        RG_DEBUG << "program: " << program << endl;
     }
     
     if (qstrtostr(programName) != program->getName()) {
@@ -449,7 +452,7 @@ MidiProgramsEditor::slotNameChanged(const QString& programName)
 void
 MidiProgramsEditor::slotKeyMapButtonPressed()
 {
-    QPushButton* button = dynamic_cast<QPushButton*>(const_cast<QObject *>(sender()));
+    QToolButton* button = dynamic_cast<QToolButton*>(const_cast<QObject *>(sender()));
     if (!button) {
         RG_DEBUG << "MidiProgramsEditor::slotKeyMapButtonPressed() : %%% ERROR - signal sender is not a QPushButton\n";
         return ;
@@ -613,7 +616,7 @@ MidiProgramsEditor::getProgram(const MidiBank &bank, int programNo)
 
     int c = 0;
     for (; it != m_programList.end(); it++) {
-        std::cout << "C = " << c++ << std::endl;
+//      std::cout << "C = " << c++ << std::endl;
         if (it->getBank() == bank && it->getProgram() == programNo)
             return &(*it);
     }

@@ -89,6 +89,8 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     setWindowTitle(tr("Manage MIDI Banks and Programs"));
 
     QSplitter *splitter = new QSplitter(mainFrame);
+    // tweak the sizes so the left bit is accessible
+    splitter->setSizes(QList<int>() << 400 << 400);
     mainFrame->layout()->addWidget(splitter);
 
     QFrame *btnBox = new QFrame(mainFrame);

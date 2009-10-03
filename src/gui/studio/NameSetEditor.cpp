@@ -154,7 +154,12 @@ NameSetEditor::NameSetEditor(BankEditorDialog* bankEditor,
                     m_keyMapButtons.push_back(button);
                 }
 
-                LineEdit* lineEdit = new LineEdit(numberText, numBox);
+                // the advantage of pre-populating with number texts (to help in
+                // creating something like raw-numbers.rgd e.g.) is outweighed
+                // by the irritation of having intentionally blank spaces
+                // populated with useless numbers that have to be deleted, so
+                // let's just start off blank if nothing is there
+                LineEdit* lineEdit = new LineEdit("", numBox);
                 numBoxLayout->addWidget(lineEdit);
                 numBox->setLayout(numBoxLayout);
                 lineEdit->setMinimumWidth(110);
