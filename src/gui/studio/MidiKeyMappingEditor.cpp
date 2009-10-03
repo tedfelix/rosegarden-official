@@ -171,7 +171,7 @@ MidiKeyMappingEditor::slotNameChanged(const QString& name)
 }
 
 void
-MidiKeyMappingEditor::slotEntryButtonPressed()
+MidiKeyMappingEditor::slotKeyMapButtonPressed()
 {}
 
 void MidiKeyMappingEditor::blockAllSignals(bool block)

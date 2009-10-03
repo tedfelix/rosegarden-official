@@ -23,16 +23,14 @@
 
 #include <QString>
 #include <QGroupBox>
+#include <QToolButton>
+#include <QPushButton>
+#include <QTreeWidgetItem>
+#include <QLabel>
+#include <QFrame>
+#include <QGridLayout>
 
 #include <vector>
-
-
-class QWidget;
-class QPushButton;
-class QTreeWidgetItem;
-class QLabel;
-class QGridLayout;
-class QFrame;
 
 
 namespace Rosegarden
@@ -52,7 +50,7 @@ public:
 
 public slots:
     virtual void slotNameChanged(const QString&) = 0;
-    virtual void slotEntryButtonPressed() = 0;
+    virtual void slotKeyMapButtonPressed() = 0;
     void slotToggleInitialLabel();
 
 protected:
@@ -61,21 +59,21 @@ protected:
                   QWidget *parent,
                   const char *name,
                   QString headingPrefix = "",
-                  bool showEntryButtons = false);
+                  bool showKeyMapButtons = false);
 
-    QPushButton *getEntryButton(int n) { return m_entryButtons[n]; }
-    const QPushButton *getEntryButton(int n) const { return m_entryButtons[n]; }
+    QToolButton *getKeyMapButton(int n) { return m_keyMapButtons[n]; }
+    const QToolButton *getKeyMapButton(int n) const { return m_keyMapButtons[n]; }
 
-    QGridLayout             *m_mainLayout;
-    BankEditorDialog*        m_bankEditor;
-    QStringList              m_completions;
-    QPushButton             *m_initialLabel;
-    std::vector<QLabel*>     m_labels;
-    std::vector<LineEdit*>   m_names;
-    QFrame                  *m_mainFrame;
-    QLabel                  *m_librarian;
-    QLabel                  *m_librarianEmail;
-    std::vector<QPushButton *> m_entryButtons;
+    QGridLayout              *m_mainLayout;
+    BankEditorDialog         *m_bankEditor;
+    QStringList               m_completions;
+    QPushButton              *m_initialLabel;
+    std::vector<QLabel*>      m_labels;
+    std::vector<LineEdit*>    m_names;
+    QFrame                   *m_mainFrame;
+    QLabel                   *m_librarian;
+    QLabel                   *m_librarianEmail;
+    std::vector<QToolButton*> m_keyMapButtons;
 };
 
 

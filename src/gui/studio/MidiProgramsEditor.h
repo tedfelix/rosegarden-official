@@ -60,9 +60,9 @@ public slots:
     void slotNewPercussion(); // gets value from checkbox
 
     virtual void slotNameChanged(const QString &);
-    virtual void slotEntryButtonPressed();
-    void slotEntryMenuItemSelected(QAction *);
-    void slotEntryMenuItemSelected(int);
+    virtual void slotKeyMapButtonPressed();
+    void slotKeyMapMenuItemSelected(QAction *);
+    void slotKeyMapMenuItemSelected(int);
 
 protected:
 

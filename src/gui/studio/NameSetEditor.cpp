@@ -36,6 +36,7 @@
 #include <QTreeWidgetItem>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QToolButton>
 
 #include <iostream>
 
@@ -47,7 +48,7 @@ NameSetEditor::NameSetEditor(BankEditorDialog* bankEditor,
                              QWidget* parent,
                              const char* name,
                              QString headingPrefix,
-                             bool showEntryButtons) :
+                             bool showKeyMapButtons) :
     QGroupBox(title, parent),
     m_bankEditor(bankEditor),
     m_mainFrame(new QFrame(this))
@@ -61,22 +62,29 @@ NameSetEditor::NameSetEditor(BankEditorDialog* bankEditor,
 
     // Librarian
     //
-    QGroupBox *groupBox = new QGroupBox(tr("Librarian"), m_mainFrame);
-    QHBoxLayout *groupBoxLayout = new QHBoxLayout;
+    QGroupBox *groupBox = new QGroupBox(tr("Provided by"), m_mainFrame);
+    QGridLayout *groupBoxLayout = new QGridLayout;
 
-    //m_mainLayout->addWidget(groupBox, 0, 3, 2- 0+1, 5- 3+1);
     m_mainLayout->addWidget(groupBox, 0, 3, 3, 3);
 
-    groupBoxLayout->addWidget(new QLabel(tr("Name")));
+//    groupBoxLayout->addWidget(new QLabel(tr("Name")), 0, 0);
+    //TODO convert to LineEdit or such, so end users can edit these fields (but
+    // not at this stage of sorting out; save this for polish afterwards)
     m_librarian = new QLabel(groupBox);
-    groupBoxLayout->addWidget(m_librarian);
+    groupBoxLayout->addWidget(m_librarian, 0, 1);
 
-    groupBoxLayout->addWidget(new QLabel(tr("Email")));
+//    groupBoxLayout->addWidget(new QLabel(tr("Email")), 1, 0);
     m_librarianEmail = new QLabel(groupBox);
-    groupBoxLayout->addWidget(m_librarianEmail);
+    groupBoxLayout->addWidget(m_librarianEmail, 1, 1);
 
     groupBox->setLayout(groupBoxLayout);
-    groupBox->setToolTip(tr("The librarian maintains the Rosegarden device data for this device.\nIf you've made modifications to suit your own device, it might be worth\nliaising with the librarian in order to publish your information for the benefit\nof others."));
+    //TODO add some message box to come up from a suitable context and explain
+    // where to send modified files, and that you can browse the latest
+    // available library at:
+    //
+    // http://rosegarden.svn.sourceforge.net/viewvc/rosegarden/trunk/rosegarden/data/library/
+    //
+//  groupBox->setToolTip(tr("<qt><p>The librarian maintains the Rosegarden device data for this device.</p><p>If you've made modifications to suit your own device, it might be worth\nliaising with the librarian in order to publish your information for the benefit\nof others."));
 
     QTabWidget* tabw = new QTabWidget(this);
     layout->addWidget(tabw);
@@ -120,6 +128,7 @@ NameSetEditor::NameSetEditor(BankEditorDialog* bankEditor,
                 if (tab == 0 && col == 0 && row == 0) {
                     // Initial label; button to adjust whether labels start at 0 or 1
                     m_initialLabel = new QPushButton(numberText, numBox);
+                    m_initialLabel->setFixedWidth(25);
                     numBoxLayout->addWidget(m_initialLabel);
                     connect(m_initialLabel,
                             SIGNAL(clicked()),
@@ -128,24 +137,21 @@ NameSetEditor::NameSetEditor(BankEditorDialog* bankEditor,
                 } else {
                     QLabel *label = new QLabel(numberText, numBox);
                     numBoxLayout->addWidget(label);
-                    label->setFixedWidth(40);
+                    label->setFixedWidth(30);
                     label->setAlignment(Qt::AlignCenter);
                     m_labels.push_back(label);
                 }
 
 
-                // What the hell is an EntryButton anyway?  Oh.  The buttons
-                // that somehow or other get the little green/white pixmaps for
-                // associating a key map with a program entry.
-                if (showEntryButtons) {
-                    QPushButton *button = new QPushButton("", numBox, numberText);
+                if (showKeyMapButtons) {
+                    QToolButton *button = new QToolButton();
                     numBoxLayout->addWidget(button);
 //                  button->setMaximumWidth(40);
 //                  button->setMaximumHeight(20);
 //                  button->setFlat(true);
                     connect(button, SIGNAL(clicked()),
-                            this, SLOT(slotEntryButtonPressed()));
-                    m_entryButtons.push_back(button);
+                            this, SLOT(slotKeyMapButtonPressed()));
+                    m_keyMapButtons.push_back(button);
                 }
 
                 LineEdit* lineEdit = new LineEdit(numberText, numBox);

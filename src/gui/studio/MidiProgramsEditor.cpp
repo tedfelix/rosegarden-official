@@ -226,12 +226,12 @@ MidiProgramsEditor::populate(QTreeWidgetItem* item)
     for (unsigned int i = 0; i < (unsigned int)m_names.size(); i++) {
 
         m_names[i]->clear();
-        getEntryButton(i)->setEnabled(haveKeyMappings);
-        getEntryButton(i)->setIcon(QIcon(noKeyPixmap));
+        getKeyMapButton(i)->setEnabled(haveKeyMappings);
+        getKeyMapButton(i)->setIcon(QIcon(noKeyPixmap));
         // QToolTip::remove
-        //    ( getEntryButton(i) );
-        getEntryButton(i)->setToolTip(QString(""));  //@@@ Usefull ?
-        getEntryButton(i)->setMaximumHeight( 12 );
+        //    ( getKeyMapButton(i) );
+        getKeyMapButton(i)->setToolTip(QString(""));  //@@@ Usefull ?
+        getKeyMapButton(i)->setMaximumHeight( 12 );
 
         for (it = programSubset.begin(); it != programSubset.end(); it++) {
             if (it->getProgram() == i) {
@@ -241,8 +241,8 @@ MidiProgramsEditor::populate(QTreeWidgetItem* item)
                 m_names[i]->setText(programName);
 
                 if (m_device->getKeyMappingForProgram(*it)) {
-                    getEntryButton(i)->setIcon(QIcon(keyPixmap));
-                    getEntryButton(i)->setToolTip
+                    getKeyMapButton(i)->setIcon(QIcon(keyPixmap));
+                    getKeyMapButton(i)->setToolTip
                         (tr("Key Mapping: %1") 
                               .arg(strtoqstr(m_device->getKeyMappingForProgram(*it)->getName())));
                 }
@@ -447,11 +447,11 @@ MidiProgramsEditor::slotNameChanged(const QString& programName)
 }
 
 void
-MidiProgramsEditor::slotEntryButtonPressed()
+MidiProgramsEditor::slotKeyMapButtonPressed()
 {
     QPushButton* button = dynamic_cast<QPushButton*>(const_cast<QObject *>(sender()));
     if (!button) {
-        RG_DEBUG << "MidiProgramsEditor::slotEntryButtonPressed() : %%% ERROR - signal sender is not a QPushButton\n";
+        RG_DEBUG << "MidiProgramsEditor::slotKeyMapButtonPressed() : %%% ERROR - signal sender is not a QPushButton\n";
         return ;
     }
 
@@ -477,7 +477,7 @@ MidiProgramsEditor::slotEntryButtonPressed()
     const MidiKeyMapping *currentMapping =
         m_device->getKeyMappingForProgram(*program);
 
-    int currentEntry = 0;
+    int currentKeyMap = 0;
 
     QAction *a = menu->addAction(tr("<no key mapping>"));
     a->setObjectName("0");
@@ -485,29 +485,29 @@ MidiProgramsEditor::slotEntryButtonPressed()
     for (size_t i = 0; i < kml.size(); ++i) {
         a = menu->addAction(strtoqstr(kml[i].getName()));
         a->setObjectName(QString("%1").arg(i+1));
-        if (currentMapping && (kml[i] == *currentMapping)) currentEntry = int(i + 1);
+        if (currentMapping && (kml[i] == *currentMapping)) currentKeyMap = int(i + 1);
     }
 
     connect(menu, SIGNAL(triggered(QAction *)),
-            this, SLOT(slotEntryMenuItemSelected(QAction *)));
+            this, SLOT(slotKeyMapMenuItemSelected(QAction *)));
 
     int itemHeight = menu->itemHeight(0) + 2;
     QPoint pos = QCursor::pos();
 
     pos.rx() -= 10;
-    pos.ry() -= (itemHeight / 2 + currentEntry * itemHeight);
+    pos.ry() -= (itemHeight / 2 + currentKeyMap * itemHeight);
 
     menu->popup(pos);
 }
 
 void
-MidiProgramsEditor::slotEntryMenuItemSelected(QAction *a)
+MidiProgramsEditor::slotKeyMapMenuItemSelected(QAction *a)
 {
-    slotEntryMenuItemSelected(a->objectName().toInt());
+    slotKeyMapMenuItemSelected(a->objectName().toInt());
 }
 
 void
-MidiProgramsEditor::slotEntryMenuItemSelected(int i)
+MidiProgramsEditor::slotKeyMapMenuItemSelected(int i)
 {
     if (!m_device)
         return ;
@@ -537,7 +537,7 @@ MidiProgramsEditor::slotEntryMenuItemSelected(int i)
     QIcon icon;
 
     bool haveKeyMappings = (m_device->getKeyMappings().size() > 0);  //@@@ JAS restored from before port/
-    QPushButton *btn = getEntryButton(m_currentMenuProgram);
+    QToolButton *btn = getKeyMapButton(m_currentMenuProgram);
 
     if (newMapping.empty()) {
         icon = il.load( "key-white" );

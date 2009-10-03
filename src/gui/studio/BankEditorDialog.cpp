@@ -32,6 +32,7 @@
 #include "gui/dialogs/ExportDeviceDialog.h"
 #include "gui/dialogs/ImportDeviceDialog.h"
 #include "gui/widgets/TmpStatusMsg.h"
+#include "gui/widgets/FileDialog.h"
 #include "gui/general/ResourceFinder.h"
 #include "MidiBankTreeWidgetItem.h"
 #include "MidiDeviceTreeWidgetItem.h"
@@ -44,7 +45,6 @@
 #include <QApplication>
 #include <QAction>
 #include <QComboBox>
-#include <QFileDialog>
 #include <QTreeWidget>
 #include <QMainWindow>
 #include <QMessageBox>
@@ -63,6 +63,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QShortcut>
+#include <QDesktopServices>
 
 
 namespace Rosegarden
@@ -1596,18 +1597,10 @@ BankEditorDialog::addCommandToHistory(Command *command)
 void
 BankEditorDialog::slotImport()
 {
-    QString deviceDir = ResourceFinder().getResourceDir("library");
+    QString home = QUrl::fromLocalFile(QDesktopServices::storageLocation(QDesktopServices::HomeLocation)).path();
+    QString deviceDir = home + "/.local/share/rosegarden/library";
 
-/*### what does this mean?
-    QDir dir(deviceDir);
-    if (!dir.exists()) {
-        deviceDir = ":ROSEGARDENDEVICE";
-    } else {
-        deviceDir = "file://" + deviceDir;
-    }
-*/
-
-    QString url_str = QFileDialog::getOpenFileName(this, tr("Import Banks from Device in File"), deviceDir,
+    QString url_str = FileDialog::getOpenFileName(this, tr("Import Banks from Device in File"), deviceDir,
                       tr("Rosegarden Device files") + " (*.rgd *.RGD)" + ";;" +
                       tr("Rosegarden files") + " (*.rg *.RG)" + ";;" +
                       tr("Sound fonts") + " (*.sf2 *.SF2)" + ";;" +
