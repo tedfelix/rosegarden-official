@@ -17,9 +17,15 @@
 
 
 #include "BankEditorDialog.h"
+#include "MidiBankTreeWidgetItem.h"
+#include "MidiDeviceTreeWidgetItem.h"
+#include "MidiKeyMapTreeWidgetItem.h"
+#include "MidiKeyMappingEditor.h"
+#include "MidiProgramsEditor.h"
 
 #include "misc/Debug.h"
 #include "misc/Strings.h"
+#include "misc/ConfigGroups.h"
 #include "base/Device.h"
 #include "base/MidiDevice.h"
 #include "base/MidiProgram.h"
@@ -34,11 +40,6 @@
 #include "gui/widgets/TmpStatusMsg.h"
 #include "gui/widgets/FileDialog.h"
 #include "gui/general/ResourceFinder.h"
-#include "MidiBankTreeWidgetItem.h"
-#include "MidiDeviceTreeWidgetItem.h"
-#include "MidiKeyMapTreeWidgetItem.h"
-#include "MidiKeyMappingEditor.h"
-#include "MidiProgramsEditor.h"
 #include "document/Command.h"
 
 #include <QLayout>
@@ -65,6 +66,7 @@
 #include <QShortcut>
 #include <QDesktopServices>
 #include <QDialogButtonBox>
+#include <QSettings>
 
 
 namespace Rosegarden
@@ -177,26 +179,38 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     // note: above connection moved to setupActions
 
     // Right side layout
-    QFrame *vbox = new QFrame;
-    vbox->setContentsMargins(8, 8, 8, 8);
-    QVBoxLayout *vboxLayout = new QVBoxLayout;
-    vboxLayout->setSpacing(6);
-    vbox->setLayout(vboxLayout);
-    splitterLayout->addWidget(vbox);
+    m_rightSide = new QFrame;
 
-    m_programEditor = new MidiProgramsEditor(this, vbox);
-    vboxLayout->addWidget(m_programEditor);
+    QSettings settings;
+    settings.beginGroup(GeneralOptionsConfigGroup);
+    m_Thorn = settings.value("use_thorn_style", true).toBool();
+    settings.endGroup();
 
-    m_keyMappingEditor = new MidiKeyMappingEditor(this, vbox);
-    vboxLayout->addWidget(m_keyMappingEditor);
+    if (m_Thorn) {
+        m_rightSide->setStyleSheet("QWidget { background: blue }");
+    } else {
+        m_rightSide->setEnabled(false);
+    }
+
+    m_rightSide->setContentsMargins(8, 8, 8, 8);
+    QVBoxLayout *rightSideLayout = new QVBoxLayout;
+    rightSideLayout->setSpacing(6);
+    m_rightSide->setLayout(rightSideLayout);
+    splitterLayout->addWidget(m_rightSide);
+
+    m_programEditor = new MidiProgramsEditor(this, m_rightSide);
+    rightSideLayout->addWidget(m_programEditor);
+
+    m_keyMappingEditor = new MidiKeyMappingEditor(this, m_rightSide);
+    rightSideLayout->addWidget(m_keyMappingEditor);
     m_keyMappingEditor->hide();
 
     m_programEditor->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred));
     m_keyMappingEditor->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred));
 
-    m_optionBox = new QGroupBox(tr("Options"), vbox);
+    m_optionBox = new QGroupBox(tr("Options"), m_rightSide);
     QVBoxLayout *optionBoxLayout = new QVBoxLayout;
-    vboxLayout->addWidget(m_optionBox);
+    rightSideLayout->addWidget(m_optionBox);
 
     QWidget *variationBox = new QWidget(m_optionBox);
     QHBoxLayout *variationBoxLayout = new QHBoxLayout;
@@ -318,10 +332,7 @@ BankEditorDialog::setupActions()
     
     createAction("file_close", SLOT(slotFileClose()));
 
-//&&&    m_closeButton->setText(findAction("file_close")->text());
-    m_closeButton->setText(tr("Close"));
-    connect(m_closeButton, SIGNAL(clicked()),
-            this, SLOT(slotFileClose()));
+    connect(m_closeButton, SIGNAL(clicked()), this, SLOT(slotFileClose()));
 
     createAction("edit_copy", SLOT(slotEditCopy()));
     createAction("edit_paste", SLOT(slotEditPaste()));
@@ -861,6 +872,12 @@ void BankEditorDialog::populateDeviceEditors(QTreeWidgetItem* item)
         m_delete->setEnabled(true);
         m_copyPrograms->setEnabled(true);
 
+        if (m_Thorn) {
+            m_rightSide->setStyleSheet("QWidget { background: black }");
+        } else {
+            m_rightSide->setEnabled(true);
+        }
+
         if (m_copyBank.first != Device::NO_DEVICE)
             m_pastePrograms->setEnabled(true);
 
@@ -919,6 +936,11 @@ void BankEditorDialog::populateDeviceEditors(QTreeWidgetItem* item)
     m_delete->setEnabled(false);
     m_copyPrograms->setEnabled(false);
     m_pastePrograms->setEnabled(false);
+    if (m_Thorn) {
+        m_rightSide->setStyleSheet("QWidget { background: gray }");
+    } else {
+        m_rightSide->setEnabled(false);
+    }
 
     m_variationToggle->setChecked(device->getVariationType() !=
                                   MidiDevice::NoVariations);
@@ -1494,7 +1516,7 @@ BankEditorDialog::selectDeviceItem(MidiDevice *device)
         }
 
     }
-    
+
 }
 
 void

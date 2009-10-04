@@ -38,6 +38,7 @@ class QCloseEvent;
 class QCheckBox;
 class QTreeWidget;
 class QComboBox;
+class QFrame;
 
 
 namespace Rosegarden
@@ -64,7 +65,7 @@ public:
 
     ~BankEditorDialog();
 
-    // Initialise the devices/banks and programs - the whole lot
+    // Initialize the devices/banks and programs - the whole lot
     //
     void initDialog();
 
@@ -152,12 +153,12 @@ protected:
     void setupActions();
 
     //--------------- Data members ---------------------------------
-    Studio      *m_studio;
-    RosegardenDocument        *m_doc;
+    Studio                 *m_studio;
+    RosegardenDocument     *m_doc;
 
     MidiProgramsEditor      *m_programEditor;
     MidiKeyMappingEditor    *m_keyMappingEditor;
-    QTreeWidget               *m_treeWidget;
+    QTreeWidget             *m_treeWidget;
 
     QGroupBox               *m_optionBox;
     QCheckBox               *m_variationToggle;
@@ -179,19 +180,24 @@ protected:
     QPushButton             *m_pastePrograms;
     std::pair<DeviceId, int> m_copyBank;
 
-    std::map<DeviceId, std::string>  m_deviceNameMap;
-    BankList                         m_bankList;
-    ProgramList                      m_programList;
-    ProgramList                      m_oldProgramList;
+    std::map<DeviceId,
+             std::string>    m_deviceNameMap;
+    BankList                 m_bankList;
+    ProgramList              m_programList;
+    ProgramList              m_oldProgramList;
 
     bool                     m_modified;
     bool                     m_keepBankList;
     bool                     m_deleteAllReally;
 
-    DeviceId     m_lastDevice;
-    MidiBank     m_lastBank;
+    DeviceId                 m_lastDevice;
+    MidiBank                 m_lastBank;
 
     bool                     m_updateDeviceList;
+
+    QFrame                  *m_rightSide;
+
+    bool                     m_Thorn;
 };
 
 // ----------------------- RemapInstrumentDialog ------------------------
