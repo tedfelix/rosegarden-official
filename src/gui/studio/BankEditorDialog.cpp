@@ -64,6 +64,7 @@
 #include <QHBoxLayout>
 #include <QShortcut>
 #include <QDesktopServices>
+#include <QDialogButtonBox>
 
 
 namespace Rosegarden
@@ -84,62 +85,38 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
 {
     QWidget* mainFrame = new QWidget(this);
     setCentralWidget(mainFrame);
-    mainFrame->setLayout(new QVBoxLayout(this));
+    QVBoxLayout *mainFrameLayout = new QVBoxLayout;
+    mainFrame->setLayout(mainFrameLayout);
 
     setWindowTitle(tr("Manage MIDI Banks and Programs"));
 
-    QSplitter *splitter = new QSplitter(mainFrame);
-    // tweak the sizes so the left bit is accessible
-    splitter->setSizes(QList<int>() << 400 << 400);
-    mainFrame->layout()->addWidget(splitter);
+    QWidget *splitter = new QWidget;
+    QHBoxLayout *splitterLayout = new QHBoxLayout;
+    splitter->setLayout(splitterLayout);
 
-    QFrame *btnBox = new QFrame(mainFrame);
-    mainFrame->layout()->addWidget(btnBox);
-
-    btnBox->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed));
-
-    btnBox->setContentsMargins(4, 4, 4, 4);
-    QHBoxLayout* layout = new QHBoxLayout(btnBox);
-    layout->setSpacing(10);
-
-    m_closeButton = new QPushButton(btnBox);
-    m_applyButton = new QPushButton(tr("Apply"), btnBox);
-    m_resetButton = new QPushButton(tr("Reset"), btnBox);
-
-    layout->addStretch(10);
-    layout->addWidget(m_applyButton);
-    layout->addWidget(m_resetButton);
-    layout->addSpacing(15);
-    layout->addWidget(m_closeButton);
-    layout->addSpacing(5);
-
-    btnBox->setLayout(layout);
-
-    connect(m_applyButton, SIGNAL(clicked()),
-            this, SLOT(slotApply()));
-    connect(m_resetButton, SIGNAL(clicked()),
-            this, SLOT(slotReset()));
+    mainFrameLayout->addWidget(splitter);
 
     //
     // Left-side list view
     //
-    QWidget *leftPart = new QWidget(splitter);
+    QWidget *leftPart = new QWidget;
     QVBoxLayout *leftPartLayout = new QVBoxLayout;
+    leftPart->setLayout(leftPartLayout);
+    splitterLayout->addWidget(leftPart);
     
-    m_treeWidget = new QTreeWidget(leftPart);
+    m_treeWidget = new QTreeWidget;
     leftPartLayout->addWidget(m_treeWidget);
     
     m_treeWidget->setColumnCount(4);
     QStringList sl;
-    sl        << tr("MIDI Device/Bankname")
-            << tr("Type")
-            << tr("MSB")
-            << tr("LSB");
+    sl << tr("Device and Banks")
+       << tr("Type")
+       << tr("MSB")
+       << tr("LSB");
     m_treeWidget->setHeaderLabels(sl);
     m_treeWidget->setRootIsDecorated(true);
 //     m_treeWidget->setSelectionBehavior( QAbstractItemView::SelectRows );    //qt4
     m_treeWidget->setSelectionMode( QAbstractItemView::SingleSelection );    //qt4
-    
     
     /*    
     m_treeWidget->setShowSortIndicator(true);        //&&&
@@ -149,7 +126,6 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     
     QFrame *bankBox = new QFrame(leftPart);
     leftPartLayout->addWidget(bankBox);
-    leftPart->setLayout(leftPartLayout);
     bankBox->setContentsMargins(6, 6, 6, 6);
     QGridLayout *gridLayout = new QGridLayout(bankBox);
     gridLayout->setSpacing(6);
@@ -200,10 +176,13 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
 //             this, SLOT(slotPopulateDeviceEditors(QTreeWidgetItem*)));
     // note: above connection moved to setupActions
 
-    QFrame *vbox = new QFrame(splitter);
+    // Right side layout
+    QFrame *vbox = new QFrame;
     vbox->setContentsMargins(8, 8, 8, 8);
-    QVBoxLayout *vboxLayout = new QVBoxLayout(vbox);
+    QVBoxLayout *vboxLayout = new QVBoxLayout;
     vboxLayout->setSpacing(6);
+    vbox->setLayout(vboxLayout);
+    splitterLayout->addWidget(vbox);
 
     m_programEditor = new MidiProgramsEditor(this, vbox);
     vboxLayout->addWidget(m_programEditor);
@@ -218,8 +197,6 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     m_optionBox = new QGroupBox(tr("Options"), vbox);
     QVBoxLayout *optionBoxLayout = new QVBoxLayout;
     vboxLayout->addWidget(m_optionBox);
-
-    vbox->setLayout(vboxLayout);
 
     QWidget *variationBox = new QWidget(m_optionBox);
     QHBoxLayout *variationBoxLayout = new QHBoxLayout;
@@ -276,7 +253,21 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
             this, SLOT(slotUpdate()));
 
-    // Initialise the dialog
+    // Button box
+    QDialogButtonBox *btnBox = new QDialogButtonBox(QDialogButtonBox::Apply  |
+                                                    QDialogButtonBox::Reset  |
+                                                    QDialogButtonBox::Close);
+
+    mainFrameLayout->addWidget(btnBox);
+
+    m_closeButton = btnBox->button(QDialogButtonBox::Close);
+    m_applyButton = btnBox->button(QDialogButtonBox::Apply);
+    m_resetButton = btnBox->button(QDialogButtonBox::Reset);
+
+    connect(m_applyButton, SIGNAL(clicked()), this, SLOT(slotApply()));
+    connect(m_resetButton, SIGNAL(clicked()), this, SLOT(slotReset()));
+
+    // Initialize the dialog
     //
     initDialog();
     setModified(false);
@@ -420,6 +411,8 @@ BankEditorDialog::initDialog()
     
     // select the first device item
     m_treeWidget->topLevelItem(0)->setSelected(true);
+    m_treeWidget->resizeColumnToContents(0);
+    m_treeWidget->setMinimumWidth(500);
 }
 
 void
