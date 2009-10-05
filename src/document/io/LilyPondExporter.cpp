@@ -128,7 +128,7 @@ LilyPondExporter::readConfigVariables(void)
     m_exportBeams = qStrToBool(settings.value("lilyexportbeamings", "false")) ;
     m_exportStaffGroup = qStrToBool(settings.value("lilyexportstaffbrackets", "true")) ;
 
-    m_languageLevel = settings.value("lilylanguage", LILYPOND_VERSION_2_6).toUInt() ;
+    m_languageLevel = settings.value("lilylanguage", LILYPOND_VERSION_2_12).toUInt() ;
     m_exportMarkerMode = settings.value("lilyexportmarkermode", EXPORT_NO_MARKERS).toUInt() ;
     m_chordNamesMode = qStrToBool(settings.value("lilychordnamesmode", "false")) ;
     settings.endGroup();
@@ -223,35 +223,37 @@ LilyPondExporter::handleStartingPostEvents(eventstartlist &postEventsToStart,
             (*m)->has(Controller::NUMBER) &&
             (*m)->has(Controller::VALUE)) {
                 if ((*m)->get <Int>(Controller::NUMBER) == 64) {
-            //
-            // As a first approximation, any positive value for
-            // the pedal event results in a new "Ped." marking.
-            //
-            // If the pedals have been entered with a midi piano,
-            // the pedal may have continuous values from 0 to 127
-            // and there may appear funny output with plenty of 
-            // "Ped." marks indicating the change of pedal pressure.
-            //
-            // One could use the following code to make the pedal
-            // marks transparent, but the invisible syntax has to
-            // be put before the note, while the pedal syntax goes
-            // after the note. Therefore, the following does not work:
-            //
-            //   c' \sustainUp \once \overr...#'transparent \sustainDown
-            //
-            // If a solution which allows to hide the pedal marks,
-            // the example code below which shows how to hide the marks
-            // can be removed.
-            //
-            /*
-                     *if ((*m)->has(INVISIBLE) && (*m)->get <Bool>(INVISIBLE)) {
-                     *    str << "\\once \\override Staff.SustainPedal #'transparent = ##t ";
-             *}
-             */
+                    //
+                    // As a first approximation, any positive value for
+                    // the pedal event results in a new "Ped." marking.
+                    //
+                    // If the pedals have been entered with a midi piano,
+                    // the pedal may have continuous values from 0 to 127
+                    // and there may appear funny output with plenty of 
+                    // "Ped." marks indicating the change of pedal pressure.
+                    //
+                    // One could use the following code to make the pedal
+                    // marks transparent, but the invisible syntax has to
+                    // be put before the note, while the pedal syntax goes
+                    // after the note. Therefore, the following does not work:
+                    //
+                    //   c' \sustainUp \once \overr...#'transparent \sustainDown
+                    //
+                    // If a solution which allows to hide the pedal marks,
+                    // the example code below which shows how to hide the marks
+                    // can be removed.
+                    //
+                    /*
+                             *if ((*m)->has(INVISIBLE) && (*m)->get <Bool>(INVISIBLE)) {
+                             *    str << "\\once \\override Staff.SustainPedal #'transparent = ##t ";
+                     *}
+                     */
+
+                    // NOTE: sustain syntax changed in LilyPond 2.12
                     if ((*m)->get <Int>(Controller::VALUE) > 0) {
-                        str << "\\sustainDown ";
+                        str << "\\sustain" << (m_languageLevel < LILYPOND_VERSION_2_12 ? "Down " : "On ");
                     } else {
-                        str << "\\sustainUp ";
+                        str << "\\sustain" << (m_languageLevel < LILYPOND_VERSION_2_12 ? "Up " : "Off ");
                     }
                 }
             }
@@ -617,15 +619,10 @@ LilyPondExporter::write()
     default:
         // force the default version if there was an error
         std::cerr << "ERROR: Unknown language level " << m_languageLevel
-        << ", using \\version \"2.6.0\" instead" << std::endl;
-        str << "\\version \"2.6.0\"" << std::endl;
-        m_languageLevel = LILYPOND_VERSION_2_6;
+        << ", using \\version \"2.12.0\" instead" << std::endl;
+        str << "\\version \"2.12.0\"" << std::endl;
+        m_languageLevel = LILYPOND_VERSION_2_12;
     }
-
-    // enable "point and click" debugging via pdf to make finding the
-    // unfortunately inevitable errors easier
-    str << "% uncomment to enable point and click debugging" << std::endl;
-    str << "% #(ly:set-option 'point-and-click #f)" << std::endl;
 
     // LilyPond \header block
 
