@@ -23,6 +23,8 @@
 #include <set>
 #include <map>
 
+#include <stdio.h>
+
 using std::cerr;
 using std::endl;
 

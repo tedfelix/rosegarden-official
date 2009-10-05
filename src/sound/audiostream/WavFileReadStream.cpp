@@ -70,7 +70,7 @@ WavFileReadStream::WavFileReadStream(QString path) :
 
     if (!m_file || m_fileInfo.frames <= 0 || m_fileInfo.channels <= 0) {
 	std::cerr << "WavFileReadStream::initialize: Failed to open file \""
-                  << path << "\" ("
+                  << path.toStdString() << "\" ("
 		  << sf_strerror(m_file) << ")" << std::endl;
 
 	if (m_file) {
