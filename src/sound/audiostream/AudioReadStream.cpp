@@ -16,6 +16,7 @@
 #include "AudioReadStream.h"
 #include "misc/Debug.h"
 #include "sound/Resampler.h"
+#include <cmath>
 
 namespace Rosegarden
 {

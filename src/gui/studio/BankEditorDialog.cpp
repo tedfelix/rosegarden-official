@@ -186,12 +186,6 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     m_Thorn = settings.value("use_thorn_style", true).toBool();
     settings.endGroup();
 
-    if (m_Thorn) {
-        m_rightSide->setStyleSheet("QWidget { background: blue }");
-    } else {
-        m_rightSide->setEnabled(false);
-    }
-
     m_rightSide->setContentsMargins(8, 8, 8, 8);
     QVBoxLayout *rightSideLayout = new QVBoxLayout;
     rightSideLayout->setSpacing(6);
@@ -873,7 +867,8 @@ void BankEditorDialog::populateDeviceEditors(QTreeWidgetItem* item)
         m_copyPrograms->setEnabled(true);
 
         if (m_Thorn) {
-            m_rightSide->setStyleSheet("QWidget { background: black }");
+            m_rightSide->setStyleSheet("QLabel { color: white}");
+            m_rightSide->setEnabled(true);
         } else {
             m_rightSide->setEnabled(true);
         }
@@ -937,7 +932,8 @@ void BankEditorDialog::populateDeviceEditors(QTreeWidgetItem* item)
     m_copyPrograms->setEnabled(false);
     m_pastePrograms->setEnabled(false);
     if (m_Thorn) {
-        m_rightSide->setStyleSheet("QWidget { background: gray }");
+        m_rightSide->setStyleSheet("QLabel { color: gray }");
+        m_rightSide->setEnabled(false);
     } else {
         m_rightSide->setEnabled(false);
     }

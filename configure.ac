@@ -33,12 +33,12 @@ AC_CHECK_HEADER([X11/SM/SMlib.h],[],[AC_MSG_ERROR(Failed to find required X11 he
 AC_C_BIGENDIAN([AC_SUBST(ENDIANNESS,"-DBIG_ENDIAN=1")],[AC_SUBST(ENDIANNESS,"-DLITTLE_ENDIAN=1")],[AC_MSG_ERROR(Could not find system endianess)])
 # hm, we'll probably want a newer version for jack_client_open
 PKG_CHECK_MODULES([JACK],[jack >= 0.77],[HAVES="$HAVES -DHAVE_LIBJACK"],[])
-#PKG_CHECK_MODULES([ALSA],[alsa >= 0.9],[HAVES="$HAVES -DHAVE_ALSA"],[])
+PKG_CHECK_MODULES([ALSA],[alsa >= 0.9],[HAVES="$HAVES -DHAVE_ALSA"],[])
 PKG_CHECK_MODULES([DSSI],[dssi >= 0.9],[],[])
 PKG_CHECK_MODULES([liblo],[liblo >= 0.7],[],[])
 PKG_CHECK_MODULES([lrdf],[lrdf >= 0.2],[],[])
 PKG_CHECK_MODULES([fftw3f],[fftw3f >= 3.0.0],[],[])
-PKG_CHECK_MODULES([samplerate],[samplerate >= 0.1.6],[],[])
+PKG_CHECK_MODULES([samplerate],[samplerate >= 0.1.4],[],[])
 
 AC_PATH_PROG([PERL],[perl])
 if test x$PERL = x ; then
