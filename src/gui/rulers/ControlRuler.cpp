@@ -87,7 +87,10 @@ ControlRuler::ControlRuler(ViewSegment *viewsegment,
 //        m_selector(new ControlSelector(this)),
 //        m_selectionRect(new Q3CanvasRectangle(canvas())),
         m_selectionRect(0),
-        m_menu(0)
+        m_menu(0),
+        m_firstVisibleItem(m_controlItemMap.end()),
+        m_lastVisibleItem(m_controlItemMap.end()),
+        m_nextItemLeft(m_controlItemMap.end())
 {
 //    setViewSegment(viewsegment);
 

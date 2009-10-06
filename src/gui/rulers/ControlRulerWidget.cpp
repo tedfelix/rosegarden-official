@@ -139,6 +139,8 @@ void ControlRulerWidget::setViewSegment(ViewSegment *viewSegment)
             }
         }
     }
+//    
+//    slotAddRuler();
 }
 
 void ControlRulerWidget::slotTogglePropertyRuler(const PropertyName &propertyName)
@@ -278,19 +280,22 @@ void ControlRulerWidget::slotDragScroll(timeT t)
 
 void ControlRulerWidget::slotSelectionChanged(EventSelection *s)
 {
+    ///@TODO This line is necessary only because a null EventSelection is sent by Notation
+    if (!s) return;
+
 //    ViewElementList *selectedElements = new ViewElementList();
     m_selectedElements.clear();
 
     for (EventSelection::eventcontainer::iterator it =
             s->getSegmentEvents().begin();
             it != s->getSegmentEvents().end(); ++it) {
-        MatrixElement *element = 0;
+//        ViewElement *element = 0;
         ViewElementList::iterator vi = m_viewSegment->findEvent(*it);
-        if (vi != m_viewSegment->getViewElementList()->end()) {
-            element = dynamic_cast<MatrixElement *>(*vi);
-        }
-        if (!element) continue;
-        m_selectedElements.push_back(element);
+//        if (vi != m_viewSegment->getViewElementList()->end()) {
+//            element = dynamic_cast<ViewElement *>(*vi);
+//        }
+//        if (!element) continue;
+        m_selectedElements.push_back(*vi);
     }
 
     // Should be dispatched to all PropertyControlRulers

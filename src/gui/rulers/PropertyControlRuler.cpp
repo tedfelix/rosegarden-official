@@ -194,11 +194,14 @@ void PropertyControlRuler::init()
         return;
 
     ViewElementList *viewElementList = m_viewSegment->getViewElementList();
+    if (!viewElementList) return;
+    
     for (ViewElementList::iterator it = viewElementList->begin(); it != viewElementList->end(); ++it) {
 //        if (MatrixElement *el = dynamic_cast<MatrixElement*>(*it)) {
         addControlItem(*it);
 //        }
     }
+    
 
     RG_DEBUG << "PropertyControlRuler::init - Segment size: " << m_segment->size();
 
