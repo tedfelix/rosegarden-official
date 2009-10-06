@@ -67,13 +67,11 @@ NameSetEditor::NameSetEditor(BankEditorDialog* bankEditor,
 
     m_mainLayout->addWidget(groupBox, 0, 3, 3, 3);
 
-//    groupBoxLayout->addWidget(new QLabel(tr("Name")), 0, 0);
     //TODO convert to LineEdit or such, so end users can edit these fields (but
     // not at this stage of sorting out; save this for polish afterwards)
     m_librarian = new QLabel(groupBox);
     groupBoxLayout->addWidget(m_librarian, 0, 1);
 
-//    groupBoxLayout->addWidget(new QLabel(tr("Email")), 1, 0);
     m_librarianEmail = new QLabel(groupBox);
     groupBoxLayout->addWidget(m_librarianEmail, 1, 1);
 
@@ -90,7 +88,6 @@ NameSetEditor::NameSetEditor(BankEditorDialog* bankEditor,
     layout->addWidget(tabw);
 
     setLayout(layout);
-//    m_mainLayout->setSpacing(layout->spacing());
 
     tabw->setMargin(5);
 
@@ -146,30 +143,17 @@ NameSetEditor::NameSetEditor(BankEditorDialog* bankEditor,
                 if (showKeyMapButtons) {
                     QToolButton *button = new QToolButton();
                     numBoxLayout->addWidget(button);
-//                  button->setMaximumWidth(40);
-//                  button->setMaximumHeight(20);
-//                  button->setFlat(true);
                     connect(button, SIGNAL(clicked()),
                             this, SLOT(slotKeyMapButtonPressed()));
                     m_keyMapButtons.push_back(button);
                 }
 
-                // the advantage of pre-populating with number texts (to help in
-                // creating something like raw-numbers.rgd e.g.) is outweighed
-                // by the irritation of having intentionally blank spaces
-                // populated with useless numbers that have to be deleted, so
-                // let's just start off blank if nothing is there
                 LineEdit* lineEdit = new LineEdit("", numBox);
+                lineEdit->setObjectName(numberText);
                 numBoxLayout->addWidget(lineEdit);
                 numBox->setLayout(numBoxLayout);
                 lineEdit->setMinimumWidth(110);
                 
-//            lineEdit->setCompletionMode(KGlobalSettings::CompletionAuto);//&&& FIX: use setCompleter(..)    
-//                 QCompleter completer;
-//                 completer->setCompletitionMode( QCompleter::InlineCompletion );
-                
-//                 lineEdit->setCompletionObject(&m_completion);
-
                 lineEdit->setCompleter(new QCompleter(m_completions));
                 
                 m_names.push_back(lineEdit);

@@ -384,10 +384,12 @@ MidiProgramsEditor::slotNameChanged(const QString& programName)
     }
 
     QString senderName = sender()->objectName();
+    std::cout << "senderName is: " << senderName.toStdString() << std::endl;
 
     // Adjust value back to zero rated
     //
     unsigned int id = senderName.toUInt() - 1;
+    std::cout << "id is: " << id << std::endl;
 
     RG_DEBUG << "MidiProgramsEditor::slotNameChanged(" << programName << ") : id = " << id << endl;
     
@@ -400,6 +402,7 @@ MidiProgramsEditor::slotNameChanged(const QString& programName)
         RG_DEBUG << "currBank: " << currBank << endl;
     }
 
+    RG_DEBUG << "current bank name: " << currBank->getName() << endl;
     MidiProgram *program = getProgram(*currBank, id);
 //     MidiProgram *program = getProgram(*currBank, id);
 
@@ -614,9 +617,8 @@ MidiProgramsEditor::getProgram(const MidiBank &bank, int programNo)
 {
     ProgramList::iterator it = m_programList.begin();
 
-    int c = 0;
     for (; it != m_programList.end(); it++) {
-//      std::cout << "C = " << c++ << std::endl;
+        RG_DEBUG << "it->getBank() " << (it->getBank() == bank ? "==" : "!=") << " bank" << endl;
         if (it->getBank() == bank && it->getProgram() == programNo)
             return &(*it);
     }
