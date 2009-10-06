@@ -20,6 +20,7 @@
 #include "misc/Debug.h"
 
 #include <cstring>
+#include <iostream>
 
 namespace Rosegarden
 {
