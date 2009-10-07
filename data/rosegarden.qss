@@ -194,23 +194,6 @@ QTabBar::tab:bottom:!selected
     margin-bottom: 2px; /* make non-selected tabs look smaller*/
 }
 
-/*  QTabWidget
-
-The frame of the tab widget is styled using the ::pane subcontrol. The left and
-right corners are styled using the ::left-corner and ::right-corner
-respectively. The position of the the tab bar is controlled using the ::tab-bar
-subcontrol.  By default, the subcontrols have positions of a QTabWidget in the
-QWindowsStyle. To place the QTabBar in the center, set the subcontrol-position
-of the tab-bar subcontrol.  The :top, :left, :right, :bottom pseudo states
-depending on the orientation of the tabs. */
-
-/*QTabWidget
-{
-    background-color: #000000;
-    color: #FFFFFF;
-}*/
-
-
 
 QDialog,
 #View QDialog QWidget,
@@ -1145,6 +1128,15 @@ QGroupBox::title,
     subcontrol-origin: margin;
     subcontrol-position: top center;
     padding: 0 5px;
+}
+
+QGroupBox::title:!enabled,
+#View QGroupBox::title:!enabled,
+#App QGroupBox:title:!enabled,
+#App QWidget QGroupBox:title:!enabled,
+#RosegardenParameterArea QGroupBox::title:!enabled
+{
+    color: #000000;
 }
 
 QGroupBox QWidget,

@@ -191,6 +191,12 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     QVBoxLayout *rightSideLayout = new QVBoxLayout;
     rightSideLayout->setSpacing(6);
     m_rightSide->setLayout(rightSideLayout);
+
+    if (m_Thorn) {
+        QString localStyle("QWidget:!enabled { color: black }");
+        m_rightSide->setStyleSheet(localStyle);
+    }
+
     splitterLayout->addWidget(m_rightSide);
 
     m_programEditor = new MidiProgramsEditor(this, m_rightSide);
@@ -806,7 +812,6 @@ void BankEditorDialog::populateDeviceEditors(QTreeWidgetItem* item)
         m_copyPrograms->setEnabled(true);
 
         if (m_Thorn) {
-            m_rightSide->setStyleSheet("QLabel { color: white}");
             m_rightSide->setEnabled(true);
         } else {
             m_rightSide->setEnabled(true);
@@ -871,7 +876,6 @@ void BankEditorDialog::populateDeviceEditors(QTreeWidgetItem* item)
     m_copyPrograms->setEnabled(false);
     m_pastePrograms->setEnabled(false);
     if (m_Thorn) {
-        m_rightSide->setStyleSheet("QLabel { color: gray }");
         m_rightSide->setEnabled(false);
     } else {
         m_rightSide->setEnabled(false);
