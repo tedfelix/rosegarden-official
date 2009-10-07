@@ -57,7 +57,7 @@ NoteFontFactory::getFontNames(bool forceRescan)
     if (!m_fontNames.empty()) return m_fontNames;
 
     QSettings settings;
-    settings.beginGroup( NotationViewConfigGroup );
+    settings.beginGroup(NotationViewConfigGroup);
 
     QString fontNameList = "";
     if (!forceRescan) {

@@ -549,8 +549,7 @@ NoteFontMap::startElement(const QString &, const QString &,
         i->second.addHotspot(noteHeight, x, y);
 
     } else if (lcName == "font-requirements") {
-    }
-    else if (lcName == "font-requirement") {
+    } else if (lcName == "font-requirement") {
 
         QString id = attributes.value("font-id");
         int n = -1;
@@ -571,14 +570,14 @@ NoteFontMap::startElement(const QString &, const QString &,
         QString name = attributes.value("name");
         QString names = attributes.value("names");
 
-		if ( ! name.isEmpty()) {
-			if ( ! names.isEmpty()) {
+        if (!name.isEmpty()) {
+            if (!names.isEmpty()) {
                 m_errorString = "font-requirement may have name or names attribute, but not both";
                 return false;
             }
 
             SystemFont *font = SystemFont::loadSystemFont
-                               (SystemFontSpec(name, 12));
+                (SystemFontSpec(name, 12));
 
             if (font) {
                 m_systemFontNames[n] = name;
@@ -588,7 +587,7 @@ NoteFontMap::startElement(const QString &, const QString &,
                 m_ok = false;
             }
 
-		} else if ( ! names.isEmpty()) {
+        } else if (!names.isEmpty()) {
 
             bool have = false;
             QStringList list = QStringList::split(",", names, false);

@@ -24,6 +24,7 @@
 
 #include "misc/Debug.h"
 #include "misc/Strings.h"
+#include "base/Profiler.h"
 #include "gui/general/ResourceFinder.h"
 #include "NoteFontMap.h"
 
@@ -47,6 +48,8 @@ namespace Rosegarden
 SystemFont *
 SystemFont::loadSystemFont(const SystemFontSpec &spec)
 {
+    Profiler profiler("SystemFont::loadSystemFont");
+
     QString name = spec.first;
     int size = spec.second;
 
@@ -124,41 +127,38 @@ qfont:
 
 #endif
 
+    static QHash<QString, QFont *> qFontMap;
+
+    if (qFontMap.contains(name)) {
+        if (qFontMap[name] == 0) return 0;
+        QFont qfont(*qFontMap[name]);
+        qfont.setPixelSize(size);
+        return new SystemFontQt(qfont);
+    }
+
     QFont qfont(name, size, QFont::Normal);
     qfont.setPixelSize(size);
 
     QFontInfo info(qfont);
 
-    std::cerr << "SystemFont::loadSystemFont[Qt]: wanted family " << name << ", got family " << info.family() << " (exactMatch " << info.exactMatch() << ")" << std::endl;
-
-    //    return info.exactMatch();
-
-    // The Qt documentation says:
-    //
-    //   bool QFontInfo::exactMatch() const
-    //   Returns TRUE if the matched window system font is exactly the
-    //   same as the one specified by the font; otherwise returns FALSE.
-    //
-    // My arse.  I specify "feta", I get "Verdana", and exactMatch
-    // returns true.  Uh huh.
-    //
-    // UPDATE: in newer versions of Qt, I specify "fughetta", I get
-    // "Fughetta [macromedia]", and exactMatch returns false.  Just as
-    // useless, but in a different way.
+    std::cerr << "SystemFont::loadSystemFont[Qt]: wanted family " << name << " at size " << size << ", got family " << info.family() << " (exactMatch " << info.exactMatch() << ")" << std::endl;
 
     QString family = info.family().toLower();
 
-    if (family == name.toLower())
+    if (family == name.toLower()) {
+        qFontMap[name] = new QFont(qfont);
         return new SystemFontQt(qfont);
-    else {
+    } else {
         int bracket = family.find(" [");
-        if (bracket > 1)
-            family = family.left(bracket);
-        if (family == name.toLower())
+        if (bracket > 1) family = family.left(bracket);
+        if (family == name.toLower()) {
+            qFontMap[name] = new QFont(qfont);
             return new SystemFontQt(qfont);
+        }
     }
 
     NOTATION_DEBUG << "SystemFont::loadSystemFont[Qt]: Wrong family returned, failing" << endl;
+    qFontMap[name] = 0;
     return 0;
 }
 

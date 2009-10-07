@@ -30,7 +30,6 @@ namespace Rosegarden
 
 typedef std::pair<QString, int> SystemFontSpec;
 
-
 class SystemFont
 {
 public:
@@ -49,9 +48,6 @@ protected:
     static void unbundleFonts();
     static void addFont(QString filename);
 };
-
-
-// Helper class for looking up information about a font
 
 
 }
