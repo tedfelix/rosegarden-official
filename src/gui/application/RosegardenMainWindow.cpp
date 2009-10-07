@@ -956,6 +956,7 @@ RosegardenMainWindow::initView()
     // make sure we show
     //
     RosegardenMainViewWidget *oldView = m_view;
+    if (oldView) oldView->blockSignals(true);
     m_view = m_swapView;
 
     connect(m_view, SIGNAL(stateChange(QString, bool)),
@@ -981,9 +982,8 @@ RosegardenMainWindow::initView()
         // Reset any loop on the sequencer
         //
         try {
-            if (isUsingSequencer())
-                m_seqManager->setLoop(0, 0);
-        leaveActionState("have_range"); //@@@ JAS orig. KXMLGUIClient::StateReverse
+            if (isUsingSequencer()) m_seqManager->setLoop(0, 0);
+            leaveActionState("have_range"); //@@@ JAS orig. KXMLGUIClient::StateReverse
         } catch (QString s) {
             StartupLogo::hideIfStillThere();
             CurrentProgressDialog::freeze();
@@ -1016,8 +1016,7 @@ RosegardenMainWindow::initView()
     delete m_triggerSegmentManager;
     m_triggerSegmentManager = 0;
 
-    setCentralWidget(m_swapView); // this also deletes oldView _but_ only on closure
-    delete oldView;
+    setCentralWidget(m_swapView); // this also deletes oldView (via deleteLater)
 
     // set the highlighted track
     m_view->slotSelectTrackSegments(comp.getSelectedTrack());
