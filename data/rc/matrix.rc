@@ -155,6 +155,8 @@
 <!--    <Action name="split" text="S&amp;plit" icon="split" shortcut="F7" group="tools_segment" checked="false" /> -->
     <Action name="velocity" text="&amp;Velocity" icon="velocity" shortcut="F7" group="tools_segment" checked="false" />
   <Separator/>
+    <Action name="pitch_bend_sequence" text="Pitch &amp;Bend Sequence" />
+  <Separator/>
     <Menu name="Move">
       <text>Local &amp;Cursor</text>
       <Action name="cursor_back" text="Cursor &amp;Back" shortcut="Left" />

@@ -32,6 +32,7 @@
 #include "gui/dialogs/EventFilterDialog.h"
 #include "gui/dialogs/EventParameterDialog.h"
 #include "gui/dialogs/TriggerSegmentDialog.h"
+#include "gui/dialogs/PitchBendSequenceDialog.h"
 
 #include "commands/edit/ChangeVelocityCommand.h"
 #include "commands/edit/ClearTriggersCommand.h"
@@ -318,7 +319,8 @@ NewMatrixView::setupActions()
     createAction("clear_loop", SLOT(slotClearLoop()));
     createAction("clear_selection", SLOT(slotClearSelection()));
     createAction("filter_selection", SLOT(slotFilterSelection()));
-    
+
+    createAction("pitch_bend_sequence", SLOT(slotPitchBendSequence()));    
     
     createAction("show_inst_parameters", SLOT(slotDockParametersBack()));
     createAction("show_chords_ruler", SLOT(slotToggleChordsRuler()));
@@ -1511,6 +1513,24 @@ NewMatrixView::slotInsertableNoteOffReceived(int pitch, int velocity)
 {
     MATRIX_DEBUG << "MatrixView::slotInsertableNoteOffReceived: " << pitch << endl;
     slotInsertableNoteEventReceived(pitch, velocity, false);
+}
+
+void
+NewMatrixView::slotPitchBendSequence()
+{
+    timeT startTime=0;
+    timeT endTime=0;
+
+    if (getSelection()) {
+        startTime=getSelection()->getStartTime();
+        endTime=getSelection()->getEndTime();
+    } else {
+        startTime = getInsertionTime();
+    }
+
+    PitchBendSequenceDialog dialog(this, getCurrentSegment(), startTime,
+                                   endTime);
+    dialog.exec();
 }
 
 /*
