@@ -166,7 +166,7 @@ MidiKeyMappingEditor::slotNameChanged(const QString& name)
 
     if (qstrtostr(name) != m_mapping.getMap()[pitch]) {
         m_mapping.getMap()[pitch] = qstrtostr(name);
-        m_bankEditor->setModified(true);
+        m_bankEditor->slotApply();
     }
 }
 

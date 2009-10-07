@@ -85,10 +85,6 @@ public:
 
     Studio *getStudio() { return m_studio; }
 
-    void setModified(bool value);
-
-    void checkModified();
-
     // Set the listview to select a certain device - used after adding
     // or deleting banks.
     //
@@ -186,7 +182,6 @@ protected:
     ProgramList              m_programList;
     ProgramList              m_oldProgramList;
 
-    bool                     m_modified;
     bool                     m_keepBankList;
     bool                     m_deleteAllReally;
 

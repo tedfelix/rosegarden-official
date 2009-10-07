@@ -55,8 +55,9 @@ NameSetEditor::NameSetEditor(BankEditorDialog* bankEditor,
 {
     QVBoxLayout *layout = new QVBoxLayout;
 
-    m_mainFrame->setContentsMargins(2, 2, 2, 2);
+    m_mainFrame->setContentsMargins(0, 1, 0, 1);
     m_mainLayout = new QGridLayout(m_mainFrame);
+    m_mainLayout->setSpacing(0);
     m_mainFrame->setLayout(m_mainLayout);
     layout->addWidget(m_mainFrame);
 

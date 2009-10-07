@@ -79,15 +79,16 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
         m_studio(&doc->getStudio()),
         m_doc(doc),
         m_copyBank(Device::NO_DEVICE, -1),
-        m_modified(false),
         m_keepBankList(false),
         m_deleteAllReally(false),
         m_lastDevice(Device::NO_DEVICE),
         m_updateDeviceList(false)
 {
     QWidget* mainFrame = new QWidget(this);
+    mainFrame->setContentsMargins(1, 1, 1, 1);
     setCentralWidget(mainFrame);
     QVBoxLayout *mainFrameLayout = new QVBoxLayout;
+    mainFrameLayout->setSpacing(2);
     mainFrame->setLayout(mainFrameLayout);
 
     setWindowTitle(tr("Manage MIDI Banks and Programs"));
@@ -128,9 +129,9 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     
     QFrame *bankBox = new QFrame(leftPart);
     leftPartLayout->addWidget(bankBox);
-    bankBox->setContentsMargins(6, 6, 6, 6);
+    bankBox->setContentsMargins(1, 1, 1, 1);
     QGridLayout *gridLayout = new QGridLayout(bankBox);
-    gridLayout->setSpacing(6);
+    gridLayout->setSpacing(4);
 
     m_addBank = new QPushButton(tr("Add Bank"), bankBox);
     m_addKeyMapping = new QPushButton(tr("Add Key Mapping"), bankBox);
@@ -262,23 +263,20 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
             this, SLOT(slotUpdate()));
 
     // Button box
-    QDialogButtonBox *btnBox = new QDialogButtonBox(QDialogButtonBox::Apply  |
+    QDialogButtonBox *btnBox = new QDialogButtonBox(/*QDialogButtonBox::Apply  | */
                                                     QDialogButtonBox::Reset  |
                                                     QDialogButtonBox::Close);
 
     mainFrameLayout->addWidget(btnBox);
 
     m_closeButton = btnBox->button(QDialogButtonBox::Close);
-    m_applyButton = btnBox->button(QDialogButtonBox::Apply);
     m_resetButton = btnBox->button(QDialogButtonBox::Reset);
 
-    connect(m_applyButton, SIGNAL(clicked()), this, SLOT(slotApply()));
     connect(m_resetButton, SIGNAL(clicked()), this, SLOT(slotReset()));
 
     // Initialize the dialog
     //
     initDialog();
-    setModified(false);
 
     setupActions();
 
@@ -748,63 +746,6 @@ BankEditorDialog::getCurrentMidiDevice()
     return getMidiDevice(m_treeWidget->currentItem());
 }
 
-void
-BankEditorDialog::checkModified()
-{
-    if (!m_modified)
-        return ;
-
-    setModified(false);
-
-    //!!! deleted comment referred to commented message box using obsolete x3
-    // API, so I (dmm) deleted the comment to avoid future confusion
-
-    ModifyDeviceCommand *command = 0;
-    MidiDevice *device = getMidiDevice(m_lastDevice);
-    if (!device) {
-        RG_DEBUG << "%%% WARNING : BankEditorDialog::checkModified() - NO MIDI DEVICE for device "
-        << m_lastDevice << endl;
-        return ;
-    }
-
-    if (m_bankList.size() == 0 && m_programList.size() == 0) {
-
-        command = new ModifyDeviceCommand(m_studio,
-                                          m_lastDevice,
-                                          m_deviceNameMap[m_lastDevice],
-                                          device->getLibrarianName(),
-                                          device->getLibrarianEmail()); // rename
-
-        command->clearBankAndProgramList();
-
-    } else {
-
-        MidiDevice::VariationType variation =
-            MidiDevice::NoVariations;
-        if (m_variationToggle->isChecked()) {
-            if (m_variationCombo->currentIndex() == 0) {
-                variation = MidiDevice::VariationFromLSB;
-            } else {
-                variation = MidiDevice::VariationFromMSB;
-            }
-        }
-
-        command = new ModifyDeviceCommand(m_studio,
-                                          m_lastDevice,
-                                          m_deviceNameMap[m_lastDevice],
-                                          device->getLibrarianName(),
-                                          device->getLibrarianEmail());
-
-        command->setVariation(variation);
-        command->setBankList(m_bankList);
-        command->setProgramList(m_programList);
-    }
-
-    addCommandToHistory(command);
-
-    setModified(false);
-}
-
 
 void BankEditorDialog::slotPopulateDeviceEditors(QTreeWidgetItem* item, QTreeWidgetItem* prev ) //int col)
 {
@@ -813,7 +754,7 @@ void BankEditorDialog::slotPopulateDeviceEditors(QTreeWidgetItem* item, QTreeWid
     if (!item)
         return ;
 
-    checkModified();
+    slotApply();
 
     populateDeviceEditors(item);
 }
@@ -830,7 +771,9 @@ void BankEditorDialog::populateDeviceEditors(QTreeWidgetItem* item)
     if (!item)
         return ;
 
+    std::cout << "glee" << std::endl;
     MidiKeyMapTreeWidgetItem *keyItem = dynamic_cast<MidiKeyMapTreeWidgetItem *>(item);
+    std::cout << "bubbles" << std::endl;
 
     if (keyItem) {
 
@@ -1022,7 +965,6 @@ BankEditorDialog::slotApply()
         m_updateDeviceList = false;
     }
 
-    setModified(false);
 }
 
 void
@@ -1049,8 +991,6 @@ BankEditorDialog::slotReset()
     }
 
     updateDialog();
-
-    setModified(false);
 }
 
 void
@@ -1427,7 +1367,7 @@ BankEditorDialog::slotModifyDeviceOrBankName(QTreeWidgetItem* item, const QStrin
 
         if (m_bankList[bankItem->getBank()].getName() != qstrtostr(label)) {
             m_bankList[bankItem->getBank()].setName(qstrtostr(label));
-            setModified(true);
+            slotApply();
         }
 
     } else if (keyItem) {
@@ -1476,7 +1416,7 @@ BankEditorDialog::slotModifyDeviceOrBankName(QTreeWidgetItem* item, const QStrin
 
         if (m_deviceNameMap[deviceItem->getDeviceId()] != qstrtostr(label)) {
             m_deviceNameMap[deviceItem->getDeviceId()] = qstrtostr(label);
-            setModified(true);
+            slotApply();
 
             m_updateDeviceList = true;
         }
@@ -1565,46 +1505,20 @@ BankEditorDialog::selectDeviceBankItem(DeviceId deviceId,
 void
 BankEditorDialog::slotVariationToggled()
 {
-    setModified(true);
+    slotApply();
     m_variationCombo->setEnabled(m_variationToggle->isChecked());
 }
 
 void
 BankEditorDialog::slotVariationChanged(int)
 {
-    setModified(true);
-}
-
-void
-BankEditorDialog::setModified(bool modified)
-{
-    RG_DEBUG << "BankEditorDialog::setModified("
-    << modified << ")" << endl;
-
-    if (modified) {
-
-        m_applyButton->setEnabled(true);
-        m_resetButton->setEnabled(true);
-        m_closeButton->setEnabled(false);
-        m_treeWidget->setEnabled(false);
-
-    } else {
-
-        m_applyButton->setEnabled(false);
-        m_resetButton->setEnabled(false);
-        m_closeButton->setEnabled(true);
-        m_treeWidget->setEnabled(true);
-
-    }
-
-    m_modified = modified;
+    slotApply();
 }
 
 void
 BankEditorDialog::addCommandToHistory(Command *command)
 {
     CommandHistory::getInstance()->addCommand(command);
-    setModified(false);
 }
 
 void
@@ -1877,21 +1791,6 @@ BankEditorDialog::slotFileClose()
 void
 BankEditorDialog::closeEvent(QCloseEvent *e)
 {
-    if (m_modified) {
-        int res = QMessageBox::warning(
-                    dynamic_cast<QWidget*>(this),
-                    tr("Unsaved Changes"),
-                    tr("There are unsaved changes.\n"
-                         "Do you want to apply the changes before exiting "
-                         "the Bank Editor?"),
-                    QMessageBox::Yes | QMessageBox::No,
-                    QMessageBox::No);
-        if (res == QMessageBox::Yes) {
-            slotApply();
-        } else if (res == QMessageBox::Cancel||res == QMessageBox::No)
-            return ;
-    }
-
     emit closing();
     QMainWindow::closeEvent(e);
 }

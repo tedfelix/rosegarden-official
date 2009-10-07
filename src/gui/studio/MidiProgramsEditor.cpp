@@ -71,7 +71,7 @@ MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog* bankEditor,
 {
     QWidget *additionalWidget = makeAdditionalWidget(m_mainFrame);
     if (additionalWidget) {
-        m_mainLayout->addWidget(additionalWidget, 0, 0, 2- 0+1, 2-0+ 1);
+        m_mainLayout->addWidget(additionalWidget, 0, 0, 3, 3);
     }
 }
 
@@ -84,8 +84,9 @@ MidiProgramsEditor::makeAdditionalWidget(QWidget *parent)
     m_msb = new QSpinBox(frame);
     m_lsb = new QSpinBox(frame);
 
-    frame->setContentsMargins(1, 1, 1, 1);
-    QGridLayout *gridLayout = new QGridLayout(frame); // margin
+    frame->setContentsMargins(0, 0, 0, 0);
+    QGridLayout *gridLayout = new QGridLayout(frame);
+    gridLayout->setSpacing(0);
 
     gridLayout->addWidget(new QLabel(tr("Percussion"), frame),
                           0, 0, Qt::AlignLeft);
@@ -296,7 +297,7 @@ MidiProgramsEditor::slotNewPercussion()
         *getCurrentBank() = newBank;
     }
     m_percussion->blockSignals(false);
-    m_bankEditor->setModified(true);
+    m_bankEditor->slotApply();
 }
 
 void
@@ -325,7 +326,7 @@ MidiProgramsEditor::slotNewMSB(int value)
 
     m_msb->blockSignals(false);
 
-    m_bankEditor->setModified(true);
+    m_bankEditor->slotApply();
 }
 
 void
@@ -354,7 +355,7 @@ MidiProgramsEditor::slotNewLSB(int value)
 
     m_lsb->blockSignals(false);
 
-    m_bankEditor->setModified(true);
+    m_bankEditor->slotApply();
 }
 
 struct ProgramCmp
@@ -431,7 +432,7 @@ MidiProgramsEditor::slotNameChanged(const QString& programName)
             for (; it != m_programList.end(); it++) {
                 if (((unsigned int)it->getProgram()) == id) {
                     m_programList.erase(it);
-                    m_bankEditor->setModified(true);
+                    m_bankEditor->slotApply();
                     RG_DEBUG << "deleting empty program (" << id << ")" << endl;
                     return ;
                 }
@@ -448,7 +449,7 @@ MidiProgramsEditor::slotNameChanged(const QString& programName)
     
     if (qstrtostr(programName) != program->getName()) {
         program->setName(qstrtostr(programName));
-        m_bankEditor->setModified(true);
+        m_bankEditor->slotApply();
     }
 }
 
@@ -460,6 +461,8 @@ MidiProgramsEditor::slotKeyMapButtonPressed()
         RG_DEBUG << "MidiProgramsEditor::slotKeyMapButtonPressed() : %%% ERROR - signal sender is not a QPushButton\n";
         return ;
     }
+
+    std::cout << "editor button name" << button->objectName().toStdString() << std::endl;
 
     QString senderName = button->objectName();
 
