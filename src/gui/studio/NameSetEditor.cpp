@@ -142,7 +142,8 @@ NameSetEditor::NameSetEditor(BankEditorDialog* bankEditor,
 
 
                 if (showKeyMapButtons) {
-                    QToolButton *button = new QToolButton();
+                    QToolButton *button = new QToolButton;
+                    button->setObjectName(numberText);
                     numBoxLayout->addWidget(button);
                     connect(button, SIGNAL(clicked()),
                             this, SLOT(slotKeyMapButtonPressed()));

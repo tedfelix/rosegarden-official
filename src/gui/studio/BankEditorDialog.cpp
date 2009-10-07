@@ -747,14 +747,12 @@ BankEditorDialog::getCurrentMidiDevice()
 }
 
 
-void BankEditorDialog::slotPopulateDeviceEditors(QTreeWidgetItem* item, QTreeWidgetItem* prev ) //int col)
+void BankEditorDialog::slotPopulateDeviceEditors(QTreeWidgetItem* item, QTreeWidgetItem*)
 {
     RG_DEBUG << "BankEditorDialog::slotPopulateDeviceEditors" << endl;
 
     if (!item)
         return ;
-
-    slotApply();
 
     populateDeviceEditors(item);
 }
@@ -771,9 +769,7 @@ void BankEditorDialog::populateDeviceEditors(QTreeWidgetItem* item)
     if (!item)
         return ;
 
-    std::cout << "glee" << std::endl;
     MidiKeyMapTreeWidgetItem *keyItem = dynamic_cast<MidiKeyMapTreeWidgetItem *>(item);
-    std::cout << "bubbles" << std::endl;
 
     if (keyItem) {
 
