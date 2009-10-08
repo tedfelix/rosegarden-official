@@ -143,7 +143,7 @@
     <Action name="trigger_segment" text="Trigger Se&amp;gment..." />
     <Action name="remove_trigger" text="Remove &amp;Triggers" />
   <Separator/>
-    <Action name="pitch_bend_sequence" text="Pitch &amp;Bend Sequence" />
+    <Action name="pitch_bend_sequence" text="Pitch &amp;Bend Sequence..." />
   </Menu>
   
   <Menu name="Tools">
