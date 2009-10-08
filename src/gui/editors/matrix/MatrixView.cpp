@@ -331,6 +331,50 @@ NewMatrixView::setupActions()
     createAction("toggle_pitchbend_ruler", SLOT(slotTogglePitchbendRuler()));
     createAction("add_control_ruler", SLOT(slotAddControlRuler()));
     
+    // code just here temporarily as proof of concept
+    QMenu *addControlRulerMenu = new QMenu;
+    addControlRulerMenu->addAction("Glee!");
+    addControlRulerMenu->addAction("Piffles!");
+    addControlRulerMenu->addAction("Nee!");
+
+    /*Controllable *c =
+        dynamic_cast<MidiDevice *>(getCurrentDevice());
+    if (!c) {
+        c = dynamic_cast<SoftSynthDevice *>(getCurrentDevice());
+        if (!c)
+            return ;
+    }
+
+    const ControlList &list = c->getControlParameters();
+
+    int i = 0;
+    QString itemStr;
+
+    for (ControlList::const_iterator it = list.begin();
+            it != list.end(); ++it) {
+        if (it->getType() == Controller::EventType) {
+            QString hexValue;
+            hexValue.sprintf("(0x%x)", it->getControllerValue());
+
+            itemStr = tr("%1 Controller %2 %3")
+                            .arg(strtoqstr(it->getName()))
+                            .arg(it->getControllerValue())
+                            .arg(hexValue);
+
+        } else if (it->getType() == PitchBend::EventType)
+            itemStr = tr("Pitch Bend");
+        else
+            itemStr = tr("Unsupported Event Type");
+
+//                      addControlRulerMenu->addItem(itemStr, i++);
+            addControlRulerMenu->addAction(itemStr); i++;   //@@@
+    }
+
+    connect(addControlRulerMenu, SIGNAL(activated(int)),
+            SLOT(slotAddControlRuler(int)));*/
+
+    findAction("add_control_ruler")->setMenu(addControlRulerMenu);
+    
     //!!! fix: some of these may not be working
     createAction("show_tools_toolbar", SLOT(slot()));
     createAction("options_show_toolbar", SLOT(slot()));

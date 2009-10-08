@@ -25,7 +25,6 @@
 #include "commands/segment/SegmentReconfigureCommand.h"
 #include "document/CommandHistory.h"
 #include "document/RosegardenDocument.h"
-#include "EditView.h"
 #include "gui/dialogs/ConfigureDialog.h"
 #include "gui/dialogs/TimeDialog.h"
 #include "gui/general/EditViewTimeSigNotifier.h"

@@ -23,6 +23,7 @@
 #include "base/BaseProperties.h"
 #include "misc/Strings.h"
 #include "misc/Debug.h"
+#include "misc/ConfigGroups.h"
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
 #include "base/Segment.h"
@@ -38,6 +39,7 @@
 #include <QComboBox>
 #include <QLabel>
 #include <QPushButton>
+#include <QSettings>
 
 
 namespace Rosegarden
@@ -49,7 +51,10 @@ LyricEditDialog::LyricEditDialog(QWidget *parent,
     m_segment(segment),
     m_verseCount(0)
 {
-    //setHelp("nv-text-lyrics");
+    QSettings settings;
+    settings.beginGroup(GeneralOptionsConfigGroup);
+    bool Thorn = settings.value("use_thorn_style", true).toBool();
+    settings.endGroup();
 
     setModal(true);
     setWindowTitle(tr("Edit Lyrics"));
@@ -89,6 +94,7 @@ LyricEditDialog::LyricEditDialog(QWidget *parent,
     m_textEdit = new QTextEdit(groupBox);
     groupBoxLayout->addWidget(m_textEdit);
     m_textEdit->setTextFormat(Qt::PlainText);
+    if (Thorn) m_textEdit->setStyleSheet("background: white");
 
     m_textEdit->setMinimumWidth(300);
     m_textEdit->setMinimumHeight(200);
