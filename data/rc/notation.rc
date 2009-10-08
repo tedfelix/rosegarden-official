@@ -108,13 +108,6 @@
     <Action name="switch_preset" text="&amp;Convert Notation for..." />
   </Menu>
 
-  <Menu name="Symbols">
-    <text>S&amp;ymbol</text>
-    <Action name="add_segno" text="Add &amp;Segno" icon="segno" />
-    <Action name="add_coda" text="Add &amp;Coda" icon="coda" />
-    <Action name="add_breath" text="Add &amp;Breath mark" icon="breath" />
-  </Menu>
-
   <Menu name="Notes">
     <text>N&amp;ote</text>
     <Menu name="Marks">
@@ -358,6 +351,12 @@
       <Action name="alto_clef" text="&amp;Alto Clef" icon="clef-alto" checked="false" group="tools_note" />
       <Action name="tenor_clef" text="Te&amp;nor Clef" icon="clef-tenor" checked="false" group="tools_note" />
       <Action name="bass_clef" text="&amp;Bass Clef" icon="clef-bass" checked="false" group="tools_note" />
+    </Menu>
+    <Menu name="Symbols">
+      <text>S&amp;ymbols</text>
+      <Action name="add_segno" text="Add &amp;Segno" icon="segno" />
+      <Action name="add_coda" text="Add &amp;Coda" icon="coda" />
+      <Action name="add_breath" text="Add &amp;Breath mark" icon="breath" />
     </Menu>
   <Separator/>
     <Action name="text" text="&amp;Text" icon="text" checked="false" group="tools_note" shortcut="F8" />

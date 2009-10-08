@@ -52,5 +52,5 @@ namespace Rosegarden
     const char* const DialogSuppressorConfigGroup = "DialogSuppressor";
     const char* const RecentDirsConfigGroup = "RecentDirs";
     const char* const CollapsingFrameConfigGroup = "CollapsingFrame";
-
+    const char* const PitchBendSequenceConfigGroup = "PitchBendSequence";
 }

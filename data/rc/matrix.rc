@@ -142,6 +142,8 @@
   <Separator/>
     <Action name="trigger_segment" text="Trigger Se&amp;gment..." />
     <Action name="remove_trigger" text="Remove &amp;Triggers" />
+  <Separator/>
+    <Action name="pitch_bend_sequence" text="Pitch &amp;Bend Sequence" />
   </Menu>
   
   <Menu name="Tools">
@@ -154,8 +156,6 @@
     <Action name="resize" text="Resi&amp;ze" icon="resize" shortcut="F6" group="tools_segment" checked="false" />
 <!--    <Action name="split" text="S&amp;plit" icon="split" shortcut="F7" group="tools_segment" checked="false" /> -->
     <Action name="velocity" text="&amp;Velocity" icon="velocity" shortcut="F7" group="tools_segment" checked="false" />
-  <Separator/>
-    <Action name="pitch_bend_sequence" text="Pitch &amp;Bend Sequence" />
   <Separator/>
     <Menu name="Move">
       <text>Local &amp;Cursor</text>
@@ -382,6 +382,7 @@ having help again -->
     <Action name="preview_selection"/>
     <Action name="clear_selection"/>
     <Action name="filter_selection"/>
+    <Action name="pitch_bend_sequence"/>
   </enable>
 </State>
 
@@ -404,12 +405,6 @@ having help again -->
 </State>
 
 <State name="have_controller_item_selected">
-  <enable>
-    <Action name="erase_control_ruler_item"/>
-  </enable>
-  <disable>
-   <Action name="insert_control_ruler_item"/>
-  </disable>
 </State>
 
 </kpartgui>

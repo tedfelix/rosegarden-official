@@ -22,6 +22,7 @@
 #include "commands/edit/EventInsertionCommand.h"
 #include "document/CommandHistory.h"
 #include "document/Command.h"
+#include "misc/ConfigGroups.h"
 
 #include <QDialog>
 #include <QDialogButtonBox>
@@ -33,6 +34,8 @@
 #include <QLabel>
 #include <QDoubleSpinBox>
 #include <QComboBox>
+#include <QSettings>
+#include <QCloseEvent>
 
 namespace Rosegarden
 {
@@ -46,33 +49,53 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(QWidget *parent, Segment *segme
     setModal(true);
     setWindowTitle(tr("Pitch Bend Sequence"));
 
+    QSettings settings;
+    settings.beginGroup(PitchBendSequenceConfigGroup);
+
     QWidget* vbox = dynamic_cast<QWidget*>( this );
     QVBoxLayout *vboxLayout = new QVBoxLayout;
     vbox->setLayout(vboxLayout);
 
-    QGroupBox *prebendbox = new QGroupBox(tr("Pre Bend"), vbox);
-    prebendbox->setContentsMargins(5, 5, 5, 5);
-    QGridLayout *prebendgrid = new QGridLayout;
-    prebendgrid->setSpacing(5);
-    vboxLayout->addWidget(prebendbox);
+    QGroupBox *presetBox = new QGroupBox(tr("Preset"));
+    QGridLayout *presetGrid = new QGridLayout;
+    presetBox->setLayout(presetGrid);
+    presetGrid->setSpacing(5);
+    vboxLayout->addWidget(presetBox);
 
-    prebendgrid->addWidget(new QLabel(tr("Value %:"), prebendbox), 0, 0);
-    m_prebendValue = new QDoubleSpinBox(prebendbox);
+    presetGrid->addWidget(new QLabel(tr("Preset:")), 0, 0);
+    m_sequencePreset = new QComboBox;
+    presetGrid->addWidget(m_sequencePreset, 0, 1);
+    m_sequencePreset->addItem(tr("User"), USER);
+    m_sequencePreset->addItem(tr("Linear ramp"), LINEAR_RAMP);
+    m_sequencePreset->addItem(tr("Fast vibrato arm release"), FAST_VIBRATO_ARM_RELEASE);
+    m_sequencePreset->addItem(tr("Vibrato"), VIBRATO);
+    m_sequencePreset->setCurrentItem(settings.value("sequence_preset", int(USER)).toInt());
+
+    QGroupBox *prebendBox = new QGroupBox(tr("Pre Bend"));
+    prebendBox->setContentsMargins(5, 5, 5, 5);
+    QGridLayout *prebendGrid = new QGridLayout;
+    prebendGrid->setSpacing(5);
+    vboxLayout->addWidget(prebendBox);
+
+    prebendGrid->addWidget(new QLabel(tr("Value %:"), prebendBox), 0, 0);
+    m_prebendValue = new QDoubleSpinBox(prebendBox);
     m_prebendValue->setMaximum(100);
     m_prebendValue->setMinimum(-100);
     m_prebendValue->setSingleStep(5);
-    prebendgrid->addWidget(m_prebendValue, 0 , 1);
+    m_prebendValue->setValue(settings.value("pre_bend_value", 0).toInt());
+    prebendGrid->addWidget(m_prebendValue, 0 , 1);
     
-    prebendbox->setLayout(prebendgrid);
+    prebendBox->setLayout(prebendGrid);
 
     if (m_startTime < m_endTime) {
-        QLabel *durationLabel = new QLabel(tr("Duration %:"), prebendbox);
-        prebendgrid->addWidget(durationLabel, 1, 0);
-        m_prebendDuration = new QDoubleSpinBox(prebendbox);
+        QLabel *durationLabel = new QLabel(tr("Duration %:"), prebendBox);
+        prebendGrid->addWidget(durationLabel, 1, 0);
+        m_prebendDuration = new QDoubleSpinBox(prebendBox);
         m_prebendDuration->setMaximum(100);
         m_prebendDuration->setMinimum(0);
         m_prebendDuration->setSingleStep(5);
-        prebendgrid->addWidget(m_prebendDuration, 1 , 1);
+        m_prebendDuration->setValue(settings.value("pre_bend_duration_value", 0).toInt());
+        prebendGrid->addWidget(m_prebendDuration, 1 , 1);
 
         QGroupBox *sequencebox = new QGroupBox(tr("Bend Sequence"), vbox );
         sequencebox->setContentsMargins(5, 5, 5, 5);
@@ -80,18 +103,12 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(QWidget *parent, Segment *segme
         sequencegrid->setSpacing(5);
         vboxLayout->addWidget(sequencebox);
 
-        sequencegrid->addWidget(new QLabel(tr("Preset:"), sequencebox), 0, 0);
-        m_sequencePreset = new QComboBox(sequencebox);
-        sequencegrid->addWidget(m_sequencePreset, 0, 1);
-        m_sequencePreset->addItem(tr("Linear ramp"));
-        m_sequencePreset->addItem(tr("Fast vibrato arm release"));
-        m_sequencePreset->addItem(tr("Vibrato"));
-
         sequencegrid->addWidget(new QLabel(tr("Ramp duration %:"), sequencebox), 1, 0);
         m_sequenceRampDuration = new QDoubleSpinBox(sequencebox);
         m_sequenceRampDuration->setMaximum(100);
         m_sequenceRampDuration->setMinimum(0);
         m_sequenceRampDuration->setSingleStep(5);
+        m_sequenceRampDuration->setValue(settings.value("sequence_ramp_duration", 0).toInt());
         sequencegrid->addWidget(m_sequenceRampDuration, 1, 1);
 
         sequencegrid->addWidget(new QLabel(tr("End value %:"), sequencebox), 2, 0);
@@ -99,6 +116,7 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(QWidget *parent, Segment *segme
         m_sequenceEndValue->setMaximum(100);
         m_sequenceEndValue->setMinimum(-100);
         m_sequenceEndValue->setSingleStep(5);
+        m_sequenceEndValue->setValue(settings.value("sequence_ramp_end_value", 0).toInt());
         sequencegrid->addWidget(m_sequenceEndValue, 2, 1);
 
         sequencegrid->addWidget(new QLabel(tr("Vibrato start amplitude %:"), 
@@ -107,7 +125,7 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(QWidget *parent, Segment *segme
         m_vibratoStartAmplitude->setMaximum(100);
         m_vibratoStartAmplitude->setMinimum(0);
         m_vibratoStartAmplitude->setSingleStep(10);
-        m_vibratoStartAmplitude->setValue(0);
+        m_vibratoStartAmplitude->setValue(settings.value("vibrato_start_amplitude", 0).toInt());
         sequencegrid->addWidget(m_vibratoStartAmplitude, 3, 1);
 
         sequencegrid->addWidget(new QLabel(tr("Vibrato end amplitude %:"),
@@ -116,25 +134,25 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(QWidget *parent, Segment *segme
         m_vibratoEndAmplitude->setMaximum(100);
         m_vibratoEndAmplitude->setMinimum(0);
         m_vibratoEndAmplitude->setSingleStep(10);
-        m_vibratoEndAmplitude->setValue(0);
+        m_vibratoEndAmplitude->setValue(settings.value("vibrato_end_amplitude", 0).toInt());
         sequencegrid->addWidget(m_vibratoEndAmplitude, 4, 1);
 
         sequencegrid->addWidget(new QLabel(tr("Vibrato wavelength:"), 
                             sequencebox), 5, 0);
-        m_vibratoWaveLenght = new QDoubleSpinBox(sequencebox);
-        m_vibratoWaveLenght->setMaximum(200);
-        m_vibratoWaveLenght->setMinimum(2);
-        m_vibratoWaveLenght->setSingleStep(5);
-        m_vibratoWaveLenght->setValue(10);
-        m_vibratoWaveLenght->setDecimals(0);
-        sequencegrid->addWidget(m_vibratoWaveLenght, 5, 1);
+        m_vibratoWaveLength = new QDoubleSpinBox(sequencebox);
+        m_vibratoWaveLength->setMaximum(200);
+        m_vibratoWaveLength->setMinimum(2);
+        m_vibratoWaveLength->setSingleStep(5);
+        m_vibratoWaveLength->setValue(settings.value("vibrato_wave_length", 10).toInt());
+        m_vibratoWaveLength->setDecimals(0);
+        sequencegrid->addWidget(m_vibratoWaveLength, 5, 1);
 
         sequencegrid->addWidget(new QLabel(tr("Resolution:"), sequencebox), 6, 0);
         m_resolution = new QDoubleSpinBox(sequencebox);
         m_resolution->setMaximum(300);
         m_resolution->setMinimum(10);
         m_resolution->setSingleStep(10);
-        m_resolution->setValue(100);
+        m_resolution->setValue(settings.value("vibrato_resolution", 100).toInt());
         m_resolution->setDecimals(0);
         sequencegrid->addWidget(m_resolution, 6, 1);
 
@@ -156,36 +174,62 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(QWidget *parent, Segment *segme
 
 void
 PitchBendSequenceDialog::slotSequencePresetChanged(int index) {
+    QSettings settings;
+    settings.beginGroup(PitchBendSequenceConfigGroup);
     switch (index) {
-      case 0: printf ("a\n");
+      case USER:        
+        m_prebendValue->setValue(settings.value("pre_bend_value", 0).toInt());
+        m_prebendDuration->setValue(settings.value("pre_bend_duration_value", 0).toInt());
+        m_sequenceRampDuration->setValue(settings.value("sequence_ramp_duration", 0).toInt());
+        m_sequenceEndValue->setValue(settings.value("sequence_ramp_end_value", 0).toInt());
+        m_vibratoStartAmplitude->setValue(settings.value("vibrato_start_amplitude", 0).toInt());
+        m_vibratoEndAmplitude->setValue(settings.value("vibrato_end_amplitude", 0).toInt());
+        m_vibratoWaveLength->setValue(settings.value("vibrato_wave_length", 10).toInt());
+        m_resolution->setValue(settings.value("vibrato_resolution", 100).toInt());
+        settings.endGroup();
+        break;
+      case LINEAR_RAMP:
         m_prebendDuration->setValue(0);
         m_sequenceRampDuration->setValue(100);
         m_vibratoStartAmplitude->setValue(0);
         m_vibratoEndAmplitude->setValue(0);
         break;
-      case 1:
+      case FAST_VIBRATO_ARM_RELEASE:
         m_prebendValue->setValue(-20);
         m_prebendDuration->setValue(5);
         m_sequenceRampDuration->setValue(0);
         m_sequenceEndValue->setValue(0);
         m_vibratoStartAmplitude->setValue(30);
         m_vibratoEndAmplitude->setValue(0);
-        m_vibratoWaveLenght->setValue(2);
+        m_vibratoWaveLength->setValue(2);
         break;
-      case 2:
+      case VIBRATO:
         m_prebendValue->setValue(0);
         m_prebendDuration->setValue(0);
         m_sequenceRampDuration->setValue(0);
         m_sequenceEndValue->setValue(0);
         m_vibratoStartAmplitude->setValue(10);
         m_vibratoEndAmplitude->setValue(10);
-        m_vibratoWaveLenght->setValue(10);
+        m_vibratoWaveLength->setValue(10);
     }	
 }
 
 void
 PitchBendSequenceDialog::accept()
 {
+    QSettings settings;
+    settings.beginGroup(PitchBendSequenceConfigGroup);
+    settings.setValue("pre_bend_value", m_prebendValue->value());
+    settings.setValue("pre_bend_duration_value", m_prebendDuration->value());
+    settings.setValue("sequence_ramp_duration", m_sequenceRampDuration->value());
+    settings.setValue("sequence_ramp_end_value", m_sequenceEndValue->value());
+    settings.setValue("vibrato_start_amplitude", m_vibratoStartAmplitude->value());
+    settings.setValue("vibrato_end_amplitude", m_vibratoEndAmplitude->value());
+    settings.setValue("vibrato_wave_length", m_vibratoWaveLength->value());
+    settings.setValue("vibrato_resolution", m_resolution->value());
+    settings.setValue("sequence_preset", m_sequencePreset->currentIndex());
+    settings.endGroup();
+
     int startvalue = (m_prebendValue->value()/100.0) * 8192.0 + 8192;
 
     if (startvalue < 0) startvalue = 0;
@@ -208,7 +252,7 @@ PitchBendSequenceDialog::accept()
         
         int steps = (int) m_resolution->value();
         int vibratoValue=0;
-        int vibratoWL=m_vibratoWaveLenght->value();
+        int vibratoWL=m_vibratoWaveLength->value();
         int vibratoHWL = vibratoWL/2;
         int vibratoSA = m_vibratoStartAmplitude->value()*8192.0/100.0;
         int vibratoEA = m_vibratoEndAmplitude->value()*8192.0/100.0;

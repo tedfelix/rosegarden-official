@@ -55,11 +55,18 @@ protected:
     QDoubleSpinBox *m_resolution;
     QDoubleSpinBox *m_vibratoStartAmplitude;
     QDoubleSpinBox *m_vibratoEndAmplitude;
-    QDoubleSpinBox *m_vibratoWaveLenght;
+    QDoubleSpinBox *m_vibratoWaveLength;
     QComboBox *m_sequencePreset;
 
     timeT m_startTime;
     timeT m_endTime;
+
+    enum {
+        USER,
+        LINEAR_RAMP,
+        FAST_VIBRATO_ARM_RELEASE,
+        VIBRATO,
+    };
 };
 
 
