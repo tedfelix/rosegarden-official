@@ -51,7 +51,7 @@ class Studio;
 class RosegardenMainWindow;
 class RosegardenMainViewWidget;
 class RosegardenDocument;
-class NewNotationView;
+class NotationView;
 class Key;
 class Composition;
 
@@ -82,14 +82,14 @@ public:
 
 public:
     LilyPondExporter(RosegardenMainWindow *parent, RosegardenDocument *, std::string fileName);
-    LilyPondExporter(NewNotationView *parent, RosegardenDocument *, std::string fileName);
+    LilyPondExporter(NotationView *parent, RosegardenDocument *, std::string fileName);
     ~LilyPondExporter();
 
     bool write();
 
 protected:
     RosegardenMainViewWidget *m_view;
-    NewNotationView *m_notationView;
+    NotationView *m_notationView;
     RosegardenDocument *m_doc;
     Composition *m_composition;
     Studio *m_studio;

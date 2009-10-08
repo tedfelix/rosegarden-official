@@ -93,7 +93,7 @@
 namespace Rosegarden
 {
 
-NewMatrixView::NewMatrixView(RosegardenDocument *doc,
+MatrixView::MatrixView(RosegardenDocument *doc,
                  std::vector<Segment *> segments,
                  bool drumMode,
                  QWidget *parent) :
@@ -185,13 +185,13 @@ NewMatrixView::NewMatrixView(RosegardenDocument *doc,
 }
 
 
-NewMatrixView::~NewMatrixView()
+MatrixView::~MatrixView()
 {
-    RG_DEBUG << "NewMatrixView::~NewMatrixView()";
+    RG_DEBUG << "MatrixView::~MatrixView()";
 }
 
 void
-NewMatrixView::closeEvent(QCloseEvent *event)
+MatrixView::closeEvent(QCloseEvent *event)
 {
     // Save window geometry
     QSettings settings;
@@ -205,7 +205,7 @@ NewMatrixView::closeEvent(QCloseEvent *event)
 
 
 void
-NewMatrixView::updateWindowTitle(bool m)
+MatrixView::updateWindowTitle(bool m)
 {
     QString indicator = (m ? "*" : "");
     // Set client label
@@ -267,7 +267,7 @@ NewMatrixView::updateWindowTitle(bool m)
 }
 
 void
-NewMatrixView::setupActions()
+MatrixView::setupActions()
 {
     
     setupBaseActions(true);
@@ -525,7 +525,7 @@ NewMatrixView::setupActions()
 
 
 void
-NewMatrixView::initActionsToolbar()
+MatrixView::initActionsToolbar()
 {
     MATRIX_DEBUG << "MatrixView::initActionsToolbar" << endl;
 
@@ -632,7 +632,7 @@ NewMatrixView::initActionsToolbar()
 }
 
 void
-NewMatrixView::initRulersToolbar()
+MatrixView::initRulersToolbar()
 {
     QToolBar *rulersToolbar = findToolbar("Rulers Toolbar");
     if (!rulersToolbar) {
@@ -642,7 +642,7 @@ NewMatrixView::initRulersToolbar()
 }
 
 void
-NewMatrixView::initZoomToolbar()
+MatrixView::initZoomToolbar()
 {
     // just return for now; this code is on the way out
     return;
@@ -687,7 +687,7 @@ NewMatrixView::initZoomToolbar()
 }
 
 void
-NewMatrixView::slotChangeHorizontalZoom(int)
+MatrixView::slotChangeHorizontalZoom(int)
 {
     double zoomSize = m_hZoomSlider->getCurrentSize();
 
@@ -705,84 +705,84 @@ NewMatrixView::slotChangeHorizontalZoom(int)
 }
 
 void
-NewMatrixView::slotSetPaintTool()
+MatrixView::slotSetPaintTool()
 {
     if (m_matrixWidget) m_matrixWidget->slotSetPaintTool();
 }
 
 void
-NewMatrixView::slotSetEraseTool()
+MatrixView::slotSetEraseTool()
 {
     if (m_matrixWidget) m_matrixWidget->slotSetEraseTool();
 }
 
 void
-NewMatrixView::slotSetSelectTool()
+MatrixView::slotSetSelectTool()
 {
-    MATRIX_DEBUG << "NewMatrixView::slotSetSelectTool" << endl;
+    MATRIX_DEBUG << "MatrixView::slotSetSelectTool" << endl;
     if (m_matrixWidget) m_matrixWidget->slotSetSelectTool();
 }
 
 void
-NewMatrixView::slotSetMoveTool()
+MatrixView::slotSetMoveTool()
 {
     if (m_matrixWidget) m_matrixWidget->slotSetMoveTool();
 }
 
 void
-NewMatrixView::slotSetResizeTool()
+MatrixView::slotSetResizeTool()
 {
     if (m_matrixWidget) m_matrixWidget->slotSetResizeTool();
 }
 
 void
-NewMatrixView::slotSetVelocityTool()
+MatrixView::slotSetVelocityTool()
 {
     if (m_matrixWidget) m_matrixWidget->slotSetVelocityTool();
 }
 
 Segment *
-NewMatrixView::getCurrentSegment()
+MatrixView::getCurrentSegment()
 {
     if (m_matrixWidget) return m_matrixWidget->getCurrentSegment();
     else return 0;
 }
 
 EventSelection *
-NewMatrixView::getSelection() const
+MatrixView::getSelection() const
 {
     if (m_matrixWidget) return m_matrixWidget->getSelection();
     else return 0;
 }
 
 void
-NewMatrixView::setSelection(EventSelection *s, bool preview)
+MatrixView::setSelection(EventSelection *s, bool preview)
 {
     if (m_matrixWidget) m_matrixWidget->setSelection(s, preview);
 }
 
 timeT
-NewMatrixView::getInsertionTime() const
+MatrixView::getInsertionTime() const
 {
     if (!m_document) return 0;
     return m_document->getComposition().getPosition();
 }
 
 const SnapGrid *
-NewMatrixView::getSnapGrid() const
+MatrixView::getSnapGrid() const
 {
     if (m_matrixWidget) return m_matrixWidget->getSnapGrid();
     else return 0;
 }
 
 void
-NewMatrixView::slotSetSnapFromIndex(int s)
+MatrixView::slotSetSnapFromIndex(int s)
 {
     slotSetSnap(m_snapValues[s]);
 }
 
 void
-NewMatrixView::slotSetSnapFromAction()
+MatrixView::slotSetSnapFromAction()
 {
     const QObject *s = sender();
     QString name = s->objectName();
@@ -803,13 +803,13 @@ NewMatrixView::slotSetSnapFromAction()
         } else if (name == "snap_unit") {
             slotSetSnap(SnapGrid::SnapToUnit);
         } else {
-            MATRIX_DEBUG << "Warning: NewMatrixView::slotSetSnapFromAction: unrecognised action " << name << endl;
+            MATRIX_DEBUG << "Warning: MatrixView::slotSetSnapFromAction: unrecognised action " << name << endl;
         }
     }
 }
 
 void
-NewMatrixView::slotSetSnap(timeT t)
+MatrixView::slotSetSnap(timeT t)
 {
     m_matrixWidget->slotSetSnap(t);
 
@@ -822,7 +822,7 @@ NewMatrixView::slotSetSnap(timeT t)
 }
 
 void
-NewMatrixView::slotEditCut()
+MatrixView::slotEditCut()
 {
     EventSelection *selection = getSelection();
     if (!selection) return;
@@ -831,7 +831,7 @@ NewMatrixView::slotEditCut()
 }
 
 void
-NewMatrixView::slotEditCopy()
+MatrixView::slotEditCopy()
 {
     EventSelection *selection = getSelection();
     if (!selection) return;
@@ -841,7 +841,7 @@ NewMatrixView::slotEditCopy()
 }
 
 void
-NewMatrixView::slotEditPaste()
+MatrixView::slotEditPaste()
 {
     if (m_document->getClipboard()->isEmpty()) return;
 
@@ -860,7 +860,7 @@ NewMatrixView::slotEditPaste()
 }
 
 void
-NewMatrixView::slotEditDelete()
+MatrixView::slotEditDelete()
 {
     EventSelection *selection = getSelection();
     if (!selection) return;
@@ -868,9 +868,9 @@ NewMatrixView::slotEditDelete()
 }
 
 void
-NewMatrixView::slotQuantizeSelection(int q)
+MatrixView::slotQuantizeSelection(int q)
 {
-    MATRIX_DEBUG << "NewMatrixView::slotQuantizeSelection\n";
+    MATRIX_DEBUG << "MatrixView::slotQuantizeSelection\n";
 
     timeT unit =
         ((unsigned int)q < m_quantizations.size() ? m_quantizations[q] : 0);
@@ -911,7 +911,7 @@ NewMatrixView::slotQuantizeSelection(int q)
 }
 
 void
-NewMatrixView::slotQuantize()
+MatrixView::slotQuantize()
 {
     if (!getSelection()) return;
 
@@ -926,7 +926,7 @@ NewMatrixView::slotQuantize()
 }
 
 void
-NewMatrixView::slotRepeatQuantize()
+MatrixView::slotRepeatQuantize()
 {
     if (!getSelection()) return;
     CommandHistory::getInstance()->addCommand
@@ -937,7 +937,7 @@ NewMatrixView::slotRepeatQuantize()
 }
 
 void
-NewMatrixView::slotCollapseNotes()
+MatrixView::slotCollapseNotes()
 {
     if (!getSelection()) return;
     CommandHistory::getInstance()->addCommand
@@ -945,7 +945,7 @@ NewMatrixView::slotCollapseNotes()
 }
 
 void
-NewMatrixView::slotLegato()
+MatrixView::slotLegato()
 {
     if (!getSelection()) return;
     CommandHistory::getInstance()->addCommand
@@ -955,7 +955,7 @@ NewMatrixView::slotLegato()
 }
 
 void
-NewMatrixView::slotVelocityUp()
+MatrixView::slotVelocityUp()
 {
     if (!getSelection()) return;
 
@@ -966,7 +966,7 @@ NewMatrixView::slotVelocityUp()
 }
 
 void
-NewMatrixView::slotVelocityDown()
+MatrixView::slotVelocityDown()
 {
     if (!getSelection()) return;
 
@@ -977,7 +977,7 @@ NewMatrixView::slotVelocityDown()
 }
 
 void
-NewMatrixView::slotSetVelocities()
+MatrixView::slotSetVelocities()
 {
     if (!getSelection()) return;
 
@@ -998,7 +998,7 @@ NewMatrixView::slotSetVelocities()
 }
 
 void
-NewMatrixView::slotSetVelocitiesToCurrent()
+MatrixView::slotSetVelocitiesToCurrent()
 {
     if (!getSelection()) return;
 
@@ -1012,7 +1012,7 @@ NewMatrixView::slotSetVelocitiesToCurrent()
 }
 
 void
-NewMatrixView::slotTriggerSegment()
+MatrixView::slotTriggerSegment()
 {
     if (!getSelection()) return;
 
@@ -1030,7 +1030,7 @@ NewMatrixView::slotTriggerSegment()
 }
 
 void
-NewMatrixView::slotRemoveTriggers()
+MatrixView::slotRemoveTriggers()
 {
     if (!getSelection()) return;
 
@@ -1040,13 +1040,13 @@ NewMatrixView::slotRemoveTriggers()
 }
 
 void
-NewMatrixView::slotSelectAll()
+MatrixView::slotSelectAll()
 {
     if (m_matrixWidget) m_matrixWidget->slotSelectAll();
 }
 
 void
-NewMatrixView::slotPreviewSelection()
+MatrixView::slotPreviewSelection()
 {
     if (!getSelection()) {
         return;
@@ -1057,19 +1057,19 @@ NewMatrixView::slotPreviewSelection()
 }
 
 void
-NewMatrixView::slotClearLoop()
+MatrixView::slotClearLoop()
 {
     m_document->slotSetLoop(0, 0);
 }
 
 void
-NewMatrixView::slotClearSelection()
+MatrixView::slotClearSelection()
 {
     if (m_matrixWidget) m_matrixWidget->slotClearSelection();
 }
 
 void
-NewMatrixView::slotFilterSelection()
+MatrixView::slotFilterSelection()
 {
     RG_DEBUG << "MatrixView::slotFilterSelection" << endl;
 
@@ -1102,19 +1102,19 @@ NewMatrixView::slotFilterSelection()
 }
 
 int
-NewMatrixView::getCurrentVelocity() const
+MatrixView::getCurrentVelocity() const
 {
     return m_velocityCombo->currentIndex();
 }
 
 void
-NewMatrixView::slotSetCurrentVelocity(int value)
+MatrixView::slotSetCurrentVelocity(int value)
 {
     m_velocityCombo->setCurrentIndex(value);
 }
 
 void
-NewMatrixView::slotSetCurrentVelocityFromSelection()
+MatrixView::slotSetCurrentVelocityFromSelection()
 {
     if (!getSelection()) return;
 
@@ -1137,14 +1137,14 @@ NewMatrixView::slotSetCurrentVelocityFromSelection()
 }
 
 void
-NewMatrixView::slotToggleTracking()
+MatrixView::slotToggleTracking()
 {
     m_tracking = !m_tracking;
     m_matrixWidget->slotSetPlayTracking(m_tracking);
 }
 
 void
-NewMatrixView::slotToggleChordsRuler()
+MatrixView::slotToggleChordsRuler()
 {
     bool view = findAction("show_chords_ruler")->isChecked();
 
@@ -1157,25 +1157,25 @@ NewMatrixView::slotToggleChordsRuler()
 }
 
 void
-NewMatrixView::slotToggleVelocityRuler()
+MatrixView::slotToggleVelocityRuler()
 {
     m_matrixWidget->slotToggleVelocityRuler();
 }
 
 void
-NewMatrixView::slotTogglePitchbendRuler()
+MatrixView::slotTogglePitchbendRuler()
 {
     m_matrixWidget->slotTogglePitchbendRuler();
 }
 
 void
-NewMatrixView::slotAddControlRuler()
+MatrixView::slotAddControlRuler()
 {
     m_matrixWidget->slotAddControlRuler();
 }
 
 void
-NewMatrixView::slotToggleTempoRuler()
+MatrixView::slotToggleTempoRuler()
 {
     bool view = findAction("show_tempo_ruler")->isChecked();
 
@@ -1195,7 +1195,7 @@ NewMatrixView::slotToggleTempoRuler()
 // --
 
 
-void NewMatrixView::slotAddTempo()
+void MatrixView::slotAddTempo()
 {
     timeT insertionTime = getInsertionTime();
 
@@ -1216,7 +1216,7 @@ void NewMatrixView::slotAddTempo()
     tempoDlg.exec();
 }
 
-void NewMatrixView::slotAddTimeSignature()
+void MatrixView::slotAddTimeSignature()
 {
     Segment *segment = getCurrentSegment();
     if (!segment)
@@ -1273,7 +1273,7 @@ void NewMatrixView::slotAddTimeSignature()
 
 
 
-void NewMatrixView::slotHalveDurations()
+void MatrixView::slotHalveDurations()
 {
     EventSelection *selection = getSelection();
     if (!selection) return;
@@ -1285,7 +1285,7 @@ void NewMatrixView::slotHalveDurations()
                        );
 }
 
-void NewMatrixView::slotDoubleDurations()
+void MatrixView::slotDoubleDurations()
 {
     EventSelection *selection = getSelection();
     if (!selection) return;
@@ -1295,7 +1295,7 @@ void NewMatrixView::slotDoubleDurations()
                        );
 }
 
-void NewMatrixView::slotRescale()
+void MatrixView::slotRescale()
 {
     EventSelection *selection = getSelection();
     if (!selection) return;
@@ -1317,7 +1317,7 @@ void NewMatrixView::slotRescale()
     }
 }
 
-void NewMatrixView::slotTranspose()
+void MatrixView::slotTranspose()
 {
     EventSelection *selection = getSelection();
     if (!selection) std::cout << "Hint: selection is NULL in slotTranpose() " << std::endl;
@@ -1343,7 +1343,7 @@ void NewMatrixView::slotTranspose()
     settings.endGroup();
 }
 
-void NewMatrixView::slotDiatonicTranspose()
+void MatrixView::slotDiatonicTranspose()
 {
     EventSelection *selection = getSelection();
     if (!selection) return;
@@ -1373,7 +1373,7 @@ void NewMatrixView::slotDiatonicTranspose()
     }
 }
 
-void NewMatrixView::slotTransposeUp()
+void MatrixView::slotTransposeUp()
 {
     EventSelection *selection = getSelection();
     if (!selection) std::cout << "Hint: selection is NULL in slotTranposeUp() " << std::endl;
@@ -1381,28 +1381,28 @@ void NewMatrixView::slotTransposeUp()
     CommandHistory::getInstance()->addCommand(new TransposeCommand(1, *selection));
 }
 
-void NewMatrixView::slotTransposeUpOctave()
+void MatrixView::slotTransposeUpOctave()
 {
     EventSelection *selection = getSelection();
     if (!selection) return ;
     CommandHistory::getInstance()->addCommand(new TransposeCommand(12, *selection));
 }
 
-void NewMatrixView::slotTransposeDown()
+void MatrixView::slotTransposeDown()
 {
     EventSelection *selection = getSelection();
     if (!selection) return ;
     CommandHistory::getInstance()->addCommand(new TransposeCommand( -1, *selection));
 }
 
-void NewMatrixView::slotTransposeDownOctave()
+void MatrixView::slotTransposeDownOctave()
 {
     EventSelection *selection = getSelection();
     if (!selection) return ;
     CommandHistory::getInstance()->addCommand(new TransposeCommand( -12, *selection));
 }
 
-void NewMatrixView::slotInvert()
+void MatrixView::slotInvert()
 {
     std::cout << "slotInvert() called" << std::endl;
     
@@ -1415,7 +1415,7 @@ void NewMatrixView::slotInvert()
             (semitones, *selection));
 }
 
-void NewMatrixView::slotRetrograde()
+void MatrixView::slotRetrograde()
 {
     EventSelection *selection = getSelection();
     if (!selection) return ;
@@ -1425,7 +1425,7 @@ void NewMatrixView::slotRetrograde()
             (semitones, *selection));
 }
 
-void NewMatrixView::slotRetrogradeInvert()
+void MatrixView::slotRetrogradeInvert()
 {
     EventSelection *selection = getSelection();
     if (!selection) return ;
@@ -1436,13 +1436,13 @@ void NewMatrixView::slotRetrogradeInvert()
 }
 
 void
-NewMatrixView::slotHelpAbout()
+MatrixView::slotHelpAbout()
 {
     new AboutDialog(this);
 }
 
 void
-NewMatrixView::slotStepBackward()
+MatrixView::slotStepBackward()
 {
     timeT time = getInsertionTime();
     m_document->slotSetPointerPosition(getSnapGrid()->snapTime
@@ -1450,7 +1450,7 @@ NewMatrixView::slotStepBackward()
 }
 
 void
-NewMatrixView::slotStepForward()
+MatrixView::slotStepForward()
 {
     timeT time = getInsertionTime();
     m_document->slotSetPointerPosition(getSnapGrid()->snapTime
@@ -1458,7 +1458,7 @@ NewMatrixView::slotStepForward()
 }
 
 void
-NewMatrixView::slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn)
+MatrixView::slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn)
 {
     // hjj:
     // The default insertion mode is implemented equivalently in
@@ -1546,21 +1546,21 @@ NewMatrixView::slotInsertableNoteEventReceived(int pitch, int velocity, bool not
 }
 
 void
-NewMatrixView::slotInsertableNoteOnReceived(int pitch, int velocity)
+MatrixView::slotInsertableNoteOnReceived(int pitch, int velocity)
 {
     MATRIX_DEBUG << "MatrixView::slotInsertableNoteOnReceived: " << pitch << endl;
     slotInsertableNoteEventReceived(pitch, velocity, true);
 }
 
 void
-NewMatrixView::slotInsertableNoteOffReceived(int pitch, int velocity)
+MatrixView::slotInsertableNoteOffReceived(int pitch, int velocity)
 {
     MATRIX_DEBUG << "MatrixView::slotInsertableNoteOffReceived: " << pitch << endl;
     slotInsertableNoteEventReceived(pitch, velocity, false);
 }
 
 void
-NewMatrixView::slotPitchBendSequence()
+MatrixView::slotPitchBendSequence()
 {
     timeT startTime=0;
     timeT endTime=0;
@@ -1579,13 +1579,13 @@ NewMatrixView::slotPitchBendSequence()
 
 /*
 
-void NewMatrixView::slotJogLeft()
+void MatrixView::slotJogLeft()
 {
     if (!selection)
         return ;
     TmpStatusMsg msg(tr("Jogging left..."), this);
 
-    RG_DEBUG << "NewMatrixView::slotJogLeft" << endl;
+    RG_DEBUG << "MatrixView::slotJogLeft" << endl;
 
     CommandHistory::getInstance()->addCommand(
         new MoveCommand(*getCurrentSegment(),
@@ -1594,13 +1594,13 @@ void NewMatrixView::slotJogLeft()
                         *selection));
 }
 
-void NewMatrixView::slotJogRight()
+void MatrixView::slotJogRight()
 {
     if (!selection)
         return ;
     TmpStatusMsg msg(tr("Jogging right..."), this);
 
-    RG_DEBUG << "NewMatrixView::slotJogRight" << endl;
+    RG_DEBUG << "MatrixView::slotJogRight" << endl;
 
     CommandHistory::getInstance()->addCommand(
         new MoveCommand(*getCurrentSegment(),

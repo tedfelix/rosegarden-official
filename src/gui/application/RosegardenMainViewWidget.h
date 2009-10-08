@@ -45,8 +45,8 @@ class SegmentParameterBox;
 class Segment;
 class RosegardenDocument;
 class RealTime;
-class NewNotationView;
-class NewMatrixView;
+class NotationView;
+class MatrixView;
 class MappedEvent;
 class InstrumentParameterBox;
 class EventView;
@@ -312,8 +312,8 @@ signals:
     void instrumentParametersChanged(InstrumentId);
 
 protected:
-    NewNotationView *createNotationView(std::vector<Segment *>);
-    NewMatrixView   *createMatrixView  (std::vector<Segment *>, bool drumMode);
+    NotationView *createNotationView(std::vector<Segment *>);
+    MatrixView   *createMatrixView  (std::vector<Segment *>, bool drumMode);
     EventView    *createEventView   (std::vector<Segment *>);
 
     virtual void windowActivationChange(bool);

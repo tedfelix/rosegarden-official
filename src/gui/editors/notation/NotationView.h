@@ -40,17 +40,17 @@ class NotationWidget;
 class Segment;
 class CommandRegistry;
 	
-class NewNotationView : public EditViewBase,
+class NotationView : public EditViewBase,
                         public SelectionManager
 {
     Q_OBJECT
 
 public:
-    NewNotationView(RosegardenDocument *doc,
+    NotationView(RosegardenDocument *doc,
                     std::vector<Segment *> segments,
                     QWidget *parent = 0);
 
-    virtual ~NewNotationView();
+    virtual ~NotationView();
 
     virtual Segment *getCurrentSegment();
     virtual EventSelection *getSelection() const;

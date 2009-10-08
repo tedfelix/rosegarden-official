@@ -440,15 +440,15 @@ void RosegardenMainViewWidget::slotEditSegmentNotation(Segment* p)
 
 void RosegardenMainViewWidget::slotEditSegmentsNotation(std::vector<Segment *> segmentsToEdit)
 {
-    NewNotationView *view = createNotationView(segmentsToEdit);
+    NotationView *view = createNotationView(segmentsToEdit);
     if (view) view->show();
 }
 
-NewNotationView *
+NotationView *
 RosegardenMainViewWidget::createNotationView(std::vector<Segment *> segmentsToEdit)
 {
-    NewNotationView *notationView =
-        new NewNotationView(getDocument(), segmentsToEdit, this);
+    NotationView *notationView =
+        new NotationView(getDocument(), segmentsToEdit, this);
 
     // For tempo changes (ugh -- it'd be nicer to make a tempo change
     // command that could interpret all this stuff from the dialog)
@@ -666,7 +666,7 @@ void RosegardenMainViewWidget::slotEditSegmentPercussionMatrix(Segment* p)
 
 void RosegardenMainViewWidget::slotEditSegmentsMatrix(std::vector<Segment *> segmentsToEdit)
 {
-    NewMatrixView *view = createMatrixView(segmentsToEdit, false);
+    MatrixView *view = createMatrixView(segmentsToEdit, false);
     if (view) view->show();
 /*!!!
     int count = 0;
@@ -674,7 +674,7 @@ void RosegardenMainViewWidget::slotEditSegmentsMatrix(std::vector<Segment *> seg
             i != segmentsToEdit.end(); ++i) {
         std::vector<Segment *> tmpvec;
         tmpvec.push_back(*i);
-        NewMatrixView *view = createMatrixView(tmpvec, false);
+        MatrixView *view = createMatrixView(tmpvec, false);
         if (view) {
             view->show();
             if (++count == maxEditorsToOpen)
@@ -686,7 +686,7 @@ void RosegardenMainViewWidget::slotEditSegmentsMatrix(std::vector<Segment *> seg
 
 void RosegardenMainViewWidget::slotEditSegmentsPercussionMatrix(std::vector<Segment *> segmentsToEdit)
 {
-    NewMatrixView *view = createMatrixView(segmentsToEdit, true);
+    MatrixView *view = createMatrixView(segmentsToEdit, true);
     if (view) view->show();
 
 /*!!!
@@ -695,7 +695,7 @@ void RosegardenMainViewWidget::slotEditSegmentsPercussionMatrix(std::vector<Segm
             i != segmentsToEdit.end(); ++i) {
         std::vector<Segment *> tmpvec;
         tmpvec.push_back(*i);
-        NewMatrixView *view = createMatrixView(tmpvec, true);
+        MatrixView *view = createMatrixView(tmpvec, true);
         if (view) {
             view->show();
             if (++count == maxEditorsToOpen)
@@ -705,10 +705,10 @@ void RosegardenMainViewWidget::slotEditSegmentsPercussionMatrix(std::vector<Segm
 */
 }
 
-NewMatrixView *
+MatrixView *
 RosegardenMainViewWidget::createMatrixView(std::vector<Segment *> segmentsToEdit, bool drumMode)
 {
-    NewMatrixView *matrixView = new NewMatrixView(getDocument(),
+    MatrixView *matrixView = new MatrixView(getDocument(),
                                                   segmentsToEdit,
                                                   drumMode,
                                                   this);
@@ -1810,7 +1810,7 @@ RosegardenMainViewWidget::slotUpdateRecordingSegment(Segment *segment,
     std::vector<Segment *> segments;
     segments.push_back(segment);
 
-    NewNotationView *view = createNotationView(segments);
+    NotationView *view = createNotationView(segments);
     if (!view) return ;
 
     /* signal no longer exists
