@@ -39,7 +39,7 @@ PKG_CHECK_MODULES([liblo],[liblo >= 0.7],[],[])
 PKG_CHECK_MODULES([lrdf],[lrdf >= 0.2],[],[])
 PKG_CHECK_MODULES([fftw3f],[fftw3f >= 3.0.0],[],[])
 PKG_CHECK_MODULES([sndfile],[sndfile >= 1.0.16],[HAVES="$HAVES -DHAVE_LIBSNDFILE"],[])
-PKG_CHECK_MODULES([samplerate],[samplerate >= 0.1.4],[],[])
+PKG_CHECK_MODULES([samplerate],[samplerate >= 0.1.2],[],[])
 
 AC_PATH_PROG([PERL],[perl])
 if test x$PERL = x ; then
