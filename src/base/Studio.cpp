@@ -641,22 +641,27 @@ Device *
 Studio::getDevice(DeviceId id)
 {
     //cerr << "Studio[" << this << "]::getDevice(" << id << ")... ";
-
+    
     std::vector<Device*>::iterator it;
-
+    
     for (it = m_devices.begin(); it != m_devices.end(); it++) {
-
-//	if (it != m_devices.begin()) cerr << ", ";
-
-//	cerr << (*it)->getId();
+        
+        // possibly fix a following seg.fault :
+        if( ! (*it) ){ 
+            cerr << "WARNING: (*it) is NULL in Studio::getDevice() " << endl;
+            continue;
+        }
+        
+        // if (it != m_devices.begin()) cerr << ", ";
+        //	cerr << (*it)->getId();
         if ((*it)->getId() == id) {
-	    //cerr << ". Found" << endl;
-	    return (*it);
-	}
+            //cerr << ". Found" << endl;
+            return (*it);
+        }
     }
-
+    
     //cerr << ". Not found" << endl;
-
+    
     return 0;
 }
 
