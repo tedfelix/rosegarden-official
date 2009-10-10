@@ -6330,2067 +6330,2067 @@ Om du ändå vill klistra in, fundera på att använda en av de andra inklistrin
     <message>
         <location filename="../AutoloadStrings.cpp" line="309"/>
         <source>MidnightBlue</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Midnattsblå</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="310"/>
         <source>NavyBlue</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Marinblå</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="311"/>
         <source>CornflowerBlue</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Blåklintsblå</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="312"/>
         <source>DarkSlateBlue</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mörk skifferblå</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="313"/>
         <source>SlateBlue</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Skifferblå</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="314"/>
         <source>MediumSlateBlue</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mellanskifferblå</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="315"/>
         <source>LightSlateBlue</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ljus skifferblå</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="316"/>
         <source>MediumBlue</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mellanblå</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="317"/>
         <source>RoyalBlue</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kungsblå</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="318"/>
         <source>blue</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">blå</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="319"/>
         <source>DodgerBlue</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dodgerblå</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="320"/>
         <source>DeepSkyBlue</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Djup himmelsblå</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="321"/>
         <source>SkyBlue</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Himmelsblå</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="322"/>
         <source>LightSkyBlue</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ljus himmelsblå</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="323"/>
         <source>SteelBlue</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Stålblå</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="324"/>
         <source>LightSteelBlue</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ljus stålblå</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="325"/>
         <source>LightBlue</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ljusblå</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="326"/>
         <source>PowderBlue</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pulverblå</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="327"/>
         <source>PaleTurquoise</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Blekturkos</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="328"/>
         <source>DarkTurquoise</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mörk turkos</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="329"/>
         <source>MediumTurquoise</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mellanturkos</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="330"/>
         <source>turquoise</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">turkos</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="331"/>
         <source>cyan</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">cyanblå</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="332"/>
         <source>LightCyan</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ljus cyanblå</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="333"/>
         <source>CadetBlue</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kadettblå</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="334"/>
         <source>MediumAquamarine</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mellanakvamarin</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="335"/>
         <source>aquamarine</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">akvamarin</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="336"/>
         <source>DarkGreen</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mörkgrön</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="337"/>
         <source>DarkOliveGreen</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mörk olivgrön</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="338"/>
         <source>DarkSeaGreen</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mörk havsgrön</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="339"/>
         <source>SeaGreen</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Havsgrön</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="340"/>
         <source>MediumSeaGreen</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mellanhavsgrön</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="341"/>
         <source>LightSeaGreen</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ljus havsgrön</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="342"/>
         <source>PaleGreen</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Blekgrön</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="343"/>
         <source>SpringGreen</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vårgrön</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="344"/>
         <source>LawnGreen</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Gräsgrön</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="345"/>
         <source>green</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">grön</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="346"/>
         <source>chartreuse</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">chartreuse</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="347"/>
         <source>MediumSpringGreen</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mellanvårgrön</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="348"/>
         <source>GreenYellow</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Gröngul</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="349"/>
         <source>LimeGreen</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Limegrön</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="350"/>
         <source>YellowGreen</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Gulgrön</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="351"/>
         <source>ForestGreen</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Skogsgrön</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="352"/>
         <source>OliveDrab</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Gråoliv</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="353"/>
         <source>DarkKhaki</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mörk kaki</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="354"/>
         <source>khaki</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">kaki</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="355"/>
         <source>PaleGoldenrod</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Blek gullris</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="356"/>
         <source>LightGoldenrodYellow</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ljus gullrisgul</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="357"/>
         <source>LightYellow</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ljusgul</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="358"/>
         <source>yellow</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">gul</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="359"/>
         <source>gold</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">guldfärgad</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="360"/>
         <source>LightGoldenrod</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ljus gullris</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="361"/>
         <source>goldenrod</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">gullris</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="362"/>
         <source>DarkGoldenrod</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mörk gullris</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="363"/>
         <source>RosyBrown</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rödbrun</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="364"/>
         <source>IndianRed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Indianröd</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="365"/>
         <source>SaddleBrown</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sadelbrun</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="366"/>
         <source>sienna</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">sienna</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="367"/>
         <source>peru</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">peru</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="368"/>
         <source>burlywood</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">kvistigt trä</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="369"/>
         <source>beige</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">beige</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="370"/>
         <source>wheat</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">vete</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="371"/>
         <source>SandyBrown</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sandbrun</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="372"/>
         <source>tan</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">mellanbrun</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="373"/>
         <source>chocolate</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">chokladfärgad</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="374"/>
         <source>firebrick</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">tegel</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="375"/>
         <source>brown</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">brun</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="376"/>
         <source>DarkSalmon</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mörk laxrosa</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="377"/>
         <source>salmon</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">laxrosa</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="378"/>
         <source>LightSalmon</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ljus laxrosa</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="379"/>
         <source>orange</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">orange</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="380"/>
         <source>DarkOrange</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mörk orange</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="381"/>
         <source>coral</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">korall</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="382"/>
         <source>LightCoral</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ljus korall</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="383"/>
         <source>tomato</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">tomatröd</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="384"/>
         <source>OrangeRed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Orangeröd</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="385"/>
         <source>red</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">röd</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="386"/>
         <source>HotPink</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Het rosa</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="387"/>
         <source>DeepPink</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Djuprosa</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="388"/>
         <source>pink</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">rosa</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="389"/>
         <source>LightPink</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ljusrosa</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="390"/>
         <source>PaleVioletRed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Blek violettröd</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="391"/>
         <source>maroon</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">mörkbrun</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="392"/>
         <source>MediumVioletRed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mellanviolettröd</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="393"/>
         <source>VioletRed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Violettröd</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="394"/>
         <source>magenta</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">magentafärgad</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="395"/>
         <source>violet</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">violett</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="396"/>
         <source>plum</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">plommon</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="397"/>
         <source>orchid</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">orkidé</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="398"/>
         <source>MediumOrchid</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mellanorkidé</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="399"/>
         <source>DarkOrchid</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mörk orkidé</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="400"/>
         <source>DarkViolet</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mörk violett</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="401"/>
         <source>BlueViolet</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Blåviolett</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="402"/>
         <source>purple</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">violett</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="403"/>
         <source>MediumPurple</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mellanpurpur</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="404"/>
         <source>thistle</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">tistel</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="405"/>
         <source>snow1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">snövit 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="406"/>
         <source>snow2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">snövit 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="407"/>
         <source>snow3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">snövit 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="408"/>
         <source>snow4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">snövit 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="409"/>
         <source>seashell1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">snäckskal 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="410"/>
         <source>seashell2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">snäckskal 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="411"/>
         <source>seashell3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">snäckskal 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="412"/>
         <source>seashell4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">snäckskal 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="413"/>
         <source>AntiqueWhite1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Antikvit 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="414"/>
         <source>AntiqueWhite2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Antikvit 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="415"/>
         <source>AntiqueWhite3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Antikvit 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="416"/>
         <source>AntiqueWhite4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Antikvit 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="417"/>
         <source>bisque1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">bisque 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="418"/>
         <source>bisque2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">bisque 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="419"/>
         <source>bisque3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">bisque 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="420"/>
         <source>bisque4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">bisque 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="421"/>
         <source>PeachPuff1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Persikopuff 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="422"/>
         <source>PeachPuff2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Persikopuff 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="423"/>
         <source>PeachPuff3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Persikopuff 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="424"/>
         <source>PeachPuff4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Persikopuff 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="425"/>
         <source>NavajoWhite1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Navajovit 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="426"/>
         <source>NavajoWhite2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Navajovit 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="427"/>
         <source>NavajoWhite3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Navajovit 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="428"/>
         <source>NavajoWhite4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Navajovit 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="429"/>
         <source>LemonChiffon1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Citronchiffong 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="430"/>
         <source>LemonChiffon2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Citronchiffong 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="431"/>
         <source>LemonChiffon3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Citronchiffong 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="432"/>
         <source>LemonChiffon4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Citronchiffong 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="433"/>
         <source>cornsilk1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">cornsilk 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="434"/>
         <source>cornsilk2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">cornsilk 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="435"/>
         <source>cornsilk3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">cornsilk 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="436"/>
         <source>cornsilk4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">cornsilk 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="437"/>
         <source>ivory1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">elfenbensvit 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="438"/>
         <source>ivory2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">elfenbensvit 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="439"/>
         <source>ivory3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">elfenbensvit 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="440"/>
         <source>ivory4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">elfenbensvit 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="441"/>
         <source>honeydew1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">honungsdagg 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="442"/>
         <source>honeydew2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">honungsdagg 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="443"/>
         <source>honeydew3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">honungsdagg 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="444"/>
         <source>honeydew4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">honungsdagg 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="445"/>
         <source>LavenderBlush1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lavendelskimrande 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="446"/>
         <source>LavenderBlush2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lavendelskimrande 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="447"/>
         <source>LavenderBlush3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lavendelskimrande 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="448"/>
         <source>LavenderBlush4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lavendelskimrande 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="449"/>
         <source>MistyRose1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Blekrosa 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="450"/>
         <source>MistyRose2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Blekrosa 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="451"/>
         <source>MistyRose3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Blekrosa 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="452"/>
         <source>MistyRose4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Blekrosa 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="453"/>
         <source>azure1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">azurblå 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="454"/>
         <source>azure2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">azurblå 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="455"/>
         <source>azure3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">azurblå 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="456"/>
         <source>azure4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">azurblå 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="457"/>
         <source>SlateBlue1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Skifferblå 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="458"/>
         <source>SlateBlue2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Skifferblå 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="459"/>
         <source>SlateBlue3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Skifferblå 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="460"/>
         <source>SlateBlue4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Skifferblå 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="461"/>
         <source>RoyalBlue1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kungsblå 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="462"/>
         <source>RoyalBlue2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kungsblå 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="463"/>
         <source>RoyalBlue3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kungsblå 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="464"/>
         <source>RoyalBlue4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kungsblå 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="465"/>
         <source>blue1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">blå 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="466"/>
         <source>blue2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">blå 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="467"/>
         <source>blue3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">blå 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="468"/>
         <source>blue4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">blå 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="469"/>
         <source>DodgerBlue1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dodgerblå 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="470"/>
         <source>DodgerBlue2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dodgerblå 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="471"/>
         <source>DodgerBlue3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dodgerblå 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="472"/>
         <source>DodgerBlue4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dodgerblå 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="473"/>
         <source>SteelBlue1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Stålblå 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="474"/>
         <source>SteelBlue2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Stålblå 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="475"/>
         <source>SteelBlue3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Stålblå 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="476"/>
         <source>SteelBlue4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Stålblå 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="477"/>
         <source>DeepSkyBlue1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Djup himmelsblå 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="478"/>
         <source>DeepSkyBlue2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Djup himmelsblå 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="479"/>
         <source>DeepSkyBlue3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Djup himmelsblå 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="480"/>
         <source>DeepSkyBlue4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Djup himmelsblå 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="481"/>
         <source>SkyBlue1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Himmelsblå 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="482"/>
         <source>SkyBlue2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Himmelsblå 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="483"/>
         <source>SkyBlue3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Himmelsblå 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="484"/>
         <source>SkyBlue4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Himmelsblå 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="485"/>
         <source>LightSkyBlue1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ljus himmelsblå 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="486"/>
         <source>LightSkyBlue2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ljus himmelsblå 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="487"/>
         <source>LightSkyBlue3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ljus himmelsblå 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="488"/>
         <source>LightSkyBlue4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ljus himmelsblå 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="489"/>
         <source>SlateGray1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Skiffergrå 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="490"/>
         <source>SlateGray2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Skiffergrå 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="491"/>
         <source>SlateGray3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Skiffergrå 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="492"/>
         <source>SlateGray4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Skiffergrå 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="493"/>
         <source>LightSteelBlue1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ljus stålblå 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="494"/>
         <source>LightSteelBlue2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ljus stålblå 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="495"/>
         <source>LightSteelBlue3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ljus stålblå 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="496"/>
         <source>LightSteelBlue4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ljus stålblå 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="497"/>
         <source>LightBlue1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ljusblå 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="498"/>
         <source>LightBlue2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ljusblå 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="499"/>
         <source>LightBlue3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ljusblå 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="500"/>
         <source>LightBlue4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ljusblå 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="501"/>
         <source>LightCyan1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ljus cyanblå 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="502"/>
         <source>LightCyan2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ljus cyanblå 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="503"/>
         <source>LightCyan3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ljus cyanblå 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="504"/>
         <source>LightCyan4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ljus cyanblå 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="505"/>
         <source>PaleTurquoise1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Blekturkos 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="506"/>
         <source>PaleTurquoise2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Blekturkos 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="507"/>
         <source>PaleTurquoise3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Blekturkos 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="508"/>
         <source>PaleTurquoise4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Blekturkos 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="509"/>
         <source>CadetBlue1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kadettblå 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="510"/>
         <source>CadetBlue2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kadettblå 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="511"/>
         <source>CadetBlue3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kadettblå 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="512"/>
         <source>CadetBlue4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kadettblå 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="513"/>
         <source>turquoise1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">turkos 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="514"/>
         <source>turquoise2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">turkos 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="515"/>
         <source>turquoise3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">turkos 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="516"/>
         <source>turquoise4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">turkos 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="517"/>
         <source>cyan1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">cyanblå 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="518"/>
         <source>cyan2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">cyanblå 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="519"/>
         <source>cyan3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">cyanblå 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="520"/>
         <source>cyan4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">cyanblå 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="521"/>
         <source>DarkSlateGray1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mörk skiffergrå 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="522"/>
         <source>DarkSlateGray2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mörk skiffergrå 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="523"/>
         <source>DarkSlateGray3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mörk skiffergrå 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="524"/>
         <source>DarkSlateGray4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mörk skiffergrå 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="525"/>
         <source>aquamarine1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">akvamarin 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="526"/>
         <source>aquamarine2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">akvamarin 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="527"/>
         <source>aquamarine3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">akvamarin 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="528"/>
         <source>aquamarine4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">akvamarin 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="529"/>
         <source>DarkSeaGreen1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mörk havsgrön 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="530"/>
         <source>DarkSeaGreen2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mörk havsgrön 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="531"/>
         <source>DarkSeaGreen3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mörk havsgrön 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="532"/>
         <source>DarkSeaGreen4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mörk havsgrön 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="533"/>
         <source>SeaGreen1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Havsgrön 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="534"/>
         <source>SeaGreen2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Havsgrön 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="535"/>
         <source>SeaGreen3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Havsgrön 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="536"/>
         <source>SeaGreen4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Havsgrön 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="537"/>
         <source>PaleGreen1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Blekgrön 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="538"/>
         <source>PaleGreen2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Blekgrön 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="539"/>
         <source>PaleGreen3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Blekgrön 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="540"/>
         <source>PaleGreen4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Blekgrön 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="541"/>
         <source>SpringGreen1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vårgrön 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="542"/>
         <source>SpringGreen2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vårgrön 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="543"/>
         <source>SpringGreen3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vårgrön 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="544"/>
         <source>SpringGreen4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vårgrön 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="545"/>
         <source>green1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">grön 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="546"/>
         <source>green2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">grön 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="547"/>
         <source>green3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">grön 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="548"/>
         <source>green4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">grön 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="549"/>
         <source>chartreuse1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">chartreuse 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="550"/>
         <source>chartreuse2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">chartreuse 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="551"/>
         <source>chartreuse3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">chartreuse 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="552"/>
         <source>chartreuse4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">chartreuse 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="553"/>
         <source>OliveDrab1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Gråoliv 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="554"/>
         <source>OliveDrab2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Gråoliv 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="555"/>
         <source>OliveDrab3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Gråoliv 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="556"/>
         <source>OliveDrab4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Gråoliv 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="557"/>
         <source>DarkOliveGreen1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mörk olivgrön 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="558"/>
         <source>DarkOliveGreen2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mörk olivgrön 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="559"/>
         <source>DarkOliveGreen3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mörk olivgrön 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="560"/>
         <source>DarkOliveGreen4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mörk olivgrön 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="561"/>
         <source>khaki1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">kaki 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="562"/>
         <source>khaki2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">kaki 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="563"/>
         <source>khaki3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">kaki 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="564"/>
         <source>khaki4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">kaki 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="565"/>
         <source>LightGoldenrod1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ljus gullris 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="566"/>
         <source>LightGoldenrod2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ljus gullris 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="567"/>
         <source>LightGoldenrod3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ljus gullris 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="568"/>
         <source>LightGoldenrod4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ljus gullris 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="569"/>
         <source>LightYellow1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ljusgul 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="570"/>
         <source>LightYellow2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ljusgul 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="571"/>
         <source>LightYellow3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ljusgul 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="572"/>
         <source>LightYellow4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ljusgul 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="573"/>
         <source>yellow1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">gul 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="574"/>
         <source>yellow2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">gul 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="575"/>
         <source>yellow3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">gul 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="576"/>
         <source>yellow4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">gul 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="577"/>
         <source>gold1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">guldfärgad 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="578"/>
         <source>gold2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">guldfärgad 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="579"/>
         <source>gold3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">guldfärgad 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="580"/>
         <source>gold4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">guldfärgad 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="581"/>
         <source>goldenrod1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">gullris 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="582"/>
         <source>goldenrod2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">gullris 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="583"/>
         <source>goldenrod3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">gullris 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="584"/>
         <source>goldenrod4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">gullris 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="585"/>
         <source>DarkGoldenrod1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mörk gullris 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="586"/>
         <source>DarkGoldenrod2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mörk gullris 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="587"/>
         <source>DarkGoldenrod3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mörk gullris 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="588"/>
         <source>DarkGoldenrod4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mörk gullris 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="589"/>
         <source>RosyBrown1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rödbrun 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="590"/>
         <source>RosyBrown2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rödbrun 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="591"/>
         <source>RosyBrown3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rödbrun 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="592"/>
         <source>RosyBrown4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rödbrun 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="593"/>
         <source>IndianRed1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Indianröd</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="594"/>
         <source>IndianRed2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Indianröd 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="595"/>
         <source>IndianRed3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Indianröd 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="596"/>
         <source>IndianRed4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Indianröd 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="597"/>
         <source>sienna1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">sienna 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="598"/>
         <source>sienna2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">sienna 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="599"/>
         <source>sienna3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">sienna 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="600"/>
         <source>sienna4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">sienna 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="601"/>
         <source>burlywood1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">kvistigt trä 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="602"/>
         <source>burlywood2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">kvistigt trä 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="603"/>
         <source>burlywood3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">kvistigt trä 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="604"/>
         <source>burlywood4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">kvistigt trä 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="605"/>
         <source>wheat1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">vete 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="606"/>
         <source>wheat2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">vete 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="607"/>
         <source>wheat3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">vete 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="608"/>
         <source>wheat4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">vete 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="609"/>
         <source>tan1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">mellanbrun 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="610"/>
         <source>tan2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">mellanbrun 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="611"/>
         <source>tan3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">mellanbrun 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="612"/>
         <source>tan4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">mellanbrun 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="613"/>
         <source>chocolate1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">chokladfärgad 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="614"/>
         <source>chocolate2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">chokladfärgad 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="615"/>
         <source>chocolate3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">chokladfärgad 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="616"/>
         <source>chocolate4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">chokladfärgad 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="617"/>
         <source>firebrick1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">tegel 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="618"/>
         <source>firebrick2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">tegel 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="619"/>
         <source>firebrick3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">tegel 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="620"/>
         <source>firebrick4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">tegel 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="621"/>
         <source>brown1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">brun 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="622"/>
         <source>brown2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">brun 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="623"/>
         <source>brown3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">brun 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="624"/>
         <source>brown4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">brun 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="625"/>
         <source>salmon1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">laxrosa 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="626"/>
         <source>salmon2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">laxrosa 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="627"/>
         <source>salmon3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">laxrosa 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="628"/>
         <source>salmon4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">laxrosa 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="629"/>
         <source>LightSalmon1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ljus laxrosa 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="630"/>
         <source>LightSalmon2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ljus laxrosa 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="631"/>
         <source>LightSalmon3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ljus laxrosa 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="632"/>
         <source>LightSalmon4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ljus laxrosa 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="633"/>
         <source>orange1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">orange 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="634"/>
         <source>orange2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">orange 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="635"/>
         <source>orange3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">orange 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="636"/>
         <source>orange4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">orange 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="637"/>
         <source>DarkOrange1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mörk orange 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="638"/>
         <source>DarkOrange2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mörk orange 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="639"/>
         <source>DarkOrange3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mörk orange 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="640"/>
         <source>DarkOrange4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mörk orange 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="641"/>
         <source>coral1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">korall 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="642"/>
         <source>coral2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">korall 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="643"/>
         <source>coral3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">korall 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="644"/>
         <source>coral4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">korall 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="645"/>
         <source>tomato1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">tomatröd 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="646"/>
         <source>tomato2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">tomatröd 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="647"/>
         <source>tomato3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">tomatröd 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="648"/>
         <source>tomato4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">tomatröd 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="649"/>
         <source>OrangeRed1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Orangeröd 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="650"/>
         <source>OrangeRed2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Orangeröd 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="651"/>
         <source>OrangeRed3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Orangeröd 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="652"/>
         <source>OrangeRed4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Orangeröd 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="653"/>
         <source>red1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">röd 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="654"/>
         <source>red2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">röd 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="655"/>
         <source>red3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">röd 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="656"/>
         <source>red4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">röd 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="657"/>
         <source>DeepPink1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Djuprosa 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="658"/>
         <source>DeepPink2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Djuprosa 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="659"/>
         <source>DeepPink3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Djuprosa 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="660"/>
         <source>DeepPink4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Djuprosa 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="661"/>
         <source>HotPink1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Het rosa 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="662"/>
         <source>HotPink2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Het rosa 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="663"/>
         <source>HotPink3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Het rosa 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="664"/>
         <source>HotPink4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Het rosa 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="665"/>
         <source>pink1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">rosa 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="666"/>
         <source>pink2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">rosa 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="667"/>
         <source>pink3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">rosa 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="668"/>
         <source>pink4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">rosa 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="669"/>
         <source>LightPink1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ljusrosa 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="670"/>
         <source>LightPink2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ljusrosa 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="671"/>
         <source>LightPink3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ljusrosa 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="672"/>
         <source>LightPink4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ljusrosa 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="673"/>
         <source>PaleVioletRed1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Blek violettröd 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="674"/>
         <source>PaleVioletRed2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Blek violettröd 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="675"/>
         <source>PaleVioletRed3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Blek violettröd 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="676"/>
         <source>PaleVioletRed4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Blek violettröd 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="677"/>
         <source>maroon1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">mörkbrun 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="678"/>
         <source>maroon2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">mörkbrun 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="679"/>
         <source>maroon3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">mörkbrun 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="680"/>
         <source>maroon4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">mörkbrun 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="681"/>
         <source>VioletRed1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Violettröd 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="682"/>
         <source>VioletRed2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Violettröd 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="683"/>
         <source>VioletRed3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Violettröd 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="684"/>
         <source>VioletRed4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Violettröd 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="685"/>
         <source>magenta1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">magentafärgad 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="686"/>
         <source>magenta2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">magentafärgad 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="687"/>
         <source>magenta3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">magentafärgad 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="688"/>
         <source>magenta4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">magentafärgad 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="689"/>
         <source>orchid1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">orkidé 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="690"/>
         <source>orchid2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">orkidé 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="691"/>
         <source>orchid3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">orkidé 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="692"/>
         <source>orchid4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">orkidé 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="693"/>
         <source>plum1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">plommon 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="694"/>
         <source>plum2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">plommon 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="695"/>
         <source>plum3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">plommon 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="696"/>
         <source>plum4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">plommon 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="697"/>
         <source>MediumOrchid1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mellanorkidé 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="698"/>
         <source>MediumOrchid2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mellanorkidé 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="699"/>
         <source>MediumOrchid3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mellanorkidé 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="700"/>
         <source>MediumOrchid4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mellanorkidé 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="701"/>
         <source>DarkOrchid1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mörk orkidé 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="702"/>
         <source>DarkOrchid2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mörk orkidé 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="703"/>
         <source>DarkOrchid3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mörk orkidé 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="704"/>
         <source>DarkOrchid4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mörk orkidé 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="705"/>
         <source>purple1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">violett 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="706"/>
         <source>purple2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">violett 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="707"/>
         <source>purple3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">violett 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="708"/>
         <source>purple4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">violett 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="709"/>
         <source>MediumPurple1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mellanpurpur 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="710"/>
         <source>MediumPurple2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mellanpurpur 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="711"/>
         <source>MediumPurple3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mellanpurpur 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="712"/>
         <source>MediumPurple4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mellanpurpur 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="713"/>
         <source>thistle1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">tistel 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="714"/>
         <source>thistle2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">tistel 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="715"/>
         <source>thistle3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">tistel 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="716"/>
         <source>thistle4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">tistel 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="717"/>
         <source>black</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">svart</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="718"/>
         <source>DarkSlateGray</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mörk skiffergrå</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="719"/>
         <source>DimGray</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dunkelgrå</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="720"/>
         <source>SlateGray</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Skiffergrå</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="721"/>
         <source>LightSlateGray</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ljus skiffergrå</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="722"/>
@@ -8400,12 +8400,12 @@ Om du ändå vill klistra in, fundera på att använda en av de andra inklistrin
     <message>
         <location filename="../AutoloadStrings.cpp" line="723"/>
         <source>LightGray</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ljusgrå</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="724"/>
         <source>white</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">vit</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="725"/>
@@ -9208,7 +9208,6 @@ Välj de du vill ta bort permanent från hårddisken.
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="933"/>
         <source>&lt;qt&gt;About to delete %n audio file(s) permanently from the hard disk.&lt;br&gt;This action cannot be undone, and there will be no way to recover the files.&lt;br&gt;Are you sure?&lt;/qt&gt;</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
@@ -13003,14 +13002,12 @@ Exempeltext från filen:</translation>
         <source>up %n octave(s) and %1</source>
         <translation type="unfinished">
             <numerusform></numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="308"/>
         <source>up %n octave(s)</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
@@ -13024,14 +13021,12 @@ Exempeltext från filen:</translation>
         <source>down %n octave(s) and %1</source>
         <translation type="unfinished">
             <numerusform></numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="321"/>
         <source>down %n octave(s)</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
@@ -14516,7 +14511,6 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
         <source>  %n event(s) selected </source>
         <translation type="unfinished">
             <numerusform></numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -14707,7 +14701,6 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
         <location filename="../../src/gui/editors/matrix/OldMatrixView.cpp" line="2687"/>
         <source>%1 - %n Segment(s) - %2</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
@@ -15065,7 +15058,6 @@ så att andra kan dra nytta av den.</translation>
         <source>%1%2 - %n Segment(s) - %3</source>
         <translation type="unfinished">
             <numerusform></numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -15171,7 +15163,6 @@ så att andra kan dra nytta av den.</translation>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="779"/>
         <source>%n pixel(s)</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
@@ -15384,7 +15375,6 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2875"/>
         <source>%1%2 - %n Segment(s) - Notation</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
@@ -16007,7 +15997,6 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat).</transl
         <source>%n pixel(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -16056,7 +16045,6 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat).</transl
         <source>  %n event(s) selected </source>
         <translation type="unfinished">
             <numerusform></numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -16098,7 +16086,6 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat).</transl
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="3463"/>
         <source>%1 - %n Segment(s) - Notation</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
@@ -17487,7 +17474,6 @@ Vill du spara den?</translation>
         <source>Delete the %n audio file(s) recorded during the unsaved session?</source>
         <translation type="unfinished">
             <numerusform></numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -17511,7 +17497,6 @@ Välj alla du vill ta bort permanent från hårddisken.
         <location filename="../../src/document/RosegardenDocument.cpp" line="531"/>
         <source>&lt;qt&gt;About to delete %n audio file(s) permanently from the hard disk.&lt;br&gt;There will be no way to recover the file(s).&lt;br&gt;Are you sure?&lt;/qt&gt;</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
@@ -18019,7 +18004,6 @@ Vill du ange den nu?</translation>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2626"/>
         <source>Split %n Segment(s) at Time</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
@@ -18945,7 +18929,6 @@ Vill du ange den nu?</translation>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="242"/>
         <source>Move Segment(s)</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
@@ -21249,7 +21232,6 @@ Vill du ställa in den nu?</translation>
         <source>%1 on %n track(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -21276,7 +21258,6 @@ Vill du ställa in den nu?</translation>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="329"/>
         <source>This triggered segment is used %n time(s) in the current composition.  Are you sure you want to remove it?</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
