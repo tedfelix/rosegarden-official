@@ -552,8 +552,8 @@ TrackParameterBox::populatePlaybackDeviceList()
 
     }
 
-    m_playDevice->setCurrentIndex( -1);
-    m_instrument->setCurrentIndex( -1);
+    m_playDevice->setCurrentIndex(-1);
+    m_instrument->setCurrentIndex(-1);
 }
 
 void

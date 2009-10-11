@@ -232,6 +232,7 @@ namespace Rosegarden
 RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
                                            QObject *startupStatusMessageReceiver) :
     QMainWindow(0),
+    m_alwaysUseDefaultStudio(false),
     m_actionsSetup(false),
     m_view(0),
     m_swapView(0),
@@ -553,6 +554,31 @@ RosegardenMainWindow::closeEvent(QCloseEvent *event)
         QSettings settings;
         settings.beginGroup(WindowGeometryConfigGroup);
         settings.setValue("Main_Window", this->saveGeometry());
+        settings.endGroup();
+
+        settings.beginGroup(GeneralOptionsConfigGroup);
+        settings.setValue("show_status_bar", !statusBar()->isHidden());
+        settings.setValue("show_stock_toolbar", !findToolbar("Main Toolbar")->isHidden());
+        settings.setValue("show_tools_toolbar", !findToolbar("Tools Toolbar")->isHidden());
+        settings.setValue("show_tracks_toolbar", !findToolbar("Tracks Toolbar")->isHidden());
+        settings.setValue("show_editors_toolbar", !findToolbar("Editors Toolbar")->isHidden());
+        settings.setValue("show_transport_toolbar", !findToolbar("Transport Toolbar")->isHidden());
+        settings.setValue("show_zoom_toolbar", !findToolbar("Zoom Toolbar")->isHidden());
+        settings.setValue("always_use_default_studio", m_alwaysUseDefaultStudio);
+        settings.setValue("show_transport", findAction("show_transport")->isChecked());
+
+        if (m_transport) {
+            settings.setValue("transport_flap_extended", m_transport->isExpanded());
+        }
+
+        settings.setValue("show_tracklabels", findAction("show_tracklabels")->isChecked());
+        settings.setValue("show_rulers", findAction("show_rulers")->isChecked());
+        settings.setValue("show_tempo_ruler", findAction("show_tempo_ruler")->isChecked());
+        settings.setValue("show_chord_name_ruler", findAction("show_chord_name_ruler")->isChecked());
+        settings.setValue("show_previews", findAction("show_previews")->isChecked());
+        settings.setValue("show_segment_labels", findAction("show_segment_labels")->isChecked());
+        settings.setValue("show_inst_segment_parameters", findAction("show_inst_segment_parameters")->isChecked());
+        settings.setValue("enable_midi_routing", findAction("enable_midi_routing")->isChecked());
         settings.endGroup();
 
         event->accept();
@@ -1249,7 +1275,9 @@ RosegardenMainWindow::openFile(QString filePath, ImportType type)
         QSettings settings;
         settings.beginGroup(GeneralOptionsConfigGroup);
 
-        if (qStrToBool(settings.value("alwaysusedefaultstudio", "false"))) {
+        if (qStrToBool(settings.value("always_use_default_studio", "false"))) {
+
+            m_alwaysUseDefaultStudio = true;
 
             QString autoloadFile = ResourceFinder().getAutoloadPath();
 
@@ -1419,29 +1447,46 @@ void
 RosegardenMainWindow::readOptions()
 {
     QSettings settings;
-//    applyMainWindowSettings(MainWindowConfigGroup);    //&&& not required
-
-//    settings.reparseConfiguration();  //&&& may not be required: reparseConfig..()
 
     // Statusbar and toolbars toggling action status
     //
-    findAction("show_status_bar")->setChecked(!statusBar() ->isHidden());
-    findAction("show_stock_toolbar")->setChecked(!findToolbar("Main Toolbar") ->isHidden());
-    findAction("show_tools_toolbar")->setChecked(!findToolbar("Tools Toolbar") ->isHidden());
-    findAction("show_tracks_toolbar")->setChecked(!findToolbar("Tracks Toolbar") ->isHidden());
-    findAction("show_editors_toolbar")->setChecked(!findToolbar("Editors Toolbar") ->isHidden());
-    findAction("show_transport_toolbar")->setChecked(!findToolbar("Transport Toolbar")->isHidden());
-    findAction("show_zoom_toolbar")->setChecked(!findToolbar("Zoom Toolbar") ->isHidden());
-
     bool opt;
 
     settings.beginGroup(GeneralOptionsConfigGroup);
 
-    opt = qStrToBool(settings.value("Show Transport", "true")) ;
+    opt = qStrToBool(settings.value("show_status_bar", "true"));
+    findAction("show_status_bar")->setChecked(opt);
+    slotToggleStatusBar();
+
+    opt = qStrToBool(settings.value("show_stock_toolbar", "true"));
+    findAction("show_stock_toolbar")->setChecked(opt);
+    slotToggleToolBar();
+
+    opt = qStrToBool(settings.value("show_tools_toolbar", "true"));
+    findAction("show_tools_toolbar")->setChecked(opt);
+    slotToggleToolsToolBar();
+
+    opt = qStrToBool(settings.value("show_tracks_toolbar", "true"));
+    findAction("show_tracks_toolbar")->setChecked(opt);
+    slotToggleTracksToolBar();
+
+    opt = qStrToBool(settings.value("show_editors_toolbar", "true"));
+    findAction("show_editors_toolbar")->setChecked(opt);
+    slotToggleEditorsToolBar();
+
+    opt = qStrToBool(settings.value("show_transport_toolbar", "true"));
+    findAction("show_transport_toolbar")->setChecked(opt);
+    slotToggleTransportToolBar();
+
+    opt = qStrToBool(settings.value("show_zoom_toolbar", "true"));
+    findAction("show_zoom_toolbar")->setChecked(opt);
+    slotToggleZoomToolBar();
+
+    opt = qStrToBool(settings.value("show_transport", "true")) ;
     findAction("show_transport")->setChecked(opt);
     slotToggleTransport();
 
-    opt = qStrToBool(settings.value("Expanded Transport", "true")) ;
+    opt = qStrToBool(settings.value("transport_flap_extended", "true")) ;
 
 #ifdef SETTING_LOG_DEBUG
     _settingLog(QString("SETTING 3 : transport flap extended = %1").arg(opt));
@@ -1452,7 +1497,7 @@ RosegardenMainWindow::readOptions()
     else
         getTransport()->slotPanelCloseButtonClicked();
 
-    opt = qStrToBool(settings.value("Show Track labels", "true")) ;
+    opt = qStrToBool(settings.value("show_tracklabels", "true")) ;
 
 #ifdef SETTING_LOG_DEBUG
     _settingLog(QString("SETTING 3 : show track labels = %1").arg(opt));
@@ -1461,37 +1506,32 @@ RosegardenMainWindow::readOptions()
     findAction("show_tracklabels")->setChecked(opt);
     slotToggleTrackLabels();
 
-    opt = qStrToBool(settings.value("Show Rulers", "true")) ;
+    opt = qStrToBool(settings.value("show_rulers", "true")) ;
     findAction("show_rulers")->setChecked(opt);
     slotToggleRulers();
 
-    opt = qStrToBool(settings.value("Show Tempo Ruler", "true")) ;
+    opt = qStrToBool(settings.value("show_tempo_ruler", "true")) ;
     findAction("show_tempo_ruler")->setChecked(opt);
     slotToggleTempoRuler();
 
-    opt = qStrToBool(settings.value("Show Chord Name Ruler", "false")) ;
+    opt = qStrToBool(settings.value("show_chord_name_ruler", "false")) ;
     findAction("show_chord_name_ruler")->setChecked(opt);
     slotToggleChordNameRuler();
 
-    opt = qStrToBool(settings.value("Show Previews", "true")) ;
+    opt = qStrToBool(settings.value("show_previews", "true")) ;
     findAction("show_previews")->setChecked(opt);
     slotTogglePreviews();
 
-    opt = qStrToBool(settings.value("Show Segment Labels", "true")) ;
+    opt = qStrToBool(settings.value("show_segment_labels", "true")) ;
     findAction("show_segment_labels")->setChecked(opt);
     slotToggleSegmentLabels();
-/*&&&
-    opt = qStrToBool(settings.value("Show Parameters", "true")) ;
-    if (!opt) {
-        //m_dockLeft->undock();
-    m_dockLeft->setFloating(true);
-        //m_dockLeft->hide();
-    m_dockLeft->setVisible(false);
-    m_dockVisible = false;
-    }
-*/
+
+    opt = qStrToBool(settings.value("show_inst_segment_parameters", true));
+    findAction("show_inst_segment_parameters")->setChecked(opt);
+    slotDockParametersBack();
+
     // MIDI Thru routing
-    opt = qStrToBool(settings.value("MIDI Thru Routing", "true")) ;
+    opt = qStrToBool(settings.value("enable_midi_routing", "true")) ;
     findAction("enable_midi_routing")->setChecked(opt);
     slotEnableMIDIThruRouting();
 
