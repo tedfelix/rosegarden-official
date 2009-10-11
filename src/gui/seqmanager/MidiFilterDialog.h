@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -46,7 +45,7 @@ public slots:
 
     void accept();
     void slotApply();
-    void slotSetModified();
+    void slotSetModified(int foo = 42);
 
 protected:
 
@@ -57,6 +56,7 @@ protected:
 
     bool              m_modified;
     QDialogButtonBox *m_buttonBox;
+    QPushButton      *m_applyButton;
 
 };
 

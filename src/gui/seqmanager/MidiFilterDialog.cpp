@@ -68,6 +68,14 @@ MidiFilterDialog::MidiFilterDialog(QWidget *parent,
     QCheckBox *contThru = new QCheckBox(tr("Controller"), m_thruBox);
     QCheckBox *sysThru = new QCheckBox(tr("System Exclusive"), m_thruBox);
 
+    noteThru->setObjectName("Note");
+    progThru->setObjectName("Program Change");
+    keyThru->setObjectName("Key Pressure");
+    chanThru->setObjectName("Channel Pressure");
+    pitchThru->setObjectName("Pitch Bend");
+    contThru->setObjectName("Controller");
+    sysThru->setObjectName("System Exclusive");
+
     thruBoxLayout->addWidget(noteThru);
     thruBoxLayout->addWidget(progThru);
     thruBoxLayout->addWidget(keyThru);
@@ -113,6 +121,14 @@ MidiFilterDialog::MidiFilterDialog(QWidget *parent,
     QCheckBox *contRecord = new QCheckBox(tr("Controller"), m_recordBox);
     QCheckBox *sysRecord = new QCheckBox(tr("System Exclusive"), m_recordBox);
 
+    noteRecord->setObjectName("Note");
+    progRecord->setObjectName("Program Change");
+    keyRecord->setObjectName("Key Pressure");
+    chanRecord->setObjectName("Channel Pressure");
+    pitchRecord->setObjectName("Pitch Bend");
+    contRecord->setObjectName("Controller");
+    sysRecord->setObjectName("System Exclusive");
+
     recordBoxLayout->addWidget(noteRecord);
     recordBoxLayout->addWidget(progRecord);
     recordBoxLayout->addWidget(keyRecord);
@@ -148,12 +164,6 @@ MidiFilterDialog::MidiFilterDialog(QWidget *parent,
 
     hBox->setLayout(hBoxLayout);
 
-    connect(m_thruBox, SIGNAL(released(int)),
-            this, SLOT(slotSetModified()));
-
-    connect(m_recordBox, SIGNAL(released(int)),
-            this, SLOT(slotSetModified()));
-
     m_buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok    |
                                        QDialogButtonBox::Apply |
                                        QDialogButtonBox::Close |
@@ -162,60 +172,97 @@ MidiFilterDialog::MidiFilterDialog(QWidget *parent,
     metagrid->setRowStretch(0, 10);
     connect(m_buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(m_buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+
+    m_applyButton = m_buttonBox->button(QDialogButtonBox::Apply);
+    connect(m_applyButton, SIGNAL(clicked()), this, SLOT(slotApply()));
+
     
-    setModified(false); // to call after the creation of buttonBox
+    // changing the state of any checkbox sets modified true
+    connect(noteThru, SIGNAL(stateChanged(int)),
+            SLOT(slotSetModified(int)));
+    connect(progThru, SIGNAL(stateChanged(int)),
+            SLOT(slotSetModified(int)));
+    connect(keyThru, SIGNAL(stateChanged(int)),
+            SLOT(slotSetModified(int)));
+    connect(chanThru, SIGNAL(stateChanged(int)),
+            SLOT(slotSetModified(int)));
+    connect(pitchThru, SIGNAL(stateChanged(int)),
+            SLOT(slotSetModified(int)));
+    connect(contThru, SIGNAL(stateChanged(int)),
+            SLOT(slotSetModified(int)));
+    connect(sysThru, SIGNAL(stateChanged(int)),
+            SLOT(slotSetModified(int)));
+
+    connect(noteRecord, SIGNAL(stateChanged(int)),
+            SLOT(slotSetModified(int)));
+    connect(progRecord, SIGNAL(stateChanged(int)),
+            SLOT(slotSetModified(int)));
+    connect(keyRecord, SIGNAL(stateChanged(int)),
+            SLOT(slotSetModified(int)));
+    connect(chanRecord, SIGNAL(stateChanged(int)),
+            SLOT(slotSetModified(int)));
+    connect(pitchRecord, SIGNAL(stateChanged(int)),
+            SLOT(slotSetModified(int)));
+    connect(contRecord, SIGNAL(stateChanged(int)),
+            SLOT(slotSetModified(int)));
+    connect(sysRecord, SIGNAL(stateChanged(int)),
+            SLOT(slotSetModified(int)));
+
+    // setting the thing up initially changes states and trips signals, so we
+    // have to do this to wipe the slate clean initially after all the false
+    // positives
+    setModified(false);
 }
 
 void
 MidiFilterDialog::slotApply()
 {
-    MidiFilter thruFilter = 0,
-                            recordFilter = 0;
+    std::cerr << "MidiFilterDialog::slotApply()" << std::endl;
 
-    if (dynamic_cast<QCheckBox*>(m_thruBox->find(0))->isChecked())
+    MidiFilter thruFilter = 0,
+               recordFilter = 0;
+
+    if (m_thruBox->findChild<QCheckBox*>("Note")->isChecked())
         thruFilter |= MappedEvent::MidiNote;
 
-    if (dynamic_cast<QCheckBox*>(m_thruBox->find(1))->isChecked())
+    if (m_thruBox->findChild<QCheckBox*>("Program Change")->isChecked())
         thruFilter |= MappedEvent::MidiProgramChange;
 
-    if (dynamic_cast<QCheckBox*>(m_thruBox->find(2))->isChecked())
+    if (m_thruBox->findChild<QCheckBox*>("Key Pressure")->isChecked())
         thruFilter |= MappedEvent::MidiKeyPressure;
 
-    if (dynamic_cast<QCheckBox*>(m_thruBox->find(3))->isChecked())
+    if (m_thruBox->findChild<QCheckBox*>("Channel Pressure")->isChecked())
         thruFilter |= MappedEvent::MidiChannelPressure;
 
-    if (dynamic_cast<QCheckBox*>(m_thruBox->find(4))->isChecked())
+    if (m_thruBox->findChild<QCheckBox*>("Pitch Bend")->isChecked())
         thruFilter |= MappedEvent::MidiPitchBend;
 
-    if (dynamic_cast<QCheckBox*>(m_thruBox->find(5))->isChecked())
+    if (m_thruBox->findChild<QCheckBox*>("Controller")->isChecked())
         thruFilter |= MappedEvent::MidiController;
 
-    if (dynamic_cast<QCheckBox*>(m_thruBox->find(6))->isChecked())
+    if (m_thruBox->findChild<QCheckBox*>("System Exclusive")->isChecked())
         thruFilter |= MappedEvent::MidiSystemMessage;
 
-    if (dynamic_cast<QCheckBox*>(m_recordBox->find(0))->isChecked())
+    if (m_recordBox->findChild<QCheckBox*>("Note")->isChecked())
         recordFilter |= MappedEvent::MidiNote;
 
-    if (dynamic_cast<QCheckBox*>(m_recordBox->find(1))->isChecked())
+    if (m_recordBox->findChild<QCheckBox*>("Program Change")->isChecked())
         recordFilter |= MappedEvent::MidiProgramChange;
 
-    if (dynamic_cast<QCheckBox*>(m_recordBox->find(2))->isChecked())
+    if (m_recordBox->findChild<QCheckBox*>("Key Pressure")->isChecked())
         recordFilter |= MappedEvent::MidiKeyPressure;
 
-    if (dynamic_cast<QCheckBox*>(m_recordBox->find(3))->isChecked())
+    if (m_recordBox->findChild<QCheckBox*>("Channel Pressure")->isChecked())
         recordFilter |= MappedEvent::MidiChannelPressure;
 
-    if (dynamic_cast<QCheckBox*>(m_recordBox->find(4))->isChecked())
+    if (m_recordBox->findChild<QCheckBox*>("Pitch Bend")->isChecked())
         recordFilter |= MappedEvent::MidiPitchBend;
 
-    if (dynamic_cast<QCheckBox*>(m_recordBox->find(5))->isChecked())
+    if (m_recordBox->findChild<QCheckBox*>("Controller")->isChecked())
         recordFilter |= MappedEvent::MidiController;
 
-    if (dynamic_cast<QCheckBox*>(m_recordBox->find(6))->isChecked())
+    if (m_recordBox->findChild<QCheckBox*>("System Exclusive")->isChecked())
         recordFilter |= MappedEvent::MidiSystemMessage;
-
-
-    //if (m_thruBox->
 
     m_doc->getStudio().setMIDIThruFilter(thruFilter);
     m_doc->getStudio().setMIDIRecordFilter(recordFilter);
@@ -235,7 +282,7 @@ MidiFilterDialog::accept()
 }
 
 void
-MidiFilterDialog::slotSetModified()
+MidiFilterDialog::slotSetModified(int)
 {
     setModified(true);
 }
@@ -246,22 +293,17 @@ MidiFilterDialog::setModified(bool value)
     if (m_modified == value)
         return ;
     
-    QPushButton* pbApply;
-    pbApply = m_buttonBox->button(QDialogButtonBox::Apply);
-    
-    if( ! pbApply ){
-//         RG_DEBUG << "Warning: PushButton-Apply is Null in MidiFilterDialog::setModified() " << endl;
-//         return;
-    }
+    if (! m_applyButton) return;
+
     if (value) {
-        pbApply->setEnabled(true);
+        m_applyButton->setEnabled(true);
     } else {
-        pbApply->setEnabled(false);
+        m_applyButton->setEnabled(false);
     }
 
     m_modified = value;
-
 }
+
 
 }
 #include "MidiFilterDialog.moc"
