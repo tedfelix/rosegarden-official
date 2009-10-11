@@ -50,19 +50,16 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenDocument *doc,
         m_doc(doc),
         m_tempoTime(0)
 {
-    //setHelp("tempo");
-
     setModal(true);
     setWindowTitle(tr("Insert Tempo Change"));
     setObjectName("MinorDialog");
 
-	QWidget* vbox = dynamic_cast<QWidget*>( this );
-	QVBoxLayout *vboxLayout = new QVBoxLayout;
-	vbox->setLayout(vboxLayout);
-    //metagrid->addWidget(vbox, 0, 0);
+    QWidget* vbox = dynamic_cast<QWidget*>(this);
+    QVBoxLayout *vboxLayout = new QVBoxLayout;
+    vbox->setLayout(vboxLayout);
 
     // group box for tempo
-    QGroupBox *frame = new QGroupBox( tr("Tempo"), vbox );
+    QGroupBox *frame = new QGroupBox(tr("Tempo"), vbox);
     frame->setContentsMargins(5, 5, 5, 5);
     QGridLayout *layout = new QGridLayout;
     layout->setSpacing(5);
@@ -131,106 +128,102 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenDocument *doc,
     m_timeEditor = 0;
 
     if (timeEditable) {
+
         m_timeEditor = new TimeWidget
             (tr("Time of tempo change"),
              vbox, &m_doc->getComposition(), 0, true);
         vboxLayout->addWidget(m_timeEditor);
-        populateTempo();
-        return ;
+
+    } else {
+    
+        // group box for scope (area)
+        QGroupBox *scopeGroup = new QGroupBox(tr("Scope"), vbox);
+        vboxLayout->addWidget(scopeGroup);
+
+        QVBoxLayout * scopeBoxLayout = new QVBoxLayout(scopeGroup);
+        scopeBoxLayout->setSpacing(5);
+        scopeBoxLayout->setMargin(5);
+
+        QVBoxLayout * currentBoxLayout = scopeBoxLayout;
+        QWidget * currentBox = scopeGroup;
+        
+        QLabel *child_15 = new QLabel(tr("The pointer is currently at "), currentBox);
+        currentBoxLayout->addWidget(child_15);
+        m_tempoTimeLabel = new QLabel(currentBox);
+        currentBoxLayout->addWidget(m_tempoTimeLabel);
+        m_tempoBarLabel = new QLabel(currentBox);
+        currentBoxLayout->addWidget(m_tempoBarLabel);
+        QLabel *spare = new QLabel(currentBox);
+        currentBoxLayout->addWidget(spare);
+        currentBox->setLayout(currentBoxLayout);
+        currentBoxLayout->setStretchFactor(spare, 20);
+
+        m_tempoStatusLabel = new QLabel(scopeGroup);
+        scopeBoxLayout->addWidget(m_tempoStatusLabel);
+        scopeGroup->setLayout(scopeBoxLayout);
+
+        QWidget * changeWhereBox = scopeGroup;
+        QVBoxLayout * changeWhereBoxLayout = scopeBoxLayout;
+        
+        spare = new QLabel("      ", changeWhereBox);
+        changeWhereBoxLayout->addWidget(spare);
+        
+        QWidget *changeWhereVBox = new QWidget(changeWhereBox);
+        QVBoxLayout *changeWhereVBoxLayout = new QVBoxLayout;
+        changeWhereBoxLayout->addWidget(changeWhereVBox);
+        changeWhereBox->setLayout(changeWhereBoxLayout);
+        changeWhereBoxLayout->setStretchFactor(changeWhereVBox, 20);
+
+        m_tempoChangeHere = new QRadioButton(tr("Apply this tempo from here onwards"), changeWhereVBox);
+        changeWhereVBoxLayout->addWidget(m_tempoChangeHere);
+
+        m_tempoChangeBefore = new QRadioButton(tr("Replace the last tempo change"), changeWhereVBox);
+        changeWhereVBoxLayout->addWidget(m_tempoChangeBefore);
+        m_tempoChangeBeforeAt = new QLabel(changeWhereVBox);
+        changeWhereVBoxLayout->addWidget(m_tempoChangeBeforeAt);
+        m_tempoChangeBeforeAt->hide();
+
+        m_tempoChangeStartOfBar = new QRadioButton(tr("Apply this tempo from the start of this bar"), changeWhereVBox);
+        changeWhereVBoxLayout->addWidget(m_tempoChangeStartOfBar);
+
+        m_tempoChangeGlobal = new QRadioButton(tr("Apply this tempo to the whole composition"), changeWhereVBox);
+        changeWhereVBoxLayout->addWidget(m_tempoChangeGlobal);
+
+        QWidget *optionHBox = new QWidget(changeWhereVBox);
+        changeWhereVBoxLayout->addWidget(optionHBox);
+        changeWhereVBox->setLayout(changeWhereVBoxLayout);
+        QHBoxLayout *optionHBoxLayout = new QHBoxLayout;
+        QLabel *child_6 = new QLabel("         ", optionHBox);
+        optionHBoxLayout->addWidget(child_6);
+        m_defaultBox = new QCheckBox(tr("Also make this the default tempo"), optionHBox);
+        optionHBoxLayout->addWidget(m_defaultBox);
+        spare = new QLabel(optionHBox);
+        optionHBoxLayout->addWidget(spare);
+        optionHBox->setLayout(optionHBoxLayout);
+        optionHBoxLayout->setStretchFactor(spare, 20);
+
+        connect(m_tempoChangeHere, SIGNAL(clicked()),
+                SLOT(slotActionChanged()));
+        connect(m_tempoChangeBefore, SIGNAL(clicked()),
+                SLOT(slotActionChanged()));
+        connect(m_tempoChangeStartOfBar, SIGNAL(clicked()),
+                SLOT(slotActionChanged()));
+        connect(m_tempoChangeGlobal, SIGNAL(clicked()),
+                SLOT(slotActionChanged()));
+
+        m_tempoChangeHere->setChecked(true);
+
+        // disable initially
+        m_defaultBox->setEnabled(false);
     }
-	
-    // group box for scope (area)
-    QGroupBox *scopeGroup = new QGroupBox( tr("Scope"), vbox );
-    vboxLayout->addWidget(scopeGroup);
 
-    QVBoxLayout * scopeBoxLayout = new QVBoxLayout( scopeGroup );
-    scopeBoxLayout->setSpacing(5);
-    scopeBoxLayout->setMargin(5);
-
-    QVBoxLayout * currentBoxLayout = scopeBoxLayout;
-    QWidget * currentBox = scopeGroup;
-	
-    QLabel *child_15 = new QLabel(tr("The pointer is currently at "), currentBox );
-    currentBoxLayout->addWidget(child_15);
-    m_tempoTimeLabel = new QLabel( currentBox );
-    currentBoxLayout->addWidget(m_tempoTimeLabel);
-    m_tempoBarLabel = new QLabel( currentBox );
-    currentBoxLayout->addWidget(m_tempoBarLabel);
-    QLabel *spare = new QLabel( currentBox );
-    currentBoxLayout->addWidget(spare);
-    currentBox->setLayout(currentBoxLayout);
-    currentBoxLayout->setStretchFactor(spare, 20);
-
-	m_tempoStatusLabel = new QLabel( scopeGroup );
-    scopeBoxLayout->addWidget(m_tempoStatusLabel);
-	scopeGroup->setLayout(scopeBoxLayout);
-
-//    new QLabel(scopeBox);
-	
-	QWidget * changeWhereBox = scopeGroup;
-	QVBoxLayout * changeWhereBoxLayout = scopeBoxLayout;
-	
-    spare = new QLabel("      ", changeWhereBox );
-    changeWhereBoxLayout->addWidget(spare);
-	
-    QWidget *changeWhereVBox = new QWidget(changeWhereBox);
-    QVBoxLayout *changeWhereVBoxLayout = new QVBoxLayout;
-    changeWhereBoxLayout->addWidget(changeWhereVBox);
-    changeWhereBox->setLayout(changeWhereBoxLayout);
-    changeWhereBoxLayout->setStretchFactor(changeWhereVBox, 20);
-
-    m_tempoChangeHere = new QRadioButton(tr("Apply this tempo from here onwards"), changeWhereVBox );
-    changeWhereVBoxLayout->addWidget(m_tempoChangeHere);
-
-    m_tempoChangeBefore = new QRadioButton(tr("Replace the last tempo change"), changeWhereVBox );
-    changeWhereVBoxLayout->addWidget(m_tempoChangeBefore);
-    m_tempoChangeBeforeAt = new QLabel( changeWhereVBox );
-    changeWhereVBoxLayout->addWidget(m_tempoChangeBeforeAt);
-    m_tempoChangeBeforeAt->hide();
-
-    m_tempoChangeStartOfBar = new QRadioButton(tr("Apply this tempo from the start of this bar"), changeWhereVBox );
-    changeWhereVBoxLayout->addWidget(m_tempoChangeStartOfBar);
-
-    m_tempoChangeGlobal = new QRadioButton(tr("Apply this tempo to the whole composition"), changeWhereVBox );
-    changeWhereVBoxLayout->addWidget(m_tempoChangeGlobal);
-
-    QWidget *optionHBox = new QWidget( changeWhereVBox );
-    changeWhereVBoxLayout->addWidget(optionHBox);
-    changeWhereVBox->setLayout(changeWhereVBoxLayout);
-    QHBoxLayout *optionHBoxLayout = new QHBoxLayout;
-    QLabel *child_6 = new QLabel("         ", optionHBox );
-    optionHBoxLayout->addWidget(child_6);
-    m_defaultBox = new QCheckBox(tr("Also make this the default tempo"), optionHBox );
-    optionHBoxLayout->addWidget(m_defaultBox);
-    spare = new QLabel( optionHBox );
-    optionHBoxLayout->addWidget(spare);
-    optionHBox->setLayout(optionHBoxLayout);
-    optionHBoxLayout->setStretchFactor(spare, 20);
-
-//    new QLabel(scopeBox);
-
-    connect(m_tempoChangeHere, SIGNAL(clicked()),
-            SLOT(slotActionChanged()));
-    connect(m_tempoChangeBefore, SIGNAL(clicked()),
-            SLOT(slotActionChanged()));
-    connect(m_tempoChangeStartOfBar, SIGNAL(clicked()),
-            SLOT(slotActionChanged()));
-    connect(m_tempoChangeGlobal, SIGNAL(clicked()),
-            SLOT(slotActionChanged()));
-
-    m_tempoChangeHere->setChecked(true);
-
-    // disable initially
-    m_defaultBox->setEnabled(false);
-
-    populateTempo();
-	
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help);
-	vboxLayout->addWidget(buttonBox, 1, 0);
-//	vboxLayout->setRowStretch(0, 10);
-	
+    vboxLayout->addWidget(buttonBox);
+    
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+
+    populateTempo();    
 }
 
 TempoDialog::~TempoDialog()

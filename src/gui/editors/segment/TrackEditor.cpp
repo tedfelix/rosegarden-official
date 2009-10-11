@@ -292,8 +292,14 @@ TrackEditor::init(QWidget* rosegardenguiview)
     connect(m_bottomStandardRuler->getLoopRuler(), SIGNAL(stopMouseMove()),
             m_compositionView, SLOT(stopAutoScroll()));
 
-    connect(m_compositionView, SIGNAL(contentsMoving(int, int)),
-            this, SLOT(slotCanvasScrolled(int, int)));
+    //&&&  Interesting one here.  Q(3)ScrollArea had a contentsMoving signal we
+    // used to grab for some purpose.  Q(Abstract)ScrollArea has no usable
+    // signals whatsoever.  I think this is why autoscrolling is still slightly
+    // wonky in Thorn, but I don't reckon there's much to do about this one
+    // unless we write a custom widget or something.  
+    //
+    //connect(m_compositionView, SIGNAL(contentsMoving(int, int)),
+    //        this, SLOT(slotCanvasScrolled(int, int)));
 
     // Synchronize bar buttons' scrollview with segment canvas' scrollbar
     //

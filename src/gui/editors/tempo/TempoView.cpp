@@ -58,20 +58,11 @@
 namespace Rosegarden
 {
 
-int
-TempoView::m_lastSetFilter = -1;
-
-
 TempoView::TempoView(RosegardenDocument *doc, QWidget *parent, timeT openTime):
         ListEditView(doc, std::vector<Segment *>(), 2, parent, "tempoview"),
         m_filter(Tempo | TimeSignature),
         m_ignoreUpdates(true)
 {
-    if (m_lastSetFilter < 0)
-        m_lastSetFilter = m_filter;
-    else
-        m_filter = m_lastSetFilter;
-
     initStatusBar();
     setupActions();
 
@@ -93,11 +84,6 @@ TempoView::TempoView(RosegardenDocument *doc, QWidget *parent, timeT openTime):
     m_filterGroup->setLayout(filterGroupLayout);
     m_grid->addWidget(m_filterGroup, 2, 0);
 
-    // Connect up
-    //
-    connect(m_filterGroup, SIGNAL(released(int)),
-            SLOT(slotModifyFilter(int)));
-
     m_list = new QTreeWidget(getCentralWidget());
     
 //     m_list->setItemsRenameable(true);    //&&&
@@ -110,21 +96,11 @@ TempoView::TempoView(RosegardenDocument *doc, QWidget *parent, timeT openTime):
 
     // Connect double clicker
     //
-    connect(m_list, SIGNAL(doubleClicked(QTreeWidgetItem*)),
-            SLOT(slotPopupEditor(QTreeWidgetItem*)));
+    connect(m_list, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)),
+            SLOT(slotPopupEditor(QTreeWidgetItem*, int)));
 
     m_list->setAllColumnsShowFocus(true);
-//     m_list->setSelectionMode(QTreeWidget::Extended);
-    m_list->setSelectionMode(QAbstractItemView::ExtendedSelection);
-//     m_list->setSelectionBehavior(QAbstractItemView::SelectRows);
-    
-    /*
-    m_list->addColumn(tr("Time  "));
-    m_list->addColumn(tr("Type  "));
-    m_list->addColumn(tr("Value  "));
-    m_list->addColumn(tr("Properties  "));
-    */
-    
+    m_list->setSelectionMode(QAbstractItemView::SingleSelection);
     
     QStringList sl;
     sl << tr("Time  ")
@@ -141,6 +117,12 @@ TempoView::TempoView(RosegardenDocument *doc, QWidget *parent, timeT openTime):
     
     readOptions();
     setButtonsToFilter();
+
+    connect(m_tempoCheckBox, SIGNAL(stateChanged(int)),
+            SLOT(slotModifyFilter(int)));
+    connect(m_timeSigCheckBox, SIGNAL(stateChanged(int)),
+            SLOT(slotModifyFilter(int)));
+
     applyLayout();
 
     makeInitialSelection(openTime);
@@ -158,6 +140,7 @@ TempoView::~TempoView()
 void
 TempoView::closeEvent(QCloseEvent *e)
 {
+    slotSaveOptions();
     emit closing();
     EditViewBase::closeEvent(e);
 }
@@ -185,36 +168,10 @@ TempoView::timeSignatureChanged(const Composition *comp)
 bool
 TempoView::applyLayout(int /*staffNo*/)
 {
-    // If no selection has already been set then we copy what's
-    // already set and try to replicate this after the rebuild
-    // of the view.  This code borrowed from EventView.
-    //
-    if (m_listSelection.size() == 0) {
-        QList<QTreeWidgetItem*> selection = m_list->selectedItems();
-
-        if(selection.count()){
-//             QPtrListIterator<QTreeWidgetItem> it(selection);
-            QTreeWidgetItem *listItem;
-            QTreeWidgetItem *it;
-            
-            it = m_list->topLevelItem(0);
-            if(it != 0){
-                do {
-                    m_listSelection.push_back(m_list->indexOfTopLevelItem(it));
-                    ++it;
-                } while ((it = m_list->itemBelow(it)) != 0);
-            }
-            
-        
-            
-            /*
-            while ((listItem = it.current()) != 0) {
-                m_listSelection.push_back(m_list->itemIndex(*it));
-                ++it;
-            }
-            */
-        }
-    }
+    // crashing selection garbage removed, and selection changed to single
+    // selection, which is really the only sane thing to do with this anyway;
+    // Classic had multiple selections for some reason, but you could only edit
+    // one event at a time.
 
     // Ok, recreate list
     //
@@ -300,12 +257,13 @@ TempoView::applyLayout(int /*staffNo*/)
         }
     }
 
+    //!!! the <nothing at this filter level> does not work, and I'm ignoring it
     if (m_list->topLevelItemCount() == 0) {
         new QTreeWidgetItem(m_list, QStringList() << tr("<nothing at this filter level>"));
         m_list->setSelectionMode(QTreeWidget::NoSelection);
         leaveActionState("have_selection");
     } else {
-        m_list->setSelectionMode(QAbstractItemView::ExtendedSelection);
+        m_list->setSelectionMode(QAbstractItemView::SingleSelection);
 
         // If no selection then select the first event
         if (m_listSelection.size() == 0)
@@ -423,7 +381,7 @@ TempoView::refreshSegment(Segment * /*segment*/,
                           timeT /*endTime*/)
 {
     RG_DEBUG << "TempoView::refreshSegment" << endl;
-    applyLayout(0);
+    applyLayout();
 }
 
 void
@@ -680,12 +638,8 @@ TempoView::readOptions()
 {
     QSettings settings;
     settings.beginGroup(TempoViewConfigGroup);
-
     EditViewBase::readOptions();
-    m_filter = settings.value("filter", m_filter).toInt() ;
-    
-//     m_list->restoreLayout(TempoViewLayoutConfigGroupName);    //&&&
-
+    m_filter = settings.value("filter", m_filter).toInt();
     settings.endGroup();
 }
 
@@ -694,54 +648,20 @@ TempoView::slotSaveOptions()
 {
     QSettings settings;
     settings.beginGroup(TempoViewConfigGroup);
-
     settings.setValue("filter", m_filter);
-    
-//     m_list->saveLayout(TempoViewLayoutConfigGroupName);    //&&&
-
     settings.endGroup();
 }
 
 void
-TempoView::slotModifyFilter(int button)
+TempoView::slotModifyFilter(int)
 {
-    QCheckBox *checkBox = dynamic_cast<QCheckBox*>(m_filterGroup->find(button));
+    if (m_tempoCheckBox->isChecked()) m_filter |= Tempo;
+    else m_filter ^= Tempo;
 
-    if (checkBox == 0)
-        return ;
+    if (m_timeSigCheckBox->isChecked()) m_filter |= TimeSignature;
+    else m_filter ^= TimeSignature;
 
-    if (checkBox->isChecked()) {
-        switch (button) {
-        case 0:
-            m_filter |= Tempo;
-            break;
-
-        case 1:
-            m_filter |= TimeSignature;
-            break;
-
-        default:
-            break;
-        }
-
-    } else {
-        switch (button) {
-        case 0:
-            m_filter ^= Tempo;
-            break;
-
-        case 1:
-            m_filter ^= TimeSignature;
-            break;
-
-        default:
-            break;
-        }
-    }
-
-    m_lastSetFilter = m_filter;
-
-    applyLayout(0);
+    applyLayout();
 }
 
 void
@@ -795,7 +715,7 @@ TempoView::slotRawTime()
 }
 
 void
-TempoView::slotPopupEditor(QTreeWidgetItem *qitem)
+TempoView::slotPopupEditor(QTreeWidgetItem *qitem, int)
 {
     TempoListItem *item = dynamic_cast<TempoListItem *>(qitem);
     if (!item)
