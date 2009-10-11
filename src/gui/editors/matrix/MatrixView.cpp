@@ -110,12 +110,15 @@ MatrixView::MatrixView(RosegardenDocument *doc,
     setupActions();
     
     createGUI("matrix.rc");
-   
      
     QToolBar *generalToolbar = findToolbar("General Toolbar");
 
+    QSettings settings;
+    settings.beginGroup(GeneralOptionsConfigGroup);
+    m_Thorn = settings.value("use_thorn_style", true).toBool();
+    settings.endGroup();
+
     initActionsToolbar();
-    initZoomToolbar();
     initRulersToolbar();
     
     connect(m_matrixWidget, SIGNAL(editTriggerSegment(int)),
@@ -146,11 +149,6 @@ MatrixView::MatrixView(RosegardenDocument *doc,
 
     // Set initial visibility ...
     bool view;
-    QSettings settings;
-
-    settings.beginGroup(GeneralOptionsConfigGroup);
-    m_Thorn = settings.value("use_thorn_style", true).toBool();
-    settings.endGroup();
 
     settings.beginGroup(MatrixViewConfigGroup);
 
@@ -639,69 +637,6 @@ MatrixView::initRulersToolbar()
         std::cerr << "MatrixView::initRulersToolbar() - rulers toolbar not found!" << std::endl;
         return;
     }
-}
-
-void
-MatrixView::initZoomToolbar()
-{
-    // just return for now; this code is on the way out
-    return;
-
-    QToolBar *zoomToolbar = findToolbar("Zoom Toolbar");
-    if (!zoomToolbar) {
-        MATRIX_DEBUG << "MatrixView::initZoomToolbar - "
-                     << "tool bar not found" << endl;
-        return ;
-    }
-
-    std::vector<double> zoomSizes;
-    static double z[] = { 0.025, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9,
-              1.0,
-                          1.1, 1.2, 1.5, 1.9, 2.5,
-                          3.5, 5.0, 7.0, 10.0, 20.0 };
-//    static double z[] = { 0.025, 0.05, 0.1, 0.2, 0.5,
-//              1.0, 1.5, 2.5, 5.0, 10.0, 20.0 };
-    for (size_t i = 0; i < sizeof(z)/sizeof(z[0]); ++i) zoomSizes.push_back(z[i]);
-
-    m_hZoomSlider = new ZoomSlider<double>
-        (zoomSizes, -1, Qt::Horizontal, zoomToolbar);
-    m_hZoomSlider->setTracking(true);
-    m_hZoomSlider->setFocusPolicy(Qt::NoFocus);
-
-    QLabel *label = new QLabel(tr("  Zoom:  "));
-    label->setObjectName("Humbug");
-    zoomToolbar->addWidget(label);
-
-    m_zoomLabel = new QLabel();
-    m_zoomLabel->setIndent(10);
-    m_zoomLabel->setFixedWidth(80);
-    m_zoomLabel->setObjectName("Humbug");
-    m_zoomLabel->setText(tr("%1%").arg(m_hZoomSlider->getCurrentSize()*100.0));
-
-    connect(m_hZoomSlider,
-            SIGNAL(valueChanged(int)),
-            SLOT(slotChangeHorizontalZoom(int)));
-
-    zoomToolbar->addWidget(m_hZoomSlider);
-    zoomToolbar->addWidget(m_zoomLabel);
-}
-
-void
-MatrixView::slotChangeHorizontalZoom(int)
-{
-    double zoomSize = m_hZoomSlider->getCurrentSize();
-
-    m_zoomLabel->setText(tr("%1%").arg(zoomSize * 100.0));
-
-    MATRIX_DEBUG << "MatrixView::slotChangeHorizontalZoom() : zoom factor = "
-                 << zoomSize << endl;
-
-    m_matrixWidget->setHorizontalZoomFactor(zoomSize);
-
-    QSettings settings;
-    settings.beginGroup(MatrixViewConfigGroup);
-    settings.setValue("Zoom Level", zoomSize);
-    settings.endGroup();
 }
 
 void

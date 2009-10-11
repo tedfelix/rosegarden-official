@@ -23,7 +23,6 @@
 #include "gui/general/ActionFileClient.h"
 #include "gui/general/SelectionManager.h"
 #include "gui/general/EditViewBase.h"
-#include "gui/widgets/ZoomSlider.h"
 #include "gui/widgets/DeferScrollArea.h"
 
 #include <QMainWindow>
@@ -92,8 +91,6 @@ signals:
 
 
 protected slots:
-    void slotChangeHorizontalZoom(int);
-
     void slotQuantize();
     void slotRepeatQuantize();
     void slotCollapseNotes();
@@ -211,9 +208,6 @@ private:
     MatrixWidget *m_matrixWidget;
     CommandRegistry *m_commandRegistry;
 
-    ZoomSlider<double> *m_hZoomSlider;
-    QLabel *m_zoomLabel;
-
     QComboBox *m_velocityCombo;
     QComboBox *m_quantizeCombo;
     QComboBox *m_snapGridCombo;
@@ -224,7 +218,6 @@ private:
     std::vector<timeT> m_snapValues;
 
     void setupActions();
-    void initZoomToolbar();
     void initActionsToolbar();
     void initRulersToolbar();
 
