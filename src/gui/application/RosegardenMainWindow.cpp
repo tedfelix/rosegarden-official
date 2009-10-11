@@ -1959,6 +1959,15 @@ RosegardenMainWindow::getValidWriteFileName(QString descriptiveExtension,
         }
     }
 
+    // if we get a string like "/tmp/~/foo.rg" assume the last saved path was
+    // /tmp and the desired new path is ~ and try to doctor the string up, which
+    // may well fail, but it's better to try
+    if (name.contains("~")) {
+        name = name.remove(0, name.indexOf("~") + 1);
+        name = name.prepend(QDir::homePath());
+        RG_DEBUG << "doctored filename after ~ swap: " << name << endl;
+    }
+
     QUrl *u = new QUrl(name);
 
     if (!u->isValid()) {
@@ -2018,19 +2027,7 @@ RosegardenMainWindow::slotFileSaveAs(bool asTemplate)
     QString errMsg;
     bool res = m_doc->saveDocument(newName, errMsg);
 
-    // I can't figure out any way to do this using the STL or Qt.  This will
-    // only work on Linux, which isn't currently a problem.  Template files
-    // should be made read only so that if you load one and change it, you'll
-    // have to save it by some other name unless you go to some extraordinary
-    // lengths.  (Doing the chmod might actually be pointless, and in fact seems
-    // to be, since we save by writing to some new file, then delete the
-    // original one after the new one is ready.  Hrm.  Interesting conundrum
-    // actually.  In practice, it works OK, because unless you explicitly choose
-    // Save As Template you will be prompted to save an .rg file, and you won't
-    // overwrite the original file without some intent behind your action.  I
-    // just feel safer going ahead and chmod -w'ing the file anyway though.
-    // Plus I already wrote the code.
-    // 
+    // save template as read-only, even though this is largely pointless
     if (asTemplate) {
         QFile chmod(saveAsInfo.absFilePath());
         chmod.setPermissions(QFile::ReadOwner |
