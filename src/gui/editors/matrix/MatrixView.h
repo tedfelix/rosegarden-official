@@ -205,6 +205,10 @@ protected slots:
     void updateWindowTitle(bool m = false);
 
     void slotToggleChordMode();
+
+    void slotToggleGeneralToolBar();
+    void slotToggleToolsToolBar();
+    void slotToggleTransportToolBar();
     
 protected:
     const SnapGrid *getSnapGrid() const;
@@ -235,6 +239,13 @@ private:
                                      Accidental &accidental,
                                      const Clef &clef,
                                      const Rosegarden::Key &key);
+    /**
+     * Helper function to toggle a toolbar given its name
+     * If \a force point to a bool, then the bool's value
+     * is used to show/hide the toolbar.
+     */
+    void toggleNamedToolBar(const QString& toolBarName, bool* force = 0);
+
 };
 
 }

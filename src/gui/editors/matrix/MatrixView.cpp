@@ -418,29 +418,13 @@ MatrixView::setupActions()
                      SLOT(slotInsertNoteFromAction()));
     }
 
-    //!!! fix: some of these may not be working
-    createAction("show_tools_toolbar", SLOT(slot()));
-    createAction("options_show_toolbar", SLOT(slot()));
-    createAction("options_show_statusbar", SLOT(slot()));
-    createAction("options_configure_keybinding", SLOT(slot()));
-    createAction("options_configure_toolbars", SLOT(slot()));
-    //createAction("options_configure", SLOT(slot()));        //!!! fix: memory access error
-    createAction("insert_control_ruler_item", SLOT(slot()));
-    createAction("erase_control_ruler_item", SLOT(slot()));
-    createAction("clear_control_ruler_item", SLOT(slot()));
-    createAction("start_control_line_item", SLOT(slot()));
-    createAction("draw_property_line", SLOT(slot()));    
-    createAction("select_all_properties", SLOT(slot()));
+    createAction("options_show_toolbar", SLOT(slotToggleGeneralToolBar()));
+    createAction("show_tools_toolbar", SLOT(slotToggleToolsToolBar()));
+    createAction("show_transport_toolbar", SLOT(slotToggleTransportToolBar()));
 
-    createAction("help_contents", SLOT(slot()));
-    createAction("tutorial", SLOT(slot()));
-    createAction("guidelines", SLOT(slot()));
     
-    createAction("language_switch", SLOT(slot()));
-    createAction("help_online", SLOT(slot()));
     createAction("help_about_app", SLOT(slotHelpAbout()));
 //     createAction("help_about_qt", SLOT(slot()));
-    
     
     // grid snap values
     timeT crotchetDuration = Note(Note::Crotchet).getDuration();
@@ -1674,6 +1658,51 @@ MatrixView::getPitchFromNoteInsertAction(QString name,
         throw Exception("Not an insert action",
                         __FILE__, __LINE__);
     }
+}
+
+
+void
+MatrixView::toggleNamedToolBar(const QString& toolBarName, bool* force)
+{
+    QToolBar *namedToolBar = findChild<QToolBar*>(toolBarName);
+
+    if (!namedToolBar) {
+        MATRIX_DEBUG << "MatrixView::toggleNamedToolBar() : toolBar "
+                       << toolBarName << " not found" << endl;
+        return ;
+    }
+
+    if (!force) {
+
+        if (namedToolBar->isVisible())
+            namedToolBar->hide();
+        else
+            namedToolBar->show();
+    } else {
+
+        if (*force)
+            namedToolBar->show();
+        else
+            namedToolBar->hide();
+    }
+}
+
+void
+MatrixView::slotToggleGeneralToolBar()
+{
+    toggleNamedToolBar("General Toolbar");
+}
+
+void
+MatrixView::slotToggleToolsToolBar()
+{
+    toggleNamedToolBar("Tools Toolbar");
+}
+
+void
+MatrixView::slotToggleTransportToolBar()
+{
+    toggleNamedToolBar("Transport Toolbar");
 }
 
 
