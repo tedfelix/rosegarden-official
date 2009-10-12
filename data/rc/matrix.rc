@@ -24,13 +24,6 @@
     <Action name="select_all" text="Select &amp;All Events" shortcut="Ctrl+A" />
     <Action name="clear_selection" text="C&amp;lear Selection" shortcut="Escape" />
     <Action name="filter_selection" text="&amp;Filter Selection" icon="filter" shortcut="Ctrl+F" />
-    
-    
-  <Separator/>
-    <Action name="options_configure_keybinding" text="Edit &amp;Shortcuts..." icon="configure_shortcuts" />
-    <Action name="options_configure_toolbars" text="Edit Tool&amp;bars..." icon="configure_toolbars" />
-    <Action name="options_configure" text="Confi&amp;gure Rosegarden..." icon="configure" />
-
   </Menu>
 
   <Menu name="View">
@@ -58,15 +51,6 @@
       <Action name="snap_2" text="Snap to 1/2" icon="menu-minim" shortcut="2" />
       <Action name="snap_beat" text="Snap to Bea&amp;t" shortcut="1" />
       <Action name="snap_bar" text="Snap to &amp;Bar" shortcut="5"/>
-    </Menu>
-  <Separator/>
-    <!-- JAS deviated from RG.svn since menu items are duplicated in "toolbars" submenu -->
-    <Menu name="toolbars" append="show_merge">
-      <text>&amp;Toolbars</text>
-      <Action name="options_show_toolbar" text="Show Main &amp;Toolbar" checked="true" append="show_merge" />
-      <Action name="show_tools_toolbar" text="Show To&amp;ols" checked="true" append="show_merge" />
-      <!-- JAS 'options_show_statusbar' determined by state -->
-      <Action name="options_show_statusbar" text="Show St&amp;atusbar" checked="true" append="show_merge" />
     </Menu>
   </Menu> <!-- end of menu View -->
 
@@ -278,15 +262,28 @@
     <Action name="toggle_step_by_step" text="Ste&amp;p Recording" icon="step_by_step" checked="false" />
   </Menu>
 
-  <Menu name="rulers">
-    <text>&amp;Rulers</text>
-    <Action name="show_chords_ruler" text="Show Ch&amp;ord Name Ruler" checked="false" />
-    <Action name="show_tempo_ruler" text="Show &amp;Tempo Ruler" checked="true" />
-    <Separator/>
-    <Action name="toggle_velocity_ruler" text="Show &amp;Velocity Ruler" icon="ruler-velocity" checked="false" />
-    <Action name="toggle_pitchbend_ruler" text="Show Pitch &amp;Bend Ruler" icon="ruler-pitch" checked="false" />
-    <Action name="add_control_ruler" text="Add &amp;Control Ruler..." icon="ruler-controller" checked="false" />
-  </Menu>  
+  <Menu name="settings">
+    <text>&amp;Settings</text>
+
+      <Menu name="toolbars" append="show_merge">
+        <text>&amp;Toolbars</text>
+        <Action name="options_show_toolbar" text="Show Main &amp;Toolbar" checked="true" append="show_merge" />
+        <Action name="show_tools_toolbar" text="Show To&amp;ols" checked="true" append="show_merge" />
+        <!-- JAS 'options_show_statusbar' determined by state -->
+        <Action name="options_show_statusbar" text="Show St&amp;atusbar" checked="true" append="show_merge" />
+      </Menu>
+      <Menu name="rulers">
+        <text>&amp;Rulers</text>
+        <Action name="show_chords_ruler" text="Show Ch&amp;ord Name Ruler" checked="false" />
+        <Action name="show_tempo_ruler" text="Show &amp;Tempo Ruler" checked="true" />
+        <Separator/>
+        <Action name="toggle_velocity_ruler" text="Show &amp;Velocity Ruler" icon="ruler-velocity" checked="false" />
+        <Action name="toggle_pitchbend_ruler" text="Show Pitch &amp;Bend Ruler" icon="ruler-pitch" checked="false" />
+        <Action name="add_control_ruler" text="Add &amp;Control Ruler..." icon="ruler-controller" checked="false" />
+      </Menu>  
+      <Separator/>
+      <Action name="options_configure" text="Confi&amp;gure Rosegarden..." icon="configure" />
+  </Menu>
   
   <Menu name="help" append="about_merge">
     <text>&amp;Help</text>
@@ -349,8 +346,6 @@ having help again -->
   <Action name="toggle_pitchbend_ruler" />
   <Action name="add_control_ruler" />
 </ToolBar>
-
-
 
 <State name="have_selection">
   <enable>
