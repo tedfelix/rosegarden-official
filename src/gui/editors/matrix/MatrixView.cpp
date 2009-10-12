@@ -2,7 +2,7 @@
 
 /*
     Rosegarden
-    A MIDI and audio sequencer and musical notation editor.
+    A MIDI and audio sequencer and musical matrix editor.
     Copyright 2000-2009 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
@@ -67,9 +67,10 @@
 #include "base/BaseProperties.h"
 #include "base/SnapGrid.h"
 #include "base/Clipboard.h"
-
 #include "base/AnalysisTypes.h"
 #include "base/CompositionTimeSliceAdapter.h"
+#include "base/NotationTypes.h"
+
 #include "gui/dialogs/RescaleDialog.h"
 #include "gui/dialogs/TempoDialog.h"
 #include "gui/dialogs/IntervalDialog.h"
@@ -100,7 +101,8 @@ MatrixView::MatrixView(RosegardenDocument *doc,
     EditViewBase(doc, segments, parent),
     m_tracking(true),
     m_quantizations(BasicQuantizer::getStandardQuantizations()),
-    m_drumMode(drumMode)
+    m_drumMode(drumMode),
+    m_inChordMode(false)
 {
     m_document = doc;
     m_matrixWidget = new MatrixWidget(m_drumMode);
@@ -111,7 +113,7 @@ MatrixView::MatrixView(RosegardenDocument *doc,
     
     createGUI("matrix.rc");
      
-    QToolBar *generalToolbar = findToolbar("General Toolbar");
+    findToolbar("General Toolbar");
 
     QSettings settings;
     settings.beginGroup(GeneralOptionsConfigGroup);
@@ -276,7 +278,7 @@ MatrixView::setupActions()
     createAction("move", SLOT(slotSetMoveTool()));
     createAction("resize", SLOT(slotSetResizeTool()));
     createAction("velocity", SLOT(slotSetVelocityTool()));
-    createAction("chord_mode", SLOT(slotUpdateInsertModeStatus()));
+    createAction("chord_mode", SLOT(slotToggleChordMode()));
     createAction("toggle_step_by_step", SLOT(slotToggleStepByStep()));
     createAction("quantize", SLOT(slotQuantize()));
     createAction("repeat_quantize", SLOT(slotRepeatQuantize()));
@@ -323,7 +325,6 @@ MatrixView::setupActions()
     createAction("show_inst_parameters", SLOT(slotDockParametersBack()));
     createAction("show_chords_ruler", SLOT(slotToggleChordsRuler()));
     createAction("show_tempo_ruler", SLOT(slotToggleTempoRuler()));
-    createAction("insert_control_ruler_item", SLOT(slotAddControlRuler()));
     
     createAction("toggle_velocity_ruler", SLOT(slotToggleVelocityRuler()));
     createAction("toggle_pitchbend_ruler", SLOT(slotTogglePitchbendRuler()));
@@ -372,7 +373,51 @@ MatrixView::setupActions()
             SLOT(slotAddControlRuler(int)));*/
 
     findAction("add_control_ruler")->setMenu(addControlRulerMenu);
-    
+   
+    // (ported from NotationView) 
+    //JAS insert note section is a rewrite
+    //JAS from EditView::createInsertPitchActionMenu()
+    for (int octave = 0; octave <= 2; ++octave) {
+        QString octaveSuffix;
+        if (octave == 1) octaveSuffix = "_high";
+        else if (octave == 2) octaveSuffix = "_low";
+
+        createAction(QString("insert_0%1").arg(octaveSuffix),
+                     SLOT(slotInsertNoteFromAction()));
+        createAction(QString("insert_0_sharp%1").arg(octaveSuffix),
+                     SLOT(slotInsertNoteFromAction()));
+        createAction(QString("insert_1_flat%1").arg(octaveSuffix),
+                     SLOT(slotInsertNoteFromAction()));
+        createAction(QString("insert_1%1").arg(octaveSuffix),
+                     SLOT(slotInsertNoteFromAction()));
+        createAction(QString("insert_1_sharp%1").arg(octaveSuffix),
+                     SLOT(slotInsertNoteFromAction()));
+        createAction(QString("insert_2_flat%1").arg(octaveSuffix),
+                     SLOT(slotInsertNoteFromAction()));
+        createAction(QString("insert_2%1").arg(octaveSuffix),
+                     SLOT(slotInsertNoteFromAction()));
+        createAction(QString("insert_3%1").arg(octaveSuffix),
+                     SLOT(slotInsertNoteFromAction()));
+        createAction(QString("insert_3_sharp%1").arg(octaveSuffix),
+                     SLOT(slotInsertNoteFromAction()));
+        createAction(QString("insert_4_flat%1").arg(octaveSuffix),
+                     SLOT(slotInsertNoteFromAction()));
+        createAction(QString("insert_4%1").arg(octaveSuffix),
+                     SLOT(slotInsertNoteFromAction()));
+        createAction(QString("insert_4_sharp%1").arg(octaveSuffix),
+                     SLOT(slotInsertNoteFromAction()));
+        createAction(QString("insert_5_flat%1").arg(octaveSuffix),
+                     SLOT(slotInsertNoteFromAction()));
+        createAction(QString("insert_5%1").arg(octaveSuffix),
+                     SLOT(slotInsertNoteFromAction()));
+        createAction(QString("insert_5_sharp%1").arg(octaveSuffix),
+                     SLOT(slotInsertNoteFromAction()));
+        createAction(QString("insert_6_flat%1").arg(octaveSuffix),
+                     SLOT(slotInsertNoteFromAction()));
+        createAction(QString("insert_6%1").arg(octaveSuffix),
+                     SLOT(slotInsertNoteFromAction()));
+    }
+
     //!!! fix: some of these may not be working
     createAction("show_tools_toolbar", SLOT(slot()));
     createAction("options_show_toolbar", SLOT(slot()));
@@ -386,75 +431,15 @@ MatrixView::setupActions()
     createAction("start_control_line_item", SLOT(slot()));
     createAction("draw_property_line", SLOT(slot()));    
     createAction("select_all_properties", SLOT(slot()));
-//     createAction("flip_control_events_forward", SLOT(slot()));
-//     createAction("flip_control_events_back", SLOT(slot()));
+
     createAction("help_contents", SLOT(slot()));
-//     createAction("help_whats_this", SLOT(slot()));
     createAction("tutorial", SLOT(slot()));
     createAction("guidelines", SLOT(slot()));
-//     createAction("help_show_tip", SLOT(slot()));
     
     createAction("language_switch", SLOT(slot()));
     createAction("help_online", SLOT(slot()));
-//     createAction("language_translate", SLOT(slot()));
     createAction("help_about_app", SLOT(slotHelpAbout()));
 //     createAction("help_about_qt", SLOT(slot()));
-    
-    
-    createAction("insert_0", SLOT(slot()));
-    createAction("insert_0_sharp", SLOT(slot()));
-    createAction("insert_1_flat", SLOT(slot()));
-    createAction("insert_1", SLOT(slot()));
-    createAction("insert_1_sharp", SLOT(slot()));
-    createAction("insert_2_flat", SLOT(slot()));
-    createAction("insert_2", SLOT(slot()));
-    createAction("insert_3", SLOT(slot()));
-    createAction("insert_3_sharp", SLOT(slot()));
-    createAction("insert_4_flat", SLOT(slot()));
-    createAction("insert_4", SLOT(slot()));
-    createAction("insert_4_sharp", SLOT(slot()));
-    createAction("insert_5_flat", SLOT(slot()));
-    createAction("insert_5", SLOT(slot()));
-    createAction("insert_5_sharp", SLOT(slot()));
-    createAction("insert_6_flat", SLOT(slot()));
-    createAction("insert_6", SLOT(slot()));
-
-    createAction("insert_0_high", SLOT(slot()));
-    createAction("insert_0_sharp_high", SLOT(slot()));
-    createAction("insert_1_flat_high", SLOT(slot()));
-    createAction("insert_1_high", SLOT(slot()));
-    createAction("insert_1_sharp_high", SLOT(slot()));
-    createAction("insert_2_flat_high", SLOT(slot()));
-    createAction("insert_2_high", SLOT(slot()));
-    createAction("insert_3_high", SLOT(slot()));
-    createAction("insert_3_sharp_high", SLOT(slot()));
-    createAction("insert_4_flat_high", SLOT(slot()));
-    createAction("insert_4_high", SLOT(slot()));
-    createAction("insert_4_sharp_high", SLOT(slot()));
-    createAction("insert_5_fla_hight", SLOT(slot()));
-    createAction("insert_5_high", SLOT(slot()));
-    createAction("insert_5_sharp_high", SLOT(slot()));
-    createAction("insert_6_flat_high", SLOT(slot()));
-    createAction("insert_6_high", SLOT(slot()));
-
-    createAction("insert_0_low", SLOT(slot()));
-    createAction("insert_0_sharp_low", SLOT(slot()));
-    createAction("insert_1_flat_low", SLOT(slot()));
-    createAction("insert_1_low", SLOT(slot()));
-    createAction("insert_1_sharp_low", SLOT(slot()));
-    createAction("insert_2_flat_low", SLOT(slot()));
-    createAction("insert_2_low", SLOT(slot()));
-    createAction("insert_3_low", SLOT(slot()));
-    createAction("insert_3_sharp_low", SLOT(slot()));
-    createAction("insert_4_flat_low", SLOT(slot()));
-    createAction("insert_4_low", SLOT(slot()));
-    createAction("insert_4_sharp_low", SLOT(slot()));
-    createAction("insert_5_flat_low", SLOT(slot()));
-    createAction("insert_5_low", SLOT(slot()));
-    createAction("insert_5_sharp_low", SLOT(slot()));
-    createAction("insert_6_flat_low", SLOT(slot()));
-    createAction("insert_6_low", SLOT(slot()));
-
     
     
     // grid snap values
@@ -1397,9 +1382,11 @@ MatrixView::slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn
 {
     // hjj:
     // The default insertion mode is implemented equivalently in
-    // notationviewslots.cpp:
+    // matrixviewslots.cpp:
     //  - proceed if notes do not overlap
     //  - make the chord if notes do overlap, and do not proceed
+
+    velocity = 42; // shut up warning; one day it would be nice to use velocity for something
 
     static int numberOfNotesOn = 0;
     static time_t lastInsertionTime = 0;
@@ -1525,7 +1512,7 @@ void MatrixView::slotJogLeft()
     CommandHistory::getInstance()->addCommand(
         new MoveCommand(*getCurrentSegment(),
                         -Note(Note::Demisemiquaver).getDuration(),
-                        false,  // don't use notation timings
+                        false,  // don't use matrix timings
                         *selection));
 }
 
@@ -1540,7 +1527,7 @@ void MatrixView::slotJogRight()
     CommandHistory::getInstance()->addCommand(
         new MoveCommand(*getCurrentSegment(),
                         Note(Note::Demisemiquaver).getDuration(),
-                        false,  // don't use notation timings
+                        false,  // don't use matrix timings
                         *selection));
 }
 */
@@ -1548,9 +1535,147 @@ void MatrixView::slotJogRight()
 // --
 // end of code formerly located in EditView.cpp
 
+void
+MatrixView::slotInsertNoteFromAction()
+{
+    const QObject *s = sender();
+    QString name = s->objectName();
 
+    Segment *segment = getCurrentSegment();
+    if (!segment) return;
+
+    int pitch = 0;
+
+    Accidental accidental =
+        Accidentals::NoAccidental;
+
+    timeT time(getInsertionTime());
+    if (time >= segment->getEndMarkerTime()) {
+        MATRIX_DEBUG << "WARNING: off end of segment" << endl;
+        return ;
+    }
+    ::Rosegarden::Key key = segment->getKeyAtTime(time);
+    Clef clef = segment->getClefAtTime(time);
+
+    try {
+
+        pitch = getPitchFromNoteInsertAction(name, accidental, clef, key);
+
+    } catch (...) {
+
+        QMessageBox::warning(this, "", tr("Unknown note insert action %1").arg(name));
+        return ;
+    }
+
+//    TmpStatusMsg msg(tr("Inserting note"), this);
+
+    MATRIX_DEBUG << "Inserting note at pitch " << pitch << endl;
+
+    Event modelEvent(Note::EventType, 0, 1);
+    modelEvent.set<Int>(BaseProperties::PITCH, pitch);
+    modelEvent.set<String>(BaseProperties::ACCIDENTAL, accidental);
+    timeT endTime(time + getSnapGrid()->getSnapTime(time));
+
+    MatrixInsertionCommand* command =
+        new MatrixInsertionCommand(*segment, time, endTime, &modelEvent);
+
+    CommandHistory::getInstance()->addCommand(command);
+
+    if (!m_inChordMode) {
+        m_document->slotSetPointerPosition(endTime);
+    }
+}
+
+void
+MatrixView::slotToggleChordMode()
+{
+    m_inChordMode = !m_inChordMode;
+
+    // bits to update status bar if/when we ever have one again
+}
+
+
+int
+MatrixView::getPitchFromNoteInsertAction(QString name,
+                                              Accidental &accidental,
+                                              const Clef &clef,
+                                              const Rosegarden::Key &key)
+{
+    using namespace Accidentals;
+
+    accidental = NoAccidental;
+
+    if (name.left(7) == "insert_") {
+
+        name = name.right(name.length() - 7);
+
+        int modify = 0;
+        int octave = 0;
+
+        if (name.right(5) == "_high") {
+
+            octave = 1;
+            name = name.left(name.length() - 5);
+
+        } else if (name.right(4) == "_low") {
+
+            octave = -1;
+            name = name.left(name.length() - 4);
+        }
+
+        if (name.right(6) == "_sharp") {
+
+            modify = 1;
+            accidental = Sharp;
+            name = name.left(name.length() - 6);
+
+        } else if (name.right(5) == "_flat") {
+
+            modify = -1;
+            accidental = Flat;
+            name = name.left(name.length() - 5);
+        }
+
+        int scalePitch = name.toInt();
+
+        if (scalePitch < 0 || scalePitch > 7) {
+            NOTATION_DEBUG << "MatrixView::getPitchFromNoteInsertAction: pitch "
+            << scalePitch << " out of range, using 0" << endl;
+            scalePitch = 0;
+        }
+
+        Pitch clefPitch(clef.getAxisHeight(), clef, key, NoAccidental);
+
+        int pitchOctave = clefPitch.getOctave() + octave;
+
+        std::cerr << "MatrixView::getPitchFromNoteInsertAction:"
+                  << " key = " << key.getName() 
+                  << ", clef = " << clef.getClefType() 
+                  << ", octaveoffset = " << clef.getOctaveOffset() << std::endl;
+        std::cerr << "MatrixView::getPitchFromNoteInsertAction: octave = " << pitchOctave << std::endl;
+
+        // We want still to make sure that when (i) octave = 0,
+        //  (ii) one of the noteInScale = 0..6 is
+        //  (iii) at the same heightOnStaff than the heightOnStaff of the key.
+        int lowestNoteInScale = 0;
+        Pitch lowestPitch(lowestNoteInScale, clefPitch.getOctave(), key, NoAccidental);
+
+        int heightToAdjust = (clefPitch.getHeightOnStaff(clef, key) - lowestPitch.getHeightOnStaff(clef, key));
+        for (; heightToAdjust < 0; heightToAdjust += 7) pitchOctave++;
+        for (; heightToAdjust > 6; heightToAdjust -= 7) pitchOctave--;
+
+        std::cerr << "MatrixView::getPitchFromNoteInsertAction: octave = " << pitchOctave << " (adjusted)" << std::endl;
+
+        Pitch pitch(scalePitch, pitchOctave, key, accidental);
+        return pitch.getPerformancePitch();
+
+    } else {
+
+        throw Exception("Not an insert action",
+                        __FILE__, __LINE__);
+    }
+}
 
 
 }
-
 #include "MatrixView.moc"

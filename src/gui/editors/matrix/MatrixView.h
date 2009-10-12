@@ -19,6 +19,7 @@
 #define _RG_NEW_MATRIX_VIEW_H_
 
 #include "base/Event.h"
+#include "base/NotationTypes.h"
 
 #include "gui/general/ActionFileClient.h"
 #include "gui/general/SelectionManager.h"
@@ -184,6 +185,9 @@ protected slots:
     void slotStepBackward();
     void slotStepForward();
 
+    /// keyboard insert
+    void slotInsertNoteFromAction();
+
     /// Note-on received asynchronously -- consider step-by-step editing
     void slotInsertableNoteOnReceived(int pitch, int velocity);
 
@@ -199,6 +203,8 @@ protected slots:
      * display a * at the extreme left of the title to indicate modified status
      */ 
     void updateWindowTitle(bool m = false);
+
+    void slotToggleChordMode();
     
 protected:
     const SnapGrid *getSnapGrid() const;
@@ -223,6 +229,12 @@ private:
 
     bool m_drumMode;
     bool m_Thorn;
+    bool m_inChordMode;
+
+    int getPitchFromNoteInsertAction(QString name,
+                                     Accidental &accidental,
+                                     const Clef &clef,
+                                     const Rosegarden::Key &key);
 };
 
 }
