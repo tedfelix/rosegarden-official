@@ -2681,10 +2681,6 @@ NotationView::slotEditTranspose()
 
     // Fix #1885520 (Update track parameter widget when transpose changed from notation)
     RosegardenMainWindow::self()->getView()->getTrackParameterBox()->slotUpdateControls(-1);
-
-    // And update track headers likewise
-//&&& no track headers yet
-//&&&    m_headersGroup->slotUpdateAllHeaders(getCanvasLeftX(), 0, true);
 }
 
 void

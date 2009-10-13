@@ -179,6 +179,8 @@ protected slots:
     void slotAdjustHeadersVerticalPos(QRectF r);
     void slotCloseHeaders();
 
+    void slotInitialHSliderHack(int);
+    void slotInitialVSliderHack(int);
 signals :
     void adjustNeeded(bool last);
 
@@ -239,6 +241,9 @@ private:
     bool m_graceMode;
 
     void locatePanner(bool vertical);
+
+    bool m_hSliderHacked;
+    bool m_vSliderHacked;
 
     /**
      * Widgets vertical positions inside the main QGridLayout

@@ -99,7 +99,8 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     m_bottomStandardRuler(0),
     m_tempoRuler(0),
     m_chordNameRuler(0),
-    m_layout(0)
+    m_layout(0),
+    m_hSliderHacked(false)
 {
     m_layout = new QGridLayout;
     setLayout(m_layout);
@@ -257,6 +258,10 @@ MatrixWidget::MatrixWidget(bool drumMode) :
 
     connect(this, SIGNAL(toolChanged(QString)),
             m_controlsWidget, SLOT(slotSetToolName(QString)));
+
+    // scrollbar hack from notation, but this one only affects horizontal
+    connect(m_view->horizontalScrollBar(), SIGNAL(valueChanged(int)),
+            this, SLOT(slotInitialHSliderHack(int)));
 }
 
 MatrixWidget::~MatrixWidget()
@@ -949,6 +954,18 @@ MatrixWidget::slotSyncPannerZoomOut()
 
     m_HVzoom->setValue(v);
     slotPrimaryThumbwheelMoved(v);
+}
+
+void
+MatrixWidget::slotInitialHSliderHack(int)
+{
+    if (m_hSliderHacked) return;
+
+    m_hSliderHacked = true;
+
+    std::cout << "h slider position was: " << m_view->horizontalScrollBar()->sliderPosition() << std::endl;;
+    m_view->horizontalScrollBar()->setSliderPosition(0);
+    std::cout << "h slider position now: " << m_view->horizontalScrollBar()->sliderPosition() << std::endl;;
 }
 
 

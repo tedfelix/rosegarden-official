@@ -165,6 +165,8 @@ protected slots:
     /// Trap a zoom out from the panner and sync it to the primary thumb wheel
     void slotSyncPannerZoomOut();
 
+    void slotInitialHSliderHack(int);
+
 protected :
     virtual void showEvent(QShowEvent * event);
 
@@ -213,6 +215,8 @@ private:
     ChordNameRuler *m_chordNameRuler; // I own this
 
     QGridLayout *m_layout; // I own this
+
+    bool m_hSliderHacked;
 
     /**
      * Widgets vertical positions inside the main QGridLayout
