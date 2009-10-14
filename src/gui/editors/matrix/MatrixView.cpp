@@ -338,10 +338,6 @@ MatrixView::setupActions()
     createAction("add_control_ruler", SLOT(slotAddControlRuler()));
     
     QMenu *addControlRulerMenu = new QMenu;
-//    addControlRulerMenu->addAction("Glee!");
-//    addControlRulerMenu->addAction("Piffles!");
-//    addControlRulerMenu->addAction("Nee!");
-
     Controllable *c =
         dynamic_cast<MidiDevice *>(getCurrentDevice());
     if (!c) {

@@ -6170,7 +6170,7 @@ así lo desea.</translation>
         <location filename="../AutoloadStrings.cpp" line="298"/>
         <location filename="../AutoloadStrings.cpp" line="737"/>
         <source>Chorus</source>
-        <translation type="unfinished"></translation>
+        <translation>Coro</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="236"/>
@@ -6184,7 +6184,7 @@ así lo desea.</translation>
         <location filename="../AutoloadStrings.cpp" line="300"/>
         <location filename="../AutoloadStrings.cpp" line="739"/>
         <source>Reverb</source>
-        <translation type="unfinished"></translation>
+        <translation>Retumbo</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="238"/>
@@ -6198,14 +6198,14 @@ así lo desea.</translation>
         <location filename="../AutoloadStrings.cpp" line="302"/>
         <location filename="../AutoloadStrings.cpp" line="741"/>
         <source>Expression</source>
-        <translation type="unfinished"></translation>
+        <translation>Expresión</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="240"/>
         <location filename="../AutoloadStrings.cpp" line="303"/>
         <location filename="../AutoloadStrings.cpp" line="742"/>
         <source>Modulation</source>
-        <translation type="unfinished"></translation>
+        <translation>Modulación</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="241"/>
@@ -6217,7 +6217,7 @@ así lo desea.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="242"/>
         <source>General MIDI Percussion</source>
-        <translation type="unfinished"></translation>
+        <translation>Percusión General MIDI</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="243"/>
@@ -11759,170 +11759,170 @@ Esto puede causar problemas si se sobreescribe más adelante con un valor calcul
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="128"/>
         <source>Pitch Bend</source>
-        <translation type="unfinished">Inflexión de Tono</translation>
+        <translation>Inflexión de Tono</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="129"/>
         <source>System Exclusive</source>
-        <translation type="unfinished">Sistema Exclusivo</translation>
+        <translation>Sistema Exclusivo</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="130"/>
         <source>Key Pressure</source>
-        <translation type="unfinished">Presión de Tecla</translation>
+        <translation>Presión de Tecla</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="131"/>
         <source>Channel Pressure</source>
-        <translation type="unfinished">Presión de Canal</translation>
+        <translation>Presión de Canal</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="132"/>
         <source>Rest</source>
-        <translation type="unfinished">Silencio</translation>
+        <translation>Silencio</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="133"/>
         <source>Indication</source>
-        <translation type="unfinished">Indicación</translation>
+        <translation>Indicación</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="134"/>
         <source>Text</source>
-        <translation type="unfinished">Texto</translation>
+        <translation>Texto</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="135"/>
         <source>Other</source>
-        <translation type="unfinished">Otro </translation>
+        <translation>Otro </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="170"/>
         <source>Triggered Segment Properties</source>
-        <translation type="unfinished">Propiedades del Segmento activado</translation>
+        <translation>Propiedades del Segmento activado</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="176"/>
         <source>Label:  </source>
-        <translation type="unfinished">Etiqueta:  </translation>
+        <translation>Etiqueta:  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="179"/>
         <source>&lt;no label&gt;</source>
-        <translation type="unfinished">&lt;sin etiqueta&gt;</translation>
+        <translation>&lt;sin etiqueta&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="182"/>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="189"/>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="196"/>
         <source>edit</source>
-        <translation type="unfinished">editar</translation>
+        <translation>editar</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="186"/>
         <source>Base pitch:  </source>
-        <translation type="unfinished">Altura base:  </translation>
+        <translation>Altura base:  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="193"/>
         <source>Base velocity:  </source>
-        <translation type="unfinished">Velocidad base:  </translation>
+        <translation>Velocidad base:  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="268"/>
         <source>Time  </source>
-        <translation type="unfinished">Tiempo  </translation>
+        <translation>Tiempo  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="269"/>
         <source>Duration  </source>
-        <translation type="unfinished">Duración  </translation>
+        <translation>Duración  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="270"/>
         <source>Event Type  </source>
-        <translation type="unfinished">Tipo de Evento  </translation>
+        <translation>Tipo de Evento  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="271"/>
         <source>Pitch  </source>
-        <translation type="unfinished">Altura  </translation>
+        <translation>Altura  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="272"/>
         <source>Velocity  </source>
-        <translation type="unfinished">Velocidad  </translation>
+        <translation>Velocidad  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="273"/>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="274"/>
         <source>Type (Data1)  </source>
-        <translation type="unfinished">Tipo (Dato 1)  </translation>
+        <translation>Tipo (Dato 1)  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="275"/>
         <source>Value (Data2)  </source>
-        <translation type="unfinished">Valor (Dato 2)  </translation>
+        <translation>Valor (Dato 2)  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="530"/>
         <source>(group %1)  </source>
-        <translation type="unfinished">(grupo %1)  </translation>
+        <translation>(grupo %1)  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="592"/>
         <source>&lt;no events at this filter level&gt;</source>
-        <translation type="unfinished">&lt;no hay eventos en este nivel de filtrado&gt;</translation>
+        <translation>&lt;no hay eventos en este nivel de filtrado&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="594"/>
         <source>&lt;no events&gt;</source>
-        <translation type="unfinished">&lt;no hay eventos&gt;</translation>
+        <translation>&lt;no hay eventos&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="776"/>
         <source>Segment label</source>
-        <translation type="unfinished">Etiqueta del segmento</translation>
+        <translation>Etiqueta del segmento</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="777"/>
         <source>Label:</source>
-        <translation type="unfinished">Etiqueta:</translation>
+        <translation>Etiqueta:</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="799"/>
         <source>Base pitch</source>
-        <translation type="unfinished">Altura base</translation>
+        <translation>Altura base</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="817"/>
         <source>Base velocity</source>
-        <translation type="unfinished">Velocidad base</translation>
+        <translation>Velocidad base</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="970"/>
         <source>Clipboard is empty</source>
-        <translation type="unfinished">Portapapeles vacío</translation>
+        <translation>Portapapeles vacío</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="974"/>
         <source>Inserting clipboard contents...</source>
-        <translation type="unfinished">Insertando el contenido del portapapeles...</translation>
+        <translation>Insertando el contenido del portapapeles...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="1008"/>
         <source>Couldn&apos;t paste at this point</source>
-        <translation type="unfinished">No se puede pegar en este punto</translation>
+        <translation>No se puede pegar en este punto</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="1742"/>
         <source>Open in Event Editor</source>
-        <translation type="unfinished">Abrir en el Editor de Eventos</translation>
+        <translation>Abrir en el Editor de Eventos</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="1743"/>
         <source>Open in Expert Event Editor</source>
-        <translation type="unfinished">Abrir en el Editor Avanzado de Eventos</translation>
+        <translation>Abrir en el Editor Avanzado de Eventos</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="1810"/>
