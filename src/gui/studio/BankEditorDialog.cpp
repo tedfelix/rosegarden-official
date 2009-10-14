@@ -1531,7 +1531,8 @@ BankEditorDialog::slotImport()
                       tr("Rosegarden Device files") + " (*.rgd *.RGD)" + ";;" +
                       tr("Rosegarden files") + " (*.rg *.RG)" + ";;" +
                       tr("Sound fonts") + " (*.sf2 *.SF2)" + ";;" +
-                      tr("All files") + " (*)", 0, 0);
+                      tr("LinuxSampler configuration files") + " (*.lscp *.LSCP)" + ";;" +
+                      tr("All files") + " (*)", 0, 0); ///!!! Should we allow 'All files' here since LinuxSampler files don't need to have an extension?!
 
     QUrl url(url_str);
     

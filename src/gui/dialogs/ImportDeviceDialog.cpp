@@ -24,6 +24,7 @@
 #include "document/RosegardenDocument.h"
 #include "gui/application/RosegardenMainWindow.h"
 #include "sound/SF2PatchExtractor.h"
+#include "sound/LSCPPatchExtractor.h"
 #include "gui/general/FileSource.h"
 
 #include <QLayout>
@@ -98,6 +99,8 @@ ImportDeviceDialog::doImport()
     bool fileRead = false;
     if (SF2PatchExtractor::isSF2File(filename)) {
         fileRead = importFromSF2(target);
+    } else if (LSCPPatchExtractor::isLSCPFile(target)) {
+        fileRead = importFromLSCP(target);
     } else {
         fileRead = importFromRG(target);
     }
@@ -420,6 +423,48 @@ ImportDeviceDialog::importFromSF2(QString filename)
 
         for (SF2PatchExtractor::Bank::const_iterator j = sf2bank.begin();
                 j != sf2bank.end(); ++j) {
+
+            MidiProgram program(bank, j->first, j->second);
+            programs.push_back(program);
+        }
+    }
+
+    MidiDevice *device = new MidiDevice
+                         (0, "", MidiDevice::Play);
+    device->replaceBankList(banks);
+    device->replaceProgramList(programs);
+    m_devices.push_back(device);
+
+    return true;
+}
+
+///Change function!!!!
+bool
+ImportDeviceDialog::importFromLSCP(QString filename)
+{
+    LSCPPatchExtractor::Device lscpDevice;
+
+    lscpDevice = LSCPPatchExtractor::extractContent(filename);
+    std::vector<MidiBank> banks;
+    std::vector<MidiProgram> programs;
+
+    for (LSCPPatchExtractor::Device::const_iterator i = lscpDevice.begin();
+            i != lscpDevice.end(); ++i) {
+
+        int bankNumber = i->first;
+        const LSCPPatchExtractor::Bank &lscpBank = i->second;
+
+        int msb = bankNumber / 128;
+        int lsb = bankNumber % 128;
+
+        MidiBank bank
+        (msb == 1, msb, lsb,
+         qstrtostr(tr("Bank %1:%2").arg(msb).arg(lsb)));
+
+        banks.push_back(bank);
+
+        for (LSCPPatchExtractor::Bank::const_iterator j = lscpBank.begin();
+                j != lscpBank.end(); ++j) {
 
             MidiProgram program(bank, j->first, j->second);
             programs.push_back(program);

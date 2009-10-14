@@ -76,6 +76,7 @@ public slots:
 protected:
     bool importFromRG(QString fileName);
     bool importFromSF2(QString fileName);
+    bool importFromLSCP(QString filename);
 
     QUrl               m_url;
 
