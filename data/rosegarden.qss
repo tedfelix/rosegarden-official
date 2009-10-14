@@ -1272,6 +1272,12 @@ QToolButton::!enabled,
     background-color: transparent;
 }
 
+QToolButton::menu-indicator
+{
+    /* the arrow on tool buttons with menus in ImmediatePopup mode is
+     * intentionally styled out of existence */
+    background: transparent;
+}
 
 /*  QPushButton
  

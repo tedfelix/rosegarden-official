@@ -96,6 +96,7 @@
 #include <QHBoxLayout>
 #include <QInputDialog>
 #include <QMessageBox>
+#include <QToolButton>
 
 
 namespace Rosegarden
@@ -374,12 +375,6 @@ MatrixView::setupActions()
 
     findAction("add_control_ruler")->setMenu(addControlRulerMenu);
 
-    // this won't work, because we have an action, not the resulting tool button
-    // on the resulting toolbar...  not sure how to get there from here, but
-    // setting it to InstantPopup is the right idea... custom toolbar needed?
-    // possibly.  sort out later.
-    //findAction("add_control_ruler")->setPopupMode(QToolButton::InstantPopup);
-   
     // (ported from NotationView) 
     //JAS insert note section is a rewrite
     //JAS from EditView::createInsertPitchActionMenu()
@@ -612,6 +607,10 @@ MatrixView::initRulersToolbar()
         std::cerr << "MatrixView::initRulersToolbar() - rulers toolbar not found!" << std::endl;
         return;
     }
+
+    // set the "ruler n" tool button to pop up its menu instantly
+    QToolButton *tb = dynamic_cast<QToolButton *>(findToolbar("Rulers Toolbar")->widgetForAction(findAction("add_control_ruler")));
+    tb->setPopupMode(QToolButton::InstantPopup);
 }
 
 void
