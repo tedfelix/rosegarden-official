@@ -217,13 +217,6 @@ void ControlRulerWidget::addRuler(ControlRuler *controlruler, QString name)
     controlruler->slotSetPannedRect(m_pannedRect);
 }
 
-void ControlRulerWidget::slotAddRuler()
-{
-    ///TODO Temp code
-    slotAddPropertyRuler(BaseProperties::VELOCITY);
-    update();
-}
-
 void ControlRulerWidget::slotAddControlRuler(const ControlParameter &controlParameter)
 {
     if (!m_viewSegment) return;

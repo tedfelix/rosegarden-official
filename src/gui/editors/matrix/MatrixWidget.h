@@ -52,6 +52,7 @@ class ControlRulerWidget;
 class StandardRuler;
 class TempoRuler;
 class ChordNameRuler;
+class Device;
 
 /**
  * Container widget for the matrix editor (which is a QGraphicsView)
@@ -97,6 +98,7 @@ public:
     const SnapGrid *getSnapGrid() const;
 
     Segment *getCurrentSegment();
+    Device *getCurrentDevice();
     bool segmentsContainNotes() const;
 
     void setTempoRulerVisible(bool visible);
@@ -130,7 +132,7 @@ public slots:
 
     void slotToggleVelocityRuler();
     void slotTogglePitchbendRuler();
-    void slotAddControlRuler();
+    void slotAddControlRuler(QAction*);
 
     void slotHScroll();
     void slotEnsureTimeVisible(timeT);

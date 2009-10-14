@@ -145,7 +145,7 @@ protected slots:
 
     void slotToggleVelocityRuler();
     void slotTogglePitchbendRuler();
-    void slotAddControlRuler();
+    void slotAddControlRuler(QAction*);
     
     /**
      * Call the Rosegaden about box.

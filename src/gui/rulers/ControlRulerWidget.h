@@ -56,7 +56,7 @@ public:
 public slots:
     void slotTogglePropertyRuler(const PropertyName &);
     void slotToggleControlRuler(std::string);
-    void slotAddRuler();
+
     void slotAddControlRuler(const ControlParameter &);
     void slotAddPropertyRuler(const PropertyName &);
     void slotSetPannedRect(QRectF pr);

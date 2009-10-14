@@ -335,7 +335,7 @@ MatrixView::setupActions()
     
     createAction("toggle_velocity_ruler", SLOT(slotToggleVelocityRuler()));
     createAction("toggle_pitchbend_ruler", SLOT(slotTogglePitchbendRuler()));
-    createAction("add_control_ruler", SLOT(slotAddControlRuler()));
+    createAction("add_control_ruler", SLOT(slotAddControlRuler(int)));
     
     QMenu *addControlRulerMenu = new QMenu;
     Controllable *c =
@@ -348,33 +348,37 @@ MatrixView::setupActions()
 
     const ControlList &list = c->getControlParameters();
 
-    int i = 0;
     QString itemStr;
 
     for (ControlList::const_iterator it = list.begin();
             it != list.end(); ++it) {
-        if (it->getType() == Controller::EventType) {
-            QString hexValue;
-            hexValue.sprintf("(0x%x)", it->getControllerValue());
 
-            itemStr = QObject::tr("%1 Controller %2 %3")
-                            .arg(QObject::tr(strtoqstr(it->getName())))
-                            .arg(it->getControllerValue())
-                            .arg(hexValue);
+        // Pitch Bend is treated separately now, and there's no point in adding
+        // "unsupported" controllers to the menu, so skip everything else
+        if (it->getType() != Controller::EventType) continue;
 
-        } else if (it->getType() == PitchBend::EventType)
-            itemStr = tr("Pitch Bend");
-        else
-            itemStr = tr("Unsupported Event Type");
+        QString hexValue;
+        hexValue.sprintf("(0x%x)", it->getControllerValue());
 
-            addControlRulerMenu->addAction(itemStr);
-            i++;
+        // strings extracted from data files must be QObject::tr()
+        itemStr = QObject::tr("%1 Controller %2 %3")
+                        .arg(QObject::tr(strtoqstr(it->getName())))
+                        .arg(it->getControllerValue())
+                        .arg(hexValue);
+
+        addControlRulerMenu->addAction(itemStr);
     }
 
-    connect(addControlRulerMenu, SIGNAL(activated(int)),
-            SLOT(slotAddControlRuler(int)));
+    connect(addControlRulerMenu, SIGNAL(triggered(QAction*)),
+            SLOT(slotAddControlRuler(QAction*)));
 
     findAction("add_control_ruler")->setMenu(addControlRulerMenu);
+
+    // this won't work, because we have an action, not the resulting tool button
+    // on the resulting toolbar...  not sure how to get there from here, but
+    // setting it to InstantPopup is the right idea... custom toolbar needed?
+    // possibly.  sort out later.
+    //findAction("add_control_ruler")->setPopupMode(QToolButton::InstantPopup);
    
     // (ported from NotationView) 
     //JAS insert note section is a rewrite
@@ -1075,9 +1079,9 @@ MatrixView::slotTogglePitchbendRuler()
 }
 
 void
-MatrixView::slotAddControlRuler()
+MatrixView::slotAddControlRuler(QAction *action)
 {
-    m_matrixWidget->slotAddControlRuler();
+    m_matrixWidget->slotAddControlRuler(action);
 }
 
 void
@@ -1093,13 +1097,8 @@ MatrixView::slotToggleTempoRuler()
     settings.endGroup();
 }
 
-
-
-
-
 // start of code formerly located in EditView.cpp
 // --
-
 
 void MatrixView::slotAddTempo()
 {
@@ -1710,19 +1709,8 @@ MatrixView::slotToggleTransportToolBar()
 Device *
 MatrixView::getCurrentDevice()
 {
-    Segment *segment = getCurrentSegment();
-    if (!segment)
-        return 0;
-
-    Studio &studio = getDocument()->getStudio();
-    Instrument *instrument =
-        studio.getInstrumentById
-        (segment->getComposition()->getTrackById(segment->getTrack())->
-         getInstrument());
-    if (!instrument)
-        return 0;
-
-    return instrument->getDevice();
+    if (m_matrixWidget) return m_matrixWidget->getCurrentDevice();
+    else return 0;
 }
 
 
