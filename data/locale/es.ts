@@ -14705,7 +14705,7 @@ Doble clic para abrir el editor de marcadores.</translation>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="360"/>
         <source>%1 Controller %2 %3</source>
-        <translation type="unfinished">%1 controlador %2 %3</translation>
+        <translation type="unfinished"> %2 %3 controlador %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="366"/>
