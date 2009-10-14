@@ -8626,13 +8626,18 @@ así lo desea.</translation>
         <source>%1 (%2)</source>
         <translation type="unfinished">%1 (%2)</translation>
     </message>
+    <message>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="360"/>
+        <source>%1 Controller %2 %3</source>
+        <translation>%2 %3 controlador %1</translation>
+    </message>
 </context>
 <context>
     <name>Rosegarden::AboutDialog</name>
     <message>
         <location filename="../../src/gui/dialogs/AboutDialog.cpp" line="32"/>
         <source>About Rosegarden</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sobre Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AboutDialog.cpp" line="48"/>
@@ -14703,9 +14708,8 @@ Doble clic para abrir el editor de marcadores.</translation>
         </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="360"/>
         <source>%1 Controller %2 %3</source>
-        <translation type="unfinished"> %2 %3 controlador %1</translation>
+        <translation type="obsolete"> %2 %3 controlador %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="366"/>

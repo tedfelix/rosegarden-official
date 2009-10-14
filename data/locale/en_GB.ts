@@ -8582,6 +8582,11 @@
         <source>%1 (%2)</source>
         <translation></translation>
     </message>
+    <message>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="360"/>
+        <source>%1 Controller %2 %3</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Rosegarden::AboutDialog</name>
@@ -14393,11 +14398,6 @@ Double-click to open the marker editor.</source>
             <numerusform>%1%2 - %n Segment - %3</numerusform>
             <numerusform>%1%2 - %n Segments - %3</numerusform>
         </translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="360"/>
-        <source>%1 Controller %2 %3</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="366"/>

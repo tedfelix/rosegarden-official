@@ -9172,6 +9172,11 @@ als den eingeschränkten wählen.</translation>
         <source>%1 (%2)</source>
         <translation>%1 (%2)</translation>
     </message>
+    <message>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="360"/>
+        <source>%1 Controller %2 %3</source>
+        <translation type="unfinished">%1 Regler %2 %3</translation>
+    </message>
 </context>
 <context>
     <name>Rosegarden::AboutDialog</name>
@@ -15317,9 +15322,8 @@ Doppel-Klick öffnet den Marker Editor.</translation>
         </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="360"/>
         <source>%1 Controller %2 %3</source>
-        <translation type="unfinished">%1 Regler %2 %3</translation>
+        <translation type="obsolete">%1 Regler %2 %3</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="366"/>

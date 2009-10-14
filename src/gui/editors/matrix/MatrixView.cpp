@@ -357,8 +357,8 @@ MatrixView::setupActions()
             QString hexValue;
             hexValue.sprintf("(0x%x)", it->getControllerValue());
 
-            itemStr = tr("%1 Controller %2 %3")
-                            .arg(tr(strtoqstr(it->getName())))
+            itemStr = QObject::tr("%1 Controller %2 %3")
+                            .arg(QObject::tr(strtoqstr(it->getName())))
                             .arg(it->getControllerValue())
                             .arg(hexValue);
 

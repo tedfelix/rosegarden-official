@@ -8619,6 +8619,11 @@ ez den beste batera alda dezakezu, nahi baduzu</translation>
         <source>%1 (%2)</source>
         <translation type="unfinished">%1 (%2)</translation>
     </message>
+    <message>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="360"/>
+        <source>%1 Controller %2 %3</source>
+        <translation type="unfinished">%1 kontroladore%2 %3</translation>
+    </message>
 </context>
 <context>
     <name>Rosegarden::AboutDialog</name>
@@ -14666,9 +14671,8 @@ Double-click to open the marker editor.</source>
         </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="360"/>
         <source>%1 Controller %2 %3</source>
-        <translation type="unfinished">%1 kontroladore%2 %3</translation>
+        <translation type="obsolete">%1 kontroladore%2 %3</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="366"/>
