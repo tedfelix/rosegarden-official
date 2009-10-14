@@ -43,6 +43,7 @@ class Segment;
 class CommandRegistry;
 class EventSelection;
 class SnapGrid;
+class Device;
 
 /**
  * MatrixView is the top-level window containing the matrix editor.
@@ -246,6 +247,10 @@ private:
      */
     void toggleNamedToolBar(const QString& toolBarName, bool* force = 0);
 
+    /**
+     * Return the device of the current segment, if any
+     */
+    Device *getCurrentDevice();
 };
 
 }

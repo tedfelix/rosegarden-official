@@ -70,6 +70,13 @@
 #include "base/AnalysisTypes.h"
 #include "base/CompositionTimeSliceAdapter.h"
 #include "base/NotationTypes.h"
+#include "base/Controllable.h"
+#include "base/Studio.h"
+#include "base/Instrument.h"
+#include "base/Device.h"
+#include "base/MidiDevice.h"
+#include "base/SoftSynthDevice.h"
+#include "base/MidiTypes.h"
 
 #include "gui/dialogs/RescaleDialog.h"
 #include "gui/dialogs/TempoDialog.h"
@@ -330,13 +337,12 @@ MatrixView::setupActions()
     createAction("toggle_pitchbend_ruler", SLOT(slotTogglePitchbendRuler()));
     createAction("add_control_ruler", SLOT(slotAddControlRuler()));
     
-    // code just here temporarily as proof of concept
     QMenu *addControlRulerMenu = new QMenu;
-    addControlRulerMenu->addAction("Glee!");
-    addControlRulerMenu->addAction("Piffles!");
-    addControlRulerMenu->addAction("Nee!");
+//    addControlRulerMenu->addAction("Glee!");
+//    addControlRulerMenu->addAction("Piffles!");
+//    addControlRulerMenu->addAction("Nee!");
 
-    /*Controllable *c =
+    Controllable *c =
         dynamic_cast<MidiDevice *>(getCurrentDevice());
     if (!c) {
         c = dynamic_cast<SoftSynthDevice *>(getCurrentDevice());
@@ -365,12 +371,12 @@ MatrixView::setupActions()
         else
             itemStr = tr("Unsupported Event Type");
 
-//                      addControlRulerMenu->addItem(itemStr, i++);
-            addControlRulerMenu->addAction(itemStr); i++;   //@@@
+            addControlRulerMenu->addAction(itemStr);
+            i++;
     }
 
     connect(addControlRulerMenu, SIGNAL(activated(int)),
-            SLOT(slotAddControlRuler(int)));*/
+            SLOT(slotAddControlRuler(int)));
 
     findAction("add_control_ruler")->setMenu(addControlRulerMenu);
    
@@ -1703,6 +1709,24 @@ void
 MatrixView::slotToggleTransportToolBar()
 {
     toggleNamedToolBar("Transport Toolbar");
+}
+
+Device *
+MatrixView::getCurrentDevice()
+{
+    Segment *segment = getCurrentSegment();
+    if (!segment)
+        return 0;
+
+    Studio &studio = getDocument()->getStudio();
+    Instrument *instrument =
+        studio.getInstrumentById
+        (segment->getComposition()->getTrackById(segment->getTrack())->
+         getInstrument());
+    if (!instrument)
+        return 0;
+
+    return instrument->getDevice();
 }
 
 
