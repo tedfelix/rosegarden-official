@@ -68,6 +68,7 @@ public slots:
 
 signals:
     void dragScroll(timeT);
+    void childRulerSelectionChanged(EventSelection *);
     
 protected:
     QStackedWidget *m_stackedWidget;
@@ -85,6 +86,20 @@ protected:
     std::vector <ViewElement*> m_selectedElements;
     
     void addRuler(ControlRuler *, QString);
+
+protected slots:
+    /** ControlRuler emits rulerSelectionChanged() which is connected to this
+     * slot.  This slot picks up child ruler selection changes and emits
+     * childRulerSelectionChanged() to be caught by the associated (matrix or
+     * notation) scene, so it can add our child ruler's selected events to its
+     * own selection for cut/copy/paste operations.  At least that's the theory.
+     *
+     * Pitch Bend ruler -> selection changes -> emit rulerSelectionChanged() ->
+     * Control Ruler Widget -> this slot -> emit childRulerSelectionChanged ->
+     * owning scene -> selection updates
+     */
+    void slotChildRulerSelectionChanged(EventSelection *);
+
 };
 }
 

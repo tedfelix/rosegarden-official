@@ -77,7 +77,8 @@ ControlRulerWidget::~ControlRulerWidget()
 {
 }
 
-void ControlRulerWidget::setSegments(RosegardenDocument *document, std::vector<Segment *> segments)
+void
+ControlRulerWidget::setSegments(RosegardenDocument *document, std::vector<Segment *> segments)
 {
     m_document = document;
 //    m_segments = segments;
@@ -125,7 +126,8 @@ void ControlRulerWidget::setSegments(RosegardenDocument *document, std::vector<S
     }
 }
 
-void ControlRulerWidget::setViewSegment(ViewSegment *viewSegment)
+void
+ControlRulerWidget::setViewSegment(ViewSegment *viewSegment)
 {
     m_viewSegment = viewSegment;
 
@@ -143,7 +145,8 @@ void ControlRulerWidget::setViewSegment(ViewSegment *viewSegment)
 //    slotAddRuler();
 }
 
-void ControlRulerWidget::slotTogglePropertyRuler(const PropertyName &propertyName)
+void
+ControlRulerWidget::slotTogglePropertyRuler(const PropertyName &propertyName)
 {
     PropertyControlRuler *propruler;
     std::list<ControlRuler*>::iterator it;
@@ -162,7 +165,8 @@ void ControlRulerWidget::slotTogglePropertyRuler(const PropertyName &propertyNam
     if (it==m_controlRulerList.end()) slotAddPropertyRuler(propertyName);
 }
 
-void ControlRulerWidget::slotToggleControlRuler(std::string controlName)
+void
+ControlRulerWidget::slotToggleControlRuler(std::string controlName)
 {
     if (!m_controlList) return;
 
@@ -193,11 +197,14 @@ void ControlRulerWidget::slotToggleControlRuler(std::string controlName)
             }
         }
         // If we don't have a control ruler, make one now
-        if (jt==m_controlRulerList.end()) slotAddControlRuler(*it);
+        if (jt == m_controlRulerList.end()) {
+            slotAddControlRuler(*it);
+        }
     }
 }
 
-void ControlRulerWidget::removeRuler(std::list<ControlRuler*>::iterator it)
+void
+ControlRulerWidget::removeRuler(std::list<ControlRuler*>::iterator it)
 {
     int index = m_stackedWidget->indexOf(*it);
     m_stackedWidget->removeWidget(*it);
@@ -206,7 +213,8 @@ void ControlRulerWidget::removeRuler(std::list<ControlRuler*>::iterator it)
     m_controlRulerList.erase(it);
 }
 
-void ControlRulerWidget::addRuler(ControlRuler *controlruler, QString name)
+void
+ControlRulerWidget::addRuler(ControlRuler *controlruler, QString name)
 {
     m_stackedWidget->addWidget(controlruler);
     // controller names (if translatable) come from AutoLoadStrings.cpp and are
@@ -217,20 +225,26 @@ void ControlRulerWidget::addRuler(ControlRuler *controlruler, QString name)
     controlruler->slotSetPannedRect(m_pannedRect);
 }
 
-void ControlRulerWidget::slotAddControlRuler(const ControlParameter &controlParameter)
+void
+ControlRulerWidget::slotAddControlRuler(const ControlParameter &controlParameter)
 {
     if (!m_viewSegment) return;
 
     ControlRuler *controlruler = new ControllerEventsRuler(m_viewSegment, m_scale, this, &controlParameter);
-    connect(controlruler,SIGNAL(dragScroll(timeT)),
-            this,SLOT(slotDragScroll(timeT)));
+
+    connect(controlruler, SIGNAL(dragScroll(timeT)),
+            this, SLOT(slotDragScroll(timeT)));
+
+    connect(controlruler, SIGNAL(rulerSelectionChanged(EventSelection *)),
+            this, SLOT(slotChildRulerSelectionChanged(EventSelection *)));
 
     addRuler(controlruler,QString::fromStdString(controlParameter.getName()));
     
     slotSetToolName(m_currentToolName);
 }
 
-void ControlRulerWidget::slotAddPropertyRuler(const PropertyName &propertyName)
+void
+ControlRulerWidget::slotAddPropertyRuler(const PropertyName &propertyName)
 {
     if (!m_viewSegment) return;
 
@@ -246,7 +260,8 @@ void ControlRulerWidget::slotAddPropertyRuler(const PropertyName &propertyName)
     addRuler(controlruler, name);
 }
 
-void ControlRulerWidget::slotSetPannedRect(QRectF pr)
+void
+ControlRulerWidget::slotSetPannedRect(QRectF pr)
 {
     // Current Panned.cpp code uses QGraphicsView::centreOn this point
     ///TODO Note these rectangles are currently wrong
@@ -266,12 +281,16 @@ void ControlRulerWidget::slotSetPannedRect(QRectF pr)
     update();
 }
 
-void ControlRulerWidget::slotDragScroll(timeT t)
+void
+ControlRulerWidget::slotDragScroll(timeT t)
 {
     emit dragScroll(t);
 }
 
-void ControlRulerWidget::slotSelectionChanged(EventSelection *s)
+// comes from the view indicating the view's selection changed, we do NOT emit
+// childRulerSelectionChanged() here
+void
+ControlRulerWidget::slotSelectionChanged(EventSelection *s)
 {
     ///@TODO This line is necessary only because a null EventSelection is sent by Notation
     if (!s) return;
@@ -303,12 +322,14 @@ void ControlRulerWidget::slotSelectionChanged(EventSelection *s)
     }
 }
 
-void ControlRulerWidget::slotHoveredOverNoteChanged(int evPitch, bool haveEvent, timeT evTime)
+void
+ControlRulerWidget::slotHoveredOverNoteChanged(int evPitch, bool haveEvent, timeT evTime)
 {
     slotHoveredOverNoteChanged();
 }
 
-void ControlRulerWidget::slotHoveredOverNoteChanged()
+void
+ControlRulerWidget::slotHoveredOverNoteChanged()
 {
     // Should be dispatched to all PropertyControlRulers
     if (m_controlRulerList.size()) {
@@ -323,7 +344,8 @@ void ControlRulerWidget::slotHoveredOverNoteChanged()
     // This is called twice for a simple note move. First time with the original position then with the new position
 }
 
-void ControlRulerWidget::slotSetToolName(const QString &toolname)
+void
+ControlRulerWidget::slotSetToolName(const QString &toolname)
 {
     m_currentToolName = toolname;
     // Should be dispatched to all PropertyControlRulers
@@ -333,6 +355,12 @@ void ControlRulerWidget::slotSetToolName(const QString &toolname)
             (*it)->slotSetTool(toolname);
         }
     }
+}
+
+void
+ControlRulerWidget::slotChildRulerSelectionChanged(EventSelection *s)
+{
+    emit childRulerSelectionChanged(s);
 }
 
 }

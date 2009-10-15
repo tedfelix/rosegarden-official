@@ -600,6 +600,16 @@ MatrixScene::setSelection(EventSelection *s, bool preview)
 }
 
 void
+MatrixScene::slotRulerSelectionChanged(EventSelection *s)
+{
+    std::cout << "MatrixScene: caught " << (s ? "useful" : "null" ) << " selection change from ruler" << std::endl;
+    if (m_selection) {
+        if (s) m_selection->addFromSelection(s);
+        setSelectionElementStatus(m_selection, true);
+    }
+}
+
+void
 MatrixScene::setSingleSelectedEvent(MatrixViewSegment *vs,
                                     MatrixElement *e,
                                     bool preview)

@@ -378,6 +378,9 @@ MatrixWidget::setSegments(RosegardenDocument *document,
     connect(m_scene, SIGNAL(selectionChanged(EventSelection *)),
             m_controlsWidget, SLOT(slotSelectionChanged(EventSelection *)));
 
+    connect(m_controlsWidget, SIGNAL(childRulerSelectionChanged(EventSelection *)),
+            m_scene, SLOT(slotRulerSelectionChanged(EventSelection *)));
+
     m_topStandardRuler = new StandardRuler(document,
                                            m_referenceScale, 0, 25,
                                            false);

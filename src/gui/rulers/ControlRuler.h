@@ -150,6 +150,11 @@ signals:
     void stateChange(const QString&, bool);
     void dragScroll(timeT);
 
+    /** Emitted whenever the ruler changes its selection, so the ruler owner can
+     * update its own selection to include the events selected on the ruler
+     */
+    void rulerSelectionChanged(EventSelection *);
+
 public slots:
     /// override RosegardenCanvasView - we don't want to change the main hscrollbar
     virtual void slotUpdate();

@@ -111,6 +111,9 @@ signals:
     void segmentDeleted(Segment *);
     void sceneDeleted(); // all segments have been removed
 
+public slots:
+    void slotRulerSelectionChanged(EventSelection *s);
+
 protected slots:
     void slotCommandExecuted();
 

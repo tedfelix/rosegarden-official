@@ -385,7 +385,7 @@ void ControlRuler::updateSegment()
     start = getRulerScale()->getTimeForX(xmin);
     end = getRulerScale()->getTimeForX(xmax)+durationAdd;
 
-    if (m_eventSelection->getAddedEvents()==0) {
+    if (m_eventSelection->getAddedEvents() == 0) {
         // We do not have a valid set of selected events to update
         if (m_selectedItems.size() == 0) {
             // There are no selected items, nothing to update
@@ -399,8 +399,7 @@ void ControlRuler::updateSegment()
         segmentModified = true;
     } else {
         // Check for movement in time here and delete events if necessary
-        if (start != m_eventSelection->getStartTime() || end != m_eventSelection->getEndTime())
-        {
+        if (start != m_eventSelection->getStartTime() || end != m_eventSelection->getEndTime()) {
             commandLabel = "Move control";
             macro->setName(commandLabel);
 
@@ -990,6 +989,9 @@ void ControlRuler::updateSelection()
     for (ControlItemList::iterator it = m_selectedItems.begin(); it != m_selectedItems.end(); it++) {
         m_eventSelection->addEvent((*it)->getEvent());
     }
+
+    std::cout << "control ruler updating selection" << std::endl;
+    emit rulerSelectionChanged(m_eventSelection);
 }
 
 void ControlRuler::addToSelection(ControlItem *item)
@@ -997,6 +999,8 @@ void ControlRuler::addToSelection(ControlItem *item)
     m_selectedItems.push_back(item);
     item->setSelected(true);
     m_eventSelection->addEvent(item->getEvent());
+    emit rulerSelectionChanged(m_eventSelection);
+    std::cout << "control ruler add to selection" << std::endl;
 }
 
 void ControlRuler::removeFromSelection(ControlItem*item)
@@ -1004,6 +1008,7 @@ void ControlRuler::removeFromSelection(ControlItem*item)
     m_selectedItems.remove(item);
     item->setSelected(false);
     m_eventSelection->removeEvent(item->getEvent());
+    emit rulerSelectionChanged(m_eventSelection);
 }
 
 void ControlRuler::clear()
