@@ -94,6 +94,7 @@ PropertyAdjuster::handleMouseMove(const ControlMouseEvent *e)
         for (ControlItemList::iterator it = selected->begin(); it != selected->end(); ++it) {
             (*it)->setValue((*it)->y()+delta);
         }
+        m_ruler->update();
     }
 
     return NoFollow;

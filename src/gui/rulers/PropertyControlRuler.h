@@ -60,6 +60,8 @@ public:
 
     virtual ~PropertyControlRuler();
 
+    virtual void update();
+    
     virtual void paintEvent(QPaintEvent *);
 
     virtual QString getName();

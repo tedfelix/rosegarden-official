@@ -75,6 +75,26 @@ PropertyControlRuler::PropertyControlRuler(PropertyName propertyName,
     setViewSegment(segment);
 }
 
+void PropertyControlRuler::update()
+{
+    ControlItemList tmplist;
+    for (ControlItemList::iterator it = m_visibleItems.begin(); it != m_visibleItems.end(); ++it) {
+        tmplist.push_back(*it);
+    }
+    
+    for (ControlItemList::iterator it = tmplist.begin(); it != tmplist.end(); ++it) {
+        if (!(*it)->isSelected()) {
+            (*it)->update();
+        }
+    }
+
+    for (ControlItemList::iterator it = m_selectedItems.begin(); it != m_selectedItems.end(); ++it) {
+        (*it)->update();        
+    }
+    
+    ControlRuler::update();
+}
+
 void PropertyControlRuler::paintEvent(QPaintEvent *event)
 {
     ControlRuler::paintEvent(event);
@@ -198,7 +218,8 @@ void PropertyControlRuler::init()
     
     for (ViewElementList::iterator it = viewElementList->begin(); it != viewElementList->end(); ++it) {
 //        if (MatrixElement *el = dynamic_cast<MatrixElement*>(*it)) {
-        addControlItem(*it);
+        if ((*it)->event()->isa("Note"))
+            addControlItem(*it);
 //        }
     }
     
@@ -221,6 +242,7 @@ void PropertyControlRuler::updateControlItems()
         // Must not modify m_selectedItems in here!!
         if (item) item->update();
     }
+    update();
 }
 
 void PropertyControlRuler::updateSelection(std::vector <ViewElement*> *elementList)
@@ -259,42 +281,14 @@ void PropertyControlRuler::updateSelection(std::vector <ViewElement*> *elementLi
     update();
 }
 
-void PropertyControlRuler::slotHoveredOverNoteChanged(int evPitch, bool haveEvent, timeT evTime)
-{
-//    if (!m_eventSelection) return;
-//
-//    PropertyControlItem *item;
-//
-//    for (EventSelection::eventcontainer::iterator it =
-//             m_eventSelection->getSegmentEvents().begin();
-//         it != m_eventSelection->getSegmentEvents().end(); ++it) {
-//
-//        MatrixElement *element = 0;
-//        ViewElementList::iterator vi = m_viewSegment->findEvent(*it);
-//        if (vi != m_viewSegment->getViewElementList()->end()) {
-//            element = static_cast<MatrixElement *>(*vi);
-//        }
-//        if (!element) continue;
-//
-//        for (ControlItemList::iterator it = m_controlItemList.begin(); it != m_controlItemList.end(); ++it) {
-//            item = dynamic_cast<PropertyControlItem*>(*it);
-//            if (item) {
-//                if (item->getElement() == element) {
-//                    break;
-//                } else {
-//                    item = 0;
-//                }
-//            }
-//        }
-//
-//        if (!item) continue;
-//
-//        item->update();
+//void PropertyControlRuler::slotHoveredOverNoteChanged(int evPitch, bool haveEvent, timeT evTime)
+//{
+//    RG_DEBUG << "slotHoveredJOBBY!!";
+//    for (ControlItemList::iterator it = m_selectedItems.begin(); it != m_selectedItems.end(); ++it) {
+//        (*it)->update();
 //    }
-    for (ControlItemList::iterator it = m_selectedItems.begin(); it != m_selectedItems.end(); ++it) {
-        (*it)->update();
-    }
-}
+//    update();
+//}
 
 void PropertyControlRuler::slotSetTool(const QString &matrixtoolname)
 {

@@ -337,7 +337,8 @@ ControlRulerWidget::slotHoveredOverNoteChanged()
         for (it = m_controlRulerList.begin(); it != m_controlRulerList.end(); ++it) {
             PropertyControlRuler *pr = dynamic_cast <PropertyControlRuler *> (*it);
             if (pr) {
-                pr->updateControlItems();
+                pr->update();
+//                pr->updateControlItems();
             }
         }
     }

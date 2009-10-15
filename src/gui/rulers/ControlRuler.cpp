@@ -1023,6 +1023,8 @@ void ControlRuler::clear()
         }
     }
     m_controlItemMap.clear();
+    m_visibleItems.clear();
+    m_selectedItems.clear();
 }
 
 //int ControlRuler::valueToHeight(long val)

@@ -50,19 +50,19 @@ void PropertyControlItem::update()
     if (!m_element) return;
     RulerScale *rulerScale = m_controlRuler->getRulerScale();    
     double x0,x1;
-    
+
+    long val = 0;    
     MatrixElement *matrixelement = dynamic_cast<MatrixElement*>(m_element);
     if (matrixelement) {
         x0 = matrixelement->getLayoutX();
         x1 = matrixelement->getWidth() + x0;
+        val = matrixelement->getElementVelocity();
     } else {
-        ///@TODO erm ... Notation?
-        x0 = rulerScale->getXForTime(m_element->getViewAbsoluteTime());
+        x0 = m_element->getLayoutX();
         x1 = x0 + PROPERTYCONTROLITEM_NOTATION_ITEMWIDTH;
+        m_element->event()->get<Rosegarden::Int>(m_propertyname, val);
     }
 
-    long val = 0;
-    m_element->event()->get<Rosegarden::Int>(m_propertyname, val);
     if (m_propertyname == BaseProperties::VELOCITY) {
         m_colour = DefaultVelocityColour::getInstance()->getColour(val);
     }
@@ -114,7 +114,7 @@ void PropertyControlItem::reconfigure(float x0, float x1, float y)
         m_xstart = boundingRect().left();
     }
 
-    m_controlRuler->update();
+//    m_controlRuler->update();
 }
 
 void PropertyControlItem::updateSegment()
