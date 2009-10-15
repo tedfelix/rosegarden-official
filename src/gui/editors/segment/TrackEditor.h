@@ -199,6 +199,7 @@ protected:
 
     virtual void dragEnterEvent(QDragEnterEvent *event);
     virtual void dropEvent(QDropEvent*);
+    virtual void dragMoveEvent(QDragMoveEvent *);
     
     virtual void paintEvent(QPaintEvent* e);
     

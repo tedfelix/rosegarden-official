@@ -17,12 +17,16 @@
 
 #include "PlayListView.h"
 
+#include "misc/Debug.h"
 
 //#include <qdragobject.h>
 #include <QMimeData>	// replaces Q3DragObject and Q3UriDrag
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QDropEvent>
+#include <QDrag>
+#include <QUrl>
+
 
 namespace Rosegarden {
 
@@ -35,10 +39,14 @@ PlayListView::PlayListView(QWidget *parent, const char *name)
 //     addColumn(tr("File name"));
 	setColumnCount( 2 );
 	setHeaderLabels( QStringList() << tr("Title") << tr("File name") );
-	
-    setDragEnabled(true);
-    setAcceptDrops(true);
     setAllColumnsShowFocus(true);
+	
+    setDropIndicatorShown(true);
+    setDragEnabled(false);
+    setAcceptDrops(false);
+    //setDragDropMode( QAbstractItemView::NoDragDrop );
+    //setDragDropMode(QAbstractItemView::InternalMove);
+    
 	
 	/*
 	setDropVisualizer(true);
@@ -49,12 +57,90 @@ PlayListView::PlayListView(QWidget *parent, const char *name)
 	*/
 }
 
-bool PlayListView::acceptDrag(QDropEvent* e) const
-{
+// bool PlayListView::acceptDrag(QDropEvent* e) const
+// {
+// note old (qt3) 
  //   return QUriDrag::canDecode(e) || QTreeWidget::acceptDrag(e);	
-	const QMimeData * qmime = e->mimeData();
-	
-	return qmime->hasUrls(); //|| qmime->hasText();	//@@@
+// 	const QMimeData * qmime = e->mimeData();
+// 	
+// 	return qmime->hasUrls(); //|| qmime->hasText();	//@@@
+// }
+// 
+
+
+
+QMimeData* PlayListView::mimeData(const QList<QTreeWidgetItem *> items) const
+{
+    
+    //### THIS METHOD IS NEVER BEING CALLED - WHY ?
+    // this should override (QTreeWidget): virtual QMimeData *mimeData(const QList<QTreeWidgetItem*> items) const;
+
+    // Create a QByteArray to store the data for the drag.
+    QByteArray ba;
+    // Create a data stream that operates on the binary data
+    QDataStream ds(&ba, QIODevice::WriteOnly);
+    
+    // Add each item's text for col 0 to the stream
+    for (int i=0; i<items.size(); i++){
+        ds << items.at(i)->text(0);
+    }
+    QMimeData *md = new QMimeData;
+    // Set the data associated with the mime type foo/bar to ba 
+    md->setData("text/uri-list", ba);
+    return md;
+}
+
+
+/*
+void PlayListView::mousePressEvent ( QMouseEvent * event ){
+    //
+}
+
+void PlayListView::dragEnterEvent ( QDragEnterEvent * event ){
+    //
+}
+*/
+
+void PlayListView::mouseMoveEvent(QMouseEvent *event){
+
+    //### THIS METHOD IS NEVER BEING CALLED - WHY ?
+    // 
+    
+    // if not left button - return
+     if (!(event->buttons() & Qt::LeftButton)) return;
+    
+    // if no item selected, return (else it would crash)
+     if (currentItem() == NULL) return;
+    
+    QDrag *drag = new QDrag(this);
+    QMimeData *mimeData = new QMimeData;
+    
+    // construct list of QUrls
+    // other widgets accept this mime type, we can drop to them
+    QList<QUrl> list;
+    QString line;
+    line = currentItem()->text(0); // 0 == first Column of QTreeWidgetItem
+    list.append( QUrl(line) ); // only QUrl in list will be text of actual item
+    
+    // mime stuff
+    mimeData->setUrls(list); 
+    //mimeData->setData( line.toUtf8(), "text/uri-list" );
+    drag->setMimeData(mimeData);
+    
+    RG_DEBUG << "Starting drag from PlayListView::mouseMoveEvent() with mime : " << mimeData->formats() << " - " << mimeData->urls()[0] << endl;
+    
+    // start drag
+    drag->start(Qt::CopyAction | Qt::MoveAction);
+    
+    
+}
+
+
+
+QStringList PlayListView::mimeTypes() const{
+    QStringList types;
+    types << "text/uri-list";
+    return types;
 }
 
 
@@ -70,6 +156,7 @@ QTreeWidgetItem* PlayListView::previousSibling(QTreeWidgetItem* item)
     return prevSib;
 	*/
 }
+
 
 }
 

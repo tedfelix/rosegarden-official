@@ -20,6 +20,7 @@
 
 #include <QTreeWidget>
 
+
 namespace Rosegarden {
 
 class PlayListView : public QTreeWidget
@@ -31,13 +32,17 @@ public:
     QTreeWidgetItem* previousSibling(QTreeWidgetItem*);
 
 protected:
+    
 //     virtual void dragEnterEvent(QDragEnterEvent *event);
 //     virtual void dropEvent(QDropEvent*);
 
-//     virtual void dragEnterEvent(QDragEnterEvent*);
-    virtual bool acceptDrag(QDropEvent*) const;
-
+//     virtual bool acceptDrag(QDropEvent*) const;
     
+//     virtual void mousePressEvent ( QMouseEvent * event );
+    virtual void mouseMoveEvent(QMouseEvent *event);
+    
+    virtual QMimeData *mimeData(const QList<QTreeWidgetItem*> items) const;
+    virtual QStringList mimeTypes() const;
 };
 
 }

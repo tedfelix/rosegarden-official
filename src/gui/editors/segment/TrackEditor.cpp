@@ -15,10 +15,13 @@
     COPYING included with this distribution for more information.
 */
 
-#include <Q3DragObject>
-#include <Q3UriDrag>
-#include <Q3TextDrag>
-#include <Q3StrList>
+
+
+// #include <Q3DragObject>
+// #include <Q3UriDrag>
+// #include <Q3TextDrag>
+// #include <Q3StrList>
+
 
 #include "TrackEditor.h"
 #include "TrackButtons.h"
@@ -104,7 +107,9 @@ TrackEditor::TrackEditor(RosegardenDocument* doc,
 
     // accept dnd
     setAcceptDrops(true);
-
+    //setDragEnabled(true);
+    
+    
     init(rosegardenguiview);
     slotReadjustCanvasSize();
 }
@@ -733,9 +738,11 @@ m_trackButtonScroll->verticalScrollBar()->setValue(y);
 
 void TrackEditor::dragEnterEvent(QDragEnterEvent *e)
 {
-    QStringList formats(e->mimeData()->formats());
-
-    if (e->provides("text/uri-list") || e->provides("text/plain")) {
+    const QMimeData *mime;
+    mime = e->mimeData();
+    QStringList formats(mime->formats());
+    
+    if (mime->hasFormat("text/uri-list") || mime->hasFormat("text/plain")) {
 
         if (e->proposedAction() & Qt::CopyAction) {
             e->acceptProposedAction();
@@ -743,8 +750,18 @@ void TrackEditor::dragEnterEvent(QDragEnterEvent *e)
             e->setDropAction(Qt::CopyAction);
             e->accept();
         }
+    }else{
+        RG_DEBUG << "HINT: Unaccepted MimeFormat in TrackEditor::dragEnterEvent : " << formats << endl;
     }
 }
+
+
+
+void TrackEditor::dragMoveEvent(QDragMoveEvent *){
+    // pass
+}
+
+
 
 void TrackEditor::dropEvent(QDropEvent* e)
 {
