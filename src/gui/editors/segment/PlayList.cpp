@@ -16,10 +16,6 @@
 */
 
 
-// #include <kglobal.h>
-// #include <kurl.h>
-
-//#include <Q3DragObject>
 
 #include "PlayList.h"
 #include "PlayListView.h"
@@ -111,6 +107,9 @@ PlayList::PlayList
     connect(m_listView, SIGNAL(dropped(QDropEvent*, QTreeWidgetItem*)),
             SLOT(slotDropped(QDropEvent*, QTreeWidgetItem*)));
 
+    connect(m_listView, SIGNAL(droppedURIs(QDropEvent*, QTreeWidget*, QStringList)),
+            SLOT(slotDroppedURIs(QDropEvent*, QTreeWidget*, QStringList)));
+
     restore();
 
     enableButtons(0);
@@ -140,9 +139,21 @@ void PlayList::slotOpenFiles()
     enableButtons( m_listView->currentItem() );
 }
 
-void
-PlayList::slotDropped(QDropEvent *event, QTreeWidgetItem* after)
+
+void PlayList::slotDroppedURIs(QDropEvent* ev, QTreeWidget* twid, QStringList sl){
+    // new
+    for( int i=0; i<sl.count(); i++ ){
+        new PlayListViewItem( m_listView, QUrl(sl[i]) );
+        //new PlayListViewItem( m_listView, after, QUrl(sl[i]) );
+    }
+}
+
+
+void PlayList::slotDropped(QDropEvent *event, QTreeWidgetItem* after)
 {
+
+    // old. funct. working ? required ?
+    
     QStringList uri;
 	QMimeData md;
 	
@@ -165,9 +176,10 @@ PlayList::slotDropped(QDropEvent *event, QTreeWidgetItem* after)
 
         }
     }
-
+    
     enableButtons( m_listView->currentItem() );
 }
+
 
 void PlayList::slotPlay()
 {

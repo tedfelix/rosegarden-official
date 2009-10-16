@@ -1659,13 +1659,15 @@ RosegardenMainViewWidget::slotDroppedNewAudio(QString audioDesc)
     AudioFile *aF = aFM.getAudioFile(audioFileId);
 
     if (aF) {
-        slotAddAudioSegment(audioFileId, trackId, time,
-                            RealTime(0, 0), aF->getLength());
-
+        
         RG_DEBUG << "RosegardenMainViewWidget::slotDroppedNewAudio("
         << "file = " << url
         << ", trackid = " << trackId
         << ", time = " << time << endl;
+        
+        slotAddAudioSegment(audioFileId, trackId, time,
+                            RealTime(0, 0), aF->getLength());
+        
     }
 }
 

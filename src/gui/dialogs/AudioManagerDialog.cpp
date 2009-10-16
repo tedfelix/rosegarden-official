@@ -179,8 +179,8 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
 //     connect(m_fileList, SIGNAL(dropped(QDropEvent*, QTreeWidgetItem*)),
 //             SLOT(slotDropped(QDropEvent*, QTreeWidgetItem*)));
 
-    connect(m_fileList, SIGNAL(dropped(QDropEvent*, QTreeWidgetItem*, QStringList)),
-            SLOT(slotDropped(QDropEvent*, QTreeWidgetItem*, QStringList)));
+    connect(m_fileList, SIGNAL(dropped(QDropEvent*, QTreeWidget*, QStringList)),
+            SLOT(slotDropped(QDropEvent*, QTreeWidget*, QStringList)));
     
     
     //

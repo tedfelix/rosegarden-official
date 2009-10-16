@@ -42,7 +42,7 @@ PlayListView::PlayListView(QWidget *parent, const char *name)
     setAllColumnsShowFocus(true);
 	
     setDropIndicatorShown(true);
-    setDragEnabled(false);
+    setDragEnabled(true);
     setAcceptDrops(true);
     //setDragDropMode( QAbstractItemView::NoDragDrop );
     //setDragDropMode(QAbstractItemView::InternalMove);
@@ -67,11 +67,10 @@ PlayListView::PlayListView(QWidget *parent, const char *name)
 // 
 
 
-
+/*
 QMimeData* PlayListView::mimeData(const QList<QTreeWidgetItem *> items) const
 {
     
-
     // Create a QByteArray to store the data for the drag.
     QByteArray ba;
     // Create a data stream that operates on the binary data
@@ -86,17 +85,27 @@ QMimeData* PlayListView::mimeData(const QList<QTreeWidgetItem *> items) const
     md->setData("text/uri-list", ba);
     return md;
 }
+*/
 
 
 /*
 void PlayListView::mousePressEvent ( QMouseEvent * event ){
     //
 }
-
-void PlayListView::dragEnterEvent ( QDragEnterEvent * event ){
-    //
-}
 */
+void PlayListView::dragEnterEvent ( QDragEnterEvent * e ){
+    
+    if (e->provides("text/uri-list") || e->provides("text/plain")) {
+
+        if (e->proposedAction() & Qt::CopyAction) {
+            e->acceptProposedAction();
+        } else {
+            e->setDropAction(Qt::CopyAction);
+            e->accept();
+        }
+    }
+}
+
 
 void PlayListView::mouseMoveEvent(QMouseEvent *event){
 
@@ -140,6 +149,54 @@ QStringList PlayListView::mimeTypes() const{
 }
 
 
+
+void PlayListView::dropEvent(QDropEvent* e)
+{
+    QStringList uriList;
+    QString text;
+
+    if (e->provides("text/uri-list") || e->provides("text/plain")) {
+
+        if (e->proposedAction() & Qt::CopyAction) {
+            e->acceptProposedAction();
+        } else {
+            e->setDropAction(Qt::CopyAction);
+            e->accept();
+        }
+
+        if (e->provides("text/uri-list")) {
+            uriList = QString::fromLocal8Bit(
+                        e->encodedData("text/uri-list").data()
+                    ).split( QRegExp("[\\r\\n]+"), QString::SkipEmptyParts );
+        } else {
+            text = QString::fromLocal8Bit(e->encodedData("text/plain").data());
+        }
+    } else {
+        e->ignore();
+        RG_DEBUG << "PlayListView::dropEvent: ignored dropEvent (invalid mime) " << endl;
+        return;
+    }
+
+    if (uriList.empty() && text == "") {
+        RG_DEBUG << "PlayListView::dropEvent: Nothing dropped" << endl;
+        return;
+    }
+    if( text != "" ){
+        uriList << text;
+    }
+    
+    //### TODO test if QUrl is valid (?) valid extension, existent, supported file ?
+    
+    emit droppedURIs(e, dynamic_cast<QTreeWidget*>(this), uriList);
+    
+    // signal: dropped(QDropEvent*, QTreeWidgetItem*)
+    // send to AudioManagerDialog::slotDropped()
+}
+
+
+
+
+
 QTreeWidgetItem* PlayListView::previousSibling(QTreeWidgetItem* item)
 {
 	return this->itemAbove( item );
@@ -156,3 +213,4 @@ QTreeWidgetItem* PlayListView::previousSibling(QTreeWidgetItem* item)
 
 }
 
+#include "PlayListView.moc"

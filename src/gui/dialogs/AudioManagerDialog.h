@@ -179,7 +179,7 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    QTreeWidget        *m_fileList;
+    QTreeWidget        *m_fileList;         // (==AudioListView)
     WarningGroupBox    *m_wrongSampleRates;
     RosegardenDocument *m_doc;
 

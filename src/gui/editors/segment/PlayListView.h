@@ -19,29 +19,32 @@
 #define _RG_PLAYLISTVIEW_H_
 
 #include <QTreeWidget>
-
+#include <QDropEvent>
 
 namespace Rosegarden {
 
 class PlayListView : public QTreeWidget
 {
-    //Q_OBJECT
+    Q_OBJECT
 public:
     PlayListView(QWidget *parent=0, const char *name=0);
 
     QTreeWidgetItem* previousSibling(QTreeWidgetItem*);
 
+protected: signals:
+    void droppedURIs(QDropEvent*, QTreeWidget*, QStringList);
+    
 protected:
     
-//     virtual void dragEnterEvent(QDragEnterEvent *event);
-//     virtual void dropEvent(QDropEvent*);
+     virtual void dragEnterEvent(QDragEnterEvent *event);
+     virtual void dropEvent(QDropEvent*);
 
 //     virtual bool acceptDrag(QDropEvent*) const;
     
 //     virtual void mousePressEvent ( QMouseEvent * event );
     virtual void mouseMoveEvent(QMouseEvent *event);
     
-    virtual QMimeData *mimeData(const QList<QTreeWidgetItem*> items) const;
+//     virtual QMimeData *mimeData(const QList<QTreeWidgetItem*> items) const;
     virtual QStringList mimeTypes() const;
 };
 

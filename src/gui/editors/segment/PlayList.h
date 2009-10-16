@@ -62,6 +62,7 @@ protected slots:
     void slotClear();
     void slotCurrentItemChanged(QTreeWidgetItem*);
     void slotDropped(QDropEvent*, QTreeWidgetItem*);
+    void slotDroppedURIs(QDropEvent* ev, QTreeWidget*, QStringList sl);
 
 protected:
     void save();
