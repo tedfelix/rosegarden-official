@@ -334,6 +334,9 @@ private:
     bool isInTripletMode();
     bool isInGraceMode();
 
+    void setCurrentNotePixmap(QPixmap);
+    void setCurrentNotePixmapFrom(QAction *);
+
     RosegardenDocument *m_document;
     NotationWidget *m_notationWidget;
     CommandRegistry *m_commandRegistry;

@@ -1019,6 +1019,23 @@ NotationView::initStatusBar()
     sb->setContentsMargins(0, 0, 0, 0);
 }
 
+void
+NotationView::setCurrentNotePixmap(QPixmap p)
+{
+    if (!m_currentNotePixmap) return;
+    QPixmap ip = IconLoader().invert(p);
+    if (ip.height() > 16) {
+        ip = ip.scaled(24, 16, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    }
+    m_currentNotePixmap->setPixmap(ip);
+}
+
+void
+NotationView::setCurrentNotePixmapFrom(QAction *a)
+{
+    if (!a) return;
+    setCurrentNotePixmap(a->icon().pixmap());
+}
 
 bool
 NotationView::exportLilyPondFile(QString file, bool forPreview)
@@ -2164,8 +2181,6 @@ NotationView::slotNoteAction()
 
     QObject *s = sender();
     QAction *a = dynamic_cast<QAction *>(s);
-    QPixmap p;
-    if (a) p = a->icon().pixmap();
     QString name = s->objectName();
     QString noteToolbarName;
 
@@ -2217,10 +2232,8 @@ NotationView::slotNoteAction()
             slotSwitchToNotes();
         }
     }
-    
-    if (m_currentNotePixmap) {
-        m_currentNotePixmap->setPixmap(IconLoader().invert(p));
-    }
+
+    setCurrentNotePixmapFrom(a);
 }
 
 void
@@ -2337,6 +2350,7 @@ void
 NotationView::slotClefAction()
 {
     QObject *s = sender();
+    QAction *a = dynamic_cast<QAction *>(s);
     QString n = s->objectName();
 
     Clef type = Clef::Treble;
@@ -2346,10 +2360,7 @@ NotationView::slotClefAction()
     else if (n == "tenor_clef") type = Clef::Tenor;
     else if (n == "bass_clef") type = Clef::Bass;
 
-    if (m_currentNotePixmap) {
-        m_currentNotePixmap->setPixmap
-            (IconLoader().invert(NotePixmapFactory::makeToolbarPixmap("clef-treble")));
-    }
+    setCurrentNotePixmapFrom(a);
 
     if (!m_notationWidget) return;
     m_notationWidget->slotSetClefInserter();
@@ -2360,10 +2371,8 @@ NotationView::slotClefAction()
 void
 NotationView::slotText()
 {
-    if (m_currentNotePixmap) {
-        m_currentNotePixmap->setPixmap
-            (IconLoader().invert(NotePixmapFactory::makeToolbarPixmap("text")));
-    }
+    QObject *s = sender();
+    setCurrentNotePixmapFrom(dynamic_cast<QAction *>(s));
 
     if (!m_notationWidget) return;
     m_notationWidget->slotSetTextInserter();
@@ -2373,10 +2382,8 @@ NotationView::slotText()
 void
 NotationView::slotGuitarChord()
 {
-    if (m_currentNotePixmap) {
-        m_currentNotePixmap->setPixmap
-            (IconLoader().invert(NotePixmapFactory::makeToolbarPixmap("text")));
-    }
+    QObject *s = sender();
+    setCurrentNotePixmapFrom(dynamic_cast<QAction *>(s));
 
     if (!m_notationWidget) return;
     m_notationWidget->slotSetGuitarChordInserter();
@@ -3041,6 +3048,7 @@ void
 NotationView::slotSymbolAction()
 {
     QObject *s = sender();
+    setCurrentNotePixmapFrom(dynamic_cast<QAction *>(s));
     QString n = s->objectName();
 
     Symbol type = Symbol::Segno;
