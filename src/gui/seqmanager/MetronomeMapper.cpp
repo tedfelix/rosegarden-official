@@ -119,6 +119,8 @@ MetronomeMapper::MetronomeMapper(RosegardenDocument *doc, MappedSegment *mapped)
         SEQMAN_DEBUG << "MetronomeMapper : WARNING no ticks generated\n";
     }
 
+    mapped->setMetronome(true);
+
     // Done by init()
 
     //     m_mappedSize = computeMappedSize();

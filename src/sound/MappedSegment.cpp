@@ -282,7 +282,11 @@ MappedSegmentsMetaIterator::acceptEvent(MappedEvent *evt,
             return true;
         }
 
-        return !ControlBlock::getInstance()->isMetronomeMuted();
+        bool play = !ControlBlock::getInstance()->isMetronomeMuted();
+#ifdef DEBUG_META_ITERATOR
+        SEQUENCER_DEBUG << "MSMI::acceptEvent: Metronome event, play = " << play << endl;
+#endif
+        return play;
     }
 
     // else, evt is not from metronome : first check if we're soloing

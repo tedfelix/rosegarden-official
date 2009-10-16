@@ -205,50 +205,12 @@ RosegardenSequencer::play(const RealTime &time,
     m_driver->setAudioBufferSizes(m_audioMix, m_audioRead, m_audioWrite,
                                   m_smallFileSize);
 
-/*    cleanupMmapData();
-
-    // Map all segments
-    //
-    QDir segmentsDir(m_segmentFilesPath, "segment_*");
-    for (unsigned int i = 0; i < segmentsDir.count(); ++i) {
-        mmapSegment(m_segmentFilesPath + "/" + segmentsDir[i]);
-    }
-
-    QString tmpDir = QDir::tempPath();
-
-    // Map metronome
-    //
-    QString metronomeFileName = tmpDir + "/rosegarden_metronome";
-    QFileInfo metronomeFileInfo(metronomeFileName);
-    if (metronomeFileInfo.exists())
-        mmapSegment(metronomeFileName);
-    else
-        SEQUENCER_DEBUG << "RosegardenSequencer::play() - no metronome found\n";
-
-    // Map tempo segment
-    //
-    QString tempoSegmentFileName = tmpDir + "/rosegarden_tempo";
-    QFileInfo tempoSegmentFileInfo(tempoSegmentFileName);
-    if (tempoSegmentFileInfo.exists())
-        mmapSegment(tempoSegmentFileName);
-    else
-        SEQUENCER_DEBUG << "RosegardenSequencer::play() - no tempo segment found\n";
-
-    // Map time sig segment
-    //
-    QString timeSigSegmentFileName = tmpDir + "/rosegarden_timesig";
-    QFileInfo timeSigSegmentFileInfo(timeSigSegmentFileName);
-    if (timeSigSegmentFileInfo.exists())
-        mmapSegment(timeSigSegmentFileName);
-    else
-        SEQUENCER_DEBUG << "RosegardenSequencer::play() - no time sig segment found\n";
-*/
     // report
     //
     SEQUENCER_DEBUG << "RosegardenSequencer::play() - starting to play\n";
     
 //!!!
-    dumpFirstSegment();
+//    dumpFirstSegment();
 
     // keep it simple
     return true;
@@ -533,25 +495,6 @@ RosegardenSequencer::processMappedEvent(MappedEvent mE)
                     << " events in async out queue" << endl;
 }
 
-/*!DEVPUSH
-// Get the MappedDevice (DCOP wrapped vector of MappedInstruments)
-//
-MappedDevice
-RosegardenSequencer::getMappedDevice(unsigned int id)
-{
-    LOCKED;
-
-    return m_driver->getMappedDevice(id);
-}
-
-unsigned int
-RosegardenSequencer::getDevices()
-{
-    LOCKED;
-
-    return m_driver->getDevices();
-}
-*/
 int
 RosegardenSequencer::canReconnect(Device::DeviceType type)
 {
@@ -630,16 +573,6 @@ RosegardenSequencer::setConnection(unsigned int deviceId,
 
     m_driver->setConnection(deviceId, connection);
 }
-
-
-/*!DEVPUSH
-void RosegardenSequencer::removeConnection(unsigned int deviceId, QString connection)
-{
-    LOCKED;
-    
-    m_driver->removeConnection(deviceId, connection);
-}
-*/
 
 void
 RosegardenSequencer::setPlausibleConnection(unsigned int deviceId,

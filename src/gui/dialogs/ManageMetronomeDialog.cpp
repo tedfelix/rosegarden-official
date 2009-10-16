@@ -141,11 +141,11 @@ ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
 
     beatBoxLayout->addWidget(new QLabel(tr("Resolution"), beatBox), 0, 0);
     m_metronomeResolution = new QComboBox(beatBox);
-    m_metronomeResolution->setToolTip(tr("<qt>The metronome can sound bars only, bars and beats, or bars, beats and divisions.  The latter mode can be particularly useful for playing in compound time signatures like 12/8.</qt>"));
+    m_metronomeResolution->setToolTip(tr("<qt>The metronome can sound bars only, bars and beats, or bars, beats and sub-beats.  The latter mode can be particularly useful for playing in compound time signatures like 12/8.</qt>"));
     m_metronomeResolution->addItem(tr("None"));
     m_metronomeResolution->addItem(tr("Bars only"));
     m_metronomeResolution->addItem(tr("Bars and beats"));
-    m_metronomeResolution->addItem(tr("Bars, beats, and divisions"));
+    m_metronomeResolution->addItem(tr("Bars, beats, and sub-beats"));
     connect(m_metronomeResolution, SIGNAL(activated(int)), this, SLOT(slotResolutionChanged(int)));
     beatBoxLayout->addWidget(m_metronomeResolution, 0, 1);
 
@@ -448,7 +448,10 @@ ManageMetronomeDialog::slotApply()
     DeviceId deviceId = dev->getId();
     studio.setMetronomeDevice(deviceId);
 
-    if (getMetronome(dev) == 0) return ;
+    if (getMetronome(dev) == 0) {
+        std::cerr << "Warning: ManageMetronomeDialog::slotApply: unable to extract metronome from device " << deviceId << std::endl;
+        return ;
+    }
     MidiMetronome metronome(*getMetronome(dev));
 
     // get instrument

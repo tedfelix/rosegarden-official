@@ -215,7 +215,7 @@ SequenceManager::play()
     //
     ControlBlock::getInstance()->setInstrumentForMetronome
         (m_metronomeMapper->getMetronomeInstrument());
-    ControlBlock::getInstance()->setMetronomeMuted(comp.usePlayMetronome());
+    ControlBlock::getInstance()->setMetronomeMuted(!comp.usePlayMetronome());
 
     // make sure we toggle the play button
     //
@@ -629,7 +629,7 @@ punchin:
         //
         ControlBlock::getInstance()->setInstrumentForMetronome
             (m_metronomeMapper->getMetronomeInstrument());
-        ControlBlock::getInstance()->setMetronomeMuted(comp.useRecordMetronome());
+        ControlBlock::getInstance()->setMetronomeMuted(!comp.useRecordMetronome());
 		
         QSettings settings;
 		
@@ -1547,24 +1547,45 @@ void SequenceManager::resetMetronomeMapper()
 {
     SEQMAN_DEBUG << "SequenceManager::resetMetronomeMapper()" << endl;
 
-    delete m_metronomeMapper;
+    if (m_metronomeMapper) {
+        RosegardenSequencer::getInstance()->segmentAboutToBeDeleted
+            (m_metronomeMapper->getMappedSegment());
+        delete m_metronomeMapper;
+    }
+
     m_metronomeMapper = SegmentMapperFactory::makeMetronome(m_doc);
+    RosegardenSequencer::getInstance()->segmentAdded
+        (m_metronomeMapper->getMappedSegment());
 }
 
 void SequenceManager::resetTempoSegmentMapper()
 {
     SEQMAN_DEBUG << "SequenceManager::resetTempoSegmentMapper()" << endl;
 
-    delete m_tempoSegmentMapper;
+    if (m_tempoSegmentMapper) {
+        RosegardenSequencer::getInstance()->segmentAboutToBeDeleted
+            (m_tempoSegmentMapper->getMappedSegment());
+        delete m_tempoSegmentMapper;
+    }
+
     m_tempoSegmentMapper = SegmentMapperFactory::makeTempo(m_doc);
+    RosegardenSequencer::getInstance()->segmentAdded
+        (m_tempoSegmentMapper->getMappedSegment());
 }
 
 void SequenceManager::resetTimeSigSegmentMapper()
 {
     SEQMAN_DEBUG << "SequenceManager::resetTimeSigSegmentMapper()" << endl;
 
-    delete m_timeSigSegmentMapper;
+    if (m_timeSigSegmentMapper) {
+        RosegardenSequencer::getInstance()->segmentAboutToBeDeleted
+            (m_timeSigSegmentMapper->getMappedSegment());
+        delete m_timeSigSegmentMapper;
+    }
+
     m_timeSigSegmentMapper = SegmentMapperFactory::makeTimeSig(m_doc);
+    RosegardenSequencer::getInstance()->segmentAdded
+        (m_timeSigSegmentMapper->getMappedSegment());
 }
 
 void SequenceManager::resetControlBlock()
@@ -1809,9 +1830,9 @@ void SequenceManager::metronomeChanged(InstrumentId id,
     ControlBlock::getInstance()->setInstrumentForMetronome(id);
 
     if (m_transportStatus == PLAYING) {
-        ControlBlock::getInstance()->setMetronomeMuted(comp.usePlayMetronome());
+        ControlBlock::getInstance()->setMetronomeMuted(!comp.usePlayMetronome());
     } else {
-        ControlBlock::getInstance()->setMetronomeMuted(comp.useRecordMetronome());
+        ControlBlock::getInstance()->setMetronomeMuted(!comp.useRecordMetronome());
     }
 
     m_metronomeMapper->refresh();
@@ -1834,9 +1855,9 @@ void SequenceManager::metronomeChanged(const Composition *comp)
         (m_metronomeMapper->getMetronomeInstrument());
 
     if (m_transportStatus == PLAYING) {
-        ControlBlock::getInstance()->setMetronomeMuted(comp->usePlayMetronome());
+        ControlBlock::getInstance()->setMetronomeMuted(!comp->usePlayMetronome());
     } else {
-        ControlBlock::getInstance()->setMetronomeMuted(comp->useRecordMetronome());
+        ControlBlock::getInstance()->setMetronomeMuted(!comp->useRecordMetronome());
     }
 }
 
