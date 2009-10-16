@@ -169,9 +169,8 @@ DeviceManagerDialog::slotPlaybackDeviceSelected()
     if (!mdev) {
         return;
     }
-    twItemS =
-            searchItemWithPort(m_treeWidget_outputPorts,
-                               strtoqstr(mdev->getConnection()));
+    QString conn = RosegardenSequencer::getInstance()->getConnection(mdev->getId());
+    twItemS = searchItemWithPort(m_treeWidget_outputPorts, conn);
     if (twItemS) {
         m_treeWidget_outputPorts->scrollToItem(twItemS,
                                                QAbstractItemView::
@@ -195,9 +194,8 @@ DeviceManagerDialog::slotRecordDeviceSelected()
     if (!mdev) {
         return;
     }
-    twItemS =
-            searchItemWithPort(m_treeWidget_inputPorts,
-                               strtoqstr(mdev->getConnection()));
+    QString conn = RosegardenSequencer::getInstance()->getConnection(mdev->getId());
+    twItemS = searchItemWithPort(m_treeWidget_inputPorts, conn);
     if (twItemS) {
         m_treeWidget_inputPorts->scrollToItem(twItemS,
                                               QAbstractItemView::
@@ -427,7 +425,7 @@ DeviceManagerDialog::updateDevicesList(DeviceList * devices,
 
             //m_playDevices.push_back ( mdev );
             devId = mdev->getId();
-            outPort = strtoqstr(mdev->getConnection());
+            outPort = RosegardenSequencer::getInstance()->getConnection(devId);
 
             if (!listEntries.contains(devId)) {
                 // device is not listed
@@ -595,8 +593,7 @@ DeviceManagerDialog::updateCheckStatesOfPortsList(QTreeWidget *treeWid_ports,
 
     IconLoader il;
 
-    QString outPort = strtoqstr(mdev->getConnection());
-
+    QString outPort = RosegardenSequencer::getInstance()->getConnection(mdev->getId());
     if (outPort.isEmpty()) {
         outPort = m_noPortName; // nullPort
     }
@@ -650,8 +647,7 @@ DeviceManagerDialog::connectMidiDeviceToPort(MidiDevice *mdev,
     RosegardenSequencer *seq;
     seq = RosegardenSequencer::getInstance();
     
-    QString outPort;
-    outPort = strtoqstr(mdev->getConnection());
+    QString outPort = RosegardenSequencer::getInstance()->getConnection(mdev->getId());
 
     DeviceId devId = mdev->getId();
 

@@ -40,6 +40,7 @@
 #include "gui/widgets/LedButton.h"
 #include "sound/AudioFileManager.h"
 #include "sound/PluginIdentifier.h"
+#include "sequencer/RosegardenSequencer.h"
 
 #include <QLayout>
 #include <QMessageBox>
@@ -680,7 +681,8 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
         } else if ((*it)->getType() == Instrument::Audio) {
             connected = true;
         } else {
-            connected = (device->getConnection() != "");
+            QString conn = RosegardenSequencer::getInstance()->getConnection(devId);
+            connected = (conn != "");
         }
 
         bool instrUsedByMe = false;

@@ -48,7 +48,8 @@ CreateOrDeleteDeviceCommand::CreateOrDeleteDeviceCommand(Studio *studio,
         m_direction = MidiDevice::Play;
         MidiDevice *md = dynamic_cast<MidiDevice *>(device);
         if (md) m_direction = md->getDirection();
-        m_connection = device->getConnection();
+        m_connection = qstrtostr(RosegardenSequencer::getInstance()
+                                 ->getConnection(md->getId()));
     } else {
         RG_DEBUG << "CreateOrDeleteDeviceCommand: No such device as "
                  << m_deviceId << endl;

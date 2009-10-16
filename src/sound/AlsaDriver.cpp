@@ -45,7 +45,7 @@
 #include <pthread.h>
 
 
-//#define DEBUG_ALSA 1
+#define DEBUG_ALSA 1
 //#define DEBUG_PROCESS_MIDI_OUT 1
 //#define DEBUG_PROCESS_SOFT_SYNTH_OUT 1
 //#define MTC_DEBUG 1
@@ -509,7 +509,7 @@ AlsaDriver::generatePortList(AlsaPortList *newPorts)
     snd_seq_client_info_set_client(cinfo, -1);
 
     audit << std::endl << "  ALSA Client information:"
-    << std::endl << std::endl;
+          << std::endl << std::endl;
 
     // Get only the client ports we're interested in and store them
     // for sorting and then device creation.
@@ -584,9 +584,9 @@ AlsaDriver::generatePortList(AlsaPortList *newPorts)
                     firstSpace = int(fullClientName.length());
 
                 if (firstSpace > 0 &&
-                        int(fullPortName.length()) >= firstSpace &&
-                        fullPortName.substr(0, firstSpace) ==
-                        fullClientName.substr(0, firstSpace)) {
+                    int(fullPortName.length()) >= firstSpace &&
+                    fullPortName.substr(0, firstSpace) ==
+                    fullClientName.substr(0, firstSpace)) {
                     name = portId + fullPortName;
                 } else {
                     name = portId + fullClientName + ": " + fullPortName;
@@ -617,7 +617,7 @@ AlsaDriver::generatePortList(AlsaPortList *newPorts)
                         direction);
 
                 if (newPorts &&
-                        (getPortName(ClientPortPair(client, port)) == "")) {
+                    (getPortName(ClientPortPair(client, port)) == "")) {
                     newPorts->push_back(portDescription);
                 }
 
@@ -923,7 +923,7 @@ AlsaDriver::getPortByName(std::string name)
                                   m_alsaPorts[i]->m_port);
         }
     }
-    return ClientPortPair( -1, -1);
+    return ClientPortPair(-1, -1);
 }
 
 std::string
@@ -977,6 +977,14 @@ AlsaDriver::getConnection(Device::DeviceType type,
     }
 
     return "";
+}
+
+QString
+AlsaDriver::getConnection(DeviceId id)
+{
+    if (m_devicePortMap.find(id) == m_devicePortMap.end()) return "";
+    const ClientPortPair &pair = m_devicePortMap[id];
+    return getPortName(pair).c_str();
 }
 
 void
@@ -4438,12 +4446,89 @@ AlsaDriver::checkForNewClients()
     Audit audit;
     bool madeChange = false;
 
+#ifdef DEBUG_ALSA
+    std::cerr << "AlsaDriver::checkForNewClients" << std::endl;
+#endif
+
     if (!m_portCheckNeeded) return false;
+
+#ifdef DEBUG_ALSA
+    std::cerr << "AlsaDriver::checkForNewClients: port check needed" << std::endl;
+#endif
 
     AlsaPortList newPorts;
     generatePortList(&newPorts); // updates m_alsaPorts, returns new ports as well
-    m_portCheckNeeded = false;
 
+    // If one of our ports is connected to a single other port and
+    // it isn't the one we thought, we should update our connection
+
+    for (MappedDeviceList::iterator i = m_devices.begin();
+         i != m_devices.end(); ++i) {
+
+        DevicePortMap::iterator j = m_devicePortMap.find((*i)->getId());
+
+        snd_seq_addr_t addr;
+        addr.client = m_client;
+
+        DeviceIntMap::iterator ii = m_outputPorts.find((*i)->getId());
+        if (ii == m_outputPorts.end()) continue;
+        addr.port = ii->second;
+
+        snd_seq_query_subscribe_t *subs;
+        snd_seq_query_subscribe_alloca(&subs);
+        snd_seq_query_subscribe_set_root(subs, &addr);
+        snd_seq_query_subscribe_set_index(subs, 0);
+
+        bool haveOurs = false;
+        int others = 0;
+        ClientPortPair firstOther;
+
+        while (!snd_seq_query_port_subscribers(m_midiHandle, subs)) {
+
+            const snd_seq_addr_t *otherEnd =
+                snd_seq_query_subscribe_get_addr(subs);
+
+            if (!otherEnd) continue;
+
+            if (j != m_devicePortMap.end() &&
+                otherEnd->client == j->second.first &&
+                otherEnd->port == j->second.second) {
+                haveOurs = true;
+            } else {
+                ++others;
+                firstOther = ClientPortPair(otherEnd->client, otherEnd->port);
+            }
+
+            snd_seq_query_subscribe_set_index
+                (subs, snd_seq_query_subscribe_get_index(subs) + 1);
+        }
+
+        if (haveOurs) { // leave our own connection alone, and stop worrying
+            continue;
+
+        } else {
+            if (others == 0) {
+                if (j != m_devicePortMap.end()) {
+                    j->second = ClientPortPair( -1, -1);
+                    setConnectionToDevice(**i, "");
+                    madeChange = true;
+                }
+            } else {
+                for (AlsaPortList::iterator k = m_alsaPorts.begin();
+                     k != m_alsaPorts.end(); ++k) {
+                    if ((*k)->m_client == firstOther.first &&
+                        (*k)->m_port == firstOther.second) {
+                        m_devicePortMap[(*i)->getId()] = firstOther;
+                        setConnectionToDevice(**i, (*k)->m_name.c_str(), firstOther);
+                        madeChange = true;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    m_portCheckNeeded = false;
     return true;
 }
 

@@ -306,6 +306,7 @@ public:
     virtual QString getConnection(Device::DeviceType,
                                   MidiDevice::DeviceDirection,
                                   unsigned int) { return ""; }
+    virtual QString getConnection(DeviceId) { return ""; }
     virtual void setConnection(DeviceId, QString) { }
     virtual void setPlausibleConnection(DeviceId id, QString c) { setConnection(id, c); }
     virtual void connectSomething() { }

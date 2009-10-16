@@ -37,7 +37,8 @@ ReconnectDeviceCommand::execute()
     Device *device = m_studio->getDevice(m_deviceId);
 
     if (device) {
-        m_oldConnection = device->getConnection();
+        m_oldConnection = qstrtostr(RosegardenSequencer::getInstance()
+                                    ->getConnection(device->getId()));
         RosegardenSequencer::getInstance()->setConnection
             (m_deviceId, strtoqstr(m_newConnection));
         device->setConnection(m_newConnection);

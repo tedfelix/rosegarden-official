@@ -62,8 +62,8 @@ public:
 private:
     Studio(const Studio &);
     Studio& operator=(const Studio &);
-public:
 
+public:
     void addDevice(const std::string &name,
                    DeviceId id,
 		   InstrumentId baseInstrumentId,

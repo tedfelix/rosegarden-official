@@ -55,6 +55,7 @@
 #include "gui/widgets/LineEdit.h"
 #include "gui/widgets/InputDialog.h"
 #include "misc/Debug.h"
+#include "sequencer/RosegardenSequencer.h"
 
 #include <QColorDialog>
 #include <QLayout>
@@ -607,9 +608,10 @@ TrackParameterBox::populateRecordingDeviceList()
                     dynamic_cast<MidiDevice*>(*it);
                 if (dev) {
                     if (dev->getDirection() == MidiDevice::Record
-                            && dev->isRecording()) {
+                        && dev->isRecording()) {
                         std::cerr << "recording code is tripping" << std::endl;
-                        QString connection = strtoqstr(dev->getConnection());
+                        QString connection = RosegardenSequencer::getInstance()
+                            ->getConnection(dev->getId());
                         // remove trailing "(duplex)", "(read only)", "(write only)" etc
                         connection.replace(QRegExp("\\s*\\([^)0-9]+\\)\\s*$"), "");
                         m_recDevice->addItem(connection);

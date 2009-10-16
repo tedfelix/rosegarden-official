@@ -72,7 +72,14 @@ public:
     virtual InstrumentList getAllInstruments() const = 0;
     virtual InstrumentList getPresentationInstruments() const = 0;
 
-    std::string getConnection() const { return m_connection; }
+    // It is not possible to query the connection from the Device.
+    // This is because the Device doesn't really know what it's
+    // connected to -- it does not get updated when the connection
+    // changes in the sequencer.  This function only exists so that we
+    // can let the Device know its proper connection prior to
+    // e.g. writing itself out as XML (because we want to include the
+    // connection in the XML).
+    //
     void setConnection(std::string connection) { m_connection = connection; }
 
 protected:

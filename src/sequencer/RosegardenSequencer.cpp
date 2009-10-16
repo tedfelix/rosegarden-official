@@ -614,6 +614,14 @@ RosegardenSequencer::getConnection(Device::DeviceType type,
     return m_driver->getConnection(type, direction, connectionNo);
 }
 
+QString
+RosegardenSequencer::getConnection(DeviceId id)
+{
+    LOCKED;
+
+    return m_driver->getConnection(id);
+}
+
 void
 RosegardenSequencer::setConnection(unsigned int deviceId,
                                    QString connection)

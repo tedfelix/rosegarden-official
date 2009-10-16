@@ -22,6 +22,8 @@
 #include "misc/Strings.h"
 #include "base/MidiDevice.h"
 #include "document/RosegardenDocument.h"
+#include "sequencer/RosegardenSequencer.h"
+
 #include <QComboBox>
 #include <QDialog>
 #include <QDialogButtonBox>
@@ -86,7 +88,8 @@ SplitByRecordingSrcDialog::SplitByRecordingSrcDialog(QWidget *parent, Rosegarden
             QString label = QString::number(dev->getId());
             label += ": ";
             label += strtoqstr(dev->getName());
-            QString connection = strtoqstr(dev->getConnection());
+            QString connection = RosegardenSequencer::getInstance()->getConnection
+                (dev->getId());
             label += " - ";
             if (connection == "")
                 label += tr("No connection");

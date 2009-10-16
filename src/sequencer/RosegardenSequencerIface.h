@@ -157,6 +157,12 @@ public:
                                   MidiDevice::DeviceDirection direction,
                                   unsigned int connectionNo) = 0;
 
+    // Return the current connection for the given device, or the
+    // empty string if the driver does not permit reconnections or the
+    // device is not connected.
+    //
+    virtual QString getConnection(DeviceId id) = 0;
+
     // Reconnect a particular device.
     // Ignored if driver does not permit reconnections or the connection
     // is not one of the permissible set for that device.

@@ -338,6 +338,7 @@ public:
     virtual QString getConnection(Device::DeviceType type,
                                   MidiDevice::DeviceDirection direction,
                                   unsigned int connectionNo);
+    virtual QString getConnection(DeviceId id);
     virtual void setConnection(DeviceId deviceId, QString connection);
     virtual void setPlausibleConnection(DeviceId deviceId, QString connection);
     virtual void connectSomething();

@@ -1256,27 +1256,36 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
         progress = ((RosegardenMainWindow *)parent())->getProgressBar();    //
     }
 
+    // First make sure all MIDI devices know their current connections
+    //
+    DeviceList *devices = m_studio.getDevices();
+    for (int i = 0; i < devices->size(); ++i) {
+        DeviceId id = (*devices)[i]->getId();
+        QString connection = RosegardenSequencer::getInstance()->getConnection(id);
+        (*devices)[i]->setConnection(qstrtostr(connection));
+    }
+
     // Send out Composition (this includes Tracks, Instruments, Tempo
     // and Time Signature changes and any other sub-objects)
     //
     outStream << strtoqstr(getComposition().toXmlString())
-    << endl << endl;
+              << endl << endl;
 
     outStream << strtoqstr(getAudioFileManager().toXmlString())
-    << endl << endl;
+              << endl << endl;
 
     outStream << strtoqstr(getConfiguration().toXmlString())
-    << endl << endl;
+              << endl << endl;
 
     long totalEvents = 0;
     for (Composition::iterator segitr = m_composition.begin();
-            segitr != m_composition.end(); ++segitr) {
+         segitr != m_composition.end(); ++segitr) {
         totalEvents += (long)(*segitr)->size();
     }
 
     for (Composition::triggersegmentcontaineriterator ci =
-                m_composition.getTriggerSegments().begin();
-            ci != m_composition.getTriggerSegments().end(); ++ci) {
+             m_composition.getTriggerSegments().begin();
+         ci != m_composition.getTriggerSegments().end(); ++ci) {
         totalEvents += (long)(*ci)->getSegment()->size();
     }
 
@@ -1286,7 +1295,7 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
     long eventCount = 0;
 
     for (Composition::iterator segitr = m_composition.begin();
-            segitr != m_composition.end(); ++segitr) {
+         segitr != m_composition.end(); ++segitr) {
 
         Segment *segment = *segitr;
 
@@ -1356,8 +1365,8 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
 }
 
 bool RosegardenDocument::exportStudio(const QString& filename,
-                                    QString &errMsg,
-                                    std::vector<DeviceId> devices)
+                                      QString &errMsg,
+                                      std::vector<DeviceId> devices)
 {
     Profiler profiler("RosegardenDocument::exportStudio");
     RG_DEBUG << "RosegardenDocument::exportStudio("

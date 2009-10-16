@@ -34,6 +34,7 @@
 #include "gui/widgets/PitchChooser.h"
 #include "sound/MappedEvent.h"
 #include "sound/PluginIdentifier.h"
+#include "sequencer/RosegardenSequencer.h"
 
 #include <QComboBox>
 #include <QDialog>
@@ -110,7 +111,8 @@ ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
         if (!isSuitable(dev, &hasConnection)) continue;
 
         QString label = strtoqstr(dev->getName());
-        QString connection = strtoqstr(dev->getConnection());
+        QString connection = RosegardenSequencer::getInstance()->getConnection
+            (dev->getId());
 
         if (hasConnection && connection != "") {
             label = tr("%1 - %2").arg(label).arg(connection);
@@ -568,7 +570,9 @@ ManageMetronomeDialog::isSuitable(Device *dev, bool *hasConnectionReturn)
     MidiDevice *md = dynamic_cast<MidiDevice *>(dev);
     if (md && md->getDirection() == MidiDevice::Play) {
         if (hasConnectionReturn) {
-            if (md->getConnection() == "") *hasConnectionReturn = false;
+            QString conn = RosegardenSequencer::getInstance()->getConnection
+                (md->getId());
+            if (conn == "") *hasConnectionReturn = false;
             else *hasConnectionReturn = true;
         }
         return true;

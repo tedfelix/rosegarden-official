@@ -34,6 +34,8 @@
 #include "InstrumentParameterPanel.h"
 #include "sound/MappedEvent.h"
 #include "sound/MappedInstrument.h"
+#include "sequencer/RosegardenSequencer.h"
+
 #include <algorithm>
 
 #include <QComboBox>
@@ -306,7 +308,8 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
 
     // Set Studio Device name
     //
-    QString connection(QObject::tr(strtoqstr(md->getConnection())));
+    QString connection(RosegardenSequencer::getInstance()->getConnection(md->getId()));
+
     if (connection == "") {
         m_connectionLabel->setText(tr("[ %1 ]").arg(tr("No connection")));
     } else {
