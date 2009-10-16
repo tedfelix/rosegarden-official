@@ -15,8 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
-#include <Q3DragObject>
-#include <Q3UriDrag>
+
 
 #include "AudioManagerDialog.h"
 
@@ -80,6 +79,11 @@
 #include <QShortcut>
 #include <QKeySequence>
 #include <QSettings>
+#include <QDrag>
+#include <QDropEvent>
+#include <QMimeData>
+
+
 
 
 namespace Rosegarden
@@ -172,12 +176,16 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     
     
     //### TODO: Fix drag n drop
-    connect(m_fileList, SIGNAL(dropped(QDropEvent*, QTreeWidgetItem*)),
-            SLOT(slotDropped(QDropEvent*, QTreeWidgetItem*)));
+//     connect(m_fileList, SIGNAL(dropped(QDropEvent*, QTreeWidgetItem*)),
+//             SLOT(slotDropped(QDropEvent*, QTreeWidgetItem*)));
 
+    connect(m_fileList, SIGNAL(dropped(QDropEvent*, QTreeWidgetItem*, QStringList)),
+            SLOT(slotDropped(QDropEvent*, QTreeWidgetItem*, QStringList)));
+    
+    
     //
     // setup local shortcuts
-     //
+    //
 
     // delete
     //
@@ -1226,10 +1234,22 @@ AudioManagerDialog::addFile(const QUrl& kurl)
     return true;
 }
 
+
 void
-AudioManagerDialog::slotDropped(QDropEvent *event, QTreeWidgetItem*)
-        // dropEvent
-{
+AudioManagerDialog::slotDropped(QDropEvent *event, QTreeWidget*, QStringList sl){
+    /// signaled from AudioListView on dropEvent, sl = list of items (filenames)
+    if( sl.empty() ) return;
+    
+    RG_DEBUG << "AudioManagerDialog::slotDropped() - Adding DroppedFile " << sl[0] << endl;
+    
+     addFile( QUrl(sl[0]) );
+}
+
+//void
+//AudioManagerDialog::slotDropped(QDropEvent *event, QTreeWidgetItem*)
+//{
+    
+/*
     //QStrList uri;
     QList<QString> uri;
 
@@ -1246,9 +1266,9 @@ AudioManagerDialog::slotDropped(QDropEvent *event, QTreeWidgetItem*)
 
             addFile(QUrl(url));
         }
-
 //    }// end if QUriDrag
-}
+*/
+//}
 
 void
 AudioManagerDialog::closeEvent(QCloseEvent *e)

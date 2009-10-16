@@ -20,19 +20,35 @@
 
 #include <QTreeWidget>
 
-#include <Q3DragObject>
 
 namespace Rosegarden {
         
 class AudioListView : public QTreeWidget
 {
+    Q_OBJECT
 public:
     AudioListView(QWidget *parent = 0, const char *name = 0);
 
 protected:
-    bool acceptDrag(QDropEvent* e) const;
-    virtual Q3DragObject* dragObject();
+signals:
+    
+    void dropped(QDropEvent*, QTreeWidget*, QStringList );
+    
+protected:
+//     bool acceptDrag(QDropEvent* e) const;
+
+    
+    virtual void dragEnterEvent(QDragEnterEvent *event);
+    virtual void dropEvent(QDropEvent*);
+    
+    virtual void mouseMoveEvent(QMouseEvent *event);
+    
+//     virtual QMimeData *mimeData(const QList<QTreeWidgetItem*> items) const;
+    virtual QStringList mimeTypes() const;
+    
 };
+
+
 
 }
 

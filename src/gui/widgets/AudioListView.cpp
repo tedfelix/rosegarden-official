@@ -18,14 +18,21 @@
 
 #include "AudioListView.h"
 
+
 #include "misc/Debug.h"
 #include "gui/widgets/AudioListItem.h"
 
-#include <Q3DragObject>
-#include <Q3UriDrag>
-#include <Q3TextDrag>
+// #include <Q3DragObject>
+// #include <Q3UriDrag>
+// #include <Q3TextDrag>
 
-// #include <QMimeData>	// qt4: replaces Q3DragObject and Q3UriDrag
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
+#include <QMimeData>	// qt4: replaces Q3DragObject and Q3UriDrag
+#include <QUrl>
+#include <QDrag>
+#include <QDropEvent>
+
 
 
 namespace Rosegarden {
@@ -36,9 +43,140 @@ AudioListView::AudioListView(QWidget *parent, const char *name)
 	setObjectName( name );
     setDragEnabled(true);
     setAcceptDrops(true);
-//&&&    setDropVisualizer(false);
+    setDropIndicatorShown(true);
+    
 }
 
+
+
+
+void AudioListView::mouseMoveEvent(QMouseEvent *event){
+    
+    // 
+    
+    // if not left button - return
+     if (!(event->buttons() & Qt::LeftButton)) return;
+    
+    // if no item selected, return (else it would crash)
+     if (currentItem() == NULL) return;
+    
+    QDrag *drag = new QDrag(this);
+    QMimeData *mimeData = new QMimeData;
+    
+    // construct list of QUrls
+    // other widgets accept this mime type, we can drop to them
+    QList<QUrl> list;
+    QString line;
+    line = currentItem()->text(6);       // 6 == Column->filename / QTreeWidgetItem
+    line = line.replace( "~", getenv( "HOME" ), Qt::CaseSensitive );
+    QFileInfo finfo( line  );
+    
+    line = finfo.absoluteFilePath();
+    // should we ?:
+//     if( ! line.startsWith( "file://" )){
+//         line = line.insert( 0, "file://" );
+//     }
+    
+    list.append( QUrl(line) ); // only QUrl in list will be text of actual item
+    
+    // mime stuff
+    mimeData->setUrls(list); 
+    //mimeData->setData( line.toUtf8(), "text/uri-list" );
+    drag->setMimeData(mimeData);
+    
+    RG_DEBUG << "Starting drag from AudioListView::mouseMoveEvent() with mime : " << mimeData->formats() << " - " << mimeData->urls()[0] << endl;
+    
+    // start drag
+    drag->start(Qt::CopyAction | Qt::MoveAction);
+    
+    
+}
+
+
+
+QStringList AudioListView::mimeTypes() const{
+    QStringList types;
+    types << "text/uri-list";
+    types << "text/plain";
+    return types;
+}
+
+
+
+void AudioListView::dragEnterEvent(QDragEnterEvent *e){
+    QStringList uriList;
+    QString text;
+
+    if (e->provides("text/uri-list") || e->provides("text/plain")) {
+
+        if (e->proposedAction() & Qt::CopyAction) {
+            e->acceptProposedAction();
+        } else {
+            e->setDropAction(Qt::CopyAction);
+            e->accept();
+        }
+
+//         if (e->provides("text/uri-list")) {
+//             uriList = QString::fromLocal8Bit(
+//                         e->encodedData("text/uri-list").data()
+//                     ).split( QRegExp("[\\r\\n]+"), QString::SkipEmptyParts );
+//         } else {
+//             text = QString::fromLocal8Bit(e->encodedData("text/plain").data());
+//         }
+    }
+
+    if (uriList.empty() && text == "") {
+//         RG_DEBUG << "AudioListView::dragEnterEvent: Nothing dropped" << endl;
+    }
+    
+    
+    
+}
+
+
+void AudioListView::dropEvent(QDropEvent* e)
+{
+    QStringList uriList;
+    QString text;
+
+    if (e->provides("text/uri-list") || e->provides("text/plain")) {
+
+        if (e->proposedAction() & Qt::CopyAction) {
+            e->acceptProposedAction();
+        } else {
+            e->setDropAction(Qt::CopyAction);
+            e->accept();
+        }
+
+        if (e->provides("text/uri-list")) {
+            uriList = QString::fromLocal8Bit(
+                        e->encodedData("text/uri-list").data()
+                    ).split( QRegExp("[\\r\\n]+"), QString::SkipEmptyParts );
+        } else {
+            text = QString::fromLocal8Bit(e->encodedData("text/plain").data());
+        }
+    } else {
+        e->ignore();
+        RG_DEBUG << "AudioListView::dropEvent: ignored dropEvent (invalid mime) " << endl;
+        return;
+    }
+
+    if (uriList.empty() && text == "") {
+        RG_DEBUG << "AudioListView::dropEvent: Nothing dropped" << endl;
+        return;
+    }
+    if( text != "" ){
+        uriList << text;
+    }
+    
+    emit dropped(e, dynamic_cast<QTreeWidget*>(this), uriList);
+    
+    // signal: dropped(QDropEvent*, QTreeWidgetItem*)
+    // send to AudioManagerDialog::slotDropped()
+}
+
+
+/*
 bool AudioListView::acceptDrag(QDropEvent* e) const
 {
     return false;
@@ -64,5 +202,9 @@ Q3DragObject* AudioListView::dragObject()
     
     return new Q3TextDrag(audioData, this);
 }
+*/
+
+
 
 }
+#include "AudioListView.moc"

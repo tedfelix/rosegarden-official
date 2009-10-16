@@ -38,6 +38,13 @@ protected:
 // 	KURL m_kurl;
 	QUrl m_kurl;
 	
+    /*
+    virtual void mousePressEvent ( QMouseEvent * event );
+    virtual void mouseMoveEvent(QMouseEvent *event);
+    
+    virtual QStringList mimeTypes () const;
+    virtual QMimeData * mimeData ( const QModelIndexList & indexes ) const;
+    */
 };
 
 }

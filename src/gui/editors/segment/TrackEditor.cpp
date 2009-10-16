@@ -17,11 +17,6 @@
 
 
 
-// #include <Q3DragObject>
-// #include <Q3UriDrag>
-// #include <Q3TextDrag>
-// #include <Q3StrList>
-
 
 #include "TrackEditor.h"
 #include "TrackButtons.h"
@@ -762,6 +757,7 @@ void TrackEditor::dropEvent(QDropEvent* e)
 
     if (uriList.empty() && text == "") {
         RG_DEBUG << "TrackEditor::dropEvent: Nothing dropped" << endl;
+        return;
     }
 
     int heightAdjust = 0;
@@ -809,8 +805,7 @@ void TrackEditor::dropEvent(QDropEvent* e)
             emit droppedDocument(uri);
         } else {
 
-            RG_DEBUG << "TrackEditor::dropEvent() : got URI: "
-            << uri << endl;
+            //RG_DEBUG << "TrackEditor::dropEvent() : got URI: " << uri << endl;
 
             RG_DEBUG << "TrackEditor::dropEvent() : dropping at track pos = "
             << trackPos
@@ -843,6 +838,7 @@ void TrackEditor::dropEvent(QDropEvent* e)
 
         if (text.endsWith(".rg")) {
             emit droppedDocument(text);
+            return;
             //
             // WARNING
             //

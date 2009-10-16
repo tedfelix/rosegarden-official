@@ -19,7 +19,7 @@
 
 #include "misc/Debug.h"
 
-//#include <qdragobject.h>
+
 #include <QMimeData>	// replaces Q3DragObject and Q3UriDrag
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
@@ -43,13 +43,12 @@ PlayListView::PlayListView(QWidget *parent, const char *name)
 	
     setDropIndicatorShown(true);
     setDragEnabled(false);
-    setAcceptDrops(false);
+    setAcceptDrops(true);
     //setDragDropMode( QAbstractItemView::NoDragDrop );
     //setDragDropMode(QAbstractItemView::InternalMove);
     
 	
 	/*
-	setDropVisualizer(true);
 	setShowToolTips(true);		//&&& disabled a few property inits
 	setShowSortIndicator(true);
 	setItemsMovable(true);
@@ -72,8 +71,6 @@ PlayListView::PlayListView(QWidget *parent, const char *name)
 QMimeData* PlayListView::mimeData(const QList<QTreeWidgetItem *> items) const
 {
     
-    //### THIS METHOD IS NEVER BEING CALLED - WHY ?
-    // this should override (QTreeWidget): virtual QMimeData *mimeData(const QList<QTreeWidgetItem*> items) const;
 
     // Create a QByteArray to store the data for the drag.
     QByteArray ba;
@@ -103,7 +100,6 @@ void PlayListView::dragEnterEvent ( QDragEnterEvent * event ){
 
 void PlayListView::mouseMoveEvent(QMouseEvent *event){
 
-    //### THIS METHOD IS NEVER BEING CALLED - WHY ?
     // 
     
     // if not left button - return

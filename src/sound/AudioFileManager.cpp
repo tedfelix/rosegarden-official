@@ -661,6 +661,8 @@ AudioFileManager::fileNeedsConversion(const std::string &fileName,
     procArgs << fileName.c_str();
 
     proc->execute("rosegarden-audiofile-importer", procArgs);
+    
+    //### FIXME Without a valid importer, RG crashes anywhere here
 
     int ec = proc->exitCode();
     delete proc;

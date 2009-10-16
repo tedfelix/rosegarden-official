@@ -21,15 +21,23 @@
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QUrl>
+#include <QMimeData>
 
 
 namespace Rosegarden {
 
-PlayListViewItem::PlayListViewItem(QTreeWidget* parent, QUrl kurl)
-    : QTreeWidgetItem(parent, QStringList() << QFile(kurl.toLocalFile()).fileName() << kurl.toString() ),
-      m_kurl(kurl)
+PlayListViewItem::PlayListViewItem(
+                    QTreeWidget* parent, QUrl kurl
+                    )
+    : QTreeWidgetItem(
+                    parent, QStringList() << QFile(kurl.toLocalFile()).fileName() << kurl.toString() 
+                    ),
+    m_kurl(kurl)
 {
+    // dont start drag on treeWidgetItem-Base, (but in TreeWidget)
+//     setFlags( flags() & ! (Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled) );
 }
+
 
 PlayListViewItem::PlayListViewItem(QTreeWidget* parent, QTreeWidgetItem* after, QUrl kurl)
 // 	: QTreeWidgetItem(parent, after, QStringList() << QFile(kurl.toLocalFile()).fileName() << kurl.toString() ),
@@ -41,6 +49,32 @@ PlayListViewItem::PlayListViewItem(QTreeWidget* parent, QTreeWidgetItem* after, 
 	
 	this->m_kurl = kurl;
 }
+
+
+/*
+void PlayListViewItem::mousePressEvent( QMouseEvent * event ){
+    
+}
+
+void PlayListViewItem::mouseMoveEvent( QMouseEvent *event ){
+    
+}
+
+
+QStringList PlayListViewItem::mimeTypes () const {
+    QStringList types;
+    types << "text/uri-list";
+    return types;
+}
+
+QMimeData * PlayListViewItem::mimeData ( const QModelIndexList & indexes ) const{
+    QMimeData *mime = new QMimeData;
+    QList<QUrl> list;
+    list << QUrl( text(0) );    // text of column 0
+    mime->setUrls( list );
+    return mime;
+}
+*/
 
 }
 
