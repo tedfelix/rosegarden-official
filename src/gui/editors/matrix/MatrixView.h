@@ -133,6 +133,8 @@ protected slots:
 
     void slotToggleTracking();
 
+    void slotUpdateMenuStates();
+
     void slotEditCut();
     void slotEditCopy();
     void slotEditPaste();

@@ -107,6 +107,7 @@ signals:
 
     void eventRemoved(Event *e);
 
+    void selectionChanged();
     void selectionChanged(EventSelection *s);
     void segmentDeleted(Segment *);
     void sceneDeleted(); // all segments have been removed

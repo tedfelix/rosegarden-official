@@ -110,6 +110,7 @@ signals:
     void segmentDeleted(Segment *);
     void sceneDeleted();
     void showContextHelp(const QString &);
+    void selectionChanged();
 
 public slots:
     void slotSelectAll();

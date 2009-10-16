@@ -139,6 +139,15 @@ MatrixView::MatrixView(RosegardenDocument *doc,
     connect(m_matrixWidget, SIGNAL(showContextHelp(const QString &)),
             this, SLOT(slotShowContextHelp(const QString &)));
 
+    slotUpdateMenuStates();
+    slotTestClipboard();
+
+    connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
+            this, SLOT(slotUpdateMenuStates()));
+
+    connect(m_matrixWidget, SIGNAL(selectionChanged()),
+            this, SLOT(slotUpdateMenuStates()));
+
     // Toggle the desired tool off and then trigger it on again, to
     // make sure its signal is called at least once (as would not
     // happen if the tool was on by default otherwise)
@@ -628,6 +637,17 @@ void
 MatrixView::slotShowContextHelp(const QString &help)
 {
     statusBar()->showMessage(help, 10000);
+}
+
+void
+MatrixView::slotUpdateMenuStates()
+{
+    EventSelection *s = getSelection();
+    if (s && !s->getSegmentEvents().empty()) {
+        enterActionState("have_selection");
+    } else {
+        leaveActionState("have_selection");
+    }
 }
 
 void

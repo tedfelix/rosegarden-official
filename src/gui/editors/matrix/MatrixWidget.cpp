@@ -378,11 +378,15 @@ MatrixWidget::setSegments(RosegardenDocument *document,
     m_controlsWidget->setViewSegment((ViewSegment *)m_scene->getCurrentViewSegment());
 
     // For some reason this doesn't work in the constructor - not looked in detail
+    // ( ^^^ it's because m_scene is only set after construction --cc)
     connect(m_scene, SIGNAL(selectionChanged(EventSelection *)),
             m_controlsWidget, SLOT(slotSelectionChanged(EventSelection *)));
 
     connect(m_controlsWidget, SIGNAL(childRulerSelectionChanged(EventSelection *)),
             m_scene, SLOT(slotRulerSelectionChanged(EventSelection *)));
+
+    connect(m_scene, SIGNAL(selectionChanged()),
+            this, SIGNAL(selectionChanged()));
 
     m_topStandardRuler = new StandardRuler(document,
                                            m_referenceScale, 0, 25,
