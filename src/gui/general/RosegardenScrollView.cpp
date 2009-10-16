@@ -662,16 +662,25 @@ void RosegardenScrollView::updateBottomWidgetGeometry()
 
 void RosegardenScrollView::wheelEvent(QWheelEvent *e)
 {
-// 	if (e->state() & ControlButton) {
-	if (e->modifiers() & Qt::CTRL ) {
-			if (e->delta() > 0)
-            emit zoomIn();
-        else if (e->delta() < 0)
-            emit zoomOut();
+    if (e->modifiers() & Qt::CTRL) {
+        if (e->delta() > 0) emit zoomIn();
+        else if (e->delta() < 0) emit zoomOut();
         return ;
     }
-//    Q3ScrollView::wheelEvent(e);
-	QAbstractScrollArea::wheelEvent(e);
+    
+    // For some reason that I don't understand, vertical scrolling
+    // with the wheel in the main window is extremely slow.  The
+    // factor of 10 applied here is to compensate for that.  No doubt
+    // on someone else's machine it will turn out to have been fine
+    // before this factor was applied, and unusable now...
+
+    QWheelEvent w(e->pos(),
+                  e->globalPos(),
+                  e->delta() * 10,
+                  e->buttons(),
+                  e->modifiers(),
+                  e->orientation());
+    QAbstractScrollArea::wheelEvent(&w);
 }
 
 }

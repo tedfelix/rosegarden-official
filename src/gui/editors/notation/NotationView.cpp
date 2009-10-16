@@ -99,7 +99,6 @@
 #include "gui/general/ClefIndex.h"
 
 #include "gui/widgets/TmpStatusMsg.h"
-#include "gui/widgets/ProgressBar.h"
 
 #include "gui/application/RosegardenMainWindow.h"
 #include "gui/application/RosegardenMainViewWidget.h"
@@ -119,7 +118,6 @@
 #include <QToolBar>
 #include <QInputDialog>
 #include <QStatusBar>
-#include <QProgressBar>
 
 #include <algorithm>
 #include <set>
@@ -136,7 +134,17 @@ NotationView::NotationView(RosegardenDocument *doc,
     m_document(doc),
     m_durationMode(InsertingRests),
     m_durationPressed(0),
-    m_accidentalPressed(0)
+    m_accidentalPressed(0),
+    m_selectionCounter(0),
+    m_insertModeLabel(0),
+    m_annotationsLabel(0),
+    m_lilyPondDirectivesLabel(0),
+    m_currentNotePixmap(0),
+    m_hoveredOverNoteName(0),
+    m_hoveredOverAbsoluteTime(0),
+    m_fontCombo(0),
+    m_fontSizeCombo(0),
+    m_spacingCombo(0)
 {
     m_notationWidget = new NotationWidget();
     setCentralWidget(m_notationWidget);
@@ -857,6 +865,15 @@ NotationView::slotUpdateMenuStates()
         NOTATION_DEBUG << "Do note have NoteRestInserter " << endl;
         leaveActionState("note_rest_tool_current");
     }
+
+    if (m_selectionCounter) {
+        if (selection && !selection->getSegmentEvents().empty()) {
+            m_selectionCounter->setText(tr("  %n event(s) selected ", "",
+                                           selection->getSegmentEvents().size()));
+        } else {
+            m_selectionCounter->setText(tr("  No selection "));
+        }
+    }
 }
 
 void
@@ -977,44 +994,29 @@ NotationView::initStatusBar()
 
     m_hoveredOverNoteName = new QLabel(sb);
     m_hoveredOverNoteName->setMinimumWidth(32);
-    sb->addWidget(m_hoveredOverNoteName);
+    sb->addPermanentWidget(m_hoveredOverNoteName);
 
     m_hoveredOverAbsoluteTime = new QLabel(sb);
     m_hoveredOverAbsoluteTime->setMinimumWidth(160);
-    sb->addWidget(m_hoveredOverAbsoluteTime);
+    sb->addPermanentWidget(m_hoveredOverAbsoluteTime);
 
-    QWidget *hbox = new QWidget(sb);
-    QHBoxLayout *hboxLayout = new QHBoxLayout;
-    hbox->setLayout(hboxLayout);
-
-    m_currentNotePixmap = new QLabel(hbox);
+    m_currentNotePixmap = new QLabel(sb);
     m_currentNotePixmap->setMinimumWidth(20);
-    hboxLayout->addWidget(m_currentNotePixmap);
+    sb->addPermanentWidget(m_currentNotePixmap);
 
-    m_insertModeLabel = new QLabel(hbox);
-    hboxLayout->addWidget(m_insertModeLabel);
+    m_insertModeLabel = new QLabel(sb);
+    sb->addPermanentWidget(m_insertModeLabel);
 
-    m_annotationsLabel = new QLabel(hbox);
-    hboxLayout->addWidget(m_annotationsLabel);
+    m_annotationsLabel = new QLabel(sb);
+    sb->addPermanentWidget(m_annotationsLabel);
 
-    m_lilyPondDirectivesLabel = new QLabel(hbox);
-    hboxLayout->addWidget(m_lilyPondDirectivesLabel);
-
-    sb->addWidget(hbox);
-
-    sb->showMessage(TmpStatusMsg::getDefaultMsg(), TmpStatusMsg::getDefaultId());
+    m_lilyPondDirectivesLabel = new QLabel(sb);
+    sb->addPermanentWidget(m_lilyPondDirectivesLabel);
     
     m_selectionCounter = new QLabel(sb);
     sb->addWidget(m_selectionCounter);
 
-    m_progressBar = new ProgressBar(100, true, sb);
-    m_progressBar->setMinimumWidth(100);
-    m_progressBar->setMaximumWidth(100);
-
-    sb->addPermanentWidget(m_progressBar);
     sb->setContentsMargins(0, 0, 0, 0);
-
-    sb->showMessage("This is a test of the emergency broadcast system. This is only a test.");
 }
 
 
@@ -2161,6 +2163,9 @@ NotationView::slotNoteAction()
     NOTATION_DEBUG << "NotationView::slotNoteAction : entered. " << endl;
 
     QObject *s = sender();
+    QAction *a = dynamic_cast<QAction *>(s);
+    QPixmap p;
+    if (a) p = a->icon().pixmap();
     QString name = s->objectName();
     QString noteToolbarName;
 
@@ -2212,7 +2217,10 @@ NotationView::slotNoteAction()
             slotSwitchToNotes();
         }
     }
-    //!!! todo: set status bar indication
+    
+    if (m_currentNotePixmap) {
+        m_currentNotePixmap->setPixmap(IconLoader().invert(p));
+    }
 }
 
 void
@@ -2338,10 +2346,11 @@ NotationView::slotClefAction()
     else if (n == "tenor_clef") type = Clef::Tenor;
     else if (n == "bass_clef") type = Clef::Bass;
 
-/*!!! todo: restore status bar indication
-    m_currentNotePixmap->setPixmap
-        (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("clef-treble")));
-*/
+    if (m_currentNotePixmap) {
+        m_currentNotePixmap->setPixmap
+            (IconLoader().invert(NotePixmapFactory::makeToolbarPixmap("clef-treble")));
+    }
+
     if (!m_notationWidget) return;
     m_notationWidget->slotSetClefInserter();
     m_notationWidget->slotSetInsertedClef(type);
@@ -2351,10 +2360,11 @@ NotationView::slotClefAction()
 void
 NotationView::slotText()
 {
-/*!!! todo: restore
-    m_currentNotePixmap->setPixmap
-        (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("text")));
-*/
+    if (m_currentNotePixmap) {
+        m_currentNotePixmap->setPixmap
+            (IconLoader().invert(NotePixmapFactory::makeToolbarPixmap("text")));
+    }
+
     if (!m_notationWidget) return;
     m_notationWidget->slotSetTextInserter();
     slotUpdateMenuStates();
@@ -2363,10 +2373,11 @@ NotationView::slotText()
 void
 NotationView::slotGuitarChord()
 {
-/*!!! todo: restore
-    m_currentNotePixmap->setPixmap
-        (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("text")));
-*/
+    if (m_currentNotePixmap) {
+        m_currentNotePixmap->setPixmap
+            (IconLoader().invert(NotePixmapFactory::makeToolbarPixmap("text")));
+    }
+
     if (!m_notationWidget) return;
     m_notationWidget->slotSetGuitarChordInserter();
     slotUpdateMenuStates();

@@ -341,8 +341,6 @@ private:
     QAction *m_durationPressed;  //Store the last duration button pressed.
     QAction *m_accidentalPressed;  //Store the last accidental button pressed.
 
-//    NotationProperties m_properties;
-
     /// Displayed in the status bar, shows number of events selected
     QLabel *m_selectionCounter;
 
@@ -354,9 +352,6 @@ private:
 
     /// Displayed in the status bar, shows when LilyPond directives are hidden
     QLabel *m_lilyPondDirectivesLabel;
-
-    /// Displayed in the status bar, shows value() of current operation
-    ProgressBar *m_progressBar;
 
     /// Displayed in the status bar, holds the pixmap of the current note
     QLabel* m_currentNotePixmap;

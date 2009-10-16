@@ -605,10 +605,8 @@ void NotationSelector::dragFine(int x, int y, bool final)
                     selection->getSegmentEvents().begin();
                 i != selection->getSegmentEvents().end(); ++i) {
             long prevX = 0, prevY = 0;
-            (*i)->get
-            <Int>(xProperty, prevX);
-            (*i)->get
-            <Int>(yProperty, prevY);
+            (*i)->get<Int>(xProperty, prevX);
+            (*i)->get<Int>(yProperty, prevY);
             (*i)->setMaybe<Int>(DISPLACED_X, prevX);
             (*i)->setMaybe<Int>(DISPLACED_Y, prevY);
             (*i)->unset(xProperty);
@@ -627,10 +625,8 @@ void NotationSelector::dragFine(int x, int y, bool final)
                     selection->getSegmentEvents().begin();
                 i != selection->getSegmentEvents().end(); ++i) {
             long prevX = 0, prevY = 0;
-            (*i)->get
-            <Int>(xProperty, prevX);
-            (*i)->get
-            <Int>(yProperty, prevY);
+            (*i)->get<Int>(xProperty, prevX);
+            (*i)->get<Int>(yProperty, prevY);
             (*i)->setMaybe<Int>(DISPLACED_X, prevX + long(dx));
             (*i)->setMaybe<Int>(DISPLACED_Y, prevY + long(dy));
             if (i == selection->getSegmentEvents().begin()) {

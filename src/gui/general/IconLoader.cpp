@@ -84,6 +84,12 @@ IconLoader::loadPixmap(QString dir, QString name)
     // No suitable inverted icon found for black background; try to
     // auto-invert the default one
 
+    return invert(pmap);
+}
+
+QPixmap
+IconLoader::invert(QPixmap pmap)
+{
     QImage img = pmap.toImage().convertToFormat(QImage::Format_ARGB32);
 
     for (int y = 0; y < img.height(); ++y) {

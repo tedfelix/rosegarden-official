@@ -881,9 +881,10 @@ RosegardenMainWindow::initStatusBar()
 //              TmpStatusMsg::getDefaultId(), 1);
 //    statusBar()->setItemAlignment(TmpStatusMsg::getDefaultId(),
 //              AlignLeft | AlignVCenter);
-    m_statusBarLabel1 = new QLabel(tr("status"), this);
-    
-    statusBar()->addPermanentWidget(m_statusBarLabel1);
+
+//    m_statusBarLabel1 = new QLabel(tr("status"), this);
+//    statusBar()->addPermanentWidget(m_statusBarLabel1);
+
 //    statusBar()->setItemAlignment(TmpStatusMsg::getDefaultId(),
 //              AlignLeft | AlignVCenter);
 

@@ -97,6 +97,7 @@
 #include <QInputDialog>
 #include <QMessageBox>
 #include <QToolButton>
+#include <QStatusBar>
 
 
 namespace Rosegarden
@@ -130,9 +131,13 @@ MatrixView::MatrixView(RosegardenDocument *doc,
 
     initActionsToolbar();
     initRulersToolbar();
+    initStatusBar();
     
     connect(m_matrixWidget, SIGNAL(editTriggerSegment(int)),
             this, SIGNAL(editTriggerSegment(int)));
+
+    connect(m_matrixWidget, SIGNAL(showContextHelp(const QString &)),
+            this, SLOT(slotShowContextHelp(const QString &)));
 
     // Toggle the desired tool off and then trigger it on again, to
     // make sure its signal is called at least once (as would not
@@ -611,6 +616,18 @@ MatrixView::initRulersToolbar()
     // set the "ruler n" tool button to pop up its menu instantly
     QToolButton *tb = dynamic_cast<QToolButton *>(findToolbar("Rulers Toolbar")->widgetForAction(findAction("add_control_ruler")));
     tb->setPopupMode(QToolButton::InstantPopup);
+}
+
+void
+MatrixView::initStatusBar()
+{
+    QStatusBar *sb = statusBar();
+}
+
+void
+MatrixView::slotShowContextHelp(const QString &help)
+{
+    statusBar()->showMessage(help, 10000);
 }
 
 void

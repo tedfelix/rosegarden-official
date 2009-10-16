@@ -53,7 +53,7 @@ class Device;
  * selection state (MatrixScene does that).
  */
 class MatrixView : public EditViewBase,
-                      public SelectionManager
+                   public SelectionManager
 {
     Q_OBJECT
 
@@ -76,7 +76,6 @@ public:
     virtual EventSelection *getSelection() const;
     virtual void setSelection(EventSelection *s, bool preview);
 
-    virtual void initStatusBar() { }//!!!
     virtual void updateViewCaption() { }//!!!
 
     virtual timeT getInsertionTime() const;
@@ -152,6 +151,7 @@ protected slots:
      */
     void slotHelpAbout();
 
+    void slotShowContextHelp(const QString &);
         
     // start of slots, formerly in located in EditView.h (which is obsolete now)
     // --
@@ -251,6 +251,8 @@ private:
      * Return the device of the current segment, if any
      */
     Device *getCurrentDevice();
+
+    virtual void initStatusBar();
 };
 
 }

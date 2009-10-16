@@ -252,6 +252,9 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     
     m_toolBox = new MatrixToolBox(this);
 
+    connect(m_toolBox, SIGNAL(showContextHelp(const QString &)),
+            this, SIGNAL(showContextHelp(const QString &)));
+
     MatrixMover *matrixMoverTool = dynamic_cast <MatrixMover *> (m_toolBox->getTool(MatrixMover::ToolName));
     if (matrixMoverTool) {
         connect(matrixMoverTool, SIGNAL(hoveredOverNoteChanged(int, bool, timeT)),

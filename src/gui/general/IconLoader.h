@@ -35,6 +35,10 @@ public:
     QIcon load(QString name);
     QPixmap loadPixmap(QString name);
 
+    // process the given pixmap so as to try to make it visible if the
+    // background is very dark
+    QPixmap invert(QPixmap);
+
 protected:
     QPixmap loadPixmap(QString dir, QString name);
     std::map<QString, QPixmap> m_cache;
