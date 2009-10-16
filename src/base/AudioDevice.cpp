@@ -19,18 +19,21 @@
 #include <cstdio>
 
 #include <sstream>
-
+#include <QString>
 
 namespace Rosegarden
 {
 
-AudioDevice::AudioDevice():Device(0, "Default Audio Device", Device::Audio)
+AudioDevice::AudioDevice() : 
+    Device(0, "Default Audio Device", Device::Audio)
 {
+    createInstruments();
 }
 
-AudioDevice::AudioDevice(DeviceId id, const std::string &name):
+AudioDevice::AudioDevice(DeviceId id, const std::string &name) :
     Device(id, name, Device::Audio)
 {
+    createInstruments();
 }
 
 
@@ -48,7 +51,26 @@ AudioDevice::AudioDevice(const AudioDevice &dev):
 AudioDevice::~AudioDevice()
 {
 }
+    
+void
+AudioDevice::createInstruments()
+{
+    for (int i = 0; i < AudioInstrumentCount; ++i) {
+	Instrument *instrument = new Instrument
+	    (AudioInstrumentBase + i, Instrument::Audio, "", i, this);
+        addInstrument(instrument);
+    }
+    renameInstruments();
+}
 
+void
+AudioDevice::renameInstruments()
+{
+    for (int i = 0; i < AudioInstrumentCount; ++i) {
+        m_instruments[i]->setName
+            (QString("%1 #%2").arg(getName().c_str()).arg(i+1).toUtf8().data());
+    }
+}
 
 std::string
 AudioDevice::toXmlString()

@@ -642,6 +642,14 @@ RosegardenSequencer::setPlausibleConnection(unsigned int deviceId,
     m_driver->setPlausibleConnection(deviceId, connection);
 }
 
+void
+RosegardenSequencer::connectSomething()
+{
+    LOCKED;
+    
+    m_driver->connectSomething();
+}
+
 unsigned int
 RosegardenSequencer::getTimers()
 {

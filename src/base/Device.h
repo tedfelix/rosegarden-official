@@ -51,18 +51,12 @@ public:
     Device(DeviceId id, const std::string &name, DeviceType type):
         m_name(name), m_type(type), m_id(id) { }
 
-    virtual ~Device() 
-    {
-        InstrumentList::iterator it = m_instruments.begin();
-        for (; it != m_instruments.end(); it++)
-            delete (*it);
-        m_instruments.erase(m_instruments.begin(), m_instruments.end());
-    }
+    virtual ~Device();
 
     void setType(DeviceType type) { m_type = type; }
     DeviceType getType() const { return m_type; }
 
-    void setName(const std::string &name) { m_name = name; }
+    void setName(const std::string &name) { m_name = name; renameInstruments(); }
     std::string getName() const { return m_name; }
 
     void setId(DeviceId id) { m_id = id; }
@@ -71,8 +65,6 @@ public:
     // Accessing instrument lists - Devices should only
     // show the world what they want it to see
     //
-    virtual void addInstrument(Instrument*) = 0;
-
     // Two functions - one to return all Instruments on a
     // Device - one to return all Instruments that a user
     // is allowed to select (Presentation Instruments).
@@ -84,6 +76,9 @@ public:
     void setConnection(std::string connection) { m_connection = connection; }
 
 protected:
+    virtual void addInstrument(Instrument *) = 0;
+    virtual void renameInstruments() = 0;
+
     InstrumentList     m_instruments;
     std::string        m_name;
     DeviceType         m_type;

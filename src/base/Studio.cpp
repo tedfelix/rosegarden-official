@@ -83,26 +83,19 @@ Studio::addDevice(const std::string &name,
                   Device::DeviceType type)
 {
     Device *d = 0;
-    int count = 16;
-    Instrument::InstrumentType itype;
 
     switch (type) {
 
         case Device::Midi:
-            d = new MidiDevice(id, name, MidiDevice::Play);
-	    itype = Instrument::Midi;
+            d = new MidiDevice(id, baseInstrumentId, name, MidiDevice::Play);
             break;
 
         case Device::Audio:
             d = new AudioDevice(id, name);
-	    count = AudioInstrumentCount;
-	    itype = Instrument::Audio;
             break;
 
         case Device::SoftSynth:
             d = new SoftSynthDevice(id, name);
-	    count = SoftSynthInstrumentCount;
-	    itype = Instrument::SoftSynth;
             break;
 
         default:
@@ -112,19 +105,6 @@ Studio::addDevice(const std::string &name,
     }
 
     m_devices.push_back(d);
-    
-    InstrumentId iid = baseInstrumentId;
-
-    for (int i = 0; i < count; ++i) {
-	bool perc = false;
-	if (itype == Instrument::Midi && i == 9) perc = true;
-	Instrument *instrument = new Instrument
-	    (iid, itype,
-	     qstrtostr(QString("%1 #%2%3").arg(name.c_str())
-		       .arg(i+1).arg(perc ? "[D]" : "")), i, d);
-	d->addInstrument(instrument);
-	++iid;
-    }
 }
 
 void

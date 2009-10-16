@@ -170,6 +170,12 @@ public:
     virtual void setPlausibleConnection(unsigned int deviceId,
                                         QString idealConnection) = 0;
 
+    // Ensure that at least one playback device is connected to
+    // something, if there is at least one very obvious candidate to
+    // connect it to
+    //
+    virtual void connectSomething() = 0;
+
     // Return the number of different timers we are capable of
     // sychronising against.  This may return 0 if the driver has no
     // ability to change the current timer.

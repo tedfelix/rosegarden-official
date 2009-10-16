@@ -62,6 +62,8 @@ private:
     MidiMetronome *m_metronome;
     static ControlList m_controlList;
     static void checkControlList();
+    void createInstruments();
+    void renameInstruments();
 };
 
 }

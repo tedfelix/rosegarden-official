@@ -297,11 +297,7 @@ Instrument::~Instrument()
 std::string
 Instrument::getPresentationName() const
 {
-    if (m_type == Audio || m_type == SoftSynth || !m_device) {
-	return m_name;
-    } else {
-	return m_device->getName() + " " + m_name;
-    }
+    return m_name;
 }
 
 void

@@ -56,7 +56,8 @@ public:
         { return m_instruments; }
 
 private:
-
+    void createInstruments();
+    void renameInstruments();
 };
 
 }

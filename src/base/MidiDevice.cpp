@@ -25,6 +25,7 @@
 
 #include <sstream>
 
+#include <QString>
 
 namespace Rosegarden
 {
@@ -36,6 +37,7 @@ MidiDevice::MidiDevice():
     m_variationType(NoVariations),
     m_librarian(std::pair<std::string, std::string>("<none>", "<none>"))
 {
+    createInstruments(MidiInstrumentBase);
     generatePresentationList();
     generateDefaultControllers();
 
@@ -44,6 +46,7 @@ MidiDevice::MidiDevice():
 }
 
 MidiDevice::MidiDevice(DeviceId id,
+                       InstrumentId ibase,
                        const std::string &name,
                        DeviceDirection dir):
     Device(id, name, Device::Midi),
@@ -52,6 +55,7 @@ MidiDevice::MidiDevice(DeviceId id,
     m_variationType(NoVariations),
     m_librarian(std::pair<std::string, std::string>("<none>", "<none>"))
 {
+    createInstruments(ibase);
     generatePresentationList();
     generateDefaultControllers();
 
@@ -60,6 +64,7 @@ MidiDevice::MidiDevice(DeviceId id,
 }
 
 MidiDevice::MidiDevice(DeviceId id,
+                       InstrumentId ibase,
 		       const MidiDevice &dev) :
     Device(id, dev.getName(), Device::Midi),
     m_programList(dev.m_programList),
@@ -70,6 +75,8 @@ MidiDevice::MidiDevice(DeviceId id,
     m_variationType(dev.getVariationType()),
     m_librarian(dev.getLibrarian())
 {
+    createInstruments(ibase);
+
     // Create and assign a metronome if required
     //
     if (dev.getMetronome()) {
@@ -168,6 +175,30 @@ MidiDevice::~MidiDevice()
 {
     delete m_metronome;
     //!!! delete key mappings
+}
+
+void
+MidiDevice::createInstruments(InstrumentId base)
+{
+    for (int i = 0; i < 16; ++i) {
+	Instrument *instrument = new Instrument
+	    (base + i, Instrument::Midi, "", i, this);
+	addInstrument(instrument);
+    }
+    renameInstruments();
+}
+
+void
+MidiDevice::renameInstruments()
+{
+    for (int i = 0; i < 16; ++i) {
+        m_instruments[i]->setName
+            (QString("%1 #%2%3")
+             .arg(getName().c_str())
+             .arg(i+1)
+             .arg((i==9) ? "[D]" : "")
+             .toUtf8().data());
+    }
 }
 
 void

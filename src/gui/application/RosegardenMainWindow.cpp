@@ -1111,8 +1111,7 @@ RosegardenMainWindow::initView()
 void
 RosegardenMainWindow::setDocument(RosegardenDocument* newDocument)
 {
-    if (m_doc == newDocument)
-        return ;
+    if (m_doc == newDocument) return;
 
     emit documentAboutToChange();
     qApp->processEvents(); // to make sure all opened dialogs (mixer, midi devices...) are closed
@@ -1214,6 +1213,8 @@ RosegardenMainWindow::setDocument(RosegardenDocument* newDocument)
 
     connect(m_doc, SIGNAL(devicesResyncd()),
             this, SLOT(slotDocumentDevicesResyncd()));
+
+    RosegardenSequencer::getInstance()->connectSomething();
 
     m_doc->checkSequencerTimer();
     m_doc->clearModifiedStatus();

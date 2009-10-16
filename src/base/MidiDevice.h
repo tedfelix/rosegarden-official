@@ -35,27 +35,28 @@ typedef std::vector<MidiByte> MidiByteList;
 class MidiDevice : public Device, public Controllable
 {
 public:
-    typedef enum
-    {
+    enum DeviceDirection {
         Play = 0,
         Record = 1
-    } DeviceDirection;
+    };
 
-    typedef enum
-    {
+    enum VariationType {
         NoVariations,
         VariationFromLSB,
         VariationFromMSB
-    } VariationType;
+    };
 
     MidiDevice();
     MidiDevice(const MidiDevice &);
     MidiDevice(DeviceId id,
+               InstrumentId ibase,
                const MidiDevice &);
     MidiDevice(DeviceId id,
+               InstrumentId ibase,
                const std::string &name,
                DeviceDirection dir);
     MidiDevice(DeviceId id,
+               InstrumentId ibase,
                const std::string &name,
                const std::string &label,
                DeviceDirection dir);
@@ -173,6 +174,8 @@ public:
     bool isRecording() {return m_recording; }
 
 protected:
+    void createInstruments(InstrumentId);
+    void renameInstruments();
     void generatePresentationList();
 
     ProgramList    m_programList;

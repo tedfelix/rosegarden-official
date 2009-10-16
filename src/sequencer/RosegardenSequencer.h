@@ -140,10 +140,10 @@ public:
                                   unsigned int connectionNo);
     virtual void setConnection(unsigned int deviceId,
                                QString connection);
-/*!DEVPUSH    virtual void removeConnection(unsigned int deviceId, QString connection); */
     virtual void setPlausibleConnection(unsigned int deviceId,
                                         QString idealConnection);
-    
+    virtual void connectSomething();
+
     virtual unsigned int getTimers();
     virtual QString getTimer(unsigned int n);
     virtual QString getCurrentTimer();

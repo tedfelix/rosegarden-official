@@ -1108,24 +1108,28 @@ void
 AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection)
 {
     Audit audit;
-    ClientPortPair port(getPortByName(qstrtostr(idealConnection)));
 
-    audit << "AlsaDriver::setPlausibleConnection: connection like "
-          << idealConnection << " requested for device " << id << std::endl;
+    audit << "AlsaDriver::setPlausibleConnection: connection like \""
+          << idealConnection << "\" requested for device " << id << std::endl;
 
-    if (port.first != -1 && port.second != -1) {
+    if (idealConnection != "") {
 
-        for (size_t i = 0; i < m_devices.size(); ++i) {
+        ClientPortPair port(getPortByName(qstrtostr(idealConnection)));
 
-            if (m_devices[i]->getId() == id) {
-                setConnectionToDevice(*m_devices[i], idealConnection, port);
-                break;
+        if (port.first != -1 && port.second != -1) {
+
+            for (size_t i = 0; i < m_devices.size(); ++i) {
+
+                if (m_devices[i]->getId() == id) {
+                    setConnectionToDevice(*m_devices[i], idealConnection, port);
+                    break;
+                }
             }
-        }
 
-        audit << "AlsaDriver::setPlausibleConnection: exact match available"
-              << std::endl;
-        return ;
+            audit << "AlsaDriver::setPlausibleConnection: exact match available"
+                  << std::endl;
+            return;
+        }
     }
 
     // What we want is a connection that:
@@ -1138,26 +1142,37 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection)
     // and use our knowledge of how connection strings are made (see
     // AlsaDriver::generatePortList above) to pick out the relevant parts
     // of the requested string.
+    //
+    // If the idealConnection string is empty, then we should pick the
+    // first available connection that looks "nice and safe"; in
+    // practice this means the first software device (don't
+    // auto-connect to hardware).
 
     int client = -1;
-    int colon = idealConnection.find(":");
-    if (colon >= 0) client = idealConnection.left(colon).toInt();
-
     int portNo = -1;
-    if (client > 0) {
-        QString remainder = idealConnection.mid(colon + 1);
-        int space = remainder.find(" ");
-        if (space >= 0) portNo = remainder.left(space).toInt();
-    }
-
-    int firstSpace = idealConnection.find(" ");
-    int endOfText = idealConnection.find(QRegExp("[^\\w ]"), firstSpace);
-
     QString text;
-    if (endOfText < 2) {
-        text = idealConnection.mid(firstSpace + 1);
-    } else {
-        text = idealConnection.mid(firstSpace + 1, endOfText - firstSpace - 2);
+
+    if (idealConnection != "") {
+
+        int colon = idealConnection.find(":");
+        if (colon >= 0) {
+            client = idealConnection.left(colon).toInt();
+        }
+
+        if (client > 0) {
+            QString remainder = idealConnection.mid(colon + 1);
+            int space = remainder.find(" ");
+            if (space >= 0) portNo = remainder.left(space).toInt();
+        }
+        
+        int firstSpace = idealConnection.find(" ");
+        int endOfText = idealConnection.find(QRegExp("[^\\w ]"), firstSpace);
+
+        if (endOfText < 2) {
+            text = idealConnection.mid(firstSpace + 1);
+        } else {
+            text = idealConnection.mid(firstSpace + 1, endOfText - firstSpace - 2);
+        }
     }
 
     for (int testUsed = 1; testUsed >= 0; --testUsed) {
@@ -1222,6 +1237,12 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection)
                         if (used) continue;
                     }
 
+                    if (idealConnection == "" &&
+                        port->m_client < 128) {
+                        // don't connect hardware as the default, only connection
+                        continue;
+                    }
+
                     // OK, this one will do
 
                     audit << "AlsaDriver::setPlausibleConnection: fuzzy match "
@@ -1252,6 +1273,32 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection)
           << std::endl;
 }
 
+
+void
+AlsaDriver::connectSomething()
+{
+    // Called after document load, if there are devices in the
+    // document but none of them has managed to get itself connected
+    // to anything.  Tries to find something suitable to connect one
+    // device to, and connects it.  If nothing very appropriate
+    // beckons, leaves unconnected.
+
+    MappedDevice *toConnect = 0;
+
+    // First check whether anything is connected.
+    for (size_t i = 0; i < m_devices.size(); ++i) {
+        MappedDevice *device = m_devices[i];
+        if (device->getDirection() != MidiDevice::Play) continue;
+        if (m_devicePortMap.find(device->getId()) != m_devicePortMap.end() &&
+            m_devicePortMap[device->getId()] != ClientPortPair()) {
+            return; // something is connected already
+        } else if (!toConnect) {
+            toConnect = device;
+        }
+    }            
+
+    setPlausibleConnection(toConnect->getId(), "");
+}
 
 void
 AlsaDriver::checkTimerSync(size_t frames)

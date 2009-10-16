@@ -308,6 +308,7 @@ public:
                                   unsigned int) { return ""; }
     virtual void setConnection(DeviceId, QString) { }
     virtual void setPlausibleConnection(DeviceId id, QString c) { setConnection(id, c); }
+    virtual void connectSomething() { }
 
     virtual unsigned int getTimers() { return 0; }
     virtual QString getTimer(unsigned int) { return ""; }

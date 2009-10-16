@@ -20,8 +20,8 @@
 #include <cstdio>
 #include <cstdlib>
 
-
 #include <sstream>
+#include <QString>
 
 
 namespace Rosegarden
@@ -34,6 +34,7 @@ SoftSynthDevice::SoftSynthDevice() :
     Device(0, "Default Soft Synth Device", Device::SoftSynth),
     m_metronome(0)
 {
+    createInstruments();
     checkControlList();
 }
 
@@ -41,6 +42,7 @@ SoftSynthDevice::SoftSynthDevice(DeviceId id, const std::string &name) :
     Device(id, name, Device::SoftSynth),
     m_metronome(0)
 {
+    createInstruments();
     checkControlList();
 }
 
@@ -63,6 +65,27 @@ SoftSynthDevice::~SoftSynthDevice()
 {
     delete m_metronome;
 }
+
+void
+SoftSynthDevice::createInstruments()
+{
+    for (int i = 0; i < SoftSynthInstrumentCount; ++i) {
+	Instrument *instrument = new Instrument
+	    (SoftSynthInstrumentBase + i, Instrument::SoftSynth, "", i, this);
+	addInstrument(instrument);
+    }
+    renameInstruments();
+}
+
+void
+SoftSynthDevice::renameInstruments()
+{
+    for (int i = 0; i < SoftSynthInstrumentCount; ++i) {
+        m_instruments[i]->setName
+            (QString("%1 #%2").arg(getName().c_str()).arg(i+1).toUtf8().data());
+    }
+}
+    
 
 void
 SoftSynthDevice::checkControlList()

@@ -340,6 +340,7 @@ public:
                                   unsigned int connectionNo);
     virtual void setConnection(DeviceId deviceId, QString connection);
     virtual void setPlausibleConnection(DeviceId deviceId, QString connection);
+    virtual void connectSomething();
 
     virtual unsigned int getTimers();
     virtual QString getTimer(unsigned int);

@@ -62,6 +62,7 @@ ImportDeviceDialog::~ImportDeviceDialog()
     } else {
         delete m_device;
     }
+    for (int i = 0; i < m_devices.size(); ++i) delete m_devices[i];
 }
 
 bool
@@ -153,7 +154,7 @@ ImportDeviceDialog::doImport()
 
     int count = 1;
     for (std::vector<MidiDevice *>::iterator i = m_devices.begin();
-            i != m_devices.end(); ++i) {
+         i != m_devices.end(); ++i) {
         if ((*i)->getName() != "") {
             showRenameOption = true;
         } else {
@@ -242,17 +243,19 @@ void
 ImportDeviceDialog::accept()
 {
     int index = 0;
-    if (m_deviceCombo)
-        index = m_deviceCombo->currentIndex();
+    if (m_deviceCombo) index = m_deviceCombo->currentIndex();
     m_device = m_devices[index];
+    for (int i = 0; i < m_devices.size(); ++i) {
+        if (i != index) delete m_devices[i];
+    }
+    m_devices.clear();
 
     int v = m_buttonGroup->checkedId();
     QSettings settings;
     settings.beginGroup( GeneralOptionsConfigGroup );
 
     settings.setValue("importbanksoverwrite", v == 1);
-    if (m_rename)
-        settings.setValue("importbanksrename", m_rename->isChecked());
+    if (m_rename) settings.setValue("importbanksrename", m_rename->isChecked());
     settings.endGroup();
 
     QDialog::accept();
@@ -379,8 +382,8 @@ ImportDeviceDialog::importFromRG(QString fileName)
             // (or a device that contains controllers or key mappings)
             //
             if (banks.size() ||
-                    controllers.size() ||
-                    device->getKeyMappings().size())
+                controllers.size() ||
+                device->getKeyMappings().size())
                 m_devices.push_back(device);
         }
     }
@@ -429,8 +432,7 @@ ImportDeviceDialog::importFromSF2(QString filename)
         }
     }
 
-    MidiDevice *device = new MidiDevice
-                         (0, "", MidiDevice::Play);
+    MidiDevice *device = new MidiDevice(0, 0, "", MidiDevice::Play);
     device->replaceBankList(banks);
     device->replaceProgramList(programs);
     m_devices.push_back(device);
@@ -471,8 +473,7 @@ ImportDeviceDialog::importFromLSCP(QString filename)
         }
     }
 
-    MidiDevice *device = new MidiDevice
-                         (0, "", MidiDevice::Play);
+    MidiDevice *device = new MidiDevice(0, 0, "", MidiDevice::Play);
     device->replaceBankList(banks);
     device->replaceProgramList(programs);
     m_devices.push_back(device);
