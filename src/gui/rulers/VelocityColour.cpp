@@ -95,7 +95,7 @@ VelocityColour::getColour(int value)
             ( m_loStartGreen + m_loStepGreen * value ) / m_multiplyFactor,
             ( m_loStartBlue + m_loStepBlue * value ) / m_multiplyFactor);
 
-    } else if (value >= m_mediumKnee < m_loudKnee) {
+    } else if (value >= m_mediumKnee && value < m_loudKnee) {
         int mixFactor = value - m_mediumKnee;
 
         m_mixedColour.setRgb(
