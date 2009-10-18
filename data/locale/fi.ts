@@ -6,38 +6,38 @@
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="472"/>
         <source>Manage MIDI Devices</source>
-        <translation type="unfinished">Hallitse MIDI-laitteita</translation>
+        <translation>Hallitse MIDI-laitteita</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="473"/>
         <source>MIDI Playback</source>
-        <translation type="unfinished">MIDI-toisto</translation>
+        <translation>MIDI-toisto</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="475"/>
         <source>Sends its data through</source>
-        <translation type="unfinished">Kohde johon data lähetetään</translation>
+        <translation>Kohde johon data lähetetään</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="476"/>
         <source>Rosegarden playback device</source>
-        <translation type="unfinished">Rosegardenin toistolaite</translation>
+        <translation>Rosegardenin toistolaite</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="481"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="513"/>
         <source>Internal Synth</source>
-        <translation type="unfinished">Sisäinen syntetisaattori</translation>
+        <translation>Sisäinen syntetisaattori</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="482"/>
         <source>Default playback device</source>
-        <translation type="unfinished">Oletustoistolaite</translation>
+        <translation>Oletustoistolaite</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="486"/>
         <source>&lt;qt&gt;&lt;p&gt;Create new playback devices here. Click the device name to change it. Select a device here and connect it to an ALSA MIDI output port by clicking on a port to the right.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Luo uusi toistolaite tässä. Napsauta laitteen nimeä muuttaaksesi sitä. Valitse laite tästä ja kytke se ALSA MIDI ulostuloon napsauttamalla oikealla olevaa porttia.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Luo uusi toistolaite tässä. Napsauta laitteen nimeä muuttaaksesi sitä. Valitse laite tästä ja kytke se ALSA MIDI ulostuloon napsauttamalla oikealla olevaa porttia.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="489"/>
@@ -49,123 +49,123 @@
         <source>Banks...</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
         <translatorcomment>Luo, lataa tai vie pankkien (tai patchien) määritelmät ...</translatorcomment>
-        <translation type="unfinished">Pankit...</translation>
+        <translation>Pankit...</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="493"/>
         <source>&lt;qt&gt;&lt;p&gt;Edit the controllers associated with this device.&lt;/p&gt;&lt;p&gt;You must define controllers here in order to use them anywhere in Rosegarden, such as on control rulers or in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box,  You can change which controllers are displayed in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box, and rearrange their layout&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Muokkaa tähän laitteeseen liitettyjä ohjaimia.&lt;/p&gt;&lt;p&gt;Sinun täytyy määritellä ohjaimet täällä, jotta voisit käyttää niitä muualla Rosegardenissa, kuten ohjainviivainta tai &lt;b&gt;Instrumentin Valinnat&lt;/b&gt; -laatikkoa,  Voit vaihtaa näytettävät ohjaimet &lt;b&gt;Instrumentin Valinnat&lt;/b&gt; -laatikosta, ja järjestää niiden asemoinnin.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Muokkaa tähän laitteeseen liitettyjä ohjaimia.&lt;/p&gt;&lt;p&gt;Sinun täytyy määritellä ohjaimet täällä, jotta voisit käyttää niitä muualla Rosegardenissa, kuten ohjainviivamessa tai &lt;b&gt;Instrumentin Valinnat&lt;/b&gt; -laatikkossa,  Voit vaihtaa näytettävät ohjaimet &lt;b&gt;Instrumentin Valinnat&lt;/b&gt; -laatikosta, ja järjestää niiden asemoinnit.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="495"/>
         <source>Controllers...</source>
-        <translation type="unfinished">Ohjaimet...</translation>
+        <translation>Ohjaimet...</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="497"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new playback device&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Luo uusi toistolaite&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Luo uusi toistolaite&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="499"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="527"/>
         <source>New</source>
-        <translation type="unfinished">Uusi</translation>
+        <translation>Uusi</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="501"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected playback device.  Any tracks using this device will need to be reassigned, and any program or bank changes on those tracks will be lost permanently&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Poista valitut toistolaitteet.  Mitkä tahansa raidat, jotka käyttävät tätä laitetta, täytyy liittää uudelleen ja mitä tahansa ohjelma- ja pankkimuutokset noihin raitoihin katoavat pysyvästi&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Poista valitut toistolaitteet.  Kaikkien tätä laitetta käyttävien raitojen toistolaite täytyy määrittää uudestaan, ja niiden instrumenttimääritykset katoavat pysyvästi&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="503"/>
         <source>Delete</source>
-        <translation type="unfinished">Poista</translation>
+        <translation>Poista</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="504"/>
         <source>MIDI outputs</source>
-        <translation type="unfinished">MIDI-ulostulot</translation>
+        <translation>MIDI-ulostulot</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="506"/>
         <source>Available outputs</source>
-        <translation type="unfinished">Saatavilla olevat ulostulot</translation>
+        <translation>Saatavilla olevat ulostulot</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="511"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="539"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="553"/>
         <source>No port</source>
-        <translation type="unfinished">Ei porttia</translation>
+        <translation>Ei porttia</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="517"/>
         <source>&lt;qt&gt;&lt;p&gt;Available ALSA MIDI outputs for any hardware detected and supported by your distribution, and any available soft synths such as QSynth, ZynAddSubFX, etc.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Saatavilla olevat ALSA MIDI ulostulot mille tahansa jaärjestelämäsi tunnistamalle raudalle ja saatavilla oleville ohjelmallisille syntetisaattoreille, kuten QSynth, ZynAddSubFX jne.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Saatavilla olevat ALSA MIDI ulostulot mille tahansa järjestelämäsi tunnistamalle raudalle ja saatavilla oleville ohjelmallisille syntetisaattoreille, kuten QSynth, ZynAddSubFX jne.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="520"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="560"/>
         <source>&lt;qt&gt;&lt;p&gt;Click to refresh the port list after connecting a new piece of equipment or starting a new soft synth&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Klikkaa virkistääksesi porttilista kytkettyäsi uuden laitteen tai käynnistettyäsi uuden ohjelmallisen syntetisaattorin&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Klikkaa virkistääksesi porttilista kytkettyäsi uuden laitteen tai käynnistettyäsi uuden ohjelmallisen syntetisaattorin&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="522"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="562"/>
         <source>Refresh</source>
-        <translation type="unfinished">Virkistä</translation>
+        <translation>Virkistä</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="557"/>
         <source>&lt;qt&gt;&lt;p&gt;Available ALSA MIDI inputs for any hardware MIDI inputs detected by your distribution&apos;s hardware autodetection, plus any ALSA MIDI software that exposes output ports, such as VMPK&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Saatavilla olevat ALSA MIDI sisääntulot kaikille MIDI-laitteille, jotka järjestelmäsi automaattitunnistus on havainnut, ja kaikille ALSA MIDI ohjelmistoille, kuten VMPK, jotka ovat luoneet ulostuloportteja&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Saatavilla olevat ALSA MIDI sisääntulot kaikille MIDI-laitteille, jotka järjestelmäsi automaattitunnistus on havainnut, ja kaikille ALSA MIDI ohjelmistoille, kuten VMPK, jotka ovat luoneet ulostuloportteja&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="523"/>
         <source>MIDI Recording</source>
-        <translation type="unfinished">MIDI-äänitys</translation>
+        <translation>MIDI-äänitys</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="525"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new recording device&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Luo uusi äänityslaite&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Luo uusi äänityslaite&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="529"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected recording device&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Poista valittu äänityslaite&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Poista valittu äänityslaite&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="531"/>
         <source>Delete</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
-        <translation type="unfinished">Poista</translation>
+        <translation>Poista</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="533"/>
         <source>Receives its data from</source>
-        <translation type="unfinished">Kohde josta data vastaanotetaan</translation>
+        <translation>Kohde josta data vastaanotetaan</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="534"/>
         <source>Rosegarden recording device</source>
-        <translation type="unfinished">Rosegardenin äänityslaite</translation>
+        <translation>Rosegardenin äänityslaite</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="540"/>
         <source>Default record device</source>
-        <translation type="unfinished">Oletusnauhoituslaite</translation>
+        <translation>Oletusnauhoituslaite</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="546"/>
         <source>MIDI inputs</source>
-        <translation type="unfinished">MIDI-sisääntulot</translation>
+        <translation>MIDI-sisääntulot</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="548"/>
         <source>Available inputs</source>
-        <translation type="unfinished">Saatavilla olevat sisääntulot</translation>
+        <translation>Saatavilla olevat sisääntulot</translation>
     </message>
 </context>
 <context>
@@ -2222,7 +2222,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="551"/>
         <source>Add Trill With &amp;Line</source>
-        <translation type="unfinished"></translation>
+        <translation>Lisää &amp;liverreviiva</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="552"/>
@@ -2378,7 +2378,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="618"/>
         <source>S&amp;ymbols</source>
-        <translation type="unfinished"></translation>
+        <translation>S&amp;ymbolit</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="624"/>
@@ -2704,41 +2704,41 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="241"/>
         <source>Pitch &amp;Bend Sequence...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Taivutusjakso...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="331"/>
         <source>Show T&amp;ransport Toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>Näytä &amp;Kuljetin -työkalupalkki</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="336"/>
         <location filename="../QMenuStrings.cpp" line="737"/>
         <source>Show &amp;Velocity Ruler</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Näytä voimakkuudetviivain</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="337"/>
         <location filename="../QMenuStrings.cpp" line="738"/>
         <source>Show Pitch &amp;Bend Ruler</source>
-        <translation type="unfinished"></translation>
+        <translation>Näytä T&amp;aivutusviivain</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="338"/>
         <location filename="../QMenuStrings.cpp" line="739"/>
         <source>Add &amp;Control Ruler...</source>
-        <translation type="unfinished"></translation>
+        <translation>Lisää &amp;ohjainviivain...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="346"/>
         <location filename="../QMenuStrings.cpp" line="769"/>
         <source>Rulers Toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>Viivaimet -työkalupalkki</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="734"/>
         <source>Show &amp;Rulers Toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>Näytä &amp;viivaimet -työkalupalkki</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="768"/>
@@ -3507,18 +3507,18 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../InstrumentStrings.cpp" line="33"/>
         <source>Baroque violin</source>
-        <translation type="unfinished"></translation>
+        <translation>Barokkiviulu</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="34"/>
         <location filename="../AutoloadStrings.cpp" line="82"/>
         <source>Viola</source>
-        <translation type="unfinished"></translation>
+        <translation>Alttoviulu</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="35"/>
         <source>Baroque viola</source>
-        <translation type="unfinished"></translation>
+        <translation>Barokkialttoviulu</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="36"/>
@@ -3534,12 +3534,14 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
         <location filename="../InstrumentStrings.cpp" line="38"/>
         <location filename="../AutoloadStrings.cpp" line="84"/>
         <source>Contrabass</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Kontrabasso</translatorcomment>
+        <translation></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="39"/>
         <source>Baroque contrabass</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Barokkikontrabasso</translatorcomment>
+        <translation></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="40"/>
@@ -3604,7 +3606,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../InstrumentStrings.cpp" line="52"/>
         <source>Steel string guitar</source>
-        <translation type="unfinished"></translation>
+        <translation>Teräskielinen kitara</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="53"/>
@@ -3614,22 +3616,22 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../InstrumentStrings.cpp" line="54"/>
         <source>12-string guitar</source>
-        <translation type="unfinished"></translation>
+        <translation>12-kielinen kitara</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="55"/>
         <source>Electric guitar</source>
-        <translation type="unfinished"></translation>
+        <translation>Sähkökitara</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="56"/>
         <source>Electric bass guitar (fretted)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sähköbasso (nauhallinen)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="57"/>
         <source>Electric bass guitar (fretless)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sähköbasso (nauhaton)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="58"/>
@@ -6503,77 +6505,77 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../AutoloadStrings.cpp" line="295"/>
         <source>MIDI input system device</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI-sisääntulojärjestelmälaite</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="296"/>
         <source>&amp;lt;none&amp;gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;lt;ei mitään&amp;gt;</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="305"/>
         <source>Synth plugin</source>
-        <translation type="unfinished">Synth-lisäosa</translation>
+        <translation>Synth-lisäosa</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="306"/>
         <source>Audio</source>
-        <translation type="unfinished">Ääni</translation>
+        <translation>Ääni</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="308"/>
         <source>AudioDefault</source>
-        <translation type="unfinished"></translation>
+        <translation>Oletusääni</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="309"/>
         <source>MidnightBlue</source>
-        <translation type="unfinished">Keskiyön sininen</translation>
+        <translation>Keskiyön sininen</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="310"/>
         <source>NavyBlue</source>
-        <translation type="unfinished">Tummansininen</translation>
+        <translation>Laivastonsininen</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="311"/>
         <source>CornflowerBlue</source>
-        <translation type="unfinished">Ruiskukan sininen</translation>
+        <translation>Ruiskukan sininen</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="312"/>
         <source>DarkSlateBlue</source>
-        <translation type="unfinished">Tumma siniharmaa </translation>
+        <translation>Tumma siniharmaa</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="313"/>
         <source>SlateBlue</source>
-        <translation type="unfinished">Harmaansininen</translation>
+        <translation>Harmaansininen</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="314"/>
         <source>MediumSlateBlue</source>
-        <translation type="unfinished">Harmaansininen</translation>
+        <translation>Harmaansininen</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="315"/>
         <source>LightSlateBlue</source>
-        <translation type="unfinished">Vaalea harmaansininen</translation>
+        <translation>Vaalean harmaansininen</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="316"/>
         <source>MediumBlue</source>
-        <translation type="unfinished">Sininen</translation>
+        <translation>Sininen</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="317"/>
         <source>RoyalBlue</source>
-        <translation type="unfinished">Ultramariini</translation>
+        <translation>Ultramariini</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="318"/>
         <source>blue</source>
-        <translation type="unfinished">sinineni</translation>
+        <translation>sininen</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="319"/>
@@ -6583,62 +6585,62 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../AutoloadStrings.cpp" line="320"/>
         <source>DeepSkyBlue</source>
-        <translation type="unfinished">Taivaansininen</translation>
+        <translation>Tumman taivaansininen</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="321"/>
         <source>SkyBlue</source>
-        <translation type="unfinished">Taivaansininen</translation>
+        <translation>Taivaansininen</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="322"/>
         <source>LightSkyBlue</source>
-        <translation type="unfinished">Vaalea taivaansininen</translation>
+        <translation>Vaalean taivaansininen</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="323"/>
         <source>SteelBlue</source>
-        <translation type="unfinished">Vaalea teräksensininen</translation>
+        <translation>Teräksensininen</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="324"/>
         <source>LightSteelBlue</source>
-        <translation type="unfinished">Vaalea teräksensininen</translation>
+        <translation>Vaalean teräksensininen</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="325"/>
         <source>LightBlue</source>
-        <translation type="unfinished">Vaaleansininen</translation>
+        <translation>Vaaleansininen</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="326"/>
         <source>PowderBlue</source>
-        <translation type="unfinished">Pulverisininen</translation>
+        <translation>Pulverinsininen</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="327"/>
         <source>PaleTurquoise</source>
-        <translation type="unfinished">Hailakanturkoosi</translation>
+        <translation>Hailakanturkoosi</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="328"/>
         <source>DarkTurquoise</source>
-        <translation type="unfinished">Tumma turkoosi</translation>
+        <translation>Tumma turkoosi</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="329"/>
         <source>MediumTurquoise</source>
-        <translation type="unfinished">Turkoosi</translation>
+        <translation>Turkoosi</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="330"/>
         <source>turquoise</source>
-        <translation type="unfinished">turkoosi</translation>
+        <translation>turkoosi</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="331"/>
         <source>cyan</source>
-        <translation type="unfinished">syaani</translation>
+        <translation>syaani</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="332"/>
@@ -8690,7 +8692,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="360"/>
         <source>%1 Controller %2 %3</source>
-        <translation type="unfinished">%1 Hallinta %2 %3</translation>
+        <translation>%1 Ohjain %2 %3</translation>
     </message>
 </context>
 <context>
@@ -9994,7 +9996,7 @@ Ole hyvä ja valitse halutessasi niistä joitakin poistaaksesi ne pysyvästi kov
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="115"/>
         <source>Device and Banks</source>
-        <translation type="unfinished"></translation>
+        <translation>Laite ja pankit</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="116"/>
@@ -10160,7 +10162,7 @@ Ole hyvä ja valitse halutessasi niistä joitakin poistaaksesi ne pysyvästi kov
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1534"/>
         <source>LinuxSampler configuration files</source>
-        <translation type="unfinished"></translation>
+        <translation>LinuxSampler -asetustiedostot</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1535"/>
@@ -12002,17 +12004,17 @@ Tämä voi aiheuttaa ongelmia, mikäli asetus ylikirjoitetaan myöhemmin toisess
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="1810"/>
         <source>%1%2 - Triggered Segment: %3</source>
-        <translation type="unfinished"></translation>
+        <translation>%1%2 - Sysätty osa: %3</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="1826"/>
         <source>%1%2 - Segment Track #%3 - Event List</source>
-        <translation type="unfinished"></translation>
+        <translation>%1%2 - Osan raita #%3 - Tapahtumalista</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="1833"/>
         <source>%1%2 - %3 Segments - Event List</source>
-        <translation type="unfinished"></translation>
+        <translation>%1%2 - %3 Osat - Tapahtumalista</translation>
     </message>
     <message>
         <source>%1 - Triggered Segment: %2</source>
@@ -13442,7 +13444,7 @@ sen sijaan?</translation>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="111"/>
         <source>Selected tracks</source>
-        <translation type="unfinished"></translation>
+        <translation>Valitut raidat</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="117"/>
@@ -13452,7 +13454,7 @@ sen sijaan?</translation>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="120"/>
         <source>&lt;qt&gt;Set the LilyPond version you have installed. Rosegarden only caters for stable releases of LilyPond.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Aseta asennettuna olevan LilyPondin versio. Rosegarden tukee vain vakaita LilyPond-julkaisuja.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="122"/>
@@ -13490,7 +13492,7 @@ sen sijaan?</translation>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="133"/>
         <source>&lt;qt&gt;Set the paper size.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Aseta paperin koko.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="134"/>
@@ -13540,7 +13542,7 @@ sen sijaan?</translation>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="144"/>
         <source>&lt;qt&gt;Check this if you want your score set in landscape.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Rastita tämä jos tahdot asettaa nuottisi vaakatasoon.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="178"/>
@@ -13841,7 +13843,7 @@ sen sijaan?</translation>
     <message>
         <location filename="../../src/gui/rulers/LoopRuler.cpp" line="87"/>
         <source>&lt;qt&gt;&lt;p&gt;Click and drag to move the playback pointer.&lt;/p&gt;&lt;p&gt;Shift-click and drag to set a range for looping or editing.&lt;/p&gt;&lt;p&gt;Shift-click to clear the loop or range.&lt;/p&gt;&lt;p&gt;Double-click to start playback.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Klikkaa ja vedä siirtääksesi toisto-osoitinta.&lt;/p&gt;&lt;p&gt;Shift-klikkaa ja vedä valitaksesi alueen silmukalle tai muokkaukselle.&lt;/p&gt;&lt;p&gt;Shift-klikkaa tyhjentääksesi silmukan tai alueen.&lt;/p&gt;&lt;p&gt;Tuplaklikkaa aloittaaksesi toiston.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -14254,32 +14256,32 @@ toiston alussa siirrettävän tiedon määrän takia.</translation>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="126"/>
         <source>&lt;qt&gt;Choose the instrument you want to use to play the metronome (typically #10)&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt; Valitse instrumentti jota haluat metronomin käyttävän (yleensä #10)&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="140"/>
         <source>&lt;qt&gt;The metronome can sound bars only, bars and beats, or bars, beats and divisions.  The latter mode can be particularly useful for playing in compound time signatures like 12/8.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Metronomi voi soida ainoastaan tahdeilla, tahdeilla ja iskuilla, tai tahdeille, iskuille ja niiden jaoille.  Jälkimmäinen tapa on hyödyllinen toistettaessa erikoisempia tahtilajeja kuten 12/8.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="150"/>
         <source>&lt;qt&gt;Controls how forcefully the bar division notes will be struck.  (These are typically the loudest of all.)&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Määrittää kuinka voimakkaasti tahdit lyödään. (Nämä ovat yleensä kaikkein voimakkaimpia.)&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="158"/>
         <source>&lt;qt&gt;Controls how forcefully the beat division notes will be struck.  (These are typically more quiet than beat division notes.)&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Määrittää kuinka voimakkaasti iskut lyödään. (Nämä ovat yleensä hieman hiljaisempia kuin tahdit.)&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="166"/>
         <source>&lt;qt&gt;Controls how forcefully the sub-beat division notes will be struck.  (These are typically the most quiet of all, and are not heard unless you are working in compound time.)&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Määrittää kuinka voimakkaasti iskujen jaot lyödään. (Nämä ovat yleensä kaikkein hiljaisimpia.)&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="181"/>
         <source>&lt;qt&gt;It is typical to use a percussion instrument for the metronome, so the pitch normally controls which sort of drum will sound for each tick.  You may configure a different pitch for each of the bar, beat, and sub-beat ticks.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Metronomi käyttää yleensä lyömäsoitintakanavaa, joten sävelkorkeus määrittelee mitä lyömäsoitinta käytetään millekin lyönnille.  Voit määritellä eri sävelkorkeuden tahdeille, iskuille ja niiden jaoille.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="187"/>
@@ -14748,7 +14750,7 @@ Tupla-klikkaa avataksesi merkintöjen muokkaimen.</translation>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1552"/>
         <source>Unknown note insert action %1</source>
-        <translation type="unfinished">Tuntematon nuotinsyöttötapahtuma %1</translation>
+        <translation>Tuntematon nuotinsyöttötapahtuma %1</translation>
     </message>
     <message>
         <source>Inserting note</source>
@@ -14761,17 +14763,17 @@ Tupla-klikkaa avataksesi merkintöjen muokkaimen.</translation>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="244"/>
         <source>&lt;untitled&gt;</source>
-        <translation type="unfinished">&lt;ei nimeä&gt;</translation>
+        <translation>&lt;ei nimeä&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="250"/>
         <source>%1%2 - Segment%3Track%4#%5 - %6</source>
-        <translation type="unfinished">%1%2 - Osa%3Raita%4#%5 - %6</translation>
+        <translation>%1%2 - Osa%3Raita%4#%5 - %6</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="260"/>
         <source>%1%2 - All Segments - %3</source>
-        <translation type="unfinished">%1%2 - Kaikki osat - %3</translation>
+        <translation>%1%2 - Kaikki osat - %3</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="267"/>
@@ -14788,12 +14790,12 @@ Tupla-klikkaa avataksesi merkintöjen muokkaimen.</translation>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="366"/>
         <source>Pitch Bend</source>
-        <translation type="unfinished">Virityksen taivutus</translation>
+        <translation>Sävelkorkeuden taivutus</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="368"/>
         <source>Unsupported Event Type</source>
-        <translation type="unfinished">Tukematon tapahtumatyyppi</translation>
+        <translation>Tukematon tapahtumatyyppi</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="519"/>
@@ -14846,17 +14848,17 @@ Tupla-klikkaa avataksesi merkintöjen muokkaimen.</translation>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1156"/>
         <source>Estimated time signature shown</source>
-        <translation type="unfinished">Näytetään arvioitu tahtilaji</translation>
+        <translation>Näytetään arvioitu tahtilaji</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1239"/>
         <source>Transpose</source>
-        <translation type="unfinished"></translation>
+        <translation>Transponoi</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1240"/>
         <source>By number of semitones: </source>
-        <translation type="unfinished"></translation>
+        <translation>Puolisävelten määrällä: </translation>
     </message>
     <message>
         <source>Raising velocities...</source>
@@ -14924,22 +14926,22 @@ Tupla-klikkaa avataksesi merkintöjen muokkaimen.</translation>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="150"/>
         <source>Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Suurennos</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="166"/>
         <source>Horizontal Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Vaakasuurennos</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="178"/>
         <source>Vertical Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Pystysuurennos</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="191"/>
         <source>Reset Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Nollaa suurennos</translation>
     </message>
 </context>
 <context>
@@ -15229,7 +15231,7 @@ hyödyttämään muitakin.</translation>
     <message>
         <location filename="../../src/gui/studio/NameSetEditor.cpp" line="66"/>
         <source>Provided by</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -16306,17 +16308,17 @@ Tämä on ohjelmointivirhe (aiemmin ohjelma kaatui tässä kohdassa)</translatio
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2070"/>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2647"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1048"/>
         <source>Printing with LilyPond...</source>
-        <translation type="unfinished">Tulosta LilyPondilla...</translation>
+        <translation>Tulosta LilyPondilla...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1066"/>
         <source>Previewing with LilyPond...</source>
-        <translation type="unfinished"></translation>
+        <translation>Esikatsele LilyPondilla...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1094"/>
@@ -16327,7 +16329,7 @@ Tämä on ohjelmointivirhe (aiemmin ohjelma kaatui tässä kohdassa)</translatio
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1311"/>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1380"/>
         <source>&lt;qt&gt;&lt;p&gt;The Restricted paste type requires enough empty space (containing only rests) at the paste position to hold all of the events to be pasted.&lt;/p&gt;&lt;p&gt;Not enough space was found.&lt;/p&gt;&lt;p&gt;If you want to paste anyway, consider using one of the other paste types from the &lt;b&gt;Paste...&lt;/b&gt; option on the Edit menu.  You can also change the default paste type to something other than Restricted if you wish.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Rajoitettu liittämistyyppi vaatii liitäntäpaikan kohdalla riittävästi tyhjää tilaa (jossa on vain taukoja), jotta kaikki tapahtumat voitaisiin liittää.&lt;/p&gt;&lt;p&gt;Tyhjää tilaa ei löytynyt riittävästi.&lt;/p&gt;&lt;p&gt;Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käyttöä &quot;Muokkaa&quot;-valikon&lt;b&gt; &quot;Liitä...&quot;&lt;/b&gt;-valinnasta.  Voit myös halutessasi vaihtaa oletusliitäntätyypin myös joksikin muuksi kuin Rajoitettu.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Rajoitettu liittämistyyppi vaatii liitäntäpaikan kohdalla riittävästi tyhjää tilaa (jossa on vain taukoja), jotta kaikki tapahtumat voitaisiin liittää.&lt;/p&gt;&lt;p&gt;Tyhjää tilaa ei löytynyt riittävästi.&lt;/p&gt;&lt;p&gt;Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käyttöä &quot;Muokkaa&quot;-valikon&lt;b&gt; &quot;Liitä...&quot;&lt;/b&gt;-valinnasta.  Voit myös halutessasi vaihtaa oletusliitäntätyypin myös joksikin muuksi kuin Rajoitettu.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1336"/>
@@ -16455,35 +16457,35 @@ Ole hyvä ja varmista, että laite on määritetty oikein pääikkunan Hallitse 
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2816"/>
         <source>Estimated time signature shown</source>
-        <translation type="unfinished">Näytetään arvioitu tahtilaji</translation>
+        <translation>Näytetään arvioitu tahtilaji</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2876"/>
         <source>%1%2 - Segment Track #%3 - Notation</source>
-        <translation type="unfinished"></translation>
+        <translation>%1%2 - Osan raita #%3 - Nuotinnus</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2883"/>
         <source>%1%2 - All Segments - Notation</source>
-        <translation type="unfinished"></translation>
+        <translation>%1%2 - Kaikki osat - Nuotinnus</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2889"/>
         <source>%1%2 - %n Segment(s) - Notation</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1%2 - %n Osa(a) - Nuotinnus</numerusform>
+            <numerusform>%1%2 - %n Osaa - Nuotinnus</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3140"/>
         <source>Transpose</source>
-        <translation type="unfinished"></translation>
+        <translation>Transponoi</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3141"/>
         <source>By number of semitones: </source>
-        <translation type="unfinished"></translation>
+        <translation>Puolisävelten määrällä: </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3503"/>
@@ -16501,22 +16503,22 @@ Ole hyvä ja varmista, että laite on määritetty oikein pääikkunan Hallitse 
     <message>
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="143"/>
         <source>Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Suurennos</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="159"/>
         <source>Horizontal Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Vaakasuurennos</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="171"/>
         <source>Vertical Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Pystysuurennos</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="184"/>
         <source>Reset Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Nollaa suurennos</translation>
     </message>
 </context>
 <context>
@@ -16698,92 +16700,92 @@ Ole hyvä ja varmista, että laite on määritetty oikein pääikkunan Hallitse 
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="50"/>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="238"/>
         <source>Pitch Bend Sequence</source>
-        <translation type="unfinished"></translation>
+        <translation>Taivutusjakso</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="59"/>
         <source>Preset</source>
-        <translation type="unfinished">Esiasetus</translation>
+        <translation>Esivalinta</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="65"/>
         <source>Preset:</source>
-        <translation type="unfinished"></translation>
+        <translation>Esivalinta:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="68"/>
         <source>User</source>
-        <translation type="unfinished"></translation>
+        <translation>Käyttäjä</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="69"/>
         <source>Linear ramp</source>
-        <translation type="unfinished"></translation>
+        <translation>Lineaarinen ramppi</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="70"/>
         <source>Fast vibrato arm release</source>
-        <translation type="unfinished"></translation>
+        <translation>Nopea vibraattokammen päästö</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="71"/>
         <source>Vibrato</source>
-        <translation type="unfinished"></translation>
+        <translation>Vibraatto</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="74"/>
         <source>Pre Bend</source>
-        <translation type="unfinished"></translation>
+        <translation>Esitaivutus</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="80"/>
         <source>Value %:</source>
-        <translation type="unfinished"></translation>
+        <translation>Arvo %:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="91"/>
         <source>Duration %:</source>
-        <translation type="unfinished"></translation>
+        <translation>Kesto %:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="100"/>
         <source>Bend Sequence</source>
-        <translation type="unfinished"></translation>
+        <translation>Taivutusjakso</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="106"/>
         <source>Ramp duration %:</source>
-        <translation type="unfinished"></translation>
+        <translation>Rampin kesto %:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="114"/>
         <source>End value %:</source>
-        <translation type="unfinished"></translation>
+        <translation>Loppuarvo %:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="122"/>
         <source>Vibrato start amplitude %:</source>
-        <translation type="unfinished"></translation>
+        <translation>Vibraaton alkuamplitudi %:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="131"/>
         <source>Vibrato end amplitude %:</source>
-        <translation type="unfinished"></translation>
+        <translation>Vibraaton loppuamplitudi %:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="140"/>
         <source>Vibrato wavelength:</source>
-        <translation type="unfinished"></translation>
+        <translation>Vibraaton aallonpituus:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="150"/>
         <source>Resolution:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tarkkuus:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="165"/>
         <source>Invalid end time. Have you selected some events?</source>
-        <translation type="unfinished"></translation>
+        <translation>Loppuaika ei ole kelvollinen. Oletko valinnut tapahtumia?</translation>
     </message>
 </context>
 <context>
@@ -17020,7 +17022,7 @@ Ole hyvä ja varmista, että laite on määritetty oikein pääikkunan Hallitse 
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="466"/>
         <source>Checking for flac...</source>
-        <translation type="unfinished"></translation>
+        <translation>Etsitään flac...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="468"/>
@@ -17535,7 +17537,7 @@ Ole hyvä ja varmista, että laite on määritetty oikein pääikkunan Hallitse 
     <message>
         <location filename="../../src/commands/notation/ResetDisplacementsCommand.h" line="45"/>
         <source>&amp;Restore Positions</source>
-        <translation>Palauta sijainnit</translation>
+        <translation>&amp;Palauta sijainnit</translation>
     </message>
 </context>
 <context>
@@ -17588,7 +17590,7 @@ Ole hyvä ja varmista, että laite on määritetty oikein pääikkunan Hallitse 
     <message>
         <location filename="../../src/commands/notation/RespellCommand.cpp" line="65"/>
         <source>&amp;Restore Accidentals</source>
-        <translation>Palauta etumerkit</translation>
+        <translation>&amp;Palauta etumerkit</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/RespellCommand.cpp" line="68"/>
@@ -17617,7 +17619,7 @@ Ole hyvä ja varmista, että laite on määritetty oikein pääikkunan Hallitse 
     <message>
         <location filename="../../src/commands/notation/RestoreTiesCommand.h" line="45"/>
         <source>&amp;Restore Tie Positions</source>
-        <translation>Palauta sidontojen sijainnit</translation>
+        <translation>&amp;Palauta sidontojen sijainnit</translation>
     </message>
 </context>
 <context>
@@ -17686,7 +17688,7 @@ Haluatko tallentaa sen?</translation>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="346"/>
         <source>Rosegarden - Warning</source>
-        <translation type="unfinished">Rosegarden - Varoitus</translation>
+        <translation>Rosegarden - Varoitus</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="346"/>
@@ -17697,12 +17699,13 @@ Haluatko tallentaa sen?</translation>
         <location filename="../../src/document/RosegardenDocument.cpp" line="367"/>
         <source>Could not save document at %1
 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Dokumenttia %1 ei voitu tallentaa
+(%2)</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="369"/>
         <source>Could not save document at %1</source>
-        <translation type="unfinished">Dokumenttia %1 ei voitu tallentaa</translation>
+        <translation>Dokumenttia %1 ei voitu tallentaa</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/document/RosegardenDocument.cpp" line="493"/>
@@ -17785,7 +17788,7 @@ Ole hyvä ja valitse haluamasi tiedostot poistaaksesi ne pysyvästi kovalevyltä
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="1210"/>
         <source>Failed to rename temporary output file &apos;%1&apos; to desired output file &apos;%2&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Väliaikaisen tiedoston &apos;%1&apos; uudelleen nimeäminen halutuksi ulostulotiedostoksi &apos;%2&apos; epäonnistui</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="1244"/>
@@ -18086,7 +18089,7 @@ Virhe oli: %2</translation>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1692"/>
         <source>%1%2 - %3</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1741"/>
@@ -20629,12 +20632,12 @@ Toisten ohjelmien lopettaminen saattaa parantaa Rosegardenin suorituskykyä.</tr
     <message>
         <location filename="../../src/gui/widgets/Thumbwheel.cpp" line="266"/>
         <source>Enter new value</source>
-        <translation type="unfinished"></translation>
+        <translation>Syötä uusi arvo</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/Thumbwheel.cpp" line="267"/>
         <source>Enter a new value from %1 to %2:</source>
-        <translation type="unfinished"></translation>
+        <translation>Syötä uusi arvo väliltä %1 - %2:</translation>
     </message>
 </context>
 <context>
@@ -21755,7 +21758,7 @@ Haluatko asettaa sen nyt?</translation>
     <message>
         <location filename="../../src/gui/widgets/WarningDialog.cpp" line="50"/>
         <source>Performance Problems Detected</source>
-        <translation type="unfinished"></translation>
+        <translation>Havaittu ongelmia suorituskyvyssä</translation>
     </message>
 </context>
 <context>
@@ -21763,22 +21766,22 @@ Haluatko asettaa sen nyt?</translation>
     <message>
         <location filename="../../src/gui/widgets/WarningWidget.cpp" line="64"/>
         <source>&lt;qt&gt;&lt;p&gt;Performance problems detected!&lt;/p&gt;&lt;p&gt;Click to display details&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Havaittu ongelmia suorituskyvyssä!&lt;/p&gt;&lt;p&gt;Klikkaa nähdäksesi yksityiskohdat&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/WarningWidget.cpp" line="87"/>
         <source>MIDI OK</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI ok</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/WarningWidget.cpp" line="99"/>
         <source>audio OK</source>
-        <translation type="unfinished"></translation>
+        <translation>ääni ok</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/WarningWidget.cpp" line="111"/>
         <source>timer OK</source>
-        <translation type="unfinished"></translation>
+        <translation>ajastin ok</translation>
     </message>
 </context>
 <context>
