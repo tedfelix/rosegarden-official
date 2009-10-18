@@ -58,6 +58,7 @@
 #include <QFileDialog>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
+#include <QTreeWidgetItemIterator>
 #include <QMessageBox>
 #include <QAction>
 #include <QByteArray>
@@ -1041,55 +1042,48 @@ AudioManagerDialog::setSelected(AudioFileId id,
                                 const Segment *segment,
                                 bool propagate)
 {
-    QTreeWidgetItem *it = m_fileList->itemAt(0,0); //firstChild();
-    QTreeWidgetItem *chIt = 0;
-    AudioListItem *aItem;
-    int nn;
-    while (it) {
-        // If we're looking for a top level audio file
-        if (segment == 0) {
-            aItem = dynamic_cast<AudioListItem*>(it);
-
-            if (aItem->getId() == id) {
-                selectFileListItemNoSignal(it);
-                return ;
-            }
-        } else // look for a child
-        {
-            if (it->childCount() > 0)
-                //chIt = it->firstChild();
-                //chIt = it->itemAt(0,0);
-                chIt = it->child(0);
-            nn = 0;
-            while (chIt && (chIt->childCount() < nn)) {
-                nn +=1;
-                aItem = dynamic_cast<AudioListItem*>(chIt);
-
+    QTreeWidgetItem *it = 0;    //m_fileList->topLevelItem(0);
+    AudioListItem *aItem = 0;
+    //int itCount = m_fileList->topLevelItemCount();
+    
+    QTreeWidgetItemIterator twIt( m_fileList, QTreeWidgetItemIterator::All );
+    
+    // note: this iterates over topLevelItems and childItems too.
+    // I hope that's what we want to do (?)
+    // otherwise re-code to iterate over topLevelItems only.
+    
+    it = *twIt;
+    while( it ) {
+                
+                if( ! it ){
+                    RG_DEBUG "AudioManagerDialog::setSelected Error: item is 0 " << endl;
+                    continue;
+                }
+                aItem = dynamic_cast<AudioListItem*>( it );
+                
                 if (aItem) {
-                    if (aItem->getId() == id && aItem->getSegment() == segment) {
-                        selectFileListItemNoSignal(chIt);
-
+                    if    ((aItem->getId() == id) 
+                        && (aItem->getSegment() == segment))
+                    {
+                        selectFileListItemNoSignal( it );
                         // Only propagate to compositionview if asked to
                         if (propagate) {
                             SegmentSelection selection;
                             selection.insert(aItem->getSegment());
                             emit segmentsSelected(selection);
                         }
-
                         return ;
                     }
-                }
-                //chIt = chIt->nextSibling();
-                //chIt = it->itemBelow(chIt);
-                chIt = it->child(nn);
-            }
-        }
+                    
+                }// end if(aItem)
+        
+        twIt++;
+        it = *twIt;
+        
+    }// end while
+    
+}// end setSelected()
 
-        //it = it->nextSibling();
-        chIt = m_fileList->itemBelow(chIt);
-    }
-
-}
 
 void
 AudioManagerDialog::selectFileListItemNoSignal(QTreeWidgetItem* it)

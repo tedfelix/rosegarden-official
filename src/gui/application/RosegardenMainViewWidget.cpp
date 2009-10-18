@@ -1614,7 +1614,7 @@ RosegardenMainViewWidget::slotDroppedNewAudio(QString audioDesc)
             progressDlg.progressBar(), SLOT(setValue(int)));
     connect(&aFM, SIGNAL(setOperationName(QString)),
             &progressDlg, SLOT(slotSetOperationName(QString)));
-    connect(&progressDlg, SIGNAL(cancelClicked()),
+    connect(&progressDlg, SIGNAL(canceled()),
             &aFM, SLOT(slotStopImport()));
 
     try {
@@ -1631,9 +1631,9 @@ RosegardenMainViewWidget::slotDroppedNewAudio(QString audioDesc)
         return ;
     }
              
-    disconnect(&progressDlg, SIGNAL(cancelClicked()),
+    disconnect(&progressDlg, SIGNAL(canceled()),
                &aFM, SLOT(slotStopImport()));
-    connect(&progressDlg, SIGNAL(cancelClicked()),
+    connect(&progressDlg, SIGNAL(canceled()),
             &aFM, SLOT(slotStopPreview()));
     progressDlg.progressBar()->show();
     progressDlg.slotSetOperationName(tr("Generating audio preview..."));
@@ -1648,7 +1648,7 @@ RosegardenMainViewWidget::slotDroppedNewAudio(QString audioDesc)
         //return false;
     }
 
-    disconnect(&progressDlg, SIGNAL(cancelClicked()),
+    disconnect(&progressDlg, SIGNAL(canceled()),
                &aFM, SLOT(slotStopPreview()));
 
     // add the file at the sequencer

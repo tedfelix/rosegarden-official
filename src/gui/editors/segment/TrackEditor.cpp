@@ -825,6 +825,8 @@ void TrackEditor::dropEvent(QDropEvent* e)
                 t << uri << "\n";
                 t << track->getId() << "\n";
                 t << time << "\n";
+                
+                RG_DEBUG << "TrackEditor::dropEvent() audioText = \n " << audioText << "\n";
 
                 emit droppedNewAudio(audioText);
             }

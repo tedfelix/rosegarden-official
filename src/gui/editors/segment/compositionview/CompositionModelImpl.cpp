@@ -821,6 +821,10 @@ void CompositionModelImpl::setSelected(const itemcontainer& items)
 
 void CompositionModelImpl::setSelected(const Segment* segment, bool selected)
 {
+    if( ! segment ){
+        RG_DEBUG << "WARNING : CompositionModelImpl::setSelected - segment is NULL " << endl;
+        return;
+    }
     RG_DEBUG << "CompositionModelImpl::setSelected " << segment << " - " << selected << endl;
     if (selected) {
         if (!isSelected(segment))
