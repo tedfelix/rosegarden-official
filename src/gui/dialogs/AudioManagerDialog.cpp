@@ -1055,10 +1055,6 @@ AudioManagerDialog::setSelected(AudioFileId id,
     it = *twIt;
     while( it ) {
                 
-                if( ! it ){
-                    RG_DEBUG "AudioManagerDialog::setSelected Error: item is 0 " << endl;
-                    continue;
-                }
                 aItem = dynamic_cast<AudioListItem*>( it );
                 
                 if (aItem) {
