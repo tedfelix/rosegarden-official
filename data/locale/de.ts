@@ -6,165 +6,165 @@
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="472"/>
         <source>Manage MIDI Devices</source>
-        <translation type="unfinished">MIDI-Geräte verwalten</translation>
+        <translation>MIDI-Geräte verwalten</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="473"/>
         <source>MIDI Playback</source>
-        <translation type="unfinished">MIDI Wiedergabe</translation>
+        <translation>MIDI Wiedergabe</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="475"/>
         <source>Sends its data through</source>
-        <translation type="unfinished">Sendet Daten durch</translation>
+        <translation>Sendet Daten durch</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="476"/>
         <source>Rosegarden playback device</source>
-        <translation type="unfinished">Rosegarden Wiedergabe Gerät</translation>
+        <translation>Rosegarden Wiedergabe Gerät</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="481"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="513"/>
         <source>Internal Synth</source>
-        <translation type="unfinished">Interner Synthesizer</translation>
+        <translation>Interner Synthesizer</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="482"/>
         <source>Default playback device</source>
-        <translation type="unfinished">Voreingestelltes Wiedergabe Gerät</translation>
+        <translation>Voreingestelltes Wiedergabe Gerät</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="486"/>
         <source>&lt;qt&gt;&lt;p&gt;Create new playback devices here. Click the device name to change it. Select a device here and connect it to an ALSA MIDI output port by clicking on a port to the right.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Hier kann ein neues Wiedergabegerät angelegt werden. Durch anklicken des Gerätenamens kann dieser geändert werden. Durch anklicken eines Ports auf der rechten Seite kann ein Gerät ausgewählt und mit einem ALSA MIDI Ausgang verbunden werden.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Hier kann ein neues Wiedergabegerät angelegt werden. Durch anklicken des Gerätenamens kann dieser geändert werden. Durch anklicken eines Ports auf der rechten Seite kann ein Gerät ausgewählt und mit einem ALSA MIDI Ausgang verbunden werden.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="489"/>
         <source>&lt;qt&gt;&lt;p&gt;Bank definitions allow you to tell Rosegarden about the programs or patches available for use on the equipment (hardware or software synth) connected to this device.&lt;/p&gt;&lt;p&gt;You must have something defined for any program or bank changes you wish to transmit, as Rosegarden hides all bank and program numbers that are undefined.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Mit der Definition einer Bank kann man Rosegarden mitteilen, welche Programme und Patches bei der angeschlossenen Ausrüstung (Hardware oder Software Synthesizer) verfügbar sind. &lt;/p&gt;&lt;p&gt;Da Rosegarden alle Bänke und Programme, die undefiniert sind, nicht anzeigt, muss für jedes Programm oder jede Bank etwas definiert sein, falls Daten übertragen werden sollen.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Mit der Definition einer Bank kann man Rosegarden mitteilen, welche Programme und Patches bei der angeschlossenen Ausrüstung (Hardware oder Software Synthesizer) verfügbar sind. &lt;/p&gt;&lt;p&gt;Da Rosegarden alle Bänke und Programme, die undefiniert sind, nicht anzeigt, muss für jedes Programm oder jede Bank etwas definiert sein, falls Daten übertragen werden sollen.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="491"/>
         <source>Banks...</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
-        <translation type="unfinished">Bänke verwalten...</translation>
+        <translation>Bänke verwalten...</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="493"/>
         <source>&lt;qt&gt;&lt;p&gt;Edit the controllers associated with this device.&lt;/p&gt;&lt;p&gt;You must define controllers here in order to use them anywhere in Rosegarden, such as on control rulers or in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box,  You can change which controllers are displayed in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box, and rearrange their layout&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Bearbeite die mit diesem Gerät verbundenen Regler.&lt;/p&gt;&lt;p&gt;Damit Regler irgendwo in Rosegarden, wie zum Beispiel in der Kontrolleiste oder der Box für die &lt;b&gt;Instrumenten Parameter&lt;/b&gt;, benutzt werden können, müssen sie hier definiert werden. Hier kann ausgewählt werden, welche Regler in der Box für die &lt;b&gt;Instrumenten Parameter&lt;/b&gt; angezeigt und ein Layout bestimmt werden.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Bearbeite die mit diesem Gerät verbundenen Regler.&lt;/p&gt;&lt;p&gt;Damit Regler irgendwo in Rosegarden, wie zum Beispiel in der Kontrolleiste oder der Box für die &lt;b&gt;Instrumenten Parameter&lt;/b&gt;, benutzt werden können, müssen sie hier definiert werden. Hier kann ausgewählt werden, welche Regler in der Box für die &lt;b&gt;Instrumenten Parameter&lt;/b&gt; angezeigt und ein Layout bestimmt werden.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="495"/>
         <source>Controllers...</source>
-        <translation type="unfinished">Regler...</translation>
+        <translation>Regler...</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="497"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new playback device&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Neues Wiedergabegerät anlegen&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Neues Wiedergabegerät anlegen&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="499"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="527"/>
         <source>New</source>
-        <translation type="unfinished">Neu</translation>
+        <translation>Neu</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="501"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected playback device.  Any tracks using this device will need to be reassigned, and any program or bank changes on those tracks will be lost permanently&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Das ausgewählte Wiedergabe-Gerät löschen. Alle Spuren, die dieses Gerät benutzen, müssen neu zugeordnet werden. Außerdem sind alle Programme oder Bank Änderungen von diesen Spuren endgültig verloren.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Das ausgewählte Wiedergabe-Gerät löschen. Alle Spuren, die dieses Gerät benutzen, müssen neu zugeordnet werden. Außerdem sind alle Programme oder Bank Änderungen von diesen Spuren endgültig verloren.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="503"/>
         <source>Delete</source>
-        <translation type="unfinished">Löschen</translation>
+        <translation>Löschen</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="504"/>
         <source>MIDI outputs</source>
-        <translation type="unfinished">MIDI Ausgabe</translation>
+        <translation>MIDI Ausgabe</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="506"/>
         <source>Available outputs</source>
-        <translation type="unfinished">Vorhandene Ausgaben</translation>
+        <translation>Vorhandene Ausgaben</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="511"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="539"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="553"/>
         <source>No port</source>
-        <translation type="unfinished">Kein Anschluss</translation>
+        <translation>Kein Anschluss</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="517"/>
         <source>&lt;qt&gt;&lt;p&gt;Available ALSA MIDI outputs for any hardware detected and supported by your distribution, and any available soft synths such as QSynth, ZynAddSubFX, etc.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Vorhandene ALSA MIDI Ausgabegeräte für jede Hardware, die von der Distribution erkannt und unterstützt wird, und alle verfügbaren Software Synthesizer wie zum Beispiel QSynth, ZynAddSubFX, etc.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Vorhandene ALSA MIDI Ausgabegeräte für jede Hardware, die von der Distribution erkannt und unterstützt wird, und alle verfügbaren Software Synthesizer wie zum Beispiel QSynth, ZynAddSubFX, etc.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="520"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="560"/>
         <source>&lt;qt&gt;&lt;p&gt;Click to refresh the port list after connecting a new piece of equipment or starting a new soft synth&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Anklicken um die Liste der Anschlüsse zu aktualisieren, nachdem ein neues Gerät angeschlossen oder ein neuer Software Synthesizer gestartet wurde.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Anklicken um die Liste der Anschlüsse zu aktualisieren, nachdem ein neues Gerät angeschlossen oder ein neuer Software Synthesizer gestartet wurde.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="522"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="562"/>
         <source>Refresh</source>
-        <translation type="unfinished">Erneuern</translation>
+        <translation>Erneuern</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="523"/>
         <source>MIDI Recording</source>
-        <translation type="unfinished">MIDI Aufnahme</translation>
+        <translation>MIDI Aufnahme</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="525"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new recording device&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Ein neues Aufnahmegerät anlegen&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Ein neues Aufnahmegerät anlegen&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="529"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected recording device&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Das ausgewählte Aufnahmegerät löschen&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Das ausgewählte Aufnahmegerät löschen&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="531"/>
         <source>Delete</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
-        <translation type="unfinished">Löschen</translation>
+        <translation>Löschen</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="533"/>
         <source>Receives its data from</source>
-        <translation type="unfinished">Empfängt Daten von</translation>
+        <translation>Empfängt Daten von</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="534"/>
         <source>Rosegarden recording device</source>
-        <translation type="unfinished">Rosegarden Aufnahme Gerät</translation>
+        <translation>Rosegarden Aufnahme Gerät</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="540"/>
         <source>Default record device</source>
-        <translation type="unfinished">Voreingestelltes Aufnahme Gerät</translation>
+        <translation>Voreingestelltes Aufnahme Gerät</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="546"/>
         <source>MIDI inputs</source>
-        <translation type="unfinished">MIDI Eingabe</translation>
+        <translation>MIDI Eingabe</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="548"/>
         <source>Available inputs</source>
-        <translation type="unfinished">Verfügbare Eingaben</translation>
+        <translation>Verfügbare Eingaben</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="557"/>
         <source>&lt;qt&gt;&lt;p&gt;Available ALSA MIDI inputs for any hardware MIDI inputs detected by your distribution&apos;s hardware autodetection, plus any ALSA MIDI software that exposes output ports, such as VMPK&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Verfügbare ALSA MIDI Eingänge, die von der automatischen Hardware-Erkennung der Distribution erkannt wurden und zusätzlich alle Ausgänge, die von ALSA MIDI Software, wie z.B. VMPK, bereitgestellt werden&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Verfügbare ALSA MIDI Eingänge, die von der automatischen Hardware-Erkennung der Distribution erkannt wurden und zusätzlich alle Ausgänge, die von ALSA MIDI Software, wie z.B. VMPK, bereitgestellt werden&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -2807,7 +2807,8 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="618"/>
         <source>S&amp;ymbols</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>S&amp;ymbole</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="624"/>
@@ -3157,12 +3158,12 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="331"/>
         <source>Show T&amp;ransport Toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Bedienfeld-Werkzeugleiste anzeigen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="734"/>
         <source>Show &amp;Rulers Toolbar</source>
-        <translation type="unfinished">Lineal-Werkzeugleiste</translation>
+        <translation type="unfinished">Lineal-Werkzeugleiste anzeigen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="768"/>
@@ -7028,7 +7029,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="312"/>
         <source>DarkSlateBlue</source>
-        <translation>dunkelschieferblau</translation>
+        <translation>Dunkles Schieferblau</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="313"/>
@@ -7053,7 +7054,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="317"/>
         <source>RoyalBlue</source>
-        <translation>königsblau</translation>
+        <translation>Royalblau</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="318"/>
@@ -7063,7 +7064,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="319"/>
         <source>DodgerBlue</source>
-        <translation>schwarzblau</translation>
+        <translation>Gaunerblau</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="320"/>
@@ -7098,7 +7099,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="326"/>
         <source>PowderBlue</source>
-        <translation>Pulverblau</translation>
+        <translation>Taubenblau</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="327"/>
@@ -7108,12 +7109,12 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="328"/>
         <source>DarkTurquoise</source>
-        <translation>dunkeltürkis</translation>
+        <translation>Dunkles Türkis</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="329"/>
         <source>MediumTurquoise</source>
-        <translation>mitteltürkis</translation>
+        <translation>Mittleres Türkis</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="330"/>
@@ -7123,7 +7124,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="331"/>
         <source>cyan</source>
-        <translation>blaugrün</translation>
+        <translation>Cyan</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="332"/>
@@ -7153,7 +7154,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="337"/>
         <source>DarkOliveGreen</source>
-        <translation>dunkelolivgrün</translation>
+        <translation>Dunkles Olivgrün</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="338"/>
@@ -7173,7 +7174,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="341"/>
         <source>LightSeaGreen</source>
-        <translation>leichtseegrün</translation>
+        <translation>Helles Seegrün</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="342"/>
@@ -7198,7 +7199,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="346"/>
         <source>chartreuse</source>
-        <translation type="unfinished">Grüngelb</translation>
+        <translation>Grüngelb</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="347"/>
@@ -7213,7 +7214,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="349"/>
         <source>LimeGreen</source>
-        <translation>Limonen Grün</translation>
+        <translation>Neongrün</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="350"/>
@@ -7223,12 +7224,12 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="351"/>
         <source>ForestGreen</source>
-        <translation>Waldgrün</translation>
+        <translation>Blattgrün</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="352"/>
         <source>OliveDrab</source>
-        <translation>oliv sandfarben</translation>
+        <translation>Düster Olivfarben</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="353"/>
@@ -7288,7 +7289,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="364"/>
         <source>IndianRed</source>
-        <translation>Indianerrot</translation>
+        <translation>Indischrot</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="365"/>
@@ -7298,17 +7299,17 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="366"/>
         <source>sienna</source>
-        <translation type="unfinished">Ocker</translation>
+        <translation>Ocker</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="367"/>
         <source>peru</source>
-        <translation type="unfinished">Peru</translation>
+        <translation>Peru</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="368"/>
         <source>burlywood</source>
-        <translation>Kernholz</translation>
+        <translation>Grobes Braun</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="369"/>
@@ -7328,7 +7329,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="372"/>
         <source>tan</source>
-        <translation>Hellbraun</translation>
+        <translation>Gelbbraun</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="373"/>
@@ -7338,7 +7339,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="374"/>
         <source>firebrick</source>
-        <translation>schamott</translation>
+        <translation>Ziegelfarbe</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="375"/>
@@ -7368,7 +7369,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="380"/>
         <source>DarkOrange</source>
-        <translation>Dunkel Orange</translation>
+        <translation>Dunkelorange</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="381"/>
@@ -7398,12 +7399,12 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="386"/>
         <source>HotPink</source>
-        <translation>Heißes Pinkrosa</translation>
+        <translation>Leuchtendes Rosa</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="387"/>
         <source>DeepPink</source>
-        <translation>tiefes Pink</translation>
+        <translation>Tiefrosa</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="388"/>
@@ -7468,17 +7469,17 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="400"/>
         <source>DarkViolet</source>
-        <translation>Dunkel Violett</translation>
+        <translation>Dunkelviolett</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="401"/>
         <source>BlueViolet</source>
-        <translation>blau violett</translation>
+        <translation>Blauviolett</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="402"/>
         <source>purple</source>
-        <translation>purpur</translation>
+        <translation>Lila</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="403"/>
@@ -7553,22 +7554,22 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="417"/>
         <source>bisque1</source>
-        <translation>Bisque 1</translation>
+        <translation>Tomatencreme 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="418"/>
         <source>bisque2</source>
-        <translation>Bisque 2</translation>
+        <translation>Tomatencreme 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="419"/>
         <source>bisque3</source>
-        <translation>Bisque 3</translation>
+        <translation>Tomatencreme 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="420"/>
         <source>bisque4</source>
-        <translation>Bisque 4</translation>
+        <translation>Tomatencreme 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="421"/>
@@ -7613,22 +7614,22 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="429"/>
         <source>LemonChiffon1</source>
-        <translation>Lemon-Chiffon 1</translation>
+        <translation>Chiffongelb 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="430"/>
         <source>LemonChiffon2</source>
-        <translation>Lemon-Chiffon 2</translation>
+        <translation>Chiffongelb 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="431"/>
         <source>LemonChiffon3</source>
-        <translation>Lemon-Chiffon 3</translation>
+        <translation>Chiffongelb 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="432"/>
         <source>LemonChiffon4</source>
-        <translation>Lemon-Chiffon 4</translation>
+        <translation>Chiffongelb 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="433"/>
@@ -7773,22 +7774,22 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="461"/>
         <source>RoyalBlue1</source>
-        <translation>königsblau1</translation>
+        <translation>Royalblau 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="462"/>
         <source>RoyalBlue2</source>
-        <translation>königsblau2</translation>
+        <translation>Royalblau 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="463"/>
         <source>RoyalBlue3</source>
-        <translation>königsblau3</translation>
+        <translation>Royalblau 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="464"/>
         <source>RoyalBlue4</source>
-        <translation>königsblau4</translation>
+        <translation>Royalblau 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="465"/>
@@ -7813,22 +7814,22 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="469"/>
         <source>DodgerBlue1</source>
-        <translation>schwarzblau 1</translation>
+        <translation>Dodger-Blau 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="470"/>
         <source>DodgerBlue2</source>
-        <translation>schwarzblau 2</translation>
+        <translation>Dodger-Blau 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="471"/>
         <source>DodgerBlue3</source>
-        <translation>schwarzblau 3</translation>
+        <translation>Dodger-Blau 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="472"/>
         <source>DodgerBlue4</source>
-        <translation>schwarzblau 4</translation>
+        <translation>Dodger-Blau 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="473"/>
@@ -8033,42 +8034,42 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="513"/>
         <source>turquoise1</source>
-        <translation>türkisfarben 1</translation>
+        <translation>Türkis 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="514"/>
         <source>turquoise2</source>
-        <translation>türkisfarben 2</translation>
+        <translation>Türkis 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="515"/>
         <source>turquoise3</source>
-        <translation>türkisfarben 3</translation>
+        <translation>Türkis 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="516"/>
         <source>turquoise4</source>
-        <translation>türkisfarben 4</translation>
+        <translation>Türkis 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="517"/>
         <source>cyan1</source>
-        <translation>blaugrün 1</translation>
+        <translation>Cyan 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="518"/>
         <source>cyan2</source>
-        <translation>blaugrün 2</translation>
+        <translation>Cyan 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="519"/>
         <source>cyan3</source>
-        <translation>blaugrün 3</translation>
+        <translation>Cyan 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="520"/>
         <source>cyan4</source>
-        <translation>blaugrün 4</translation>
+        <translation>Cyan 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="521"/>
@@ -8213,62 +8214,62 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="549"/>
         <source>chartreuse1</source>
-        <translation type="unfinished">Grüngelb 1</translation>
+        <translation>Grüngelb 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="550"/>
         <source>chartreuse2</source>
-        <translation type="unfinished">Grüngelb 2</translation>
+        <translation>Grüngelb 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="551"/>
         <source>chartreuse3</source>
-        <translation type="unfinished">Grüngelb 3</translation>
+        <translation>Grüngelb 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="552"/>
         <source>chartreuse4</source>
-        <translation type="unfinished">Grüngelb 4</translation>
+        <translation>Grüngelb 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="553"/>
         <source>OliveDrab1</source>
-        <translation>oliv sandfarben 1</translation>
+        <translation>Düster Olivfarben 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="554"/>
         <source>OliveDrab2</source>
-        <translation>oliv sandfarben 2</translation>
+        <translation>Düster Olivfarben 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="555"/>
         <source>OliveDrab3</source>
-        <translation>oliv sandfarben 3</translation>
+        <translation>Düster Olivfarben 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="556"/>
         <source>OliveDrab4</source>
-        <translation>oliv sandfarben 4</translation>
+        <translation>Düster Olivfarben 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="557"/>
         <source>DarkOliveGreen1</source>
-        <translation>Dunkles Olivengrün 1</translation>
+        <translation>Dunkles Olivgrün 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="558"/>
         <source>DarkOliveGreen2</source>
-        <translation>Dunkles Olivengrün 2</translation>
+        <translation>Dunkles Olivgrün 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="559"/>
         <source>DarkOliveGreen3</source>
-        <translation>Dunkles Olivengrün 3</translation>
+        <translation>Dunkles Olivgrün 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="560"/>
         <source>DarkOliveGreen4</source>
-        <translation>Dunkles Olivengrün 4</translation>
+        <translation>Dunkles Olivgrün 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="561"/>
@@ -8333,42 +8334,42 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="573"/>
         <source>yellow1</source>
-        <translation>Gelb1</translation>
+        <translation>Gelb 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="574"/>
         <source>yellow2</source>
-        <translation>Gelb2</translation>
+        <translation>Gelb 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="575"/>
         <source>yellow3</source>
-        <translation>Gelb3</translation>
+        <translation>Gelb 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="576"/>
         <source>yellow4</source>
-        <translation>Gelb4</translation>
+        <translation>Gelb 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="577"/>
         <source>gold1</source>
-        <translation>Gold1</translation>
+        <translation>Gold 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="578"/>
         <source>gold2</source>
-        <translation>Gold2</translation>
+        <translation>Gold 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="579"/>
         <source>gold3</source>
-        <translation>Gold3</translation>
+        <translation>Gold 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="580"/>
         <source>gold4</source>
-        <translation>Gold4</translation>
+        <translation>Gold 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="581"/>
@@ -8393,22 +8394,22 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="585"/>
         <source>DarkGoldenrod1</source>
-        <translation>Dunkles Goldrutengelb 1</translation>
+        <translation>Dunkles Goldrutengelb1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="586"/>
         <source>DarkGoldenrod2</source>
-        <translation>Dunkles Goldrutengelb 2</translation>
+        <translation>Dunkles Goldrutengelb2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="587"/>
         <source>DarkGoldenrod3</source>
-        <translation>Dunkles Goldrutengelb 3</translation>
+        <translation>Dunkles Goldrutengelb3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="588"/>
         <source>DarkGoldenrod4</source>
-        <translation>Dunkles Goldrutengelb 4</translation>
+        <translation>Dunkles Goldrutengelb4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="589"/>
@@ -8433,62 +8434,62 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="593"/>
         <source>IndianRed1</source>
-        <translation>Indianerrot 1</translation>
+        <translation>Indischrot 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="594"/>
         <source>IndianRed2</source>
-        <translation>Indianerrot 2</translation>
+        <translation>Indischrot 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="595"/>
         <source>IndianRed3</source>
-        <translation>Indianerrot 3</translation>
+        <translation>Indischrot 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="596"/>
         <source>IndianRed4</source>
-        <translation>Indianerrot 4</translation>
+        <translation>Indischrot 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="597"/>
         <source>sienna1</source>
-        <translation type="unfinished">Ocker 1</translation>
+        <translation>Ocker 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="598"/>
         <source>sienna2</source>
-        <translation type="unfinished">Ocker 2</translation>
+        <translation>Ocker 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="599"/>
         <source>sienna3</source>
-        <translation type="unfinished">Ocker 3</translation>
+        <translation>Ocker 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="600"/>
         <source>sienna4</source>
-        <translation type="unfinished">Ocker 4</translation>
+        <translation>Ocker 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="601"/>
         <source>burlywood1</source>
-        <translation>Kernholz 1</translation>
+        <translation>Grobes Braun 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="602"/>
         <source>burlywood2</source>
-        <translation>Kernholz 2</translation>
+        <translation>Grobes Braun 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="603"/>
         <source>burlywood3</source>
-        <translation>Kernholz 3</translation>
+        <translation>Grobes Braun 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="604"/>
         <source>burlywood4</source>
-        <translation>Kernholz 4</translation>
+        <translation>Grobes Braun 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="605"/>
@@ -8513,62 +8514,62 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="609"/>
         <source>tan1</source>
-        <translation>Hellbraun 1</translation>
+        <translation>Gelbbraun 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="610"/>
         <source>tan2</source>
-        <translation>Hellbraun 2</translation>
+        <translation>Gelbbraun 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="611"/>
         <source>tan3</source>
-        <translation>Hellbraun 3</translation>
+        <translation>Gelbbraun 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="612"/>
         <source>tan4</source>
-        <translation>Hellbraun 4</translation>
+        <translation>Gelbbraun 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="613"/>
         <source>chocolate1</source>
-        <translation>schokoladenfarben 1</translation>
+        <translation>Schokolade 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="614"/>
         <source>chocolate2</source>
-        <translation>schokoladenfarben 2</translation>
+        <translation>Schokolade 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="615"/>
         <source>chocolate3</source>
-        <translation>schokoladenfarben 3</translation>
+        <translation>Schokolade 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="616"/>
         <source>chocolate4</source>
-        <translation>schokoladenfarben 4</translation>
+        <translation>Schokolade 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="617"/>
         <source>firebrick1</source>
-        <translation>schamott 1</translation>
+        <translation>Ziegelfarbe 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="618"/>
         <source>firebrick2</source>
-        <translation>schamott 2</translation>
+        <translation>Ziegelfarbe 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="619"/>
         <source>firebrick3</source>
-        <translation>schamott 3</translation>
+        <translation>Ziegelfarbe 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="620"/>
         <source>firebrick4</source>
-        <translation>schamott 4</translation>
+        <translation>Ziegelfarbe 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="621"/>
@@ -8633,42 +8634,42 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="633"/>
         <source>orange1</source>
-        <translation>Orange1</translation>
+        <translation>Orange 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="634"/>
         <source>orange2</source>
-        <translation>Orange2</translation>
+        <translation>Orange 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="635"/>
         <source>orange3</source>
-        <translation>Orange3</translation>
+        <translation>Orange 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="636"/>
         <source>orange4</source>
-        <translation>Orange4</translation>
+        <translation>Orange 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="637"/>
         <source>DarkOrange1</source>
-        <translation>Dunkel Orange 1</translation>
+        <translation>Dunkelorange 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="638"/>
         <source>DarkOrange2</source>
-        <translation>Dunkel Orange 2</translation>
+        <translation>Dunkelorange 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="639"/>
         <source>DarkOrange3</source>
-        <translation>Dunkel Orange 3</translation>
+        <translation>Dunkelorange 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="640"/>
         <source>DarkOrange4</source>
-        <translation>Dunkel Orange 4</translation>
+        <translation>Dunkelorange 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="641"/>
@@ -8753,42 +8754,42 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="657"/>
         <source>DeepPink1</source>
-        <translation>tiefes Pink 1</translation>
+        <translation>Tiefrosa 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="658"/>
         <source>DeepPink2</source>
-        <translation>tiefes Pink 2</translation>
+        <translation>Tiefrosa 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="659"/>
         <source>DeepPink3</source>
-        <translation>tiefes Pink 3</translation>
+        <translation>Tiefrosa 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="660"/>
         <source>DeepPink4</source>
-        <translation>tiefes Pink 4</translation>
+        <translation>Tiefrosa 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="661"/>
         <source>HotPink1</source>
-        <translation>Heißes Pinkrosa 1</translation>
+        <translation>Leuchtendes Rosa 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="662"/>
         <source>HotPink2</source>
-        <translation>Heißes Pinkrosa 2</translation>
+        <translation>Leuchtendes Rosa 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="663"/>
         <source>HotPink3</source>
-        <translation>Heißes Pinkrosa 3</translation>
+        <translation>Leuchtendes Rosa 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="664"/>
         <source>HotPink4</source>
-        <translation>Heißes Pinkrosa 4</translation>
+        <translation>Leuchtendes Rosa 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="665"/>
@@ -8818,7 +8819,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="670"/>
         <source>LightPink2</source>
-        <translation>Hell Pinkrosa 2</translation>
+        <translation>Helles Pinkrosa 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="671"/>
@@ -8973,42 +8974,42 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="701"/>
         <source>DarkOrchid1</source>
-        <translation>Dunkle Orchideenfarbe 1</translation>
+        <translation>Dunkle Orchidee 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="702"/>
         <source>DarkOrchid2</source>
-        <translation>Dunkle Orchideenfarbe 2</translation>
+        <translation>Dunkle Orchidee 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="703"/>
         <source>DarkOrchid3</source>
-        <translation>Dunkle Orchideenfarbe 3</translation>
+        <translation>Dunkle Orchidee 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="704"/>
         <source>DarkOrchid4</source>
-        <translation>Dunkle Orchideenfarbe 4</translation>
+        <translation>Dunkle Orchidee 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="705"/>
         <source>purple1</source>
-        <translation>purpur 1</translation>
+        <translation>Lila 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="706"/>
         <source>purple2</source>
-        <translation>purpur 2</translation>
+        <translation>Lila 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="707"/>
         <source>purple3</source>
-        <translation>purpur 3</translation>
+        <translation>Lila 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="708"/>
         <source>purple4</source>
-        <translation>purpur 4</translation>
+        <translation>Lila 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="709"/>
@@ -9175,7 +9176,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="360"/>
         <source>%1 Controller %2 %3</source>
-        <translation type="unfinished">%1 Regler %2 %3</translation>
+        <translation>%1 Regler %2 %3</translation>
     </message>
 </context>
 <context>
@@ -10497,7 +10498,7 @@ Bitte wählen Sie diejenigen aus, die permanent von der Festplatte gelöscht wer
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="115"/>
         <source>Device and Banks</source>
-        <translation type="unfinished"></translation>
+        <translation>Gerät und Bänke</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="116"/>
@@ -10663,7 +10664,7 @@ Bitte wählen Sie diejenigen aus, die permanent von der Festplatte gelöscht wer
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1534"/>
         <source>LinuxSampler configuration files</source>
-        <translation type="unfinished"></translation>
+        <translation>LinuxSampler Konfigurations Dateien</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1535"/>
@@ -13400,7 +13401,7 @@ Beispieltext aus Datei:</translation>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="138"/>
         <source>Import from: </source>
-        <translation>Bänke importieren von Gerät...</translation>
+        <translation>Bänke importieren von Gerät:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="160"/>
@@ -14700,7 +14701,7 @@ verursacht.</translation>
         <location filename="../../src/commands/notation/MakeRegionViableCommand.h" line="47"/>
         <source>Tie Notes at &amp;Barlines</source>
         <translatorcomment>amp ok</translatorcomment>
-        <translation>Noten an Taktstrichen ver&amp;binden etc.</translation>
+        <translation>Noten an Taktstrichen ver&amp;binden</translation>
     </message>
 </context>
 <context>
@@ -15288,7 +15289,7 @@ Doppel-Klick öffnet den Marker Editor.</translation>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1552"/>
         <source>Unknown note insert action %1</source>
-        <translation type="unfinished">Unbekannte Noten-Einfügeaktion %1</translation>
+        <translation>Unbekannte Noten-Einfügeaktion %1</translation>
     </message>
     <message>
         <source>Inserting note</source>
@@ -15301,22 +15302,22 @@ Doppel-Klick öffnet den Marker Editor.</translation>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="244"/>
         <source>&lt;untitled&gt;</source>
-        <translation type="unfinished">&lt;ohne Titel&gt;</translation>
+        <translation>&lt;ohne Titel&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="250"/>
         <source>%1%2 - Segment%3Track%4#%5 - %6</source>
-        <translation type="unfinished">%1%2 - Segment%3Spur%4#%5 - %6</translation>
+        <translation>%1%2 - Segment%3Spur%4#%5 - %6</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="260"/>
         <source>%1%2 - All Segments - %3</source>
-        <translation type="unfinished">%1%2 - Alle Segmente - %3</translation>
+        <translation>%1%2 - Alle Segmente - %3</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="267"/>
         <source>%1%2 - %n Segment(s) - %3</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>%1%2 - %n Segment - %3</numerusform>
             <numerusform>%1%2 - %n Segmente - %3</numerusform>
         </translation>
@@ -15328,12 +15329,12 @@ Doppel-Klick öffnet den Marker Editor.</translation>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="366"/>
         <source>Pitch Bend</source>
-        <translation type="unfinished">Pitch Bend</translation>
+        <translation>Tonhöhenänderung</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="368"/>
         <source>Unsupported Event Type</source>
-        <translation type="unfinished">Nicht unterstützter Eventtyp</translation>
+        <translation>Nicht unterstützter Eventtyp</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="519"/>
@@ -15386,17 +15387,17 @@ Doppel-Klick öffnet den Marker Editor.</translation>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1156"/>
         <source>Estimated time signature shown</source>
-        <translation type="unfinished">Ermittelte Taktart wird angezeigt</translation>
+        <translation>Ermittelte Taktart wird angezeigt</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1239"/>
         <source>Transpose</source>
-        <translation type="unfinished">Transponieren</translation>
+        <translation>Transponieren</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1240"/>
         <source>By number of semitones: </source>
-        <translation type="unfinished">Anzahl der Halbtöne, um die transponiert werden soll:</translation>
+        <translation>Anzahl der Halbtöne, um die transponiert werden soll:</translation>
     </message>
     <message>
         <source>Raising velocities...</source>
@@ -15775,7 +15776,7 @@ möglicherweise auch Andere von Ihren Anpassungen profitieren können.</translat
     <message>
         <location filename="../../src/gui/studio/NameSetEditor.cpp" line="66"/>
         <source>Provided by</source>
-        <translation type="unfinished"></translation>
+        <translation>Angeboten von</translation>
     </message>
 </context>
 <context>
@@ -16890,22 +16891,22 @@ Dies ist ein Fehler (das Programm ist vermutlich inzwischen abgestürzt)</transl
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2070"/>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2647"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1048"/>
         <source>Printing with LilyPond...</source>
-        <translation type="unfinished">Drucken mit LilyPond...</translation>
+        <translation>Drucken mit LilyPond...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1066"/>
         <source>Previewing with LilyPond...</source>
-        <translation type="unfinished">Vorschau mit LilyPond...</translation>
+        <translation>Vorschau mit LilyPond...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1094"/>
         <source>&lt;qt&gt;&lt;p&gt;Failed to open a temporary file for LilyPond export.&lt;/p&gt;&lt;p&gt;This probably means you have run out of disk space on &lt;pre&gt;%1&lt;/pre&gt;&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Es konnte kein temporäres File für den Export von LilyPond angelegt werden.&lt;/p&gt;&lt;p&gt;Dies bedeutet möglicherweise, dass der Speicherplatz auf &lt;pre&gt;%1&lt;/pre&gt; komplett belegt ist.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Es konnte kein temporäres File für den Export von LilyPond angelegt werden.&lt;/p&gt;&lt;p&gt;Dies bedeutet möglicherweise, dass der Speicherplatz auf &lt;pre&gt;%1&lt;/pre&gt; komplett belegt ist.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1311"/>
@@ -17039,22 +17040,22 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2816"/>
         <source>Estimated time signature shown</source>
-        <translation type="unfinished">Ermittelte Taktart wird angezeigt</translation>
+        <translation>Ermittelte Taktart wird angezeigt</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2876"/>
         <source>%1%2 - Segment Track #%3 - Notation</source>
-        <translation type="unfinished">%1%2 - Segment Spur #%3 - Notation</translation>
+        <translation>%1%2 - Segment Spur #%3 - Notation</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2883"/>
         <source>%1%2 - All Segments - Notation</source>
-        <translation type="unfinished">%1%2 - Alle Segmente - Notation</translation>
+        <translation>%1%2 - Alle Segmente - Notation</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2889"/>
         <source>%1%2 - %n Segment(s) - Notation</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>%1%2 - %n Segment - Notation</numerusform>
             <numerusform>%1%2 - %n Segmente - Notation</numerusform>
         </translation>
@@ -17062,12 +17063,12 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3140"/>
         <source>Transpose</source>
-        <translation type="unfinished">Transponieren</translation>
+        <translation>Transponieren</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3141"/>
         <source>By number of semitones: </source>
-        <translation type="unfinished">Anzahl der Halbtöne, um die transponiert werden soll:</translation>
+        <translation>Anzahl der Halbtöne, um die transponiert werden soll:</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3503"/>
@@ -17085,7 +17086,7 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="143"/>
         <source>Zoom</source>
-        <translation type="unfinished">Zoom</translation>
+        <translation>Zoom</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="159"/>
@@ -17287,22 +17288,22 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="59"/>
         <source>Preset</source>
-        <translation type="unfinished">Voreinstellung</translation>
+        <translation>Voreinstellung</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="65"/>
         <source>Preset:</source>
-        <translation type="unfinished"></translation>
+        <translation>Voreinstellung:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="68"/>
         <source>User</source>
-        <translation type="unfinished"></translation>
+        <translation>Nutzer</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="69"/>
         <source>Linear ramp</source>
-        <translation type="unfinished"></translation>
+        <translation>Lineare Rampe</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="70"/>
@@ -17312,12 +17313,12 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="71"/>
         <source>Vibrato</source>
-        <translation type="unfinished"></translation>
+        <translation>Vibratro</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="74"/>
         <source>Pre Bend</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="80"/>
@@ -17362,7 +17363,7 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="150"/>
         <source>Resolution:</source>
-        <translation type="unfinished"></translation>
+        <translation>Auflösung:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="165"/>
@@ -22443,198 +22444,198 @@ Möchten Sie den Pfad jetzt setzen?</translation>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1047"/>
         <source>Rosegarden Transport</source>
-        <translation type="unfinished">Rosegarden Bedienfeld</translation>
+        <translation>Rosegarden Bedienfeld</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1049"/>
         <source>Hide additional controls</source>
-        <translation type="unfinished">Zusätzliche Kontrollelemente verbergen</translation>
+        <translation>Zusätzliche Kontrollelemente verbergen</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1053"/>
         <source>Panic Button</source>
-        <translation type="unfinished">Not-Halt</translation>
+        <translation>Not-Halt</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1056"/>
         <source>Resets all MIDI devices if you&apos;ve got stuck notes</source>
-        <translation type="unfinished">Setzt alle MIDI-Geräte bei hängengebliebenen Tönen zurück</translation>
+        <translation>Setzt alle MIDI-Geräte bei hängengebliebenen Tönen zurück</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1060"/>
         <source>Metronome</source>
-        <translation type="unfinished">Metronom</translation>
+        <translation>Metronom</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1063"/>
         <source>Provides a metronome click for you to play along with</source>
-        <translation type="unfinished">Stellt einen Metronom-Klick zur Verfügung</translation>
+        <translation>Stellt einen Metronom-Klick zur Verfügung</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1067"/>
         <source>Shows MIDI activity in and out of Rosegarden</source>
-        <translation type="unfinished">Zeigt MIDI-Aktivitäten aus Rosegarden heraus und nach Rosegarden hinein</translation>
+        <translation>Zeigt MIDI-Aktivitäten aus Rosegarden heraus und nach Rosegarden hinein</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1069"/>
         <source>IN</source>
-        <translation type="unfinished">IN</translation>
+        <translation>IN</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1070"/>
         <source>OUT</source>
-        <translation type="unfinished">OUT</translation>
+        <translation>OUT</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1071"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1072"/>
         <source>NO EVENTS</source>
-        <translation type="unfinished">NO EVENTS</translation>
+        <translation>NO EVENTS</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1074"/>
         <source>Record</source>
-        <translation type="unfinished">Aufnahme</translation>
+        <translation>Aufnahme</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1077"/>
         <source>Record either MIDI or audio</source>
-        <translation type="unfinished">MIDI- oder Audio-Aufnahme</translation>
+        <translation>MIDI- oder Audio-Aufnahme</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1081"/>
         <source>Loop</source>
-        <translation type="unfinished">Schleife</translation>
+        <translation>Schleife</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1084"/>
         <source>Turn on and off the loop markers (if set)</source>
-        <translation type="unfinished">Schleifen-Markierungen an- oder ausschalten (wenn gesetzt)</translation>
+        <translation>Schleifen-Markierungen an- oder ausschalten (wenn gesetzt)</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1088"/>
         <source>Solo</source>
-        <translation type="unfinished">Solo</translation>
+        <translation>Solo</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1091"/>
         <source>Mutes all but the currently selected track</source>
-        <translation type="unfinished">Schaltet alle Spuren stumm bis auf die aktuell ausgewählte</translation>
+        <translation>Schaltet alle Spuren stumm bis auf die aktuell ausgewählte</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1095"/>
         <source>Start loop or range here</source>
-        <translation type="unfinished">Beginne Schleife oder Bereich hier</translation>
+        <translation>Beginne Schleife oder Bereich hier</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1099"/>
         <source>End loop or range here</source>
-        <translation type="unfinished">Beende Schleife oder Bereich hier</translation>
+        <translation>Beende Schleife oder Bereich hier</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1102"/>
         <source>SIG</source>
-        <translation type="unfinished">SIG</translation>
+        <translation>SIG</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1103"/>
         <source>DIV</source>
-        <translation type="unfinished">DIV</translation>
+        <translation>DIV</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1104"/>
         <source>/16</source>
-        <translation type="unfinished">/16</translation>
+        <translation>/16</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1105"/>
         <source>TEMPO</source>
-        <translation type="unfinished">TEMPO</translation>
+        <translation>TEMPO</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1106"/>
         <source>END</source>
-        <translation type="unfinished">END</translation>
+        <translation>END</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1107"/>
         <source>BAR</source>
-        <translation type="unfinished">BAR</translation>
+        <translation>BAR</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1109"/>
         <source>Switch between real time, musical time, and frame count</source>
-        <translation type="unfinished">Zwischen Echtzeit, Taktschlägen und Rahmen umschalten</translation>
+        <translation>Zwischen Echtzeit, Taktschlägen und Rahmen umschalten</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1113"/>
         <source>Show additional controls</source>
-        <translation type="unfinished">Weitere Kontrollelemente anzeigen</translation>
+        <translation>Weitere Kontrollelemente anzeigen</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1117"/>
         <source>Rewind</source>
-        <translation type="unfinished">Zurückspulen</translation>
+        <translation>Zurückspulen</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1120"/>
         <source>Moves the current pointer position back one bar.</source>
-        <translation type="unfinished">Bewegt den aktuellen Zeiger einen Takt zurück.</translation>
+        <translation>Bewegt den aktuellen Zeiger einen Takt zurück.</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1124"/>
         <source>Rewind to beginning</source>
-        <translation type="unfinished">Zum Beginn zurückspulen</translation>
+        <translation>Zum Beginn zurückspulen</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1127"/>
         <source>Moves the pointer position to the start of the composition. (This may mean going forwards if the pointer is currently before the start.)</source>
-        <translation type="unfinished">Bewegt den Zeiger zum Beginn des Stücks.  (Wenn sich der Zeiger bereits vor dem Beginn des Stücks befindet, wird der Zeiger entsprechend vorwärts bewegt.)</translation>
+        <translation>Bewegt den Zeiger zum Beginn des Stücks.  (Wenn sich der Zeiger bereits vor dem Beginn des Stücks befindet, wird der Zeiger entsprechend vorwärts bewegt.)</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1131"/>
         <source>Play/Pause</source>
-        <translation type="unfinished">Wiedergabe/Pause</translation>
+        <translation>Wiedergabe/Pause</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1134"/>
         <source>Plays from the current pointer position, or pauses playback if already in progress.</source>
-        <translation type="unfinished">Spielt von der aktuellen Cursorposition, oder hält die Wiedergabe an, wenn sie schon im Gang ist.</translation>
+        <translation>Spielt von der aktuellen Cursorposition, oder hält die Wiedergabe an, wenn sie schon im Gang ist.</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1138"/>
         <source>Stop</source>
-        <translation type="unfinished">Stopp</translation>
+        <translation>Stopp</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1141"/>
         <source>Stops playback or recording.</source>
-        <translation type="unfinished">Beendet Wiedergabe bzw. Aufnahme.</translation>
+        <translation>Beendet Wiedergabe bzw. Aufnahme.</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1145"/>
         <source>Fast forward</source>
-        <translation type="unfinished">Schnell vorspulen</translation>
+        <translation>Schnell vorspulen</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1148"/>
         <source>Moves the current pointer position forwards one bar.</source>
-        <translation type="unfinished">Bewegt die aktuelle Cursorposition einen Takt vorwärts.</translation>
+        <translation>Bewegt die aktuelle Cursorposition einen Takt vorwärts.</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1152"/>
         <source>Fast forward to end</source>
-        <translation type="unfinished">Schnell ans Ende vorspulen</translation>
+        <translation>Schnell ans Ende vorspulen</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1155"/>
         <source>Moves the pointer position to the end of the composition.  (This may mean going backwards if the pointer is already beyond the end.)</source>
-        <translation type="unfinished">Bewegt den Zeiger zum Ende des Stücks.  (Wenn sich der Zeiger bereits hinter dem Ende des Stücks befindet, wird der Zeiger entsprechend zurück bewegt.)</translation>
+        <translation>Bewegt den Zeiger zum Ende des Stücks.  (Wenn sich der Zeiger bereits hinter dem Ende des Stücks befindet, wird der Zeiger entsprechend zurück bewegt.)</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1159"/>
         <source>Display time to end</source>
-        <translation type="unfinished">Zeit bis zum Ende zeigen</translation>
+        <translation>Zeit bis zum Ende zeigen</translation>
     </message>
 </context>
 </TS>
