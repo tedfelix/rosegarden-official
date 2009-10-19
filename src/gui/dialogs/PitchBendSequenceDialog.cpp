@@ -77,7 +77,7 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(QWidget *parent, Segment *segme
     prebendGrid->setSpacing(5);
     vboxLayout->addWidget(prebendBox);
 
-    prebendGrid->addWidget(new QLabel(tr("Value (in %):"), prebendBox), 0, 0);
+    prebendGrid->addWidget(new QLabel(tr("Value (%):"), prebendBox), 0, 0);
     m_prebendValue = new QDoubleSpinBox(prebendBox);
     m_prebendValue->setMaximum(100);
     m_prebendValue->setMinimum(-100);
@@ -88,7 +88,7 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(QWidget *parent, Segment *segme
     prebendBox->setLayout(prebendGrid);
 
     if (m_startTime < m_endTime) {
-        QLabel *durationLabel = new QLabel(tr("Duration (in %):"), prebendBox);
+        QLabel *durationLabel = new QLabel(tr("Duration (%):"), prebendBox);
         prebendGrid->addWidget(durationLabel, 1, 0);
         m_prebendDuration = new QDoubleSpinBox(prebendBox);
         m_prebendDuration->setMaximum(100);
@@ -103,7 +103,7 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(QWidget *parent, Segment *segme
         sequencegrid->setSpacing(5);
         vboxLayout->addWidget(sequencebox);
 
-        sequencegrid->addWidget(new QLabel(tr("Ramp duration (in %):"), sequencebox), 1, 0);
+        sequencegrid->addWidget(new QLabel(tr("Ramp duration (%):"), sequencebox), 1, 0);
         m_sequenceRampDuration = new QDoubleSpinBox(sequencebox);
         m_sequenceRampDuration->setMaximum(100);
         m_sequenceRampDuration->setMinimum(0);
@@ -111,7 +111,7 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(QWidget *parent, Segment *segme
         m_sequenceRampDuration->setValue(settings.value("sequence_ramp_duration", 0).toInt());
         sequencegrid->addWidget(m_sequenceRampDuration, 1, 1);
 
-        sequencegrid->addWidget(new QLabel(tr("End value (in %):"), sequencebox), 2, 0);
+        sequencegrid->addWidget(new QLabel(tr("End value (%):"), sequencebox), 2, 0);
         m_sequenceEndValue = new QDoubleSpinBox(sequencebox);
         m_sequenceEndValue->setMaximum(100);
         m_sequenceEndValue->setMinimum(-100);
@@ -119,7 +119,7 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(QWidget *parent, Segment *segme
         m_sequenceEndValue->setValue(settings.value("sequence_ramp_end_value", 0).toInt());
         sequencegrid->addWidget(m_sequenceEndValue, 2, 1);
 
-        sequencegrid->addWidget(new QLabel(tr("Vibrato start amplitude (in %):"), 
+        sequencegrid->addWidget(new QLabel(tr("Vibrato start amplitude (%):"), 
                                 sequencebox), 3, 0);
         m_vibratoStartAmplitude = new QDoubleSpinBox(sequencebox);
         m_vibratoStartAmplitude->setMaximum(100);
@@ -128,7 +128,7 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(QWidget *parent, Segment *segme
         m_vibratoStartAmplitude->setValue(settings.value("vibrato_start_amplitude", 0).toInt());
         sequencegrid->addWidget(m_vibratoStartAmplitude, 3, 1);
 
-        sequencegrid->addWidget(new QLabel(tr("Vibrato end amplitude (in %):"),
+        sequencegrid->addWidget(new QLabel(tr("Vibrato end amplitude (%):"),
                                 sequencebox), 4, 0);
         m_vibratoEndAmplitude = new QDoubleSpinBox(sequencebox);
         m_vibratoEndAmplitude->setMaximum(100);
