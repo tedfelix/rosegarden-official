@@ -142,7 +142,7 @@ ControlRulerWidget::setViewSegment(ViewSegment *viewSegment)
         }
     }
 //    
-//    slotAddRuler();
+//    slotTogglePropertyRuler(BaseProperties::VELOCITY);
 }
 
 void

@@ -218,7 +218,7 @@ void PropertyControlRuler::init()
     
     for (ViewElementList::iterator it = viewElementList->begin(); it != viewElementList->end(); ++it) {
 //        if (MatrixElement *el = dynamic_cast<MatrixElement*>(*it)) {
-        if ((*it)->event()->isa("Note"))
+        if ((*it)->event()->isa(Note::EventType))
             addControlItem(*it);
 //        }
     }
