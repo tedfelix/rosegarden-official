@@ -56,15 +56,6 @@ PlayListView::PlayListView(QWidget *parent, const char *name)
 	*/
 }
 
-// bool PlayListView::acceptDrag(QDropEvent* e) const
-// {
-// note old (qt3) 
- //   return QUriDrag::canDecode(e) || QTreeWidget::acceptDrag(e);	
-// 	const QMimeData * qmime = e->mimeData();
-// 	
-// 	return qmime->hasUrls(); //|| qmime->hasText();	//@@@
-// }
-// 
 
 
 /*

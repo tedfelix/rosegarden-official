@@ -35,6 +35,12 @@ namespace Rosegarden
 
 typedef unsigned int AudioFileId;
 
+
+//initialize static
+static unsigned int _LAST_AUDIO_FILE_ID = 0;
+
+
+
 /// The different types of audio file we support.
 ///
 typedef enum
@@ -184,7 +190,15 @@ public:
                         std::vector<float *> &targetData,
                         bool addToResultBuffers = false) = 0;
 
+
+    static AudioFileId getNewAudioFileID() {
+        _LAST_AUDIO_FILE_ID++;
+        return _LAST_AUDIO_FILE_ID;
+    };
+
+
 protected:
+    
 
     AudioFileType  m_type;   /// AudioFile type
     AudioFileId    m_id;     /// AudioFile ID
@@ -202,7 +216,14 @@ protected:
 
     QFileInfo     *m_fileInfo;
 
+//private: 
+//    static unsigned int _LAST_AUDIO_FILE_ID;
 };
+
+
+//initialize static
+//static unsigned int _LAST_AUDIO_FILE_ID = 0;
+
 
 }
 

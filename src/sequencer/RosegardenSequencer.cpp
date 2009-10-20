@@ -450,7 +450,8 @@ bool
 RosegardenSequencer::addAudioFile(const QString &fileName, int id)
 {
     LOCKED;
-
+    
+    //call SoundDriver->addAudioFile()
     return m_driver->addAudioFile(fileName.toUtf8().data(), id);
 }
 

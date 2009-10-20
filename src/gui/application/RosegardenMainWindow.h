@@ -1577,11 +1577,11 @@ private:
     QProcess* m_jackProcess;
 #endif // HAVE_LIBJACK
 
+    ProgressBar *m_progressBar;
+    
     ZoomSlider<double> *m_zoomSlider;
     QLabel             *m_zoomLabel;
 
-    ProgressBar *m_progressBar;
-    
     
     QLabel* m_statusBarLabel1;
     // SequenceManager

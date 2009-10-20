@@ -787,9 +787,12 @@ void TrackEditor::dropEvent(QDropEvent* e)
     // note: Base of m_compositionView is CompositionView, RosegardenScrollView, [[QScrollArea]]
     
     
-
-    int trackPos = m_compositionView->grid().getYBin(posInCompositionView.y());
-
+    //### FIXME !! trackPos doesn't tacke into account the tracks y-scroll-position !!
+    // (try to drop an audiofile on the scrolled canvas...)
+    int trackPos = m_compositionView->grid().getYBin( posInCompositionView.y() );
+    
+    
+    
     timeT time =
 //        m_compositionView->grid().getRulerScale()->
 //        getTimeForX(posInCompositionView.x());

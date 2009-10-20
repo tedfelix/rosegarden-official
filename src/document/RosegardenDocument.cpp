@@ -1259,7 +1259,7 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
     // First make sure all MIDI devices know their current connections
     //
     DeviceList *devices = m_studio.getDevices();
-    for (int i = 0; i < devices->size(); ++i) {
+    for (uint i = 0; i < devices->size(); ++i) {
         DeviceId id = (*devices)[i]->getId();
         QString connection = RosegardenSequencer::getInstance()->getConnection(id);
         (*devices)[i]->setConnection(qstrtostr(connection));

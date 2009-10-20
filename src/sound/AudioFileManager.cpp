@@ -293,6 +293,13 @@ AudioFileManager::removeFile(AudioFileId id)
     return false;
 }
 
+
+AudioFileId
+AudioFileManager::getFirstUnusedID()
+{
+    return AudioFile::getNewAudioFileID(); // defined in AudioFile.h
+}
+/*
 AudioFileId
 AudioFileManager::getFirstUnusedID()
 {
@@ -314,6 +321,7 @@ AudioFileManager::getFirstUnusedID()
 
     return rI;
 }
+*/
 
 bool
 AudioFileManager::insertFile(const std::string &name,

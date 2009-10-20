@@ -69,8 +69,6 @@ ProgressDialog::ProgressDialog(QWidget *creator,
 //     progressBar()->setTotalSteps(totalSteps);
 //    progressBar()->setMaximum(totalSteps);
     
-    
-    setWindowTitle(tr("Processing..."));
     RG_DEBUG << "ProgressDialog::ProgressDialog type 1 - "
 //    << labelText() << " - modal : " << modal << endl;
     << name << " - modal : " << modal << endl;

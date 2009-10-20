@@ -332,8 +332,8 @@ AudioManagerDialog::slotPopulateFileList()
         // Set the label, duration, envelope pixmap and filename
         //
         
-        //AudioListItem *item = new AudioListItem(m_fileList, label, (*it)->getId());
-        AudioListItem *item = new AudioListItem(m_fileList, QStringList(label)); //, (*it)->getId());
+        AudioListItem *item = new AudioListItem(m_fileList, QStringList(label), (*it)->getId());
+        //AudioListItem *item = new AudioListItem(m_fileList, QStringList(label)); //, (*it)->getId());
         
         // Duration
         //
@@ -1170,16 +1170,17 @@ AudioManagerDialog::addFile(const QUrl& kurl)
                                this);
 
     CurrentProgressDialog::set(&progressDlg);
-    progressDlg.progressBar()->hide();
+    //progressDlg.progressBar()->hide();
+    progressDlg.progressBar()->setValue(0);
     progressDlg.show();
-
+    
     // Connect the progress dialog
     //
     connect(&aFM, SIGNAL(setValue(int)),
             progressDlg.progressBar(), SLOT(setValue(int)));
     connect(&aFM, SIGNAL(setOperationName(QString)),
             &progressDlg, SLOT(slotSetOperationName(QString)));
-    connect(&progressDlg, SIGNAL(cancelClicked()),
+    connect(&progressDlg, SIGNAL(canceled()),
             &aFM, SLOT(slotStopImport()));
 
     try {
@@ -1196,11 +1197,11 @@ AudioManagerDialog::addFile(const QUrl& kurl)
         return false;
     }
             
-    disconnect(&progressDlg, SIGNAL(cancelClicked()),
+    disconnect(&progressDlg, SIGNAL(canceled()),
                &aFM, SLOT(slotStopImport()));
-    connect(&progressDlg, SIGNAL(cancelClicked()),
+    connect(&progressDlg, SIGNAL(canceled()),
             &aFM, SLOT(slotStopPreview()));
-    progressDlg.progressBar()->show();
+    //progressDlg.progressBar()->show();
     progressDlg.slotSetOperationName(tr("Generating audio preview..."));
 
     try {
@@ -1213,14 +1214,14 @@ AudioManagerDialog::addFile(const QUrl& kurl)
         QMessageBox::information(this, "", message);
     }
 
-    disconnect(&progressDlg, SIGNAL(cancelClicked()),
+    disconnect(&progressDlg, SIGNAL(canceled()),
                &aFM, SLOT(slotStopPreview()));
 
     slotPopulateFileList();
 
     // tell the sequencer
     emit addAudioFile(id);
-
+    
     return true;
 }
 
@@ -1231,8 +1232,14 @@ AudioManagerDialog::slotDropped(QDropEvent *event, QTreeWidget*, QStringList sl)
     if( sl.empty() ) return;
     
     RG_DEBUG << "AudioManagerDialog::slotDropped() - Adding DroppedFile " << sl[0] << endl;
+    QUrl urlx;
     
-     addFile( QUrl(sl[0]) );
+    // iterate over dropped URIs
+    for( uint i=0; i<sl.count(); i++ ){
+        urlx = sl[i];
+        
+        addFile( urlx );
+    }
 }
 
 //void
