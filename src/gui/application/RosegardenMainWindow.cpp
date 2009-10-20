@@ -235,7 +235,6 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
     m_alwaysUseDefaultStudio(false),
     m_actionsSetup(false),
     m_view(0),
-    m_swapView(0),
     m_mainDockWidget(0),
     m_dockLeft(0),
     m_doc(0),
@@ -920,37 +919,60 @@ RosegardenMainWindow::initView()
         comp.setEndMarker(endMarker);
     }
 
-    m_swapView = new RosegardenMainViewWidget(findAction("show_tracklabels")->isChecked(),
-                                       m_segmentParameterBox,
-                                       m_instrumentParameterBox,
-                                       m_trackParameterBox,
-                                       this);
+    // The plan is to set the new central view via setCentralWidget in
+    // a moment, which schedules the old one for deletion later via
+    // deleteLater.  However, we need to make sure that the old one
+    // behaves as if it's already been deleted -- i.e. that it and its
+    // entire tree of children send no signals between now and its
+    // actual deletion.
+    // 
+    RosegardenMainViewWidget *oldView = m_view;
+    if (oldView) {
+        oldView->blockSignals(true);
+        // a qt-ism that I have never actually used before.  brief innit
+        foreach (QObject *o, oldView->findChildren<QObject *>()) {
+            std::cerr << o << std::endl;
+            o->blockSignals(true);
+        }
+    }
+
+    // We also need to make sure the parameter boxes don't send any
+    // signals to the old view!
+    // 
+    disconnect(m_segmentParameterBox, 0, oldView, 0);
+    disconnect(m_instrumentParameterBox, 0, oldView, 0);
+    disconnect(m_trackParameterBox, 0, oldView, 0);
+
+    RosegardenMainViewWidget *swapView = new RosegardenMainViewWidget
+        (findAction("show_tracklabels")->isChecked(),
+         m_segmentParameterBox,
+         m_instrumentParameterBox,
+         m_trackParameterBox,
+         this);
 
     // Connect up this signal so that we can force tool mode
     // changes from the view
-    connect(m_swapView, SIGNAL(activateTool(QString)),
+    connect(swapView, SIGNAL(activateTool(QString)),
             this, SLOT(slotActivateTool(QString)));
 
-    connect(m_swapView,
+    connect(swapView,
             SIGNAL(segmentsSelected(const SegmentSelection &)),
             SIGNAL(segmentsSelected(const SegmentSelection &)));
 
-    connect(m_swapView,
+    connect(swapView,
             SIGNAL(addAudioFile(AudioFileId)),
             SLOT(slotAddAudioFile(AudioFileId)));
 
-    connect(m_swapView, SIGNAL(toggleSolo(bool)), SLOT(slotToggleSolo(bool)));
+    connect(swapView, SIGNAL(toggleSolo(bool)), SLOT(slotToggleSolo(bool)));
 
-    m_doc->attachView(m_swapView);
+    m_doc->attachView(swapView);
 
     setWindowTitle(tr("%1 - %2").arg(m_doc->getTitle()).arg(qApp->applicationName()));
     
     // Transport setup
     //
-    std::string transportMode = m_doc->getConfiguration().
-                       get
-                        <String>
-                        (DocumentConfiguration::TransportMode);
+    std::string transportMode = m_doc->getConfiguration().get<String>
+        (DocumentConfiguration::TransportMode);
  
 
     slotEnableTransport(true);
@@ -980,11 +1002,7 @@ RosegardenMainWindow::initView()
     //
     slotSetPointerPosition(m_doc->getComposition().getPosition());
 
-    // make sure we show
-    //
-    RosegardenMainViewWidget *oldView = m_view;
-    if (oldView) oldView->blockSignals(true);
-    m_view = m_swapView;
+    m_view = swapView;
 
     connect(m_view, SIGNAL(stateChange(QString, bool)),
             this, SLOT (slotStateChanged(QString, bool)));
@@ -1043,7 +1061,7 @@ RosegardenMainWindow::initView()
     delete m_triggerSegmentManager;
     m_triggerSegmentManager = 0;
 
-    setCentralWidget(m_swapView); // this also deletes oldView (via deleteLater)
+    setCentralWidget(m_view); // this also deletes oldView (via deleteLater)
 
     // set the highlighted track
     m_view->slotSelectTrackSegments(comp.getSelectedTrack());

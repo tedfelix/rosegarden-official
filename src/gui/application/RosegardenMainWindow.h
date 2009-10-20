@@ -1551,14 +1551,7 @@ private:
     bool m_alwaysUseDefaultStudio;
     bool m_actionsSetup;
 
-    /**
-     * view is the main widget which represents your working area. The
-     * View class should handle all events of the view widget.  It is
-     * kept empty so you can create your view according to your
-     * application's needs by changing the view class.
-     */
     RosegardenMainViewWidget* m_view;
-    RosegardenMainViewWidget* m_swapView;
 
     QDockWidget *m_mainDockWidget;
     QDockWidget* m_dockLeft;
