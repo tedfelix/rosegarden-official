@@ -931,7 +931,6 @@ RosegardenMainWindow::initView()
         oldView->blockSignals(true);
         // a qt-ism that I have never actually used before.  brief innit
         foreach (QObject *o, oldView->findChildren<QObject *>()) {
-            std::cerr << o << std::endl;
             o->blockSignals(true);
         }
     }
