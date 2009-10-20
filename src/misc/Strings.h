@@ -23,6 +23,7 @@
 #include <iostream>
 #include <QVariant>
 #include <QTextStream>
+#include <QStringList>
 
 #include "base/PropertyName.h"
 #include "base/Exception.h"
@@ -53,6 +54,9 @@ operator<<(std::ostream &, const QString &);
 
 QTextStream &
 operator<<(QTextStream &, const std::string &);
+
+/// Split a string at whitespace, allowing for quoted substring sections
+extern QStringList splitQuotedString(QString s);
 
 }
 

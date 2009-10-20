@@ -147,6 +147,135 @@ operator<<(QTextStream &target, const std::string &str)
     return target << QString(str.c_str());
 }
 
+QStringList
+splitQuotedString(QString s)
+{
+    QStringList tokens;
+    QString tok;
+
+    enum { sep, unq, q1, q2 } mode = sep;
+
+    for (int i = 0; i < s.length(); ++i) {
+	
+	QChar c = s[i];
+
+	if (c == '\'') {
+	    switch (mode) {
+	    case sep: mode = q1; break;
+	    case unq: case q2: tok += c; break;
+	    case q1: mode = sep; tokens << tok; tok = ""; break;
+	    }
+
+	} else if (c == '"') {
+	    switch (mode) {
+	    case sep: mode = q2; break;
+	    case unq: case q1: tok += c; break;
+	    case q2: mode = sep; tokens << tok; tok = ""; break;
+	    }
+
+	} else if (c.isSpace()) {
+	    switch (mode) {
+	    case sep: break;
+	    case unq: mode = sep; tokens << tok; tok = ""; break;
+	    case q1: case q2: tok += c; break;
+	    }
+
+	} else if (c == '\\') {
+	    if (++i < s.length()) {
+		c = s[i];
+		switch (mode) {
+		case sep: mode = unq; tok += c; break;
+		default: tok += c; break;
+		}
+	    }
+
+	} else {
+	    switch (mode) {
+	    case sep: mode = unq; tok += c; break;
+	    default: tok += c; break;
+	    }
+	}
+    }
+
+    if (tok != "" || mode != sep) tokens << tok;
+    return tokens;
+}
+
+/*
+
+void testSplit()
+{
+    QStringList tests;
+    tests << "a b c d";
+    tests << "a \"b c\" d";
+    tests << "a 'b c' d";
+    tests << "a \"b c\\\" d\"";
+    tests << "a 'b c\\' d'";
+    tests << "a \"b c' d\"";
+    tests << "a 'b c\" d'";
+    tests << "aa 'bb cc\" dd'";
+    tests << "a'a 'bb' \\\"cc\" dd\\\"";
+    tests << "  a'a \\\'	 'bb'	 \'	\\\"cc\" ' dd\\\" '";
+
+    for (int j = 0; j < tests.size(); ++j) {
+	cout << endl;
+	cout << tests[j].toStdString() << endl;
+	cout << "->" << endl << "(";
+	QStringList l = splitQuoted(tests[j]);
+	for (int i = 0; i < l.size(); ++i) {
+	    if (i > 0) cout << ";";
+	    cout << l[i].toStdString();
+	}
+	cout << ")" << endl;
+    }
+}
+
+*/
+
+/* 
+   Results:
+
+a b c d
+->     
+(a;b;c;d)
+
+a "b c" d
+->       
+(a;b c;d)
+
+a 'b c' d
+->       
+(a;b c;d)
+
+a "b c\" d"
+->         
+(a;b c" d) 
+
+a 'b c\' d'
+->         
+(a;b c' d) 
+
+a "b c' d"
+->        
+(a;b c' d)
+
+a 'b c" d'
+->        
+(a;b c" d)
+
+aa 'bb cc" dd'
+->            
+(aa;bb cc" dd)
+
+a'a 'bb' \"cc" dd\"
+->                 
+(a'a;bb;"cc";dd")  
+
+  a'a \'         'bb'    '      \"cc" ' dd\" '
+->                                            
+(a'a;';bb;      "cc" ;dd";)
+
+*/
 
 }
 
