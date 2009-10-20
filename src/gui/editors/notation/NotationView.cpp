@@ -43,6 +43,11 @@
 #include "base/AnalysisTypes.h"
 #include "base/MidiDevice.h"
 #include "base/MidiTypes.h"
+#include "base/Controllable.h"
+#include "base/Studio.h"
+#include "base/Instrument.h"
+#include "base/Device.h"
+#include "base/SoftSynthDevice.h"
 
 #include "commands/edit/CopyCommand.h"
 #include "commands/edit/CutCommand.h"
@@ -645,6 +650,43 @@ NotationView::setupActions()
     createAction("toggle_velocity_ruler", SLOT(slotToggleVelocityRuler()));
     createAction("toggle_pitchbend_ruler", SLOT(slotTogglePitchbendRuler()));
     createAction("add_control_ruler", SLOT(slotAddControlRuler()));
+
+    QMenu *addControlRulerMenu = new QMenu;
+    Controllable *c =
+        dynamic_cast<MidiDevice *>(getCurrentDevice());
+    if (!c) {
+        c = dynamic_cast<SoftSynthDevice *>(getCurrentDevice());
+        if (!c)
+            return ;
+    }
+
+    const ControlList &list = c->getControlParameters();
+
+    QString itemStr;
+
+    for (ControlList::const_iterator it = list.begin();
+            it != list.end(); ++it) {
+
+        // Pitch Bend is treated separately now, and there's no point in adding
+        // "unsupported" controllers to the menu, so skip everything else
+        if (it->getType() != Controller::EventType) continue;
+
+        QString hexValue;
+        hexValue.sprintf("(0x%x)", it->getControllerValue());
+
+        // strings extracted from data files must be QObject::tr()
+        itemStr = QObject::tr("%1 Controller %2 %3")
+                        .arg(QObject::tr(strtoqstr(it->getName())))
+                        .arg(it->getControllerValue())
+                        .arg(hexValue);
+
+        addControlRulerMenu->addAction(itemStr);
+    }
+
+    connect(addControlRulerMenu, SIGNAL(triggered(QAction*)),
+            SLOT(slotAddControlRuler(QAction*)));
+
+    findAction("add_control_ruler")->setMenu(addControlRulerMenu);
 
     //Actions first appear in "settings" Menubar menu
     //"toolbars" subMenu
@@ -3560,6 +3602,31 @@ NotationView::slotSpacingComboChanged(int index)
     m_spacing = spacing;
     QString action = QString("spacing_%1").arg(spacing);
     findAction(action)->setChecked(true);
+}
+
+void
+NotationView::slotToggleVelocityRuler()
+{
+    m_notationWidget->slotToggleVelocityRuler();
+}
+
+void
+NotationView::slotTogglePitchbendRuler()
+{
+    m_notationWidget->slotTogglePitchbendRuler();
+}
+
+void
+NotationView::slotAddControlRuler(QAction *action)
+{
+    m_notationWidget->slotAddControlRuler(action);
+}
+
+Device *
+NotationView::getCurrentDevice()
+{
+    if (m_notationWidget) return m_notationWidget->getCurrentDevice();
+    else return 0;
 }
 
 

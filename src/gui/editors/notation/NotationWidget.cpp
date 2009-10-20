@@ -31,6 +31,19 @@
 #include "HeadersGroup.h"
 
 #include "base/RulerScale.h"
+#include "base/BaseProperties.h"
+#include "base/Composition.h"
+#include "base/Instrument.h"
+#include "base/MidiProgram.h"
+#include "base/PropertyName.h"
+#include "base/BaseProperties.h"
+#include "base/Controllable.h"
+#include "base/Studio.h"
+#include "base/Instrument.h"
+#include "base/Device.h"
+#include "base/MidiDevice.h"
+#include "base/SoftSynthDevice.h"
+#include "base/MidiTypes.h"
 
 #include "document/RosegardenDocument.h"
 
@@ -1304,6 +1317,91 @@ NotationWidget::slotInitialVSliderHack(int)
     std::cout << "v slider position was: " << m_view->verticalScrollBar()->sliderPosition() << std::endl;;
     m_view->verticalScrollBar()->setSliderPosition(0);
     std::cout << "v slider position now: " << m_view->verticalScrollBar()->sliderPosition() << std::endl;;
+}
+
+void
+NotationWidget::slotToggleVelocityRuler()
+{
+    m_controlsWidget->slotTogglePropertyRuler(BaseProperties::VELOCITY);
+}
+
+void
+NotationWidget::slotTogglePitchbendRuler()
+{
+    m_controlsWidget->slotToggleControlRuler("PitchBend");
+}
+
+void
+NotationWidget::slotAddControlRuler(QAction *action)
+{
+    QString name = action->text();
+
+    std::cout << "my name is " << name.toStdString() << std::endl;
+
+    // we just cheaply paste the code from NotationView that created the menu to
+    // figure out what its indices must point to (and thinking about this whole
+    // thing, I bet it's all buggy as hell in a multi-track view where the
+    // active segment can change, and the segment's track's device could be
+    // completely different from whatever was first used to create the menu...
+    // there will probably be refresh problems and crashes and general bugginess
+    // 20% of the time, but a solution that works 80% of the time is worth
+    // shipping, I just read on some blog, and damn the torpedoes)
+    Controllable *c =
+        dynamic_cast<MidiDevice *>(getCurrentDevice());
+    if (!c) {
+        c = dynamic_cast<SoftSynthDevice *>(getCurrentDevice());
+        if (!c)
+            return ;
+    }
+
+    const ControlList &list = c->getControlParameters();
+
+    QString itemStr;
+//  int i = 0;
+
+    for (ControlList::const_iterator it = list.begin();
+            it != list.end(); ++it) {
+
+        // Pitch Bend is treated separately now, and there's no point in adding
+        // "unsupported" controllers to the menu, so skip everything else
+        if (it->getType() != Controller::EventType) continue;
+
+        QString hexValue;
+        hexValue.sprintf("(0x%x)", it->getControllerValue());
+
+        // strings extracted from data files must be QObject::tr()
+        QString itemStr = QObject::tr("%1 Controller %2 %3")
+                                     .arg(QObject::tr(strtoqstr(it->getName())))
+                                     .arg(it->getControllerValue())
+                                     .arg(hexValue);
+        
+        if (name != itemStr) continue;
+
+        std::cout << "name: " << name.toStdString() << " should match  itemStr: " << itemStr.toStdString() << std::endl;
+
+        m_controlsWidget->slotAddControlRuler(*it);
+
+//      if (i == menuIndex) m_controlsWidget->slotAddControlRuler(*p);
+//      else i++;
+    }   
+}
+
+Device *
+NotationWidget::getCurrentDevice()
+{
+    Segment *segment = getCurrentSegment();
+    if (!segment)
+        return 0;
+
+    Studio &studio = m_document->getStudio();
+    Instrument *instrument =
+        studio.getInstrumentById
+        (segment->getComposition()->getTrackById(segment->getTrack())->
+         getInstrument());
+    if (!instrument)
+        return 0;
+
+    return instrument->getDevice();
 }
 
 

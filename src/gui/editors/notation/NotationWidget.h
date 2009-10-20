@@ -89,6 +89,7 @@ public:
     void setCanvasCursor(QCursor cursor);
 
     Segment *getCurrentSegment();
+    Device  *getCurrentDevice();
     bool segmentsContainNotes() const;
 
     void setTempoRulerVisible(bool visible);
@@ -135,6 +136,10 @@ public slots:
     void slotTogglePlayTracking();
     void slotSetSymbolInserter();
     void slotSetInsertedSymbol(Symbol type);
+
+    void slotToggleVelocityRuler();
+    void slotTogglePitchbendRuler();
+    void slotAddControlRuler(QAction*);
 
 protected:
     virtual void showEvent(QShowEvent * event);

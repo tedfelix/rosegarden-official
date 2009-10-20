@@ -202,6 +202,10 @@ protected slots:
     void slotToggleRawNoteRuler();
     void slotToggleTempoRuler();
 
+    void slotToggleVelocityRuler();
+    void slotTogglePitchbendRuler();
+    void slotAddControlRuler(QAction*);
+
     void slotAddTempo();
     void slotAddTimeSignature();
 
@@ -287,6 +291,10 @@ private:
      */
     void toggleNamedToolBar(const QString& toolBarName, bool* force = 0);
 
+    /**
+     * Return the device of the current segment, if any
+     */
+    Device *getCurrentDevice();
 
     /**
      * The DurationMonobar needs to know how to convolute itself somehow to

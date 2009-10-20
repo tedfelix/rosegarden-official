@@ -75,7 +75,6 @@ void
 SymbolInserter::handleLeftButtonPress(const NotationMouseEvent *e)
 {
     if (!e->staff || !e->element) return;
-    Event *symbol = 0, *key = 0;
 
     timeT time = e->element->event()->getAbsoluteTime(); // not getViewAbsoluteTime()
 
