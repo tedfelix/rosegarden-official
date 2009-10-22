@@ -365,6 +365,9 @@ NotationWidget::setSegments(RosegardenDocument *document,
     m_controlsWidget->setSegments(document, segments);
     m_controlsWidget->setViewSegment((ViewSegment *) m_scene->getCurrentStaff());
 
+    connect(m_scene, SIGNAL(layoutUpdated()),
+            m_controlsWidget, SLOT(slotUpdatePropertyRulers()));
+    
     // For some reason this doesn't work in the constructor - not looked in detail
     connect(m_scene, SIGNAL(selectionChanged(EventSelection *)),
             m_controlsWidget, SLOT(slotSelectionChanged(EventSelection *)));

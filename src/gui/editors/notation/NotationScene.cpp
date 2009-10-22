@@ -722,6 +722,8 @@ NotationScene::checkUpdate()
     if (need) {
         if (all) layoutAll();
         else layout(single, start, end);
+        
+        emit layoutUpdated();
     }
 }
 

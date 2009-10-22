@@ -331,18 +331,21 @@ ControlRulerWidget::slotHoveredOverNoteChanged(int evPitch, bool haveEvent, time
 void
 ControlRulerWidget::slotHoveredOverNoteChanged()
 {
-    // Should be dispatched to all PropertyControlRulers
+    slotUpdatePropertyRulers();
+}
+
+void
+ControlRulerWidget::slotUpdatePropertyRulers()
+{
     if (m_controlRulerList.size()) {
         std::list<ControlRuler *>::iterator it;
         for (it = m_controlRulerList.begin(); it != m_controlRulerList.end(); ++it) {
             PropertyControlRuler *pr = dynamic_cast <PropertyControlRuler *> (*it);
             if (pr) {
                 pr->update();
-//                pr->updateControlItems();
             }
         }
     }
-    // This is called twice for a simple note move. First time with the original position then with the new position
 }
 
 void

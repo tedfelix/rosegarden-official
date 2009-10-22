@@ -149,6 +149,8 @@ signals:
     
     void selectionChanged();
     void selectionChanged(EventSelection *);
+    
+    void layoutUpdated();
 
     /**
      * Emitted when the mouse cursor moves to a different height

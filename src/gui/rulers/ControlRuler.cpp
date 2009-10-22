@@ -174,6 +174,8 @@ ControlItemMap::iterator ControlRuler::findControlItem(const ControlItem* item)
 void ControlRuler::addControlItem(ControlItem* item)
 {
     // Add a ControlItem to the ruler
+    RG_DEBUG << "ControlItem added: " << hex << (long)item;
+    
     // ControlItem may not have an assigned event but must have x position
     ControlItemMap::iterator it = m_controlItemMap.insert(ControlItemMap::value_type(item->xStart(),item));
     addCheckVisibleLimits(it);    
@@ -244,8 +246,8 @@ void ControlRuler::removeControlItem(const Event *event)
 
 void ControlRuler::removeControlItem(const ControlItemMap::iterator &it)
 {
-    RG_DEBUG << "removeControlItem: iterator->item: " << (long) it->second;
-    RG_DEBUG << "m_selectedItems.front(): " << (long) m_selectedItems.front();
+    RG_DEBUG << "removeControlItem: iterator->item: " << hex << (long) it->second;
+    RG_DEBUG << "m_selectedItems.front(): " << hex << (long) m_selectedItems.front();
     
     if (it->second->isSelected()) m_selectedItems.remove(it->second);
     removeCheckVisibleLimits(it);

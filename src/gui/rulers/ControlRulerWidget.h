@@ -63,6 +63,7 @@ public slots:
     void slotSelectionChanged(EventSelection *);
     void slotHoveredOverNoteChanged();
     void slotHoveredOverNoteChanged(int evPitch, bool haveEvent, timeT evTime);
+    void slotUpdatePropertyRulers();
     void slotSetToolName(const QString &);
     void slotDragScroll(timeT);
 

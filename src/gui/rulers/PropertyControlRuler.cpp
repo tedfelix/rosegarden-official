@@ -85,13 +85,15 @@ void PropertyControlRuler::update()
     for (ControlItemList::iterator it = tmplist.begin(); it != tmplist.end(); ++it) {
         if (!(*it)->isSelected()) {
             (*it)->update();
+            RG_DEBUG << "ControlItem updated: " << hex << (long)(*it);
         }
     }
 
     for (ControlItemList::iterator it = m_selectedItems.begin(); it != m_selectedItems.end(); ++it) {
         (*it)->update();        
+        RG_DEBUG << "ControlItem updated: " << hex << (long)(*it);
     }
-    
+
     ControlRuler::update();
 }
 
@@ -234,17 +236,6 @@ void PropertyControlRuler::init()
     update();
 }
 
-void PropertyControlRuler::updateControlItems()
-{
-    PropertyControlItem *item;
-    for (ControlItemList::iterator it = m_selectedItems.begin(); it != m_selectedItems.end(); ++it) {
-        item = dynamic_cast <PropertyControlItem *> (*it);
-        // Must not modify m_selectedItems in here!!
-        if (item) item->update();
-    }
-    update();
-}
-
 void PropertyControlRuler::updateSelection(std::vector <ViewElement*> *elementList)
 {
     // Use base class fcn to set each item as not selected, clear the m_selectedItems lsit
@@ -304,12 +295,12 @@ void PropertyControlRuler::slotSetTool(const QString &matrixtoolname)
 
 void PropertyControlRuler::elementAdded(const ViewSegment *, ViewElement *el)
 {
-    RG_DEBUG << "PropertyControlRuler::elementAdded()\n";
-
     if (el->event()->isa(Note::EventRestType))
         return ;
 
-    RG_DEBUG << "PropertyControlRuler::eventAdded()";
+    RG_DEBUG << "PropertyControlRuler::elementAdded()\n";
+
+//    RG_DEBUG << "PropertyControlRuler::eventAdded()";
 //    addControlItem(el->event());
 //    if (MatrixElement *mel = dynamic_cast<MatrixElement*>(el)) {
     addControlItem(el);
@@ -325,7 +316,10 @@ void PropertyControlRuler::elementAdded(const ViewSegment *, ViewElement *el)
 
 void PropertyControlRuler::elementRemoved(const ViewSegment *, ViewElement *el)
 {
-    RG_DEBUG << "PropertyControlRuler::eventRemoved()";
+    if (el->event()->isa(Note::EventRestType))
+        return ;
+
+    RG_DEBUG << "PropertyControlRuler::elementRemoved()";
     for (ControlItemMap::iterator it = m_controlItemMap.begin(); it != m_controlItemMap.end(); ++it) {
         if (PropertyControlItem *item = dynamic_cast<PropertyControlItem*>(it->second)) {
             if (item->getEvent() == el->event()) {
