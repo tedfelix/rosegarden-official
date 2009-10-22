@@ -841,7 +841,8 @@ NotePixmapFactory::makeRoomForMarks(bool isStemmed,
 void
 NotePixmapFactory::drawMarks(bool isStemmed,
                              const NotePixmapParameters &params,
-                             int stemLength)
+                             int stemLength,
+                             bool overRestHack)
 {
     int gap = m_noteBodyHeight / 5 + 1;
     int dy = gap;
@@ -874,8 +875,6 @@ NotePixmapFactory::drawMarks(bool isStemmed,
             QRect bounds = m_textMarkFontMetrics.boundingRect(text);
 
             m_p->painter().setFont(m_textMarkFont);
-//            if (!m_inPrinterMethod)
-//                m_p->maskPainter().setFont(m_textMarkFont);
 
             int x = m_left + m_noteBodyWidth / 2 - bounds.width() / 2;
             int y = (normalMarksAreAbove ?
@@ -902,10 +901,9 @@ NotePixmapFactory::drawMarks(bool isStemmed,
     for (std::vector<Mark>::iterator i = aboveMarks.begin();
          i != aboveMarks.end(); ++i) {
 
-        if (m_selected)
-            m_p->painter().setPen(GUIPalette::getColour(GUIPalette::SelectedElement));
-        else
-            m_p->painter().setPen(QColor(Qt::black));
+        if (m_selected) m_p->painter().setPen(GUIPalette::getColour(GUIPalette::SelectedElement));
+        else m_p->painter().setPen(QColor(Qt::black));
+
         if (!Marks::isFingeringMark(*i)) {
 
             int x = m_left + m_noteBodyWidth / 2;
@@ -913,18 +911,27 @@ NotePixmapFactory::drawMarks(bool isStemmed,
 
             if (*i != Marks::TrillLine) {
 
-                NoteCharacter character(getCharacter(m_style->getMarkCharName(*i),
-                                        PlainColour, false));
+                NoteCharacter character(getCharacter(m_style->getMarkCharName(*i), PlainColour, false));
 
-                x -= character.getWidth() / 2;
-                y -= character.getHeight();
+                if (overRestHack) {
+                    std::cout << "width: " << character.getWidth() << " height: " << character.getHeight() << std::endl;
+                    //m_p->drawNoteCharacter(character.getWidth() / 2, 10, character);
+                    m_p->drawNoteCharacter(24, 9, character);
 
-                m_p->drawNoteCharacter(x, y, character);
+                } else {
 
-                y += character.getHeight() / 2;
-                x += character.getWidth();
+                    x -= character.getWidth() / 2;
+                    y -= character.getHeight();
 
-                dy += character.getHeight() + gap;
+                    m_p->drawNoteCharacter(x, y, character);
+
+                    y += character.getHeight() / 2;
+                    x += character.getWidth();
+
+                    dy += character.getHeight() + gap;
+                }
+
+                std::cout << "x: " << x << " y: " << y << std::endl;
 
             } else {
 
@@ -955,8 +962,6 @@ NotePixmapFactory::drawMarks(bool isStemmed,
             QRect bounds = m_fingeringFontMetrics.boundingRect(text);
 
             m_p->painter().setFont(m_fingeringFont);
-//            if (!m_inPrinterMethod)
-//                m_p->maskPainter().setFont(m_fingeringFont);
 
             int x = m_left + m_noteBodyWidth / 2 - bounds.width() / 2;
             int y = m_above - dy - 3;
@@ -1725,7 +1730,7 @@ NotePixmapFactory::drawRestAux(const NotePixmapParameters &params,
         // is 1, it's passed here there and everywhere to wind up at this next
         // bit, which calls NoteFont looking for a FERMATA symbol, but never
         // draws the thing so far.
-        drawMarks(false, params, 10);
+        drawMarks(false, params, 0, true);
     }
 
     if (painter) {

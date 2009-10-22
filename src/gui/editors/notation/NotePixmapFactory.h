@@ -293,7 +293,7 @@ protected:
     void drawAccidental(Accidental, bool cautionary);
 
     void makeRoomForMarks(bool isStemmed, const NotePixmapParameters &params, int stemLength);
-    void drawMarks(bool isStemmed, const NotePixmapParameters &params, int stemLength);
+    void drawMarks(bool isStemmed, const NotePixmapParameters &params, int stemLength, bool overRestHack = false);
 
     void makeRoomForLegerLines(const NotePixmapParameters &params);
     void drawLegerLines(const NotePixmapParameters &params);
