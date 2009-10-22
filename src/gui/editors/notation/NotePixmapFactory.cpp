@@ -914,9 +914,13 @@ NotePixmapFactory::drawMarks(bool isStemmed,
                 NoteCharacter character(getCharacter(m_style->getMarkCharName(*i), PlainColour, false));
 
                 if (overRestHack) {
-                    std::cout << "width: " << character.getWidth() << " height: " << character.getHeight() << std::endl;
-                    //m_p->drawNoteCharacter(character.getWidth() / 2, 10, character);
-                    m_p->drawNoteCharacter(24, 9, character);
+
+                    // Hmmm...  The "canvas" we can draw on is contrained by
+                    // something somewhere else, and a fermata symbol won't fit
+                    // on it.  After a few hours trying to pick this apart, I'm
+                    // completely stuck.  Oh well.  I'll leave the code leading
+                    // up to here in place in case I ever have any new
+                    // inspiration.
 
                 } else {
 
@@ -930,8 +934,6 @@ NotePixmapFactory::drawMarks(bool isStemmed,
 
                     dy += character.getHeight() + gap;
                 }
-
-                std::cout << "x: " << x << " y: " << y << std::endl;
 
             } else {
 
