@@ -57,6 +57,7 @@ public:
     virtual void setSelection(EventSelection* s, bool preview = false);
 
     virtual void initLayoutToolbar();
+    void initRulersToolbar();
     virtual void initStatusBar();
     virtual timeT getInsertionTime() const;
 

@@ -123,6 +123,7 @@
 #include <QToolBar>
 #include <QInputDialog>
 #include <QStatusBar>
+#include <QToolButton>
 
 #include <algorithm>
 #include <set>
@@ -274,6 +275,7 @@ NotationView::NotationView(RosegardenDocument *doc,
     }
 
     initLayoutToolbar();
+    initRulersToolbar();
     initStatusBar();
 
     updateWindowTitle();
@@ -1034,6 +1036,20 @@ NotationView::initLayoutToolbar()
             this, SLOT(slotSpacingComboChanged(int)));
 
     layoutToolbar->addWidget(m_spacingCombo);
+}
+
+void
+NotationView::initRulersToolbar()
+{
+    QToolBar *rulersToolbar = findToolbar("Rulers Toolbar");
+    if (!rulersToolbar) {
+        std::cerr << "NotationView::initRulersToolbar() - rulers toolbar not found!" << std::endl;
+        return;
+    }
+
+    // set the "ruler n" tool button to pop up its menu instantly
+    QToolButton *tb = dynamic_cast<QToolButton *>(findToolbar("Rulers Toolbar")->widgetForAction(findAction("add_control_ruler")));
+    tb->setPopupMode(QToolButton::InstantPopup);
 }
 
 void
