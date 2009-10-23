@@ -36,6 +36,8 @@
     <Action name="select_whole_staff" text="Select Whole St&amp;aff" shortcut="Ctrl+A" />
     <Action name="clear_selection" text="Clear Select&amp;ion" shortcut="Escape" />
     <Action name="filter_selection" text="&amp;Filter Selection" icon="filter" shortcut="Ctrl+F" />
+  <Separator/>
+    <Action name="options_configure" text="&amp;Preferences..." icon="configure" />
   </Menu>
 
   <Menu name="View">
@@ -76,7 +78,35 @@
     <Action name="lyric_editor" text="Open L&amp;yric Editor" />
   <Separator/>
     <!-- JAS 'show_track_headers' is determined by states -->
-    <Action name="show_track_headers" text="Show &amp;Track Headers" />
+    <Menu name="toolbars" append="show_merge">
+      <text>&amp;Toolbars</text>
+      <Action name="options_show_toolbar" text="Show Main &amp;Toolbar" checked="true" append="show_merge" />
+      <Action name="show_tools_toolbar" text="Show T&amp;ools Toolbar" checked="true" append="show_merge" />
+      <Action name="show_accidentals_toolbar" text="Show &amp;Accidentals Toolbar" icon="palette-accidentals" checked="true" append="show_merge" />
+      <Action name="show_clefs_toolbar" text="Show Cle&amp;fs Toolbar" icon="palette-clefs" checked="true" append="show_merge" />
+      <Action name="show_marks_toolbar" text="Show &amp;Marks Toolbar" icon="palette-marks" checked="true" append="show_merge" />
+      <Action name="show_group_toolbar" text="Show &amp;Group Toolbar" icon="palette-group" checked="true" append="show_merge" />
+      <Action name="show_symbol_toolbar" text="Show &amp;Symbols Toolbar" icon="palette-symbol" checked="true" append="show_merge" />
+      <Action name="show_transport_toolbar" text="Show Trans&amp;port Toolbar" checked="true" append="show_merge" />
+      <Action name="show_layout_toolbar" text="Show &amp;Layout Toolbar" checked="true" append="show_merge" />
+      <Action name="show_rulers_toolbar" text="Show &amp;Rulers Toolbar" checked="true" append="show_merge" />
+      <!-- JAS 'options_show_statusbar' determined by state -->
+      <Action name="options_show_statusbar" text="Hide St&amp;atusbar" append="show_merge" />
+    </Menu>
+    <Menu name="rulers" append="show_merge">
+      <text>&amp;Rulers</text>
+      <Action name="toggle_velocity_ruler" text="Show &amp;Velocity Ruler" icon="ruler-velocity" checked="false" />
+      <Action name="toggle_pitchbend_ruler" text="Show Pitch &amp;Bend Ruler" icon="ruler-pitch" checked="false" />
+      <Action name="add_control_ruler" text="Add &amp;Control Ruler..." icon="ruler-controller" checked="false" />
+    </Menu>
+  <Separator append="show_merge" />
+    <Action name="show_track_headers" text="Show &amp;Track Headers" checked="false" />
+    <Action name="show_annotations" text="Show &amp;Annotations" checked="true" append="show_merge" />
+    <Action name="show_lilypond_directives" text="Show Lily&amp;Pond Directives" checked="true" append="show_merge" />
+  <Separator/>
+    <Action name="options_configure_keybinding" text="Configure S&amp;hortcuts..." icon="configure_shortcuts" />
+    <Action name="options_configure_toolbars" text="Configure Tool&amp;bars..." icon="configure_toolbars" />
+
   </Menu>
 
   <Menu name="document">
@@ -328,6 +358,32 @@
     </Menu>
   </Menu>
 
+  <Menu name="Move">
+    <text>&amp;Move</text>
+      <Action name="extend_selection_backward" text="Cursor back and Se&amp;lect" icon="select-backward" shortcut="Shift+Left" />
+      <Action name="extend_selection_forward" text="Cursor Forward and &amp;Select" icon="select-forward" shortcut="Shift+Right" />
+      <Action name="preview_selection" text="Set Loop &amp;to Selection" icon="selection-to-loop" shortcut="Chrt+;" />
+      <Action name="clear_loop" text="Clear L&amp;oop" icon="clear-loop" shortcut="Ctrl+:" />
+    <Separator/>
+      <Action name="cursor_up_staff" text="Next Staff &amp;Up" icon="up-staff" shortcut="Alt+Up" />
+      <Action name="cursor_down_staff" text="Next Staff &amp;Down" icon="down-staff" shortcut="Alt+Down" />
+      <Action name="cursor_prior_segment" text="Pre&amp;vious Segment" icon="next-segment" shortcut="Alt+PgUp" />
+      <Action name="cursor_next_segment" text="Ne&amp;xt Segment" icon="previous-segment" shortcut="Alt+PgDown" />
+    <Separator/>
+      <!-- JAS need to know how to add Qt::KeypadModifier in Human Readable shortcut for Play 'KP_Enter'-->
+      <Action name="play" text="&amp;Play" icon="transport-play" tooltip="Play" /> 
+      <Action name="stop" text="&amp;Stop" icon="transport-stop" tooltip="Stop" /> 
+      <Action name="cursor_back" text="Step &amp;Back" icon="step-back" tooltip="Step Back (Left)" shortcut="Left" />
+      <Action name="cursor_forward" text="Step &amp;Forward" icon="step-forward" tooltip="Step Forward (Right)"  shortcut="Right" />
+      <Action name="playback_pointer_back_bar" text="Re&amp;wind" tooltip="Rewind" icon="transport-rewind" />
+      <Action name="playback_pointer_forward_bar" text="&amp;Fast Forward" tooltip="Fast Forward" icon="transport-ffwd" /> 
+      <Action name="playback_pointer_start" text="Rewind to &amp;Beginning" tooltip="Rewind to Beginning" icon="transport-rewind-end" />
+      <Action name="playback_pointer_end" text="Fast Forward to &amp;End" tooltip="Fast Forward to End" icon="transport-ffwd-end" />
+      <Action name="toggle_solo" text="S&amp;olo" tooltip="Solo the Active Track" icon="transport-solo" />
+      <Action name="toggle_tracking" text="Scro&amp;ll to Follow Playback" tooltip="Scroll to Follow Playback" icon="transport-tracking" shortcut="Pause" checked="true" />
+      <Action name="panic" text="P&amp;anic" icon="transport-panic" tooltip="Panic! (Ctrl+Alt+P)" shortcut="Alt+Ctrl+P" />
+  </Menu>
+
   <Menu name="Tools">
     <text>&amp;Tools</text>
     <!-- JAS Other tools in group are not selectable from menu -->
@@ -361,35 +417,6 @@
   <Separator/>
     <Action name="text" text="&amp;Text" icon="text" checked="false" group="tools_note" shortcut="F8" />
     <Action name="guitarchord" text="&amp;Guitar Chord" checked="false" group="tools_note" icon="guitarchord" shortcut="F9" />
-  <Separator/>
-    <Menu name="Navigation">
-      <text>&amp;Navigation</text>
-    <Separator/>
-      <Action name="extend_selection_backward" text="Cursor back and Se&amp;lect" icon="select-backward" shortcut="Shift+Left" />
-      <Action name="extend_selection_forward" text="Cursor Forward and &amp;Select" icon="select-forward" shortcut="Shift+Right" />
-      <Action name="preview_selection" text="Set Loop &amp;to Selection" icon="selection-to-loop" shortcut="Chrt+;" />
-      <Action name="clear_loop" text="Clear L&amp;oop" icon="clear-loop" shortcut="Ctrl+:" />
-    <Separator/>
-      <Action name="cursor_up_staff" text="Next Staff &amp;Up" icon="up-staff" shortcut="Alt+Up" />
-      <Action name="cursor_down_staff" text="Next Staff &amp;Down" icon="down-staff" shortcut="Alt+Down" />
-      <Action name="cursor_prior_segment" text="Pre&amp;vious Segment" icon="next-segment" shortcut="Alt+PgUp" />
-      <Action name="cursor_next_segment" text="Ne&amp;xt Segment" icon="previous-segment" shortcut="Alt+PgDown" />
-    </Menu>
-    <Menu name="Transport">
-      <text>T&amp;ransport</text>
-      <!-- JAS need to know how to add Qt::KeypadModifier in Human Readable shortcut for Play 'KP_Enter'-->
-      <Action name="play" text="&amp;Play" icon="transport-play" tooltip="Play" /> 
-      <Action name="stop" text="&amp;Stop" icon="transport-stop" tooltip="Stop" /> 
-      <Action name="cursor_back" text="Step &amp;Back" icon="step-back" tooltip="Step Back (Left)" shortcut="Left" />
-      <Action name="cursor_forward" text="Step &amp;Forward" icon="step-forward" tooltip="Step Forward (Right)"  shortcut="Right" />
-      <Action name="playback_pointer_back_bar" text="Re&amp;wind" tooltip="Rewind" icon="transport-rewind" />
-      <Action name="playback_pointer_forward_bar" text="&amp;Fast Forward" tooltip="Fast Forward" icon="transport-ffwd" /> 
-      <Action name="playback_pointer_start" text="Rewind to &amp;Beginning" tooltip="Rewind to Beginning" icon="transport-rewind-end" />
-      <Action name="playback_pointer_end" text="Fast Forward to &amp;End" tooltip="Fast Forward to End" icon="transport-ffwd-end" />
-      <Action name="toggle_solo" text="S&amp;olo" tooltip="Solo the Active Track" icon="transport-solo" />
-      <Action name="toggle_tracking" text="Scro&amp;ll to Follow Playback" tooltip="Scroll to Follow Playback" icon="transport-tracking" shortcut="Pause" checked="true" />
-      <Action name="panic" text="P&amp;anic" icon="transport-panic" tooltip="Panic! (Ctrl+Alt+P)" shortcut="Alt+Ctrl+P" />
-    </Menu>
   <Separator/>
     <Menu noMerge="1" name="DurationTools">
       <text>&amp;Durations</text>
@@ -456,7 +483,7 @@
       <Separator/>
         <Action name="insert_2_flat_high" text="III flat" shortcut="Ctrl+Shift+E" />
         <Action name="insert_2_high" text="III" shortcut="E" />
-      <Seperator/>
+      <Separator/>
         <Action name="insert_3_high" text="IV" shortcut="R" />
         <Action name="insert_3_sharp_high" text="IV sha&amp;rp" shortcut="Shift+R" />
       <Separator/>
@@ -512,39 +539,6 @@
   <Separator/>
     <Action name="toggle_step_by_step" text="Ste&amp;p Recording" icon="step_by_step" checked="false" />
   </Menu>
-
-  <Menu name="settings">
-    <text>&amp;Settings</text>
-    <!-- JAS deviated from RG.svn since menu items are duplicated in "toolbars" submenu -->
-    <Menu name="toolbars" append="show_merge">
-      <text>&amp;Toolbars</text>
-      <Action name="options_show_toolbar" text="Show Main &amp;Toolbar" checked="true" append="show_merge" />
-      <Action name="show_tools_toolbar" text="Show T&amp;ools Toolbar" checked="true" append="show_merge" />
-      <Action name="show_accidentals_toolbar" text="Show &amp;Accidentals Toolbar" icon="palette-accidentals" checked="true" append="show_merge" />
-      <Action name="show_clefs_toolbar" text="Show Cle&amp;fs Toolbar" icon="palette-clefs" checked="true" append="show_merge" />
-      <Action name="show_marks_toolbar" text="Show &amp;Marks Toolbar" icon="palette-marks" checked="true" append="show_merge" />
-      <Action name="show_group_toolbar" text="Show &amp;Group Toolbar" icon="palette-group" checked="true" append="show_merge" />
-      <Action name="show_symbol_toolbar" text="Show &amp;Symbols Toolbar" icon="palette-symbol" checked="true" append="show_merge" />
-      <Action name="show_transport_toolbar" text="Show Trans&amp;port Toolbar" checked="true" append="show_merge" />
-      <Action name="show_layout_toolbar" text="Show &amp;Layout Toolbar" checked="true" append="show_merge" />
-      <Action name="show_rulers_toolbar" text="Show &amp;Rulers Toolbar" checked="true" append="show_merge" />
-      <!-- JAS 'options_show_statusbar' determined by state -->
-      <Action name="options_show_statusbar" text="Hide St&amp;atusbar" append="show_merge" />
-    </Menu>
-    <Menu name="rulers" append="show_merge">
-      <text>&amp;Rulers</text>
-      <Action name="toggle_velocity_ruler" text="Show &amp;Velocity Ruler" icon="ruler-velocity" checked="false" />
-      <Action name="toggle_pitchbend_ruler" text="Show Pitch &amp;Bend Ruler" icon="ruler-pitch" checked="false" />
-      <Action name="add_control_ruler" text="Add &amp;Control Ruler..." icon="ruler-controller" checked="false" />
-    </Menu>
-  <Separator append="show_merge" />
-    <Action name="show_annotations" text="Show &amp;Annotations" checked="true" append="show_merge" />
-    <Action name="show_lilypond_directives" text="Show Lily&amp;Pond Directives" checked="true" append="show_merge" />
-  <Seperator/>
-    <Action name="options_configure_keybinding" text="Configure S&amp;hortcuts..." icon="configure_shortcuts" />
-    <Action name="options_configure_toolbars" text="Configure Tool&amp;bars..." icon="configure_toolbars" />
-    <Action name="options_configure" text="&amp;Configure Rosegarden..." icon="configure" />
-  </Menu> 
 
   <Menu name="help" append="about_merge">
     <text>&amp;Help</text>
