@@ -82,6 +82,8 @@ TRANSLATIONSQM	:= $(filter-out data/locale/rosegarden.qm, $(shell echo $(TRANSLA
 BUILDKEY	:= $(shell cat $(KEYSOURCES) | $(SHA1SUM) | $(CUT) -c1-10)
 CXXFLAGS	:= $(CXXFLAGS) -D'BUILDKEY="$(BUILDKEY)"'
 
+DATA_FILES	:= $(shell scripts/extract-data-files)
+
 all:	$(QSOURCES) $(UIHEADERS) $(UISOURCES) $(UIMOC) $(OBJECTS) $(LIBRARIES) $(EXECUTABLES) rosegarden
 
 rosegarden:	$(OBJECTS)
@@ -145,19 +147,19 @@ distclean:	clean
 	rm -f Makefile
 
 test:
-	echo $(QSOURCES)
+	echo $(QSOURCES) $(DATA_FILES)
 
-dependencies: $(KEYSOURCES) $(HEADERS) Makefile
+dependencies: $(KEYSOURCES) $(HEADERS) Makefile $(DATA_FILES)
 	@echo Rebuilding dependencies file...
 	@rm -f $@ 
 	@touch $@
 	@echo $(KEYSOURCES) | $(XARGS) -n 100 $(MAKEDEPEND) -f$@ -a -Y -Isrc >/dev/null 2>&1
 	@echo Done
+	@echo Detected that a resource rebuild is required...
+	@rm -f data/data.o data/data.cpp
 
 qrc:	locale
 	@bash ./scripts/rebuild-qrc
-	@rm -f data/data.o
-	@rm -f data/data.cpp
 
 install:
 	$(MKDIR_P) -m 755 $(INSTBINDIR)

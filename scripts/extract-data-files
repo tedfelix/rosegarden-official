@@ -1,0 +1,20 @@
+#!/bin/bash
+#
+# extract-data-files
+#
+# Copyright (c) 2009  D. Michael McIntyre <rosegarden.trumpeter@gmail.com>
+# Released under the GPL
+#
+# REQUIRES: bash, cut, sed
+#
+# PURPOSE:  Prints a list of the files contained in data/data.qrc to stdout so
+# they can be tracked by make, and the resource bundle rebuilt when one of them
+# changes
+#
+
+for f in $(grep "<file>" data/data.qrc|cut -d \> -f 2|cut -d \< -f 1|sed s/^\./data/g  ); do
+    printf "$f "
+done
+echo
+
+exit 0
