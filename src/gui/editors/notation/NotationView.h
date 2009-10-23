@@ -197,6 +197,11 @@ protected slots:
     void slotStepBackward();
     void slotStepForward();
 
+    void slotCurrentStaffUp();
+    void slotCurrentStaffDown();
+    void slotCurrentSegmentPrior();
+    void slotCurrentSegmentNext();
+
     /// Show or hide rulers
     void slotToggleChordsRuler();
     void slotToggleRawNoteRuler();

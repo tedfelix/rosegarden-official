@@ -1467,12 +1467,6 @@ NotationView::slotPreviewSelection()
 }
 
 void
-NotationView::slotClearLoop()
-{
-    getDocument()->slotSetLoop(0, 0);
-}
-
-void
 NotationView::slotClearSelection()
 {
     // Actually we don't clear the selection immediately: if we're
@@ -1622,6 +1616,54 @@ NotationView::slotSetVelocities()
                         dialog.getValue1(),
                         dialog.getValue2()));
     }
+}
+
+void
+NotationView::slotClearLoop()
+{
+    getDocument()->slotSetLoop(0, 0);
+}
+
+void
+NotationView::slotCurrentStaffUp()
+{
+    NotationScene *scene = m_notationWidget->getScene();
+    if (!scene) return;
+    NotationStaff *staff = scene->getStaffAbove();
+    if (!staff) return;
+    scene->setCurrentStaff(staff);
+}
+
+void
+NotationView::slotCurrentStaffDown()
+{
+    NotationScene *scene = m_notationWidget->getScene();
+    if (!scene) return;
+    NotationStaff *staff = scene->getStaffBelow();
+    if (!staff) return;
+    scene->setCurrentStaff(staff);
+}
+
+void
+NotationView::slotCurrentSegmentPrior()
+{
+    NotationScene *scene = m_notationWidget->getScene();
+    if (!scene) return;
+    NotationStaff *staff = scene->getPriorStaffOnTrack();
+    if (!staff) return;
+    scene->setCurrentStaff(staff);
+    slotEditSelectWholeStaff();
+}
+
+void
+NotationView::slotCurrentSegmentNext()
+{
+    NotationScene *scene = m_notationWidget->getScene();
+    if (!scene) return;
+    NotationStaff *staff = scene->getNextStaffOnTrack();
+    if (!staff) return;
+    scene->setCurrentStaff(staff);
+    slotEditSelectWholeStaff();
 }
 
 void

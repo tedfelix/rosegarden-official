@@ -141,6 +141,8 @@ public slots:
     void slotTogglePitchbendRuler();
     void slotAddControlRuler(QAction*);
 
+    void slotUpdatePointerPosition();
+
 protected:
     virtual void showEvent(QShowEvent * event);
     void hideOrShowRulers();

@@ -187,8 +187,21 @@ NotationScene::getCurrentStaff()
 {
     if (m_currentStaff < (int)m_staffs.size()) {
         return m_staffs[m_currentStaff];
-    } else
+    } else {
         return 0;
+    }
+}
+
+void
+NotationScene::setCurrentStaff(NotationStaff *staff)
+{
+    for (int i = 0; i < m_staffs.size(); ++i) {
+        if (m_staffs[i] == staff) {
+            m_currentStaff = i;
+            emit currentStaffChanged();
+            return;
+        }
+    }
 }
 
 void
@@ -306,6 +319,96 @@ NotationScene::getStaffForSceneCoords(double x, int y) const
     return 0;
 }
 
+NotationStaff *
+NotationScene::getStaffAbove()
+{
+    return getNextStaffVertically(-1);
+}
+
+NotationStaff *
+NotationScene::getStaffBelow()
+{
+    return getNextStaffVertically(1);
+}
+
+NotationStaff *
+NotationScene::getPriorStaffOnTrack()
+{
+    return getNextStaffHorizontally(-1, true);
+}
+
+NotationStaff *
+NotationScene::getNextStaffOnTrack()
+{
+    return getNextStaffHorizontally(1, true);
+}
+
+NotationStaff *
+NotationScene::getNextStaffVertically(int direction)
+{
+    if (m_staffs.size() < 2 || m_currentStaff >= m_staffs.size()) return 0;
+
+    NotationStaff *current = m_staffs[m_currentStaff];
+    Composition *composition = &m_document->getComposition();
+    Track *track = composition->getTrackById(current->getSegment().getTrack());
+    if (!track) return 0;
+
+    int position = track->getPosition();
+    Track *newTrack = 0;
+
+    while ((newTrack = composition->getTrackByPosition(position + direction))) {
+        for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+            if (m_staffs[i]->getSegment().getTrack() == newTrack->getId()) {
+                return m_staffs[i];
+            }
+        }
+        position += direction;
+    }
+
+    return 0;
+}
+
+NotationStaff *
+NotationScene::getNextStaffHorizontally(int direction, bool cycle)
+{
+    if (m_staffs.size() < 2 || m_currentStaff >= m_staffs.size()) return 0;
+
+    NotationStaff *current = m_staffs[m_currentStaff];
+    Composition *composition = &m_document->getComposition();
+    TrackId trackId = current->getSegment().getTrack();
+
+    QMultiMap<timeT, NotationStaff *> timeMap;
+    for (size_t i = 0; i < m_staffs.size(); ++i) {
+        if (m_staffs[i]->getSegment().getTrack() == trackId) {
+            timeMap.insert(m_staffs[i]->getSegment().getStartTime(), m_staffs[i]);
+        }
+    }
+
+    QMultiMap<timeT, NotationStaff *>::iterator i =
+        timeMap.find(current->getSegment().getStartTime(), current);
+
+    if (i == timeMap.end()) {
+        std::cerr << "Argh! Can't find staff I just put in map" << std::endl;
+        return 0;
+    }
+
+    if (direction < 0) {
+        if (i == timeMap.begin()) {
+            if (cycle) i = timeMap.end();
+            else return 0;
+        }
+        --i;
+    } else {
+        ++i;
+        if (i == timeMap.end()) {
+            if (cycle) i = timeMap.begin();
+            else return 0;
+        }
+    }
+
+    return i.value();
+}
+
 Segment *
 NotationScene::getCurrentSegment()
 {
@@ -365,9 +468,7 @@ NotationScene::setupMouseEvent(QGraphicsSceneMouseEvent *e,
     if (nme.staff) {
 
         if (nme.buttons != Qt::NoButton) {
-            for (size_t i = 0; i < m_staffs.size(); ++i) {
-                if (nme.staff == m_staffs[i]) { m_currentStaff = i; break; }
-            }
+            setCurrentStaff(nme.staff);
         }
 
         Event *clefEvent = 0, *keyEvent = 0;
@@ -1273,10 +1374,7 @@ NotationScene::setSelection(EventSelection *s,
     }
 
     if (newStaff) {
-        for (int i = 0; i < (int)m_staffs.size(); ++i) {
-            if (newStaff == m_staffs[i]) { m_currentStaff = i; break; }
-        }
-        std::cerr << "setSelection: set current staff to " << m_currentStaff << std::endl;
+        setCurrentStaff(newStaff);
     }
 
     if (oldSelection && m_selection && oldStaff && newStaff &&

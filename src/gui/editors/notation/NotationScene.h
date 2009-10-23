@@ -64,7 +64,14 @@ public:
 
     std::vector<NotationStaff *> *getStaffs() { return &m_staffs; }
     unsigned int getStaffCount() { return m_staffs.size(); }
+
     NotationStaff *getCurrentStaff();
+    void setCurrentStaff(NotationStaff *);
+
+    NotationStaff *getStaffAbove();
+    NotationStaff *getStaffBelow();
+    NotationStaff *getPriorStaffOnTrack();
+    NotationStaff *getNextStaffOnTrack();
     
     Segment *getCurrentSegment();
 
@@ -157,6 +164,8 @@ signals:
     
     void layoutUpdated();
 
+    void currentStaffChanged();
+
     /**
      * Emitted when the mouse cursor moves to a different height
      * on the staff
@@ -233,13 +242,16 @@ private:
 
     NotationStaff *getStaffForSceneCoords(double x, int y) const;
 
+    NotationStaff *getNextStaffVertically(int direction);
+    NotationStaff *getNextStaffHorizontally(int direction, bool cycle);
+
     void setupMouseEvent(QGraphicsSceneMouseEvent *, NotationMouseEvent &);
 
     void checkUpdate();
     void positionStaffs();
     void layoutAll();
     void layout(NotationStaff *singleStaff, timeT start, timeT end);
-    
+
     NotationStaff *setSelectionElementStatus(EventSelection *, bool set);
     void previewSelection(EventSelection *, EventSelection *oldSelection);
 

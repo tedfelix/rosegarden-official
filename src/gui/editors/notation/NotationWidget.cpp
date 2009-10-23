@@ -354,6 +354,12 @@ NotationWidget::setSegments(RosegardenDocument *document,
     connect(m_scene, SIGNAL(segmentDeleted(Segment *)),
             this, SIGNAL(segmentDeleted(Segment *)));
 
+    connect(m_scene, SIGNAL(currentStaffChanged()),
+            this, SLOT(slotUpdatePointerPosition()));
+
+    connect(m_scene, SIGNAL(selectionChanged()),
+            m_view, SLOT(updateScene()));
+
     connect(m_scene, SIGNAL(sceneDeleted()),
             this, SIGNAL(sceneDeleted()));
 
@@ -652,6 +658,12 @@ void
 NotationWidget::slotTogglePlayTracking()
 {
     slotSetPlayTracking(!m_playTracking);
+}
+
+void
+NotationWidget::slotUpdatePointerPosition()
+{
+    slotPointerPositionChanged(m_document->getComposition().getPosition());
 }
 
 void
