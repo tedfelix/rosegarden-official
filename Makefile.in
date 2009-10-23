@@ -132,7 +132,7 @@ ts-noobsolete:	menu-ts instrument-ts
 locale:	$(TRANSLATIONSQM)
 
 clean:
-	rm -f $(QSOURCES) $(UIHEADERS) $(UISOURCES) $(UIMOC) $(OBJECTS) $(LIBRARIES) $(EXECUTABLES)
+	rm -f $(QSOURCES) $(UIHEADERS) $(UISOURCES) $(UIMOC) $(OBJECTS) $(LIBRARIES) $(EXECUTABLES) data/data.o data/data.cpp
 
 distclean:	clean
 	rm -rf autom4te.cache/
