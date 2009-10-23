@@ -53,11 +53,11 @@ StartupTester::~StartupTester()
 void
 StartupTester::run() {
     m_runningMutex.lock();
-    m_audioFileImporterMutex.lock();
+//    m_audioFileImporterMutex.lock();
     m_ready = true;
 
     //setup "rosegarden-audiofile-importer" process
-    m_proc = new QProcess();
+/*    m_proc = new QProcess();
     QStringList procArgs;
 
     m_stdoutBuffer = "";
@@ -75,7 +75,7 @@ StartupTester::run() {
 
     // Wait for stdout to be processed by stdoutReceived
     // Note if this isn't done, this thread will go ahead and delete m_proc before the stdoutReceived slot is called
-/*    while(m_proc->bytesAvailable() > 0)
+    while(m_proc->bytesAvailable() > 0)
         usleep(10000);
 
     if ((m_proc->exitStatus() != QProcess::NormalExit) || m_proc->exitCode()) {
@@ -85,11 +85,12 @@ StartupTester::run() {
     } else {
         RG_DEBUG << "StartupTester - Audio file importer OK" << endl;
         m_haveAudioFileImporter = true;
-    }*/
+    }
     delete m_proc;
     procArgs = QStringList();
-    m_audioFileImporterMutex.unlock();
+    m_audioFileImporterMutex.unlock();*/
 
+    m_haveAudioFileImporter = true;
     NoteFontFactory::getFontNames(true);
 
     // unlock this as the very last thing we do in this thread,

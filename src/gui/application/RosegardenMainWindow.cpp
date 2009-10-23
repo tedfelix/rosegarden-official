@@ -4433,8 +4433,6 @@ void
 RosegardenMainWindow::slotTestStartupTester()
 {   
     RG_DEBUG << "RosegardenMainWindow::slotTestStartupTester" << endl;
-    m_haveAudioImporter = true; // we short circuit this whole test and go home
-    return;
 
     if (!m_startupTester) {
         m_startupTester = new StartupTester();
@@ -4450,7 +4448,7 @@ RosegardenMainWindow::slotTestStartupTester()
         return ;
     }
 
-    QStringList missingFeatures;
+/*    QStringList missingFeatures;
     QStringList allMissing;
 
     QStringList missing;
@@ -4512,7 +4510,7 @@ RosegardenMainWindow::slotTestStartupTester()
         // irritating @#@^@#^ dialog into the warning widget, and get it out of
         // my face before I punch it right in the nose.        
         m_warningWidget->queueMessage(shortMessage, message);
-    }
+    }*/
 
     m_startupTester->wait();
     delete m_startupTester;
