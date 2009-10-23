@@ -83,7 +83,12 @@ public:
 
     timeT getInsertionTime() const;
 
-    QLineF snapTimeToStaffPosition(timeT t) const;
+    struct CursorCoordinates {
+        QLineF currentStaff;
+        QLineF allStaffs;
+    };
+
+    CursorCoordinates getCursorCoordinates(timeT t) const;
     timeT snapTimeToNoteBoundary(timeT t) const;
 
     void setSingleSelectedEvent(NotationStaff *staff,

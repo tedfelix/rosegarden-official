@@ -2167,6 +2167,12 @@ RosegardenDocument::insertRecordedEvent(Event *ev, int device, int channel, bool
 }
 
 void
+RosegardenDocument::stopPlaying()
+{
+    emit pointerPositionChanged(m_composition.getPosition());
+}
+
+void
 RosegardenDocument::stopRecordingMidi()
 {
     RG_DEBUG << "RosegardenDocument::stopRecordingMidi" << endl;
@@ -2318,6 +2324,8 @@ RosegardenDocument::stopRecordingMidi()
     emit stoppedMIDIRecording();
 
     slotUpdateAllViews(0);
+
+    emit pointerPositionChanged(m_composition.getPosition());
 }
 
 void
@@ -2618,6 +2626,8 @@ RosegardenDocument::stopRecordingAudio()
         */
     }
     emit stoppedAudioRecording();
+
+    emit pointerPositionChanged(m_composition.getPosition());
 }
 
 void

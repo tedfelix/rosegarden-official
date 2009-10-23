@@ -307,6 +307,11 @@ public:
     void stopRecordingAudio();
 
     /**
+     * And any post-play jobs
+     */
+    void stopPlaying();
+
+    /**
      * Register audio samples at the sequencer
      */
     void prepareAudio();

@@ -637,25 +637,59 @@ NotationScene::getInsertionTime() const
     return snapTimeToNoteBoundary(m_document->getComposition().getPosition());
 }
 
-QLineF
-NotationScene::snapTimeToStaffPosition(timeT t) const
+NotationScene::CursorCoordinates
+NotationScene::getCursorCoordinates(timeT t) const
 {
-    t = snapTimeToNoteBoundary(t);
-    NotationStaff *s = 0;
-    if (m_currentStaff < (int)m_staffs.size()) {
-        s = m_staffs[m_currentStaff];
-    }
-    if (!s || !m_hlayout) return QLineF();
+    if (m_staffs.empty() || !m_hlayout) return CursorCoordinates();
 
-    double x = m_hlayout->getXForTimeByEvent(t);
+    NotationStaff *topStaff = 0;
+    NotationStaff *bottomStaff = 0;
+    for (int i = 0; i < m_staffs.size(); ++i) {
+        if (!m_staffs[i]) continue;
+        if (!topStaff || m_staffs[i]->getY() < topStaff->getY()) {
+            topStaff = m_staffs[i];
+        }
+        if (!bottomStaff || m_staffs[i]->getY() > bottomStaff->getY()) {
+            bottomStaff = m_staffs[i];
+        }
+    }
+
+    NotationStaff *currentStaff = 0;
+    if (m_currentStaff < (int)m_staffs.size()) {
+        currentStaff = m_staffs[m_currentStaff];
+    }
+
+    timeT snapped = snapTimeToNoteBoundary(t);
+
+    double x = m_hlayout->getXForTime(t);
+    double sx = m_hlayout->getXForTimeByEvent(snapped);
 
     StaffLayout::StaffLayoutCoords top =
-        s->getSceneCoordsForLayoutCoords(x, s->getLayoutYForHeight(16));
+        topStaff->getSceneCoordsForLayoutCoords
+        (x, topStaff->getLayoutYForHeight(24));
 
     StaffLayout::StaffLayoutCoords bottom =
-        s->getSceneCoordsForLayoutCoords(x, s->getLayoutYForHeight(-8));
+        bottomStaff->getSceneCoordsForLayoutCoords
+        (x, bottomStaff->getLayoutYForHeight(-16));
 
-    return QLineF(top.first, top.second, bottom.first, bottom.second);
+    StaffLayout::StaffLayoutCoords singleTop = top;
+    StaffLayout::StaffLayoutCoords singleBottom = bottom;
+
+    if (currentStaff) {
+        singleTop =
+            currentStaff->getSceneCoordsForLayoutCoords
+            (sx, currentStaff->getLayoutYForHeight(16));
+        singleBottom =
+            currentStaff->getSceneCoordsForLayoutCoords
+            (sx, currentStaff->getLayoutYForHeight(-8));
+    }
+
+    CursorCoordinates cc;
+    cc.allStaffs = QLineF(top.first, top.second,
+                          bottom.first, bottom.second);
+    cc.currentStaff = QLineF(singleTop.first, singleTop.second,
+                             singleBottom.first, singleBottom.second);
+    return cc;
 }
 
 timeT

@@ -402,6 +402,9 @@ SequenceManager::stop()
         m_doc->stopRecordingAudio();
 
         SEQMAN_DEBUG << "SequenceManager::stop() - stopped recording" << endl;
+
+    } else {
+        m_doc->stopPlaying();
     }
 
     // always untoggle the play button at this stage

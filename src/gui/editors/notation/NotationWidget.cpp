@@ -61,6 +61,8 @@
 #include "gui/rulers/ChordNameRuler.h"
 #include "gui/rulers/RawNoteRuler.h"
 
+#include "gui/seqmanager/SequenceManager.h"
+
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 
@@ -662,8 +664,23 @@ NotationWidget::slotPointerPositionChanged(timeT t)
 
     if (!m_scene) return;
 
-    QLineF p = m_scene->snapTimeToStaffPosition(t);
+    NotationScene::CursorCoordinates cc = m_scene->getCursorCoordinates(t);
+
+    bool rolling = false;
+    if (m_document->getSequenceManager() &&
+        (m_document->getSequenceManager()->getTransportStatus() == PLAYING ||
+         m_document->getSequenceManager()->getTransportStatus() == RECORDING)) {
+        rolling = true;
+    }
+
+    NOTATION_DEBUG << "NotationWidget::slotPointerPositionChanged(" << t << "): rolling = " << rolling << endl;
+
+    QLineF p = cc.currentStaff;
+    if (rolling) p = cc.allStaffs;
     if (p == QLineF()) return;
+
+//    QLineF p = m_scene->snapTimeToStaffPosition(t);
+//    if (p == QLineF()) return;
 
     //!!! p will also contain sensible Y (although not 100% sensible yet)
     double sceneX = p.x1();
