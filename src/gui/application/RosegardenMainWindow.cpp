@@ -737,6 +737,9 @@ RosegardenMainWindow::setupActions()
     setupRecentFilesMenu();
     createAndSetupTransport();
 
+    connect(&m_recentFiles, SIGNAL(recentChanged()),
+            this, SLOT(setupRecentFilesMenu()));
+
     // transport toolbar is hidden by default - TODO : this should be in options
     //
     //toolBar("Transport Toolbar")->hide();
@@ -766,9 +769,10 @@ RosegardenMainWindow::setupRecentFilesMenu()
     menu->clear();
     std::vector<QString> files = m_recentFiles.getRecent();
     for (size_t i = 0; i < files.size(); ++i) {
-    QAction *action = new QAction(files[i], this);
-    connect(action, SIGNAL(triggered()), this, SLOT(slotFileOpenRecent()));
-    menu->addAction(action);
+        QAction *action = new QAction(files[i], this);
+        connect(action, SIGNAL(triggered()), this, SLOT(slotFileOpenRecent()));
+        menu->addAction(action);
+        if (i == 0) action->setShortcut(tr("Ctrl+R"));
     }
 }
 

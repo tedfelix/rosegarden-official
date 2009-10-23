@@ -390,8 +390,6 @@ protected:
      */
     void setupActions();
 
-    void setupRecentFilesMenu();
-
     /**
      * sets up the zoom toolbar
      */
@@ -1537,6 +1535,9 @@ public slots:
     void slotDisplayWarning(int type,
                             QString text,
                             QString informativeText);
+
+protected slots:
+    void setupRecentFilesMenu();
 
 private:
 
