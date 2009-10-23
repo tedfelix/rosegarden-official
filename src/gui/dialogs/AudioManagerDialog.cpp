@@ -220,8 +220,9 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     settings.beginGroup(WindowGeometryConfigGroup);
     this->restoreGeometry(settings.value("Audio_File_Manager").toByteArray());
     settings.endGroup();
-}
 
+    setAttribute(Qt::WA_DeleteOnClose);
+}
 
 
 void slotFileItemActivated(){

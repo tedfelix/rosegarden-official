@@ -104,8 +104,10 @@ signals:
     void editBanks (DeviceId);
     void editControllers (DeviceId);
     
-    void sigDeviceNameChanged(DeviceId);
+    void deviceNameChanged(DeviceId);
+    void deviceNamesChanged();
     
+    void closing();
     
 public slots:
     void slotOutputPortClicked(QTreeWidgetItem * item, int column);
@@ -136,6 +138,8 @@ public slots:
     void slotResyncDevicesReceived();
     
 protected:
+    virtual void closeEvent(QCloseEvent *);
+
     //
     RosegardenDocument *m_doc;
     Studio *m_studio;

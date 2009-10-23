@@ -62,10 +62,10 @@ namespace Rosegarden
 {
 
 MarkerEditor::MarkerEditor(QWidget *parent,
-                                       RosegardenDocument *doc):
-        QMainWindow(parent),
-        m_doc(doc),
-        m_modified(false)
+                           RosegardenDocument *doc):
+    QMainWindow(parent),
+    m_doc(doc),
+    m_modified(false)
 {
     this->setObjectName( "markereditordialog" );
     
@@ -183,6 +183,8 @@ MarkerEditor::MarkerEditor(QWidget *parent,
 //     setAutoSaveSettings(MarkerEditorConfigGroup, true);    //&&&
 
     m_shortcuts = new QShortcut(this);
+
+    setAttribute(Qt::WA_DeleteOnClose);
 }
 
 void

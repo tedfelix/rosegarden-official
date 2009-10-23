@@ -72,336 +72,340 @@ SynthPluginManagerDialog::SynthPluginManagerDialog(QWidget *parent,
     setupGuiCreatePluginList();
     
     createGUI ( "synthpluginmanager.rc" );
-    
+
+    setAttribute(Qt::WA_DeleteOnClose);
 //         setAutoSaveSettings(SynthPluginManagerConfigGroup, true);    //&&&
 }
 
-    void
-    SynthPluginManagerDialog:: setupGuiMain(){
-        //
-        m_centralWidget = new QWidget ( this );
-        m_centralWidget->setObjectName ( QString::fromUtf8 ( "m_centralWidget" ) );
+void
+SynthPluginManagerDialog:: setupGuiMain()
+{
+    m_centralWidget = new QWidget ( this );
+    m_centralWidget->setObjectName ( QString::fromUtf8 ( "m_centralWidget" ) );
 
-        m_mainLayout = new QVBoxLayout ( m_centralWidget );
-        m_mainLayout->setObjectName ( QString::fromUtf8 ( "mainLayout" ) );
+    m_mainLayout = new QVBoxLayout ( m_centralWidget );
+    m_mainLayout->setObjectName ( QString::fromUtf8 ( "mainLayout" ) );
 
-        m_groupBoxPluginList = new QGroupBox ( m_centralWidget );
-        m_groupBoxPluginList->setObjectName ( QString::fromUtf8 ( "m_groupBoxPluginList" ) );
+    m_groupBoxPluginList = new QGroupBox ( m_centralWidget );
+    m_groupBoxPluginList->setObjectName ( QString::fromUtf8 ( "m_groupBoxPluginList" ) );
 
-        m_verticalLayout_2 = new QVBoxLayout ( m_groupBoxPluginList );
-        m_verticalLayout_2->setObjectName ( QString::fromUtf8 ( "verticalLayout_2" ) );
+    m_verticalLayout_2 = new QVBoxLayout ( m_groupBoxPluginList );
+    m_verticalLayout_2->setObjectName ( QString::fromUtf8 ( "verticalLayout_2" ) );
 
-        m_scrollArea = new QScrollArea ( m_groupBoxPluginList );
-        m_scrollArea->setObjectName ( QString::fromUtf8 ( "m_scrollArea" ) );
-        m_scrollArea->setVerticalScrollBarPolicy ( Qt::ScrollBarAlwaysOn );
-        m_scrollArea->setWidgetResizable ( true );
+    m_scrollArea = new QScrollArea ( m_groupBoxPluginList );
+    m_scrollArea->setObjectName ( QString::fromUtf8 ( "m_scrollArea" ) );
+    m_scrollArea->setVerticalScrollBarPolicy ( Qt::ScrollBarAlwaysOn );
+    m_scrollArea->setWidgetResizable ( true );
 
-        m_scrollWidget = new QWidget();
-        m_scrollWidget->setObjectName ( QString::fromUtf8 ( "m_scrollWidget" ) );
-        m_scrollWidget->setGeometry ( QRect ( 0, 0, 740, 489 ) );
-        m_scrollArea->setWidget ( m_scrollWidget );
-        m_verticalLayout_2->addWidget ( m_scrollArea );
+    m_scrollWidget = new QWidget();
+    m_scrollWidget->setObjectName ( QString::fromUtf8 ( "m_scrollWidget" ) );
+    m_scrollWidget->setGeometry ( QRect ( 0, 0, 740, 489 ) );
+    m_scrollArea->setWidget ( m_scrollWidget );
+    m_verticalLayout_2->addWidget ( m_scrollArea );
 
-        m_scrollWidgetLayout = new QGridLayout ( m_scrollWidget );
-        m_scrollWidgetLayout->setObjectName ( QString::fromUtf8 ( "m_scrollWidgetLayout" ) );
+    m_scrollWidgetLayout = new QGridLayout ( m_scrollWidget );
+    m_scrollWidgetLayout->setObjectName ( QString::fromUtf8 ( "m_scrollWidgetLayout" ) );
 
-        m_mainLayout->addWidget ( m_groupBoxPluginList );
+    m_mainLayout->addWidget ( m_groupBoxPluginList );
 
-        setCentralWidget ( m_centralWidget );
+    setCentralWidget ( m_centralWidget );
         
         
         
-        //
-        // start dialog button-box setup
-        // ------------------------------------------------------------------
-        //
-        QDialogButtonBox::StandardButtons sbuttons = \
-            QDialogButtonBox::Close |
+    //
+    // start dialog button-box setup
+    // ------------------------------------------------------------------
+    //
+    QDialogButtonBox::StandardButtons sbuttons = \
+        QDialogButtonBox::Close |
 //                 QDialogButtonBox::Ok |
 //                 QDialogButtonBox::Cancel |
 //                 QDialogButtonBox::Apply |
 //                 QDialogButtonBox::RestoreDefaults |
-            QDialogButtonBox::Help;
+        QDialogButtonBox::Help;
 
-        m_dialogButtonBox = new QDialogButtonBox;
-        m_dialogButtonBox->setObjectName("dialog_base_button_box");
-        m_dialogButtonBox->setStandardButtons(sbuttons);
-        m_dialogButtonBox->setOrientation(Qt::Horizontal);
-        m_mainLayout->addWidget(m_dialogButtonBox);
+    m_dialogButtonBox = new QDialogButtonBox;
+    m_dialogButtonBox->setObjectName("dialog_base_button_box");
+    m_dialogButtonBox->setStandardButtons(sbuttons);
+    m_dialogButtonBox->setOrientation(Qt::Horizontal);
+    m_mainLayout->addWidget(m_dialogButtonBox);
 
-        // fist disable the Apply button
-        QPushButton * btApply;
-        btApply = m_dialogButtonBox->button ( QDialogButtonBox::Apply );
-        if ( btApply ){
-            btApply->setEnabled ( false );
-        }
+    // fist disable the Apply button
+    QPushButton * btApply;
+    btApply = m_dialogButtonBox->button ( QDialogButtonBox::Apply );
+    if ( btApply ){
+        btApply->setEnabled ( false );
+    }
 
 //         connect(m_dialogButtonBox, SIGNAL(accepted()), this, SLOT(accept()));
-        connect ( m_dialogButtonBox, SIGNAL ( rejected() ), this, SLOT ( slotClose() ) );
-        connect ( m_dialogButtonBox, SIGNAL ( helpRequested() ), this, SLOT ( slotHelpRequested() ) );
+    connect ( m_dialogButtonBox, SIGNAL ( rejected() ), this, SLOT ( slotClose() ) );
+    connect ( m_dialogButtonBox, SIGNAL ( helpRequested() ), this, SLOT ( slotHelpRequested() ) );
 
-        //
-        // end dialog button-box setup
-        // ------------------------------------------------------------------
+    //
+    // end dialog button-box setup
+    // ------------------------------------------------------------------
         
         
-    }// end setupGuiMain()
+}// end setupGuiMain()
 
 
 
 
-    void SynthPluginManagerDialog:: setupGuiCreatePluginList(){
-        //
-        m_synthPlugins.clear();
-        m_synthPlugins.push_back ( -1 );
+void SynthPluginManagerDialog:: setupGuiCreatePluginList(){
+    //
+    m_synthPlugins.clear();
+    m_synthPlugins.push_back ( -1 );
 
-        int count = 0;
+    int count = 0;
 
-        for ( PluginIterator itr = m_pluginManager->begin();
-              itr != m_pluginManager->end(); ++itr ){
+    for ( PluginIterator itr = m_pluginManager->begin();
+          itr != m_pluginManager->end(); ++itr ){
 
-            if ( ( *itr )->isSynth() ){
-                m_synthPlugins.push_back ( count );
-            }
-
-            ++count;
+        if ( ( *itr )->isSynth() ){
+            m_synthPlugins.push_back ( count );
         }
 
-        for ( unsigned int i = 0; i < SoftSynthInstrumentCount; ++i ){
+        ++count;
+    }
 
-            InstrumentId id = SoftSynthInstrumentBase + i;
-            Instrument *instrument = m_studio->getInstrumentById ( id );
-            if ( !instrument )
+    for ( unsigned int i = 0; i < SoftSynthInstrumentCount; ++i ){
+
+        InstrumentId id = SoftSynthInstrumentBase + i;
+        Instrument *instrument = m_studio->getInstrumentById ( id );
+        if ( !instrument )
+            continue;
+
+        //  pluginLayout->addWidget(new QLabel(instrument->getPresentationName().c_str(),
+        //                     pluginFrame), i, 0);
+        m_scrollWidgetLayout->addWidget ( new QLabel ( QString ( "%1" ).arg ( i + 1 ),
+                                                       m_scrollWidget ), i, 0 );
+
+        AudioPluginInstance *plugin = instrument->getPlugin
+            ( Instrument::SYNTH_PLUGIN_POSITION );
+
+        std::string identifier;
+        if ( plugin )
+            identifier = plugin->getIdentifier();
+
+        int currentIndex = 0;
+
+        QComboBox *pluginCombo = new QComboBox ( m_scrollWidget );
+        pluginCombo->addItem ( tr ( "<none>" ) );
+
+        for ( size_t j = 0; j < m_synthPlugins.size(); ++j ){
+
+            if ( m_synthPlugins[j] == -1 )
                 continue;
 
-            //  pluginLayout->addWidget(new QLabel(instrument->getPresentationName().c_str(),
-            //                     pluginFrame), i, 0);
-            m_scrollWidgetLayout->addWidget ( new QLabel ( QString ( "%1" ).arg ( i + 1 ),
-                                                           m_scrollWidget ), i, 0 );
+            AudioPlugin *plugin =
+                m_pluginManager->getPlugin ( m_synthPlugins[j] );
 
-            AudioPluginInstance *plugin = instrument->getPlugin
-                ( Instrument::SYNTH_PLUGIN_POSITION );
+            pluginCombo->addItem ( plugin->getName() );
 
-            std::string identifier;
-            if ( plugin )
-                identifier = plugin->getIdentifier();
-
-            int currentIndex = 0;
-
-            QComboBox *pluginCombo = new QComboBox ( m_scrollWidget );
-            pluginCombo->addItem ( tr ( "<none>" ) );
-
-            for ( size_t j = 0; j < m_synthPlugins.size(); ++j ){
-
-                if ( m_synthPlugins[j] == -1 )
-                    continue;
-
-                AudioPlugin *plugin =
-                    m_pluginManager->getPlugin ( m_synthPlugins[j] );
-
-                pluginCombo->addItem ( plugin->getName() );
-
-                if ( plugin->getIdentifier() == identifier.c_str() ){
-                    pluginCombo->setCurrentIndex ( pluginCombo->count() - 1 );
-                }
-            }
-
-            connect ( pluginCombo, SIGNAL ( activated ( int ) ),
-                      this, SLOT ( slotPluginChanged ( int ) ) );
-
-            m_scrollWidgetLayout->addWidget ( pluginCombo, i, 1 );
-
-            m_synthCombos.push_back ( pluginCombo );
-
-            QPushButton *controlsButton = new QPushButton ( tr ( "Controls" ), m_scrollWidget );
-            m_scrollWidgetLayout->addWidget ( controlsButton, i, 2 );
-            connect ( controlsButton, SIGNAL ( clicked() ), this, SLOT ( slotControlsButtonClicked() ) );
-            m_controlsButtons.push_back ( controlsButton );
-
-            QPushButton *guiButton = new QPushButton ( tr ( "Editor >>" ), m_scrollWidget );
-            m_scrollWidgetLayout->addWidget ( guiButton, i, 3 );
-            guiButton->setEnabled ( m_guiManager->hasGUI
-                                    ( id, Instrument::SYNTH_PLUGIN_POSITION ) );
-            connect ( guiButton, SIGNAL ( clicked() ), this, SLOT ( slotGUIButtonClicked() ) );
-            m_guiButtons.push_back ( guiButton );
-
-        }// end for i
-        
-        
-    }// end setupGuiCreatePluginList()
-
-
-
-    SynthPluginManagerDialog::~SynthPluginManagerDialog(){
-        RG_DEBUG << "\n*** SynthPluginManagerDialog::~SynthPluginManagerDialog()"
-                 << endl;
-    }
-
-
-    void SynthPluginManagerDialog:: slotHelpRequested(){
-        QMessageBox:: information (
-            this,
-            tr ( "Help for the Synth-Plugin Management Dialog" ),
-            tr ( "Create plugin instances here, e.g. software synthesizers and effects. " ),
-            QMessageBox::Ok,
-            QMessageBox::Ok
-            );
-    }
-
-
-    void
-    SynthPluginManagerDialog::updatePlugin ( InstrumentId id, int plugin ){
-        if ( id < SoftSynthInstrumentBase )
-            return ;
-        size_t row = size_t(id - SoftSynthInstrumentBase);
-        if ( row >= m_synthCombos.size() )
-            return ;
-
-        QComboBox *comboBox = m_synthCombos[row];
-
-        for ( size_t i = 0; i < m_synthPlugins.size(); ++i ){
-            if ( m_synthPlugins[i] == plugin ){
-                blockSignals ( true );
-                comboBox->setCurrentIndex ( i );
-                blockSignals ( false );
-                return ;
+            if ( plugin->getIdentifier() == identifier.c_str() ){
+                pluginCombo->setCurrentIndex ( pluginCombo->count() - 1 );
             }
         }
 
-        blockSignals ( true );
-        comboBox->setCurrentIndex ( 0 );
-        blockSignals ( false );
+        connect ( pluginCombo, SIGNAL ( activated ( int ) ),
+                  this, SLOT ( slotPluginChanged ( int ) ) );
+
+        m_scrollWidgetLayout->addWidget ( pluginCombo, i, 1 );
+
+        m_synthCombos.push_back ( pluginCombo );
+
+        QPushButton *controlsButton = new QPushButton ( tr ( "Controls" ), m_scrollWidget );
+        m_scrollWidgetLayout->addWidget ( controlsButton, i, 2 );
+        connect ( controlsButton, SIGNAL ( clicked() ), this, SLOT ( slotControlsButtonClicked() ) );
+        m_controlsButtons.push_back ( controlsButton );
+
+        QPushButton *guiButton = new QPushButton ( tr ( "Editor >>" ), m_scrollWidget );
+        m_scrollWidgetLayout->addWidget ( guiButton, i, 3 );
+        guiButton->setEnabled ( m_guiManager->hasGUI
+                                ( id, Instrument::SYNTH_PLUGIN_POSITION ) );
+        connect ( guiButton, SIGNAL ( clicked() ), this, SLOT ( slotGUIButtonClicked() ) );
+        m_guiButtons.push_back ( guiButton );
+
+    }// end for i
+        
+        
+}// end setupGuiCreatePluginList()
+
+
+
+SynthPluginManagerDialog::~SynthPluginManagerDialog(){
+    RG_DEBUG << "\n*** SynthPluginManagerDialog::~SynthPluginManagerDialog()"
+             << endl;
+}
+
+
+void SynthPluginManagerDialog:: slotHelpRequested(){
+    QMessageBox:: information (
+        this,
+        tr ( "Help for the Synth-Plugin Management Dialog" ),
+        tr ( "Create plugin instances here, e.g. software synthesizers and effects. " ),
+        QMessageBox::Ok,
+        QMessageBox::Ok
+        );
+}
+
+
+void
+SynthPluginManagerDialog::updatePlugin ( InstrumentId id, int plugin ){
+    if ( id < SoftSynthInstrumentBase )
+        return ;
+    size_t row = size_t(id - SoftSynthInstrumentBase);
+    if ( row >= m_synthCombos.size() )
+        return ;
+
+    QComboBox *comboBox = m_synthCombos[row];
+
+    for ( size_t i = 0; i < m_synthPlugins.size(); ++i ){
+        if ( m_synthPlugins[i] == plugin ){
+            blockSignals ( true );
+            comboBox->setCurrentIndex ( i );
+            blockSignals ( false );
+            return ;
+        }
+    }
+
+    blockSignals ( true );
+    comboBox->setCurrentIndex ( 0 );
+    blockSignals ( false );
+    return ;
+}
+
+void
+SynthPluginManagerDialog::slotClose()
+{
+    emit closing();
+    close();
+}
+
+void
+SynthPluginManagerDialog::closeEvent ( QCloseEvent *e )
+{
+    emit closing();
+    QMainWindow::closeEvent ( e );
+}
+
+void
+SynthPluginManagerDialog::slotGUIButtonClicked(){
+    const QObject *s = sender();
+
+    int instrumentNo = -1;
+
+    for ( size_t i = 0; i < m_guiButtons.size(); ++i ){
+        if ( s == m_guiButtons[i] )
+            instrumentNo = int(i);
+    }
+
+    if ( instrumentNo == -1 ){
+        RG_DEBUG << "WARNING: SynthPluginManagerDialog::slotGUIButtonClicked: unknown sender" << endl;
         return ;
     }
 
-    void
-    SynthPluginManagerDialog::slotClose(){
-        close();
+    InstrumentId id = SoftSynthInstrumentBase + instrumentNo;
+
+    emit showPluginGUI ( id, Instrument::SYNTH_PLUGIN_POSITION );
+}
+
+
+
+void SynthPluginManagerDialog:: slotControlsButtonClicked(){
+    const QObject *s = sender();
+
+    int instrumentNo = -1;
+
+    for ( size_t i = 0; i < m_controlsButtons.size(); ++i ){
+        if ( s == m_controlsButtons[i] )
+            instrumentNo = int(i);
     }
 
-    void
-    SynthPluginManagerDialog::closeEvent ( QCloseEvent *e ){
-        emit closing();
-        QMainWindow::closeEvent ( e );
+    if ( instrumentNo == -1 ){
+        RG_DEBUG << "WARNING: SynthPluginManagerDialog::slotControlsButtonClicked: unknown sender" << endl;
+        return ;
     }
 
-    void
-    SynthPluginManagerDialog::slotGUIButtonClicked(){
-        const QObject *s = sender();
+    InstrumentId id = SoftSynthInstrumentBase + instrumentNo;
 
-        int instrumentNo = -1;
+    emit showPluginDialog ( this, id, Instrument::SYNTH_PLUGIN_POSITION );
+    // note: slot is in RosegardenMainWindow.cpp
+}
 
-        for ( size_t i = 0; i < m_guiButtons.size(); ++i ){
-            if ( s == m_guiButtons[i] )
-                instrumentNo = int(i);
-        }
 
-        if ( instrumentNo == -1 ){
-            RG_DEBUG << "WARNING: SynthPluginManagerDialog::slotGUIButtonClicked: unknown sender" << endl;
-            return ;
-        }
 
-        InstrumentId id = SoftSynthInstrumentBase + instrumentNo;
+void SynthPluginManagerDialog::slotPluginChanged ( int index ){
+    const QObject *s = sender();
 
-        emit showPluginGUI ( id, Instrument::SYNTH_PLUGIN_POSITION );
+    RG_DEBUG << "SynthPluginManagerDialog::slotPluginChanged(" << index
+             << ")" << endl;
+
+    int instrumentNo = -1;
+
+    for ( size_t i = 0; i < m_synthCombos.size(); ++i ){
+        if ( s == m_synthCombos[i] )
+            instrumentNo = int(i);
     }
 
-
-
-    void SynthPluginManagerDialog:: slotControlsButtonClicked(){
-        const QObject *s = sender();
-
-        int instrumentNo = -1;
-
-        for ( size_t i = 0; i < m_controlsButtons.size(); ++i ){
-            if ( s == m_controlsButtons[i] )
-                instrumentNo = int(i);
-        }
-
-        if ( instrumentNo == -1 ){
-            RG_DEBUG << "WARNING: SynthPluginManagerDialog::slotControlsButtonClicked: unknown sender" << endl;
-            return ;
-        }
-
-        InstrumentId id = SoftSynthInstrumentBase + instrumentNo;
-
-        emit showPluginDialog ( this, id, Instrument::SYNTH_PLUGIN_POSITION );
-        // note: slot is in RosegardenMainWindow.cpp
+    if ( instrumentNo == -1 ){
+        RG_DEBUG << "WARNING: SynthPluginManagerDialog::slotValueChanged: unknown sender" << endl;
+        return ;
     }
 
+    InstrumentId id = SoftSynthInstrumentBase + instrumentNo;
 
+    if ( index >= int ( m_synthPlugins.size() ) ){
+        RG_DEBUG << "WARNING: SynthPluginManagerDialog::slotValueChanged: synth "
+                 << index << " out of range" << endl;
+        return ;
+    }
 
-    void SynthPluginManagerDialog::slotPluginChanged ( int index ){
-        const QObject *s = sender();
+    // NB m_synthPlugins[0] is -1 to represent the <none> item
 
-        RG_DEBUG << "SynthPluginManagerDialog::slotPluginChanged(" << index
-                 << ")" << endl;
+    AudioPlugin *plugin = m_pluginManager->getPlugin ( m_synthPlugins[index] );
+    Instrument *instrument = m_studio->getInstrumentById ( id );
 
-        int instrumentNo = -1;
+    if ( instrument ){
 
-        for ( size_t i = 0; i < m_synthCombos.size(); ++i ){
-            if ( s == m_synthCombos[i] )
-                instrumentNo = int(i);
-        }
+        AudioPluginInstance *pluginInstance = instrument->getPlugin
+            ( Instrument::SYNTH_PLUGIN_POSITION );
 
-        if ( instrumentNo == -1 ){
-            RG_DEBUG << "WARNING: SynthPluginManagerDialog::slotValueChanged: unknown sender" << endl;
-            return ;
-        }
+        if ( pluginInstance ){
 
-        InstrumentId id = SoftSynthInstrumentBase + instrumentNo;
+            if ( plugin ){
+                RG_DEBUG << "plugin is " << plugin->getIdentifier() << endl;
+                pluginInstance->setIdentifier ( qstrtostr ( plugin->getIdentifier() ) );
 
-        if ( index >= int ( m_synthPlugins.size() ) ){
-            RG_DEBUG << "WARNING: SynthPluginManagerDialog::slotValueChanged: synth "
-                     << index << " out of range" << endl;
-            return ;
-        }
+                // set ports to defaults
 
-        // NB m_synthPlugins[0] is -1 to represent the <none> item
+                AudioPlugin::PortIterator it = plugin->begin();
+                int count = 0;
 
-        AudioPlugin *plugin = m_pluginManager->getPlugin ( m_synthPlugins[index] );
-        Instrument *instrument = m_studio->getInstrumentById ( id );
+                for ( ; it != plugin->end(); ++it ){
 
-        if ( instrument ){
+                    if ( ( ( *it )->getType() & PluginPort::Control ) &&
+                         ( ( *it )->getType() & PluginPort::Input ) ){
 
-            AudioPluginInstance *pluginInstance = instrument->getPlugin
-                ( Instrument::SYNTH_PLUGIN_POSITION );
-
-            if ( pluginInstance ){
-
-                if ( plugin ){
-                    RG_DEBUG << "plugin is " << plugin->getIdentifier() << endl;
-                    pluginInstance->setIdentifier ( qstrtostr ( plugin->getIdentifier() ) );
-
-                    // set ports to defaults
-
-                    AudioPlugin::PortIterator it = plugin->begin();
-                    int count = 0;
-
-                    for ( ; it != plugin->end(); ++it ){
-
-                        if ( ( ( *it )->getType() & PluginPort::Control ) &&
-                             ( ( *it )->getType() & PluginPort::Input ) ){
-
-                            if ( pluginInstance->getPort ( count ) == 0 ){
-                                pluginInstance->addPort ( count, ( float ) ( *it )->getDefaultValue() );
-                            }
-                            else{
-                                pluginInstance->getPort ( count )->value = ( *it )->getDefaultValue();
-                            }
+                        if ( pluginInstance->getPort ( count ) == 0 ){
+                            pluginInstance->addPort ( count, ( float ) ( *it )->getDefaultValue() );
                         }
-
-                        ++count;
+                        else{
+                            pluginInstance->getPort ( count )->value = ( *it )->getDefaultValue();
+                        }
                     }
 
+                    ++count;
                 }
-                else{
-                    pluginInstance->setIdentifier ( "" );
-                }
+
+            }
+            else{
+                pluginInstance->setIdentifier ( "" );
             }
         }
+    }
 
-        if ( instrumentNo < int(m_guiButtons.size()) ){
+    if ( instrumentNo < int(m_guiButtons.size()) ){
         m_guiButtons[instrumentNo]->setEnabled
             ( m_guiManager->hasGUI
               ( id, Instrument::SYNTH_PLUGIN_POSITION ) );

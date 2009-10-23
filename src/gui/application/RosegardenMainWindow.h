@@ -1653,7 +1653,7 @@ private:
 #endif     
     TranzportClient *m_tranzport;
         
-    DeviceManagerDialog *m_devicesManagerNew;    
+    DeviceManagerDialog *m_deviceManager;    
 
     WarningWidget *m_warningWidget;
 };

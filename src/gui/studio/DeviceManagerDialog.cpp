@@ -85,6 +85,8 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget * parent,
     connectSignalsToSlots();
 
     clearAllPortsLists();
+
+    setAttribute(Qt::WA_DeleteOnClose);
 }
 
 void
@@ -107,6 +109,12 @@ DeviceManagerDialog::show()
     QMainWindow::show();
 }
 
+void
+DeviceManagerDialog::closeEvent(QCloseEvent *e)
+{
+    emit closing();
+    QMainWindow::closeEvent(e);
+}
 
 void
 DeviceManagerDialog::slotClose()
@@ -118,6 +126,7 @@ DeviceManagerDialog::slotClose()
        m_doc = 0;
        }
      */
+    emit closing();
     close(0);
 }
 
@@ -931,7 +940,8 @@ DeviceManagerDialog::slotDeviceItemChanged(QTreeWidgetItem * twItem,
         CommandHistory::getInstance()->addCommand
             (new RenameDeviceCommand(m_studio, mdev->getId(),
                                      qstrtostr(devName)));
-        emit sigDeviceNameChanged(mdev->getId());
+        emit deviceNameChanged(mdev->getId());
+        emit deviceNamesChanged();
     }
 }
 

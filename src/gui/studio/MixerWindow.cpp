@@ -33,12 +33,13 @@ namespace Rosegarden
 
 MixerWindow::MixerWindow(QWidget *parent,
                          RosegardenDocument *document) :
-        QMainWindow(parent, "mixerwindow"),
-        m_document(document),
-        m_studio(&document->getStudio()),
-        m_currentId(0)
+    QMainWindow(parent, "mixerwindow"),
+    m_document(document),
+    m_studio(&document->getStudio()),
+    m_currentId(0)
 {
     m_shortcuts = new QShortcut(this);
+    setAttribute(Qt::WA_DeleteOnClose);
 }
 
 void

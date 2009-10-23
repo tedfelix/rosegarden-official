@@ -316,6 +316,7 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
         setCurrentDevice(defaultDevice);
     }
 
+    setAttribute(Qt::WA_DeleteOnClose);
 //     setAutoSaveSettings(BankEditorConfigGroup, true);    //&&&
 }
 

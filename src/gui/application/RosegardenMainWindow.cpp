@@ -278,7 +278,7 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
     m_lircCommander(0),
 #endif
     m_tranzport(0),
-    m_devicesManagerNew(0),
+    m_deviceManager(0),
     m_warningWidget(0)
 {
     setAttribute(Qt::WA_DeleteOnClose);
@@ -6290,25 +6290,31 @@ RosegardenMainWindow::slotChangeCompositionLength()
 void
 RosegardenMainWindow::slotManageMIDIDevices()
 {
-    if (m_devicesManagerNew != 0){
-        RG_DEBUG << "Warning: m_devicesManagerNew was NOT null, in RosegardenMainWindow::slotOpenDeviceManagerNew() " << endl;
-        //delete m_devicesManagerNew;
+    if (m_deviceManager) {
+        m_deviceManager->show();
+        m_deviceManager->raise();
+        m_deviceManager->setActiveWindow();
+        return;
     }
-    if (! m_devicesManagerNew){
-        m_devicesManagerNew = new DeviceManagerDialog(this, getDocument());
-        //m_devicesManagerNew->setupUi(dynamic_cast<QDialog*>(m_devicesManagerNew));
+    if (!m_deviceManager) {
+
+        m_deviceManager = new DeviceManagerDialog(this, getDocument());
         
-        //devMan->setAttribute(Qt::WA_DeleteOnClose);    // destroys dialog, if close event was accepted
+        connect(m_deviceManager, SIGNAL(editBanks(DeviceId)),
+                this, SLOT(slotEditBanks(DeviceId)));
         
-        connect(m_devicesManagerNew, SIGNAL(editBanks(DeviceId)),
-            this, SLOT(slotEditBanks(DeviceId)));
+        connect(m_deviceManager, SIGNAL(editControllers(DeviceId)),
+                this, SLOT(slotEditControlParameters(DeviceId)));
         
-        connect(m_devicesManagerNew, SIGNAL(editControllers(DeviceId)),
-            this, SLOT(slotEditControlParameters(DeviceId)));
-        
+        connect(m_deviceManager, SIGNAL(closing()),
+                this, SLOT(slotDeviceManagerClosed()));
+
+        connect(this, SIGNAL(documentAboutToChange()),
+                m_deviceManager, SLOT(close()));
+
         if (m_midiMixer) {
-//             connect(m_devicesManagerNew, SIGNAL(deviceNamesChanged()),
-//                         m_midiMixer, SLOT(slotSynchronise()));
+             connect(m_deviceManager, SIGNAL(deviceNamesChanged()),
+                     m_midiMixer, SLOT(slotSynchronise()));
         }
     }
     
@@ -6317,44 +6323,7 @@ RosegardenMainWindow::slotManageMIDIDevices()
         tb->setDown(true);
     }
     
-    m_devicesManagerNew->show();
-
-// old slotManageMIDIDevices for old dialog that no longer exists, left in case
-// any useful tricks remain to be discovered by looking through the old code.
-/*    if (m_deviceManager) {
-        m_deviceManager->show();
-        m_deviceManager->raise();
-        m_deviceManager->setActiveWindow();
-        return ;
-    }
-
-    m_deviceManager = new DeviceManagerDialog(this, m_doc);
-
-    connect(m_deviceManager, SIGNAL(closing()),
-            this, SLOT(slotDeviceManagerClosed()));
-
-    connect(this, SIGNAL(documentAboutToChange()),
-            m_deviceManager, SLOT(close()));
-
-    // Cheating way of updating the track/instrument list
-    //
-    connect(m_deviceManager, SIGNAL(deviceNamesChanged()),
-            m_view, SLOT(slotSynchroniseWithComposition()));
-
-    connect(m_deviceManager, SIGNAL(editBanks(DeviceId)),
-            this, SLOT(slotEditBanks(DeviceId)));
-
-    connect(m_deviceManager, SIGNAL(editControllers(DeviceId)),
-            this, SLOT(slotEditControlParameters(DeviceId)));
-
-    if (m_midiMixer) {
-        connect(m_deviceManager, SIGNAL(deviceNamesChanged()),
-                m_midiMixer, SLOT(slotSynchronise()));
-
-    }
-
-
-    m_deviceManager->show();*/
+    m_deviceManager->show();
 }
 
 void
@@ -6708,15 +6677,14 @@ RosegardenMainWindow::slotControlEditorClosed()
 
     RG_DEBUG << "RosegardenMainWindow::slotControlEditorClosed" << endl;
 
-    for (std::set
-                <ControlEditorDialog *>::iterator i = m_controlEditors.begin();
-                i != m_controlEditors.end(); ++i) {
-            if (*i == s) {
-                m_controlEditors.erase(i);
-                RG_DEBUG << "removed control editor dialog, have " << m_controlEditors.size() << " left" << endl;
-                return ;
-            }
+    for (std::set<ControlEditorDialog *>::iterator i = m_controlEditors.begin();
+         i != m_controlEditors.end(); ++i) {
+        if (*i == s) {
+            m_controlEditors.erase(i);
+            RG_DEBUG << "removed control editor dialog, have " << m_controlEditors.size() << " left" << endl;
+            return ;
         }
+    }
 
     std::cerr << "WARNING: control editor " << s << " closed, but couldn't find it in our control editor list (we have " << m_controlEditors.size() << " editors)" << std::endl;
 }
@@ -7383,8 +7351,9 @@ RosegardenMainWindow::slotBankEditorClosed()
     RG_DEBUG << "RosegardenMainWindow::slotBankEditorClosed()\n";
 
     if (m_doc->isModified()) {
-        if (m_view)
+        if (m_view) {
             m_view->slotSelectTrackSegments(m_doc->getComposition().getSelectedTrack());
+        }
     }
 
     m_bankEditor = 0;
@@ -7393,16 +7362,15 @@ RosegardenMainWindow::slotBankEditorClosed()
 void
 RosegardenMainWindow::slotDeviceManagerClosed()
 {
-// obsolete, or merely unimplemented for the new dialog?
-//
-/*    RG_DEBUG << "RosegardenMainWindow::slotDeviceManagerClosed()\n";
+    RG_DEBUG << "RosegardenMainWindow::slotDeviceManagerClosed()\n";
 
     if (m_doc->isModified()) {
-        if (m_view)
+        if (m_view) {
             m_view->slotSelectTrackSegments(m_doc->getComposition().getSelectedTrack());
+        }
     }
 
-    m_deviceManager = 0;*/
+    m_deviceManager = 0;
 }
 
 void

@@ -58,14 +58,14 @@ namespace Rosegarden
 
 MidiMixerWindow::MidiMixerWindow(QWidget *parent,
                                  RosegardenDocument *document):
-        MixerWindow(parent, document),
-        m_tabFrame(0)
+    MixerWindow(parent, document),
+    m_tabFrame(0)
 {
     // Initial setup
     //
     setupTabs();
 
-    createAction( "file_close", SLOT(slotClose()) );
+    createAction("file_close", SLOT(slotClose()));
 
     createAction("play", SIGNAL(play()));
     createAction("stop", SIGNAL(stop()));

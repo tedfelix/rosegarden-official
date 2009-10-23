@@ -92,23 +92,23 @@ protected:
 
     virtual void sendControllerRefresh();
 
-    QTabWidget                        *m_tabWidget;
+    QTabWidget *m_tabWidget;
 
     struct FaderStruct {
 
         FaderStruct():m_id(0), m_vuMeter(0), m_volumeFader(0) {}
 
-        InstrumentId       m_id;
-        MidiMixerVUMeter              *m_vuMeter;
-        Fader               *m_volumeFader;
+        InstrumentId m_id;
+        MidiMixerVUMeter *m_vuMeter;
+        Fader *m_volumeFader;
         std::vector<std::pair<MidiByte, Rotary*> > m_controllerRotaries;
 
     };
 
     typedef std::vector<FaderStruct*>  FaderVector;
-    FaderVector                        m_faders;
+    FaderVector m_faders;
 
-    QFrame                            *m_tabFrame;
+    QFrame *m_tabFrame;
 
 };
 

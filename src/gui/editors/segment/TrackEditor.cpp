@@ -409,7 +409,7 @@ void TrackEditor::updateRulers()
 
 void TrackEditor::paintEvent(QPaintEvent* e)
 {
-    RG_DEBUG << "TrackEditor::paintEvent" << endl;
+//    RG_DEBUG << "TrackEditor::paintEvent" << endl;
 
     if (isCompositionModified()) {
 
