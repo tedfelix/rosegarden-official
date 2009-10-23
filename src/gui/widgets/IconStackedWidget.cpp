@@ -69,6 +69,7 @@ IconStackedWidget::IconStackedWidget(QWidget *parent) :
 
     // Use a QHBoxLayout for icon and page panels
     m_layout = new QHBoxLayout;
+    m_layout->setMargin(0);
     
     // Add the icon and page panels to the main layout
     m_layout->addWidget(m_iconPanel);

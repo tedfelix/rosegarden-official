@@ -46,6 +46,7 @@ ConfigureDialogBase::ConfigureDialogBase(QWidget *parent, QString label, const c
     this->setObjectName( (name) );
 
     QVBoxLayout *dlgLayout = new QVBoxLayout(this);
+//    dlgLayout->setMargin(0);
 
     m_iconWidget = new IconStackedWidget(this);
     dlgLayout->addWidget(m_iconWidget);
@@ -76,6 +77,7 @@ void ConfigureDialogBase::addPage(const QString& name, const QString& title, con
     // New widget to hold the title, dividing line and configuration page
     QWidget * titledPage = new QWidget(this);
     QLayout * pageLayout = new QVBoxLayout(titledPage);
+    pageLayout->setMargin(0);
 
     // Create the title label widget for the configration page
     QLabel * titleLabel = new QLabel(titledPage,title);
