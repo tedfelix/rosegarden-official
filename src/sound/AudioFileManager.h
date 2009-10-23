@@ -124,6 +124,10 @@ public:
 
     // And insert an AudioFile and specify an id
     //
+    // Convert an audio file using packages in Rosegarden.
+    // This replaces the Perl script previously used. It returns 0 for OK
+    int convertAudioFile(const std::string inFile, const std::string outFile);
+
     bool insertFile(const std::string &name, const std::string &fileName,
                     AudioFileId id);
     // throw BadAudioPathException

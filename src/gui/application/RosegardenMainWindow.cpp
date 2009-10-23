@@ -4433,6 +4433,8 @@ void
 RosegardenMainWindow::slotTestStartupTester()
 {   
     RG_DEBUG << "RosegardenMainWindow::slotTestStartupTester" << endl;
+    m_haveAudioImporter = true; // we short circuit this whole test and go home
+    return;
 
     if (!m_startupTester) {
         m_startupTester = new StartupTester();

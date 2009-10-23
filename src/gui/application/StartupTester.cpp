@@ -51,8 +51,7 @@ StartupTester::~StartupTester()
 }
 
 void
-StartupTester::run()
-{
+StartupTester::run() {
     m_runningMutex.lock();
     m_audioFileImporterMutex.lock();
     m_ready = true;
@@ -71,12 +70,12 @@ StartupTester::run()
                      
     procArgs << "--conftest";
 //    m_proc->execute("rosegarden-audiofile-importer", procArgs);
-    m_proc->start("rosegarden-audiofile-importer", procArgs);
-    m_proc->waitForFinished();
+//    m_proc->start("rosegarden-audiofile-importer", procArgs);
+//    m_proc->waitForFinished();
 
     // Wait for stdout to be processed by stdoutReceived
     // Note if this isn't done, this thread will go ahead and delete m_proc before the stdoutReceived slot is called
-    while(m_proc->bytesAvailable() > 0)
+/*    while(m_proc->bytesAvailable() > 0)
         usleep(10000);
 
     if ((m_proc->exitStatus() != QProcess::NormalExit) || m_proc->exitCode()) {
@@ -86,7 +85,7 @@ StartupTester::run()
     } else {
         RG_DEBUG << "StartupTester - Audio file importer OK" << endl;
         m_haveAudioFileImporter = true;
-    }
+    }*/
     delete m_proc;
     procArgs = QStringList();
     m_audioFileImporterMutex.unlock();

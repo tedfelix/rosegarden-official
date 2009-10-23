@@ -44,6 +44,11 @@
 #include "WAVAudioFile.h"
 #include "BWFAudioFile.h"
 #include "misc/Strings.h"
+#include "sequencer/RosegardenSequencer.h"
+#include "sound/audiostream/AudioReadStream.h"
+#include "sound/audiostream/AudioReadStreamFactory.h"
+#include "sound/audiostream/AudioWriteStream.h"
+#include "sound/audiostream/AudioWriteStreamFactory.h"
 
 namespace Rosegarden
 {
@@ -657,6 +662,7 @@ bool
 AudioFileManager::fileNeedsConversion(const std::string &fileName,
                                       int sampleRate)
 {
+    return false;   // short circuit this test
     //setup "rosegarden-audiofile-importer" process
     QProcess *proc = new QProcess();
     QStringList procArgs;
@@ -699,9 +705,10 @@ AudioFileManager::importFile(const std::string &fileName, int sampleRate)
     procArgs << "-w";
     procArgs << fileName.c_str();
 
-    proc->execute("rosegarden-audiofile-importer", procArgs);
+//    proc->execute("rosegarden-audiofile-importer", procArgs);
 
-    int ec = proc->exitCode();
+//    int ec = proc->exitCode();
+    int ec = 1;
     delete proc;
 
     if (ec == 0) {
@@ -749,7 +756,7 @@ AudioFileManager::importFile(const std::string &fileName, int sampleRate)
 	//@@@ Fixed:  Created importProcess on the Stack
         //@@@ FIX: free *m_importProcess when execption thrown
 
-    importProcessArgs << "rosegarden-audiofile-importer";
+/*    importProcessArgs << "rosegarden-audiofile-importer";
     if (sampleRate > 0) {
 	importProcessArgs << "-r";
 	importProcessArgs << QString("%1").arg(sampleRate);
@@ -770,7 +777,9 @@ AudioFileManager::importFile(const std::string &fileName, int sampleRate)
 	throw SoundFile::BadSoundFileException(fileName, "Import cancelled");
     }
 
-    ec = m_importProcess->exitCode();
+    ec = m_importProcess->exitCode();*/
+    std::string outFileName = targetName.toStdString();
+    ec = convertAudioFile(fileName, outFileName);
 
     delete m_importProcess;
     m_importProcess = 0;
@@ -795,6 +804,45 @@ AudioFileManager::importFile(const std::string &fileName, int sampleRate)
     m_expectedSampleRate = sampleRate;
 
     return aF->getId();
+}
+
+int AudioFileManager::convertAudioFile(std::string inFile, std::string outFile) {
+    AudioReadStream *rs = AudioReadStreamFactory::createReadStream( strtoqstr(inFile));
+    if (!rs || !rs->isOK()) {
+        std::cerr << "ERROR: Failed to read audio file";
+        if (rs) std::cerr << ": " << rs->getError() << std::endl;
+        else std::cerr << std::endl;
+        return -1;
+    }
+
+    int channels = rs->getChannelCount();
+    int rate = RosegardenSequencer::getInstance()->getSampleRate();
+    int blockSize = 2048; // or anything
+
+    rs->setRetrievalSampleRate(rate);
+
+    AudioWriteStream *ws = AudioWriteStreamFactory::createWriteStream
+            (strtoqstr(outFile), channels, rate);
+
+    if (!ws || !ws->isOK()) {
+        std::cerr << "ERROR: Failed to write audio file";
+        if (ws) std::cerr << ": " << ws->getError() << std::endl;
+        else std::cerr << std::endl;
+        return -1;
+    }
+
+    float *block = new float[blockSize * channels];
+
+    while (1) {
+        int got = rs->getInterleavedFrames(blockSize, block);
+        ws->putInterleavedFrames(got, block);
+        if (got < blockSize) break;
+    }
+
+    delete[] block;
+    delete ws;
+    delete rs;
+    return 0;
 }
 
 void
