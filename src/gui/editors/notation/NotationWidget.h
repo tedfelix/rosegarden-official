@@ -113,6 +113,7 @@ public:
 signals:
     void segmentDeleted(Segment *);
     void sceneDeleted();
+    void toolChanged(QString);
 
 public slots:
     void slotSetTool(QString name);

@@ -556,6 +556,7 @@ NotationWidget::slotSetTool(QString name)
     if (m_currentTool) m_currentTool->stow();
     m_currentTool = tool;
     m_currentTool->ready();
+    emit toolChanged(name);
 }
 
 void
