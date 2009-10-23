@@ -80,6 +80,9 @@ public:
     Segment *getCurrentSegment();
     void setCurrentSegment(Segment *);
 
+    Segment *getPriorSegment();
+    Segment *getNextSegment();
+
     MatrixViewSegment *getCurrentViewSegment();
 
     bool segmentsContainNotes() const;

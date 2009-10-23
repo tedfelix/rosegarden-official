@@ -194,6 +194,12 @@ MatrixView::MatrixView(RosegardenDocument *doc,
     
     settings.endGroup();
 
+    if (segments.size() > 1) {
+        enterActionState("have_multiple_segments");
+    } else {
+        leaveActionState("have_multiple_segments");
+    }
+
     // Restore window geometry
     settings.beginGroup(WindowGeometryConfigGroup);
     QString modeStr = (m_drumMode ? "Percussion_Matrix_View" : "Matrix_View");
@@ -334,6 +340,8 @@ MatrixView::setupActions()
     createAction("playback_pointer_start", SIGNAL(rewindPlaybackToBeginning()));
     createAction("playback_pointer_end", SIGNAL(fastForwardPlaybackToEnd()));
     createAction("playback_pointer_to_cursor", SLOT(slotJumpPlaybackToCursor()));
+    createAction("cursor_prior_segment", SLOT(slotCurrentSegmentPrior()));
+    createAction("cursor_next_segment", SLOT(slotCurrentSegmentNext()));
     createAction("toggle_solo", SLOT(slotToggleSolo()));
     createAction("toggle_tracking", SLOT(slotToggleTracking()));
     createAction("panic", SIGNAL(panic()));
@@ -989,6 +997,18 @@ void
 MatrixView::slotSelectAll()
 {
     if (m_matrixWidget) m_matrixWidget->slotSelectAll();
+}
+
+void
+MatrixView::slotCurrentSegmentPrior()
+{
+    if (m_matrixWidget) m_matrixWidget->slotCurrentSegmentPrior();
+}
+
+void
+MatrixView::slotCurrentSegmentNext()
+{
+    if (m_matrixWidget) m_matrixWidget->slotCurrentSegmentNext();
 }
 
 void

@@ -116,6 +116,9 @@ public slots:
     void slotSelectAll();
     void slotClearSelection();
 
+    void slotCurrentSegmentPrior();
+    void slotCurrentSegmentNext();
+
     void slotSetTool(QString name);
     void slotSetPaintTool();
     void slotSetEraseTool();

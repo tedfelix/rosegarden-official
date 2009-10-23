@@ -267,6 +267,12 @@ NotationView::NotationView(RosegardenDocument *doc,
 
     settings.endGroup();
 
+    if (segments.size() > 1) {
+        enterActionState("have_multiple_staffs");
+    } else {
+        leaveActionState("have_multiple_staffs");
+    }
+
     initLayoutToolbar();
     initStatusBar();
 

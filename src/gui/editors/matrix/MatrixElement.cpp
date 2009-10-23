@@ -210,6 +210,8 @@ MatrixElement::setCurrent(bool current)
         item->setPen
             (QPen(GUIPalette::getColour(GUIPalette::MatrixElementLightBorder), 0));
     }
+
+    m_current = current;
 }
 
 MatrixElement *

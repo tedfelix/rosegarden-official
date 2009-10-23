@@ -108,6 +108,9 @@ protected slots:
     void slotClearSelection();
     void slotFilterSelection();
 
+    void slotCurrentSegmentPrior();
+    void slotCurrentSegmentNext();
+
     void slotSetPaintTool();
     void slotSetEraseTool();
     void slotSetSelectTool();

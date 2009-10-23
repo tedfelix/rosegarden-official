@@ -589,6 +589,22 @@ MatrixWidget::getCurrentSegment()
     return m_scene->getCurrentSegment();
 }
 
+void
+MatrixWidget::slotCurrentSegmentPrior()
+{
+    if (!m_scene) return;
+    Segment *s = m_scene->getPriorSegment();
+    if (s) m_scene->setCurrentSegment(s);
+}
+
+void
+MatrixWidget::slotCurrentSegmentNext()
+{
+    if (!m_scene) return;
+    Segment *s = m_scene->getNextSegment();
+    if (s) m_scene->setCurrentSegment(s);
+}
+
 Device *
 MatrixWidget::getCurrentDevice()
 {

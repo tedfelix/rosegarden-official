@@ -186,11 +186,26 @@ MatrixScene::setCurrentSegment(Segment *s)
     for (int i = 0; i < int(m_segments.size()); ++i) {
         if (s == m_segments[i]) {
             m_currentSegmentIndex = i;
+            updateCurrentSegment();
             return;
         }
     }
     std::cerr << "WARNING: MatrixScene::setCurrentSegment: unknown segment "
               << s << std::endl;
+}
+
+Segment *
+MatrixScene::getPriorSegment()
+{
+    if (m_currentSegmentIndex == 0) return 0;
+    return m_segments[m_currentSegmentIndex-1];
+}
+
+Segment *
+MatrixScene::getNextSegment()
+{
+    if (m_currentSegmentIndex + 1 >= m_segments.size()) return 0;
+    return m_segments[m_currentSegmentIndex+1];
 }
 
 MatrixViewSegment *
@@ -707,6 +722,7 @@ MatrixScene::previewSelection(EventSelection *s,
 void
 MatrixScene::updateCurrentSegment()
 {
+    MATRIX_DEBUG << "MatrixScene::updateCurrentSegment: current is " << m_currentSegmentIndex << endl;
     for (int i = 0; i < (int)m_viewSegments.size(); ++i) {
         bool current = (i == m_currentSegmentIndex);
         ViewElementList *vel = m_viewSegments[i]->getViewElementList();
