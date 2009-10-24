@@ -61,12 +61,8 @@ ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
         QDialog(parent),
         m_doc(doc),
         m_buttonBox(new QDialogButtonBox(QDialogButtonBox::Ok | 
-                                         QDialogButtonBox::Apply |
-                                         QDialogButtonBox::Close |
-                                         QDialogButtonBox::Help))
+                                         QDialogButtonBox::Close))
 {
-    //setHelp("studio-metronome");
-
     setModal(true);
     setWindowTitle(tr("Metronome"));
 
@@ -410,13 +406,6 @@ ManageMetronomeDialog::setModified(bool value)
 {
     if (m_modified == value)
         return ;
-
-    QPushButton *butt = m_buttonBox->button( QDialogButtonBox::Apply );
-    if (value) {
-        butt->setEnabled(true);
-    } else {
-        butt->setEnabled(false);
-    }
 
     m_modified = value;
 }
