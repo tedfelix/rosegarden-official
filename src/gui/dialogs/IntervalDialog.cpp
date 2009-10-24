@@ -48,12 +48,12 @@ IntervalDialog::IntervalDialog(QWidget *parent, bool askChangeKey, bool askTrans
 
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
-    QWidget *vBox = new QWidget(this);
+
+    QWidget *vBox = new QWidget;
     QVBoxLayout *vBoxLayout = new QVBoxLayout;
     metagrid->addWidget(vBox, 0, 0);
 
-
-    QWidget *hBox = new QWidget( vBox );
+    QWidget *hBox = new QWidget;
     vBoxLayout->addWidget(hBox);
     QHBoxLayout *hBoxLayout = new QHBoxLayout;
 
@@ -66,10 +66,6 @@ IntervalDialog::IntervalDialog(QWidget *parent, bool askChangeKey, bool askTrans
     intervalChromatic = 0;
     intervalDiatonic = 0;
 
-    //m_intervalPitchLabel = new QLabel( tr("Pitch: %1").arg(intervalChromatic), hBox);
-    //m_intervalOctavesLabel = new QLabel( tr("Octaves: %1").arg(intervalDiatonic / 7), hBox);
-    //m_intervalStepsLabel = new QLabel( tr("Steps: %1").arg(intervalDiatonic % 7), hBox);
-
     m_intervalLabel = new QLabel(tr("a perfect unison"), vBox );
     vBoxLayout->addWidget(m_intervalLabel);
     m_intervalLabel->setAlignment(Qt::AlignCenter);
@@ -77,8 +73,7 @@ IntervalDialog::IntervalDialog(QWidget *parent, bool askChangeKey, bool askTrans
     font.setItalic(true);
     m_intervalLabel->setFont(font);
 
-    if (askChangeKey)
-    {
+    if (askChangeKey) {
         QGroupBox *affectKeyGroup = new QGroupBox( tr("Effect on Key"), vBox );
         QVBoxLayout *affectKeyGroupLayout = new QVBoxLayout;
         vBoxLayout->addWidget(affectKeyGroup);
@@ -88,22 +83,17 @@ IntervalDialog::IntervalDialog(QWidget *parent, bool askChangeKey, bool askTrans
         m_transposeChangingKey = new QRadioButton(tr("Change key for selection"));
         affectKeyGroupLayout->addWidget(m_transposeChangingKey);
         affectKeyGroup->setLayout(affectKeyGroupLayout);
-    }
-    else
-    {
+    } else {
         m_transposeChangingKey = NULL;
         m_transposeWithinKey = NULL;
     }
     
-    if (askTransposeSegmentBack)
-    {
+    if (askTransposeSegmentBack) {
         m_transposeSegmentBack = new QCheckBox(tr("Adjust segment transposition in opposite direction (maintain audible pitch)"), vBox );
         vBoxLayout->addWidget(m_transposeSegmentBack);
         m_transposeSegmentBack->setTristate(false);
         m_transposeSegmentBack->setChecked(false);
-    }
-    else
-    {
+    } else {
         m_transposeSegmentBack = NULL;
     }
 
@@ -167,8 +157,7 @@ IntervalDialog::getIntervalName(int intervalDiatonic, int intervalChromatic)
     bool down = (intervalDiatonic < 0 || 
                  (intervalDiatonic == 0 &&
                   intervalChromatic < 0));
-    if (down)
-    {
+    if (down) {
         displayIntervalDiatonic = -displayIntervalDiatonic;
         displayIntervalChromatic = -displayIntervalChromatic;
     }
@@ -197,10 +186,8 @@ IntervalDialog::getIntervalName(int intervalDiatonic, int intervalChromatic)
     
     QString textInterval = "";
     QString textIntervalDeviated = "";
-    if (showStep)
-    {
-        switch (displayIntervalDiatonic % 7)
-        {
+    if (showStep) {
+        switch (displayIntervalDiatonic % 7) {
         // First the diminished/perfect/augmented:
         case 0: // unison or octaves
         case 3: // fourth
@@ -257,8 +244,7 @@ IntervalDialog::getIntervalName(int intervalDiatonic, int intervalChromatic)
         default:
            textIntervalDeviated += tr("an (unknown)");
         }
-        switch (displayIntervalDiatonic % 7)
-	{
+        switch (displayIntervalDiatonic % 7) {
 	case 0:
 	    // Note (hjj):
 	    // "1 octave and a diminished octave" is better than
@@ -296,10 +282,8 @@ IntervalDialog::getIntervalName(int intervalDiatonic, int intervalChromatic)
         }
     }
     
-    if (displayIntervalChromatic != 0 || displayIntervalDiatonic != 0)
-    {
-        if (!down)
-        {
+    if (displayIntervalChromatic != 0 || displayIntervalDiatonic != 0) {
+        if (!down) {
 	    if (octaves != 0) {
 		if (showStep) {
 		    return tr("up %n octave(s) and %1", "", octaves)
@@ -310,9 +294,7 @@ IntervalDialog::getIntervalName(int intervalDiatonic, int intervalChromatic)
 	    } else {
 		return tr("up %1").arg(textInterval);
 	    }
-        }
-        else
-        {
+        } else {
 	    if (octaves != 0) {
 		if (showStep) {
 		    return tr("down %n octave(s) and %1", "", octaves)
@@ -353,12 +335,9 @@ IntervalDialog::slotSetReferenceNote(int pitch, int octave, int step)
 bool
 IntervalDialog::getChangeKey()
 {
-    if (m_transposeChangingKey == NULL)
-    {
+    if (m_transposeChangingKey == NULL) {
         return false;
-    }
-    else
-    {
+    } else {
         return m_transposeChangingKey->isChecked();
     }
 }
@@ -366,12 +345,9 @@ IntervalDialog::getChangeKey()
 bool
 IntervalDialog::getTransposeSegmentBack()
 {
-    if (m_transposeSegmentBack == NULL)
-    {
+    if (m_transposeSegmentBack == NULL) {
         return false;
-    }
-    else
-    {
+    } else {
         return m_transposeSegmentBack->isChecked();	
     }
 }
