@@ -42,7 +42,7 @@
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="489"/>
         <source>&lt;qt&gt;&lt;p&gt;Bank definitions allow you to tell Rosegarden about the programs or patches available for use on the equipment (hardware or software synth) connected to this device.&lt;/p&gt;&lt;p&gt;You must have something defined for any program or bank changes you wish to transmit, as Rosegarden hides all bank and program numbers that are undefined.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Ohjelma määritelmät sallivat sinun määritellä Rosegardenille saatavilla olevat ohjelmat tai patchit tähän laitteeseen yhdistettyä laitteistoa (kiinteä tai ohjelmallinen syntetisointi) varten.&lt;/p&gt;&lt;p&gt;Sinulla täytyy olla jotain määritettynä kutakin välitettävää ohjelma- tai pankinmuutosta varten, sillä Rosegaden piilottaa kaikki määrittämättömät pankki- tai ohjelmanumerot.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Pankkimääritysten avulla voit määritellä Rosegardenille tämän laitteen (kiinteä tai ohjelmallinen syntetisointi) instrumentit.&lt;/p&gt;&lt;p&gt;Sinulla täytyy olla jotain määritettynä kutakin välitettävää instrumentti- tai pankinmuutosta varten, sillä Rosegaden piilottaa kaikki määrittämättömät pankki- tai instrumenttinumerot.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="491"/>
@@ -2372,34 +2372,34 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="624"/>
         <source>Next Staff &amp;Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Seuraava viivasto &amp;ylös</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="625"/>
         <source>Next Staff &amp;Down</source>
-        <translation type="unfinished"></translation>
+        <translation>Seuraava viivasto &amp;alas</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="262"/>
         <location filename="../QMenuStrings.cpp" line="626"/>
         <source>Pre&amp;vious Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Edellinen osa</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="263"/>
         <location filename="../QMenuStrings.cpp" line="627"/>
         <source>Ne&amp;xt Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Seuraava osa</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="630"/>
         <source>Step &amp;Back</source>
-        <translation type="unfinished"></translation>
+        <translation>Askel &amp;taakse</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="631"/>
         <source>Step &amp;Forward</source>
-        <translation type="unfinished"></translation>
+        <translation>Askel &amp;eteen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="662"/>
@@ -2700,7 +2700,7 @@
         <location filename="../QMenuStrings.cpp" line="110"/>
         <location filename="../QMenuStrings.cpp" line="184"/>
         <source>Preferences...</source>
-        <translation type="unfinished"></translation>
+        <translation>Asetukset...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="209"/>
@@ -2723,7 +2723,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="258"/>
         <source>Cursor Back and Se&amp;lect</source>
-        <translation type="unfinished"></translation>
+        <translation>Kohdistin taakse ja &amp;valitse</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="343"/>
@@ -2735,7 +2735,7 @@
         <location filename="../QMenuStrings.cpp" line="439"/>
         <location filename="../QMenuStrings.cpp" line="834"/>
         <source>&amp;Preferences...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Asetukset...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="459"/>
@@ -3526,12 +3526,12 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../InstrumentStrings.cpp" line="36"/>
         <source>Violoncello</source>
-        <translation type="unfinished"></translation>
+        <translation>Sello</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="37"/>
         <source>Baroque violoncello</source>
-        <translation type="unfinished"></translation>
+        <translation>Barokkisello</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="38"/>
@@ -3549,62 +3549,62 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../InstrumentStrings.cpp" line="40"/>
         <source>Soprano viola da gamba</source>
-        <translation type="unfinished"></translation>
+        <translation>Sopraano viola da gamba</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="41"/>
         <source>Alto viola da gamba</source>
-        <translation type="unfinished"></translation>
+        <translation>Altto viola da gamba</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="42"/>
         <source>Tenor viola da gamba</source>
-        <translation type="unfinished"></translation>
+        <translation>Tenori viola da gamba</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="43"/>
         <source>Viola da gamba</source>
-        <translation type="unfinished"></translation>
+        <translation>Viola da gamba</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="44"/>
         <source>Violone</source>
-        <translation type="unfinished"></translation>
+        <translation>Kontrabassogamba</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="45"/>
         <source>Plucked strings</source>
-        <translation type="unfinished"></translation>
+        <translation>Näppäilty kitara</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="46"/>
         <source>Soprano guitar</source>
-        <translation type="unfinished"></translation>
+        <translation>Sopraanokitara</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="47"/>
         <source>Alto guitar</source>
-        <translation type="unfinished"></translation>
+        <translation>Alttokitara</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="48"/>
         <source>Guitar (prim)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kitara (</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="49"/>
         <source>Contrabass guitar</source>
-        <translation type="unfinished"></translation>
+        <translation>Kontrabassokitara</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="50"/>
         <source>11-string alto guitar (treble)</source>
-        <translation type="unfinished"></translation>
+        <translation>11-kielinen alttokitara (diskantti)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="51"/>
         <source>11-string alto guitar (bass)</source>
-        <translation type="unfinished"></translation>
+        <translation>11-kielinen alttokitara (basso)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="52"/>
@@ -3614,7 +3614,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../InstrumentStrings.cpp" line="53"/>
         <source>Pedal steel guitar</source>
-        <translation type="unfinished"></translation>
+        <translation>Pedaali steel-kitara</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="54"/>
@@ -3639,17 +3639,17 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../InstrumentStrings.cpp" line="58"/>
         <source>Lute</source>
-        <translation type="unfinished"></translation>
+        <translation>Luuttu</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="59"/>
         <source>Cittern</source>
-        <translation type="unfinished"></translation>
+        <translation>Cittern</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="60"/>
         <source>Piccolo balalaika</source>
-        <translation type="unfinished"></translation>
+        <translation>Pikkolobalalaikka</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="61"/>
@@ -3664,60 +3664,60 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../InstrumentStrings.cpp" line="63"/>
         <source>Alto balalaika</source>
-        <translation type="unfinished"></translation>
+        <translation>Alttobalalaikka</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="64"/>
         <source>Bass balalaika</source>
-        <translation type="unfinished"></translation>
+        <translation>Bassobalalaikka</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="65"/>
         <source>Contrabass balalaika</source>
-        <translation type="unfinished"></translation>
+        <translation>Kontrabassobalalaikka</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="66"/>
         <location filename="../AutoloadStrings.cpp" line="201"/>
         <source>Mandolin</source>
-        <translation type="unfinished"></translation>
+        <translation>Mandoliini</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="67"/>
         <source>Mandola</source>
-        <translation type="unfinished"></translation>
+        <translation>Mandola</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="68"/>
         <location filename="../AutoloadStrings.cpp" line="178"/>
         <source>Ukulele</source>
-        <translation type="unfinished"></translation>
+        <translation>Ukulele</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="69"/>
         <source>Banjo (5-string)</source>
-        <translation type="unfinished"></translation>
+        <translation>Banjo (5-kielinen)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="70"/>
         <source>Tenor banjo</source>
-        <translation type="unfinished"></translation>
+        <translation>Tenoribanjo</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="71"/>
         <source>Harp (treble)</source>
-        <translation type="unfinished"></translation>
+        <translation>Harppu (diskantti)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="72"/>
         <source>Harp (bass)</source>
-        <translation type="unfinished"></translation>
+        <translation>Harppu (basso)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="73"/>
         <location filename="../AutoloadStrings.cpp" line="148"/>
         <source>Koto</source>
-        <translation type="unfinished"></translation>
+        <translation>Koto</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="74"/>
@@ -4716,13 +4716,13 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../InstrumentStrings.cpp" line="271"/>
         <source>Bass drum</source>
-        <translation type="unfinished"></translation>
+        <translation>Bassorumpu</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="272"/>
         <location filename="../AutoloadStrings.cpp" line="267"/>
         <source>Tambourine</source>
-        <translation type="unfinished"></translation>
+        <translation>Tamburiini</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="273"/>
@@ -5071,17 +5071,17 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../InstrumentStrings.cpp" line="341"/>
         <source>Electronic organ (manual) (treble)</source>
-        <translation type="unfinished">Elektroniset urut (manuaalinen) (diskantti)</translation>
+        <translation>Sähköurut (manuaalinen) (diskantti)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="342"/>
         <source>Electronic organ (manual) (bass)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sähköurut (manuaalinen) (basso)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="343"/>
         <source>Electronic organ (pedal)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sähköurut (pedaali)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="344"/>
@@ -5142,22 +5142,22 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../InstrumentStrings.cpp" line="356"/>
         <source>Alto</source>
-        <translation type="unfinished">Altto</translation>
+        <translation>Altto</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="358"/>
         <source>Baritone</source>
-        <translation type="unfinished"></translation>
+        <translation>Baritoni</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="360"/>
         <source>Boy soprano</source>
-        <translation type="unfinished"></translation>
+        <translation>Poikasopraano</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="361"/>
         <source>Miscellaneous</source>
-        <translation type="unfinished"></translation>
+        <translation>Sekalaiset</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="362"/>
@@ -5172,12 +5172,12 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../InstrumentStrings.cpp" line="364"/>
         <source>Police whistle</source>
-        <translation type="unfinished"></translation>
+        <translation>Poliisipilli</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="365"/>
         <source>Bird whistle</source>
-        <translation type="unfinished"></translation>
+        <translation>Linnunlaulu</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="366"/>
@@ -5393,7 +5393,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../AutoloadStrings.cpp" line="53"/>
         <source>Marimba</source>
-        <translation type="unfinished"></translation>
+        <translation>Marimba</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="55"/>
@@ -5443,27 +5443,27 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../AutoloadStrings.cpp" line="65"/>
         <source>Acoustic Guitar (nylon)</source>
-        <translation type="unfinished"></translation>
+        <translation>Akustinen kitara (nylon)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="66"/>
         <source>Acoustic Guitar (steel)</source>
-        <translation type="unfinished"></translation>
+        <translation>Akustinen kitara (teräs)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="67"/>
         <source>Electric Guitar (jazz)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sähkökitara (jazz)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="68"/>
         <source>Electric Guitar (clean)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sähkökitara (puhdas)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="69"/>
         <source>Electric Guitar (muted)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sähkökitara (vaimennettu)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="70"/>
@@ -6308,97 +6308,97 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../AutoloadStrings.cpp" line="251"/>
         <source>Acoustic Snare</source>
-        <translation type="unfinished"></translation>
+        <translation>Akustinen virveli</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="252"/>
         <source>Hand Clap</source>
-        <translation type="unfinished"></translation>
+        <translation>Käsien taputus</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="253"/>
         <source>Electric Snare</source>
-        <translation type="unfinished"></translation>
+        <translation>Sähköinen virveli</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="254"/>
         <source>Low Floor Tom</source>
-        <translation type="unfinished"></translation>
+        <translation>Matala lattiatomi</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="255"/>
         <source>Closed Hi-Hat</source>
-        <translation type="unfinished"></translation>
+        <translation>Suljettu hi-hat</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="256"/>
         <source>High Floor Tom</source>
-        <translation type="unfinished"></translation>
+        <translation>Korkea lattiatomi</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="257"/>
         <source>Pedal Hi-Hat</source>
-        <translation type="unfinished"></translation>
+        <translation>Poljettu hi-hat</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="258"/>
         <source>Low Tom</source>
-        <translation type="unfinished"></translation>
+        <translation>Matala tomi</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="259"/>
         <source>Open Hi-Hat</source>
-        <translation type="unfinished"></translation>
+        <translation>Avoin hi-hat</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="260"/>
         <source>Low-Mid Tom</source>
-        <translation type="unfinished"></translation>
+        <translation>Matala-keski tomi</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="261"/>
         <source>Hi-Mid Tom</source>
-        <translation type="unfinished"></translation>
+        <translation>Korkea-keski tomi</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="262"/>
         <source>Crash Cymbal 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Crash-lautanen 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="263"/>
         <source>High Tom</source>
-        <translation type="unfinished"></translation>
+        <translation>Korkea tomi</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="264"/>
         <source>Ride Cymbal 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ride-lautanen 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="265"/>
         <source>Chinese Cymbal</source>
-        <translation type="unfinished"></translation>
+        <translation>Kiina-lautanen</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="266"/>
         <source>Ride Bell</source>
-        <translation type="unfinished"></translation>
+        <translation>Ride-kello</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="268"/>
         <source>Splash Cymbal</source>
-        <translation type="unfinished"></translation>
+        <translation>Splash-lautanen</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="269"/>
         <source>Cowbell</source>
-        <translation type="unfinished"></translation>
+        <translation>Lehmänkello</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="270"/>
         <source>Crash Cymbal 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Crash-lautanen 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="271"/>
@@ -6408,7 +6408,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../AutoloadStrings.cpp" line="272"/>
         <source>Ride Cymbal 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Ride-lautanen 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="273"/>
@@ -6833,17 +6833,17 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../AutoloadStrings.cpp" line="369"/>
         <source>beige</source>
-        <translation type="unfinished">beige</translation>
+        <translation>beige</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="370"/>
         <source>wheat</source>
-        <translation type="unfinished">vehnä</translation>
+        <translation>vehnä</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="371"/>
         <source>SandyBrown</source>
-        <translation type="unfinished">Oranssihtava ruskea</translation>
+        <translation>Hiekanruskea</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="372"/>
@@ -8643,7 +8643,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../AutoloadStrings.cpp" line="731"/>
         <source>default</source>
-        <translation type="unfinished"></translation>
+        <translation>oletus</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="732"/>
@@ -8653,12 +8653,12 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../AutoloadStrings.cpp" line="733"/>
         <source>Not Yet Titled</source>
-        <translation type="unfinished"></translation>
+        <translation>Vielä otsikoimaton</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="734"/>
         <source>not yet subtitled</source>
-        <translation type="unfinished"></translation>
+        <translation>vielä alaotsikoimaton</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="735"/>
@@ -8668,29 +8668,29 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="320"/>
         <source>[ %1 ]</source>
-        <translation type="unfinished">[ %1 ]</translation>
+        <translation>[ %1 ]</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="759"/>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="881"/>
         <source>%1. %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1. %2</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="91"/>
         <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="448"/>
         <source>%1</source>
-        <translation type="unfinished">%1</translation>
+        <translation>%1</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/DialogSuppressor.cpp" line="76"/>
         <source>Do not show this warning again</source>
-        <translation type="unfinished">Älä näytä tätä varoitusta uudestaan</translation>
+        <translation>Älä näytä tätä varoitusta uudestaan</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ActionFileParser.cpp" line="629"/>
         <source>%1 (%2)</source>
-        <translation type="unfinished">%1 (%2)</translation>
+        <translation>%1 (%2)</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="387"/>
@@ -13583,7 +13583,7 @@ sen sijaan?</translation>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="152"/>
         <source>Staff size</source>
-        <translation type="unfinished"></translation>
+        <translation>Viivaston koko</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="155"/>
@@ -17146,28 +17146,28 @@ Ole hyvä ja varmista, että laite on määritetty oikein pääikkunan Hallitse 
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="655"/>
         <source>&lt;qt&gt;&lt;p&gt;Rosegarden can add any number of extra files you may desire to a project package.  For example, you may wish to include an explanatory text file, a soundfont, a bank definition for ZynAddSubFX, or perhaps some cover art.&lt;/p&gt;&lt;p&gt;Would you like to include any additional files?&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Rosegarden voi lisätä rajoittamattoman määrän lisätiedostoja projektipakettiin.  Voit esimerkiksi lisätä lisätietoja sisältävän tekstitiedoston, äänikirjaston, ZynAddSubFX:n pankkimäärityksen, tai vaikkapa kansikuvataidetta.&lt;/p&gt;&lt;p&gt;Haluaisitko lisätä muita tiedostoja?&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="676"/>
         <source>All files</source>
-        <translation type="unfinished">Kaikki tiedostot</translation>
+        <translation>Kaikki tiedostot</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="685"/>
         <source>&lt;qt&gt;&lt;p&gt;Would you like to include any additional files?&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Haluaisitko lisätä muita tiedostoja?&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="689"/>
         <source>Copying plugin data and extra files...</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopioidaan lisäosatietoja ja muita tiedostoja...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="748"/>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="947"/>
         <source>&lt;qt&gt;&lt;p&gt;Unable to write to temporary backend processing script %1.&lt;/p&gt;&lt;p&gt;Processing aborted.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Väliaikaiseen taustaprosessointikomentoon %1 ei voitu kirjoittaa.&lt;/p&gt;&lt;p&gt;Käsittely keskeytetty.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="799"/>
