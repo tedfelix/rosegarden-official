@@ -32,54 +32,27 @@ namespace Rosegarden
 QuantizeDialog::QuantizeDialog(QWidget *parent, bool inNotation) :
         QDialog(parent)
 {
-    //setHelp("quantization");
-
     setModal(true);
     setWindowTitle(tr("Quantize"));
 
-    QGridLayout *metagrid = new QGridLayout;
-    setLayout(metagrid);
-    QWidget *vbox = new QWidget(this);
     QVBoxLayout *vboxLayout = new QVBoxLayout;
-    metagrid->addWidget(vbox, 0, 0);
+    setLayout(vboxLayout);
 
 
-    m_quantizeFrame = new QuantizeParameters( vbox , inNotation ?
+    m_quantizeFrame = new QuantizeParameters(this , inNotation ?
             QuantizeParameters::Notation : QuantizeParameters::Grid,
-            true, false, 0);
+            false, 0);
     vboxLayout->addWidget(m_quantizeFrame);
-    vbox->setLayout(vboxLayout);
 
-    setDetailsWidget(m_quantizeFrame->getAdvancedWidget());  //
-	
-	m_quantizeFrame->getAdvancedWidget()->hide();
-
+    m_quantizeFrame->getAdvancedWidget()->show();
     m_quantizeFrame->adjustSize();
-    vbox->adjustSize();
     adjustSize();
 
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 
-    QPushButton *details = buttonBox->addButton(tr("Advanced"), QDialogButtonBox::ActionRole);
-	details->setObjectName( "detailsButton" );
-	connect(details, SIGNAL(clicked()), this, SLOT(slotShowDetails(bool)));
-	buttonBox->addButton(QDialogButtonBox::Help);
-	
-    metagrid->addWidget(buttonBox, 1, 0);
-    metagrid->setRowStretch(0, 10);
+    vboxLayout->addWidget(buttonBox);
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
-}
-
-void QuantizeDialog::setDetailsWidget( QWidget* wid ){
-	//QPushButton* butt = this->findChild<QPushButton*>( "detailsButton" );
-	m_detailsWidget = wid;
-//	wid->setObjectName( "detailsWidget" );
-}
-
-void QuantizeDialog::slotShowDetails( bool checked ){
-	bool vis = m_detailsWidget->isVisible();
-	m_detailsWidget->setVisible( ! vis );
 }
 
 Quantizer *
@@ -87,6 +60,7 @@ QuantizeDialog::getQuantizer() const
 {
     return m_quantizeFrame->getQuantizer();
 }
+
 
 }
 #include "QuantizeDialog.moc"

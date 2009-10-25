@@ -49,9 +49,7 @@ public:
     QuantizeParameters(QWidget *parent,
                        QuantizerType defaultQuantizer,
                        bool showNotationOption,
-                       bool showAdvancedButton,
-                       QString configCategory,
-                       QString preamble = 0);
+                       QString configCategory);
     
     /**
      * Returned quantizer object is on heap -- caller must delete.
@@ -65,11 +63,9 @@ public:
     bool shouldDeCounterpoint() const { return m_deCounterpoint; }
     bool shouldMakeViable() const { return m_makeViable; }
 
-    void showAdvanced(bool show);
 
 public slots:
     void slotTypeChanged(int);
-    void slotAdvancedChanged();
 
 protected:
     QString m_configCategory;

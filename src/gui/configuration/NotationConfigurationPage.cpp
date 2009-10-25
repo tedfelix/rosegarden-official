@@ -63,7 +63,7 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
         TabbedConfigurationPage(parent)
 {
     QSettings settings;
-    settings.beginGroup( NotationViewConfigGroup );
+    settings.beginGroup(NotationViewConfigGroup);
 
     QFrame *frame;
     QGridLayout *layout;
@@ -151,7 +151,7 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
          row, 0, 1, 2);
     m_showUnknowns = new QCheckBox(frame);
     connect(m_showUnknowns, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
-    bool defaultShowUnknowns = qStrToBool( settings.value("showunknowns", "false" ) ) ;
+    bool defaultShowUnknowns = qStrToBool(settings.value("showunknowns", "false")) ;
     m_showUnknowns->setChecked(defaultShowUnknowns);
     layout->addWidget(m_showUnknowns, row, 2);
     ++row;
@@ -162,7 +162,7 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
          row, 0, 1, 2);
     m_colourQuantize = new QCheckBox(frame);
     connect(m_colourQuantize, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
-    bool defaultColourQuantize = qStrToBool( settings.value("colourquantize", "false" ) ) ;
+    bool defaultColourQuantize = qStrToBool(settings.value("colourquantize", "false")) ;
     m_colourQuantize->setChecked(defaultColourQuantize);
     layout->addWidget(m_colourQuantize, row, 2);
     ++row;
@@ -173,7 +173,7 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
          row, 0, 1, 2);
     m_showInvisibles = new QCheckBox(frame);
     connect(m_showInvisibles, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
-    bool defaultShowInvisibles = qStrToBool( settings.value("showinvisibles", "true" ) ) ;
+    bool defaultShowInvisibles = qStrToBool(settings.value("showinvisibles", "true")) ;
     m_showInvisibles->setChecked(defaultShowInvisibles);
     layout->addWidget(m_showInvisibles, row, 2);
     ++row;
@@ -184,7 +184,7 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
          row, 0, 1, 2);
     m_showRanges = new QCheckBox(frame);
     connect(m_showRanges, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
-    bool defaultShowRanges = qStrToBool( settings.value("showranges", "true" ) ) ;
+    bool defaultShowRanges = qStrToBool(settings.value("showranges", "true")) ;
     m_showRanges->setChecked(defaultShowRanges);
     layout->addWidget(m_showRanges, row, 2);
     ++row;
@@ -195,7 +195,7 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
          row, 0, 1, 2);
     m_showCollisions = new QCheckBox(frame);
     connect(m_showCollisions, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
-    bool defaultShowCollisions = qStrToBool( settings.value("showcollisions", "true" ) ) ;
+    bool defaultShowCollisions = qStrToBool(settings.value("showcollisions", "true")) ;
     m_showCollisions->setChecked(defaultShowCollisions);
     layout->addWidget(m_showCollisions, row, 2);
     ++row;
@@ -209,7 +209,7 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
          row, 0, 1, 2);
     m_splitAndTie = new QCheckBox(frame);
     connect(m_splitAndTie, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
-    bool defaultSplitAndTie = qStrToBool( settings.value("quantizemakeviable", "false" ) ) ;
+    bool defaultSplitAndTie = qStrToBool(settings.value("quantizemakeviable", "false")) ;
     m_splitAndTie->setChecked(defaultSplitAndTie);
     layout->addWidget(m_splitAndTie, row, 2);
     ++row;
@@ -277,7 +277,7 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
     layout->addWidget(m_insertType, row, 1, 1, 2);
     ++row;
 
-    bool autoBeam = qStrToBool( settings.value("autobeam", "true" ) ) ;
+    bool autoBeam = qStrToBool(settings.value("autobeam", "true")) ;
 
     layout->addWidget
         (new QLabel
@@ -290,7 +290,7 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
 
     ++row;
 
-    bool collapse = qStrToBool( settings.value("collapse", "false" ) ) ;
+    bool collapse = qStrToBool(settings.value("collapse", "false")) ;
 
     layout->addWidget
         (new QLabel
@@ -386,44 +386,12 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
 
     addTab(frame, tr("Accidentals"));
 
-/*
-    QString preamble =
-        (tr("Rosegarden can apply automatic quantization to recorded "
-              "or imported MIDI data for notation purposes only. "
-              "This does not affect playback, and does not affect "
-              "editing in any of the views except notation."));
-
-    // force to default of 2 if not used before
-    int quantizeType = settings.value("quantizetype", 2).toInt() ;
-    settings.setValue("quantizetype", quantizeType);
-    settings.setValue("quantizenotationonly", true);
-
-    m_quantizeFrame = new QuantizeParameters
-                      (m_tabWidget, QuantizeParameters::Notation,
-                       false, false, "Notation Options", preamble);
-
-    addTab(m_quantizeFrame, tr("Quantize"));
-*/
     row = 0;
 
-//    QFrame *mainFrame = new QFrame(m_tabWidget);
-//    QGridLayout *mainLayout = new QGridLayout(mainFrame, 2, 4, 10, 5);
-
-//    QGroupBox *noteFontBox = new QGroupBox(1, Horizontal, tr("Notation font"), mainFrame);
-//    QGroupBox *otherFontBox = new QGroupBox(1, Horizontal, tr("Other fonts"), mainFrame);
-//    QGroupBox *descriptionBox = new QGroupBox(1, Horizontal, tr("Description"), mainFrame);
-
-//    mainLayout->addWidget(noteFontBox, 0, 0);
-//    mainLayout->addWidget(otherFontBox, 1, 0);
-
-//    QFrame *mainFrame = new QFrame(m_tabWidget);
     frame = new QFrame(m_tabWidget);
     frame->setContentsMargins(10, 10, 10, 10);
     layout = new QGridLayout(frame);
     layout->setSpacing(5);
-
-//    frame = new QFrame(noteFontBox);
-//    layout = new QGridLayout(frame, 5, 2, 10, 5);
 
     m_viewButton = 0;
 
@@ -473,11 +441,9 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
     m_fontOriginLabel = new QLabel(subFrame);
     m_fontOriginLabel->setWordWrap(true);
     m_fontOriginLabel->setFont(font);
-//    m_fontOriginLabel->setFixedWidth(250);
     m_fontCopyrightLabel = new QLabel(subFrame);
     m_fontCopyrightLabel->setWordWrap(true);
     m_fontCopyrightLabel->setFont(font);
-//    m_fontCopyrightLabel->setFixedWidth(250);
     m_fontMappedByLabel = new QLabel(subFrame);
     m_fontMappedByLabel->setFont(font);
     m_fontTypeLabel = new QLabel(subFrame);
@@ -510,17 +476,6 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
     m_multiStaffSize->setEditable(false);
     layout->addWidget(m_multiStaffSize, row, 2, 1, 1);
     ++row;
-
-    //!!! native printing is deprecated
-    //
-//    layout->addWidget
-//        (new QLabel(tr("Font size for printing (pt)"), frame),
-//         row, 0, 1, 2);
-//    m_printingSize = new QComboBox(frame);
-//    connect(m_printingSize, SIGNAL(activated(int)), this, SLOT(slotModified()));
-//    m_printingSize->setEditable(false);
-//    layout->addWidget(m_printingSize, row, 2, 1, 1);
-//    ++row;
 
     slotPopulateFontCombo(false);
 
@@ -555,22 +510,8 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
     layout->addWidget(m_sansFont, row, 1, 1, 3);
     ++row;
 
-/*!!! No -- not much point in having the time sig font here: it's only
- * used if the time sig characters are not found in the notation font,
- * and our default notation font has all the characters we need
-
-    layout->addWidget
-        (new QLabel(tr("Time Signature font"), frame), row, 0);
-    m_timeSigFont = new FontRequester(frame);
-    QFont timeSigFont = settings->readFontEntry("timesigfont", &defaultTimeSigFont);
-    m_timeSigFont->setFont(timeSigFont);
-    layout->addWidget(m_timeSigFont, row, 1, 1, 3);
-    ++row;
-*/
-
     frame->setLayout(layout);
 
-//    addTab(mainFrame, tr("Font"));
     addTab(frame, tr("Font"));
     settings.endGroup();
 }
@@ -595,7 +536,7 @@ NotationConfigurationPage::slotViewButtonPressed()
             (void)viewer->exec(); // no return value
         }
     } catch (Exception f) {
-        QMessageBox::critical(0, "", tr(f.getMessage().c_str()) );
+        QMessageBox::critical(0, "", tr(f.getMessage().c_str()));
     }
 #endif
 }
@@ -604,7 +545,7 @@ void
 NotationConfigurationPage::slotPopulateFontCombo(bool rescan)
 {
     QSettings settings;
-    settings.beginGroup( NotationViewConfigGroup );
+    settings.beginGroup(NotationViewConfigGroup);
 
     QString defaultFont = settings.value
         ("notefont", NoteFontFactory::getDefaultFontName()).toString();
@@ -642,7 +583,7 @@ NotationConfigurationPage::slotFontComboChanged(int index)
     QString fontStr = m_untranslatedFont[index];
 
     QSettings settings;
-    settings.beginGroup( NotationViewConfigGroup );
+    settings.beginGroup(NotationViewConfigGroup);
 
     populateSizeCombo
         (m_singleStaffSize, fontStr,
@@ -696,7 +637,7 @@ void
 NotationConfigurationPage::apply()
 {
     QSettings settings;
-    settings.beginGroup( NotationViewConfigGroup );
+    settings.beginGroup(NotationViewConfigGroup);
 
     settings.setValue("notefont", m_untranslatedFont[m_font->currentIndex()]);
     settings.setValue("singlestaffnotesize",
@@ -729,7 +670,6 @@ NotationConfigurationPage::apply()
 
     settings.setValue("quantizemakeviable", m_splitAndTie->isChecked());
 
-//    (void)m_quantizeFrame->getQuantizer(); // this also writes to the config
     settings.endGroup();
 }
 

@@ -17,8 +17,6 @@
 
 
 #include "QuantizeParameters.h"
-#include <QLayout>
-#include <QApplication>
 
 #include "misc/Strings.h"
 #include "base/NotationTypes.h"
@@ -28,6 +26,9 @@
 #include "base/NotationQuantizer.h"
 #include "gui/editors/notation/NotationStrings.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
+
+#include <QLayout>
+#include <QApplication>
 #include <QComboBox>
 #include <QSettings>
 #include <QCheckBox>
@@ -45,38 +46,27 @@
 namespace Rosegarden
 {
 
+
 QuantizeParameters::QuantizeParameters(QWidget *parent,
                                        QuantizerType defaultQuantizer,
                                        bool showNotationOption,
-                                       bool showAdvancedButton,
-                                       QString configCategory,
-                                       QString preamble) :
+                                       QString configCategory) :
         QFrame(parent),
         m_configCategory(configCategory),
         m_standardQuantizations
         (BasicQuantizer::getStandardQuantizations())
 {
-    bool p = !preamble.isEmpty();
-
-    int margin = p ? 10 : 0;
-    setContentsMargins(margin, margin, margin, margin);
     m_mainLayout = new QGridLayout(this);
-    m_mainLayout->setSpacing(p ? 5 : 4);
-
-    int zero = 0;
-    if (p) {
-        QLabel *label = new QLabel(preamble, this);
-        label->setWordWrap(true);
-        m_mainLayout->addWidget(label, 0, 0, 0- 0+1, 1-0+ 1);
-        zero = 1;
-    }
+    m_mainLayout->setSpacing(5);
+    setContentsMargins(5, 5, 5, 5);
 
     QGroupBox *quantizerBox = new QGroupBox
                               (tr("Quantizer"), this);
     quantizerBox->setContentsMargins(5, 5, 5, 5);
     QGridLayout *layout = new QGridLayout(quantizerBox);
-    layout->setSpacing(3);
-    m_mainLayout->addWidget(quantizerBox, zero, 0);
+    layout->setSpacing(5);
+    layout->setContentsMargins(5, 5, 5, 5);
+    m_mainLayout->addWidget(quantizerBox, 0, 0);
 
     layout->addWidget(new QLabel(tr("Quantizer type:"), quantizerBox), 0, 0);
     m_typeCombo = new QComboBox(quantizerBox);
@@ -88,14 +78,15 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     m_notationTarget = new QCheckBox
                        (tr("Quantize for notation only (leave performance unchanged)"),
                         quantizerBox);
-    layout->addWidget(m_notationTarget, 1, 0, 0+1, 1-0+ 1);
+    layout->addWidget(m_notationTarget, 1, 0, 1, 2);
     if (!showNotationOption)
         m_notationTarget->hide();
     quantizerBox->setLayout(layout);
 
     QWidget *parameterBox = new QWidget(this);
     QHBoxLayout *parameterBoxLayout = new QHBoxLayout;
-    m_mainLayout->addWidget(parameterBox, zero + 1, 0);
+    m_mainLayout->addWidget(parameterBox, 1, 0);
+    parameterBoxLayout->setContentsMargins(5, 5, 5, 5);
 
     m_notationBox = new QGroupBox( tr("Notation parameters"), parameterBox );
     m_notationBox->setContentsMargins(5, 5, 5, 5);
@@ -125,18 +116,11 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     m_maxTuplet->addItem(tr("None"));
     m_maxTuplet->addItem(tr("2-in-the-time-of-3"));
     m_maxTuplet->addItem(tr("Triplet"));
-    /*
-        m_maxTuplet->addItem(tr("4-Tuplet"));
-        m_maxTuplet->addItem(tr("5-Tuplet"));
-        m_maxTuplet->addItem(tr("6-Tuplet"));
-        m_maxTuplet->addItem(tr("7-Tuplet"));
-        m_maxTuplet->addItem(tr("8-Tuplet"));
-    */
     m_maxTuplet->addItem(tr("Any"));
     layout->addWidget(m_maxTuplet, 2, 1);
 
     m_counterpoint = new QCheckBox(tr("Permit counterpoint"), m_notationBox);
-    layout->addWidget(m_counterpoint, 3, 0, 0+1, 1-0+ 1);
+    layout->addWidget(m_counterpoint, 3, 0, 1, 1);
 
     m_notationBox->setLayout(layout);
 
@@ -162,7 +146,7 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
 
     m_durationCheckBox = new QCheckBox
                          (tr("Quantize durations as well as start times"), m_gridBox);
-    layout->addWidget(m_durationCheckBox, 3, 0, 0+1, 1-0+ 1);
+    layout->addWidget(m_durationCheckBox, 3, 0, 1, 1);
 
     m_gridBox->setLayout(layout);
     parameterBox->setLayout(parameterBoxLayout);
@@ -173,25 +157,7 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     layout = new QGridLayout(m_postProcessingBox);
     layout->setSpacing(3);
 
-    if (p) {
-        m_mainLayout->addWidget(m_postProcessingBox,
-                                         zero,
-                                         1, zero + 1-
-                                         zero+1, 1-
-                                         1+1);
-    } else {
-        m_mainLayout->addWidget(m_postProcessingBox, zero + 3, 0);
-    }
-
-    bool advanced = true;
-    m_advancedButton = 0;
-    if (showAdvancedButton) {
-        m_advancedButton =
-            new QPushButton(tr("Show advanced options"), this);
-        m_mainLayout->addWidget(m_advancedButton, zero + 2, 0, Qt::AlignLeft);
-        QObject::connect(m_advancedButton, SIGNAL(clicked()),
-                         this, SLOT(slotAdvancedChanged()));
-    }
+    m_mainLayout->addWidget(m_postProcessingBox, 3, 0);
 
     m_rebeam = new QCheckBox(tr("Re-beam"), m_postProcessingBox);
     m_articulate = new QCheckBox
@@ -251,7 +217,6 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
                 ("quantizedecounterpoint", "false")));
         m_articulate->setChecked(qStrToBool(settings.value
                 ("quantizearticulate", "true")));
-        advanced = qStrToBool(settings.value("quantizeshowadvanced", "false"));
 
         settings.endGroup();
     } else {
@@ -267,14 +232,9 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
         m_makeViable->setChecked(defaultQuantizer == Notation);
         m_deCounterpoint->setChecked(defaultQuantizer == Notation);
         m_articulate->setChecked(true);
-        advanced = false;
     }
 
-    if (p || advanced) {
-        m_postProcessingBox->show();
-    } else {
-        m_postProcessingBox->hide();
-    }
+    m_postProcessingBox->show();
 
     for (unsigned int i = 0; i < m_standardQuantizations.size(); ++i) {
 
@@ -448,32 +408,6 @@ QuantizeParameters::getQuantizer() const
 }
 
 void
-QuantizeParameters::slotAdvancedChanged()
-{
-    if (m_postProcessingBox->isVisible()) {
-        if (m_advancedButton)
-            m_advancedButton->setText(tr("Show Advanced Options"));
-        m_postProcessingBox->hide();
-    } else {
-        if (m_advancedButton)
-            m_advancedButton->setText(tr("Hide Advanced Options"));
-        m_postProcessingBox->show();
-    }
-    adjustSize();
-}
-
-void
-QuantizeParameters::showAdvanced(bool show)
-{
-    if (show) {
-        m_postProcessingBox->show();
-    } else {
-        m_postProcessingBox->hide();
-    }
-    adjustSize();
-}
-
-void
 QuantizeParameters::slotTypeChanged(int index)
 {
     if (index == 0) {
@@ -496,6 +430,7 @@ QuantizeParameters::slotTypeChanged(int index)
         m_gridBox->hide();
         m_notationBox->show();
     }
+    adjustSize();
 }
 
 }

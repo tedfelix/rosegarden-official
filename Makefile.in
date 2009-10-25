@@ -154,7 +154,6 @@ dependencies: $(KEYSOURCES) $(HEADERS) Makefile $(DATA_FILES)
 	@rm -f $@ 
 	@touch $@
 	@echo $(KEYSOURCES) | $(XARGS) -n 100 $(MAKEDEPEND) -f$@ -a -Y -Isrc >/dev/null 2>&1
-	@echo Done
 	@echo Detected that a resource rebuild is required...
 	@rm -f data/data.o data/data.cpp
 
