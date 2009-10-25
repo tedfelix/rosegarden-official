@@ -981,7 +981,7 @@ SegmentParameterBox::slotEditSegmentLabel()
                                             tr("Enter new label:"),
                                             LineEdit::Normal,
                                             m_label->text(),
-                                            &ok );
+                                            &ok);
 
     if (ok) {
         SegmentSelection segments;

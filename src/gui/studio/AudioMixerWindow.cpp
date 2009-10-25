@@ -48,6 +48,7 @@
 #include "sound/MappedEvent.h"
 #include "sound/MappedStudio.h"
 #include "gui/widgets/PluginPushButton.h"
+#include "gui/widgets/InstrumentAliasButton.h"
 
 #include <QLayout>
 #include <QApplication>
@@ -334,7 +335,7 @@ AudioMixerWindow::populate()
         // use the instrument alias if one is set, else a standard label
         std::string alias = (*i)->getAlias();
 
-        QPushButton *aliasButton = new QPushButton(m_mainBox);
+        InstrumentAliasButton *aliasButton = new InstrumentAliasButton(m_mainBox, (*i));
         aliasButton->setFixedSize(20,5);
         mainLayout->addWidget(aliasButton, 0, col, 1, 2, Qt::AlignTop);
 
