@@ -410,6 +410,9 @@ QuantizeParameters::getQuantizer() const
 void
 QuantizeParameters::slotTypeChanged(int index)
 {
+    setSizePolicy(QSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum));
+    parentWidget()->setSizePolicy(QSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum));
+
     if (index == 0) {
         m_gridBox->show();
         m_swingLabel->show();
@@ -430,6 +433,8 @@ QuantizeParameters::slotTypeChanged(int index)
         m_gridBox->hide();
         m_notationBox->show();
     }
+
+    parentWidget()->adjustSize();
     adjustSize();
 }
 
