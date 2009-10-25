@@ -55,7 +55,7 @@ AudioDevice::~AudioDevice()
 void
 AudioDevice::createInstruments()
 {
-    for (int i = 0; i < AudioInstrumentCount; ++i) {
+    for (uint i = 0; i < AudioInstrumentCount; ++i) {
 	Instrument *instrument = new Instrument
 	    (AudioInstrumentBase + i, Instrument::Audio, "", i, this);
         addInstrument(instrument);
@@ -66,7 +66,7 @@ AudioDevice::createInstruments()
 void
 AudioDevice::renameInstruments()
 {
-    for (int i = 0; i < AudioInstrumentCount; ++i) {
+    for (uint i = 0; i < AudioInstrumentCount; ++i) {
         m_instruments[i]->setName
             (QString("%1 #%2").arg(getName().c_str()).arg(i+1).toUtf8().data());
     }

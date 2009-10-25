@@ -122,7 +122,7 @@ ViewElementList::iterator
 ViewElementList::findNext(const std::string &type, iterator i)
 {
     if (i == end()) return i;
-    for (++i; i != end() && !(*i)->event()->isa(type); ++i);
+    for (++i; i != end() && !(*i)->event()->isa(type); ++i){ };
     return i;
 }
 

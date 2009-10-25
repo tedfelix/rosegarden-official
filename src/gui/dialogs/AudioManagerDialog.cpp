@@ -134,17 +134,27 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
 
     boxLayout->addWidget(m_wrongSampleRates);
     m_wrongSampleRates->hide();
-
+    
+    // file menu
     createAction("add_audio", SLOT(slotAdd()));
     createAction("export_audio", SLOT(slotExportAudio()));
+    createAction("file_close", SLOT(slotClose()));
+    
+    // edit menu
     createAction("remove_audio", SLOT(slotRemove()));
     createAction("remove_all_audio", SLOT(slotRemoveAll()));
     createAction("remove_all_unused_audio", SLOT(slotRemoveAllUnused()));
     createAction("delete_unused_audio", SLOT(slotDeleteUnused()));
+    
+    // action menu
     createAction("preview_audio", SLOT(slotPlayPreview()));
     createAction("insert_audio", SLOT(slotInsert()));
-    createAction("preview_audio", SLOT(slotPlayPreview()));
-
+    createAction("distribute_audio", SLOT(slotDistributeOnMidiSegment()));
+    
+    // help menu
+    // NOTE: Help menu completely omitted - not required in AudioManagerDialog ?
+    
+    
     //!!! oh now hang on, does this one work?
 
     // (No, I've never heard of it until poking around in this code.  Julie

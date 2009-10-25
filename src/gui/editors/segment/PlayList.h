@@ -60,8 +60,8 @@ protected slots:
     void slotMoveDown();
     void slotDeleteCurrent();
     void slotClear();
-    void slotCurrentItemChanged(QTreeWidgetItem*);
-    void slotDropped(QDropEvent*, QTreeWidgetItem*);
+    void slotCurrentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*);
+//     void slotDropped(QDropEvent*, QTreeWidgetItem*);
     void slotDroppedURIs(QDropEvent* ev, QTreeWidget*, QStringList sl);
 
 protected:

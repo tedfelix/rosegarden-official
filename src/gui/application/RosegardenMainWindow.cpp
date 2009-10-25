@@ -7301,10 +7301,10 @@ RosegardenMainWindow::slotPlayList()
 {
     if (!m_playList) {
         m_playList = new PlayListDialog(tr("Play List"), this);
-        connect(m_playList, SIGNAL(closing()),
-                SLOT(slotPlayListClosed()));
-        connect(m_playList->getPlayList(), SIGNAL(play(QString)),
-                SLOT(slotPlayListPlay(QString)));
+        connect(m_playList, SIGNAL(closing()), this, SLOT(slotPlayListClosed()));
+                
+        connect(m_playList->getPlayList(), SIGNAL(play(QString)), this, SLOT(slotPlayListPlay(QString)));
+        
     }
 
     m_playList->show();
@@ -7313,6 +7313,7 @@ RosegardenMainWindow::slotPlayList()
 void
 RosegardenMainWindow::slotPlayListPlay(QString url)
 {
+//     RG_DEBUG << "RosegardenMainWindow::slotPlayListPlay() - called with: " << url << endl;
     slotStop();
     openURL(url);
     slotPlay();
@@ -7322,7 +7323,10 @@ void
 RosegardenMainWindow::slotPlayListClosed()
 {
     RG_DEBUG << "RosegardenMainWindow::slotPlayListClosed()\n";
-    m_playList = 0;
+    if( m_playList ){
+//         delete m_playList;
+        m_playList = 0;
+    }
 }
 
 void

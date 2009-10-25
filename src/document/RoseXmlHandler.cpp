@@ -1234,7 +1234,8 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             m_errorString = "No ID on Device tag";
             return false;
         }
-        int id = idString.toInt();
+        
+        //int id = idString.toInt();
 
         if (type == "midi") {
             QString direction = atts.value("direction").toLower();

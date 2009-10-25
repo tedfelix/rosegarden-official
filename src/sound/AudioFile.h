@@ -216,13 +216,10 @@ protected:
 
     QFileInfo     *m_fileInfo;
 
-//private: 
-//    static unsigned int _LAST_AUDIO_FILE_ID;
+
 };
 
 
-//initialize static
-//static unsigned int _LAST_AUDIO_FILE_ID = 0;
 
 
 }

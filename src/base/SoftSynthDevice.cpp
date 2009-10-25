@@ -69,7 +69,7 @@ SoftSynthDevice::~SoftSynthDevice()
 void
 SoftSynthDevice::createInstruments()
 {
-    for (int i = 0; i < SoftSynthInstrumentCount; ++i) {
+    for (uint i = 0; i < SoftSynthInstrumentCount; ++i) {
 	Instrument *instrument = new Instrument
 	    (SoftSynthInstrumentBase + i, Instrument::SoftSynth, "", i, this);
 	addInstrument(instrument);
@@ -80,7 +80,7 @@ SoftSynthDevice::createInstruments()
 void
 SoftSynthDevice::renameInstruments()
 {
-    for (int i = 0; i < SoftSynthInstrumentCount; ++i) {
+    for (uint i = 0; i < SoftSynthInstrumentCount; ++i) {
         m_instruments[i]->setName
             (QString("%1 #%2").arg(getName().c_str()).arg(i+1).toUtf8().data());
     }

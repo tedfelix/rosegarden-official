@@ -41,6 +41,9 @@ PlayListView::PlayListView(QWidget *parent, const char *name)
 	setHeaderLabels( QStringList() << tr("Title") << tr("File name") );
     setAllColumnsShowFocus(true);
 	
+    setSelectionBehavior( QAbstractItemView::SelectRows );
+    setSelectionMode( QAbstractItemView::SingleSelection );
+    
     setDropIndicatorShown(true);
     setDragEnabled(true);
     setAcceptDrops(true);
@@ -147,7 +150,14 @@ void PlayListView::dropEvent(QDropEvent* e)
     QString text;
 
     if (e->provides("text/uri-list") || e->provides("text/plain")) {
-
+        
+        // if (drag-source == this)  (or a child item) disallow drop
+        if( e->source() && ((e->source() == this) || (e->source()->parent() && (e->source()->parent() == this )))){
+            // don't accept items dragged from self
+            // moving items not supported yet.
+            return;
+        }
+        
         if (e->proposedAction() & Qt::CopyAction) {
             e->acceptProposedAction();
         } else {

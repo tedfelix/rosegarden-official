@@ -64,6 +64,7 @@ void AudioListView::mouseMoveEvent(QMouseEvent *event){
      }
      if( ! item ){
         RG_DEBUG << "AudioListView::mouseMoveEvent() - item is NULL (cast failed?) " << endl;
+        return;
      }
     
     QDrag *drag = new QDrag(this);
