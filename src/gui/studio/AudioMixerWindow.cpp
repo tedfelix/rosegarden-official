@@ -755,6 +755,9 @@ AudioMixerWindow::updateFader(int id)
             return ;
         Instrument *instrument = m_studio->getInstrumentById(id);
 
+        std::cout << "INSTRUMENT: name: " << instrument->getName() << " presentation name: " << instrument->getPresentationName()
+                  << " alias: " << instrument->getAlias() << std::endl;
+
         rec.m_fader->blockSignals(true);
         rec.m_fader->setFader(instrument->getLevel());
         rec.m_fader->blockSignals(false);

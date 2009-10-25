@@ -121,11 +121,13 @@ public:
 
     virtual std::string getName() const { return m_name; }
     virtual std::string getPresentationName() const;
+    virtual std::string getAlias() const;
 
     void setId(InstrumentId id) { m_id = id; }
     InstrumentId getId() const { return m_id; }
 
     void setName(const std::string &name) { m_name = name; }
+    void setAlias(const std::string &alias) { m_alias = alias; }
     InstrumentType getType() const { return m_type; }
 
     void setType(InstrumentType type) { m_type = type; }
@@ -235,6 +237,7 @@ public:
 private:
     InstrumentId    m_id;
     std::string     m_name;
+    std::string     m_alias;
     InstrumentType  m_type;
     
     // Standard MIDI controllers and parameters

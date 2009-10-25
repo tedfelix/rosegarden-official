@@ -117,6 +117,7 @@ Instrument::Instrument(InstrumentId id,
     PluginContainer(it == Audio || it == SoftSynth),
     m_id(id),
     m_name(name),
+    m_alias(""),
     m_type(it),
     m_channel(0),
     //m_input_channel(-1),
@@ -163,6 +164,7 @@ Instrument::Instrument(InstrumentId id,
     PluginContainer(it == Audio || it == SoftSynth),
     m_id(id),
     m_name(name),
+    m_alias(""),
     m_type(it),
     m_channel(channel),
     //m_input_channel(-1),
@@ -227,6 +229,7 @@ Instrument::Instrument(const Instrument &ins):
     PluginContainer(ins.getType() == Audio || ins.getType() == SoftSynth),
     m_id(ins.getId()),
     m_name(ins.getName()),
+    m_alias(ins.getAlias()),
     m_type(ins.getType()),
     m_channel(ins.getMidiChannel()),
     //m_input_channel(ins.getMidiInputChannel()),
@@ -267,6 +270,7 @@ Instrument::operator=(const Instrument &ins)
 
     m_id = ins.getId();
     m_name = ins.getName();
+    m_alias = ins.getAlias();
     m_type = ins.getType();
     m_channel = ins.getMidiChannel();
     //m_input_channel = ins.getMidiInputChannel();
@@ -298,6 +302,12 @@ std::string
 Instrument::getPresentationName() const
 {
     return m_name;
+}
+
+std::string
+Instrument::getAlias() const
+{
+    return m_alias;
 }
 
 void
@@ -472,6 +482,9 @@ Instrument::toXmlString()
 
         instrument << "            <audioOutput value=\""
                    << m_audioOutput << "\"/>" << std::endl;
+
+        instrument << "            <alias value=\""
+                   << m_alias << "\"/>" << std::endl;
 
         PluginInstanceIterator it = m_audioPlugins.begin();
         for (; it != m_audioPlugins.end(); it++)

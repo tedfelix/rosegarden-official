@@ -1991,6 +1991,16 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         if (m_instrument)
             m_instrument->setRecordLevel(value);
 
+    } else if (lcName == "alias") {
+
+        if (m_section != InInstrument) {
+            m_errorString = "Found alias outside Instrument";
+            return false;
+        }
+
+        QString alias = atts.value("value");
+        m_instrument->setAlias(alias.toStdString());
+
     } else if (lcName == "audioinput") {
 
         if (m_section != InInstrument) {
