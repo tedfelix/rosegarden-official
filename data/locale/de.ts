@@ -9992,15 +9992,15 @@ Bitte wählen Sie diejenigen aus, die permanent von der Festplatte gelöscht wer
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="286"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="420"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="421"/>
         <source>Pan</source>
         <translation>Pan</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="294"/>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="295"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="427"/>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="428"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="429"/>
         <source>Audio level</source>
         <translation>Lautsärke</translation>
     </message>
@@ -10024,49 +10024,49 @@ Bitte wählen Sie diejenigen aus, die permanent von der Festplatte gelöscht wer
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="321"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="439"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="579"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="634"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="815"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="440"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="580"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="635"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="816"/>
         <source>&lt;none&gt;</source>
         <translation>&lt;keine&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="323"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="441"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="442"/>
         <source>Click to load an audio plugin</source>
         <translation>Zum laden eines Audio Plugins anklicken</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="344"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="345"/>
         <source>Audio %1</source>
         <translation>Audio %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="349"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="350"/>
         <source>Synth %1</source>
         <translation>Synthesizer %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="449"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="450"/>
         <source>Sub %1</source>
         <translation>Gruppe %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="488"/>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="489"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="490"/>
         <source>Audio master output level</source>
         <translation>Audio Master Ausgangspegel</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="491"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="492"/>
         <source>Master</source>
         <translation>Master</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="580"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="635"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="816"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="581"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="636"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="817"/>
         <source>&lt;no plugin&gt;</source>
         <translation>&lt;kein Plugin&gt;</translation>
     </message>
@@ -13491,12 +13491,12 @@ Beispieltext aus Datei:</translation>
     <message>
         <location filename="../../src/gui/widgets/InstrumentAliasButton.cpp" line="49"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/InstrumentAliasButton.cpp" line="50"/>
         <source>Enter instrument alias:</source>
-        <translation type="unfinished"></translation>
+        <translation>Namen für das Instrument eingeben:</translation>
     </message>
 </context>
 <context>
@@ -14324,12 +14324,12 @@ Wollen Sie stattdessen
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="131"/>
         <source>&lt;qt&gt;&lt;p&gt;Could not run &lt;b&gt;convert-ly&lt;/b&gt;!&lt;/p&gt;&lt;p&gt;Please install LilyPond and ensure that the &quot;convert-ly&quot; and &quot;lilypond&quot; commands are available on your path.  If you perform a &lt;b&gt;Run Command&lt;/b&gt; (typically &lt;b&gt;Alt+F2&lt;/b&gt;) and type &quot;convert-ly&quot; into the box, you should not get a &quot;command not found&quot; error.  If you can do that without getting an error, but still see this error message, please consult &lt;a style=&quot;color:gold&quot; href=&quot;mailto:rosegarden-user@lists.sourceforge.net&quot;&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt; for additional help.&lt;/p&gt;&lt;p&gt;Processing terminated due to fatal errors.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;&lt;b&gt;convert-ly&lt;/b&gt; konnte nicht ausgeführt werden!&lt;/p&gt;&lt;p&gt;Bitte installieren Sie LilyPond and stellen sicher, dass die beiden Kommandos &quot;convert-ly&quot; und &quot;lilypond&quot; im Pfad vorhanden sind. Wenn Sie ein &lt;b&gt;Befehl ausführen&lt;/b&gt; machen (typischerweise &lt;b&gt;ALT+F2&lt;/b&gt;) und &quot;convert-ly&quot; eingeben, sollte keine Fehlermeldung &quot;Der angegebene Befehl lässt sich nicht ausführen.&quot; erscheinen. Falls der Befehl auf diese Art erfolgreich ausgeführt werden kann und trotzdem diese Fehlermeldung erscheint, bitten Sie unter &lt;a style=&quot;color:gold&quot; href=&quot;mailto:rosegarden-user@lists.sourceforge.net&quot;&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt; um weitere Hilfestellung.&lt;/p&gt;&lt;p&gt;Arbeitsablauf auf Grund von fatalen Fehlern abgebrochen.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="162"/>
         <source>&lt;qt&gt;&lt;p&gt;Could not run &lt;b&gt;lilypond&lt;/b&gt;!&lt;/p&gt;&lt;p&gt;Please install LilyPond and ensure that the &quot;convert-ly&quot; and &quot;lilypond&quot; commands are available on your path.  If you perform a &lt;b&gt;Run Command&lt;/b&gt; (typically &lt;b&gt;Alt+F2&lt;/b&gt;) and type &quot;lilypond&quot; into the box, you should not get a &quot;command not found&quot; error.  If you can do that without getting an error, but still see this error message, please consult &lt;a style=&quot;color:gold&quot; href=&quot;mailto:rosegarden-user@lists.sourceforge.net&quot;&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt; for additional help.&lt;/p&gt;&lt;p&gt;Processing terminated due to fatal errors.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;&lt;b&gt;lilypond&lt;/b&gt; konnte nicht ausgeführt werden!&lt;/p&gt;&lt;p&gt;Bitte installieren Sie LilyPond and stellen sicher, dass die beiden Kommandos &quot;convert-ly&quot; und &quot;lilypond&quot; im Pfad vorhanden sind. Wenn Sie ein &lt;b&gt;Befehl ausführen&lt;/b&gt; machen (typischerweise &lt;b&gt;ALT+F2&lt;/b&gt;) und &quot;lilypond&quot; eingeben, sollte keine Fehlermeldung &quot;Der angegebene Befehl lässt sich nicht ausführen.&quot; erscheinen. Falls der Befehl auf diese Art erfolgreich ausgeführt werden kann und trotzdem diese Fehlermeldung erscheint, bitten Sie unter &lt;a style=&quot;color:gold&quot; href=&quot;mailto:rosegarden-user@lists.sourceforge.net&quot;&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt; um weitere Hilfestellung.&lt;/p&gt;&lt;p&gt;Arbeitsablauf auf Grund von fatalen Fehlern abgebrochen.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="178"/>
@@ -14789,7 +14789,7 @@ verursacht.</translation>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="144"/>
         <source>Bars, beats, and sub-beats</source>
-        <translation type="unfinished"></translation>
+        <translation>Takte, Schläge und Zwischen-Schläge</translation>
     </message>
     <message>
         <source>Bars, beats, and divisions</source>
@@ -16752,7 +16752,7 @@ Dies ist ein Fehler (das Programm ist vermutlich inzwischen abgestürzt)</transl
     <message numerus="yes">
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="922"/>
         <source>  %n event(s) selected </source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>  %n Ereignis(se) ausgewählt </numerusform>
             <numerusform>  %n Ereignisse ausgewählt </numerusform>
         </translation>
@@ -16760,7 +16760,7 @@ Dies ist ein Fehler (das Programm ist vermutlich inzwischen abgestürzt)</transl
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="925"/>
         <source>  No selection </source>
-        <translation type="unfinished">  Keine Auswahl </translation>
+        <translation>  Keine Auswahl </translation>
     </message>
     <message>
         <source>Nothing to print</source>
@@ -16936,7 +16936,7 @@ Dies ist ein Fehler (das Programm ist vermutlich inzwischen abgestürzt)</transl
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1395"/>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1464"/>
         <source>&lt;qt&gt;&lt;p&gt;The Restricted paste type requires enough empty space (containing only rests) at the paste position to hold all of the events to be pasted.&lt;/p&gt;&lt;p&gt;Not enough space was found.&lt;/p&gt;&lt;p&gt;If you want to paste anyway, consider using one of the other paste types from the &lt;b&gt;Paste...&lt;/b&gt; option on the Edit menu.  You can also change the default paste type to something other than Restricted if you wish.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Das eingeschränkte Einfügen erfordert ausreichend leeren Platz (Pausen) an der Einfügeposition, um alle einzufügenden Events aufzunehmen.&lt;/p&gt;&lt;p&gt;Es wurde nicht ausreichend Platz gefunden.&lt;/p&gt;&lt;p&gt;Wenn Sie trotzdem einfügen wollen, sollten Sie einen der anderen Einfügemodi aus dem &lt;b&gt;Einfügen...&lt;/b&gt;-Menü in Betracht ziehen. Sie können dort auch einen anderen Standard-Einfügemodus als den eingeschränkten wählen.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1420"/>
@@ -16947,7 +16947,7 @@ Dies ist ein Fehler (das Programm ist vermutlich inzwischen abgestürzt)</transl
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1394"/>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1463"/>
         <source>Couldn&apos;t paste at this point.</source>
-        <translation>Kein Einfügen an diesem Punkt möglich</translation>
+        <translation>Kein Einfügen an diesem Punkt möglich.</translation>
     </message>
     <message>
         <source>Move Events to Staff Above</source>
@@ -17347,22 +17347,22 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="80"/>
         <source>Value (%):</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert (%):</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="91"/>
         <source>Duration (%):</source>
-        <translation type="unfinished"></translation>
+        <translation>Dauer (%):</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="106"/>
         <source>Ramp duration (%):</source>
-        <translation type="unfinished"></translation>
+        <translation>Dauer der Steigung (%):</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="114"/>
         <source>End value (%):</source>
-        <translation type="unfinished"></translation>
+        <translation>End Wert (%):</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="122"/>
@@ -17392,7 +17392,7 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="165"/>
         <source>Invalid end time. Have you selected some events?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ungültige Endzeit. Wurde Events ausgewählt?</translation>
     </message>
 </context>
 <context>
@@ -17639,7 +17639,7 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="131"/>
         <source>&lt;qt&gt;&lt;p&gt;Fatal error.&lt;/p&gt;&lt;p&gt;Processing aborted.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Fataler Fehler..&lt;/p&gt;&lt;p&gt;Verarbeitung abgebrochen.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="132"/>
@@ -17721,7 +17721,7 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="748"/>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="947"/>
         <source>&lt;qt&gt;&lt;p&gt;Unable to write to temporary backend processing script %1.&lt;/p&gt;&lt;p&gt;Processing aborted.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Temporäres Skript &amp;1 kann nicht geschrieben werden.&lt;/p&gt;&lt;p&gt;Verarbeitung abgebrochen.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Temporäres Skript %1 kann nicht geschrieben werden.&lt;/p&gt;&lt;p&gt;Verarbeitung abgebrochen.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="799"/>
@@ -18709,7 +18709,7 @@ Fehler war: %2</translation>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="775"/>
         <source>Ctrl+R</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">CTRL+R</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1715"/>
@@ -18986,7 +18986,7 @@ Segmente-&gt;Segmente zusammenfassen.
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6246"/>
         <source>Input</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Eingabe</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7792"/>
@@ -19793,7 +19793,7 @@ Möchten Sie den Pfad jetzt setzen?</translation>
     <message numerus="yes">
         <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="242"/>
         <source>Move Segment(s)</source>
-        <translation>
+        <translation type="unfinished">
             <numerusform>Bewege Segment</numerusform>
             <numerusform>Bewege Segmente</numerusform>
         </translation>
@@ -20619,7 +20619,7 @@ Das Beenden anderer laufender Anwendung könnte u.U. die Leistung von Rosegarden
         <location filename="../../src/commands/notation/SymbolInsertionCommand.cpp" line="62"/>
         <source>Insert &amp;Symbol...</source>
         <translatorcomment>amp ok</translatorcomment>
-        <translation>&amp;Symbol einfügen</translation>
+        <translation>&amp;Symbol einfügen...</translation>
     </message>
 </context>
 <context>
@@ -22399,15 +22399,20 @@ Möchten Sie den Pfad jetzt setzen?</translation>
     <message>
         <location filename="../../src/gui/widgets/WarningDialog.cpp" line="50"/>
         <source>Performance Problems Detected</source>
-        <translation type="unfinished"></translation>
+        <translation>Probleme mit der Computerleistung entdeckt</translation>
     </message>
 </context>
 <context>
     <name>Rosegarden::WarningWidget</name>
     <message>
-        <location filename="../../src/gui/widgets/WarningWidget.cpp" line="64"/>
         <source>&lt;qt&gt;&lt;p&gt;Performance problems detected!&lt;/p&gt;&lt;p&gt;Click to display details&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>XXX endp fehlt im original</translatorcomment>
+        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Probleme mit der Computerleistung!&lt;/p&gt;&lt;p&gt;Um weitere Details anzuzeigen, bitte anklicken&lt;/p&gt;&lt;/qt&gt; </translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/widgets/WarningWidget.cpp" line="64"/>
+        <source>&lt;qt&gt;&lt;p&gt;Performance problems detected!&lt;/p&gt;&lt;p&gt;Click to display details&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation>&lt;qt&gt;&lt;p&gt;Probleme mit der Computerleistung!&lt;/p&gt;&lt;p&gt;Um weitere Details anzuzeigen, bitte anklicken&lt;/p&gt;&lt;/qt&gt; </translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/WarningWidget.cpp" line="87"/>

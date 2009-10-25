@@ -9416,15 +9416,15 @@ Seleccioneu els que voleu esborrar permanentment del disc dur.
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="286"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="420"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="421"/>
         <source>Pan</source>
         <translation type="unfinished">Balanç</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="294"/>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="295"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="427"/>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="428"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="429"/>
         <source>Audio level</source>
         <translation type="unfinished">Nivell d&apos;àudio</translation>
     </message>
@@ -9448,49 +9448,49 @@ Seleccioneu els que voleu esborrar permanentment del disc dur.
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="321"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="439"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="579"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="634"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="815"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="440"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="580"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="635"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="816"/>
         <source>&lt;none&gt;</source>
         <translation type="unfinished">&lt;cap&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="323"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="441"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="442"/>
         <source>Click to load an audio plugin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="344"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="345"/>
         <source>Audio %1</source>
         <translation type="unfinished">Àudio %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="349"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="350"/>
         <source>Synth %1</source>
         <translation type="unfinished">Sint.%1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="449"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="450"/>
         <source>Sub %1</source>
         <translation type="unfinished">Sub %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="488"/>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="489"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="490"/>
         <source>Audio master output level</source>
         <translation type="unfinished">Nivell principal de la sortida d&apos;àudio</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="491"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="492"/>
         <source>Master</source>
         <translation type="unfinished">Master</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="580"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="635"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="816"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="581"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="636"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="817"/>
         <source>&lt;no plugin&gt;</source>
         <translation type="unfinished">&lt;sense connector&gt;</translation>
     </message>
@@ -21581,7 +21581,7 @@ Voleu configurar-ho ara?</translation>
     <name>Rosegarden::WarningWidget</name>
     <message>
         <location filename="../../src/gui/widgets/WarningWidget.cpp" line="64"/>
-        <source>&lt;qt&gt;&lt;p&gt;Performance problems detected!&lt;/p&gt;&lt;p&gt;Click to display details&lt;/qt&gt;</source>
+        <source>&lt;qt&gt;&lt;p&gt;Performance problems detected!&lt;/p&gt;&lt;p&gt;Click to display details&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
