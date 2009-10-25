@@ -300,22 +300,6 @@ AudioMixerWindow::populate()
         rec.m_stereoness = false;
         rec.m_stereoButton->setToolTip(tr("Mono or stereo"));
 
-        rec.m_muteButton = new QPushButton(m_mainBox);
-        rec.m_muteButton->setText("M");
-        rec.m_muteButton->setToggleButton(true);
-        rec.m_muteButton->setFixedWidth(rec.m_stereoButton->width());
-        rec.m_muteButton->setFixedHeight(rec.m_stereoButton->height());
-        rec.m_muteButton->setFlat(true);
-        rec.m_muteButton->setToolTip(tr("Mute"));
-
-        rec.m_soloButton = new QPushButton(m_mainBox);
-        rec.m_soloButton->setText("S");
-        rec.m_soloButton->setToggleButton(true);
-        rec.m_soloButton->setFixedWidth(rec.m_stereoButton->width());
-        rec.m_soloButton->setFixedHeight(rec.m_stereoButton->height());
-        rec.m_soloButton->setFlat(true);
-        rec.m_soloButton->setToolTip(tr("Solo"));
-
         rec.m_recordButton = new QPushButton(m_mainBox);
         rec.m_recordButton->setText("R");
         rec.m_recordButton->setToggleButton(true);
@@ -350,6 +334,10 @@ AudioMixerWindow::populate()
         // use the instrument alias if one is set, else a standard label
         std::string alias = (*i)->getAlias();
 
+        QPushButton *aliasButton = new QPushButton(m_mainBox);
+        aliasButton->setFixedSize(20,5);
+        mainLayout->addWidget(aliasButton, 0, col, 1, 2, Qt::AlignTop);
+
         if ((*i)->getType() == Instrument::Audio) {
             if (alias.size()) idString = strtoqstr(alias);
             else idString = tr("Audio %1").arg((*i)->getId() -
@@ -364,35 +352,21 @@ AudioMixerWindow::populate()
         idLabel->setFont(boldFont);
 
         if (rec.m_input) {
-            mainLayout->addWidget(rec.m_input->getWidget(), 1, col, 1, 2);
+            mainLayout->addWidget(rec.m_input->getWidget(), 2, col, 1, 2);
         }
-        mainLayout->addWidget(rec.m_output->getWidget(), 2, col, 1, 2);
-        //    mainLayout->addWidget(idLabel, 2, col, Qt::AlignCenter);
-        //    mainLayout->addWidget(rec.m_pan, 2, col+1, Qt::AlignLeft);
+        mainLayout->addWidget(rec.m_output->getWidget(), 3, col, 1, 2);
 
-        // col == 10; 10 + 1 == 11 - 10 == 1 + 1 == 2
-        // col ==  3;  3 + 1 ==  4 -  3 == 1 + 1 == 2
-//        mainLayout->addWidget(idLabel, 0, col, 1, col + 1- col+1, Qt::AlignCenter);
-        mainLayout->addWidget(idLabel, 0, col, 1, 2, Qt::AlignCenter);
-        mainLayout->addWidget(rec.m_pan, 5, col, Qt::AlignCenter);
+        mainLayout->addWidget(idLabel, 1, col, 1, 2, Qt::AlignLeft);
+        mainLayout->addWidget(rec.m_pan, 6, col, Qt::AlignCenter);
 
-        mainLayout->addWidget(rec.m_fader, 3, col, Qt::AlignCenter);
-        mainLayout->addWidget(rec.m_meter, 3, col + 1, Qt::AlignCenter);
-
-        // commented out until implemented
-        //    mainLayout->addWidget(rec.m_muteButton, 4, col);
-        //    mainLayout->addWidget(rec.m_soloButton, 4, col+1);
-        rec.m_muteButton->hide();
-        rec.m_soloButton->hide();
-
-        //    mainLayout->addWidget(rec.m_recordButton, 5, col);
-        //    mainLayout->addWidget(rec.m_stereoButton, 5, col+1);
+        mainLayout->addWidget(rec.m_fader, 4, col, Qt::AlignCenter);
+        mainLayout->addWidget(rec.m_meter, 4, col + 1, Qt::AlignCenter);
 
         rec.m_recordButton->hide();
-        mainLayout->addWidget(rec.m_stereoButton, 5, col + 1);
+        mainLayout->addWidget(rec.m_stereoButton, 6, col + 1);
 
         if (rec.m_pluginBox) {
-            mainLayout->addWidget(rec.m_pluginBox, 6, col, 1, 2);
+            mainLayout->addWidget(rec.m_pluginBox, 7, col, 1, 2);
         }
 
         m_faders[(*i)->getId()] = rec;
@@ -415,12 +389,6 @@ AudioMixerWindow::populate()
         connect(rec.m_pan, SIGNAL(valueChanged(float)),
                 this, SLOT(slotPanChanged(float)));
 
-        connect(rec.m_soloButton, SIGNAL(clicked()),
-                this, SLOT(slotSoloChanged()));
-
-        connect(rec.m_muteButton, SIGNAL(clicked()),
-                this, SLOT(slotMuteChanged()));
-
         connect(rec.m_stereoButton, SIGNAL(clicked()),
                 this, SLOT(slotChannelsChanged()));
 
@@ -428,8 +396,6 @@ AudioMixerWindow::populate()
                 this, SLOT(slotRecordChanged()));
 
         ++count;
-
-        mainLayout->addMultiCell(new QSpacerItem(2, 0), 0, 6, col + 2, col + 2);
 
         col += 3;
     }
@@ -460,13 +426,6 @@ AudioMixerWindow::populate()
         rec.m_fader->setToolTip(tr("Audio level"));
         rec.m_meter->setToolTip(tr("Audio level"));
 
-        rec.m_muteButton = new QPushButton(m_mainBox);
-        rec.m_muteButton->setText("M");
-        rec.m_muteButton->setToggleButton(true);
-        rec.m_muteButton->setFlat(true);
-
-        rec.m_muteButton->setToolTip(tr("Mute"));
-
         rec.m_pluginBox = new QWidget(m_mainBox);
         QVBoxLayout *pluginBoxLayout = new QVBoxLayout;
 
@@ -489,20 +448,15 @@ AudioMixerWindow::populate()
         QLabel *idLabel = new QLabel(tr("Sub %1").arg(count), m_mainBox, "subMaster");
         idLabel->setFont(boldFont);
 
-        //    mainLayout->addWidget(idLabel, 2, col, Qt::AlignCenter);
-        mainLayout->addWidget(idLabel, 0, col, 1, 2, Qt::AlignCenter);
+        mainLayout->addWidget(idLabel, 1, col, 1, 2, Qt::AlignLeft);
 
-        //    mainLayout->addWidget(rec.m_pan, 2, col+1, Qt::AlignLeft);
-        mainLayout->addWidget(rec.m_pan, 5, col, 1, 2, Qt::AlignCenter);
+        mainLayout->addWidget(rec.m_pan, 6, col, 1, 2, Qt::AlignCenter);
 
-        mainLayout->addWidget(rec.m_fader, 3, col, Qt::AlignCenter);
-        mainLayout->addWidget(rec.m_meter, 3, col + 1, Qt::AlignCenter);
-
-        //    mainLayout->addWidget(rec.m_muteButton, 4, col, 1, col+1- col+1);
-        rec.m_muteButton->hide();
+        mainLayout->addWidget(rec.m_fader, 4, col, Qt::AlignCenter);
+        mainLayout->addWidget(rec.m_meter, 4, col + 1, Qt::AlignCenter);
 
         if (rec.m_pluginBox) {
-            mainLayout->addWidget(rec.m_pluginBox, 6, col, 1, 2);
+            mainLayout->addWidget(rec.m_pluginBox, 7, col, 1, 2);
         }
 
         m_submasters.push_back(rec);
@@ -515,12 +469,7 @@ AudioMixerWindow::populate()
         connect(rec.m_pan, SIGNAL(valueChanged(float)),
                 this, SLOT(slotPanChanged(float)));
 
-        connect(rec.m_muteButton, SIGNAL(clicked()),
-                this, SLOT(slotMuteChanged()));
-
         ++count;
-
-        mainLayout->addMultiCell(new QSpacerItem(2, 0), 0, 6, col + 2, col + 2);
 
         col += 3;
     }
@@ -538,31 +487,18 @@ AudioMixerWindow::populate()
         rec.m_fader->setToolTip(tr("Audio master output level"));
         rec.m_meter->setToolTip(tr("Audio master output level"));
 
-        rec.m_muteButton = new QPushButton(m_mainBox);
-        rec.m_muteButton->setText("M");
-        rec.m_muteButton->setToggleButton(true);
-        rec.m_muteButton->setFlat(true);
-
         QLabel *idLabel = new QLabel(tr("Master"), m_mainBox);
         idLabel->setFont(boldFont);
 
-        mainLayout->addMultiCellWidget(idLabel, 0, 0, col, col + 1, Qt::AlignCenter);
-        mainLayout->addWidget(rec.m_fader, 3, col, Qt::AlignCenter);
-        mainLayout->addWidget(rec.m_meter, 3, col + 1, Qt::AlignCenter);
-
-        //    mainLayout->addWidget(rec.m_muteButton, 4, col, 1, col+1- col+1);
-        rec.m_muteButton->hide();
-
-        mainLayout->addMultiCell(new QSpacerItem(2, 0), 0, 6, col + 2, col + 2);
+        mainLayout->addWidget(idLabel, 1, col, 1,  2, Qt::AlignLeft);
+        mainLayout->addWidget(rec.m_fader, 4, col, Qt::AlignCenter);
+        mainLayout->addWidget(rec.m_meter, 4, col + 1, Qt::AlignCenter);
 
         m_master = rec;
         updateFader(0);
 
         connect(rec.m_fader, SIGNAL(faderChanged(float)),
                 this, SLOT(slotFaderLevelChanged(float)));
-
-        connect(rec.m_muteButton, SIGNAL(clicked()),
-                this, SLOT(slotMuteChanged()));
     }
 
     m_mainBox->show();
@@ -1483,10 +1419,6 @@ void AudioMixerWindow::FaderRec::setVisible(bool visible)
             m_fader->show();
         if (m_meter)
             m_meter->show();
-        // commented out until implemented
-        //         if (m_muteButton)   m_muteButton->show();
-        //         if (m_soloButton)   m_soloButton->show();
-        //         if (m_recordButton) m_recordButton->show();
         if (m_stereoButton)
             m_stereoButton->show();
 
@@ -1502,10 +1434,6 @@ void AudioMixerWindow::FaderRec::setVisible(bool visible)
             m_fader->hide();
         if (m_meter)
             m_meter->hide();
-        // commented out until implemented
-        //         if (m_muteButton)   m_muteButton->hide();
-        //         if (m_soloButton)   m_soloButton->hide();
-        //         if (m_recordButton) m_recordButton->hide();
         if (m_stereoButton)
             m_stereoButton->hide();
     }

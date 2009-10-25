@@ -128,8 +128,8 @@ private:
         FaderRec() :
             m_populated(false),
             m_input(0), m_output(0), m_pan(0), m_fader(0), m_meter(0),
-            m_muteButton(0), m_soloButton(0), m_recordButton(0),
-            m_stereoButton(0), m_stereoness(false), m_pluginBox(0)
+            m_recordButton(0), m_stereoButton(0), m_stereoness(false),
+            m_pluginBox(0)
         { }
 
         void setVisible(bool);
@@ -144,8 +144,6 @@ private:
         Fader *m_fader;
         AudioVUMeter *m_meter;
 
-        QPushButton *m_muteButton;
-        QPushButton *m_soloButton;
         QPushButton *m_recordButton;
         QPushButton *m_stereoButton;
         bool m_stereoness;
