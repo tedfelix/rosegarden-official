@@ -346,12 +346,18 @@ AudioMixerWindow::populate()
 
         QLabel *idLabel;
         QString idString;
+
+        // use the instrument alias if one is set, else a standard label
+        std::string alias = (*i)->getAlias();
+
         if ((*i)->getType() == Instrument::Audio) {
-            idString = tr("Audio %1").arg((*i)->getId() -
+            if (alias.size()) idString = strtoqstr(alias);
+            else idString = tr("Audio %1").arg((*i)->getId() -
                                             AudioInstrumentBase + 1);
             idLabel = new QLabel(idString, m_mainBox, "audioIdLabel");
         } else {
-            idString = tr("Synth %1").arg((*i)->getId() -
+            if (alias.size()) idString = strtoqstr(alias);
+            else idString = tr("Synth %1").arg((*i)->getId() -
                                             SoftSynthInstrumentBase + 1);
             idLabel = new QLabel(idString, m_mainBox, "synthIdLabel");
         }
@@ -364,7 +370,10 @@ AudioMixerWindow::populate()
         //    mainLayout->addWidget(idLabel, 2, col, Qt::AlignCenter);
         //    mainLayout->addWidget(rec.m_pan, 2, col+1, Qt::AlignLeft);
 
-        mainLayout->addWidget(idLabel, 0, col, 0- 0+1, col + 1- col+1, Qt::AlignCenter);
+        // col == 10; 10 + 1 == 11 - 10 == 1 + 1 == 2
+        // col ==  3;  3 + 1 ==  4 -  3 == 1 + 1 == 2
+//        mainLayout->addWidget(idLabel, 0, col, 1, col + 1- col+1, Qt::AlignCenter);
+        mainLayout->addWidget(idLabel, 0, col, 1, 2, Qt::AlignCenter);
         mainLayout->addWidget(rec.m_pan, 5, col, Qt::AlignCenter);
 
         mainLayout->addWidget(rec.m_fader, 3, col, Qt::AlignCenter);
@@ -383,7 +392,7 @@ AudioMixerWindow::populate()
         mainLayout->addWidget(rec.m_stereoButton, 5, col + 1);
 
         if (rec.m_pluginBox) {
-            mainLayout->addWidget(rec.m_pluginBox, 6, col, 1, col + 1- col+1);
+            mainLayout->addWidget(rec.m_pluginBox, 6, col, 1, 2);
         }
 
         m_faders[(*i)->getId()] = rec;
@@ -481,10 +490,10 @@ AudioMixerWindow::populate()
         idLabel->setFont(boldFont);
 
         //    mainLayout->addWidget(idLabel, 2, col, Qt::AlignCenter);
-        mainLayout->addWidget(idLabel, 0, col, 0- 1, col + 1- col+1, Qt::AlignCenter);
+        mainLayout->addWidget(idLabel, 0, col, 1, 2, Qt::AlignCenter);
 
         //    mainLayout->addWidget(rec.m_pan, 2, col+1, Qt::AlignLeft);
-        mainLayout->addWidget(rec.m_pan, 5, col, 1, col + 1- col+1, Qt::AlignCenter);
+        mainLayout->addWidget(rec.m_pan, 5, col, 1, 2, Qt::AlignCenter);
 
         mainLayout->addWidget(rec.m_fader, 3, col, Qt::AlignCenter);
         mainLayout->addWidget(rec.m_meter, 3, col + 1, Qt::AlignCenter);
@@ -493,7 +502,7 @@ AudioMixerWindow::populate()
         rec.m_muteButton->hide();
 
         if (rec.m_pluginBox) {
-            mainLayout->addWidget(rec.m_pluginBox, 6, col, 1, col + 1- col+1);
+            mainLayout->addWidget(rec.m_pluginBox, 6, col, 1, 2);
         }
 
         m_submasters.push_back(rec);
