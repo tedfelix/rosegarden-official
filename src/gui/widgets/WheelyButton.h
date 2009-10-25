@@ -36,7 +36,7 @@ class WheelyButton : public QPushButton
     Q_OBJECT
 
 public:
-    WheelyButton(QWidget *w) : QPushButton(w) { }
+    WheelyButton(QWidget *w);
     virtual ~WheelyButton() { }
 
 signals:
@@ -48,13 +48,6 @@ protected:
     }
 };
 
-
-
-// A specialised menu for selecting audio inputs or outputs, that
-// queries the studio and instrument to find out what it should show.
-// Available in a "compact" size, which is a push button with a popup
-// menu attached, or a regular size which is a combobox.
-//
 
 }
 

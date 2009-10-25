@@ -20,9 +20,24 @@
 
 #include <QPushButton>
 #include <QWidget>
+#include <QFont>
 
 
 namespace Rosegarden
 {
+    // These things are only used by AudioRouteMenu, and it uses these to
+    // provide the compact version of its interface, which is only used by the
+    // audio mixer window.  This ctor is implemented to force the buttons to use
+    // a smaller font, so they fit in better on the audio mixer and the buttons
+    // don't say "aste" instead of "Master" and so on.  It would have been
+    // cleaner to provide some mechanism for the audio mixer to get its audio
+    // route menu's wheely buttons and only change them local to that context,
+    // but in practice, this will work too, and it's cheap.
+    WheelyButton::WheelyButton(QWidget *w) : QPushButton(w)
+    {
+        QFont font;
+        font.setPointSize(6);
+        setFont(font);
+    }
 }
 #include "WheelyButton.moc"

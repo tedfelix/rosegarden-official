@@ -201,7 +201,8 @@ AudioMixerWindow::populate()
     }
 
     QFont font;
-    font.setPointSize(font.pointSize() * 8 / 10);
+//    font.setPointSize(font.pointSize() * 8 / 10);
+    font.setPointSize(6);
     font.setBold(false);
     setFont(font);
 
@@ -224,8 +225,7 @@ AudioMixerWindow::populate()
 
     // Total cols: is 2 for each fader, submaster or master, plus 1
     // for each spacer.
-    QGridLayout *mainLayout = new QGridLayout
-                              (m_mainBox, (instruments.size() + busses.size()) * 3, 7);
+    QGridLayout *mainLayout = new QGridLayout(m_mainBox);
 
     setWindowTitle(tr("Audio Mixer"));
     setIcon(IconLoader().loadPixmap("window-audiomixer"));
@@ -537,22 +537,6 @@ AudioMixerWindow::populate()
         QLabel *idLabel = new QLabel(tr("Master"), m_mainBox);
         idLabel->setFont(boldFont);
 
-//@@@
-//      WTF?  This looks like some script gone wrong:
-//      mainLayout->addWidget(idLabel, 0, col, 0- 1, col + 1- col+1, Qt::AlignCenter);
-//
-//      There are a lot of similar 0- 1, col + 1- col+1 throughout the code, but
-//      this was the only label that was drawn in totally the wrong place.  I
-//      can't figure out what to make of this, and the old code had
-//      addMultiCellWidget() for all of these, whereas our new code has a simple
-//      addWidget() for all but this one.  I'm not sure what to make of that
-//      either, other than to think if it ain't broke, I'll just leave the mess
-//      for later, and be on the lookout for weird label layout problems.
-//
-//      Response:  It must have been the conversion script.  addMultiCellWidget
-//      is no more.  It's an alternate ctor for addWidget.  When this is broken,
-//      fix it.  When it's not, it's probably OK to simplify all the
-//      0-0+10-10+3-3+1 down to 1 &c
         mainLayout->addMultiCellWidget(idLabel, 0, 0, col, col + 1, Qt::AlignCenter);
         mainLayout->addWidget(rec.m_fader, 3, col, Qt::AlignCenter);
         mainLayout->addWidget(rec.m_meter, 3, col + 1, Qt::AlignCenter);

@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -31,11 +30,16 @@ class QAction;
 namespace Rosegarden
 {
 
+
 class WheelyButton;
 class Studio;
 class Instrument;
 
-
+/// A specialised menu for selecting audio inputs or outputs, that
+/// queries the studio and instrument to find out what it should show.
+/// Available in a "compact" size, which is a push button with a popup
+/// menu attached, or a regular size which is a combobox.
+///
 class AudioRouteMenu : public QObject
 {
     Q_OBJECT
@@ -80,8 +84,6 @@ private:
     int getCurrentEntry(); // for instrument
     QString getEntryText(int n);
 };
-
-
 
 
 }
