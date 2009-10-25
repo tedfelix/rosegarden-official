@@ -3764,22 +3764,22 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../InstrumentStrings.cpp" line="82"/>
         <source>Transverse flute (D foot)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Poikkihuilu (D foot)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="83"/>
         <source>Transverse flute (C foot)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Poikkihuilu (C foot)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="84"/>
         <source>Transverse flute (B foot)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Poikkihuilu (B foot)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="85"/>
         <source>Alto transverse flute</source>
-        <translation type="unfinished"></translation>
+        <translation>Alttopoikkihuilu</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="86"/>
@@ -4641,22 +4641,22 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../InstrumentStrings.cpp" line="256"/>
         <source>Marimba (treble)</source>
-        <translation type="unfinished"></translation>
+        <translation>Marimba (diskantti)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="257"/>
         <source>Marimba (bass)</source>
-        <translation type="unfinished"></translation>
+        <translation>Marimba (basso)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="258"/>
         <source>Dulcimer (treble)</source>
-        <translation type="unfinished"></translation>
+        <translation>Dulcimer (diskantti)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="259"/>
         <source>Dulcimer (bass)</source>
-        <translation type="unfinished"></translation>
+        <translation>Dulcimer (basso)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="260"/>
@@ -4676,7 +4676,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../InstrumentStrings.cpp" line="263"/>
         <source>Snare drum</source>
-        <translation type="unfinished"></translation>
+        <translation>Virevelirumpu</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="264"/>
@@ -4686,17 +4686,17 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../InstrumentStrings.cpp" line="265"/>
         <source>Military drum</source>
-        <translation type="unfinished"></translation>
+        <translation>Sotilasrumpu</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="266"/>
         <source>Tom-toms</source>
-        <translation type="unfinished"></translation>
+        <translation>Tom-tomit</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="267"/>
         <source>Chinese tom-toms</source>
-        <translation type="unfinished"></translation>
+        <translation>Kiinalaiset tom-tomit</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="268"/>
@@ -4762,7 +4762,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../InstrumentStrings.cpp" line="280"/>
         <source>Ride cymbal</source>
-        <translation type="unfinished"></translation>
+        <translation>Ride-lautanen</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="281"/>
@@ -4772,12 +4772,12 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../InstrumentStrings.cpp" line="282"/>
         <source>Crash cymbal</source>
-        <translation type="unfinished"></translation>
+        <translation>Crash-lautanen</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="283"/>
         <source>Splash cymbal</source>
-        <translation type="unfinished"></translation>
+        <translation>Splash-lautanen</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="284"/>
@@ -4792,7 +4792,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../InstrumentStrings.cpp" line="286"/>
         <source>Cowbells</source>
-        <translation type="unfinished"></translation>
+        <translation>Lehmänkellot</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="287"/>
@@ -5137,7 +5137,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../InstrumentStrings.cpp" line="355"/>
         <source>Mezzosoprano</source>
-        <translation type="unfinished"></translation>
+        <translation>Mezzosopraano</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="356"/>
@@ -5192,12 +5192,12 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../InstrumentStrings.cpp" line="368"/>
         <source>Siren</source>
-        <translation type="unfinished"></translation>
+        <translation>Sireeni</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="369"/>
         <source>Auto horn</source>
-        <translation type="unfinished"></translation>
+        <translation>Auton äänimerkki</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="370"/>
@@ -5207,12 +5207,12 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../InstrumentStrings.cpp" line="371"/>
         <source>Lion&apos;s roar</source>
-        <translation type="unfinished"></translation>
+        <translation>Leijonan karjunta</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="372"/>
         <source>Wind machine</source>
-        <translation type="unfinished"></translation>
+        <translation>Tuulikone</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="373"/>
@@ -5958,7 +5958,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../AutoloadStrings.cpp" line="179"/>
         <source>12 String Guitar</source>
-        <translation type="unfinished"></translation>
+        <translation>12-Kielinen Kitara</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="180"/>
@@ -6225,7 +6225,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
         <location filename="../AutoloadStrings.cpp" line="297"/>
         <location filename="../AutoloadStrings.cpp" line="736"/>
         <source>Pan</source>
-        <translation type="unfinished">Jako</translation>
+        <translation>Tasapaino</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="235"/>
@@ -6239,14 +6239,14 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
         <location filename="../AutoloadStrings.cpp" line="299"/>
         <location filename="../AutoloadStrings.cpp" line="738"/>
         <source>Volume</source>
-        <translation type="unfinished">Äänenvoimakkuus</translation>
+        <translation>Äänenvoimakkuus</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="237"/>
         <location filename="../AutoloadStrings.cpp" line="300"/>
         <location filename="../AutoloadStrings.cpp" line="739"/>
         <source>Reverb</source>
-        <translation type="unfinished"></translation>
+        <translation>Kaiku</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="238"/>
@@ -6274,7 +6274,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
         <location filename="../AutoloadStrings.cpp" line="304"/>
         <location filename="../AutoloadStrings.cpp" line="743"/>
         <source>PitchBend</source>
-        <translation type="unfinished"></translation>
+        <translation>Sävelkorkeuden taivutus</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="242"/>
@@ -6298,7 +6298,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../AutoloadStrings.cpp" line="249"/>
         <source>Bass Drum 1</source>
-        <translation type="unfinished"></translation>
+        <translation>BAssorumpu 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="250"/>
@@ -6583,7 +6583,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../AutoloadStrings.cpp" line="319"/>
         <source>DodgerBlue</source>
-        <translation type="unfinished">Keskisininen</translation>
+        <translation>Keskisininen</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="320"/>
@@ -6648,7 +6648,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../AutoloadStrings.cpp" line="332"/>
         <source>LightCyan</source>
-        <translation type="unfinished">Vaalea syaani</translation>
+        <translation>Vaaleansyaani</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="333"/>
@@ -6658,162 +6658,162 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../AutoloadStrings.cpp" line="334"/>
         <source>MediumAquamarine</source>
-        <translation type="unfinished">Akvamariini</translation>
+        <translation>Akvamariini</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="335"/>
         <source>aquamarine</source>
-        <translation type="unfinished">akvamariini</translation>
+        <translation>akvamariini</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="336"/>
         <source>DarkGreen</source>
-        <translation type="unfinished">Tummanvihreä</translation>
+        <translation>Tummanvihreä</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="337"/>
         <source>DarkOliveGreen</source>
-        <translation type="unfinished">Tumman oliivinvihreä</translation>
+        <translation>Tumman oliivinvihreä</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="338"/>
         <source>DarkSeaGreen</source>
-        <translation type="unfinished">Tumma sinertävänvihreä</translation>
+        <translation>Tumman merenvihreä</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="339"/>
         <source>SeaGreen</source>
-        <translation type="unfinished">Merenvihreä</translation>
+        <translation>Merenvihreä</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="340"/>
         <source>MediumSeaGreen</source>
-        <translation type="unfinished">Merenvihreä</translation>
+        <translation>Merenvihreä</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="341"/>
         <source>LightSeaGreen</source>
-        <translation type="unfinished">Vaalea merenvihreä</translation>
+        <translation>Vaalean merenvihreä</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="342"/>
         <source>PaleGreen</source>
-        <translation type="unfinished">Hailakanvihreä</translation>
+        <translation>Hailakanvihreä</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="343"/>
         <source>SpringGreen</source>
-        <translation type="unfinished">Vaaleanvihreä</translation>
+        <translation>Keväänvihreä</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="344"/>
         <source>LawnGreen</source>
-        <translation type="unfinished">Nuermenvihreä</translation>
+        <translation>Nurmenvihreä</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="345"/>
         <source>green</source>
-        <translation type="unfinished">vihreä</translation>
+        <translation>vihreä</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="346"/>
         <source>chartreuse</source>
-        <translation type="unfinished">kirkas kellanvihreä</translation>
+        <translation>kirkkaan kellanvihreä</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="347"/>
         <source>MediumSpringGreen</source>
-        <translation type="unfinished">Keväänvihreä</translation>
+        <translation>Keväänvihreä</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="348"/>
         <source>GreenYellow</source>
-        <translation type="unfinished">Kellanvihreä</translation>
+        <translation>Vihreänkeltainen</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="349"/>
         <source>LimeGreen</source>
-        <translation type="unfinished">Limetinvihreä</translation>
+        <translation>Limetinvihreä</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="350"/>
         <source>YellowGreen</source>
-        <translation type="unfinished">Kellanvihreä</translation>
+        <translation>Kellanvihreä</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="351"/>
         <source>ForestGreen</source>
-        <translation type="unfinished">Metsän vihreä</translation>
+        <translation>Metsänvihreä</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="352"/>
         <source>OliveDrab</source>
-        <translation type="unfinished">Oliivinruskea</translation>
+        <translation>Oliivinruskea</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="353"/>
         <source>DarkKhaki</source>
-        <translation type="unfinished">Tumma khaki</translation>
+        <translation>Tumma khaki</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="354"/>
         <source>khaki</source>
-        <translation type="unfinished">khaki</translation>
+        <translation>khaki</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="355"/>
         <source>PaleGoldenrod</source>
-        <translation type="unfinished">Hailakka kullankeltainen</translation>
+        <translation>Hailakan kullankeltainen</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="356"/>
         <source>LightGoldenrodYellow</source>
-        <translation type="unfinished">Vaalea kullankeltainen</translation>
+        <translation>Vaalean kullankeltainen</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="357"/>
         <source>LightYellow</source>
-        <translation type="unfinished">Vaaleankeltainen</translation>
+        <translation>Vaaleankeltainen</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="358"/>
         <source>yellow</source>
-        <translation type="unfinished">keltainen</translation>
+        <translation>keltainen</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="359"/>
         <source>gold</source>
-        <translation type="unfinished">kulta</translation>
+        <translation>kulta</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="360"/>
         <source>LightGoldenrod</source>
-        <translation type="unfinished">Vaalea kullankeltainen</translation>
+        <translation>Vaalea kullankeltainen</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="361"/>
         <source>goldenrod</source>
-        <translation type="unfinished">kullankeltainen</translation>
+        <translation>kullankeltainen</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="362"/>
         <source>DarkGoldenrod</source>
-        <translation type="unfinished">Tumma kullankeltainen</translation>
+        <translation>Tumman kullankeltainen</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="363"/>
         <source>RosyBrown</source>
-        <translation type="unfinished">Punertavanruskea</translation>
+        <translation>Punertavanruskea</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="364"/>
         <source>IndianRed</source>
-        <translation type="unfinished">Intiaanipunainen</translation>
+        <translation>Intiaanipunainen</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="365"/>
         <source>SaddleBrown</source>
-        <translation type="unfinished">Keskiruskea</translation>
+        <translation>Keskiruskea</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="366"/>
@@ -6828,7 +6828,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../AutoloadStrings.cpp" line="368"/>
         <source>burlywood</source>
-        <translation type="unfinished">oksainen puu</translation>
+        <translation>pahkapuu</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="369"/>
@@ -6848,687 +6848,687 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../AutoloadStrings.cpp" line="372"/>
         <source>tan</source>
-        <translation type="unfinished">kastanjanruskea</translation>
+        <translation>kastanjanruskea</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="373"/>
         <source>chocolate</source>
-        <translation type="unfinished">suklaa</translation>
+        <translation>suklaa</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="374"/>
         <source>firebrick</source>
-        <translation type="unfinished">tiilenpunainen</translation>
+        <translation>tiilenpunainen</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="375"/>
         <source>brown</source>
-        <translation type="unfinished">ruskea</translation>
+        <translation>ruskea</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="376"/>
         <source>DarkSalmon</source>
-        <translation type="unfinished">Tumma lohenpunainen</translation>
+        <translation>Tumman lohenpunainen</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="377"/>
         <source>salmon</source>
-        <translation type="unfinished">lohenpunainen</translation>
+        <translation>lohenpunainen</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="378"/>
         <source>LightSalmon</source>
-        <translation type="unfinished">Vaalea lohenpunainen</translation>
+        <translation>Vaalean lohenpunainen</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="379"/>
         <source>orange</source>
-        <translation type="unfinished">oranssi</translation>
+        <translation>oranssi</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="380"/>
         <source>DarkOrange</source>
-        <translation type="unfinished">Tumma oranssi</translation>
+        <translation>Tumma oranssi</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="381"/>
         <source>coral</source>
-        <translation type="unfinished">koralli</translation>
+        <translation>koralli</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="382"/>
         <source>LightCoral</source>
-        <translation type="unfinished">Vaalea koralli</translation>
+        <translation>Vaalea koralli</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="383"/>
         <source>tomato</source>
-        <translation type="unfinished">tomaatinpunainen</translation>
+        <translation>tomaatinpunainen</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="384"/>
         <source>OrangeRed</source>
-        <translation type="unfinished">Oranssinpunainen</translation>
+        <translation>Oranssinpunainen</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="385"/>
         <source>red</source>
-        <translation type="unfinished">punainen</translation>
+        <translation>punainen</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="386"/>
         <source>HotPink</source>
-        <translation type="unfinished">Kuuman pinkki</translation>
+        <translation>Kuuman pinkki</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="387"/>
         <source>DeepPink</source>
-        <translation type="unfinished">Syvä vaaleanpunainen</translation>
+        <translation>Syvä vaaleanpunainen</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="388"/>
         <source>pink</source>
-        <translation type="unfinished">pinkki</translation>
+        <translation>pinkki</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="389"/>
         <source>LightPink</source>
-        <translation type="unfinished">Vaalea pinkki</translation>
+        <translation>Vaaleanpinkki</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="390"/>
         <source>PaleVioletRed</source>
-        <translation type="unfinished">Hailakan violettipunainen</translation>
+        <translation>Hailakan violetinpunainen</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="391"/>
         <source>maroon</source>
-        <translation type="unfinished">kastanjanruskea</translation>
+        <translation>kastanjanruskea</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="392"/>
         <source>MediumVioletRed</source>
-        <translation type="unfinished">Violetinpunainen</translation>
+        <translation>Violetinpunainen</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="393"/>
         <source>VioletRed</source>
-        <translation type="unfinished">Violettipunainen</translation>
+        <translation>Violetinpunainen</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="394"/>
         <source>magenta</source>
-        <translation type="unfinished">magenta</translation>
+        <translation>magenta</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="395"/>
         <source>violet</source>
-        <translation type="unfinished">violetti</translation>
+        <translation>violetti</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="396"/>
         <source>plum</source>
-        <translation type="unfinished">luumu</translation>
+        <translation>luumu</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="397"/>
         <source>orchid</source>
-        <translation type="unfinished">orkidea</translation>
+        <translation>orkidea</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="398"/>
         <source>MediumOrchid</source>
-        <translation type="unfinished">Orkidea 1</translation>
+        <translation>Orkidea 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="399"/>
         <source>DarkOrchid</source>
-        <translation type="unfinished">Tumma violetti</translation>
+        <translation>Tumma orkidea</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="400"/>
         <source>DarkViolet</source>
-        <translation type="unfinished">Tumma violetti</translation>
+        <translation>Tumma violetti</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="401"/>
         <source>BlueViolet</source>
-        <translation type="unfinished">Sinisenvioletti</translation>
+        <translation>Sinisenvioletti</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="402"/>
         <source>purple</source>
-        <translation type="unfinished">purppura</translation>
+        <translation>purppura</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="403"/>
         <source>MediumPurple</source>
-        <translation type="unfinished">Purppura </translation>
+        <translation>Purppura</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="404"/>
         <source>thistle</source>
-        <translation type="unfinished">ohdake</translation>
+        <translation>ohdake</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="405"/>
         <source>snow1</source>
-        <translation type="unfinished">lumi 1</translation>
+        <translation>lumi 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="406"/>
         <source>snow2</source>
-        <translation type="unfinished">lumi 2</translation>
+        <translation>lumi 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="407"/>
         <source>snow3</source>
-        <translation type="unfinished">lumi 3</translation>
+        <translation>lumi 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="408"/>
         <source>snow4</source>
-        <translation type="unfinished">lumi 4</translation>
+        <translation>lumi 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="409"/>
         <source>seashell1</source>
-        <translation type="unfinished">simpukankuori 1</translation>
+        <translation>simpukankuori 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="410"/>
         <source>seashell2</source>
-        <translation type="unfinished">simpukankuori 2</translation>
+        <translation>simpukankuori 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="411"/>
         <source>seashell3</source>
-        <translation type="unfinished">simpukankuori 3</translation>
+        <translation>simpukankuori 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="412"/>
         <source>seashell4</source>
-        <translation type="unfinished">simpukankuori 4</translation>
+        <translation>simpukankuori 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="413"/>
         <source>AntiqueWhite1</source>
-        <translation type="unfinished">Antiikin valkoinen 1</translation>
+        <translation>Antiikinvalkoinen 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="414"/>
         <source>AntiqueWhite2</source>
-        <translation type="unfinished">Antiikin valkoinen 2</translation>
+        <translation>Antiikinvalkoinen 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="415"/>
         <source>AntiqueWhite3</source>
-        <translation type="unfinished">Antiikin valkoinen 3</translation>
+        <translation>Antiikinvalkoinen 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="416"/>
         <source>AntiqueWhite4</source>
-        <translation type="unfinished">Antiikin valkoinen 4</translation>
+        <translation>Antiikinvalkoinen 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="417"/>
         <source>bisque1</source>
-        <translation type="unfinished">vaalea beige 1</translation>
+        <translation>vaalea beige 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="418"/>
         <source>bisque2</source>
-        <translation type="unfinished">vaalea beige 2</translation>
+        <translation>vaalea beige 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="419"/>
         <source>bisque3</source>
-        <translation type="unfinished">vaalea beige 3</translation>
+        <translation>vaalea beige 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="420"/>
         <source>bisque4</source>
-        <translation type="unfinished">vaalea beige 4</translation>
+        <translation>vaalea beige 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="421"/>
         <source>PeachPuff1</source>
-        <translation type="unfinished">Persikka 1</translation>
+        <translation>Persikka 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="422"/>
         <source>PeachPuff2</source>
-        <translation type="unfinished">Persikka 2</translation>
+        <translation>Persikka 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="423"/>
         <source>PeachPuff3</source>
-        <translation type="unfinished">Persikka 3</translation>
+        <translation>Persikka 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="424"/>
         <source>PeachPuff4</source>
-        <translation type="unfinished">Persikka 4</translation>
+        <translation>Persikka 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="425"/>
         <source>NavajoWhite1</source>
-        <translation type="unfinished">Navajovalkoinen 1</translation>
+        <translation>Navajovalkoinen 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="426"/>
         <source>NavajoWhite2</source>
-        <translation type="unfinished">Navajovalkoinen 2</translation>
+        <translation>Navajovalkoinen 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="427"/>
         <source>NavajoWhite3</source>
-        <translation type="unfinished">Navajovalkoinen 3</translation>
+        <translation>Navajovalkoinen 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="428"/>
         <source>NavajoWhite4</source>
-        <translation type="unfinished">Navajovalkoinen 4</translation>
+        <translation>Navajovalkoinen 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="429"/>
         <source>LemonChiffon1</source>
-        <translation type="unfinished">Sitruunankuori 1</translation>
+        <translation>Sitruunankuori 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="430"/>
         <source>LemonChiffon2</source>
-        <translation type="unfinished">Sitruunankuori 2</translation>
+        <translation>Sitruunankuori 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="431"/>
         <source>LemonChiffon3</source>
-        <translation type="unfinished">Sitruunankuori 3</translation>
+        <translation>Sitruunankuori 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="432"/>
         <source>LemonChiffon4</source>
-        <translation type="unfinished">Sitruunankuori 4</translation>
+        <translation>Sitruunankuori 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="433"/>
         <source>cornsilk1</source>
-        <translation type="unfinished">vaaleankellertävä 1</translation>
+        <translation>vaaleankellertävä 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="434"/>
         <source>cornsilk2</source>
-        <translation type="unfinished">vaaleankellertävä 2</translation>
+        <translation>vaaleankellertävä 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="435"/>
         <source>cornsilk3</source>
-        <translation type="unfinished">vaaleankellertävä 3</translation>
+        <translation>vaaleankellertävä 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="436"/>
         <source>cornsilk4</source>
-        <translation type="unfinished">vaaleankellertävä 4</translation>
+        <translation>vaaleankellertävä 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="437"/>
         <source>ivory1</source>
-        <translation type="unfinished">norsunluu 1</translation>
+        <translation>norsunluu 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="438"/>
         <source>ivory2</source>
-        <translation type="unfinished">norsunluu 2</translation>
+        <translation>norsunluu 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="439"/>
         <source>ivory3</source>
-        <translation type="unfinished">norsunluu 3</translation>
+        <translation>norsunluu 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="440"/>
         <source>ivory4</source>
-        <translation type="unfinished">norsunluu 4</translation>
+        <translation>norsunluu 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="441"/>
         <source>honeydew1</source>
-        <translation type="unfinished">oranssinkeltainen 1</translation>
+        <translation>oranssinkeltainen 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="442"/>
         <source>honeydew2</source>
-        <translation type="unfinished">oranssinkeltainen 2</translation>
+        <translation>oranssinkeltainen 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="443"/>
         <source>honeydew3</source>
-        <translation type="unfinished">oranssinkeltainen 3</translation>
+        <translation>oranssinkeltainen 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="444"/>
         <source>honeydew4</source>
-        <translation type="unfinished">oranssinkeltainen 4</translation>
+        <translation>oranssinkeltainen 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="445"/>
         <source>LavenderBlush1</source>
-        <translation type="unfinished">Laventelinpunainen 1</translation>
+        <translation>Laventelinpunainen 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="446"/>
         <source>LavenderBlush2</source>
-        <translation type="unfinished">Laventelinpunainen 2</translation>
+        <translation>Laventelinpunainen 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="447"/>
         <source>LavenderBlush3</source>
-        <translation type="unfinished">Laventelinpunainen 3</translation>
+        <translation>Laventelinpunainen 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="448"/>
         <source>LavenderBlush4</source>
-        <translation type="unfinished">Laventelinpunainen 4</translation>
+        <translation>Laventelinpunainen 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="449"/>
         <source>MistyRose1</source>
-        <translation type="unfinished">Vaalea ruusu 1</translation>
+        <translation>Vaalea ruusu 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="450"/>
         <source>MistyRose2</source>
-        <translation type="unfinished">Vaalea ruusu 2</translation>
+        <translation>Vaalea ruusu 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="451"/>
         <source>MistyRose3</source>
-        <translation type="unfinished">Vaalea ruusu 3</translation>
+        <translation>Vaalea ruusu 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="452"/>
         <source>MistyRose4</source>
-        <translation type="unfinished">Vaalea ruusu 4</translation>
+        <translation>Vaalea ruusu 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="453"/>
         <source>azure1</source>
-        <translation type="unfinished">taivaansininen 1</translation>
+        <translation>taivaansininen 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="454"/>
         <source>azure2</source>
-        <translation type="unfinished">taivaansininen 2</translation>
+        <translation>taivaansininen 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="455"/>
         <source>azure3</source>
-        <translation type="unfinished">taivaansininen 3</translation>
+        <translation>taivaansininen 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="456"/>
         <source>azure4</source>
-        <translation type="unfinished">taivaansininen 4</translation>
+        <translation>taivaansininen 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="457"/>
         <source>SlateBlue1</source>
-        <translation type="unfinished">Harmaansininen 1</translation>
+        <translation>Harmaansininen 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="458"/>
         <source>SlateBlue2</source>
-        <translation type="unfinished">Harmaansininen 2</translation>
+        <translation>Harmaansininen 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="459"/>
         <source>SlateBlue3</source>
-        <translation type="unfinished">Harmaansininen 3</translation>
+        <translation>Harmaansininen 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="460"/>
         <source>SlateBlue4</source>
-        <translation type="unfinished">Harmaansininen 4</translation>
+        <translation>Harmaansininen 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="461"/>
         <source>RoyalBlue1</source>
-        <translation type="unfinished">Ultramariini 1</translation>
+        <translation>Ultramariini 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="462"/>
         <source>RoyalBlue2</source>
-        <translation type="unfinished">Ultramariini 2</translation>
+        <translation>Ultramariini 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="463"/>
         <source>RoyalBlue3</source>
-        <translation type="unfinished">Ultramariini 3</translation>
+        <translation>Ultramariini 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="464"/>
         <source>RoyalBlue4</source>
-        <translation type="unfinished">Ultramariini 4</translation>
+        <translation>Ultramariini 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="465"/>
         <source>blue1</source>
-        <translation type="unfinished">sininen 1</translation>
+        <translation>sininen 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="466"/>
         <source>blue2</source>
-        <translation type="unfinished">sininen 2</translation>
+        <translation>sininen 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="467"/>
         <source>blue3</source>
-        <translation type="unfinished">sininen 3</translation>
+        <translation>sininen 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="468"/>
         <source>blue4</source>
-        <translation type="unfinished">sininen 4</translation>
+        <translation>sininen 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="469"/>
         <source>DodgerBlue1</source>
-        <translation type="unfinished">Keskisininen 1</translation>
+        <translation>Keskisininen 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="470"/>
         <source>DodgerBlue2</source>
-        <translation type="unfinished">Keskisininen 2</translation>
+        <translation>Keskisininen 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="471"/>
         <source>DodgerBlue3</source>
-        <translation type="unfinished">Keskisininen 3</translation>
+        <translation>Keskisininen 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="472"/>
         <source>DodgerBlue4</source>
-        <translation type="unfinished">Keskisininen 4</translation>
+        <translation>Keskisininen 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="473"/>
         <source>SteelBlue1</source>
-        <translation type="unfinished">Vaalea teräksensininen 1</translation>
+        <translation>Teräksensininen 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="474"/>
         <source>SteelBlue2</source>
-        <translation type="unfinished">Vaalea teräksensininen 2</translation>
+        <translation>Teräksensininen 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="475"/>
         <source>SteelBlue3</source>
-        <translation type="unfinished">Vaalea teräksensininen 3</translation>
+        <translation>Teräksensininen 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="476"/>
         <source>SteelBlue4</source>
-        <translation type="unfinished">Vaalea teräksensininen 4</translation>
+        <translation>Teräksensininen 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="477"/>
         <source>DeepSkyBlue1</source>
-        <translation type="unfinished">Taivaansininen 1</translation>
+        <translation>Tumma taivaansininen 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="478"/>
         <source>DeepSkyBlue2</source>
-        <translation type="unfinished">Taivaansininen 2</translation>
+        <translation>Tumma taivaansininen 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="479"/>
         <source>DeepSkyBlue3</source>
-        <translation type="unfinished">Taivaansininen 3</translation>
+        <translation>Tumma taivaansininen 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="480"/>
         <source>DeepSkyBlue4</source>
-        <translation type="unfinished">Taivaansininen 4</translation>
+        <translation>Tumma taivaansininen 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="481"/>
         <source>SkyBlue1</source>
-        <translation type="unfinished">Taivaansininen 1</translation>
+        <translation>Taivaansininen 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="482"/>
         <source>SkyBlue2</source>
-        <translation type="unfinished">Taivaansininen 2</translation>
+        <translation>Taivaansininen 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="483"/>
         <source>SkyBlue3</source>
-        <translation type="unfinished">Taivaansininen 3</translation>
+        <translation>Taivaansininen 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="484"/>
         <source>SkyBlue4</source>
-        <translation type="unfinished">Taivaansininen 4</translation>
+        <translation>Taivaansininen 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="485"/>
         <source>LightSkyBlue1</source>
-        <translation type="unfinished">Vaalea taivaansininen 1</translation>
+        <translation>Vaalea taivaansininen 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="486"/>
         <source>LightSkyBlue2</source>
-        <translation type="unfinished">Vaalea taivaansininen 2</translation>
+        <translation>Vaalea taivaansininen 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="487"/>
         <source>LightSkyBlue3</source>
-        <translation type="unfinished">Vaalea taivaansininen 3</translation>
+        <translation>Vaalea taivaansininen 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="488"/>
         <source>LightSkyBlue4</source>
-        <translation type="unfinished">Vaalea taivaansininen 4</translation>
+        <translation>Vaalea taivaansininen 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="489"/>
         <source>SlateGray1</source>
-        <translation type="unfinished">Siniharmaa 1</translation>
+        <translation>Siniharmaa 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="490"/>
         <source>SlateGray2</source>
-        <translation type="unfinished">Siniharmaa 2</translation>
+        <translation>Siniharmaa 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="491"/>
         <source>SlateGray3</source>
-        <translation type="unfinished">Siniharmaa 3</translation>
+        <translation>Siniharmaa 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="492"/>
         <source>SlateGray4</source>
-        <translation type="unfinished">Siniharmaa 4</translation>
+        <translation>Siniharmaa 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="493"/>
         <source>LightSteelBlue1</source>
-        <translation type="unfinished">Vaalea teräksensininen 1</translation>
+        <translation>Vaalea teräksensininen 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="494"/>
         <source>LightSteelBlue2</source>
-        <translation type="unfinished">Vaalea teräksensininen 2</translation>
+        <translation>Vaalea teräksensininen 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="495"/>
         <source>LightSteelBlue3</source>
-        <translation type="unfinished">Vaalea teräksensininen 3</translation>
+        <translation>Vaalea teräksensininen 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="496"/>
         <source>LightSteelBlue4</source>
-        <translation type="unfinished">Vaalea teräksensininen 4</translation>
+        <translation>Vaalea teräksensininen 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="497"/>
         <source>LightBlue1</source>
-        <translation type="unfinished">Vaaleansininen 1</translation>
+        <translation>Vaaleansininen 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="498"/>
         <source>LightBlue2</source>
-        <translation type="unfinished">Vaaleansininen 2</translation>
+        <translation>Vaaleansininen 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="499"/>
         <source>LightBlue3</source>
-        <translation type="unfinished">Vaaleansininen 3</translation>
+        <translation>Vaaleansininen 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="500"/>
         <source>LightBlue4</source>
-        <translation type="unfinished">Vaaleansininen 4</translation>
+        <translation>Vaaleansininen 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="501"/>
         <source>LightCyan1</source>
-        <translation type="unfinished">Vaalea syaani 1</translation>
+        <translation>Vaalea syaani 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="502"/>
         <source>LightCyan2</source>
-        <translation type="unfinished">Vaalea syaani 2</translation>
+        <translation>Vaalea syaani 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="503"/>
         <source>LightCyan3</source>
-        <translation type="unfinished">Vaalea syaani 3</translation>
+        <translation>Vaalea syaani 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="504"/>
         <source>LightCyan4</source>
-        <translation type="unfinished">Vaalea syaani 4</translation>
+        <translation>Vaalea syaani 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="505"/>
         <source>PaleTurquoise1</source>
-        <translation type="unfinished">Hailakanturkoosi 1</translation>
+        <translation>Hailakanturkoosi 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="506"/>
         <source>PaleTurquoise2</source>
-        <translation type="unfinished">Hailakanturkoosi 2</translation>
+        <translation>Hailakanturkoosi 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="507"/>
         <source>PaleTurquoise3</source>
-        <translation type="unfinished">Hailakanturkoosi 3</translation>
+        <translation>Hailakanturkoosi 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="508"/>
         <source>PaleTurquoise4</source>
-        <translation type="unfinished">Hailakanturkoosi 4</translation>
+        <translation>Hailakanturkoosi 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="509"/>
@@ -7553,622 +7553,622 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../AutoloadStrings.cpp" line="513"/>
         <source>turquoise1</source>
-        <translation type="unfinished">turkoosi 1</translation>
+        <translation>turkoosi 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="514"/>
         <source>turquoise2</source>
-        <translation type="unfinished">turkoosi 2</translation>
+        <translation>turkoosi 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="515"/>
         <source>turquoise3</source>
-        <translation type="unfinished">turkoosi 3</translation>
+        <translation>turkoosi 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="516"/>
         <source>turquoise4</source>
-        <translation type="unfinished">turkoosi 4</translation>
+        <translation>turkoosi 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="517"/>
         <source>cyan1</source>
-        <translation type="unfinished">syaani 1</translation>
+        <translation>syaani 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="518"/>
         <source>cyan2</source>
-        <translation type="unfinished">syaani 2</translation>
+        <translation>syaani 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="519"/>
         <source>cyan3</source>
-        <translation type="unfinished">syaani 3</translation>
+        <translation>syaani 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="520"/>
         <source>cyan4</source>
-        <translation type="unfinished">syaani 4</translation>
+        <translation>syaani 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="521"/>
         <source>DarkSlateGray1</source>
-        <translation type="unfinished">Tumma siniharmaa 1</translation>
+        <translation>Tumma siniharmaa 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="522"/>
         <source>DarkSlateGray2</source>
-        <translation type="unfinished">Tumma siniharmaa 2</translation>
+        <translation>Tumma siniharmaa 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="523"/>
         <source>DarkSlateGray3</source>
-        <translation type="unfinished">Tumma siniharmaa 3</translation>
+        <translation>Tumma siniharmaa 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="524"/>
         <source>DarkSlateGray4</source>
-        <translation type="unfinished">Tumma siniharmaa 4</translation>
+        <translation>Tumma siniharmaa 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="525"/>
         <source>aquamarine1</source>
-        <translation type="unfinished">akvamariini 1</translation>
+        <translation>akvamariini 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="526"/>
         <source>aquamarine2</source>
-        <translation type="unfinished">akvamariini 2</translation>
+        <translation>akvamariini 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="527"/>
         <source>aquamarine3</source>
-        <translation type="unfinished">akvamariini 3</translation>
+        <translation>akvamariini 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="528"/>
         <source>aquamarine4</source>
-        <translation type="unfinished">akvamariini 4</translation>
+        <translation>akvamariini 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="529"/>
         <source>DarkSeaGreen1</source>
-        <translation type="unfinished">Tumma sinertävänvihreä 1</translation>
+        <translation>Tumma merenvihreä 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="530"/>
         <source>DarkSeaGreen2</source>
-        <translation type="unfinished">Tumma sinertävänvihreä 2</translation>
+        <translation>Tumma merenvihreä 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="531"/>
         <source>DarkSeaGreen3</source>
-        <translation type="unfinished">Tumma sinertävänvihreä 3</translation>
+        <translation>Tumma merenvihreä 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="532"/>
         <source>DarkSeaGreen4</source>
-        <translation type="unfinished">Tumma sinertävänvihreä 4</translation>
+        <translation>Tumma merenvihreä 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="533"/>
         <source>SeaGreen1</source>
-        <translation type="unfinished">Merenvihreä 1</translation>
+        <translation>Merenvihreä 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="534"/>
         <source>SeaGreen2</source>
-        <translation type="unfinished">Merenvihreä 2</translation>
+        <translation>Merenvihreä 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="535"/>
         <source>SeaGreen3</source>
-        <translation type="unfinished">Merenvihreä 3</translation>
+        <translation>Merenvihreä 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="536"/>
         <source>SeaGreen4</source>
-        <translation type="unfinished">Merenvihreä 4</translation>
+        <translation>Merenvihreä 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="537"/>
         <source>PaleGreen1</source>
-        <translation type="unfinished">Hailakanvihreä 1</translation>
+        <translation>Hailakanvihreä 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="538"/>
         <source>PaleGreen2</source>
-        <translation type="unfinished">Hailakanvihreä 2</translation>
+        <translation>Hailakanvihreä 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="539"/>
         <source>PaleGreen3</source>
-        <translation type="unfinished">Hailakanvihreä 3</translation>
+        <translation>Hailakanvihreä 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="540"/>
         <source>PaleGreen4</source>
-        <translation type="unfinished">Hailakanvihreä 4</translation>
+        <translation>Hailakanvihreä 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="541"/>
         <source>SpringGreen1</source>
-        <translation type="unfinished">Vaaleanvihreä 1</translation>
+        <translation>Keväänvihreä 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="542"/>
         <source>SpringGreen2</source>
-        <translation type="unfinished">Vaaleanvihreä 2</translation>
+        <translation>Keväänvihreä 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="543"/>
         <source>SpringGreen3</source>
-        <translation type="unfinished">Vaaleanvihreä 3</translation>
+        <translation>Keväänvihreä 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="544"/>
         <source>SpringGreen4</source>
-        <translation type="unfinished">Vaaleanvihreä 4</translation>
+        <translation>Keväänvihreä 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="545"/>
         <source>green1</source>
-        <translation type="unfinished">vihreä 1</translation>
+        <translation>vihreä 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="546"/>
         <source>green2</source>
-        <translation type="unfinished">vihreä 2</translation>
+        <translation>vihreä 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="547"/>
         <source>green3</source>
-        <translation type="unfinished">vihreä 3</translation>
+        <translation>vihreä 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="548"/>
         <source>green4</source>
-        <translation type="unfinished">vihreä 4</translation>
+        <translation>vihreä 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="549"/>
         <source>chartreuse1</source>
-        <translation type="unfinished">kirkas kellanvihreä 1</translation>
+        <translation>kirkas kellanvihreä 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="550"/>
         <source>chartreuse2</source>
-        <translation type="unfinished">kirkas kellanvihreä 2</translation>
+        <translation>kirkas kellanvihreä 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="551"/>
         <source>chartreuse3</source>
-        <translation type="unfinished">kirkas kellanvihreä 3</translation>
+        <translation>kirkas kellanvihreä 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="552"/>
         <source>chartreuse4</source>
-        <translation type="unfinished">kirkas kellanvihreä 4</translation>
+        <translation>kirkas kellanvihreä 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="553"/>
         <source>OliveDrab1</source>
-        <translation type="unfinished">Oliivinruskea 1</translation>
+        <translation>Oliivinruskea 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="554"/>
         <source>OliveDrab2</source>
-        <translation type="unfinished">Oliivinruskea 2</translation>
+        <translation>Oliivinruskea 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="555"/>
         <source>OliveDrab3</source>
-        <translation type="unfinished">Oliivinruskea 3</translation>
+        <translation>Oliivinruskea 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="556"/>
         <source>OliveDrab4</source>
-        <translation type="unfinished">Oliivinruskea 4</translation>
+        <translation>Oliivinruskea 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="557"/>
         <source>DarkOliveGreen1</source>
-        <translation type="unfinished">Tumman oliivinvihreä 1</translation>
+        <translation>Tumman oliivinvihreä 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="558"/>
         <source>DarkOliveGreen2</source>
-        <translation type="unfinished">Tumman oliivinvihreä 2</translation>
+        <translation>Tumman oliivinvihreä 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="559"/>
         <source>DarkOliveGreen3</source>
-        <translation type="unfinished">Tumman oliivinvihreä 3</translation>
+        <translation>Tumman oliivinvihreä 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="560"/>
         <source>DarkOliveGreen4</source>
-        <translation type="unfinished">Tumman oliivinvihreä 4</translation>
+        <translation>Tumman oliivinvihreä 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="561"/>
         <source>khaki1</source>
-        <translation type="unfinished">khaki1</translation>
+        <translation>khaki 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="562"/>
         <source>khaki2</source>
-        <translation type="unfinished">khaki2</translation>
+        <translation>khaki 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="563"/>
         <source>khaki3</source>
-        <translation type="unfinished">khaki3</translation>
+        <translation>khaki 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="564"/>
         <source>khaki4</source>
-        <translation type="unfinished">khaki 4</translation>
+        <translation>khaki 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="565"/>
         <source>LightGoldenrod1</source>
-        <translation type="unfinished">Vaalea kullankeltainen 1</translation>
+        <translation>Vaalean kullankeltainen 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="566"/>
         <source>LightGoldenrod2</source>
-        <translation type="unfinished">Vaalea kullankeltainen 2</translation>
+        <translation>Vaalean kullankeltainen 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="567"/>
         <source>LightGoldenrod3</source>
-        <translation type="unfinished">Vaalea kullankeltainen 3</translation>
+        <translation>Vaalean kullankeltainen 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="568"/>
         <source>LightGoldenrod4</source>
-        <translation type="unfinished">Vaalea kullankeltainen</translation>
+        <translation>Vaalean kullankeltainen 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="569"/>
         <source>LightYellow1</source>
-        <translation type="unfinished">Vaaleankeltainen 1</translation>
+        <translation>Vaaleankeltainen 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="570"/>
         <source>LightYellow2</source>
-        <translation type="unfinished">Vaaleankeltainen 2</translation>
+        <translation>Vaaleankeltainen 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="571"/>
         <source>LightYellow3</source>
-        <translation type="unfinished">Vaaleankeltainen 3</translation>
+        <translation>Vaaleankeltainen 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="572"/>
         <source>LightYellow4</source>
-        <translation type="unfinished">Vaaleankeltainen 4</translation>
+        <translation>Vaaleankeltainen 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="573"/>
         <source>yellow1</source>
-        <translation type="unfinished">keltainen 1</translation>
+        <translation>keltainen 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="574"/>
         <source>yellow2</source>
-        <translation type="unfinished">keltainen 2</translation>
+        <translation>keltainen 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="575"/>
         <source>yellow3</source>
-        <translation type="unfinished">keltainen 3</translation>
+        <translation>keltainen 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="576"/>
         <source>yellow4</source>
-        <translation type="unfinished">keltainen 4</translation>
+        <translation>keltainen 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="577"/>
         <source>gold1</source>
-        <translation type="unfinished">kulta 1</translation>
+        <translation>kulta 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="578"/>
         <source>gold2</source>
-        <translation type="unfinished">kulta 2</translation>
+        <translation>kulta 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="579"/>
         <source>gold3</source>
-        <translation type="unfinished">kulta 3 </translation>
+        <translation>kulta 3 </translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="580"/>
         <source>gold4</source>
-        <translation type="unfinished">kulta 4</translation>
+        <translation>kulta 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="581"/>
         <source>goldenrod1</source>
-        <translation type="unfinished">kullankeltainen 1</translation>
+        <translation>kullankeltainen 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="582"/>
         <source>goldenrod2</source>
-        <translation type="unfinished">kullankeltainen 2</translation>
+        <translation>kullankeltainen 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="583"/>
         <source>goldenrod3</source>
-        <translation type="unfinished">kullankeltainen 3</translation>
+        <translation>kullankeltainen 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="584"/>
         <source>goldenrod4</source>
-        <translation type="unfinished">kullankeltainen 4</translation>
+        <translation>kullankeltainen 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="585"/>
         <source>DarkGoldenrod1</source>
-        <translation type="unfinished">Tumma kullankeltainen 1</translation>
+        <translation>Tumman kullankeltainen 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="586"/>
         <source>DarkGoldenrod2</source>
-        <translation type="unfinished">Tumma kullankeltainen 2</translation>
+        <translation>Tumman kullankeltainen 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="587"/>
         <source>DarkGoldenrod3</source>
-        <translation type="unfinished">Tumma kullankeltainen 3</translation>
+        <translation>Tumman kullankeltainen 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="588"/>
         <source>DarkGoldenrod4</source>
-        <translation type="unfinished">Tumma kullankeltainen 4</translation>
+        <translation>Tumman kullankeltainen 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="589"/>
         <source>RosyBrown1</source>
-        <translation type="unfinished">Punertavanruskea 1</translation>
+        <translation>Punertavanruskea 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="590"/>
         <source>RosyBrown2</source>
-        <translation type="unfinished">Punertavanruskea 2</translation>
+        <translation>Punertavanruskea 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="591"/>
         <source>RosyBrown3</source>
-        <translation type="unfinished">Punertavanruskea 3</translation>
+        <translation>Punertavanruskea 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="592"/>
         <source>RosyBrown4</source>
-        <translation type="unfinished">Punertavanruskea 4</translation>
+        <translation>Punertavanruskea 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="593"/>
         <source>IndianRed1</source>
-        <translation type="unfinished">Intian punainen 1</translation>
+        <translation>Intiaanipunainen 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="594"/>
         <source>IndianRed2</source>
-        <translation type="unfinished">Intiaanipunainen 2</translation>
+        <translation>Intiaanipunainen 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="595"/>
         <source>IndianRed3</source>
-        <translation type="unfinished">Intiaanipunainen 3</translation>
+        <translation>Intiaanipunainen 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="596"/>
         <source>IndianRed4</source>
-        <translation type="unfinished">Intiaanipunainen 4</translation>
+        <translation>Intiaanipunainen 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="597"/>
         <source>sienna1</source>
-        <translation type="unfinished">siena 1</translation>
+        <translation>siena 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="598"/>
         <source>sienna2</source>
-        <translation type="unfinished">siena 2</translation>
+        <translation>siena 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="599"/>
         <source>sienna3</source>
-        <translation type="unfinished">siena 3</translation>
+        <translation>siena 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="600"/>
         <source>sienna4</source>
-        <translation type="unfinished">siena 4</translation>
+        <translation>siena 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="601"/>
         <source>burlywood1</source>
-        <translation type="unfinished">oksainen puu 1</translation>
+        <translation>pahkainen puu 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="602"/>
         <source>burlywood2</source>
-        <translation type="unfinished">oksainen puu 2</translation>
+        <translation>pahkainen puu 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="603"/>
         <source>burlywood3</source>
-        <translation type="unfinished">oksainen puu 3</translation>
+        <translation>pahkainen puu 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="604"/>
         <source>burlywood4</source>
-        <translation type="unfinished">oksainen puu 4</translation>
+        <translation>pahkainen puu 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="605"/>
         <source>wheat1</source>
-        <translation type="unfinished">vehnä 1</translation>
+        <translation>vehnä 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="606"/>
         <source>wheat2</source>
-        <translation type="unfinished">vehnä 2</translation>
+        <translation>vehnä 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="607"/>
         <source>wheat3</source>
-        <translation type="unfinished">vehnä 3</translation>
+        <translation>vehnä 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="608"/>
         <source>wheat4</source>
-        <translation type="unfinished">vehnä 4</translation>
+        <translation>vehnä 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="609"/>
         <source>tan1</source>
-        <translation type="unfinished">kastanjanruskea 1</translation>
+        <translation>kastanjanruskea 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="610"/>
         <source>tan2</source>
-        <translation type="unfinished">kastanjanruskea 2</translation>
+        <translation>kastanjanruskea 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="611"/>
         <source>tan3</source>
-        <translation type="unfinished">kastanjanruskea 3</translation>
+        <translation>kastanjanruskea 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="612"/>
         <source>tan4</source>
-        <translation type="unfinished">kastanjanruskea 4</translation>
+        <translation>kastanjanruskea 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="613"/>
         <source>chocolate1</source>
-        <translation type="unfinished">suklaa 1</translation>
+        <translation>suklaa 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="614"/>
         <source>chocolate2</source>
-        <translation type="unfinished">suklaa 2</translation>
+        <translation>suklaa 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="615"/>
         <source>chocolate3</source>
-        <translation type="unfinished">suklaa 3</translation>
+        <translation>suklaa 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="616"/>
         <source>chocolate4</source>
-        <translation type="unfinished">suklaa 4</translation>
+        <translation>suklaa 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="617"/>
         <source>firebrick1</source>
-        <translation type="unfinished">tiilenpunainen 1</translation>
+        <translation>tiilenpunainen 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="618"/>
         <source>firebrick2</source>
-        <translation type="unfinished">tiilenpunainen 2</translation>
+        <translation>tiilenpunainen 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="619"/>
         <source>firebrick3</source>
-        <translation type="unfinished">tiilenpunainen 3</translation>
+        <translation>tiilenpunainen 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="620"/>
         <source>firebrick4</source>
-        <translation type="unfinished">tiilenpunainen 4</translation>
+        <translation>tiilenpunainen 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="621"/>
         <source>brown1</source>
-        <translation type="unfinished">ruskea 1</translation>
+        <translation>ruskea 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="622"/>
         <source>brown2</source>
-        <translation type="unfinished">ruskea 2</translation>
+        <translation>ruskea 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="623"/>
         <source>brown3</source>
-        <translation type="unfinished">ruskea 3</translation>
+        <translation>ruskea 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="624"/>
         <source>brown4</source>
-        <translation type="unfinished">ruskea 4</translation>
+        <translation>ruskea 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="625"/>
         <source>salmon1</source>
-        <translation type="unfinished">lohenpunainen 1</translation>
+        <translation>lohenpunainen 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="626"/>
         <source>salmon2</source>
-        <translation type="unfinished">lohenpunainen 2</translation>
+        <translation>lohenpunainen 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="627"/>
         <source>salmon3</source>
-        <translation type="unfinished">lohenpunainen 3</translation>
+        <translation>lohenpunainen 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="628"/>
         <source>salmon4</source>
-        <translation type="unfinished">lohenpunainen 4</translation>
+        <translation>lohenpunainen 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="629"/>
         <source>LightSalmon1</source>
-        <translation type="unfinished">Vaalea lohenpunainen 1</translation>
+        <translation>Vaalean lohenpunainen 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="630"/>
         <source>LightSalmon2</source>
-        <translation type="unfinished">Vaalea lohenpunainen 2</translation>
+        <translation>Vaalean lohenpunainen 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="631"/>
         <source>LightSalmon3</source>
-        <translation type="unfinished">Vaalea lohenpunainen 3</translation>
+        <translation>Vaalean lohenpunainen 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="632"/>
         <source>LightSalmon4</source>
-        <translation type="unfinished">Vaalea lohenpunainen 4</translation>
+        <translation>Vaalean lohenpunainen 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="633"/>
         <source>orange1</source>
-        <translation type="unfinished">oranssi 1</translation>
+        <translation>oranssi 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="634"/>
         <source>orange2</source>
-        <translation type="unfinished">oranssi 2</translation>
+        <translation>oranssi 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="635"/>
         <source>orange3</source>
-        <translation type="unfinished">oranssi 3</translation>
+        <translation>oranssi 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="636"/>
         <source>orange4</source>
-        <translation type="unfinished">oranssi 4</translation>
+        <translation>oranssi 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="637"/>
@@ -8193,102 +8193,102 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../AutoloadStrings.cpp" line="641"/>
         <source>coral1</source>
-        <translation type="unfinished">koralli 1</translation>
+        <translation>koralli 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="642"/>
         <source>coral2</source>
-        <translation type="unfinished">koralli 2</translation>
+        <translation>koralli 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="643"/>
         <source>coral3</source>
-        <translation type="unfinished">koralli 3</translation>
+        <translation>koralli 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="644"/>
         <source>coral4</source>
-        <translation type="unfinished">koralli 4</translation>
+        <translation>koralli 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="645"/>
         <source>tomato1</source>
-        <translation type="unfinished">tomaatinpunainen 1</translation>
+        <translation>tomaatinpunainen 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="646"/>
         <source>tomato2</source>
-        <translation type="unfinished">tomaatinpunainen 2</translation>
+        <translation>tomaatinpunainen 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="647"/>
         <source>tomato3</source>
-        <translation type="unfinished">tomaatinpunainen 3</translation>
+        <translation>tomaatinpunainen 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="648"/>
         <source>tomato4</source>
-        <translation type="unfinished">tomaatinpunainen 4</translation>
+        <translation>tomaatinpunainen 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="649"/>
         <source>OrangeRed1</source>
-        <translation type="unfinished">Oranssinpunainen 1</translation>
+        <translation>Oranssinpunainen 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="650"/>
         <source>OrangeRed2</source>
-        <translation type="unfinished">Oranssinpunainen 2</translation>
+        <translation>Oranssinpunainen 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="651"/>
         <source>OrangeRed3</source>
-        <translation type="unfinished">Oranssinpunainen 3</translation>
+        <translation>Oranssinpunainen 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="652"/>
         <source>OrangeRed4</source>
-        <translation type="unfinished">Oranssinpunainen 4</translation>
+        <translation>Oranssinpunainen 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="653"/>
         <source>red1</source>
-        <translation type="unfinished">punainen 1</translation>
+        <translation>punainen 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="654"/>
         <source>red2</source>
-        <translation type="unfinished">punainen 2</translation>
+        <translation>punainen 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="655"/>
         <source>red3</source>
-        <translation type="unfinished">punainen 3</translation>
+        <translation>punainen 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="656"/>
         <source>red4</source>
-        <translation type="unfinished">punainen 4</translation>
+        <translation>punainen 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="657"/>
         <source>DeepPink1</source>
-        <translation type="unfinished">Syvä vaaleanpunainen 1</translation>
+        <translation>Syvän vaaleanpunainen 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="658"/>
         <source>DeepPink2</source>
-        <translation type="unfinished">Syvä vaaleanpunainen 2</translation>
+        <translation>Syvän vaaleanpunainen 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="659"/>
         <source>DeepPink3</source>
-        <translation type="unfinished">Syvä vaaleanpunainen 3</translation>
+        <translation>Syvän vaaleanpunainen 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="660"/>
         <source>DeepPink4</source>
-        <translation type="unfinished">Syvä vaaleanpunainen</translation>
+        <translation>Syvän vaaleanpunainen 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="661"/>
@@ -8573,7 +8573,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../AutoloadStrings.cpp" line="717"/>
         <source>black</source>
-        <translation type="unfinished">musta</translation>
+        <translation>musta</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="718"/>
@@ -8598,17 +8598,17 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../AutoloadStrings.cpp" line="722"/>
         <source>grey</source>
-        <translation type="unfinished"></translation>
+        <translation>harmaa</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="723"/>
         <source>LightGray</source>
-        <translation type="unfinished">Vaaleanharmaa</translation>
+        <translation>Vaaleanharmaa</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="724"/>
         <source>white</source>
-        <translation type="unfinished">valkoinen</translation>
+        <translation>valkoinen</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="725"/>
@@ -8618,27 +8618,27 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../AutoloadStrings.cpp" line="726"/>
         <source>Blue pastel</source>
-        <translation type="unfinished"></translation>
+        <translation>Pastellinsininen</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="727"/>
         <source>Red pastel</source>
-        <translation type="unfinished"></translation>
+        <translation>Pastellinpunainen</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="728"/>
         <source>Green pastel</source>
-        <translation type="unfinished"></translation>
+        <translation>Pastellinvihreä</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="729"/>
         <source>Orange pastel</source>
-        <translation type="unfinished"></translation>
+        <translation>Pastellinoranssi</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="730"/>
         <source>Yellow pastel</source>
-        <translation type="unfinished"></translation>
+        <translation>Pastellinkeltainen</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="731"/>
@@ -8648,7 +8648,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../AutoloadStrings.cpp" line="732"/>
         <source>Copyright (c) xxxx Copyright Holder</source>
-        <translation type="unfinished"></translation>
+        <translation>Copyright (c) xxxx Tekijänoikeuden haltija</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="733"/>
@@ -12957,12 +12957,12 @@ Esimerkkiteksti tiedostosta:</translation>
     <message>
         <location filename="../../src/gui/widgets/InstrumentAliasButton.cpp" line="49"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/InstrumentAliasButton.cpp" line="50"/>
         <source>Enter instrument alias:</source>
-        <translation type="unfinished"></translation>
+        <translation>Syötä instrumenttialias:</translation>
     </message>
 </context>
 <context>
@@ -13568,7 +13568,7 @@ sen sijaan?</translation>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="241"/>
         <source>&lt;qt&gt;Set different score mark options.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Aseta erilaisia sävellyksen merkintävalintoja.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="105"/>
@@ -13598,7 +13598,7 @@ sen sijaan?</translation>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="155"/>
         <source>&lt;qt&gt;&lt;p&gt;Choose the staff size of the score.  LilyPond will scale staff contents relative to this size.&lt;/p&gt;&lt;p&gt;Sizes marked * may provide the best rendering quality.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Valitse sävellyksen viivaston koko.  LilyPond skaalaa viivaston sisällön suhteessa tähän kokoon.&lt;/p&gt;&lt;p&gt;Koot jotka on merkitty tähdellä (*) saattavat tuottaa parhaan tulosteen laadun.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="169"/>
@@ -13608,7 +13608,7 @@ sen sijaan?</translation>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="169"/>
         <source> *</source>
-        <translation type="unfinished"></translation>
+        <translation> *</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="189"/>
@@ -13634,7 +13634,7 @@ sen sijaan?</translation>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="196"/>
         <source>&lt;qt&gt;Choose how often to show Tempo Marks in your score.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Valitse kuinka usein tempomerkinnät näkyvät sävellyksessä.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="199"/>
@@ -13644,7 +13644,7 @@ sen sijaan?</translation>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="206"/>
         <source>&lt;qt&gt;Set the position of the &lt;b&gt;lyrics/words&lt;/b&gt; in relation to the notes.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Aseta &lt;b&gt;sanoituksen&lt;/b&gt; paikka suhteessa nuotteihin.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="210"/>
@@ -13654,7 +13654,7 @@ sen sijaan?</translation>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="212"/>
         <source>&lt;qt&gt;Check to export Rosegarden beamings to your score.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Rastista tämä viedäksesi Rosegarden-palkitukset partituuriin.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="217"/>
@@ -13689,17 +13689,17 @@ sen sijaan?</translation>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="219"/>
         <source>&lt;qt&gt;If you have only one staff in this score, you wouldn&apos;t want to export brackets.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Jos sävellyksessä on vain yksi viivasto, et saata haluta viedä sulkumerkkejä.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="226"/>
         <source>&lt;qt&gt;&lt;p&gt;There is a tutorial on how to use this feature at http://www.rosegardenmusic.com/tutorials/supplemental/chordnames/index.html&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Tämän toiminnon käyttöön on ohje: http://www.rosegardenmusic.com/tutorials/supplemental/chordnames/index.html&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="231"/>
         <source>&lt;qt&gt;&lt;p&gt;Useful for multipage scores: this will prevent ugly final pages.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Käytännöllinen monisivuisissa sävellyksissä, tämä estää rumalta näyttävät viimeiset sivut.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="234"/>
@@ -13787,12 +13787,12 @@ sen sijaan?</translation>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="131"/>
         <source>&lt;qt&gt;&lt;p&gt;Could not run &lt;b&gt;convert-ly&lt;/b&gt;!&lt;/p&gt;&lt;p&gt;Please install LilyPond and ensure that the &quot;convert-ly&quot; and &quot;lilypond&quot; commands are available on your path.  If you perform a &lt;b&gt;Run Command&lt;/b&gt; (typically &lt;b&gt;Alt+F2&lt;/b&gt;) and type &quot;convert-ly&quot; into the box, you should not get a &quot;command not found&quot; error.  If you can do that without getting an error, but still see this error message, please consult &lt;a style=&quot;color:gold&quot; href=&quot;mailto:rosegarden-user@lists.sourceforge.net&quot;&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt; for additional help.&lt;/p&gt;&lt;p&gt;Processing terminated due to fatal errors.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Ei voitu suorittaa komentoa &lt;b&gt;convert-ly&lt;/b&gt;!&lt;/p&gt;&lt;p&gt;Ole hyvä ja asenna LilyPond ja varmista että &quot;convert-ly&quot; ja &quot;lilypond&quot; -komennot ovat saatavilla komentopolussa.  Jos suoritat &lt;b&gt;Suorita sovellus&lt;/b&gt; -toiminnon (yleensä &lt;b&gt;Alt+F2&lt;/b&gt;) ja kirjoitat laatikkoon &quot;convert-ly&quot;, ei pitäisi tulla virheilmoitusta.  Jos voit tehdä edellisen ilman virheilmoitusta, mutta näet silti tämän virheilmoituksen, ota yhteyttä &lt;a style=&quot;color:gold&quot; href=&quot;mailto:rosegarden-user@lists.sourceforge.net&quot;&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt; saadaksesi apua.&lt;/p&gt;&lt;p&gt;Käsittely keskeytetty vakavan virheen vuoksi&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="162"/>
         <source>&lt;qt&gt;&lt;p&gt;Could not run &lt;b&gt;lilypond&lt;/b&gt;!&lt;/p&gt;&lt;p&gt;Please install LilyPond and ensure that the &quot;convert-ly&quot; and &quot;lilypond&quot; commands are available on your path.  If you perform a &lt;b&gt;Run Command&lt;/b&gt; (typically &lt;b&gt;Alt+F2&lt;/b&gt;) and type &quot;lilypond&quot; into the box, you should not get a &quot;command not found&quot; error.  If you can do that without getting an error, but still see this error message, please consult &lt;a style=&quot;color:gold&quot; href=&quot;mailto:rosegarden-user@lists.sourceforge.net&quot;&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt; for additional help.&lt;/p&gt;&lt;p&gt;Processing terminated due to fatal errors.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Ei voitu suorittaa komentoa &lt;b&gt;lilypond&lt;/b&gt;!&lt;/p&gt;&lt;p&gt;Ole hyvä ja asenna LilyPond ja varmista että &quot;convert-ly&quot; ja &quot;lilypond&quot; -komennot ovat saatavilla komentopolussa.  Jos suoritat &lt;b&gt;Suorita sovellus&lt;/b&gt; -toiminnon (yleensä &lt;b&gt;Alt+F2&lt;/b&gt;) ja kirjoitat laatikkoon &quot;lilypond&quot;, ei pitäisi tulla virheilmoitusta.  Jos voit tehdä edellisen ilman virheilmoitusta, mutta näet silti tämän virheilmoituksen, ota yhteyttä &lt;a style=&quot;color:gold&quot; href=&quot;mailto:rosegarden-user@lists.sourceforge.net&quot;&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt; saadaksesi apua.&lt;/p&gt;&lt;p&gt;Käsittely keskeytetty vakavan virheen vuoksi&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="178"/>
@@ -13802,7 +13802,7 @@ sen sijaan?</translation>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="193"/>
         <source>&lt;qt&gt;&lt;p&gt;Ran &lt;b&gt;lilypond&lt;/b&gt; successfully, but it terminated with errors.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Käynnistettiin &lt;b&gt;lilypond&lt;/b&gt; onnistuneesti, mutta sen suoritus keskeytyi virheen vuoksi.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="196"/>
@@ -13817,7 +13817,7 @@ sen sijaan?</translation>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="203"/>
         <source>&lt;qt&gt;&lt;p&gt;Processing terminated due to fatal errors.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Käsittely keskeytetty vakavien virheiden vuoksi.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="259"/>
@@ -17069,7 +17069,7 @@ Ole hyvä ja varmista, että laite on määritetty oikein pääikkunan Hallitse 
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="468"/>
         <source>&lt;qt&gt;&lt;p&gt;The &lt;b&gt;flac&lt;/b&gt; command was not found.&lt;/p&gt;&lt;p&gt;FLAC is a lossless audio compression format used to reduce the size of Rosegarden project packages with no loss of audio quality.  Please install FLAC and try again.  This utility is typically available to most distros as a package called &quot;flac&quot;.&lt;/p&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;&lt;b&gt;Flac&lt;/b&gt;-komentoa ei löytynyt.&lt;/p&gt;&lt;p&gt;FLAC on häviötön äänen pakkausmuoto, jota käytetään pienentämään Rosegardenin projektipaketteja ilman äänen laadun huononemista.  Ole hyvä ja asenna FLAC ja yritä uudelleen.  Tämä työkalu on saatavissa useimmille jakeluille pakettina nimeltä &quot;flac&quot;.&lt;/p&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Komentoa &lt;b&gt;flac&lt;/b&gt; ei löytynyt.&lt;/p&gt;&lt;p&gt;FLAC on häviötön äänen pakkausmuoto, jota käytetään pienentämään Rosegardenin projektipaketteja ilman äänen laadun huononemista.  Ole hyvä ja asenna FLAC ja yritä uudelleen.  Tämä työkalu on saatavissa useimmille jakeluille pakettina nimeltä &quot;flac&quot;.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="530"/>
@@ -17091,7 +17091,7 @@ Ole hyvä ja varmista, että laite on määritetty oikein pääikkunan Hallitse 
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="435"/>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="814"/>
         <source>&lt;qt&gt;Could not remove&lt;br&gt;%1&lt;br&gt;&lt;br&gt;Processing aborted.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Ei voitu poistaa&lt;br&gt;%1&lt;br&gt;&lt;br&gt;Käsittely keskeytetty.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="440"/>
@@ -17099,7 +17099,7 @@ Ole hyvä ja varmista, että laite on määritetty oikein pääikkunan Hallitse 
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="649"/>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="716"/>
         <source>&lt;qt&gt;Could not copy&lt;br&gt;%1&lt;br&gt;  to&lt;br&gt;%2&lt;br&gt;&lt;br&gt;Processing aborted.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Ei voitu kopioida kohdetta&lt;br&gt;%1&lt;br&gt;  kohteeseen&lt;br&gt;%2&lt;br&gt;&lt;br&gt;Käsittely keskeytetty.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="484"/>
@@ -17109,7 +17109,7 @@ Ole hyvä ja varmista, että laite on määritetty oikein pääikkunan Hallitse 
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="486"/>
         <source>&lt;qt&gt;&lt;p&gt;The &lt;b&gt;wavpack&lt;/b&gt; command was not found.&lt;/p&gt;&lt;p&gt;WavPack is an audio compression format used to reduce the size of Rosegarden project packages with no loss of audio quality.  Please install WavPack and try again.  This utility is typically available to most distros as part of a package called &quot;wavpack&quot;.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Komentoa &lt;b&gt;wavpack&lt;/b&gt; ei löytynyt.&lt;/p&gt;&lt;p&gt;WavPack on äänenpakkausformaatti jota käytetään pienentämään Rosegardenin projektipakettien kokoa ilman laadun huonontumista.  Ole hyvä ja asenna WavPack ja yritä uudelleen.  Tämä työkalu on saatavissa useimmille jakeluille pakettina nimeltä &quot;wavpack&quot;.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="495"/>
@@ -17119,12 +17119,12 @@ Ole hyvä ja varmista, että laite on määritetty oikein pääikkunan Hallitse 
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="497"/>
         <source>&lt;qt&gt;&lt;p&gt;The &lt;b&gt;wvunpack&lt;/b&gt; command was not found.&lt;/p&gt;&lt;p&gt;WavPack is an audio compression format used to reduce the size of Rosegarden project packages with no loss of audio quality.  Please install WavPack and try again.  This utility is typically available to most distros as part of a package called &quot;wavpack&quot;.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Komentoa &lt;b&gt;wvunpack&lt;/b&gt; ei löytynyt.&lt;/p&gt;&lt;p&gt;WavPack on äänenpakkausformaatti jota käytetään pienentämään Rosegardenin projektipakettien kokoa ilman laadun huonontumista.  Ole hyvä ja asenna WavPack ja yritä uudelleen.  Tämä työkalu on saatavissa useimmille jakeluille pakettina nimeltä &quot;wavpack&quot;.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="565"/>
         <source>&lt;qt&gt;&lt;p&gt;Could not create temporary working directory.&lt;/p&gt;&lt;p&gt;Processing aborted.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Ei voitu luoda väliaikaista työhakemistoa.&lt;/p&gt;&lt;p&gt;Käsittely keskeytetty.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="569"/>
@@ -21814,7 +21814,7 @@ Haluatko asettaa sen nyt?</translation>
     <message>
         <location filename="../../src/gui/widgets/WarningWidget.cpp" line="64"/>
         <source>&lt;qt&gt;&lt;p&gt;Performance problems detected!&lt;/p&gt;&lt;p&gt;Click to display details&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Havaittu ongelmia suorituskyvyssä!&lt;/p&gt;&lt;p&gt;Klikkaa nähdäksesi yksityiskohdat&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/WarningWidget.cpp" line="87"/>
@@ -21852,7 +21852,7 @@ Haluatko asettaa sen nyt?</translation>
     <message>
         <location filename="../../src/gui/application/main.cpp" line="724"/>
         <source>&lt;h2&gt;Welcome to Rosegarden!&lt;/h2&gt;&lt;p&gt;Welcome to the Rosegarden audio and MIDI sequencer and musical notation editor.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;If you have not already done so, you may wish to install some DSSI synth plugins, or a separate synth program such as QSynth.  Rosegarden does not synthesize sounds from MIDI on its own, so without these you will hear nothing.&lt;/li&gt;&lt;li&gt;Rosegarden uses the JACK audio server for recording and playback of audio, and for playback from DSSI synth plugins.  These features will only be available if the JACK server is running.&lt;/li&gt;&lt;li&gt;Rosegarden has comprehensive documentation: see the &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&gt;Rosegarden website&lt;/a&gt; for the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/doc/en/&quot;&gt;handbook&lt;/a&gt;, &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;tutorials&lt;/a&gt;, and other information!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  To learn more, go to the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;Rosegarden website&lt;/a&gt;.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;h2&gt;Tervetuloa Rosegardeniin!&lt;/h2&gt;&lt;p&gt;Tervetuloa käyttämään Rosegardenia, ääni- ja MIDI-sekvensseriä ja nuottieditoria.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Saatat haluta asentaa DSSI-syntetisaattorilisäosia tai erillisiä syntetisaattoriohjelmia kuten QSynth jos et ole jo tehnyt niin.  Rosegarden itsessään ei tuota ääntä MIDI-tiedoista, joten ilman niitä et kuule mitään.&lt;/li&gt;&lt;li&gt;Rosegarden käyttää JACK-äänipalvelinta äänen toistoon ja tallennukseen sekä DSSI-lisäosien äänen toistoon.  Nämä ominaisuudet ovat käytettävissa vain jos JACK-palvelin on käynnissä.&lt;/li&gt;&lt;li&gt;Rosegardeniin on kattava ohjeistus, katso &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&gt;Rosegarden website&lt;/a&gt; for the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/doc/en/&quot;&gt;käsikirja&lt;/a&gt;, &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;johdatus&lt;/a&gt;, ja muuta tietoa!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegardenin tarjoavat sinulle joukko vapaaehtoisia ympäri maailman.  Katso lisätietoja: &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;Rosegardenin kotisivulta&lt;/a&gt;.&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
