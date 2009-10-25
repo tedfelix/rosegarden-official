@@ -88,6 +88,7 @@ protected slots:
     void slotMuteChanged();
     void slotRecordChanged();
     void slotSelectPlugin();
+    void slotRepopulate();
     
     // to be called if something changes in an instrument parameter box
     void slotUpdateInstrument(InstrumentId);

@@ -337,6 +337,7 @@ AudioMixerWindow::populate()
 
         InstrumentAliasButton *aliasButton = new InstrumentAliasButton(m_mainBox, (*i));
         aliasButton->setFixedSize(20,5);
+        connect (aliasButton, SIGNAL(changed()), this, SLOT(slotRepopulate()));
         mainLayout->addWidget(aliasButton, 0, col, 1, 2, Qt::AlignTop);
 
         if ((*i)->getType() == Instrument::Audio) {
@@ -1615,6 +1616,17 @@ AudioMixerWindow::toggleNamedWidgets(bool show, const char* const name)
     }
 
 }
+
+void
+AudioMixerWindow::slotRepopulate()
+{
+    // this destroys everything if it already exists and rebuilds it, so while
+    // it's overkill for changing one label, it should get the job done without
+    // the need for even more new plumbing
+    std::cout << "POPULATE" << std::endl;
+    populate();
+}
+
 
 }
 #include "AudioMixerWindow.moc"
