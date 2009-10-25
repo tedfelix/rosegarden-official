@@ -61,7 +61,7 @@ WarningWidget::WarningWidget(QWidget *parent) :
             SIGNAL(clicked()),
             this,
             SLOT(displayMessageQueue()));
-    m_warningButton->setToolTip(tr("<qt><p>Performance problems detected!</p><p>Click to display details</qt>"));
+    m_warningButton->setToolTip(tr("<qt><p>Performance problems detected!</p><p>Click to display details</p></qt>"));
     m_warningButton->hide();
 
     // Set these to false initially, assuming an all clear state.  When some
