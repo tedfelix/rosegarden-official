@@ -9372,100 +9372,97 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::AudioMixerWindow</name>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="230"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="231"/>
         <source>Audio Mixer</source>
         <translation type="unfinished">混音器</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="262"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="263"/>
         <source>Record input source</source>
         <translation type="unfinished">录制输入源</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="272"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="273"/>
         <source>Output destination</source>
         <translation type="unfinished">输出目标</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="285"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="444"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="286"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="420"/>
         <source>Pan</source>
         <translation type="unfinished">音相</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="293"/>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="294"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="451"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="452"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="295"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="427"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="428"/>
         <source>Audio level</source>
         <translation type="unfinished">音频电平</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="301"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="302"/>
         <source>Mono or stereo</source>
         <translation type="unfinished">单声道或立体声</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="309"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="459"/>
         <source>Mute</source>
-        <translation type="unfinished">静音</translation>
+        <translation type="obsolete">静音</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="317"/>
         <source>Solo</source>
-        <translation type="unfinished">独奏</translation>
+        <translation type="obsolete">独奏</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="325"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="310"/>
         <source>Arm recording</source>
         <translation type="unfinished">正在录音</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="336"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="470"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="649"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="704"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="882"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="321"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="439"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="579"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="634"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="815"/>
         <source>&lt;none&gt;</source>
         <translation type="unfinished">&lt;无&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="338"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="472"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="323"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="441"/>
         <source>Click to load an audio plugin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="350"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="344"/>
         <source>Audio %1</source>
         <translation type="unfinished">音频 %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="354"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="349"/>
         <source>Synth %1</source>
         <translation type="unfinished">同步 %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="480"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="449"/>
         <source>Sub %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="529"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="530"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="488"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="489"/>
         <source>Audio master output level</source>
         <translation type="unfinished">音频控制器输出电平</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="537"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="491"/>
         <source>Master</source>
         <translation type="unfinished">控制器</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="650"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="705"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="883"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="580"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="635"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="816"/>
         <source>&lt;no plugin&gt;</source>
         <translation type="unfinished">&lt;没有插件&gt;</translation>
     </message>
@@ -12823,6 +12820,19 @@ Example text from file:</source>
         <location filename="../../src/commands/edit/InsertTriggerNoteCommand.cpp" line="48"/>
         <source>Insert Trigger Note</source>
         <translation type="unfinished">插入触发记号</translation>
+    </message>
+</context>
+<context>
+    <name>Rosegarden::InstrumentAliasButton</name>
+    <message>
+        <location filename="../../src/gui/widgets/InstrumentAliasButton.cpp" line="49"/>
+        <source>Rosegarden</source>
+        <translation type="unfinished">玫瑰园</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/widgets/InstrumentAliasButton.cpp" line="50"/>
+        <source>Enter instrument alias:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -16758,11 +16768,6 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="259"/>
-        <source>&lt;qt&gt;&lt;pUnable to read %1.&lt;/p&gt;&lt;p&gt;Processing aborted.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="466"/>
         <source>Checking for flac...</source>
         <translation type="unfinished"></translation>
@@ -16789,11 +16794,6 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="429"/>
-        <source>&lt;qt&gt;&lt;pCould not write&lt;br&gt;%1.&lt;/p&gt;&lt;p&gt;Processing aborted.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="435"/>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="814"/>
         <source>&lt;qt&gt;Could not remove&lt;br&gt;%1&lt;br&gt;&lt;br&gt;Processing aborted.&lt;/qt&gt;</source>
@@ -16805,11 +16805,6 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="649"/>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="716"/>
         <source>&lt;qt&gt;Could not copy&lt;br&gt;%1&lt;br&gt;  to&lt;br&gt;%2&lt;br&gt;&lt;br&gt;Processing aborted.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="444"/>
-        <source>&lt;qt&gt;&lt;pCould not remove&lt;br&gt;%1.&lt;/p&gt;&lt;p&gt;Processing aborted.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -16898,6 +16893,21 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="833"/>
         <source>Unpacking project...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="259"/>
+        <source>&lt;qt&gt;&lt;p&gt;Unable to read %1.&lt;/p&gt;&lt;p&gt;Processing aborted.&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="429"/>
+        <source>&lt;qt&gt;&lt;p&gt;Could not write&lt;br&gt;%1.&lt;/p&gt;&lt;p&gt;Processing aborted.&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="444"/>
+        <source>&lt;qt&gt;&lt;p&gt;Could not remove&lt;br&gt;%1.&lt;/p&gt;&lt;p&gt;Processing aborted.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

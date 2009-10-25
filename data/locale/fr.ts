@@ -9419,100 +9419,97 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
 <context>
     <name>Rosegarden::AudioMixerWindow</name>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="230"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="231"/>
         <source>Audio Mixer</source>
         <translation>Mixeur audio</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="262"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="263"/>
         <source>Record input source</source>
         <translation>Enregistrer la source d&apos;entrée</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="272"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="273"/>
         <source>Output destination</source>
         <translation>Destination de sortie</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="285"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="444"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="286"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="420"/>
         <source>Pan</source>
         <translation>Balance</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="293"/>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="294"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="451"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="452"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="295"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="427"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="428"/>
         <source>Audio level</source>
         <translation>Niveau audio</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="301"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="302"/>
         <source>Mono or stereo</source>
         <translation>Mono ou stereo</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="309"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="459"/>
         <source>Mute</source>
-        <translation>Assourdir</translation>
+        <translation type="obsolete">Assourdir</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="317"/>
         <source>Solo</source>
-        <translation>Solo</translation>
+        <translation type="obsolete">Solo</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="325"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="310"/>
         <source>Arm recording</source>
         <translation>Armer l&apos;enregistrement</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="336"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="470"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="649"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="704"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="882"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="321"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="439"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="579"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="634"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="815"/>
         <source>&lt;none&gt;</source>
         <translation>&lt;Aucun&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="338"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="472"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="323"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="441"/>
         <source>Click to load an audio plugin</source>
         <translation>Cliquer pour charger un greffon audio</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="350"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="344"/>
         <source>Audio %1</source>
         <translation>Audio %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="354"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="349"/>
         <source>Synth %1</source>
         <translation>Synth %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="480"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="449"/>
         <source>Sub %1</source>
         <translation>Sous %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="529"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="530"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="488"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="489"/>
         <source>Audio master output level</source>
         <translation>Niveau maître de sortie audio</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="537"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="491"/>
         <source>Master</source>
         <translation>Maître</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="650"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="705"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="883"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="580"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="635"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="816"/>
         <source>&lt;no plugin&gt;</source>
         <translation>&lt;pas de greffon&gt;</translation>
     </message>
@@ -12901,6 +12898,19 @@ Texte d&apos;exemple depuis le fichier:</translation>
         <location filename="../../src/commands/edit/InsertTriggerNoteCommand.cpp" line="48"/>
         <source>Insert Trigger Note</source>
         <translation>Insérer une note déclencheuse</translation>
+    </message>
+</context>
+<context>
+    <name>Rosegarden::InstrumentAliasButton</name>
+    <message>
+        <location filename="../../src/gui/widgets/InstrumentAliasButton.cpp" line="49"/>
+        <source>Rosegarden</source>
+        <translation type="unfinished">Rosegarden</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/widgets/InstrumentAliasButton.cpp" line="50"/>
+        <source>Enter instrument alias:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -16965,11 +16975,6 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
         <translation type="obsolete">Rosegarden - Erreur de traitement fatale!</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="259"/>
-        <source>&lt;qt&gt;&lt;pUnable to read %1.&lt;/p&gt;&lt;p&gt;Processing aborted.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="466"/>
         <source>Checking for flac...</source>
         <translation type="unfinished"></translation>
@@ -16996,11 +17001,6 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="429"/>
-        <source>&lt;qt&gt;&lt;pCould not write&lt;br&gt;%1.&lt;/p&gt;&lt;p&gt;Processing aborted.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="435"/>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="814"/>
         <source>&lt;qt&gt;Could not remove&lt;br&gt;%1&lt;br&gt;&lt;br&gt;Processing aborted.&lt;/qt&gt;</source>
@@ -17012,11 +17012,6 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="649"/>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="716"/>
         <source>&lt;qt&gt;Could not copy&lt;br&gt;%1&lt;br&gt;  to&lt;br&gt;%2&lt;br&gt;&lt;br&gt;Processing aborted.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="444"/>
-        <source>&lt;qt&gt;&lt;pCould not remove&lt;br&gt;%1.&lt;/p&gt;&lt;p&gt;Processing aborted.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -17105,6 +17100,21 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="833"/>
         <source>Unpacking project...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="259"/>
+        <source>&lt;qt&gt;&lt;p&gt;Unable to read %1.&lt;/p&gt;&lt;p&gt;Processing aborted.&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="429"/>
+        <source>&lt;qt&gt;&lt;p&gt;Could not write&lt;br&gt;%1.&lt;/p&gt;&lt;p&gt;Processing aborted.&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="444"/>
+        <source>&lt;qt&gt;&lt;p&gt;Could not remove&lt;br&gt;%1.&lt;/p&gt;&lt;p&gt;Processing aborted.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

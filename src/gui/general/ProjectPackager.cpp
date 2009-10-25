@@ -256,7 +256,7 @@ ProjectPackager::getPluginFilesAndRewriteXML(const QString fileToModify, const Q
 
     bool readOK = GzipFile::readFromFile(fileToModify, inText);
     if (!readOK) {
-        puke(tr("<qt><pUnable to read %1.</p><p>Processing aborted.</p></qt>").arg(fileToModify));
+        puke(tr("<qt><p>Unable to read %1.</p><p>Processing aborted.</p></qt>").arg(fileToModify));
         return QStringList();
     }
 
@@ -426,7 +426,7 @@ ProjectPackager::getPluginFilesAndRewriteXML(const QString fileToModify, const Q
     QString ofileName = QString("%1.tmp").arg(fileToModify);
     bool writeOK = GzipFile::writeToFile(ofileName, outText);
     if (!writeOK) {
-        puke(tr("<qt><pCould not write<br>%1.</p><p>Processing aborted.</p></qt>").arg(ofileName));
+        puke(tr("<qt><p>Could not write<br>%1.</p><p>Processing aborted.</p></qt>").arg(ofileName));
         return QStringList();
     }
 
@@ -441,7 +441,7 @@ ProjectPackager::getPluginFilesAndRewriteXML(const QString fileToModify, const Q
         return QStringList();
     }
     if (!QFile::remove(ofileName)) {
-        puke(tr("<qt><pCould not remove<br>%1.</p><p>Processing aborted.</p></qt>").arg(ofileName));
+        puke(tr("<qt><p>Could not remove<br>%1.</p><p>Processing aborted.</p></qt>").arg(ofileName));
         return QStringList();
     }
 

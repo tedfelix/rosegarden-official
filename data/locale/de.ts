@@ -9976,100 +9976,97 @@ Bitte wählen Sie diejenigen aus, die permanent von der Festplatte gelöscht wer
 <context>
     <name>Rosegarden::AudioMixerWindow</name>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="230"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="231"/>
         <source>Audio Mixer</source>
         <translation>Audio Mixer</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="262"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="263"/>
         <source>Record input source</source>
         <translation>Aufnahmequelle</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="272"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="273"/>
         <source>Output destination</source>
         <translation>Ausgabeziel</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="285"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="444"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="286"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="420"/>
         <source>Pan</source>
         <translation>Pan</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="293"/>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="294"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="451"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="452"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="295"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="427"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="428"/>
         <source>Audio level</source>
         <translation>Lautsärke</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="301"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="302"/>
         <source>Mono or stereo</source>
         <translation>Mono oder Stereo</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="309"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="459"/>
         <source>Mute</source>
-        <translation>Stummschalten</translation>
+        <translation type="obsolete">Stummschalten</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="317"/>
         <source>Solo</source>
-        <translation>Solo</translation>
+        <translation type="obsolete">Solo</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="325"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="310"/>
         <source>Arm recording</source>
         <translation>Aufnahme vorbereiten</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="336"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="470"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="649"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="704"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="882"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="321"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="439"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="579"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="634"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="815"/>
         <source>&lt;none&gt;</source>
         <translation>&lt;keine&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="338"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="472"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="323"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="441"/>
         <source>Click to load an audio plugin</source>
         <translation>Zum laden eines Audio Plugins anklicken</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="350"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="344"/>
         <source>Audio %1</source>
         <translation>Audio %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="354"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="349"/>
         <source>Synth %1</source>
         <translation>Synthesizer %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="480"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="449"/>
         <source>Sub %1</source>
         <translation>Gruppe %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="529"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="530"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="488"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="489"/>
         <source>Audio master output level</source>
         <translation>Audio Master Ausgangspegel</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="537"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="491"/>
         <source>Master</source>
         <translation>Master</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="650"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="705"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="883"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="580"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="635"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="816"/>
         <source>&lt;no plugin&gt;</source>
         <translation>&lt;kein Plugin&gt;</translation>
     </message>
@@ -13487,6 +13484,19 @@ Beispieltext aus Datei:</translation>
         <location filename="../../src/commands/edit/InsertTriggerNoteCommand.cpp" line="48"/>
         <source>Insert Trigger Note</source>
         <translation>Trigger Note einfügen</translation>
+    </message>
+</context>
+<context>
+    <name>Rosegarden::InstrumentAliasButton</name>
+    <message>
+        <location filename="../../src/gui/widgets/InstrumentAliasButton.cpp" line="49"/>
+        <source>Rosegarden</source>
+        <translation type="unfinished">Rosegarden</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/widgets/InstrumentAliasButton.cpp" line="50"/>
+        <source>Enter instrument alias:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -17611,12 +17621,6 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
         <translation type="obsolete">Rosegarden - Fataler Fehler bei der Ausführung!</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="259"/>
-        <source>&lt;qt&gt;&lt;pUnable to read %1.&lt;/p&gt;&lt;p&gt;Processing aborted.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translatorcomment>XXX falsches Original</translatorcomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="466"/>
         <source>Checking for flac...</source>
         <translation>Answesenheit von flac überprüfen...</translation>
@@ -17643,12 +17647,6 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
         <translation>Rosegarden - Fataler Fehler bei der Verarbeitung</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="429"/>
-        <source>&lt;qt&gt;&lt;pCould not write&lt;br&gt;%1.&lt;/p&gt;&lt;p&gt;Processing aborted.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translatorcomment>XXX fehler im original</translatorcomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="435"/>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="814"/>
         <source>&lt;qt&gt;Could not remove&lt;br&gt;%1&lt;br&gt;&lt;br&gt;Processing aborted.&lt;/qt&gt;</source>
@@ -17661,12 +17659,6 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="716"/>
         <source>&lt;qt&gt;Could not copy&lt;br&gt;%1&lt;br&gt;  to&lt;br&gt;%2&lt;br&gt;&lt;br&gt;Processing aborted.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;%1&lt;br&gt;kann nicht nach&lt;br&gt;%2&lt;br&gt;kopiert werden&lt;br&gt;&lt;br&gt;Verarbeitung abgebrochen.&lt;/qt&gt;</translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="444"/>
-        <source>&lt;qt&gt;&lt;pCould not remove&lt;br&gt;%1.&lt;/p&gt;&lt;p&gt;Processing aborted.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translatorcomment>XXX original falsch</translatorcomment>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="484"/>
@@ -17755,6 +17747,21 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="833"/>
         <source>Unpacking project...</source>
         <translation>Projekt wird ausgepackt...</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="259"/>
+        <source>&lt;qt&gt;&lt;p&gt;Unable to read %1.&lt;/p&gt;&lt;p&gt;Processing aborted.&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="429"/>
+        <source>&lt;qt&gt;&lt;p&gt;Could not write&lt;br&gt;%1.&lt;/p&gt;&lt;p&gt;Processing aborted.&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="444"/>
+        <source>&lt;qt&gt;&lt;p&gt;Could not remove&lt;br&gt;%1.&lt;/p&gt;&lt;p&gt;Processing aborted.&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="919"/>
