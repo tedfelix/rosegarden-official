@@ -336,9 +336,10 @@ AudioMixerWindow::populate()
         std::string alias = (*i)->getAlias();
 
         InstrumentAliasButton *aliasButton = new InstrumentAliasButton(m_mainBox, (*i));
-        aliasButton->setFixedSize(20,5);
+        aliasButton->setFixedSize(10, 6); // golden rectangle
+        aliasButton->setToolTip(tr("Click to rename this instrument"));
         connect (aliasButton, SIGNAL(changed()), this, SLOT(slotRepopulate()));
-        mainLayout->addWidget(aliasButton, 0, col, 1, 2, Qt::AlignTop);
+        mainLayout->addWidget(aliasButton, 0, col, 1, 2, Qt::AlignLeft);
 
         if ((*i)->getType() == Instrument::Audio) {
             if (alias.size()) idString = strtoqstr(alias);
@@ -352,6 +353,7 @@ AudioMixerWindow::populate()
             idLabel = new QLabel(idString, m_mainBox, "synthIdLabel");
         }
         idLabel->setFont(boldFont);
+        idLabel->setToolTip(tr("Click the button above to rename this instrument"));
 
         if (rec.m_input) {
             mainLayout->addWidget(rec.m_input->getWidget(), 2, col, 1, 2);
@@ -685,9 +687,6 @@ AudioMixerWindow::updateFader(int id)
         if (!rec.m_populated)
             return ;
         Instrument *instrument = m_studio->getInstrumentById(id);
-
-        std::cout << "INSTRUMENT: name: " << instrument->getName() << " presentation name: " << instrument->getPresentationName()
-                  << " alias: " << instrument->getAlias() << std::endl;
 
         rec.m_fader->blockSignals(true);
         rec.m_fader->setFader(instrument->getLevel());
