@@ -160,6 +160,7 @@ void
 AudioInstrumentParameterPanel::slotPluginSelected(InstrumentId instrumentId,
         int index, int plugin)
 {
+    std::cout << "slotPluginSelected was reached" << std::endl;
     if (!m_selectedInstrument ||
             instrumentId != m_selectedInstrument->getId())
         return ;
@@ -418,14 +419,16 @@ AudioInstrumentParameterPanel::slotAudioChannels(int channels)
 void
 AudioInstrumentParameterPanel::slotAudioRoutingChanged()
 {
-    if (m_selectedInstrument)
+    if (m_selectedInstrument) {
         emit instrumentParametersChanged(m_selectedInstrument->getId());
+    }
 }
 
 void
 AudioInstrumentParameterPanel::slotSelectPlugin(int index)
 {
     if (m_selectedInstrument) {
+        std::cout << "AudioInstrumentParameterPanel: emitting selectPlugin...  This is the START of the chain, triggered by one of my buttons." << std::endl;
         emit selectPlugin(0, m_selectedInstrument->getId(), index);
     }
 }

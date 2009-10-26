@@ -116,6 +116,8 @@ public:
 
     virtual ~RosegardenMainWindow();
 
+    void connectOutsideCtorHack();
+
     /** Qt generates a QCloseEvent when the user clicks the close button on the
      * title bar.  We also get a close event when slotQuit() calls close().
      *

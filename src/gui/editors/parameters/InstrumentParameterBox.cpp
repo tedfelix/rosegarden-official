@@ -41,6 +41,14 @@
 namespace Rosegarden
 {
 
+void
+InstrumentParameterBox::WTF(QWidget *, InstrumentId, int)
+{
+    std::cout << "We caught the signal from AudioParameterPanel and are supposed to have relayed it." << std::endl;
+
+    emit selectPlugin(0, 0, 0);
+}
+
 InstrumentParameterBox::InstrumentParameterBox(RosegardenDocument *doc,
                                                QWidget *parent)
     : RosegardenParameterBox(tr("Instrument"),
@@ -96,6 +104,11 @@ InstrumentParameterBox::InstrumentParameterBox(RosegardenDocument *doc,
             SIGNAL(selectPlugin(QWidget *, InstrumentId, int)),
             this,
             SIGNAL(selectPlugin(QWidget *, InstrumentId, int)));
+
+    connect(m_audioInstrumentParameters,
+            SIGNAL(selectPlugin(QWidget *, InstrumentId, int)),
+            this,
+            SLOT(WTF(QWidget *, InstrumentId, int)));
 
     connect(m_audioInstrumentParameters,
             SIGNAL(showPluginGUI(InstrumentId, int)),

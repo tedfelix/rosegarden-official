@@ -361,37 +361,6 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
 
 //    m_dockLeft->update();
 
-    connect(m_instrumentParameterBox,
-            SIGNAL(selectPlugin(QWidget *, InstrumentId, int)),
-            this,
-            SLOT(slotShowPluginDialog(QWidget *, InstrumentId, int)));
-
-    connect(m_instrumentParameterBox,
-            SIGNAL(showPluginGUI(InstrumentId, int)),
-            this,
-            SLOT(slotShowPluginGUI(InstrumentId, int)));
-
-    // relay this through our own signal so that others can use it too
-    connect(m_instrumentParameterBox,
-            SIGNAL(instrumentParametersChanged(InstrumentId)),
-            this,
-            SIGNAL(instrumentParametersChanged(InstrumentId)));
-
-    connect(this,
-            SIGNAL(instrumentParametersChanged(InstrumentId)),
-            m_instrumentParameterBox,
-            SLOT(slotInstrumentParametersChanged(InstrumentId)));
-
-    connect(this,
-            SIGNAL(pluginSelected(InstrumentId, int, int)),
-            m_instrumentParameterBox,
-            SLOT(slotPluginSelected(InstrumentId, int, int)));
-
-    connect(this,
-            SIGNAL(pluginBypassed(InstrumentId, int, bool)),
-            m_instrumentParameterBox,
-            SLOT(slotPluginBypassed(InstrumentId, int, bool)));
-
     // Load the initial document (this includes doc's own autoload)
     //
     setDocument(doc);
@@ -504,6 +473,8 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
     settings.beginGroup(WindowGeometryConfigGroup);
     this->restoreGeometry(settings.value("Main_Window").toByteArray());
     settings.endGroup();
+
+    connectOutsideCtorHack();
 }
 
 RosegardenMainWindow::~RosegardenMainWindow()
@@ -536,6 +507,48 @@ RosegardenMainWindow::~RosegardenMainWindow()
     delete m_tranzport;    
     delete m_doc;
     Profiles::getInstance()->dump();
+}
+
+// Chris Fryer ran into some problem with rulers where bits weren't working in
+// the ctor.  I've got perfectly valid connections that aren't working, and that
+// rings a bell, so I'm trying this hack to see if it works:
+void
+RosegardenMainWindow::connectOutsideCtorHack()
+{
+    // AudioParameterPanel has the button, you click, it signals
+    // InstrumentParameterBox which relays the signal here via this connection:
+    // (which does not work.  WHY?!)
+    connect(m_instrumentParameterBox,
+            SIGNAL(selectPlugin(QWidget *, InstrumentId, int)),
+            this,
+            SLOT(slotShowPluginDialog(QWidget *, InstrumentId, int)));
+
+    connect(m_instrumentParameterBox,
+            SIGNAL(showPluginGUI(InstrumentId, int)),
+            this,
+            SLOT(slotShowPluginGUI(InstrumentId, int)));
+
+    // relay this through our own signal so that others can use it too
+    connect(m_instrumentParameterBox,
+            SIGNAL(instrumentParametersChanged(InstrumentId)),
+            this,
+            SIGNAL(instrumentParametersChanged(InstrumentId)));
+
+    connect(this,
+            SIGNAL(instrumentParametersChanged(InstrumentId)),
+            m_instrumentParameterBox,
+            SLOT(slotInstrumentParametersChanged(InstrumentId)));
+
+    connect(this,
+            SIGNAL(pluginSelected(InstrumentId, int, int)),
+            m_instrumentParameterBox,
+            SLOT(slotPluginSelected(InstrumentId, int, int)));
+
+    connect(this,
+            SIGNAL(pluginBypassed(InstrumentId, int, bool)),
+            m_instrumentParameterBox,
+            SLOT(slotPluginBypassed(InstrumentId, int, bool)));
+
 }
 
 void
@@ -6383,6 +6396,7 @@ RosegardenMainWindow::slotOpenAudioMixer()
     connect(m_audioMixer, SIGNAL(closing()),
             this, SLOT(slotAudioMixerClosed()));
 
+    // this works
     connect(m_audioMixer, SIGNAL(selectPlugin(QWidget *, InstrumentId, int)),
             this, SLOT(slotShowPluginDialog(QWidget *, InstrumentId, int)));
 
@@ -6694,6 +6708,9 @@ RosegardenMainWindow::slotShowPluginDialog(QWidget *parent,
                                        InstrumentId instrumentId,
                                        int index)
 {
+    // AudioParameterPanel is clicking and emitting and InstrumentParameterBox
+    // is catching and relaying, so why is this never called from the IPB
+    // control?
     std::cout << "RosegardenMainWindow::slotShowPluginDialog(" << parent << ", " << instrumentId << ", " << index << ")" << std::endl;
     if (!parent)
         parent = this;

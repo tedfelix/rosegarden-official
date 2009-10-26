@@ -512,6 +512,7 @@ AudioMixerWindow::populate()
     slotUpdateSubmasterVisibility();
     slotUpdatePluginButtonVisibility();
 
+    parentWidget()->adjustSize();
     adjustSize();
 }
 
@@ -1486,6 +1487,7 @@ AudioMixerWindow::slotUpdateFaderVisibility()
 
     toggleNamedWidgets(d, "audioIdLabel");
 
+    parentWidget()->adjustSize();
     adjustSize();
 }
 
@@ -1517,6 +1519,7 @@ AudioMixerWindow::slotUpdateSynthFaderVisibility()
 
     toggleNamedWidgets(action->isChecked(), "synthIdLabel");
 
+    parentWidget()->adjustSize();
     adjustSize();
 }
 
@@ -1547,6 +1550,7 @@ AudioMixerWindow::slotUpdateSubmasterVisibility()
 
     toggleNamedWidgets(action->isChecked(), "subMaster");
 
+    parentWidget()->adjustSize();
     adjustSize();
 }
 
@@ -1577,6 +1581,7 @@ AudioMixerWindow::slotUpdatePluginButtonVisibility()
         rec.setPluginButtonsVisible(action->isChecked());
     }
 
+    parentWidget()->adjustSize();
     adjustSize();
 }
 
