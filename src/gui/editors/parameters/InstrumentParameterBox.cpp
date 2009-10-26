@@ -41,14 +41,6 @@
 namespace Rosegarden
 {
 
-void
-InstrumentParameterBox::WTF(QWidget *, InstrumentId, int)
-{
-    std::cout << "We caught the signal from AudioParameterPanel and are supposed to have relayed it." << std::endl;
-
-    emit selectPlugin(0, 0, 0);
-}
-
 InstrumentParameterBox::InstrumentParameterBox(RosegardenDocument *doc,
                                                QWidget *parent)
     : RosegardenParameterBox(tr("Instrument"),
@@ -85,13 +77,6 @@ InstrumentParameterBox::InstrumentParameterBox(RosegardenDocument *doc,
     m_widgetStack->addWidget(m_audioInstrumentParameters);
     m_widgetStack->addWidget(m_noInstrumentParameters);
 
-    /*
-    //### Painter not active on create?? ... come me back to resizing these widgets.
-    m_midiInstrumentParameters->adjustSize();
-    m_audioInstrumentParameters->adjustSize();
-    m_noInstrumentParameters->adjustSize();
-    */
-
     connect(m_audioInstrumentParameters, SIGNAL(updateAllBoxes()),
             this, SLOT(slotUpdateAllBoxes()));
 
@@ -104,11 +89,6 @@ InstrumentParameterBox::InstrumentParameterBox(RosegardenDocument *doc,
             SIGNAL(selectPlugin(QWidget *, InstrumentId, int)),
             this,
             SIGNAL(selectPlugin(QWidget *, InstrumentId, int)));
-
-    connect(m_audioInstrumentParameters,
-            SIGNAL(selectPlugin(QWidget *, InstrumentId, int)),
-            this,
-            SLOT(WTF(QWidget *, InstrumentId, int)));
 
     connect(m_audioInstrumentParameters,
             SIGNAL(showPluginGUI(InstrumentId, int)),

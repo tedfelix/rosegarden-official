@@ -87,8 +87,6 @@ public slots:
     void slotPluginSelected(InstrumentId id, int index, int plugin);
     void slotPluginBypassed(InstrumentId id, int pluginIndex, bool bp);
 
-    void WTF(QWidget *, InstrumentId, int);
-
 signals:
 
     void changeInstrumentLabel(InstrumentId id, QString label);
@@ -102,7 +100,7 @@ signals:
 protected:
 
     //--------------- Data members ---------------------------------
-	QStackedWidget                  *m_widgetStack;
+    QStackedWidget                  *m_widgetStack;
     QFrame                          *m_noInstrumentParameters;
     MIDIInstrumentParameterPanel    *m_midiInstrumentParameters;
     AudioInstrumentParameterPanel   *m_audioInstrumentParameters;

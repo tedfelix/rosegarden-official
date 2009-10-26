@@ -299,19 +299,10 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
 
 
     QPixmap dummyPixmap; // any icon will do
-    
-    
-    
+   
+
     // start of docking code 
     this->setDockOptions(QMainWindow::AnimatedDocks);
-
-    // Apparently, hasUndocked() is emitted when the dock widget's
-    // 'close' button on the dock handle is clicked.
-    //
-    //&&& disabled mainDockWidget connection, may not be required
-//    connect(m_mainDockWidget, SIGNAL(docking(QDockWidget*, QDockWidget::DockPosition)),
-//            this, SLOT(slotParametersDockedBack(QDockWidget*, QDockWidget::DockPosition)));
-    
 
     RosegardenDocument* doc = new RosegardenDocument(this, m_pluginManager);
 
@@ -343,7 +334,6 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
     // Lookup the configuration parameter that specifies the default
     // arrangement, and instantiate it.
     
-    
     // call inits to invoke all other construction parts
     //
     emit startupStatusMessage(tr("Initializing view...")); 
@@ -351,15 +341,12 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
     setupActions();
     initZoomToolbar();
     
-    
     QSettings settings;
     settings.beginGroup(GeneralOptionsConfigGroup);
 
     m_parameterArea->setArrangement((RosegardenParameterArea::Arrangement)
                                     settings.value("sidebarstyle",
                                     RosegardenParameterArea::CLASSIC_STYLE).toUInt());
-
-//    m_dockLeft->update();
 
     // Load the initial document (this includes doc's own autoload)
     //
@@ -402,10 +389,8 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
 
     if (m_seqManager->getSoundDriverStatus() & AUDIO_OK) {
         slotStateChanged("got_audio", true);
-//        m_warningWidget->setAudioWarning(false);
     } else {
         slotStateChanged("got_audio", false);
-//        m_warningWidget->setAudioWarning(true);
     }
 
     // If we're restarting the gui then make sure any transient
@@ -509,15 +494,11 @@ RosegardenMainWindow::~RosegardenMainWindow()
     Profiles::getInstance()->dump();
 }
 
-// Chris Fryer ran into some problem with rulers where bits weren't working in
-// the ctor.  I've got perfectly valid connections that aren't working, and that
-// rings a bell, so I'm trying this hack to see if it works:
 void
 RosegardenMainWindow::connectOutsideCtorHack()
 {
     // AudioParameterPanel has the button, you click, it signals
     // InstrumentParameterBox which relays the signal here via this connection:
-    // (which does not work.  WHY?!)
     connect(m_instrumentParameterBox,
             SIGNAL(selectPlugin(QWidget *, InstrumentId, int)),
             this,
@@ -726,11 +707,6 @@ RosegardenMainWindow::setupActions()
     createAction("set_quick_marker", SLOT(slotSetQuickMarker()));
     createAction("jump_to_quick_marker", SLOT(slotJumpToQuickMarker()));
 
-// These were commented out in the old KDE3 code as well
-//    createAction("insert_marker_here", SLOT(slotInsertMarkerHere()));
-//    createAction("insert_marker_at_pointer", SLOT(slotInsertMarkerAtPointer()));
-//    createAction("delete_marker", SLOT(slotDeleteMarker()));
-
     createAction("play", SLOT(slotPlay()));
     createAction("stop", SLOT(slotStop()));
     createAction("fast_forward", SLOT(slotFastforward()));
@@ -802,36 +778,6 @@ RosegardenMainWindow::setRewFFwdToAutoRepeat()
         QToolButton *ffw = transportToolbar->findChild<QToolButton*>("fast_forward");
         if (rew) rew->setAutoRepeat(true);
         if (ffw) ffw->setAutoRepeat(true);
-        
-        /*
-        //&&& //### reimplement all this:
-        //
-        //
-        //### changed var *l from <QObjectList*> to <QListWidget*>
-        QListWidget *l = transportToolbar->queryList();        //###################### FIX next
-        QListWidgetItem it(*l); // iterate over the buttons
-        QObject *obj;
-        
-        while ((obj = it.current()) != 0) {
-            // for each found object...
-            ++it;
-            // RG_DEBUG << "obj name : " << obj->objectName() << endl;
-            QString objName = obj->objectName();
-
-            if (objName.endsWith("rewind") || objName.endsWith("fast_forward")) {
-                QPushButton* btn = dynamic_cast<QPushButton*>(obj);
-                if (!btn) {
-                    RG_DEBUG << "Very strange - found widgets in transport_toolbar which aren't buttons\n";
-
-                    continue;
-                }
-                btn->setAutoRepeat(true);
-            }
-
-
-        }
-        delete l;
-        */
     } else {
         RG_DEBUG << "transportToolbar == 0\n";
     }
@@ -2519,8 +2465,6 @@ RosegardenMainWindow::slotAutoSplitSelection()
                     new AudioSegmentAutoSplitCommand(m_doc,
                                                      *i,
                                                      aSD.getThreshold()));
-                // dmm - verifying that widget->value() accessors *can* work without crashing
-                //        std::cout << "SILVAN: getThreshold() = " << aSD.getThreshold() << std::endl;
             }
         } else {
             command->addCommand(new SegmentAutoSplitCommand(*i));
@@ -4619,8 +4563,8 @@ RosegardenMainWindow::slotExportProject()
 
     // I have a ton of weird files and suspect problems with this, but maybe
     // not:
-    std::cout << "getValidWriteFileName() returned " << fileName.toStdString() << std::endl;
-    std::cout << "                         rgFile: " << fileName.toStdString() << std::endl;
+    RG_DEBUG << "getValidWriteFileName() returned " << fileName.toStdString() << endl
+             << "                         rgFile: " << fileName.toStdString() << endl;
 
     CurrentProgressDialog::freeze();
 
@@ -6708,10 +6652,7 @@ RosegardenMainWindow::slotShowPluginDialog(QWidget *parent,
                                        InstrumentId instrumentId,
                                        int index)
 {
-    // AudioParameterPanel is clicking and emitting and InstrumentParameterBox
-    // is catching and relaying, so why is this never called from the IPB
-    // control?
-    std::cout << "RosegardenMainWindow::slotShowPluginDialog(" << parent << ", " << instrumentId << ", " << index << ")" << std::endl;
+    RG_DEBUG << "RosegardenMainWindow::slotShowPluginDialog(" << parent << ", " << instrumentId << ", " << index << ")" << endl;
     if (!parent)
         parent = this;
 
