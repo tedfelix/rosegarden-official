@@ -40,6 +40,8 @@ public:
     InstrumentAliasButton(QWidget *parent,
                    Instrument *instrument = 0);
 
+    void setInstrument(Instrument *instrument) { m_instrument = instrument; }
+
 protected slots:
     void slotPressed();
 

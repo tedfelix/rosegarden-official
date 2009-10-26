@@ -19,6 +19,7 @@
 #ifndef _RG_INSTRUMENTPARAMETERPANEL_H_
 #define _RG_INSTRUMENTPARAMETERPANEL_H_
 
+#include "gui/widgets/InstrumentAliasButton.h"
 #include <QFrame>
 #include <vector>
 #include <utility>
@@ -60,8 +61,9 @@ signals:
 protected:
     //--------------- Data members ---------------------------------
     QLabel                          *m_instrumentLabel;
-    Instrument          *m_selectedInstrument;
-    RosegardenDocument                *m_doc;
+    Instrument                      *m_selectedInstrument;
+    RosegardenDocument              *m_doc;
+    InstrumentAliasButton           *m_aliasButton;
 };
 
 

@@ -73,12 +73,24 @@ AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(RosegardenDocument*
     gridLayout->setMargin(0);
     setLayout(gridLayout);
 
+    // we should have a change alias button here too (remember, it changes the
+    // alias by itself, so we just have to update to reflect the change)
+    m_aliasButton = new InstrumentAliasButton(this, 0);
+    m_aliasButton->setFixedSize(10, 6); // golden rectangle
+    m_aliasButton->setToolTip(tr("Click to rename this instrument"));
+    connect (m_aliasButton, SIGNAL(changed()), this, SLOT(updateAllBoxes()));
+    // cheat on the layout, both this and the label at 0, 0; this all the way
+    // left, the label centered.
+    gridLayout->addWidget(m_aliasButton, 0, 0, 1, 2, Qt::AlignLeft);
+
     // Instrument label : first row, all cols
     QFontMetrics metrics(f);
     int width25 = metrics.width("1234567890123456789012345");
     m_instrumentLabel->setFont(f);
     m_instrumentLabel->setFixedWidth(width25);
     m_instrumentLabel->setAlignment(Qt::AlignCenter);
+    m_instrumentLabel->setToolTip(tr("Click the button above to rename this instrument"));
+    m_instrumentLabel->setText("REFRESH BUG!"); // no tr(); temporary internal string
     gridLayout->addWidget(m_instrumentLabel, 0, 0, 1, 2, Qt::AlignCenter);
 
     // fader and connect it
@@ -333,7 +345,10 @@ AudioInstrumentParameterPanel::setupForInstrument(Instrument* instrument)
 
     m_selectedInstrument = instrument;
 
-    m_instrumentLabel->setText(strtoqstr(instrument->getName()));
+    std::string l = instrument->getAlias();
+    if (!l.size()) l = instrument->getName();
+    m_instrumentLabel->setText(strtoqstr(l));
+    m_aliasButton->setInstrument(instrument);
 
     m_audioFader->m_recordFader->setFader(instrument->getRecordLevel());
     m_audioFader->m_fader->setFader(instrument->getLevel());
