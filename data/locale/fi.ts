@@ -3784,87 +3784,87 @@ Jos haluat litt채채 t채st채 huolimatta, harkitse toisen liit채nt채tyypin k채ytt�
     <message>
         <location filename="../InstrumentStrings.cpp" line="86"/>
         <source>Garklein recorder</source>
-        <translation type="unfinished"></translation>
+        <translation>Garklein-nokkahuilu</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="87"/>
         <source>Sopranino recorder</source>
-        <translation type="unfinished"></translation>
+        <translation>Sopraniinonokkahuilu</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="88"/>
         <source>Soprano recorder</source>
-        <translation type="unfinished"></translation>
+        <translation>Sopraanonokkahuilu</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="89"/>
         <source>Alto recorder</source>
-        <translation type="unfinished"></translation>
+        <translation>Alttonokkahuilu</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="90"/>
         <source>Tenor recorder</source>
-        <translation type="unfinished"></translation>
+        <translation>Tenorinokkahuilu</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="91"/>
         <source>Bass recorder</source>
-        <translation type="unfinished"></translation>
+        <translation>Bassonokkahuilu</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="92"/>
         <source>Greatbass recorder</source>
-        <translation type="unfinished"></translation>
+        <translation>C-bassonokkahuilu</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="93"/>
         <source>Contrabass recorder</source>
-        <translation type="unfinished"></translation>
+        <translation>Kontrabassonokkahuilu</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="94"/>
         <source>G soprano ocarina</source>
-        <translation type="unfinished"></translation>
+        <translation>G-sopraano-okariina</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="95"/>
         <source>F soprano ocarina</source>
-        <translation type="unfinished"></translation>
+        <translation>F-sopraano-okariina</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="96"/>
         <source>C soprano ocarina</source>
-        <translation type="unfinished"></translation>
+        <translation>C-sopraano-okariina</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="97"/>
         <source>Bb soprano ocarina</source>
-        <translation type="unfinished"></translation>
+        <translation>Bb-sopraano-okariina</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="98"/>
         <source>G alto ocarina</source>
-        <translation type="unfinished"></translation>
+        <translation>G-altto-okariina</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="99"/>
         <source>F alto ocarina</source>
-        <translation type="unfinished"></translation>
+        <translation>F-altto-okariina</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="100"/>
         <source>C alto ocarina</source>
-        <translation type="unfinished"></translation>
+        <translation>C-altto-okariina</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="101"/>
         <source>Bb alto ocarina</source>
-        <translation type="unfinished"></translation>
+        <translation>Bb-altto-okariina</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="102"/>
         <source>C bass ocarina</source>
-        <translation type="unfinished"></translation>
+        <translation>C-basso-okariina</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="103"/>
@@ -3880,7 +3880,7 @@ Jos haluat litt채채 t채st채 huolimatta, harkitse toisen liit채nt채tyypin k채ytt�
         <location filename="../InstrumentStrings.cpp" line="105"/>
         <location filename="../AutoloadStrings.cpp" line="118"/>
         <source>Shakuhachi</source>
-        <translation type="unfinished"></translation>
+        <translation>Shakuhachi</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="106"/>
@@ -3890,12 +3890,12 @@ Jos haluat litt채채 t채st채 huolimatta, harkitse toisen liit채nt채tyypin k채ytt�
     <message>
         <location filename="../InstrumentStrings.cpp" line="107"/>
         <source>Piccolo oboe in F</source>
-        <translation type="unfinished"></translation>
+        <translation>F-pikkolo-oboe</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="108"/>
         <source>Piccolo oboe in Eb</source>
-        <translation type="unfinished"></translation>
+        <translation>Eb-pikkolo-oboe</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="109"/>
@@ -3911,12 +3911,12 @@ Jos haluat litt채채 t채st채 huolimatta, harkitse toisen liit채nt채tyypin k채ytt�
     <message>
         <location filename="../InstrumentStrings.cpp" line="111"/>
         <source>English horn</source>
-        <translation type="unfinished"></translation>
+        <translation>Englannintorvi</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="112"/>
         <source>Baritone oboe</source>
-        <translation type="unfinished"></translation>
+        <translation>Baritonioboe</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="113"/>
@@ -3926,7 +3926,7 @@ Jos haluat litt채채 t채st채 huolimatta, harkitse toisen liit채nt채tyypin k채ytt�
     <message>
         <location filename="../InstrumentStrings.cpp" line="114"/>
         <source>Baroque oboe</source>
-        <translation type="unfinished"></translation>
+        <translation>Barokkioboe</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="115"/>
@@ -3936,12 +3936,12 @@ Jos haluat litt채채 t채st채 huolimatta, harkitse toisen liit채nt채tyypin k채ytt�
     <message>
         <location filename="../InstrumentStrings.cpp" line="116"/>
         <source>Shawm</source>
-        <translation type="unfinished"></translation>
+        <translation>Skalmeija</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="117"/>
         <source>Sopranino shawm</source>
-        <translation type="unfinished"></translation>
+        <translation>Sopraniinoskalmeija</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="118"/>
@@ -4152,37 +4152,37 @@ Jos haluat litt채채 t채st채 huolimatta, harkitse toisen liit채nt채tyypin k채ytt�
     <message>
         <location filename="../InstrumentStrings.cpp" line="159"/>
         <source>Sopranino saxophone</source>
-        <translation type="unfinished"></translation>
+        <translation>Sopraniinosaksofoni</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="160"/>
         <source>Soprano saxophone</source>
-        <translation type="unfinished"></translation>
+        <translation>Sopraanosaksofoni</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="161"/>
         <source>Alto saxophone</source>
-        <translation type="unfinished"></translation>
+        <translation>Alttosaksofoni</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="162"/>
         <source>Tenor saxophone</source>
-        <translation type="unfinished"></translation>
+        <translation>Tenorisaksofoni</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="163"/>
         <source>Baritone saxophone</source>
-        <translation type="unfinished"></translation>
+        <translation>Baritonisaksofoni</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="164"/>
         <source>Bass saxophone</source>
-        <translation type="unfinished"></translation>
+        <translation>Bassosaksofoni</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="165"/>
         <source>Contrabass saxophone</source>
-        <translation type="unfinished"></translation>
+        <translation>Kontrabassosaksofoni</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="166"/>
@@ -4212,117 +4212,117 @@ Jos haluat litt채채 t채st채 huolimatta, harkitse toisen liit채nt채tyypin k채ytt�
     <message>
         <location filename="../InstrumentStrings.cpp" line="171"/>
         <source>Trumpet in Eb</source>
-        <translation type="unfinished"></translation>
+        <translation>Eb-trumpetti</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="172"/>
         <source>Trumpet in D</source>
-        <translation type="unfinished"></translation>
+        <translation>D-trumpetti</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="173"/>
         <source>Trumpet in C</source>
-        <translation type="unfinished"></translation>
+        <translation>C-trumpetti</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="174"/>
         <source>Trumpet in Bb</source>
-        <translation type="unfinished"></translation>
+        <translation>Bb-trumpetti</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="175"/>
         <source>Bass trumpet in Eb</source>
-        <translation type="unfinished"></translation>
+        <translation>Eb-bassotrumpetti</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="176"/>
         <source>Bass trumpet in Bb</source>
-        <translation type="unfinished"></translation>
+        <translation>Bb-bassotrumpetti</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="177"/>
         <source>Baroque trumpet in F</source>
-        <translation type="unfinished"></translation>
+        <translation>F-barokkitrumpetti</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="178"/>
         <source>Baroque trumpet in Eb</source>
-        <translation type="unfinished"></translation>
+        <translation>Eb-barokkitrumpetti</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="179"/>
         <source>Baroque trumpet in D</source>
-        <translation type="unfinished"></translation>
+        <translation>D-barokkitrumpetti</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="180"/>
         <source>Baroque trumpet in C</source>
-        <translation type="unfinished"></translation>
+        <translation>C-barokkitrumpetti</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="181"/>
         <source>Baroque trumpet in Bb</source>
-        <translation type="unfinished"></translation>
+        <translation>Bb-barokkitrumpetti</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="182"/>
         <source>Cornet in Eb</source>
-        <translation type="unfinished"></translation>
+        <translation>Eb-kornetti</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="183"/>
         <source>Cornet in Bb</source>
-        <translation type="unfinished"></translation>
+        <translation>Bb-kornetti</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="184"/>
         <source>Flugelhorn</source>
-        <translation type="unfinished"></translation>
+        <translation>Flyygelitorvi</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="185"/>
         <source>Cornettino</source>
-        <translation type="unfinished"></translation>
+        <translation>Sopraniinosinkki</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="186"/>
         <source>Alto cornetto</source>
-        <translation type="unfinished"></translation>
+        <translation>Alttosinkki</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="187"/>
         <source>Tenor cornetto</source>
-        <translation type="unfinished"></translation>
+        <translation>Tenorisinkki</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="188"/>
         <source>Serpent</source>
-        <translation type="unfinished"></translation>
+        <translation>Serpentti</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="189"/>
         <source>Alto ophicleide in F</source>
-        <translation type="unfinished"></translation>
+        <translation>F-altto-ofikleidi</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="190"/>
         <source>Alto ophicleide in Eb</source>
-        <translation type="unfinished"></translation>
+        <translation>Eb-altto-ofikleidi</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="191"/>
         <source>Bass ophicleide in C</source>
-        <translation type="unfinished"></translation>
+        <translation>C-basso-ofikleidi</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="192"/>
         <source>Bass ophicleide in Bb</source>
-        <translation type="unfinished"></translation>
+        <translation>Bb-basso-ofikleidi</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="193"/>
         <source>Contrabass ophicleide in Eb</source>
-        <translation type="unfinished"></translation>
+        <translation>Eb-kontrabasso-ofikleidi</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="194"/>
@@ -4417,62 +4417,62 @@ Jos haluat litt채채 t채st채 huolimatta, harkitse toisen liit채nt채tyypin k채ytt�
     <message>
         <location filename="../InstrumentStrings.cpp" line="212"/>
         <source>Wagner tuba in Bb</source>
-        <translation type="unfinished"></translation>
+        <translation>Bb-Wagnertuuba</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="213"/>
         <source>Wagner tuba in F</source>
-        <translation type="unfinished"></translation>
+        <translation>F-Wagnertuuba</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="214"/>
         <source>Soprano trombone</source>
-        <translation type="unfinished"></translation>
+        <translation>Sopraanopasuuna</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="215"/>
         <source>Alto trombone</source>
-        <translation type="unfinished"></translation>
+        <translation>Alttopasuuna</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="216"/>
         <source>Tenor trombone</source>
-        <translation type="unfinished"></translation>
+        <translation>Tenoripasuuna</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="217"/>
         <source>Bass trombone</source>
-        <translation type="unfinished"></translation>
+        <translation>Bassopasuuna</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="218"/>
         <source>Contrabass trombone</source>
-        <translation type="unfinished"></translation>
+        <translation>Kontrabassopasuuna</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="219"/>
         <source>Euphonium</source>
-        <translation type="unfinished"></translation>
+        <translation>Eufonium</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="220"/>
         <source>F tuba</source>
-        <translation type="unfinished"></translation>
+        <translation>F-tuuba</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="221"/>
         <source>C tuba</source>
-        <translation type="unfinished"></translation>
+        <translation>C-tuuba</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="222"/>
         <source>Bb tuba</source>
-        <translation type="unfinished"></translation>
+        <translation>Bb-tuuba</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="223"/>
         <source>Pitched Percussion</source>
-        <translation type="unfinished"></translation>
+        <translation>Melodialy철m채soittimet</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="224"/>
@@ -19928,72 +19928,72 @@ Toisten ohjelmien lopettaminen saattaa parantaa Rosegardenin suorituskyky채.</tr
         <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="359"/>
         <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="414"/>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="455"/>
         <source>C</source>
-        <translation type="unfinished">C</translation>
+        <translation>C</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="456"/>
         <source>C#</source>
-        <translation type="unfinished">C#</translation>
+        <translation>C#</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="457"/>
         <source>D</source>
-        <translation type="unfinished">D</translation>
+        <translation>D</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="458"/>
         <source>Eb</source>
-        <translation type="unfinished">Eb</translation>
+        <translation>Eb</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="459"/>
         <source>E</source>
-        <translation type="unfinished">E</translation>
+        <translation>E</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="460"/>
         <source>F</source>
-        <translation type="unfinished">F</translation>
+        <translation>F</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="461"/>
         <source>F#</source>
-        <translation type="unfinished">F#</translation>
+        <translation>F#</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="462"/>
         <source>G</source>
-        <translation type="unfinished">G</translation>
+        <translation>G</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="463"/>
         <source>G#</source>
-        <translation type="unfinished">G#</translation>
+        <translation>G#</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="464"/>
         <source>A</source>
-        <translation type="unfinished">A</translation>
+        <translation>A</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="465"/>
         <source>Bb</source>
-        <translation type="unfinished">Bb</translation>
+        <translation>Bb</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="466"/>
         <source>B</source>
-        <translation type="unfinished">H</translation>
+        <translation>B</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="577"/>
         <source>%1: %2</source>
-        <translation type="unfinished">%1: %2</translation>
+        <translation>%1: %2</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="580"/>
