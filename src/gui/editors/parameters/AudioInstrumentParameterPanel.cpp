@@ -285,6 +285,7 @@ AudioInstrumentParameterPanel::setButtonColour(
 void
 AudioInstrumentParameterPanel::slotSynthButtonClicked()
 {
+    RG_DEBUG << "AudioInstrumentParameterPanel::slotSynthButtonClicked()" << endl;
     slotSelectPlugin(Instrument::SYNTH_PLUGIN_POSITION);
 }
 

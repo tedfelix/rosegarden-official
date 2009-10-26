@@ -74,7 +74,7 @@ SynthPluginManagerDialog::SynthPluginManagerDialog(QWidget *parent,
     createGUI ( "synthpluginmanager.rc" );
 
     setAttribute(Qt::WA_DeleteOnClose);
-//         setAutoSaveSettings(SynthPluginManagerConfigGroup, true);    //&&&
+    setSizePolicy(QSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum));
 }
 
 void
@@ -413,6 +413,9 @@ void SynthPluginManagerDialog::slotPluginChanged ( int index ){
 
     emit pluginSelected ( id, Instrument::SYNTH_PLUGIN_POSITION,
                           m_synthPlugins[index] );
+
+    parentWidget()->adjustSize();
+    adjustSize();
 }
 
 }

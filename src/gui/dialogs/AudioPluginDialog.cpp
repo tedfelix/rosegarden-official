@@ -72,32 +72,11 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     m_generating(true),
     m_guiShown(false)
 {
-    //setHelp("studio-plugins");
-//     setSizePolicy(QSizePolicy(QSizePolicy::Preferred,
-//                               QSizePolicy::Fixed));
-    
+    setSizePolicy(QSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum));
+
     setModal(false);
     setWindowTitle(tr("Audio Plugin"));
 
-    //@@@ NOTE:  It is apparently new Qt4 idiom to use something like:
-    //
-    // QWidget *foo = new QWidget(optional parent);
-    // QGridLayout *bar = new QGridLayout;
-    // foo->addLayout(bar);
-    //
-    // Layouts don't have parents or construction parameters in this idiom.
-    //
-    // This code had been rewritten that way, but I used Designer to help sort
-    // out what belonged to what why, and Designer-generated code set the layout
-    // of a widget through parenting.  I rewrote the code that way, copying the
-    // Designer model, and only later in my digging did I discover that I
-    // probably shouldn't have.
-    //
-    // I can't see where this hurts anything, but it's not consistent with the
-    // rest of our code.  I'm going to leave well enough alone, since layout
-    // inheritance is no longer why this dialog isn't fully functional, but it
-    // might be worth putting it back the other way eventually, on a rainy day.
-    //
     QGridLayout *metagrid = new QGridLayout(this);
 
     QWidget *vbox = new QWidget(this);
@@ -549,13 +528,8 @@ AudioPluginDialog::slotPluginSelected(int i)
         }
     }
 
+    parentWidget()->adjustSize();
     adjustSize();
-//&&& It would be nice to do something to size the dialog back down after going
-// from a big number of controls to a small number of controls, which leaves it
-// in an inflated, empty looking state.  However, the following currently leaves
-// the dialog totally unusuable, because minimumSizeHint() is just way too
-// small:
-//    setFixedSize(minimumSizeHint());
     
     // tell the sequencer
     emit pluginSelected(m_containerId, m_index, number - 1);
@@ -672,6 +646,9 @@ AudioPluginDialog::slotPluginSelected(int i)
     bool gui = false;
     m_pluginGUIManager->hasGUI(m_containerId, m_index);
     m_editorButton->setEnabled(gui);    
+
+    parentWidget()->adjustSize();
+    adjustSize();
 }
 
 QStringList
