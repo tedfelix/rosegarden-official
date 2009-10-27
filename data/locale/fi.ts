@@ -3869,7 +3869,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../InstrumentStrings.cpp" line="103"/>
         <source>Slide whistle</source>
-        <translation type="unfinished"></translation>
+        <translation>Tulppakanavahuilu</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="104"/>
@@ -3885,7 +3885,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../InstrumentStrings.cpp" line="106"/>
         <source>Double reeds</source>
-        <translation type="unfinished"></translation>
+        <translation>Kaksoislehdykkä</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="107"/>
@@ -3906,7 +3906,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../InstrumentStrings.cpp" line="110"/>
         <source>Oboe d&apos;amore</source>
-        <translation type="unfinished"></translation>
+        <translation>Oboe d&apos;amore</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="111"/>
@@ -3931,7 +3931,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../InstrumentStrings.cpp" line="115"/>
         <source>Oboe da caccia</source>
-        <translation type="unfinished"></translation>
+        <translation>Oboe da caccia</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="116"/>
@@ -3956,57 +3956,57 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../InstrumentStrings.cpp" line="120"/>
         <source>Soprano crumhorn</source>
-        <translation type="unfinished"></translation>
+        <translation>Sopraanokrummhorn</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="121"/>
         <source>Alto crumhorn</source>
-        <translation type="unfinished"></translation>
+        <translation>Alttokrummhorn</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="122"/>
         <source>Tenor crumhorn</source>
-        <translation type="unfinished"></translation>
+        <translation>Tenorikrummhorn</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="123"/>
         <source>Bass crumhorn</source>
-        <translation type="unfinished"></translation>
+        <translation>Bassokrummhorn</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="124"/>
         <source>Greatbass crumhorn</source>
-        <translation type="unfinished"></translation>
+        <translation>C-bassokrummhorn</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="125"/>
         <source>Soprano cornamuse</source>
-        <translation type="unfinished"></translation>
+        <translation>Sopraanokornamusa</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="126"/>
         <source>Alto cornamuse</source>
-        <translation type="unfinished"></translation>
+        <translation>Alttokornamusa</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="127"/>
         <source>Tenor cornamuse</source>
-        <translation type="unfinished"></translation>
+        <translation>Tenorikornamusa</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="128"/>
         <source>Bass cornamuse</source>
-        <translation type="unfinished"></translation>
+        <translation>Bassokornamusa</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="129"/>
         <source>Sopranino rauschpfeife</source>
-        <translation type="unfinished"></translation>
+        <translation>Sopraniinoruokopilli</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="130"/>
         <source>Soprano rauschpfeife</source>
-        <translation type="unfinished"></translation>
+        <translation>Sopraanoruokopilli</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="131"/>
@@ -4032,42 +4032,42 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../InstrumentStrings.cpp" line="135"/>
         <source>Sopranino sarrusophone</source>
-        <translation type="unfinished"></translation>
+        <translation>Sopraniinosarrusfoni</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="136"/>
         <source>Soprano sarrusophone</source>
-        <translation type="unfinished"></translation>
+        <translation>Sopraanosarrusfoni</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="137"/>
         <source>Alto sarrusophone</source>
-        <translation type="unfinished"></translation>
+        <translation>Alttosarrusfoni</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="138"/>
         <source>Tenor sarrusophone</source>
-        <translation type="unfinished"></translation>
+        <translation>Tenorisarrusfoni</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="139"/>
         <source>Baritone sarrusophone</source>
-        <translation type="unfinished"></translation>
+        <translation>Baritonisarrusfoni</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="140"/>
         <source>Bass sarrusophone</source>
-        <translation type="unfinished"></translation>
+        <translation>Bassosarrusfoni</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="141"/>
         <source>Contrabass sarrusophone</source>
-        <translation type="unfinished"></translation>
+        <translation>Kontrabassosarrusfoni</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="142"/>
         <source>Bagpipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Säkkipilli</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="143"/>
@@ -4202,12 +4202,12 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../InstrumentStrings.cpp" line="169"/>
         <source>Piccolo trumpet in Bb</source>
-        <translation type="unfinished"></translation>
+        <translation>Bb-pikkolotrumpetti</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="170"/>
         <source>Piccolo trumpet in A</source>
-        <translation type="unfinished"></translation>
+        <translation>A-pikkolotrumpetti</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="171"/>
