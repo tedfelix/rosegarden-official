@@ -57,6 +57,7 @@ TextEventDialog::TextEventDialog(QWidget *parent,
     //setHelp("nv-text");
     setModal(true);
     setWindowTitle(tr("Text"));
+    setSizePolicy(QSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum));
 
 //    QGridLayout *metagrid = new QGridLayout;
 //    setLayout(metagrid);
@@ -71,6 +72,7 @@ TextEventDialog::TextEventDialog(QWidget *parent,
     vboxLayout->addWidget(entryBox);
     QGroupBox *exampleBox = new QGroupBox( tr("Preview"), vbox );
     QVBoxLayout *exampleVBoxLayout = new QVBoxLayout;
+//    exampleBox->setStyleSheet("background: white");
     vboxLayout->addWidget(exampleBox);
 
     QGridLayout *entryGridLay = new QGridLayout;
@@ -308,6 +310,7 @@ TextEventDialog::TextEventDialog(QWidget *parent,
     map.fill();
     mask.fill(QColor(Qt::color0));
 
+    std::cerr << "paint outside paint event error expected next:" << std::endl;
     QPainter p, pm;
 
     p.begin(&map);
@@ -351,6 +354,13 @@ TextEventDialog::TextEventDialog(QWidget *parent,
     m_localTempoShortcutCombo->setCurrentIndex( settings.value("local_tempo_shortcut", 0).toInt() );
     m_lilyPondDirectiveCombo->setCurrentIndex( settings.value("lilyPond_directive_combo", 0).toInt() );
 
+    /*m_dynamicShortcutCombo->setFixedHeight(10);
+    m_directionShortcutCombo->setFixedHeight(10);
+    m_localDirectionShortcutCombo->setFixedHeight(10);
+    m_tempoShortcutCombo->setFixedHeight(10);
+    m_localTempoShortcutCombo->setFixedHeight(10);
+    m_lilyPondDirectiveCombo->setFixedHeight(10);*/
+
     m_prevChord = settings.value("previous_chord", "").toString();
     m_prevLyric = settings.value("previous_lyric", "").toString();
     m_prevAnnotation = settings.value("previous_annotation", "").toString();
@@ -359,7 +369,6 @@ TextEventDialog::TextEventDialog(QWidget *parent,
                      this, SLOT(slotTextChanged(const QString &)));
     QObject::connect(m_typeCombo, SIGNAL(activated(const QString &)),
                      this, SLOT(slotTypeChanged(const QString &)));
-    QObject::connect(this, SIGNAL(okClicked()), this, SLOT(slotOK()));
     QObject::connect(m_dynamicShortcutCombo, SIGNAL(activated(const QString &)),
                      this, SLOT(slotDynamicShortcutChanged(const QString &)));
     QObject::connect(m_directionShortcutCombo, SIGNAL(activated(const QString &)),
@@ -387,7 +396,7 @@ TextEventDialog::TextEventDialog(QWidget *parent,
     vboxLayout->addWidget(buttonBox, 1, 0);
     //vboxLayout->setRowStretch(0, 10);
     
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(slotOK()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 
     settings.endGroup();
@@ -522,12 +531,13 @@ TextEventDialog::slotTypeChanged(const QString &)
 
             m_staffAboveLabel->show();
             m_staffBelowLabel->hide();
-
         } else {
             m_staffAboveLabel->hide();
             m_staffBelowLabel->show();
         }
     }
+
+    adjustSize();
 }
 
 void
@@ -556,6 +566,8 @@ TextEventDialog::slotOK()
         settings.setValue("previous_annotation", m_text->text());
 
     settings.endGroup();
+
+    accept();
 }
 
 void
@@ -613,6 +625,7 @@ TextEventDialog::slotLilyPondDirectiveChanged(const QString &)
 {
     m_text->setText(m_lilyPondDirectiveCombo->currentText());
 }
+
 
 }
 #include "TextEventDialog.moc"
