@@ -51,6 +51,9 @@ WavFileWriteStream::WavFileWriteStream(Target target) :
             getPath() + "' for writing";
         m_target.invalidate();
 	return;
+    } else {
+        std::cerr << "WavFileWriteStream::initialize: Opened output file "
+                  << getPath().toStdString() << " for writing" << std::endl;
     }
 }
 

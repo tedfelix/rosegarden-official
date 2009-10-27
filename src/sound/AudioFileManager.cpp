@@ -778,8 +778,8 @@ AudioFileManager::importFile(const std::string &fileName, int sampleRate)
     }
 
     ec = m_importProcess->exitCode();*/
-    std::string outFileName = targetName.toStdString();
-    ec = convertAudioFile(fileName, outFileName);
+    std::string outFileName = m_audioPath + targetName.toStdString();
+    ec = convertAudioFile(fileName,  outFileName);
 
     delete m_importProcess;
     m_importProcess = 0;
@@ -807,6 +807,9 @@ AudioFileManager::importFile(const std::string &fileName, int sampleRate)
 }
 
 int AudioFileManager::convertAudioFile(std::string inFile, std::string outFile) {
+    std::cerr << "AudioFileManager::convertAudioFile: inFile = "
+              << inFile << ", outFile = " << outFile << std::endl;
+
     AudioReadStream *rs = AudioReadStreamFactory::createReadStream( strtoqstr(inFile));
     if (!rs || !rs->isOK()) {
         std::cerr << "ERROR: Failed to read audio file";
