@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -57,7 +56,7 @@ public slots:
     void slotTextChanged(const QString &);
     void slotTypeChanged(const QString &);
 
-    /*
+    /**
      * Save previous state of assorted widgets for restoration in the next
      * instance
      */
@@ -73,9 +72,12 @@ public slots:
     //
     // special LilyPond directives, initial phase, as cheap text events; will
     // eventually move out of Text, and out of this dialog into
-    // some other less cheesy interface 
+    // some other less cheesy interface (or maybe not, four years later, oh
+    // well)
     //
     void slotLilyPondDirectiveChanged(const QString &);
+
+    void slotUpdateSize(int);
 
 protected:
 
@@ -122,7 +124,6 @@ protected:
 //    std::vector<std::string> m_directives;
 
 };
-
 
 
 }
