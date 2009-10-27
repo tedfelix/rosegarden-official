@@ -104,6 +104,8 @@ rosegarden:	$(OBJECTS)
 data/data.o: data/data.cpp
 	$(CXX) -c $(RCC_CXXFLAGS) $< -o $@
 
+data/data.cpp: $(DATA_FILES)
+
 %.o: %.cpp
 	$(CXX) -c $(CXXFLAGS) $< -o $@
 
@@ -146,16 +148,14 @@ distclean:	clean
 	rm -f src/gui/studio/DeviceManagerDialogUi.h
 	rm -f Makefile
 
-test:
+showfiles:
 	echo $(QSOURCES) $(DATA_FILES)
 
-dependencies: $(KEYSOURCES) $(HEADERS) Makefile $(DATA_FILES)
+dependencies: $(KEYSOURCES) $(HEADERS) Makefile
 	@echo Rebuilding dependencies file...
 	@rm -f $@ 
 	@touch $@
 	@echo $(KEYSOURCES) | $(XARGS) -n 100 $(MAKEDEPEND) -f$@ -a -Y -Isrc >/dev/null 2>&1
-	@echo Detected that a resource rebuild is required...
-	@rm -f data/data.o data/data.cpp
 
 qrc:	locale
 	@bash ./scripts/rebuild-qrc
