@@ -181,6 +181,7 @@ protected slots:
     /// Trap a zoom out from the panner and sync it to the primary thumb wheel
     void slotSyncPannerZoomOut();
 
+    void slotGenerateHeaders();
     void slotShowHeaderToolTip(QString toolTipText);
     void slotHeadersResized(int width);
     void slotAdjustHeadersHorizontalPos(bool last);

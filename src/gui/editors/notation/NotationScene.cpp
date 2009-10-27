@@ -1181,48 +1181,8 @@ NotationScene::positionStaffs()
 
     }
 
-/*!!!
-    if (!m_printMode && m_headersGroupView) {
-        // Destroy then recreate all track headers
-        hideHeadersGroup();
-        m_headersGroup->removeAllHeaders();
-        if (m_pageMode == StaffLayout::LinearMode) {
-            for (int i = minTrack; i <= maxTrack; ++i) {
-                TrackIntMap::iterator hi = trackHeights.find(i);
-                if (hi != trackHeights.end()) {
-                    TrackId trackId = m_document->getComposition()
-                                            .getTrackByPosition(i)->getId();
-                    m_headersGroup->addHeader(trackId, trackHeights[i],
-                                              trackCoords[i], getCanvasLeftX());
-                }
-            }
-
-            m_headersGroup->completeToHeight(canvas()->height());
-
- 			m_headersGroupView->addChild(m_headersGroup);
-//			m_headersGroupView->layout()->addWidget(m_headersGroup);
-
-            getCanvasView()->updateLeftWidgetGeometry();
-
-            if (    (m_showHeadersGroup == HeadersGroup::ShowAlways)
-                || (    (m_showHeadersGroup == HeadersGroup::ShowWhenNeeded)
-                      && (m_headersGroup->getUsedHeight()
-                              > getCanvasView()->visibleHeight()))) {
-                m_headersGroup->slotUpdateAllHeaders(getCanvasLeftX(), 0, true);
-                showHeadersGroup();
-
-                // Disable menu entry when headers are shown
-                findAction("show_track_headers")->setEnabled(false);
-            } else {
-                // Enable menu entry when headers are hidden
-                findAction("show_track_headers")->setEnabled(true);
-            }
-        } else {
-            // Disable menu entry when not in linear mode
-            findAction("show_track_headers")->setEnabled(false);
-        }
-    }
-*/
+    // Notation headers must be regenerated
+    emit staffsPositionned();
 }
 
 void

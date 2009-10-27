@@ -406,11 +406,6 @@ NotationWidget::setSegments(RosegardenDocument *document,
                                       0.0,
                                       20);  // why not 24 as other rulers ?
 
-    if (m_headersGroup) disconnect(m_headersGroup, SIGNAL(headersResized(int)),
-                                   this, SLOT(slotHeadersResized(int)));
-    m_headersGroup = new HeadersGroup(m_document);
-    m_headersGroup->setTracks(this, m_scene);
-
     m_layout->addWidget(m_topStandardRuler, TOPRULER_ROW, MAIN_COL, 1, 1);
     m_layout->addWidget(m_bottomStandardRuler, BOTTOMRULER_ROW, MAIN_COL, 1, 1);
     m_layout->addWidget(m_tempoRuler, TEMPORULER_ROW, MAIN_COL, 1, 1);
@@ -432,15 +427,31 @@ NotationWidget::setSegments(RosegardenDocument *document,
 
     m_chordNameRuler->setReady();
 
+    slotGenerateHeaders();
+    
+    // Regenerate headers when font size changed
+    connect(m_scene, SIGNAL(staffsPositionned()),
+            this, SLOT(slotGenerateHeaders()));
+}
+
+void
+NotationWidget::slotGenerateHeaders()
+{
+    if (m_headersGroup) disconnect(m_headersGroup, SIGNAL(headersResized(int)),
+                                   this, SLOT(slotHeadersResized(int)));
+    m_headersGroup = new HeadersGroup(m_document);
+
+    m_headersGroup->setTracks(this, m_scene);
+
     m_headersGroup->setFixedSize(m_headersGroup->sizeHint());
     m_headersView->setFixedWidth(m_headersGroup->sizeHint().width());
 
-    delete m_headersScene;
+    delete m_headersScene;  // delete the old m_headersGroup if any
     m_headersScene = new QGraphicsScene();
-    QGraphicsProxyWidget *headersProxy = m_headersScene->addWidget(m_headersGroup);
+    QGraphicsProxyWidget 
+        *headersProxy = m_headersScene->addWidget(m_headersGroup);
     m_headersView->setScene(m_headersScene);
     m_headersView->centerOn(headersProxy);
-
     m_headersView->setMinimumHeight(0);
 
     // If headers scene and notation scene don't have the same height
@@ -449,7 +460,6 @@ NotationWidget::setSegments(RosegardenDocument *document,
     QRectF headersRect = m_headersScene->sceneRect();
     headersRect.setHeight(viewRect.height());
     m_headersScene->setSceneRect(headersRect);
-
     connect(m_headersGroup, SIGNAL(headersResized(int)),
             this, SLOT(slotHeadersResized(int)));
 }
