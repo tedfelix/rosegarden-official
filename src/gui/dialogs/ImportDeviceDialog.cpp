@@ -361,15 +361,12 @@ ImportDeviceDialog::importFromRG(QString fileName)
         return true; // true because we successfully read the document
     }
 
-    for (DeviceListIterator it = list->begin();
-            it != list->end(); ++it) {
+    for (DeviceListIterator it = list->begin(); it != list->end(); ++it) {
 
-        MidiDevice *device =
-            dynamic_cast<MidiDevice*>(*it);
+        MidiDevice *device = dynamic_cast<MidiDevice*>(*it);
 
         if (device) {
-            std::vector<MidiBank> banks =
-                device->getBanks();
+            std::vector<MidiBank> banks = device->getBanks();
 
             // DMM - check for controllers too, because some users have
             // created .rgd files that contain only controllers
@@ -432,7 +429,11 @@ ImportDeviceDialog::importFromSF2(QString filename)
         }
     }
 
-    MidiDevice *device = new MidiDevice(0, 0, "", MidiDevice::Play);
+    // This is a temporary device, so we can use device and instrument
+    // IDs that other devices in the Studio may also be using without
+    // expecting any problems
+    MidiDevice *device = new MidiDevice
+        (0, MidiInstrumentBase, "", MidiDevice::Play);
     device->replaceBankList(banks);
     device->replaceProgramList(programs);
     m_devices.push_back(device);
@@ -473,7 +474,11 @@ ImportDeviceDialog::importFromLSCP(QString filename)
         }
     }
 
-    MidiDevice *device = new MidiDevice(0, 0, "", MidiDevice::Play);
+    // This is a temporary device, so we can use device and instrument
+    // IDs that other devices in the Studio may also be using without
+    // expecting any problems
+    MidiDevice *device = new MidiDevice
+        (0, MidiInstrumentBase, "", MidiDevice::Play);
     device->replaceBankList(banks);
     device->replaceProgramList(programs);
     m_devices.push_back(device);
