@@ -82,6 +82,7 @@ NotationWidget::NotationWidget() :
     m_document(0),
     m_view(0),
     m_scene(0),
+    m_currentTool(0),
     m_playTracking(true),
     m_hZoomFactor(1.0),
     m_vZoomFactor(1.0),
@@ -289,14 +290,16 @@ NotationWidget::NotationWidget() :
 
     m_toolBox = new NotationToolBox(this);
 
-    //!!! 
-    NoteRestInserter *noteRestInserter = dynamic_cast<NoteRestInserter *>
-        (m_toolBox->getTool(NoteRestInserter::ToolName));
-    m_currentTool = noteRestInserter;
-    m_currentTool->ready();
 
     connect(this, SIGNAL(toolChanged(QString)),
             m_controlsWidget, SLOT(slotSetToolName(QString)));
+
+    //!!! 
+//    NoteRestInserter *noteRestInserter = dynamic_cast<NoteRestInserter *>
+//        (m_toolBox->getTool(NoteRestInserter::ToolName));
+//    m_currentTool = noteRestInserter;
+//    m_currentTool->ready();
+    slotSetTool(NoteRestInserter::ToolName); 
 
     // crude, but finally effective!
     //

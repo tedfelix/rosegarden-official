@@ -46,7 +46,9 @@ namespace Rosegarden
 {
 
 ControlMover::ControlMover(ControlRuler *parent, QString menuName) :
-    ControlTool("", menuName, parent)
+    ControlTool("", menuName, parent),
+    m_overCursor(Qt::OpenHandCursor),
+    m_notOverCursor(Qt::ArrowCursor)
 {
 //    createAction("select", SLOT(slotSelectSelected()));
 //    createAction("draw", SLOT(slotDrawSelected()));
@@ -166,7 +168,7 @@ ControlMover::handleMouseRelease(const ControlMouseEvent *e)
         m_ruler->updateSegment();
 
         // Reset the cursor to the state that it started
-        m_ruler->setCursor(Qt::OpenHandCursor);
+        m_ruler->setCursor(m_overCursor);
     }
 
     // May have moved off the item during a drag so use setCursor to correct its state
@@ -183,12 +185,12 @@ void ControlMover::setCursor(const ControlMouseEvent *e)
 
     if (!m_overItem) {
         if (isOverItem) {
-            m_ruler->setCursor(Qt::OpenHandCursor);
+            m_ruler->setCursor(m_overCursor);
             m_overItem = true;
         }
     } else {
         if (!isOverItem) {
-            m_ruler->setCursor(Qt::ArrowCursor);
+            m_ruler->setCursor(m_notOverCursor);
             m_overItem = false;
         }
     }
@@ -196,7 +198,7 @@ void ControlMover::setCursor(const ControlMouseEvent *e)
 
 void ControlMover::ready()
 {
-    m_ruler->setCursor(Qt::ArrowCursor);
+    m_ruler->setCursor(m_notOverCursor);
     m_overItem = false;
 //    connect(this, SIGNAL(hoveredOverNoteChanged(int, bool, timeT)),
 //            m_widget, SLOT(slotHoveredOverNoteChanged(int, bool, timeT)));
@@ -230,7 +232,6 @@ void ControlMover::stow()
 //}
 
 const QString ControlMover::ToolName = "mover";
-
 }
 
 #include "ControlMover.moc"

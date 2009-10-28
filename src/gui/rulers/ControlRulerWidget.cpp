@@ -222,7 +222,8 @@ ControlRulerWidget::addRuler(ControlRuler *controlruler, QString name)
     int index = m_tabBar->addTab(QObject::tr(name));
     m_tabBar->setCurrentTab(index);
     m_controlRulerList.push_back(controlruler);
-    controlruler->slotSetPannedRect(m_pannedRect);
+    controlruler->slotSetPannedRect(m_pannedRect);    
+    slotSetToolName(m_currentToolName);
 }
 
 void
@@ -239,8 +240,6 @@ ControlRulerWidget::slotAddControlRuler(const ControlParameter &controlParameter
             this, SLOT(slotChildRulerSelectionChanged(EventSelection *)));
 
     addRuler(controlruler,QString::fromStdString(controlParameter.getName()));
-    
-    slotSetToolName(m_currentToolName);
 }
 
 void
@@ -351,12 +350,18 @@ ControlRulerWidget::slotUpdatePropertyRulers()
 void
 ControlRulerWidget::slotSetToolName(const QString &toolname)
 {
-    m_currentToolName = toolname;
+    QString rulertoolname = toolname;
+    // Translate Notation tool names
+    if (toolname == "notationselector") rulertoolname = "selector";
+    if (toolname == "noterestinserter") rulertoolname = "painter";
+    if (toolname == "notationeraser") rulertoolname = "eraser";
+    
+    m_currentToolName = rulertoolname;
     // Should be dispatched to all PropertyControlRulers
     if (m_controlRulerList.size()) {
         std::list<ControlRuler *>::iterator it;
         for (it = m_controlRulerList.begin(); it != m_controlRulerList.end(); ++it) {
-            (*it)->slotSetTool(toolname);
+            (*it)->slotSetTool(rulertoolname);
         }
     }
 }

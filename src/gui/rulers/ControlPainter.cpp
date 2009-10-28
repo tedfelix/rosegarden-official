@@ -42,6 +42,8 @@ namespace Rosegarden
 ControlPainter::ControlPainter(ControlRuler *parent) :
     ControlMover(parent, "ControlPainter")
 {
+    m_overCursor = Qt::OpenHandCursor;
+    m_notOverCursor = Qt::CrossCursor;
 //    createAction("select", SLOT(slotSelectSelected()));
 //    createAction("draw", SLOT(slotDrawSelected()));
 //    createAction("erase", SLOT(slotEraseSelected()));
@@ -79,7 +81,6 @@ ControlPainter::handleLeftButtonPress(const ControlMouseEvent *e)
 }
 
 const QString ControlPainter::ToolName = "painter";
-
 }
 
 #include "ControlPainter.moc"

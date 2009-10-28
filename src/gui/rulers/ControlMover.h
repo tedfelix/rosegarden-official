@@ -22,7 +22,7 @@
 //#include <QString>
 //#include "base/Event.h"
 #include "ControlItem.h"
-
+#include <QCursor>
 
 class QRectF;
 class QPoint;
@@ -55,7 +55,7 @@ public:
     virtual void stow();
 
     static const QString ToolName;
-
+    
 signals:
 //    void hoveredOverNoteChanged(int evPitch, bool haveEvent, timeT evTime);
 
@@ -64,6 +64,9 @@ protected slots:
 
 protected:
     void setCursor(const ControlMouseEvent *);
+    QCursor m_overCursor;
+    QCursor m_notOverCursor;
+
     float m_mouseStartX;
     float m_mouseStartY;
     float m_lastDScreenX;
