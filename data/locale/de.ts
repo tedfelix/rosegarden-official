@@ -20513,118 +20513,118 @@ Das Beenden anderer laufender Anwendung könnte u.U. die Leistung von Rosegarden
 <context>
     <name>Rosegarden::StaffHeader</name>
     <message>
-        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="128"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="128"/>
         <source>normal</source>
         <translation>Normal</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="131"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="131"/>
         <source>small</source>
         <translation>klein</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="134"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="134"/>
         <source>tiny</source>
         <translation>winzig</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="120"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="120"/>
         <source>Track %1 : &quot;%2&quot;</source>
         <translation>Spur %1 : &quot;%2&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="126"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="126"/>
         <source>&lt;br&gt;Notate for: %1</source>
         <translation>&lt;br&gt;notieren für: %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="163"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="163"/>
         <source>&lt;br&gt;Size: %1,  Bracket: %2 </source>
         <translation>&lt;br&gt;Größe: %1,  Klammer: %2 </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="191"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="191"/>
         <source>&lt;br&gt;bars [%1-%2] in %3 (tr=%4) : &quot;%5&quot;</source>
         <translation>&lt;br&gt;Takte [%1-%2] in %3 (tr=%4) : &quot;%5&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="198"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="198"/>
         <source>&lt;br&gt;bars [%1-%2] (tr=%3) : &quot;%4&quot;</source>
         <translation>&lt;br&gt;Takte [%1-%2] (tr=%3) : &quot;%4&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="359"/>
-        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="414"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="359"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="414"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="455"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="455"/>
         <source>C</source>
         <translation>C</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="456"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="456"/>
         <source>C#</source>
         <translation>C#</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="457"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="457"/>
         <source>D</source>
         <translation>D</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="458"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="458"/>
         <source>Eb</source>
         <translation>Eb</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="459"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="459"/>
         <source>E</source>
         <translation>E</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="460"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="460"/>
         <source>F</source>
         <translation>F</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="461"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="461"/>
         <source>F#</source>
         <translation>F#</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="462"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="462"/>
         <source>G</source>
         <translation>G</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="463"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="463"/>
         <source>G#</source>
         <translation>G#</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="464"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="464"/>
         <source>A</source>
         <translation>A</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="465"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="465"/>
         <source>Bb</source>
         <translation>B</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="466"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="466"/>
         <source>B</source>
         <translation>H</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="577"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="577"/>
         <source>%1: %2</source>
         <translation>%1: %2</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="580"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="580"/>
         <source> in %1</source>
         <translation> in %1</translation>
     </message>
