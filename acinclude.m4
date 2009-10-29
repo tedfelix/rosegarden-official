@@ -134,7 +134,9 @@ AC_MSG_CHECKING([QTLIBDIR])
 AC_ARG_WITH([qtlibdir], [  --with-qtlibdir=DIR     Qt library directory [default=$QTLIBDIR]], QTLIBDIR=$withval)
 if test x"$QTLIBDIR" = x ; then
    	# bin is included because that's where Qt DLLs hide on Windows
-	QTLIB_SEARCH="$QTDIR/lib $QTDIR/lib64 $QTDIR/lib32 $QTDIR/bin"
+    # On Mandriva Qt libraries are in /usr/lib or /usr/lib64 although
+    # QTDIR is /usr/lib/qt4
+	QTLIB_SEARCH="$QTDIR/lib $QTDIR/lib64 $QTDIR/lib32 $QTDIR/bin /usr/lib /usr/lib64"
 else
 	QTLIB_SEARCH="$QTLIBDIR"
 	QTDIR=""
