@@ -617,9 +617,13 @@ RosegardenMainWindow::setupActions()
     createAction("file_print_lilypond", SLOT(slotPrintLilyPond()));
     createAction("file_preview_lilypond", SLOT(slotPreviewLilyPond()));
     createAction("file_show_playlist", SLOT(slotPlayList()));
+
+    // Help menu
+    createAction("manual", SLOT(slotHelp()));
     createAction("tutorial", SLOT(slotTutorial()));
     createAction("guidelines", SLOT(slotBugGuidelines()));
     createAction("help_about_app", SLOT(slotHelpAbout()));
+    createAction("help_about_qt", SLOT(slotHelpAboutQt()));
 
     createAction("show_stock_toolbar", SLOT(slotToggleToolBar()));
     createAction("show_tools_toolbar", SLOT(slotToggleToolsToolBar()));
@@ -721,7 +725,7 @@ RosegardenMainWindow::setupActions()
     
     createAction("repeat_segment_onoff", m_segmentParameterBox, SLOT(slotRepeatPressed()));
 
-    createGUI("rosegardenui.rc");
+    createGUI("rosegardenmainwindow.rc");
 
     setupRecentFilesMenu();
     createAndSetupTransport();
@@ -7289,6 +7293,18 @@ RosegardenMainWindow::slotPlayListClosed()
 }
 
 void
+RosegardenMainWindow::slotHelp()
+{
+    // TRANSLATORS: if the manual is translated into your language, you can
+    // change the two-letter language code in this URL to point to your language
+    // version, eg. "http://rosegardenmusic.com/wiki/doc:manual-es" for the
+    // Spanish version. If your language doesn't yet have a translation, feel
+    // free to create one.
+    QString helpURL = tr("http://rosegardenmusic.com/wiki/doc:manual-en");
+    QDesktopServices::openUrl(QUrl(helpURL));
+}
+
+void
 RosegardenMainWindow::slotTutorial()
 {
     QString tutorialURL = tr("http://www.rosegardenmusic.com/tutorials/en/chapter-0.html");
@@ -7306,6 +7322,12 @@ void
 RosegardenMainWindow::slotHelpAbout()
 {
     new AboutDialog(this);
+}
+
+void
+RosegardenMainWindow::slotHelpAboutQt()
+{
+    QMessageBox::aboutQt(this, tr("Rosegarden"));
 }
 
 void

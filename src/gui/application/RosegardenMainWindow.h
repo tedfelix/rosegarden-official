@@ -1331,6 +1331,8 @@ public slots:
      */
     void slotPlayListPlay(QString url);
 
+    void slotHelp();
+
     /**
      * Call up the online tutorial
      */
@@ -1345,6 +1347,8 @@ public slots:
      * Call the Rosegaden about box.
      */
     void slotHelpAbout();
+
+    void slotHelpAboutQt();
 
     /**
      * View the trigger segments manager

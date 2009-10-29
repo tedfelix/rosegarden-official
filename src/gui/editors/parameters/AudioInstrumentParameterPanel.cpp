@@ -341,6 +341,7 @@ AudioInstrumentParameterPanel::setAudioMeter(float dBleft, float dBright,
 void
 AudioInstrumentParameterPanel::setupForInstrument(Instrument* instrument)
 {
+    std::cout << "SPLUNK!" << std::endl;
     blockSignals(true);
 
     m_selectedInstrument = instrument;
