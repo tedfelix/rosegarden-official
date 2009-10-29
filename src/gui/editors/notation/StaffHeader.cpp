@@ -18,7 +18,7 @@
     COPYING included with this distribution for more information.
 */
 
-#include "TrackHeader.h"
+#include "StaffHeader.h"
 #include "HeadersGroup.h"
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
@@ -717,5 +717,5 @@ StaffHeader::event(QEvent *event)
 }
 
 }
-#include "TrackHeader.moc"
+#include "StaffHeader.moc"
 

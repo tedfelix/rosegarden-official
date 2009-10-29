@@ -27,7 +27,7 @@
 #include "gui/editors/guitar/Fingering.h"
 #include "gui/editors/guitar/FingeringBox.h"
 #include "gui/editors/guitar/NoteSymbols.h"
-#include "gui/editors/notation/TrackHeader.h"
+#include "gui/editors/notation/StaffHeader.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/general/PixmapFunctions.h"
 #include "gui/general/Spline.h"

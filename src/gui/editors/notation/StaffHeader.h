@@ -46,11 +46,9 @@ class NotationScene;
 class ColourMap;
 class Segment;
 
-// Class rename fron TrackHeader to StaffHeader since paintEvent() method
+// Class rename from TrackHeader to StaffHeader since paintEvent() method
 // has been added : Qt disliked to have two different StaffHeader::paintEvent()
 // method.
-// TODO : Rename TrackHeader.h and TrackHeader.cpp files to StaffHeader.h and
-//        StaffHeader.cpp
 
 class StaffHeader : public QWidget
 {

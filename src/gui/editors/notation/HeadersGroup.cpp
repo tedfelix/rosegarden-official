@@ -21,7 +21,7 @@
 #include <limits>
 
 #include "HeadersGroup.h"
-#include "TrackHeader.h"
+#include "StaffHeader.h"
 #include "NotationWidget.h"
 #include "NotationScene.h"
 #include "NotePixmapFactory.h"
