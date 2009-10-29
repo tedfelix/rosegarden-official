@@ -37,6 +37,8 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QApplication>
+#include <QUrl>
+#include <QDesktopServices>
 
 // #define DEBUG_CATEGORIES
 
@@ -163,11 +165,24 @@ PresetHandlerDialog::initDialog()
     settings.endGroup();
 
     QDialogButtonBox *buttonBox
-        = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+        = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help);
     vboxLayout->addWidget(buttonBox);
 
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(buttonBox, SIGNAL(helpRequested()), this, SLOT(help()));
+}
+
+void
+PresetHandlerDialog::help()
+{
+    // TRANSLATORS: if the manual is translated into your language, you can
+    // change the two-letter language code in this URL to point to your language
+    // version, eg. "http://rosegardenmusic.com/wiki/doc:manual-es" for the
+    // Spanish version. If your language doesn't yet have a translation, feel
+    // free to create one.
+    QString helpURL = tr("http://rosegardenmusic.com/wiki/doc:manual-preset-handler-en");
+    QDesktopServices::openUrl(QUrl(helpURL));
 }
 
 QString

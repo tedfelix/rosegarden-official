@@ -154,6 +154,7 @@ protected slots:
     /// write out settings to QSettings data for next time and call accept()
     void accept();
 
+    void help();
 }; // PresetHandlerDialog
 
 
