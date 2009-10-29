@@ -48,6 +48,7 @@ public:
 public slots:
     void slotApply();
     void accept();
+    void help();
 
 protected:
     RosegardenDocument *m_doc;

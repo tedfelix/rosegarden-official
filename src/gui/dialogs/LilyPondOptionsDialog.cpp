@@ -29,6 +29,8 @@
 #include <QComboBox>
 #include <QDialog>
 #include <QDialogButtonBox>
+#include <QUrl>
+#include <QDesktopServices>
 #include <QFrame>
 #include <QGridLayout>
 #include <QGroupBox>
@@ -55,8 +57,6 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
         QDialog(parent),
 	m_doc(doc)
 {
-    //setHelp("file-printing");
-
     setModal(true);
     setWindowTitle((windowCaption = "" ? tr("LilyPond Export/Preview") : windowCaption));
 
@@ -250,7 +250,7 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
 
     mainbox->setLayout(mainboxLayout);
 
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Apply | QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Apply | QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help);
     metaGridLayout->addWidget(buttonBox, 1, 0);
     metaGridLayout->setRowStretch(0, 10);
 
@@ -259,11 +259,25 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
 
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(buttonBox, SIGNAL(helpRequested()), this, SLOT(help()));
 
     populateDefaultValues();
 
     resize(minimumSizeHint());
 }
+
+void
+LilyPondOptionsDialog::help()
+{
+    // TRANSLATORS: if the manual is translated into your language, you can
+    // change the two-letter language code in this URL to point to your language
+    // version, eg. "http://rosegardenmusic.com/wiki/doc:manual-es" for the
+    // Spanish version. If your language doesn't yet have a translation, feel
+    // free to create one.
+    QString helpURL = tr("http://rosegardenmusic.com/wiki/doc:manual-lilypondoptions-en");
+    QDesktopServices::openUrl(QUrl(helpURL));
+}
+    
 
 void
 LilyPondOptionsDialog::populateDefaultValues()
