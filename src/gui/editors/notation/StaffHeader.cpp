@@ -260,11 +260,13 @@ StaffHeader::paintEvent(QPaintEvent *)
 {
     // avoid common random crash by brute force
     if (!m_clefItem) {
-        std::cerr << "StaffHeader::paintEvent() - m_clefItem was NULL.  Skipping this paintEvent." << std::endl
-                  << "                            This is a BUG, but it seems fairly harmless to just avoid crashing here and return." << std::endl
+        std::cerr << "StaffHeader::paintEvent() - m_clefItem was NULL."
                   << std::endl
-                  << "                            See you next iteration!"  << std::endl;
-
+                  << "  Skipping this paintEvent to avoid a crash."
+                  << std::endl
+                  << "  This is a BUG which should no more occur. (rev 11137)"
+                  << std::endl
+                  << std::endl;
         return;
     }
         
@@ -611,9 +613,13 @@ StaffHeader::lookAtStaff(double x, int maxWidth)
 void
 StaffHeader::updateHeader(int width)
 {
-    if (!m_headersGroup->isVisible()) return;
-
     // Update the header (using given width) if necessary
+
+    // updateHeader() must be executed the first time it is called
+    // (ie when m_neverUpdated is true) as it initialized some data
+    // later used by paintEvent()).
+    // But to execute it when the headers are not visible is useless.
+    if (!m_headersGroup->isVisible() && !m_neverUpdated) return;
 
     // Filter out bits whose display doesn't depend from
     int statusPart = m_status & ~(SUPERIMPOSED_SEGMENTS);
