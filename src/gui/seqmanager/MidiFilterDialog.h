@@ -44,6 +44,7 @@ public:
 public slots:
 
     void accept();
+    void help();
     void slotApply();
     void slotSetModified(int foo = 42);
 

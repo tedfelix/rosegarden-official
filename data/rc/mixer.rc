@@ -56,18 +56,13 @@
 
   <Menu name="help" append="about_merge">
     <text>&amp;Help</text>
-    <Action name="help_contents" text="Rosegarden &amp;Handbook" icon="contents" shortcut="F1" />
-    <Action name="help_whats_this" text="&amp;What's This?" icon="contexthelp" shortcut="Shift+F1" />
+    <Action name="manual" text="Rosegarden &amp;Mandbook" icon="contents" shortcut="F1" />
   <Separator/>
-    <!-- JAS invented "language_switch" action name -->
-    <Action name="language_switch" text="Switch application &amp;language..." />
+    <Action name="tutorial" text="&amp;Rosegarden tutorial" />
+    <Action name="guidelines" text="&amp;Bug Reporting Guidelines" />
   <Separator/>
-    <!-- JAS invented "help_online" action name, and used KDE launch icon: can't fing right one -->
-    <Action name="help_online" text="&amp;Get Help Online" icon="launch" />
-    <!-- JAS invented "language_translate" action name and used KDE translate icon: can't fiond right one -->
-    <Action name="language_translate" text="&amp;Translate This Application" icon="translate" />
-  <Separator/> 
     <Action name="help_about_app" text="&amp;About Rosegarden" icon="rg-rwb-rose3-16x16" />
+    <Action name="help_about_qt" text="About &amp;Qt" />
   </Menu>
 
 </MenuBar>

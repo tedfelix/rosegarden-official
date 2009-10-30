@@ -286,9 +286,13 @@
   
   <Menu name="help" append="about_merge">
     <text>&amp;Help</text>
-    <!-- we'll just start with a clean help menu if/when we ever get around to
-having help again -->
+    <Action name="manual" text="Rosegarden &amp;Mandbook" icon="contents" shortcut="F1" />
+  <Separator/>
+    <Action name="tutorial" text="&amp;Rosegarden tutorial" />
+    <Action name="guidelines" text="&amp;Bug Reporting Guidelines" />
+  <Separator/>
     <Action name="help_about_app" text="&amp;About Rosegarden" icon="rg-rwb-rose3-16x16" />
+    <Action name="help_about_qt" text="About &amp;Qt" />
   </Menu>
 
 </MenuBar>

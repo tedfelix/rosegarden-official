@@ -26,6 +26,8 @@
     <!-- JAS added shortcut for "select_all" for uniformity. -->
     <Action name="select_all" text="Select &amp;All" shortcut="Ctrl+A" />
     <Action name="clear_selection" text="&amp;Clear Selection" shortcut="Escape" />
+  <Separator/>
+    <Action name="configure" text="&amp;Preferences" icon="configure" />
   </Menu>
 
   <Menu name="view">
@@ -33,34 +35,21 @@
     <Action name="time_musical" text="&amp;Musical Times" icon="time-musical"  />
     <Action name="time_real" text="&amp;Real Times" icon="time-real" />
     <Action name="time_raw" text="Ra&amp;w Times" icon="time-raw" />
-  </Menu>
-
-  <Menu name="settings">
-    <text>Sett&amp;ings</text>
+  <Separator/>
     <Action name="options_show_toolbar" text="Show &amp;Toolbar" checked="true" append="show_merge" />
     <!-- JAS 'options_show_statusbar' determined by state -->
     <Action name="options_show_statusbar" text="Hide St&amp;atusbar" append="show_merge" />
-  <Seperator/>
-    <Action name="options_configure_keybinding" text="Configure S&amp;hortcuts..." icon="configure_shortcuts" />
-    <Action name="options_configure_toolbars" text="Configure Tool&amp;bars..." icon="configure_toolbars" />
-    <Action name="options_configure" text="&amp;Configure Rosegarden..." icon="configure" />
   </Menu>
 
   <Menu name="help" append="about_merge">
     <text>&amp;Help</text>
-    <Action name="help_contents" text="Rosegarden &amp;Handbook" icon="contents" shortcut="F1" />
-    <Action name="help_whats_this" text="&amp;What's This?" icon="contexthelp" shortcut="Shift+F1" />
+    <Action name="manual" text="Rosegarden &amp;Mandbook" icon="contents" shortcut="F1" />
   <Separator/>
-    <!-- JAS invented "language_switch" action name -->
-    <Action name="language_switch" text="Switch application &amp;language..." />
+    <Action name="tutorial" text="&amp;Rosegarden tutorial" />
+    <Action name="guidelines" text="&amp;Bug Reporting Guidelines" />
   <Separator/>
-    <!-- JAS invented "help_online" action name, and used KDE launch icon: can't fing right one -->
-    <Action name="help_online" text="&amp;Get Help Online" icon="launch" />
-    <!-- JAS invented "language_translate" action name and used KDE translate icon: can't fiond right one -->
-    <Action name="language_translate" text="&amp;Translate This Application" icon="translate" />
-  <Separator/> 
     <Action name="help_about_app" text="&amp;About Rosegarden" icon="rg-rwb-rose3-16x16" />
-    <Action name="help_about_kde" text="About &amp;KDE" icon="about_kde" />
+    <Action name="help_about_qt" text="About &amp;Qt" />
   </Menu>
 
 </MenuBar>

@@ -31,6 +31,8 @@
 #include <QWidget>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QUrl>
+#include <QDesktopServices>
 
 
 namespace Rosegarden
@@ -172,6 +174,7 @@ MidiFilterDialog::MidiFilterDialog(QWidget *parent,
     metagrid->setRowStretch(0, 10);
     connect(m_buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(m_buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(m_buttonBox, SIGNAL(helpRequested()), this, SLOT(help()));
 
     m_applyButton = m_buttonBox->button(QDialogButtonBox::Apply);
     connect(m_applyButton, SIGNAL(clicked()), this, SLOT(slotApply()));
@@ -212,6 +215,18 @@ MidiFilterDialog::MidiFilterDialog(QWidget *parent,
     // have to do this to wipe the slate clean initially after all the false
     // positives
     setModified(false);
+}
+
+void
+MidiFilterDialog::help()
+{
+    // TRANSLATORS: if the manual is translated into your language, you can
+    // change the two-letter language code in this URL to point to your language
+    // version, eg. "http://rosegardenmusic.com/wiki/doc:manual-es" for the
+    // Spanish version. If your language doesn't yet have a translation, feel
+    // free to create one.
+    QString helpURL = tr("http://rosegardenmusic.com/wiki/doc:midi-filter-en");
+    QDesktopServices::openUrl(QUrl(helpURL));
 }
 
 void

@@ -699,6 +699,7 @@ int main(int argc, char *argv[])
         }
     }
 
+    newVersion = true; // TESTING
     if (newVersion) {
         StartupLogo::hideIfStillThere();
         CurrentProgressDialog::freeze();
