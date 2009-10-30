@@ -8698,22 +8698,22 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../../src/gui/application/main.cpp" line="318"/>
         <source>Rosegarden - A sequencer and musical notation editor</source>
-        <translation type="unfinished">Rosegarden - Sekvensseri ja nuotintaja</translation>
+        <translation>Rosegarden - Sekvensseri ja nuotintaja</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/main.cpp" line="431"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/main.cpp" line="709"/>
         <source>Welcome!</source>
-        <translation type="unfinished">Tervetuloa!</translation>
+        <translation>Tervetuloa!</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/main.cpp" line="725"/>
         <source>&lt;h2&gt;Welcome to Rosegarden!&lt;/h2&gt;&lt;p&gt;Welcome to the Rosegarden audio and MIDI sequencer and musical notation editor.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;If you have not already done so, you may wish to install some DSSI synth plugins, or a separate synth program such as QSynth.  Rosegarden does not synthesize sounds from MIDI on its own, so without these you will hear nothing.&lt;/li&gt;&lt;li&gt;Rosegarden uses the JACK audio server for recording and playback of audio, and for playback from DSSI synth plugins.  These features will only be available if the JACK server is running.&lt;/li&gt;&lt;li&gt;Rosegarden has comprehensive documentation: see the &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&gt;Rosegarden website&lt;/a&gt; for the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/doc/en/&quot;&gt;handbook&lt;/a&gt;, &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;tutorials&lt;/a&gt;, and other information!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  To learn more, go to the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;Rosegarden website&lt;/a&gt;.&lt;/p&gt;</source>
-        <translation type="unfinished">&lt;h2&gt;Tervetuloa Rosegardeniin!&lt;/h2&gt;&lt;p&gt;Tervetuloa käyttämään Rosegardenia, ääni- ja MIDI-sekvensseriä ja nuottieditoria.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Saatat haluta asentaa DSSI-syntetisaattorilisäosia tai erillisiä syntetisaattoriohjelmia kuten QSynth jos et ole jo tehnyt niin.  Rosegarden itsessään ei tuota ääntä MIDI-tiedoista, joten ilman niitä et kuule mitään.&lt;/li&gt;&lt;li&gt;Rosegarden käyttää JACK-äänipalvelinta äänen toistoon ja tallennukseen sekä DSSI-lisäosien äänen toistoon.  Nämä ominaisuudet ovat käytettävissa vain jos JACK-palvelin on käynnissä.&lt;/li&gt;&lt;li&gt;Rosegardeniin on kattava ohjeistus, katso &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&gt;Rosegarden website&lt;/a&gt; for the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/doc/en/&quot;&gt;käsikirja&lt;/a&gt;, &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;johdatus&lt;/a&gt;, ja muuta tietoa!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegardenin tarjoavat sinulle joukko vapaaehtoisia ympäri maailman.  Katso lisätietoja: &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;Rosegardenin kotisivulta&lt;/a&gt;.&lt;/p&gt;</translation>
+        <translation>&lt;h2&gt;Tervetuloa Rosegardeniin!&lt;/h2&gt;&lt;p&gt;Tervetuloa käyttämään Rosegardenia, ääni- ja MIDI-sekvensseriä ja nuottieditoria.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Saatat haluta asentaa DSSI-syntetisaattorilisäosia tai erillisiä syntetisaattoriohjelmia kuten QSynth jos et ole jo tehnyt niin.  Rosegarden itsessään ei tuota ääntä MIDI-tiedoista, joten ilman niitä et kuule mitään.&lt;/li&gt;&lt;li&gt;Rosegarden käyttää JACK-äänipalvelinta äänen toistoon ja tallennukseen sekä DSSI-lisäosien äänen toistoon.  Nämä ominaisuudet ovat käytettävissa vain jos JACK-palvelin on käynnissä.&lt;/li&gt;&lt;li&gt;Rosegardeniin on kattava ohjeistus, katso &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&gt;Rosegarden website&lt;/a&gt; for the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/doc/en/&quot;&gt;käsikirja&lt;/a&gt;, &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;johdatus&lt;/a&gt;, ja muuta tietoa!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegardenin tarjoavat sinulle joukko vapaaehtoisia ympäri maailman.  Katso lisätietoja: &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;Rosegardenin kotisivulta&lt;/a&gt;.&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
