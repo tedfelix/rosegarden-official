@@ -97,6 +97,7 @@
 #include "gui/dialogs/TimeSignatureDialog.h"
 #include "gui/dialogs/QuantizeDialog.h"
 #include "gui/dialogs/LyricEditDialog.h"
+#include "gui/dialogs/AboutDialog.h"
 
 #include "gui/general/IconLoader.h"
 #include "gui/general/LilyPondProcessor.h"
@@ -124,6 +125,8 @@
 #include <QInputDialog>
 #include <QStatusBar>
 #include <QToolButton>
+#include <QUrl>
+#include <QDesktopServices>
 
 #include <algorithm>
 #include <set>
@@ -655,6 +658,12 @@ NotationView::setupActions()
     createAction("grace_mode", SLOT(slotUpdateInsertModeStatus()));
     createAction("toggle_step_by_step", SLOT(slotToggleStepByStep()));
 
+    createAction("manual", SLOT(slotHelp()));
+    createAction("tutorial", SLOT(slotTutorial()));
+    createAction("guidelines", SLOT(slotBugGuidelines()));
+    createAction("help_about_app", SLOT(slotHelpAbout()));
+    createAction("help_about_qt", SLOT(slotHelpAboutQt()));
+
     createAction("toggle_velocity_ruler", SLOT(slotToggleVelocityRuler()));
     createAction("toggle_pitchbend_ruler", SLOT(slotTogglePitchbendRuler()));
     createAction("add_control_ruler", SLOT(slotAddControlRuler()));
@@ -1166,14 +1175,11 @@ QString
 NotationView::getLilyPondTmpFilename()
 {
     QString mask = QString("%1/rosegarden_tmp_XXXXXX.ly").arg(QDir::tempPath());
-    std::cerr << "RosegardenMainWindow::getLilyPondTmpName() - using tmp file: " << qstrtostr(mask) << std::endl;
+    std::cerr << "NotationView::getLilyPondTmpName() - using tmp file: " << qstrtostr(mask) << std::endl;
 
     QTemporaryFile *file = new QTemporaryFile(mask);
     file->setAutoRemove(true);
     if (!file->open()) {
-        // getLilyPondTmpFilename() in RosegardenMainWindow:: and in NotationView:: are nearly in sync.
-        // However, the following line is NOT commented out in RosegardenMainWindow::getLilyPondTmpFilename()
-        // CurrentProgressDialog::freeze();
         QMessageBox::warning(this, tr("Rosegarden"),
                                        tr("<qt><p>Failed to open a temporary file for LilyPond export.</p>"
                                           "<p>This probably means you have run out of disk space on <pre>%1</pre></p></qt>").
@@ -3691,6 +3697,44 @@ NotationView::getCurrentDevice()
 {
     if (m_notationWidget) return m_notationWidget->getCurrentDevice();
     else return 0;
+}
+
+void
+NotationView::slotHelp()
+{
+    // TRANSLATORS: if the manual is translated into your language, you can
+    // change the two-letter language code in this URL to point to your language
+    // version, eg. "http://rosegardenmusic.com/wiki/doc:manual-es" for the
+    // Spanish version. If your language doesn't yet have a translation, feel
+    // free to create one.
+    QString helpURL = tr("http://rosegardenmusic.com/wiki/doc:notation-en");
+    QDesktopServices::openUrl(QUrl(helpURL));
+}
+
+void
+NotationView::slotTutorial()
+{
+    QString tutorialURL = tr("http://www.rosegardenmusic.com/tutorials/en/chapter-0.html");
+    QDesktopServices::openUrl(QUrl(tutorialURL));
+}
+
+void
+NotationView::slotBugGuidelines()
+{
+    QString glURL = tr("http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html");
+     QDesktopServices::openUrl(QUrl(glURL));
+}
+
+void
+NotationView::slotHelpAbout()
+{
+    new AboutDialog(this);
+}
+
+void
+NotationView::slotHelpAboutQt()
+{
+    QMessageBox::aboutQt(this, tr("Rosegarden"));
 }
 
 

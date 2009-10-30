@@ -267,6 +267,12 @@ protected slots:
     void slotSizeComboChanged(int);
     void slotSpacingComboChanged(int);
 
+    void slotHelp();
+    void slotTutorial();
+    void slotBugGuidelines();
+    void slotHelpAbout();
+    void slotHelpAboutQt();
+
 private:
     /**
      * export a LilyPond file (used by slotPrintLilyPond and

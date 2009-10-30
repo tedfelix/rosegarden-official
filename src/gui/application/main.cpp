@@ -315,7 +315,7 @@ visible at the bottom of rosegarden/sequencer/main.cpp.
 */
 
 static QString description =
-       RosegardenApplication::tr("Rosegarden - A sequencer and musical notation editor");
+       QObject::tr("Rosegarden - A sequencer and musical notation editor");
 
 // -----------------------------------------------------------------
 
@@ -428,7 +428,7 @@ int main(int argc, char *argv[])
 
     theApp.setOrganizationName("rosegardenmusic");
     theApp.setOrganizationDomain("rosegardenmusic.com");
-    theApp.setApplicationName(RosegardenApplication::tr("Rosegarden"));
+    theApp.setApplicationName(QObject::tr("Rosegarden"));
 
     QStringList args = theApp.arguments();
 
@@ -699,14 +699,13 @@ int main(int argc, char *argv[])
         }
     }
 
-    newVersion = true; // TESTING
     if (newVersion) {
         StartupLogo::hideIfStillThere();
         CurrentProgressDialog::freeze();
 
         QDialog *dialog = new QDialog;
         dialog->setModal(true);
-        dialog->setWindowTitle(RosegardenApplication::tr("Welcome!"));
+        dialog->setWindowTitle(QObject::tr("Welcome!"));
         QGridLayout *metagrid = new QGridLayout;
         dialog->setLayout(metagrid);
 
@@ -722,7 +721,7 @@ int main(int argc, char *argv[])
 
         QLabel *label = new QLabel;
         hbLayout->addWidget(label);
-        label->setText(RosegardenApplication::tr("<h2>Welcome to Rosegarden!</h2><p>Welcome to the Rosegarden audio and MIDI sequencer and musical notation editor.</p><ul><li>If you have not already done so, you may wish to install some DSSI synth plugins, or a separate synth program such as QSynth.  Rosegarden does not synthesize sounds from MIDI on its own, so without these you will hear nothing.</li><li>Rosegarden uses the JACK audio server for recording and playback of audio, and for playback from DSSI synth plugins.  These features will only be available if the JACK server is running.</li><li>Rosegarden has comprehensive documentation: see the <a style=\"color:gold\" href=\"http://rosegardenmusic.com>Rosegarden website</a> for the <a style=\"color:gold\" href=\"http://www.rosegardenmusic.com/doc/en/\">handbook</a>, <a style=\"color:gold\" href=\"http://www.rosegardenmusic.com/tutorials/\">tutorials</a>, and other information!</li></ul><p>Rosegarden was brought to you by a team of volunteers across the world.  To learn more, go to the <a style=\"color:gold\" href=\"http://www.rosegardenmusic.com/\">Rosegarden website</a>.</p>"));
+        label->setText(QObject::tr("<h2>Welcome to Rosegarden!</h2><p>Welcome to the Rosegarden audio and MIDI sequencer and musical notation editor.</p><ul><li>If you have not already done so, you may wish to install some DSSI synth plugins, or a separate synth program such as QSynth.  Rosegarden does not synthesize sounds from MIDI on its own, so without these you will hear nothing.</li><li>Rosegarden uses the JACK audio server for recording and playback of audio, and for playback from DSSI synth plugins.  These features will only be available if the JACK server is running.</li><li>Rosegarden has comprehensive documentation: see the <a style=\"color:gold\" href=\"http://rosegardenmusic.com>Rosegarden website</a> for the <a style=\"color:gold\" href=\"http://www.rosegardenmusic.com/doc/en/\">handbook</a>, <a style=\"color:gold\" href=\"http://www.rosegardenmusic.com/tutorials/\">tutorials</a>, and other information!</li></ul><p>Rosegarden was brought to you by a team of volunteers across the world.  To learn more, go to the <a style=\"color:gold\" href=\"http://www.rosegardenmusic.com/\">Rosegarden website</a>.</p>"));
         label->setWordWrap(true);
         label->setOpenExternalLinks(true);
 
