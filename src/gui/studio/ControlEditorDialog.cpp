@@ -57,6 +57,7 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QList>
+#include <QSettings>
 
 
 namespace Rosegarden
@@ -112,18 +113,7 @@ ControlEditorDialog::ControlEditorDialog
     m_treeWidget = new QTreeWidget(mainFrame);
     m_treeWidget->setHeaderLabels(sl);
     
-//     m_treeWidget->setColumnAlignment(0, Qt::AlignLeft);    //&&& align per item now:
-//     m_treeWidgetItem->setTextAlignment(0, Qt::AlignLeft);    
-    
-        
     mainFrameLayout->addWidget(m_treeWidget);
-    
-    // Align remaining columns centrally
-//     for (int i = 1; i < 9; ++i)
-//         m_treeWidget->setColumnAlignment(i, Qt::AlignHCenter);    //&&& align per item now
-    
-    
-//     m_treeWidget->restoreLayout(ControlEditorConfigGroup);    //&&&
     
     QFrame *btnBox = new QFrame(mainFrame);
     mainFrameLayout->addWidget(btnBox);
@@ -172,19 +162,20 @@ ControlEditorDialog::ControlEditorDialog
     m_treeWidget->setAllColumnsShowFocus(true);
     
     m_treeWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
-//     m_treeWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
 
     initDialog();
-
-//     setAutoSaveSettings(ControlEditorConfigGroup, true);    //&&&
 }
 
 ControlEditorDialog::~ControlEditorDialog()
 {
     RG_DEBUG << "\n*** ControlEditorDialog::~ControlEditorDialog\n" << endl;
 
-//     m_treeWidget->saveLayout(ControlEditorConfigGroup);    //&&&
-    
+    // Save window geometry
+    QSettings settings;
+    settings.beginGroup(WindowGeometryConfigGroup);
+    RG_DEBUG << "[geometry] storing window geometry for ControlEditorDialog" << endl;
+    settings.setValue("Control_Editor_Dialog", this->saveGeometry());
+    settings.endGroup();
 }
 
 void
@@ -192,14 +183,19 @@ ControlEditorDialog::initDialog()
 {
     RG_DEBUG << "ControlEditorDialog::initDialog" << endl;
     slotUpdate();
+
+    // Restore window geometry
+    RG_DEBUG << "[geometry] ControlEditorDialog - Restoring saved main window geometry..." << endl;
+    QSettings settings;
+    settings.beginGroup(WindowGeometryConfigGroup);
+    this->restoreGeometry(settings.value("Control_Editor_Dialog").toByteArray());
+    settings.endGroup();
 }
 
 void
 ControlEditorDialog::slotUpdate(bool added)
 {
     RG_DEBUG << "ControlEditorDialog::slotUpdate" << endl;
-
-    //QPtrList<QTreeWidgetItem> selection = m_treeWidget->selectedItems();
 
     MidiDevice *md =
         dynamic_cast<MidiDevice *>(m_studio->getDevice(m_device));
@@ -268,7 +264,6 @@ ControlEditorDialog::slotUpdate(bool added)
         Colour c = comp.getGeneralColourMap().getColourByIndex(it->getColourIndex());
         colourPixmap.fill(QColor(c.getRed(), c.getGreen(), c.getBlue()));
         
-//         item->setPixmap(7, colourPixmap);
         item->setIcon(7, QIcon(colourPixmap));
 
         m_treeWidget->addTopLevelItem(item);
@@ -300,6 +295,9 @@ ControlEditorDialog::slotUpdate(bool added)
     // could grab it here and launch the dialog on the generic blah we just added
     // to the list right before this slot got called with the optional bool set
     // true.
+    //
+    // (so much for verbose comments being helpful...  I wrote that not too long
+    // ago, and reading it now, I have NO fscking idea what I was talking about)
     //
     if (added) {
         RG_DEBUG << "ControlEditorDialog: detected new item entered; launching editor" << endl;
@@ -339,7 +337,6 @@ ControlEditorDialog::slotDelete()
 {
     RG_DEBUG << "ControlEditorDialog::slotDelete" << endl;
 
-//     if (!m_treeWidget->currentIndex())
     if(! m_treeWidget->currentItem())
         return ;
 
