@@ -83,6 +83,9 @@ ControlEditorDialog::ControlEditorDialog
     setCentralWidget(mainFrame);
     setAttribute(Qt::WA_DeleteOnClose);
 
+    // everything else failed, so screw it, let's just set the fscking minimum
+    // width the brute force way
+    setMinimumWidth(935);
 
     setWindowTitle(tr("Manage Controllers"));
 
@@ -185,7 +188,7 @@ ControlEditorDialog::initDialog()
     slotUpdate();
 
     // Restore window geometry
-    RG_DEBUG << "[geometry] ControlEditorDialog - Restoring saved main window geometry..." << endl;
+    RG_DEBUG << "[geometry] ControlEditorDialog - Restoring saved geometry..." << endl;
     QSettings settings;
     settings.beginGroup(WindowGeometryConfigGroup);
     this->restoreGeometry(settings.value("Control_Editor_Dialog").toByteArray());
