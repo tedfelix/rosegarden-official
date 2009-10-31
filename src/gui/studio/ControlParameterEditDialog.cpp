@@ -57,6 +57,7 @@ ControlParameterEditDialog::ControlParameterEditDialog(
     m_dialogControl = *control; // copy in the ControlParameter
 
     setModal(true);
+    setAttribute(Qt::WA_DeleteOnClose);
     setWindowTitle(tr("Edit Controller"));
 
     QGridLayout *metagrid = new QGridLayout;
