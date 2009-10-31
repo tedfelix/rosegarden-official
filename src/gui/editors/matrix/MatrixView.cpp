@@ -617,6 +617,11 @@ MatrixView::initActionsToolbar()
 
     m_quantizeCombo->addItem(noMap, tr("Off"));
 
+    // default to Off to mirror Classic behavior
+    m_quantizeCombo->setCurrentIndex(m_quantizeCombo->count() - 1);
+
+    m_quantizeCombo->setSizeAdjustPolicy(QComboBox::AdjustToContents);
+
     connect(m_quantizeCombo, SIGNAL(activated(int)),
             this, SLOT(slotQuantizeSelection(int)));
 }
@@ -638,7 +643,7 @@ MatrixView::initRulersToolbar()
 void
 MatrixView::initStatusBar()
 {
-    QStatusBar *sb = statusBar();
+    statusBar();
 }
 
 void
