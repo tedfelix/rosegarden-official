@@ -164,6 +164,7 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
     // If this is the first time we've drawn this view,
     //  reconfigure all items to make sure their icons
     //  come out the right size
+    ///@TODO Only reconfigure all items if zoom has changed
     if (m_lastDrawnRect != m_pannedRect) {
         EventControlItem *item;
         for (ControlItemMap::iterator it = m_controlItemMap.begin(); it != m_controlItemMap.end(); it++) {
@@ -459,38 +460,38 @@ void ControllerEventsRuler::eraseControllerEvent()
     updateSelection();
 }
 
-void ControllerEventsRuler::clearControllerEvents()
-{
-    EventSelection *es = new EventSelection(*m_segment);
-
-    for (Segment::iterator it = m_segment->begin(); it != m_segment->end(); ++it) {
-        if (isOnThisRuler(*it)) {
-            es->addEvent(*it);
-        }
-//        if (!(*it)->isa(Controller::EventType))
-//            continue;
-//        {
-//            if (m_controller) // ensure we have only the controller events we want for this ruler
-//            {
-//                try
-//                {
-//                    if ((*it)->get
-//                            <Int>(Controller::NUMBER)
-//                            != m_controller->getControllerValue())
-//                        continue;
-//                } catch (...)
-//                {
-//                    continue;
-//                }
+//void ControllerEventsRuler::clearControllerEvents()
+//{
+//    EventSelection *es = new EventSelection(*m_segment);
 //
-//                es->addEvent(*it);
-//            }
+//    for (Segment::iterator it = m_segment->begin(); it != m_segment->end(); ++it) {
+//        if (isOnThisRuler(*it)) {
+//            es->addEvent(*it);
 //        }
-    }
-
-    EraseCommand *command = new EraseCommand(*es);
-    CommandHistory::getInstance()->addCommand(command);
-}
+////        if (!(*it)->isa(Controller::EventType))
+////            continue;
+////        {
+////            if (m_controller) // ensure we have only the controller events we want for this ruler
+////            {
+////                try
+////                {
+////                    if ((*it)->get
+////                            <Int>(Controller::NUMBER)
+////                            != m_controller->getControllerValue())
+////                        continue;
+////                } catch (...)
+////                {
+////                    continue;
+////                }
+////
+////                es->addEvent(*it);
+////            }
+////        }
+//    }
+//
+//    EraseCommand *command = new EraseCommand(*es);
+//    CommandHistory::getInstance()->addCommand(command);
+//}
 
 //void ControllerEventsRuler::startControlLine()
 //{

@@ -83,7 +83,7 @@ public:
     virtual Event * insertEvent(float,float);
     virtual void eraseEvent(Event *event);
     virtual void eraseControllerEvent();
-    virtual void clearControllerEvents();
+//    virtual void clearControllerEvents();
 //    virtual void startControlLine();
 
     ControlParameter* getControlParameter() { return m_controller; }

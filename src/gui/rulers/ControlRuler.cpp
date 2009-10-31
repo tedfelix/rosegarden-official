@@ -472,31 +472,6 @@ void ControlRuler::slotScrollHorizSmallSteps(int step)
 {
 }
 
-//void ControlRuler::slotUpdateElementsHPos()
-//{
-//    // Update the position of control elements based on changes to the segment
-//	// This is only called for PropertControlRulers
-//    RG_DEBUG << "ControlRuler::slotUpdateElementsHPos()\n";
-//
-//    // This is only called for PropertControlRulers
-//    computeViewSegmentOffset();
-//
-////    Q3CanvasItemList list = canvas()->allItems();
-//
-////    Q3CanvasItemList::Iterator it = list.begin();
-/////TODO Iterate through m_controlItemList
-//    ControlItemList::iterator it = m_controlItemList.begin();
-//    for (; it != m_controlItemList.end(); ++it) {
-//        ///TODO This test should no be necessary
-//        ControlItem* item = dynamic_cast<ControlItem*>(*it);
-//        if (!item)
-//            continue;
-////        layoutItem(item);
-//    }
-//
-////    canvas()->update();
-//}
-
 int ControlRuler::mapXToWidget(float x)
 {
     return (0.5+(x-m_pannedRect.left()) / m_xScale);
@@ -589,99 +564,10 @@ void ControlRuler::resizeEvent(QResizeEvent *)
     slotSetPannedRect(m_pannedRect);
 }
 
-//void ControlRuler::slotSetScale(double factor)
-//{
-//	m_scale = factor;
-//}
-
 void ControlRuler::slotSetTool(const QString &matrixtoolname)
 {
 }
 
-//void ControlRuler::eventSelected(EventSelection *es,Event *e) {
-//    if(es==m_assignedEventSelection) {
-////        Q3CanvasItemList list = canvas()->allItems();
-////        Q3CanvasItemList::Iterator it = list.begin();
-/////TODO Iterate through m_controlItemList
-//        //for (; it != list.end(); ++it) {
-//            //if (ControlItem *item = dynamic_cast<ControlItem*>(*it)) {
-//        		//if(item->getElementAdapter()->getEvent()==e) {
-//        			//item->setHighlighted(true);
-//    	    		//return;
-//    		    //}
-//	        //}
-//        //}
-//    }
-//}
-//
-//void ControlRuler::eventDeselected(EventSelection *es,Event *e) {
-//    if(es==m_assignedEventSelection) {
-////        Q3CanvasItemList list = canvas()->allItems();
-////        Q3CanvasItemList::Iterator it = list.begin();
-/////TODO Iterate through m_controlItemList
-//        //for (; it != list.end(); ++it) {
-//            //if (ControlItem *item = dynamic_cast<ControlItem*>(*it)) {
-//    	        //if(item->getElementAdapter()->getEvent()==e) {
-//                    //item->setHighlighted(false);
-//                    //return;
-//    	        //}
-//            //}
-//        //}
-//    }
-//}
-//
-//void ControlRuler::eventSelectionDestroyed(EventSelection *es) {
-//	/// Someone destroyed  ES  lets handle that
-//	if(es==m_assignedEventSelection)
-//		m_assignedEventSelection=NULL;
-//}
-//
-//
-//void ControlRuler::assignEventSelection(EventSelection *es)
-//{
-//    // Clear all selected ControllItem
-////    Q3CanvasItemList list = canvas()->allItems();
-////    Q3CanvasItemList::Iterator it = list.begin();
-/////TODO Iterate through m_controlItemList
-//    //for (; it != list.end(); ++it) {
-//        //if (ControlItem *item = dynamic_cast<ControlItem*>(*it))
-//    	    //item->setHighlighted(false);
-//    //}
-//
-//    if(es) {
-//        // Dont observe the old selection anymore
-//        m_assignedEventSelection=es;
-//
-////        Q3CanvasItemList list = canvas()->allItems();
-//        const EventSelection::eventcontainer ec=es->getSegmentEvents();
-//        for (EventSelection::eventcontainer::iterator e = ec.begin(); e != ec.end(); ++e) {
-////            Q3CanvasItemList::Iterator it = list.begin();
-/////TODO Iterate through m_controlItemList
-//            //for (; it != list.end(); ++it) {
-//                //if (ControlItem *item = dynamic_cast<ControlItem*>(*it)) {
-//                    //if(item->getElementAdapter()->getEvent()==*e) {
-//                        //item->setHighlighted(true);
-//                        //break;
-//                    //}
-//                //}
-//            //}
-//        }
-//
-//        es->addObserver(this);
-//
-//    } else {
-//    	m_assignedEventSelection=NULL;
-//    }
-//
-//    slotUpdate();
-//}
-
-//void ControlRuler::viewSegmentDeleted(const ViewSegment *)
-//{
-//    m_viewSegment = 0;
-//    m_segment = 0;
-//}
-//
 ControlMouseEvent ControlRuler::createControlMouseEvent(QMouseEvent* e)
 {
     ControlMouseEvent controlMouseEvent;
@@ -710,89 +596,6 @@ void ControlRuler::mousePressEvent(QMouseEvent* e)
 
     ControlMouseEvent controlMouseEvent = createControlMouseEvent(e);
     m_currentTool->handleLeftButtonPress(&controlMouseEvent);
-//    if (e->button() != Qt::LeftButton) {
-//        TextFloat::getTextFloat()->hide();
-//        m_selecting = false;
-//        return ;
-//    }
-//
-//    RG_DEBUG << "ControlRuler::contentsMousePressEvent()\n";
-//
-///TODO Not necessary in th custom widget implementation?
-//    QPoint p = inverseMapPoint(e->pos());
-
-//    Q3CanvasItemList l = canvas()->collisions(p);
-///TODO Write simple collision detection code for m_controlItemList
-/*
-
-    if (l.count() == 0) { // de-select current item
-        clearSelectedItems();
-        m_selecting = true;
-        m_selector->handleMouseButtonPress(e);
-        RG_DEBUG << "ControlRuler::contentsMousePressEvent : entering selection mode\n";
-        return ;
-    }
-
-    // clear selection unless control was pressed, in which case
-    // add the event to the current selection
-// 	if (!(e->state() && QMouseEvent::ControlButton)) {
-	if( ! (e->modifiers() & Qt::CTRL) ){
-        clearSelectedItems();
-    }
-
-    ControlItem *topItem = 0;
-    for (Q3CanvasItemList::Iterator it = l.begin(); it != l.end(); ++it) {
-
-        if (ControlItem *item = dynamic_cast<ControlItem*>(*it)) {
-
-            if (topItem == 0)
-                topItem = item;
-
-            if (item->isSelected()) { // if the item which was clicked
-                // on is part of a selection,
-                // propagate mousepress on all
-                // selected items
-
-                item->handleMouseButtonPress(e);
-
-                for (Q3CanvasItemList::Iterator it = m_selectedItems.begin();
-                        it != m_selectedItems.end(); ++it) {
-                    if (ControlItem *selectedItem =
-                                dynamic_cast<ControlItem*>(*it)) {
-                        selectedItem->handleMouseButtonPress(e);
-                    }
-                }
-
-
-            } else { // select it
-
-                if (!(e->state() && Qt::CTRL) ){		//@@@ QMouseEvent::ControlButton)) {
-                    if (item->z() > topItem->z())
-                        topItem = item;
-
-                } else {
-                    m_selectedItems << item;
-                    item->setSelected(true);
-                    item->handleMouseButtonPress(e);
-                    ElementAdapter* adapter = item->getElementAdapter();
-                    m_eventSelection->addEvent(adapter->getEvent());
-                }
-            }
-        }
-    }
-
-    if (topItem && !m_selectedItems.contains(topItem)) { // select the top item
-        m_selectedItems << topItem;
-        topItem->setSelected(true);
-        topItem->handleMouseButtonPress(e);
-        ElementAdapter* adapter = topItem->getElementAdapter();
-        m_eventSelection->addEvent(adapter->getEvent());
-    }
-
-    m_itemMoved = false;
-    m_lastEventPos = p;
-
-*/ ///TODO
 }
 
 void ControlRuler::mouseReleaseEvent(QMouseEvent* e)
@@ -802,51 +605,6 @@ void ControlRuler::mouseReleaseEvent(QMouseEvent* e)
 
     ControlMouseEvent controlMouseEvent = createControlMouseEvent(e);
     m_currentTool->handleMouseRelease(&controlMouseEvent);
-
-//    if (e->button() != Qt::LeftButton) {
-//        TextFloat::getTextFloat()->hide();
-//        m_selecting = false;
-//        return ;
-//    }
-//
-//    if (m_selecting) {
-//        updateSelection();
-//        m_selector->handleMouseButtonRelease(e);
-//        RG_DEBUG << "ControlRuler::contentsMouseReleaseEvent : leaving selection mode\n";
-//        m_selecting = false;
-//        return ;
-//    }
-//
-/////TODO Iterate through m_controlItemList
-//    //for (Q3CanvasItemList::Iterator it = m_selectedItems.begin(); it != m_selectedItems.end(); ++it) {
-//        //if (ControlItem *item = dynamic_cast<ControlItem*>(*it)) {
-//
-//            //ElementAdapter * adapter = item->getElementAdapter();
-//            //m_eventSelection->addEvent(adapter->getEvent());
-//            //item->handleMouseButtonRelease(e);
-//        //}
-//    //}
-//
-//    emit stateChange("have_controller_item_selected", true);
-//
-//    if (m_itemMoved) {
-//
-/////TODO Not necessary?
-////        m_lastEventPos = inverseMapPoint(e->pos());
-//
-//        // Add command to history
-//        ControlChangeCommand* command = new ControlChangeCommand(m_selectedItems,
-//                                        *m_segment,
-//                                        m_eventSelection->getStartTime(),
-//                                        m_eventSelection->getEndTime());
-//
-//        RG_DEBUG << "ControlRuler::contentsMouseReleaseEvent : adding command\n";
-//        CommandHistory::getInstance()->addCommand(command);
-//
-//        m_itemMoved = false;
-//    }
-//
-//    TextFloat::getTextFloat()->hide();
 }
 
 void ControlRuler::mouseMoveEvent(QMouseEvent* e)
@@ -860,49 +618,6 @@ void ControlRuler::mouseMoveEvent(QMouseEvent* e)
     if (mode != ControlTool::NoFollow) {
         emit dragScroll(m_rulerScale->getTimeForX(controlMouseEvent.x));
     }
-//    QPoint p = e->pos(); ///CJ Is this ok - inverseMapPoint(e->pos());
-//
-//    int deltaX = p.x() - m_lastEventPos.x(),
-//                 deltaY = p.y() - m_lastEventPos.y();
-//    m_lastEventPos = p;
-//
-//    if (m_selecting) {
-//        updateSelection();
-//        m_selector->handleMouseMove(e, deltaX, deltaY);
-//        slotScrollHorizSmallSteps(p.x());
-//        return ;
-//    }
-//
-//    m_itemMoved = true;
-//
-//    TextFloat *numberFloat = TextFloat::getTextFloat();
-//    numberFloat->reparent(this);
-//    // A better way should be not to call reparent() here, but to
-//    // call attach() in enterEvent().
-//    // Nevertheless it doesn't work because, for some reason,  enterEvent()
-//    // (when defined) is never called when mouse enters the ruler.
-//
-//    int value = 0;
-//
-////    for (Q3CanvasItemList::Iterator it = m_selectedItems.begin(); it != m_selectedItems.end(); ++it) {
-//    for (ControlItemList::iterator it = m_selectedItems.begin(); it != m_selectedItems.end(); ++it) {
-//        if (ControlItem *item = dynamic_cast<ControlItem*>(*it)) {
-//            item->handleMouseMove(e, deltaX, deltaY);
-//            //            ElementAdapter* adapter = item->getElementAdapter();
-//
-//            // set value to highest in selection
-//            if (item->getValue() >= value) {
-//                value = item->getValue();
-//                numberFloat->setText(QString("%1").arg(value));
-//            }
-//        }
-//    }
-//    ///CJ What to do? canvas()->update();
-//
-//    // Display text float near mouse cursor
-//    QPoint offset = mapFromGlobal(QPoint(QCursor::pos()))
-//                    + QPoint(20, + numberFloat->height() / 2);
-//    numberFloat->display(offset);
 }
 
 void
@@ -1029,17 +744,6 @@ void ControlRuler::clear()
     m_selectedItems.clear();
 }
 
-//int ControlRuler::valueToHeight(long val)
-//{
-//    long scaleVal = val * (ItemHeightRange);
-//
-//    int res = -(int(scaleVal / getMaxItemValue()) + MinItemHeight);
-//
-//    //RG_DEBUG << "ControlRuler::valueToHeight : val = " << val << " - height = " << res
-//    //<< " - scaleVal = " << scaleVal << endl;
-//
-//    return res;
-//}
 float ControlRuler::valueToY(long val)
 {
     float y = (float)(val-getMinItemValue())
@@ -1052,16 +756,6 @@ long ControlRuler::yToValue(float y)
     long value = (long)(y*(getMaxItemValue()-getMinItemValue()))+getMinItemValue();
     return value;
 }
-
-//long ControlRuler::heightToValue(int h)
-//{
-//    long val = -h;
-//    val -= MinItemHeight;
-//    val *= getMaxItemValue();
-//    val /= (ItemHeightRange);
-//    val = std::min(val, long(getMaxItemValue()));
-//    return val;
-//}
 
 QColor ControlRuler::valueToColour(int max, int val)
 {
@@ -1076,13 +770,6 @@ QColor ControlRuler::valueToColour(int max, int val)
 
     return DefaultVelocityColour::getInstance()->getColour(value);
 }
-
-//int ControlRuler::applyTool(double x, int val)
-//{
-//    if (m_tool)
-//        return (*m_tool)(x, val);
-//    return val;
-//}
 
 void ControlRuler::flipForwards()
 {
@@ -1146,12 +833,6 @@ std::pair<int, int> ControlRuler::getZMinMax()
 
     return std::pair<int, int>(zList[0], zList[zList.size() - 1]);
 }
-
-///CJ We have no scrollbar so can't return it!
-//QScrollBar* ControlRuler::getMainHorizontalScrollBar()
-//{
-//    return m_mainHorizontalScrollBar ? m_mainHorizontalScrollBar : horizontalScrollBar();
-//}
 
 }
 #include "ControlRuler.moc"
