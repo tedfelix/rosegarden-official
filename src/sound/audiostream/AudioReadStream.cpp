@@ -77,9 +77,10 @@ AudioReadStream::getInterleavedFrames(size_t count, float *frames)
 
         float ratio = float(m_retrievalRate) / float(m_sampleRate);
         size_t req = size_t(ceil(count / ratio));
+        size_t outSz = size_t(ceil(req * ratio));
 
         float *in  = new float[req * m_channelCount];
-        float *out = new float[(count + 1) * m_channelCount];
+        float *out = new float[(outSz + 1) * m_channelCount];   // take one extra space to be sure
 
         size_t got = getFrames(req, in);
     
