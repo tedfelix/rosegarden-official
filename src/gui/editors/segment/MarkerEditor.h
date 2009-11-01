@@ -76,20 +76,8 @@ public slots:
     void slotDeleteAll();
     void slotClose();
     void slotEdit(QTreeWidgetItem *, int);
-    //@@@ The following generates:
-    //
-    // Object::connect: No such signal QTreeWidget::pressed(QTreeWidgetItem*)
-    //
-    // There is no pressed(QTreeWidgetItem *) signal under QTreeWidget.  Near as
-    // I can tell, it inherits 
-    //
-    // void pressed ( const QModelIndex & index )
-    //
-    // from QAbstractViewItem at least.  I'm not sure how to adapt this, or even
-    // what this particular bit of code is for.  I took a quick stab at it, and
-    // didn't make any progress, so I'm leaving it broken for now, with this
-    // bigass comment to draw somebody's attention to the broken signal
-    void slotItemClicked(QTreeWidgetItem *);
+
+    void slotItemClicked(QTreeWidgetItem *, int);   // item,column
 
     void slotMusicalTime();
     void slotRealTime();

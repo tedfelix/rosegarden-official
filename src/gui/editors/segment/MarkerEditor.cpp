@@ -162,10 +162,16 @@ MarkerEditor::MarkerEditor(QWidget *parent,
 
     connect(m_listView, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)),
             SLOT(slotEdit(QTreeWidgetItem *, int)));
-
-    connect(m_listView, SIGNAL(pressed(QTreeWidgetItem *)),
-            this, SLOT(slotItemClicked(QTreeWidgetItem *)));
-
+    
+    // qt4 code:
+    // on pressed
+    connect( m_listView, SIGNAL(itemPressed( QTreeWidgetItem*, int)), //item,column
+            this, SLOT(slotItemClicked(QTreeWidgetItem*, int)) );
+//     // on clicked
+//     connect( m_listView, SIGNAL(itemClicked( QTreeWidgetItem*, int)), //item,column
+//             this, SLOT(slotItemClicked(QTreeWidgetItem*, int)) );
+    
+    
     // Highlight all columns - enable extended selection mode
     //
     m_listView->setAllColumnsShowFocus(true);
@@ -479,6 +485,8 @@ MarkerEditor::slotEdit(QTreeWidgetItem *i, int)
 void
 MarkerEditor::closeEvent(QCloseEvent *e)
 {
+    if(e){ };    // remove warning
+    
     emit closing();
     close();
 //     KMainWindow::closeEvent(e);
@@ -495,8 +503,13 @@ MarkerEditor::setDocument(RosegardenDocument *doc)
 }
 
 void
-MarkerEditor::slotItemClicked(QTreeWidgetItem *item)
+MarkerEditor::slotItemClicked(QTreeWidgetItem *item, int column )
 {
+    if( ! item ){
+        // no item clicked, ignore
+        if( column ){ }; // removes warning
+        return;
+    }
     RG_DEBUG << "MarkerEditor::slotItemClicked" << endl;
     MarkerEditorViewItem *ei =
         dynamic_cast<MarkerEditorViewItem *>(item);
