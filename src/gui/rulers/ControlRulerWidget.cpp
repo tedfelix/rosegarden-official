@@ -17,6 +17,7 @@
 #include "ControlRulerWidget.h"
 
 #include "ControlRuler.h"
+#include "ControlRulerTabBar.h"
 #include "ControllerEventsRuler.h"
 #include "PropertyControlRuler.h"
 
@@ -37,8 +38,9 @@
 #include "misc/Debug.h"
 
 #include <QVBoxLayout>
-#include <QTabBar>
+//#include <QTabBar>
 #include <QStackedWidget>
+#include <QIcon>
 
 namespace Rosegarden
 {
@@ -49,7 +51,7 @@ m_segment(0),
 m_viewSegment(0),
 m_scale(0)
 {
-    m_tabBar = new QTabBar;
+    m_tabBar = new ControlRulerTabBar;
 
     // sizeHint() is the maximum allowed, and the widget is still useful if made
     // smaller than this, but should never grow larger
@@ -71,6 +73,9 @@ m_scale(0)
     
     connect(m_tabBar,SIGNAL(currentChanged(int)),
             m_stackedWidget,SLOT(setCurrentIndex(int)));
+    
+    connect(m_tabBar,SIGNAL(tabCloseRequest(int)),
+            this,SLOT(slotRemoveRuler(int)));
 }
 
 ControlRulerWidget::~ControlRulerWidget()
@@ -214,6 +219,16 @@ ControlRulerWidget::removeRuler(std::list<ControlRuler*>::iterator it)
 }
 
 void
+ControlRulerWidget::slotRemoveRuler(int index)
+{
+    ControlRuler *ruler = (ControlRuler*) m_stackedWidget->widget(index);
+    m_stackedWidget->removeWidget(ruler);
+    m_tabBar->removeTab(index);
+    delete (ruler);
+    m_controlRulerList.remove(ruler);
+}
+
+void
 ControlRulerWidget::addRuler(ControlRuler *controlruler, QString name)
 {
     m_stackedWidget->addWidget(controlruler);
@@ -222,7 +237,7 @@ ControlRulerWidget::addRuler(ControlRuler *controlruler, QString name)
     int index = m_tabBar->addTab(QObject::tr(name));
     m_tabBar->setCurrentTab(index);
     m_controlRulerList.push_back(controlruler);
-    controlruler->slotSetPannedRect(m_pannedRect);    
+    controlruler->slotSetPannedRect(m_pannedRect);
     slotSetToolName(m_currentToolName);
 }
 

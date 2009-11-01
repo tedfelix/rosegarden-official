@@ -32,6 +32,7 @@ namespace Rosegarden
 class RosegardenDocument;
 class Segment;
 class ControlRuler;
+class ControlRulerTabBar;
 class ControlParameter;
 class RulerScale;
 class PropertyName;
@@ -59,6 +60,7 @@ public slots:
 
     void slotAddControlRuler(const ControlParameter &);
     void slotAddPropertyRuler(const PropertyName &);
+    void slotRemoveRuler(int);
     void slotSetPannedRect(QRectF pr);
     void slotSelectionChanged(EventSelection *);
     void slotHoveredOverNoteChanged();
@@ -73,7 +75,7 @@ signals:
     
 protected:
     QStackedWidget *m_stackedWidget;
-    QTabBar *m_tabBar;
+    ControlRulerTabBar *m_tabBar;
     
     std::list<ControlRuler *> m_controlRulerList;
     const ControlList *m_controlList;
