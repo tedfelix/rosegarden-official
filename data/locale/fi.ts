@@ -4966,49 +4966,49 @@ Jos haluat litt채채 t채st채 huolimatta, harkitse toisen liit채nt채tyypin k채ytt�
         <location filename="../InstrumentStrings.cpp" line="374"/>
         <source>Cb</source>
         <comment>note name</comment>
-        <translation type="unfinished">Cb</translation>
+        <translation>Cb</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="377"/>
         <source>Db</source>
         <comment>note name</comment>
-        <translation type="unfinished">Db</translation>
+        <translation>Db</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="379"/>
         <source>Eb</source>
         <comment>note name</comment>
-        <translation type="unfinished">Eb</translation>
+        <translation>Eb</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="381"/>
         <source>E#</source>
         <comment>note name</comment>
-        <translation type="unfinished">E#</translation>
+        <translation>E#</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="382"/>
         <source>Fb</source>
         <comment>note name</comment>
-        <translation type="unfinished">Fb</translation>
+        <translation>Fb</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="387"/>
         <source>Ab</source>
         <comment>note name</comment>
-        <translation type="unfinished">Ab</translation>
+        <translation>Ab</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="390"/>
         <source>Bb</source>
         <comment>note name</comment>
-        <translation type="unfinished">Bb</translation>
+        <translation>Bb</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="392"/>
         <source>B#</source>
         <comment>note name</comment>
-        <translation type="unfinished">B#</translation>
+        <translation>B#</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="303"/>
@@ -8738,83 +8738,84 @@ Jos haluat litt채채 t채st채 huolimatta, harkitse toisen liit채nt채tyypin k채ytt�
         <location filename="../InstrumentStrings.cpp" line="375"/>
         <source>C</source>
         <comment>note name</comment>
-        <translation type="unfinished">C</translation>
+        <translation>C</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="35"/>
         <location filename="../InstrumentStrings.cpp" line="376"/>
         <source>C#</source>
         <comment>note name</comment>
-        <translation type="unfinished">C#</translation>
+        <translation>C#</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="36"/>
         <location filename="../InstrumentStrings.cpp" line="378"/>
         <source>D</source>
         <comment>note name</comment>
-        <translation type="unfinished">D</translation>
+        <translation>D</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="36"/>
         <source>D#</source>
         <comment>note name</comment>
-        <translation type="unfinished">D#</translation>
+        <translation>D#</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="37"/>
         <location filename="../InstrumentStrings.cpp" line="380"/>
         <source>E</source>
         <comment>note name</comment>
-        <translation type="unfinished">E</translation>
+        <translation>E</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="37"/>
         <location filename="../InstrumentStrings.cpp" line="383"/>
         <source>F</source>
         <comment>note name</comment>
-        <translation type="unfinished">F</translation>
+        <translation>F</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="38"/>
         <location filename="../InstrumentStrings.cpp" line="384"/>
         <source>F#</source>
         <comment>note name</comment>
-        <translation type="unfinished">F#</translation>
+        <translation>F#</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="38"/>
         <location filename="../InstrumentStrings.cpp" line="385"/>
         <source>G</source>
         <comment>note name</comment>
-        <translation type="unfinished">G</translation>
+        <translation>G</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="39"/>
         <location filename="../InstrumentStrings.cpp" line="386"/>
         <source>G#</source>
         <comment>note name</comment>
-        <translation type="unfinished">G#</translation>
+        <translation>G#</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="39"/>
         <location filename="../InstrumentStrings.cpp" line="389"/>
         <source>A</source>
         <comment>note name</comment>
-        <translation type="unfinished">A</translation>
+        <translation>A</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="40"/>
         <location filename="../InstrumentStrings.cpp" line="388"/>
         <source>A#</source>
         <comment>note name</comment>
-        <translation type="unfinished">A#</translation>
+        <translation>A#</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="40"/>
         <location filename="../InstrumentStrings.cpp" line="391"/>
         <source>B</source>
         <comment>note name</comment>
-        <translation type="unfinished"></translation>
+        <translatorcomment>We decided not to translate note names in german system.</translatorcomment>
+        <translation>B</translation>
     </message>
 </context>
 <context>
@@ -11189,43 +11190,44 @@ Haluatko saattaa muutokset voimaan ennen pankkimuokkaimen sulkemista?</translati
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="59"/>
         <source>C</source>
         <comment>note name</comment>
-        <translation type="unfinished">C</translation>
+        <translation>C</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="60"/>
         <source>D</source>
         <comment>note name</comment>
-        <translation type="unfinished">D</translation>
+        <translation>D</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="61"/>
         <source>E</source>
         <comment>note name</comment>
-        <translation type="unfinished">E</translation>
+        <translation>E</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="62"/>
         <source>F</source>
         <comment>note name</comment>
-        <translation type="unfinished">F</translation>
+        <translation>F</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="63"/>
         <source>G</source>
         <comment>note name</comment>
-        <translation type="unfinished">G</translation>
+        <translation>G</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="64"/>
         <source>A</source>
         <comment>note name</comment>
-        <translation type="unfinished">A</translation>
+        <translation>A</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="65"/>
         <source>B</source>
         <comment>note name</comment>
-        <translation type="unfinished"></translation>
+        <translatorcomment>We decided not to translate note names in german system.</translatorcomment>
+        <translation>B</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="70"/>
@@ -20150,73 +20152,74 @@ Toisten ohjelmien lopettaminen saattaa parantaa Rosegardenin suorituskyky채.</tr
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="457"/>
         <source>C</source>
         <comment>note name</comment>
-        <translation type="unfinished">C</translation>
+        <translation>C</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="458"/>
         <source>C#</source>
         <comment>note name</comment>
-        <translation type="unfinished">C#</translation>
+        <translation>C#</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="459"/>
         <source>D</source>
         <comment>note name</comment>
-        <translation type="unfinished">D</translation>
+        <translation>D</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="460"/>
         <source>Eb</source>
         <comment>note name</comment>
-        <translation type="unfinished">Eb</translation>
+        <translation>Eb</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="461"/>
         <source>E</source>
         <comment>note name</comment>
-        <translation type="unfinished">E</translation>
+        <translation>E</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="462"/>
         <source>F</source>
         <comment>note name</comment>
-        <translation type="unfinished">F</translation>
+        <translation>F</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="463"/>
         <source>F#</source>
         <comment>note name</comment>
-        <translation type="unfinished">F#</translation>
+        <translation>F#</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="464"/>
         <source>G</source>
         <comment>note name</comment>
-        <translation type="unfinished">G</translation>
+        <translation>G</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="465"/>
         <source>G#</source>
         <comment>note name</comment>
-        <translation type="unfinished">G#</translation>
+        <translation>G#</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="466"/>
         <source>A</source>
         <comment>note name</comment>
-        <translation type="unfinished">A</translation>
+        <translation>A</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="467"/>
         <source>Bb</source>
         <comment>note name</comment>
-        <translation type="unfinished">Bb</translation>
+        <translation>Bb</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="468"/>
         <source>B</source>
         <comment>note name</comment>
-        <translation type="unfinished"></translation>
+        <translatorcomment>We decided not to translate note names in german system.</translatorcomment>
+        <translation>B</translation>
     </message>
     <message>
         <source>C</source>
