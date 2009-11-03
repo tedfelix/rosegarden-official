@@ -186,17 +186,17 @@
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="30"/>
-        <location filename="../QMenuStrings.cpp" line="48"/>
-        <location filename="../QMenuStrings.cpp" line="64"/>
-        <location filename="../QMenuStrings.cpp" line="86"/>
-        <location filename="../QMenuStrings.cpp" line="129"/>
-        <location filename="../QMenuStrings.cpp" line="161"/>
-        <location filename="../QMenuStrings.cpp" line="351"/>
-        <location filename="../QMenuStrings.cpp" line="370"/>
-        <location filename="../QMenuStrings.cpp" line="409"/>
-        <location filename="../QMenuStrings.cpp" line="775"/>
-        <location filename="../QMenuStrings.cpp" line="942"/>
-        <location filename="../QMenuStrings.cpp" line="972"/>
+        <location filename="../QMenuStrings.cpp" line="49"/>
+        <location filename="../QMenuStrings.cpp" line="65"/>
+        <location filename="../QMenuStrings.cpp" line="87"/>
+        <location filename="../QMenuStrings.cpp" line="130"/>
+        <location filename="../QMenuStrings.cpp" line="162"/>
+        <location filename="../QMenuStrings.cpp" line="352"/>
+        <location filename="../QMenuStrings.cpp" line="371"/>
+        <location filename="../QMenuStrings.cpp" line="410"/>
+        <location filename="../QMenuStrings.cpp" line="776"/>
+        <location filename="../QMenuStrings.cpp" line="943"/>
+        <location filename="../QMenuStrings.cpp" line="973"/>
         <source>&amp;File</source>
         <translation type="unfinished"></translation>
     </message>
@@ -212,32 +212,32 @@
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="33"/>
-        <location filename="../QMenuStrings.cpp" line="49"/>
-        <location filename="../QMenuStrings.cpp" line="66"/>
-        <location filename="../QMenuStrings.cpp" line="76"/>
-        <location filename="../QMenuStrings.cpp" line="88"/>
-        <location filename="../QMenuStrings.cpp" line="130"/>
-        <location filename="../QMenuStrings.cpp" line="163"/>
-        <location filename="../QMenuStrings.cpp" line="353"/>
-        <location filename="../QMenuStrings.cpp" line="372"/>
-        <location filename="../QMenuStrings.cpp" line="413"/>
-        <location filename="../QMenuStrings.cpp" line="804"/>
-        <location filename="../QMenuStrings.cpp" line="944"/>
-        <location filename="../QMenuStrings.cpp" line="973"/>
-        <source>&amp;Close</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="34"/>
         <location filename="../QMenuStrings.cpp" line="50"/>
         <location filename="../QMenuStrings.cpp" line="67"/>
         <location filename="../QMenuStrings.cpp" line="77"/>
         <location filename="../QMenuStrings.cpp" line="89"/>
         <location filename="../QMenuStrings.cpp" line="131"/>
+        <location filename="../QMenuStrings.cpp" line="164"/>
+        <location filename="../QMenuStrings.cpp" line="354"/>
+        <location filename="../QMenuStrings.cpp" line="373"/>
         <location filename="../QMenuStrings.cpp" line="414"/>
-        <location filename="../QMenuStrings.cpp" line="806"/>
+        <location filename="../QMenuStrings.cpp" line="805"/>
         <location filename="../QMenuStrings.cpp" line="945"/>
         <location filename="../QMenuStrings.cpp" line="974"/>
+        <source>&amp;Close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="34"/>
+        <location filename="../QMenuStrings.cpp" line="51"/>
+        <location filename="../QMenuStrings.cpp" line="68"/>
+        <location filename="../QMenuStrings.cpp" line="78"/>
+        <location filename="../QMenuStrings.cpp" line="90"/>
+        <location filename="../QMenuStrings.cpp" line="132"/>
+        <location filename="../QMenuStrings.cpp" line="415"/>
+        <location filename="../QMenuStrings.cpp" line="807"/>
+        <location filename="../QMenuStrings.cpp" line="946"/>
+        <location filename="../QMenuStrings.cpp" line="975"/>
         <source>&amp;Edit</source>
         <translation type="unfinished"></translation>
     </message>
@@ -273,36 +273,24 @@
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="41"/>
-        <location filename="../QMenuStrings.cpp" line="55"/>
-        <location filename="../QMenuStrings.cpp" line="70"/>
-        <location filename="../QMenuStrings.cpp" line="80"/>
-        <location filename="../QMenuStrings.cpp" line="115"/>
-        <location filename="../QMenuStrings.cpp" line="138"/>
-        <location filename="../QMenuStrings.cpp" line="327"/>
-        <location filename="../QMenuStrings.cpp" line="363"/>
-        <location filename="../QMenuStrings.cpp" line="399"/>
-        <location filename="../QMenuStrings.cpp" line="729"/>
-        <location filename="../QMenuStrings.cpp" line="915"/>
-        <location filename="../QMenuStrings.cpp" line="961"/>
-        <location filename="../QMenuStrings.cpp" line="982"/>
-        <source>&amp;Help</source>
+        <source>Distribute Audio on Midi Segment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="43"/>
-        <location filename="../QMenuStrings.cpp" line="57"/>
-        <location filename="../QMenuStrings.cpp" line="72"/>
-        <location filename="../QMenuStrings.cpp" line="82"/>
-        <location filename="../QMenuStrings.cpp" line="117"/>
-        <location filename="../QMenuStrings.cpp" line="140"/>
-        <location filename="../QMenuStrings.cpp" line="329"/>
-        <location filename="../QMenuStrings.cpp" line="365"/>
-        <location filename="../QMenuStrings.cpp" line="401"/>
-        <location filename="../QMenuStrings.cpp" line="731"/>
-        <location filename="../QMenuStrings.cpp" line="917"/>
-        <location filename="../QMenuStrings.cpp" line="963"/>
-        <location filename="../QMenuStrings.cpp" line="984"/>
-        <source>&amp;Rosegarden tutorial</source>
+        <location filename="../QMenuStrings.cpp" line="42"/>
+        <location filename="../QMenuStrings.cpp" line="56"/>
+        <location filename="../QMenuStrings.cpp" line="71"/>
+        <location filename="../QMenuStrings.cpp" line="81"/>
+        <location filename="../QMenuStrings.cpp" line="116"/>
+        <location filename="../QMenuStrings.cpp" line="139"/>
+        <location filename="../QMenuStrings.cpp" line="328"/>
+        <location filename="../QMenuStrings.cpp" line="364"/>
+        <location filename="../QMenuStrings.cpp" line="400"/>
+        <location filename="../QMenuStrings.cpp" line="730"/>
+        <location filename="../QMenuStrings.cpp" line="916"/>
+        <location filename="../QMenuStrings.cpp" line="962"/>
+        <location filename="../QMenuStrings.cpp" line="983"/>
+        <source>&amp;Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -319,7 +307,7 @@
         <location filename="../QMenuStrings.cpp" line="918"/>
         <location filename="../QMenuStrings.cpp" line="964"/>
         <location filename="../QMenuStrings.cpp" line="985"/>
-        <source>&amp;Bug Reporting Guidelines</source>
+        <source>&amp;Rosegarden tutorial</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -336,234 +324,7 @@
         <location filename="../QMenuStrings.cpp" line="919"/>
         <location filename="../QMenuStrings.cpp" line="965"/>
         <location filename="../QMenuStrings.cpp" line="986"/>
-        <source>&amp;About Rosegarden</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="47"/>
-        <location filename="../QMenuStrings.cpp" line="333"/>
-        <location filename="../QMenuStrings.cpp" line="735"/>
-        <source>General Toolbar</source>
-        <translation type="unfinished">元(数据)工具栏</translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="51"/>
-        <location filename="../QMenuStrings.cpp" line="68"/>
-        <location filename="../QMenuStrings.cpp" line="78"/>
-        <location filename="../QMenuStrings.cpp" line="90"/>
-        <location filename="../QMenuStrings.cpp" line="132"/>
-        <location filename="../QMenuStrings.cpp" line="415"/>
-        <location filename="../QMenuStrings.cpp" line="807"/>
-        <location filename="../QMenuStrings.cpp" line="922"/>
-        <location filename="../QMenuStrings.cpp" line="946"/>
-        <location filename="../QMenuStrings.cpp" line="975"/>
-        <source>&amp;Nothing to undo</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="52"/>
-        <location filename="../QMenuStrings.cpp" line="69"/>
-        <location filename="../QMenuStrings.cpp" line="79"/>
-        <location filename="../QMenuStrings.cpp" line="91"/>
-        <location filename="../QMenuStrings.cpp" line="133"/>
-        <location filename="../QMenuStrings.cpp" line="416"/>
-        <location filename="../QMenuStrings.cpp" line="808"/>
-        <location filename="../QMenuStrings.cpp" line="923"/>
-        <location filename="../QMenuStrings.cpp" line="947"/>
-        <location filename="../QMenuStrings.cpp" line="976"/>
-        <source>N&amp;othing to redo</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="53"/>
-        <location filename="../QMenuStrings.cpp" line="97"/>
-        <location filename="../QMenuStrings.cpp" line="168"/>
-        <location filename="../QMenuStrings.cpp" line="418"/>
-        <location filename="../QMenuStrings.cpp" line="810"/>
-        <source>&amp;Copy</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="54"/>
-        <location filename="../QMenuStrings.cpp" line="98"/>
-        <location filename="../QMenuStrings.cpp" line="169"/>
-        <location filename="../QMenuStrings.cpp" line="419"/>
-        <location filename="../QMenuStrings.cpp" line="811"/>
-        <source>&amp;Paste</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="61"/>
-        <location filename="../QMenuStrings.cpp" line="126"/>
-        <location filename="../QMenuStrings.cpp" line="149"/>
-        <location filename="../QMenuStrings.cpp" line="153"/>
-        <location filename="../QMenuStrings.cpp" line="157"/>
-        <location filename="../QMenuStrings.cpp" line="338"/>
-        <location filename="../QMenuStrings.cpp" line="346"/>
-        <location filename="../QMenuStrings.cpp" line="406"/>
-        <location filename="../QMenuStrings.cpp" line="761"/>
-        <location filename="../QMenuStrings.cpp" line="931"/>
-        <location filename="../QMenuStrings.cpp" line="969"/>
-        <source>Switch to Select Tool</source>
-        <translation type="unfinished">切换到选择工具</translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="62"/>
-        <location filename="../QMenuStrings.cpp" line="127"/>
-        <location filename="../QMenuStrings.cpp" line="932"/>
-        <location filename="../QMenuStrings.cpp" line="970"/>
-        <source>Switch to Inserting Notes</source>
-        <translation type="unfinished">切换到插入音符</translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="63"/>
-        <location filename="../QMenuStrings.cpp" line="128"/>
-        <location filename="../QMenuStrings.cpp" line="155"/>
-        <location filename="../QMenuStrings.cpp" line="159"/>
-        <location filename="../QMenuStrings.cpp" line="341"/>
-        <location filename="../QMenuStrings.cpp" line="344"/>
-        <location filename="../QMenuStrings.cpp" line="348"/>
-        <location filename="../QMenuStrings.cpp" line="750"/>
-        <location filename="../QMenuStrings.cpp" line="762"/>
-        <location filename="../QMenuStrings.cpp" line="933"/>
-        <location filename="../QMenuStrings.cpp" line="971"/>
-        <source>Switch to Erase Tool</source>
-        <translation type="unfinished">切换到擦除工具</translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="65"/>
-        <location filename="../QMenuStrings.cpp" line="87"/>
-        <location filename="../QMenuStrings.cpp" line="162"/>
-        <location filename="../QMenuStrings.cpp" line="352"/>
-        <location filename="../QMenuStrings.cpp" line="371"/>
-        <location filename="../QMenuStrings.cpp" line="410"/>
-        <location filename="../QMenuStrings.cpp" line="796"/>
-        <location filename="../QMenuStrings.cpp" line="943"/>
-        <source>&amp;Save</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="92"/>
-        <source>&amp;Insert Event</source>
-        <translation type="unfinished">插入事件(&amp;I)</translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="93"/>
-        <source>&amp;Delete Event</source>
-        <translation type="unfinished">删除事件(&amp;D)</translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="94"/>
-        <source>&amp;Edit Event</source>
-        <translation type="unfinished">编辑事件(&amp;E)</translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="95"/>
-        <source>&amp;Advanced Event Editor</source>
-        <translation type="unfinished">高级事件编辑器(&amp;A)</translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="96"/>
-        <location filename="../QMenuStrings.cpp" line="167"/>
-        <location filename="../QMenuStrings.cpp" line="417"/>
-        <location filename="../QMenuStrings.cpp" line="809"/>
-        <source>Cu&amp;t</source>
-        <translation type="unfinished">剪切(&amp;T)</translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="99"/>
-        <source>&amp;Select All</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="100"/>
-        <location filename="../QMenuStrings.cpp" line="172"/>
-        <source>C&amp;lear Selection</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="101"/>
-        <location filename="../QMenuStrings.cpp" line="173"/>
-        <location filename="../QMenuStrings.cpp" line="429"/>
-        <source>&amp;Filter Selection</source>
-        <translation type="unfinished">过滤器选择(&amp;F)</translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="102"/>
-        <source>Set Se&amp;gment Start Time...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="103"/>
-        <source>Set Seg&amp;ment Duration...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="105"/>
-        <location filename="../QMenuStrings.cpp" line="134"/>
-        <location filename="../QMenuStrings.cpp" line="175"/>
-        <location filename="../QMenuStrings.cpp" line="431"/>
-        <location filename="../QMenuStrings.cpp" line="819"/>
-        <location filename="../QMenuStrings.cpp" line="955"/>
-        <location filename="../QMenuStrings.cpp" line="978"/>
-        <source>&amp;View</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="106"/>
-        <location filename="../QMenuStrings.cpp" line="135"/>
-        <location filename="../QMenuStrings.cpp" line="956"/>
-        <location filename="../QMenuStrings.cpp" line="979"/>
-        <source>&amp;Musical Times</source>
-        <translation type="unfinished">音乐时间(&amp;M)</translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="107"/>
-        <location filename="../QMenuStrings.cpp" line="136"/>
-        <location filename="../QMenuStrings.cpp" line="957"/>
-        <location filename="../QMenuStrings.cpp" line="980"/>
-        <source>&amp;Real Times</source>
-        <translation type="unfinished">实际时间(&amp;R)</translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="108"/>
-        <location filename="../QMenuStrings.cpp" line="137"/>
-        <location filename="../QMenuStrings.cpp" line="958"/>
-        <location filename="../QMenuStrings.cpp" line="981"/>
-        <source>Ra&amp;w Times</source>
-        <translation type="unfinished">天然时间(&amp;W)</translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="111"/>
-        <location filename="../QMenuStrings.cpp" line="462"/>
-        <source>Se&amp;gment</source>
-        <translation type="unfinished">小节(&amp;M)</translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="112"/>
-        <location filename="../QMenuStrings.cpp" line="206"/>
-        <location filename="../QMenuStrings.cpp" line="463"/>
-        <location filename="../QMenuStrings.cpp" line="862"/>
-        <source>Edit &amp;With</source>
-        <translation type="unfinished">根据音色拆分</translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="113"/>
-        <location filename="../QMenuStrings.cpp" line="465"/>
-        <location filename="../QMenuStrings.cpp" line="864"/>
-        <source>Open in Matri&amp;x Editor</source>
-        <translation type="unfinished">以字模编辑器打开(&amp;X)</translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="114"/>
-        <location filename="../QMenuStrings.cpp" line="208"/>
-        <location filename="../QMenuStrings.cpp" line="866"/>
-        <source>Open in &amp;Notation Editor</source>
-        <translation type="unfinished">以记号编辑器打开(&amp;N)</translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="916"/>
-        <source>Rosegarden &amp;manual</source>
+        <source>&amp;Bug Reporting Guidelines</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -580,595 +341,825 @@
         <location filename="../QMenuStrings.cpp" line="920"/>
         <location filename="../QMenuStrings.cpp" line="966"/>
         <location filename="../QMenuStrings.cpp" line="987"/>
-        <source>About &amp;Qt</source>
+        <source>&amp;About Rosegarden</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="646"/>
-        <location filename="../QMenuStrings.cpp" line="742"/>
-        <source>Add &amp;Segno</source>
+        <location filename="../QMenuStrings.cpp" line="48"/>
+        <location filename="../QMenuStrings.cpp" line="334"/>
+        <location filename="../QMenuStrings.cpp" line="736"/>
+        <source>General Toolbar</source>
+        <translation type="unfinished">元(数据)工具栏</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="52"/>
+        <location filename="../QMenuStrings.cpp" line="69"/>
+        <location filename="../QMenuStrings.cpp" line="79"/>
+        <location filename="../QMenuStrings.cpp" line="91"/>
+        <location filename="../QMenuStrings.cpp" line="133"/>
+        <location filename="../QMenuStrings.cpp" line="416"/>
+        <location filename="../QMenuStrings.cpp" line="808"/>
+        <location filename="../QMenuStrings.cpp" line="923"/>
+        <location filename="../QMenuStrings.cpp" line="947"/>
+        <location filename="../QMenuStrings.cpp" line="976"/>
+        <source>&amp;Nothing to undo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="53"/>
+        <location filename="../QMenuStrings.cpp" line="70"/>
+        <location filename="../QMenuStrings.cpp" line="80"/>
+        <location filename="../QMenuStrings.cpp" line="92"/>
+        <location filename="../QMenuStrings.cpp" line="134"/>
+        <location filename="../QMenuStrings.cpp" line="417"/>
+        <location filename="../QMenuStrings.cpp" line="809"/>
+        <location filename="../QMenuStrings.cpp" line="924"/>
+        <location filename="../QMenuStrings.cpp" line="948"/>
+        <location filename="../QMenuStrings.cpp" line="977"/>
+        <source>N&amp;othing to redo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="54"/>
+        <location filename="../QMenuStrings.cpp" line="98"/>
+        <location filename="../QMenuStrings.cpp" line="169"/>
+        <location filename="../QMenuStrings.cpp" line="419"/>
+        <location filename="../QMenuStrings.cpp" line="811"/>
+        <source>&amp;Copy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="55"/>
+        <location filename="../QMenuStrings.cpp" line="99"/>
+        <location filename="../QMenuStrings.cpp" line="170"/>
+        <location filename="../QMenuStrings.cpp" line="420"/>
+        <location filename="../QMenuStrings.cpp" line="812"/>
+        <source>&amp;Paste</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="62"/>
+        <location filename="../QMenuStrings.cpp" line="127"/>
+        <location filename="../QMenuStrings.cpp" line="150"/>
+        <location filename="../QMenuStrings.cpp" line="154"/>
+        <location filename="../QMenuStrings.cpp" line="158"/>
+        <location filename="../QMenuStrings.cpp" line="339"/>
+        <location filename="../QMenuStrings.cpp" line="347"/>
+        <location filename="../QMenuStrings.cpp" line="407"/>
+        <location filename="../QMenuStrings.cpp" line="762"/>
+        <location filename="../QMenuStrings.cpp" line="932"/>
+        <location filename="../QMenuStrings.cpp" line="970"/>
+        <source>Switch to Select Tool</source>
+        <translation type="unfinished">切换到选择工具</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="63"/>
+        <location filename="../QMenuStrings.cpp" line="128"/>
+        <location filename="../QMenuStrings.cpp" line="933"/>
+        <location filename="../QMenuStrings.cpp" line="971"/>
+        <source>Switch to Inserting Notes</source>
+        <translation type="unfinished">切换到插入音符</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="64"/>
+        <location filename="../QMenuStrings.cpp" line="129"/>
+        <location filename="../QMenuStrings.cpp" line="156"/>
+        <location filename="../QMenuStrings.cpp" line="160"/>
+        <location filename="../QMenuStrings.cpp" line="342"/>
+        <location filename="../QMenuStrings.cpp" line="345"/>
+        <location filename="../QMenuStrings.cpp" line="349"/>
+        <location filename="../QMenuStrings.cpp" line="751"/>
+        <location filename="../QMenuStrings.cpp" line="763"/>
+        <location filename="../QMenuStrings.cpp" line="934"/>
+        <location filename="../QMenuStrings.cpp" line="972"/>
+        <source>Switch to Erase Tool</source>
+        <translation type="unfinished">切换到擦除工具</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="66"/>
+        <location filename="../QMenuStrings.cpp" line="88"/>
+        <location filename="../QMenuStrings.cpp" line="163"/>
+        <location filename="../QMenuStrings.cpp" line="353"/>
+        <location filename="../QMenuStrings.cpp" line="372"/>
+        <location filename="../QMenuStrings.cpp" line="411"/>
+        <location filename="../QMenuStrings.cpp" line="797"/>
+        <location filename="../QMenuStrings.cpp" line="944"/>
+        <source>&amp;Save</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="93"/>
+        <source>&amp;Insert Event</source>
+        <translation type="unfinished">插入事件(&amp;I)</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="94"/>
+        <source>&amp;Delete Event</source>
+        <translation type="unfinished">删除事件(&amp;D)</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="95"/>
+        <source>&amp;Edit Event</source>
+        <translation type="unfinished">编辑事件(&amp;E)</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="96"/>
+        <source>&amp;Advanced Event Editor</source>
+        <translation type="unfinished">高级事件编辑器(&amp;A)</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="97"/>
+        <location filename="../QMenuStrings.cpp" line="168"/>
+        <location filename="../QMenuStrings.cpp" line="418"/>
+        <location filename="../QMenuStrings.cpp" line="810"/>
+        <source>Cu&amp;t</source>
+        <translation type="unfinished">剪切(&amp;T)</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="100"/>
+        <source>&amp;Select All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="101"/>
+        <location filename="../QMenuStrings.cpp" line="173"/>
+        <source>C&amp;lear Selection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="102"/>
+        <location filename="../QMenuStrings.cpp" line="174"/>
+        <location filename="../QMenuStrings.cpp" line="430"/>
+        <source>&amp;Filter Selection</source>
+        <translation type="unfinished">过滤器选择(&amp;F)</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="103"/>
+        <source>Set Se&amp;gment Start Time...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="104"/>
+        <source>Set Seg&amp;ment Duration...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="106"/>
+        <location filename="../QMenuStrings.cpp" line="135"/>
+        <location filename="../QMenuStrings.cpp" line="176"/>
+        <location filename="../QMenuStrings.cpp" line="432"/>
+        <location filename="../QMenuStrings.cpp" line="820"/>
+        <location filename="../QMenuStrings.cpp" line="956"/>
+        <location filename="../QMenuStrings.cpp" line="979"/>
+        <source>&amp;View</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="107"/>
+        <location filename="../QMenuStrings.cpp" line="136"/>
+        <location filename="../QMenuStrings.cpp" line="957"/>
+        <location filename="../QMenuStrings.cpp" line="980"/>
+        <source>&amp;Musical Times</source>
+        <translation type="unfinished">音乐时间(&amp;M)</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="108"/>
+        <location filename="../QMenuStrings.cpp" line="137"/>
+        <location filename="../QMenuStrings.cpp" line="958"/>
+        <location filename="../QMenuStrings.cpp" line="981"/>
+        <source>&amp;Real Times</source>
+        <translation type="unfinished">实际时间(&amp;R)</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="109"/>
+        <location filename="../QMenuStrings.cpp" line="138"/>
+        <location filename="../QMenuStrings.cpp" line="959"/>
+        <location filename="../QMenuStrings.cpp" line="982"/>
+        <source>Ra&amp;w Times</source>
+        <translation type="unfinished">天然时间(&amp;W)</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="112"/>
+        <location filename="../QMenuStrings.cpp" line="463"/>
+        <source>Se&amp;gment</source>
+        <translation type="unfinished">小节(&amp;M)</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="113"/>
+        <location filename="../QMenuStrings.cpp" line="207"/>
+        <location filename="../QMenuStrings.cpp" line="464"/>
+        <location filename="../QMenuStrings.cpp" line="863"/>
+        <source>Edit &amp;With</source>
+        <translation type="unfinished">根据音色拆分</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="114"/>
+        <location filename="../QMenuStrings.cpp" line="466"/>
+        <location filename="../QMenuStrings.cpp" line="865"/>
+        <source>Open in Matri&amp;x Editor</source>
+        <translation type="unfinished">以字模编辑器打开(&amp;X)</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="115"/>
+        <location filename="../QMenuStrings.cpp" line="209"/>
+        <location filename="../QMenuStrings.cpp" line="867"/>
+        <source>Open in &amp;Notation Editor</source>
+        <translation type="unfinished">以记号编辑器打开(&amp;N)</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="47"/>
+        <location filename="../QMenuStrings.cpp" line="61"/>
+        <location filename="../QMenuStrings.cpp" line="76"/>
+        <location filename="../QMenuStrings.cpp" line="86"/>
+        <location filename="../QMenuStrings.cpp" line="121"/>
+        <location filename="../QMenuStrings.cpp" line="144"/>
+        <location filename="../QMenuStrings.cpp" line="333"/>
+        <location filename="../QMenuStrings.cpp" line="369"/>
+        <location filename="../QMenuStrings.cpp" line="405"/>
+        <location filename="../QMenuStrings.cpp" line="735"/>
+        <location filename="../QMenuStrings.cpp" line="921"/>
+        <location filename="../QMenuStrings.cpp" line="967"/>
+        <location filename="../QMenuStrings.cpp" line="988"/>
+        <source>About &amp;Qt</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="647"/>
         <location filename="../QMenuStrings.cpp" line="743"/>
-        <source>Add &amp;Coda</source>
+        <source>Add &amp;Segno</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="648"/>
         <location filename="../QMenuStrings.cpp" line="744"/>
+        <source>Add &amp;Coda</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="649"/>
+        <location filename="../QMenuStrings.cpp" line="745"/>
         <source>Add &amp;Breath mark</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="482"/>
+        <location filename="../QMenuStrings.cpp" line="483"/>
         <source>Add &amp;Open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="483"/>
+        <location filename="../QMenuStrings.cpp" line="484"/>
         <source>Add &amp;Stopped</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="661"/>
+        <location filename="../QMenuStrings.cpp" line="662"/>
         <source>Dotted Ha&amp;lf Note</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="666"/>
-        <location filename="../QMenuStrings.cpp" line="763"/>
-        <source>Switch To &amp;Notes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="667"/>
         <location filename="../QMenuStrings.cpp" line="764"/>
-        <source>Switch To &amp;Rests</source>
+        <source>Switch To &amp;Notes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="668"/>
         <location filename="../QMenuStrings.cpp" line="765"/>
-        <source>To&amp;ggle Dot On</source>
+        <source>Switch To &amp;Rests</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="669"/>
         <location filename="../QMenuStrings.cpp" line="766"/>
+        <source>To&amp;ggle Dot On</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="670"/>
+        <location filename="../QMenuStrings.cpp" line="767"/>
         <source>To&amp;ggle Dot Off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="447"/>
+        <location filename="../QMenuStrings.cpp" line="448"/>
         <source>Show &amp;Symbols Toolbar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="738"/>
+        <location filename="../QMenuStrings.cpp" line="739"/>
         <source>Duration Toolbar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="741"/>
+        <location filename="../QMenuStrings.cpp" line="742"/>
         <source>Symbols Toolbar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="959"/>
+        <location filename="../QMenuStrings.cpp" line="960"/>
         <source>Show &amp;Toolbar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="451"/>
-        <location filename="../QMenuStrings.cpp" line="960"/>
+        <location filename="../QMenuStrings.cpp" line="452"/>
+        <location filename="../QMenuStrings.cpp" line="961"/>
         <source>Hide St&amp;atusbar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="121"/>
-        <location filename="../QMenuStrings.cpp" line="124"/>
-        <location filename="../QMenuStrings.cpp" line="336"/>
-        <location filename="../QMenuStrings.cpp" line="967"/>
+        <location filename="../QMenuStrings.cpp" line="122"/>
+        <location filename="../QMenuStrings.cpp" line="125"/>
+        <location filename="../QMenuStrings.cpp" line="337"/>
+        <location filename="../QMenuStrings.cpp" line="968"/>
         <source>Actions Toolbar</source>
         <translation type="unfinished">行为工具栏</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="122"/>
-        <location filename="../QMenuStrings.cpp" line="144"/>
-        <location filename="../QMenuStrings.cpp" line="968"/>
-        <location filename="../QMenuStrings.cpp" line="988"/>
+        <location filename="../QMenuStrings.cpp" line="123"/>
+        <location filename="../QMenuStrings.cpp" line="145"/>
+        <location filename="../QMenuStrings.cpp" line="969"/>
+        <location filename="../QMenuStrings.cpp" line="989"/>
         <source>Time Toolbar</source>
         <translation type="unfinished">时间工具栏</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="123"/>
-        <location filename="../QMenuStrings.cpp" line="335"/>
-        <location filename="../QMenuStrings.cpp" line="369"/>
-        <location filename="../QMenuStrings.cpp" line="405"/>
-        <location filename="../QMenuStrings.cpp" line="737"/>
-        <location filename="../QMenuStrings.cpp" line="927"/>
+        <location filename="../QMenuStrings.cpp" line="124"/>
+        <location filename="../QMenuStrings.cpp" line="336"/>
+        <location filename="../QMenuStrings.cpp" line="370"/>
+        <location filename="../QMenuStrings.cpp" line="406"/>
+        <location filename="../QMenuStrings.cpp" line="738"/>
+        <location filename="../QMenuStrings.cpp" line="928"/>
         <source>Transport Toolbar</source>
         <translation type="unfinished">播放控制器工具栏</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="125"/>
-        <location filename="../QMenuStrings.cpp" line="930"/>
+        <location filename="../QMenuStrings.cpp" line="126"/>
+        <location filename="../QMenuStrings.cpp" line="931"/>
         <source>Zoom Toolbar</source>
         <translation type="unfinished">缩放工具栏</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="145"/>
+        <location filename="../QMenuStrings.cpp" line="146"/>
         <source>Insert Marker</source>
         <translation type="unfinished">插入休止符</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="146"/>
+        <location filename="../QMenuStrings.cpp" line="147"/>
         <source>Insert Marker at Playback Position</source>
         <translation type="unfinished">插入节拍变化</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="147"/>
+        <location filename="../QMenuStrings.cpp" line="148"/>
         <source>Delete Marker</source>
         <translation type="unfinished">删除库</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="148"/>
+        <location filename="../QMenuStrings.cpp" line="149"/>
         <source>Edit Marker</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="150"/>
-        <location filename="../QMenuStrings.cpp" line="158"/>
-        <location filename="../QMenuStrings.cpp" line="339"/>
-        <location filename="../QMenuStrings.cpp" line="343"/>
-        <location filename="../QMenuStrings.cpp" line="349"/>
+        <location filename="../QMenuStrings.cpp" line="151"/>
+        <location filename="../QMenuStrings.cpp" line="159"/>
+        <location filename="../QMenuStrings.cpp" line="340"/>
+        <location filename="../QMenuStrings.cpp" line="344"/>
+        <location filename="../QMenuStrings.cpp" line="350"/>
         <source>Switch to Move Tool</source>
         <translation type="unfinished">切换到擦除工具</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="151"/>
-        <location filename="../QMenuStrings.cpp" line="154"/>
-        <location filename="../QMenuStrings.cpp" line="340"/>
-        <location filename="../QMenuStrings.cpp" line="342"/>
-        <location filename="../QMenuStrings.cpp" line="347"/>
+        <location filename="../QMenuStrings.cpp" line="152"/>
+        <location filename="../QMenuStrings.cpp" line="155"/>
+        <location filename="../QMenuStrings.cpp" line="341"/>
+        <location filename="../QMenuStrings.cpp" line="343"/>
+        <location filename="../QMenuStrings.cpp" line="348"/>
         <source>Switch to Draw Tool</source>
         <translation type="unfinished">切换到擦除工具</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="152"/>
-        <location filename="../QMenuStrings.cpp" line="156"/>
-        <location filename="../QMenuStrings.cpp" line="160"/>
-        <location filename="../QMenuStrings.cpp" line="345"/>
-        <location filename="../QMenuStrings.cpp" line="350"/>
+        <location filename="../QMenuStrings.cpp" line="153"/>
+        <location filename="../QMenuStrings.cpp" line="157"/>
+        <location filename="../QMenuStrings.cpp" line="161"/>
+        <location filename="../QMenuStrings.cpp" line="346"/>
+        <location filename="../QMenuStrings.cpp" line="351"/>
         <source>Switch to Resize Tool</source>
         <translation type="unfinished">切换到擦除工具</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="164"/>
+        <location filename="../QMenuStrings.cpp" line="165"/>
         <source>E&amp;dit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="165"/>
+        <location filename="../QMenuStrings.cpp" line="166"/>
         <source>Nothing to &amp;undo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="166"/>
+        <location filename="../QMenuStrings.cpp" line="167"/>
         <source>Nothing to &amp;redo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="170"/>
-        <location filename="../QMenuStrings.cpp" line="812"/>
-        <location filename="../QMenuStrings.cpp" line="950"/>
+        <location filename="../QMenuStrings.cpp" line="171"/>
+        <location filename="../QMenuStrings.cpp" line="813"/>
+        <location filename="../QMenuStrings.cpp" line="951"/>
         <source>&amp;Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="176"/>
+        <location filename="../QMenuStrings.cpp" line="177"/>
         <source>&amp;Grid</source>
         <translation type="unfinished">栅格(&amp;G)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="177"/>
+        <location filename="../QMenuStrings.cpp" line="178"/>
         <source>&amp;No Snap</source>
         <translation type="unfinished">无快速切换(&amp;N)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="178"/>
+        <location filename="../QMenuStrings.cpp" line="179"/>
         <source>&amp;Snap to 1/64</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="179"/>
+        <location filename="../QMenuStrings.cpp" line="180"/>
         <source>Snap to &amp;1/48</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="180"/>
+        <location filename="../QMenuStrings.cpp" line="181"/>
         <source>Sn&amp;ap to 1/32</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="181"/>
+        <location filename="../QMenuStrings.cpp" line="182"/>
         <source>Snap to 1/&amp;24</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="182"/>
+        <location filename="../QMenuStrings.cpp" line="183"/>
         <source>Sna&amp;p to 1/16</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="183"/>
+        <location filename="../QMenuStrings.cpp" line="184"/>
         <source>Snap t&amp;o 1/12</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="184"/>
+        <location filename="../QMenuStrings.cpp" line="185"/>
         <source>Snap to 1/&amp;8</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="185"/>
+        <location filename="../QMenuStrings.cpp" line="186"/>
         <source>Snap to &amp;3/16</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="186"/>
+        <location filename="../QMenuStrings.cpp" line="187"/>
         <source>Snap to 1/4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="187"/>
+        <location filename="../QMenuStrings.cpp" line="188"/>
         <source>Snap to 3/8</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="188"/>
+        <location filename="../QMenuStrings.cpp" line="189"/>
         <source>Snap to 1/2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="189"/>
+        <location filename="../QMenuStrings.cpp" line="190"/>
         <source>Snap to Bea&amp;t</source>
         <translation type="unfinished">快速切换到节拍(&amp;T)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="190"/>
+        <location filename="../QMenuStrings.cpp" line="191"/>
         <source>Snap to &amp;Bar</source>
         <translation type="unfinished">快速切换到进程条(&amp;B)</translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="202"/>
-        <location filename="../QMenuStrings.cpp" line="459"/>
-        <location filename="../QMenuStrings.cpp" line="837"/>
-        <source>&amp;Composition</source>
-        <translation type="unfinished">插入到作品中</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="203"/>
         <location filename="../QMenuStrings.cpp" line="460"/>
         <location filename="../QMenuStrings.cpp" line="838"/>
-        <location filename="../QMenuStrings.cpp" line="948"/>
-        <source>Add Te&amp;mpo Change...</source>
-        <translation type="unfinished">添加节拍变更(&amp;M)...</translation>
+        <source>&amp;Composition</source>
+        <translation type="unfinished">插入到作品中</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="204"/>
         <location filename="../QMenuStrings.cpp" line="461"/>
         <location filename="../QMenuStrings.cpp" line="839"/>
         <location filename="../QMenuStrings.cpp" line="949"/>
+        <source>Add Te&amp;mpo Change...</source>
+        <translation type="unfinished">添加节拍变更(&amp;M)...</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="205"/>
+        <location filename="../QMenuStrings.cpp" line="462"/>
+        <location filename="../QMenuStrings.cpp" line="840"/>
+        <location filename="../QMenuStrings.cpp" line="950"/>
         <source>Add Time Si&amp;gnature Change...</source>
         <translation type="unfinished">添加时间署名变更(&amp;G)...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="205"/>
+        <location filename="../QMenuStrings.cpp" line="206"/>
         <source>&amp;Segment</source>
         <translation type="unfinished">小节(&amp;M)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="207"/>
-        <location filename="../QMenuStrings.cpp" line="464"/>
-        <location filename="../QMenuStrings.cpp" line="867"/>
+        <location filename="../QMenuStrings.cpp" line="208"/>
+        <location filename="../QMenuStrings.cpp" line="465"/>
+        <location filename="../QMenuStrings.cpp" line="868"/>
         <source>Open in &amp;Event List Editor</source>
         <translation type="unfinished">以事件列表编辑器打开(&amp;E)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="209"/>
+        <location filename="../QMenuStrings.cpp" line="210"/>
         <source>Set Segment Start &amp;Time...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="210"/>
-        <location filename="../QMenuStrings.cpp" line="472"/>
+        <location filename="../QMenuStrings.cpp" line="211"/>
+        <location filename="../QMenuStrings.cpp" line="473"/>
         <source>Set Segment &amp;Duration...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="564"/>
+        <location filename="../QMenuStrings.cpp" line="565"/>
         <source>Ad&amp;just</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="212"/>
-        <location filename="../QMenuStrings.cpp" line="572"/>
+        <location filename="../QMenuStrings.cpp" line="213"/>
+        <location filename="../QMenuStrings.cpp" line="573"/>
         <source>&amp;Quantize</source>
         <translation type="unfinished">量化</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="213"/>
-        <location filename="../QMenuStrings.cpp" line="573"/>
-        <location filename="../QMenuStrings.cpp" line="869"/>
+        <location filename="../QMenuStrings.cpp" line="214"/>
+        <location filename="../QMenuStrings.cpp" line="574"/>
+        <location filename="../QMenuStrings.cpp" line="870"/>
         <source>&amp;Quantize...</source>
         <translation type="unfinished">量化(&amp;Q)...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="214"/>
+        <location filename="../QMenuStrings.cpp" line="215"/>
         <source>&amp;Repeat Last Quantize</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="215"/>
+        <location filename="../QMenuStrings.cpp" line="216"/>
         <source>&amp;Legato</source>
         <translation type="unfinished">法定</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="216"/>
-        <location filename="../QMenuStrings.cpp" line="569"/>
+        <location filename="../QMenuStrings.cpp" line="217"/>
+        <location filename="../QMenuStrings.cpp" line="570"/>
         <source>Collapse &amp;Equal-Pitch Notes</source>
         <translation type="unfinished">压缩相同音色的音符(&amp;E)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="217"/>
-        <location filename="../QMenuStrings.cpp" line="603"/>
-        <location filename="../QMenuStrings.cpp" line="875"/>
+        <location filename="../QMenuStrings.cpp" line="218"/>
+        <location filename="../QMenuStrings.cpp" line="604"/>
+        <location filename="../QMenuStrings.cpp" line="876"/>
         <source>Jog &amp;Left</source>
         <translation type="unfinished">左移一帧(&amp;L)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="218"/>
+        <location filename="../QMenuStrings.cpp" line="219"/>
         <source>&amp;Jog Right</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="219"/>
-        <location filename="../QMenuStrings.cpp" line="593"/>
+        <location filename="../QMenuStrings.cpp" line="220"/>
+        <location filename="../QMenuStrings.cpp" line="594"/>
         <source>&amp;Increase Velocity</source>
         <translation type="unfinished">提高力度(&amp;I)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="220"/>
-        <location filename="../QMenuStrings.cpp" line="594"/>
+        <location filename="../QMenuStrings.cpp" line="221"/>
+        <location filename="../QMenuStrings.cpp" line="595"/>
         <source>&amp;Reduce Velocity</source>
         <translation type="unfinished">降低力度(&amp;R)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="221"/>
+        <location filename="../QMenuStrings.cpp" line="222"/>
         <source>&amp;Set to Current Velocity</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="222"/>
+        <location filename="../QMenuStrings.cpp" line="223"/>
         <source>Set Event &amp;Velocities...</source>
         <translation type="unfinished">设定事件力度(&amp;V)...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="223"/>
+        <location filename="../QMenuStrings.cpp" line="224"/>
         <source>Resc&amp;ale</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="224"/>
-        <location filename="../QMenuStrings.cpp" line="578"/>
+        <location filename="../QMenuStrings.cpp" line="225"/>
+        <location filename="../QMenuStrings.cpp" line="579"/>
         <source>&amp;Halve Durations</source>
         <translation type="unfinished">音长</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="225"/>
-        <location filename="../QMenuStrings.cpp" line="579"/>
+        <location filename="../QMenuStrings.cpp" line="226"/>
+        <location filename="../QMenuStrings.cpp" line="580"/>
         <source>&amp;Double Durations</source>
         <translation type="unfinished">双重扁平化</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="226"/>
-        <location filename="../QMenuStrings.cpp" line="580"/>
+        <location filename="../QMenuStrings.cpp" line="227"/>
+        <location filename="../QMenuStrings.cpp" line="581"/>
         <source>Stretch or S&amp;quash...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="227"/>
-        <location filename="../QMenuStrings.cpp" line="581"/>
+        <location filename="../QMenuStrings.cpp" line="228"/>
+        <location filename="../QMenuStrings.cpp" line="582"/>
         <source>Trans&amp;pose</source>
         <translation type="unfinished">变调(&amp;P)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="228"/>
-        <location filename="../QMenuStrings.cpp" line="582"/>
+        <location filename="../QMenuStrings.cpp" line="229"/>
+        <location filename="../QMenuStrings.cpp" line="583"/>
         <source>&amp;Up a Semitone</source>
         <translation type="unfinished">升高一个半音(&amp;U)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="229"/>
-        <location filename="../QMenuStrings.cpp" line="583"/>
+        <location filename="../QMenuStrings.cpp" line="230"/>
+        <location filename="../QMenuStrings.cpp" line="584"/>
         <source>&amp;Down a Semitone</source>
         <translation type="unfinished">降低一个半音(&amp;D)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="230"/>
-        <location filename="../QMenuStrings.cpp" line="584"/>
+        <location filename="../QMenuStrings.cpp" line="231"/>
+        <location filename="../QMenuStrings.cpp" line="585"/>
         <source>Up an &amp;Octave</source>
         <translation type="unfinished">升高一个八度音阶(&amp;O)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="231"/>
-        <location filename="../QMenuStrings.cpp" line="585"/>
+        <location filename="../QMenuStrings.cpp" line="232"/>
+        <location filename="../QMenuStrings.cpp" line="586"/>
         <source>Down an Octa&amp;ve</source>
         <translation type="unfinished">降低一个八度音阶(&amp;V)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="232"/>
-        <location filename="../QMenuStrings.cpp" line="586"/>
+        <location filename="../QMenuStrings.cpp" line="233"/>
+        <location filename="../QMenuStrings.cpp" line="587"/>
         <source>&amp;Transpose by Semitones...</source>
         <translation type="unfinished">正在升高一个半音...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="233"/>
-        <location filename="../QMenuStrings.cpp" line="587"/>
-        <location filename="../QMenuStrings.cpp" line="871"/>
+        <location filename="../QMenuStrings.cpp" line="234"/>
+        <location filename="../QMenuStrings.cpp" line="588"/>
+        <location filename="../QMenuStrings.cpp" line="872"/>
         <source>Transpose by &amp;Interval...</source>
         <translation type="unfinished">变调(&amp;T)...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="234"/>
+        <location filename="../QMenuStrings.cpp" line="235"/>
         <source>&amp;Convert</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="235"/>
-        <location filename="../QMenuStrings.cpp" line="589"/>
+        <location filename="../QMenuStrings.cpp" line="236"/>
+        <location filename="../QMenuStrings.cpp" line="590"/>
         <source>&amp;Invert</source>
         <translation type="unfinished">还原(&amp;V)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="236"/>
-        <location filename="../QMenuStrings.cpp" line="590"/>
+        <location filename="../QMenuStrings.cpp" line="237"/>
+        <location filename="../QMenuStrings.cpp" line="591"/>
         <source>&amp;Retrograde</source>
         <translation type="unfinished">录制(&amp;R)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="237"/>
-        <location filename="../QMenuStrings.cpp" line="591"/>
+        <location filename="../QMenuStrings.cpp" line="238"/>
+        <location filename="../QMenuStrings.cpp" line="592"/>
         <source>Re&amp;trograde Invert</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="238"/>
+        <location filename="../QMenuStrings.cpp" line="239"/>
         <source>Trigger Se&amp;gment...</source>
         <translation type="unfinished">擦除小节</translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="263"/>
-        <location filename="../QMenuStrings.cpp" line="628"/>
-        <location filename="../QMenuStrings.cpp" line="899"/>
-        <source>&amp;Tools</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="264"/>
         <location filename="../QMenuStrings.cpp" line="629"/>
         <location filename="../QMenuStrings.cpp" line="900"/>
+        <source>&amp;Tools</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="265"/>
+        <location filename="../QMenuStrings.cpp" line="630"/>
+        <location filename="../QMenuStrings.cpp" line="901"/>
         <source>&amp;Select and Edit</source>
         <translation type="unfinished">从当前位置到结尾选中(&amp;E)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="265"/>
-        <location filename="../QMenuStrings.cpp" line="901"/>
+        <location filename="../QMenuStrings.cpp" line="266"/>
+        <location filename="../QMenuStrings.cpp" line="902"/>
         <source>&amp;Draw</source>
         <translation type="unfinished">绘制(&amp;D)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="266"/>
-        <location filename="../QMenuStrings.cpp" line="631"/>
-        <location filename="../QMenuStrings.cpp" line="902"/>
+        <location filename="../QMenuStrings.cpp" line="267"/>
+        <location filename="../QMenuStrings.cpp" line="632"/>
+        <location filename="../QMenuStrings.cpp" line="903"/>
         <source>&amp;Erase</source>
         <translation type="unfinished">擦除(&amp;E)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="241"/>
-        <location filename="../QMenuStrings.cpp" line="267"/>
-        <location filename="../QMenuStrings.cpp" line="608"/>
-        <location filename="../QMenuStrings.cpp" line="903"/>
+        <location filename="../QMenuStrings.cpp" line="242"/>
+        <location filename="../QMenuStrings.cpp" line="268"/>
+        <location filename="../QMenuStrings.cpp" line="609"/>
+        <location filename="../QMenuStrings.cpp" line="904"/>
         <source>&amp;Move</source>
         <translation type="unfinished">移动(&amp;M)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="268"/>
+        <location filename="../QMenuStrings.cpp" line="269"/>
         <source>Resi&amp;ze</source>
         <translation type="unfinished">改变大小</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="269"/>
-        <location filename="../QMenuStrings.cpp" line="905"/>
+        <location filename="../QMenuStrings.cpp" line="270"/>
+        <location filename="../QMenuStrings.cpp" line="906"/>
         <source>S&amp;plit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="270"/>
+        <location filename="../QMenuStrings.cpp" line="271"/>
         <source>&amp;Velocity</source>
         <translation type="unfinished">力度(&amp;V)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="242"/>
+        <location filename="../QMenuStrings.cpp" line="243"/>
         <source>Cursor &amp;Back</source>
         <translation type="unfinished">光标后退(&amp;B)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="243"/>
+        <location filename="../QMenuStrings.cpp" line="244"/>
         <source>Cursor &amp;Forward</source>
         <translation type="unfinished">光标前进(&amp;F)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="244"/>
+        <location filename="../QMenuStrings.cpp" line="245"/>
         <source>C&amp;ursor Back Bar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="245"/>
+        <location filename="../QMenuStrings.cpp" line="246"/>
         <source>Cursor For&amp;ward Bar</source>
         <translation type="unfinished">光标沿进程条前进(&amp;W)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="246"/>
+        <location filename="../QMenuStrings.cpp" line="247"/>
         <source>Cursor to St&amp;art</source>
         <translation type="unfinished">光标移到起点(&amp;A)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="247"/>
+        <location filename="../QMenuStrings.cpp" line="248"/>
         <source>Cursor to &amp;End</source>
         <translation type="unfinished">光标移到末尾(&amp;E)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="609"/>
+        <location filename="../QMenuStrings.cpp" line="610"/>
         <source>Cursor back and Se&amp;lect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="249"/>
-        <location filename="../QMenuStrings.cpp" line="610"/>
+        <location filename="../QMenuStrings.cpp" line="250"/>
+        <location filename="../QMenuStrings.cpp" line="611"/>
         <source>Cursor Forward and &amp;Select</source>
         <translation type="unfinished">光标前进并选中(&amp;S)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="250"/>
-        <location filename="../QMenuStrings.cpp" line="611"/>
+        <location filename="../QMenuStrings.cpp" line="251"/>
+        <location filename="../QMenuStrings.cpp" line="612"/>
         <source>Set Loop &amp;to Selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="251"/>
-        <location filename="../QMenuStrings.cpp" line="612"/>
+        <location filename="../QMenuStrings.cpp" line="252"/>
+        <location filename="../QMenuStrings.cpp" line="613"/>
         <source>Clear L&amp;oop</source>
         <translation type="unfinished">清除循环(&amp;O)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="354"/>
-        <location filename="../QMenuStrings.cpp" line="373"/>
-        <location filename="../QMenuStrings.cpp" line="906"/>
-        <source>T&amp;ransport</source>
-        <translation type="unfinished">播放控制器(&amp;R)</translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="254"/>
         <location filename="../QMenuStrings.cpp" line="355"/>
         <location filename="../QMenuStrings.cpp" line="374"/>
-        <location filename="../QMenuStrings.cpp" line="617"/>
         <location filename="../QMenuStrings.cpp" line="907"/>
-        <source>&amp;Play</source>
-        <translation type="unfinished">播放(&amp;P)</translation>
+        <source>T&amp;ransport</source>
+        <translation type="unfinished">播放控制器(&amp;R)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="255"/>
@@ -1176,17 +1167,17 @@
         <location filename="../QMenuStrings.cpp" line="375"/>
         <location filename="../QMenuStrings.cpp" line="618"/>
         <location filename="../QMenuStrings.cpp" line="908"/>
-        <source>&amp;Stop</source>
-        <translation type="unfinished">停止(&amp;S)</translation>
+        <source>&amp;Play</source>
+        <translation type="unfinished">播放(&amp;P)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="256"/>
         <location filename="../QMenuStrings.cpp" line="357"/>
         <location filename="../QMenuStrings.cpp" line="376"/>
-        <location filename="../QMenuStrings.cpp" line="621"/>
+        <location filename="../QMenuStrings.cpp" line="619"/>
         <location filename="../QMenuStrings.cpp" line="909"/>
-        <source>Re&amp;wind</source>
-        <translation type="unfinished">回绕(&amp;W)</translation>
+        <source>&amp;Stop</source>
+        <translation type="unfinished">停止(&amp;S)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="257"/>
@@ -1194,60 +1185,59 @@
         <location filename="../QMenuStrings.cpp" line="377"/>
         <location filename="../QMenuStrings.cpp" line="622"/>
         <location filename="../QMenuStrings.cpp" line="910"/>
-        <source>&amp;Fast Forward</source>
-        <translation type="unfinished">快进(&amp;F)</translation>
+        <source>Re&amp;wind</source>
+        <translation type="unfinished">回绕(&amp;W)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="258"/>
         <location filename="../QMenuStrings.cpp" line="359"/>
         <location filename="../QMenuStrings.cpp" line="378"/>
         <location filename="../QMenuStrings.cpp" line="623"/>
-        <source>Rewind to &amp;Beginning</source>
-        <translation type="unfinished">回绕到起点(&amp;B)</translation>
+        <location filename="../QMenuStrings.cpp" line="911"/>
+        <source>&amp;Fast Forward</source>
+        <translation type="unfinished">快进(&amp;F)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="259"/>
         <location filename="../QMenuStrings.cpp" line="360"/>
         <location filename="../QMenuStrings.cpp" line="379"/>
         <location filename="../QMenuStrings.cpp" line="624"/>
+        <source>Rewind to &amp;Beginning</source>
+        <translation type="unfinished">回绕到起点(&amp;B)</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="260"/>
+        <location filename="../QMenuStrings.cpp" line="361"/>
+        <location filename="../QMenuStrings.cpp" line="380"/>
+        <location filename="../QMenuStrings.cpp" line="625"/>
         <source>Fast Forward to &amp;End</source>
         <translation type="unfinished">快进到末尾(&amp;E)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="260"/>
-        <location filename="../QMenuStrings.cpp" line="625"/>
+        <location filename="../QMenuStrings.cpp" line="261"/>
+        <location filename="../QMenuStrings.cpp" line="626"/>
         <source>S&amp;olo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="261"/>
-        <location filename="../QMenuStrings.cpp" line="626"/>
-        <location filename="../QMenuStrings.cpp" line="913"/>
+        <location filename="../QMenuStrings.cpp" line="262"/>
+        <location filename="../QMenuStrings.cpp" line="627"/>
+        <location filename="../QMenuStrings.cpp" line="914"/>
         <source>Scro&amp;ll to Follow Playback</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="262"/>
-        <location filename="../QMenuStrings.cpp" line="362"/>
-        <location filename="../QMenuStrings.cpp" line="381"/>
-        <location filename="../QMenuStrings.cpp" line="627"/>
-        <location filename="../QMenuStrings.cpp" line="914"/>
+        <location filename="../QMenuStrings.cpp" line="263"/>
+        <location filename="../QMenuStrings.cpp" line="363"/>
+        <location filename="../QMenuStrings.cpp" line="382"/>
+        <location filename="../QMenuStrings.cpp" line="628"/>
+        <location filename="../QMenuStrings.cpp" line="915"/>
         <source>P&amp;anic</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="271"/>
-        <source>I&amp;nsert Note</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="272"/>
-        <location filename="../QMenuStrings.cpp" line="290"/>
-        <location filename="../QMenuStrings.cpp" line="308"/>
-        <location filename="../QMenuStrings.cpp" line="671"/>
-        <location filename="../QMenuStrings.cpp" line="689"/>
-        <location filename="../QMenuStrings.cpp" line="707"/>
-        <source>&amp;I</source>
+        <source>I&amp;nsert Note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1257,7 +1247,7 @@
         <location filename="../QMenuStrings.cpp" line="672"/>
         <location filename="../QMenuStrings.cpp" line="690"/>
         <location filename="../QMenuStrings.cpp" line="708"/>
-        <source>I &amp;sharp</source>
+        <source>&amp;I</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1267,7 +1257,7 @@
         <location filename="../QMenuStrings.cpp" line="673"/>
         <location filename="../QMenuStrings.cpp" line="691"/>
         <location filename="../QMenuStrings.cpp" line="709"/>
-        <source>II &amp;flat</source>
+        <source>I &amp;sharp</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1277,8 +1267,8 @@
         <location filename="../QMenuStrings.cpp" line="674"/>
         <location filename="../QMenuStrings.cpp" line="692"/>
         <location filename="../QMenuStrings.cpp" line="710"/>
-        <source>II</source>
-        <translation type="unfinished">II</translation>
+        <source>II &amp;flat</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="276"/>
@@ -1287,8 +1277,8 @@
         <location filename="../QMenuStrings.cpp" line="675"/>
         <location filename="../QMenuStrings.cpp" line="693"/>
         <location filename="../QMenuStrings.cpp" line="711"/>
-        <source>II sh&amp;arp</source>
-        <translation type="unfinished"></translation>
+        <source>II</source>
+        <translation type="unfinished">II</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="277"/>
@@ -1297,7 +1287,7 @@
         <location filename="../QMenuStrings.cpp" line="676"/>
         <location filename="../QMenuStrings.cpp" line="694"/>
         <location filename="../QMenuStrings.cpp" line="712"/>
-        <source>III flat</source>
+        <source>II sh&amp;arp</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1307,8 +1297,8 @@
         <location filename="../QMenuStrings.cpp" line="677"/>
         <location filename="../QMenuStrings.cpp" line="695"/>
         <location filename="../QMenuStrings.cpp" line="713"/>
-        <source>III</source>
-        <translation type="unfinished">III</translation>
+        <source>III flat</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="279"/>
@@ -1317,8 +1307,8 @@
         <location filename="../QMenuStrings.cpp" line="678"/>
         <location filename="../QMenuStrings.cpp" line="696"/>
         <location filename="../QMenuStrings.cpp" line="714"/>
-        <source>IV</source>
-        <translation type="unfinished">IV</translation>
+        <source>III</source>
+        <translation type="unfinished">III</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="280"/>
@@ -1327,8 +1317,8 @@
         <location filename="../QMenuStrings.cpp" line="679"/>
         <location filename="../QMenuStrings.cpp" line="697"/>
         <location filename="../QMenuStrings.cpp" line="715"/>
-        <source>IV sha&amp;rp</source>
-        <translation type="unfinished"></translation>
+        <source>IV</source>
+        <translation type="unfinished">IV</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="281"/>
@@ -1337,7 +1327,7 @@
         <location filename="../QMenuStrings.cpp" line="680"/>
         <location filename="../QMenuStrings.cpp" line="698"/>
         <location filename="../QMenuStrings.cpp" line="716"/>
-        <source>&amp;V flat</source>
+        <source>IV sha&amp;rp</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1347,8 +1337,8 @@
         <location filename="../QMenuStrings.cpp" line="681"/>
         <location filename="../QMenuStrings.cpp" line="699"/>
         <location filename="../QMenuStrings.cpp" line="717"/>
-        <source>V</source>
-        <translation type="unfinished">V</translation>
+        <source>&amp;V flat</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="283"/>
@@ -1357,8 +1347,8 @@
         <location filename="../QMenuStrings.cpp" line="682"/>
         <location filename="../QMenuStrings.cpp" line="700"/>
         <location filename="../QMenuStrings.cpp" line="718"/>
-        <source>V s&amp;harp</source>
-        <translation type="unfinished"></translation>
+        <source>V</source>
+        <translation type="unfinished">V</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="284"/>
@@ -1367,7 +1357,7 @@
         <location filename="../QMenuStrings.cpp" line="683"/>
         <location filename="../QMenuStrings.cpp" line="701"/>
         <location filename="../QMenuStrings.cpp" line="719"/>
-        <source>VI fla&amp;t</source>
+        <source>V s&amp;harp</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1377,8 +1367,8 @@
         <location filename="../QMenuStrings.cpp" line="684"/>
         <location filename="../QMenuStrings.cpp" line="702"/>
         <location filename="../QMenuStrings.cpp" line="720"/>
-        <source>VI</source>
-        <translation type="unfinished">VI</translation>
+        <source>VI fla&amp;t</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="286"/>
@@ -1387,8 +1377,8 @@
         <location filename="../QMenuStrings.cpp" line="685"/>
         <location filename="../QMenuStrings.cpp" line="703"/>
         <location filename="../QMenuStrings.cpp" line="721"/>
-        <source>VI shar&amp;p</source>
-        <translation type="unfinished"></translation>
+        <source>VI</source>
+        <translation type="unfinished">VI</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="287"/>
@@ -1397,7 +1387,7 @@
         <location filename="../QMenuStrings.cpp" line="686"/>
         <location filename="../QMenuStrings.cpp" line="704"/>
         <location filename="../QMenuStrings.cpp" line="722"/>
-        <source>VII flat</source>
+        <source>VI shar&amp;p</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1407,228 +1397,238 @@
         <location filename="../QMenuStrings.cpp" line="687"/>
         <location filename="../QMenuStrings.cpp" line="705"/>
         <location filename="../QMenuStrings.cpp" line="723"/>
+        <source>VII flat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="289"/>
+        <location filename="../QMenuStrings.cpp" line="307"/>
+        <location filename="../QMenuStrings.cpp" line="325"/>
+        <location filename="../QMenuStrings.cpp" line="688"/>
+        <location filename="../QMenuStrings.cpp" line="706"/>
+        <location filename="../QMenuStrings.cpp" line="724"/>
         <source>VII</source>
         <translation type="unfinished">VII</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="289"/>
-        <location filename="../QMenuStrings.cpp" line="688"/>
+        <location filename="../QMenuStrings.cpp" line="290"/>
+        <location filename="../QMenuStrings.cpp" line="689"/>
         <source>&amp;Upper Octave</source>
         <translation type="unfinished">高八度(&amp;U)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="325"/>
-        <location filename="../QMenuStrings.cpp" line="725"/>
+        <location filename="../QMenuStrings.cpp" line="326"/>
+        <location filename="../QMenuStrings.cpp" line="726"/>
         <source>C&amp;hord Insert Mode</source>
         <translation type="unfinished">和弦插入模式(&amp;H)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="326"/>
-        <location filename="../QMenuStrings.cpp" line="728"/>
+        <location filename="../QMenuStrings.cpp" line="327"/>
+        <location filename="../QMenuStrings.cpp" line="729"/>
         <source>Ste&amp;p Recording</source>
         <translation type="unfinished">正在录音</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="191"/>
-        <location filename="../QMenuStrings.cpp" line="440"/>
-        <location filename="../QMenuStrings.cpp" line="820"/>
+        <location filename="../QMenuStrings.cpp" line="192"/>
+        <location filename="../QMenuStrings.cpp" line="441"/>
+        <location filename="../QMenuStrings.cpp" line="821"/>
         <source>&amp;Toolbars</source>
         <translation type="unfinished">工具栏(&amp;T)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="196"/>
-        <location filename="../QMenuStrings.cpp" line="452"/>
-        <location filename="../QMenuStrings.cpp" line="827"/>
+        <location filename="../QMenuStrings.cpp" line="197"/>
+        <location filename="../QMenuStrings.cpp" line="453"/>
+        <location filename="../QMenuStrings.cpp" line="828"/>
         <source>&amp;Rulers</source>
         <translation type="unfinished">标尺(&amp;R)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="197"/>
+        <location filename="../QMenuStrings.cpp" line="198"/>
         <source>Show Ch&amp;ord Name Ruler</source>
         <translation type="unfinished">显示和弦名称标尺(&amp;O)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="198"/>
+        <location filename="../QMenuStrings.cpp" line="199"/>
         <source>Show &amp;Tempo Ruler</source>
         <translation type="unfinished">显示节拍标尺(&amp;T)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="334"/>
-        <location filename="../QMenuStrings.cpp" line="736"/>
-        <location filename="../QMenuStrings.cpp" line="924"/>
+        <location filename="../QMenuStrings.cpp" line="335"/>
+        <location filename="../QMenuStrings.cpp" line="737"/>
+        <location filename="../QMenuStrings.cpp" line="925"/>
         <source>Tools Toolbar</source>
         <translation type="unfinished">工具工具栏</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="361"/>
-        <location filename="../QMenuStrings.cpp" line="380"/>
-        <location filename="../QMenuStrings.cpp" line="911"/>
+        <location filename="../QMenuStrings.cpp" line="362"/>
+        <location filename="../QMenuStrings.cpp" line="381"/>
+        <location filename="../QMenuStrings.cpp" line="912"/>
         <source>&amp;Record</source>
         <translation type="unfinished">录制(&amp;R)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="382"/>
+        <location filename="../QMenuStrings.cpp" line="383"/>
         <source>&amp;Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="383"/>
+        <location filename="../QMenuStrings.cpp" line="384"/>
         <source>Number of Stereo &amp;Inputs</source>
         <translation type="unfinished">立体声输入数量(&amp;I)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="384"/>
+        <location filename="../QMenuStrings.cpp" line="385"/>
         <source>&amp;1 Input</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="385"/>
+        <location filename="../QMenuStrings.cpp" line="386"/>
         <source>&amp;2 Inputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="386"/>
+        <location filename="../QMenuStrings.cpp" line="387"/>
         <source>&amp;4 Inputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="387"/>
+        <location filename="../QMenuStrings.cpp" line="388"/>
         <source>&amp;8 Inputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="388"/>
+        <location filename="../QMenuStrings.cpp" line="389"/>
         <source>1&amp;6 Inputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="389"/>
+        <location filename="../QMenuStrings.cpp" line="390"/>
         <source>&amp;Number of Submasters</source>
         <translation type="unfinished">副控制器数量(&amp;N)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="390"/>
+        <location filename="../QMenuStrings.cpp" line="391"/>
         <source>No Submasters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="391"/>
+        <location filename="../QMenuStrings.cpp" line="392"/>
         <source>&amp;2 Submasters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="392"/>
+        <location filename="../QMenuStrings.cpp" line="393"/>
         <source>&amp;4 Submasters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="393"/>
+        <location filename="../QMenuStrings.cpp" line="394"/>
         <source>&amp;8 Submasters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="394"/>
+        <location filename="../QMenuStrings.cpp" line="395"/>
         <source>Show &amp;Audio Faders</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="395"/>
+        <location filename="../QMenuStrings.cpp" line="396"/>
         <source>Show &amp;Synth Faders</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="396"/>
+        <location filename="../QMenuStrings.cpp" line="397"/>
         <source>Show Audio Su&amp;bmasters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="397"/>
+        <location filename="../QMenuStrings.cpp" line="398"/>
         <source>Show &amp;Plugin Buttons</source>
         <translation type="unfinished">音频插件按钮</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="398"/>
+        <location filename="../QMenuStrings.cpp" line="399"/>
         <source>Show &amp;Unassigned Faders</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="407"/>
+        <location filename="../QMenuStrings.cpp" line="408"/>
         <source>Switch to Inserting Tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="408"/>
+        <location filename="../QMenuStrings.cpp" line="409"/>
         <source>Collapse Rests After Erase</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="412"/>
-        <location filename="../QMenuStrings.cpp" line="801"/>
+        <location filename="../QMenuStrings.cpp" line="413"/>
+        <location filename="../QMenuStrings.cpp" line="802"/>
         <source>&amp;Print...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="411"/>
+        <location filename="../QMenuStrings.cpp" line="412"/>
         <source>P&amp;rint preview...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="420"/>
+        <location filename="../QMenuStrings.cpp" line="421"/>
         <source>C&amp;ut and Close</source>
         <translation type="unfinished">剪切并关闭(&amp;U)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="421"/>
+        <location filename="../QMenuStrings.cpp" line="422"/>
         <source>Pa&amp;ste...</source>
         <translation type="unfinished">粘贴(&amp;S)...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="422"/>
+        <location filename="../QMenuStrings.cpp" line="423"/>
         <source>De&amp;lete</source>
         <translation type="unfinished">删除(&amp;L)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="423"/>
+        <location filename="../QMenuStrings.cpp" line="424"/>
         <source>&amp;Move to Staff Above</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="424"/>
+        <location filename="../QMenuStrings.cpp" line="425"/>
         <source>Move to Staff &amp;Below</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="425"/>
+        <location filename="../QMenuStrings.cpp" line="426"/>
         <source>Select from Sta&amp;rt</source>
         <translation type="unfinished">从开头到当前位置选中(&amp;R)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="426"/>
+        <location filename="../QMenuStrings.cpp" line="427"/>
         <source>Select to &amp;End</source>
         <translation type="unfinished">从当前位置到结尾选中(&amp;E)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="427"/>
+        <location filename="../QMenuStrings.cpp" line="428"/>
         <source>Select Whole St&amp;aff</source>
         <translation type="unfinished">选中整个五线谱(&amp;A)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="428"/>
+        <location filename="../QMenuStrings.cpp" line="429"/>
         <source>Clear Select&amp;ion</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="432"/>
+        <location filename="../QMenuStrings.cpp" line="433"/>
         <source>Note &amp;Font</source>
         <translation type="unfinished">音符字体(&amp;F)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="433"/>
+        <location filename="../QMenuStrings.cpp" line="434"/>
         <source>Si&amp;ze</source>
         <translation type="unfinished">大小(&amp;Z)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="434"/>
+        <location filename="../QMenuStrings.cpp" line="435"/>
         <source>S&amp;pacing</source>
         <translation type="unfinished">间距</translation>
     </message>
@@ -1637,27 +1637,27 @@
         <translation type="obsolete">音长  </translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="435"/>
+        <location filename="../QMenuStrings.cpp" line="436"/>
         <source>&amp;Layout Mode</source>
         <translation type="unfinished">布局模式(&amp;L)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="436"/>
+        <location filename="../QMenuStrings.cpp" line="437"/>
         <source>&amp;Linear Layout</source>
         <translation type="unfinished">谱线布局(&amp;L)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="437"/>
+        <location filename="../QMenuStrings.cpp" line="438"/>
         <source>&amp;Continuous Page Layout</source>
         <translation type="unfinished">页面布局(&amp;P)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="438"/>
+        <location filename="../QMenuStrings.cpp" line="439"/>
         <source>&amp;Multiple Page Layout</source>
         <translation type="unfinished">页面布局(&amp;P)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="439"/>
+        <location filename="../QMenuStrings.cpp" line="440"/>
         <source>Open L&amp;yric Editor</source>
         <translation type="unfinished">用 ge_dit 打开</translation>
     </message>
@@ -1666,787 +1666,787 @@
         <translation type="obsolete">添加事件标尺</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="456"/>
+        <location filename="../QMenuStrings.cpp" line="457"/>
         <source>Show &amp;Track Headers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="466"/>
-        <location filename="../QMenuStrings.cpp" line="865"/>
+        <location filename="../QMenuStrings.cpp" line="467"/>
+        <location filename="../QMenuStrings.cpp" line="866"/>
         <source>Open in &amp;Percussion Matrix Editor</source>
         <translation type="unfinished">以字模编辑器打开(&amp;X)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="467"/>
+        <location filename="../QMenuStrings.cpp" line="468"/>
         <source>Add Cle&amp;f Change...</source>
         <translation type="unfinished">添加谱号改变(&amp;F)...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="468"/>
+        <location filename="../QMenuStrings.cpp" line="469"/>
         <source>Add &amp;Key Change...</source>
         <translation type="unfinished">添加键改变(&amp;K)...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="469"/>
+        <location filename="../QMenuStrings.cpp" line="470"/>
         <source>Add Pedal &amp;Press</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="470"/>
+        <location filename="../QMenuStrings.cpp" line="471"/>
         <source>Add Pedal &amp;Release</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="471"/>
+        <location filename="../QMenuStrings.cpp" line="472"/>
         <source>&amp;Set Segment Start Time...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="473"/>
+        <location filename="../QMenuStrings.cpp" line="474"/>
         <source>Transpose by &amp;Inverval...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="474"/>
+        <location filename="../QMenuStrings.cpp" line="475"/>
         <source>&amp;Convert Notation for...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="475"/>
+        <location filename="../QMenuStrings.cpp" line="476"/>
         <source>N&amp;ote</source>
         <translation type="unfinished">音符(&amp;O)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="476"/>
+        <location filename="../QMenuStrings.cpp" line="477"/>
         <source>Mar&amp;ks</source>
         <translation type="unfinished">标记(&amp;K)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="477"/>
+        <location filename="../QMenuStrings.cpp" line="478"/>
         <source>Add &amp;Accent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="478"/>
+        <location filename="../QMenuStrings.cpp" line="479"/>
         <source>Add T&amp;enuto</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="479"/>
+        <location filename="../QMenuStrings.cpp" line="480"/>
         <source>Add Sta&amp;ccato</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="480"/>
+        <location filename="../QMenuStrings.cpp" line="481"/>
         <source>Add &amp;Staccatissimo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="481"/>
+        <location filename="../QMenuStrings.cpp" line="482"/>
         <source>Add &amp;Marcato</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="484"/>
+        <location filename="../QMenuStrings.cpp" line="485"/>
         <source>Add S&amp;forzando</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="485"/>
+        <location filename="../QMenuStrings.cpp" line="486"/>
         <source>Add R&amp;inforzando</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="486"/>
+        <location filename="../QMenuStrings.cpp" line="487"/>
         <source>Add Tri&amp;ll</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="487"/>
+        <location filename="../QMenuStrings.cpp" line="488"/>
         <source>Add &amp;Turn</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="488"/>
+        <location filename="../QMenuStrings.cpp" line="489"/>
         <source>Add M&amp;ordent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="489"/>
+        <location filename="../QMenuStrings.cpp" line="490"/>
         <source>Add I&amp;nverted Mordent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="490"/>
+        <location filename="../QMenuStrings.cpp" line="491"/>
         <source>Add Long Mordent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="491"/>
+        <location filename="../QMenuStrings.cpp" line="492"/>
         <source>Add Lon&amp;g Inverted Mordent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="492"/>
+        <location filename="../QMenuStrings.cpp" line="493"/>
         <source>Add &amp;Up-Bow</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="493"/>
+        <location filename="../QMenuStrings.cpp" line="494"/>
         <source>Add &amp;Down-Bow</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="494"/>
+        <location filename="../QMenuStrings.cpp" line="495"/>
         <source>Add &amp;Harmonic</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="495"/>
+        <location filename="../QMenuStrings.cpp" line="496"/>
         <source>Add &amp;Pause</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="496"/>
+        <location filename="../QMenuStrings.cpp" line="497"/>
         <source>Add Te&amp;xt Mark...</source>
         <translation type="unfinished">添加文本标记(&amp;X)...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="497"/>
+        <location filename="../QMenuStrings.cpp" line="498"/>
         <source>&amp;Remove All Marks</source>
         <translation type="unfinished">删除所有标记(&amp;R)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="498"/>
+        <location filename="../QMenuStrings.cpp" line="499"/>
         <source>&amp;Ornaments</source>
         <translation type="unfinished">小节(&amp;M)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="499"/>
+        <location filename="../QMenuStrings.cpp" line="500"/>
         <source>Trigger &amp;Ornament...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="500"/>
+        <location filename="../QMenuStrings.cpp" line="501"/>
         <source>&amp;Remove Ornament...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="501"/>
+        <location filename="../QMenuStrings.cpp" line="502"/>
         <source>Ma&amp;ke Ornament...</source>
         <translation type="unfinished">正在制作美化音符...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="502"/>
+        <location filename="../QMenuStrings.cpp" line="503"/>
         <source>&amp;Fingerings</source>
         <translation type="unfinished">正在添加连音线...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="503"/>
+        <location filename="../QMenuStrings.cpp" line="504"/>
         <source>&amp;Remove Fingerings</source>
         <translation type="unfinished">删除所有标记(&amp;R)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="504"/>
+        <location filename="../QMenuStrings.cpp" line="505"/>
         <source>Add Fingering &amp;0 (Thumb)</source>
         <translation type="unfinished">正在添加连音线...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="505"/>
+        <location filename="../QMenuStrings.cpp" line="506"/>
         <source>Add Fingering &amp;1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="506"/>
+        <location filename="../QMenuStrings.cpp" line="507"/>
         <source>Add Fingering &amp;2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="507"/>
+        <location filename="../QMenuStrings.cpp" line="508"/>
         <source>Add Fingering &amp;3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="508"/>
+        <location filename="../QMenuStrings.cpp" line="509"/>
         <source>Add Fingering &amp;4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="509"/>
+        <location filename="../QMenuStrings.cpp" line="510"/>
         <source>Add Fingering &amp;5</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="510"/>
+        <location filename="../QMenuStrings.cpp" line="511"/>
         <source>&amp;Add Fingering +</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="511"/>
+        <location filename="../QMenuStrings.cpp" line="512"/>
         <source>Add Other &amp;Fingering...</source>
         <translation type="unfinished">正在添加连音线...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="512"/>
+        <location filename="../QMenuStrings.cpp" line="513"/>
         <source>S&amp;lashes</source>
         <translation type="unfinished">斜线(&amp;L)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="513"/>
+        <location filename="../QMenuStrings.cpp" line="514"/>
         <source>&amp;None</source>
         <translation type="unfinished">无(&amp;N)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="514"/>
+        <location filename="../QMenuStrings.cpp" line="515"/>
         <source>&amp;1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="515"/>
+        <location filename="../QMenuStrings.cpp" line="516"/>
         <source>&amp;2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="516"/>
+        <location filename="../QMenuStrings.cpp" line="517"/>
         <source>&amp;3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="517"/>
+        <location filename="../QMenuStrings.cpp" line="518"/>
         <source>&amp;4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="518"/>
+        <location filename="../QMenuStrings.cpp" line="519"/>
         <source>&amp;5</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="519"/>
+        <location filename="../QMenuStrings.cpp" line="520"/>
         <source>Note &amp;Style</source>
         <translation type="unfinished">音符样式(&amp;S)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="520"/>
+        <location filename="../QMenuStrings.cpp" line="521"/>
         <source>&amp;Classical</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="521"/>
+        <location filename="../QMenuStrings.cpp" line="522"/>
         <source>C&amp;ross</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="522"/>
+        <location filename="../QMenuStrings.cpp" line="523"/>
         <source>&amp;Mensural</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="523"/>
+        <location filename="../QMenuStrings.cpp" line="524"/>
         <source>&amp;Triangle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="524"/>
-        <location filename="../QMenuStrings.cpp" line="632"/>
+        <location filename="../QMenuStrings.cpp" line="525"/>
+        <location filename="../QMenuStrings.cpp" line="633"/>
         <source>&amp;Accidentals</source>
         <translation type="unfinished">临时记号(&amp;A)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="525"/>
+        <location filename="../QMenuStrings.cpp" line="526"/>
         <source>&amp;Restore Accidentals</source>
         <translation type="unfinished">临时记号(&amp;A)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="526"/>
+        <location filename="../QMenuStrings.cpp" line="527"/>
         <source>Respell with Dou&amp;ble Flat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="527"/>
+        <location filename="../QMenuStrings.cpp" line="528"/>
         <source>Respell with &amp;Flat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="528"/>
+        <location filename="../QMenuStrings.cpp" line="529"/>
         <source>Respell with &amp;Natural</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="529"/>
+        <location filename="../QMenuStrings.cpp" line="530"/>
         <source>Respell with &amp;Sharp</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="530"/>
+        <location filename="../QMenuStrings.cpp" line="531"/>
         <source>Respell with Do&amp;uble Sharp</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="531"/>
+        <location filename="../QMenuStrings.cpp" line="532"/>
         <source>Use &amp;Cautionary Accidentals</source>
         <translation type="unfinished">恢复计算好的符干(&amp;R)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="532"/>
+        <location filename="../QMenuStrings.cpp" line="533"/>
         <source>Cancel C&amp;autionary Accidentals</source>
         <translation type="unfinished">临时记号(&amp;A)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="533"/>
+        <location filename="../QMenuStrings.cpp" line="534"/>
         <source>Stem &amp;Up</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="534"/>
+        <location filename="../QMenuStrings.cpp" line="535"/>
         <source>Stem &amp;Down</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="535"/>
+        <location filename="../QMenuStrings.cpp" line="536"/>
         <source>&amp;Restore Stems</source>
         <translation type="unfinished">恢复计算好的符干(&amp;R)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="536"/>
+        <location filename="../QMenuStrings.cpp" line="537"/>
         <source>&amp;Phrase</source>
         <translation type="unfinished">擦除(&amp;E)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="537"/>
+        <location filename="../QMenuStrings.cpp" line="538"/>
         <source>&amp;Make Chord</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="538"/>
+        <location filename="../QMenuStrings.cpp" line="539"/>
         <source>&amp;Beam Group</source>
         <translation type="unfinished">全部分开符尾(&amp;B)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="539"/>
+        <location filename="../QMenuStrings.cpp" line="540"/>
         <source>&amp;Auto-Beam</source>
         <translation type="unfinished">自动分开符尾(&amp;A)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="540"/>
+        <location filename="../QMenuStrings.cpp" line="541"/>
         <source>&amp;Unbeam</source>
         <translation type="unfinished">取销符尾分开(&amp;U)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="541"/>
+        <location filename="../QMenuStrings.cpp" line="542"/>
         <source>Tupl&amp;et...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="542"/>
+        <location filename="../QMenuStrings.cpp" line="543"/>
         <source>&amp;Triplet</source>
         <translation type="unfinished">三连音</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="543"/>
+        <location filename="../QMenuStrings.cpp" line="544"/>
         <source>U&amp;ntuplet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="544"/>
+        <location filename="../QMenuStrings.cpp" line="545"/>
         <source>Add S&amp;lur</source>
         <translation type="unfinished">添加含糊音(&amp;L)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="545"/>
+        <location filename="../QMenuStrings.cpp" line="546"/>
         <source>Add P&amp;hrasing Slur</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="546"/>
+        <location filename="../QMenuStrings.cpp" line="547"/>
         <source>Slur &amp;Position</source>
         <translation type="unfinished">插入到作品中</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="547"/>
+        <location filename="../QMenuStrings.cpp" line="548"/>
         <source>&amp;Restore Slur Positions</source>
         <translation type="unfinished">恢复计算好的符干(&amp;R)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="548"/>
+        <location filename="../QMenuStrings.cpp" line="549"/>
         <source>Slur &amp;Above</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="549"/>
+        <location filename="../QMenuStrings.cpp" line="550"/>
         <source>Slur &amp;Below</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="550"/>
+        <location filename="../QMenuStrings.cpp" line="551"/>
         <source>T&amp;ie</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="551"/>
+        <location filename="../QMenuStrings.cpp" line="552"/>
         <source>&amp;Untie</source>
         <translation type="unfinished">松解音符(&amp;U)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="552"/>
+        <location filename="../QMenuStrings.cpp" line="553"/>
         <source>Tie &amp;Position</source>
         <translation type="unfinished">插入到作品中</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="553"/>
+        <location filename="../QMenuStrings.cpp" line="554"/>
         <source>&amp;Restore Tie Position</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="554"/>
+        <location filename="../QMenuStrings.cpp" line="555"/>
         <source>Tie &amp;Above</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="555"/>
+        <location filename="../QMenuStrings.cpp" line="556"/>
         <source>Tie &amp;Below</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="556"/>
+        <location filename="../QMenuStrings.cpp" line="557"/>
         <source>Add &amp;Crescendo</source>
         <translation type="unfinished">正在添加渐强...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="557"/>
+        <location filename="../QMenuStrings.cpp" line="558"/>
         <source>Add &amp;Decescendo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="558"/>
+        <location filename="../QMenuStrings.cpp" line="559"/>
         <source>Add Trill With &amp;Line</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="559"/>
+        <location filename="../QMenuStrings.cpp" line="560"/>
         <source>&amp;Octaves</source>
         <translation type="unfinished">八度音阶(&amp;O)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="560"/>
+        <location filename="../QMenuStrings.cpp" line="561"/>
         <source>&amp;Add Double-Octave Up</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="561"/>
+        <location filename="../QMenuStrings.cpp" line="562"/>
         <source>Add Octave &amp;Up</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="562"/>
+        <location filename="../QMenuStrings.cpp" line="563"/>
         <source>Add Octave &amp;Down</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="563"/>
+        <location filename="../QMenuStrings.cpp" line="564"/>
         <source>Add Double &amp;Octave Down</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="565"/>
+        <location filename="../QMenuStrings.cpp" line="566"/>
         <source>R&amp;ests</source>
         <translation type="unfinished">休止符(&amp;R)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="566"/>
+        <location filename="../QMenuStrings.cpp" line="567"/>
         <source>&amp;Normalize Rests</source>
         <translation type="unfinished">规格化休止符(&amp;N)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="567"/>
+        <location filename="../QMenuStrings.cpp" line="568"/>
         <source>&amp;Collapse Rests</source>
         <translation type="unfinished">压缩休止符(&amp;C)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="568"/>
+        <location filename="../QMenuStrings.cpp" line="569"/>
         <source>&amp;Notes</source>
         <translation type="unfinished">音符(&amp;N)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="570"/>
+        <location filename="../QMenuStrings.cpp" line="571"/>
         <source>Tie Notes at &amp;Barlines</source>
         <translation type="unfinished">将音符捆绑于进程线等等</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="571"/>
+        <location filename="../QMenuStrings.cpp" line="572"/>
         <source>Split-and-Tie Overlapping &amp;Chords</source>
         <translation type="unfinished">分割与捆绑重叠和弦</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="574"/>
+        <location filename="../QMenuStrings.cpp" line="575"/>
         <source>Fi&amp;x Notation Quantization</source>
         <translation type="unfinished">启发记号量化(&amp;Q)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="575"/>
+        <location filename="../QMenuStrings.cpp" line="576"/>
         <source>Remo&amp;ve Notation Quantization</source>
         <translation type="unfinished">启发记号量化(&amp;Q)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="576"/>
+        <location filename="../QMenuStrings.cpp" line="577"/>
         <source>&amp;Interpret...</source>
         <translation type="unfinished">解析(&amp;I)...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="577"/>
+        <location filename="../QMenuStrings.cpp" line="578"/>
         <source>Rescale</source>
         <translation type="unfinished">重定比例</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="588"/>
+        <location filename="../QMenuStrings.cpp" line="589"/>
         <source>Convert</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="592"/>
+        <location filename="../QMenuStrings.cpp" line="593"/>
         <source>Ve&amp;locities</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="595"/>
+        <location filename="../QMenuStrings.cpp" line="596"/>
         <source>Set Event &amp;Velocities</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="596"/>
+        <location filename="../QMenuStrings.cpp" line="597"/>
         <source>&amp;Fine Positioning</source>
         <translation type="unfinished">插入到作品中</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="597"/>
+        <location filename="../QMenuStrings.cpp" line="598"/>
         <source>&amp;Restore Positions</source>
         <translation type="unfinished">恢复计算好的符干(&amp;R)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="598"/>
+        <location filename="../QMenuStrings.cpp" line="599"/>
         <source>Push &amp;Left</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="599"/>
+        <location filename="../QMenuStrings.cpp" line="600"/>
         <source>&amp;Push Right</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="600"/>
+        <location filename="../QMenuStrings.cpp" line="601"/>
         <source>Push &amp;Up</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="601"/>
+        <location filename="../QMenuStrings.cpp" line="602"/>
         <source>Push &amp;Down</source>
         <translation type="unfinished">符干向下(&amp;D)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="602"/>
+        <location filename="../QMenuStrings.cpp" line="603"/>
         <source>Fine Ti&amp;ming</source>
         <translation type="unfinished">插入到作品中</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="604"/>
-        <location filename="../QMenuStrings.cpp" line="876"/>
+        <location filename="../QMenuStrings.cpp" line="605"/>
+        <location filename="../QMenuStrings.cpp" line="877"/>
         <source>Jog &amp;Right</source>
         <translation type="unfinished">右移一帧(&amp;R)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="605"/>
+        <location filename="../QMenuStrings.cpp" line="606"/>
         <source>&amp;Visibility</source>
         <translation type="unfinished">力度(&amp;V)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="606"/>
+        <location filename="../QMenuStrings.cpp" line="607"/>
         <source>Make &amp;Invisible</source>
         <translation type="unfinished">使音符生效(&amp;V)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="607"/>
+        <location filename="../QMenuStrings.cpp" line="608"/>
         <source>Make &amp;Visible</source>
         <translation type="unfinished">使音符生效(&amp;V)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="630"/>
+        <location filename="../QMenuStrings.cpp" line="631"/>
         <source>Draw &amp;Notes and Rests</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="645"/>
+        <location filename="../QMenuStrings.cpp" line="646"/>
         <source>S&amp;ymbols</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="613"/>
+        <location filename="../QMenuStrings.cpp" line="614"/>
         <source>Next Staff &amp;Up</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="614"/>
-        <source>Next Staff &amp;Down</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="252"/>
         <location filename="../QMenuStrings.cpp" line="615"/>
-        <source>Pre&amp;vious Segment</source>
+        <source>Next Staff &amp;Down</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="253"/>
         <location filename="../QMenuStrings.cpp" line="616"/>
+        <source>Pre&amp;vious Segment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="254"/>
+        <location filename="../QMenuStrings.cpp" line="617"/>
         <source>Ne&amp;xt Segment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="619"/>
+        <location filename="../QMenuStrings.cpp" line="620"/>
         <source>Step &amp;Back</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="620"/>
+        <location filename="../QMenuStrings.cpp" line="621"/>
         <source>Step &amp;Forward</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="651"/>
+        <location filename="../QMenuStrings.cpp" line="652"/>
         <source>&amp;Durations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="652"/>
+        <location filename="../QMenuStrings.cpp" line="653"/>
         <source>&amp;Double Whole Note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="653"/>
+        <location filename="../QMenuStrings.cpp" line="654"/>
         <source>&amp;Whole Note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="654"/>
+        <location filename="../QMenuStrings.cpp" line="655"/>
         <source>&amp;Half Note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="655"/>
+        <location filename="../QMenuStrings.cpp" line="656"/>
         <source>&amp;Quarter Note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="656"/>
+        <location filename="../QMenuStrings.cpp" line="657"/>
         <source>&amp;Eighth Note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="657"/>
+        <location filename="../QMenuStrings.cpp" line="658"/>
         <source>&amp;Sixteenth note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="658"/>
+        <location filename="../QMenuStrings.cpp" line="659"/>
         <source>&amp;Thirty-Second Note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="659"/>
+        <location filename="../QMenuStrings.cpp" line="660"/>
         <source>Sixty-&amp;Fourth Note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="660"/>
+        <location filename="../QMenuStrings.cpp" line="661"/>
         <source>D&amp;otted Whole Note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="662"/>
+        <location filename="../QMenuStrings.cpp" line="663"/>
         <source>Dotted Q&amp;uarter Note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="663"/>
+        <location filename="../QMenuStrings.cpp" line="664"/>
         <source>Dotted E&amp;ighth Note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="664"/>
+        <location filename="../QMenuStrings.cpp" line="665"/>
         <source>Dotted Si&amp;xteenth Note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="665"/>
+        <location filename="../QMenuStrings.cpp" line="666"/>
         <source>Dotted Thirt&amp;y-Second Note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="633"/>
+        <location filename="../QMenuStrings.cpp" line="634"/>
         <source>&amp;No Accidental</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="634"/>
+        <location filename="../QMenuStrings.cpp" line="635"/>
         <source>&amp;Follow Previous Accidental</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="635"/>
+        <location filename="../QMenuStrings.cpp" line="636"/>
         <source>&amp;Sharp</source>
         <translation type="unfinished">锐化</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="636"/>
+        <location filename="../QMenuStrings.cpp" line="637"/>
         <source>F&amp;lat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="637"/>
+        <location filename="../QMenuStrings.cpp" line="638"/>
         <source>N&amp;atural</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="638"/>
+        <location filename="../QMenuStrings.cpp" line="639"/>
         <source>&amp;Double Sharp</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="639"/>
+        <location filename="../QMenuStrings.cpp" line="640"/>
         <source>D&amp;ouble Flat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="640"/>
+        <location filename="../QMenuStrings.cpp" line="641"/>
         <source>&amp;Clefs</source>
         <translation type="unfinished">谱号(&amp;C)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="641"/>
+        <location filename="../QMenuStrings.cpp" line="642"/>
         <source>&amp;Treble Clef</source>
         <translation type="unfinished">高音谱号(&amp;T)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="642"/>
+        <location filename="../QMenuStrings.cpp" line="643"/>
         <source>&amp;Alto Clef</source>
         <translation type="unfinished">次高音谱号(&amp;A)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="643"/>
+        <location filename="../QMenuStrings.cpp" line="644"/>
         <source>Te&amp;nor Clef</source>
         <translation type="unfinished">次中音谱号(&amp;N)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="644"/>
+        <location filename="../QMenuStrings.cpp" line="645"/>
         <source>&amp;Bass Clef</source>
         <translation type="unfinished">低音谱号(&amp;B)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="649"/>
+        <location filename="../QMenuStrings.cpp" line="650"/>
         <source>&amp;Text</source>
         <translation type="unfinished">文本(&amp;T)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="650"/>
+        <location filename="../QMenuStrings.cpp" line="651"/>
         <source>&amp;Guitar Chord</source>
         <translation type="unfinished">音色选择器</translation>
     </message>
@@ -2463,70 +2463,70 @@
         <translation type="obsolete">创建小节</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="670"/>
+        <location filename="../QMenuStrings.cpp" line="671"/>
         <source>&amp;Insert Note</source>
         <translation type="unfinished">插入音符(&amp;I)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="307"/>
-        <location filename="../QMenuStrings.cpp" line="706"/>
+        <location filename="../QMenuStrings.cpp" line="308"/>
+        <location filename="../QMenuStrings.cpp" line="707"/>
         <source>&amp;Lower Octave</source>
         <translation type="unfinished">低八度(&amp;L)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="724"/>
+        <location filename="../QMenuStrings.cpp" line="725"/>
         <source>Insert rest</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="726"/>
+        <location filename="../QMenuStrings.cpp" line="727"/>
         <source>Triplet Insert Mo&amp;de</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="727"/>
+        <location filename="../QMenuStrings.cpp" line="728"/>
         <source>Grace Insert &amp;Mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="442"/>
-        <location filename="../QMenuStrings.cpp" line="822"/>
+        <location filename="../QMenuStrings.cpp" line="443"/>
+        <location filename="../QMenuStrings.cpp" line="823"/>
         <source>Show T&amp;ools Toolbar</source>
         <translation type="unfinished">显示工具工具栏(&amp;O)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="443"/>
+        <location filename="../QMenuStrings.cpp" line="444"/>
         <source>Show &amp;Accidentals Toolbar</source>
         <translation type="unfinished">显示临时记号工具栏(&amp;A)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="444"/>
+        <location filename="../QMenuStrings.cpp" line="445"/>
         <source>Show Cle&amp;fs Toolbar</source>
         <translation type="unfinished">显示谱号工具栏(&amp;F)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="445"/>
+        <location filename="../QMenuStrings.cpp" line="446"/>
         <source>Show &amp;Marks Toolbar</source>
         <translation type="unfinished">显示标记工具栏(&amp;M)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="446"/>
+        <location filename="../QMenuStrings.cpp" line="447"/>
         <source>Show &amp;Group Toolbar</source>
         <translation type="unfinished">显示分组工具栏(&amp;G)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="448"/>
-        <location filename="../QMenuStrings.cpp" line="825"/>
+        <location filename="../QMenuStrings.cpp" line="449"/>
+        <location filename="../QMenuStrings.cpp" line="826"/>
         <source>Show Trans&amp;port Toolbar</source>
         <translation type="unfinished">显示传送工具栏(&amp;P)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="449"/>
+        <location filename="../QMenuStrings.cpp" line="450"/>
         <source>Show &amp;Layout Toolbar</source>
         <translation type="unfinished">显示布局工具栏(&amp;L)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="829"/>
+        <location filename="../QMenuStrings.cpp" line="830"/>
         <source>Show Cho&amp;rd Name Ruler</source>
         <translation type="unfinished">显示和弦名称标尺(&amp;R)</translation>
     </message>
@@ -2535,803 +2535,800 @@
         <translation type="obsolete">显示未加工音符标尺(&amp;W)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="457"/>
+        <location filename="../QMenuStrings.cpp" line="458"/>
         <source>Show &amp;Annotations</source>
         <translation type="unfinished">显示标注(&amp;A)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="458"/>
+        <location filename="../QMenuStrings.cpp" line="459"/>
         <source>Show Lily&amp;Pond Directives</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="739"/>
+        <location filename="../QMenuStrings.cpp" line="740"/>
         <source>Clefs Toolbar</source>
         <translation type="unfinished">谱号工具栏</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="740"/>
+        <location filename="../QMenuStrings.cpp" line="741"/>
         <source>Accidentals Toolbar</source>
         <translation type="unfinished">临时记号工具栏</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="746"/>
+        <location filename="../QMenuStrings.cpp" line="747"/>
         <source>Group Toolbar</source>
         <translation type="unfinished">分组工具栏</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="745"/>
+        <location filename="../QMenuStrings.cpp" line="746"/>
         <source>Marks Toolbar</source>
         <translation type="unfinished">标记工具栏</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="171"/>
+        <location filename="../QMenuStrings.cpp" line="172"/>
         <source>Select &amp;All Events</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="193"/>
+        <location filename="../QMenuStrings.cpp" line="194"/>
         <source>Show To&amp;ols</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="211"/>
+        <location filename="../QMenuStrings.cpp" line="212"/>
         <source>&amp;Events</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="239"/>
+        <location filename="../QMenuStrings.cpp" line="240"/>
         <source>Remove &amp;Triggers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="240"/>
+        <location filename="../QMenuStrings.cpp" line="241"/>
         <source>Pitch &amp;Bend Sequence...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="194"/>
+        <location filename="../QMenuStrings.cpp" line="195"/>
         <source>Show T&amp;ransport Toolbar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="42"/>
+        <location filename="../QMenuStrings.cpp" line="43"/>
+        <location filename="../QMenuStrings.cpp" line="57"/>
+        <location filename="../QMenuStrings.cpp" line="72"/>
+        <location filename="../QMenuStrings.cpp" line="82"/>
+        <location filename="../QMenuStrings.cpp" line="117"/>
+        <location filename="../QMenuStrings.cpp" line="140"/>
+        <location filename="../QMenuStrings.cpp" line="329"/>
+        <location filename="../QMenuStrings.cpp" line="365"/>
+        <location filename="../QMenuStrings.cpp" line="401"/>
+        <location filename="../QMenuStrings.cpp" line="731"/>
+        <location filename="../QMenuStrings.cpp" line="917"/>
+        <location filename="../QMenuStrings.cpp" line="963"/>
+        <location filename="../QMenuStrings.cpp" line="984"/>
         <source>Rosegarden &amp;Manual</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="56"/>
-        <location filename="../QMenuStrings.cpp" line="71"/>
-        <location filename="../QMenuStrings.cpp" line="81"/>
-        <location filename="../QMenuStrings.cpp" line="116"/>
-        <location filename="../QMenuStrings.cpp" line="139"/>
-        <location filename="../QMenuStrings.cpp" line="328"/>
-        <location filename="../QMenuStrings.cpp" line="364"/>
-        <location filename="../QMenuStrings.cpp" line="400"/>
-        <location filename="../QMenuStrings.cpp" line="730"/>
-        <location filename="../QMenuStrings.cpp" line="962"/>
-        <location filename="../QMenuStrings.cpp" line="983"/>
-        <source>Rosegarden &amp;Mandbook</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="104"/>
-        <location filename="../QMenuStrings.cpp" line="174"/>
+        <location filename="../QMenuStrings.cpp" line="105"/>
+        <location filename="../QMenuStrings.cpp" line="175"/>
         <source>Preferences...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="199"/>
-        <location filename="../QMenuStrings.cpp" line="453"/>
-        <source>Show &amp;Velocity Ruler</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="200"/>
         <location filename="../QMenuStrings.cpp" line="454"/>
-        <source>Show Pitch &amp;Bend Ruler</source>
+        <source>Show &amp;Velocity Ruler</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="201"/>
         <location filename="../QMenuStrings.cpp" line="455"/>
+        <source>Show Pitch &amp;Bend Ruler</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="202"/>
+        <location filename="../QMenuStrings.cpp" line="456"/>
         <source>Add &amp;Control Ruler...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="248"/>
+        <location filename="../QMenuStrings.cpp" line="249"/>
         <source>Cursor Back and Se&amp;lect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="337"/>
-        <location filename="../QMenuStrings.cpp" line="748"/>
+        <location filename="../QMenuStrings.cpp" line="338"/>
+        <location filename="../QMenuStrings.cpp" line="749"/>
         <source>Rulers Toolbar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="430"/>
-        <location filename="../QMenuStrings.cpp" line="818"/>
+        <location filename="../QMenuStrings.cpp" line="431"/>
+        <location filename="../QMenuStrings.cpp" line="819"/>
         <source>&amp;Preferences...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="450"/>
+        <location filename="../QMenuStrings.cpp" line="451"/>
         <source>Show &amp;Rulers Toolbar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="747"/>
+        <location filename="../QMenuStrings.cpp" line="748"/>
         <source>Layout Toolbar</source>
         <translation type="unfinished">布局工具栏</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="749"/>
+        <location filename="../QMenuStrings.cpp" line="750"/>
         <source>Switch to Insert Tool</source>
         <translation type="unfinished">切换到插入工具</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="751"/>
+        <location filename="../QMenuStrings.cpp" line="752"/>
         <source>Collapse Rests</source>
         <translation type="unfinished">压缩休止符(&amp;C)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="752"/>
+        <location filename="../QMenuStrings.cpp" line="753"/>
         <source>Respell as Flat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="753"/>
+        <location filename="../QMenuStrings.cpp" line="754"/>
         <source>Respell as Sharp</source>
         <translation type="unfinished">临时记号(&amp;A)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="754"/>
+        <location filename="../QMenuStrings.cpp" line="755"/>
         <source>Respell as Natural</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="755"/>
+        <location filename="../QMenuStrings.cpp" line="756"/>
         <source>Collapse Notes</source>
         <translation type="unfinished">压缩休止符(&amp;C)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="756"/>
+        <location filename="../QMenuStrings.cpp" line="757"/>
         <source>Interpret</source>
         <translation type="unfinished">解译</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="757"/>
+        <location filename="../QMenuStrings.cpp" line="758"/>
         <source>Move to Staff Above</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="758"/>
+        <location filename="../QMenuStrings.cpp" line="759"/>
         <source>Move to Staff Below</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="759"/>
+        <location filename="../QMenuStrings.cpp" line="760"/>
         <source>Make Invisible</source>
         <translation type="unfinished">使音符生效(&amp;V)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="760"/>
+        <location filename="../QMenuStrings.cpp" line="761"/>
         <source>Make Visible</source>
         <translation type="unfinished">使音符生效(&amp;V)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="767"/>
+        <location filename="../QMenuStrings.cpp" line="768"/>
         <source>Auto-Beam when appropriate</source>
         <translation type="unfinished">适当的时候自动分开符尾</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="768"/>
+        <location filename="../QMenuStrings.cpp" line="769"/>
         <source>No Accidental</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="769"/>
+        <location filename="../QMenuStrings.cpp" line="770"/>
         <source>Follow Previous Accidental</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="770"/>
+        <location filename="../QMenuStrings.cpp" line="771"/>
         <source>Sharp</source>
         <translation type="unfinished">锐化</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="771"/>
+        <location filename="../QMenuStrings.cpp" line="772"/>
         <source>Flat</source>
         <translation type="unfinished">平坦化</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="772"/>
+        <location filename="../QMenuStrings.cpp" line="773"/>
         <source>Natural</source>
         <translation type="unfinished">自然化</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="773"/>
+        <location filename="../QMenuStrings.cpp" line="774"/>
         <source>Double Sharp</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="774"/>
+        <location filename="../QMenuStrings.cpp" line="775"/>
         <source>Double Flat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="776"/>
+        <location filename="../QMenuStrings.cpp" line="777"/>
         <source>&amp;New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="777"/>
+        <location filename="../QMenuStrings.cpp" line="778"/>
         <source>&amp;Import</source>
         <translation type="unfinished">导入(&amp;I)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="778"/>
+        <location filename="../QMenuStrings.cpp" line="779"/>
         <source>Import Rosegarden &amp;Project file...</source>
         <translation type="unfinished">导入玫瑰园 2.1 文件(&amp;R)...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="779"/>
+        <location filename="../QMenuStrings.cpp" line="780"/>
         <source>Import &amp;MIDI file...</source>
         <translation type="unfinished">导入 MIDI 文件(&amp;M)...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="781"/>
+        <location filename="../QMenuStrings.cpp" line="782"/>
         <source>Import &amp;Hydrogen file...</source>
         <translation type="unfinished">导入 Hydrogen 文件(&amp;H)...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="782"/>
+        <location filename="../QMenuStrings.cpp" line="783"/>
         <source>&amp;Merge</source>
         <translation type="unfinished">并入(&amp;M)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="783"/>
+        <location filename="../QMenuStrings.cpp" line="784"/>
         <source>Merge &amp;File...</source>
         <translation type="unfinished">并入文件(&amp;F)...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="784"/>
+        <location filename="../QMenuStrings.cpp" line="785"/>
         <source>Merge &amp;MIDI file...</source>
         <translation type="unfinished">并入 MIDI 文件(&amp;M)...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="786"/>
+        <location filename="../QMenuStrings.cpp" line="787"/>
         <source>Merge &amp;Hydrogen file...</source>
         <translation type="unfinished">并入 Hydrogen 文件(&amp;H)...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="787"/>
+        <location filename="../QMenuStrings.cpp" line="788"/>
         <source>&amp;Export</source>
         <translation type="unfinished">导出(&amp;E)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="788"/>
+        <location filename="../QMenuStrings.cpp" line="789"/>
         <source>Export Rosegarden &amp;Project file...</source>
         <translation type="unfinished">导入玫瑰园 2.1 文件(&amp;R)...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="789"/>
+        <location filename="../QMenuStrings.cpp" line="790"/>
         <source>Export &amp;Lilypond file...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="790"/>
+        <location filename="../QMenuStrings.cpp" line="791"/>
         <source>Export &amp;MIDI file...</source>
         <translation type="unfinished">导出 MIDI 文件(&amp;M)...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="791"/>
+        <location filename="../QMenuStrings.cpp" line="792"/>
         <source>Export &amp;Csound score file...</source>
         <translation type="unfinished">导出 Csound 乐谱文件(&amp;C)...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="792"/>
+        <location filename="../QMenuStrings.cpp" line="793"/>
         <source>Export M&amp;up file...</source>
         <translation type="unfinished">导出 Mup 文件(&amp;U)...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="793"/>
+        <location filename="../QMenuStrings.cpp" line="794"/>
         <source>Export Music&amp;XML file...</source>
         <translation type="unfinished">导出 MusicXML 文件(&amp;X)...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="794"/>
+        <location filename="../QMenuStrings.cpp" line="795"/>
         <source>&amp;Open...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="795"/>
+        <location filename="../QMenuStrings.cpp" line="796"/>
         <source>Open &amp;Recent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="797"/>
+        <location filename="../QMenuStrings.cpp" line="798"/>
         <source>Save &amp;As...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="798"/>
+        <location filename="../QMenuStrings.cpp" line="799"/>
         <source>Save as &amp;Template...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="799"/>
+        <location filename="../QMenuStrings.cpp" line="800"/>
         <source>Re&amp;vert</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="800"/>
+        <location filename="../QMenuStrings.cpp" line="801"/>
         <source>Prin&amp;t preview...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="802"/>
+        <location filename="../QMenuStrings.cpp" line="803"/>
         <source>Manage A&amp;udio Files</source>
         <translation type="unfinished">更改音频文件标签</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="803"/>
+        <location filename="../QMenuStrings.cpp" line="804"/>
         <source>Play&amp;list</source>
         <translation type="unfinished">播放列表</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="805"/>
+        <location filename="../QMenuStrings.cpp" line="806"/>
         <source>&amp;Quit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="813"/>
+        <location filename="../QMenuStrings.cpp" line="814"/>
         <source>Cut &amp;Range</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="814"/>
+        <location filename="../QMenuStrings.cpp" line="815"/>
         <source>Cop&amp;y Range</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="815"/>
+        <location filename="../QMenuStrings.cpp" line="816"/>
         <source>Pa&amp;ste Range</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="816"/>
+        <location filename="../QMenuStrings.cpp" line="817"/>
         <source>&amp;Insert Range...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="817"/>
+        <location filename="../QMenuStrings.cpp" line="818"/>
         <source>Select &amp;All Segments</source>
         <translation type="unfinished">选择全部小节(&amp;A)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="840"/>
+        <location filename="../QMenuStrings.cpp" line="841"/>
         <source>&amp;Open Tempo and Time Signature Editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="841"/>
+        <location filename="../QMenuStrings.cpp" line="842"/>
         <source>Set &amp;Tempo to Audio Segment Duration</source>
         <translation type="unfinished">使节拍符合音频片段音长(&amp;T)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="842"/>
+        <location filename="../QMenuStrings.cpp" line="843"/>
         <source>Set Tempos from &amp;Beat Segment</source>
         <translation type="unfinished">使节拍符合拍音片段(&amp;B)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="843"/>
+        <location filename="../QMenuStrings.cpp" line="844"/>
         <source>Change &amp;Composition Start and End...</source>
         <translation type="unfinished">改变作品持续时间(&amp;C)...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="844"/>
+        <location filename="../QMenuStrings.cpp" line="845"/>
         <source>Edit Mar&amp;kers...</source>
         <translation type="unfinished">添加文本标记(&amp;X)...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="845"/>
+        <location filename="../QMenuStrings.cpp" line="846"/>
         <source>Edit Document P&amp;roperties...</source>
         <translation type="unfinished">编辑文档属性(&amp;R)...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="846"/>
+        <location filename="../QMenuStrings.cpp" line="847"/>
         <source>&amp;Set Quick Marker at Playback Position</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="847"/>
+        <location filename="../QMenuStrings.cpp" line="848"/>
         <source>&amp;Jump to Quick Marker</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="848"/>
+        <location filename="../QMenuStrings.cpp" line="849"/>
         <source>&amp;Studio</source>
         <translation type="unfinished">工作环境(&amp;S)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="849"/>
+        <location filename="../QMenuStrings.cpp" line="850"/>
         <source>&amp;Audio Mixer</source>
         <translation type="unfinished">音频衰减器</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="851"/>
+        <location filename="../QMenuStrings.cpp" line="852"/>
         <source>Manage MIDI &amp;Devices</source>
         <translation type="unfinished">管理 MIDI 设备</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="852"/>
+        <location filename="../QMenuStrings.cpp" line="853"/>
         <source>Manage S&amp;ynth Plugins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="853"/>
+        <location filename="../QMenuStrings.cpp" line="854"/>
         <source>Manage &amp;Metronome</source>
         <translation type="unfinished">管理库...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="854"/>
+        <location filename="../QMenuStrings.cpp" line="855"/>
         <source>Modify MIDI &amp;Filters</source>
         <translation type="unfinished">调整 MIDI 过滤器(&amp;F)...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="855"/>
+        <location filename="../QMenuStrings.cpp" line="856"/>
         <source>MIDI &amp;Thru Routing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="856"/>
+        <location filename="../QMenuStrings.cpp" line="857"/>
         <source>&amp;Reset MIDI Network</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="857"/>
+        <location filename="../QMenuStrings.cpp" line="858"/>
         <source>Im&amp;port Studio from File...</source>
         <translation type="unfinished">正在导出音频文件...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="858"/>
+        <location filename="../QMenuStrings.cpp" line="859"/>
         <source>&amp;Import Default Studio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="859"/>
+        <location filename="../QMenuStrings.cpp" line="860"/>
         <source>&amp;Save Current Document as Default Studio</source>
         <translation type="unfinished">将当前文档保存为默认工作环境(&amp;S)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="860"/>
+        <location filename="../QMenuStrings.cpp" line="861"/>
         <source>Se&amp;gments</source>
         <translation type="unfinished">片段(&amp;G)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="861"/>
+        <location filename="../QMenuStrings.cpp" line="862"/>
         <source>Toggle Repeat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="863"/>
+        <location filename="../QMenuStrings.cpp" line="864"/>
         <source>Open in &amp;Default editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="868"/>
+        <location filename="../QMenuStrings.cpp" line="869"/>
         <source>R&amp;elabel...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="870"/>
+        <location filename="../QMenuStrings.cpp" line="871"/>
         <source>Repe&amp;at Last Quantize</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="872"/>
+        <location filename="../QMenuStrings.cpp" line="873"/>
         <source>Stretch &amp;or Squash...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="873"/>
+        <location filename="../QMenuStrings.cpp" line="874"/>
         <source>Set Start &amp;Time...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="874"/>
+        <location filename="../QMenuStrings.cpp" line="875"/>
         <source>Set &amp;Duration...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="877"/>
+        <location filename="../QMenuStrings.cpp" line="878"/>
         <source>Join</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="878"/>
+        <location filename="../QMenuStrings.cpp" line="879"/>
         <source>&amp;Split</source>
         <translation type="unfinished">分割(&amp;R)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="879"/>
+        <location filename="../QMenuStrings.cpp" line="880"/>
         <source>&amp;Split on Silence</source>
         <translation type="unfinished">安静拆分(&amp;S)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="880"/>
+        <location filename="../QMenuStrings.cpp" line="881"/>
         <source>Split by &amp;Pitch...</source>
         <translation type="unfinished">根据音色拆分(&amp;P)...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="881"/>
+        <location filename="../QMenuStrings.cpp" line="882"/>
         <source>Split by &amp;Recording Source...</source>
         <translation type="unfinished">根据音色拆分(&amp;P)...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="882"/>
+        <location filename="../QMenuStrings.cpp" line="883"/>
         <source> Split &amp;at Time...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="883"/>
+        <location filename="../QMenuStrings.cpp" line="884"/>
         <source>Turn Re&amp;peats into Copies</source>
         <translation type="unfinished">将重复部分转为副本(&amp;P)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="884"/>
+        <location filename="../QMenuStrings.cpp" line="885"/>
         <source>Manage Tri&amp;ggered Segments</source>
         <translation type="unfinished">管理触发片段(&amp;G)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="885"/>
+        <location filename="../QMenuStrings.cpp" line="886"/>
         <source>Trac&amp;ks</source>
         <translation type="unfinished">轨道(&amp;K)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="886"/>
+        <location filename="../QMenuStrings.cpp" line="887"/>
         <source>Add &amp;Track</source>
         <translation type="unfinished">添加轨道...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="887"/>
+        <location filename="../QMenuStrings.cpp" line="888"/>
         <source>&amp;Add Tracks...</source>
         <translation type="unfinished">添加轨道...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="888"/>
+        <location filename="../QMenuStrings.cpp" line="889"/>
         <source>D&amp;elete Track</source>
         <translation type="unfinished">删除轨道(&amp;D)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="889"/>
+        <location filename="../QMenuStrings.cpp" line="890"/>
         <source>Move Track &amp;Down</source>
         <translation type="unfinished">下移轨道(&amp;D)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="890"/>
+        <location filename="../QMenuStrings.cpp" line="891"/>
         <source>Mo&amp;ve Track Up</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="891"/>
+        <location filename="../QMenuStrings.cpp" line="892"/>
         <source>Select &amp;Next Track</source>
         <translation type="unfinished">选择下一轨(&amp;N)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="892"/>
+        <location filename="../QMenuStrings.cpp" line="893"/>
         <source>Select &amp;Previous Track</source>
         <translation type="unfinished">选择上一轨(&amp;P)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="893"/>
+        <location filename="../QMenuStrings.cpp" line="894"/>
         <source>Mute or Unmute Tra&amp;ck</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="894"/>
+        <location filename="../QMenuStrings.cpp" line="895"/>
         <source>Arm &amp;or Un-arm Track for Record</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="895"/>
+        <location filename="../QMenuStrings.cpp" line="896"/>
         <source>&amp;Unmute all Tracks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="896"/>
+        <location filename="../QMenuStrings.cpp" line="897"/>
         <source>&amp;Mute all Tracks</source>
         <translation type="unfinished">删除轨道(&amp;D)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="897"/>
+        <location filename="../QMenuStrings.cpp" line="898"/>
         <source>Set &amp;Instrument</source>
         <translation type="unfinished">设置乐器(&amp;I)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="898"/>
+        <location filename="../QMenuStrings.cpp" line="899"/>
         <source>&amp;Remap Instruments...</source>
         <translation type="unfinished">重新映射乐器(&amp;R)...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="904"/>
+        <location filename="../QMenuStrings.cpp" line="905"/>
         <source>&amp;Resize</source>
         <translation type="unfinished">重定义大小(&amp;R)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="912"/>
+        <location filename="../QMenuStrings.cpp" line="913"/>
         <source>P&amp;unch in Record</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="109"/>
-        <location filename="../QMenuStrings.cpp" line="192"/>
-        <location filename="../QMenuStrings.cpp" line="441"/>
-        <location filename="../QMenuStrings.cpp" line="821"/>
+        <location filename="../QMenuStrings.cpp" line="110"/>
+        <location filename="../QMenuStrings.cpp" line="193"/>
+        <location filename="../QMenuStrings.cpp" line="442"/>
+        <location filename="../QMenuStrings.cpp" line="822"/>
         <source>Show Main &amp;Toolbar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="823"/>
+        <location filename="../QMenuStrings.cpp" line="824"/>
         <source>Show Trac&amp;ks Toolbar</source>
         <translation type="unfinished">显示轨道工具栏(&amp;K)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="824"/>
+        <location filename="../QMenuStrings.cpp" line="825"/>
         <source>Show &amp;Editors Toolbar</source>
         <translation type="unfinished">显示编辑工具栏(&amp;E)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="826"/>
+        <location filename="../QMenuStrings.cpp" line="827"/>
         <source>Show &amp;Zoom Toolbar</source>
         <translation type="unfinished">显示缩放工具栏(&amp;Z)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="110"/>
-        <location filename="../QMenuStrings.cpp" line="195"/>
-        <location filename="../QMenuStrings.cpp" line="836"/>
+        <location filename="../QMenuStrings.cpp" line="111"/>
+        <location filename="../QMenuStrings.cpp" line="196"/>
+        <location filename="../QMenuStrings.cpp" line="837"/>
         <source>Show St&amp;atusbar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="828"/>
+        <location filename="../QMenuStrings.cpp" line="829"/>
         <source>Show Playback Position R&amp;uler</source>
         <translation type="unfinished">从回放点到光标(&amp;C)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="780"/>
+        <location filename="../QMenuStrings.cpp" line="781"/>
         <source>Import &amp;X11 Rosegarden file...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="785"/>
+        <location filename="../QMenuStrings.cpp" line="786"/>
         <source>Merge &amp;X11 Rosegarden file...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="850"/>
+        <location filename="../QMenuStrings.cpp" line="851"/>
         <source>MIDI Mi&amp;xer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="830"/>
+        <location filename="../QMenuStrings.cpp" line="831"/>
         <source>Show Te&amp;mpo Ruler</source>
         <translation type="unfinished">显示节拍标尺(&amp;M)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="831"/>
+        <location filename="../QMenuStrings.cpp" line="832"/>
         <source>Show Tra&amp;nsport</source>
         <translation type="unfinished">显示播放控制器(&amp;N)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="832"/>
+        <location filename="../QMenuStrings.cpp" line="833"/>
         <source>Show Special &amp;Parameters</source>
         <translation type="unfinished">显示设备参数(&amp;I)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="833"/>
+        <location filename="../QMenuStrings.cpp" line="834"/>
         <source>Show Segment Pre&amp;views</source>
         <translation type="unfinished">显示小节预览(&amp;V)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="834"/>
+        <location filename="../QMenuStrings.cpp" line="835"/>
         <source>Sh&amp;ow Segment Labels</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="835"/>
+        <location filename="../QMenuStrings.cpp" line="836"/>
         <source>Show Track &amp;Labels</source>
         <translation type="unfinished">显示轨道标签(&amp;L)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="921"/>
+        <location filename="../QMenuStrings.cpp" line="922"/>
         <source>Main Toolbar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="925"/>
+        <location filename="../QMenuStrings.cpp" line="926"/>
         <source>Tracks Toolbar</source>
         <translation type="unfinished">轨道工具栏</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="926"/>
+        <location filename="../QMenuStrings.cpp" line="927"/>
         <source>Editors Toolbar</source>
         <translation type="unfinished">编辑器工具栏</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="928"/>
+        <location filename="../QMenuStrings.cpp" line="929"/>
         <source>Rewind to Beginning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="929"/>
+        <location filename="../QMenuStrings.cpp" line="930"/>
         <source>Fast Forward to End</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="934"/>
+        <location filename="../QMenuStrings.cpp" line="935"/>
         <source>Insert Tempo Change</source>
         <translation type="unfinished">插入节拍变化</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="935"/>
+        <location filename="../QMenuStrings.cpp" line="936"/>
         <source>Insert Tempo Change at Playback Position</source>
         <translation type="unfinished">插入节拍变化</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="936"/>
+        <location filename="../QMenuStrings.cpp" line="937"/>
         <source>Delete Tempo Change</source>
         <translation type="unfinished">插入节拍变化</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="937"/>
+        <location filename="../QMenuStrings.cpp" line="938"/>
         <source>Ramp Tempo to Next Tempo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="938"/>
+        <location filename="../QMenuStrings.cpp" line="939"/>
         <source>Un-Ramp Tempo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="939"/>
+        <location filename="../QMenuStrings.cpp" line="940"/>
         <source>Edit Tempo...</source>
         <translation type="unfinished">修改默认节拍(&amp;D)...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="940"/>
+        <location filename="../QMenuStrings.cpp" line="941"/>
         <source>Edit Time Signature...</source>
         <translation type="unfinished">时间标记</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="941"/>
+        <location filename="../QMenuStrings.cpp" line="942"/>
         <source>Open Tempo and Time Signature Editor</source>
         <translation type="unfinished">以事件列表编辑器打开(&amp;E)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="951"/>
+        <location filename="../QMenuStrings.cpp" line="952"/>
         <source>&amp;Edit Item</source>
         <translation type="unfinished">编辑事件</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="952"/>
+        <location filename="../QMenuStrings.cpp" line="953"/>
         <source>Select &amp;All</source>
         <translation type="unfinished">全部选择(&amp;A)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="953"/>
+        <location filename="../QMenuStrings.cpp" line="954"/>
         <source>&amp;Clear Selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="954"/>
+        <location filename="../QMenuStrings.cpp" line="955"/>
         <source>&amp;Preferences</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="977"/>
+        <location filename="../QMenuStrings.cpp" line="978"/>
         <source>Pa&amp;ste as New Triggered Segment</source>
         <translation type="unfinished">粘贴为新的触发片段(&amp;S)</translation>
     </message>
@@ -8550,14 +8547,14 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ActionFileParser.cpp" line="629"/>
+        <location filename="../../src/gui/general/ActionFileParser.cpp" line="634"/>
         <source>%1 (%2)</source>
         <translation type="unfinished">%1 (以上)</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="387"/>
         <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="828"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="686"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="695"/>
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1419"/>
         <source>%1 Controller %2 %3</source>
         <translation type="unfinished">%1 控制器 %2 %3</translation>
@@ -8573,12 +8570,12 @@
         <translation type="unfinished">玫瑰园</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/main.cpp" line="709"/>
+        <location filename="../../src/gui/application/main.cpp" line="708"/>
         <source>Welcome!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/main.cpp" line="725"/>
+        <location filename="../../src/gui/application/main.cpp" line="724"/>
         <source>&lt;h2&gt;Welcome to Rosegarden!&lt;/h2&gt;&lt;p&gt;Welcome to the Rosegarden audio and MIDI sequencer and musical notation editor.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;If you have not already done so, you may wish to install some DSSI synth plugins, or a separate synth program such as QSynth.  Rosegarden does not synthesize sounds from MIDI on its own, so without these you will hear nothing.&lt;/li&gt;&lt;li&gt;Rosegarden uses the JACK audio server for recording and playback of audio, and for playback from DSSI synth plugins.  These features will only be available if the JACK server is running.&lt;/li&gt;&lt;li&gt;Rosegarden has comprehensive documentation: see the &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&gt;Rosegarden website&lt;/a&gt; for the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/doc/en/&quot;&gt;handbook&lt;/a&gt;, &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;tutorials&lt;/a&gt;, and other information!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  To learn more, go to the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;Rosegarden website&lt;/a&gt;.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -10525,108 +10522,108 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::ControlEditorDialog</name>
     <message>
-        <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="86"/>
+        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="92"/>
         <source>&lt;no device&gt;</source>
         <translation type="unfinished">&lt;没有设备&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="103"/>
+        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="109"/>
         <source>Description  </source>
         <translation type="unfinished">描述  </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="84"/>
+        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="90"/>
         <source>Manage Controllers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="94"/>
+        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="100"/>
         <source>  Controllers for %1 (device %2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="100"/>
+        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="106"/>
         <source>Name  </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="101"/>
+        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="107"/>
         <source>Type  </source>
         <translation type="unfinished">类型</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="102"/>
+        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="108"/>
         <source>Number  </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="104"/>
+        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="110"/>
         <source>Min. value  </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="105"/>
+        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="111"/>
         <source>Max. value  </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="106"/>
+        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="112"/>
         <source>Default value  </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="107"/>
+        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="113"/>
         <source>Color  </source>
         <translation type="unfinished">配色  </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="108"/>
+        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="114"/>
         <source>Position on instrument panel</source>
         <translation type="unfinished">乐器面板上的位置</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="135"/>
+        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="130"/>
         <source>Add</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="136"/>
+        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="131"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="138"/>
-        <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="375"/>
+        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="133"/>
+        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="371"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="140"/>
+        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="135"/>
         <source>Add a Control Parameter to the Studio</source>
         <translation type="unfinished">向工作环境添加一个控制器参数</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="142"/>
+        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="137"/>
         <source>Delete a Control Parameter from the Studio</source>
         <translation type="unfinished">从工作环境删除一个控制器参数</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="144"/>
+        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="139"/>
         <source>Close the Control Parameter editor</source>
         <translation type="unfinished">关闭控制器参数编辑器</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="226"/>
+        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="221"/>
         <source>&lt;default&gt;</source>
         <translation type="unfinished">&lt;默认&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="230"/>
+        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="225"/>
         <source>&lt;not showing&gt;</source>
         <translation type="unfinished">&lt;未显示&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="282"/>
+        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="276"/>
         <source>&lt;none&gt;</source>
         <translation type="unfinished">&lt;无&gt;</translation>
     </message>
@@ -10634,62 +10631,62 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::ControlParameterEditDialog</name>
     <message>
-        <location filename="../../src/gui/editors/segment/ControlParameterEditDialog.cpp" line="76"/>
+        <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="76"/>
         <source>Name:</source>
         <translation type="unfinished">名称：</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/ControlParameterEditDialog.cpp" line="81"/>
+        <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="81"/>
         <source>Type:</source>
         <translation type="unfinished">类型：</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/ControlParameterEditDialog.cpp" line="90"/>
+        <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="90"/>
         <source>Description:</source>
         <translation type="unfinished">描述：</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/ControlParameterEditDialog.cpp" line="60"/>
+        <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="60"/>
         <source>Edit Controller</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/ControlParameterEditDialog.cpp" line="69"/>
+        <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="69"/>
         <source>Controller Properties</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/ControlParameterEditDialog.cpp" line="98"/>
+        <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="98"/>
         <source>Controller number:</source>
         <translation type="unfinished">控制器编号：</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/ControlParameterEditDialog.cpp" line="102"/>
+        <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="102"/>
         <source>Minimum value:</source>
         <translation type="unfinished">最小值：</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/ControlParameterEditDialog.cpp" line="106"/>
+        <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="106"/>
         <source>Maximum value:</source>
         <translation type="unfinished">最大值：</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/ControlParameterEditDialog.cpp" line="110"/>
+        <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="110"/>
         <source>Default value:</source>
         <translation type="unfinished">默认值：</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/ControlParameterEditDialog.cpp" line="114"/>
+        <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="114"/>
         <source>Color:</source>
         <translation type="unfinished">配色：</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/ControlParameterEditDialog.cpp" line="118"/>
+        <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="118"/>
         <source>Instrument Parameter Box position:</source>
         <translation type="unfinished">乐器参数框位置：</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/ControlParameterEditDialog.cpp" line="190"/>
+        <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="190"/>
         <source>&lt;not showing&gt;</source>
         <translation type="unfinished">&lt;未显示&gt;</translation>
     </message>
@@ -10713,7 +10710,7 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::ControlRulerWidget</name>
     <message>
-        <location filename="../../src/gui/rulers/ControlRulerWidget.cpp" line="258"/>
+        <location filename="../../src/gui/rulers/ControlRulerWidget.cpp" line="273"/>
         <source>Velocity</source>
         <translation type="unfinished"></translation>
     </message>
@@ -10721,22 +10718,22 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::ControllerEventsRuler</name>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="276"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="277"/>
         <source>Unsupported Event Type</source>
         <translation type="unfinished">不支持的事件类型</translation>
     </message>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="286"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="287"/>
         <source>Pitch Bend</source>
         <translation type="unfinished">音色弯曲</translation>
     </message>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="291"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="292"/>
         <source>Controller Events</source>
         <translation type="unfinished">控制器事件</translation>
     </message>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="406"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="407"/>
         <source>Controller Event Number</source>
         <translation type="unfinished">控制器事件号</translation>
     </message>
@@ -14260,7 +14257,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="123"/>
-        <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="387"/>
+        <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="393"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
@@ -14285,12 +14282,12 @@ delay at the start of playback due to the amount of data being transmitted.</sou
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="286"/>
+        <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="292"/>
         <source>&lt;none&gt;</source>
         <translation type="unfinished">&lt;无&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="305"/>
+        <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="311"/>
         <source>Remove all markers</source>
         <translation type="unfinished">删除所有标记(&amp;R)</translation>
     </message>
@@ -14616,7 +14613,7 @@ Double-click to open the marker editor.</source>
         <translation type="obsolete">正在删除选择区...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1607"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1612"/>
         <source>Unknown note insert action %1</source>
         <translation type="unfinished">未知的音符插入行为 %1</translation>
     </message>
@@ -14711,17 +14708,17 @@ Double-click to open the marker editor.</source>
         <translation type="obsolete">%1%</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1211"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1216"/>
         <source>Estimated time signature shown</source>
         <translation type="unfinished">估计的时间标记显示为</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1294"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1299"/>
         <source>Transpose</source>
         <translation type="unfinished">变调</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1295"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1300"/>
         <source>By number of semitones: </source>
         <translation type="unfinished">输入要变调的半音数字：</translation>
     </message>
@@ -14734,7 +14731,7 @@ Double-click to open the marker editor.</source>
         <translation type="obsolete">正在降低力度...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="939"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="944"/>
         <source>Set Event Velocities</source>
         <translation type="unfinished">设定事件力度</translation>
     </message>
@@ -14743,12 +14740,12 @@ Double-click to open the marker editor.</source>
         <translation type="obsolete">正在设定力度...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="983"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="988"/>
         <source>Trigger Segment</source>
         <translation type="unfinished">触发片段</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="993"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="998"/>
         <source>Remove Triggers</source>
         <translation type="unfinished">删除所有标记(&amp;R)</translation>
     </message>
@@ -14766,7 +14763,7 @@ Double-click to open the marker editor.</source>
         <translation type="obsolete">音长</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1493"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1498"/>
         <source>Can&apos;t insert note: No grid duration selected</source>
         <translation type="unfinished">没有音符音长被选中</translation>
     </message>
@@ -15868,17 +15865,17 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation type="obsolete">正在清除音频数据...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="798"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="807"/>
         <source>Note &amp;Font</source>
         <translation type="unfinished">音符字体(&amp;F)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="826"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="835"/>
         <source>Si&amp;ze</source>
         <translation type="unfinished">大小(&amp;Z)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="846"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="855"/>
         <source>S&amp;pacing</source>
         <translation type="unfinished">间距</translation>
     </message>
@@ -15891,29 +15888,29 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation type="obsolete">无</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="838"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="847"/>
         <source>%n pixel(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="945"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="954"/>
         <source>  Font:  </source>
         <translation type="unfinished">  字体： </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="980"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="989"/>
         <source>Unknown font &quot;%1&quot;, using default</source>
         <translation type="unfinished">未知的字体“%1”，使用默认值</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="988"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="997"/>
         <source>  Size:  </source>
         <translation type="unfinished">  大小： </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1012"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1021"/>
         <source>  Spacing:  </source>
         <translation type="unfinished">  间隔： </translation>
     </message>
@@ -15934,7 +15931,7 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation type="obsolete">正在调和五线谱...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="925"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="934"/>
         <source>  No selection </source>
         <translation type="unfinished">  没有选中 </translation>
     </message>
@@ -15955,17 +15952,17 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation type="obsolete">音长</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3107"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3113"/>
         <source>Triplet</source>
         <translation type="unfinished">三连音</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3108"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3114"/>
         <source>Chord</source>
         <translation type="unfinished">和弦</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3109"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3115"/>
         <source>Grace</source>
         <translation type="unfinished">取消装饰音(&amp;R)</translation>
     </message>
@@ -15978,7 +15975,7 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation type="obsolete">隐藏标注</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1285"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1291"/>
         <source>Unknown spacing action %1</source>
         <translation type="unfinished">未知的间隔行为 %1</translation>
     </message>
@@ -15987,7 +15984,7 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation type="obsolete">未知的字体行为 %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1234"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1240"/>
         <source>Unknown font action %1</source>
         <translation type="unfinished">未知的字体行为 %1</translation>
     </message>
@@ -15996,7 +15993,7 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation type="obsolete">未知的字体大小 %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1260"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1266"/>
         <source>Unknown font size action %1</source>
         <translation type="unfinished">未知的字体大小行为 %1</translation>
     </message>
@@ -16021,12 +16018,12 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation type="obsolete">正在导出 Lilypond 文件...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1110"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1119"/>
         <source>LilyPond Preview Options</source>
         <translation type="unfinished">Lilypond 导出选项</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1111"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1120"/>
         <source>LilyPond preview options</source>
         <translation type="unfinished">Lilypond 导出选项</translation>
     </message>
@@ -16035,7 +16032,7 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation type="obsolete">正在导出 Lilypond 文件...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1122"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1131"/>
         <source>Export failed.  The file could not be opened for writing.</source>
         <translation type="unfinished">导出失败。无法打开文件以写入。</translation>
     </message>
@@ -16052,64 +16049,65 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation type="obsolete">正在把选中区复制到剪贴板...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1416"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1422"/>
         <source>Clipboard is empty</source>
         <translation type="unfinished">剪贴板是空的</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1357"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1363"/>
         <source>Can&apos;t paste multiple Segments into one</source>
         <translation type="unfinished">无法将多个小节粘贴入一个文件</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="922"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="931"/>
         <source>  %n event(s) selected </source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1122"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1177"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1234"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1260"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1285"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1392"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1461"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2196"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2772"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1131"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1183"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1240"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1266"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1291"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1398"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1467"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2202"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2778"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3737"/>
         <source>Rosegarden</source>
         <translation type="unfinished">玫瑰园</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1132"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1141"/>
         <source>Printing with LilyPond...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1150"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1159"/>
         <source>Previewing with LilyPond...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1178"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1184"/>
         <source>&lt;qt&gt;&lt;p&gt;Failed to open a temporary file for LilyPond export.&lt;/p&gt;&lt;p&gt;This probably means you have run out of disk space on &lt;pre&gt;%1&lt;/pre&gt;&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1395"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1464"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1401"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1470"/>
         <source>&lt;qt&gt;&lt;p&gt;The Restricted paste type requires enough empty space (containing only rests) at the paste position to hold all of the events to be pasted.&lt;/p&gt;&lt;p&gt;Not enough space was found.&lt;/p&gt;&lt;p&gt;If you want to paste anyway, consider using one of the other paste types from the &lt;b&gt;Paste...&lt;/b&gt; option on the Edit menu.  You can also change the default paste type to something other than Restricted if you wish.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1420"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1426"/>
         <source>Inserting clipboard contents...</source>
         <translation type="unfinished">正在插入剪贴板内容...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1394"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1463"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1400"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1469"/>
         <source>Couldn&apos;t paste at this point.</source>
         <translation type="unfinished">无法粘贴到这点。</translation>
     </message>
@@ -16118,22 +16116,22 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation type="obsolete">移动事件到其他片段(&amp;M)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1579"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1585"/>
         <source>Raising velocities...</source>
         <translation type="unfinished">正在提升力度...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1590"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1596"/>
         <source>Lowering velocities...</source>
         <translation type="unfinished">正在降低力度...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1627"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1633"/>
         <source>Set Event Velocities</source>
         <translation type="unfinished">设定事件力度</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1632"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1638"/>
         <source>Setting Velocities...</source>
         <translation type="unfinished">正在设定力度...</translation>
     </message>
@@ -16150,12 +16148,12 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation type="obsolete">没有音符音长被选中</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2196"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2202"/>
         <source>Unknown note insert action %1</source>
         <translation type="unfinished">未知的音符插入行为 %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2200"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2206"/>
         <source>Inserting note</source>
         <translation type="unfinished">正在插入音符</translation>
     </message>
@@ -16180,85 +16178,100 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation type="obsolete">正在添加渐强...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2573"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2579"/>
         <source>Ornament track %1 bar %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2575"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2581"/>
         <source>Ornament bar %1</source>
         <translation type="unfinished">小节(&amp;M)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2585"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2591"/>
         <source>Make Ornament</source>
         <translation type="unfinished">制作修饰符</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2630"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2636"/>
         <source>Use Ornament</source>
         <translation type="unfinished">使用修饰符</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2641"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2647"/>
         <source>Remove Ornaments</source>
         <translation type="unfinished">删除所有标记(&amp;R)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2699"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2705"/>
         <source>Estimated key signature shown</source>
         <translation type="unfinished">估计的基调标记显示为</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2756"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2762"/>
         <source>Sustain</source>
         <translation type="unfinished">持续</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2772"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2778"/>
         <source>There is no sustain controller defined for this device.
 Please ensure the device is configured correctly in the Manage MIDI Devices dialog in the main window.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2941"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2947"/>
         <source>Estimated time signature shown</source>
         <translation type="unfinished">估计的时间标记显示为</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3001"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3007"/>
         <source>%1%2 - Segment Track #%3 - Notation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3008"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3014"/>
         <source>%1%2 - All Segments - Notation</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3014"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3020"/>
         <source>%1%2 - %n Segment(s) - Notation</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3266"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3272"/>
         <source>Transpose</source>
         <translation type="unfinished">变调</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3267"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3273"/>
         <source>By number of semitones: </source>
         <translation type="unfinished">输入要变调的半音数字：</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3629"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3635"/>
         <source>Time: %1 (%2.%3s)</source>
         <translation type="unfinished">时间：%1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3465"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3710"/>
+        <source>http://rosegardenmusic.com/wiki/doc:notation-en</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3717"/>
+        <source>http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3724"/>
+        <source>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3471"/>
         <source>Can&apos;t insert note: No note duration selected</source>
         <translation type="unfinished">没有音符音长被选中</translation>
     </message>

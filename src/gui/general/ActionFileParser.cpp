@@ -430,6 +430,11 @@ ActionFileParser::translate(QString actionName,
 {
     // These translations are extracted from data/ui/*.rc files.
     // The translations appear in Rosegarden::ActionFileParser context.
+    if ((text == "C") || (text == "D") || (text == "E")||
+        (text == "F") || (text == "G") || (text == "A")||
+        (text == "B")) {
+        std::cout << "returning translation: " << QObject::tr(text).toStdString() << "\t\t\tfor: " << text << std::endl;
+    }
     return QObject::tr(text);
 }                                       
 
