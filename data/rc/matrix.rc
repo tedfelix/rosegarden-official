@@ -162,7 +162,7 @@
     <Separator/>
       <Action name="extend_selection_backward" text="Cursor Back and Se&amp;lect" icon="select-backward" shortcut="Shift+Left" />
       <Action name="extend_selection_forward" text="Cursor Forward and &amp;Select" icon="select-forward" shortcut="Shift+Right" />
-      <Action name="preview_selection" text="Set Loop &amp;to Selection" shortcut="Chrt+;" />
+      <Action name="preview_selection" text="Set Loop &amp;to Selection" shortcut="Ctrl+;" />
       <Action name="clear_loop" text="Clear L&amp;oop" shortcut="Ctrl+:" />
     <Separator/>
       <Action name="cursor_prior_segment" text="Pre&amp;vious Segment" icon="next-segment" shortcut="Alt+PgUp" />
