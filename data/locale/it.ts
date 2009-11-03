@@ -8548,7 +8548,7 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ActionFileParser.cpp" line="634"/>
+        <location filename="../../src/gui/general/ActionFileParser.cpp" line="648"/>
         <source>%1 (%2)</source>
         <translation type="unfinished">%1 (%2)</translation>
     </message>
@@ -13308,7 +13308,7 @@ Testo di esempio dal file:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="144"/>
-        <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="421"/>
+        <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="425"/>
         <source>Minor</source>
         <translation type="unfinished">Minore</translation>
     </message>
@@ -13353,7 +13353,7 @@ Testo di esempio dal file:</translation>
         <translation type="unfinished">Trasponi in questa tonalità</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="383"/>
+        <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="387"/>
         <source>No such key</source>
         <translation type="unfinished">Non c&apos;è questa tonalità</translation>
     </message>

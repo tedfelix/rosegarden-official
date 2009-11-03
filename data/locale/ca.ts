@@ -8521,7 +8521,7 @@ del menú Edita. Per altra banda també podeu canviar
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ActionFileParser.cpp" line="634"/>
+        <location filename="../../src/gui/general/ActionFileParser.cpp" line="648"/>
         <source>%1 (%2)</source>
         <translation type="unfinished">%1 (%2)</translation>
     </message>
@@ -13258,7 +13258,7 @@ Exemple del text del fitxer:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="144"/>
-        <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="421"/>
+        <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="425"/>
         <source>Minor</source>
         <translation type="unfinished">Menor</translation>
     </message>
@@ -13303,7 +13303,7 @@ Exemple del text del fitxer:</translation>
         <translation type="unfinished">Transposa a aquesta clau</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="383"/>
+        <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="387"/>
         <source>No such key</source>
         <translation type="unfinished">No hi ha aquesta clau</translation>
     </message>

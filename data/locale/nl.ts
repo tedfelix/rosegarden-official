@@ -8546,7 +8546,7 @@ If you want to paste anyway, consider using one of the other paste types from th
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ActionFileParser.cpp" line="634"/>
+        <location filename="../../src/gui/general/ActionFileParser.cpp" line="648"/>
         <source>%1 (%2)</source>
         <translation type="unfinished">%1 (%2)</translation>
     </message>
@@ -13306,7 +13306,7 @@ Voorbeeldtekst uit het bestand:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="144"/>
-        <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="421"/>
+        <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="425"/>
         <source>Minor</source>
         <translation type="unfinished">Mineur</translation>
     </message>
@@ -13351,7 +13351,7 @@ Voorbeeldtekst uit het bestand:</translation>
         <translation type="unfinished">Transponeer naar deze toonsoort</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="383"/>
+        <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="387"/>
         <source>No such key</source>
         <translation type="unfinished">Onbekende toonsoort</translation>
     </message>

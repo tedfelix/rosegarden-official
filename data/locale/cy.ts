@@ -8518,7 +8518,7 @@ os hoffech chi.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ActionFileParser.cpp" line="634"/>
+        <location filename="../../src/gui/general/ActionFileParser.cpp" line="648"/>
         <source>%1 (%2)</source>
         <translation type="unfinished">&amp;%1%2</translation>
     </message>
@@ -13234,7 +13234,7 @@ Example text from file:</source>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="144"/>
-        <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="421"/>
+        <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="425"/>
         <source>Minor</source>
         <translation type="unfinished">Cyfuno</translation>
     </message>
@@ -13279,7 +13279,7 @@ Example text from file:</source>
         <translation type="unfinished">Trawsgyweirio i&apos;r gywair yma</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="383"/>
+        <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="387"/>
         <source>No such key</source>
         <translation type="unfinished">Dim cywair o&apos;r fath</translation>
     </message>

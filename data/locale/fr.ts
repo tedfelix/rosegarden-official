@@ -8613,7 +8613,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
         <translation type="unfinished">Ne plus afficher cet avertissement</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ActionFileParser.cpp" line="634"/>
+        <location filename="../../src/gui/general/ActionFileParser.cpp" line="648"/>
         <source>%1 (%2)</source>
         <translation type="unfinished">%1 (%2)</translation>
     </message>
@@ -13385,7 +13385,7 @@ Texte d&apos;exemple depuis le fichier:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="144"/>
-        <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="421"/>
+        <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="425"/>
         <source>Minor</source>
         <translation>Mineur</translation>
     </message>
@@ -13430,7 +13430,7 @@ Texte d&apos;exemple depuis le fichier:</translation>
         <translation>Transposer dans cette armature</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="383"/>
+        <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="387"/>
         <source>No such key</source>
         <translation>Armature inconnue</translation>
     </message>

@@ -9187,7 +9187,7 @@ als den eingeschränkten wählen.</translation>
         <translation>Diese Warnung nicht mehr anzeigen</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ActionFileParser.cpp" line="634"/>
+        <location filename="../../src/gui/general/ActionFileParser.cpp" line="648"/>
         <source>%1 (%2)</source>
         <translation>%1 (%2)</translation>
     </message>
@@ -14004,7 +14004,7 @@ Beispieltext aus Datei:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="144"/>
-        <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="421"/>
+        <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="425"/>
         <source>Minor</source>
         <translation>moll</translation>
     </message>
@@ -14049,7 +14049,7 @@ Beispieltext aus Datei:</translation>
         <translation>In diese Tonart transponieren</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="383"/>
+        <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="387"/>
         <source>No such key</source>
         <translation>Tonart nicht vorhanden</translation>
     </message>
