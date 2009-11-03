@@ -74,7 +74,11 @@ while (<>) {
     # good amount of complication.  Instead, we write the comments in the code.
     if ($line =~ /shortcut="([^"]*)"/) {
         $shortcut = $1;
-        print "\n/* TRANSLATOR: this is a keyboard shortcut for an English QWERTY keyboard.  Please adjust to suit your language! */\n";
+        print "\n/* TRANSLATOR: this is a keyboard shortcut for an English QWERTY keyboard.  If you adjust this to suit your language";
+        print "\n * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the";
+        print "\n * translation.  You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ";
+        print "\n * keyboard.  Treat ASCII characters as single keys.  ; : < > [ ] - = ( ) and so on, even if they require Shift or some";
+        print "\n * special combination on your keyboard.*/";
         print 'QObject::tr("' . $shortcut . '");';
         if ($name) { print ' // ' . $name; }
         print "\n\n";
