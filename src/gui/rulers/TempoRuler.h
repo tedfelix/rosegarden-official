@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -70,8 +69,7 @@ public:
                double xorigin = 0.0,
                int height = 0,
                bool small = false,
-               QWidget* parent = 0,
-               const char *name = 0);
+               bool Thorn = true);
 
     ~TempoRuler();
 
@@ -165,6 +163,8 @@ private:
     QFont        m_boldFont;
     QFontMetrics m_fontMetrics;
     QPixmap      m_buffer;
+
+    bool m_Thorn;
 };
 
 

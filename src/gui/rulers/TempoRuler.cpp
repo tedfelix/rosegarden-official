@@ -66,9 +66,8 @@ TempoRuler::TempoRuler(RulerScale *rulerScale,
                        double xorigin,
                        int height,
                        bool small,
-                       QWidget *parent,
-                       const char *name) :
-        QWidget(parent, name),
+                       bool Thorn) :
+        QWidget(0),
         m_xorigin(xorigin),
         m_height(height),
         m_currentXOffset(0),
@@ -93,24 +92,13 @@ TempoRuler::TempoRuler(RulerScale *rulerScale,
         m_rulerScale(rulerScale),
         m_menu(0),
         m_parentMainWindow(parentMainWindow),
-        m_fontMetrics(m_boldFont)
+        m_fontMetrics(m_boldFont),
+        m_Thorn(Thorn)
 {
-    //    m_font.setPointSize(m_small ? 9 : 11);
-    //    m_boldFont.setPointSize(m_small ? 9 : 11);
-
-    //    m_font.setPixelSize(m_height * 2 / 3);
-    //    m_boldFont.setPixelSize(m_height * 2 / 3);
-
     m_font.setPixelSize(m_height / 3);
     m_boldFont.setPixelSize(m_height * 2 / 5);
     m_boldFont.setBold(true);
     m_fontMetrics = QFontMetrics(m_boldFont);
-
-    QPalette p(palette());
-    p.setColor(QPalette::Background,
-               GUIPalette::getColour(GUIPalette::TextRulerBackground));
-    setPalette(p);
-    setBackgroundMode(Qt::NoBackground);
 
     QObject::connect
     (CommandHistory::getInstance(), SIGNAL(commandExecuted()),
@@ -130,15 +118,6 @@ TempoRuler::TempoRuler(RulerScale *rulerScale,
 
 TempoRuler::~TempoRuler()
 {
-/*!!! comment retained for reference, in case of problems later.  I think this should no longer be necessary, but I am only a simple carbon-based life form
-
-    // we have to do this so that the menu is re-created properly
-    // when the main window is itself recreated (on a File->New for instance)
-
-    KXMLGUIFactory* factory = m_parentMainWindow->factory();
-    if (factory)
-        factory->removeClient(this);
-*/
 }
 
 void
@@ -196,20 +175,6 @@ TempoRuler::slotScrollHoriz(int x)
     m_currentXOffset = -x;
 
     update();
-
-//### bitBlt is no more working with Qt4
-//     if (dx > w*3 / 4 || dx < -w*3 / 4) {
-//         update();
-//         return ;
-//     }
-// 
-//     if (dx > 0) { // moving right, so the existing stuff moves left
-//         bitBlt(this, 0, 0, this, dx, 0, w - dx, h);
-//         repaint(w - dx, 0, dx, h);
-//     } else {      // moving left, so the existing stuff moves right
-//         bitBlt(this, -dx, 0, this, 0, 0, w + dx, h);
-//         repaint(0, 0, -dx, h);
-//     }
 }
 
 void
@@ -274,10 +239,10 @@ TempoRuler::mousePressEvent(QMouseEvent *e)
             createMenu();
         if (m_menu) {
             // enable 'delete' action only if cursor is actually over a tempo change
-// 			actionCollection()->action("delete_tempo")->setEnabled(m_illuminatePoint);
-			findAction("delete_tempo")->setEnabled(m_illuminatePoint);
+//             actionCollection()->action("delete_tempo")->setEnabled(m_illuminatePoint);
+            findAction("delete_tempo")->setEnabled(m_illuminatePoint);
 
-			m_menu->exec(QCursor::pos());
+            m_menu->exec(QCursor::pos());
         }
 
     }
@@ -427,7 +392,7 @@ TempoRuler::mouseMoveEvent(QMouseEvent *e)
                 return ;
         }
 
-        //	std::cerr << " -> " << newTime << std::endl;
+        //    std::cerr << " -> " << newTime << std::endl;
 
         m_composition->removeTempoChange(tcn);
         m_composition->addTempoAtTime(newTime,
@@ -457,7 +422,7 @@ TempoRuler::mouseMoveEvent(QMouseEvent *e)
         m_illuminate = tcn;
         m_illuminatePoint = false;
         m_illuminateTarget = false;
-        //!!!	m_refreshLinesOnly = true;
+        //!!!    m_refreshLinesOnly = true;
 
         //!!! merge this test with the one in mousePressEvent as
         //isCloseToStart or equiv, and likewise for close to end
@@ -475,7 +440,7 @@ TempoRuler::mouseMoveEvent(QMouseEvent *e)
                 m_illuminateTarget = true;
             }
 
-            //	    std::cerr << "nt = " << nt << ", nx = " << nx << ", x = " << x << ", m_illuminateTarget = " << m_illuminateTarget << std::endl;
+            //        std::cerr << "nt = " << nt << ", nx = " << nx << ", x = " << x << ", m_illuminateTarget = " << m_illuminateTarget << std::endl;
         }
 
         showTextFloat(tc.second, tr.first ? tr.second : -1,
@@ -503,7 +468,7 @@ TempoRuler::leaveEvent(QEvent *)
         setMouseTracking(false);
         m_illuminate = -1;
         m_illuminatePoint = false;
-        //!!!	m_refreshLinesOnly = true;
+        //!!!    m_refreshLinesOnly = true;
         TextFloat::getTextFloat()->hide();
 
         update();
@@ -548,7 +513,7 @@ TempoRuler::showTextFloat(tempoT tempo, tempoT target,
 
             timeText = QString("%1\n%2")
                        .arg(timeText)
-                       //		.arg(rt.toString().c_str());
+                       //        .arg(rt.toString().c_str());
                        .arg(rt.toText(true).c_str());
         }
 
@@ -668,8 +633,15 @@ TempoRuler::paintEvent(QPaintEvent* e)
         m_buffer = QPixmap(width(), height());
     }
 
-    m_buffer.fill(GUIPalette::getColour
-                  (GUIPalette::TextRulerBackground));
+    // NEW: don't set the background for "null space" to the TextRulerBackground
+    // color, because this has always looked like crap.  If we're not using
+    // Thorn, just leave the background at system default, because there's
+    // nothing in this part of the ruler that means anything anyway.  If we're
+    // using Thorn, use a nice dark gray that just contrasts with the black
+    // horizontal line here
+    QColor kuller(0x40, 0x40, 0x40);
+    if (!m_Thorn) kuller = palette().background();
+    m_buffer.fill(kuller);
 
     QPainter paint(&m_buffer);
     paint.setPen(GUIPalette::getColour
@@ -770,29 +742,29 @@ TempoRuler::paintEvent(QPaintEvent* e)
         x0 = m_rulerScale->getXForTime(t0) + m_currentXOffset + m_xorigin;
         x1 = m_rulerScale->getXForTime(t1) + m_currentXOffset + m_xorigin;
         /*!!!
-        	if (x0 > e->rect().x()) {
-        	    paint.fillRect(e->rect().x(), 0, x0 - e->rect().x(), height(),
-        			   paletteBackgroundColor());
-        	}
+            if (x0 > e->rect().x()) {
+                paint.fillRect(e->rect().x(), 0, x0 - e->rect().x(), height(),
+                       paletteBackgroundColor());
+            }
         */
         QColor colour = TempoColour::getColour(m_composition->getTempoQpm(tempo));
         paint.setPen(colour);
         paint.setBrush(colour);
 
         if (!m_refreshLinesOnly) {
-            // 	    RG_DEBUG << "TempoRuler: draw rect from " << x0 << " to " << x1 << endl;
+            //         RG_DEBUG << "TempoRuler: draw rect from " << x0 << " to " << x1 << endl;
             paint.drawRect(int(x0), 0, int(x1 - x0) + 1, height());
         }
 
         int y = getYForTempo(tempo);
         /*!!!
-        	int drawh = height() - 4;
-        	int y = drawh / 2;
-        	if (maxTempo > minTempo) {
-        	    y = drawh -
-        		int((double(tempo - minTempo) / double(maxTempo - minTempo))
-        		    * drawh + 0.5);
-        	}
+            int drawh = height() - 4;
+            int y = drawh / 2;
+            if (maxTempo > minTempo) {
+                y = drawh -
+                int((double(tempo - minTempo) / double(maxTempo - minTempo))
+                    * drawh + 0.5);
+            }
         */
         y += 2;
 
@@ -810,10 +782,10 @@ TempoRuler::paintEvent(QPaintEvent* e)
                 ry = getYForTempo(ramping.second);
                 ry += 2;
                 /*!!!
-                		ry = drawh -
-                		    int((double(ramping.second - minTempo) /
-                			 double(maxTempo - minTempo))
-                			* drawh + 0.5);
+                        ry = drawh -
+                            int((double(ramping.second - minTempo) /
+                             double(maxTempo - minTempo))
+                            * drawh + 0.5);
                 */
             }
 
@@ -850,9 +822,9 @@ TempoRuler::paintEvent(QPaintEvent* e)
 
     if (lastx1 < e->rect().x() + e->rect().width()) {
         /*!!!
-        	paint.fillRect(lastx1, 0,
-        		       e->rect().x() + e->rect().width() - lastx1, height(),
-        		       paletteBackgroundColor());
+            paint.fillRect(lastx1, 0,
+                       e->rect().x() + e->rect().width() - lastx1, height(),
+                       paletteBackgroundColor());
         */
     }
 
@@ -880,10 +852,10 @@ TempoRuler::paintEvent(QPaintEvent* e)
                    + m_xorigin;
 
         /*
-        	paint.drawLine(static_cast<int>(x),
-        		       height() - (height()/4),
-        		       static_cast<int>(x),
-        		       height());
+            paint.drawLine(static_cast<int>(x),
+                       height() - (height()/4),
+                       static_cast<int>(x),
+                       height());
         */
 
         if ((i->second & timeSigChangeHere) && !m_refreshLinesOnly) {
@@ -903,7 +875,7 @@ TempoRuler::paintEvent(QPaintEvent* e)
 
             double tempo = m_composition->getTempoQpm(m_composition->getTempoAtTime(time));
             long bpm = long(tempo);
-            //	    long frac = long(tempo * 100 + 0.001) - 100 * bpm;
+            //        long frac = long(tempo * 100 + 0.001) - 100 * bpm;
 
             QString tempoString = QString("%1").arg(bpm);
 
@@ -931,7 +903,7 @@ TempoRuler::paintEvent(QPaintEvent* e)
             paint.setFont(m_font);
             if (time > 0)
                 x -= bounds.width() / 2;
-            //	    if (x > bounds.width() / 2) x -= bounds.width() / 2;
+            //        if (x > bounds.width() / 2) x -= bounds.width() / 2;
             if (prevEndX >= x - 3)
                 x = prevEndX + 3;
             paint.drawText(static_cast<int>(x), textY, tempoString);

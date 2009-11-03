@@ -39,6 +39,7 @@
 #include <QStackedLayout>
 #include <QWidget>
 #include <QPushButton>
+#include <QSettings>
 
 #include "document/RosegardenDocument.h"
 
@@ -64,6 +65,7 @@
 
 #include "misc/Debug.h"
 #include "misc/Strings.h"
+#include "misc/ConfigGroups.h"
 
 #include "base/Composition.h"
 #include "base/Instrument.h"
@@ -273,6 +275,11 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     // scrollbar hack from notation, but this one only affects horizontal
     connect(m_view->horizontalScrollBar(), SIGNAL(valueChanged(int)),
             this, SLOT(slotInitialHSliderHack(int)));
+
+    QSettings settings;
+    settings.beginGroup(GeneralOptionsConfigGroup);
+    m_Thorn = settings.value("use_thorn_style", true).toBool();
+    settings.endGroup();
 }
 
 MatrixWidget::~MatrixWidget()
@@ -401,7 +408,8 @@ MatrixWidget::setSegments(RosegardenDocument *document,
                                   RosegardenMainWindow::self(),
                                   0.0,    // xorigin
                                   24,     // height
-                                  true);  // small
+                                  true,   // small
+                                  m_Thorn);
 
     m_chordNameRuler = new ChordNameRuler(m_referenceScale,
                                           document,

@@ -254,6 +254,8 @@ private:
     bool m_hSliderHacked;
     bool m_vSliderHacked;
 
+    bool m_Thorn;
+
     /**
      * Widgets vertical positions inside the main QGridLayout
      */

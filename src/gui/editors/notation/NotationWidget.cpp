@@ -65,6 +65,7 @@
 
 #include "misc/Debug.h"
 #include "misc/Strings.h"
+#include "misc/ConfigGroups.h"
 
 #include <QGraphicsView>
 #include <QGridLayout>
@@ -74,6 +75,7 @@
 #include <QGraphicsProxyWidget>
 #include <QToolTip>
 #include <QToolButton>
+#include <QSettings>
 
 namespace Rosegarden
 {
@@ -315,6 +317,11 @@ NotationWidget::NotationWidget() :
             this, SLOT(slotInitialHSliderHack(int)));
     connect(m_view->verticalScrollBar(), SIGNAL(valueChanged(int)),
             this, SLOT(slotInitialVSliderHack(int)));
+
+    QSettings settings;
+    settings.beginGroup(GeneralOptionsConfigGroup);
+    m_Thorn = settings.value("use_thorn_style", true).toBool();
+    settings.endGroup();
 }
 
 NotationWidget::~NotationWidget()
@@ -396,7 +403,8 @@ NotationWidget::setSegments(RosegardenDocument *document,
                                   RosegardenMainWindow::self(),
                                   0.0,    // xorigin
                                   24,     // height
-                                  true);  // small
+                                  true,   // small
+                                  m_Thorn);
 
     m_chordNameRuler = new ChordNameRuler(m_referenceScale,
                                           document,
