@@ -4963,6 +4963,54 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
         <translation>Rumpusyntetisaattori</translation>
     </message>
     <message>
+        <location filename="../InstrumentStrings.cpp" line="374"/>
+        <source>Cb</source>
+        <comment>note name</comment>
+        <translation type="unfinished">Cb</translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="377"/>
+        <source>Db</source>
+        <comment>note name</comment>
+        <translation type="unfinished">Db</translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="379"/>
+        <source>Eb</source>
+        <comment>note name</comment>
+        <translation type="unfinished">Eb</translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="381"/>
+        <source>E#</source>
+        <comment>note name</comment>
+        <translation type="unfinished">E#</translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="382"/>
+        <source>Fb</source>
+        <comment>note name</comment>
+        <translation type="unfinished">Fb</translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="387"/>
+        <source>Ab</source>
+        <comment>note name</comment>
+        <translation type="unfinished">Ab</translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="390"/>
+        <source>Bb</source>
+        <comment>note name</comment>
+        <translation type="unfinished">Bb</translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="392"/>
+        <source>B#</source>
+        <comment>note name</comment>
+        <translation type="unfinished">B#</translation>
+    </message>
+    <message>
         <location filename="../InstrumentStrings.cpp" line="303"/>
         <location filename="../AutoloadStrings.cpp" line="283"/>
         <source>Maracas</source>
@@ -5216,115 +5264,84 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
         <translation>Pistoolin laukaus</translation>
     </message>
     <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
         <source>Cb</source>
-        <translation>Cb</translation>
+        <translation type="obsolete">Cb</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="35"/>
-        <location filename="../InstrumentStrings.cpp" line="375"/>
         <source>C</source>
-        <translation>C</translation>
+        <translation type="obsolete">C</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="35"/>
-        <location filename="../InstrumentStrings.cpp" line="376"/>
         <source>C#</source>
-        <translation>C#</translation>
+        <translation type="obsolete">C#</translation>
     </message>
     <message>
-        <location filename="../InstrumentStrings.cpp" line="377"/>
         <source>Db</source>
-        <translation>Db</translation>
+        <translation type="obsolete">Db</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="35"/>
-        <location filename="../InstrumentStrings.cpp" line="378"/>
         <source>D</source>
-        <translation>D</translation>
+        <translation type="obsolete">D</translation>
     </message>
     <message>
-        <location filename="../InstrumentStrings.cpp" line="379"/>
         <source>Eb</source>
-        <translation>Eb</translation>
+        <translation type="obsolete">Eb</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="36"/>
-        <location filename="../InstrumentStrings.cpp" line="380"/>
         <source>E</source>
-        <translation>E</translation>
+        <translation type="obsolete">E</translation>
     </message>
     <message>
-        <location filename="../InstrumentStrings.cpp" line="381"/>
         <source>E#</source>
-        <translation>E#</translation>
+        <translation type="obsolete">E#</translation>
     </message>
     <message>
-        <location filename="../InstrumentStrings.cpp" line="382"/>
         <source>Fb</source>
-        <translation>Fb</translation>
+        <translation type="obsolete">Fb</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="35"/>
         <source>D#</source>
-        <translation>D#</translation>
+        <translation type="obsolete">D#</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="36"/>
-        <location filename="../InstrumentStrings.cpp" line="383"/>
         <source>F</source>
-        <translation>F</translation>
+        <translation type="obsolete">F</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="36"/>
-        <location filename="../InstrumentStrings.cpp" line="384"/>
         <source>F#</source>
-        <translation>F#</translation>
+        <translation type="obsolete">F#</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="36"/>
-        <location filename="../InstrumentStrings.cpp" line="385"/>
         <source>G</source>
-        <translation>G</translation>
+        <translation type="obsolete">G</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="37"/>
-        <location filename="../InstrumentStrings.cpp" line="386"/>
         <source>G#</source>
-        <translation>G#</translation>
+        <translation type="obsolete">G#</translation>
     </message>
     <message>
-        <location filename="../InstrumentStrings.cpp" line="387"/>
         <source>Ab</source>
-        <translation>Ab</translation>
+        <translation type="obsolete">Ab</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="37"/>
-        <location filename="../InstrumentStrings.cpp" line="388"/>
         <source>A#</source>
-        <translation>A#</translation>
+        <translation type="obsolete">A#</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="37"/>
-        <location filename="../InstrumentStrings.cpp" line="389"/>
         <source>A</source>
-        <translation>A</translation>
+        <translation type="obsolete">A</translation>
     </message>
     <message>
-        <location filename="../InstrumentStrings.cpp" line="390"/>
         <source>Bb</source>
-        <translation>Bb</translation>
+        <translation type="obsolete">Bb</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="37"/>
-        <location filename="../InstrumentStrings.cpp" line="391"/>
         <source>B</source>
-        <translation>B</translation>
+        <translation type="obsolete">B</translation>
     </message>
     <message>
-        <location filename="../InstrumentStrings.cpp" line="392"/>
         <source>B#</source>
-        <translation>B#</translation>
+        <translation type="obsolete">B#</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="39"/>
@@ -8716,6 +8733,89 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
         <source>&lt;h2&gt;Welcome to Rosegarden!&lt;/h2&gt;&lt;p&gt;Welcome to the Rosegarden audio and MIDI sequencer and musical notation editor.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;If you have not already done so, you may wish to install some DSSI synth plugins, or a separate synth program such as QSynth.  Rosegarden does not synthesize sounds from MIDI on its own, so without these you will hear nothing.&lt;/li&gt;&lt;li&gt;Rosegarden uses the JACK audio server for recording and playback of audio, and for playback from DSSI synth plugins.  These features will only be available if the JACK server is running.&lt;/li&gt;&lt;li&gt;Rosegarden has comprehensive documentation: see the &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&gt;Rosegarden website&lt;/a&gt; for the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/doc/en/&quot;&gt;handbook&lt;/a&gt;, &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;tutorials&lt;/a&gt;, and other information!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  To learn more, go to the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;Rosegarden website&lt;/a&gt;.&lt;/p&gt;</source>
         <translation>&lt;h2&gt;Tervetuloa Rosegardeniin!&lt;/h2&gt;&lt;p&gt;Tervetuloa käyttämään Rosegardenia, ääni- ja MIDI-sekvensseriä ja nuottieditoria.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Saatat haluta asentaa DSSI-syntetisaattorilisäosia tai erillisiä syntetisaattoriohjelmia kuten QSynth jos et ole jo tehnyt niin.  Rosegarden itsessään ei tuota ääntä MIDI-tiedoista, joten ilman niitä et kuule mitään.&lt;/li&gt;&lt;li&gt;Rosegarden käyttää JACK-äänipalvelinta äänen toistoon ja tallennukseen sekä DSSI-lisäosien äänen toistoon.  Nämä ominaisuudet ovat käytettävissa vain jos JACK-palvelin on käynnissä.&lt;/li&gt;&lt;li&gt;Rosegardeniin on kattava ohjeistus, katso &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&gt;Rosegarden website&lt;/a&gt; for the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/doc/en/&quot;&gt;käsikirja&lt;/a&gt;, &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;johdatus&lt;/a&gt;, ja muuta tietoa!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegardenin tarjoavat sinulle joukko vapaaehtoisia ympäri maailman.  Katso lisätietoja: &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;Rosegardenin kotisivulta&lt;/a&gt;.&lt;/p&gt;</translation>
     </message>
+    <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="35"/>
+        <location filename="../InstrumentStrings.cpp" line="375"/>
+        <source>C</source>
+        <comment>note name</comment>
+        <translation type="unfinished">C</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="35"/>
+        <location filename="../InstrumentStrings.cpp" line="376"/>
+        <source>C#</source>
+        <comment>note name</comment>
+        <translation type="unfinished">C#</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="36"/>
+        <location filename="../InstrumentStrings.cpp" line="378"/>
+        <source>D</source>
+        <comment>note name</comment>
+        <translation type="unfinished">D</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="36"/>
+        <source>D#</source>
+        <comment>note name</comment>
+        <translation type="unfinished">D#</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="37"/>
+        <location filename="../InstrumentStrings.cpp" line="380"/>
+        <source>E</source>
+        <comment>note name</comment>
+        <translation type="unfinished">E</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="37"/>
+        <location filename="../InstrumentStrings.cpp" line="383"/>
+        <source>F</source>
+        <comment>note name</comment>
+        <translation type="unfinished">F</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="38"/>
+        <location filename="../InstrumentStrings.cpp" line="384"/>
+        <source>F#</source>
+        <comment>note name</comment>
+        <translation type="unfinished">F#</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="38"/>
+        <location filename="../InstrumentStrings.cpp" line="385"/>
+        <source>G</source>
+        <comment>note name</comment>
+        <translation type="unfinished">G</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="39"/>
+        <location filename="../InstrumentStrings.cpp" line="386"/>
+        <source>G#</source>
+        <comment>note name</comment>
+        <translation type="unfinished">G#</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="39"/>
+        <location filename="../InstrumentStrings.cpp" line="389"/>
+        <source>A</source>
+        <comment>note name</comment>
+        <translation type="unfinished">A</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="40"/>
+        <location filename="../InstrumentStrings.cpp" line="388"/>
+        <source>A#</source>
+        <comment>note name</comment>
+        <translation type="unfinished">A#</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="40"/>
+        <location filename="../InstrumentStrings.cpp" line="391"/>
+        <source>B</source>
+        <comment>note name</comment>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Rosegarden::AboutDialog</name>
@@ -11058,39 +11158,74 @@ Haluatko saattaa muutokset voimaan ennen pankkimuokkaimen sulkemista?</translati
 <context>
     <name>Rosegarden::DiatonicPitchChooser</name>
     <message>
+        <source>C</source>
+        <translation type="obsolete">C</translation>
+    </message>
+    <message>
+        <source>D</source>
+        <translation type="obsolete">D</translation>
+    </message>
+    <message>
+        <source>E</source>
+        <translation type="obsolete">E</translation>
+    </message>
+    <message>
+        <source>F</source>
+        <translation type="obsolete">F</translation>
+    </message>
+    <message>
+        <source>G</source>
+        <translation type="obsolete">G</translation>
+    </message>
+    <message>
+        <source>A</source>
+        <translation type="obsolete">A</translation>
+    </message>
+    <message>
+        <source>B</source>
+        <translation type="obsolete">H</translation>
+    </message>
+    <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="59"/>
         <source>C</source>
-        <translation>C</translation>
+        <comment>note name</comment>
+        <translation type="unfinished">C</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="60"/>
         <source>D</source>
-        <translation>D</translation>
+        <comment>note name</comment>
+        <translation type="unfinished">D</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="61"/>
         <source>E</source>
-        <translation>E</translation>
+        <comment>note name</comment>
+        <translation type="unfinished">E</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="62"/>
         <source>F</source>
-        <translation>F</translation>
+        <comment>note name</comment>
+        <translation type="unfinished">F</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="63"/>
         <source>G</source>
-        <translation>G</translation>
+        <comment>note name</comment>
+        <translation type="unfinished">G</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="64"/>
         <source>A</source>
-        <translation>A</translation>
+        <comment>note name</comment>
+        <translation type="unfinished">A</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="65"/>
         <source>B</source>
-        <translation>H</translation>
+        <comment>note name</comment>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="70"/>
@@ -20014,62 +20149,122 @@ Toisten ohjelmien lopettaminen saattaa parantaa Rosegardenin suorituskykyä.</tr
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="457"/>
         <source>C</source>
-        <translation>C</translation>
+        <comment>note name</comment>
+        <translation type="unfinished">C</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="458"/>
         <source>C#</source>
-        <translation>C#</translation>
+        <comment>note name</comment>
+        <translation type="unfinished">C#</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="459"/>
         <source>D</source>
-        <translation>D</translation>
+        <comment>note name</comment>
+        <translation type="unfinished">D</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="460"/>
         <source>Eb</source>
-        <translation>Eb</translation>
+        <comment>note name</comment>
+        <translation type="unfinished">Eb</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="461"/>
         <source>E</source>
-        <translation>E</translation>
+        <comment>note name</comment>
+        <translation type="unfinished">E</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="462"/>
         <source>F</source>
-        <translation>F</translation>
+        <comment>note name</comment>
+        <translation type="unfinished">F</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="463"/>
         <source>F#</source>
-        <translation>F#</translation>
+        <comment>note name</comment>
+        <translation type="unfinished">F#</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="464"/>
         <source>G</source>
-        <translation>G</translation>
+        <comment>note name</comment>
+        <translation type="unfinished">G</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="465"/>
         <source>G#</source>
-        <translation>G#</translation>
+        <comment>note name</comment>
+        <translation type="unfinished">G#</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="466"/>
         <source>A</source>
-        <translation>A</translation>
+        <comment>note name</comment>
+        <translation type="unfinished">A</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="467"/>
         <source>Bb</source>
-        <translation>Bb</translation>
+        <comment>note name</comment>
+        <translation type="unfinished">Bb</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="468"/>
         <source>B</source>
-        <translation>B</translation>
+        <comment>note name</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>C</source>
+        <translation type="obsolete">C</translation>
+    </message>
+    <message>
+        <source>C#</source>
+        <translation type="obsolete">C#</translation>
+    </message>
+    <message>
+        <source>D</source>
+        <translation type="obsolete">D</translation>
+    </message>
+    <message>
+        <source>Eb</source>
+        <translation type="obsolete">Eb</translation>
+    </message>
+    <message>
+        <source>E</source>
+        <translation type="obsolete">E</translation>
+    </message>
+    <message>
+        <source>F</source>
+        <translation type="obsolete">F</translation>
+    </message>
+    <message>
+        <source>F#</source>
+        <translation type="obsolete">F#</translation>
+    </message>
+    <message>
+        <source>G</source>
+        <translation type="obsolete">G</translation>
+    </message>
+    <message>
+        <source>G#</source>
+        <translation type="obsolete">G#</translation>
+    </message>
+    <message>
+        <source>A</source>
+        <translation type="obsolete">A</translation>
+    </message>
+    <message>
+        <source>Bb</source>
+        <translation type="obsolete">Bb</translation>
+    </message>
+    <message>
+        <source>B</source>
+        <translation type="obsolete">B</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="579"/>

@@ -56,13 +56,13 @@ DiatonicPitchChooser::DiatonicPitchChooser(QString title,
     m_step = new QComboBox( hbox );
     hboxLayout->addWidget(m_step);
     m_step->setMaxVisibleItems( 7 );
-    m_step->addItem(tr("C"));
-    m_step->addItem(tr("D"));
-    m_step->addItem(tr("E"));
-    m_step->addItem(tr("F"));
-    m_step->addItem(tr("G"));
-    m_step->addItem(tr("A"));
-    m_step->addItem(tr("B"));
+    m_step->addItem(tr("C", "note name"));
+    m_step->addItem(tr("D", "note name"));
+    m_step->addItem(tr("E", "note name"));
+    m_step->addItem(tr("F", "note name"));
+    m_step->addItem(tr("G", "note name"));
+    m_step->addItem(tr("A", "note name"));
+    m_step->addItem(tr("B", "note name"));
     m_step->setCurrentIndex(defaultNote);
 
     m_octave = new QComboBox( hbox );

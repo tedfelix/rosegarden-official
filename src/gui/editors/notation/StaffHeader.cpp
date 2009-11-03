@@ -448,24 +448,24 @@ void
 StaffHeader::transposeValueToName(int transpose, QString &transposeName)
 {
 
-    /// TODO : Should be rewrited using methods from Pitch class
+    /// TODO : Should be rewritten using methods from Pitch class
 
     int noteIndex = transpose % 12;
     if (noteIndex < 0) noteIndex += 12;
 
     switch(noteIndex) {
-        case  0 : transposeName = tr("C");  break;
-        case  1 : transposeName = tr("C#"); break;
-        case  2 : transposeName = tr("D");  break;
-        case  3 : transposeName = tr("Eb"); break;
-        case  4 : transposeName = tr("E");  break;
-        case  5 : transposeName = tr("F");  break;
-        case  6 : transposeName = tr("F#"); break;
-        case  7 : transposeName = tr("G");  break;
-        case  8 : transposeName = tr("G#"); break;
-        case  9 : transposeName = tr("A");  break;
-        case 10 : transposeName = tr("Bb"); break;
-        case 11 : transposeName = tr("B");  break;
+        case  0 : transposeName = tr("C",  "note name"); break;
+        case  1 : transposeName = tr("C#", "note name"); break;
+        case  2 : transposeName = tr("D",  "note name"); break;
+        case  3 : transposeName = tr("Eb", "note name"); break;
+        case  4 : transposeName = tr("E",  "note name"); break;
+        case  5 : transposeName = tr("F",  "note name"); break;
+        case  6 : transposeName = tr("F#", "note name"); break;
+        case  7 : transposeName = tr("G",  "note name"); break;
+        case  8 : transposeName = tr("G#", "note name"); break;
+        case  9 : transposeName = tr("A",  "note name"); break;
+        case 10 : transposeName = tr("Bb", "note name"); break;
+        case 11 : transposeName = tr("B",  "note name"); break;
     }
 }
 

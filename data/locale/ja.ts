@@ -4837,6 +4837,54 @@ If you want to paste anyway, consider using one of the other paste types from th
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../InstrumentStrings.cpp" line="374"/>
+        <source>Cb</source>
+        <comment>note name</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="377"/>
+        <source>Db</source>
+        <comment>note name</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="379"/>
+        <source>Eb</source>
+        <comment>note name</comment>
+        <translation type="unfinished">Eb</translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="381"/>
+        <source>E#</source>
+        <comment>note name</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="382"/>
+        <source>Fb</source>
+        <comment>note name</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="387"/>
+        <source>Ab</source>
+        <comment>note name</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="390"/>
+        <source>Bb</source>
+        <comment>note name</comment>
+        <translation type="unfinished">Bb</translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="392"/>
+        <source>B#</source>
+        <comment>note name</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../InstrumentStrings.cpp" line="303"/>
         <location filename="../AutoloadStrings.cpp" line="283"/>
         <source>Maracas</source>
@@ -5095,115 +5143,52 @@ If you want to paste anyway, consider using one of the other paste types from th
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>Cb</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="35"/>
-        <location filename="../InstrumentStrings.cpp" line="375"/>
         <source>C</source>
-        <translation type="unfinished">C</translation>
+        <translation type="obsolete">C</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="35"/>
-        <location filename="../InstrumentStrings.cpp" line="376"/>
         <source>C#</source>
-        <translation type="unfinished">C#</translation>
+        <translation type="obsolete">C#</translation>
     </message>
     <message>
-        <location filename="../InstrumentStrings.cpp" line="377"/>
-        <source>Db</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="35"/>
-        <location filename="../InstrumentStrings.cpp" line="378"/>
         <source>D</source>
-        <translation type="unfinished">D</translation>
+        <translation type="obsolete">D</translation>
     </message>
     <message>
-        <location filename="../InstrumentStrings.cpp" line="379"/>
         <source>Eb</source>
-        <translation type="unfinished">Eb</translation>
+        <translation type="obsolete">Eb</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="36"/>
-        <location filename="../InstrumentStrings.cpp" line="380"/>
         <source>E</source>
-        <translation type="unfinished">E</translation>
+        <translation type="obsolete">E</translation>
     </message>
     <message>
-        <location filename="../InstrumentStrings.cpp" line="381"/>
-        <source>E#</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="382"/>
-        <source>Fb</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="35"/>
-        <source>D#</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="36"/>
-        <location filename="../InstrumentStrings.cpp" line="383"/>
         <source>F</source>
-        <translation type="unfinished">F</translation>
+        <translation type="obsolete">F</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="36"/>
-        <location filename="../InstrumentStrings.cpp" line="384"/>
         <source>F#</source>
-        <translation type="unfinished">F#</translation>
+        <translation type="obsolete">F#</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="36"/>
-        <location filename="../InstrumentStrings.cpp" line="385"/>
         <source>G</source>
-        <translation type="unfinished">G</translation>
+        <translation type="obsolete">G</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="37"/>
-        <location filename="../InstrumentStrings.cpp" line="386"/>
         <source>G#</source>
-        <translation type="unfinished">G#</translation>
+        <translation type="obsolete">G#</translation>
     </message>
     <message>
-        <location filename="../InstrumentStrings.cpp" line="387"/>
-        <source>Ab</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="37"/>
-        <location filename="../InstrumentStrings.cpp" line="388"/>
-        <source>A#</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="37"/>
-        <location filename="../InstrumentStrings.cpp" line="389"/>
         <source>A</source>
-        <translation type="unfinished">A</translation>
+        <translation type="obsolete">A</translation>
     </message>
     <message>
-        <location filename="../InstrumentStrings.cpp" line="390"/>
         <source>Bb</source>
-        <translation type="unfinished">Bb</translation>
+        <translation type="obsolete">Bb</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="37"/>
-        <location filename="../InstrumentStrings.cpp" line="391"/>
         <source>B</source>
-        <translation type="unfinished">B</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="392"/>
-        <source>B#</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">B</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="39"/>
@@ -8595,6 +8580,89 @@ If you want to paste anyway, consider using one of the other paste types from th
         <source>&lt;h2&gt;Welcome to Rosegarden!&lt;/h2&gt;&lt;p&gt;Welcome to the Rosegarden audio and MIDI sequencer and musical notation editor.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;If you have not already done so, you may wish to install some DSSI synth plugins, or a separate synth program such as QSynth.  Rosegarden does not synthesize sounds from MIDI on its own, so without these you will hear nothing.&lt;/li&gt;&lt;li&gt;Rosegarden uses the JACK audio server for recording and playback of audio, and for playback from DSSI synth plugins.  These features will only be available if the JACK server is running.&lt;/li&gt;&lt;li&gt;Rosegarden has comprehensive documentation: see the &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&gt;Rosegarden website&lt;/a&gt; for the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/doc/en/&quot;&gt;handbook&lt;/a&gt;, &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;tutorials&lt;/a&gt;, and other information!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  To learn more, go to the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;Rosegarden website&lt;/a&gt;.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="35"/>
+        <location filename="../InstrumentStrings.cpp" line="375"/>
+        <source>C</source>
+        <comment>note name</comment>
+        <translation type="unfinished">C</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="35"/>
+        <location filename="../InstrumentStrings.cpp" line="376"/>
+        <source>C#</source>
+        <comment>note name</comment>
+        <translation type="unfinished">C#</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="36"/>
+        <location filename="../InstrumentStrings.cpp" line="378"/>
+        <source>D</source>
+        <comment>note name</comment>
+        <translation type="unfinished">D</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="36"/>
+        <source>D#</source>
+        <comment>note name</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="37"/>
+        <location filename="../InstrumentStrings.cpp" line="380"/>
+        <source>E</source>
+        <comment>note name</comment>
+        <translation type="unfinished">E</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="37"/>
+        <location filename="../InstrumentStrings.cpp" line="383"/>
+        <source>F</source>
+        <comment>note name</comment>
+        <translation type="unfinished">F</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="38"/>
+        <location filename="../InstrumentStrings.cpp" line="384"/>
+        <source>F#</source>
+        <comment>note name</comment>
+        <translation type="unfinished">F#</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="38"/>
+        <location filename="../InstrumentStrings.cpp" line="385"/>
+        <source>G</source>
+        <comment>note name</comment>
+        <translation type="unfinished">G</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="39"/>
+        <location filename="../InstrumentStrings.cpp" line="386"/>
+        <source>G#</source>
+        <comment>note name</comment>
+        <translation type="unfinished">G#</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="39"/>
+        <location filename="../InstrumentStrings.cpp" line="389"/>
+        <source>A</source>
+        <comment>note name</comment>
+        <translation type="unfinished">A</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="40"/>
+        <location filename="../InstrumentStrings.cpp" line="388"/>
+        <source>A#</source>
+        <comment>note name</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="40"/>
+        <location filename="../InstrumentStrings.cpp" line="391"/>
+        <source>B</source>
+        <comment>note name</comment>
+        <translation type="unfinished">B</translation>
+    </message>
 </context>
 <context>
     <name>Rosegarden::AboutDialog</name>
@@ -10925,38 +10993,73 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::DiatonicPitchChooser</name>
     <message>
+        <source>C</source>
+        <translation type="obsolete">C</translation>
+    </message>
+    <message>
+        <source>D</source>
+        <translation type="obsolete">D</translation>
+    </message>
+    <message>
+        <source>E</source>
+        <translation type="obsolete">E</translation>
+    </message>
+    <message>
+        <source>F</source>
+        <translation type="obsolete">F</translation>
+    </message>
+    <message>
+        <source>G</source>
+        <translation type="obsolete">G</translation>
+    </message>
+    <message>
+        <source>A</source>
+        <translation type="obsolete">A</translation>
+    </message>
+    <message>
+        <source>B</source>
+        <translation type="obsolete">B</translation>
+    </message>
+    <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="59"/>
         <source>C</source>
+        <comment>note name</comment>
         <translation type="unfinished">C</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="60"/>
         <source>D</source>
+        <comment>note name</comment>
         <translation type="unfinished">D</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="61"/>
         <source>E</source>
+        <comment>note name</comment>
         <translation type="unfinished">E</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="62"/>
         <source>F</source>
+        <comment>note name</comment>
         <translation type="unfinished">F</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="63"/>
         <source>G</source>
+        <comment>note name</comment>
         <translation type="unfinished">G</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="64"/>
         <source>A</source>
+        <comment>note name</comment>
         <translation type="unfinished">A</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="65"/>
         <source>B</source>
+        <comment>note name</comment>
         <translation type="unfinished">B</translation>
     </message>
     <message>
@@ -19730,62 +19833,122 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="457"/>
         <source>C</source>
+        <comment>note name</comment>
         <translation type="unfinished">C</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="458"/>
         <source>C#</source>
+        <comment>note name</comment>
         <translation type="unfinished">C#</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="459"/>
         <source>D</source>
+        <comment>note name</comment>
         <translation type="unfinished">D</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="460"/>
         <source>Eb</source>
+        <comment>note name</comment>
         <translation type="unfinished">Eb</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="461"/>
         <source>E</source>
+        <comment>note name</comment>
         <translation type="unfinished">E</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="462"/>
         <source>F</source>
+        <comment>note name</comment>
         <translation type="unfinished">F</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="463"/>
         <source>F#</source>
+        <comment>note name</comment>
         <translation type="unfinished">F#</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="464"/>
         <source>G</source>
+        <comment>note name</comment>
         <translation type="unfinished">G</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="465"/>
         <source>G#</source>
+        <comment>note name</comment>
         <translation type="unfinished">G#</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="466"/>
         <source>A</source>
+        <comment>note name</comment>
         <translation type="unfinished">A</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="467"/>
         <source>Bb</source>
+        <comment>note name</comment>
         <translation type="unfinished">Bb</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="468"/>
         <source>B</source>
+        <comment>note name</comment>
         <translation type="unfinished">B</translation>
+    </message>
+    <message>
+        <source>C</source>
+        <translation type="obsolete">C</translation>
+    </message>
+    <message>
+        <source>C#</source>
+        <translation type="obsolete">C#</translation>
+    </message>
+    <message>
+        <source>D</source>
+        <translation type="obsolete">D</translation>
+    </message>
+    <message>
+        <source>Eb</source>
+        <translation type="obsolete">Eb</translation>
+    </message>
+    <message>
+        <source>E</source>
+        <translation type="obsolete">E</translation>
+    </message>
+    <message>
+        <source>F</source>
+        <translation type="obsolete">F</translation>
+    </message>
+    <message>
+        <source>F#</source>
+        <translation type="obsolete">F#</translation>
+    </message>
+    <message>
+        <source>G</source>
+        <translation type="obsolete">G</translation>
+    </message>
+    <message>
+        <source>G#</source>
+        <translation type="obsolete">G#</translation>
+    </message>
+    <message>
+        <source>A</source>
+        <translation type="obsolete">A</translation>
+    </message>
+    <message>
+        <source>Bb</source>
+        <translation type="obsolete">Bb</translation>
+    </message>
+    <message>
+        <source>B</source>
+        <translation type="obsolete">B</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="579"/>

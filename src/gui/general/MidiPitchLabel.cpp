@@ -32,9 +32,12 @@ MidiPitchLabel::MidiPitchLabel(int pitch)
     // this was refactored to take advantage of these translations being
     // available in other contexts, and to avoid extra work for translators
     static QString notes[] = {
-        QObject::tr("C"),  QObject::tr("C#"), QObject::tr("D"),  QObject::tr("D#"),
-        QObject::tr("E"),  QObject::tr("F"),  QObject::tr("F#"), QObject::tr("G"),
-        QObject::tr("G#"), QObject::tr("A"),  QObject::tr("A#"), QObject::tr("B")
+        QObject::tr("C",  "note name"), QObject::tr("C#", "note name"),
+        QObject::tr("D",  "note name"), QObject::tr("D#", "note name"),
+        QObject::tr("E",  "note name"), QObject::tr("F",  "note name"),
+        QObject::tr("F#", "note name"), QObject::tr("G",  "note name"),
+        QObject::tr("G#", "note name"), QObject::tr("A",  "note name"),
+        QObject::tr("A#", "note name"), QObject::tr("B",  "note name")
     };
 
     if (pitch < 0 || pitch > 127) {
