@@ -198,6 +198,7 @@ private:
     Panned *m_view; // I own this
     Panner *m_hpanner; // I own this
     NotationScene *m_scene; // I own this
+    int m_leftGutter;
     bool m_playTracking;
     double m_hZoomFactor;
     double m_vZoomFactor;

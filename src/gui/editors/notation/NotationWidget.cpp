@@ -84,6 +84,7 @@ NotationWidget::NotationWidget() :
     m_document(0),
     m_view(0),
     m_scene(0),
+    m_leftGutter(20),
     m_currentTool(0),
     m_playTracking(true),
     m_hZoomFactor(1.0),
@@ -345,6 +346,7 @@ NotationWidget::setSegments(RosegardenDocument *document,
     delete m_scene;
     m_scene = new NotationScene();
     m_scene->setNotationWidget(this);
+    m_scene->setLeftGutter(m_leftGutter);
     m_scene->setStaffs(document, segments);
 
     m_referenceScale = new ZoomableRulerScale(m_scene->getRulerScale());
@@ -391,17 +393,19 @@ NotationWidget::setSegments(RosegardenDocument *document,
             m_controlsWidget, SLOT(slotSelectionChanged(EventSelection *)));
 
     m_topStandardRuler = new StandardRuler(document,
-                                           m_referenceScale, 0, 25,
+                                           m_referenceScale,
+                                           0, 25,
                                            false);
 
     m_bottomStandardRuler = new StandardRuler(document,
-                                               m_referenceScale, 0, 25,
-                                               true);
+                                              m_referenceScale,
+                                              0, 25,
+                                              true);
 
     m_tempoRuler = new TempoRuler(m_referenceScale,
                                   document,
                                   RosegardenMainWindow::self(),
-                                  0.0,    // xorigin
+                                  0,      // xorigin
                                   24,     // height
                                   true,   // small
                                   m_Thorn);
@@ -409,12 +413,12 @@ NotationWidget::setSegments(RosegardenDocument *document,
     m_chordNameRuler = new ChordNameRuler(m_referenceScale,
                                           document,
                                           segments,
-                                          0.0,     // xorigin
+                                          0,       // xorigin
                                           24);     // height
 
     m_rawNoteRuler = new RawNoteRuler(m_referenceScale,
                                       segments[0],
-                                      0.0,
+                                      0,
                                       20);  // why not 24 as other rulers ?
 
     m_layout->addWidget(m_topStandardRuler, TOPRULER_ROW, MAIN_COL, 1, 1);
@@ -1003,7 +1007,7 @@ NotationWidget::slotHScroll()
 
     // Apply zoom correction (Offset of 20 found empirically : probably
     // some improvments are needed ...)
-    int x = (xs - 20) * m_hZoomFactor;
+    int x = (xs - m_leftGutter) * m_hZoomFactor;
 
     // Scroll rulers accordingly
     m_topStandardRuler->slotScrollHoriz(x);

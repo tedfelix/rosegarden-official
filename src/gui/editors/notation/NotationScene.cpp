@@ -66,7 +66,7 @@ NotationScene::NotationScene() :
 //    m_pageMode(StaffLayout::MultiPageMode),
     m_pageMode(StaffLayout::LinearMode),
     m_printSize(5),
-    m_leftGutter(20),
+    m_leftGutter(0),
     m_currentStaff(0),
     m_compositionRefreshStatusId(0),
     m_timeSignatureChanged(false),
@@ -168,6 +168,19 @@ NotationScene::setHSpacing(int spacing)
     m_hlayout->setSpacing(spacing);
     positionStaffs();
     layoutAll();
+}
+
+int
+NotationScene::getLeftGutter() const
+{
+    return m_leftGutter;
+}
+
+void
+NotationScene::setLeftGutter(int gutter)
+{
+    m_leftGutter = gutter;
+    positionStaffs();
 }
 
 void
@@ -899,6 +912,7 @@ void
 NotationScene::positionStaffs()
 {
     NOTATION_DEBUG << "NotationView::positionStaffs" << endl;
+    if (m_staffs.empty()) return;
 
     QSettings settings;
     settings.beginGroup(NotationViewConfigGroup);
