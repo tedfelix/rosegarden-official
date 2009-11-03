@@ -346,7 +346,11 @@ KeySignatureDialog::regenerateKeyCombo()
         if (space > 0)
             name = name.left(space);
 
-        m_keyCombo->addItem(name);
+        // translation required; translation from QObject::tr to pull
+        // translations from (generated) InstrumentStrings.cpp, must have "note
+        // name" to distinguish from keyboard shortcut, even though this is a
+        // key name
+        m_keyCombo->addItem(QObject::tr(name, "note name"));
 
         if (m_valid && (*i == m_key)) {
             m_keyCombo->setCurrentIndex(m_keyCombo->count() - 1);

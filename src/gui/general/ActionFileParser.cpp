@@ -430,10 +430,24 @@ ActionFileParser::translate(QString actionName,
 {
     // These translations are extracted from data/ui/*.rc files.
     // The translations appear in Rosegarden::ActionFileParser context.
+    //
+    // NOTE: We had a conflict between "C" the keyboard shortcut and "C" the
+    // note name.  Qt's method for handling this situation involves passing a
+    // second parameter, a translator comment, to tr().  It was less complicated
+    // to add the comment to the "note name" occurrences of this string than to
+    // add something to the keyboard shortcut, thus these strings should always
+    // translate straight across as single key shortcuts.  We'll allow
+    // translators to change the shortcuts if they desire (although I haven't
+    // figured out how I, as a translator, might accomplish this) and simply
+    // warn if these translations are more than one character long, which is
+    // probably an indication that something has gone awry:
     if ((text == "C") || (text == "D") || (text == "E")||
         (text == "F") || (text == "G") || (text == "A")||
         (text == "B")) {
-        std::cout << "returning translation: " << QObject::tr(text).toStdString() << "\t\t\tfor: " << text << std::endl;
+        if (text.size() > 1) {
+            std::cerr << "ActionFileParser: TRANSLATION BUG: \"" << QObject::tr(text).toStdString()
+                      << "\" is probably invalid for \"" << text << std::endl;
+        }
     }
     return QObject::tr(text);
 }                                       
