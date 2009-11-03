@@ -160,7 +160,7 @@
       <Action name="cursor_start" text="Cursor to St&amp;art" />
       <Action name="cursor_end" text="Cursor to &amp;End" shortcut="Ctrl+E" />
     <Separator/>
-      <Action name="extend_selection_backward" text="Cursor Back and Se&amp;lect" icon="select-backward" shortcut="ShiftLeft" />
+      <Action name="extend_selection_backward" text="Cursor Back and Se&amp;lect" icon="select-backward" shortcut="Shift+Left" />
       <Action name="extend_selection_forward" text="Cursor Forward and &amp;Select" icon="select-forward" shortcut="Shift+Right" />
       <Action name="preview_selection" text="Set Loop &amp;to Selection" shortcut="Chrt+;" />
       <Action name="clear_loop" text="Clear L&amp;oop" shortcut="Ctrl+:" />
