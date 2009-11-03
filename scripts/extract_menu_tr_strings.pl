@@ -65,19 +65,18 @@ while (<>) {
         print 'QObject::tr("' . $text . '");';
         print ' /* ' . $file;
         if ($name) { print ' : ' . $name; }
-        print ' */
-';
+        print " */\n";
     }
 
-##
-##  Do not add (yet) shortcuts to the translations.
-##
-#
-#    if ($line =~ /shortcut="([^"]*)"/) {
-#        $shortcut = $1;
-#        print 'QObject::tr("' . $shortcut . '","(shortcut)");';
-#        if ($name) { print ' // ' . $name; }
-#        print '
-#';
-#    }
+    # extract shortcuts
+    #
+    # NOTE: shortcuts do not have a comment field with them in order to avoid a
+    # good amount of complication.  Instead, we write the comments in the code.
+    if ($line =~ /shortcut="([^"]*)"/) {
+        $shortcut = $1;
+        print "\n/* TRANSLATOR: this is a keyboard shortcut for an English QWERTY keyboard.  Please adjust to suit your language! */\n";
+        print 'QObject::tr("' . $shortcut . '");';
+        if ($name) { print ' // ' . $name; }
+        print "\n\n";
+    }
 }
