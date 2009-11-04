@@ -35,9 +35,13 @@
         <translation>Oletustoistolaite</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="486"/>
         <source>&lt;qt&gt;&lt;p&gt;Create new playback devices here. Click the device name to change it. Select a device here and connect it to an ALSA MIDI output port by clicking on a port to the right.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Luo uusi toistolaite tässä. Napsauta laitteen nimeä muuttaaksesi sitä. Valitse laite tästä ja kytke se ALSA MIDI ulostuloon napsauttamalla oikealla olevaa porttia.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Luo uusi toistolaite tässä. Napsauta laitteen nimeä muuttaaksesi sitä. Valitse laite tästä ja kytke se ALSA MIDI ulostuloon napsauttamalla oikealla olevaa porttia.&lt;/p&gt;&lt;/qt&gt;</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="486"/>
+        <source>&lt;qt&gt;&lt;p&gt;Create new playback devices here. Click the device name to change it. Select a device here and connect it to a MIDI output port by clicking on a port to the right.&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="489"/>
@@ -101,8 +105,17 @@
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="517"/>
+        <source>&lt;qt&gt;&lt;p&gt;Available MIDI outputs (hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="557"/>
+        <source>&lt;qt&gt;&lt;p&gt;Available MIDI inputs (from hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>&lt;qt&gt;&lt;p&gt;Available ALSA MIDI outputs for any hardware detected and supported by your distribution, and any available soft synths such as QSynth, ZynAddSubFX, etc.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Saatavilla olevat ALSA MIDI ulostulot mille tahansa järjestelämäsi tunnistamalle raudalle ja saatavilla oleville ohjelmallisille syntetisaattoreille, kuten QSynth, ZynAddSubFX jne.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Saatavilla olevat ALSA MIDI ulostulot mille tahansa järjestelämäsi tunnistamalle raudalle ja saatavilla oleville ohjelmallisille syntetisaattoreille, kuten QSynth, ZynAddSubFX jne.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="520"/>
@@ -117,9 +130,8 @@
         <translation>Virkistä</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="557"/>
         <source>&lt;qt&gt;&lt;p&gt;Available ALSA MIDI inputs for any hardware MIDI inputs detected by your distribution&apos;s hardware autodetection, plus any ALSA MIDI software that exposes output ports, such as VMPK&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Saatavilla olevat ALSA MIDI sisääntulot kaikille MIDI-laitteille, jotka järjestelmäsi automaattitunnistus on havainnut, ja kaikille ALSA MIDI ohjelmistoille, kuten VMPK, jotka ovat luoneet ulostuloportteja&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Saatavilla olevat ALSA MIDI sisääntulot kaikille MIDI-laitteille, jotka järjestelmäsi automaattitunnistus on havainnut, ja kaikille ALSA MIDI ohjelmistoille, kuten VMPK, jotka ovat luoneet ulostuloportteja&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="523"/>
@@ -14948,6 +14960,11 @@ sen sijaan?</translation>
         <translation>&lt;b&gt;lilypond&lt;/b&gt; aloitettiin...</translation>
     </message>
     <message>
+        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="277"/>
+        <source>&lt;qt&gt;&lt;p&gt;LilyPond processed the file successfully, but &lt;b&gt;%1&lt;/b&gt; did not run!&lt;/p&gt;&lt;p&gt;Please configure a valid %2 under &lt;b&gt;Edit -&gt; Preferences -&gt; General -&gt; External Applications&lt;/b&gt; and try again.&lt;/p&gt;&lt;p&gt;Processing terminated due to fatal errors.&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="131"/>
         <source>&lt;qt&gt;&lt;p&gt;Could not run &lt;b&gt;convert-ly&lt;/b&gt;!&lt;/p&gt;&lt;p&gt;Please install LilyPond and ensure that the &quot;convert-ly&quot; and &quot;lilypond&quot; commands are available on your path.  If you perform a &lt;b&gt;Run Command&lt;/b&gt; (typically &lt;b&gt;Alt+F2&lt;/b&gt;) and type &quot;convert-ly&quot; into the box, you should not get a &quot;command not found&quot; error.  If you can do that without getting an error, but still see this error message, please consult &lt;a style=&quot;color:gold&quot; href=&quot;mailto:rosegarden-user@lists.sourceforge.net&quot;&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt; for additional help.&lt;/p&gt;&lt;p&gt;Processing terminated due to fatal errors.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Ei voitu suorittaa komentoa &lt;b&gt;convert-ly&lt;/b&gt;!&lt;/p&gt;&lt;p&gt;Ole hyvä ja asenna LilyPond ja varmista että &quot;convert-ly&quot; ja &quot;lilypond&quot; -komennot ovat saatavilla komentopolussa.  Jos suoritat &lt;b&gt;Suorita sovellus&lt;/b&gt; -toiminnon (yleensä &lt;b&gt;Alt+F2&lt;/b&gt;) ja kirjoitat laatikkoon &quot;convert-ly&quot;, ei pitäisi tulla virheilmoitusta.  Jos voit tehdä edellisen ilman virheilmoitusta, mutta näet silti tämän virheilmoituksen, ota yhteyttä &lt;a style=&quot;color:gold&quot; href=&quot;mailto:rosegarden-user@lists.sourceforge.net&quot;&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt; saadaksesi apua.&lt;/p&gt;&lt;p&gt;Käsittely keskeytetty vakavan virheen vuoksi&lt;/p&gt;&lt;/qt&gt;</translation>
@@ -14998,9 +15015,8 @@ sen sijaan?</translation>
         <translation>&lt;b&gt;%1&lt;/b&gt; aloitettiin...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="277"/>
         <source>&lt;qt&gt;&lt;p&gt;LilyPond processed the file successfully, but &lt;b&gt;%1&lt;/b&gt; did not run!&lt;/p&gt;&lt;p&gt;Please configure a valid %2 under &lt;b&gt;Settings -&gt; Configure Rosegarden -&gt; General -&gt; External Applications&lt;/b&gt; and try again.&lt;/p&gt;&lt;p&gt;Processing terminated due to fatal errors.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;LilyPond prosessoi tiedoston onnistuneesti, mutta &lt;b&gt;%1&lt;/b&gt; ei voitu ajaa!&lt;p&gt;&lt;p&gt;Ole hyvä ja määritä kelpo %2 kohdasta &lt;b&gt;Asetukset -&gt; Määritä Rosegarden -&gt; Yleiset -&gt; Ulkoiset ohjelmat&lt;/b&gt; ja yritä uudelleen.&lt;p&gt;&lt;p&gt;Prosessointi päättyi vakaviin virheisiin.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;LilyPond prosessoi tiedoston onnistuneesti, mutta &lt;b&gt;%1&lt;/b&gt; ei voitu ajaa!&lt;p&gt;&lt;p&gt;Ole hyvä ja määritä kelpo %2 kohdasta &lt;b&gt;Asetukset -&gt; Määritä Rosegarden -&gt; Yleiset -&gt; Ulkoiset ohjelmat&lt;/b&gt; ja yritä uudelleen.&lt;p&gt;&lt;p&gt;Prosessointi päättyi vakaviin virheisiin.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="278"/>
@@ -19126,11 +19142,16 @@ Suosittelemme, että talletat tämän tiedoston tällä Rosegarden-versiolla var
         <translation>Muita kuin ääniosia ei valittuna</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="909"/>
         <source>You&apos;ve not yet defined an audio editor for Rosegarden to use.
 See Settings -&gt; Configure Rosegarden -&gt; Audio.</source>
-        <translation>Et ole vielä määritellyt Rosegardenin käyttämää äänimuokkainta.
+        <translation type="obsolete">Et ole vielä määritellyt Rosegardenin käyttämää äänimuokkainta.
 Katso Asetukset -&gt; Muokkaa ohjelman Rosegarden asetuksia -&gt; Ääni.</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="909"/>
+        <source>You&apos;ve not yet defined an audio editor for Rosegarden to use.
+See Edit -&gt; Preferences -&gt; Audio.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1598"/>
