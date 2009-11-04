@@ -29,7 +29,7 @@
       <text>&amp;Export</text>
       <Action name="file_export_project" text="Export Rosegarden &amp;Project file..." />
       <Separator/>
-      <Action name="file_export_lilypond" text="Export &amp;Lilypond file..." />
+      <Action name="file_export_lilypond" text="Export &amp;LilyPond file..." />
       <Separator/>
       <Action name="file_export_midi" text="Export &amp;MIDI file..." />
       <Separator/>
