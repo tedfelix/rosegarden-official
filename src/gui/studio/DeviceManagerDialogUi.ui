@@ -59,7 +59,7 @@
            </size>
           </property>
           <property name="toolTip">
-           <string>&lt;qt&gt;&lt;p&gt;Create new playback devices here. Click the device name to change it. Select a device here and connect it to an ALSA MIDI output port by clicking on a port to the right.&lt;/p&gt;&lt;/qt&gt;</string>
+           <string>&lt;qt&gt;&lt;p&gt;Create new playback devices here. Click the device name to change it. Select a device here and connect it to a MIDI output port by clicking on a port to the right.&lt;/p&gt;&lt;/qt&gt;</string>
           </property>
           <property name="autoFillBackground">
            <bool>false</bool>
@@ -286,7 +286,7 @@ QLineEdit
            </size>
           </property>
           <property name="toolTip">
-           <string>&lt;qt&gt;&lt;p&gt;Available ALSA MIDI outputs for any hardware detected and supported by your distribution, and any available soft synths such as QSynth, ZynAddSubFX, etc.&lt;/p&gt;&lt;/qt&gt;</string>
+           <string>&lt;qt&gt;&lt;p&gt;Available MIDI outputs (hardware or software)&lt;/p&gt;&lt;/qt&gt;</string>
           </property>
           <property name="styleSheet">
            <string notr="true">/*Style the QTreeWidget items in this widget to resemble and behave like push buttons.*/
@@ -628,7 +628,7 @@ QLineEdit
            </size>
           </property>
           <property name="toolTip">
-           <string>&lt;qt&gt;&lt;p&gt;Available ALSA MIDI inputs for any hardware MIDI inputs detected by your distribution's hardware autodetection, plus any ALSA MIDI software that exposes output ports, such as VMPK&lt;/p&gt;&lt;/qt&gt;</string>
+           <string>&lt;qt&gt;&lt;p&gt;Available MIDI inputs (from hardware or software)&lt;/p&gt;&lt;/qt&gt;</string>
           </property>
           <property name="styleSheet">
            <string notr="true">/*Style the QTreeWidget items in this widget to resemble and behave like push buttons.*/

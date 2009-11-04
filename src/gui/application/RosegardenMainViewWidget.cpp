@@ -906,7 +906,7 @@ void RosegardenMainViewWidget::slotEditSegmentAudio(Segment *segment)
         << "\" not found" << std::endl;
 
         /* was sorry */ QMessageBox::warning(this, "", 
-                           tr("You've not yet defined an audio editor for Rosegarden to use.\nSee Settings -> Configure Rosegarden -> Audio."));
+                           tr("You've not yet defined an audio editor for Rosegarden to use.\nSee Edit -> Preferences -> Audio."));
 
         return ;
     }

@@ -274,7 +274,7 @@ LilyPondProcessor::runFinalStage(int exitCode, QProcess::ExitStatus)
     if (m_process->waitForStarted()) {
         QString t = QString(tr("<b>%1</b> started...").arg(finalProcessor));
     } else {
-        QString t = QString(tr("<qt><p>LilyPond processed the file successfully, but <b>%1</b> did not run!</p><p>Please configure a valid %2 under <b>Settings -> Configure Rosegarden -> General -> External Applications</b> and try again.</p><p>Processing terminated due to fatal errors.</p></qt>")).arg(finalProcessor).arg(
+        QString t = QString(tr("<qt><p>LilyPond processed the file successfully, but <b>%1</b> did not run!</p><p>Please configure a valid %2 under <b>Edit -> Preferences -> General -> External Applications</b> and try again.</p><p>Processing terminated due to fatal errors.</p></qt>")).arg(finalProcessor).arg(
                 (m_mode == LilyPondProcessor::Print ? tr("file printer") : tr("PDF viewer")));
         puke(t);
     }
