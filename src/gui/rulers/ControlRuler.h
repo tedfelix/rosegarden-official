@@ -56,6 +56,7 @@ class Segment;
 class RulerScale;
 class EventSelection;
 class EditViewBase;
+class NotationStaff;
 
 //typedef std::list<ControlItem*> ControlItemList;
 //typedef std::list<ControlItem*>::iterator ControlItemListIterator;
@@ -110,6 +111,8 @@ public:
 
     virtual void setRulerScale(RulerScale *rulerscale) { m_rulerScale = rulerscale; }
     RulerScale* getRulerScale() { return m_rulerScale; }
+    
+    void setXOffset(int offset) { m_xOffset = offset; } 
 
     float valueToY(long val);
     long yToValue(float height);
@@ -222,6 +225,7 @@ protected:
 //    MatrixScene *m_scene;
 
     ViewSegment *m_viewSegment;
+    NotationStaff *m_notationStaff;
     Segment *m_segment;
 
     ControlItemMap m_controlItemMap;
@@ -253,6 +257,8 @@ protected:
     long m_minItemValue;
 
     double m_viewSegmentOffset;
+    
+    int m_xOffset;
 
     double m_currentX;
 

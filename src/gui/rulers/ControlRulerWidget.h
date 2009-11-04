@@ -51,6 +51,9 @@ public:
                      std::vector<Segment *> segments);
 
     void setViewSegment(ViewSegment *);
+    void setRulerScale(RulerScale *);
+    void setRulerScale(RulerScale *,int);
+    
     QString getCurrentToolName() { return m_currentToolName; }
     void removeRuler(std::list<ControlRuler*>::iterator);
 
@@ -84,6 +87,7 @@ protected:
     Segment *m_segment;
     ViewSegment *m_viewSegment;
     RulerScale *m_scale;
+    int m_gutter;
     QString m_currentToolName;
     QRectF m_pannedRect;
     std::vector <ViewElement*> m_selectedElements;

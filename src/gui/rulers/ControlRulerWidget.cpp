@@ -151,6 +151,25 @@ ControlRulerWidget::setViewSegment(ViewSegment *viewSegment)
 }
 
 void
+ControlRulerWidget::setRulerScale(RulerScale *scale)
+{
+    setRulerScale(scale, 0);
+}
+
+void
+ControlRulerWidget::setRulerScale(RulerScale *scale, int gutter)
+{
+    m_scale = scale;
+    m_gutter = gutter;
+    if (m_controlRulerList.size()) {
+        std::list<ControlRuler *>::iterator it;
+        for (it = m_controlRulerList.begin(); it != m_controlRulerList.end(); ++it) {
+            (*it)->setRulerScale(m_scale);
+        }
+    }
+}
+
+void
 ControlRulerWidget::slotTogglePropertyRuler(const PropertyName &propertyName)
 {
     PropertyControlRuler *propruler;
@@ -247,6 +266,7 @@ ControlRulerWidget::slotAddControlRuler(const ControlParameter &controlParameter
     if (!m_viewSegment) return;
 
     ControlRuler *controlruler = new ControllerEventsRuler(m_viewSegment, m_scale, this, &controlParameter);
+    controlruler->setXOffset(m_gutter);
 
     connect(controlruler, SIGNAL(dragScroll(timeT)),
             this, SLOT(slotDragScroll(timeT)));
@@ -263,6 +283,7 @@ ControlRulerWidget::slotAddPropertyRuler(const PropertyName &propertyName)
     if (!m_viewSegment) return;
 
     PropertyControlRuler *controlruler = new PropertyControlRuler(propertyName, m_viewSegment, m_scale, this);
+    controlruler->setXOffset(m_gutter);
     controlruler->updateSelection(&m_selectedElements);
 
     // little kludge here, we only have the one property ruler, and the string

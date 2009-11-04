@@ -22,6 +22,7 @@
 #include "base/RulerScale.h"
 #include "document/Command.h"
 #include "commands/notation/NormalizeRestsCommand.h"
+#include "gui/editors/notation/NotationStaff.h"
 //#include "base/Segment.h"
 //#include "base/Selection.h"
 #include "ControlMouseEvent.h"
@@ -72,6 +73,7 @@ ControlRuler::ControlRuler(ViewSegment *viewsegment,
         m_rulerScale(rulerScale),
         m_eventSelection(0),
         m_viewSegment(0),
+        m_notationStaff(0),
         m_segment(0),
 //        m_assignedEventSelection(0),
         m_currentIndex(0),
@@ -81,6 +83,7 @@ ControlRuler::ControlRuler(ViewSegment *viewsegment,
         m_maxItemValue(127),
         m_minItemValue(0),
         m_viewSegmentOffset(0),
+        m_xOffset(0),
         m_currentX(0.0),
         m_itemMoved(false),
         m_selecting(false),
@@ -125,10 +128,12 @@ void ControlRuler::setSegment(Segment *segment)
 
 void ControlRuler::setViewSegment(ViewSegment *viewSegment)
 {
-//    if (m_viewSegment) m_viewSegment->removeObserver(this);
-
     m_viewSegment = viewSegment;
-//    m_viewSegment->addObserver(this);
+    
+    // If this ruler is connected to a NotationStaff then this will return a valid pointer
+    //   otherwise, it will return zero. This can be used to check whether we're connected
+    //   to a matrix or notation editor later
+    m_notationStaff = dynamic_cast <NotationStaff *> (viewSegment);
 
     setSegment(&m_viewSegment->getSegment());
 }
@@ -474,7 +479,7 @@ void ControlRuler::slotScrollHorizSmallSteps(int step)
 
 int ControlRuler::mapXToWidget(float x)
 {
-    return (0.5+(x-m_pannedRect.left()) / m_xScale);
+    return (0.5+(m_xOffset+x-m_pannedRect.left()) / m_xScale);
 }
 
 int ControlRuler::mapYToWidget(float y)
@@ -514,7 +519,7 @@ QPointF ControlRuler::mapWidgetToItem(QPoint *point)
 //    double yscale = 1.0f / (double) height();
 
     QPointF newpoint;
-    newpoint.setX(m_xScale*(point->x()) + m_pannedRect.left());
+    newpoint.setX(m_xScale*(point->x()) + m_pannedRect.left() - m_xOffset);
     newpoint.setY(-m_yScale*(point->y()) + 1.0f);
     return newpoint;
 }
@@ -582,7 +587,7 @@ ControlMouseEvent ControlRuler::createControlMouseEvent(QMouseEvent* e)
             controlMouseEvent.itemList.push_back(*it);
         }
     }
-
+    
     controlMouseEvent.buttons = e->buttons();
     controlMouseEvent.modifiers = e->modifiers();
 
