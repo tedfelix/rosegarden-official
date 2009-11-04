@@ -64,7 +64,7 @@ LSCPPatchExtractor::extractContent(const QString& fileName)
     
     unsigned int bank, program;
     std::string programName;
-    //    std::string deviceName;
+//    std::string deviceName;
     
     if (!lscpFile.open(QFile::ReadOnly)) {
         return device;
@@ -74,20 +74,25 @@ LSCPPatchExtractor::extractContent(const QString& fileName)
             currentLine = currentLine.simplified();
             
             if (!currentLine.isEmpty() && currentLine.startsWith("add", Qt::CaseInsensitive)) {
-                // Preparation for returning device's name - do nothing for now!
-
-                // splitLine = currentLine.split(QRegExp("\\s+"));
-                // deviceName = splitLine.at(2).latin1();
+// Preparation for returning device's name - do nothing for now!
+//
+//                splitLine = currentLine.split(QRegExp("\\s+"));
+//                deviceName = splitLine.at(2).latin1();
                 
             } else if (!currentLine.isEmpty() && currentLine.startsWith("map", Qt::CaseInsensitive)) {
 
                 unsigned int positionOfBankElement = 3; //position of element in QStringList if NON_MODAL element is absent
                 unsigned int positionOfProgramElement = 4; //similar to above
 
-                splitLine = currentLine.split(QRegExp("\\s+"));
-                std::cout << splitLine.size() << std::endl;
+                splitLine = splitQuotedString(currentLine);
+//                std::cout << splitLine.size() << std::endl;
+//                for (int i = 0; i < splitLine.size(); i++) {
+//                    std::cout << i << ": " << splitLine.at(i) << std::endl;
+//                }
 
                 if (splitLine.at(2) == "NON_MODAL") {
+//                  std::cout << " Ima non_modal" << std::endl;
+// Shifting position of elements if optional element is present
                     positionOfBankElement = 4;
                     positionOfProgramElement = 5;
                 }
@@ -96,8 +101,10 @@ LSCPPatchExtractor::extractContent(const QString& fileName)
                 program = splitLine.at(positionOfProgramElement).toInt();
                 
                 QString quotedName = splitLine.at(splitLine.size() - 1);
-                if (quotedName[0] != '\'') {
-                    quotedName = "Unnamed instrument";
+//                std::cout << splitLine.at(splitLine.size() - 1).latin1() << std::cout;
+// Chacking for another optional element. This one is even more strange - program name may be absent as well!
+                if (quotedName.isEmpty() || quotedName.contains("ON_DEMAND") || quotedName.contains("ON_DEMAND_HOLD") || quotedName.contains("PERSISTENT")) {
+                    programName = "Unnamed instrument";
                 } else {
                     programName = quotedName.latin1();
                 }

@@ -16,6 +16,8 @@
 #ifndef LSCPPATCHEXTRACTOR_H
 #define LSCPPATCHEXTRACTOR_H
 
+#include "misc/Strings.h"
+
 #include <QString>
 #include <QStringList>
 
