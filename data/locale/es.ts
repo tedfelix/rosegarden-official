@@ -41,7 +41,7 @@
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="486"/>
         <source>&lt;qt&gt;&lt;p&gt;Create new playback devices here. Click the device name to change it. Select a device here and connect it to a MIDI output port by clicking on a port to the right.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Hacer dispositivos de reproducción nuevos ahí.  Hacer clic en el nombre del dispositivo para cambiarlo. Seleccionar un dispositivo por ahí y conectarlo a un puerto de salida de MIDI haciendo clic en un puerto hacia el derecho&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="489"/>
@@ -105,12 +105,12 @@
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="517"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI outputs (hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Salidas de MIDI disponibles (hardware o software)&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="557"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI inputs (from hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Entradas de MIDI disponibles (de hardware o de software)&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <source>&lt;qt&gt;&lt;p&gt;Available ALSA MIDI outputs for any hardware detected and supported by your distribution, and any available soft synths such as QSynth, ZynAddSubFX, etc.&lt;/p&gt;&lt;/qt&gt;</source>
@@ -120,7 +120,7 @@
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="520"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="560"/>
         <source>&lt;qt&gt;&lt;p&gt;Click to refresh the port list after connecting a new piece of equipment or starting a new soft synth&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Hacer click para reiniciar la lista de puertos duspués de conectar un aparato de MIDI nuevo o poner en marcha un nuevo sinte de software&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="522"/>
@@ -136,12 +136,12 @@
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="525"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new recording device&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Hacer un nuevo dispositivo de grabación&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="529"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected recording device&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Borrar el dispositivo de grabación seleccionado&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="531"/>
@@ -152,17 +152,17 @@
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="533"/>
         <source>Receives its data from</source>
-        <translation type="unfinished"></translation>
+        <translation>Su data entra de</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="534"/>
         <source>Rosegarden recording device</source>
-        <translation type="unfinished"></translation>
+        <translation>Dispositivo de grabación de Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="540"/>
         <source>Default record device</source>
-        <translation>Dispositivo de grabacción predeterminado</translation>
+        <translation>Dispositivo de grabación predeterminado</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="546"/>
@@ -4100,37 +4100,37 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3641"/>
         <source>Mute or Unmute Tra&amp;ck</source>
-        <translation type="unfinished"></translation>
+        <translation>Silen&amp;ciar o dejar sonar la Pista</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3650"/>
         <source>Arm &amp;or Un-arm Track for Record</source>
-        <translation type="unfinished"></translation>
+        <translation>Armar &amp;o desarmar la pista para grabar</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3659"/>
         <source>&amp;Unmute all Tracks</source>
-        <translation type="unfinished">&amp;No silenciar ninguna Pista</translation>
+        <translation>&amp;Dejar sonar todas las Pistas</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3660"/>
         <source>&amp;Mute all Tracks</source>
-        <translation type="unfinished">&amp;Silenciar todas las Pistas</translation>
+        <translation>&amp;Silenciar todas las Pistas</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3661"/>
         <source>Set &amp;Instrument</source>
-        <translation type="unfinished">Establecer &amp;Instrumento</translation>
+        <translation>Establecer &amp;Instrumento</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3662"/>
         <source>&amp;Remap Instruments...</source>
-        <translation type="unfinished">&amp;Remapear Instrumentos...</translation>
+        <translation>&amp;Remapear Instrumentos...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3700"/>
         <source>&amp;Resize</source>
-        <translation type="unfinished">&amp;Cambiar tamaño</translation>
+        <translation>&amp;Cambiar tamaño</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3726"/>
@@ -4168,179 +4168,179 @@
         <location filename="../QMenuStrings.cpp" line="1946"/>
         <location filename="../QMenuStrings.cpp" line="3385"/>
         <source>Show Main &amp;Toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Mostrar barra de herramientas Principal</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3387"/>
         <source>Show Trac&amp;ks Toolbar</source>
-        <translation type="unfinished">Mostrar barra de herramientas de &amp;Pistas</translation>
+        <translation>Mostrar barra de herramientas de &amp;Pistas</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3388"/>
         <source>Show &amp;Editors Toolbar</source>
-        <translation type="unfinished">Mostrar barra de herramientas de &amp;Edición</translation>
+        <translation>Mostrar barra de herramientas de &amp;Edición</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3390"/>
         <source>Show &amp;Zoom Toolbar</source>
-        <translation type="unfinished">Mostrar barra de herramientas de &amp;Ampliación</translation>
+        <translation>Mostrar barra de herramientas de &amp;Ampliación</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="351"/>
         <location filename="../QMenuStrings.cpp" line="724"/>
         <location filename="../QMenuStrings.cpp" line="3416"/>
         <source>Show St&amp;atusbar</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar la b&amp;arra de estado</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3392"/>
         <source>Show Playback Position R&amp;uler</source>
-        <translation type="unfinished">Mostrar regla de Posición de Ejec&amp;ución</translation>
+        <translation>Mostrar regla de Posición de Ejec&amp;ución</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3216"/>
         <source>Import &amp;X11 Rosegarden file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Importar archivo de &amp;X11 Rosegarden...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3221"/>
         <source>Merge &amp;X11 Rosegarden file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Mezclar archivo de &amp;X11 Rosegarden...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3454"/>
         <source>MIDI Mi&amp;xer</source>
-        <translation type="unfinished"></translation>
+        <translation>Me&amp;zclador MIDI</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3394"/>
         <source>Show Te&amp;mpo Ruler</source>
-        <translation type="unfinished">Mostrar regla de Te&amp;mpo</translation>
+        <translation>Mostrar regla de Te&amp;mpo</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3225"/>
         <source>Export &amp;LilyPond file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportar archivo de &amp;LilyPond...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3395"/>
         <source>Show Tra&amp;nsport</source>
-        <translation type="unfinished">Mostrar &amp;Transporte</translation>
+        <translation>Mostrar &amp;Transporte</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3404"/>
         <source>Show Special &amp;Parameters</source>
-        <translation type="unfinished">Mostrar Parámetros especiales</translation>
+        <translation>Mostrar &amp;Parámetros especiales</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3413"/>
         <source>Show Segment Pre&amp;views</source>
-        <translation type="unfinished">Mostrar Pre&amp;visualización de Segmentos</translation>
+        <translation>Mostrar Pre&amp;visualización de Segmentos</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3414"/>
         <source>Sh&amp;ow Segment Labels</source>
-        <translation type="unfinished"></translation>
+        <translation>M&amp;ostrar etiquetas de Segmentos</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3415"/>
         <source>Show Track &amp;Labels</source>
-        <translation type="unfinished">Mostrar &amp;Etiquetas de Pista</translation>
+        <translation>Mostrar &amp;etiquetas de Pista</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3771"/>
         <source>Space</source>
-        <translation type="unfinished"></translation>
+        <translation>Space</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3805"/>
         <source>Main Toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>Barra de herramientas Principal</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3809"/>
         <source>Tracks Toolbar</source>
-        <translation type="unfinished">Barra de Herramientas de Pistas</translation>
+        <translation>Barra de herramientas de Pistas</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3810"/>
         <source>Editors Toolbar</source>
-        <translation type="unfinished">Barra de Herramientas de Edición</translation>
+        <translation>Barra de herramientas de Edición</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3812"/>
         <source>Rewind to Beginning</source>
-        <translation type="unfinished"></translation>
+        <translation>Rebobinar al principio</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3819"/>
         <source>Home</source>
-        <translation type="unfinished"></translation>
+        <translation>Home</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3821"/>
         <source>Fast Forward to End</source>
-        <translation type="unfinished"></translation>
+        <translation>Avance rápido hacia el final</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3828"/>
         <source>End</source>
-        <translation type="unfinished"></translation>
+        <translation>End</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3834"/>
         <source>Insert Tempo Change</source>
-        <translation type="unfinished">Insertar Cambio de Tempo</translation>
+        <translation>Insertar Cambio de Tempo</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3835"/>
         <source>Insert Tempo Change at Playback Position</source>
-        <translation type="unfinished">Insertar Cambio de Tempo en posición de reproducción </translation>
+        <translation>Insertar Cambio de Tempo en posición de reproducción</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3836"/>
         <source>Delete Tempo Change</source>
-        <translation type="unfinished">Borrar Cambio de Tempo</translation>
+        <translation>Borrar Cambio de Tempo</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3837"/>
         <source>Ramp Tempo to Next Tempo</source>
-        <translation type="unfinished">Hacer un cambio de tempo gradual hasta el tempo siguiente</translation>
+        <translation>Hacer un cambio de tempo gradual hasta el tempo siguiente</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3838"/>
         <source>Un-Ramp Tempo</source>
-        <translation type="unfinished">Deshacer el cambio de tempo gradual</translation>
+        <translation>Deshacer el cambio de tempo gradual</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3839"/>
         <source>Edit Tempo...</source>
-        <translation type="unfinished">Mo&amp;dificar Tempo </translation>
+        <translation>Modificar Tempo...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3840"/>
         <source>Edit Time Signature...</source>
-        <translation type="unfinished">Modificar el Compás</translation>
+        <translation>Modificar el Compás...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3841"/>
         <source>Open Tempo and Time Signature Editor</source>
-        <translation type="unfinished">Abrir Editor de Tempo y Medida</translation>
+        <translation>Abrir Editor de Tempo y Medida</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3907"/>
         <source>&amp;Edit Item</source>
-        <translation type="unfinished">&amp;Editar Elemento</translation>
+        <translation>&amp;Editar Elemento</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3916"/>
         <source>Select &amp;All</source>
-        <translation type="unfinished">Seleccionar &amp;todo</translation>
+        <translation>Seleccionar &amp;todo</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3925"/>
         <source>&amp;Clear Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>E&amp;liminar Selección</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3934"/>
@@ -5938,228 +5938,228 @@ así lo desea.</translation>
     <message>
         <location filename="../InstrumentStrings.cpp" line="327"/>
         <source>Clavichord (treble)</source>
-        <translation type="unfinished"></translation>
+        <translation>Clavicordio (clave de sol)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="328"/>
         <source>Clavichord (bass)</source>
-        <translation type="unfinished"></translation>
+        <translation>Clavicordio (clave de fa)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="329"/>
         <source>Harpsichord (treble)</source>
-        <translation type="unfinished"></translation>
+        <translation>Clavicémbalo (clave de sol)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="330"/>
         <source>Harpsichord (bass)</source>
-        <translation type="unfinished"></translation>
+        <translation>Clavicémbalo (clave de fa)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="331"/>
         <source>Celesta (treble)</source>
-        <translation type="unfinished"></translation>
+        <translation>Celesta (clave de sol)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="332"/>
         <source>Celesta (bass)</source>
-        <translation type="unfinished"></translation>
+        <translation>Celesta (clave de fa)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="333"/>
         <source>Electric piano (treble)</source>
-        <translation type="unfinished"></translation>
+        <translation>Piano eléctrico (clave de sol)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="334"/>
         <source>Electric piano (bass)</source>
-        <translation type="unfinished"></translation>
+        <translation>Piano eléctrico (clave de fa)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="335"/>
         <source>Toy piano</source>
-        <translation type="unfinished"></translation>
+        <translation>Piano de juguete</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="336"/>
         <source>Keyboard synthesizer (treble)</source>
-        <translation type="unfinished"></translation>
+        <translation>Teclado sinte (clave de sol)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="337"/>
         <source>Keyboard synthesizer (bass)</source>
-        <translation type="unfinished"></translation>
+        <translation>Teclado sinte (clave de fa)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="338"/>
         <source>Organ (manual) (treble)</source>
-        <translation type="unfinished"></translation>
+        <translation>Órgano (manual) (clave de sol)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="339"/>
         <source>Organ (manual) (bass)</source>
-        <translation type="unfinished"></translation>
+        <translation>Órgano (manual) (clave de fa)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="340"/>
         <source>Organ (pedal)</source>
-        <translation type="unfinished"></translation>
+        <translation>Órgano (pedalero)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="341"/>
         <source>Electronic organ (manual) (treble)</source>
-        <translation type="unfinished"></translation>
+        <translation>Órgano Hammond (manual) (clave de sol)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="342"/>
         <source>Electronic organ (manual) (bass)</source>
-        <translation type="unfinished"></translation>
+        <translation>Órgano Hammond (manual) (clave de fa)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="343"/>
         <source>Electronic organ (pedal)</source>
-        <translation type="unfinished"></translation>
+        <translation>Órgano Hammond (pedalero)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="344"/>
         <source>Harmonium (treble)</source>
-        <translation type="unfinished"></translation>
+        <translation>Armonio (clave de sol)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="345"/>
         <source>Harmonium (bass)</source>
-        <translation type="unfinished"></translation>
+        <translation>Armonio (clave de fa)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="346"/>
         <source>Free reeds</source>
-        <translation type="unfinished"></translation>
+        <translation>Instrumentos de lengüeta libre</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="347"/>
         <source>Accordion (treble)</source>
-        <translation type="unfinished"></translation>
+        <translation>Acordeón (clave de sol)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="348"/>
         <source>Accordion (bass)</source>
-        <translation type="unfinished"></translation>
+        <translation>Acordeón (clave de fa)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="349"/>
         <source>Bandoneon (treble)</source>
-        <translation type="unfinished"></translation>
+        <translation>Bandoneón (clave de sol)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="350"/>
         <source>Bandoneon (bass)</source>
-        <translation type="unfinished"></translation>
+        <translation>Bandoneón (clave de fa)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="351"/>
         <location filename="../AutoloadStrings.cpp" line="63"/>
         <source>Harmonica</source>
-        <translation type="unfinished"></translation>
+        <translation>Armónica</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="352"/>
         <source>Melodica</source>
-        <translation type="unfinished"></translation>
+        <translation>Melódica</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="353"/>
         <source>Voices</source>
-        <translation type="unfinished"></translation>
+        <translation>Voces humanas</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="354"/>
         <source>Soprano</source>
-        <translation type="unfinished">Soprano</translation>
+        <translation>Soprano</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="355"/>
         <source>Mezzosoprano</source>
-        <translation type="unfinished"></translation>
+        <translation>Mezzosoprano</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="356"/>
         <source>Alto</source>
-        <translation type="unfinished">Alto</translation>
+        <translation>Contralto</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="358"/>
         <source>Baritone</source>
-        <translation type="unfinished"></translation>
+        <translation>Barítono</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="360"/>
         <source>Boy soprano</source>
-        <translation type="unfinished"></translation>
+        <translation>Niño soprano</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="361"/>
         <source>Miscellaneous</source>
-        <translation type="unfinished">Varios</translation>
+        <translation>Varios</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="362"/>
         <source>Kazoo (treble)</source>
-        <translation type="unfinished"></translation>
+        <translation>Mirlitón (soprano)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="363"/>
         <source>Kazoo (bass)</source>
-        <translation type="unfinished"></translation>
+        <translation>Mirlitón (bajo)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="364"/>
         <source>Police whistle</source>
-        <translation type="unfinished"></translation>
+        <translation>Silbato de policía</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="365"/>
         <source>Bird whistle</source>
-        <translation type="unfinished"></translation>
+        <translation>Silbato de pájaro</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="366"/>
         <source>Duck call</source>
-        <translation type="unfinished"></translation>
+        <translation>Reclamo de pato</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="367"/>
         <source>Mouth siren</source>
-        <translation type="unfinished"></translation>
+        <translation>Sirena de boca</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="368"/>
         <source>Siren</source>
-        <translation type="unfinished"></translation>
+        <translation>Sirena</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="369"/>
         <source>Auto horn</source>
-        <translation type="unfinished"></translation>
+        <translation>Bocina</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="370"/>
         <source>Klaxon horn</source>
-        <translation type="unfinished"></translation>
+        <translation>Claxon</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="371"/>
         <source>Lion&apos;s roar</source>
-        <translation type="unfinished"></translation>
+        <translation>Rugido de león</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="372"/>
         <source>Wind machine</source>
-        <translation type="unfinished"></translation>
+        <translation>Máquina de viento</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="373"/>
         <source>Pistol shot</source>
-        <translation type="unfinished"></translation>
+        <translation>Disparo de pistola</translation>
     </message>
     <message>
         <source>Cb</source>
@@ -6184,7 +6184,7 @@ así lo desea.</translation>
         <location filename="../QMenuStrings.cpp" line="2720"/>
         <location filename="../QMenuStrings.cpp" line="3500"/>
         <source>D</source>
-        <translation type="unfinished">Re</translation>
+        <translation>D</translation>
     </message>
     <message>
         <source>Eb</source>
@@ -6197,7 +6197,7 @@ así lo desea.</translation>
         <location filename="../QMenuStrings.cpp" line="3518"/>
         <location filename="../QMenuStrings.cpp" line="3914"/>
         <source>E</source>
-        <translation type="unfinished">Mi</translation>
+        <translation>E</translation>
     </message>
     <message>
         <source>E#</source>
@@ -6215,7 +6215,7 @@ así lo desea.</translation>
         <location filename="../QMenuStrings.cpp" line="1151"/>
         <location filename="../QMenuStrings.cpp" line="2729"/>
         <source>F</source>
-        <translation type="unfinished">Fa</translation>
+        <translation>F</translation>
     </message>
     <message>
         <source>F#</source>
@@ -6225,7 +6225,7 @@ así lo desea.</translation>
         <location filename="../QMenuStrings.cpp" line="3145"/>
         <location filename="../QMenuStrings.cpp" line="3896"/>
         <source>G</source>
-        <translation type="unfinished">Sol</translation>
+        <translation>G</translation>
     </message>
     <message>
         <source>G#</source>
@@ -6243,7 +6243,7 @@ así lo desea.</translation>
         <location filename="../QMenuStrings.cpp" line="1088"/>
         <location filename="../QMenuStrings.cpp" line="2666"/>
         <source>A</source>
-        <translation type="unfinished">La</translation>
+        <translation>A</translation>
     </message>
     <message>
         <source>Bb</source>
@@ -6253,7 +6253,7 @@ así lo desea.</translation>
         <location filename="../QMenuStrings.cpp" line="1486"/>
         <location filename="../QMenuStrings.cpp" line="3064"/>
         <source>B</source>
-        <translation type="unfinished">Si</translation>
+        <translation>B</translation>
     </message>
     <message>
         <source>B#</source>
