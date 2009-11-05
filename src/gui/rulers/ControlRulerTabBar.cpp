@@ -18,6 +18,7 @@
 #include "ControlRulerTabBar.h"
 
 #include "misc/Debug.h"
+#include "gui/general/IconLoader.h"
 
 #include <QTabBar>
 #include <QString>
@@ -29,7 +30,7 @@ namespace Rosegarden
 
 ControlRulerTabBar::ControlRulerTabBar():QTabBar()
 {
-    m_closeIcon = QPixmap(":/pixmaps/icons/warning.png");
+    m_closeIcon = QPixmap(IconLoader().loadPixmap("tab-close"));
 }
 
 void ControlRulerTabBar::paintEvent(QPaintEvent *event)
