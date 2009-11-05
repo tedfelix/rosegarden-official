@@ -4503,12 +4503,12 @@ así lo desea.</translation>
     <message>
         <location filename="../InstrumentStrings.cpp" line="53"/>
         <source>Pedal steel guitar</source>
-        <translation>Guitarra pedal steel (música country de EEUU)</translation>
+        <translation>Guitarra électrica horizontal</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="54"/>
         <source>12-string guitar</source>
-        <translation>Bajo sexto</translation>
+        <translation>Guitarra de 12 cuerdas</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="55"/>
@@ -6272,242 +6272,242 @@ así lo desea.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="41"/>
         <source>Acoustic Grand Piano</source>
-        <translation type="unfinished"></translation>
+        <translation>Piano de cola</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="42"/>
         <source>Bright Acoustic Piano</source>
-        <translation type="unfinished"></translation>
+        <translation>Piano brillante</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="43"/>
         <source>Electric Grand Piano</source>
-        <translation type="unfinished"></translation>
+        <translation>Piano de cola électrico</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="44"/>
         <source>Honky-tonk Piano</source>
-        <translation type="unfinished"></translation>
+        <translation>Piano honky tonk</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="45"/>
         <source>Electric Piano 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Piano eléctrico 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="46"/>
         <source>Electric Piano 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Piano eléctrico 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="47"/>
         <source>Harpsichord</source>
-        <translation type="unfinished"></translation>
+        <translation>Clavicémbalo</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="48"/>
         <source>Clavi</source>
-        <translation type="unfinished"></translation>
+        <translation>Clavicordio</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="49"/>
         <source>Celesta</source>
-        <translation type="unfinished"></translation>
+        <translation>Celesta</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="51"/>
         <source>Music Box</source>
-        <translation type="unfinished"></translation>
+        <translation>Caja de música</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="53"/>
         <source>Marimba</source>
-        <translation type="unfinished"></translation>
+        <translation>Marimba</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="55"/>
         <source>Tubular Bells</source>
-        <translation type="unfinished"></translation>
+        <translation>Campanas tubulares</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="56"/>
         <source>Dulcimer</source>
-        <translation type="unfinished"></translation>
+        <translation>Cémbalo</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="57"/>
         <source>Drawbar Organ</source>
-        <translation type="unfinished"></translation>
+        <translation>Óragano de barras deslizantes</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="58"/>
         <source>Percussive Organ</source>
-        <translation type="unfinished"></translation>
+        <translation>Órgano de percusión</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="59"/>
         <source>Rock Organ</source>
-        <translation type="unfinished"></translation>
+        <translation>Órgano de rock</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="60"/>
         <source>Church Organ</source>
-        <translation type="unfinished"></translation>
+        <translation>Órgano de iglesia</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="61"/>
         <source>Reed Organ</source>
-        <translation type="unfinished"></translation>
+        <translation>Órgano de lengüetería</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="62"/>
         <source>Accordion</source>
-        <translation type="unfinished"></translation>
+        <translation>Acordeón</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="64"/>
         <source>Tango Accordion</source>
-        <translation type="unfinished"></translation>
+        <translation>Bandoneón</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="65"/>
         <source>Acoustic Guitar (nylon)</source>
-        <translation type="unfinished"></translation>
+        <translation>Guitarra clásica</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="66"/>
         <source>Acoustic Guitar (steel)</source>
-        <translation type="unfinished"></translation>
+        <translation>Guitarra acústica</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="67"/>
         <source>Electric Guitar (jazz)</source>
-        <translation type="unfinished"></translation>
+        <translation>Guitarra eléctrica (jazz)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="68"/>
         <source>Electric Guitar (clean)</source>
-        <translation type="unfinished"></translation>
+        <translation>Guitarra eléctrica (limpio)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="69"/>
         <source>Electric Guitar (muted)</source>
-        <translation type="unfinished"></translation>
+        <translation>Guitarra eléctrica (sordinada)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="70"/>
         <source>Overdriven Guitar</source>
-        <translation type="unfinished"></translation>
+        <translation>Guitarra eléctrica (overdrive)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="71"/>
         <source>Distortion Guitar</source>
-        <translation type="unfinished"></translation>
+        <translation>Guitarra électrica (distorción)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="72"/>
         <source>Guitar harmonics</source>
-        <translation type="unfinished"></translation>
+        <translation>Armonicos de guitarra</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="73"/>
         <source>Acoustic Bass</source>
-        <translation type="unfinished"></translation>
+        <translation>Bajo acústico</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="74"/>
         <source>Fingered Bass</source>
-        <translation type="unfinished"></translation>
+        <translation>Bajo (dedos)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="75"/>
         <source>Picked Bass</source>
-        <translation type="unfinished"></translation>
+        <translation>Bajo (plectro)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="76"/>
         <source>Fretless Bass</source>
-        <translation type="unfinished"></translation>
+        <translation>Bajo sin trastes</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="77"/>
         <source>Slap Bass 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Bajo «slap» 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="78"/>
         <source>Slap Bass 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Bajo «slap» 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="79"/>
         <source>Synth Bass 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Bajo sinte 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="80"/>
         <source>Synth Bass 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Bajo sinte 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="83"/>
         <source>Cello</source>
-        <translation type="unfinished"></translation>
+        <translation>Violoncello</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="85"/>
         <source>Tremolo Strings</source>
-        <translation type="unfinished"></translation>
+        <translation>Cuerdas tremolo</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="86"/>
         <source>Pizzicato Strings</source>
-        <translation type="unfinished"></translation>
+        <translation>Cuerdas pizzicato</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="87"/>
         <source>Orchestral Harp</source>
-        <translation type="unfinished"></translation>
+        <translation>Arpa</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="89"/>
         <source>String Ensemble 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Conjunto de cuerdas 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="90"/>
         <source>String Ensemble 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Conjunto de cuerdas 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="91"/>
         <source>SynthStrings 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Cuerdas sintes 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="92"/>
         <source>SynthStrings 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Cuerdas sintes 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="93"/>
         <source>Choir Aahs</source>
-        <translation type="unfinished"></translation>
+        <translation>Coro cantando «Aaa»</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="94"/>
         <source>Voice Oohs</source>
-        <translation type="unfinished"></translation>
+        <translation>Voz cantando «Uuu»</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="95"/>
         <source>Synth Voice</source>
-        <translation type="unfinished"></translation>
+        <translation>Voz sinte</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="96"/>
         <source>Orchestra Hit</source>
-        <translation type="unfinished"></translation>
+        <translation>Golpe de orquesta</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="97"/>
@@ -6522,7 +6522,7 @@ así lo desea.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="99"/>
         <source>Tuba</source>
-        <translation type="unfinished"></translation>
+        <translation>Tuba</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="100"/>
@@ -6537,617 +6537,617 @@ así lo desea.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="102"/>
         <source>Brass Section</source>
-        <translation type="unfinished"></translation>
+        <translation>Conjunto de viento metales</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="103"/>
         <source>SynthBrass 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Viento metal sinte 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="104"/>
         <source>SynthBrass 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Viento metal sinte 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="105"/>
         <source>Soprano Sax</source>
-        <translation type="unfinished"></translation>
+        <translation>Saxofón soprano</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="106"/>
         <source>Alto Sax</source>
-        <translation type="unfinished"></translation>
+        <translation>Saxofón alto</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="107"/>
         <source>Tenor Sax</source>
-        <translation type="unfinished"></translation>
+        <translation>Saxofón tenor</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="108"/>
         <source>Baritone Sax</source>
-        <translation type="unfinished"></translation>
+        <translation>Saxofón barítono</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="110"/>
         <source>English Horn</source>
-        <translation type="unfinished"></translation>
+        <translation>Corno inglés</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="112"/>
         <source>Clarinet</source>
-        <translation type="unfinished"></translation>
+        <translation>Clarinete</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="115"/>
         <source>Recorder</source>
-        <translation type="unfinished"></translation>
+        <translation>Flauta dulce</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="116"/>
         <source>Pan Flute</source>
-        <translation type="unfinished"></translation>
+        <translation>Zampoña</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="117"/>
         <source>Blown Bottle</source>
-        <translation type="unfinished"></translation>
+        <translation>Botella soplada</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="119"/>
         <source>Whistle</source>
-        <translation type="unfinished"></translation>
+        <translation>Silbato</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="120"/>
         <source>Ocarina</source>
-        <translation type="unfinished"></translation>
+        <translation>Ocarina</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="121"/>
         <source>Lead 1 (square)</source>
-        <translation type="unfinished"></translation>
+        <translation>Líder 1 (onda cuadrada)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="122"/>
         <source>Lead 2 (sawtooth)</source>
-        <translation type="unfinished"></translation>
+        <translation>Líder 2 (onda de sierra)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="123"/>
         <source>Lead 3 (calliope)</source>
-        <translation type="unfinished"></translation>
+        <translation>Líder 3 (calíope)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="124"/>
         <source>Lead 4 (chiff)</source>
-        <translation type="unfinished"></translation>
+        <translation>Líder 4 (chif)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="125"/>
         <source>Lead 5 (charang)</source>
-        <translation type="unfinished"></translation>
+        <translation>Líder 5 (charang)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="126"/>
         <source>Lead 6 (voice)</source>
-        <translation type="unfinished"></translation>
+        <translation>Líder 6 (voz)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="127"/>
         <source>Lead 7 (fifths)</source>
-        <translation type="unfinished"></translation>
+        <translation>Líder 7 (quintas)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="128"/>
         <source>Lead 8 (bass + lead)</source>
-        <translation type="unfinished"></translation>
+        <translation>Líder 8 (bajo + líder)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="129"/>
         <source>Pad 1 (new age)</source>
-        <translation type="unfinished"></translation>
+        <translation>Pad 1 (nueva era)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="130"/>
         <source>Pad 2 (warm)</source>
-        <translation type="unfinished"></translation>
+        <translation>Pad 2 (tibio)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="131"/>
         <source>Pad 3 (polysynth)</source>
-        <translation type="unfinished"></translation>
+        <translation>Pad 3 (polísinte)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="132"/>
         <source>Pad 4 (choir)</source>
-        <translation type="unfinished"></translation>
+        <translation>Pad 4 (coro)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="133"/>
         <source>Pad 5 (bowed)</source>
-        <translation type="unfinished"></translation>
+        <translation>Pad 5 (frotada)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="134"/>
         <source>Pad 6 (metallic)</source>
-        <translation type="unfinished"></translation>
+        <translation>Pad 6 (metálico)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="135"/>
         <source>Pad 7 (halo)</source>
-        <translation type="unfinished"></translation>
+        <translation>Pad 7 (halo)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="136"/>
         <source>Pad 8 (sweep)</source>
-        <translation type="unfinished"></translation>
+        <translation>Pad 8 (recorrer)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="137"/>
         <source>FX 1 (rain)</source>
-        <translation type="unfinished"></translation>
+        <translation>Efecto 1 (lluvia)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="138"/>
         <source>FX 2 (soundtrack)</source>
-        <translation type="unfinished"></translation>
+        <translation>Efecto 2 (banda sonora)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="139"/>
         <source>FX 3 (crystal)</source>
-        <translation type="unfinished"></translation>
+        <translation>Efecto 3 (cristal)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="140"/>
         <source>FX 4 (atmosphere)</source>
-        <translation type="unfinished"></translation>
+        <translation>Efecto 4 (atmósfera)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="141"/>
         <source>FX 5 (brightness)</source>
-        <translation type="unfinished"></translation>
+        <translation>Efecto 5 (brillo)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="142"/>
         <source>FX 6 (goblins)</source>
-        <translation type="unfinished"></translation>
+        <translation>Efecto 6 (¡cuidado con el chupacabras!)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="143"/>
         <source>FX 7 (echoes)</source>
-        <translation type="unfinished"></translation>
+        <translation>Efecto 7 (eco)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="144"/>
         <source>FX 8 (sci-fi)</source>
-        <translation type="unfinished"></translation>
+        <translation>Efecto 8 (ciencia ficción)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="145"/>
         <source>Sitar</source>
-        <translation type="unfinished"></translation>
+        <translation>Sitar</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="146"/>
         <source>Banjo</source>
-        <translation type="unfinished"></translation>
+        <translation>Banjo</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="147"/>
         <source>Shamisen</source>
-        <translation type="unfinished"></translation>
+        <translation>Shamisen</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="149"/>
         <source>Kalimba</source>
-        <translation type="unfinished"></translation>
+        <translation>Kalimba</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="150"/>
         <source>Bag pipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Gaita</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="151"/>
         <source>Fiddle</source>
-        <translation type="unfinished"></translation>
+        <translation>Fiddle</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="152"/>
         <source>Shanai</source>
-        <translation type="unfinished"></translation>
+        <translation>Shanai</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="153"/>
         <source>Tinkle Bell</source>
-        <translation type="unfinished"></translation>
+        <translation>Tintineo</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="154"/>
         <source>Agogo</source>
-        <translation type="unfinished"></translation>
+        <translation>Agogô</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="155"/>
         <source>Steel Drums</source>
-        <translation type="unfinished"></translation>
+        <translation>Tambores metálicos de Trinidad y Tobago</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="156"/>
         <source>Woodblock</source>
-        <translation type="unfinished"></translation>
+        <translation>Caja china</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="157"/>
         <source>Taiko Drum</source>
-        <translation type="unfinished"></translation>
+        <translation>Taiko</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="158"/>
         <source>Melodic Tom</source>
-        <translation type="unfinished"></translation>
+        <translation>Tom melódico</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="159"/>
         <source>Synth Drum</source>
-        <translation type="unfinished"></translation>
+        <translation>Tambor sinte</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="160"/>
         <source>Reverse Cymbal</source>
-        <translation type="unfinished"></translation>
+        <translation>Platillo al revés</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="161"/>
         <source>Guitar Fret Noise</source>
-        <translation type="unfinished"></translation>
+        <translation>Ruido de trastes de guitarra</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="162"/>
         <source>Breath Noise</source>
-        <translation type="unfinished"></translation>
+        <translation>Ruido de respiración</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="163"/>
         <source>Seashore</source>
-        <translation type="unfinished"></translation>
+        <translation>Orilla del mar</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="164"/>
         <source>Bird Tweet</source>
-        <translation type="unfinished"></translation>
+        <translation>Gorjeo de ave</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="165"/>
         <source>Telephone Ring</source>
-        <translation type="unfinished"></translation>
+        <translation>Timbre de teléfono</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="166"/>
         <source>Helicopter</source>
-        <translation type="unfinished"></translation>
+        <translation>Helicóptero</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="167"/>
         <source>Applause</source>
-        <translation type="unfinished"></translation>
+        <translation>Aplausos</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="168"/>
         <source>Gunshot</source>
-        <translation type="unfinished"></translation>
+        <translation>Disparo de pistola</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="169"/>
         <source>Bank 0:8</source>
-        <translation type="unfinished"></translation>
+        <translation>Banco 0:8</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="170"/>
         <source>Detuned EP 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Piano eléctrico desafinado 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="171"/>
         <source>Detuned EP 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Piano eléctrico desafinado 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="172"/>
         <source>Coupled Harpsichord</source>
-        <translation type="unfinished"></translation>
+        <translation>Clavicémbalo doblado</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="173"/>
         <source>Church Bell</source>
-        <translation type="unfinished"></translation>
+        <translation>Campana de iglesia</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="174"/>
         <source>Detuned Organ 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Órgano desafinado 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="175"/>
         <source>Detuned Organ 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Órgano desafinado 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="176"/>
         <source>Church Organ 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Órgano de iglesia 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="177"/>
         <source>Italian Accordion</source>
-        <translation type="unfinished"></translation>
+        <translation>Acordeón italiano</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="179"/>
         <source>12 String Guitar</source>
-        <translation type="unfinished"></translation>
+        <translation>Guitarra de 12 cuerdas</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="180"/>
         <source>Hawaiian Guitar</source>
-        <translation type="unfinished"></translation>
+        <translation>Guitarra horizontal</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="181"/>
         <source>Funk Guitar</source>
-        <translation type="unfinished"></translation>
+        <translation>Guitarra funk</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="182"/>
         <source>Feedback Guitar</source>
-        <translation type="unfinished"></translation>
+        <translation>Guitarra con realimentación</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="183"/>
         <source>Guitar Feedback</source>
-        <translation type="unfinished"></translation>
+        <translation>Realimentación de guitarra</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="184"/>
         <source>Synth Bass 3</source>
-        <translation type="unfinished"></translation>
+        <translation>Bajo sinte 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="185"/>
         <source>Synth Bass 4</source>
-        <translation type="unfinished"></translation>
+        <translation>Bajo sinte 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="186"/>
         <source>Slow Violin</source>
-        <translation type="unfinished"></translation>
+        <translation>Violín lento</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="187"/>
         <source>Orchestral Pad</source>
-        <translation type="unfinished"></translation>
+        <translation>Pad de orquesta</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="188"/>
         <source>Synth Strings 3</source>
-        <translation type="unfinished"></translation>
+        <translation>Cuerdas sintes 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="189"/>
         <source>Brass 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Viento-metal 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="190"/>
         <source>Synth Brass 3</source>
-        <translation type="unfinished"></translation>
+        <translation>Viento-metal sinte 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="191"/>
         <source>Synth Brass 4</source>
-        <translation type="unfinished"></translation>
+        <translation>Viento-metal sinte 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="192"/>
         <source>Sine Wave</source>
-        <translation type="unfinished"></translation>
+        <translation>Sinusoide</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="193"/>
         <source>Taisho Koto</source>
-        <translation type="unfinished"></translation>
+        <translation>Taisho Koto</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="195"/>
         <source>Concert Bass Drum</source>
-        <translation type="unfinished"></translation>
+        <translation>Bombo orquestal</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="196"/>
         <source>Melo Tom 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Tom melódico 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="197"/>
         <source>808 Tom</source>
-        <translation type="unfinished"></translation>
+        <translation>Tom 808</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="198"/>
         <source>Bank 0:9</source>
-        <translation type="unfinished"></translation>
+        <translation>Banco 0:9</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="199"/>
         <source>Burst Noise</source>
-        <translation type="unfinished"></translation>
+        <translation>Ruido de rotura</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="200"/>
         <source>Bank 0:16</source>
-        <translation type="unfinished"></translation>
+        <translation>Banco 0:16</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="202"/>
         <source>Bank 1:0</source>
-        <translation type="unfinished"></translation>
+        <translation>Banco 1:0</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="203"/>
         <source>Standard</source>
-        <translation type="unfinished"></translation>
+        <translation>Estándar</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="204"/>
         <source>Standard 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Estándar 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="205"/>
         <source>Standard 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Estándar 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="206"/>
         <source>Standard 3</source>
-        <translation type="unfinished"></translation>
+        <translation>Estándar 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="207"/>
         <source>Standard 4</source>
-        <translation type="unfinished"></translation>
+        <translation>Estándar 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="208"/>
         <source>Standard 5</source>
-        <translation type="unfinished"></translation>
+        <translation>Estándar 5</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="209"/>
         <source>Standard 6</source>
-        <translation type="unfinished"></translation>
+        <translation>Estándar 6</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="210"/>
         <source>Standard 7</source>
-        <translation type="unfinished"></translation>
+        <translation>Estándar 7</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="211"/>
         <source>Room</source>
-        <translation type="unfinished"></translation>
+        <translation>Cámara</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="212"/>
         <source>Room 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Cámara 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="213"/>
         <source>Room 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Cámara 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="214"/>
         <source>Room 3</source>
-        <translation type="unfinished"></translation>
+        <translation>Cámara 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="215"/>
         <source>Room 4</source>
-        <translation type="unfinished"></translation>
+        <translation>Cámara 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="216"/>
         <source>Room 5</source>
-        <translation type="unfinished"></translation>
+        <translation>Cámara 5</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="217"/>
         <source>Room 6</source>
-        <translation type="unfinished"></translation>
+        <translation>Cámara 6</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="218"/>
         <source>Room 7</source>
-        <translation type="unfinished"></translation>
+        <translation>Cámara 7</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="219"/>
         <source>Power</source>
-        <translation type="unfinished"></translation>
+        <translation>Poder</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="220"/>
         <source>Power 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Poder 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="221"/>
         <source>Power 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Poder 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="222"/>
         <source>Power 3</source>
-        <translation type="unfinished"></translation>
+        <translation>Poder 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="223"/>
         <source>Electronic</source>
-        <translation type="unfinished"></translation>
+        <translation>Eléctronico</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="224"/>
         <source>TR-808</source>
-        <translation type="unfinished"></translation>
+        <translation>TR-808</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="225"/>
         <source>Jazz</source>
-        <translation type="unfinished"></translation>
+        <translation>Jazz</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="226"/>
         <source>Jazz 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Jazz 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="227"/>
         <source>Jazz 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Jazz 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="228"/>
         <source>Jazz 3</source>
-        <translation type="unfinished"></translation>
+        <translation>Jazz 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="229"/>
         <source>Jazz 4</source>
-        <translation type="unfinished"></translation>
+        <translation>Jazz 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="230"/>
         <source>Brush</source>
-        <translation type="unfinished"></translation>
+        <translation>Escobilla</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="231"/>
         <source>Brush 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Escobilla 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="232"/>
         <source>Brush 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Escobilla 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="233"/>
         <source>Orchestra Kit</source>
-        <translation type="unfinished"></translation>
+        <translation>Kit de orquesta</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="234"/>
@@ -7222,232 +7222,232 @@ así lo desea.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="248"/>
         <source>Acoustic Bass Drum</source>
-        <translation type="unfinished"></translation>
+        <translation>Bombo acústico</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="249"/>
         <source>Bass Drum 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Bombo 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="250"/>
         <source>Side Stick</source>
-        <translation type="unfinished"></translation>
+        <translation>Baqueteo</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="251"/>
         <source>Acoustic Snare</source>
-        <translation type="unfinished"></translation>
+        <translation>Caja acústica</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="252"/>
         <source>Hand Clap</source>
-        <translation type="unfinished"></translation>
+        <translation>Palmada</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="253"/>
         <source>Electric Snare</source>
-        <translation type="unfinished"></translation>
+        <translation>Caja eléctronico</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="254"/>
         <source>Low Floor Tom</source>
-        <translation type="unfinished"></translation>
+        <translation>Tom de piso bajo</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="255"/>
         <source>Closed Hi-Hat</source>
-        <translation type="unfinished"></translation>
+        <translation>Hi-hat cerrado</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="256"/>
         <source>High Floor Tom</source>
-        <translation type="unfinished"></translation>
+        <translation>Tom de piso alto</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="257"/>
         <source>Pedal Hi-Hat</source>
-        <translation type="unfinished"></translation>
+        <translation>Hi-hat con pedal</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="258"/>
         <source>Low Tom</source>
-        <translation type="unfinished"></translation>
+        <translation>Tom bajo</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="259"/>
         <source>Open Hi-Hat</source>
-        <translation type="unfinished"></translation>
+        <translation>Platillo hi-hat abierto</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="260"/>
         <source>Low-Mid Tom</source>
-        <translation type="unfinished"></translation>
+        <translation>Tom medio bajo</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="261"/>
         <source>Hi-Mid Tom</source>
-        <translation type="unfinished"></translation>
+        <translation>Tom medio alto</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="262"/>
         <source>Crash Cymbal 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Platillo crash 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="263"/>
         <source>High Tom</source>
-        <translation type="unfinished"></translation>
+        <translation>Tom alto</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="264"/>
         <source>Ride Cymbal 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Platillo ride 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="265"/>
         <source>Chinese Cymbal</source>
-        <translation type="unfinished"></translation>
+        <translation>Platillo chino</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="266"/>
         <source>Ride Bell</source>
-        <translation type="unfinished"></translation>
+        <translation>Cencerro ride</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="268"/>
         <source>Splash Cymbal</source>
-        <translation type="unfinished"></translation>
+        <translation>Platillo splash</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="269"/>
         <source>Cowbell</source>
-        <translation type="unfinished"></translation>
+        <translation>Cencerro</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="270"/>
         <source>Crash Cymbal 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Platillo crash 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="271"/>
         <source>Vibraslap</source>
-        <translation type="unfinished"></translation>
+        <translation>Trafaplás (vibraslap)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="272"/>
         <source>Ride Cymbal 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Platillo ride 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="273"/>
         <source>Hi Bongo</source>
-        <translation type="unfinished"></translation>
+        <translation>Bongo alto</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="274"/>
         <source>Low Bongo</source>
-        <translation type="unfinished"></translation>
+        <translation>Bongo bajo</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="275"/>
         <source>Mute Hi Conga</source>
-        <translation type="unfinished"></translation>
+        <translation>Conga alto sordinada</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="276"/>
         <source>Open Hi Conga</source>
-        <translation type="unfinished"></translation>
+        <translation>Conga alto abierto</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="277"/>
         <source>Low Conga</source>
-        <translation type="unfinished"></translation>
+        <translation>Conga bajo</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="278"/>
         <source>High Timbale</source>
-        <translation type="unfinished"></translation>
+        <translation>Timbale alto</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="279"/>
         <source>Low Timbale</source>
-        <translation type="unfinished"></translation>
+        <translation>Timbale bajo</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="280"/>
         <source>High Agogo</source>
-        <translation type="unfinished"></translation>
+        <translation>Agogô alto</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="281"/>
         <source>Low Agogo</source>
-        <translation type="unfinished"></translation>
+        <translation>Agogô bajo</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="284"/>
         <source>Short Whistle</source>
-        <translation type="unfinished"></translation>
+        <translation>Silbato corto</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="285"/>
         <source>Long Whistle</source>
-        <translation type="unfinished"></translation>
+        <translation>Silbato largo</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="286"/>
         <source>Short Guiro</source>
-        <translation type="unfinished"></translation>
+        <translation>Güiro corto</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="287"/>
         <source>Long Guiro</source>
-        <translation type="unfinished"></translation>
+        <translation>Güiro largo</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="289"/>
         <source>Hi Wood Block</source>
-        <translation type="unfinished"></translation>
+        <translation>Caja china alto</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="290"/>
         <source>Low Wood Block</source>
-        <translation type="unfinished"></translation>
+        <translation>Caja china bajo</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="291"/>
         <source>Mute Cuica</source>
-        <translation type="unfinished"></translation>
+        <translation>Cuica sordinada</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="292"/>
         <source>Open Cuica</source>
-        <translation type="unfinished"></translation>
+        <translation>Cuica abierta</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="293"/>
         <source>Mute Triangle</source>
-        <translation type="unfinished"></translation>
+        <translation>Triángulo sordinado</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="294"/>
         <source>Open Triangle</source>
-        <translation type="unfinished"></translation>
+        <translation>Triángulo abierto</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="295"/>
         <source>MIDI input system device</source>
-        <translation type="unfinished"></translation>
+        <translation>Dispositivo de sistema de entrada de MIDI</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="296"/>
         <source>&amp;lt;none&amp;gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;lt;nada&amp;gt;</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="305"/>
         <source>Synth plugin</source>
-        <translation type="unfinished"></translation>
+        <translation>Plugin sinte</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="306"/>
@@ -10575,7 +10575,7 @@ Por favor, seleccione cuáles de ellos quiere borrar permanentemente del disco d
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="340"/>
         <source>Click to rename this instrument</source>
-        <translation type="unfinished"></translation>
+        <translation>Hacer clic para renombrar este instrumento</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="346"/>
@@ -10590,7 +10590,7 @@ Por favor, seleccione cuáles de ellos quiere borrar permanentemente del disco d
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="356"/>
         <source>Click the button above to rename this instrument</source>
-        <translation type="unfinished"></translation>
+        <translation>Hacer clic en el botón arriba para renombrar este instrumento</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="452"/>
@@ -10716,12 +10716,12 @@ Por favor, seleccione cuáles de ellos quiere borrar permanentemente del disco d
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="119"/>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="416"/>
         <source>Select a plugin from this list</source>
-        <translation type="unfinished"></translation>
+        <translation>Seleccionar un plugin de esta lista</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="129"/>
         <source>Bypass this plugin</source>
-        <translation type="unfinished"></translation>
+        <translation>Desviar este plugin</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="138"/>
@@ -10737,7 +10737,7 @@ Por favor, seleccione cuáles de ellos quiere borrar permanentemente del disco d
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="142"/>
         <source>Unique ID of plugin</source>
-        <translation type="unfinished"></translation>
+        <translation>ID exclusivo del plugin</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="169"/>
@@ -11048,19 +11048,19 @@ Por favor, seleccione cuáles de ellos quiere borrar permanentemente del disco d
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="119"/>
         <source>Type</source>
-        <translation type="unfinished">Tipo</translation>
+        <translation>Tipo</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="120"/>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="232"/>
         <source>MSB</source>
-        <translation type="unfinished">MSB</translation>
+        <translation>MSB</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="121"/>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="231"/>
         <source>LSB</source>
-        <translation type="unfinished">LSB</translation>
+        <translation>LSB</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="139"/>
@@ -11209,7 +11209,7 @@ Por favor, seleccione cuáles de ellos quiere borrar permanentemente del disco d
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1541"/>
         <source>LinuxSampler configuration files</source>
-        <translation type="unfinished"></translation>
+        <translation>Archivos de configuración de LinuxSampler</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1542"/>
