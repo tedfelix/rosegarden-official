@@ -635,6 +635,7 @@ punchin:
         ControlBlock::getInstance()->setMetronomeMuted(!comp.useRecordMetronome());
 		
         QSettings settings;
+        settings.beginGroup(GeneralOptionsConfigGroup);
 		
         // If we are looping then jump to start of loop and start recording,
         // if we're not take off the number of count-in bars and start
@@ -645,10 +646,12 @@ punchin:
         else {
             if (m_transportStatus != RECORDING_ARMED && punchIn == false) {
                 int startBar = comp.getBarNumber(comp.getPosition());
-                startBar -= settings.value("countinbars", 0).toUInt() ;
+                startBar -= settings.value("countinbars", 0).toUInt();
                 m_doc->slotSetPointerPosition(comp.getBarRange(startBar).first);
             }
         }
+
+        settings.endGroup();
 
         m_doc->setRecordStartTime(m_doc->getComposition().getPosition());
 
