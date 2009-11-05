@@ -5444,32 +5444,32 @@ así lo desea.</translation>
     <message>
         <location filename="../InstrumentStrings.cpp" line="239"/>
         <source>Bass steel drums</source>
-        <translation>Tambores metálicos de Trinidad y Tobago bajos</translation>
+        <translation>Tambores metálicos bajos</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="240"/>
         <source>Cello steel drums</source>
-        <translation>Tambores metálicos de Trinidad y Tobago cellos</translation>
+        <translation>Tambores metálicos cellos</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="241"/>
         <source>Tenor steel drums</source>
-        <translation>Tambores metálicos de Trinidad y Tobago tenores</translation>
+        <translation>Tambores metálicos tenores</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="242"/>
         <source>Guitar steel drums</source>
-        <translation>tambores metálicos de Trinidad y Tobago guitarras</translation>
+        <translation>tambores metálicos guitarras</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="243"/>
         <source>Alto steel drums</source>
-        <translation>Tambores metálicos de Trinidad y Tobago altos</translation>
+        <translation>Tambores metálicos altos</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="244"/>
         <source>Soprano steel drums</source>
-        <translation>Tambores metálicos de Trinidad y Tobago sopranos</translation>
+        <translation>Tambores metálicos sopranos</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="245"/>
@@ -6712,7 +6712,7 @@ así lo desea.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="142"/>
         <source>FX 6 (goblins)</source>
-        <translation>Efecto 6 (¡cuidado con el chupacabras!)</translation>
+        <translation>Efecto 6 (¡Chupacabras!)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="143"/>
@@ -6772,7 +6772,7 @@ así lo desea.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="155"/>
         <source>Steel Drums</source>
-        <translation>Tambores metálicos de Trinidad y Tobago</translation>
+        <translation>Tambores metálicos</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="156"/>
