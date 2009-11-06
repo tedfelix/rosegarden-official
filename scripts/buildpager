@@ -1,4 +1,6 @@
 #!/bin/bash
+warnings=""
+if [ x"$1" = x-w ]; then warnings=yes; shift; fi
 outcodefile=`mktemp /tmp/XXXXXX`
 trap "rm -f ${outcodefile} ; stty -F /dev/tty cooked echo" 0
 getinput() {
@@ -26,7 +28,13 @@ fi
 	    b=${line#*[: ][0-9]*:}
 	    a=${line%${b}}
 	    line="\033[01;37;44m$a\033[00m$b"
-	fi
+	elif [ -n "$warnings" ]; then
+            if [[ "$line" =~ 'arning: ' ]]; then
+                b=${line#*[: ][0-9]*:}
+                a=${line%${b}}
+                line="\033[01;37;44m$a\033[00m$b"
+	    fi
+        fi
 	echo -e "$line"
 	if [ -n "$bad" ] && [ -z "$runon" ]; then
 	    lines=`echo -e "$line" | fold | wc -l | awk '{ print $1 }'`
