@@ -9530,7 +9530,7 @@ del menú Edita. Per altra banda també podeu canviar
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="387"/>
         <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="836"/>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="695"/>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1427"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1432"/>
         <source>%1 Controller %2 %3</source>
         <translation type="unfinished">%1 controlador %2 %3</translation>
     </message>
@@ -10259,78 +10259,64 @@ del menú Edita. Per altra banda també podeu canviar
         <translation type="unfinished">&lt;cap fitxer d&apos;àudio&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="513"/>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="577"/>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="682"/>
-        <source>Please select an audio item in the list!</source>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="518"/>
+        <source>Save File As</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="513"/>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="577"/>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="682"/>
-        <source>Error: Selection is empty!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="521"/>
-        <source>Choose a name to save this file as </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="521"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="520"/>
         <source>*.wav|WAV files (*.wav)</source>
         <translation type="unfinished">*.wav|fitxers WAV (*.wav)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="531"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="530"/>
         <source>Exporting audio file...</source>
         <translation type="unfinished">S&apos;està exportant el fitxer d&apos;àudio...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="646"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="644"/>
         <source>This will unload audio file &quot;%1&quot; and remove all associated segments.  Are you sure?</source>
         <translation type="unfinished">Això descarregarà el fitxer d&apos;&apos;audio &quot;%1&quot; i esborrarà tots els fragments associats. Voleu continuar?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="735"/>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="743"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="732"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="740"/>
         <source>WAV files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="736"/>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="747"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="733"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="744"/>
         <source>All files</source>
         <translation type="unfinished">Tots els fitxers</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="742"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="739"/>
         <source>Audio files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="744"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="741"/>
         <source>FLAC files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="745"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="742"/>
         <source>Ogg files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="746"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="743"/>
         <source>MP3 files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="759"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="756"/>
         <source>Select one or more audio files</source>
         <translation type="unfinished">Selecciona un o més fitxers d&apos;àudio</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="841"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="838"/>
         <source>This will unload all audio files and remove their associated segments.
 This action cannot be undone, and associations with these files will be lost.
 Files will not be removed from your disk.
@@ -10341,7 +10327,7 @@ Tot i així els fitxers no s&apos;esborraran del disc.
 Voleu continuar?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="878"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="875"/>
         <source>This will unload all audio files that are not associated with any segments in this composition.
 This action cannot be undone, and associations with these files will be lost.
 Files will not be removed from your disk.
@@ -10352,7 +10338,7 @@ Tot i així els fitxers no s&apos;esborraran del disc.
 Voleu continuar?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="943"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="940"/>
         <source>The following audio files are not used in the current composition.
 
 Please select the ones you wish to delete permanently from the hard disk.
@@ -10363,7 +10349,7 @@ Seleccioneu els que voleu esborrar permanentment del disc dur.
 </translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="953"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="950"/>
         <source>&lt;qt&gt;About to delete %n audio file(s) permanently from the hard disk.&lt;br&gt;This action cannot be undone, and there will be no way to recover the files.&lt;br&gt;Are you sure?&lt;/qt&gt;</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -10372,48 +10358,48 @@ Seleccioneu els que voleu esborrar permanentment del disc dur.
         </translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="966"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="963"/>
         <source>File %1 could not be deleted.</source>
         <translation type="unfinished">No s&apos;ha pogut esborrar el fitxer %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="999"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="996"/>
         <source>Change Audio File label</source>
         <translation type="unfinished">Canvia l&apos;etiqueta del fitxer d&apos;àudio</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1000"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="997"/>
         <source>Enter new label</source>
         <translation type="unfinished">Introduïu una nova etiqueta</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1174"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1171"/>
         <source>importing a remote audio file</source>
         <translation type="unfinished">S&apos;està exportant el fitxer d&apos;àudio...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1176"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1173"/>
         <source>importing an audio file that needs to be converted or resampled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1179"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1176"/>
         <source>Adding audio file...</source>
         <translation type="unfinished">S&apos;està exportant el fitxer d&apos;àudio...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1201"/>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1206"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1198"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1203"/>
         <source>Failed to add audio file. </source>
         <translation type="unfinished">El seqüenciador no ha pogut afegir el fitxer d&apos;àduio %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1216"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1213"/>
         <source>Generating audio preview...</source>
         <translation type="unfinished">S&apos;està generant una mostra d&apos;àudio...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1224"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1221"/>
         <source>Try copying this file to a directory where you have write permission and re-add it</source>
         <translation type="unfinished">Mireu de copiar aquest fitxer en una carpeta on tingueu permisos i torneu a afegir-lo.</translation>
     </message>
@@ -11779,7 +11765,7 @@ Seleccioneu els que voleu esborrar permanentment del disc dur.
 <context>
     <name>Rosegarden::ControlRulerWidget</name>
     <message>
-        <location filename="../../src/gui/rulers/ControlRulerWidget.cpp" line="273"/>
+        <location filename="../../src/gui/rulers/ControlRulerWidget.cpp" line="294"/>
         <source>Velocity</source>
         <translation type="unfinished"></translation>
     </message>
@@ -17435,22 +17421,22 @@ Mireu si el dispositiu està ben configurat en el gestor de dispositius MIDI</tr
 <context>
     <name>Rosegarden::NotationWidget</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="161"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="162"/>
         <source>Zoom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="177"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="178"/>
         <source>Horizontal Zoom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="189"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="190"/>
         <source>Vertical Zoom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="202"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="203"/>
         <source>Reset Zoom</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20249,8 +20235,8 @@ Voleu configurar-ho ara?</translation>
 <context>
     <name>Rosegarden::SequenceManager</name>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="919"/>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1068"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="922"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1071"/>
         <source>The JACK Audio subsystem has failed or it has stopped Rosegarden from processing audio.
 Please restart Rosegarden to continue working with audio.
 Quitting other running applications may improve Rosegarden&apos;s performance.</source>
@@ -20259,8 +20245,8 @@ Reinicieu el Rosegarden per tornar a tenir l&apos;àudio funcionant.
 Si sortiu de les altres aplicacions que estan corrent, millorareu el rendiment del Rosegarden.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="925"/>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1077"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="928"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1080"/>
         <source>The JACK Audio subsystem has stopped Rosegarden from processing audio, probably because of a processing overload.
 An attempt to restart the audio service has been made, but some problems may remain.
 Quitting other running applications may improve Rosegarden&apos;s performance.</source>
@@ -20269,87 +20255,87 @@ S&apos;ha provat de reiniciar el Rosegarden però no ha anat bé, encara deu hav
 Si sortiu de les altres aplicacions que estan corrent, millorareu el rendiment del Rosegarden.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="936"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="939"/>
         <source>Out of processor power for real-time audio processing.  Cannot continue.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="962"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="965"/>
         <source>A serious error has occurred in the ALSA MIDI subsystem.  It may not be possible to continue sequencing.  Please check console output for more information.</source>
         <translation type="unfinished">El subsistema ALSA MIDI ha tingut un problema seriós. No es podrà continuar amb la seqüenciació. Si voleu més informació mireu la consola de sortida.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="988"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="991"/>
         <source>JACK Audio subsystem is losing sample frames.</source>
         <translation type="unfinished">El subsitema d&apos;àudio JACK no dóna l&apos;abast.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1006"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1009"/>
         <source>Failed to read audio data from disk in time to service the audio subsystem.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1010"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1013"/>
         <source>Failed to write audio data to disk fast enough to service the audio subsystem.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1061"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1064"/>
         <source>&lt;h3&gt;System timer resolution is too low!&lt;/h3&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1096"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1099"/>
         <source>&lt;p&gt;Rosegarden was unable to find a high-resolution timing source for MIDI performance.&lt;/p&gt;&lt;p&gt;This may mean you are using a Linux system with the kernel timer resolution set too low.  Please contact your Linux distributor for more information.&lt;/p&gt;&lt;p&gt;Some Linux distributors already provide low latency kernels, see the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;Rosegarden website&lt;/a&gt; for instructions.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1121"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1124"/>
         <source>&lt;p&gt;Rosegarden was unable to find a high-resolution timing source for MIDI performance.&lt;/p&gt;&lt;p&gt;You may be able to solve this problem by loading the RTC timer kernel module.  To do this, try running &lt;b&gt;sudo modprobe snd-rtctimer&lt;/b&gt; in a terminal window and then restarting Rosegarden.&lt;/p&gt;&lt;p&gt;Alternatively, check whether your Linux distributor provides a multimedia-optimized kernel.  See the &lt;a style=&quot;color:gold&quot;  href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;Rosegarden website&lt;/a&gt; for notes about this.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1232"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1235"/>
         <source>&lt;h3&gt;Sequencer engine unavailable!&lt;/h3&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1233"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1236"/>
         <source>&lt;p&gt;Both MIDI and Audio subsystems have failed to initialize.&lt;/p&gt;&lt;p&gt;If you wish to run with no sequencer by design, then use &quot;rosegarden --nosequencer&quot; to avoid seeing this error in the future.  Otherwise, we recommend that you repair your system configuration and start Rosegarden again.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1235"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1238"/>
         <source>&lt;h3&gt;MIDI sequencing unavailable!&lt;/h3&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1253"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1256"/>
         <source>&lt;h3&gt;Audio sequencing and synth plugins unavailable!&lt;/h3&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1254"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1257"/>
         <source>&lt;p&gt;Rosegarden could not connect to the JACK audio server.  This probably means that Rosegarden was unable to start the audio server due to a problem with your configuration, your system installation, or both.&lt;/p&gt;&lt;p&gt;If you want to be able to play or record audio files or use plugins, we suggest that you exit Rosegarden and use the JACK Control utility (qjackctl) to try different settings until you arrive at a configuration that permits JACK to start.  You may also need to install a realtime kernel, edit your system security configuration, and so on.  Unfortunately, this is an extremely complex subject.&lt;/p&gt;&lt;p&gt; Once you establish a working JACK configuration, Rosegarden will be able to start the audio server automatically in the future.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1014"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1017"/>
         <source>The audio mixing subsystem is failing to keep up.</source>
         <translation type="unfinished">El subsistema mesclador d&apos;àudio no ha pogut continuar</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1018"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1021"/>
         <source>The audio subsystem is failing to keep up.</source>
         <translation type="unfinished">El subsistema d&apos;àudio no ha pogut continuar</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1022"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1025"/>
         <source>Unknown sequencer failure mode!</source>
         <translation type="unfinished">El seqüenciador té un problema desconegut!</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1236"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1239"/>
         <source>&lt;p&gt;The MIDI subsystem has failed to initialize.&lt;/p&gt;&lt;p&gt;You may continue without the sequencer, but we suggest closing Rosegarden, running &quot;modprobe snd-seq-midi&quot; as root, and starting Rosegarden again.  If you wish to run with no sequencer by design, then use &quot;rosegarden --nosequencer&quot; to avoid seeing this error in the future.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>

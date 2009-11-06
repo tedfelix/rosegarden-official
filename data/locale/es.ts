@@ -972,12 +972,12 @@
         <location filename="../QMenuStrings.cpp" line="2343"/>
         <location filename="../QMenuStrings.cpp" line="3543"/>
         <source>Jog &amp;Left</source>
-        <translation>Saltar a la &amp;izquierda</translation>
+        <translation>Codear a la &amp;izquierda</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="779"/>
         <source>&amp;Jog Right</source>
-        <translation>Saltar al &amp;derecho</translation>
+        <translation>Codear al &amp;derecho</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="788"/>
@@ -2304,7 +2304,7 @@
         <location filename="../QMenuStrings.cpp" line="2352"/>
         <location filename="../QMenuStrings.cpp" line="3552"/>
         <source>Jog &amp;Right</source>
-        <translation>Correr a la de&amp;recha</translation>
+        <translation>Codear a la de&amp;recha</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2361"/>
@@ -6337,7 +6337,7 @@ así lo desea.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="57"/>
         <source>Drawbar Organ</source>
-        <translation>Óragano de barras deslizantes</translation>
+        <translation>Órgano de barras deslizantes</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="58"/>
@@ -9625,7 +9625,7 @@ así lo desea.</translation>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="387"/>
         <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="836"/>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="695"/>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1427"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1432"/>
         <source>%1 Controller %2 %3</source>
         <translation>%2 %3 controlador %1</translation>
     </message>
@@ -10034,7 +10034,7 @@ así lo desea.</translation>
     <message>
         <location filename="../../src/commands/segment/AddTimeSignatureCommand.h" line="47"/>
         <source>Add Time Si&amp;gnature Change...</source>
-        <translation>Añadir cambio de m&amp;edida del compás</translation>
+        <translation>Añadir cambio de m&amp;edida del compás...</translation>
     </message>
 </context>
 <context>
@@ -10311,7 +10311,7 @@ así lo desea.</translation>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="131"/>
         <source>&lt;qt&gt;&lt;p&gt;&lt;img src=&quot;:pixmaps/tooltip/warning.png&quot;&gt;&lt;/img&gt; &lt;b&gt;Audio files marked with an asterisk (*) are encoded at a sample rate different from that of the JACK audio server.&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Rosegarden will play them at the correct speed, but they will sound terrible.  Please consider resampling these files externally, or adjusting the sample rate of the JACK server.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;&lt;img src=&quot;:pixmaps/tooltip/warning.png&quot;&gt;&lt;/img&gt; &lt;b&gt;Archivos de audio que se distinguen por un asterisco (*) son codificados con una frecuencia de muestreo distinta de la del servidor de audio JACK.&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Rosegarden los tocará a la velocidad correcta, pero sonorán horriblemente.  Por favor considere convertir la frecuencia de muestreo de estes archivos por fuera o adjustar la frecuencia de muestreo del servidor de audio JACK.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="170"/>
@@ -10354,78 +10354,72 @@ así lo desea.</translation>
         <translation>&lt;sin archivos de audio&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="513"/>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="577"/>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="682"/>
         <source>Please select an audio item in the list!</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">¡Por favor seleccione algo de audio de la lista!</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="513"/>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="577"/>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="682"/>
         <source>Error: Selection is empty!</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Error: ¡selección vacía!</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="521"/>
-        <source>Choose a name to save this file as </source>
-        <translation type="unfinished"></translation>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="518"/>
+        <source>Save File As</source>
+        <translation>Guardar archivo como</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="521"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="520"/>
         <source>*.wav|WAV files (*.wav)</source>
         <translation>archivos *.wav|WAV (*.wav)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="531"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="530"/>
         <source>Exporting audio file...</source>
         <translation>Exportando archivo de audio...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="646"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="644"/>
         <source>This will unload audio file &quot;%1&quot; and remove all associated segments.  Are you sure?</source>
         <translation>Se va a descargar el archivo de audio &quot;%1&quot; y se borrarán todos los segmentos asociados. ¿Está seguro?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="735"/>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="743"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="732"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="740"/>
         <source>WAV files</source>
         <translation>archivos WAV</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="736"/>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="747"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="733"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="744"/>
         <source>All files</source>
         <translation>Todos los archivos</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="742"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="739"/>
         <source>Audio files</source>
         <translation>Archivos de audio</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="744"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="741"/>
         <source>FLAC files</source>
         <translation>Archivos FLAC</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="745"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="742"/>
         <source>Ogg files</source>
         <translation>Archivos OGG</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="746"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="743"/>
         <source>MP3 files</source>
         <translation>Archivos MP3</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="759"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="756"/>
         <source>Select one or more audio files</source>
         <translation>Seleccionar uno o más archivos de audio</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="841"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="838"/>
         <source>This will unload all audio files and remove their associated segments.
 This action cannot be undone, and associations with these files will be lost.
 Files will not be removed from your disk.
@@ -10434,7 +10428,7 @@ Are you sure?</source>
 ¿Está usted seguro?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="878"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="875"/>
         <source>This will unload all audio files that are not associated with any segments in this composition.
 This action cannot be undone, and associations with these files will be lost.
 Files will not be removed from your disk.
@@ -10443,7 +10437,7 @@ Are you sure?</source>
 ¿Está usted seguro?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="943"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="940"/>
         <source>The following audio files are not used in the current composition.
 
 Please select the ones you wish to delete permanently from the hard disk.
@@ -10454,56 +10448,56 @@ Por favor, seleccione cuáles de ellos quiere borrar permanentemente del disco d
 </translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="953"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="950"/>
         <source>&lt;qt&gt;About to delete %n audio file(s) permanently from the hard disk.&lt;br&gt;This action cannot be undone, and there will be no way to recover the files.&lt;br&gt;Are you sure?&lt;/qt&gt;</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>&lt;qt&gt;Se borrará un archivo de audio del disco duro de modo permanente.&lt;br&gt;Esta acción no se puede deshacer y no habrá modo de recuperar este archivo.&lt;br&gt;¿Está seguro?&lt;/qt&gt;</numerusform>
+            <numerusform>&lt;qt&gt;Se borrarán %n archivos de audio del disco duro de modo permanente.&lt;br&gt;Esta acción no se puede deshacer y no habrá modo de recuperar estos archivos.&lt;br&gt;¿Está seguro?&lt;/qt&gt;</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="966"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="963"/>
         <source>File %1 could not be deleted.</source>
         <translation>El archivo %1 no pudo ser borrado.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="999"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="996"/>
         <source>Change Audio File label</source>
         <translation>Cambiar etiqueta del archivo de audio</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1000"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="997"/>
         <source>Enter new label</source>
         <translation>Introducir nueva etiqueta</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1174"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1171"/>
         <source>importing a remote audio file</source>
         <translation>Importando archivo de audio remoto</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1176"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1173"/>
         <source>importing an audio file that needs to be converted or resampled</source>
         <translation>importando un archivo de audio que debe ser convertido o resampleado</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1179"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1176"/>
         <source>Adding audio file...</source>
         <translation>Añadiendo archivo de audio...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1201"/>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1206"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1198"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1203"/>
         <source>Failed to add audio file. </source>
         <translation>Fallo al añadir archivo de audio.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1216"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1213"/>
         <source>Generating audio preview...</source>
         <translation>Generando vista preliminar.de audio...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1224"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1221"/>
         <source>Try copying this file to a directory where you have write permission and re-add it</source>
         <translation>Intente copiar este archivo a un directorio en el que tenga permiso de escritura y vuelva a añadirlo</translation>
     </message>
@@ -10858,7 +10852,7 @@ Por favor, seleccione cuáles de ellos quiere borrar permanentemente del disco d
     <message>
         <location filename="../../src/gui/configuration/AudioPropertiesPage.cpp" line="133"/>
         <source>%1 kB out of %2 kB (%3% kB used)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 kB de %2 kB (%3% kB usado)</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioPropertiesPage.cpp" line="156"/>
@@ -10868,7 +10862,7 @@ Por favor, seleccione cuáles de ellos quiere borrar permanentemente del disco d
     <message>
         <location filename="../../src/gui/configuration/AudioPropertiesPage.cpp" line="165"/>
         <source>Audio Recording Path</source>
-        <translation type="unfinished"></translation>
+        <translation>Camino de grabación de audio</translation>
     </message>
 </context>
 <context>
@@ -11043,7 +11037,7 @@ Por favor, seleccione cuáles de ellos quiere borrar permanentemente del disco d
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="118"/>
         <source>Device and Banks</source>
-        <translation type="unfinished"></translation>
+        <translation>Dispositivos y bancos</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="119"/>
@@ -11883,7 +11877,7 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
 <context>
     <name>Rosegarden::ControlRulerWidget</name>
     <message>
-        <location filename="../../src/gui/rulers/ControlRulerWidget.cpp" line="273"/>
+        <location filename="../../src/gui/rulers/ControlRulerWidget.cpp" line="294"/>
         <source>Velocity</source>
         <translation type="unfinished">Velocidad</translation>
     </message>
@@ -16332,7 +16326,7 @@ puede ser valioso comunicarlo al bibliotecario para beneficio de otros.</transla
     <message>
         <location filename="../../src/gui/studio/NameSetEditor.cpp" line="66"/>
         <source>Provided by</source>
-        <translation type="unfinished"></translation>
+        <translation>Gracias a</translation>
     </message>
 </context>
 <context>
@@ -16633,7 +16627,7 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location filename="../../src/commands/notation/NormalizeRestsCommand.h" line="49"/>
         <source>&amp;Normalize Rests</source>
-        <translation type="unfinished">&amp;Normalizar Silencios</translation>
+        <translation>&amp;Normalizar silencios</translation>
     </message>
 </context>
 <context>
@@ -16642,37 +16636,37 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
         <location filename="../../src/gui/configuration/NotationConfigurationPage.h" line="53"/>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.h" line="54"/>
         <source>Notation</source>
-        <translation type="unfinished">Partitura</translation>
+        <translation>Partitura</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="81"/>
         <source>Default layout mode</source>
-        <translation type="unfinished">Modo de formato predeterminado</translation>
+        <translation>Modo de formato predeterminado</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="86"/>
         <source>Linear layout</source>
-        <translation type="unfinished">Formato lineal</translation>
+        <translation>Formato lineal</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="87"/>
         <source>Continuous page layout</source>
-        <translation type="unfinished">Distribución de página continuo</translation>
+        <translation>Distribución de página continuo</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="88"/>
         <source>Multiple page layout</source>
-        <translation type="unfinished">Distribución de página múltiple</translation>
+        <translation>Distribución de página múltiple</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="96"/>
         <source>Default spacing</source>
-        <translation type="unfinished">Espaciado predeterminado</translation>
+        <translation>Espaciado predeterminado</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="109"/>
         <source>%1 % (normal)</source>
-        <translation type="unfinished">%1 % (normal)</translation>
+        <translation>%1 % (normal)</translation>
     </message>
     <message>
         <source>Default duration factor</source>
@@ -16689,209 +16683,209 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="121"/>
         <source>Show track headers (linear layout only)</source>
-        <translation type="unfinished">Mostrar cabeceras de pista (formato linear únicamente)</translation>
+        <translation>Mostrar cabeceras de pista (formato linear únicamente)</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="128"/>
         <source>Never</source>
-        <translation type="unfinished">Nunca</translation>
+        <translation>Nunca</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="129"/>
         <source>When needed</source>
-        <translation type="unfinished">Si sea necesario</translation>
+        <translation>Si sea necesario</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="130"/>
         <source>Always</source>
-        <translation type="unfinished">Siempre</translation>
+        <translation>Siempre</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="137"/>
         <source>&quot;Always&quot; and &quot;Never&quot; mean what they usually mean
 &quot;When needed&quot; means &quot;when staves are too many to all fit in the current window&quot;</source>
-        <translation type="unfinished">«Siempre» y «Nunca» significan lo normal
+        <translation>«Siempre» y «Nunca» significan lo normal
 «Si sea necesario» significa «cuando hayan demasiados pentagramas y no caban en la ventana corriente»</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="150"/>
         <source>Show non-notation events as question marks</source>
-        <translation type="unfinished">Mostrar eventos no representables como signos de interrogación</translation>
+        <translation>Mostrar eventos no representables como signos de interrogación</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="161"/>
         <source>Show notation-quantized notes in a different color</source>
-        <translation type="unfinished">Mostrar notas cuantificadas en un color diferente</translation>
+        <translation>Mostrar notas cuantificadas en un color diferente</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="172"/>
         <source>Show &quot;invisible&quot; events in grey</source>
-        <translation type="unfinished">Mostrar eventos &quot;invisibles&quot; en gris</translation>
+        <translation>Mostrar eventos &quot;invisibles&quot; en gris</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="183"/>
         <source>Show notes outside suggested playable range in red</source>
-        <translation type="unfinished">Mostrar notas afuera del ámbito sugerido en rojo</translation>
+        <translation>Mostrar notas afuera del ámbito sugerido en rojo</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="194"/>
         <source>Highlight superimposed notes with a halo effect</source>
-        <translation type="unfinished">Destacar notas superpuestas con un efecto de halo</translation>
+        <translation>Destacar notas superpuestas con un efecto de halo</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="208"/>
         <source>When recording MIDI, split-and-tie long notes at barlines</source>
-        <translation type="unfinished">Al grabar MIDI, dividir y ligar notas largas en divisiones de compás</translation>
+        <translation>Al grabar MIDI, dividir y ligar notas largas en divisiones de compás</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="220"/>
         <source>Layout</source>
-        <translation type="unfinished">Formato</translation>
+        <translation>Formato</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="233"/>
         <source>Default note style for new notes</source>
-        <translation type="unfinished">Estilo de nota predeterminado para nuevas notas</translation>
+        <translation>Estilo de nota predeterminado para nuevas notas</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="265"/>
         <source>When inserting notes...</source>
-        <translation type="unfinished">Al insertar notas...</translation>
+        <translation>Al insertar notas...</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="273"/>
         <source>Split notes into ties to make durations match</source>
-        <translation type="unfinished">Dividir notas en ligaduras para hacer coincidir la duración</translation>
+        <translation>Dividir notas en ligaduras para hacer coincidir la duración</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="274"/>
         <source>Ignore existing durations</source>
-        <translation type="unfinished">Ignorar duraciones existentes</translation>
+        <translation>Ignorar duraciones existentes</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="284"/>
         <source>Auto-beam on insert when appropriate</source>
-        <translation type="unfinished">Unión automática de plicas al insertar cuando sea apropiado</translation>
+        <translation>Unión automática de plicas al insertar cuando sea apropiado</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="297"/>
         <source>Collapse rests after erase</source>
-        <translation type="unfinished">Fusionar silencios tras el borrado</translation>
+        <translation>Fusionar silencios tras el borrado</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="309"/>
         <source>Default paste type</source>
-        <translation type="unfinished">Tipo de pegado predeterminado</translation>
+        <translation>Tipo de pegado predeterminado</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="333"/>
         <source>Editing</source>
-        <translation type="unfinished">Edición</translation>
+        <translation>Edición</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="345"/>
         <source>Accidentals in one octave...</source>
-        <translation type="unfinished">Alteraciones en una octava...</translation>
+        <translation>Alteraciones en una octava...</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="348"/>
         <source>Affect only that octave</source>
-        <translation type="unfinished">Afectar únicamente esa octava</translation>
+        <translation>Afectar únicamente esa octava</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="349"/>
         <source>Require cautionaries in other octaves</source>
-        <translation type="unfinished">Requerir precautorias en otras octavas</translation>
+        <translation>Requerir precautorias en otras octavas</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="350"/>
         <source>Affect all subsequent octaves</source>
-        <translation type="unfinished">Afectar a todas las octavas siguientes</translation>
+        <translation>Afectar a todas las octavas siguientes</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="358"/>
         <source>Accidentals in one bar...</source>
-        <translation type="unfinished">Alteraciones en un compás...</translation>
+        <translation>Alteraciones en un compás...</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="361"/>
         <source>Affect only that bar</source>
-        <translation type="unfinished">Afectar sólamente ese compás</translation>
+        <translation>Afectar sólamente ese compás</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="362"/>
         <source>Require cautionary resets in following bar</source>
-        <translation type="unfinished">Requerir anulaciones precautorias en el compás siguiente</translation>
+        <translation>Requerir anulaciones precautorias en el compás siguiente</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="363"/>
         <source>Require explicit resets in following bar</source>
-        <translation type="unfinished">Requerir anulaciones explícitas en el compás siguiente</translation>
+        <translation>Requerir anulaciones explícitas en el compás siguiente</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="371"/>
         <source>Key signature cancellation style</source>
-        <translation type="unfinished">Estilo de cancellación de la armadura</translation>
+        <translation>Estilo de cancellación de la armadura</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="374"/>
         <source>Cancel only when entering C major or A minor</source>
-        <translation type="unfinished">Cancelar sólamente al entrar en Do mayor o La menor</translation>
+        <translation>Cancelar sólamente al entrar en Do mayor o La menor</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="375"/>
         <source>Cancel whenever removing sharps or flats</source>
-        <translation type="unfinished">Cancelar al reducir sostenidos o bemoles</translation>
+        <translation>Cancelar al reducir sostenidos o bemoles</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="376"/>
         <source>Cancel always</source>
-        <translation type="unfinished">Cancelar siempre</translation>
+        <translation>Cancelar siempre</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="387"/>
         <source>Accidentals</source>
-        <translation type="unfinished">Alteraciones</translation>
+        <translation>Alteraciones</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="398"/>
         <source>Notation font</source>
-        <translation type="unfinished">Tipografía de partitura</translation>
+        <translation>Tipografía de partitura</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="404"/>
         <source>View</source>
-        <translation type="unfinished"></translation>
+        <translation>Vista</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="425"/>
         <source>Origin:</source>
-        <translation type="unfinished">Origen: </translation>
+        <translation>Origen: </translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="429"/>
         <source>Copyright:</source>
-        <translation type="unfinished">Copyright: </translation>
+        <translation>Copyright: </translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="433"/>
         <source>Mapped by:</source>
-        <translation type="unfinished">Mapeado por:</translation>
+        <translation>Mapeado por:</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="437"/>
         <source>Type:</source>
-        <translation type="unfinished">Tipo: </translation>
+        <translation>Tipo: </translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="463"/>
         <source>Font size for single-staff views</source>
-        <translation type="unfinished">Tamaño de tipografía para la vista de un solo pentagrama</translation>
+        <translation>Tamaño de tipografía para la vista de un solo pentagrama</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="472"/>
         <source>Font size for multi-staff views</source>
-        <translation type="unfinished">Tamaño de tipografía para la vista de varios pentagramas</translation>
+        <translation>Tamaño de tipografía para la vista de varios pentagramas</translation>
     </message>
     <message>
         <source>Font size for printing (pt)</source>
@@ -16900,27 +16894,27 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="490"/>
         <source>Text font</source>
-        <translation type="unfinished">Tipografía de texto</translation>
+        <translation>Tipografía de texto</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="502"/>
         <source>Sans-serif font</source>
-        <translation type="unfinished">Tipografía sans-serif</translation>
+        <translation>Tipografía sans-serif</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="515"/>
         <source>Font</source>
-        <translation type="unfinished">Letras</translation>
+        <translation>Tipografía</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="609"/>
         <source>%1 (smooth)</source>
-        <translation type="unfinished">%1 (suave)</translation>
+        <translation>%1 (suave)</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="611"/>
         <source>%1 (jaggy)</source>
-        <translation type="unfinished">%1 (dentado)</translation>
+        <translation>%1 (dentado)</translation>
     </message>
 </context>
 <context>
@@ -16928,22 +16922,22 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="454"/>
         <source>Rendering staff %1...</source>
-        <translation type="unfinished">Procesado pentagrama %1...</translation>
+        <translation>Procesado pentagrama %1...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="517"/>
         <source>Rendering notes on staff %1...</source>
-        <translation type="unfinished">Representando notas en el pentagrama %1...</translation>
+        <translation>Representando notas en el pentagrama %1...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="646"/>
         <source>Positioning staff %1...</source>
-        <translation type="unfinished">Colocando pentagrama %1...</translation>
+        <translation>Colocando pentagrama %1...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="1203"/>
         <source>Sustain</source>
-        <translation type="unfinished">Sostenido</translation>
+        <translation>Sostenido</translation>
     </message>
 </context>
 <context>
@@ -16951,199 +16945,199 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="44"/>
         <source>%1-dotted-%2</source>
-        <translation type="unfinished">%1-con puntillo-%2</translation>
+        <translation>%1-con puntillo-%2</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="46"/>
         <source>%1-dotted %2</source>
-        <translation type="unfinished">%1-con puntillo %2</translation>
+        <translation>%1-con puntillo %2</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="49"/>
         <source>dotted-%1</source>
-        <translation type="unfinished">%1-con puntillo</translation>
+        <translation>%1-con puntillo</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="51"/>
         <source>dotted %1</source>
-        <translation type="unfinished">%1 con puntillo</translation>
+        <translation>%1 con puntillo</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="75"/>
         <source>sixty-fourth note</source>
-        <translation type="unfinished">semifusa</translation>
+        <translation>semifusa</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="75"/>
         <source>thirty-second note</source>
-        <translation type="unfinished">fusa</translation>
+        <translation>fusa</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="76"/>
         <source>sixteenth note</source>
-        <translation type="unfinished">semicorchea</translation>
+        <translation>semicorchea</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="76"/>
         <source>eighth note</source>
-        <translation type="unfinished">corchea</translation>
+        <translation>corchea</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="77"/>
         <source>quarter note</source>
-        <translation type="unfinished">negra</translation>
+        <translation>negra</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="77"/>
         <source>half note</source>
-        <translation type="unfinished">blanca</translation>
+        <translation>blanca</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="78"/>
         <source>whole note</source>
-        <translation type="unfinished">redonda</translation>
+        <translation>redonda</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="78"/>
         <source>double whole note</source>
-        <translation type="unfinished">cuadrada</translation>
+        <translation>cuadrada</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="81"/>
         <source>sixty-fourth notes</source>
-        <translation type="unfinished">semifusas</translation>
+        <translation>semifusas</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="81"/>
         <source>thirty-second notes</source>
-        <translation type="unfinished">fusas</translation>
+        <translation>fusas</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="82"/>
         <source>sixteenth notes</source>
-        <translation type="unfinished">semicorcheas</translation>
+        <translation>semicorcheas</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="82"/>
         <source>eighth notes</source>
-        <translation type="unfinished">corcheas</translation>
+        <translation>corcheas</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="83"/>
         <source>quarter notes</source>
-        <translation type="unfinished">negras</translation>
+        <translation>negras</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="83"/>
         <source>half notes</source>
-        <translation type="unfinished">blancas</translation>
+        <translation>blancas</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="84"/>
         <source>whole notes</source>
-        <translation type="unfinished">redondas</translation>
+        <translation>redondas</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="84"/>
         <source>double whole notes</source>
-        <translation type="unfinished">cuadradas</translation>
+        <translation>cuadradas</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="88"/>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="146"/>
         <source>%1 triplets</source>
-        <translation type="unfinished">%1 tresillos</translation>
+        <translation>%1 tresillos</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="92"/>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="150"/>
         <source>%1 triplet</source>
-        <translation type="unfinished">tresillo de %1</translation>
+        <translation>tresillo de %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="135"/>
         <source>64th</source>
-        <translation type="unfinished">semifusa</translation>
+        <translation>semifusa</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="135"/>
         <source>32nd</source>
-        <translation type="unfinished">fusa</translation>
+        <translation>fusa</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="135"/>
         <source>16th</source>
-        <translation type="unfinished">semicorchea</translation>
+        <translation>semicorchea</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="135"/>
         <source>8th</source>
-        <translation type="unfinished">corchea</translation>
+        <translation>corchea</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="136"/>
         <source>quarter</source>
-        <translation type="unfinished">negra</translation>
+        <translation>negra</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="136"/>
         <source>half</source>
-        <translation type="unfinished">blanca</translation>
+        <translation>blanca</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="136"/>
         <source>whole</source>
-        <translation type="unfinished">redonda</translation>
+        <translation>redonda</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="137"/>
         <source>double whole</source>
-        <translation type="unfinished">cuadrada</translation>
+        <translation>cuadrada</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="140"/>
         <source>64ths</source>
-        <translation type="unfinished">semifusas</translation>
+        <translation>semifusas</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="140"/>
         <source>32nds</source>
-        <translation type="unfinished">fusas</translation>
+        <translation>fusas</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="140"/>
         <source>16ths</source>
-        <translation type="unfinished">semicorcheas</translation>
+        <translation>semicorcheas</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="140"/>
         <source>8ths</source>
-        <translation type="unfinished">corcheas</translation>
+        <translation>corcheas</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="141"/>
         <source>quarters</source>
-        <translation type="unfinished">negras</translation>
+        <translation>negras</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="141"/>
         <source>halves</source>
-        <translation type="unfinished">blancas</translation>
+        <translation>blancas</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="141"/>
         <source>wholes</source>
-        <translation type="unfinished">redondas</translation>
+        <translation>redondas</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="142"/>
         <source>double wholes</source>
-        <translation type="unfinished">cuadradas</translation>
+        <translation>cuadradas</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="269"/>
         <source>%1 ticks</source>
-        <translation type="unfinished">%1 tics</translation>
+        <translation>%1 tics</translation>
     </message>
 </context>
 <context>
@@ -17152,7 +17146,7 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
         <location filename="../../src/gui/editors/notation/NotationVLayout.cpp" line="508"/>
         <source>Spanned note at %1 has no HEIGHT_ON_STAFF property!
 This is a bug (the program would previously have crashed by now)</source>
-        <translation type="unfinished">La nota espaciada en %1 no tiene la propiedad HEIGHT_ON_STAFF!
+        <translation>La nota espaciada en %1 no tiene la propiedad HEIGHT_ON_STAFF!
 Esto es un bug (el programa debería haber fallado ya)</translation>
     </message>
 </context>
@@ -17240,15 +17234,15 @@ Esto es un bug (el programa debería haber fallado ya)</translation>
     <message numerus="yes">
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="931"/>
         <source>  %n event(s) selected </source>
-        <translation type="unfinished">
-            <numerusform>  %n evento seleccionado </numerusform>
+        <translation>
+            <numerusform>  %n evento seleccionado</numerusform>
             <numerusform>  %n eventos seleccionados</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="934"/>
         <source>  No selection </source>
-        <translation type="unfinished">  Sin selección </translation>
+        <translation>  Sin selección </translation>
     </message>
     <message>
         <source>Nothing to print</source>
@@ -17404,28 +17398,28 @@ Esto es un bug (el programa debería haber fallado ya)</translation>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2778"/>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3737"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1141"/>
         <source>Printing with LilyPond...</source>
-        <translation type="unfinished">Imprimiendo con LilyPond...</translation>
+        <translation>Imprimiendo con LilyPond...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1159"/>
         <source>Previewing with LilyPond...</source>
-        <translation type="unfinished"></translation>
+        <translation>Previsualizando archivo.LilyPond...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1184"/>
         <source>&lt;qt&gt;&lt;p&gt;Failed to open a temporary file for LilyPond export.&lt;/p&gt;&lt;p&gt;This probably means you have run out of disk space on &lt;pre&gt;%1&lt;/pre&gt;&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;No pudo abrir un archivo provisional para la exportación LilyPond.&lt;/p&gt;&lt;p&gt;Esto probablemente signifca que ya no queda espacio libre en &lt;pre&gt;%1&lt;/pre&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Fallo al abrir un archivo provisional para la exportación LilyPond.&lt;/p&gt;&lt;p&gt;Esto probablemente signifca que ya no queda espacio libre en &lt;pre&gt;%1&lt;/pre&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1401"/>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1470"/>
         <source>&lt;qt&gt;&lt;p&gt;The Restricted paste type requires enough empty space (containing only rests) at the paste position to hold all of the events to be pasted.&lt;/p&gt;&lt;p&gt;Not enough space was found.&lt;/p&gt;&lt;p&gt;If you want to paste anyway, consider using one of the other paste types from the &lt;b&gt;Paste...&lt;/b&gt; option on the Edit menu.  You can also change the default paste type to something other than Restricted if you wish.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;El tipo de pegado Restringido requiere suficiente espacio en la posición de pegado (conteniendo únicamente silencios) para albergar todos los eventos que van a ser pegados&lt;/p&gt;&lt;p&gt;No se ha encontrado espacio suficiente.&lt;/p&gt;&lt;p&gt;Si quiere pegar de todas formas, considere el uso de uno de los otros tipos de pegado en la opción &lt;b&gt;Pegar...&quot;&lt;/b&gt; del menú Editar. También puede cambiar el tipo de pegado por defecto a otro distinto del Restringido si así lo desea.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1426"/>
@@ -17445,22 +17439,22 @@ Esto es un bug (el programa debería haber fallado ya)</translation>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1585"/>
         <source>Raising velocities...</source>
-        <translation type="unfinished">Subiendo velocidades...</translation>
+        <translation>Subiendo velocidades...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1596"/>
         <source>Lowering velocities...</source>
-        <translation type="unfinished">Bajando velocidades...</translation>
+        <translation>Bajando velocidades...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1633"/>
         <source>Set Event Velocities</source>
-        <translation type="unfinished">Establecer Velocidades de los Eventos</translation>
+        <translation>Establecer velocidades de los eventos</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1638"/>
         <source>Setting Velocities...</source>
-        <translation type="unfinished">Estableciendo Velocidades...</translation>
+        <translation>Estableciendo velocidades...</translation>
     </message>
     <message>
         <source>Normalizing rests...</source>
@@ -17477,12 +17471,12 @@ Esto es un bug (el programa debería haber fallado ya)</translation>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2202"/>
         <source>Unknown note insert action %1</source>
-        <translation type="unfinished">Acción de insertar nota desconocida: %1</translation>
+        <translation>Acción de insertar nota desconocida: %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2206"/>
         <source>Inserting note</source>
-        <translation type="unfinished">Insertando nota</translation>
+        <translation>Insertando nota</translation>
     </message>
     <message>
         <source>No rest duration selected</source>
@@ -17507,125 +17501,125 @@ Esto es un bug (el programa debería haber fallado ya)</translation>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2579"/>
         <source>Ornament track %1 bar %2</source>
-        <translation type="unfinished">Pista de ornamento %1 compás %2</translation>
+        <translation>Pista de ornamento %1 compás %2</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2581"/>
         <source>Ornament bar %1</source>
-        <translation type="unfinished">Ornamento compás %1</translation>
+        <translation>Ornamento compás %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2591"/>
         <source>Make Ornament</source>
-        <translation type="unfinished">Crear Ornamento</translation>
+        <translation>Crear ornamento</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2636"/>
         <source>Use Ornament</source>
-        <translation type="unfinished">Usar Ornamento</translation>
+        <translation>Usar ornamento</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2647"/>
         <source>Remove Ornaments</source>
-        <translation type="unfinished">Eliminar Ornamentos</translation>
+        <translation>Eliminar ornamentos</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2705"/>
         <source>Estimated key signature shown</source>
-        <translation type="unfinished">Se muestra la armadura estimada</translation>
+        <translation>Se muestra la armadura estimada</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2762"/>
         <source>Sustain</source>
-        <translation type="unfinished">Sostenido</translation>
+        <translation>Sostenido</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2778"/>
         <source>There is no sustain controller defined for this device.
 Please ensure the device is configured correctly in the Manage MIDI Devices dialog in the main window.</source>
-        <translation type="unfinished">No hay un controlador de Sustain definido para este dispositivo.
+        <translation>No hay un controlador de Sustain definido para este dispositivo.
 Por favor, asegúrese de que está correctamente configurado en el cuadro de diálogo &quot;Gestionar Dispositivos MIDI&quot;. </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2947"/>
         <source>Estimated time signature shown</source>
-        <translation type="unfinished">Se muestra la estimación de la medida del compás</translation>
+        <translation>Se muestra la estimación de la medida del compás</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3007"/>
         <source>%1%2 - Segment Track #%3 - Notation</source>
-        <translation type="unfinished"></translation>
+        <translation>%1%2 - Segmento Pista %3 - Partitura</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3014"/>
         <source>%1%2 - All Segments - Notation</source>
-        <translation type="unfinished"></translation>
+        <translation>%1%2 - Todos los segmentos - Partitura</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3020"/>
         <source>%1%2 - %n Segment(s) - Notation</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1%2 - %n Segmento - Partitura</numerusform>
+            <numerusform>%1%2 - %n Segmentos - Partitura</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3272"/>
         <source>Transpose</source>
-        <translation type="unfinished">Transportar</translation>
+        <translation>Transportar</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3273"/>
         <source>By number of semitones: </source>
-        <translation type="unfinished">Por número de semitonos: </translation>
+        <translation>Por número de semitonos: </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3635"/>
         <source>Time: %1 (%2.%3s)</source>
-        <translation type="unfinished">Tiempo: %1 (%2.%3s)</translation>
+        <translation>Tiempo: %1 (%2.%3s)</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3710"/>
         <source>http://rosegardenmusic.com/wiki/doc:notation-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:notation-es</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3717"/>
         <source>http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</source>
-        <translation type="unfinished">http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</translation>
+        <translation>http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3724"/>
         <source>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</source>
-        <translation type="unfinished">http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</translation>
+        <translation>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3471"/>
         <source>Can&apos;t insert note: No note duration selected</source>
-        <translation type="unfinished">No es posible insertar nota: No hay una duración seleccionada</translation>
+        <translation>No es posible insertar nota: No hay una duración seleccionada</translation>
     </message>
 </context>
 <context>
     <name>Rosegarden::NotationWidget</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="161"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="162"/>
         <source>Zoom</source>
         <translation>Ampliar</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="177"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="178"/>
         <source>Horizontal Zoom</source>
-        <translation type="unfinished">Ampliación horizontal</translation>
+        <translation>Ampliación horizontal</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="189"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="190"/>
         <source>Vertical Zoom</source>
-        <translation type="unfinished">Ampliación vertical</translation>
+        <translation>Ampliación vertical</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="202"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="203"/>
         <source>Reset Zoom</source>
-        <translation type="unfinished">Reiniciar ampliación</translation>
+        <translation>Reiniciar ampliación</translation>
     </message>
 </context>
 <context>
@@ -17633,7 +17627,7 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location filename="../../src/gui/editors/notation/NoteFontFactory.cpp" line="182"/>
         <source>Can&apos;t obtain a default font -- no fonts found</source>
-        <translation type="unfinished">No se puede obtener una tipografía por omisión -- no se han encontrado tipografías</translation>
+        <translation>No se puede obtener una tipografía.  No se han encontrado tipografías</translation>
     </message>
 </context>
 <context>
@@ -17641,32 +17635,32 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location filename="../../src/gui/editors/notation/NoteFontViewer.cpp" line="82"/>
         <source>Note Font Viewer: %1</source>
-        <translation type="unfinished">Visor de tipografía de partitura: %1</translation>
+        <translation>Visor de tipografía de partitura: %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NoteFontViewer.cpp" line="96"/>
         <source>  Component: </source>
-        <translation type="unfinished">  Componente: </translation>
+        <translation>  Componente: </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NoteFontViewer.cpp" line="105"/>
         <source>  View: </source>
-        <translation type="unfinished">  Vista: </translation>
+        <translation>  Vista: </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NoteFontViewer.cpp" line="109"/>
         <source>Glyphs</source>
-        <translation type="unfinished">Glifos</translation>
+        <translation>Glifos</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NoteFontViewer.cpp" line="110"/>
         <source>Codes</source>
-        <translation type="unfinished">Códigos</translation>
+        <translation>Códigos</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NoteFontViewer.cpp" line="112"/>
         <source>  Page: </source>
-        <translation type="unfinished">  Página: </translation>
+        <translation>  Página: </translation>
     </message>
 </context>
 <context>
@@ -17674,7 +17668,7 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location filename="../../src/commands/notation/NoteInsertionCommand.cpp" line="48"/>
         <source>Insert Note</source>
-        <translation type="unfinished">Insertar Nota</translation>
+        <translation>Insertar nota</translation>
     </message>
 </context>
 <context>
@@ -17682,27 +17676,27 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location filename="../../src/gui/editors/notation/NoteStyleFileReader.cpp" line="54"/>
         <source>Can&apos;t open style file &quot;%1&quot; for style &quot;%2&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>No puede abrir el archivo de estilo %1&quot; por estilo &quot;%2&quot;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NoteStyleFileReader.cpp" line="89"/>
         <source>type is a required attribute of note</source>
-        <translation type="unfinished">el tipo es un atributo requerido de la nota</translation>
+        <translation>el tipo es un atributo requerido de la nota</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NoteStyleFileReader.cpp" line="98"/>
         <source>Unrecognised note name %1</source>
-        <translation type="unfinished">Nombre de nota no reconocida %1</translation>
+        <translation>Nombre de nota no reconocida %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NoteStyleFileReader.cpp" line="105"/>
         <source>global element must precede note elements</source>
-        <translation type="unfinished">elemento global debe preceder a elementos de nota</translation>
+        <translation>elemento global debe preceder a elementos de nota</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NoteStyleFileReader.cpp" line="134"/>
         <source>global and note elements may have shape or charname attribute, but not both</source>
-        <translation type="unfinished">elementos globales y notas pueden tener forma o nombre de carácter, pero no ambos</translation>
+        <translation>elementos globales y notas pueden tener forma o nombre de carácter, pero no ambos</translation>
     </message>
 </context>
 <context>
@@ -17710,7 +17704,7 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location filename="../../src/commands/segment/OpenOrCloseRangeCommand.cpp" line="35"/>
         <source>Open or Close Range</source>
-        <translation type="unfinished">Abrir o cerrar ámbito</translation>
+        <translation>Abrir o cerrar ámbito</translation>
     </message>
 </context>
 <context>
@@ -17718,7 +17712,7 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location filename="../../src/commands/segment/PasteConductorDataCommand.cpp" line="34"/>
         <source>Paste Tempos and Time Signatures</source>
-        <translation type="unfinished">Pegar tempos y compases</translation>
+        <translation>Pegar tempos y compases</translation>
     </message>
 </context>
 <context>
@@ -17726,32 +17720,32 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location filename="../../src/commands/edit/PasteEventsCommand.h" line="85"/>
         <source>&amp;Paste</source>
-        <translation type="unfinished">&amp;Pegar</translation>
+        <translation>&amp;Pegar</translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/PasteEventsCommand.cpp" line="91"/>
         <source>Paste into an existing gap [&quot;restricted&quot;]</source>
-        <translation type="unfinished">Pegar en una ranura existente [&quot;restringido&quot;]</translation>
+        <translation>Pegar en una ranura existente [&quot;restringido&quot;]</translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/PasteEventsCommand.cpp" line="93"/>
         <source>Erase existing events to make room [&quot;simple&quot;]</source>
-        <translation type="unfinished">Borrar eventos existentes para hacer sitio [&quot;simple&quot;]</translation>
+        <translation>Borrar eventos existentes para hacer sitio [&quot;simple&quot;]</translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/PasteEventsCommand.cpp" line="95"/>
         <source>Move existing events out of the way [&quot;open-n-paste&quot;]</source>
-        <translation type="unfinished">Mover eventos existentes fuera de su sitio [&quot;abrir-y-pegar&quot;]</translation>
+        <translation>Mover eventos existentes fuera de su sitio [&quot;abrir-y-pegar&quot;]</translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/PasteEventsCommand.cpp" line="97"/>
         <source>Overlay notes, tying against present notes [&quot;note-overlay&quot;]</source>
-        <translation type="unfinished">Solapar notas, enlazando con las preexistentes [&quot;solapamiento&quot;]</translation>
+        <translation>Solapar notas, enlazando con las preexistentes [&quot;solapamiento&quot;]</translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/PasteEventsCommand.cpp" line="99"/>
         <source>Overlay notes, ignoring present notes [&quot;matrix-overlay&quot;]</source>
-        <translation type="unfinished">Solapar notas, ignorando notas preexistentes [&quot;solapamiento en matriz&quot;]</translation>
+        <translation>Solapar notas, ignorando notas preexistentes [&quot;solapamiento en matriz&quot;]</translation>
     </message>
 </context>
 <context>
@@ -17759,22 +17753,22 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location filename="../../src/gui/dialogs/PasteNotationDialog.cpp" line="43"/>
         <source>Paste</source>
-        <translation type="unfinished">Pegar</translation>
+        <translation>Pegar</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PasteNotationDialog.cpp" line="52"/>
         <source>Paste type</source>
-        <translation type="unfinished">Pegar tipo</translation>
+        <translation>Pegar tipo</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PasteNotationDialog.cpp" line="73"/>
         <source>Options</source>
-        <translation type="unfinished">Opciones</translation>
+        <translation>Opciones</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PasteNotationDialog.cpp" line="79"/>
         <source>Make this the default paste type</source>
-        <translation type="unfinished">Hacer este el tipo predeterminado de pegada</translation>
+        <translation>Hacer este el tipo predeterminado de pegada</translation>
     </message>
 </context>
 <context>
@@ -17782,7 +17776,7 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location filename="../../src/commands/segment/PasteRangeCommand.cpp" line="37"/>
         <source>Paste Range</source>
-        <translation type="unfinished">Pegar ámbito</translation>
+        <translation>Pegar ámbito</translation>
     </message>
 </context>
 <context>
@@ -17790,7 +17784,7 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location filename="../../src/commands/edit/PasteSegmentsCommand.h" line="55"/>
         <source>&amp;Paste</source>
-        <translation type="unfinished">&amp;Pegar</translation>
+        <translation>&amp;Pegar</translation>
     </message>
 </context>
 <context>
@@ -17798,7 +17792,7 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location filename="../../src/commands/segment/PasteToTriggerSegmentCommand.cpp" line="39"/>
         <source>Paste as New Triggered Segment</source>
-        <translation type="unfinished">Pegar como nuevo segmento actrivado</translation>
+        <translation>Pegar como nuevo segmento actrivado</translation>
     </message>
 </context>
 <context>
@@ -17807,92 +17801,92 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="50"/>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="238"/>
         <source>Pitch Bend Sequence</source>
-        <translation type="unfinished"></translation>
+        <translation>Secuencia de inflexión de tono</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="59"/>
         <source>Preset</source>
-        <translation type="unfinished">Preprograma</translation>
+        <translation>Preprograma</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="65"/>
         <source>Preset:</source>
-        <translation type="unfinished"></translation>
+        <translation>Preprograma:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="68"/>
         <source>User</source>
-        <translation type="unfinished"></translation>
+        <translation>Usuario</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="69"/>
         <source>Linear ramp</source>
-        <translation type="unfinished"></translation>
+        <translation>Rampa lineal</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="70"/>
         <source>Fast vibrato arm release</source>
-        <translation type="unfinished"></translation>
+        <translation>Relajación rápida de palanca de vibrato</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="71"/>
         <source>Vibrato</source>
-        <translation type="unfinished"></translation>
+        <translation>Vibrato</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="74"/>
         <source>Pre Bend</source>
-        <translation type="unfinished"></translation>
+        <translation>Pre-inflexión</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="80"/>
         <source>Value (%):</source>
-        <translation type="unfinished"></translation>
+        <translation>Valor (%):</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="91"/>
         <source>Duration (%):</source>
-        <translation type="unfinished"></translation>
+        <translation>Duración (%):</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="106"/>
         <source>Ramp duration (%):</source>
-        <translation type="unfinished"></translation>
+        <translation>Duración de rampa (%):</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="114"/>
         <source>End value (%):</source>
-        <translation type="unfinished"></translation>
+        <translation>Valor final (%):</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="122"/>
         <source>Vibrato start amplitude (%):</source>
-        <translation type="unfinished"></translation>
+        <translation>Amplitud de vibrato al comienzo (%):</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="131"/>
         <source>Vibrato end amplitude (%):</source>
-        <translation type="unfinished"></translation>
+        <translation>Amplitud de vibrato al final (%):</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="100"/>
         <source>Bend Sequence</source>
-        <translation type="unfinished"></translation>
+        <translation>Sequencia de inflexión</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="140"/>
         <source>Vibrato wavelength:</source>
-        <translation type="unfinished"></translation>
+        <translation>Longitud de onda de vibrato:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="150"/>
         <source>Resolution:</source>
-        <translation type="unfinished"></translation>
+        <translation>Resolución:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="165"/>
         <source>Invalid end time. Have you selected some events?</source>
-        <translation type="unfinished"></translation>
+        <translation>Tiempo final inválido. ¿Ha seleccionado unos eventos?</translation>
     </message>
 </context>
 <context>
@@ -17900,7 +17894,7 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location filename="../../src/gui/widgets/PitchChooser.cpp" line="52"/>
         <source>Pitch:</source>
-        <translation type="unfinished">Altura:</translation>
+        <translation>Altura:</translation>
     </message>
 </context>
 <context>
@@ -17908,7 +17902,7 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location filename="../../src/gui/dialogs/PitchDialog.cpp" line="51"/>
         <source>Reset</source>
-        <translation type="unfinished">Reiniciar</translation>
+        <translation>Reiniciar</translation>
     </message>
 </context>
 <context>
@@ -17916,7 +17910,7 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location filename="../../src/gui/dialogs/PitchPickerDialog.cpp" line="38"/>
         <source>Pitch Selector</source>
-        <translation type="unfinished">Selector de Altura de Nota</translation>
+        <translation>Selector de altura de nota</translation>
     </message>
 </context>
 <context>
@@ -17924,22 +17918,22 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location filename="../../src/gui/editors/segment/PlayList.cpp" line="79"/>
         <source>Add...</source>
-        <translation type="unfinished">Añadir...</translation>
+        <translation>Añadir...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/PlayList.cpp" line="80"/>
         <source>Play</source>
-        <translation type="unfinished">Reproducir</translation>
+        <translation>Reproducir</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/PlayList.cpp" line="81"/>
         <source>Move Up</source>
-        <translation type="unfinished">Mover Arriba</translation>
+        <translation>Mover arriba</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/PlayList.cpp" line="82"/>
         <source>Move Down</source>
-        <translation type="unfinished">Mover Abajo</translation>
+        <translation>Mover abajo</translation>
     </message>
     <message>
         <source>Delete</source>
@@ -17948,37 +17942,37 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location filename="../../src/gui/editors/segment/PlayList.cpp" line="83"/>
         <source>Remove</source>
-        <translation type="unfinished"></translation>
+        <translation>Eliminar</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/PlayList.cpp" line="84"/>
         <source>Clear whole List</source>
-        <translation type="unfinished"></translation>
+        <translation>Eliminar toda la lista</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/PlayList.cpp" line="117"/>
         <source>Select one or more Rosegarden files</source>
-        <translation type="unfinished">Seleccionar uno o más archivos de Rosegarden</translation>
+        <translation>Seleccionar uno o más archivos de Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/PlayList.cpp" line="118"/>
         <source>Rosegarden files</source>
-        <translation type="unfinished">Archivos de Rosegarden</translation>
+        <translation>Archivos de Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/PlayList.cpp" line="119"/>
         <source>MIDI files</source>
-        <translation type="unfinished"></translation>
+        <translation>Archivos de MIDI</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/PlayList.cpp" line="120"/>
         <source>X11 Rosegaden files</source>
-        <translation type="unfinished"></translation>
+        <translation>Archivos de X11 Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/PlayList.cpp" line="121"/>
         <source>All files</source>
-        <translation type="unfinished">Todos los archivos</translation>
+        <translation>Todos los archivos</translation>
     </message>
 </context>
 <context>
@@ -17986,12 +17980,12 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location filename="../../src/gui/editors/segment/PlayListView.cpp" line="41"/>
         <source>Title</source>
-        <translation type="unfinished">Título</translation>
+        <translation>Título</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/PlayListView.cpp" line="41"/>
         <source>File name</source>
-        <translation type="unfinished">Nombre de archivo</translation>
+        <translation>Nombre de archivo</translation>
     </message>
 </context>
 <context>
@@ -17999,12 +17993,12 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location filename="../../src/gui/general/PresetGroup.cpp" line="44"/>
         <source>unknown error</source>
-        <translation type="unfinished">error desconocido</translation>
+        <translation>error desconocido</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/PresetGroup.cpp" line="77"/>
         <source>Can&apos;t open preset file %1</source>
-        <translation type="unfinished">No se puede abrir archivo de preprogramas %1</translation>
+        <translation>No se puede abrir archivo de preprogramas %1</translation>
     </message>
 </context>
 <context>
@@ -18012,82 +18006,82 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="55"/>
         <source>Convert notation for...</source>
-        <translation type="unfinished">Convertir partitura en...</translation>
+        <translation>Convertir partitura en...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="74"/>
         <source>Load track parameters preset</source>
-        <translation type="unfinished">Cargar parámetros de pista preprogramados</translation>
+        <translation>Cargar parámetros de pista preprogramados</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="78"/>
         <source>Select preset track parameters for:</source>
-        <translation type="unfinished">Seleccionar parámetros de pista preprogramados por:</translation>
+        <translation>Seleccionar parámetros de pista preprogramados por:</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="79"/>
         <source>Create appropriate notation for:</source>
-        <translation type="unfinished">Crear partitura para:</translation>
+        <translation>Crear partitura para:</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="88"/>
         <source>Category</source>
-        <translation type="unfinished">Categoría</translation>
+        <translation>Categoría</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="96"/>
         <source>Electronic organ (manual) (treble)</source>
-        <translation type="unfinished"></translation>
+        <translation>Órgano Hammond (manual) (clave de sol)</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="99"/>
         <source>Instrument</source>
-        <translation type="unfinished">Instrumento</translation>
+        <translation>Instrumento</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="104"/>
         <source>Player Ability</source>
-        <translation type="unfinished">Nivel</translation>
+        <translation>Nivel</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="106"/>
         <source>Amateur</source>
-        <translation type="unfinished">Amateur</translation>
+        <translation>Aficcionado</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="107"/>
         <source>Professional</source>
-        <translation type="unfinished">Profesional</translation>
+        <translation>Profesional</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="111"/>
         <source>Scope</source>
-        <translation type="unfinished">Ámbito</translation>
+        <translation>Ámbito</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="119"/>
         <source>Only selected segments</source>
-        <translation type="unfinished">Segmentos seleccionados solamente</translation>
+        <translation>Segmentos seleccionados solamente</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="122"/>
         <source>All segments in this track</source>
-        <translation type="unfinished">Todos los segmentos en esta pista</translation>
+        <translation>Todos los segmentos en esta pista</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="128"/>
         <source>Only for new segments</source>
-        <translation type="unfinished">Sólo para segmentos nuevos</translation>
+        <translation>Sólo para segmentos nuevos</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="131"/>
         <source>Convert existing segments</source>
-        <translation type="unfinished">Convertir segmentos existentes</translation>
+        <translation>Convertir segmentos existentes</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="184"/>
         <source>http://rosegardenmusic.com/wiki/doc:manual-preset-handler-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:manual-preset-handler-es</translation>
     </message>
 </context>
 <context>
@@ -18096,7 +18090,7 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
         <location filename="../../src/gui/widgets/ProgressDialog.cpp" line="61"/>
         <location filename="../../src/gui/widgets/ProgressDialog.cpp" line="127"/>
         <source>Processing...</source>
-        <translation type="unfinished">Procesando...</translation>
+        <translation>Procesando...</translation>
     </message>
 </context>
 <context>
@@ -18189,14 +18183,14 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="569"/>
         <source>Copying audio files...</source>
-        <translation type="unfinished"></translation>
+        <translation>Copiando archivos de audio...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="654"/>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="684"/>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="918"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="655"/>
@@ -18617,22 +18611,22 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location filename="../../src/gui/dialogs/RescaleDialog.cpp" line="49"/>
         <source>Stretch or Squash</source>
-        <translation type="unfinished"></translation>
+        <translation>Estirar o encoger</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RescaleDialog.cpp" line="56"/>
         <source>Duration of selection</source>
-        <translation type="unfinished">Duración de la selección</translation>
+        <translation>Duración de la selección</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RescaleDialog.cpp" line="62"/>
         <source>Options</source>
-        <translation type="unfinished">Opciones</translation>
+        <translation>Opciones</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RescaleDialog.cpp" line="66"/>
         <source>Adjust times of following events accordingly</source>
-        <translation type="unfinished">Ajustar los tiempos de los siguientes eventos sin crear superposiciones ni vacíos </translation>
+        <translation>Ajustar los tiempos de los siguientes eventos sin crear superposiciones ni vacíos</translation>
     </message>
 </context>
 <context>
@@ -18640,7 +18634,7 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location filename="../../src/commands/notation/ResetDisplacementsCommand.h" line="45"/>
         <source>&amp;Restore Positions</source>
-        <translation type="unfinished">Restablecer posiciones</translation>
+        <translation>&amp;Restablecer posiciones</translation>
     </message>
 </context>
 <context>
@@ -18810,8 +18804,8 @@ Do you want to save it?</source>
         <location filename="../../src/document/RosegardenDocument.cpp" line="493"/>
         <source>Delete the %n audio file(s) recorded during the unsaved session?</source>
         <translation type="unfinished">
-            <numerusform>Borrar el archivo Delete the %n audio file(s) recorded during the unsaved session?</numerusform>
-            <numerusform></numerusform>
+            <numerusform>¿Borrar el archivo de audio grabado durante la sesión que no se ha guardada?</numerusform>
+            <numerusform>¿Borrar los %n archivos de audio grabado durante la sesión que no se ha guardada?</numerusform>
         </translation>
     </message>
     <message>
@@ -18823,7 +18817,7 @@ You may want to clean up these files to save disk space.
 
 Please select any you wish to delete permanently from the hard disk.
 </source>
-        <translation type="unfinished">Los siguientes archivos de audio fueron grabados en esta sesión pero han sido descargados
+        <translation>Los siguientes archivos de audio fueron grabados en esta sesión pero han sido descargados
 desde Gestionar segmentos de Audio, y por lo tanto no están en uso ahora en el documento que está grabando.
  
 Quizá quiera limpiar estos archivos para ahorrar espacio en disco.
@@ -18834,9 +18828,9 @@ Por favor, decida si quiere borrarlos permanentemente del disco duro.
     <message numerus="yes">
         <location filename="../../src/document/RosegardenDocument.cpp" line="531"/>
         <source>&lt;qt&gt;About to delete %n audio file(s) permanently from the hard disk.&lt;br&gt;There will be no way to recover the file(s).&lt;br&gt;Are you sure?&lt;/qt&gt;</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>&lt;qt&gt;Se borrará un archivo de audio del disco duro de modo permanente.&lt;br&gt;Esta acción no se puede deshacer y no habrá modo de recuperar este archivo.&lt;br&gt;¿Está seguro?&lt;/qt&gt;</numerusform>
+            <numerusform>&lt;qt&gt;Se borrarán %n archivos de audio del disco duro de modo permanente.&lt;br&gt;Esta acción no se puede deshacer y no habrá modo de recuperar estos archivos.&lt;br&gt;¿Está seguro?&lt;/qt&gt;</numerusform>
         </translation>
     </message>
     <message>
@@ -18877,74 +18871,74 @@ Por favor, decida si quiere borrarlos permanentemente del disco duro.
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="1179"/>
         <source>Could not create temporary file in directory of &apos;%1&apos;: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Fallo al crear un archivo temporario en directorio &apos;%1&apos;: %2</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="1192"/>
         <source>Failure in temporary file handling for file &apos;%1&apos;: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Ha fallado el majeo del archivo temporario &apos;%1&apos;: %2</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="1210"/>
         <source>Failed to rename temporary output file &apos;%1&apos; to desired output file &apos;%2&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Fallo al renombrar &apos;%1 a &apos;%2&apos;</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="1244"/>
         <source>Saving file...</source>
-        <translation type="unfinished">Guardando archivo...</translation>
+        <translation>Guardando archivo...</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="1347"/>
         <source>Error while writing on &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Fallo al escribir en &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="1644"/>
         <source>File load cancelled</source>
-        <translation type="unfinished">Carga de Archivo Cancelada</translation>
+        <translation>Carga de archivo cancelada</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="1664"/>
         <source>&lt;h3&gt;Audio and plugins not available&lt;/h3&gt;&lt;p&gt;This composition uses audio files or plugins, but Rosegarden is currently running without audio because the JACK audio server was not available on startup.&lt;/p&gt;&lt;p&gt;Please exit Rosegarden, start the JACK audio server and re-start Rosegarden if you wish to load this complete composition.&lt;/p&gt;&lt;p&gt;&lt;b&gt;WARNING:&lt;/b&gt; If you re-save this composition, all audio and plugin data and settings in it will be lost.&lt;/p&gt;</source>
-        <translation type="unfinished">&lt;h3&gt;Audio y &quot;plugins&quot; no disponibles&lt;/h3&gt;&lt;p&gt; Esta composición utiliza archivos de audio o plugins, pero Rosegarden está funcionando actualmente sin audio porque el servidor JACK no estaba disponible al comienzo.&lt;/p&gt;&lt;p&gt; Por favor, termine Rosegarden, inicie el servidor de audio JACK y reinicie Rosegarden si desea cargar esta composición por completo.&lt;/p&gt;&lt;p&gt; &lt;b&gt;AVISO:&lt;/b&gt; Si usted guarda esta composición, todos los datos de audio y &quot;plugins&quot; se perderán.&lt;/p&gt;</translation>
+        <translation>&lt;h3&gt;Audio y &quot;plugins&quot; no disponibles&lt;/h3&gt;&lt;p&gt; Esta composición utiliza archivos de audio o plugins, pero Rosegarden está funcionando actualmente sin audio porque el servidor JACK no estaba disponible al comienzo.&lt;/p&gt;&lt;p&gt; Por favor, termine Rosegarden, inicie el servidor de audio JACK y reinicie Rosegarden si desea cargar esta composición por completo.&lt;/p&gt;&lt;p&gt; &lt;b&gt;AVISO:&lt;/b&gt; Si usted guarda esta composición, todos los datos de audio y &quot;plugins&quot; se perderán.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="1667"/>
         <source>&lt;h3&gt;Audio and plugins not available&lt;/h3&gt;&lt;p&gt;This composition uses audio files or plugins, but you are running a version of Rosegarden that was compiled without audio support.&lt;/p&gt;&lt;p&gt;&lt;b&gt;WARNING:&lt;/b&gt; If you re-save this composition from this version of Rosegarden, all audio and plugin data and settings in it will be lost.&lt;/p&gt;</source>
-        <translation type="unfinished">&lt;h3&gt;Audio y &quot;plugins&quot; no disponibles&lt;/h3&gt; &lt;p&gt; Esta composición utiliza archivos de audio o plugins, pero usted está usando una versión de Rosegarden que ha sido compilada sin soporte de audio. &lt;/p&gt;&lt;p&gt;&lt;b&gt;AVISO:&lt;/b&gt; Si usted guarda esta composición desde esta versión de Rosegarden, todos los datos de audio y &quot;plugins&quot; se perderán.&lt;/p&gt;</translation>
+        <translation>&lt;h3&gt;Audio y &quot;plugins&quot; no disponibles&lt;/h3&gt; &lt;p&gt; Esta composición utiliza archivos de audio o plugins, pero usted está usando una versión de Rosegarden que ha sido compilada sin soporte de audio. &lt;/p&gt;&lt;p&gt;&lt;b&gt;AVISO:&lt;/b&gt; Si usted guarda esta composición desde esta versión de Rosegarden, todos los datos de audio y &quot;plugins&quot; se perderán.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="1704"/>
         <source>&lt;h3&gt;Incorrect audio sample rate&lt;/h3&gt;&lt;p&gt;This composition contains audio files that were recorded or imported with the audio server running at a different sample rate (%1 Hz) from the current JACK server sample rate (%2 Hz).&lt;/p&gt;&lt;p&gt;Rosegarden will play this composition at the correct speed, but any audio files in it will probably sound awful.&lt;/p&gt;&lt;p&gt;Please consider re-starting the JACK server at the correct rate (%3 Hz) and re-loading this composition before you do any more work with it.&lt;/p&gt;</source>
-        <translation type="unfinished">&lt;h3&gt;Frecuencia de muestreo de audio incorrecta&lt;/h3&gt; &lt;p&gt; Esta composición contiene archivos de audio que han sido grabados o importados con el servidor de audiocorriendo a una frecuencia de muestreo diferente (%1 Hz) de la actual frecuencia de muestreo de JACK (%2 Hz)&lt;/p&gt;&lt;p&gt; Rosegarden interpretará esta composición a la velocidad correcta, pero los archivos de audio utilizados probablemente suenen horriblemente.&lt;/p&gt;&lt;p&gt; Por favor, considere reiniciar el servidor JACK con la frecuencia correcta (%3 Hz) y recargue esta composición antes de seguir trabajando con ella.&lt;/p&gt;</translation>
+        <translation>&lt;h3&gt;Frecuencia de muestreo de audio incorrecta&lt;/h3&gt; &lt;p&gt; Esta composición contiene archivos de audio que han sido grabados o importados con el servidor de audiocorriendo a una frecuencia de muestreo diferente (%1 Hz) de la actual frecuencia de muestreo de JACK (%2 Hz)&lt;/p&gt;&lt;p&gt; Rosegarden interpretará esta composición a la velocidad correcta, pero los archivos de audio utilizados probablemente suenen horriblemente.&lt;/p&gt;&lt;p&gt; Por favor, considere reiniciar el servidor JACK con la frecuencia correcta (%3 Hz) y recargue esta composición antes de seguir trabajando con ella.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="1714"/>
         <source>&lt;h3&gt;Inconsistent audio sample rates&lt;/h3&gt;&lt;p&gt;This composition contains audio files at more than one sample rate.&lt;/p&gt;&lt;p&gt;Rosegarden will play them at the correct speed, but any audio files that were recorded or imported at rates different from the current JACK server sample rate (%1 Hz) will probably sound awful.&lt;/p&gt;&lt;p&gt;Please see the audio file manager dialog for more details, and consider resampling any files that are at the wrong rate.&lt;/p&gt;</source>
-        <translation type="unfinished">&lt;h3&gt;Frecuencias de muestreo inconsistentes&lt;/h3&gt; &lt;p&gt; Esta composición contiene archivos de audio con mas de una frecuencia de muestreo.&lt;/p&gt; &lt;p&gt; Rosegarden los interpretará a la velocidad correcta, pero cualquier archivo de audio grabado o importado con frecuencias de muestreo diferentes de la frecuencia actual de JACK (%1 Hz) probablemente sonarán horriblemente.&lt;/p&gt;&lt;p&gt; Por favor, vea el diálogo de gestión de segmentos de audio para mas detalles, y considere convertir la frecuencia de muestreo de los archivos con la frecuencia incorrecta.&lt;/p&gt;</translation>
+        <translation>&lt;h3&gt;Frecuencias de muestreo inconsistentes&lt;/h3&gt; &lt;p&gt; Esta composición contiene archivos de audio con mas de una frecuencia de muestreo.&lt;/p&gt; &lt;p&gt; Rosegarden los interpretará a la velocidad correcta, pero cualquier archivo de audio grabado o importado con frecuencias de muestreo diferentes de la frecuencia actual de JACK (%1 Hz) probablemente sonarán horriblemente.&lt;/p&gt;&lt;p&gt; Por favor, vea el diálogo de gestión de segmentos de audio para mas detalles, y considere convertir la frecuencia de muestreo de los archivos con la frecuencia incorrecta.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="1715"/>
         <source>Inconsistent sample rates</source>
-        <translation type="unfinished">Frecuencias de muestreo inconsistentes</translation>
+        <translation>Frecuencias de muestreo inconsistentes</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="1729"/>
         <source>&lt;h3&gt;Plugins not found&lt;/h3&gt;&lt;p&gt;The following audio plugins could not be loaded:&lt;/p&gt;&lt;ul&gt;</source>
-        <translation type="unfinished">&lt;h3&gt;&quot;Plugins&quot; no encontrados&lt;/h3&gt; &lt;p&gt;Los siguientes &quot;plugins&quot; de audio no han podido ser cargados: &lt;/p&gt;&lt;ul&gt;</translation>
+        <translation>&lt;h3&gt;&quot;Plugins&quot; no encontrados&lt;/h3&gt; &lt;p&gt;Los siguientes &quot;plugins&quot; de audio no han podido ser cargados: &lt;/p&gt;&lt;ul&gt;</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="1737"/>
         <source>&lt;li&gt;%1 (from %2)&lt;/li&gt;</source>
-        <translation type="unfinished">&lt;li&gt;%1 (desde %2)&lt;/li&gt;</translation>
+        <translation>&lt;li&gt;%1 (desde %2)&lt;/li&gt;</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="1751"/>
         <source>This file contains one or more old element types that are now deprecated.
 Support for these elements may disappear in future versions of Rosegarden.
 We recommend you re-save this file from this version of Rosegarden to ensure that it can still be re-loaded in future versions.</source>
-        <translation type="unfinished">Este archivo contiene uno o más tipos de elementos que ahora están obsoletos.
+        <translation>Este archivo contiene uno o más tipos de elementos que ahora están obsoletos.
 El soporte para estos elementos puede desaparecer en versiones futuras de
 Rosegarden. Se recomienda guardar este archivo con la versión actual de
 Rosegarden para garantizar que podrá ser reconocida por futuras versiones.</translation>
@@ -18952,17 +18946,17 @@ Rosegarden para garantizar que podrá ser reconocida por futuras versiones.</tra
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="2295"/>
         <source>Insert Recorded MIDI</source>
-        <translation type="unfinished">Insertar MIDI Grabado</translation>
+        <translation>Insertar MIDI grabado</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="2422"/>
         <source>(recorded)</source>
-        <translation type="unfinished">(grabado)</translation>
+        <translation>(grabado)</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="2656"/>
         <source>Generating audio preview...</source>
-        <translation type="unfinished">Generando vista preliminar.de audio</translation>
+        <translation>Generando vista preliminar.de audio...</translation>
     </message>
 </context>
 <context>
@@ -18995,38 +18989,39 @@ Vea Preferencias -&gt; Configurar Rosegarden -&gt; Audio</translation>
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="909"/>
         <source>You&apos;ve not yet defined an audio editor for Rosegarden to use.
 See Edit -&gt; Preferences -&gt; Audio.</source>
-        <translation type="unfinished"></translation>
+        <translation>No ha definido un editor de audio para que lo utilice Rosegarden.
+Vea Editar -&gt; Preferencias -&gt; Audio.</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1598"/>
         <source>importing a remote audio file</source>
-        <translation type="unfinished">Importando archivo de audio remoto</translation>
+        <translation>Importando archivo de audio remoto</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1600"/>
         <source>importing an audio file that needs to be converted or resampled</source>
-        <translation type="unfinished">importando un archivo de audio que debe ser convertido o resampleado</translation>
+        <translation>importando un archivo de audio que debe ser convertido o resampleado</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1603"/>
         <source>Adding audio file...</source>
-        <translation type="unfinished">Añadiendo archivo de audio...</translation>
+        <translation>Añadiendo archivo de audio...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1624"/>
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1629"/>
         <source>Can&apos;t add dropped file. </source>
-        <translation type="unfinished">No es posible añadir el archivo soltado. </translation>
+        <translation>No es posible añadir el archivo soltado. </translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1639"/>
         <source>Generating audio preview...</source>
-        <translation type="unfinished">Generando vista preliminar.de audio</translation>
+        <translation>Generando vista preliminar.de audio...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1646"/>
         <source>Try copying this file to a directory where you have write permission and re-add it</source>
-        <translation type="unfinished">Intente copiar este archivo a un directorio en el que tenga permiso de escritura y vuelva a añadirlo</translation>
+        <translation>Intente copiar este archivo a un directorio en el que tenga permiso de escritura y vuelva a añadirlo</translation>
     </message>
 </context>
 <context>
@@ -19034,37 +19029,37 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="297"/>
         <source>Initializing plugin manager...</source>
-        <translation type="unfinished">Inicializando gestor de plugins...</translation>
+        <translation>Inicializando gestor de plugins...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="339"/>
         <source>Initializing view...</source>
-        <translation type="unfinished">Inicializando vista...</translation>
+        <translation>Inicializando vista...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="309"/>
         <source>Special Parameters</source>
-        <translation type="unfinished">Parámetros Especiales</translation>
+        <translation>Parámetros especiales</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="355"/>
         <source>Starting sequence manager...</source>
-        <translation type="unfinished">Iniciando gestor del secuenciador...</translation>
+        <translation>Iniciando gestor del secuenciador...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="398"/>
         <source>Clearing studio data...</source>
-        <translation type="unfinished">Limpiando datos del estudio...</translation>
+        <translation>Limpiando datos del estudio...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="417"/>
         <source>Starting...</source>
-        <translation type="unfinished">Iniciando...</translation>
+        <translation>Iniciando...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="804"/>
         <source>  Zoom:  </source>
-        <translation type="unfinished">  Ampliar:  </translation>
+        <translation>  Ampliar:  </translation>
     </message>
     <message>
         <source>status</source>
@@ -19076,34 +19071,34 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1589"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2038"/>
         <source>%1 - %2</source>
-        <translation type="unfinished">%1 - %2</translation>
+        <translation>%1 - %2</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1296"/>
         <source>File &quot;%1&quot; does not exist</source>
-        <translation type="unfinished">El archivo &quot;%1&quot; no existe</translation>
+        <translation>El archivo &quot;%1&quot; no existe</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1302"/>
         <source>File &quot;%1&quot; is actually a directory</source>
-        <translation type="unfinished">El archivo &quot;%1&quot; es un directorio</translation>
+        <translation>El archivo &quot;%1&quot; es un directorio</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1311"/>
         <source>You do not have read permission for &quot;%1&quot;</source>
-        <translation type="unfinished">No tiene permiso de lectura para &quot;%1&quot;</translation>
+        <translation>No tiene permiso de lectura para &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1388"/>
         <source>An auto-save file for this document has been found
 Do you want to open it instead ?</source>
-        <translation type="unfinished">Se ha encontrado un archivo auto-guardado para este documento
+        <translation>Se ha encontrado un archivo auto-guardado para este documento
 ¿Quiere abrirlo en lugar del original?</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1535"/>
         <source>Untitled</source>
-        <translation type="unfinished">Sin título</translation>
+        <translation>Sin título</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1548"/>
@@ -19111,56 +19106,57 @@ Do you want to open it instead ?</source>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2027"/>
         <source>Could not save document at %1
 Error was : %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Fallo al guardar documento en %1
+Error fue: %2</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1550"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1890"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2030"/>
         <source>Could not save document at %1</source>
-        <translation type="unfinished">Rosegarden no logró guardar el documento en %1</translation>
+        <translation>Rosegarden no logró guardar el documento en %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1637"/>
         <source>Opening a new application window...</source>
-        <translation type="unfinished">Abriendo una nueva ventana de la aplicación...</translation>
+        <translation>Abriendo una nueva ventana de la aplicación...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1648"/>
         <source>Creating new document...</source>
-        <translation type="unfinished">Creando nuevo documento...</translation>
+        <translation>Creando nuevo documento...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1713"/>
         <source>Malformed URL
 %1</source>
-        <translation type="unfinished">Formato erróneo de URL
+        <translation>Formato erróneo de URL
 %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1747"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1853"/>
         <source>Opening file...</source>
-        <translation type="unfinished">Abriendo archivo...</translation>
+        <translation>Abriendo archivo...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1774"/>
         <source>All supported files</source>
-        <translation type="unfinished"></translation>
+        <translation>Todos archivos soportados</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1775"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1809"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1998"/>
         <source>Rosegarden files</source>
-        <translation type="unfinished">Archivos de Rosegarden</translation>
+        <translation>Archivos de Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1776"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3490"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3526"/>
         <source>MIDI files</source>
-        <translation type="unfinished"></translation>
+        <translation>Archivos de MIDI</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1777"/>
@@ -19181,23 +19177,23 @@ Error was : %2</source>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4822"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7525"/>
         <source>All files</source>
-        <translation type="unfinished">Todos los archivos</translation>
+        <translation>Todos los archivos</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1773"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1808"/>
         <source>Open File</source>
-        <translation type="unfinished">Abrir Archivo</translation>
+        <translation>Abrir archivo</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="768"/>
         <source>Ctrl+R</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+R</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1678"/>
         <source>%1%2 - %3</source>
-        <translation type="unfinished"></translation>
+        <translation>%1%2 - %3</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1727"/>
@@ -19211,149 +19207,149 @@ Error was : %2</source>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3959"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7538"/>
         <source>Cannot open file %1</source>
-        <translation type="unfinished">No se puede abrir el archivo %1</translation>
+        <translation>No se puede abrir el archivo %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1870"/>
         <source>Saving file...</source>
-        <translation type="unfinished">Guardando archivo...</translation>
+        <translation>Guardando archivo...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1930"/>
         <source>Save File</source>
-        <translation type="unfinished">Guardar archivo</translation>
+        <translation>Guardar archivo</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1960"/>
         <source>&lt;qt&gt;Sorry.&lt;br&gt;&quot;%1&quot; is not a valid filename.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Perdón.&lt;br&gt;&quot;%1&quot; no es un nombre de archivo válido.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1967"/>
         <source>You have specified a folder/directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ha especificado un directorio.</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1973"/>
         <source>The specified file exists.  Overwrite?</source>
-        <translation type="unfinished">El archivo especificado ya existe. ¿Sobreescribir?</translation>
+        <translation>El archivo especificado ya existe. ¿Sobreescribir?</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1995"/>
         <source>Saving file%1with a new filename...</source>
-        <translation type="unfinished"></translation>
+        <translation>Guardando archivo%1con nombre nuevo...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1998"/>
         <source>Rosegarden templates</source>
-        <translation type="unfinished"></translation>
+        <translation>Plantillas de Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2000"/>
         <source>Save as template...</source>
-        <translation type="unfinished"></translation>
+        <translation>Guardar como plantilla...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2000"/>
         <source>Save as...</source>
-        <translation type="unfinished">Guardar como...</translation>
+        <translation>Guardar como...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2054"/>
         <source>Closing file...</source>
-        <translation type="unfinished">Cerrando archivo...</translation>
+        <translation>Cerrando archivo...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2076"/>
         <source>Printing...</source>
-        <translation type="unfinished">Imprimiendo...</translation>
+        <translation>Imprimiendo...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2093"/>
         <source>Previewing...</source>
-        <translation type="unfinished">Pre-visualización...</translation>
+        <translation>Pre-visualización...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2101"/>
         <source>Exiting...</source>
-        <translation type="unfinished">Saliendo...</translation>
+        <translation>Saliendo...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2113"/>
         <source>Cutting selection...</source>
-        <translation type="unfinished">Cortando selección...</translation>
+        <translation>Cortando selección...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2125"/>
         <source>Copying selection to clipboard...</source>
-        <translation type="unfinished">Copiando la selección al portapapeles...</translation>
+        <translation>Copiando la selección al portapapeles...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2136"/>
         <source>Clipboard is empty</source>
-        <translation type="unfinished">Portapapeles vacío</translation>
+        <translation>Portapapeles vacío</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2139"/>
         <source>Inserting clipboard contents...</source>
-        <translation type="unfinished">Insertando el contenido del portapapeles...</translation>
+        <translation>Insertando el contenido del portapapeles...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2213"/>
         <source>Duration of empty range to insert</source>
-        <translation type="unfinished">Duración del rango vacío para insertar</translation>
+        <translation>Duración del rango vacío para insertar</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2294"/>
         <source>This function needs no more than one segment to be selected.</source>
-        <translation type="unfinished">Esta función necesita no más de un segmento seleccionado</translation>
+        <translation>Esta función necesita no más de un segmento seleccionado.</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2318"/>
         <source>Can&apos;t join Audio segments</source>
-        <translation type="unfinished">No se pueden unir segmentos de Audio</translation>
+        <translation>No se pueden unir segmentos de audio</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2372"/>
         <source>rescaling an audio file</source>
-        <translation type="unfinished">Re-escalado de un archivo de audio</translation>
+        <translation>Re-escalado de un archivo de audio</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2389"/>
         <source>Rescaling audio file...</source>
-        <translation type="unfinished">Re-escalando archivo de audio...</translation>
+        <translation>Re-escalando archivo de audio...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2402"/>
         <source>Generating audio preview...</source>
-        <translation type="unfinished">Generando vista preliminar.de audio</translation>
+        <translation>Generando vista preliminar.de audio...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2432"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4973"/>
         <source>Warning</source>
-        <translation type="unfinished">Advertencia</translation>
+        <translation>Advertencia</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2433"/>
         <source>The audio file path does not exist or is not writable.
 You must set the audio file path to a valid directory in Document Properties before %1.
 Would you like to set it now?</source>
-        <translation type="unfinished">El directorio de archivos de audio no existe o no se puede escribir.
+        <translation>El directorio de archivos de audio no existe o no se puede escribir.
 Usted debe establecer el directorio de archivos de audio en un directorio válido desde Propiedades del Documento antes de %1.
 ¿Quiere usted configurarlo ahora?</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2503"/>
         <source>Jog Selection</source>
-        <translation type="unfinished">Correr Selección</translation>
+        <translation>Codear selección</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2645"/>
         <source>Split %n Segment(s) at Time</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Dividir el segmento por tiempo</numerusform>
+            <numerusform>Dividir %n segmentos por tiempo</numerusform>
         </translation>
     </message>
     <message>
@@ -20456,8 +20452,8 @@ Por favor, configure el directorio de archivos de audio hacia un directorio vál
 <context>
     <name>Rosegarden::SequenceManager</name>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="919"/>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1068"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="922"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1071"/>
         <source>The JACK Audio subsystem has failed or it has stopped Rosegarden from processing audio.
 Please restart Rosegarden to continue working with audio.
 Quitting other running applications may improve Rosegarden&apos;s performance.</source>
@@ -20466,8 +20462,8 @@ Por favor, reinicie Rosegarden para continuar trabajando con audio.
 Cierre otras aplicaciones en ejecución para mejorar el rendimiento de Rosegarden. </translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="925"/>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1077"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="928"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1080"/>
         <source>The JACK Audio subsystem has stopped Rosegarden from processing audio, probably because of a processing overload.
 An attempt to restart the audio service has been made, but some problems may remain.
 Quitting other running applications may improve Rosegarden&apos;s performance.</source>
@@ -20476,87 +20472,87 @@ Se ha realizado un intento de reiniciar el servicio, pero pueden quedar algunos 
 Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosegarden.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="936"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="939"/>
         <source>Out of processor power for real-time audio processing.  Cannot continue.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="962"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="965"/>
         <source>A serious error has occurred in the ALSA MIDI subsystem.  It may not be possible to continue sequencing.  Please check console output for more information.</source>
         <translation type="unfinished">Un error serio ha ocurrido en el subsistema ALSA MIDI.  Puede no serposible continuar secuenciando.  Por favor revisa la salida de consola para másinformación.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="988"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="991"/>
         <source>JACK Audio subsystem is losing sample frames.</source>
         <translation type="unfinished">Subsistema de audio JACK está perdiendo muestras.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1006"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1009"/>
         <source>Failed to read audio data from disk in time to service the audio subsystem.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1010"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1013"/>
         <source>Failed to write audio data to disk fast enough to service the audio subsystem.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1061"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1064"/>
         <source>&lt;h3&gt;System timer resolution is too low!&lt;/h3&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1096"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1099"/>
         <source>&lt;p&gt;Rosegarden was unable to find a high-resolution timing source for MIDI performance.&lt;/p&gt;&lt;p&gt;This may mean you are using a Linux system with the kernel timer resolution set too low.  Please contact your Linux distributor for more information.&lt;/p&gt;&lt;p&gt;Some Linux distributors already provide low latency kernels, see the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;Rosegarden website&lt;/a&gt; for instructions.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1121"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1124"/>
         <source>&lt;p&gt;Rosegarden was unable to find a high-resolution timing source for MIDI performance.&lt;/p&gt;&lt;p&gt;You may be able to solve this problem by loading the RTC timer kernel module.  To do this, try running &lt;b&gt;sudo modprobe snd-rtctimer&lt;/b&gt; in a terminal window and then restarting Rosegarden.&lt;/p&gt;&lt;p&gt;Alternatively, check whether your Linux distributor provides a multimedia-optimized kernel.  See the &lt;a style=&quot;color:gold&quot;  href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;Rosegarden website&lt;/a&gt; for notes about this.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1232"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1235"/>
         <source>&lt;h3&gt;Sequencer engine unavailable!&lt;/h3&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1233"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1236"/>
         <source>&lt;p&gt;Both MIDI and Audio subsystems have failed to initialize.&lt;/p&gt;&lt;p&gt;If you wish to run with no sequencer by design, then use &quot;rosegarden --nosequencer&quot; to avoid seeing this error in the future.  Otherwise, we recommend that you repair your system configuration and start Rosegarden again.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1235"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1238"/>
         <source>&lt;h3&gt;MIDI sequencing unavailable!&lt;/h3&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1253"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1256"/>
         <source>&lt;h3&gt;Audio sequencing and synth plugins unavailable!&lt;/h3&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1254"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1257"/>
         <source>&lt;p&gt;Rosegarden could not connect to the JACK audio server.  This probably means that Rosegarden was unable to start the audio server due to a problem with your configuration, your system installation, or both.&lt;/p&gt;&lt;p&gt;If you want to be able to play or record audio files or use plugins, we suggest that you exit Rosegarden and use the JACK Control utility (qjackctl) to try different settings until you arrive at a configuration that permits JACK to start.  You may also need to install a realtime kernel, edit your system security configuration, and so on.  Unfortunately, this is an extremely complex subject.&lt;/p&gt;&lt;p&gt; Once you establish a working JACK configuration, Rosegarden will be able to start the audio server automatically in the future.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1014"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1017"/>
         <source>The audio mixing subsystem is failing to keep up.</source>
         <translation type="unfinished">El subsistema de mezclador de audio está fallando.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1018"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1021"/>
         <source>The audio subsystem is failing to keep up.</source>
         <translation type="unfinished">El subsistema de audio está fallando</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1022"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1025"/>
         <source>Unknown sequencer failure mode!</source>
         <translation type="unfinished">Fallo desconocido del secuenciador!</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1236"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1239"/>
         <source>&lt;p&gt;The MIDI subsystem has failed to initialize.&lt;/p&gt;&lt;p&gt;You may continue without the sequencer, but we suggest closing Rosegarden, running &quot;modprobe snd-seq-midi&quot; as root, and starting Rosegarden again.  If you wish to run with no sequencer by design, then use &quot;rosegarden --nosequencer&quot; to avoid seeing this error in the future.&lt;/p&gt;</source>
         <translation type="unfinished">&lt;p&gt;El subsistema MIDI ha fallado en su inicialización.&lt;/p&gt;&lt;p&gt; Usted puede continuar sin el secuenciador, pero sugerimos que cierre Rosegarden, ejecute &quot;modprobe snd-seq-midi&quot; como usuario administrador, y reinicie Rosegarden de nuevo. Si desea utilizar Rosegarden sin el secuenciador, entonces ejecute &quot;rosegarden --nosequencer&quot; para evitar la aparición de este mensaje de error en el futuro.&lt;/p&gt;</translation>
     </message>
@@ -21138,7 +21134,7 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
     <message>
         <location filename="../../src/base/Studio.cpp" line="56"/>
         <source>Synth plugin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Plugin sinte</translation>
     </message>
 </context>
 <context>
@@ -22673,7 +22669,7 @@ Por favor, configura el directorio de archivos de audio hacia un directorio vál
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="329"/>
         <source>This triggered segment is used %n time(s) in the current composition.  Are you sure you want to remove it?</source>
         <translation>
-            <numerusform>Este segmento activado se usa %n vez en la composición actual.  ¿Está seguro que quiere borrarlo?</numerusform>
+            <numerusform>Este segmento activado se usa una vez en la composición actual.  ¿Está seguro que quiere borrarlo?</numerusform>
             <numerusform>Este segmento activado se usa %n veces en la composición actual.  ¿Está seguro que quiere borrarlo?</numerusform>
         </translation>
     </message>
