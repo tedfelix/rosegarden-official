@@ -29,6 +29,7 @@
 
 namespace Rosegarden 
 {
+
 using std::string;
 using std::vector;
 using std::cout;
@@ -91,7 +92,7 @@ namespace Accidentals
         // and don't case if the accidental is simplified
         return NoAccidental;
     }
-}
+} // end namespace Accidentals
 
 using namespace Accidentals;
   
@@ -258,7 +259,7 @@ namespace Marks
         return v;
     }
 
-}
+} // end namespace Marks
 
 using namespace Marks;
 
@@ -2498,4 +2499,4 @@ Symbol::getAsEvent(timeT absoluteTime) const
 }
 
 
-} // close namespace
+} // end namespace Rosegarden

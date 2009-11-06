@@ -82,6 +82,11 @@ for P in *.ts; do
     # figures we used to get from msgfmt.  The lupdate and lrelease tools just
     # don't have any kind of reporting mode to exploit for this, so I've muddled
     # through as best I could.
+    #
+    # (Note to self.  I think it's something to do with the number translations.
+    # Some languages have more fields than others.)
+
+
 #	MSG="Warning!"
 	W=1
     fi

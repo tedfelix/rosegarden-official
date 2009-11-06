@@ -86,15 +86,6 @@ public:
      */
     virtual void handleEventRemoved(Event *event);
 
-#ifdef NOT_DEFINED
-//!!! {
-        if (m_clickedElement && m_clickedElement->event() == event) {
-            m_clickedElement = 0;
-        }
-    }
-    */
-#endif
-
     static const QString ToolName;
 
 signals:

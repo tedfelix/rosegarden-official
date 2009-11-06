@@ -469,9 +469,6 @@ AudioManagerDialog::getCurrentSelection()
     QList<QTreeWidgetItem *> til= m_fileList->selectedItems();
     if (til.isEmpty()){
         std::cerr << "AudioManagerDialog::getCurrentSelection() - til.isEmpty() so we're returning 0 and this game is over. Fail." << std::endl;
-        //QMessageBox::warning
-        //        (this, tr("Error: Selection is empty!"), 
-        //        tr("Please select an audio item in the list!"), QMessageBox::Yes);
         return 0;
     }
     AudioListItem *item = dynamic_cast<AudioListItem*>(til[0]);
@@ -508,9 +505,8 @@ AudioManagerDialog::slotExportAudio()
     = dynamic_cast<WAVAudioFile*>(getCurrentSelection());
 
     QList<QTreeWidgetItem *> til= m_fileList->selectedItems();
-    if (til.isEmpty()){
-        QMessageBox::warning
-                (this, tr("Error: Selection is empty!"), tr("Please select an audio item in the list!"), QMessageBox::Yes);
+    if (til.isEmpty()) {
+        std::cerr << "AudioManagerDialog::slotExportAudio() - nothing selected!" << std::endl;
         return;
     }
     AudioListItem *item = dynamic_cast<AudioListItem*>(til[0]);
@@ -518,7 +514,10 @@ AudioManagerDialog::slotExportAudio()
     Segment *segment = item->getSegment();
 
     QString saveFile =
-            QFileDialog::getSaveFileName(this, tr("Choose a name to save this file as ").arg(":WAVS"), QDir::currentPath(), tr("*.wav|WAV files (*.wav)"));
+            QFileDialog::getSaveFileName(this,
+                                         tr("Save File As"),
+                                         QDir::currentPath(),
+                                         tr("*.wav|WAV files (*.wav)"));
 
     if (sourceFile == 0 || item == 0 || saveFile.isEmpty())
         return ;
@@ -572,9 +571,8 @@ AudioManagerDialog::slotRemove()
 {
     AudioFile *audioFile = getCurrentSelection();
     QList<QTreeWidgetItem*> til = m_fileList->selectedItems();
-    if (til.isEmpty()){
-        QMessageBox::warning
-                (this, tr("Error: Selection is empty!"), tr("Please select an audio item in the list!"), QMessageBox::Yes);
+    if (til.isEmpty()) {
+        std::cerr << "AudioManagerDialog::slotRemove() - nothing selected!" << std::endl;
         return;
     }
     AudioListItem *item = dynamic_cast<AudioListItem*>(til[0]);
@@ -677,9 +675,8 @@ AudioManagerDialog::slotPlayPreview()
     AudioFile *audioFile = getCurrentSelection();
     
     QList<QTreeWidgetItem*> til = m_fileList->selectedItems();
-    if (til.isEmpty()){
-        QMessageBox::warning
-                (this, tr("Error: Selection is empty!"), tr("Please select an audio item in the list!"), QMessageBox::Yes);
+    if (til.isEmpty()) {
+        std::cerr << "AudioManagerDialog::slotPlayPreview() - nothing selected!" << std::endl;
         return;
     }
     AudioListItem *item = dynamic_cast<AudioListItem*>(til[0]);
