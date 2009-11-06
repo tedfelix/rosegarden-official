@@ -953,6 +953,14 @@ StaffLayout::resizeStaffLineRow(int row, double x, double length)
             level = 200;
     }
 
+    // As a result of a bug Michael reported where the staff changes color after
+    // bar N, I decided to check the values. For m_resolution of 4 the level = 160.
+    // However, if the previous value was < 12, the line remained black, i.e. level = 0.
+    // If the previous value was 12 and it was reduced to 4, the line indeed was
+    // gray, but it was UGLY. The reason for this is the notes remain black and
+    // there are these gray lines through the notes. Since it doesn't always work,
+    // and since it is ugly when it does work - kill it. 6 Nov 2009, Ilan
+    level = 0;
     QColor lineColour(level, level, level);
 
     int h;
