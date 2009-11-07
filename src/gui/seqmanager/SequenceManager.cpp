@@ -619,7 +619,7 @@ punchin:
 
         if (!haveInstrument) {
             m_transport->RecordButton()->setDown(false);
-            throw(Exception("No Record instrument selected"));
+            throw(Exception("No Record instrument selected.\nPlease press the yellow LED on at least one track."));
         }
 
         // may throw an exception
