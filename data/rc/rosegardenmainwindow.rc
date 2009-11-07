@@ -86,6 +86,8 @@
 
   <Menu name="settings">
     <text>&amp;View</text>
+      <Action name="view_doc_properties" text="Document P&amp;roperties..." />
+      <Separator/>
     <Menu name="toolbars" append="show_merge">
       <text>&amp;Toolbars</text>
       <!-- JAS "show_stock_toolbar" is "options_show_toolbar" in matrix.rc and notation .rc -->
@@ -245,7 +247,7 @@
 
   <Menu name="help" append="about_merge">
     <text>&amp;Help</text>
-    <Action name="manual" text="Rosegarden &amp;Manual" icon="contents" shortcut="F1" />
+    <Action name="manual" text="Rosegarden &amp;Manual" icon="wiki" shortcut="F1" />
   <Separator/>
     <Action name="tutorial" text="&amp;Rosegarden tutorial" />
     <Action name="guidelines" text="&amp;Bug Reporting Guidelines" />

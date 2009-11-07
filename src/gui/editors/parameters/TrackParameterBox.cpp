@@ -268,7 +268,7 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     groupLayout->addWidget(m_grandStaffLbl, row, 0, Qt::AlignLeft);
     m_staffBracketCombo = new QComboBox(m_staffGroup);
     m_staffBracketCombo->setFont(m_font);
-    m_staffBracketCombo->setToolTip(tr("<qt>Bracket staffs in LilyPond<br>(fragile, use with caution)</p><qt>"));
+    m_staffBracketCombo->setToolTip(tr("<qt><p>Bracket staffs in LilyPond<br>(fragile, use with caution)</p><qt>"));
     m_staffBracketCombo->setMinimumWidth(width11);
     m_staffBracketCombo->addItem(tr("-----"), Brackets::None);
     m_staffBracketCombo->addItem(tr("[----"), Brackets::SquareOn);
@@ -353,7 +353,7 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     groupLayout->addWidget(m_transpLbl, row, 3, 1, 2, Qt::AlignRight);
     m_defTranspose = new QComboBox(m_defaultsGroup);
     m_defTranspose->setFont(m_font);
-    m_defTranspose->setToolTip(tr("<qt><p>New segments will be created with this transpose property set<p></qt>"));
+    m_defTranspose->setToolTip(tr("<qt><p>New segments will be created with this transpose property set</p></qt>"));
     connect(m_defTranspose, SIGNAL(activated(int)),
             SLOT(slotTransposeIndexChanged(int)));
 

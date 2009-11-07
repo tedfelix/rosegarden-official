@@ -47,7 +47,7 @@ public:
 
     static QString iconLabel() { return tr("About"); }
     static QString title() { return tr("About"); }
-    static QString iconName()  { return "contents"; }
+    static QString iconName()  { return "mm-mime-hi32-rosegarden"; }
 
 /* hjj: WHAT TO DO WITH THIS ?
     void selectMetadata(QString name);

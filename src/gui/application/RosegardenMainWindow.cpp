@@ -660,6 +660,12 @@ RosegardenMainWindow::setupActions()
     createAction("change_composition_length", SLOT(slotChangeCompositionLength()));
     createAction("edit_markers", SLOT(slotEditMarkers()));
     createAction("edit_doc_properties", SLOT(slotEditDocumentProperties()));
+    // throw a redundant copy on the View menu; even though it edits too, we
+    // just call it "View -> Document Properties"  (I got this idea when I
+    // noticed that some piece of configuration in OO.o was on two different
+    // menus, when I looked for it in two different places, and found it in
+    // both.  It seems reasonable to me if not overdone.)
+    createAction("view_doc_properties", SLOT(slotEditDocumentProperties()));
     createAction("edit_default", SLOT(slotEdit()));
     createAction("edit_matrix", SLOT(slotEditInMatrix()));
     createAction("edit_percussion_matrix", SLOT(slotEditInPercussionMatrix()));
