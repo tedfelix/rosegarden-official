@@ -44,17 +44,9 @@ namespace Rosegarden
 ConfigureDialog::ConfigureDialog(RosegardenDocument *doc,
                                  QWidget *parent,
                                  const char *name)
-            //: QDialog(parent) //, tr("Configure Rosegarden"), name)
-    : ConfigureDialogBase(parent, tr("Configure Rosegarden"), name )
+    : ConfigureDialogBase(parent, tr("Rosegarden - Preferences"), name )
 {
     
-//  set in parent constr.
-//    this->setWindowTitle( tr("Configure Rosegarden") );
-//    this->setObjectName( objName );
-    
-//    QWidget *pageWidget = 0;
-//    QVBoxLayout *vlay = 0;
-//    ConfigurationPage* page = 0;
     QWidget* page = 0;
     
     // General Page
@@ -62,18 +54,9 @@ ConfigureDialog::ConfigureDialog(RosegardenDocument *doc,
     IconLoader il;
     
     
-//    pageWidget = addPage(GeneralConfigurationPage::iconLabel(),
-//                         GeneralConfigurationPage::title(),
-//                         il.load( GeneralConfigurationPage::iconName()) );
-    
-    
-//    vlay = new QVBoxLayout(pageWidget); //, 0, spacingHint());
     page = new GeneralConfigurationPage(doc, this);
     connect(page,SIGNAL(modified()),this,SLOT(slotActivateApply()));
     addPage(GeneralConfigurationPage::iconLabel(),GeneralConfigurationPage::title(),il.loadPixmap(GeneralConfigurationPage::iconName()),page);    
-//    vlay->addWidget(page);
-    //page->setPageIndex(pageIndex(pageWidget));
-//    m_tabWidget->setCurrentIndex( m_tabWidget->indexOf(pageWidget) );
     m_configurationPages.push_back((ConfigurationPage*)page);
 
     connect(page, SIGNAL(updateAutoSaveInterval(unsigned int)),
@@ -81,42 +64,20 @@ ConfigureDialog::ConfigureDialog(RosegardenDocument *doc,
     connect(page, SIGNAL(updateSidebarStyle(unsigned int)),
             this, SIGNAL(updateSidebarStyle(unsigned int)));
 
-//    IconLoader il;
-//    pageWidget = addPage(MIDIConfigurationPage::iconLabel(),
-//                         MIDIConfigurationPage::title(),
-//                         il.load( MIDIConfigurationPage::iconName()) );
-//    vlay = new QVBoxLayout(pageWidget); //, 0, spacingHint());
     page = new MIDIConfigurationPage(doc, this);
     connect(page,SIGNAL(modified()),this,SLOT(slotActivateApply()));
     addPage(MIDIConfigurationPage::iconLabel(),MIDIConfigurationPage::title(),il.loadPixmap( MIDIConfigurationPage::iconName()),page);
-//    vlay->addWidget(page);
-    //page->setPageIndex(pageIndex(pageWidget));
-//    m_tabWidget->setCurrentIndex( m_tabWidget->indexOf(pageWidget) );
     m_configurationPages.push_back((ConfigurationPage*)page);
 
-//    pageWidget = addPage(AudioConfigurationPage::iconLabel(),
-//                         AudioConfigurationPage::title(),
-//                         il.load(AudioConfigurationPage::iconName()));
-//    vlay = new QVBoxLayout(pageWidget); //, 0, spacingHint());
     page = new AudioConfigurationPage(doc, this);
     connect(page,SIGNAL(modified()),this,SLOT(slotActivateApply()));
     addPage(AudioConfigurationPage::iconLabel(),AudioConfigurationPage::title(),il.loadPixmap(AudioConfigurationPage::iconName()),page);
-//    vlay->addWidget(page);
-    //page->setPageIndex(pageIndex(pageWidget));
-//    m_tabWidget->setCurrentIndex( m_tabWidget->indexOf(pageWidget) );
     m_configurationPages.push_back((ConfigurationPage*)page);
 
     // Notation Page
-//    pageWidget = addPage(NotationConfigurationPage::iconLabel(),
-//                         NotationConfigurationPage::title(),
-//                         il.load(NotationConfigurationPage::iconName()));
-//    vlay = new QVBoxLayout(pageWidget); //, 0, spacingHint());
     page = new NotationConfigurationPage(this);
     connect(page,SIGNAL(modified()),this,SLOT(slotActivateApply()));
     addPage(NotationConfigurationPage::iconLabel(),NotationConfigurationPage::title(),il.loadPixmap(NotationConfigurationPage::iconName()),page);
-//    vlay->addWidget(page);
-    //page->setPageIndex(pageIndex(pageWidget));
-//    m_tabWidget->setCurrentIndex( m_tabWidget->indexOf(pageWidget) );
     m_configurationPages.push_back((ConfigurationPage*)page);
 }
 
