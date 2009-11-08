@@ -689,17 +689,20 @@
         <location filename="../QMenuStrings.cpp" line="2524"/>
         <location filename="../QMenuStrings.cpp" line="3172"/>
         <source>Add &amp;Breath mark</source>
-        <translation type="unfinished">Atemmarkierung hinzufügen</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>&amp;Atemmarkierung hinzufügen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1990"/>
         <source>Add &amp;Open</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>&amp;Öffnung hinzufügen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1991"/>
         <source>Add &amp;Stopped</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>amp ok (2)</translatorcomment>
+        <translation>&amp;Cesura hinzufügen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2617"/>
@@ -718,7 +721,8 @@
         <location filename="../QMenuStrings.cpp" line="2631"/>
         <location filename="../QMenuStrings.cpp" line="3192"/>
         <source>Switch To &amp;Rests</source>
-        <translation type="unfinished">Zu Pausen umschalten</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Zu &amp;Pausen umschalten</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2640"/>
@@ -1015,7 +1019,8 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2216"/>
         <source>Ad&amp;just</source>
-        <translation type="unfinished">An&amp;passen</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>An&amp;passen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="741"/>
@@ -1780,7 +1785,8 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="722"/>
         <source>Show To&amp;ols</source>
-        <translation type="unfinished">Werkzeuge anzeigen</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>&amp;Werkzeuge anzeigen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="740"/>
@@ -1831,7 +1837,8 @@
         <location filename="../QMenuStrings.cpp" line="1765"/>
         <location filename="../QMenuStrings.cpp" line="3756"/>
         <source>&amp;Record</source>
-        <translation type="unfinished">&amp;Aufnehmen</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>&amp;Aufnehmen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1775"/>
@@ -1964,7 +1971,8 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="1886"/>
         <source>Pa&amp;ste...</source>
-        <translation type="unfinished">Ein&amp;fügen...</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Ein&amp;fügen...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1895"/>
@@ -2800,7 +2808,8 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2410"/>
         <source>Next Staff &amp;Down</source>
-        <translation type="unfinished">Nächste Notenzeile abwärts</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Nächste Notenzeile a&amp;bwärts</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="973"/>
@@ -2813,17 +2822,20 @@
         <location filename="../QMenuStrings.cpp" line="982"/>
         <location filename="../QMenuStrings.cpp" line="2428"/>
         <source>Ne&amp;xt Segment</source>
-        <translation type="unfinished">Nächstes Segment</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>&amp;Nächstes Segment</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2439"/>
         <source>Step &amp;Back</source>
-        <translation type="unfinished">Schritt zurück</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Schritt &amp;zurück</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2448"/>
         <source>Step &amp;Forward</source>
-        <translation type="unfinished">Schritt vorwärts</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Schritt &amp;vorwärts</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2543"/>
@@ -3101,7 +3113,8 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="1965"/>
         <source>Show &amp;Annotations</source>
-        <translation type="unfinished">&amp;Bemerkungen anzeigen</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>&amp;Bemerkungen anzeigen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1966"/>
@@ -3132,12 +3145,14 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="889"/>
         <source>Pitch &amp;Bend Sequence...</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>&amp;Tonhöhen-Sequenz...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="723"/>
         <source>Show T&amp;ransport Toolbar</source>
-        <translation type="unfinished">&amp;Bedienfeld-Werkzeugleiste anzeigen</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>&amp;Bedienfeld-Werkzeugleiste anzeigen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="40"/>
@@ -3171,7 +3186,8 @@
         <location filename="../QMenuStrings.cpp" line="3943"/>
         <location filename="../QMenuStrings.cpp" line="4004"/>
         <source>Rosegarden &amp;Manual</source>
-        <translation type="unfinished">Rosegarden &amp;Handbuch</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Rosegarden &amp;Handbuch</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="58"/>
@@ -3873,12 +3889,14 @@
         <location filename="../QMenuStrings.cpp" line="1935"/>
         <location filename="../QMenuStrings.cpp" line="3382"/>
         <source>&amp;Preferences...</source>
-        <translation type="unfinished">Einstellungen...</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>&amp;Einstellungen...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1955"/>
         <source>Show &amp;Rulers Toolbar</source>
-        <translation type="unfinished">Lineal-Werkzeugleiste anzeigen</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>&amp;Lineal-Werkzeugleiste anzeigen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2019"/>
@@ -4339,7 +4357,8 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3384"/>
         <source>Document P&amp;roperties...</source>
-        <translation type="unfinished">Dokument Eigenschaften...</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Dokument &amp;Eigenschaften...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3403"/>
@@ -4577,7 +4596,8 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3578"/>
         <source>Trac&amp;ks</source>
-        <translation type="unfinished">S&amp;puren</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>S&amp;puren</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3579"/>
@@ -4909,7 +4929,8 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3935"/>
         <source>&amp;Preferences</source>
-        <translation type="unfinished">Einstellungen</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>&amp;Einstellungen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3990"/>
@@ -6454,13 +6475,13 @@ als den eingeschränkten wählen.</translation>
         <location filename="../InstrumentStrings.cpp" line="387"/>
         <source>Ab</source>
         <comment>note name</comment>
-        <translation type="unfinished">Ab</translation>
+        <translation>Ab</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="390"/>
         <source>Bb</source>
         <comment>note name</comment>
-        <translation type="unfinished">B</translation>
+        <translation>B</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="392"/>
@@ -6809,7 +6830,7 @@ als den eingeschränkten wählen.</translation>
         <location filename="../QMenuStrings.cpp" line="1088"/>
         <location filename="../QMenuStrings.cpp" line="2666"/>
         <source>A</source>
-        <translation type="unfinished">A</translation>
+        <translation>A</translation>
     </message>
     <message>
         <source>Bb</source>
@@ -6819,7 +6840,7 @@ als den eingeschränkten wählen.</translation>
         <location filename="../QMenuStrings.cpp" line="1486"/>
         <location filename="../QMenuStrings.cpp" line="3064"/>
         <source>B</source>
-        <translation type="unfinished">H</translation>
+        <translation>H</translation>
     </message>
     <message>
         <source>B#</source>
@@ -7806,7 +7827,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="250"/>
         <source>Side Stick</source>
-        <translation type="unfinished"></translation>
+        <translation>Rimshot</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="251"/>
@@ -10220,7 +10241,12 @@ als den eingeschränkten wählen.</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/main.cpp" line="724"/>
-        <source>&lt;h2&gt;Welcome to Rosegarden!&lt;/h2&gt;&lt;p&gt;Welcome to the Rosegarden audio and MIDI sequencer and musical notation editor.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;If you have not already done so, you may wish to install some DSSI synth plugins, or a separate synth program such as QSynth.  Rosegarden does not synthesize sounds from MIDI on its own, so without these you will hear nothing.&lt;/li&gt;&lt;li&gt;Rosegarden uses the JACK audio server for recording and playback of audio, and for playback from DSSI synth plugins.  These features will only be available if the JACK server is running.&lt;/li&gt;&lt;li&gt;Rosegarden has comprehensive documentation: see the &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&gt;Rosegarden website&lt;/a&gt; for the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/doc/en/&quot;&gt;handbook&lt;/a&gt;, &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;tutorials&lt;/a&gt;, and other information!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  To learn more, go to the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;Rosegarden website&lt;/a&gt;.&lt;/p&gt;</source>
+        <source>http://rosegardenmusic.com/wiki/doc:manual-en</source>
+        <translation>http://rosegardenmusic.com/wiki/doc:manual-en</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/application/main.cpp" line="725"/>
+        <source>&lt;h2&gt;Welcome to Rosegarden!&lt;/h2&gt;&lt;p&gt;Welcome to the Rosegarden audio and MIDI sequencer and musical notation editor.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;If you have not already done so, you may wish to install some DSSI synth plugins, or a separate synth program such as QSynth.  Rosegarden does not synthesize sounds from MIDI on its own, so without these you will hear nothing.&lt;/li&gt;&lt;li&gt;Rosegarden uses the JACK audio server for recording and playback of audio, and for playback from DSSI synth plugins.  These features will only be available if the JACK server is running.&lt;/li&gt;&lt;li&gt;Rosegarden has comprehensive documentation: see the &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&quot;&gt;Rosegarden website&lt;/a&gt; for the &lt;a style=&quot;color:gold&quot; href=&quot;%1&quot;&gt;manual&lt;/a&gt;, &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;tutorials&lt;/a&gt;, and other information!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  To learn more, go to the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;Rosegarden website&lt;/a&gt;.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -10309,16 +10335,20 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="524"/>
         <source>Audio subsystem is not available - can&apos;t record audio</source>
-        <translation type="unfinished"></translation>
+        <translation>Audio Subsystem ist nicht verfügbar - Audio kann nicht aufgenommen werden</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="624"/>
         <source>&lt;qt&gt;&lt;p&gt;No tracks were armed for recording.&lt;/p&gt;&lt;p&gt;Please arm at least one of the recording LEDs &lt;img src=&quot;:pixmaps/tooltip/record-leds.png&quot;&gt; and try again&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Keine Spuren sind für Aufnahmen vorbereitet.&lt;/p&gt;&lt;p&gt;Bitte mindestes eine Aufnahme LED &lt;img src=&quot;:pixmaps/tooltip/record-leds.png&quot;&gt; auswählen und erneut probieren&lt;/p&gt;&lt;/qt&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;qt&gt;&lt;p&gt;Couldn&apos;t start recording audio.&lt;/p&gt;&lt;p&gt;Please set a valid recording path in &lt;b&gt;Composition -&gt; Edit Document Properties... -&gt; Audio&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Audio-Aufnahme kann nicht gestartet werden.&lt;/p&gt;&lt;p&gt;Bitte einen gültigen Aufnahme-Pfad in &lt;b&gt;Komposition-&gt;Dokumenteigenschaften editieren...-&gt;Audio&lt;/b&gt; definieren.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="790"/>
-        <source>&lt;qt&gt;&lt;p&gt;Couldn&apos;t start recording audio.&lt;/p&gt;&lt;p&gt;Please set a valid recording path in &lt;b&gt;Composition -&gt; Edit Document Properties... -&gt; Audio&lt;/p&gt;&lt;/qt&gt;</source>
+        <source>&lt;qt&gt;&lt;p&gt;Couldn&apos;t start recording audio.&lt;/p&gt;&lt;p&gt;Please set a valid recording path in &lt;b&gt;Composition -&gt; Edit Document Properties... -&gt; Audio&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -20221,7 +20251,7 @@ Segmente-&gt;Segmente zusammenfassen.
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7309"/>
         <source>http://rosegardenmusic.com/wiki/doc:manual-en</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">http://rosegardenmusic.com/wiki/doc:manual-en</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7336"/>
