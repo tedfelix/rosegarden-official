@@ -328,6 +328,8 @@ NotationWidget::NotationWidget() :
 NotationWidget::~NotationWidget()
 {
     delete m_scene;
+    delete m_headersScene;
+    delete m_referenceScale;
 }
 
 void
