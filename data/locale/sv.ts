@@ -14347,28 +14347,24 @@ Exempeltext från filen:</translation>
 <context>
     <name>Rosegarden::LatencyConfigurationPage</name>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.h" line="50"/>
         <source>Latency</source>
-        <translation type="unfinished">Latenstid</translation>
+        <translation type="obsolete">Latenstid</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.h" line="51"/>
         <source>Sequencer Latency</source>
-        <translation type="unfinished">Spelarens latenstid</translation>
+        <translation type="obsolete">Spelarens latenstid</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="48"/>
         <source>JACK latency</source>
-        <translation type="unfinished">JACK-latenstid</translation>
+        <translation type="obsolete">JACK-latenstid</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="51"/>
         <source>Use the &quot;Fetch JACK latencies&quot; button to discover the latency values set at
 the sequencer.  It&apos;s recommended that you use the returned values but it&apos;s also
 possible to override them manually using the sliders.  Note that if you change
 your JACK server parameters you should always fetch the latency values again.
 The latency values will be stored by Rosegarden for use next time.</source>
-        <translation type="unfinished">Använd knappen &quot;Hämta latenstider från JACK&quot; för att se vilka
+        <translation type="obsolete">Använd knappen &quot;Hämta latenstider från JACK&quot; för att se vilka
 latenstider som är inställda för spelaren. Det rekommenderas att du
 använder returnerade värden, men det är också möjligt att överskrida dem
 manuellt med skjutreglagen. Observera att om du ändrar dina
@@ -14376,24 +14372,20 @@ serverparametrar för JACK, ska du alltid hämta latenstidsvärden igen.
 Latenstidsvärden lagras av Rosegarden för användning nästa gång.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="55"/>
         <source>JACK playback latency (in ms)</source>
-        <translation type="unfinished">Latenstid vid uppspelning med JACK (i ms)</translation>
+        <translation type="obsolete">Latenstid vid uppspelning med JACK (i ms)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="56"/>
         <source>JACK record latency (in ms)</source>
-        <translation type="unfinished">Latenstid vid inspelning med JACK (i ms)</translation>
+        <translation type="obsolete">Latenstid vid inspelning med JACK (i ms)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="58"/>
         <source>Fetch JACK latencies</source>
-        <translation type="unfinished">Hämta latenstider från JACK</translation>
+        <translation type="obsolete">Hämta latenstider från JACK</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="111"/>
         <source>JACK Latency</source>
-        <translation type="unfinished">JACK-latenstid</translation>
+        <translation type="obsolete">JACK-latenstid</translation>
     </message>
 </context>
 <context>

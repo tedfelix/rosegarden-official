@@ -14258,48 +14258,24 @@ Teks contoh dari berkas:</translation>
 <context>
     <name>Rosegarden::LatencyConfigurationPage</name>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.h" line="50"/>
         <source>Latency</source>
-        <translation type="unfinished">Latensi</translation>
+        <translation type="obsolete">Latensi</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.h" line="51"/>
         <source>Sequencer Latency</source>
-        <translation type="unfinished">Latensi Sekuenser</translation>
+        <translation type="obsolete">Latensi Sekuenser</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="48"/>
         <source>JACK latency</source>
-        <translation type="unfinished">Latensi JACK</translation>
+        <translation type="obsolete">Latensi JACK</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="51"/>
-        <source>Use the &quot;Fetch JACK latencies&quot; button to discover the latency values set at
-the sequencer.  It&apos;s recommended that you use the returned values but it&apos;s also
-possible to override them manually using the sliders.  Note that if you change
-your JACK server parameters you should always fetch the latency values again.
-The latency values will be stored by Rosegarden for use next time.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="55"/>
-        <source>JACK playback latency (in ms)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="56"/>
         <source>JACK record latency (in ms)</source>
-        <translation type="unfinished">Latensi perekaman JACK (dalam mdet)</translation>
+        <translation type="obsolete">Latensi perekaman JACK (dalam mdet)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="58"/>
-        <source>Fetch JACK latencies</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="111"/>
         <source>JACK Latency</source>
-        <translation type="unfinished">Latensi JACK</translation>
+        <translation type="obsolete">Latensi JACK</translation>
     </message>
 </context>
 <context>

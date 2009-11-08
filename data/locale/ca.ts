@@ -14317,52 +14317,44 @@ Exemple del text del fitxer:</translation>
 <context>
     <name>Rosegarden::LatencyConfigurationPage</name>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.h" line="50"/>
         <source>Latency</source>
-        <translation type="unfinished">Latència</translation>
+        <translation type="obsolete">Latència</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.h" line="51"/>
         <source>Sequencer Latency</source>
-        <translation type="unfinished">Latència del seqüenciador</translation>
+        <translation type="obsolete">Latència del seqüenciador</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="48"/>
         <source>JACK latency</source>
-        <translation type="unfinished">Latència del JACK</translation>
+        <translation type="obsolete">Latència del JACK</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="51"/>
         <source>Use the &quot;Fetch JACK latencies&quot; button to discover the latency values set at
 the sequencer.  It&apos;s recommended that you use the returned values but it&apos;s also
 possible to override them manually using the sliders.  Note that if you change
 your JACK server parameters you should always fetch the latency values again.
 The latency values will be stored by Rosegarden for use next time.</source>
-        <translation type="unfinished">Fes servir el botó &quot;Comprova les latències del JACK&quot; per veure quines 
+        <translation type="obsolete">Fes servir el botó &quot;Comprova les latències del JACK&quot; per veure quines 
 latències fa servir el seqüenciador. Es recomana que utilitzeu aquests 
 valors, tot i que podeu modificar-los. Si canvieu els valors, haureu de tornar 
 a comprovar les latències del JACK de nou. Els valors de latències les desa 
 el Rosegarden per utilitzar-les la propera vegada.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="55"/>
         <source>JACK playback latency (in ms)</source>
-        <translation type="unfinished">Latència de reproducció del JACK (en ms)</translation>
+        <translation type="obsolete">Latència de reproducció del JACK (en ms)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="56"/>
         <source>JACK record latency (in ms)</source>
-        <translation type="unfinished">Latència de gravació del JACK (en ms)</translation>
+        <translation type="obsolete">Latència de gravació del JACK (en ms)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="58"/>
         <source>Fetch JACK latencies</source>
-        <translation type="unfinished">Comprova les latències del JACK</translation>
+        <translation type="obsolete">Comprova les latències del JACK</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="111"/>
         <source>JACK Latency</source>
-        <translation type="unfinished">Latència del JACK</translation>
+        <translation type="obsolete">Latència del JACK</translation>
     </message>
 </context>
 <context>

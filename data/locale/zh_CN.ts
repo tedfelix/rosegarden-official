@@ -14270,51 +14270,43 @@ Example text from file:</source>
 <context>
     <name>Rosegarden::LatencyConfigurationPage</name>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.h" line="50"/>
         <source>Latency</source>
-        <translation type="unfinished">潜伏期</translation>
+        <translation type="obsolete">潜伏期</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.h" line="51"/>
         <source>Sequencer Latency</source>
-        <translation type="unfinished">音序发生器潜伏期</translation>
+        <translation type="obsolete">音序发生器潜伏期</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="48"/>
         <source>JACK latency</source>
-        <translation type="unfinished">JACK 潜伏期</translation>
+        <translation type="obsolete">JACK 潜伏期</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="51"/>
         <source>Use the &quot;Fetch JACK latencies&quot; button to discover the latency values set at
 the sequencer.  It&apos;s recommended that you use the returned values but it&apos;s also
 possible to override them manually using the sliders.  Note that if you change
 your JACK server parameters you should always fetch the latency values again.
 The latency values will be stored by Rosegarden for use next time.</source>
-        <translation type="unfinished">使用“获取 JACK 潜伏期”按钮来查看音序发生器里设置的潜伏期值。
+        <translation type="obsolete">使用“获取 JACK 潜伏期”按钮来查看音序发生器里设置的潜伏期值。
 建议您使用这些返回值，但是使用滑块手工覆盖这些值也是可以的。
 请注意，如果您更改了您的 JACK 服务器参数，您应该总是重新获取
 潜伏期值。这些潜伏期值将被 Rosegarden 保存以备下次使用。</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="55"/>
         <source>JACK playback latency (in ms)</source>
-        <translation type="unfinished">JACK 回放潜伏期(ms)</translation>
+        <translation type="obsolete">JACK 回放潜伏期(ms)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="56"/>
         <source>JACK record latency (in ms)</source>
-        <translation type="unfinished">JACK 录制潜伏期(ms)</translation>
+        <translation type="obsolete">JACK 录制潜伏期(ms)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="58"/>
         <source>Fetch JACK latencies</source>
-        <translation type="unfinished">获取 JACK 潜伏期</translation>
+        <translation type="obsolete">获取 JACK 潜伏期</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="111"/>
         <source>JACK Latency</source>
-        <translation type="unfinished">JACK 潜伏期</translation>
+        <translation type="obsolete">JACK 潜伏期</translation>
     </message>
 </context>
 <context>

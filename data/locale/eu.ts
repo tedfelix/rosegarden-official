@@ -14298,52 +14298,44 @@ Artxiboan dagoen testuaren adibidea:</translation>
 <context>
     <name>Rosegarden::LatencyConfigurationPage</name>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.h" line="50"/>
         <source>Latency</source>
-        <translation type="unfinished">Latentzia </translation>
+        <translation type="obsolete">Latentzia </translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.h" line="51"/>
         <source>Sequencer Latency</source>
-        <translation type="unfinished">Sekuentziadorearen Latentzia</translation>
+        <translation type="obsolete">Sekuentziadorearen Latentzia</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="48"/>
         <source>JACK latency</source>
-        <translation type="unfinished">JACK-aren latentzia</translation>
+        <translation type="obsolete">JACK-aren latentzia</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="51"/>
         <source>Use the &quot;Fetch JACK latencies&quot; button to discover the latency values set at
 the sequencer.  It&apos;s recommended that you use the returned values but it&apos;s also
 possible to override them manually using the sliders.  Note that if you change
 your JACK server parameters you should always fetch the latency values again.
 The latency values will be stored by Rosegarden for use next time.</source>
-        <translation type="unfinished">Erabili &quot;JACK latentziak lortu&quot; botoia sekuentziadorean ezarritako baloreakikusi ahal izateko
+        <translation type="obsolete">Erabili &quot;JACK latentziak lortu&quot; botoia sekuentziadorean ezarritako baloreakikusi ahal izateko
 Gomendatzen da ikusten diren baloreak erabiltzea, baina izan daiteke bestebatzuk
 jartzea kontroleak erabiliz. Kontuan izan JACK zerbitzariaren parametroakaldatuz gero
 latentzia baloreak beti berreskuratu beharko zenukeelaberriro
 Latentzia baloreak Rosegardenen gordeko dira etorkizunean erabiltzeko</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="55"/>
         <source>JACK playback latency (in ms)</source>
-        <translation type="unfinished">JACK-en erreprodukzio latentzia (ms-tan)</translation>
+        <translation type="obsolete">JACK-en erreprodukzio latentzia (ms-tan)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="56"/>
         <source>JACK record latency (in ms)</source>
-        <translation type="unfinished">JACK-en grabaketa latentzia (ms-tan)</translation>
+        <translation type="obsolete">JACK-en grabaketa latentzia (ms-tan)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="58"/>
         <source>Fetch JACK latencies</source>
-        <translation type="unfinished">JACK-en latentziak lortu</translation>
+        <translation type="obsolete">JACK-en latentziak lortu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="111"/>
         <source>JACK Latency</source>
-        <translation type="unfinished">JACK-en Latentzia</translation>
+        <translation type="obsolete">JACK-en Latentzia</translation>
     </message>
 </context>
 <context>

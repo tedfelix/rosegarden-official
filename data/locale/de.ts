@@ -15081,28 +15081,24 @@ Beispieltext aus Datei:</translation>
 <context>
     <name>Rosegarden::LatencyConfigurationPage</name>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.h" line="50"/>
         <source>Latency</source>
-        <translation>Verzögerung</translation>
+        <translation type="obsolete">Verzögerung</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.h" line="51"/>
         <source>Sequencer Latency</source>
-        <translation>Sequencer-Verzögerung</translation>
+        <translation type="obsolete">Sequencer-Verzögerung</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="48"/>
         <source>JACK latency</source>
-        <translation>Jack-Verzögerung</translation>
+        <translation type="obsolete">Jack-Verzögerung</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="51"/>
         <source>Use the &quot;Fetch JACK latencies&quot; button to discover the latency values set at
 the sequencer.  It&apos;s recommended that you use the returned values but it&apos;s also
 possible to override them manually using the sliders.  Note that if you change
 your JACK server parameters you should always fetch the latency values again.
 The latency values will be stored by Rosegarden for use next time.</source>
-        <translation>Benutzen Sie den Knopf &quot;JACK-Verzögerungen holen&quot; um auf die Verzögerungswerte
+        <translation type="obsolete">Benutzen Sie den Knopf &quot;JACK-Verzögerungen holen&quot; um auf die Verzögerungswerte
 des Sequncers zuzugreifen. Wir empfehlen Ihnen, die zurückgelieferten  Werte zu verwenden,
 aber es ist auch möglich, diese Werte manuell mit den Stellbalken zu verändern.
 Denken Sie daran, immer die Verzögerungswerte erneut zu holen, wenn Sie die
@@ -15110,24 +15106,20 @@ Jack-Serverparameter verändern. Rosegarden speichert die Verzögerungswerte fü
 die nächste Verwendung.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="55"/>
         <source>JACK playback latency (in ms)</source>
-        <translation>Wiedergabeverzögerung für JACK (in ms)</translation>
+        <translation type="obsolete">Wiedergabeverzögerung für JACK (in ms)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="56"/>
         <source>JACK record latency (in ms)</source>
-        <translation>Aufnahmeverzögerung für JACK (in ms)</translation>
+        <translation type="obsolete">Aufnahmeverzögerung für JACK (in ms)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="58"/>
         <source>Fetch JACK latencies</source>
-        <translation>JACK-Verzögerungen holen</translation>
+        <translation type="obsolete">JACK-Verzögerungen holen</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="111"/>
         <source>JACK Latency</source>
-        <translation>Jack Verzögerung</translation>
+        <translation type="obsolete">Jack Verzögerung</translation>
     </message>
 </context>
 <context>

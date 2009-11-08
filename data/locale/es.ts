@@ -4380,7 +4380,7 @@ así lo desea.</translation>
     <message>
         <location filename="../../src/gui/editors/notation/NoteFont.cpp" line="62"/>
         <source>Font &quot;%1&quot; not available in size %2</source>
-        <translation>Tipografía &quot;%1&quot; no disponible en tamño %2</translation>
+        <translation>Tipografía «%1» no disponible en tamño %2</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="357"/>
@@ -9652,7 +9652,7 @@ así lo desea.</translation>
     <message>
         <location filename="../../src/gui/application/main.cpp" line="724"/>
         <source>&lt;h2&gt;Welcome to Rosegarden!&lt;/h2&gt;&lt;p&gt;Welcome to the Rosegarden audio and MIDI sequencer and musical notation editor.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;If you have not already done so, you may wish to install some DSSI synth plugins, or a separate synth program such as QSynth.  Rosegarden does not synthesize sounds from MIDI on its own, so without these you will hear nothing.&lt;/li&gt;&lt;li&gt;Rosegarden uses the JACK audio server for recording and playback of audio, and for playback from DSSI synth plugins.  These features will only be available if the JACK server is running.&lt;/li&gt;&lt;li&gt;Rosegarden has comprehensive documentation: see the &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&gt;Rosegarden website&lt;/a&gt; for the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/doc/en/&quot;&gt;handbook&lt;/a&gt;, &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;tutorials&lt;/a&gt;, and other information!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  To learn more, go to the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;Rosegarden website&lt;/a&gt;.&lt;/p&gt;</source>
-        <translation>&lt;h2&gt;¡Bienvenido a Rosegarden!&lt;/h2&gt;&lt;p&gt;Bienvenido a Rosegarden, un secuenciador de audio y MIDI y editor de partituras.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;If you have not already done so, you may wish to install some DSSI synth plugins, or a separate synth program such as QSynth.  Rosegarden does not synthesize sounds from MIDI on its own, so without these you will hear nothing.&lt;/li&gt;&lt;li&gt;Rosegarden uses the JACK audio server for recording and playback of audio, and for playback from DSSI synth plugins.  These features will only be available if the JACK server is running.&lt;/li&gt;&lt;li&gt;Rosegarden has comprehensive documentation: see the &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&gt;Rosegarden website&lt;/a&gt; for the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/doc/en/&quot;&gt;handbook&lt;/a&gt;, &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;tutorials&lt;/a&gt;, and other information!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  To learn more, go to the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;Rosegarden website&lt;/a&gt;.&lt;/p&gt;</translation>
+        <translation type="unfinished">&lt;h2&gt;¡Bienvenido a Rosegarden!&lt;/h2&gt;&lt;p&gt;Bienvenido a Rosegarden, un secuenciador de audio y MIDI y editor de partituras.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;If you have not already done so, you may wish to install some DSSI synth plugins, or a separate synth program such as QSynth.  Rosegarden does not synthesize sounds from MIDI on its own, so without these you will hear nothing.&lt;/li&gt;&lt;li&gt;Rosegarden uses the JACK audio server for recording and playback of audio, and for playback from DSSI synth plugins.  These features will only be available if the JACK server is running.&lt;/li&gt;&lt;li&gt;Rosegarden has comprehensive documentation: see the &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&gt;Rosegarden website&lt;/a&gt; for the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/doc/en/&quot;&gt;handbook&lt;/a&gt;, &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;tutorials&lt;/a&gt;, and other information!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  To learn more, go to the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;Rosegarden website&lt;/a&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="35"/>
@@ -9767,7 +9767,7 @@ así lo desea.</translation>
     <message>
         <location filename="../../src/gui/dialogs/AboutDialog.cpp" line="48"/>
         <source>&lt;h2&gt;Rosegarden - &quot;%1&quot;&lt;/h2&gt;&lt;h3&gt;A sequencer and musical notation editor&lt;/h3&gt;</source>
-        <translation></translation>
+        <translation>&lt;h2&gt;Rosegarden - «%1»&lt;/h2&gt;&lt;h3&gt;Un secuenciador y editor de partituras&lt;/h3&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AboutDialog.cpp" line="54"/>
@@ -11695,7 +11695,7 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/gui/dialogs/ConfigureDialog.cpp" line="47"/>
         <source>Rosegarden - Preferences</source>
-        <translation type="unfinished"></translation>
+        <translation>Rosegarden - Preferencias</translation>
     </message>
 </context>
 <context>
@@ -11754,22 +11754,22 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="110"/>
         <source>Min. value  </source>
-        <translation type="unfinished"></translation>
+        <translation>Valor min.</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="111"/>
         <source>Max. value  </source>
-        <translation type="unfinished"></translation>
+        <translation>Valor max.</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="112"/>
         <source>Default value  </source>
-        <translation type="unfinished"></translation>
+        <translation>Valor predeterminado</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="113"/>
         <source>Color  </source>
-        <translation type="unfinished">Color  </translation>
+        <translation>Color  </translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="114"/>
@@ -11779,7 +11779,7 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="130"/>
         <source>Add</source>
-        <translation type="unfinished">Añadir</translation>
+        <translation>Añadir</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="131"/>
@@ -11795,32 +11795,32 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="135"/>
         <source>Add a Control Parameter to the Studio</source>
-        <translation type="unfinished">Añadir un Parámetro de Control al Estudio</translation>
+        <translation>Añadir un parámetro de control al estudio</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="137"/>
         <source>Delete a Control Parameter from the Studio</source>
-        <translation type="unfinished">Eliminar un Parámetro de Control del Estudio</translation>
+        <translation>Eliminar un parámetro de control del estudio</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="139"/>
         <source>Close the Control Parameter editor</source>
-        <translation type="unfinished">Cerrar el editor de Parámetros de Control</translation>
+        <translation>Cerrar el editor de Parámetros de Control</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="221"/>
         <source>&lt;default&gt;</source>
-        <translation type="unfinished">&lt;por omisión&gt;</translation>
+        <translation>&lt;predeterminado&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="225"/>
         <source>&lt;not showing&gt;</source>
-        <translation type="unfinished">&lt;no mostrado&gt;</translation>
+        <translation>&lt;no mostrado&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="276"/>
         <source>&lt;none&gt;</source>
-        <translation type="unfinished">&lt;nada&gt;</translation>
+        <translation>&lt;nada&gt;</translation>
     </message>
 </context>
 <context>
@@ -11828,52 +11828,52 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="76"/>
         <source>Name:</source>
-        <translation type="unfinished">Nombre:</translation>
+        <translation>Nombre:</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="81"/>
         <source>Type:</source>
-        <translation type="unfinished">Tipo: </translation>
+        <translation>Tipo: </translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="90"/>
         <source>Description:</source>
-        <translation type="unfinished">Descripción:</translation>
+        <translation>Descripción:</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="60"/>
         <source>Edit Controller</source>
-        <translation type="unfinished"></translation>
+        <translation>Editar controlador</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="69"/>
         <source>Controller Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Propiedades del controlador</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="98"/>
         <source>Controller number:</source>
-        <translation type="unfinished">Número de Controlador:</translation>
+        <translation>Número de controlador:</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="102"/>
         <source>Minimum value:</source>
-        <translation type="unfinished">Valor mínimo:</translation>
+        <translation>Valor mínimo:</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="106"/>
         <source>Maximum value:</source>
-        <translation type="unfinished">Valor máximo:</translation>
+        <translation>Valor máximo:</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="110"/>
         <source>Default value:</source>
-        <translation type="unfinished">Valor por omisión:</translation>
+        <translation>Valor predeterminado:</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="114"/>
         <source>Color:</source>
-        <translation type="unfinished">Color:</translation>
+        <translation>Color:</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="118"/>
@@ -12242,147 +12242,147 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.h" line="48"/>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.h" line="49"/>
         <source>About</source>
-        <translation type="unfinished">Acerca de</translation>
+        <translation>Acerca de</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.h" line="61"/>
         <source>%1 minutes %2.%3%4 seconds (%5 units, %6 measures)</source>
-        <translation type="unfinished">%1 minutos %2.%3%4 segundos (%5 unidades, %6 compases)</translation>
+        <translation>%1 minutos %2.%3%4 segundos (%5 unidades, %6 compases)</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="91"/>
         <source>Headers</source>
-        <translation type="unfinished">Cabeceras</translation>
+        <translation>Cabeceras</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="112"/>
         <source>Filename:</source>
-        <translation type="unfinished">Nombre de archivo:</translation>
+        <translation>Nombre de archivo:</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="115"/>
         <source>Formal duration (to end marker):</source>
-        <translation type="unfinished">Duración formal (hasta el marcador final)</translation>
+        <translation>Duración formal (hasta el marcador final):</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="120"/>
         <source>Playing duration:</source>
-        <translation type="unfinished">Duración de la reproducción:</translation>
+        <translation>Duración de la reproducción:</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="125"/>
         <source>Tracks:</source>
-        <translation type="unfinished">Pistas:</translation>
+        <translation>Pistas:</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="126"/>
         <source>%1 used, %2 total</source>
-        <translation type="unfinished">%1 usado, %2 total</translation>
+        <translation>%1 usado, %2 total</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="131"/>
         <source>Segments:</source>
-        <translation type="unfinished">Segmentos:</translation>
+        <translation>Segmentos:</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="132"/>
         <source>%1 MIDI, %2 audio, %3 total</source>
-        <translation type="unfinished">%1 MIDI, %2 audio, %3 total</translation>
+        <translation>%1 MIDI, %2 audio, %3 total</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="140"/>
         <source>Statistics</source>
-        <translation type="unfinished">Estadísticas</translation>
+        <translation>Estadísticas</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="155"/>
         <source>Type</source>
-        <translation type="unfinished">Tipo</translation>
+        <translation>Tipo</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="156"/>
         <source>Track</source>
-        <translation type="unfinished">Pista</translation>
+        <translation>Pista</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="157"/>
         <source>Label</source>
-        <translation type="unfinished">Etiqueta</translation>
+        <translation>Etiqueta</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="158"/>
         <source>Time</source>
-        <translation type="unfinished">Tiempo</translation>
+        <translation>Tiempo</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="159"/>
         <source>Duration</source>
-        <translation type="unfinished">Duración</translation>
+        <translation>Duración</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="160"/>
         <source>Events</source>
-        <translation type="unfinished">Eventos</translation>
+        <translation>Eventos</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="161"/>
         <source>Polyphony</source>
-        <translation type="unfinished">Polifonía</translation>
+        <translation>Polifonía</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="162"/>
         <source>Repeat</source>
-        <translation type="unfinished">Repetir</translation>
+        <translation>Repetir</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="163"/>
         <source>Quantize</source>
-        <translation type="unfinished">Cuantificación</translation>
+        <translation>Cuantificación</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="164"/>
         <source>Transpose</source>
-        <translation type="unfinished">Transportar</translation>
+        <translation>Transportar</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="165"/>
         <source>Delay</source>
-        <translation type="unfinished">Retardo</translation>
+        <translation>Retardo</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="192"/>
         <source>Audio</source>
-        <translation type="unfinished">Audio </translation>
+        <translation>Audio</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="192"/>
         <source>MIDI</source>
-        <translation type="unfinished">MIDI</translation>
+        <translation>MIDI</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="254"/>
         <source>Yes</source>
-        <translation type="unfinished">Sí</translation>
+        <translation>Sí</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="254"/>
         <source>No</source>
-        <translation type="unfinished">No</translation>
+        <translation>No</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="267"/>
         <source>Off</source>
-        <translation type="unfinished">Ningún</translation>
+        <translation>Ningún</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="298"/>
         <source>None</source>
-        <translation type="unfinished">Nada</translation>
+        <translation>Nada</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="306"/>
         <source>Segment Summary</source>
-        <translation type="unfinished">Resumen del Segmento</translation>
+        <translation>Resumen de los segmentos</translation>
     </message>
 </context>
 <context>
@@ -12521,27 +12521,27 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/gui/general/EditViewBase.cpp" line="203"/>
         <source>Toggle the statusbar...</source>
-        <translation type="unfinished">Conmutar la barra de estado...</translation>
+        <translation>Conmutar la barra de estado...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/EditViewBase.cpp" line="267"/>
         <source>Segment Start Time</source>
-        <translation type="unfinished">Tiempo de Comienzo de Segmento</translation>
+        <translation>Tiempo de comienzo de segmento</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/EditViewBase.cpp" line="274"/>
         <source>Set Segment Start Time</source>
-        <translation type="unfinished">Establecer Tiempo de Comienzo de Segmento</translation>
+        <translation>Establecer tiempo de comienzo de segmento</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/EditViewBase.cpp" line="292"/>
         <source>Segment Duration</source>
-        <translation type="unfinished">Duración del Segmento</translation>
+        <translation>Duración del segmento</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/EditViewBase.cpp" line="300"/>
         <source>Set Segment Duration</source>
-        <translation type="unfinished">Establecer Duración de Segmento</translation>
+        <translation>Establecer duración de segmento</translation>
     </message>
 </context>
 <context>
@@ -12549,7 +12549,7 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/commands/edit/EraseCommand.h" line="45"/>
         <source>&amp;Erase</source>
-        <translation type="unfinished">&amp;Eliminar</translation>
+        <translation>&amp;Eliminar</translation>
     </message>
 </context>
 <context>
@@ -12557,7 +12557,7 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/commands/segment/EraseSegmentsStartingInRangeCommand.cpp" line="31"/>
         <source>Delete Range</source>
-        <translation type="unfinished">Borrar ámbito</translation>
+        <translation>Borrar ámbito</translation>
     </message>
 </context>
 <context>
@@ -12565,7 +12565,7 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/commands/edit/EventEditCommand.h" line="50"/>
         <source>Edit E&amp;vent</source>
-        <translation type="unfinished">Editar E&amp;vento</translation>
+        <translation>Editar E&amp;vento</translation>
     </message>
 </context>
 <context>
@@ -12671,28 +12671,28 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
         <source>Are you sure you want to delete the &quot;%1&quot; property?
 
 Removing necessary properties may cause unexpected behavior.</source>
-        <translation>¿Está seguro de querer borrar la propiedad &quot;%1&quot;?
+        <translation>¿Está seguro de querer borrar la propiedad «%1»?
 
 Eliminar propiedades necesarias puede causar un comportamiento inesperado.</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="523"/>
         <source>&amp;Delete</source>
-        <translation type="unfinished">&amp;Borrar</translation>
+        <translation>&amp;Borrar</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="552"/>
         <source>Are you sure you want to make the &quot;%1&quot; property persistent?
 
 This could cause problems if it overrides a different computed value later on.</source>
-        <translation>Está seguro de querer hacer persistente la propiedad &quot;%1&quot;?
+        <translation>Está seguro de querer hacer persistente la propiedad «%1»?
 
 Esto puede causar problemas si se sobreescribe más adelante con un valor calculado diferente.</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="556"/>
         <source>Make &amp;Persistent</source>
-        <translation type="unfinished">Hacer &amp;Persistente</translation>
+        <translation>Hacer &amp;persistente</translation>
     </message>
 </context>
 <context>
@@ -13148,7 +13148,7 @@ Esto puede causar problemas si se sobreescribe más adelante con un valor calcul
     <message>
         <location filename="../../src/gui/dialogs/ExportDeviceDialog.cpp" line="48"/>
         <source>         (&quot;%1&quot;)</source>
-        <translation type="unfinished">         (&quot;%1&quot;)</translation>
+        <translation>         («%1»)</translation>
     </message>
 </context>
 <context>
@@ -13156,13 +13156,13 @@ Esto puede causar problemas si se sobreescribe más adelante con un valor calcul
     <message>
         <location filename="../../src/gui/dialogs/FileLocateDialog.cpp" line="44"/>
         <source>Locate audio file</source>
-        <translation type="unfinished">Buscar archivo de audio</translation>
+        <translation>Buscar archivo de audio</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/FileLocateDialog.cpp" line="52"/>
         <source>Can&apos;t find file &quot;%1&quot;.
 Would you like to try and locate this file or skip it?</source>
-        <translation type="unfinished">No se puede encontrar el archivo &quot;%1&quot;.
+        <translation>No se puede encontrar el archivo «%1».
 ¿Quiere intentar buscar y localizar este archivo o saltarlo?</translation>
     </message>
     <message>
@@ -14449,52 +14449,44 @@ Ejemplo de texto perteneciente del archivo:</translation>
 <context>
     <name>Rosegarden::LatencyConfigurationPage</name>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.h" line="50"/>
         <source>Latency</source>
-        <translation type="unfinished">Latencia </translation>
+        <translation type="obsolete">Latencia </translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.h" line="51"/>
         <source>Sequencer Latency</source>
-        <translation type="unfinished">Latencia del secuenciador</translation>
+        <translation type="obsolete">Latencia del secuenciador</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="48"/>
         <source>JACK latency</source>
-        <translation type="unfinished">latencia de JACK</translation>
+        <translation type="obsolete">latencia de JACK</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="51"/>
         <source>Use the &quot;Fetch JACK latencies&quot; button to discover the latency values set at
 the sequencer.  It&apos;s recommended that you use the returned values but it&apos;s also
 possible to override them manually using the sliders.  Note that if you change
 your JACK server parameters you should always fetch the latency values again.
 The latency values will be stored by Rosegarden for use next time.</source>
-        <translation type="unfinished">Utilice el botón &quot;Obtener latencias de JACK&quot; para descubrir los valores establecidos
+        <translation type="obsolete">Utilice el botón &quot;Obtener latencias de JACK&quot; para descubrir los valores establecidos
 en el secuenciador. Es recomendable utilizar los valores devueltos, pero también es
 posible establecerlos manualmente usando los deslizadores. Observe que si modifica
 los parámetros de su servidor JACK debería siempre recuperar los valores de latencia
 otra vez. Los valores de latencia se almacenarán por Rosegarden para su uso futuro.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="55"/>
         <source>JACK playback latency (in ms)</source>
-        <translation type="unfinished">Latencia de reproducción de JACK (en ms)</translation>
+        <translation type="obsolete">Latencia de reproducción de JACK (en ms)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="56"/>
         <source>JACK record latency (in ms)</source>
-        <translation type="unfinished">Latencia de grabación de JACK (en ms)</translation>
+        <translation type="obsolete">Latencia de grabación de JACK (en ms)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="58"/>
         <source>Fetch JACK latencies</source>
-        <translation type="unfinished">Obtener latencias de JACK</translation>
+        <translation type="obsolete">Obtener latencias de JACK</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="111"/>
         <source>JACK Latency</source>
-        <translation type="unfinished">Latencia de JACK</translation>
+        <translation type="obsolete">Latencia de JACK</translation>
     </message>
 </context>
 <context>
@@ -16743,7 +16735,7 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="172"/>
         <source>Show &quot;invisible&quot; events in grey</source>
-        <translation>Mostrar eventos &quot;invisibles&quot; en gris</translation>
+        <translation>Mostrar eventos «invisibles» en gris</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="183"/>
@@ -18489,7 +18481,7 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location filename="../../src/gui/rulers/RawNoteRuler.cpp" line="451"/>
         <source>Track #%1, Segment &quot;%2&quot; (runtime id %3)</source>
-        <translation type="unfinished">Pista #%1, Segmento &quot;%2&quot; (identificador %3)</translation>
+        <translation>Pista %1, Segmento «%2» (identificador %3)</translation>
     </message>
 </context>
 <context>
@@ -18497,7 +18489,7 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location filename="../../src/commands/studio/ReconnectDeviceCommand.h" line="50"/>
         <source>Reconnect Device</source>
-        <translation type="unfinished">Reconectar dispositivo</translation>
+        <translation>Reconectar dispositivo</translation>
     </message>
 </context>
 <context>
@@ -18879,7 +18871,7 @@ Por favor, decida si quiere borrarlos permanentemente del disco duro.
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="621"/>
         <source>Error when parsing file &apos;%1&apos;: &quot;%2&quot;</source>
-        <translation>Error al interpretar el archivo &apos;%1&apos;: &quot;%2&quot;</translation>
+        <translation>Error al interpretar el archivo «%1»: «%2»</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="668"/>
@@ -19507,7 +19499,7 @@ Usted debe establecer el directorio de archivos de audio en un directorio válid
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7784"/>
         <source>&lt;p&gt;You are using version %1.  Version %2 is now available.&lt;/p&gt;&lt;p&gt;Please consult the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;Rosegarden website&lt;/a&gt; for more information.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Soy versión %1.  Versión %2 está disponible.&lt;/p&gt;&lt;p&gt;Favor de consultar el &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;web de Rosegarden&lt;/a&gt; para ver más información sobre esta versión nueva.&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;La versión de esta aplicación es %1.  Versión %2 está disponible.&lt;/p&gt;&lt;p&gt;Consulte el &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;web de Rosegarden&lt;/a&gt; para ver más información sobre esta versión más actualizada.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3495"/>
@@ -20577,7 +20569,7 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1241"/>
         <source>&lt;p&gt;The MIDI subsystem has failed to initialize.&lt;/p&gt;&lt;p&gt;You may continue without the sequencer, but we suggest closing Rosegarden, running &quot;modprobe snd-seq-midi&quot; as root, and starting Rosegarden again.  If you wish to run with no sequencer by design, then use &quot;rosegarden --nosequencer&quot; to avoid seeing this error in the future.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;El subsistema MIDI ha fallado en su inicialización.&lt;/p&gt;&lt;p&gt; El usuario puede continuar sin el secuenciador, pero sugerimos que cierre Rosegarden, ejecute &quot;modprobe snd-seq-midi&quot; como usuario administrador, y reinicie Rosegarden de nuevo. Si desea utilizar Rosegarden sin el secuenciador, entonces ejecute &quot;rosegarden --nosequencer&quot; para evitar la aparición de este mensaje de error en el futuro.&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;El subsistema MIDI ha fallado en su inicialización.&lt;/p&gt;&lt;p&gt; El usuario puede continuar sin el secuenciador, pero sugerimos que cierre Rosegarden, ejecute «modprobe snd-seq-midi» como usuario administrador, y reinicie Rosegarden de nuevo. Si desea utilizar Rosegarden sin el secuenciador, entonces ejecute «rosegarden --nosequencer» para evitar la aparición de este mensaje de error en el futuro.&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
@@ -20973,7 +20965,7 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="120"/>
         <source>Track %1 : &quot;%2&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>Pista %1 : «%2»</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="126"/>
@@ -21003,90 +20995,90 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="191"/>
         <source>&lt;br&gt;bars [%1-%2] in %3 (tr=%4) : &quot;%5&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;br&gt;compáses [%1-%2] en %3 (tr=%4) : «%5»</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="198"/>
         <source>&lt;br&gt;bars [%1-%2] (tr=%3) : &quot;%4&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;br&gt;compáses [%1-%2] (tr=%3) : «%4»</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="361"/>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="416"/>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="457"/>
         <source>C</source>
         <comment>note name</comment>
-        <translation type="unfinished">Do</translation>
+        <translation>Do</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="458"/>
         <source>C#</source>
         <comment>note name</comment>
-        <translation type="unfinished">Do sostenido</translation>
+        <translation>Do sostenido</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="459"/>
         <source>D</source>
         <comment>note name</comment>
-        <translation type="unfinished">Re</translation>
+        <translation>Re</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="460"/>
         <source>Eb</source>
         <comment>note name</comment>
-        <translation type="unfinished">Mi bemol</translation>
+        <translation>Mi bemol</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="461"/>
         <source>E</source>
         <comment>note name</comment>
-        <translation type="unfinished">Mi</translation>
+        <translation>Mi</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="462"/>
         <source>F</source>
         <comment>note name</comment>
-        <translation type="unfinished">Fa</translation>
+        <translation>Fa</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="463"/>
         <source>F#</source>
         <comment>note name</comment>
-        <translation type="unfinished">Fa sostenido</translation>
+        <translation>Fa sostenido</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="464"/>
         <source>G</source>
         <comment>note name</comment>
-        <translation type="unfinished">Sol</translation>
+        <translation>Sol</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="465"/>
         <source>G#</source>
         <comment>note name</comment>
-        <translation type="unfinished">Sol sostenido</translation>
+        <translation>Sol sostenido</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="466"/>
         <source>A</source>
         <comment>note name</comment>
-        <translation type="unfinished">La</translation>
+        <translation>La</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="467"/>
         <source>Bb</source>
         <comment>note name</comment>
-        <translation type="unfinished">Si bemol</translation>
+        <translation>Si bemol</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="468"/>
         <source>B</source>
         <comment>note name</comment>
-        <translation type="unfinished">Si</translation>
+        <translation>Si</translation>
     </message>
     <message>
         <source>C</source>
@@ -21139,12 +21131,12 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="579"/>
         <source>%1: %2</source>
-        <translation type="unfinished">%1: %2</translation>
+        <translation>%1: %2</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="582"/>
         <source> in %1</source>
-        <translation type="unfinished"> en %1</translation>
+        <translation> en %1</translation>
     </message>
 </context>
 <context>
@@ -21152,12 +21144,12 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
     <message>
         <location filename="../../src/base/Studio.cpp" line="53"/>
         <source>Audio</source>
-        <translation type="unfinished">Audio </translation>
+        <translation>Audio </translation>
     </message>
     <message>
         <location filename="../../src/base/Studio.cpp" line="56"/>
         <source>Synth plugin</source>
-        <translation type="unfinished">Plugin sinte</translation>
+        <translation>Plugin sinte</translation>
     </message>
 </context>
 <context>

@@ -14345,52 +14345,44 @@ Voorbeeldtekst uit het bestand:</translation>
 <context>
     <name>Rosegarden::LatencyConfigurationPage</name>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.h" line="50"/>
         <source>Latency</source>
-        <translation type="unfinished">Vertraging</translation>
+        <translation type="obsolete">Vertraging</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.h" line="51"/>
         <source>Sequencer Latency</source>
-        <translation type="unfinished">Sequencer-vertraging</translation>
+        <translation type="obsolete">Sequencer-vertraging</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="48"/>
         <source>JACK latency</source>
-        <translation type="unfinished">JACK vertraging</translation>
+        <translation type="obsolete">JACK vertraging</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="51"/>
         <source>Use the &quot;Fetch JACK latencies&quot; button to discover the latency values set at
 the sequencer.  It&apos;s recommended that you use the returned values but it&apos;s also
 possible to override them manually using the sliders.  Note that if you change
 your JACK server parameters you should always fetch the latency values again.
 The latency values will be stored by Rosegarden for use next time.</source>
-        <translation type="unfinished">Gebruik de knop &quot;JACK vertragingen bepalen&quot; om de vertragingen bij de sequencer te zien.
+        <translation type="obsolete">Gebruik de knop &quot;JACK vertragingen bepalen&quot; om de vertragingen bij de sequencer te zien.
 Aanbevolen wordt om de gegeven waarden te gebruiken, maar u kunt deze ook
 handmatig instellen met de schuifbalken.  NB: zodra u de JACK serverparameters
 wijzigt, dient u altijd de vertragingswaarden opnieuw te bepalen.
 De vertragingswaarden worden door Rosegarden opgeslagen voor de volgende keer.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="55"/>
         <source>JACK playback latency (in ms)</source>
-        <translation type="unfinished">JACK afspeel vertraging (in ms)</translation>
+        <translation type="obsolete">JACK afspeel vertraging (in ms)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="56"/>
         <source>JACK record latency (in ms)</source>
-        <translation type="unfinished">JACK opneem vertraging (in ms)</translation>
+        <translation type="obsolete">JACK opneem vertraging (in ms)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="58"/>
         <source>Fetch JACK latencies</source>
-        <translation type="unfinished">JACK vertragingen bepalen</translation>
+        <translation type="obsolete">JACK vertragingen bepalen</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="111"/>
         <source>JACK Latency</source>
-        <translation type="unfinished">JACK Vertraging</translation>
+        <translation type="obsolete">JACK Vertraging</translation>
     </message>
 </context>
 <context>

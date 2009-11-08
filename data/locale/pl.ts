@@ -14338,51 +14338,43 @@ Przykładowy tekst z pliku:</translation>
 <context>
     <name>Rosegarden::LatencyConfigurationPage</name>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.h" line="50"/>
         <source>Latency</source>
-        <translation type="unfinished">Latencja</translation>
+        <translation type="obsolete">Latencja</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.h" line="51"/>
         <source>Sequencer Latency</source>
-        <translation type="unfinished">Latencja Sekwencera</translation>
+        <translation type="obsolete">Latencja Sekwencera</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="48"/>
         <source>JACK latency</source>
-        <translation type="unfinished">Latencja serwera JACK</translation>
+        <translation type="obsolete">Latencja serwera JACK</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="51"/>
         <source>Use the &quot;Fetch JACK latencies&quot; button to discover the latency values set at
 the sequencer.  It&apos;s recommended that you use the returned values but it&apos;s also
 possible to override them manually using the sliders.  Note that if you change
 your JACK server parameters you should always fetch the latency values again.
 The latency values will be stored by Rosegarden for use next time.</source>
-        <translation type="unfinished">Użyj przycisku  &quot;Osiągnij wartość latencji JACK&quot; by sprawdzić wartości latencji w
+        <translation type="obsolete">Użyj przycisku  &quot;Osiągnij wartość latencji JACK&quot; by sprawdzić wartości latencji w
  sekwencerze. Jest zalecane, by używać zwróconych wartości, ale jest również
  możliwe by je ręcznie zmienić używając suwaków. Zauważ, że jeśl zmienisz &lt;br&gt; parametry serwera JACK, powinieneś zawsze sprawdzać wartość latencji ponownie.
 Wartość latencji będzie zapisana przez Różany Ogród do następnego razu. </translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="55"/>
         <source>JACK playback latency (in ms)</source>
-        <translation type="unfinished">Latencja Serwera JACK podczas odtwarzania (w mili sekundach)</translation>
+        <translation type="obsolete">Latencja Serwera JACK podczas odtwarzania (w mili sekundach)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="56"/>
         <source>JACK record latency (in ms)</source>
-        <translation type="unfinished">Latencja Serwera JACK podczas nagrywania (w milisekundach)</translation>
+        <translation type="obsolete">Latencja Serwera JACK podczas nagrywania (w milisekundach)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="58"/>
         <source>Fetch JACK latencies</source>
-        <translation type="unfinished">Osiągij latencję serwera JACK</translation>
+        <translation type="obsolete">Osiągij latencję serwera JACK</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="111"/>
         <source>JACK Latency</source>
-        <translation type="unfinished">Latencja Serwera JACK</translation>
+        <translation type="obsolete">Latencja Serwera JACK</translation>
     </message>
 </context>
 <context>

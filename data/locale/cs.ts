@@ -14344,52 +14344,44 @@ Vzor textu ze souboru:</translation>
 <context>
     <name>Rosegarden::LatencyConfigurationPage</name>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.h" line="50"/>
         <source>Latency</source>
-        <translation type="unfinished">Latence</translation>
+        <translation type="obsolete">Latence</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.h" line="51"/>
         <source>Sequencer Latency</source>
-        <translation type="unfinished">Latence sekvenceru</translation>
+        <translation type="obsolete">Latence sekvenceru</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="48"/>
         <source>JACK latency</source>
-        <translation type="unfinished">Latence JACK</translation>
+        <translation type="obsolete">Latence JACK</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="51"/>
         <source>Use the &quot;Fetch JACK latencies&quot; button to discover the latency values set at
 the sequencer.  It&apos;s recommended that you use the returned values but it&apos;s also
 possible to override them manually using the sliders.  Note that if you change
 your JACK server parameters you should always fetch the latency values again.
 The latency values will be stored by Rosegarden for use next time.</source>
-        <translation type="unfinished">Pomocí tlačítka &quot;Načíst latence JACK&quot; zjistíte hodnoty latencí nastavené na
+        <translation type="obsolete">Pomocí tlačítka &quot;Načíst latence JACK&quot; zjistíte hodnoty latencí nastavené na
 sekvenceru. Doporučujeme použít tyto vrácené hodnoty. Je však také možné
 hodnoty ručně přepsat pomocí posuvníků.  Uvědomte si, že pokud změníte
 parametry serveru JACK, měli byste vždy načíst hodnoty latencí znovu.
 Hodnoty latencí budou aplikací Rosegarden uloženy pro další použití.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="55"/>
         <source>JACK playback latency (in ms)</source>
-        <translation type="unfinished">Latence přehrávání přes JACK (ms)</translation>
+        <translation type="obsolete">Latence přehrávání přes JACK (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="56"/>
         <source>JACK record latency (in ms)</source>
-        <translation type="unfinished">Latence záznamu přes JACK (ms)</translation>
+        <translation type="obsolete">Latence záznamu přes JACK (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="58"/>
         <source>Fetch JACK latencies</source>
-        <translation type="unfinished">Načíst latence JACK</translation>
+        <translation type="obsolete">Načíst latence JACK</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="111"/>
         <source>JACK Latency</source>
-        <translation type="unfinished">Latence JACK</translation>
+        <translation type="obsolete">Latence JACK</translation>
     </message>
 </context>
 <context>

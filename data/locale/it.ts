@@ -14347,48 +14347,40 @@ Testo di esempio dal file:</translation>
 <context>
     <name>Rosegarden::LatencyConfigurationPage</name>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.h" line="50"/>
         <source>Latency</source>
-        <translation type="unfinished">Latenza</translation>
+        <translation type="obsolete">Latenza</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.h" line="51"/>
         <source>Sequencer Latency</source>
-        <translation type="unfinished">Latenza del sequencer</translation>
+        <translation type="obsolete">Latenza del sequencer</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="48"/>
         <source>JACK latency</source>
-        <translation type="unfinished">Latenza di JACK</translation>
+        <translation type="obsolete">Latenza di JACK</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="51"/>
         <source>Use the &quot;Fetch JACK latencies&quot; button to discover the latency values set at
 the sequencer.  It&apos;s recommended that you use the returned values but it&apos;s also
 possible to override them manually using the sliders.  Note that if you change
 your JACK server parameters you should always fetch the latency values again.
 The latency values will be stored by Rosegarden for use next time.</source>
-        <translation type="unfinished">Usa il pulsante &quot;Trova le latenze di JACK&quot; per scoprire i valori di latenza del sequencer. È bene usare i valori trovati, anche se è possibile impostarli manualmente muovendo gli slider. Se i parametri del server JACK vengono cambiati, devi sempre ritrovare i valori di latenza di nuovo. I valori di latenza verranno memorizzati da Rosegarden per gli utilizzi successivi.</translation>
+        <translation type="obsolete">Usa il pulsante &quot;Trova le latenze di JACK&quot; per scoprire i valori di latenza del sequencer. È bene usare i valori trovati, anche se è possibile impostarli manualmente muovendo gli slider. Se i parametri del server JACK vengono cambiati, devi sempre ritrovare i valori di latenza di nuovo. I valori di latenza verranno memorizzati da Rosegarden per gli utilizzi successivi.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="55"/>
         <source>JACK playback latency (in ms)</source>
-        <translation type="unfinished">Latenza di riproduzione di JACK (in millisecondi)</translation>
+        <translation type="obsolete">Latenza di riproduzione di JACK (in millisecondi)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="56"/>
         <source>JACK record latency (in ms)</source>
-        <translation type="unfinished">Latenza di registrazione di JACK (in millisecondi)</translation>
+        <translation type="obsolete">Latenza di registrazione di JACK (in millisecondi)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="58"/>
         <source>Fetch JACK latencies</source>
-        <translation type="unfinished">Rileva latenze di JACK</translation>
+        <translation type="obsolete">Rileva latenze di JACK</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="111"/>
         <source>JACK Latency</source>
-        <translation type="unfinished">Latenza di JACK</translation>
+        <translation type="obsolete">Latenza di JACK</translation>
     </message>
 </context>
 <context>

@@ -14399,28 +14399,24 @@ Example text from file:</source>
 <context>
     <name>Rosegarden::LatencyConfigurationPage</name>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.h" line="50"/>
         <source>Latency</source>
-        <translation>Латентность</translation>
+        <translation type="obsolete">Латентность</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.h" line="51"/>
         <source>Sequencer Latency</source>
-        <translation>Латентность секвенсера</translation>
+        <translation type="obsolete">Латентность секвенсера</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="48"/>
         <source>JACK latency</source>
-        <translation>Латентность JACK</translation>
+        <translation type="obsolete">Латентность JACK</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="51"/>
         <source>Use the &quot;Fetch JACK latencies&quot; button to discover the latency values set at
 the sequencer.  It&apos;s recommended that you use the returned values but it&apos;s also
 possible to override them manually using the sliders.  Note that if you change
 your JACK server parameters you should always fetch the latency values again.
 The latency values will be stored by Rosegarden for use next time.</source>
-        <translation>Щёлкните по кнопке &quot;Узнать латентность JACK&quot; для получения 
+        <translation type="obsolete">Щёлкните по кнопке &quot;Узнать латентность JACK&quot; для получения 
 данных об установленных для секвенсера значений задержки.
 Рекомендуется устанавливать латентность именно в очерченных системой границах, хотя вы можете использовать и свои значения.
 Помните, что если вы изменили параметры JACK-сервера, вам обязательно нужно снова запросить значения задержки.
@@ -14428,24 +14424,20 @@ The latency values will be stored by Rosegarden for use next time.</source>
 запусков программы.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="55"/>
         <source>JACK playback latency (in ms)</source>
-        <translation>Задержка воспроизведения через JACK (в мс)</translation>
+        <translation type="obsolete">Задержка воспроизведения через JACK (в мс)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="56"/>
         <source>JACK record latency (in ms)</source>
-        <translation>Задержка записи через JACK (в мс)</translation>
+        <translation type="obsolete">Задержка записи через JACK (в мс)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="58"/>
         <source>Fetch JACK latencies</source>
-        <translation>Узнать задержку JACK</translation>
+        <translation type="obsolete">Узнать задержку JACK</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="111"/>
         <source>JACK Latency</source>
-        <translation>Задержка JACK</translation>
+        <translation type="obsolete">Задержка JACK</translation>
     </message>
 </context>
 <context>

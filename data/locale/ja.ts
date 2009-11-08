@@ -14340,51 +14340,43 @@ Example text from file:</source>
 <context>
     <name>Rosegarden::LatencyConfigurationPage</name>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.h" line="50"/>
         <source>Latency</source>
-        <translation type="unfinished">レイテンシ</translation>
+        <translation type="obsolete">レイテンシ</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.h" line="51"/>
         <source>Sequencer Latency</source>
-        <translation type="unfinished">シーケンサレイテンシ</translation>
+        <translation type="obsolete">シーケンサレイテンシ</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="48"/>
         <source>JACK latency</source>
-        <translation type="unfinished">JACKレイテンシ</translation>
+        <translation type="obsolete">JACKレイテンシ</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="51"/>
         <source>Use the &quot;Fetch JACK latencies&quot; button to discover the latency values set at
 the sequencer.  It&apos;s recommended that you use the returned values but it&apos;s also
 possible to override them manually using the sliders.  Note that if you change
 your JACK server parameters you should always fetch the latency values again.
 The latency values will be stored by Rosegarden for use next time.</source>
-        <translation type="unfinished">&quot;Fetch JACK latencies&quot;ボタンを、シーケンサに設定されているレイテンシの値を検索するのに使う。
+        <translation type="obsolete">&quot;Fetch JACK latencies&quot;ボタンを、シーケンサに設定されているレイテンシの値を検索するのに使う。
 戻り値を使うことを推奨するが、スライダを使ってその値を手動で上書きすることも可能である。
 もしも、JACKサーバパラメータを変えたなら、レイテンシの値を毎回再フェッチすべきである。
 レイテンシの値は次回使うためにRosegardenによって保存される。</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="55"/>
         <source>JACK playback latency (in ms)</source>
-        <translation type="unfinished">JACK再生レイテンシ(ミリ秒)</translation>
+        <translation type="obsolete">JACK再生レイテンシ(ミリ秒)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="56"/>
         <source>JACK record latency (in ms)</source>
-        <translation type="unfinished">JACK録音レイテンシ(ミリ秒)</translation>
+        <translation type="obsolete">JACK録音レイテンシ(ミリ秒)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="58"/>
         <source>Fetch JACK latencies</source>
-        <translation type="unfinished">JACKレイテンシの取得</translation>
+        <translation type="obsolete">JACKレイテンシの取得</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="111"/>
         <source>JACK Latency</source>
-        <translation type="unfinished">JACKレイテンシ</translation>
+        <translation type="obsolete">JACKレイテンシ</translation>
     </message>
 </context>
 <context>

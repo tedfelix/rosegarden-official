@@ -14293,52 +14293,44 @@ Example text from file:</source>
 <context>
     <name>Rosegarden::LatencyConfigurationPage</name>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.h" line="50"/>
         <source>Latency</source>
-        <translation type="unfinished">Hwyrni</translation>
+        <translation type="obsolete">Hwyrni</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.h" line="51"/>
         <source>Sequencer Latency</source>
-        <translation type="unfinished">Hwyrni Dilyniannydd</translation>
+        <translation type="obsolete">Hwyrni Dilyniannydd</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="48"/>
         <source>JACK latency</source>
-        <translation type="unfinished">Hwyrni JACK</translation>
+        <translation type="obsolete">Hwyrni JACK</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="51"/>
         <source>Use the &quot;Fetch JACK latencies&quot; button to discover the latency values set at
 the sequencer.  It&apos;s recommended that you use the returned values but it&apos;s also
 possible to override them manually using the sliders.  Note that if you change
 your JACK server parameters you should always fetch the latency values again.
 The latency values will be stored by Rosegarden for use next time.</source>
-        <translation type="unfinished">Defynyddiwch y botwm &quot;Nol hwyrnioedd JACK&quot; i ddarganfod y gwerthoedd hwyrni sydd wedi eu gosod
+        <translation type="obsolete">Defynyddiwch y botwm &quot;Nol hwyrnioedd JACK&quot; i ddarganfod y gwerthoedd hwyrni sydd wedi eu gosod
 wrth y dilyniannydd.  Y peth gorau yw defnyddio&apos;r gwerthoedd a ddangosir, ond mae&apos;n bosibl hefyd
 i&apos;w newid a llaw gan ddefnyddio&apos;r llithryddion.  Noder: ar ol i chi newid paramedrau eich
 gweinydd JACK, dylech nol y gwerthoedd hwyrni eto.  Bydd Rosegarden yn cadw&apos;r gwerthoedd
 hwyrni i ddeffnyddio&apos;r tro nesaf.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="55"/>
         <source>JACK playback latency (in ms)</source>
-        <translation type="unfinished">Hwyrni chwarae JACK (mewn ms)</translation>
+        <translation type="obsolete">Hwyrni chwarae JACK (mewn ms)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="56"/>
         <source>JACK record latency (in ms)</source>
-        <translation type="unfinished">Hwyrni recordio JACK (mewn ms)</translation>
+        <translation type="obsolete">Hwyrni recordio JACK (mewn ms)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="58"/>
         <source>Fetch JACK latencies</source>
-        <translation type="unfinished">Nol hwyrnioedd JACK</translation>
+        <translation type="obsolete">Nol hwyrnioedd JACK</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/LatencyConfigurationPage.cpp" line="111"/>
         <source>JACK Latency</source>
-        <translation type="unfinished">Hwyrni JACK</translation>
+        <translation type="obsolete">Hwyrni JACK</translation>
     </message>
 </context>
 <context>
