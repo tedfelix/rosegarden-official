@@ -9524,7 +9524,7 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="91"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="448"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="450"/>
         <source>%1</source>
         <translation type="unfinished">%1</translation>
     </message>
@@ -11586,10 +11586,14 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
 <context>
     <name>Rosegarden::ConfigureDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/ConfigureDialog.cpp" line="48"/>
         <source>Configure Rosegarden</source>
         <extracomment>QDialog(parent) //, tr(&quot;Configure Rosegarden&quot;), name)</extracomment>
-        <translation type="unfinished">Configura Rosegarden</translation>
+        <translation type="obsolete">Configura Rosegarden</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/dialogs/ConfigureDialog.cpp" line="47"/>
+        <source>Rosegarden - Preferences</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -11963,13 +11967,13 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
 <context>
     <name>Rosegarden::DeviceManagerDialog</name>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="796"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="817"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="798"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="819"/>
         <source>New Device</source>
         <translation type="unfinished">Nuovo dispositivo</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="914"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="916"/>
         <source>http://rosegardenmusic.com/wiki/doc:device-manager-en</source>
         <translation type="unfinished"></translation>
     </message>
@@ -22614,7 +22618,7 @@ Vuoi impostarlo adesso?</translation>
 <context>
     <name>Rosegarden::Ui</name>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="70"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="72"/>
         <source>[ No port ]</source>
         <translation type="unfinished"></translation>
     </message>

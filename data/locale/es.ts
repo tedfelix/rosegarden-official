@@ -4375,7 +4375,7 @@ así lo desea.</translation>
     <message>
         <location filename="../../src/gui/editors/notation/NoteFont.cpp" line="57"/>
         <source>No sizes listed for font &quot;%1&quot;</source>
-        <translation>Ninguna lista de tamaños dento de tipografía &quot;%1&quot;</translation>
+        <translation>Ninguna lista de tamaños dento de tipografía «%1»</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NoteFont.cpp" line="62"/>
@@ -9612,7 +9612,7 @@ así lo desea.</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="91"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="448"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="450"/>
         <source>%1</source>
         <translation>%1</translation>
     </message>
@@ -11688,10 +11688,14 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
 <context>
     <name>Rosegarden::ConfigureDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/ConfigureDialog.cpp" line="48"/>
         <source>Configure Rosegarden</source>
         <extracomment>QDialog(parent) //, tr(&quot;Configure Rosegarden&quot;), name)</extracomment>
-        <translation>Configurar Rosegarden</translation>
+        <translation type="obsolete">Configurar Rosegarden</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/dialogs/ConfigureDialog.cpp" line="47"/>
+        <source>Rosegarden - Preferences</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -12065,13 +12069,13 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
 <context>
     <name>Rosegarden::DeviceManagerDialog</name>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="796"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="817"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="798"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="819"/>
         <source>New Device</source>
         <translation>Nuevo dispositivo</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="914"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="916"/>
         <source>http://rosegardenmusic.com/wiki/doc:device-manager-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:device-manager-es</translation>
     </message>
@@ -22772,7 +22776,7 @@ Por favor, configura el directorio de archivos de audio hacia un directorio vál
 <context>
     <name>Rosegarden::Ui</name>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="70"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="72"/>
         <source>[ No port ]</source>
         <translation>[ningún]</translation>
     </message>

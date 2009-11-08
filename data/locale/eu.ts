@@ -9517,7 +9517,7 @@ ez den beste batera alda dezakezu, nahi baduzu</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="91"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="448"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="450"/>
         <source>%1</source>
         <translation type="unfinished">%1</translation>
     </message>
@@ -11570,10 +11570,14 @@ Mesedez, aukera itzazu disko gogorretik betiko ezabatu nahi dituzunak.
 <context>
     <name>Rosegarden::ConfigureDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/ConfigureDialog.cpp" line="48"/>
         <source>Configure Rosegarden</source>
         <extracomment>QDialog(parent) //, tr(&quot;Configure Rosegarden&quot;), name)</extracomment>
-        <translation type="unfinished">Rosegarden Konfiguratu</translation>
+        <translation type="obsolete">Rosegarden Konfiguratu</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/dialogs/ConfigureDialog.cpp" line="47"/>
+        <source>Rosegarden - Preferences</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -11947,13 +11951,13 @@ Mesedez, aukera itzazu disko gogorretik betiko ezabatu nahi dituzunak.
 <context>
     <name>Rosegarden::DeviceManagerDialog</name>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="796"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="817"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="798"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="819"/>
         <source>New Device</source>
         <translation type="unfinished">Dispositibo Berria</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="914"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="916"/>
         <source>http://rosegardenmusic.com/wiki/doc:device-manager-en</source>
         <translation type="unfinished"></translation>
     </message>
@@ -22493,7 +22497,7 @@ Konfiguratu nahi duzu orain?</translation>
 <context>
     <name>Rosegarden::Ui</name>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="70"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="72"/>
         <source>[ No port ]</source>
         <translation type="unfinished"></translation>
     </message>
