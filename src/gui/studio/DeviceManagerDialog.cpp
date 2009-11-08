@@ -906,12 +906,14 @@ DeviceManagerDialog::slotEditControllerDefinitions()
 void
 DeviceManagerDialog::slotHelpRequested()
 {
-    QMessageBox::information(this,
-                             tr
-                                               ("Help for the Midi Devices-Manager Dialog"),
-                             tr
-                                               ("This is Rosegardens central connection station. Create and connect your Midi Devices here! "),
-                             QMessageBox::Ok, QMessageBox::Ok);
+    // TRANSLATORS: We recommend pointing help URLs to a wiki page in your native language.
+    // We suggest changing the two-letter language code in the following URL,
+    // and establishing a wiki page there directing users to the English version
+    // of the page, and inviting readers to translate the manual into your
+    // language.
+    QString helpURL = tr("http://rosegardenmusic.com/wiki/doc:device-manager-en");
+    QDesktopServices::openUrl(QUrl(helpURL));
+
 }
 
 

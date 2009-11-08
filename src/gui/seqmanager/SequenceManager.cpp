@@ -521,7 +521,7 @@ SequenceManager::record(bool toggled)
         if (instr && instr->getType() == Instrument::Audio) {
             if (!m_doc || !(m_soundDriverStatus & AUDIO_OK)) {
                 m_transport->RecordButton()->setOn(false);
-                throw(Exception("Audio subsystem is not available - can't record audio"));
+                throw(Exception(QObject::tr("Audio subsystem is not available - can't record audio")));
             }
             // throws BadAudioPathException if path is not valid:
             m_doc->getAudioFileManager().testAudioPath();
@@ -619,7 +619,9 @@ punchin:
 
         if (!haveInstrument) {
             m_transport->RecordButton()->setDown(false);
-            throw(Exception("No Record instrument selected.\nPlease press the yellow LED on at least one track."));
+            // TRANSLATORS: the pixmap in this error string contains no English
+            // text and is suitable for use by all languages
+            throw(Exception(QObject::tr("<qt><p>No tracks were armed for recording.</p><p>Please arm at least one of the recording LEDs <img src=\":pixmaps/tooltip/record-leds.png\"> and try again</p></qt>")));
         }
 
         // may throw an exception
@@ -785,7 +787,7 @@ punchin:
             m_transportStatus = STOPPED;
 
             if (haveAudioInstrument) {
-                throw(Exception("Couldn't start recording audio.\nPlease set a valid file path in the Document Properties\n(Composition menu -> Edit Document Properties -> Audio)."));
+                throw(Exception(QObject::tr("<qt><p>Couldn't start recording audio.</p><p>Please set a valid recording path in <b>Composition -> Edit Document Properties... -> Audio</p></qt>")));
             }
         }
     }
