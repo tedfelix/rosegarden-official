@@ -43,6 +43,8 @@
 #include <QObject>
 #include <QFont>
 #include <QMessageBox>
+#include <QUrl>
+#include <QDesktopServices>
 
 
 namespace Rosegarden
