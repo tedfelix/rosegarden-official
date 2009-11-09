@@ -9630,7 +9630,7 @@ así lo desea.</translation>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="387"/>
         <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="836"/>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="695"/>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1432"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1434"/>
         <source>%1 Controller %2 %3</source>
         <translation>%2 %3 controlador %1</translation>
     </message>
@@ -9652,16 +9652,16 @@ así lo desea.</translation>
     <message>
         <location filename="../../src/gui/application/main.cpp" line="724"/>
         <source>http://rosegardenmusic.com/wiki/doc:manual-en</source>
-        <translation type="unfinished">http://rosegardenmusic.com/wiki/doc:manual-es</translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:manual-es</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/main.cpp" line="725"/>
         <source>&lt;h2&gt;Welcome to Rosegarden!&lt;/h2&gt;&lt;p&gt;Welcome to the Rosegarden audio and MIDI sequencer and musical notation editor.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;If you have not already done so, you may wish to install some DSSI synth plugins, or a separate synth program such as QSynth.  Rosegarden does not synthesize sounds from MIDI on its own, so without these you will hear nothing.&lt;/li&gt;&lt;li&gt;Rosegarden uses the JACK audio server for recording and playback of audio, and for playback from DSSI synth plugins.  These features will only be available if the JACK server is running.&lt;/li&gt;&lt;li&gt;Rosegarden has comprehensive documentation: see the &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&quot;&gt;Rosegarden website&lt;/a&gt; for the &lt;a style=&quot;color:gold&quot; href=&quot;%1&quot;&gt;manual&lt;/a&gt;, &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;tutorials&lt;/a&gt;, and other information!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  To learn more, go to the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;Rosegarden website&lt;/a&gt;.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;h2&gt;¡Bienvenido a Rosegarden!&lt;/h2&gt;&lt;p&gt;Bienvenido a Rosegarden, un secuenciador de audio y de MIDI y un editor de partituras.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Considere de instalar unos plugins sinte DSSI o un sinte externo como QSynth, porque Rosegarden no sintesiza sus propios sonidos.&lt;/li&gt;&lt;li&gt;Rosegarden utiliza el servidor de audio JACK para la grabación y reproducción de audio, y para la reproducción de plugins sinte DSSI.  Estas características solamente están disponibles si el servidor de audio esté ejecutándose.&lt;/li&gt;&lt;li&gt;Rosegarden dispone de documentación exhaustiva (principalmente en inglés): véa el &lt;a style=&quot;color:gold&quot; href=&quot;%1&quot;&gt;manual&lt;/a&gt;, el  &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&quot;&gt;sitio web&lt;/a&gt; de Rosegarden y las &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;tutoriales&lt;/a&gt;.&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegarden se realizó por un equipo de voluntarios ubicado por todas partes del mundo.  Para aprender más, consulte el &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;sitio Rosegarden&lt;/a&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;h2&gt;Welcome to Rosegarden!&lt;/h2&gt;&lt;p&gt;Welcome to the Rosegarden audio and MIDI sequencer and musical notation editor.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;If you have not already done so, you may wish to install some DSSI synth plugins, or a separate synth program such as QSynth.  Rosegarden does not synthesize sounds from MIDI on its own, so without these you will hear nothing.&lt;/li&gt;&lt;li&gt;Rosegarden uses the JACK audio server for recording and playback of audio, and for playback from DSSI synth plugins.  These features will only be available if the JACK server is running.&lt;/li&gt;&lt;li&gt;Rosegarden has comprehensive documentation: see the &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&gt;Rosegarden website&lt;/a&gt; for the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/doc/en/&quot;&gt;handbook&lt;/a&gt;, &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;tutorials&lt;/a&gt;, and other information!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  To learn more, go to the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;Rosegarden website&lt;/a&gt;.&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;h2&gt;¡Bienvenido a Rosegarden!&lt;/h2&gt;&lt;p&gt;Bienvenido a Rosegarden, un secuenciador de audio y MIDI y editor de partituras.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;If you have not already done so, you may wish to install some DSSI synth plugins, or a separate synth program such as QSynth.  Rosegarden does not synthesize sounds from MIDI on its own, so without these you will hear nothing.&lt;/li&gt;&lt;li&gt;Rosegarden uses the JACK audio server for recording and playback of audio, and for playback from DSSI synth plugins.  These features will only be available if the JACK server is running.&lt;/li&gt;&lt;li&gt;Rosegarden has comprehensive documentation: see the &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&gt;Rosegarden website&lt;/a&gt; for the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/doc/en/&quot;&gt;handbook&lt;/a&gt;, &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;tutorials&lt;/a&gt;, and other information!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  To learn more, go to the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;Rosegarden website&lt;/a&gt;.&lt;/p&gt;</translation>
+        <translation type="obsolete">&lt;h2&gt;¡Bienvenido a Rosegarden!&lt;/h2&gt;&lt;p&gt;Bienvenido a Rosegarden, un secuenciador de audio y de MIDI y un editor de partituras.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Considere de instalar unos plugins sinte DSSI o un sinte externo como QSynth, porque Rosegarden no sintesiza sus propios sonidos.&lt;/li&gt;&lt;li&gt;Rosegarden utiliza el servidor de audio JACK para la grabación y reproducción de audio, y para la reproducción de plugins sinte DSSI.  Estas características solamente están disponibles si el servidor de audio esté ejecutándose.&lt;/li&gt;&lt;li&gt;Rosegarden dispone de documentación exhaustiva (principalmente en inglés): véa el &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&gt;Rosegarden website&lt;/a&gt; for the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/doc/en/&quot;&gt;manual&lt;/a&gt;, las &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;tutoriales&lt;/a&gt;, y otra información.&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegarden se realizó por un equipo de voluntarios ubicado por todas partes del mundo.  Para aprender más, consulte el &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;sitio Rosegarden&lt;/a&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="35"/>
@@ -9767,7 +9767,7 @@ así lo desea.</translation>
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="790"/>
         <source>&lt;qt&gt;&lt;p&gt;Couldn&apos;t start recording audio.&lt;/p&gt;&lt;p&gt;Please set a valid recording path in &lt;b&gt;Composition -&gt; Edit Document Properties... -&gt; Audio&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Fallo al grabar audio.&lt;/p&gt;&lt;p&gt;Establezca un camido de audio válido por &lt;b&gt;Composition -&gt; Edit Document Properties... -&gt; Audio&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -11388,9 +11388,13 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
 <context>
     <name>Rosegarden::ChordNameRuler</name>
     <message>
-        <location filename="../../src/gui/rulers/ChordNameRuler.cpp" line="90"/>
         <source>&lt;qt&gt;&lt;p&gt;Chord name ruler.  This ruler analyzes your harmonies and attempts to guess what chords your composition contains.  These chords cannot be printed or        manipulated, and this is only a reference for your information.&lt;/p&gt;&lt;p&gt;Turn it on and off from the Settings-&gt;Rulers menu.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Regla de nombres de acorde.  Esta regla analiza sus armonias e intenta adivinar los acordes que contiene su composición.  Estos acordes ni se imprimen ni se cambian, y esta regla solo existe como referencia.&lt;/p&gt;Conmútela desde el menú &lt;/qt&gt;</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/rulers/ChordNameRuler.cpp" line="90"/>
+        <source>&lt;qt&gt;&lt;p&gt;Chord name ruler.  This ruler analyzes your harmonies and attempts to guess what chords your composition contains.  These chords cannot be printed or manipulated, and this is only a reference for your information.&lt;/p&gt;&lt;p&gt;Turn it on and off with the &lt;b&gt;View -&gt; Rulers&lt;/b&gt; menu.&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation>&lt;qt&gt;&lt;p&gt;Regla de nombres de acorde.  Esta regla analiza sus armonías e intenta adivinar los acordes que contiene su composición.  Estos acordes no se imprimen y no se editan aquí. Esta regla solo existe como referencia.&lt;/p&gt;Conmútela desde el menú &lt;b&gt;Ver -&gt; Reglas&lt;/b&gt;&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -11582,11 +11586,6 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
         <source>New</source>
         <translation>Nuevo</translation>
     </message>
-    <message>
-        <location filename="../../src/gui/configuration/ColourConfigurationPage.cpp" line="161"/>
-        <source>Please select an item in the list!</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>Rosegarden::ColourTable</name>
@@ -11633,7 +11632,7 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/document/CommandHistory.cpp" line="53"/>
         <source>Undo the last editing operation</source>
-        <translation type="unfinished"></translation>
+        <translation>Deshacer</translation>
     </message>
     <message>
         <location filename="../../src/document/CommandHistory.cpp" line="65"/>
@@ -11650,7 +11649,7 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/document/CommandHistory.cpp" line="68"/>
         <source>Redo the last operation that was undone</source>
-        <translation type="unfinished"></translation>
+        <translation>Rehacer</translation>
     </message>
     <message>
         <location filename="../../src/document/CommandHistory.cpp" line="495"/>
@@ -11685,7 +11684,7 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/gui/dialogs/CompositionLengthDialog.cpp" line="59"/>
         <source>Change the start and end markers for the composition:</source>
-        <translation type="unfinished"></translation>
+        <translation>Cambiar el comienzo y el final de la composición:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/CompositionLengthDialog.cpp" line="76"/>
@@ -12586,98 +12585,98 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="84"/>
         <source>Intrinsics</source>
-        <translation type="unfinished">Intrínsecas</translation>
+        <translation>Intrínsecas</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="90"/>
         <source>Event type: </source>
-        <translation type="unfinished">Tipo de Evento</translation>
+        <translation>Tipo de Evento: </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="98"/>
         <source>Absolute time: </source>
-        <translation type="unfinished">Tiempo absoluto: </translation>
+        <translation>Tiempo absoluto: </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="112"/>
         <source>Duration: </source>
-        <translation type="unfinished">Duración: </translation>
+        <translation>Duración: </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="130"/>
         <source>Sub-ordering: </source>
-        <translation type="unfinished">Sub-ordenación: </translation>
+        <translation>Sub-ordenación: </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="145"/>
         <source>Persistent properties</source>
-        <translation type="unfinished">Propiedades persistentes</translation>
+        <translation>Propiedades persistentes</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="151"/>
         <source>Name</source>
-        <translation type="unfinished">Nombre</translation>
+        <translation>Nombre</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="157"/>
         <source>Type</source>
-        <translation type="unfinished">Tipo</translation>
+        <translation>Tipo</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="161"/>
         <source>Value</source>
-        <translation type="unfinished">Valor</translation>
+        <translation>Valor</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="189"/>
         <source>Non-persistent properties</source>
-        <translation type="unfinished">Propiedades no persistentes</translation>
+        <translation>Propiedades no persistentes</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="194"/>
         <source>These are cached values, lost if the event is modified.</source>
-        <translation type="unfinished">Estos valores están en caché, y se perderán al modificar el evento</translation>
+        <translation>Estos valores están en caché, y se perderán al modificar el evento.</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="205"/>
         <source>Name       </source>
-        <translation type="unfinished">Nombre       </translation>
+        <translation>Nombre       </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="209"/>
         <source>Type       </source>
-        <translation type="unfinished">Tipo       </translation>
+        <translation>Tipo       </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="213"/>
         <source>Value      </source>
-        <translation type="unfinished">Valor      </translation>
+        <translation>Valor      </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="242"/>
         <source>Make persistent</source>
-        <translation type="unfinished">Hacer persistente</translation>
+        <translation>Hacer persistente</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="321"/>
         <source>sec</source>
-        <translation type="unfinished"></translation>
+        <translation>s</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="335"/>
         <source>nsec</source>
-        <translation type="unfinished"></translation>
+        <translation>ns</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="375"/>
         <source>Delete this property</source>
-        <translation type="unfinished">Borrar esta propiedad</translation>
+        <translation>Borrar esta propiedad</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="518"/>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="551"/>
         <source>Edit Event</source>
-        <translation type="unfinished">Editar Evento</translation>
+        <translation>Editar evento</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="519"/>
@@ -12713,105 +12712,105 @@ Esto puede causar problemas si se sobreescribe más adelante con un valor calcul
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="78"/>
         <source>Event Filter</source>
-        <translation type="unfinished">Filtro de Eventos</translation>
+        <translation>Filtro de eventos</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="88"/>
         <source>Note Events</source>
-        <translation type="unfinished">Eventos de Nota</translation>
+        <translation>Eventos de nota</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="95"/>
         <source>lowest:</source>
-        <translation type="unfinished">inferior:</translation>
+        <translation>inferior:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="98"/>
         <source>highest:</source>
-        <translation type="unfinished">superior:</translation>
+        <translation>superior:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="101"/>
         <source>Pitch:</source>
-        <translation type="unfinished">Altura:</translation>
+        <translation>Altura:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="104"/>
         <source>Velocity:</source>
-        <translation type="unfinished">Velocidad:</translation>
+        <translation>Velocidad:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="107"/>
         <source>Duration:</source>
-        <translation type="unfinished">Duración:</translation>
+        <translation>Duración:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="113"/>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="124"/>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="132"/>
         <source>include</source>
-        <translation type="unfinished">incluir</translation>
+        <translation>incluir</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="114"/>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="125"/>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="133"/>
         <source>exclude</source>
-        <translation type="unfinished">excluir</translation>
+        <translation>excluir</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="147"/>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="165"/>
         <source>edit</source>
-        <translation type="unfinished">editar</translation>
+        <translation>editar</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="151"/>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="166"/>
         <source>choose a pitch using a staff</source>
-        <translation type="unfinished">elegir una altura de nota usando un pentagrama</translation>
+        <translation>elegir una altura de nota usando un pentagrama</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="192"/>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="199"/>
         <source>longest</source>
-        <translation type="unfinished">más larga</translation>
+        <translation>más larga</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="214"/>
         <source>Include all</source>
-        <translation type="unfinished">Incluir todo</translation>
+        <translation>Incluir todo</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="216"/>
         <source>Include entire range of values</source>
-        <translation type="unfinished">Incluir el rango de valores completo</translation>
+        <translation>Incluir el rango de valores completo</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="219"/>
         <source>Exclude all</source>
-        <translation type="unfinished">Excluir todo</translation>
+        <translation>Excluir todo</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="221"/>
         <source>Exclude entire range of values</source>
-        <translation type="unfinished">Excluir el rango de valores completo</translation>
+        <translation>Excluir el rango de valores completo</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="254"/>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="255"/>
         <source>shortest</source>
-        <translation type="unfinished">más corta</translation>
+        <translation>más corta</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="359"/>
         <source>Lowest pitch</source>
-        <translation type="unfinished">Nota más grave</translation>
+        <translation>Nota más grave</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="369"/>
         <source>Highest pitch</source>
-        <translation type="unfinished">Nota más aguda</translation>
+        <translation>Nota más aguda</translation>
     </message>
 </context>
 <context>
@@ -12819,7 +12818,7 @@ Esto puede causar problemas si se sobreescribe más adelante con un valor calcul
     <message>
         <location filename="../../src/commands/edit/EventInsertionCommand.cpp" line="31"/>
         <source>Insert Event</source>
-        <translation type="unfinished">Insertar Evento</translation>
+        <translation>Insertar evento</translation>
     </message>
 </context>
 <context>
@@ -12827,68 +12826,68 @@ Esto puede causar problemas si se sobreescribe más adelante con un valor calcul
     <message>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="60"/>
         <source>Set the %1 property of the event selection:</source>
-        <translation type="unfinished">Establecer la propiedad %1 de la selección del evento:</translation>
+        <translation>Establecer la propiedad %1 de la selección del evento:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="70"/>
         <source>Pattern</source>
-        <translation type="unfinished">Patrón</translation>
+        <translation>Patrón</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="77"/>
         <source>Flat - set %1 to value</source>
-        <translation type="unfinished">Bemol - establecer %1 al valor</translation>
+        <translation>Bemol - establecer %1 al valor</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="81"/>
         <source>Alternating - set %1 to max and min on alternate events</source>
-        <translation type="unfinished">Alternar - establecer %1 al máximo y mínimo en eventos alternos</translation>
+        <translation>Alternar - establecer %1 al máximo y mínimo en eventos alternos</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="85"/>
         <source>Crescendo - set %1 rising from min to max</source>
-        <translation type="unfinished">Crescendo - establecer %1 creciendo desde el mínimo al máximo</translation>
+        <translation>Crescendo - establecer %1 creciendo desde el mínimo al máximo</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="89"/>
         <source>Diminuendo - set %1 falling from max to min</source>
-        <translation type="unfinished">Diminuendo - establecer %1 descendiendo desde el máximo hasta el mínimo</translation>
+        <translation>Diminuendo - establecer %1 descendiendo desde el máximo hasta el mínimo</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="93"/>
         <source>Ringing - set %1 alternating from max to min with both dying to zero</source>
-        <translation type="unfinished">Repique - establecer %1 alternando desde el máximo al mínimo con ambos cayendo hacia cero</translation>
+        <translation>Repique - establecer %1 alternando desde el máximo al mínimo con ambos cayendo hacia cero</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="103"/>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="109"/>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="139"/>
         <source>Value</source>
-        <translation type="unfinished">Valor</translation>
+        <translation>Valor</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="147"/>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="174"/>
         <source>First Value</source>
-        <translation type="unfinished">Velocidad primera</translation>
+        <translation>Velocidad primera</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="148"/>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="175"/>
         <source>Second Value</source>
-        <translation type="unfinished">Velocidad segunda</translation>
+        <translation>Velocidad segunda</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="156"/>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="166"/>
         <source>Low Value</source>
-        <translation type="unfinished">Velocidad baja</translation>
+        <translation>Velocidad baja</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="157"/>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="165"/>
         <source>High Value</source>
-        <translation type="unfinished">Velocidad alta</translation>
+        <translation>Velocidad alta</translation>
     </message>
 </context>
 <context>
@@ -12896,17 +12895,17 @@ Esto puede causar problemas si se sobreescribe más adelante con un valor calcul
     <message>
         <location filename="../../src/commands/edit/EventQuantizeCommand.cpp" line="108"/>
         <source>Heuristic Notation &amp;Quantize</source>
-        <translation type="unfinished">Cuanti&amp;ficación heurística para partitura</translation>
+        <translation>Cuanti&amp;ficación heurística para partitura</translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/EventQuantizeCommand.cpp" line="110"/>
         <source>Grid &amp;Quantize</source>
-        <translation type="unfinished">Rejilla de &amp;Cuantificación</translation>
+        <translation>Rejilla de &amp;cuantificación</translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/EventQuantizeCommand.cpp" line="114"/>
         <source>&amp;Quantize...</source>
-        <translation type="unfinished">Cuanti&amp;ficar...</translation>
+        <translation>Cuanti&amp;ficar...</translation>
     </message>
 </context>
 <context>
@@ -12915,12 +12914,12 @@ Esto puede causar problemas si se sobreescribe más adelante con un valor calcul
         <location filename="../../src/commands/edit/EventUnquantizeCommand.cpp" line="35"/>
         <location filename="../../src/commands/edit/EventUnquantizeCommand.cpp" line="46"/>
         <source>Unquantize Events</source>
-        <translation type="unfinished">Descuantificar eventos</translation>
+        <translation>Descuantificar eventos</translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/EventUnquantizeCommand.cpp" line="79"/>
         <source>&amp;Quantize...</source>
-        <translation type="unfinished">Cuanti&amp;ficar...</translation>
+        <translation>Cuanti&amp;ficar...</translation>
     </message>
 </context>
 <context>
@@ -12928,22 +12927,22 @@ Esto puede causar problemas si se sobreescribe más adelante con un valor calcul
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="121"/>
         <source>Event filters</source>
-        <translation type="unfinished">Filtros de Evento</translation>
+        <translation>Filtros de evento</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="125"/>
         <source>Note</source>
-        <translation type="unfinished">Nota</translation>
+        <translation>Nota</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="126"/>
         <source>Program Change</source>
-        <translation type="unfinished">Cambio de Programa</translation>
+        <translation>Cambio de programa</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="127"/>
         <source>Controller</source>
-        <translation type="unfinished">Controlador</translation>
+        <translation>Controlador</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="128"/>
@@ -13116,17 +13115,17 @@ Esto puede causar problemas si se sobreescribe más adelante con un valor calcul
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="1810"/>
         <source>%1%2 - Triggered Segment: %3</source>
-        <translation type="unfinished"></translation>
+        <translation>%1%2 - Segmento activado: %3</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="1826"/>
         <source>%1%2 - Segment Track #%3 - Event List</source>
-        <translation type="unfinished"></translation>
+        <translation>%1%2 - Segmento Pista %3 - Lista de eventos</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="1833"/>
         <source>%1%2 - %3 Segments - Event List</source>
-        <translation type="unfinished"></translation>
+        <translation>%1%2 - %3 Segmentos - Lista de eventos</translation>
     </message>
     <message>
         <source>%1 - Triggered Segment: %2</source>
@@ -13146,17 +13145,17 @@ Esto puede causar problemas si se sobreescribe más adelante con un valor calcul
     <message>
         <location filename="../../src/gui/dialogs/ExportDeviceDialog.cpp" line="38"/>
         <source>Export Devices...</source>
-        <translation type="unfinished">Exportar Dispositivos...</translation>
+        <translation>Exportar dispositivos...</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ExportDeviceDialog.cpp" line="44"/>
         <source>Export all devices</source>
-        <translation type="unfinished">Exportar todos los dispositivos</translation>
+        <translation>Exportar todos los dispositivos</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ExportDeviceDialog.cpp" line="46"/>
         <source>Export selected device only</source>
-        <translation type="unfinished">Exportar solamente el dispositivo seleccionado</translation>
+        <translation>Exportar solamente el dispositivo seleccionado</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ExportDeviceDialog.cpp" line="48"/>
@@ -13181,37 +13180,37 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location filename="../../src/gui/dialogs/FileLocateDialog.cpp" line="64"/>
         <source>&amp;Skip</source>
-        <translation type="unfinished">&amp;Saltar</translation>
+        <translation>&amp;Saltar</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/FileLocateDialog.cpp" line="68"/>
         <source>Skip &amp;All</source>
-        <translation type="unfinished">S&amp;altar todo</translation>
+        <translation>S&amp;altar todo</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/FileLocateDialog.cpp" line="72"/>
         <source>&amp;Locate</source>
-        <translation type="unfinished">&amp;Localizar</translation>
+        <translation>&amp;Localizar</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/FileLocateDialog.cpp" line="86"/>
         <source>Select an Audio File</source>
-        <translation type="unfinished">Seleccionar un Archivo de Audio</translation>
+        <translation>Seleccionar un archivo de audio</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/FileLocateDialog.cpp" line="87"/>
         <source>Requested file</source>
-        <translation type="unfinished"></translation>
+        <translation>Archivo solicitado</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/FileLocateDialog.cpp" line="88"/>
         <source>WAV files</source>
-        <translation type="unfinished">archivos WAV</translation>
+        <translation>archivos de WAV</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/FileLocateDialog.cpp" line="89"/>
         <source>All files</source>
-        <translation type="unfinished">Todos los archivos</translation>
+        <translation>Todos los archivos</translation>
     </message>
 </context>
 <context>
@@ -13219,32 +13218,32 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location filename="../../src/gui/dialogs/FileMergeDialog.cpp" line="51"/>
         <source>Merge File</source>
-        <translation type="unfinished">Mezclar archivo</translation>
+        <translation>Mezclar archivo</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/FileMergeDialog.cpp" line="63"/>
         <source>Merge new file  </source>
-        <translation type="unfinished">Mezclar nuevo Archivo  </translation>
+        <translation>Mezclar nuevo archivo  </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/FileMergeDialog.cpp" line="69"/>
         <source>At start of existing composition</source>
-        <translation type="unfinished">Al comienzo de una composición existente</translation>
+        <translation>Al comienzo de una composición existente</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/FileMergeDialog.cpp" line="70"/>
         <source>From end of existing composition</source>
-        <translation type="unfinished">Desde el final de una composición existente</translation>
+        <translation>Desde el final de una composición existente</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/FileMergeDialog.cpp" line="74"/>
         <source>The file has different time signatures or tempos.</source>
-        <translation type="unfinished">El archivo tiene diferentes medidas de compás o tempos.</translation>
+        <translation>El archivo tiene diferentes medidas de compás o tempos.</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/FileMergeDialog.cpp" line="75"/>
         <source>Import these as well</source>
-        <translation type="unfinished">Importar estos también</translation>
+        <translation>Importar estos también</translation>
     </message>
 </context>
 <context>
@@ -13254,47 +13253,47 @@ Would you like to try and locate this file or skip it?</source>
         <location filename="../../src/gui/general/FileSource.cpp" line="136"/>
         <location filename="../../src/gui/general/FileSource.cpp" line="163"/>
         <source>Unsupported scheme in URL</source>
-        <translation type="unfinished"></translation>
+        <translation>Esquema no soportada en URL</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/FileSource.cpp" line="304"/>
         <source>Downloading %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Descargando %1...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/FileSource.cpp" line="582"/>
         <source>Failed to connect to FTP server</source>
-        <translation type="unfinished"></translation>
+        <translation>Fallo al conectar al servidor de FTP</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/FileSource.cpp" line="584"/>
         <source>Login failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Fallo de autenticación</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/FileSource.cpp" line="586"/>
         <source>Failed to change to correct directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Fallo al cambiar al directorio correcto</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/FileSource.cpp" line="588"/>
         <source>FTP download aborted</source>
-        <translation type="unfinished"></translation>
+        <translation>Descarga FTP abortada</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/FileSource.cpp" line="608"/>
         <source>Download cancelled</source>
-        <translation type="unfinished"></translation>
+        <translation>Descarga abortada</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/FileSource.cpp" line="639"/>
         <source>Failed to create local file %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Fallo al crear archivo local %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/FileSource.cpp" line="642"/>
         <source>File contains no data!</source>
-        <translation type="unfinished"></translation>
+        <translation>¡Archivo no contiene dato!</translation>
     </message>
 </context>
 <context>
@@ -13302,7 +13301,7 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location filename="../../src/commands/notation/FixNotationQuantizeCommand.h" line="45"/>
         <source>Fi&amp;x Notation Quantization</source>
-        <translation type="unfinished">Fi&amp;jar Cuantificación de Partitura</translation>
+        <translation>Fi&amp;jar cuantificación de partitura</translation>
     </message>
 </context>
 <context>
@@ -13310,12 +13309,12 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location filename="../../src/gui/widgets/FontRequester.cpp" line="39"/>
         <source>Choose...</source>
-        <translation type="unfinished">Elegir... </translation>
+        <translation>Elegir...</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/FontRequester.cpp" line="56"/>
         <source>%1 %2</source>
-        <translation type="unfinished">%1 %2</translation>
+        <translation>%1 %2</translation>
     </message>
 </context>
 <context>
@@ -13323,17 +13322,17 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location filename="../../src/gui/editors/notation/FontViewFrame.cpp" line="99"/>
         <source>Error: Unable to match font name %1</source>
-        <translation type="unfinished">Error: Incapaz de emparejar el nombre de tipografía %1</translation>
+        <translation>Error: Incapaz de emparejar el nombre de tipografía %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/FontViewFrame.cpp" line="107"/>
         <source>Warning: No good match for font name %1 (best is %2)</source>
-        <translation type="unfinished">Aviso: No hay buena correspondencia para nombre de tipografía %1 (el mejor es %2)</translation>
+        <translation>Aviso: No hay buena correspondencia para nombre de tipografía %1 (el mejor es %2)</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/FontViewFrame.cpp" line="114"/>
         <source>Error: Unable to open best-match font %1</source>
-        <translation type="unfinished">Error: Incapaz de abrir la mejor correspondencia para tipografía %1</translation>
+        <translation>Error: Incapaz de abrir la mejor correspondencia para tipografía %1</translation>
     </message>
 </context>
 <context>
@@ -13341,137 +13340,137 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.h" line="83"/>
         <source>General</source>
-        <translation type="unfinished">General</translation>
+        <translation>General</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.h" line="84"/>
         <source>General Configuration</source>
-        <translation type="unfinished">Configuración General</translation>
+        <translation>Configuración general</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="83"/>
         <source>Double-click opens segment in</source>
-        <translation type="unfinished">Doble-clic abre el segmento en el</translation>
+        <translation>Doble-clic abre el segmento en el</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="88"/>
         <source>Notation editor</source>
-        <translation type="unfinished">Editor de partitura</translation>
+        <translation>Editor de partitura</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="89"/>
         <source>Matrix editor</source>
-        <translation type="unfinished">Editor de matriz</translation>
+        <translation>Editor de matriz</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="90"/>
         <source>Event List editor</source>
-        <translation type="unfinished">Editor de lista de eventos</translation>
+        <translation>Editor de lista de eventos</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="96"/>
         <source>Number of count-in measures when recording</source>
-        <translation type="unfinished">Número de compases previos a la grabación</translation>
+        <translation>Número de compases previos a la grabación</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="107"/>
         <source>Auto-save interval</source>
-        <translation type="unfinished">Intervalo de archivado automático</translation>
+        <translation>Intervalo de archivado automático</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="111"/>
         <source>Every 30 seconds</source>
-        <translation type="unfinished">Cada 30 segundos</translation>
+        <translation>Cada 30 segundos</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="112"/>
         <source>Every minute</source>
-        <translation type="unfinished">Cada minuto</translation>
+        <translation>Cada minuto</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="113"/>
         <source>Every five minutes</source>
-        <translation type="unfinished">Cada cinco minutos</translation>
+        <translation>Cada cinco minutos</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="114"/>
         <source>Every half an hour</source>
-        <translation type="unfinished">Cada media hora</translation>
+        <translation>Cada media hora</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="115"/>
         <source>Never</source>
-        <translation type="unfinished">Nunca</translation>
+        <translation>Nunca</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="134"/>
         <source>Append suffixes to segment labels</source>
-        <translation type="unfinished">Agregar sufijos a las etiquetas de segmento</translation>
+        <translation>Agregar sufijos a las etiquetas de segmento</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="149"/>
         <source>Use JACK transport</source>
-        <translation type="unfinished">Utilizar transporte de JACK</translation>
+        <translation>Utilizar transporte de JACK</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="182"/>
         <source>Sequencer status</source>
-        <translation type="unfinished">Estado del Secuenciador</translation>
+        <translation>Estado del secuenciador</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="184"/>
         <source>Unknown</source>
-        <translation type="unfinished">Desconocida</translation>
+        <translation>Desconocida</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="190"/>
         <source>No MIDI, audio OK</source>
-        <translation type="unfinished">No MIDI, audio OK</translation>
+        <translation>No MIDI, audio OK</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="193"/>
         <source>MIDI OK, no audio</source>
-        <translation type="unfinished">MIDI OK, no audio</translation>
+        <translation>MIDI OK, no audio</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="196"/>
         <source>MIDI OK, audio OK</source>
-        <translation type="unfinished">MIDI OK, audio OK</translation>
+        <translation>MIDI OK, audio OK</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="199"/>
         <source>No driver</source>
-        <translation type="unfinished">No interprete</translation>
+        <translation>No interprete</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="206"/>
         <source>Details...</source>
-        <translation type="unfinished">Detalles...</translation>
+        <translation>Detalles...</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="215"/>
         <source>Behavior</source>
-        <translation type="unfinished">Comportamiento </translation>
+        <translation>Comportamiento</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="230"/>
         <source>Use Thorn style</source>
-        <translation type="unfinished"></translation>
+        <translation>Aparecer en el estilo de «Thorn»</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="236"/>
         <source>&lt;qt&gt;When checked, Rosegarden will use the Thorn look and feel, otherwise default system preferences will be used the next time Rosegarden starts.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Si marcado, Rosegarden se aparecerá en el estilo de «Thorn», si no, en el estilo del sistema.  Esta preferencia tardará hasta que Rosegarden se reincie &lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="333"/>
         <source>KPrinter (KDE3)</source>
-        <translation type="unfinished"></translation>
+        <translation>KPrinter (KDE3)</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="240"/>
         <source>Note name style</source>
-        <translation type="unfinished">Estilo de nombres de notas</translation>
+        <translation>Estilo de nombres de notas</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="245"/>
