@@ -2371,17 +2371,17 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2544"/>
         <source>&amp;Double Whole Note</source>
-        <translation>&amp;Breve</translation>
+        <translation>&amp;Cuadrada</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2553"/>
         <source>&amp;Whole Note</source>
-        <translation>&amp;Semibreve</translation>
+        <translation>&amp;Redonda</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2562"/>
         <source>&amp;Half Note</source>
-        <translation>&amp;Mínima</translation>
+        <translation>&amp;Blanca</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2571"/>
