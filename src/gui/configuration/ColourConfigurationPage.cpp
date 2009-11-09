@@ -157,8 +157,7 @@ ColourConfigurationPage::slotDelete()
 //        return ;
     
     if( temp.isEmpty() ){
-        QMessageBox::warning
-            (this, "Error: Selection is empty!", tr("Please select an item in the list!"), QMessageBox::Yes );
+        // fail silently
         return;
     }
 
