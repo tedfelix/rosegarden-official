@@ -627,34 +627,34 @@
         <location filename="../QMenuStrings.cpp" line="2522"/>
         <location filename="../QMenuStrings.cpp" line="3170"/>
         <source>Add &amp;Segno</source>
-        <translation>Añadir &amp;Segno</translation>
+        <translation>Añadir &amp;segno</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2523"/>
         <location filename="../QMenuStrings.cpp" line="3171"/>
         <source>Add &amp;Coda</source>
-        <translation>Añadir &amp;Coda</translation>
+        <translation>Añadir &amp;coda</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2524"/>
         <location filename="../QMenuStrings.cpp" line="3172"/>
         <source>Add &amp;Breath mark</source>
-        <translation>Añadir &amp;Respiro</translation>
+        <translation>Añadir &amp;respiro</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1990"/>
         <source>Add &amp;Open</source>
-        <translation>Añadir &amp;Abierto</translation>
+        <translation>Añadir &amp;abierto</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1991"/>
         <source>Add &amp;Stopped</source>
-        <translation>Añadir &amp;Frenada</translation>
+        <translation>Añadir &amp;frenada</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2617"/>
         <source>Dotted Ha&amp;lf Note</source>
-        <translation>Mínima con punti&amp;llo</translation>
+        <translation>Blanca con punti&amp;llo</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2622"/>
@@ -2411,7 +2411,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2616"/>
         <source>D&amp;otted Whole Note</source>
-        <translation>Semibreve con punti&amp;llo</translation>
+        <translation>Redonda con punti&amp;llo</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2618"/>
@@ -2421,7 +2421,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2619"/>
         <source>Dotted E&amp;ighth Note</source>
-        <translation>Cor&amp;cheta con puntillo</translation>
+        <translation>Cor&amp;chea con puntillo</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2620"/>
@@ -3519,6 +3519,201 @@
         <translation>Ctrl+=</translation>
     </message>
     <message>
+        <location filename="../QMenuStrings.cpp" line="4021"/>
+        <source>Rewind</source>
+        <translation>Rebobinar</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4023"/>
+        <source>Step Back (Left)</source>
+        <translation>Regresar un paso (Izquierda)</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4025"/>
+        <source>Play</source>
+        <translation>Reproducir</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4027"/>
+        <source>Step Forward (Right)</source>
+        <translation>Adelantar un paso (Derecha)</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4029"/>
+        <source>Fast Forward</source>
+        <translation>Avance rápido</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4033"/>
+        <source>Stop</source>
+        <translation>Parar</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4035"/>
+        <source>Solo the Active Track</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4037"/>
+        <source>Scroll to Follow Playback</source>
+        <translation>Desplazamiento para seguir la reproducción</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4039"/>
+        <source>Panic! (Ctrl+Alt+P)</source>
+        <translation>¡Apretar la alarma! (Ctrl+Alt+P)</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4041"/>
+        <source>Double Whole Note (5)</source>
+        <translation>Cuadrada (5)</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4043"/>
+        <source>Whole Note (1)</source>
+        <translation>Redonda (1)</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4045"/>
+        <source>Half Note (2)</source>
+        <translation>Blanca (2)</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4047"/>
+        <source>Quarter Note (4)</source>
+        <translation>Negra (4)</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4049"/>
+        <source>Eighth Note (8)</source>
+        <translation>Corchea (8)</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4051"/>
+        <source>Sixteenth Note (6)</source>
+        <translation>Semicorchea (6)</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4053"/>
+        <source>Thirty-Second Note (3)</source>
+        <translation>Fusa (3)</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4055"/>
+        <source>Sixty-Fourth Note (0)</source>
+        <translation>Semifusa (0)</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4057"/>
+        <source>Dotted Double Whole Note</source>
+        <translation>Cuadrada con puntillo</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4059"/>
+        <source>Dotted Whole Note</source>
+        <translation>Redonda con puntillo</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4061"/>
+        <source>Dotted Half Note</source>
+        <translation>Blanca con puntillo</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4063"/>
+        <source>Dotted Quarter Note</source>
+        <translation>Negra con puntillo</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4065"/>
+        <source>Dotted Eighth Note</source>
+        <translation>Corchea con puntillo</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4067"/>
+        <source>Dotted Sixteenth Note</source>
+        <translation>Semicorchea con puntillo</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4069"/>
+        <source>Dotted Thirty-Second Note</source>
+        <translation>Fusa con puntillo</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4071"/>
+        <source>Double Whole Rest (5)</source>
+        <translation>Silencio de cuadrada (5)</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4073"/>
+        <source>Whole Rest (1)</source>
+        <translation>Silencio de redonda (1)</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4075"/>
+        <source>Half Rest (2)</source>
+        <translation>Silenco de negra (2)</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4077"/>
+        <source>Quarter Rest (4)</source>
+        <translation>Silencio de negra (4)</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4079"/>
+        <source>Eighth Rest (8)</source>
+        <translation>Silencio de corcheta (8)</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4081"/>
+        <source>Sixteenth Rest (6)</source>
+        <translation>Silencio de semicorchea (6)</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4083"/>
+        <source>Thirty-Second Rest (3)</source>
+        <translation>Silencio de fusa (3)</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4085"/>
+        <source>Sixty-Fourth Rest (0)</source>
+        <translation>Silencio de semifusa (6)</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4087"/>
+        <source>Dotted Double Whole Rest</source>
+        <translation>Silencio de cuadrada con puntillo</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4089"/>
+        <source>Dotted Whole Rest</source>
+        <translation>Silencio de redonda con puntillo</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4091"/>
+        <source>Dotted Half Rest</source>
+        <translation>Silencio de blanca con puntillo</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4093"/>
+        <source>Dotted Quarter Rest</source>
+        <translation>Silencio de negra con puntillo</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4095"/>
+        <source>Dotted Eighth Rest</source>
+        <translation>Silencio de corchea con puntillo</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4097"/>
+        <source>Dotted Sixteenth Rest</source>
+        <translation>Silencio de semicorchea con puntillo</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4099"/>
+        <source>Dotted Thirty-Second Rest</source>
+        <translation>Silencio de fusa con puntillo</translation>
+    </message>
+    <message>
         <location filename="../QMenuStrings.cpp" line="944"/>
         <location filename="../QMenuStrings.cpp" line="2372"/>
         <source>Shift+Left</source>
@@ -4274,6 +4469,7 @@
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3813"/>
+        <location filename="../QMenuStrings.cpp" line="4019"/>
         <source>Rewind to Beginning</source>
         <translation>Rebobinar al principio</translation>
     </message>
@@ -4284,6 +4480,7 @@
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3822"/>
+        <location filename="../QMenuStrings.cpp" line="4031"/>
         <source>Fast Forward to End</source>
         <translation>Avance rápido hacia el final</translation>
     </message>
@@ -9612,6 +9809,7 @@ así lo desea.</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="91"/>
+        <location filename="../../src/gui/general/ActionFileParser.cpp" line="645"/>
         <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="450"/>
         <source>%1</source>
         <translation>%1</translation>
@@ -9622,7 +9820,7 @@ así lo desea.</translation>
         <translation>No mostrar más esta advertencia</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ActionFileParser.cpp" line="648"/>
+        <location filename="../../src/gui/general/ActionFileParser.cpp" line="660"/>
         <source>%1 (%2)</source>
         <translation>%1 (%2)</translation>
     </message>
