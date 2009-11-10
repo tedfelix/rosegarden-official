@@ -10042,6 +10042,167 @@ Jos haluat litt채채 t채st채 huolimatta, harkitse toisen liit채nt채tyypin k채ytt�
         <source>&lt;qt&gt;&lt;p&gt;Couldn&apos;t start recording audio.&lt;/p&gt;&lt;p&gt;Please set a valid recording path in &lt;b&gt;Composition -&gt; Edit Document Properties... -&gt; Audio&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../ExceptionStrings.cpp" line="22"/>
+        <source>track id already present</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ExceptionStrings.cpp" line="28"/>
+        <source>track id not found</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ExceptionStrings.cpp" line="34"/>
+        <source>Value of </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ExceptionStrings.cpp" line="40"/>
+        <source>Bad SysEx encoding</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ExceptionStrings.cpp" line="46"/>
+        <location filename="../ExceptionStrings.cpp" line="58"/>
+        <source>No data found for property </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ExceptionStrings.cpp" line="52"/>
+        <location filename="../ExceptionStrings.cpp" line="64"/>
+        <source>Bad type for </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ExceptionStrings.cpp" line="70"/>
+        <location filename="../ExceptionStrings.cpp" line="232"/>
+        <source>Not an insert action</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ExceptionStrings.cpp" line="76"/>
+        <source>No GUI found</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ExceptionStrings.cpp" line="82"/>
+        <source>Failed to start GUI</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ExceptionStrings.cpp" line="88"/>
+        <source>Can&apos;t deal with relative .soname</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ExceptionStrings.cpp" line="94"/>
+        <source>No GUI subdir available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ExceptionStrings.cpp" line="100"/>
+        <source>Failed to connect to LIRC</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ExceptionStrings.cpp" line="106"/>
+        <source>Failed reading LIRC config file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ExceptionStrings.cpp" line="112"/>
+        <source>Failed to open tranzport device /dev/tranzport0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ExceptionStrings.cpp" line="118"/>
+        <source>could not map current mode to string.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ExceptionStrings.cpp" line="124"/>
+        <source>Cancelled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ExceptionStrings.cpp" line="130"/>
+        <source>Bad sound file </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ExceptionStrings.cpp" line="136"/>
+        <source>Bad audio file path </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ExceptionStrings.cpp" line="142"/>
+        <source>Bad audio file path (malformed file?) </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ExceptionStrings.cpp" line="148"/>
+        <source>Bad peak file </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ExceptionStrings.cpp" line="154"/>
+        <source>Bad peak file (malformed audio?) </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ExceptionStrings.cpp" line="160"/>
+        <source>Rosegarden currently only supports 8-, 16- or 24-bit PCM in RIFF files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ExceptionStrings.cpp" line="166"/>
+        <source>Rosegarden currently only supports 32-bit floating-point in RIFF files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ExceptionStrings.cpp" line="172"/>
+        <source>Wrong length for long data in MIDI stream</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ExceptionStrings.cpp" line="178"/>
+        <source>Wrong length for int data in MIDI stream</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ExceptionStrings.cpp" line="184"/>
+        <location filename="../ExceptionStrings.cpp" line="202"/>
+        <source>End of MIDI file encountered while reading</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ExceptionStrings.cpp" line="190"/>
+        <location filename="../ExceptionStrings.cpp" line="208"/>
+        <source>Attempt to get more bytes than expected on Track</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ExceptionStrings.cpp" line="196"/>
+        <location filename="../ExceptionStrings.cpp" line="214"/>
+        <source>Attempt to read past MIDI file end</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ExceptionStrings.cpp" line="220"/>
+        <source>Invalid event code found</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ExceptionStrings.cpp" line="226"/>
+        <source>Running status used for first event in track</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ExceptionStrings.cpp" line="238"/>
+        <source>Bad sound file</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Rosegarden::AboutDialog</name>
