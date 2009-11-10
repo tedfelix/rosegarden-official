@@ -125,12 +125,12 @@ autoload-ts:
 
 ts:	menu-ts instrument-ts autoload-ts
 	$(MKDIR_P) data/locale
-	$(LUPDATE) $(HEADERS) $(SOURCES) data/QMenuStrings.cpp data/InstrumentStrings.cpp data/AutoloadStrings.cpp -ts data/locale/rosegarden.ts $(TRANSLATIONS)
+	$(LUPDATE) $(HEADERS) $(SOURCES) data/QMenuStrings.cpp data/InstrumentStrings.cpp data/AutoloadStrings.cpp data/ExceptionStrings.cpp -ts data/locale/rosegarden.ts $(TRANSLATIONS)
 	@scripts/ts-stats
 
 ts-noobsolete:	menu-ts instrument-ts
 	$(MKDIR_P) data/locale
-	$(LUPDATE) -noobsolete $(HEADERS) $(SOURCES) data/QMenuStrings.cpp data/InstrumentStrings.cpp data/AutoloadStrings.cpp -ts data/locale/rosegarden.ts $(TRANSLATIONS)
+	$(LUPDATE) -noobsolete $(HEADERS) $(SOURCES) data/QMenuStrings.cpp data/InstrumentStrings.cpp data/AutoloadStrings.cpp data/ExceptionStrings.cpp -ts data/locale/rosegarden.ts $(TRANSLATIONS)
 	@scripts/ts-stats
 
 locale:	$(TRANSLATIONSQM)
