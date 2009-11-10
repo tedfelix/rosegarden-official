@@ -49,6 +49,7 @@ while (<>) {
     my $name = "";
     my $text = "";
     my $shortcut = "";
+    my $tooltip = "";
 
     if ($line =~ /<text>(.*)<\/text>/) {
 	$text = $1;
@@ -83,4 +84,15 @@ while (<>) {
         if ($name) { print ' // ' . $name; }
         print "\n\n";
     }
+
+    # extract tooltips
+    if ($line =~ /tooltip="([^"]*)"/) {
+        $tooltip = $1;
+        print "\n/* TRANSLATOR: this is a tooltip.  If it contains a string in () this string is a keyboard shortcut";
+        print "\n * and this shortcut SHOULD be translated to your target language, because Qt will not translate";
+        print "\n * these strings for you.  You will need to sync these manually. */\n";
+        print 'QObject::tr("' . $tooltip . '");';
+        print "\n\n";
+    }
+
 }
