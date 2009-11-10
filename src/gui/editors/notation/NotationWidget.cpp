@@ -130,7 +130,18 @@ NotationWidget::NotationWidget() :
     m_view->setRenderHints(QPainter::Antialiasing |
                            QPainter::TextAntialiasing |
                            QPainter::SmoothPixmapTransform);
-    m_view->setBackgroundBrush(QBrush(IconLoader().loadPixmap("bg-paper-grey")));
+
+    bool texture = false;
+    QSettings settings;
+    settings.beginGroup(NotationViewConfigGroup);
+    texture =  settings.value("backgroundtextures", true).toBool();
+    settings.endGroup();
+
+    QBrush bg = (texture ?
+                QBrush(IconLoader().loadPixmap("bg-paper-grey"))
+                :
+                Qt::white);
+    m_view->setBackgroundBrush(bg);
     m_layout->addWidget(m_view, PANNED_ROW, MAIN_COL, 1, 1);
 
     m_controlsWidget = new ControlRulerWidget;
@@ -319,7 +330,6 @@ NotationWidget::NotationWidget() :
     connect(m_view->verticalScrollBar(), SIGNAL(valueChanged(int)),
             this, SLOT(slotInitialVSliderHack(int)));
 
-    QSettings settings;
     settings.beginGroup(GeneralOptionsConfigGroup);
     m_Thorn = settings.value("use_thorn_style", true).toBool();
     settings.endGroup();

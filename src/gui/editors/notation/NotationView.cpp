@@ -1922,7 +1922,7 @@ NotationView::morphDurationMonobar()
     NOTATION_DEBUG << "NotationView::morphDurationMonobar : entered. " << endl;
 
     NoteRestInserter *currentInserter = 0; 
-    if(m_notationWidget) {
+    if (m_notationWidget) {
         currentInserter = dynamic_cast<NoteRestInserter *>
         (m_notationWidget->getCurrentTool());
     }
