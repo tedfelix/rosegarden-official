@@ -639,7 +639,22 @@ ActionFileParser::addActionToToolbar(QString toolbarName, QString actionName)
     QToolBar *toolbar = findToolbar(toolbarName, Default);
     if (!toolbar) return false;
     toolbar->addAction(action);
-    if (action->shortcut() != QKeySequence()) {
+
+    // duration toolbar tooltips:
+    // no text() toolTip() in English like "Double Whole Note (5)"
+    if (!action->toolTip().isEmpty() && action->text().isEmpty()) {
+        QString m(action->toolTip());
+        QString tip = QObject::tr("%1").arg(QObject::tr(m));
+        action->setToolTip(tip);
+//        std::cout << "setting tip: " << std::string(tip.toLocal8Bit()) << std::endl;
+    // transport toolbar tooltips:
+    // text() translated, toolTip() in English
+    } else if (strippedText(action->text()) != action->toolTip()) {
+        QString m(action->toolTip());
+        QString tip = QObject::tr("%1").arg(QObject::tr(m));
+        action->setToolTip(tip);
+//        std::cout << "setting tip: " << std::string(tip.toLocal8Bit()) << std::endl;
+    } else if (action->shortcut() != QKeySequence()) {
         // Avoid setting an automatic tooltip if an explicit one has
         // been provided via setActionToolTip earlier.  We need to
         // remember this ourselves, as action->toolTip() will return a
