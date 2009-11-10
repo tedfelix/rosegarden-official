@@ -1769,6 +1769,34 @@ MatrixView::slotToggleTransportToolBar()
     toggleNamedToolBar("Transport Toolbar");
 }
 
+void
+MatrixView::slotToggleStepByStep()
+{
+    QAction *action = findAction("toggle_step_by_step");
+	        
+    if (!action) {
+        MATRIX_DEBUG << "WARNING: No toggle_step_by_step action" << endl;
+        return ;
+    }
+    if (action->isChecked()) { // after toggling, that is
+        emit stepByStepTargetRequested(this);
+    } else {
+        emit stepByStepTargetRequested(0);
+    }
+}
+
+void
+MatrixView::slotStepByStepTargetRequested(QObject *obj)
+{
+    QAction *action = findAction("toggle_step_by_step");
+	        
+    if (!action) {
+        MATRIX_DEBUG << "WARNING: No toggle_step_by_step action" << endl;
+        return ;
+    }
+    action->setChecked(obj == this);
+}
+
 Device *
 MatrixView::getCurrentDevice()
 {

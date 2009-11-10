@@ -90,6 +90,7 @@ signals:
     void fastForwardPlaybackToEnd();
     void panic();
 
+    void stepByStepTargetRequested(QObject *);
 
 protected slots:
     void slotQuantize();
@@ -204,6 +205,9 @@ protected slots:
     void slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn);
 
     void slotPitchBendSequence();
+
+    void slotToggleStepByStep();
+    void slotStepByStepTargetRequested(QObject *);
 
     /** Update the window title.  If m is true (normally comes from a signal)
      * display a * at the extreme left of the title to indicate modified status

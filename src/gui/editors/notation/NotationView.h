@@ -75,6 +75,7 @@ signals:
     void fastForwardPlaybackToEnd();
     void panic();
 
+    void stepByStepTargetRequested(QObject *);
 
 protected slots:
     /// Update the window title during setup, and when document modified status
@@ -237,6 +238,9 @@ protected slots:
 
     /// Note-on or note-off received asynchronously -- as above
     void slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn);
+
+    void slotToggleStepByStep();
+    void slotStepByStepTargetRequested(QObject *);
 
     /**
      * Insert a Symbol

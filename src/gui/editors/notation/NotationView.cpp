@@ -3737,6 +3737,34 @@ NotationView::slotHelpAboutQt()
     QMessageBox::aboutQt(this, tr("Rosegarden"));
 }
 
+void
+NotationView::slotToggleStepByStep()
+{
+    QAction *action = findAction("toggle_step_by_step");
+
+    if (!action) {
+        MATRIX_DEBUG << "WARNING: No toggle_step_by_step action" << endl;
+        return ;
+    }
+    if (action->isChecked()) {
+        emit stepByStepTargetRequested(this);
+    } else {
+        emit stepByStepTargetRequested(0);
+    }
+}
+
+void
+NotationView::slotStepByStepTargetRequested(QObject *obj)
+{
+    QAction *action = findAction("toggle_step_by_step");
+
+    if (!action) {
+        MATRIX_DEBUG << "WARNING: No toggle_step_by_step action" << endl;
+        return ;
+    }
+    action->setChecked(obj == this);
+}
+
 
 } // end namespace Rosegarden
 
