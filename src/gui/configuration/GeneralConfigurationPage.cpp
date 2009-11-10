@@ -263,21 +263,12 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
     connect(m_backgroundTextures, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
     layout->addWidget(m_backgroundTextures, row, 1);
 
-    m_matrixBackgroundTextures = new QCheckBox(tr("Matrix"), frame);
-    connect(m_matrixBackgroundTextures, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
-    layout->addWidget(m_matrixBackgroundTextures, row, 2);
-
     m_notationBackgroundTextures = new QCheckBox(tr("Notation"), frame);
     connect(m_notationBackgroundTextures, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
-    layout->addWidget(m_notationBackgroundTextures, row, 3);
+    layout->addWidget(m_notationBackgroundTextures, row, 2);
 
     m_backgroundTextures->setChecked(qStrToBool(settings.value("backgroundtextures", true)));
 
-    settings.endGroup();
-    settings.beginGroup(MatrixViewConfigGroup);
-
-    m_matrixBackgroundTextures->setChecked(qStrToBool(settings.value(
-            "backgroundtextures-1.6-plus", true)));
     settings.endGroup();
 
     settings.beginGroup(NotationViewConfigGroup);
@@ -393,12 +384,9 @@ void GeneralConfigurationPage::apply()
 
     int namestyle = getNoteNameStyle();
     settings.setValue("notenamestyle", namestyle);
-/*
-    settings.setValue("toolcontexthelp", m_toolContextHelp->isChecked());
-*/
+    
     bool texturesChanged = false;
     bool mainTextureChanged = false;
-    //### settings.beginGroup(GeneralOptionsConfigGroup);
 
     if (qStrToBool(settings.value("backgroundtextures", "true"))  !=
         m_backgroundTextures->isChecked()) {
@@ -407,29 +395,17 @@ void GeneralConfigurationPage::apply()
         settings.endGroup();
     } else {
         settings.endGroup();
-        settings.beginGroup(MatrixViewConfigGroup);
-        if (qStrToBool(settings.value("backgroundtextures-1.6-plus", "false"))  !=
-            m_matrixBackgroundTextures->isChecked()) {
+        settings.beginGroup(NotationViewConfigGroup);
+        if (qStrToBool(settings.value("backgroundtextures", "true"))  !=
+            m_notationBackgroundTextures->isChecked()) {
             texturesChanged = true;
-            settings.endGroup();
-        } else {
-            settings.endGroup();
-            settings.beginGroup(NotationViewConfigGroup);
-            if (qStrToBool(settings.value("backgroundtextures", "true"))  !=
-                m_notationBackgroundTextures->isChecked()) {
-                texturesChanged = true;
-            }
-            settings.endGroup();
         }
+        settings.endGroup();
     }
+
     settings.beginGroup(GeneralOptionsConfigGroup);
 
     settings.setValue("backgroundtextures", m_backgroundTextures->isChecked());
-    settings.endGroup();
-
-    settings.beginGroup(MatrixViewConfigGroup);
-
-    settings.setValue("backgroundtextures-1.6-plus", m_matrixBackgroundTextures->isChecked());
     settings.endGroup();
 
     settings.beginGroup(NotationViewConfigGroup);
