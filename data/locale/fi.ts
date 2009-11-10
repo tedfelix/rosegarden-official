@@ -652,17 +652,17 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="1990"/>
         <source>Add &amp;Open</source>
-        <translation>Lisää &amp;Avoin</translation>
+        <translation>Lisää &amp;avoin</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1991"/>
         <source>Add &amp;Stopped</source>
-        <translation>Lisää &amp;Pysäytys</translation>
+        <translation>Lisää &amp;pysäytys</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2617"/>
         <source>Dotted Ha&amp;lf Note</source>
-        <translation>Pisteellinen Puo&amp;linuotti</translation>
+        <translation>Pisteellinen puo&amp;linuotti</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2622"/>
@@ -934,7 +934,7 @@
         <location filename="../QMenuStrings.cpp" line="1972"/>
         <location filename="../QMenuStrings.cpp" line="3512"/>
         <source>Open in &amp;Event List Editor</source>
-        <translation>Avaa Tapahtuma&amp;listamuokkaimessa</translation>
+        <translation>Avaa tapahtuma&amp;listamuokkaimessa</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="738"/>
@@ -1772,7 +1772,7 @@
         <location filename="../QMenuStrings.cpp" line="1974"/>
         <location filename="../QMenuStrings.cpp" line="3494"/>
         <source>Open in &amp;Percussion Matrix Editor</source>
-        <translation>Avaa &amp;Rumpumatriisi -muokkaimessa</translation>
+        <translation>Avaa &amp;rumpumatriisi -muokkaimessa</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1975"/>
@@ -1872,7 +1872,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="1998"/>
         <source>Add Long Mordent</source>
-        <translation>Lisä pitkä pureutuminen</translation>
+        <translation>Lisää pitkä pureutuminen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1999"/>
@@ -1892,7 +1892,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2002"/>
         <source>Add &amp;Harmonic</source>
-        <translation>Lisää &amp;Harmooninen</translation>
+        <translation>Lisää &amp;harmooninen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2003"/>
@@ -1922,7 +1922,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2008"/>
         <source>&amp;Remove Ornament...</source>
-        <translation>&amp;poista koru...</translation>
+        <translation>&amp;Poista koru...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2009"/>
@@ -4001,7 +4001,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3258"/>
         <source>Save as &amp;Template...</source>
-        <translation>Tallenna &amp;Mallineena...</translation>
+        <translation>Tallenna &amp;mallineena...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3259"/>
@@ -4126,7 +4126,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3457"/>
         <source>Manage S&amp;ynth Plugins</source>
-        <translation>Hallitse S&amp;yntetisaattorilisäosia</translation>
+        <translation>Hallitse s&amp;yntetisaattorilisäosia</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3458"/>
@@ -4610,7 +4610,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3462"/>
         <source>Im&amp;port Studio from File...</source>
-        <translation>Tuo &amp;Studio tiedostosta...</translation>
+        <translation>Tuo &amp;studio tiedostosta...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3624"/>
@@ -11678,7 +11678,7 @@ Haluatko saattaa muutokset voimaan ennen pankkimuokkaimen sulkemista?</translati
     <message>
         <location filename="../../src/gui/rulers/ChordNameRuler.cpp" line="90"/>
         <source>&lt;qt&gt;&lt;p&gt;Chord name ruler.  This ruler analyzes your harmonies and attempts to guess what chords your composition contains.  These chords cannot be printed or manipulated, and this is only a reference for your information.&lt;/p&gt;&lt;p&gt;Turn it on and off with the &lt;b&gt;View -&gt; Rulers&lt;/b&gt; menu.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Sointunimi-viivain.  Tämä viivain analysoi harmoniat ja yrittää arvata mitä sointuja sävellyksesi sisältää.  Näitä sointuja ei voida tulostaa tai muokata, ja tiedolla on vain viiteellistä arvoa.&lt;/p&gt;&lt;p&gt;Aseta se päälle ja pois Katso-&gt;Viivaimet -valikosta.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Sointunimi-viivain.  Tämä viivain analysoi harmoniat ja yrittää arvata mitä sointuja sävellyksesi sisältää.  Näitä sointuja ei voida tulostaa tai muokata, ja tiedolla on vain viiteellistä arvoa.&lt;/p&gt;&lt;p&gt;Aseta se päälle ja pois Näkymä-&gt;Viivaimet -valikosta.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
