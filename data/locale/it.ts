@@ -3474,6 +3474,201 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../QMenuStrings.cpp" line="4021"/>
+        <source>Rewind</source>
+        <translation type="unfinished">Riavvolgi</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4023"/>
+        <source>Step Back (Left)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4025"/>
+        <source>Play</source>
+        <translation type="unfinished">Riproduci</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4027"/>
+        <source>Step Forward (Right)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4029"/>
+        <source>Fast Forward</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4033"/>
+        <source>Stop</source>
+        <translation type="unfinished">Iterrompi</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4035"/>
+        <source>Solo the Active Track</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4037"/>
+        <source>Scroll to Follow Playback</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4039"/>
+        <source>Panic! (Ctrl+Alt+P)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4041"/>
+        <source>Double Whole Note (5)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4043"/>
+        <source>Whole Note (1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4045"/>
+        <source>Half Note (2)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4047"/>
+        <source>Quarter Note (4)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4049"/>
+        <source>Eighth Note (8)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4051"/>
+        <source>Sixteenth Note (6)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4053"/>
+        <source>Thirty-Second Note (3)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4055"/>
+        <source>Sixty-Fourth Note (0)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4057"/>
+        <source>Dotted Double Whole Note</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4059"/>
+        <source>Dotted Whole Note</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4061"/>
+        <source>Dotted Half Note</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4063"/>
+        <source>Dotted Quarter Note</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4065"/>
+        <source>Dotted Eighth Note</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4067"/>
+        <source>Dotted Sixteenth Note</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4069"/>
+        <source>Dotted Thirty-Second Note</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4071"/>
+        <source>Double Whole Rest (5)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4073"/>
+        <source>Whole Rest (1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4075"/>
+        <source>Half Rest (2)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4077"/>
+        <source>Quarter Rest (4)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4079"/>
+        <source>Eighth Rest (8)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4081"/>
+        <source>Sixteenth Rest (6)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4083"/>
+        <source>Thirty-Second Rest (3)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4085"/>
+        <source>Sixty-Fourth Rest (0)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4087"/>
+        <source>Dotted Double Whole Rest</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4089"/>
+        <source>Dotted Whole Rest</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4091"/>
+        <source>Dotted Half Rest</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4093"/>
+        <source>Dotted Quarter Rest</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4095"/>
+        <source>Dotted Eighth Rest</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4097"/>
+        <source>Dotted Sixteenth Rest</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4099"/>
+        <source>Dotted Thirty-Second Rest</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../QMenuStrings.cpp" line="944"/>
         <location filename="../QMenuStrings.cpp" line="2372"/>
         <source>Shift+Left</source>
@@ -4225,6 +4420,7 @@
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3813"/>
+        <location filename="../QMenuStrings.cpp" line="4019"/>
         <source>Rewind to Beginning</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4235,6 +4431,7 @@
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3822"/>
+        <location filename="../QMenuStrings.cpp" line="4031"/>
         <source>Fast Forward to End</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9524,6 +9721,7 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="91"/>
+        <location filename="../../src/gui/general/ActionFileParser.cpp" line="645"/>
         <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="450"/>
         <source>%1</source>
         <translation type="unfinished">%1</translation>
@@ -9534,7 +9732,7 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ActionFileParser.cpp" line="648"/>
+        <location filename="../../src/gui/general/ActionFileParser.cpp" line="660"/>
         <source>%1 (%2)</source>
         <translation type="unfinished">%1 (%2)</translation>
     </message>
@@ -9542,7 +9740,7 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="387"/>
         <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="836"/>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="695"/>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1432"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1434"/>
         <source>%1 Controller %2 %3</source>
         <translation type="unfinished">%1 Controller %2 %3</translation>
     </message>
@@ -11279,7 +11477,7 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <name>Rosegarden::ChordNameRuler</name>
     <message>
         <location filename="../../src/gui/rulers/ChordNameRuler.cpp" line="90"/>
-        <source>&lt;qt&gt;&lt;p&gt;Chord name ruler.  This ruler analyzes your harmonies and attempts to guess what chords your composition contains.  These chords cannot be printed or        manipulated, and this is only a reference for your information.&lt;/p&gt;&lt;p&gt;Turn it on and off from the Settings-&gt;Rulers menu.&lt;/p&gt;&lt;/qt&gt;</source>
+        <source>&lt;qt&gt;&lt;p&gt;Chord name ruler.  This ruler analyzes your harmonies and attempts to guess what chords your composition contains.  These chords cannot be printed or manipulated, and this is only a reference for your information.&lt;/p&gt;&lt;p&gt;Turn it on and off with the &lt;b&gt;View -&gt; Rulers&lt;/b&gt; menu.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -11471,11 +11669,6 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
         <location filename="../../src/gui/configuration/ColourConfigurationPage.cpp" line="127"/>
         <source>New</source>
         <translation type="unfinished">Nuovo</translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/configuration/ColourConfigurationPage.cpp" line="161"/>
-        <source>Please select an item in the list!</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
