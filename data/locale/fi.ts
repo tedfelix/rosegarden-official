@@ -41,7 +41,7 @@
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="486"/>
         <source>&lt;qt&gt;&lt;p&gt;Create new playback devices here. Click the device name to change it. Select a device here and connect it to a MIDI output port by clicking on a port to the right.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Luo uusi toistolaite tässä. Napsauta laitteen nimeä muuttaaksesi sitä. Valitse laite tästä ja kytke se MIDI-ulostuloon napsauttamalla oikealla olevaa porttia.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="489"/>
@@ -106,12 +106,12 @@
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="517"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI outputs (hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Saatavilla olevat MIDI-lähdöt (rauta tai ohjelmallinen)&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="557"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI inputs (from hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Saatavilla olevat MIDI-tulot (rauta tai ohjelmallinen)&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <source>&lt;qt&gt;&lt;p&gt;Available ALSA MIDI outputs for any hardware detected and supported by your distribution, and any available soft synths such as QSynth, ZynAddSubFX, etc.&lt;/p&gt;&lt;/qt&gt;</source>
@@ -548,7 +548,7 @@
         <location filename="../QMenuStrings.cpp" line="3936"/>
         <location filename="../QMenuStrings.cpp" line="3999"/>
         <source>&amp;View</source>
-        <translation>&amp;Katso</translation>
+        <translation>&amp;Näkymä</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="347"/>
@@ -1223,7 +1223,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="49"/>
         <source>Distribute Audio on Midi Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Jaa äänidata Midi-osalle</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="992"/>
@@ -2720,7 +2720,7 @@
         <location filename="../QMenuStrings.cpp" line="3943"/>
         <location filename="../QMenuStrings.cpp" line="4004"/>
         <source>Rosegarden &amp;Manual</source>
-        <translation type="unfinished"></translation>
+        <translation>Rosegardenin &amp;ohje</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="58"/>
@@ -2802,14 +2802,14 @@
         <location filename="../QMenuStrings.cpp" line="2937"/>
         <location filename="../QMenuStrings.cpp" line="3888"/>
         <source>I</source>
-        <translation type="unfinished">I</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="277"/>
         <location filename="../QMenuStrings.cpp" line="1902"/>
         <location filename="../QMenuStrings.cpp" line="3335"/>
         <source>Delete</source>
-        <translation type="unfinished">Poista</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="296"/>
@@ -2922,49 +2922,49 @@
         <location filename="../QMenuStrings.cpp" line="650"/>
         <location filename="../QMenuStrings.cpp" line="2614"/>
         <source>0</source>
-        <translation type="unfinished">0</translation>
+        <translation>0</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="660"/>
         <location filename="../QMenuStrings.cpp" line="2605"/>
         <source>3</source>
-        <translation type="unfinished">3</translation>
+        <translation>3</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="670"/>
         <location filename="../QMenuStrings.cpp" line="2596"/>
         <source>6</source>
-        <translation type="unfinished">6</translation>
+        <translation>6</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="680"/>
         <location filename="../QMenuStrings.cpp" line="2587"/>
         <source>8</source>
-        <translation type="unfinished"></translation>
+        <translation>8</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="690"/>
         <location filename="../QMenuStrings.cpp" line="2578"/>
         <source>4</source>
-        <translation type="unfinished">4</translation>
+        <translation>4</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="700"/>
         <location filename="../QMenuStrings.cpp" line="2569"/>
         <source>2</source>
-        <translation type="unfinished">2</translation>
+        <translation>2</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="709"/>
         <location filename="../QMenuStrings.cpp" line="2560"/>
         <source>1</source>
-        <translation type="unfinished">1</translation>
+        <translation>1</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="718"/>
         <location filename="../QMenuStrings.cpp" line="2551"/>
         <source>5</source>
-        <translation type="unfinished">5</translation>
+        <translation>5</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="728"/>
@@ -3082,13 +3082,13 @@
         <location filename="../QMenuStrings.cpp" line="898"/>
         <location filename="../QMenuStrings.cpp" line="2446"/>
         <source>Left</source>
-        <translation type="unfinished">Vasen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="907"/>
         <location filename="../QMenuStrings.cpp" line="2455"/>
         <source>Right</source>
-        <translation type="unfinished">Oikea</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="916"/>
@@ -3516,7 +3516,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2153"/>
         <source>Ctrl+R</source>
-        <translation type="unfinished">Ctrl+R</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2163"/>
@@ -4066,7 +4066,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3384"/>
         <source>Document P&amp;roperties...</source>
-        <translation type="unfinished"></translation>
+        <translation>Dokumentin &amp;ominaisuudet...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3403"/>
@@ -4543,7 +4543,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3935"/>
         <source>&amp;Preferences</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Asetukset</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3990"/>
@@ -4595,7 +4595,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="1959"/>
         <source>Show Ra&amp;w Note Ruler</source>
-        <translation type="unfinished">Näytä &amp;Käsittelemättömät nuotit -viivain</translation>
+        <translation>Näytä &amp;Käsittelemättömät nuotit -viivain</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3180"/>
@@ -6452,7 +6452,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
         <location filename="../QMenuStrings.cpp" line="1450"/>
         <location filename="../QMenuStrings.cpp" line="3028"/>
         <source>C</source>
-        <translation type="unfinished">C</translation>
+        <translation>C</translation>
     </message>
     <message>
         <source>C#</source>
@@ -6467,7 +6467,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
         <location filename="../QMenuStrings.cpp" line="2720"/>
         <location filename="../QMenuStrings.cpp" line="3501"/>
         <source>D</source>
-        <translation type="unfinished">D</translation>
+        <translation>D</translation>
     </message>
     <message>
         <source>Eb</source>
@@ -6480,7 +6480,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
         <location filename="../QMenuStrings.cpp" line="3519"/>
         <location filename="../QMenuStrings.cpp" line="3915"/>
         <source>E</source>
-        <translation type="unfinished">E</translation>
+        <translation>E</translation>
     </message>
     <message>
         <source>E#</source>
@@ -6498,7 +6498,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
         <location filename="../QMenuStrings.cpp" line="1151"/>
         <location filename="../QMenuStrings.cpp" line="2729"/>
         <source>F</source>
-        <translation type="unfinished">F</translation>
+        <translation>F</translation>
     </message>
     <message>
         <source>F#</source>
@@ -6508,7 +6508,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
         <location filename="../QMenuStrings.cpp" line="3145"/>
         <location filename="../QMenuStrings.cpp" line="3897"/>
         <source>G</source>
-        <translation type="unfinished">G</translation>
+        <translation>G</translation>
     </message>
     <message>
         <source>G#</source>
@@ -6526,7 +6526,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
         <location filename="../QMenuStrings.cpp" line="1088"/>
         <location filename="../QMenuStrings.cpp" line="2666"/>
         <source>A</source>
-        <translation type="unfinished">A</translation>
+        <translation>A</translation>
     </message>
     <message>
         <source>Bb</source>
@@ -6536,7 +6536,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
         <location filename="../QMenuStrings.cpp" line="1486"/>
         <location filename="../QMenuStrings.cpp" line="3064"/>
         <source>B</source>
-        <translation type="unfinished">B</translation>
+        <translation>B</translation>
     </message>
     <message>
         <source>B#</source>
@@ -7510,7 +7510,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../AutoloadStrings.cpp" line="249"/>
         <source>Bass Drum 1</source>
-        <translation>BAssorumpu 1</translation>
+        <translation>Bassorumpu 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="250"/>
@@ -9931,12 +9931,12 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../../src/gui/application/main.cpp" line="724"/>
         <source>http://rosegardenmusic.com/wiki/doc:manual-en</source>
-        <translation type="unfinished">http://rosegardenmusic.com/wiki/doc:manual-fi</translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:manual-fi</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/main.cpp" line="725"/>
         <source>&lt;h2&gt;Welcome to Rosegarden!&lt;/h2&gt;&lt;p&gt;Welcome to the Rosegarden audio and MIDI sequencer and musical notation editor.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;If you have not already done so, you may wish to install some DSSI synth plugins, or a separate synth program such as QSynth.  Rosegarden does not synthesize sounds from MIDI on its own, so without these you will hear nothing.&lt;/li&gt;&lt;li&gt;Rosegarden uses the JACK audio server for recording and playback of audio, and for playback from DSSI synth plugins.  These features will only be available if the JACK server is running.&lt;/li&gt;&lt;li&gt;Rosegarden has comprehensive documentation: see the &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&quot;&gt;Rosegarden website&lt;/a&gt; for the &lt;a style=&quot;color:gold&quot; href=&quot;%1&quot;&gt;manual&lt;/a&gt;, &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;tutorials&lt;/a&gt;, and other information!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  To learn more, go to the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;Rosegarden website&lt;/a&gt;.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;h2&gt;Tervetuloa Rosegardeniin!&lt;/h2&gt;&lt;p&gt;Tervetuloa käyttämään Rosegardenia, ääni- ja MIDI-sekvensseriä sekä nuottieditoria.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Saatat haluta asentaa DSSI-syntetisaattorilisäosia tai erillisiä syntetisaattoriohjelmia kuten QSynth jos et ole jo tehnyt niin.  Rosegarden itsessään ei tuota ääntä MIDI-tiedoista, joten ilman niitä et kuule mitään.&lt;/li&gt;&lt;li&gt;Rosegarden käyttää JACK-äänipalvelinta äänen toistoon ja tallennukseen sekä DSSI-lisäosien äänen toistoon.  Nämä ominaisuudet ovat käytettävissa vain jos JACK-palvelin on käynnissä.&lt;/li&gt;&lt;li&gt;Rosegardeniin on kattava ohjeistus, katso &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&quot;&gt;Rosegardenin kotisivulta&lt;/a&gt; &lt;a style=&quot;color:gold&quot; href=&quot;%1&quot;&gt;käsikirja&lt;/a&gt;, &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;johdatus&lt;/a&gt;, ja muuta tietoa!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegardenin tarjoavat sinulle joukko vapaaehtoisia ympäri maailman.  Katso lisätietoja: &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;Rosegardenin kotisivulta&lt;/a&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;h2&gt;Welcome to Rosegarden!&lt;/h2&gt;&lt;p&gt;Welcome to the Rosegarden audio and MIDI sequencer and musical notation editor.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;If you have not already done so, you may wish to install some DSSI synth plugins, or a separate synth program such as QSynth.  Rosegarden does not synthesize sounds from MIDI on its own, so without these you will hear nothing.&lt;/li&gt;&lt;li&gt;Rosegarden uses the JACK audio server for recording and playback of audio, and for playback from DSSI synth plugins.  These features will only be available if the JACK server is running.&lt;/li&gt;&lt;li&gt;Rosegarden has comprehensive documentation: see the &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&gt;Rosegarden website&lt;/a&gt; for the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/doc/en/&quot;&gt;handbook&lt;/a&gt;, &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;tutorials&lt;/a&gt;, and other information!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  To learn more, go to the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;Rosegarden website&lt;/a&gt;.&lt;/p&gt;</source>
@@ -10677,7 +10677,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="518"/>
         <source>Save File As</source>
-        <translation type="unfinished"></translation>
+        <translation>Tallenna tiedosto nimellä</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="520"/>
@@ -11678,7 +11678,7 @@ Haluatko saattaa muutokset voimaan ennen pankkimuokkaimen sulkemista?</translati
     <message>
         <location filename="../../src/gui/rulers/ChordNameRuler.cpp" line="90"/>
         <source>&lt;qt&gt;&lt;p&gt;Chord name ruler.  This ruler analyzes your harmonies and attempts to guess what chords your composition contains.  These chords cannot be printed or manipulated, and this is only a reference for your information.&lt;/p&gt;&lt;p&gt;Turn it on and off with the &lt;b&gt;View -&gt; Rulers&lt;/b&gt; menu.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Sointunimi-viivain.  Tämä viivain analysoi harmoniat ja yrittää arvata mitä sointuja sävellyksesi sisältää.  Näitä sointuja ei voida tulostaa tai muokata, ja tiedolla on vain viiteellistä arvoa.&lt;/p&gt;&lt;p&gt;Aseta se päälle ja pois Katso-&gt;Viivaimet -valikosta.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -11995,7 +11995,7 @@ Haluatko saattaa muutokset voimaan ennen pankkimuokkaimen sulkemista?</translati
     <message>
         <location filename="../../src/gui/dialogs/ConfigureDialog.cpp" line="47"/>
         <source>Rosegarden - Preferences</source>
-        <translation type="unfinished"></translation>
+        <translation>Rosegarden - asetukset</translation>
     </message>
 </context>
 <context>
@@ -19378,7 +19378,8 @@ Katso Asetukset -&gt; Muokkaa ohjelman Rosegarden asetuksia -&gt; Ääni.</trans
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="909"/>
         <source>You&apos;ve not yet defined an audio editor for Rosegarden to use.
 See Edit -&gt; Preferences -&gt; Audio.</source>
-        <translation type="unfinished"></translation>
+        <translation>Et ole vielä määritellyt Rosegardenin käyttämää äänimuokkainta.
+Katso Muokkaa -&gt; Asetukset -&gt; Ääni.</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1598"/>
