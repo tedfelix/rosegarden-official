@@ -375,8 +375,8 @@
       <Action name="stop" text="&amp;Stop" icon="transport-stop" tooltip="Stop" /> 
       <Action name="cursor_back" text="Step &amp;Back" icon="step-back" tooltip="Step Back (Left)" shortcut="Left" />
       <Action name="cursor_forward" text="Step &amp;Forward" icon="step-forward" tooltip="Step Forward (Right)"  shortcut="Right" />
-      <Action name="playback_pointer_back_bar" text="Re&amp;wind" tooltip="Rewind" icon="transport-rewind" />
-      <Action name="playback_pointer_forward_bar" text="&amp;Fast Forward" tooltip="Fast Forward" icon="transport-ffwd" /> 
+      <Action name="playback_pointer_back_bar" text="Re&amp;wind" icon="transport-rewind" shortcut="Ctrl+Left" />
+      <Action name="playback_pointer_forward_bar" text="&amp;Fast Forward" icon="transport-ffwd" shortcut="Ctrl+Right" /> 
       <Action name="playback_pointer_start" text="Rewind to &amp;Beginning" tooltip="Rewind to Beginning" icon="transport-rewind-end" />
       <Action name="playback_pointer_end" text="Fast Forward to &amp;End" tooltip="Fast Forward to End" icon="transport-ffwd-end" />
       <Action name="toggle_solo" text="S&amp;olo" tooltip="Solo the Active Track" icon="transport-solo" />

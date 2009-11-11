@@ -153,12 +153,6 @@
 
   <Menu name="Move">
       <text>&amp;Move</text>
-      <Action name="cursor_back" text="Cursor &amp;Back" shortcut="Left" />
-      <Action name="cursor_forward" text="Cursor &amp;Forward" shortcut="Right" />
-      <Action name="cursor_back_bar" text="C&amp;ursor Back Bar" shortcut="Ctrl+Left" />
-      <Action name="cursor_forward_bar" text="Cursor For&amp;ward Bar" shortcut="Ctrl+Right" />
-      <Action name="cursor_start" text="Cursor to St&amp;art" />
-      <Action name="cursor_end" text="Cursor to &amp;End" shortcut="Ctrl+E" />
     <Separator/>
       <Action name="extend_selection_backward" text="Cursor Back and Se&amp;lect" icon="select-backward" shortcut="Shift+Left" />
       <Action name="extend_selection_forward" text="Cursor Forward and &amp;Select" icon="select-forward" shortcut="Shift+Right" />
@@ -172,9 +166,11 @@
       <Action name="play" text="&amp;Play" icon="transport-play" /> 
       <Action name="stop" text="&amp;Stop" icon="transport-stop" /> 
       <!-- JAS action called "rewind" in rosegardenui.rc.  Is this the same call? -->
-      <Action name="playback_pointer_back_bar" text="Re&amp;wind" icon="transport-rewind" />
+      <Action name="cursor_back" text="Step &amp;Back" icon="step-back" tooltip="Step Back (Left)" shortcut="Left" />
+      <Action name="cursor_forward" text="Step &amp;Forward" icon="step-forward" tooltip="Step Forward (Right)"  shortcut="Right" />
+      <Action name="playback_pointer_back_bar" text="Re&amp;wind" icon="transport-rewind" shortcut="Ctrl+Left" />
       <!-- JAS action called "fast_forward" in rosegardenui.rc.  Is this the same call? -->
-      <Action name="playback_pointer_forward_bar" text="&amp;Fast Forward" icon="transport-ffwd" /> 
+      <Action name="playback_pointer_forward_bar" text="&amp;Fast Forward" icon="transport-ffwd" shortcut="Ctrl+Right" /> 
       <!-- JAS action called "rewindtobeginning" in rosegardenui.rc.  Is this a different call? -->
       <Action name="playback_pointer_start" text="Rewind to &amp;Beginning" icon="transport-rewind-end" />
       <!-- JAS action called "fastforwardtoend" in rosegardenui.rc.  Is this a different call? -->
@@ -328,7 +324,9 @@
   <text>Transport Toolbar</text>
   <Action name="playback_pointer_start" />
   <Action name="playback_pointer_back_bar" />
+  <Action name="cursor_back" />
   <Action name="play" />
+  <Action name="cursor_forward" />
   <Action name="playback_pointer_forward_bar" />
   <Action name="playback_pointer_end" />
   <Action name="stop" />

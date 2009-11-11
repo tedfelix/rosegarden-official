@@ -322,14 +322,14 @@ MatrixView::setupActions()
     createAction("delete", SLOT(slotEditDelete()));
     createAction("cursor_back", SLOT(slotStepBackward()));
     createAction("cursor_forward", SLOT(slotStepForward()));
-    createAction("cursor_back_bar", SLOT(slotJumpBackward()));
-    createAction("cursor_forward_bar", SLOT(slotJumpForward()));
+//    createAction("cursor_back_bar", SLOT(slotJumpBackward())); obsolete
+//    createAction("cursor_forward_bar", SLOT(slotJumpForward())); obsolete
     createAction("extend_selection_backward", SLOT(slotExtendSelectionBackward()));
     createAction("extend_selection_forward", SLOT(slotExtendSelectionForward()));
     createAction("extend_selection_backward_bar", SLOT(slotExtendSelectionBackwardBar()));
     createAction("extend_selection_forward_bar", SLOT(slotExtendSelectionForwardBar()));
-    createAction("cursor_start", SLOT(slotJumpToStart()));
-    createAction("cursor_end", SLOT(slotJumpToEnd()));
+//    createAction("cursor_start", SLOT(slotJumpToStart())); obsolete
+//    createAction("cursor_end", SLOT(slotJumpToEnd())); obsolete
 // Next one is obsolete since we have only one pointer now
 //    createAction("cursor_to_playback_pointer", SLOT(slotJumpCursorToPlayback()));
     //&&& NB Play has two shortcuts (Enter and Ctrl+Return) -- need to
