@@ -1412,17 +1412,33 @@ MatrixView::slotHelpAbout()
 void
 MatrixView::slotStepBackward()
 {
-    timeT time = getInsertionTime();
-    m_document->slotSetPointerPosition(getSnapGrid()->snapTime
-                                       (time - 1, SnapGrid::SnapLeft));
+    Segment *segment = getCurrentSegment();
+    if (!segment) return;
+
+    timeT time = getSnapGrid()->snapTime(getInsertionTime() - 1,
+                                         SnapGrid::SnapLeft);
+
+    if (time < segment->getStartTime()){
+        m_document->slotSetPointerPosition(segment->getStartTime());
+    } else {
+        m_document->slotSetPointerPosition(time);
+    }
 }
 
 void
 MatrixView::slotStepForward()
 {
-    timeT time = getInsertionTime();
-    m_document->slotSetPointerPosition(getSnapGrid()->snapTime
-                                       (time + 1, SnapGrid::SnapRight));
+    Segment *segment = getCurrentSegment();
+    if (!segment) return;
+
+    timeT time = getSnapGrid()->snapTime(getInsertionTime() + 1, 
+                                         SnapGrid::SnapRight);
+    
+    if (time > segment->getEndMarkerTime()){
+        m_document->slotSetPointerPosition(segment->getEndMarkerTime());
+    } else {
+        m_document->slotSetPointerPosition(time);
+    }
 }
 
 void
