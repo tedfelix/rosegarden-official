@@ -136,17 +136,17 @@
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="523"/>
         <source>MIDI Recording</source>
-        <translation>MIDI-äänitys</translation>
+        <translation>MIDI-nauhoitus</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="525"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new recording device&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Luo uusi äänityslaite&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Luo uusi nauhoituslaite&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="529"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected recording device&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Poista valittu äänityslaite&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Poista valittu nauhoituslaite&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="531"/>
@@ -162,7 +162,7 @@
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="534"/>
         <source>Rosegarden recording device</source>
-        <translation>Rosegardenin äänityslaite</translation>
+        <translation>Rosegardenin nauhoituslaite</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="540"/>
@@ -2703,7 +2703,7 @@
         <location filename="../QMenuStrings.cpp" line="4106"/>
         <location filename="../QMenuStrings.cpp" line="4215"/>
         <source>Ctrl+W</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+W</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="51"/>
@@ -2737,7 +2737,7 @@
         <location filename="../QMenuStrings.cpp" line="4196"/>
         <location filename="../QMenuStrings.cpp" line="4257"/>
         <source>F1</source>
-        <translation type="unfinished"></translation>
+        <translation>F1</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="83"/>
@@ -2751,7 +2751,7 @@
         <location filename="../QMenuStrings.cpp" line="4116"/>
         <location filename="../QMenuStrings.cpp" line="4225"/>
         <source>Ctrl+Z</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Z</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="92"/>
@@ -2765,7 +2765,7 @@
         <location filename="../QMenuStrings.cpp" line="4125"/>
         <location filename="../QMenuStrings.cpp" line="4234"/>
         <source>Ctrl+Shift+Z</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+Z</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="101"/>
@@ -2774,7 +2774,7 @@
         <location filename="../QMenuStrings.cpp" line="1866"/>
         <location filename="../QMenuStrings.cpp" line="3563"/>
         <source>Ctrl+C, F16, Ctrl+Ins</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+C, F16, Ctrl+Ins</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="110"/>
@@ -2782,7 +2782,7 @@
         <location filename="../QMenuStrings.cpp" line="1875"/>
         <location filename="../QMenuStrings.cpp" line="3572"/>
         <source>Ctrl+V, F18, Shift+Ins</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+V, F18, Shift+Ins</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="137"/>
@@ -2794,7 +2794,7 @@
         <location filename="../QMenuStrings.cpp" line="3493"/>
         <location filename="../QMenuStrings.cpp" line="4097"/>
         <source>Ctrl+S</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+S</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="268"/>
@@ -2802,7 +2802,7 @@
         <location filename="../QMenuStrings.cpp" line="3003"/>
         <location filename="../QMenuStrings.cpp" line="4134"/>
         <source>I</source>
-        <translation type="unfinished">I</translation>
+        <translation>I</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="277"/>
@@ -2818,7 +2818,7 @@
         <location filename="../QMenuStrings.cpp" line="1857"/>
         <location filename="../QMenuStrings.cpp" line="3554"/>
         <source>Ctrl+X, F20, Shift+Del</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+X, F20, Shift+Del</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="323"/>
@@ -2827,7 +2827,7 @@
         <location filename="../QMenuStrings.cpp" line="3626"/>
         <location filename="../QMenuStrings.cpp" line="4170"/>
         <source>Ctrl+A</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+A</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="332"/>
@@ -2835,14 +2835,14 @@
         <location filename="../QMenuStrings.cpp" line="1924"/>
         <location filename="../QMenuStrings.cpp" line="4179"/>
         <source>Escape</source>
-        <translation type="unfinished"></translation>
+        <translation>Escape</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="341"/>
         <location filename="../QMenuStrings.cpp" line="637"/>
         <location filename="../QMenuStrings.cpp" line="1933"/>
         <source>Ctrl+F</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+F</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="345"/>
@@ -2860,7 +2860,7 @@
         <location filename="../QMenuStrings.cpp" line="2554"/>
         <location filename="../QMenuStrings.cpp" line="3918"/>
         <source>F2</source>
-        <translation type="unfinished"></translation>
+        <translation>F2</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="446"/>
@@ -2871,7 +2871,7 @@
         <location filename="../QMenuStrings.cpp" line="1677"/>
         <location filename="../QMenuStrings.cpp" line="3945"/>
         <source>F5</source>
-        <translation type="unfinished"></translation>
+        <translation>F5</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="455"/>
@@ -2883,7 +2883,7 @@
         <location filename="../QMenuStrings.cpp" line="2563"/>
         <location filename="../QMenuStrings.cpp" line="3927"/>
         <source>F3</source>
-        <translation type="unfinished"></translation>
+        <translation>F3</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="464"/>
@@ -2894,7 +2894,7 @@
         <location filename="../QMenuStrings.cpp" line="1686"/>
         <location filename="../QMenuStrings.cpp" line="3954"/>
         <source>F6</source>
-        <translation type="unfinished"></translation>
+        <translation>F6</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="491"/>
@@ -2906,18 +2906,18 @@
         <location filename="../QMenuStrings.cpp" line="2572"/>
         <location filename="../QMenuStrings.cpp" line="3936"/>
         <source>F4</source>
-        <translation type="unfinished"></translation>
+        <translation>F4</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="601"/>
         <source>Ctrl+V, F18, Shift+Insert</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+V, F18, Shift+Insert</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="610"/>
         <location filename="../QMenuStrings.cpp" line="4152"/>
         <source>Delete, Ctrl+D</source>
-        <translation type="unfinished"></translation>
+        <translation>Delete, Ctrl+D</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="650"/>
@@ -3008,76 +3008,76 @@
         <location filename="../QMenuStrings.cpp" line="2350"/>
         <location filename="../QMenuStrings.cpp" line="3797"/>
         <source>Alt+Left</source>
-        <translation type="unfinished"></translation>
+        <translation>Alt+Left</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="786"/>
         <location filename="../QMenuStrings.cpp" line="2359"/>
         <location filename="../QMenuStrings.cpp" line="3806"/>
         <source>Alt+Right</source>
-        <translation type="unfinished"></translation>
+        <translation>Alt+Right</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="795"/>
         <location filename="../QMenuStrings.cpp" line="2324"/>
         <location filename="../QMenuStrings.cpp" line="3868"/>
         <source>Shift+Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift+Up</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="804"/>
         <location filename="../QMenuStrings.cpp" line="2333"/>
         <location filename="../QMenuStrings.cpp" line="3859"/>
         <source>Shift+Down</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift+Down</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="816"/>
         <location filename="../QMenuStrings.cpp" line="2261"/>
         <source>Ctrl+H</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+H</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="825"/>
         <location filename="../QMenuStrings.cpp" line="2270"/>
         <source>Ctrl+Shift+H</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+H</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="836"/>
         <location filename="../QMenuStrings.cpp" line="2281"/>
         <location filename="../QMenuStrings.cpp" line="3886"/>
         <source>Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Up</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="845"/>
         <location filename="../QMenuStrings.cpp" line="2290"/>
         <location filename="../QMenuStrings.cpp" line="3877"/>
         <source>Down</source>
-        <translation type="unfinished"></translation>
+        <translation>Down</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="854"/>
         <location filename="../QMenuStrings.cpp" line="2299"/>
         <source>Ctrl+Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Up</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="863"/>
         <location filename="../QMenuStrings.cpp" line="2308"/>
         <source>Ctrl+Down</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Down</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="875"/>
         <source>Shift+Alt+I</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift+Alt+I</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="884"/>
         <source>Shift+Alt+R</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift+Alt+R</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="898"/>
@@ -3096,17 +3096,17 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="916"/>
         <source>Ctrl+Left</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Left</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="925"/>
         <source>Ctrl+Right</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Right</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="935"/>
         <source>Ctrl+E</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+E</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="937"/>
@@ -3117,7 +3117,7 @@
         <location filename="../QMenuStrings.cpp" line="953"/>
         <location filename="../QMenuStrings.cpp" line="2381"/>
         <source>Shift+Right</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift+Right</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="971"/>
@@ -3129,20 +3129,20 @@
         <location filename="../QMenuStrings.cpp" line="980"/>
         <location filename="../QMenuStrings.cpp" line="2426"/>
         <source>Alt+PgUp</source>
-        <translation type="unfinished"></translation>
+        <translation>Alt+PgUp</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="989"/>
         <location filename="../QMenuStrings.cpp" line="2435"/>
         <source>Alt+PgDown</source>
-        <translation type="unfinished"></translation>
+        <translation>Alt+PgDown</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1005"/>
         <location filename="../QMenuStrings.cpp" line="2523"/>
         <location filename="../QMenuStrings.cpp" line="4027"/>
         <source>Pause</source>
-        <translation type="unfinished"></translation>
+        <translation>Pause</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1014"/>
@@ -3151,201 +3151,201 @@
         <location filename="../QMenuStrings.cpp" line="2538"/>
         <location filename="../QMenuStrings.cpp" line="4036"/>
         <source>Alt+Ctrl+P</source>
-        <translation type="unfinished"></translation>
+        <translation>Alt+Ctrl+P</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1069"/>
         <location filename="../QMenuStrings.cpp" line="1078"/>
         <location filename="../QMenuStrings.cpp" line="3963"/>
         <source>F7</source>
-        <translation type="unfinished"></translation>
+        <translation>F7</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1097"/>
         <location filename="../QMenuStrings.cpp" line="2741"/>
         <source>Shift+A</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift+A</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1106"/>
         <location filename="../QMenuStrings.cpp" line="2750"/>
         <location filename="../QMenuStrings.cpp" line="3502"/>
         <source>Ctrl+Shift+S</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+S</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1115"/>
         <location filename="../QMenuStrings.cpp" line="2759"/>
         <source>S</source>
-        <translation type="unfinished"></translation>
+        <translation>S</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1124"/>
         <location filename="../QMenuStrings.cpp" line="2768"/>
         <source>Shift+S</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift+S</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1133"/>
         <location filename="../QMenuStrings.cpp" line="2777"/>
         <source>Ctrl+Shift+D</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+D</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1160"/>
         <location filename="../QMenuStrings.cpp" line="2804"/>
         <source>Shift+F</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift+F</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1169"/>
         <location filename="../QMenuStrings.cpp" line="2813"/>
         <source>Ctrl+Shift+J</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+J</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1178"/>
         <location filename="../QMenuStrings.cpp" line="2822"/>
         <source>J</source>
-        <translation type="unfinished"></translation>
+        <translation>J</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1187"/>
         <location filename="../QMenuStrings.cpp" line="2831"/>
         <source>Shift+J</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift+J</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1196"/>
         <location filename="../QMenuStrings.cpp" line="2840"/>
         <source>Ctrl+Shift+K</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+K</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1205"/>
         <location filename="../QMenuStrings.cpp" line="2849"/>
         <source>K</source>
-        <translation type="unfinished"></translation>
+        <translation>K</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1214"/>
         <location filename="../QMenuStrings.cpp" line="2858"/>
         <source>Shift+K</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift+K</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1223"/>
         <location filename="../QMenuStrings.cpp" line="2867"/>
         <source>Ctrl+Shift+L</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+L</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1232"/>
         <location filename="../QMenuStrings.cpp" line="2876"/>
         <source>L</source>
-        <translation type="unfinished"></translation>
+        <translation>L</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1242"/>
         <location filename="../QMenuStrings.cpp" line="2886"/>
         <source>Q</source>
-        <translation type="unfinished"></translation>
+        <translation>Q</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1251"/>
         <location filename="../QMenuStrings.cpp" line="2895"/>
         <source>Shift+Q</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift+Q</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1260"/>
         <location filename="../QMenuStrings.cpp" line="2904"/>
         <source>Ctrl+Shift+W</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+W</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1269"/>
         <location filename="../QMenuStrings.cpp" line="2913"/>
         <source>W</source>
-        <translation type="unfinished"></translation>
+        <translation>W</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1278"/>
         <location filename="../QMenuStrings.cpp" line="2922"/>
         <source>Shift+W</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift+W</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1287"/>
         <location filename="../QMenuStrings.cpp" line="2931"/>
         <source>Ctrl+Shift+E</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+E</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1305"/>
         <location filename="../QMenuStrings.cpp" line="2949"/>
         <location filename="../QMenuStrings.cpp" line="3904"/>
         <source>R</source>
-        <translation type="unfinished"></translation>
+        <translation>R</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1314"/>
         <location filename="../QMenuStrings.cpp" line="2958"/>
         <source>Shift+R</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift+R</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1323"/>
         <location filename="../QMenuStrings.cpp" line="2967"/>
         <source>Ctrl+Shift+U</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+U</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1332"/>
         <location filename="../QMenuStrings.cpp" line="2976"/>
         <location filename="../QMenuStrings.cpp" line="3895"/>
         <source>U</source>
-        <translation type="unfinished"></translation>
+        <translation>U</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1341"/>
         <location filename="../QMenuStrings.cpp" line="2985"/>
         <source>Shift+U</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift+U</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1350"/>
         <location filename="../QMenuStrings.cpp" line="2994"/>
         <source>Ctrl+Shift+I</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+I</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1368"/>
         <location filename="../QMenuStrings.cpp" line="3012"/>
         <source>Shift+I</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift+I</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1377"/>
         <location filename="../QMenuStrings.cpp" line="3021"/>
         <source>Ctrl+Shift+O</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+O</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1386"/>
         <location filename="../QMenuStrings.cpp" line="3030"/>
         <source>O</source>
-        <translation type="unfinished"></translation>
+        <translation>O</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1396"/>
         <source>Z,Y</source>
-        <translation type="unfinished"></translation>
+        <translation>Z,Y</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1405"/>
         <source>Shift+Z,Shift+Y</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift+Z,Shift+Y</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1414"/>
@@ -3353,83 +3353,83 @@
         <location filename="../QMenuStrings.cpp" line="3058"/>
         <location filename="../QMenuStrings.cpp" line="3590"/>
         <source>Ctrl+Shift+X</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+X</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1423"/>
         <location filename="../QMenuStrings.cpp" line="3067"/>
         <source>X</source>
-        <translation type="unfinished"></translation>
+        <translation>X</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1432"/>
         <location filename="../QMenuStrings.cpp" line="3076"/>
         <source>Shift+X</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift+X</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1441"/>
         <location filename="../QMenuStrings.cpp" line="3085"/>
         <location filename="../QMenuStrings.cpp" line="3599"/>
         <source>Ctrl+Shift+C</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+C</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1468"/>
         <location filename="../QMenuStrings.cpp" line="3112"/>
         <source>Shift+V</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift+V</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1477"/>
         <location filename="../QMenuStrings.cpp" line="3121"/>
         <source>Ctrl+Shift+B</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+B</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1495"/>
         <location filename="../QMenuStrings.cpp" line="3139"/>
         <source>Shift+B</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift+B</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1504"/>
         <location filename="../QMenuStrings.cpp" line="3148"/>
         <source>Ctrl+Shift+N</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+N</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1513"/>
         <location filename="../QMenuStrings.cpp" line="3157"/>
         <location filename="../QMenuStrings.cpp" line="3756"/>
         <source>N</source>
-        <translation type="unfinished"></translation>
+        <translation>N</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1522"/>
         <location filename="../QMenuStrings.cpp" line="3166"/>
         <source>Shift+N</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift+N</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1531"/>
         <location filename="../QMenuStrings.cpp" line="3175"/>
         <location filename="../QMenuStrings.cpp" line="3688"/>
         <source>Ctrl+Shift+M</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+M</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1540"/>
         <location filename="../QMenuStrings.cpp" line="3184"/>
         <location filename="../QMenuStrings.cpp" line="3738"/>
         <source>M</source>
-        <translation type="unfinished"></translation>
+        <translation>M</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1549"/>
         <location filename="../QMenuStrings.cpp" line="3202"/>
         <source>H</source>
-        <translation type="unfinished"></translation>
+        <translation>H</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1570"/>
@@ -3442,7 +3442,7 @@
         <location filename="../QMenuStrings.cpp" line="3608"/>
         <location filename="../QMenuStrings.cpp" line="4243"/>
         <source>Ctrl+Shift+V</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+V</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1935"/>
@@ -3458,68 +3458,68 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2019"/>
         <source>Alt+0</source>
-        <translation type="unfinished"></translation>
+        <translation>Alt+0</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2028"/>
         <source>Alt+1</source>
-        <translation type="unfinished"></translation>
+        <translation>Alt+1</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2037"/>
         <source>Alt+2</source>
-        <translation type="unfinished"></translation>
+        <translation>Alt+2</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2046"/>
         <source>Alt+3</source>
-        <translation type="unfinished"></translation>
+        <translation>Alt+3</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2055"/>
         <source>Alt+4</source>
-        <translation type="unfinished"></translation>
+        <translation>Alt+4</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2064"/>
         <source>Alt+5</source>
-        <translation type="unfinished"></translation>
+        <translation>Alt+5</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2073"/>
         <source>Alt+9</source>
-        <translation type="unfinished"></translation>
+        <translation>Alt+9</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2104"/>
         <source>Ctrl+PgUp</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+PgUp</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2113"/>
         <source>Ctrl+PgDown</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+PgDown</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2125"/>
         <source>Ctrl+B</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+B</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2135"/>
         <source>Ctrl+U</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+U</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2144"/>
         <location filename="../QMenuStrings.cpp" line="3832"/>
         <source>Ctrl+T</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+T</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2153"/>
         <source>Ctrl+R</source>
-        <translation type="unfinished">Ctrl+R</translation>
+        <translation>Ctrl+R</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2163"/>
@@ -3550,7 +3550,7 @@
         <location filename="../QMenuStrings.cpp" line="2225"/>
         <location filename="../QMenuStrings.cpp" line="3457"/>
         <source>Ctrl+N</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+N</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2236"/>
@@ -3560,47 +3560,47 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2486"/>
         <source>Rewind</source>
-        <translation type="unfinished">Kelaa taaksepäin</translation>
+        <translation>Kelaa taaksepäin</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2464"/>
         <source>Step Back (Left)</source>
-        <translation type="unfinished"></translation>
+        <translation>Askel taakse (vasen)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2442"/>
         <source>Play</source>
-        <translation type="unfinished">Toista</translation>
+        <translation>Toista</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2479"/>
         <source>Step Forward (Right)</source>
-        <translation type="unfinished"></translation>
+        <translation>Askel eteen (oikea)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2493"/>
         <source>Fast Forward</source>
-        <translation type="unfinished"></translation>
+        <translation>Kelaa eteenpäin</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2449"/>
         <source>Stop</source>
-        <translation type="unfinished">Pysäytä</translation>
+        <translation>Pysäytä</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2514"/>
         <source>Solo the Active Track</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktiivisen raidan soolo</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2529"/>
         <source>Scroll to Follow Playback</source>
-        <translation type="unfinished"></translation>
+        <translation>Vieritys seuraa toistoa</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2544"/>
         <source>Panic! (Ctrl+Alt+P)</source>
-        <translation type="unfinished"></translation>
+        <translation>Paniikki! (Ctrl+Alt+P)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3237"/>
@@ -3680,83 +3680,83 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3327"/>
         <source>Double Whole Rest (5)</source>
-        <translation type="unfinished"></translation>
+        <translation>Kaksoiskokotauko (5)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3333"/>
         <source>Whole Rest (1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Kokotauko (1)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3339"/>
         <source>Half Rest (2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Puolitauko (2)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3345"/>
         <source>Quarter Rest (4)</source>
-        <translation type="unfinished"></translation>
+        <translation>Neljäsosatauko (4)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3351"/>
         <source>Eighth Rest (8)</source>
-        <translation type="unfinished"></translation>
+        <translation>Kahdeksasosatauko (8)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3357"/>
         <source>Sixteenth Rest (6)</source>
-        <translation type="unfinished"></translation>
+        <translation>16.-osatauko (6)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3363"/>
         <source>Thirty-Second Rest (3)</source>
-        <translation type="unfinished"></translation>
+        <translation>32.-osatauko (3)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3369"/>
         <source>Sixty-Fourth Rest (0)</source>
-        <translation type="unfinished"></translation>
+        <translation>64.-osatauko (0)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3375"/>
         <source>Dotted Double Whole Rest</source>
-        <translation type="unfinished"></translation>
+        <translation>Pisteellinen kaksoiskokotauko</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3381"/>
         <source>Dotted Whole Rest</source>
-        <translation type="unfinished"></translation>
+        <translation>Pisteellinen kokotauko</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3387"/>
         <source>Dotted Half Rest</source>
-        <translation type="unfinished"></translation>
+        <translation>Pisteellinen puolitauko</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3393"/>
         <source>Dotted Quarter Rest</source>
-        <translation type="unfinished"></translation>
+        <translation>Pisteellinen neljäsosatauko</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3399"/>
         <source>Dotted Eighth Rest</source>
-        <translation type="unfinished"></translation>
+        <translation>Pisteellinen kahdeksasosatauko</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3405"/>
         <source>Dotted Sixteenth Rest</source>
-        <translation type="unfinished"></translation>
+        <translation>Pisteellinen kuudestoistaosatauko</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3411"/>
         <source>Dotted Thirty-Second Rest</source>
-        <translation type="unfinished"></translation>
+        <translation>Pisteellinen 32.osatauko</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="944"/>
         <location filename="../QMenuStrings.cpp" line="2372"/>
         <source>Shift+Left</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift+Left</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="962"/>
@@ -3767,50 +3767,50 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2408"/>
         <source>Alt+Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Alt+Up</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2417"/>
         <source>Alt+Down</source>
-        <translation type="unfinished"></translation>
+        <translation>Alt+Down</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2598"/>
         <source>F8</source>
-        <translation type="unfinished"></translation>
+        <translation>F8</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2607"/>
         <source>F9</source>
-        <translation type="unfinished"></translation>
+        <translation>F9</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2695"/>
         <location filename="../QMenuStrings.cpp" line="2704"/>
         <source>Y</source>
-        <translation type="unfinished"></translation>
+        <translation>Y</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2713"/>
         <location filename="../QMenuStrings.cpp" line="2722"/>
         <source>.</source>
-        <translation type="unfinished"></translation>
+        <translation>.</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3040"/>
         <source>Z</source>
-        <translation type="unfinished"></translation>
+        <translation>Z</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3049"/>
         <source>Shift+Z</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift+Z</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3193"/>
         <location filename="../QMenuStrings.cpp" line="3658"/>
         <source>P</source>
-        <translation type="unfinished"></translation>
+        <translation>P</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3421"/>
@@ -3989,7 +3989,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3483"/>
         <source>Ctrl+O</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+O</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3485"/>
@@ -4034,7 +4034,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3526"/>
         <source>Ctrl+Q</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Q</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3583"/>
@@ -4059,7 +4059,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3617"/>
         <source>Ctrl+Shift+Ins</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+Ins</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3619"/>
@@ -4074,7 +4074,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3649"/>
         <source>T</source>
-        <translation type="unfinished"></translation>
+        <translation>T</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3667"/>
@@ -4099,7 +4099,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3678"/>
         <source>Ctrl+K</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+K</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3680"/>
@@ -4109,7 +4109,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3697"/>
         <source>Ctrl+M</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+M</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3699"/>
@@ -4174,7 +4174,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3719"/>
         <source>Ctrl+Shift+R</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+R</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3722"/>
@@ -4184,7 +4184,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3729"/>
         <source>Return</source>
-        <translation type="unfinished"></translation>
+        <translation>Return</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3767"/>
@@ -4219,7 +4219,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3815"/>
         <source>Ctrl+J</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+J</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3817"/>
@@ -4274,7 +4274,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3841"/>
         <source>Ctrl+Shift+T</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+T</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3843"/>
@@ -4284,7 +4284,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3850"/>
         <source>Ctrl+D</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+D</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3852"/>
@@ -4339,27 +4339,27 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3973"/>
         <source>Enter, Media Play, Ctrl+Return</source>
-        <translation type="unfinished"></translation>
+        <translation>Enter, Media Play, Ctrl+Return</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3982"/>
         <source>Insert, Media Stop</source>
-        <translation type="unfinished"></translation>
+        <translation>Insert, Media Stop</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3991"/>
         <source>PgUp, Media Previous</source>
-        <translation type="unfinished"></translation>
+        <translation>PgUp, Media Previous</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="4000"/>
         <source>PgDown, Media Next</source>
-        <translation type="unfinished"></translation>
+        <translation>PgDown, Media Next</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="4009"/>
         <source>Media Record</source>
-        <translation type="unfinished"></translation>
+        <translation>Media Record</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="4011"/>
@@ -4424,7 +4424,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3471"/>
         <source>Export &amp;LilyPond file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Vie &amp;LilyPond-tiedosto...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3642"/>
@@ -4449,7 +4449,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="4018"/>
         <source>Space</source>
-        <translation type="unfinished"></translation>
+        <translation>Space</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="4052"/>
@@ -4475,7 +4475,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="4066"/>
         <source>Home</source>
-        <translation type="unfinished"></translation>
+        <translation>Home</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2507"/>
@@ -4486,7 +4486,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="4075"/>
         <source>End</source>
-        <translation type="unfinished"></translation>
+        <translation>End</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="4081"/>
@@ -7133,12 +7133,12 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../AutoloadStrings.cpp" line="170"/>
         <source>Detuned EP 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Epävireinen sähköpiano 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="171"/>
         <source>Detuned EP 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Epävireinen sähköpiano 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="172"/>
@@ -7153,12 +7153,12 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../AutoloadStrings.cpp" line="174"/>
         <source>Detuned Organ 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Epävireiset urut 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="175"/>
         <source>Detuned Organ 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Epävireiset urut 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="176"/>
@@ -7243,7 +7243,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../AutoloadStrings.cpp" line="193"/>
         <source>Taisho Koto</source>
-        <translation type="unfinished"></translation>
+        <translation>Taisho Koto</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="195"/>
@@ -7268,7 +7268,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../AutoloadStrings.cpp" line="199"/>
         <source>Burst Noise</source>
-        <translation type="unfinished"></translation>
+        <translation>Räjähdysääni</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="200"/>
@@ -9940,7 +9940,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../../src/gui/application/main.cpp" line="725"/>
         <source>&lt;h2&gt;Welcome to Rosegarden!&lt;/h2&gt;&lt;p&gt;Welcome to the Rosegarden audio and MIDI sequencer and musical notation editor.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;If you have not already done so, you may wish to install some DSSI synth plugins, or a separate synth program such as QSynth.  Rosegarden does not synthesize sounds from MIDI on its own, so without these you will hear nothing.&lt;/li&gt;&lt;li&gt;Rosegarden uses the JACK audio server for recording and playback of audio, and for playback from DSSI synth plugins.  These features will only be available if the JACK server is running.&lt;/li&gt;&lt;li&gt;Rosegarden has comprehensive documentation: see the &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&quot;&gt;Rosegarden website&lt;/a&gt; for the &lt;a style=&quot;color:gold&quot; href=&quot;%1&quot;&gt;manual&lt;/a&gt;, &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;tutorials&lt;/a&gt;, and other information!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  To learn more, go to the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;Rosegarden website&lt;/a&gt;.&lt;/p&gt;</source>
-        <translation type="unfinished">&lt;h2&gt;Tervetuloa Rosegardeniin!&lt;/h2&gt;&lt;p&gt;Tervetuloa käyttämään Rosegardenia, ääni- ja MIDI-sekvensseriä sekä nuottieditoria.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Saatat haluta asentaa DSSI-syntetisaattorilisäosia tai erillisiä syntetisaattoriohjelmia kuten QSynth jos et ole jo tehnyt niin.  Rosegarden itsessään ei tuota ääntä MIDI-tiedoista, joten ilman niitä et kuule mitään.&lt;/li&gt;&lt;li&gt;Rosegarden käyttää JACK-äänipalvelinta äänen toistoon ja tallennukseen sekä DSSI-lisäosien äänen toistoon.  Nämä ominaisuudet ovat käytettävissa vain jos JACK-palvelin on käynnissä.&lt;/li&gt;&lt;li&gt;Rosegardeniin on kattava ohjeistus, katso &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&quot;&gt;Rosegardenin kotisivulta&lt;/a&gt; &lt;a style=&quot;color:gold&quot; href=&quot;%1&quot;&gt;käsikirja&lt;/a&gt;, &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;johdatus&lt;/a&gt;, ja muuta tietoa!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegardenin tarjoavat sinulle joukko vapaaehtoisia ympäri maailman.  Katso lisätietoja: &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;Rosegardenin kotisivulta&lt;/a&gt;.&lt;/p&gt;</translation>
+        <translation>&lt;h2&gt;Tervetuloa Rosegardeniin!&lt;/h2&gt;&lt;p&gt;Tervetuloa käyttämään Rosegardenia, ääni- ja MIDI-sekvensseriä sekä nuottieditoria.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Saatat haluta asentaa DSSI-syntetisaattorilisäosia tai erillisiä syntetisaattoriohjelmia kuten QSynth jos et ole jo tehnyt niin.  Rosegarden itsessään ei tuota ääntä MIDI-tiedoista, joten ilman niitä et kuule mitään.&lt;/li&gt;&lt;li&gt;Rosegarden käyttää JACK-äänipalvelinta äänen toistoon ja tallennukseen sekä DSSI-lisäosien äänen toistoon.  Nämä ominaisuudet ovat käytettävissa vain jos JACK-palvelin on käynnissä.&lt;/li&gt;&lt;li&gt;Rosegardeniin on kattava ohjeistus, katso &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&quot;&gt;Rosegardenin kotisivulta&lt;/a&gt; &lt;a style=&quot;color:gold&quot; href=&quot;%1&quot;&gt;käsikirja&lt;/a&gt;, &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;johdatus&lt;/a&gt;, ja muuta tietoa!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegardenin tarjoavat sinulle joukko vapaaehtoisia ympäri maailman.  Katso lisätietoja: &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;Rosegardenin kotisivulta&lt;/a&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;h2&gt;Welcome to Rosegarden!&lt;/h2&gt;&lt;p&gt;Welcome to the Rosegarden audio and MIDI sequencer and musical notation editor.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;If you have not already done so, you may wish to install some DSSI synth plugins, or a separate synth program such as QSynth.  Rosegarden does not synthesize sounds from MIDI on its own, so without these you will hear nothing.&lt;/li&gt;&lt;li&gt;Rosegarden uses the JACK audio server for recording and playback of audio, and for playback from DSSI synth plugins.  These features will only be available if the JACK server is running.&lt;/li&gt;&lt;li&gt;Rosegarden has comprehensive documentation: see the &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&gt;Rosegarden website&lt;/a&gt; for the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/doc/en/&quot;&gt;handbook&lt;/a&gt;, &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;tutorials&lt;/a&gt;, and other information!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  To learn more, go to the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;Rosegarden website&lt;/a&gt;.&lt;/p&gt;</source>
@@ -10033,17 +10033,17 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="524"/>
         <source>Audio subsystem is not available - can&apos;t record audio</source>
-        <translation type="unfinished"></translation>
+        <translation>Äänialijärjestelmä ei ole käytettävissä - ääntä ei voi nauhoittaa</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="624"/>
         <source>&lt;qt&gt;&lt;p&gt;No tracks were armed for recording.&lt;/p&gt;&lt;p&gt;Please arm at least one of the recording LEDs &lt;img src=&quot;:pixmaps/tooltip/record-leds.png&quot;&gt; and try again&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Ainuttakaan raitaa ei ole kytketty nauhoitustilaan.&lt;/p&gt;&lt;p&gt;Ole hyvä ja aseta ainakin yksi tallennus LED &lt;img src=&quot;:pixmaps/tooltip/record-leds.png&quot;&gt; ja yritä uudelleen&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="790"/>
         <source>&lt;qt&gt;&lt;p&gt;Couldn&apos;t start recording audio.&lt;/p&gt;&lt;p&gt;Please set a valid recording path in &lt;b&gt;Composition -&gt; Edit Document Properties... -&gt; Audio&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Äänen nauhoitusta ei voitu käynnistää.&lt;/p&gt;&lt;p&gt;Ole hyvä ja aseta kelvollinen nauhoituspolku valikosta &lt;b&gt;Sävellys -&gt; Muokkaa dokumentin ominaisuuksia... -&gt; Ääni&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../ExceptionStrings.cpp" line="22"/>
@@ -10674,7 +10674,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="81"/>
         <source>Click to load an audio plugin</source>
-        <translation>Klikkaa ladataksesi audio-lisäosan</translation>
+        <translation>Klikkaa ladataksesi äänilisäosan</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="92"/>
@@ -11046,7 +11046,7 @@ Ole hyvä ja valitse halutessasi niistä joitakin poistaaksesi ne pysyvästi kov
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="323"/>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="444"/>
         <source>Click to load an audio plugin</source>
-        <translation>Klikkaa ladataksesi audio-lisäosan</translation>
+        <translation>Klikkaa ladataksesi äänilisäosan</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="340"/>
@@ -12168,7 +12168,7 @@ Haluatko saattaa muutokset voimaan ennen pankkimuokkaimen sulkemista?</translati
     <message>
         <location filename="../../src/gui/dialogs/ConfigureDialogBase.cpp" line="45"/>
         <source>Configure Rosegarden</source>
-        <translation>Valitse Rosegardenin asetukset</translation>
+        <translation>Aseta Rosegardenin asetukset</translation>
     </message>
 </context>
 <context>
@@ -18673,7 +18673,7 @@ Ole hyvä ja varmista, että laite on määritetty oikein pääikkunan Hallitse 
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="468"/>
         <source>&lt;qt&gt;&lt;p&gt;The &lt;b&gt;flac&lt;/b&gt; command was not found.&lt;/p&gt;&lt;p&gt;FLAC is a lossless audio compression format used to reduce the size of Rosegarden project packages with no loss of audio quality.  Please install FLAC and try again.  This utility is typically available to most distros as a package called &quot;flac&quot;.&lt;/p&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Komentoa &lt;b&gt;flac&lt;/b&gt; ei löytynyt.&lt;/p&gt;&lt;p&gt;FLAC on häviötön äänen pakkausmuoto, jota käytetään pienentämään Rosegardenin projektipaketteja ilman äänen laadun huononemista.  Ole hyvä ja asenna FLAC ja yritä uudelleen.  Tämä työkalu on saatavissa useimmille jakeluille pakettina nimeltä &quot;flac&quot;.&lt;/p&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Komentoa &lt;b&gt;flac&lt;/b&gt; ei löytynyt.&lt;/p&gt;&lt;p&gt;FLAC on häviötön äänenpakkausmuoto, jota käytetään pienentämään Rosegardenin projektipaketteja ilman äänen laadun huononemista.  Ole hyvä ja asenna FLAC ja yritä uudelleen.  Tämä työkalu on saatavissa useimmille jakeluille pakettina nimeltä &quot;flac&quot;.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="530"/>
@@ -19465,12 +19465,12 @@ Ole hyvä ja valitse haluamasi tiedostot poistaaksesi ne pysyvästi kovalevyltä
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="1704"/>
         <source>&lt;h3&gt;Incorrect audio sample rate&lt;/h3&gt;&lt;p&gt;This composition contains audio files that were recorded or imported with the audio server running at a different sample rate (%1 Hz) from the current JACK server sample rate (%2 Hz).&lt;/p&gt;&lt;p&gt;Rosegarden will play this composition at the correct speed, but any audio files in it will probably sound awful.&lt;/p&gt;&lt;p&gt;Please consider re-starting the JACK server at the correct rate (%3 Hz) and re-loading this composition before you do any more work with it.&lt;/p&gt;</source>
-        <translation>&lt;h3&gt;Väärä äänen näytteenottotaajuus&lt;/h3&gt;&lt;p&gt;Tämä sävellys sisältää äänitiedostoja, jotka nauhoitettiin tai tuotiin äänipalvelimelta, joka käyttää eri näytteenottotaajuutta (%1 Hz) kuin mikä on nykyisen JACK-palvelimen näytteenottotaajuus (%2 Hz).&lt;p/&gt;&lt;p&gt;Rosegarden soittaa tämän sävellyksen oikealla nopeudella, mutta sisällytetyt äänitiedostot kuulostavat todennäköisesti kamalalta.&lt;/p&gt;&lt;p&gt;Ole hyvä ja harkitse JACK-palvelimen käynnistämistä oikella taajuudella (%3 Hz) aja tämän sävellyksen uudelleen lataamista ennen kuin jatkat työskentelyä sen parissa.&lt;/p&gt;</translation>
+        <translation>&lt;h3&gt;Väärä äänen näytteenottotaajuus&lt;/h3&gt;&lt;p&gt;Tämä sävellys sisältää äänitiedostoja, jotka nauhoitettiin tai tuotiin äänipalvelimelta, joka käyttää eri näytteenottotaajuutta (%1 Hz) kuin mikä on nykyinen JACK-palvelimen näytteenottotaajuus (%2 Hz).&lt;p/&gt;&lt;p&gt;Rosegarden toistaa tämän sävellyksen oikealla nopeudella, mutta äänitiedostojen äänen laatu on todennäköisesti huono.&lt;/p&gt;&lt;p&gt;Ole hyvä ja harkitse JACK-palvelimen käynnistämistä oikella taajuudella (%3 Hz) ja tämän sävellyksen uudelleen lataamista ennen kuin jatkat työskentelyä sen parissa.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="1714"/>
         <source>&lt;h3&gt;Inconsistent audio sample rates&lt;/h3&gt;&lt;p&gt;This composition contains audio files at more than one sample rate.&lt;/p&gt;&lt;p&gt;Rosegarden will play them at the correct speed, but any audio files that were recorded or imported at rates different from the current JACK server sample rate (%1 Hz) will probably sound awful.&lt;/p&gt;&lt;p&gt;Please see the audio file manager dialog for more details, and consider resampling any files that are at the wrong rate.&lt;/p&gt;</source>
-        <translation>&lt;h3&gt;Yhteensopimattomia äänen näytteenottotaajuuksia&lt;/h3&gt;&lt;p&gt;Tämä sävellys sisältää äänitiedostoja, joilla on useampi kuin yksi näytteenottotaajuus.&lt;p/&gt;&lt;p&gt;Rosegarden soittaa ne oikealla nopeudella, mutta äänitiedostot, joiden näytteenottotaajuus poikkeaa nykyisen JACK-palvelimen näytteenottotaajudesta (%1 Hz) kuulostavat todennäköisesti kamalalta.&lt;/p&gt;&lt;p&gt;Ole hyvä ja katso äänitiedostojen hallinnasta lisää yksityiskohtia, ja harkitse väärällä näytteenottotaajudella olevien tiedostojen näytteistämistä uudelleen.&lt;/p&gt;</translation>
+        <translation>&lt;h3&gt;Yhteensopimattomia äänen näytteenottotaajuuksia&lt;/h3&gt;&lt;p&gt;Tämä sävellys sisältää äänitiedostoja, joilla on useampi kuin yksi näytteenottotaajuus.&lt;p/&gt;&lt;p&gt;Rosegarden toistaa ne oikealla nopeudella, mutta äänitiedostojen, joiden näytteenottotaajuus poikkeaa nykyisen JACK-palvelimen näytteenottotaajudesta (%1 Hz) äänen laatu on todennäköisesti huono.&lt;/p&gt;&lt;p&gt;Ole hyvä ja katso äänitiedostojen hallinnasta lisää yksityiskohtia, ja harkitse väärällä näytteenottotaajudella olevien tiedostojen näytteistämistä uudelleen.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="1715"/>
@@ -20171,14 +20171,14 @@ Haluatko asettaa sen nyt?</translation>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4544"/>
         <source>The Rosegarden sequencer process has exited unexpectedly.  Sound and recording will no longer be available for this session.
 Please exit and restart Rosegarden to restore sound capability.</source>
-        <translation>Rosegardenin sekvensseriprosessi keskeytyi odottamatta.  Ääni ja tallennus eivät ole enää tässä istunnossa käytössä.
+        <translation>Rosegardenin sekvensseriprosessi keskeytyi odottamatta.  Ääni ja nauhoitus eivät ole enää tässä istunnossa käytössä.
 Ole hyvä, sulje ja käynnistä uudelleen Rosegarden palauttaaksesi äänitoiminnot.</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4548"/>
         <source>The Rosegarden sequencer could not be started, so sound and recording will be unavailable for this session.
 For assistance with correct audio and MIDI configuration, go to http://rosegardenmusic.com.</source>
-        <translation>Rosegardenin sekvensseriprosessi keskeytyi odottamatta.  Ääni ja tallennus ei ole enää tässä istunnossa käytössä.
+        <translation>Rosegardenin sekvensseriprosessi keskeytyi odottamatta.  Ääni ja nauhoitus eivät ole enää tässä istunnossa käytössä.
 Oikeiden ääni- ja MIDI-asetusten varalle löydät apua sivulta http://rosegardenmusic.com.</translation>
     </message>
     <message>
@@ -20626,7 +20626,7 @@ Virhe oli: %2</translation>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="187"/>
         <source>&lt;qt&gt;&lt;p&gt;Raise or lower playback of any selected segments by this number of semitones&lt;/p&gt;&lt;p&gt;&lt;i&gt;NOTE: This control changes segments that already exist.&lt;/i&gt;&lt;/p&gt;&lt;p&gt;&lt;i&gt;Use the transpose control in &lt;b&gt;Track Parameters&lt;/b&gt; under &lt;b&gt;Create segments with&lt;/b&gt; to pre-select this   setting before drawing or recording new segments.&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Transponoi kaikien valittujen osien toistoa tällä puoliaskelten määrällä&lt;/p&gt;&lt;p&gt;&lt;i&gt;HUOMIO:Tämä ohjain muuttaa olemassa olevia osia.&lt;/i&gt;&lt;/p&gt;&lt;p&gt;&lt;i&gt;Käytä transponointiohjainta &lt;b&gt;Raidan ominaisuudet&lt;/b&gt;-laatikon &lt;b&gt;Luo osat&lt;/b&gt;-osiossa asettaaksesi tämän ennen osan piirtoa tai äänitystä.&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Transponoi kaikien valittujen osien toistoa tällä puoliaskelten määrällä&lt;/p&gt;&lt;p&gt;&lt;i&gt;HUOMIO:Tämä ohjain muuttaa olemassa olevia osia.&lt;/i&gt;&lt;/p&gt;&lt;p&gt;&lt;i&gt;Käytä transponointiohjainta &lt;b&gt;Raidan ominaisuudet&lt;/b&gt;-laatikon &lt;b&gt;Luo osat&lt;/b&gt;-osiossa asettaaksesi tämän ennen osan piirtoa tai nauhoitusta.&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="204"/>
@@ -21087,7 +21087,7 @@ Toisten ohjelmien lopettaminen saattaa parantaa Rosegardenin suorituskykyä.</tr
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1259"/>
         <source>&lt;p&gt;Rosegarden could not connect to the JACK audio server.  This probably means that Rosegarden was unable to start the audio server due to a problem with your configuration, your system installation, or both.&lt;/p&gt;&lt;p&gt;If you want to be able to play or record audio files or use plugins, we suggest that you exit Rosegarden and use the JACK Control utility (qjackctl) to try different settings until you arrive at a configuration that permits JACK to start.  You may also need to install a realtime kernel, edit your system security configuration, and so on.  Unfortunately, this is an extremely complex subject.&lt;/p&gt;&lt;p&gt; Once you establish a working JACK configuration, Rosegarden will be able to start the audio server automatically in the future.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Rosegarden ei pystynyt kytkeytymään JACK-äänipalvelimeen.  Tämä todennäköisesti tarkoittaa että Rosegarden ei pystynyt käynnistämään palvelinta järjestelmäasetustesi ongelmien takia.&lt;/p&gt;&lt;p&gt;Jos haluat toistaa tai äänittää äänitiedostoja tai käyttää lisäosia, suosittelemme sammutat Rosegardenin ja käytät JACK-apuohjelmaa (qjackctl) kokeillaksesi erilaisia asetuksia kunnes saat JACK-palvelimen käynnistymään.  Saatat myös joutua asentamaan reaaliaikaytimen, muokkaamaan turva-asetuksia ja niin edelleen.  Valitettavasti tämä on monimutkainen aihe.&lt;/p&gt;&lt;p&gt; Kun saat JACK-asetukset kuntoon, Rosegarden pystyy käynnistämään äänipalvelimen automaattisesti tulevaisuudessa.&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;Rosegarden ei pystynyt kytkeytymään JACK-äänipalvelimeen.  Tämä todennäköisesti tarkoittaa että Rosegarden ei pystynyt käynnistämään palvelinta järjestelmäasetustesi ongelmien takia.&lt;/p&gt;&lt;p&gt;Jos haluat toistaa tai nauhoittaa äänitiedostoja tai käyttää lisäosia, suosittelemme sammutat Rosegardenin ja käytät JACK-apuohjelmaa (qjackctl) kokeillaksesi erilaisia asetuksia kunnes saat JACK-palvelimen käynnistymään.  Saatat myös joutua asentamaan reaaliaikaytimen, muokkaamaan turva-asetuksia ja niin edelleen.  Valitettavasti tämä on monimutkainen aihe.&lt;/p&gt;&lt;p&gt; Kun saat JACK-asetukset kuntoon, Rosegarden pystyy käynnistämään äänipalvelimen automaattisesti tulevaisuudessa.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1019"/>
@@ -22582,7 +22582,7 @@ Toisten ohjelmien lopettaminen saattaa parantaa Rosegardenin suorituskykyä.</tr
 Please set the audio file path to a valid directory in Document Properties before recording audio.
 Would you like to set it now?</source>
         <translation>Äänitiedostopolkua ei ole tai kirjoitus siihen ei onnistu.
-Ole hyvä ja aseta äänitiedostopoluksi kelpo hakemisto Asiakirjan ominaisuuksista ennen nauhoittamista.
+Ole hyvä ja aseta tiedostopoluksi kelvollinen hakemisto Asiakirjan ominaisuuksista ennen nauhoittamista.
 Haluatko asettaa sen nyt?</translation>
     </message>
     <message>
@@ -22808,12 +22808,12 @@ Haluatko asettaa sen nyt?</translation>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="208"/>
         <source>&lt;qt&gt;&lt;p&gt;This track will only record Audio/ MIDI from the selected device, filtering anything else out&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Tämä raita äänittää ääntä/MIDI-dataa vain valitusta laitteesta, kaikki muu suodatetaan pois&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Tämä raita nauhoittaa ääntä/ MIDI-dataa vain valitusta laitteesta, kaikki muu suodatetaan pois&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="220"/>
         <source>&lt;qt&gt;&lt;p&gt;This track will only record Audio/MIDI from the selected channel, filtering anything else out&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Tämä raita äänittää ääntä/MIDI-dataa vain valitulta kanavalta, kaikki muu suodatetaan pois&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Tämä raita nauhoittaa ääntä/MIDI-dataa vain valitulta kanavalta, kaikki muu suodatetaan pois&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="255"/>
@@ -23711,7 +23711,7 @@ Haluatko asettaa sen nyt?</translation>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1141"/>
         <source>Stops playback or recording.</source>
-        <translation>Pysäyttää toiston tai hauhoituksen.</translation>
+        <translation>Pysäyttää toiston tai nauhoituksen.</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1145"/>
