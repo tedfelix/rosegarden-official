@@ -27,6 +27,8 @@
 
 #include "base/Exception.h"
 
+#include <QCoreApplication>
+
 namespace Rosegarden
 {
 
@@ -51,6 +53,8 @@ typedef unsigned char FileByte;
 
 class SoundFile
 {
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SoundFile)
+
 public:
     SoundFile(const std::string &fileName);
     virtual ~SoundFile();
