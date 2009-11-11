@@ -2809,7 +2809,8 @@
         <location filename="../QMenuStrings.cpp" line="1902"/>
         <location filename="../QMenuStrings.cpp" line="3581"/>
         <source>Delete</source>
-        <translation type="unfinished">Poista</translation>
+        <translatorcomment>Keyboard shortcut, dont translate</translatorcomment>
+        <translation>Delete</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="296"/>
@@ -3082,13 +3083,15 @@
         <location filename="../QMenuStrings.cpp" line="898"/>
         <location filename="../QMenuStrings.cpp" line="2458"/>
         <source>Left</source>
-        <translation type="unfinished">Vasen</translation>
+        <translatorcomment>Keyboard shortcut, dont translate</translatorcomment>
+        <translation>Left</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="907"/>
         <location filename="../QMenuStrings.cpp" line="2473"/>
         <source>Right</source>
-        <translation type="unfinished">Oikea</translation>
+        <translatorcomment>Keyboard shortcut, dont translate</translatorcomment>
+        <translation>Right</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="916"/>
@@ -3602,77 +3605,77 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3237"/>
         <source>Double Whole Note (5)</source>
-        <translation type="unfinished"></translation>
+        <translation>Kaksoiskokonuotti (5)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3243"/>
         <source>Whole Note (1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Kokonuotti (1)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3249"/>
         <source>Half Note (2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Puolinuotti (2)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3255"/>
         <source>Quarter Note (4)</source>
-        <translation type="unfinished"></translation>
+        <translation>Neljäsosanuotti (4)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3261"/>
         <source>Eighth Note (8)</source>
-        <translation type="unfinished"></translation>
+        <translation>Kahdeksasosanuotti (8)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3267"/>
         <source>Sixteenth Note (6)</source>
-        <translation type="unfinished"></translation>
+        <translation>16.-osanuotti (6)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3273"/>
         <source>Thirty-Second Note (3)</source>
-        <translation type="unfinished"></translation>
+        <translation>32.-osanuotti (3)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3279"/>
         <source>Sixty-Fourth Note (0)</source>
-        <translation type="unfinished"></translation>
+        <translation>64.-osanuotti (0)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3285"/>
         <source>Dotted Double Whole Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Pisteellinen kaksoiskokonuotti</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3291"/>
         <source>Dotted Whole Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Pisteellinen kokonuotti</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3297"/>
         <source>Dotted Half Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Pisteellinen puolinuotti</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3303"/>
         <source>Dotted Quarter Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Pisteellinen neljäsosanuotti</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3309"/>
         <source>Dotted Eighth Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Pisteellinen kahdeksasosanuotti</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3315"/>
         <source>Dotted Sixteenth Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Pisteellinen kuudestoistaosanuotti</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3321"/>
         <source>Dotted Thirty-Second Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Pisteellinen 32.osanuotti</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3327"/>
@@ -11840,7 +11843,7 @@ Haluatko saattaa muutokset voimaan ennen pankkimuokkaimen sulkemista?</translati
     <message>
         <location filename="../../src/gui/rulers/ChordNameRuler.cpp" line="90"/>
         <source>&lt;qt&gt;&lt;p&gt;Chord name ruler.  This ruler analyzes your harmonies and attempts to guess what chords your composition contains.  These chords cannot be printed or manipulated, and this is only a reference for your information.&lt;/p&gt;&lt;p&gt;Turn it on and off with the &lt;b&gt;View -&gt; Rulers&lt;/b&gt; menu.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Sointunimi-viivain.  Tämä viivain analysoi harmoniat ja yrittää arvata mitä sointuja sävellyksesi sisältää.  Näitä sointuja ei voida tulostaa tai muokata, ja tiedolla on vain viiteellistä arvoa.&lt;/p&gt;&lt;p&gt;Aseta se päälle ja pois Näkymä-&gt;Viivaimet -valikosta.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Sointunimi-viivain.  Tämä viivain analysoi harmoniat ja yrittää arvata mitä sointuja sävellyksesi sisältää.  Näitä sointuja ei voida tulostaa tai muokata, ja tiedolla on vain viiteellistä arvoa.&lt;/p&gt;&lt;p&gt;Aseta se päälle ja pois Näkymä-&gt;Viivaimet -valikosta.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
