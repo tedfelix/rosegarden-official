@@ -63,11 +63,11 @@ public:
     {
     public:
         BadSoundFileException(std::string path) :
-            Exception("Bad sound file " + path), m_path(path) { }
+            Exception(QObject::tr("Bad sound file ").toStdString() + path), m_path(path) { }
         BadSoundFileException(std::string path, std::string message) :
-            Exception("Bad sound file " + path + ": " + message), m_path(path) { }
+            Exception(QObject::tr("Bad sound file ").toStdString() + path + ": " + message), m_path(path) { }
         BadSoundFileException(std::string path, std::string file, int line) :
-            Exception("Bad sound file " + path, file, line), m_path(path) { }
+            Exception(QObject::tr("Bad sound file ").toStdString() + path, file, line), m_path(path) { }
 
         ~BadSoundFileException() throw() { }
 
