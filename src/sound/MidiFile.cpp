@@ -13,13 +13,7 @@
     COPYING included with this distribution for more information.
 */
 
-#include <iostream>
-#include "misc/Debug.h"
 #include <QApplication>
-#include <fstream>
-#include <string>
-#include <cstdio>
-#include <algorithm>
 
 #include "Midi.h"
 #include "MidiFile.h"
@@ -33,13 +27,18 @@
 #include "base/Studio.h"
 #include "base/MidiTypes.h"
 #include "base/Profiler.h"
+#include "misc/Debug.h"
+#include "misc/Strings.h"
 
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <cstdio>
+#include <algorithm>
 #include <limits.h>
-
+#include <sstream>
 
 //#define MIDI_DEBUG 1
-
-#include <sstream>
 
 namespace Rosegarden
 {
@@ -102,7 +101,8 @@ MidiFile::midiBytesToLong(const string& bytes)
         << ", should be 4)" << endl;
 #endif
 
-        throw (Exception("Wrong length for long data in MIDI stream"));
+        // TRANSLATOR: "long" is a C++ data type
+        throw (Exception(qstrtostr(QObject::tr("Wrong length for long data in MIDI stream"))));
     }
 
     long longRet = ((long)(((MidiByte)bytes[0]) << 24)) |
@@ -124,7 +124,8 @@ MidiFile::midiBytesToInt(const string& bytes)
         << ", should be 2)" << endl;
 #endif
 
-        throw (Exception("Wrong length for int data in MIDI stream"));
+        // TRANSLATOR: "int" is a C++ data type
+        throw (Exception(qstrtostr(QObject::tr("Wrong length for int data in MIDI stream"))));
     }
 
     int intRet = ((int)(((MidiByte)bytes[0]) << 8)) |
@@ -144,11 +145,11 @@ MidiFile::getMidiByte(ifstream* midiFile)
     static int bytesGot = 0; // purely for progress reporting purposes
 
     if (midiFile->eof()) {
-        throw(Exception("End of MIDI file encountered while reading"));
+        throw(Exception(qstrtostr(QObject::tr("End of MIDI file encountered while reading"))));
     }
 
     if (m_decrementCount && m_trackByteCount <= 0) {
-        throw(Exception("Attempt to get more bytes than expected on Track"));
+        throw(Exception(qstrtostr(QObject::tr("Attempt to get more bytes than expected on Track"))));
     }
 
     char byte;
@@ -169,7 +170,7 @@ MidiFile::getMidiByte(ifstream* midiFile)
         return (MidiByte)byte;
     }
 
-    throw(Exception("Attempt to read past MIDI file end"));
+    throw(Exception(qstrtostr(QObject::tr("Attempt to read past MIDI file end"))));
 }
 
 
@@ -191,7 +192,7 @@ MidiFile::getMidiBytes(ifstream* midiFile, unsigned long numberOfBytes)
         << numberOfBytes << endl;
 #endif
 
-        throw(Exception("End of MIDI file encountered while reading"));
+        throw(Exception(qstrtostr(QObject::tr("End of MIDI file encountered while reading"))));
 
     }
 
@@ -207,7 +208,7 @@ MidiFile::getMidiBytes(ifstream* midiFile, unsigned long numberOfBytes)
         // branch: load glazunov.rg, run Interpret on first segment, export
         // and attempt to import again
 
-        throw(Exception("Attempt to get more bytes than expected on Track"));
+        throw(Exception(qstrtostr(QObject::tr("Attempt to get more bytes than expected on Track"))));
     }
 
     while (stringRet.length() < numberOfBytes &&
@@ -227,7 +228,7 @@ MidiFile::getMidiBytes(ifstream* midiFile, unsigned long numberOfBytes)
         << numberOfBytes << endl;
 #endif
 
-        throw(Exception("Attempt to read past MIDI file end"));
+        throw(Exception(qstrtostr(QObject::tr("Attempt to read past MIDI file end"))));
 
     }
 
@@ -511,7 +512,7 @@ MidiFile::parseTrack(ifstream* midiFile, TrackId &lastTrackNum)
             << " in MIDI file" << endl;
 #endif
 
-            throw (Exception("Invalid event code found"));
+            throw (Exception(qstrtostr(QObject::tr("Invalid event code found"))));
         }
 
         deltaTime = getNumberFromMidiBytes(midiFile);
@@ -525,7 +526,7 @@ MidiFile::parseTrack(ifstream* midiFile, TrackId &lastTrackNum)
 
         if (!(midiByte & MIDI_STATUS_BYTE_MASK)) {
             if (runningStatus < 0) {
-                throw (Exception("Running status used for first event in track"));
+                throw (Exception(qstrtostr(QObject::tr("Running status used for first event in track"))));
             }
 
             eventCode = (MidiByte)runningStatus;

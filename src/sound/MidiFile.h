@@ -15,17 +15,17 @@
 #ifndef _ROSEGARDEN_MIDI_FILE_H_
 #define _ROSEGARDEN_MIDI_FILE_H_
 
-#include <fstream>
-#include <string>
-#include <list>
-#include <map>
-
 #include <QObject>
 
 #include "Midi.h"
 #include "MidiEvent.h"
 #include "base/Composition.h"
 #include "SoundFile.h"
+
+#include <fstream>
+#include <string>
+#include <list>
+#include <map>
 
 // Conversion class for Composition to and
 // from MIDI Files.  Despite the fact you can reuse this
