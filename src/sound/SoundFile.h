@@ -26,6 +26,7 @@
 #include <string>
 
 #include "base/Exception.h"
+#include "misc/Strings.h"
 
 #include <QCoreApplication>
 
@@ -63,11 +64,11 @@ public:
     {
     public:
         BadSoundFileException(std::string path) :
-            Exception(QObject::tr("Bad sound file ").toStdString() + path), m_path(path) { }
+            Exception(qstrtostr(QObject::tr("Bad sound file ")) + path), m_path(path) { }
         BadSoundFileException(std::string path, std::string message) :
-            Exception(QObject::tr("Bad sound file ").toStdString() + path + ": " + message), m_path(path) { }
+            Exception(qstrtostr(QObject::tr("Bad sound file ")) + path + ": " + message), m_path(path) { }
         BadSoundFileException(std::string path, std::string file, int line) :
-            Exception(QObject::tr("Bad sound file ").toStdString() + path, file, line), m_path(path) { }
+            Exception(qstrtostr(QObject::tr("Bad sound file ")) + path, file, line), m_path(path) { }
 
         ~BadSoundFileException() throw() { }
 
