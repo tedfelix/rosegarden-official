@@ -33,6 +33,7 @@
 
 
 #include "PeakFile.h"
+#include "misc/Strings.h"
 
 namespace Rosegarden
 {
@@ -57,11 +58,11 @@ public:
     {
     public:
         BadPeakFileException(std::string path) :
-            Exception("Bad peak file " + path), m_path(path) { }
+            Exception(qstrtostr(QObject::tr("Bad peak file ")) + path), m_path(path) { }
         BadPeakFileException(std::string path, std::string file, int line) :
-            Exception("Bad peak file " + path, file, line), m_path(path) { }
+            Exception(qstrtostr(QObject::tr("Bad peak file ")) + path, file, line), m_path(path) { }
         BadPeakFileException(const SoundFile::BadSoundFileException &e) :
-            Exception("Bad peak file (malformed audio?) " + e.getPath()), m_path(e.getPath()) { }
+            Exception(qstrtostr(QObject::tr("Bad peak file (malformed audio?) ")) + e.getPath()), m_path(e.getPath()) { }
 
         ~BadPeakFileException() throw() { }
 

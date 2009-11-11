@@ -30,11 +30,14 @@
 #include "AudioFile.h"
 #include "base/RealTime.h"
 
+#include <QCoreApplication>
+
 namespace Rosegarden
 {
 
 class RIFFAudioFile : public AudioFile
 {
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::RIFFAudioFile)
 public:
     RIFFAudioFile(unsigned int id,
                   const std::string &name,

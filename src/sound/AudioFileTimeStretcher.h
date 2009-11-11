@@ -21,6 +21,7 @@
 #include <QObject>
 #include "AudioFile.h"
 #include "base/Exception.h"
+#include "misc/Strings.h"
 
 namespace Rosegarden {
 
@@ -45,7 +46,7 @@ public:
     class CancelledException : public Exception
     {
     public:
-	CancelledException() : Exception("Cancelled") { }
+	CancelledException() : Exception(qstrtostr(QObject::tr("Cancelled"))) { }
 	~CancelledException() throw() { }
     };
 

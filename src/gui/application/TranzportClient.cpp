@@ -26,6 +26,8 @@
 #include "gui/editors/segment/TrackButtons.h"
 #include "RosegardenMainWindow.h"
 #include "misc/Debug.h"
+#include "misc/Strings.h"
+
 #include <QSocketNotifier>
 
 #include <errno.h>
@@ -54,7 +56,7 @@ namespace Rosegarden
         m_descriptor = open("/dev/tranzport0",O_RDWR);
         if(m_descriptor < 0)
         {
-            throw Exception("Failed to open tranzport device /dev/tranzport0");      
+            throw Exception(qstrtostr(QObject::tr("Failed to open tranzport device /dev/tranzport0")));      
         }
                 
         

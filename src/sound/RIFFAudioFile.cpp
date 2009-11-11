@@ -16,6 +16,7 @@
 #include "RIFFAudioFile.h"
 #include "base/RealTime.h"
 #include "base/Profiler.h"
+#include "misc/Strings.h"
 
 using std::cout;
 using std::cerr;
@@ -55,7 +56,7 @@ RIFFAudioFile::RIFFAudioFile(const std::string &fileName,
     else if (bitsPerSample == 32)
         m_subFormat = FLOAT;
     else
-        throw(BadSoundFileException(m_fileName, "Rosegarden currently only supports 16 or 32-bit PCM or IEEE floating-point RIFF files for writing"));
+        throw(BadSoundFileException(m_fileName, qstrtostr(QObject::tr("Rosegarden currently only supports 16 or 32-bit PCM or IEEE floating-point RIFF files for writing"))));
 
 }
 
@@ -372,7 +373,7 @@ RIFFAudioFile::readFormatChunk()
         << "can't find RIFF identifier\n";
 #endif
 
-        throw(BadSoundFileException(m_fileName, "RIFFAudioFile::readFormatChunk - can't find RIFF identifier"));
+        throw(BadSoundFileException(m_fileName, qstrtostr(QObject::tr("Can't find RIFF identifier"))));
     }
 
     // Look for the WAV identifier
@@ -382,7 +383,7 @@ RIFFAudioFile::readFormatChunk()
         std::cerr << "Can't find WAV identifier\n";
 #endif
 
-        throw(BadSoundFileException(m_fileName, "Can't find WAV identifier"));
+        throw(BadSoundFileException(m_fileName, qstrtostr(QObject::tr("Can't find WAV identifier"))));
     }
 
     // Look for the FORMAT identifier - note that this doesn't actually
@@ -395,7 +396,7 @@ RIFFAudioFile::readFormatChunk()
         std::cerr << "Can't find FORMAT identifier\n";
 #endif
 
-        throw(BadSoundFileException(m_fileName, "Can't find FORMAT identifier"));
+        throw(BadSoundFileException(m_fileName, qstrtostr(QObject::tr("Can't find FORMAT identifier"))));
     }
 
     // Little endian conversion of length bytes into file length
@@ -448,7 +449,7 @@ RIFFAudioFile::readFormatChunk()
     } else if (subFormat == 0x03) {
         m_subFormat = FLOAT;
     } else {
-        throw(BadSoundFileException(m_fileName, "Rosegarden currently only supports PCM or IEEE floating-point RIFF files"));
+        throw(BadSoundFileException(m_fileName, qstrtostr(QObject::tr("Rosegarden currently only supports PCM or IEEE floating-point RIFF files"))));
     }
 
     // We seem to have a good looking .WAV file - extract the
@@ -463,7 +464,7 @@ RIFFAudioFile::readFormatChunk()
         break;
 
     default: {
-            throw(BadSoundFileException(m_fileName, "Unsupported number of channels"));
+            throw(BadSoundFileException(m_fileName, qstrtostr(QObject::tr("Unsupported number of channels"))));
         }
         break;
     }
@@ -477,11 +478,11 @@ RIFFAudioFile::readFormatChunk()
 
     if (m_subFormat == PCM) {
         if (m_bitsPerSample != 8 && m_bitsPerSample != 16 && m_bitsPerSample != 24) {
-            throw BadSoundFileException("Rosegarden currently only supports 8-, 16- or 24-bit PCM in RIFF files");
+            throw BadSoundFileException(qstrtostr(QObject::tr("Rosegarden currently only supports 8-, 16- or 24-bit PCM in RIFF files")));
         }
     } else if (m_subFormat == FLOAT) {
         if (m_bitsPerSample != 32) {
-            throw BadSoundFileException("Rosegarden currently only supports 32-bit floating-point in RIFF files");
+            throw BadSoundFileException(qstrtostr(QObject::tr("Rosegarden currently only supports 32-bit floating-point in RIFF files")));
         }
     }
 

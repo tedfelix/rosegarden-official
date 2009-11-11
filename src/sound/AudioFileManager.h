@@ -34,6 +34,7 @@
 
 #include "base/XmlExportable.h"
 #include "base/Exception.h"
+#include "misc/Strings.h"
 
 // AudioFileManager loads and maps audio files to their
 // internal references (ids).  A point of contact for
@@ -67,11 +68,11 @@ public:
     {
     public:
         BadAudioPathException(std::string path) :
-            Exception("Bad audio file path " + path), m_path(path) { }
+            Exception(qstrtostr(QObject::tr("Bad audio file path ")) + path), m_path(path) { }
         BadAudioPathException(std::string path, std::string file, int line) :
-            Exception("Bad audio file path " + path, file, line), m_path(path) { }
+            Exception(qstrtostr(QObject::tr("Bad audio file path ")) + path, file, line), m_path(path) { }
         BadAudioPathException(const SoundFile::BadSoundFileException &e) :
-            Exception("Bad audio file path (malformed file?) " + e.getPath()), m_path(e.getPath()) { }
+            Exception(qstrtostr(QObject::tr("Bad audio file path (malformed file?) ")) + e.getPath()), m_path(e.getPath()) { }
 
         ~BadAudioPathException() throw() { }
 
