@@ -321,11 +321,11 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
 
     m_filePrinter = new QComboBox(frame);
     connect(m_filePrinter, SIGNAL(activated(int)), this, SLOT(slotModified()));
-    m_filePrinter->addItem(tr("KPrinter (KDE3)"));
+    m_filePrinter->addItem(tr("KPrinter (KDE 3)"));
     m_filePrinter->addItem(tr("Gtk-LP (GNOME)"));
     m_filePrinter->addItem(tr("lpr (no GUI)"));
     m_filePrinter->addItem(tr("lp (no GUI)"));
-    m_filePrinter->addItem(tr("HPLIP (QT4)"));
+    m_filePrinter->addItem(tr("HPLIP (Qt 4)"));
     m_filePrinter->setToolTip(tr("Used to print generated LilyPond output without previewing it"));
 
     layout->addWidget(m_filePrinter, row, 1, 1, 3);
