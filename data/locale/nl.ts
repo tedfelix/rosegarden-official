@@ -14825,6 +14825,11 @@ Would you like to use
         <translation type="unfinished">Liggend</translation>
     </message>
     <message>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="219"/>
+        <source>&lt;qt&gt;Track staff brackets are found in the &lt;b&gt;Track Parameters&lt;/b&gt; box, and may be used to group staffs in various ways&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="277"/>
         <source>http://rosegardenmusic.com/wiki/doc:manual-lilypondoptions-en</source>
         <translation type="unfinished"></translation>
@@ -14963,11 +14968,6 @@ Would you like to use
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="212"/>
         <source>&lt;qt&gt;If checked, Rosegarden&apos;s beamings will be exported.  Otherwise, LilyPond will calculate beams automatically.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="219"/>
-        <source>&lt;qt&gt;Track staff brackets are found in the &lt;b&gt;Track Parameters&gt; box, and may be used to group staffs in various ways&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -18245,180 +18245,189 @@ Controleer of het apparaat juist is geconfigureerd in het dialoog &apos;Beheer M
 <context>
     <name>Rosegarden::ProjectPackager</name>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="84"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="85"/>
         <source>Unpack</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="85"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="86"/>
         <source>Pack</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="87"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="88"/>
         <source>Rosegarden - %1 Project Package...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="98"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="99"/>
         <source>Cancel</source>
         <translation type="unfinished">Annuleren</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="466"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="132"/>
+        <source>&lt;qt&gt;&lt;p&gt;Fatal error.&lt;/p&gt;%1&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="260"/>
+        <source>&lt;qt&gt;&lt;p&gt;Unable to read %1.&lt;/p&gt;%2&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="430"/>
+        <source>&lt;qt&gt;&lt;p&gt;Could not write&lt;br&gt;%1.&lt;/p&gt;%2&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="436"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="815"/>
+        <source>&lt;qt&gt;Could not remove&lt;br&gt;%1&lt;br&gt;&lt;br&gt;%2&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="441"/>
+        <source>&lt;qt&gt;Could not copy&lt;br&gt;%1&lt;br&gt;  to&lt;br&gt;%2&lt;br&gt;&lt;br&gt;%3&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="445"/>
+        <source>&lt;qt&gt;&lt;p&gt;Could not remove&lt;br&gt;%1.&lt;/p&gt;%2&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="467"/>
         <source>Checking for flac...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="468"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="469"/>
         <source>&lt;qt&gt;&lt;p&gt;The &lt;b&gt;flac&lt;/b&gt; command was not found.&lt;/p&gt;&lt;p&gt;FLAC is a lossless audio compression format used to reduce the size of Rosegarden project packages with no loss of audio quality.  Please install FLAC and try again.  This utility is typically available to most distros as a package called &quot;flac&quot;.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="530"/>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="732"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="531"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="733"/>
         <source>Packing project...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="131"/>
-        <source>&lt;qt&gt;&lt;p&gt;Fatal error.&lt;/p&gt;&lt;p&gt;Processing aborted.&lt;/p&gt;&lt;/qt&gt;</source>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="566"/>
+        <source>&lt;qt&gt;&lt;p&gt;Could not create temporary working directory.&lt;/p&gt;%1&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="132"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="749"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="948"/>
+        <source>&lt;qt&gt;&lt;p&gt;Unable to write to temporary backend processing script %1.&lt;/p&gt;%2&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="800"/>
+        <source>&lt;qt&gt;&lt;p&gt;Encoding and compressing files failed with exit status %1. Checking %2 for the line that ends with &quot;exit %1&quot; may be useful for diagnostic purposes.&lt;/p&gt;%3&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="878"/>
+        <source>&lt;qt&gt;&lt;p&gt;Unable to read to temporary file list.&lt;/p&gt;%1&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="1044"/>
+        <source>&lt;qt&gt;&lt;p&gt;Extracting and decoding files failed with exit status %1. Checking %2 for the line that ends with &quot;exit %1&quot; may be useful for diagnostic purposes.&lt;/p&gt;%3&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="133"/>
         <source>Rosegarden - Fatal Processing Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="435"/>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="814"/>
-        <source>&lt;qt&gt;Could not remove&lt;br&gt;%1&lt;br&gt;&lt;br&gt;Processing aborted.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="440"/>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="604"/>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="649"/>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="716"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="605"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="650"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="717"/>
         <source>&lt;qt&gt;Could not copy&lt;br&gt;%1&lt;br&gt;  to&lt;br&gt;%2&lt;br&gt;&lt;br&gt;Processing aborted.&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="484"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="485"/>
         <source>Checking for wavpack...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="486"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="64"/>
+        <source>&lt;p&gt;Processing aborted&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="487"/>
         <source>&lt;qt&gt;&lt;p&gt;The &lt;b&gt;wavpack&lt;/b&gt; command was not found.&lt;/p&gt;&lt;p&gt;WavPack is an audio compression format used to reduce the size of Rosegarden project packages with no loss of audio quality.  Please install WavPack and try again.  This utility is typically available to most distros as part of a package called &quot;wavpack&quot;.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="495"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="496"/>
         <source>Checking for wvunpack...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="497"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="498"/>
         <source>&lt;qt&gt;&lt;p&gt;The &lt;b&gt;wvunpack&lt;/b&gt; command was not found.&lt;/p&gt;&lt;p&gt;WavPack is an audio compression format used to reduce the size of Rosegarden project packages with no loss of audio quality.  Please install WavPack and try again.  This utility is typically available to most distros as part of a package called &quot;wavpack&quot;.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="565"/>
-        <source>&lt;qt&gt;&lt;p&gt;Could not create temporary working directory.&lt;/p&gt;&lt;p&gt;Processing aborted.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="569"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="570"/>
         <source>Copying audio files...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="654"/>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="684"/>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="918"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="655"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="685"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="919"/>
         <source>Rosegarden</source>
         <translation type="unfinished">Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="655"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="656"/>
         <source>&lt;qt&gt;&lt;p&gt;Rosegarden can add any number of extra files you may desire to a project package.  For example, you may wish to include an explanatory text file, a soundfont, a bank definition for ZynAddSubFX, or perhaps some cover art.&lt;/p&gt;&lt;p&gt;Would you like to include any additional files?&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="676"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="677"/>
         <source>All files</source>
         <translation type="unfinished">Alle bestanden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="685"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="686"/>
         <source>&lt;qt&gt;&lt;p&gt;Would you like to include any additional files?&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="689"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="690"/>
         <source>Copying plugin data and extra files...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="748"/>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="947"/>
-        <source>&lt;qt&gt;&lt;p&gt;Unable to write to temporary backend processing script %1.&lt;/p&gt;&lt;p&gt;Processing aborted.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="799"/>
-        <source>&lt;qt&gt;&lt;p&gt;Encoding and compressing files failed with exit status %1. Checking %2 for the line that ends with &quot;exit %1&quot; may be useful for diagnostic purposes.&lt;/p&gt;&lt;p&gt;Processing aborted.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="870"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="871"/>
         <source>&lt;qt&gt;&lt;p&gt;Unable to obtain list of files using tar.&lt;/p&gt;&lt;p&gt;Process exited with status code %1&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="877"/>
-        <source>&lt;qt&gt;&lt;p&gt;Unable to read to temporary file list.&lt;/p&gt;&lt;p&gt;Processing aborted.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="1043"/>
-        <source>&lt;qt&gt;&lt;p&gt;Extracting and decoding files failed with exit status %1. Checking %2 for the line that ends with &quot;exit %1&quot; may be useful for diagnostic purposes.&lt;/p&gt;&lt;p&gt;Processing aborted.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="833"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="834"/>
         <source>Unpacking project...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="259"/>
-        <source>&lt;qt&gt;&lt;p&gt;Unable to read %1.&lt;/p&gt;&lt;p&gt;Processing aborted.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="429"/>
-        <source>&lt;qt&gt;&lt;p&gt;Could not write&lt;br&gt;%1.&lt;/p&gt;&lt;p&gt;Processing aborted.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="444"/>
-        <source>&lt;qt&gt;&lt;p&gt;Could not remove&lt;br&gt;%1.&lt;/p&gt;&lt;p&gt;Processing aborted.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="919"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="920"/>
         <source>&lt;qt&gt;&lt;p&gt;It appears that you have already unpacked this project package.&lt;/p&gt;&lt;p&gt;Would you like to load %1 now?&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="1018"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="1019"/>
         <source>Decoding audio files...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="1020"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="1021"/>
         <source>&lt;qt&gt;Could not start backend processing script %1.&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20210,7 +20219,7 @@ Error was : %2</source>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="156"/>
-        <source>&lt;qt&gt;&lt;p&gt;When checked,     any selected segments will repeat until they run into another segment,  or the end of the composition.&lt;/p&gt;&lt;p&gt;When viewed in the notation editor or printed via LilyPond, the segments will be bracketed by repeat signs.&lt;/p&gt;&lt;p&gt;&lt;center&gt;&lt;img src=&quot;:pixmaps/tooltip/repeats.png&quot;&lt;/img&gt;&lt;/center&gt;&lt;/p&gt;&lt;br&gt;These can be used in conjunction with special LilyPond export directives to create repeats with first and second alternate endings. See rosegardenmusic.com for a tutorial. [Ctrl+Shift+R] &lt;/qt&gt;</source>
+        <source>&lt;qt&gt;&lt;p&gt;When checked,     any selected segments will repeat until they run into another segment,  or the end of the composition.&lt;/p&gt;&lt;p&gt;When viewed in the notation editor or printed via LilyPond, the segments will be bracketed by repeat signs.&lt;/p&gt;&lt;p&gt;&lt;center&gt;&lt;img src=&quot;:pixmaps/tooltip/repeats.png&quot;&gt;&lt;/img&gt;&lt;/center&gt;&lt;/p&gt;&lt;br&gt;These can be used in conjunction with special LilyPond export directives to create repeats with first and second alternate endings. See rosegardenmusic.com for a tutorial. [Ctrl+Shift+R] &lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -21304,33 +21313,28 @@ Andere lopende applicaties afsluiten kan de werking van Rosegarden verbeteren.</
 <context>
     <name>Rosegarden::SynthPluginManagerDialog</name>
     <message>
-        <location filename="../../src/gui/studio/SynthPluginManagerDialog.cpp" line="67"/>
+        <location filename="../../src/gui/studio/SynthPluginManagerDialog.cpp" line="69"/>
         <source>Manage Synth Plugins</source>
         <translation type="unfinished">Beheer synth-plugins</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/SynthPluginManagerDialog.cpp" line="193"/>
+        <location filename="../../src/gui/studio/SynthPluginManagerDialog.cpp" line="195"/>
         <source>&lt;none&gt;</source>
         <translation type="unfinished">&lt;geen&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/SynthPluginManagerDialog.cpp" line="217"/>
+        <location filename="../../src/gui/studio/SynthPluginManagerDialog.cpp" line="219"/>
         <source>Controls</source>
         <translation type="unfinished">Controls</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/SynthPluginManagerDialog.cpp" line="222"/>
+        <location filename="../../src/gui/studio/SynthPluginManagerDialog.cpp" line="224"/>
         <source>Editor &gt;&gt;</source>
         <translation type="unfinished">Editor &gt;&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/SynthPluginManagerDialog.cpp" line="245"/>
-        <source>Help for the Synth-Plugin Management Dialog</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/SynthPluginManagerDialog.cpp" line="246"/>
-        <source>Create plugin instances here, e.g. software synthesizers and effects. </source>
+        <location filename="../../src/gui/studio/SynthPluginManagerDialog.cpp" line="250"/>
+        <source>http://rosegardenmusic.com/wiki/doc:synth-plugin-manager-en</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
