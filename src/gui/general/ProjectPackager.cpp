@@ -60,7 +60,8 @@ ProjectPackager::ProjectPackager(QWidget *parent, RosegardenDocument *document, 
         m_filename(filename),
         m_trueFilename(filename),
         m_packTmpDirName("fatal error"),
-        m_packDataDirName("fatal error")
+        m_packDataDirName("fatal error"),
+        m_abortText(tr("<p>Processing aborted</p>"))
 
 {
     // (I'm not sure why RG_DEBUG didn't work from in here.  Having to use
@@ -128,7 +129,7 @@ ProjectPackager::puke(QString error)
     m_progress->setMaximum(100);
     m_progress->hide();
 
-    m_info->setText(tr("<qt><p>Fatal error.</p><p>Processing aborted.</p></qt>"));
+    m_info->setText(tr("<qt><p>Fatal error.</p>%1</qt>").arg(m_abortText));
     QMessageBox::critical(this, tr("Rosegarden - Fatal Processing Error"), error, QMessageBox::Ok, QMessageBox::Ok);
 
     // abort processing after a fatal error, so calls to puke() abort the whole
@@ -256,7 +257,7 @@ ProjectPackager::getPluginFilesAndRewriteXML(const QString fileToModify, const Q
 
     bool readOK = GzipFile::readFromFile(fileToModify, inText);
     if (!readOK) {
-        puke(tr("<qt><p>Unable to read %1.</p><p>Processing aborted.</p></qt>").arg(fileToModify));
+        puke(tr("<qt><p>Unable to read %1.</p>%2</qt>").arg(fileToModify).arg(m_abortText));
         return QStringList();
     }
 
@@ -426,22 +427,22 @@ ProjectPackager::getPluginFilesAndRewriteXML(const QString fileToModify, const Q
     QString ofileName = QString("%1.tmp").arg(fileToModify);
     bool writeOK = GzipFile::writeToFile(ofileName, outText);
     if (!writeOK) {
-        puke(tr("<qt><p>Could not write<br>%1.</p><p>Processing aborted.</p></qt>").arg(ofileName));
+        puke(tr("<qt><p>Could not write<br>%1.</p>%2</qt>").arg(ofileName).arg(m_abortText));
         return QStringList();
     }
 
     // swap the .tmp modified copy back to the original filename
     if (!QFile::remove(fileToModify)) {
-        puke(tr("<qt>Could not remove<br>%1<br><br>Processing aborted.</qt>").arg(fileToModify));
+        puke(tr("<qt>Could not remove<br>%1<br><br>%2</qt>").arg(fileToModify).arg(m_abortText));
         return QStringList();
     }
 
     if (!QFile::copy(ofileName, fileToModify)) {
-        puke(tr("<qt>Could not copy<br>%1<br>  to<br>%2<br><br>Processing aborted.</qt>").arg(ofileName).arg(fileToModify));
+        puke(tr("<qt>Could not copy<br>%1<br>  to<br>%2<br><br>%3</qt>").arg(ofileName).arg(fileToModify).arg(m_abortText));
         return QStringList();
     }
     if (!QFile::remove(ofileName)) {
-        puke(tr("<qt><p>Could not remove<br>%1.</p><p>Processing aborted.</p></qt>").arg(ofileName));
+        puke(tr("<qt><p>Could not remove<br>%1.</p>%2</qt>").arg(ofileName).arg(m_abortText));
         return QStringList();
     }
 
@@ -562,7 +563,7 @@ ProjectPackager::runPack()
     if (tmpDir.mkdir(m_packTmpDirName)) {
 
     } else {
-        puke(tr("<qt><p>Could not create temporary working directory.</p><p>Processing aborted.</p></qt>"));
+        puke(tr("<qt><p>Could not create temporary working directory.</p>%1</qt>").arg(m_abortText));
         return;
     }
 
@@ -745,7 +746,7 @@ ProjectPackager::startAudioEncoder(QStringList files)
     if (m_script.exists()) m_script.remove();
 
     if (!m_script.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        puke(tr("<qt><p>Unable to write to temporary backend processing script %1.</p><p>Processing aborted.</p></qt>"));
+        puke(tr("<qt><p>Unable to write to temporary backend processing script %1.</p>%2</qt>").arg(m_abortText));
         return;
     }
     
@@ -796,7 +797,7 @@ ProjectPackager::finishPack(int exitCode, QProcess::ExitStatus) {
     if (exitCode == 0) {
         delete m_process;
     } else {
-        puke(tr("<qt><p>Encoding and compressing files failed with exit status %1. Checking %2 for the line that ends with \"exit %1\" may be useful for diagnostic purposes.</p><p>Processing aborted.</p></qt>").arg(exitCode).arg(m_script.fileName()));
+        puke(tr("<qt><p>Encoding and compressing files failed with exit status %1. Checking %2 for the line that ends with \"exit %1\" may be useful for diagnostic purposes.</p>%3</qt>").arg(exitCode).arg(m_script.fileName()).arg(m_abortText));
         return;
     }
 
@@ -811,7 +812,7 @@ ProjectPackager::finishPack(int exitCode, QProcess::ExitStatus) {
     QString dirname = fi.path();
     QString basename = QString("%1/%2.rg").arg(dirname).arg(fi.baseName());
     if (!QFile::remove(basename)) {
-        puke(tr("<qt>Could not remove<br>%1<br><br>Processing aborted.</qt>").arg(basename));
+        puke(tr("<qt>Could not remove<br>%1<br><br>%2</qt>").arg(basename).arg(m_abortText));
         return;
     }
 
@@ -874,7 +875,7 @@ ProjectPackager::runUnpack()
     QFile contents(ofile);
 
     if (!contents.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        puke(tr("<qt><p>Unable to read to temporary file list.</p><p>Processing aborted.</p></qt>"));
+        puke(tr("<qt><p>Unable to read to temporary file list.</p>%1</qt>").arg(m_abortText));
         return;
     }
 
@@ -944,7 +945,7 @@ ProjectPackager::startAudioDecoder(QStringList flacFiles, QStringList wavpackFil
     if (m_script.exists()) m_script.remove();
 
     if (!m_script.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        puke(tr("<qt><p>Unable to write to temporary backend processing script %1.</p><p>Processing aborted.</p></qt>").arg(scriptName));
+        puke(tr("<qt><p>Unable to write to temporary backend processing script %1.</p>%2</qt>").arg(scriptName).arg(m_abortText));
         return;
     }
 
@@ -1040,7 +1041,7 @@ ProjectPackager::finishUnpack(int exitCode, QProcess::ExitStatus) {
     if (exitCode == 0) {
         delete m_process;
     } else {
-        puke(tr("<qt><p>Extracting and decoding files failed with exit status %1. Checking %2 for the line that ends with \"exit %1\" may be useful for diagnostic purposes.</p><p>Processing aborted.</p></qt>").arg(exitCode).arg(m_script.fileName()));
+        puke(tr("<qt><p>Extracting and decoding files failed with exit status %1. Checking %2 for the line that ends with \"exit %1\" may be useful for diagnostic purposes.</p>%3</qt>").arg(exitCode).arg(m_script.fileName()).arg(m_abortText));
         return;
     }
 

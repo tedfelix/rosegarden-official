@@ -118,6 +118,8 @@ protected:
     // possibly avoid troubles.
     void sanityCheck();
 
+    QString m_abortText;
+
 protected slots:
     /**
      * Display an explanatory failure message and terminate processing
