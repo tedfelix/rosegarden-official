@@ -102,6 +102,8 @@ protected slots:
     void slotEditTranspose();
     void slotEditSwitchPreset();
 
+    void slotMoveEventsUpStaff();
+    void slotMoveEventsDownStaff();
 
     void slotPreviewSelection();
     void slotClearLoop();

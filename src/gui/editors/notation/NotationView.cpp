@@ -3751,6 +3751,76 @@ NotationView::slotStepByStepTargetRequested(QObject *obj)
     action->setChecked(obj == this);
 }
 
+void
+NotationView::slotMoveEventsUpStaff()
+{
+    EventSelection *selection = getSelection();
+    if (!selection) return;
+
+    NotationScene *scene = m_notationWidget->getScene();
+    if (!scene) return;
+//    NotationStaff *current_staff = scene->getCurrentStaff();
+//    if (!current_staff) return;
+    NotationStaff *target_staff = scene->getStaffAbove();
+    if (!target_staff) return;
+
+    MacroCommand *command = new MacroCommand(tr("Move Events to Staff Above"));
+
+    timeT insertionTime = selection->getStartTime();
+
+    Clipboard *c = new Clipboard;
+    CopyCommand *cc = new CopyCommand(*selection, c);
+    cc->execute();
+
+    command->addCommand(new EraseCommand(*selection));
+
+    scene->setCurrentStaff(target_staff);
+
+    command->addCommand(new PasteEventsCommand
+                        (*getCurrentSegment(), c, insertionTime,
+                         PasteEventsCommand::NoteOverlay));
+    
+    CommandHistory::getInstance()->addCommand(command);
+
+    delete c;
+
+}
+
+void
+NotationView::slotMoveEventsDownStaff()
+{
+    EventSelection *selection = getSelection();
+    if (!selection) return;
+
+    NotationScene *scene = m_notationWidget->getScene();
+    if (!scene) return;
+//    NotationStaff *current_staff = scene->getCurrentStaff();
+//    if (!current_staff) return;
+    NotationStaff *target_staff = scene->getStaffBelow();
+    if (!target_staff) return;
+
+    MacroCommand *command = new MacroCommand(tr("Move Events to Staff Above"));
+
+    timeT insertionTime = selection->getStartTime();
+
+    Clipboard *c = new Clipboard;
+    CopyCommand *cc = new CopyCommand(*selection, c);
+    cc->execute();
+
+    command->addCommand(new EraseCommand(*selection));
+
+    scene->setCurrentStaff(target_staff);
+
+    command->addCommand(new PasteEventsCommand
+                        (*getCurrentSegment(), c, insertionTime,
+                         PasteEventsCommand::NoteOverlay));
+    
+    CommandHistory::getInstance()->addCommand(command);
+
+    delete c;
+
+}
+
 
 } // end namespace Rosegarden
 
