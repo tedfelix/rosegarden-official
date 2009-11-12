@@ -100,15 +100,11 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenDocument *d
     m_variationCheckBox->setFont(f);
     m_percussionCheckBox->setFont(f);
 
-    m_bankValue->setToolTip(tr("<qt>Set the MIDI bank from which programs will be selected upon loading a new file or (if so configured) at the start of playback</qt>"));
+    m_bankValue->setToolTip(tr("<qt>Set the MIDI bank from which to select programs</qt>"));
     m_channelValue->setToolTip(tr("<qt><p>Set the MIDI channel number.</p><p>Before changing this, consider switching to a different instrument instead.  Instruments #1 through #16 match MIDI channels 1 through 16 by default.  You may change this relationship using this control if you wish, but this can lead to confusion</p></qt>"));
-    m_programValue->setToolTip(tr("<qt>Set the MIDI program or &quot;patch&quot;</p><p>This will be transmitted upon loading a new file and (if Rosegarden is so configured) at the start of playback</p></qt>"));
+    m_programValue->setToolTip(tr("<qt>Set the MIDI program or &quot;patch&quot;</p></qt>"));
     m_variationValue->setToolTip(tr("<qt>Set variations on the program above, if available in the studio</qt>"));
-    QString checkBoxTip = tr("<qt>Enable the control to the right</qt>"); 
-    m_bankCheckBox->setToolTip(tr(checkBoxTip));
-    m_programCheckBox->setToolTip(tr(checkBoxTip));
-    m_variationCheckBox->setToolTip(tr(checkBoxTip));
-    m_percussionCheckBox->setToolTip(tr("<qt><p>Check this to tell Rosegarden that this is a percussion instrument.  This allows you access to any percussion key maps and/or Roland-style drum kits you may have configured in the studio</p></qt>"));
+    m_percussionCheckBox->setToolTip(tr("<qt><p>Check this to tell Rosegarden that this is a percussion instrument.  This allows you access to any percussion key maps and drum kits you may have configured in the studio</p></qt>"));
 
     m_bankValue->setMaxVisibleItems(20);
     m_programValue->setMaxVisibleItems(20);
