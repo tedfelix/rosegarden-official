@@ -156,7 +156,7 @@ SegmentParameterBox::initBox()
     m_repeatValue->setToolTip(tr("<qt><p>When checked,     any selected segments will repeat until they run into another segment,  "
                                  "or the end of the composition.</p><p>When viewed in the notation editor or printed via LilyPond, "
                                  "the segments will be bracketed by repeat signs.</p><p><center><img src=\":pixmaps/tooltip/repeats"
-                                 ".png\"</img></center></p><br>These can be used in conjunction with special LilyPond export direct"
+                                 ".png\"></img></center></p><br>These can be used in conjunction with special LilyPond export direct"
                                  "ives to create repeats with first and second alternate endings. See rosegardenmusic.com for a tut"
                                  "orial. [Ctrl+Shift+R] </qt>"));
     //m_repeatValue->setFixedHeight(comboHeight);
