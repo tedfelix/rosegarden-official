@@ -778,12 +778,13 @@ RosegardenMainViewWidget::createMatrixView(std::vector<Segment *> segmentsToEdit
             matrixView, SLOT(slotCompositionStateUpdate()));
     connect(this, SIGNAL(compositionStateUpdate()),
             matrixView, SLOT(slotCompositionStateUpdate()));
-    connect(this,
-            SIGNAL(instrumentLevelsChanged(InstrumentId,
-                                           const LevelInfo &)),
-            matrixView,
-            SLOT(slotInstrumentLevelsChanged(InstrumentId,
-                                             const LevelInfo &)));
+//  This is obsolete?
+//    connect(this,
+//            SIGNAL(instrumentLevelsChanged(InstrumentId,
+//                                           const LevelInfo &)),
+//            matrixView,
+//            SLOT(slotInstrumentLevelsChanged(InstrumentId,
+//                                             const LevelInfo &)));
 
     // Encourage the matrix view window to open to the same
     // interval as the current segment view

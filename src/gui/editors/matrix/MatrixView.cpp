@@ -354,7 +354,6 @@ MatrixView::setupActions()
 
     createAction("pitch_bend_sequence", SLOT(slotPitchBendSequence()));    
     
-    createAction("show_inst_parameters", SLOT(slotDockParametersBack()));
     createAction("show_chords_ruler", SLOT(slotToggleChordsRuler()));
     createAction("show_tempo_ruler", SLOT(slotToggleTempoRuler()));
     
