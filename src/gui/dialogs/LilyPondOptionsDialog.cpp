@@ -216,7 +216,7 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     m_lilyExportStaffGroup = new QCheckBox(
                                  tr("Export track staff brackets"), frameNotation);
     layoutNotation->addWidget(m_lilyExportStaffGroup, 3, 0, 0+1, 1- 0+1);
-    m_lilyExportStaffGroup->setToolTip(tr("<qt>Track staff brackets are found in the <b>Track Parameters> box, and may be used to group staffs in various ways</qt>"));
+    m_lilyExportStaffGroup->setToolTip(tr("<qt>Track staff brackets are found in the <b>Track Parameters</b> box, and may be used to group staffs in various ways</qt>"));
 
     layoutGrid->setRowStretch(4, 10);
 
