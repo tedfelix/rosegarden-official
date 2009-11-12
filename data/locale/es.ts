@@ -1612,12 +1612,12 @@
         <location filename="../QMenuStrings.cpp" line="1821"/>
         <location filename="../QMenuStrings.cpp" line="3511"/>
         <source>&amp;Print...</source>
-        <translation>&amp;Imprimir...</translation>
+        <translation>Im&amp;primir...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1820"/>
         <source>P&amp;rint preview...</source>
-        <translation>P&amp;revisualizar la impresión...</translation>
+        <translation>Vista preli&amp;minar...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1877"/>
@@ -3982,7 +3982,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3510"/>
         <source>Prin&amp;t preview...</source>
-        <translation>P&amp;revisualizar la impresión...</translation>
+        <translation>Vista preli&amp;minar...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3512"/>
@@ -9771,7 +9771,7 @@ así lo desea.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="731"/>
         <source>default</source>
-        <translation>por defecto</translation>
+        <translation>predeterminado</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="732"/>
@@ -10577,7 +10577,7 @@ así lo desea.</translation>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="182"/>
         <source>External audio editor path</source>
-        <translation>Camino del editor externo de audio</translation>
+        <translation>Ruta del editor externo de audio</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="216"/>
@@ -11237,7 +11237,7 @@ Por favor, seleccione cuáles de ellos quiere borrar permanentemente del disco d
     <message>
         <location filename="../../src/gui/configuration/AudioPropertiesPage.cpp" line="63"/>
         <source>Audio file path:</source>
-        <translation>Camino de los archivos de audio:</translation>
+        <translation>Ruta de los archivos de audio:</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioPropertiesPage.cpp" line="68"/>
@@ -11257,7 +11257,7 @@ Por favor, seleccione cuáles de ellos quiere borrar permanentemente del disco d
     <message>
         <location filename="../../src/gui/configuration/AudioPropertiesPage.cpp" line="91"/>
         <source>Modify audio path</source>
-        <translation>Modificar camino de archivos de audio</translation>
+        <translation>Modificar ruta de archivos de audio</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioPropertiesPage.cpp" line="133"/>
@@ -11272,7 +11272,7 @@ Por favor, seleccione cuáles de ellos quiere borrar permanentemente del disco d
     <message>
         <location filename="../../src/gui/configuration/AudioPropertiesPage.cpp" line="165"/>
         <source>Audio Recording Path</source>
-        <translation>Camino de grabación de audio</translation>
+        <translation>Ruta de grabación de audio</translation>
     </message>
 </context>
 <context>
@@ -12139,12 +12139,12 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="110"/>
         <source>Min. value  </source>
-        <translation>Valor min.</translation>
+        <translation>Valor min.  </translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="111"/>
         <source>Max. value  </source>
-        <translation>Valor max.</translation>
+        <translation>Valor max.  </translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="112"/>
@@ -14450,7 +14450,7 @@ Ejemplo de texto perteneciente del archivo:</translation>
     <message>
         <location filename="../../src/gui/widgets/InstrumentAliasButton.cpp" line="50"/>
         <source>Enter instrument alias:</source>
-        <translation>Introduzca alias del instrumento</translation>
+        <translation>Introduzca alias del instrumento:</translation>
     </message>
 </context>
 <context>
@@ -14935,7 +14935,7 @@ en su lugar? </translation>
     </message>
     <message>
         <source>&lt;qt&gt;Choose which tracks to export.&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;Eligir cuáles pistas se exportan&lt;/qt&gt;</translation>
+        <translation type="obsolete">&lt;qt&gt;Elegir cuáles pistas se exportan&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="111"/>
@@ -14982,7 +14982,7 @@ en su lugar? </translation>
     </message>
     <message>
         <source>&lt;qt&gt;Set the paper size.&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;Eligir el tamaño del papel.&lt;/qt&gt;</translation>
+        <translation type="obsolete">&lt;qt&gt;Elegir el tamaño del papel.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="134"/>
@@ -15077,8 +15077,7 @@ en su lugar? </translation>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="155"/>
         <source>&lt;qt&gt;&lt;p&gt;Choose the staff size of the score.  LilyPond will scale staff contents relative to this size.&lt;/p&gt;&lt;p&gt;Sizes marked * may provide the best rendering quality.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Elegir el tamaño de pentagrama de la partitura.  LilyPond escala el contenido de la pentagrama 
-Choose the staff size of the score.  LilyPond will scale staff contents relative to this size.&lt;/p&gt;&lt;p&gt;Sizes marked * may provide the best rendering quality.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Elegir el tamaño de pentagrama de la partitura.  LilyPond escala el contenido de la pentagrama en relación con este tamaño &lt;/p&gt;&lt;p&gt;Es posible que los tamaños que llevan un * proporcionen la más alta calidad de rendimiento.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="169"/>
@@ -15117,14 +15116,19 @@ Choose the staff size of the score.  LilyPond will scale staff contents relative
         <translation>Exportar indicaciones de tempo</translation>
     </message>
     <message>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="219"/>
+        <source>&lt;qt&gt;Track staff brackets are found in the &lt;b&gt;Track Parameters&lt;/b&gt; box, and may be used to group staffs in various ways&lt;/qt&gt;</source>
+        <translation>&lt;qt&gt;Los paréntesis se encuentran en la caja de &lt;b&gt;Parámetros de pista&lt;/b&gt; box, y pueden utilizarse para agrupar pentagramas de modo variado&lt;/qt&gt;</translation>
+    </message>
+    <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="231"/>
         <source>&lt;qt&gt;&lt;p&gt;Useful for multi-page scores: this may prevent ugly final pages&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Útil al imprimir partituras de várias páginas: puede que esta opción averta una página final fea&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Útil al imprimir partituras de várias páginas: puede que esta opción evite una página fea al final&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="241"/>
         <source>&lt;qt&gt;Markers are found on the &lt;b&gt;Marker Ruler&lt;/b&gt;.  They may be exported as text, or as rehearsal marks.&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;Marcadores se encuentran en la &lt;b&gt;Regla de marcadores&lt;/b&gt;.  Se exportan como texto o como rehearsal marks.&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;Marcadores se encuentran en la &lt;b&gt;Regla de marcadores&lt;/b&gt;.  Se exportan como texto o como marcos de ensayo.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="199"/>
@@ -15139,7 +15143,7 @@ Choose the staff size of the score.  LilyPond will scale staff contents relative
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="217"/>
         <source>Export track staff brackets</source>
-        <translation>Exportar paréntesis </translation>
+        <translation>Exportar paréntesis</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="202"/>
@@ -15149,72 +15153,71 @@ Choose the staff size of the score.  LilyPond will scale staff contents relative
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="108"/>
         <source>&lt;qt&gt;Choose which tracks or segments to export&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Elegir cuáles pistas o segmentos para exportar&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="196"/>
         <source>&lt;qt&gt;Choose how often to show tempo marks in your score&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;¿Mostar cuántos marcos de tempo en la partitura?&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="203"/>
         <source>Center</source>
-        <translation type="unfinished">Centrada</translation>
+        <translation>Centrada</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="204"/>
         <source>Right</source>
-        <translation type="unfinished">Derecha</translation>
+        <translation>Derecha</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="206"/>
         <source>&lt;qt&gt;Set the position of the &lt;b&gt;lyrics&lt;/b&gt; in relation to the notes&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Establece la ubicación de la &lt;b&gt;letra&lt;/b&gt; en relación con las notas&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="212"/>
         <source>&lt;qt&gt;If checked, Rosegarden&apos;s beamings will be exported.  Otherwise, LilyPond will calculate beams automatically.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Al marcar, se exportan las agrupaciones de Rosegarden.  Si no, LilyPond las calculará automáticamente.&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="219"/>
         <source>&lt;qt&gt;Track staff brackets are found in the &lt;b&gt;Track Parameters&gt; box, and may be used to group staffs in various ways&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">&lt;&gt;paréntesis</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="229"/>
         <source>Ragged bottom (systems will not be spread vertically across the page)</source>
-        <translation type="unfinished">Pié irregular (sistemas no repartidos verticalmente en la página)</translation>
+        <translation>Pié irregular (sistemas no repartidos verticalmente en la página)</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="224"/>
         <source>Interpret chord texts as lead sheet chord names</source>
-        <translation type="unfinished">Interpretar textos de acorde como nombres de acorde en formato «lead sheet»</translation>
+        <translation>Interpretar textos de acorde como nombres de acorde en formato «lead sheet»</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="226"/>
         <source>&lt;qt&gt;&lt;p&gt;There is a tutorial on how to use this feature at http://www.rosegardenmusic.com/tutorials/supplemental/chordnames/index.html&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Hay un tutorial (en ingés) que demuestra esto. http://www.rosegardenmusic.com/tutorials/supplemental/chordnames/index.html&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="234"/>
         <source>No markers</source>
-        <translation type="unfinished">Sin marcadores</translation>
+        <translation>Sin marcadores</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="235"/>
         <source>Rehearsal marks</source>
-        <translation type="unfinished">Marcos de ensayo</translation>
+        <translation>Marcos de ensayo</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="236"/>
         <source>Marker text</source>
-        <translation type="unfinished">Texto del marcador</translation>
+        <translation>Texto del marcador</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="239"/>
         <source>Export markers</source>
-        <translation type="unfinished">Exportar marcadores</translation>
+        <translation>Exportar marcadores</translation>
     </message>
 </context>
 <context>
@@ -15222,67 +15225,67 @@ Choose the staff size of the score.  LilyPond will scale staff contents relative
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="67"/>
         <source>Preview</source>
-        <translation type="unfinished">Previsualización</translation>
+        <translation>Previsualización</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="68"/>
         <source>Print</source>
-        <translation type="unfinished">Imprimir</translation>
+        <translation>Imprimir</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="70"/>
         <source>Rosegarden - %1 with LilyPond...</source>
-        <translation type="unfinished"></translation>
+        <translation>Rosegarden - %1 con LilyPond...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="81"/>
         <source>Cancel</source>
-        <translation type="unfinished">Cancelar</translation>
+        <translation>Cancelar</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="104"/>
         <source>Fatal error.  Processing aborted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Error fatal.  Procesamiento abortado.</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="105"/>
         <source>Rosegarden - Fatal processing error!</source>
-        <translation type="unfinished"></translation>
+        <translation>Rosegarden - ¡Error fatal con el procesamiento!</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="120"/>
         <source>Running &lt;b&gt;convert-ly&lt;/b&gt;...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ejecutando &lt;b&gt;convert-ly&lt;/b&gt;...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="129"/>
         <source>&lt;b&gt;convert-ly&lt;/b&gt; started...</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;convert-ly&lt;/b&gt; se empezó...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="143"/>
         <source>&lt;b&gt;convert-ly&lt;/b&gt; finished...</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;convert-ly&lt;/b&gt; se terminó...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="146"/>
         <source>&lt;qt&gt;&lt;p&gt;Ran &lt;b&gt;convert-ly&lt;/b&gt; successfully, but it terminated with errors.&lt;/p&gt;&lt;p&gt;Processing terminated due to fatal errors.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Ejecutó &lt;b&gt;convert-ly&lt;/b&gt;, pero terminó con errores.&lt;/p&gt;&lt;p&gt;Procesamiento terminado debido a errores fatales.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="153"/>
         <source>Running &lt;b&gt;lilypond&lt;/b&gt;...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ejecutando &lt;b&gt;lilypond&lt;/b&gt;...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="160"/>
         <source>&lt;b&gt;lilypond&lt;/b&gt; started...</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;lilypond&lt;/b&gt; se empezó...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="277"/>
         <source>&lt;qt&gt;&lt;p&gt;LilyPond processed the file successfully, but &lt;b&gt;%1&lt;/b&gt; did not run!&lt;/p&gt;&lt;p&gt;Please configure a valid %2 under &lt;b&gt;Edit -&gt; Preferences -&gt; General -&gt; External Applications&lt;/b&gt; and try again.&lt;/p&gt;&lt;p&gt;Processing terminated due to fatal errors.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;LilyPond ha procesado el archivo con éxito, sin embargo ¡&lt;b&gt;%1&lt;/b&gt; no se ejecutó!&lt;/p&gt;&lt;p&gt;Configúres un %2 válido bajo &lt;b&gt;Editar -&gt; Preferencias -&gt; General -&gt; Aplicaciones externas&lt;/b&gt; e intente de nuevo.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="131"/>
@@ -15358,27 +15361,27 @@ Choose the staff size of the score.  LilyPond will scale staff contents relative
     <message>
         <location filename="../../src/gui/dialogs/LyricEditDialog.cpp" line="60"/>
         <source>Edit Lyrics</source>
-        <translation type="unfinished">Editar letra</translation>
+        <translation>Editar letra</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LyricEditDialog.cpp" line="69"/>
         <source>Lyrics for this segment</source>
-        <translation type="unfinished">Letra para este segmento</translation>
+        <translation>Letra para este segmento</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LyricEditDialog.cpp" line="83"/>
         <source>Add Verse</source>
-        <translation type="unfinished">Añadir Estrofa</translation>
+        <translation>Añadir estrofa</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LyricEditDialog.cpp" line="86"/>
         <source>Remove Verse</source>
-        <translation type="unfinished">Eliminar estrofa</translation>
+        <translation>Eliminar estrofa</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LyricEditDialog.cpp" line="320"/>
         <source>Verse %1</source>
-        <translation type="unfinished">Estrofa %1</translation>
+        <translation>Estrofa %1</translation>
     </message>
 </context>
 <context>
@@ -15386,27 +15389,27 @@ Choose the staff size of the score.  LilyPond will scale staff contents relative
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.h" line="53"/>
         <source>MIDI</source>
-        <translation type="unfinished">MIDI</translation>
+        <translation>MIDI</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.h" line="54"/>
         <source>MIDI Settings</source>
-        <translation type="unfinished">Preferencias de MIDI</translation>
+        <translation>Preferencias de MIDI</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="90"/>
         <source>Base octave number for MIDI pitch display</source>
-        <translation type="unfinished">Número de octava base para mostrar tono MIDI</translation>
+        <translation>Número de octava base para mostrar tono MIDI</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="105"/>
         <source>Always use default studio when loading files</source>
-        <translation type="unfinished">Usar siempre estudio por omisión al cargar archivos</translation>
+        <translation>Usar siempre estudio predeterminado al cargar archivos</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="118"/>
         <source>Send all MIDI Controllers at start of each playback</source>
-        <translation type="unfinished">Enviar todos los controles MIDI al principio de la reproducción</translation>
+        <translation>Enviar todos los controles MIDI al principio de la reproducción</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="120"/>
@@ -15418,114 +15421,114 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="136"/>
         <source>Sequencer timing source</source>
-        <translation type="unfinished">Temporizador del secuenciador</translation>
+        <translation>Temporizador del secuenciador</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="162"/>
         <source>Load SoundFont to SoundBlaster card at startup</source>
-        <translation type="unfinished">Cargar fuente de sonidos en la tarjeta SoundBlaster al inicio</translation>
+        <translation>Cargar fuente de sonidos en la tarjeta SoundBlaster al inicio</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="163"/>
         <source>Check this box to enable soundfont loading on EMU10K-based cards when Rosegarden is launched</source>
-        <translation type="unfinished">Seleccionar esta opción para habilitar la carga de un SoundFont en tarjetas basadas en EMU10K al iniciar Rosegarden</translation>
+        <translation>Seleccionar esta opción para habilitar la carga de un SoundFont en tarjetas basadas en EMU10K al iniciar Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="173"/>
         <source>Path to &apos;asfxload&apos; or &apos;sfxload&apos; command</source>
-        <translation type="unfinished">Camino al mandato &apos;asfxload&apos; o bien &apos;sfxload&apos;</translation>
+        <translation>Ruta al mandato &apos;asfxload&apos; o bien &apos;sfxload&apos;</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="180"/>
         <source>SoundFont</source>
-        <translation type="unfinished">SoundFont</translation>
+        <translation>SoundFont</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="207"/>
         <source>General</source>
-        <translation type="unfinished">General</translation>
+        <translation>General</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="225"/>
         <source>MIDI Clock and System messages</source>
-        <translation type="unfinished">Mensajes de Reloj MIDI y Sistema</translation>
+        <translation>Mensajes de Reloj MIDI y Sistema</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="231"/>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="251"/>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="271"/>
         <source>Off</source>
-        <translation type="unfinished">Ningún</translation>
+        <translation>Ningún</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="232"/>
         <source>Send MIDI Clock, Start and Stop</source>
-        <translation type="unfinished">Enviar mensajes de Start y Stop</translation>
+        <translation>Enviar mensajes de Reloj MIDI, Start y Stop</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="233"/>
         <source>Accept Start, Stop and Continue</source>
-        <translation type="unfinished">Aceptar Start, Stop y Continue </translation>
+        <translation>Aceptar Start, Stop y Continue </translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="244"/>
         <source>MIDI Machine Control mode</source>
-        <translation type="unfinished">Modo de MIDI Machine Control</translation>
+        <translation>Modo de MIDI Machine Control</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="252"/>
         <source>MMC Master</source>
-        <translation type="unfinished">MMC Mestro</translation>
+        <translation>MMC Mestro</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="253"/>
         <source>MMC Slave</source>
-        <translation type="unfinished">MMC Esclavo</translation>
+        <translation>MMC Esclavo</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="264"/>
         <source>MIDI Time Code mode</source>
-        <translation type="unfinished">Modo MIDI Time Code</translation>
+        <translation>Modo MIDI Time Code</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="272"/>
         <source>MTC Master</source>
-        <translation type="unfinished">Maestro MTC</translation>
+        <translation>Maestro MTC</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="273"/>
         <source>MTC Slave</source>
-        <translation type="unfinished">MTC Esclavo</translation>
+        <translation>MTC Esclavo</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="287"/>
         <source>Automatically connect sync output to all devices in use</source>
-        <translation type="unfinished">Conectar automáticamente la salida de sincronización a todos los dispositivos en uso</translation>
+        <translation>Conectar automáticamente la salida de sincronización a todos los dispositivos en uso</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="302"/>
         <source>MIDI Sync</source>
-        <translation type="unfinished">Sincronización MIDI</translation>
+        <translation>Sincronización MIDI</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="320"/>
         <source>sfxload path</source>
-        <translation type="unfinished">camino de sfxload</translation>
+        <translation>ruta de sfxload</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="328"/>
         <source>Soundfont path</source>
-        <translation type="unfinished">Camino de SoundFont</translation>
+        <translation>Ruta de SoundFont</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="329"/>
         <source>Sound fonts</source>
-        <translation type="unfinished">Soundfonts</translation>
+        <translation>Soundfonts</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="330"/>
         <source>All files</source>
-        <translation type="unfinished">Todos los archivos</translation>
+        <translation>Todos los archivos</translation>
     </message>
 </context>
 <context>
@@ -16355,17 +16358,17 @@ Doble clic para abrir el editor de marcadores.</translation>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1218"/>
         <source>Estimated time signature shown</source>
-        <translation type="unfinished">Se muestra la estimación de la medida del compás</translation>
+        <translation>Se muestra la estimación de la medida del compás</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1301"/>
         <source>Transpose</source>
-        <translation type="unfinished">Transportar</translation>
+        <translation>Transportar</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1302"/>
         <source>By number of semitones: </source>
-        <translation type="unfinished">Por número de semitonos: </translation>
+        <translation>Por número de semitonos: </translation>
     </message>
     <message>
         <source>Raising velocities...</source>
@@ -16546,7 +16549,7 @@ Doble clic para abrir el editor de marcadores.</translation>
     <message>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="228"/>
         <source>http://rosegardenmusic.com/wiki/doc:midi-filter-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:midi-filter-es</translation>
     </message>
 </context>
 <context>
@@ -18512,182 +18515,215 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
 <context>
     <name>Rosegarden::ProjectPackager</name>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="84"/>
-        <source>Unpack</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="85"/>
+        <source>Unpack</source>
+        <translation>Desempaquetar</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="86"/>
         <source>Pack</source>
-        <translation type="unfinished"></translation>
+        <translation>Empaquetar</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="87"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="88"/>
         <source>Rosegarden - %1 Project Package...</source>
-        <translation type="unfinished"></translation>
+        <translation>Rosegarden - %1 Achivo de Proyecto de Rosegarden...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="98"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="99"/>
         <source>Cancel</source>
-        <translation type="unfinished">Cancelar</translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="466"/>
-        <source>Checking for flac...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="468"/>
-        <source>&lt;qt&gt;&lt;p&gt;The &lt;b&gt;flac&lt;/b&gt; command was not found.&lt;/p&gt;&lt;p&gt;FLAC is a lossless audio compression format used to reduce the size of Rosegarden project packages with no loss of audio quality.  Please install FLAC and try again.  This utility is typically available to most distros as a package called &quot;flac&quot;.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="530"/>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="732"/>
-        <source>Packing project...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="131"/>
-        <source>&lt;qt&gt;&lt;p&gt;Fatal error.&lt;/p&gt;&lt;p&gt;Processing aborted.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Cancelar</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="132"/>
+        <source>&lt;qt&gt;&lt;p&gt;Fatal error.&lt;/p&gt;%1&lt;/qt&gt;</source>
+        <translation>&lt;qt&gt;&lt;p&gt;Error fatal.&lt;/p&gt;%1&lt;/qt&gt;</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="260"/>
+        <source>&lt;qt&gt;&lt;p&gt;Unable to read %1.&lt;/p&gt;%2&lt;/qt&gt;</source>
+        <translation>&lt;qt&gt;&lt;p&gt;Fallo al leer %1.&lt;/p&gt;%2&lt;/qt&gt;</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="430"/>
+        <source>&lt;qt&gt;&lt;p&gt;Could not write&lt;br&gt;%1.&lt;/p&gt;%2&lt;/qt&gt;</source>
+        <translation>&lt;qt&gt;&lt;p&gt;Fallo al escribir&lt;br&gt;%1.&lt;/p&gt;%2&lt;/qt&gt;</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="436"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="815"/>
+        <source>&lt;qt&gt;Could not remove&lt;br&gt;%1&lt;br&gt;&lt;br&gt;%2&lt;/qt&gt;</source>
+        <translation>&lt;qt&gt;Fallo al eliminar&lt;br&gt;%1&lt;br&gt;&lt;br&gt;%2&lt;/qt&gt;</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="441"/>
+        <source>&lt;qt&gt;Could not copy&lt;br&gt;%1&lt;br&gt;  to&lt;br&gt;%2&lt;br&gt;&lt;br&gt;%3&lt;/qt&gt;</source>
+        <translation>&lt;qt&gt;Fallo al copiar&lt;br&gt;%1&lt;br&gt; a&lt;br&gt;%2&lt;br&gt;&lt;br&gt;%3&lt;/qt&gt;</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="445"/>
+        <source>&lt;qt&gt;&lt;p&gt;Could not remove&lt;br&gt;%1.&lt;/p&gt;%2&lt;/qt&gt;</source>
+        <translation>&lt;qt&gt;&lt;p&gt;Fallo al eliminar&lt;br&gt;%1.&lt;/p&gt;%2&lt;/qt&gt;</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="467"/>
+        <source>Checking for flac...</source>
+        <translation>Buscando flac...</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="469"/>
+        <source>&lt;qt&gt;&lt;p&gt;The &lt;b&gt;flac&lt;/b&gt; command was not found.&lt;/p&gt;&lt;p&gt;FLAC is a lossless audio compression format used to reduce the size of Rosegarden project packages with no loss of audio quality.  Please install FLAC and try again.  This utility is typically available to most distros as a package called &quot;flac&quot;.&lt;/p&gt;</source>
+        <translation>&lt;qt&gt;&lt;p&gt;El orden &lt;b&gt;flac&lt;/b&gt; no se encontró.&lt;/p&gt;&lt;p&gt;FLAC (códec libre de compresión de audio sin pérdida) es un formato para codificar que se utiliza para reducir el tamaño de un archivo de proyecto de Rosegarden sin pérdida de calidad.  Instale FLAC e intente de nuevo.  Esta utilidad se encuentra típicamente en un paquete que se llama «flac».&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="531"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="733"/>
+        <source>Packing project...</source>
+        <translation>Empaquetando proyecto...</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="566"/>
+        <source>&lt;qt&gt;&lt;p&gt;Could not create temporary working directory.&lt;/p&gt;%1&lt;/qt&gt;</source>
+        <translation>&lt;qt&gt;&lt;p&gt;Fallo al crear un directorio temporario.&lt;/p&gt;%1&lt;/qt&gt;</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="749"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="948"/>
+        <source>&lt;qt&gt;&lt;p&gt;Unable to write to temporary backend processing script %1.&lt;/p&gt;%2&lt;/qt&gt;</source>
+        <translation>&lt;qt&gt;&lt;p&gt;Fallo al escribir el motor de procesamiento %1.&lt;/p&gt;%2&lt;/qt&gt;</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="800"/>
+        <source>&lt;qt&gt;&lt;p&gt;Encoding and compressing files failed with exit status %1. Checking %2 for the line that ends with &quot;exit %1&quot; may be useful for diagnostic purposes.&lt;/p&gt;%3&lt;/qt&gt;</source>
+        <translation>&lt;qt&gt;&lt;p&gt;Fallo al empaquetar archivos con estado de salida %1. Véase %2 y busque la línea que empieza con «&quot;exit %1&quot; para diagnosticar el problema.&lt;/p&gt;%3&lt;/qt&gt;</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="878"/>
+        <source>&lt;qt&gt;&lt;p&gt;Unable to read to temporary file list.&lt;/p&gt;%1&lt;/qt&gt;</source>
+        <translation>&lt;qt&gt;&lt;p&gt;Fallo al leer la lista de archivos temporarios.&lt;/p&gt;%1&lt;/qt&gt;</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="1044"/>
+        <source>&lt;qt&gt;&lt;p&gt;Extracting and decoding files failed with exit status %1. Checking %2 for the line that ends with &quot;exit %1&quot; may be useful for diagnostic purposes.&lt;/p&gt;%3&lt;/qt&gt;</source>
+        <translation>&lt;qt&gt;&lt;p&gt;Fallo al empaquetar archivos con estado de salida %1. Véase %2 y busque la línea que empieza con «&quot;exit %1» para diagnosticar el problema.&lt;/p&gt;%3&lt;/qt&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;qt&gt;&lt;p&gt;Fatal error.&lt;/p&gt;&lt;p&gt;Processing aborted.&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Error fatal.&lt;/p&gt;&lt;p&gt;Procesamiento abortado.&lt;/p&gt;&lt;/qt&gt;</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="133"/>
         <source>Rosegarden - Fatal Processing Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Rosegarden - Error fatal con el procesamiento</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="435"/>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="814"/>
         <source>&lt;qt&gt;Could not remove&lt;br&gt;%1&lt;br&gt;&lt;br&gt;Processing aborted.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">&lt;qt&gt;Fallo al eliminarse &lt;br&gt;%1&lt;br&gt;&lt;br&gt;Procesamiento abortado.&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="440"/>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="604"/>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="649"/>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="716"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="605"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="650"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="717"/>
         <source>&lt;qt&gt;Could not copy&lt;br&gt;%1&lt;br&gt;  to&lt;br&gt;%2&lt;br&gt;&lt;br&gt;Processing aborted.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Fallo al copiarse &lt;br&gt;%1&lt;br&gt; a &lt;br&gt;%2&lt;br&gt;&lt;br&gt;Procesamiento abortado.&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="484"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="485"/>
         <source>Checking for wavpack...</source>
-        <translation type="unfinished"></translation>
+        <translation>Buscando wavpack...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="486"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="64"/>
+        <source>&lt;p&gt;Processing aborted&lt;/p&gt;</source>
+        <translation>&lt;p&gt;Procesamiento abortado&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="487"/>
         <source>&lt;qt&gt;&lt;p&gt;The &lt;b&gt;wavpack&lt;/b&gt; command was not found.&lt;/p&gt;&lt;p&gt;WavPack is an audio compression format used to reduce the size of Rosegarden project packages with no loss of audio quality.  Please install WavPack and try again.  This utility is typically available to most distros as part of a package called &quot;wavpack&quot;.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;El orden &lt;b&gt;wavpack&lt;/b&gt; no se encontró.&lt;/p&gt;&lt;p&gt;WavPack es un formato para codificar audio que se utiliza para reducir el tamaño de un archivo de proyecto de Rosegarden sin pérdida de calidad.  Instale WavPack e intente de nuevo.  Esta utilidad se encuentra típicamente en un paquete que se llama «wavpack».&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="495"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="496"/>
         <source>Checking for wvunpack...</source>
-        <translation type="unfinished"></translation>
+        <translation>Buscando wvunpack...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="497"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="498"/>
         <source>&lt;qt&gt;&lt;p&gt;The &lt;b&gt;wvunpack&lt;/b&gt; command was not found.&lt;/p&gt;&lt;p&gt;WavPack is an audio compression format used to reduce the size of Rosegarden project packages with no loss of audio quality.  Please install WavPack and try again.  This utility is typically available to most distros as part of a package called &quot;wavpack&quot;.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;El orden &lt;b&gt;wvunpack&lt;/b&gt; no se encontró.&lt;/p&gt;&lt;p&gt;WavPack es un formato para codificar audio que se utiliza para reducir el tamaño de un archivo de proyecto de Rosegarden sin pérdida de calidad.  Instale WavPack e intente de nuevo.  Esta utilidad se encuentra típicamente en un paquete que se llama «wavpack».&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="565"/>
         <source>&lt;qt&gt;&lt;p&gt;Could not create temporary working directory.&lt;/p&gt;&lt;p&gt;Processing aborted.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Fallo al crear un directorio temporario.&lt;/p&gt;&lt;p&gt;Procesamiento abortado.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="569"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="570"/>
         <source>Copying audio files...</source>
         <translation>Copiando archivos de audio...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="654"/>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="684"/>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="918"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="655"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="685"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="919"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="655"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="656"/>
         <source>&lt;qt&gt;&lt;p&gt;Rosegarden can add any number of extra files you may desire to a project package.  For example, you may wish to include an explanatory text file, a soundfont, a bank definition for ZynAddSubFX, or perhaps some cover art.&lt;/p&gt;&lt;p&gt;Would you like to include any additional files?&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Rosegarden puede agregar más archivos (de cualquier formato) al proyecto.  Por ejemplo, puede que desee incluir un texto de explicación, un soundfont, una definición de banco para ZynAddsubFX, o quizás una portada..&lt;/p&gt;&lt;p&gt;¿Desea agregar un archivo?&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="676"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="677"/>
         <source>All files</source>
-        <translation type="unfinished">Todos los archivos</translation>
+        <translation>Todos los archivos</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="685"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="686"/>
         <source>&lt;qt&gt;&lt;p&gt;Would you like to include any additional files?&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;¿Desea agregar otro archivo?&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="689"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="690"/>
         <source>Copying plugin data and extra files...</source>
-        <translation type="unfinished"></translation>
+        <translation>Copiando dato de plugin y archivos adicionales...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="748"/>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="947"/>
         <source>&lt;qt&gt;&lt;p&gt;Unable to write to temporary backend processing script %1.&lt;/p&gt;&lt;p&gt;Processing aborted.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Fallo al escribir motor de procesamiento temporario %1.&lt;/p&gt;&lt;p&gt;Procesamiento abortado.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="799"/>
         <source>&lt;qt&gt;&lt;p&gt;Encoding and compressing files failed with exit status %1. Checking %2 for the line that ends with &quot;exit %1&quot; may be useful for diagnostic purposes.&lt;/p&gt;&lt;p&gt;Processing aborted.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Fallo al empaquetar archivos con estado de salida %1. Véase %2 y busque la línea que empieza con «&quot;exit %1&quot; para diagnosticar el problema.&lt;/p&gt;&lt;p&gt;Procesamiento abortado.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="870"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="871"/>
         <source>&lt;qt&gt;&lt;p&gt;Unable to obtain list of files using tar.&lt;/p&gt;&lt;p&gt;Process exited with status code %1&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Fallo al obtener una lista de archivos con tar.&lt;/p&gt;&lt;p&gt;Proceso se terminó con estado de salida %1&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="877"/>
         <source>&lt;qt&gt;&lt;p&gt;Unable to read to temporary file list.&lt;/p&gt;&lt;p&gt;Processing aborted.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Fallo al leer la lista de archivos temporarios.&lt;/p&gt;&lt;p&gt;Procesamiento abortado.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="1043"/>
-        <source>&lt;qt&gt;&lt;p&gt;Extracting and decoding files failed with exit status %1. Checking %2 for the line that ends with &quot;exit %1&quot; may be useful for diagnostic purposes.&lt;/p&gt;&lt;p&gt;Processing aborted.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="833"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="834"/>
         <source>Unpacking project...</source>
-        <translation type="unfinished"></translation>
+        <translation>Desempaquetando proyecto...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="259"/>
-        <source>&lt;qt&gt;&lt;p&gt;Unable to read %1.&lt;/p&gt;&lt;p&gt;Processing aborted.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="429"/>
-        <source>&lt;qt&gt;&lt;p&gt;Could not write&lt;br&gt;%1.&lt;/p&gt;&lt;p&gt;Processing aborted.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="444"/>
-        <source>&lt;qt&gt;&lt;p&gt;Could not remove&lt;br&gt;%1.&lt;/p&gt;&lt;p&gt;Processing aborted.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="919"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="920"/>
         <source>&lt;qt&gt;&lt;p&gt;It appears that you have already unpacked this project package.&lt;/p&gt;&lt;p&gt;Would you like to load %1 now?&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Aparece que este proyecto ya se ha desempaquetado.&lt;/p&gt;&lt;p&gt;¿Desea cargar %1?&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="1018"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="1019"/>
         <source>Decoding audio files...</source>
-        <translation type="unfinished"></translation>
+        <translation>Decodificando archivos de audio...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="1020"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="1021"/>
         <source>&lt;qt&gt;Could not start backend processing script %1.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Fallo al ejecutar el motor de procesamiento %1.&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -18695,7 +18731,7 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location filename="../../src/gui/rulers/PropertyViewRuler.cpp" line="65"/>
         <source>%1 controller</source>
-        <translation type="unfinished">controlador %1</translation>
+        <translation>controlador %1</translation>
     </message>
 </context>
 <context>
@@ -18703,7 +18739,7 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location filename="../../src/gui/dialogs/QuantizeDialog.cpp" line="36"/>
         <source>Quantize</source>
-        <translation type="unfinished">Cuantificación</translation>
+        <translation>Cuantificación</translation>
     </message>
     <message>
         <source>Advanced</source>
@@ -18715,129 +18751,129 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="64"/>
         <source>Quantizer</source>
-        <translation type="unfinished">Cuantificación</translation>
+        <translation>Cuantificación</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="71"/>
         <source>Quantizer type:</source>
-        <translation type="unfinished">Tipo de cuantificación:</translation>
+        <translation>Tipo de cuantificación:</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="73"/>
         <source>Grid quantizer</source>
-        <translation type="unfinished">Cuantificador de rejilla</translation>
+        <translation>Cuantificador de rejilla</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="74"/>
         <source>Legato quantizer</source>
-        <translation type="unfinished">Cuantificador de ligadura</translation>
+        <translation>Cuantificador de ligadura</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="75"/>
         <source>Heuristic notation quantizer</source>
-        <translation type="unfinished">Cuantificador heurístico de partitura</translation>
+        <translation>Cuantificador heurístico de partitura</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="79"/>
         <source>Quantize for notation only (leave performance unchanged)</source>
-        <translation type="unfinished">Cuantificar para la partitura solamente (dejar la interpretación intacta)</translation>
+        <translation>Cuantificar para la partitura solamente (dejar la interpretación intacta)</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="91"/>
         <source>Notation parameters</source>
-        <translation type="unfinished">Parámetros de edición de partitura</translation>
+        <translation>Parámetros de edición de partitura</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="97"/>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="133"/>
         <source>Base grid unit:</source>
-        <translation type="unfinished">Unidad base de la rejilla:</translation>
+        <translation>Unidad base de la rejilla:</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="102"/>
         <source>Complexity:</source>
-        <translation type="unfinished">Complejidad:</translation>
+        <translation>Complejidad:</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="106"/>
         <source>Very high</source>
-        <translation type="unfinished">Muy alta</translation>
+        <translation>Muy alta</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="107"/>
         <source>High</source>
-        <translation type="unfinished">Alta</translation>
+        <translation>Alta</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="108"/>
         <source>Normal</source>
-        <translation type="unfinished">Normal</translation>
+        <translation>Normal</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="109"/>
         <source>Low</source>
-        <translation type="unfinished">Baja</translation>
+        <translation>Baja</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="110"/>
         <source>Very low</source>
-        <translation type="unfinished">Muy baja</translation>
+        <translation>Muy baja</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="113"/>
         <source>Tuplet level:</source>
-        <translation type="unfinished">Nivel de grupo irregular</translation>
+        <translation>Nivel de grupo irregular:</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="116"/>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="263"/>
         <source>None</source>
-        <translation type="unfinished">Nada</translation>
+        <translation>Nada</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="117"/>
         <source>2-in-the-time-of-3</source>
-        <translation type="unfinished">Dosillo</translation>
+        <translation>Dosillo</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="118"/>
         <source>Triplet</source>
-        <translation type="unfinished">Tresillo</translation>
+        <translation>Tresillo</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="119"/>
         <source>Any</source>
-        <translation type="unfinished">Cualquiera</translation>
+        <translation>Cualquiera</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="122"/>
         <source>Permit counterpoint</source>
-        <translation type="unfinished">Permitir contrapunto</translation>
+        <translation>Permitir contrapunto</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="127"/>
         <source>Grid parameters</source>
-        <translation type="unfinished">Parámetros de rejilla</translation>
+        <translation>Parámetros de rejilla</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="137"/>
         <source>Swing:</source>
-        <translation type="unfinished">Swing:</translation>
+        <translation>Swing:</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="142"/>
         <source>Iterative amount:</source>
-        <translation type="unfinished">Cantidad de iteración:</translation>
+        <translation>Cantidad de iteración:</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="148"/>
         <source>Quantize durations as well as start times</source>
-        <translation type="unfinished">Cuantificar duraciones y momentos de inicio</translation>
+        <translation>Cuantificar duraciones y momentos de inicio</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="155"/>
         <source>After quantization</source>
-        <translation type="unfinished">Después de cuantificar</translation>
+        <translation>Después de cuantificar</translation>
     </message>
     <message>
         <source>Show advanced options</source>
@@ -18846,27 +18882,27 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="162"/>
         <source>Re-beam</source>
-        <translation type="unfinished">volver a unir plicas</translation>
+        <translation>Volver a unir plicas</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="164"/>
         <source>Add articulations (staccato, tenuto, slurs)</source>
-        <translation type="unfinished">Añadir articulaciones (staccato, tenuto, ligaduras)</translation>
+        <translation>Añadir articulaciones (staccato, tenuto, ligaduras)</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="165"/>
         <source>Tie notes at barlines etc</source>
-        <translation type="unfinished">Ligar notas en las barras de compás, etc.</translation>
+        <translation>Ligar notas en las barras de compás</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="166"/>
         <source>Split-and-tie overlapping chords</source>
-        <translation type="unfinished">Dividir-y-ligar acordes solapados</translation>
+        <translation>Dividir-y-ligar acordes solapados</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="269"/>
         <source>Full quantize</source>
-        <translation type="unfinished">Cuantificador completo</translation>
+        <translation>Cuantificador completo</translation>
     </message>
     <message>
         <source>Show Advanced Options</source>
@@ -18898,48 +18934,48 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="51"/>
         <source>Remap Instrument assigments...</source>
-        <translation type="unfinished">Remapear asignación de instrumentos</translation>
+        <translation>emapear asignación de instrumentos...</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="60"/>
         <source>Device or Instrument</source>
-        <translation type="unfinished">Dispositivo o Instrumento</translation>
+        <translation>Dispositivo o instrumento</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="64"/>
         <source>Remap Tracks by all Instruments on a Device or by single Instrument</source>
-        <translation type="unfinished">Remapear pistas para todos los instrumentos en un dispositivo o para un solo instrumento</translation>
+        <translation>Remapear pistas para todos los instrumentos en un dispositivo o para un solo instrumento</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="66"/>
         <source>Device</source>
-        <translation type="unfinished">Dispositivo</translation>
+        <translation>Dispositivo</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="68"/>
         <source>Instrument</source>
-        <translation type="unfinished">Instrumento</translation>
+        <translation>Instrumento</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="77"/>
         <source>Choose Source and Destination</source>
-        <translation type="unfinished">Elegir Origen y Destino</translation>
+        <translation>Elegir origen y destino</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="81"/>
         <source>From</source>
-        <translation type="unfinished">Desde</translation>
+        <translation>Desde</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="82"/>
         <source>To</source>
-        <translation type="unfinished">Hacia</translation>
+        <translation>Hacia</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="139"/>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="140"/>
         <source>&lt;no devices&gt;</source>
-        <translation type="unfinished">&lt;sin dispositivos&gt;</translation>
+        <translation>&lt;sin dispositivos&gt;</translation>
     </message>
 </context>
 <context>
@@ -18947,7 +18983,7 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location filename="../../src/commands/studio/RemoveControlParameterCommand.h" line="55"/>
         <source>&amp;Remove Control Parameter</source>
-        <translation type="unfinished">&amp;Eliminar parámetro de control</translation>
+        <translation>&amp;Eliminar parámetro de control</translation>
     </message>
 </context>
 <context>
@@ -18955,7 +18991,7 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location filename="../../src/commands/notation/RemoveFingeringMarksCommand.h" line="45"/>
         <source>&amp;Remove Fingerings</source>
-        <translation type="unfinished">Elimina&amp;r Digitaciones</translation>
+        <translation>Elimina&amp;r digitaciones</translation>
     </message>
 </context>
 <context>
@@ -18963,7 +18999,7 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location filename="../../src/commands/edit/RemoveMarkerCommand.h" line="50"/>
         <source>&amp;Remove Marker</source>
-        <translation type="unfinished">Elimina&amp;r Marcador</translation>
+        <translation>Elimina&amp;r marcador</translation>
     </message>
 </context>
 <context>
@@ -18971,7 +19007,7 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location filename="../../src/commands/notation/RemoveMarksCommand.h" line="45"/>
         <source>&amp;Remove All Marks</source>
-        <translation type="unfinished">&amp;Eliminar Todos los Marcadores</translation>
+        <translation>&amp;Eliminar todos los marcadores</translation>
     </message>
 </context>
 <context>
@@ -18979,7 +19015,7 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location filename="../../src/commands/notation/RemoveNotationQuantizeCommand.h" line="45"/>
         <source>Remo&amp;ve Notation Quantization</source>
-        <translation type="unfinished">Elimina&amp;r Cuantificación de Partitura</translation>
+        <translation>Elimina&amp;r cuantificación de partitura</translation>
     </message>
 </context>
 <context>
@@ -18987,7 +19023,7 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location filename="../../src/commands/segment/RemoveTempoChangeCommand.h" line="53"/>
         <source>Remove &amp;Tempo Change...</source>
-        <translation type="unfinished">Eliminar Cambio de &amp;Tempo</translation>
+        <translation>Eliminar cambio de &amp;tempo</translation>
     </message>
 </context>
 <context>
@@ -18995,7 +19031,7 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location filename="../../src/commands/segment/RemoveTimeSignatureCommand.h" line="53"/>
         <source>Remove &amp;Time Signature Change...</source>
-        <translation type="unfinished">&amp;Quitar Cambio de Medida de Compás...</translation>
+        <translation>&amp;Quitar cambio de medida de compás...</translation>
     </message>
 </context>
 <context>
@@ -19003,7 +19039,7 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location filename="../../src/commands/studio/RenameDeviceCommand.h" line="50"/>
         <source>Rename Device</source>
-        <translation type="unfinished">Renombrar Dispositivo</translation>
+        <translation>Renombrar dispositivo</translation>
     </message>
 </context>
 <context>
@@ -19011,7 +19047,7 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location filename="../../src/commands/segment/RenameTrackCommand.h" line="47"/>
         <source>Rename Track</source>
-        <translation type="unfinished">Renombrar Pista</translation>
+        <translation>Renombrar pista</translation>
     </message>
 </context>
 <context>
@@ -19019,7 +19055,7 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location filename="../../src/commands/edit/RescaleCommand.h" line="45"/>
         <source>Stretch or S&amp;quash...</source>
-        <translation type="unfinished">Estirar o Enco&amp;ger...</translation>
+        <translation>Estirar o enco&amp;ger...</translation>
     </message>
 </context>
 <context>
@@ -19219,7 +19255,7 @@ Do you want to save it?</source>
     <message numerus="yes">
         <location filename="../../src/document/RosegardenDocument.cpp" line="493"/>
         <source>Delete the %n audio file(s) recorded during the unsaved session?</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>¿Borrar el archivo de audio grabado durante la sesión que no se ha guardada?</numerusform>
             <numerusform>¿Borrar los %n archivos de audio grabado durante la sesión que no se ha guardada?</numerusform>
         </translation>
@@ -19327,7 +19363,7 @@ Por favor, decida si quiere borrarlos permanentemente del disco duro.
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="1704"/>
         <source>&lt;h3&gt;Incorrect audio sample rate&lt;/h3&gt;&lt;p&gt;This composition contains audio files that were recorded or imported with the audio server running at a different sample rate (%1 Hz) from the current JACK server sample rate (%2 Hz).&lt;/p&gt;&lt;p&gt;Rosegarden will play this composition at the correct speed, but any audio files in it will probably sound awful.&lt;/p&gt;&lt;p&gt;Please consider re-starting the JACK server at the correct rate (%3 Hz) and re-loading this composition before you do any more work with it.&lt;/p&gt;</source>
-        <translation>&lt;h3&gt;Frecuencia de muestreo de audio incorrecta&lt;/h3&gt; &lt;p&gt; Esta composición contiene archivos de audio que han sido grabados o importados con el servidor de audiocorriendo a una frecuencia de muestreo diferente (%1 Hz) de la actual frecuencia de muestreo de JACK (%2 Hz)&lt;/p&gt;&lt;p&gt; Rosegarden interpretará esta composición a la velocidad correcta, pero los archivos de audio utilizados probablemente suenen horriblemente.&lt;/p&gt;&lt;p&gt; Por favor, considere reiniciar el servidor JACK con la frecuencia correcta (%3 Hz) y recargue esta composición antes de seguir trabajando con ella.&lt;/p&gt;</translation>
+        <translation>&lt;h3&gt;Frecuencia de muestreo de audio incorrecta&lt;/h3&gt; &lt;p&gt; Esta composición contiene archivos de audio que han sido grabados o importados con el servidor de audio corriendo a una frecuencia de muestreo diferente (%1 Hz) de la actual frecuencia de muestreo de JACK (%2 Hz)&lt;/p&gt;&lt;p&gt; Rosegarden interpretará esta composición a la velocidad correcta, pero los archivos de audio utilizados probablemente suenen horriblemente.&lt;/p&gt;&lt;p&gt; Por favor, considere reiniciar el servidor JACK con la frecuencia correcta (%3 Hz) y recargue esta composición antes de seguir trabajando con ella.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="1714"/>
@@ -19771,53 +19807,53 @@ Usted debe establecer el directorio de archivos de audio en un directorio válid
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2686"/>
         <source>Segment Start Time</source>
-        <translation type="unfinished">Tiempo de Comienzo de Segmento</translation>
+        <translation>Tiempo de comienzo de segmento</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2696"/>
         <source>Set Segment Start Times</source>
-        <translation type="unfinished">Establecer Tiempos de Comienzo de Segmento</translation>
+        <translation>Establecer tiempos de comienzo de segmento</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2697"/>
         <source>Set Segment Start Time</source>
-        <translation type="unfinished">Establecer Tiempo de Comienzo de Segmento</translation>
+        <translation>Establecer tiempo de comienzo de segmento</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2729"/>
         <source>Segment Duration</source>
-        <translation type="unfinished">Duración del Segmento</translation>
+        <translation>Duración del segmento</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2741"/>
         <source>Set Segment Durations</source>
-        <translation type="unfinished">Establecer Duraciones de Segmento</translation>
+        <translation>Establecer duraciones de segmento</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2742"/>
         <source>Set Segment Duration</source>
-        <translation type="unfinished">Establecer Duración de Segmento</translation>
+        <translation>Establecer duración de segmento</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2852"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5606"/>
         <source>Set Global Tempo</source>
-        <translation type="unfinished">Establecer Tempo global</translation>
+        <translation>Establecer tempo global</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2919"/>
         <source>Toggle the toolbar...</source>
-        <translation type="unfinished">Conmuta la barra de herramientas...</translation>
+        <translation>Conmuta la barra de herramientas...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2930"/>
         <source>Toggle the tools toolbar...</source>
-        <translation>Conmutar la barra de herramientas principal</translation>
+        <translation>Conmutar la barra de herramientas principal...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2941"/>
         <source>Toggle the tracks toolbar...</source>
-        <translation>Conmutar la barra de herramientas de pistas</translation>
+        <translation>Conmutar la barra de herramientas de pistas...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2952"/>
@@ -19869,7 +19905,7 @@ Usted debe establecer el directorio de archivos de audio en un directorio válid
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3443"/>
         <source>Import Rosegarden Project File</source>
-        <translation type="unfinished">Importar archivo de Proyecto de Rosegarden</translation>
+        <translation>Importar archivo de Proyecto de Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3444"/>
@@ -20259,12 +20295,12 @@ Por favor, configura el directorio de archivos de audio hacia un directorio vál
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7472"/>
         <source>Are you sure you want to save this as your default studio?</source>
-        <translation>¿Está seguro de querer guardar esto como el Estudio Predeterminado?</translation>
+        <translation>¿Está seguro de querer guardar esto como el estudio predeterminado?</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7478"/>
         <source>Saving current document as default studio...</source>
-        <translation>Guardando el documento actual como Estudio predeterminado...</translation>
+        <translation>Guardando el documento actual como estudio predeterminado...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7490"/>
@@ -20281,7 +20317,7 @@ Error fue : %2</translation>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7503"/>
         <source>Are you sure you want to import your default studio and lose the current one?</source>
-        <translation>¿Está seguro de querer importar el estudio por omisión y perder el actual?</translation>
+        <translation>¿Está seguro de querer importar el estudio predeterminado y perder el actual?</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7530"/>
@@ -20299,7 +20335,7 @@ Error fue : %2</translation>
     <message>
         <location filename="../../src/gui/widgets/Rotary.cpp" line="89"/>
         <source>&lt;qt&gt;&lt;p&gt;Click and drag up and down or left and right to modify.&lt;/p&gt;&lt;p&gt;Double click to edit value directly.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Haga clic y arrastre arriba y abajo o a izqierda y derecha para modificar.&lt;p&gt;&lt;/p&gt;&lt;p&gt;Haga doble clic para editar el valor directamente&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/Rotary.cpp" line="430"/>
@@ -20479,12 +20515,16 @@ Error fue : %2</translation>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="148"/>
         <source>&lt;qt&gt;Edit the segment label for any selected segments&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Editar la etiqueta de los segmentos seleccionados&lt;/qt&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;qt&gt;&lt;p&gt;When checked,     any selected segments will repeat until they run into another segment,  or the end of the composition.&lt;/p&gt;&lt;p&gt;When viewed in the notation editor or printed via LilyPond, the segments will be bracketed by repeat signs.&lt;/p&gt;&lt;p&gt;&lt;center&gt;&lt;img src=&quot;:pixmaps/tooltip/repeats.png&quot;&lt;/img&gt;&lt;/center&gt;&lt;/p&gt;&lt;br&gt;These can be used in conjunction with special LilyPond export directives to create repeats with first and second alternate endings. See rosegardenmusic.com for a tutorial. [Ctrl+Shift+R] &lt;/qt&gt;</source>
+        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Al marcar, los segmentos seleccionados se repiten hasta que encuentren un segmento siguiente, o el fin de la composición.&lt;/p&gt;&lt;p&gt;Los segmentos aparecen con barras de repetición cuando se ven en el editor de partituras o cuando se imprimen con LilyPond.&lt;/p&gt;&lt;p&gt;&lt;center&gt;&lt;img src=&quot;:pixmaps/tooltip/repeats.png&quot;&lt;/img&gt;&lt;/center&gt;&lt;/p&gt;&lt;br&gt;These can be used in conjunction with special LilyPond export directives to create repeats with first and second alternate endings. See rosegardenmusic.com for a tutorial. [Ctrl+Shift+R] &lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="156"/>
-        <source>&lt;qt&gt;&lt;p&gt;When checked,     any selected segments will repeat until they run into another segment,  or the end of the composition.&lt;/p&gt;&lt;p&gt;When viewed in the notation editor or printed via LilyPond, the segments will be bracketed by repeat signs.&lt;/p&gt;&lt;p&gt;&lt;center&gt;&lt;img src=&quot;:pixmaps/tooltip/repeats.png&quot;&lt;/img&gt;&lt;/center&gt;&lt;/p&gt;&lt;br&gt;These can be used in conjunction with special LilyPond export directives to create repeats with first and second alternate endings. See rosegardenmusic.com for a tutorial. [Ctrl+Shift+R] &lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <source>&lt;qt&gt;&lt;p&gt;When checked,     any selected segments will repeat until they run into another segment,  or the end of the composition.&lt;/p&gt;&lt;p&gt;When viewed in the notation editor or printed via LilyPond, the segments will be bracketed by repeat signs.&lt;/p&gt;&lt;p&gt;&lt;center&gt;&lt;img src=&quot;:pixmaps/tooltip/repeats.png&quot;&gt;&lt;/img&gt;&lt;/center&gt;&lt;/p&gt;&lt;br&gt;These can be used in conjunction with special LilyPond export directives to create repeats with first and second alternate endings. See rosegardenmusic.com for a tutorial. [Ctrl+Shift+R] &lt;/qt&gt;</source>
+        <translation>&lt;qt&gt;&lt;p&gt;Al marcar, los segmentos seleccionados se repiten hasta que encuentren un segmento siguiente, o el fin de la composición.&lt;/p&gt;&lt;p&gt;Los segmentos aparecen con barras de repetición cuando se ven en el editor de partituras o cuando se imprimen con LilyPond.&lt;/p&gt;&lt;p&gt;&lt;center&gt;&lt;img src=&quot;:pixmaps/tooltip/repeats.png&quot;&gt;&lt;/img&gt;&lt;/center&gt;&lt;/p&gt;&lt;br&gt;Estas barras pueden usarse con los directrices para LilyPond para hacer repeticiones con parentesis volta (primer y segundo final). Véase el tutorial en rosegardenmusic.com. [Ctrl+Shift+R] &lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="187"/>
@@ -20573,17 +20613,17 @@ Error fue : %2</translation>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentPencil.cpp" line="219"/>
         <source>Hold Shift to avoid snapping to bar lines</source>
-        <translation type="unfinished">Pulse mayúsculas para evitar el ajuste a los límites de compás</translation>
+        <translation>Pulse mayúsculas para evitar el ajuste a los límites de compás</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentPencil.cpp" line="277"/>
         <source>Record or drop audio here</source>
-        <translation type="unfinished">Grabar o soltar archivos de audio aquí</translation>
+        <translation>Grabar o soltar archivos de audio aquí</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentPencil.cpp" line="283"/>
         <source>Click and drag to draw an empty segment.  Control+Alt click and drag to draw in overlap mode.</source>
-        <translation type="unfinished">Haga clic y arrastre para para dibujar un segmento vacío; hacer Ctrl+Alt+clic y arrastre para dibujar sobre un segmento que ya existe</translation>
+        <translation>Haga clic y arrastre para para dibujar un segmento vacío.  Haga Ctrl+Alt+clic y arrastre para dibujar sobre un segmento que ya existe.</translation>
     </message>
 </context>
 <context>
@@ -20591,12 +20631,12 @@ Error fue : %2</translation>
     <message>
         <location filename="../../src/commands/segment/SegmentQuickCopyCommand.h" line="50"/>
         <source>Quick-Copy Segment</source>
-        <translation type="unfinished">Copia Rápida de Segmento</translation>
+        <translation>Copia rápida de segmento</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/SegmentQuickCopyCommand.cpp" line="52"/>
         <source>(copied)</source>
-        <translation type="unfinished">(copiado)</translation>
+        <translation>(copiado)</translation>
     </message>
 </context>
 <context>
@@ -20604,7 +20644,7 @@ Error fue : %2</translation>
     <message>
         <location filename="../../src/commands/segment/SegmentRecordCommand.cpp" line="30"/>
         <source>Record</source>
-        <translation type="unfinished">Grabación</translation>
+        <translation>Grabación</translation>
     </message>
 </context>
 <context>
@@ -20612,7 +20652,7 @@ Error fue : %2</translation>
     <message>
         <location filename="../../src/commands/segment/SegmentRepeatToCopyCommand.cpp" line="32"/>
         <source>Turn Repeats into Copies</source>
-        <translation type="unfinished">Convertir Repeticiones en Copias</translation>
+        <translation>Convertir repeticiones en copias</translation>
     </message>
 </context>
 <context>
@@ -20620,12 +20660,12 @@ Error fue : %2</translation>
     <message>
         <location filename="../../src/commands/segment/SegmentRescaleCommand.h" line="53"/>
         <source>Stretch or S&amp;quash...</source>
-        <translation type="unfinished">Estirar o Enco&amp;ger...</translation>
+        <translation>Estirar o enco&amp;ger...</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/SegmentRescaleCommand.cpp" line="97"/>
         <source>(rescaled)</source>
-        <translation type="unfinished">(escalado)</translation>
+        <translation>(escalado)</translation>
     </message>
 </context>
 <context>
@@ -20633,7 +20673,7 @@ Error fue : %2</translation>
     <message>
         <location filename="../../src/commands/segment/SegmentResizeFromStartCommand.cpp" line="31"/>
         <source>Resize Segment</source>
-        <translation type="unfinished">Redimensionar Segmento</translation>
+        <translation>Redimensionar segmento</translation>
     </message>
 </context>
 <context>
@@ -20641,7 +20681,7 @@ Error fue : %2</translation>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="148"/>
         <source>Warning</source>
-        <translation type="unfinished">Advertencia</translation>
+        <translation>Advertencia</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="149"/>
@@ -20655,32 +20695,32 @@ Por favor, configure el directorio de archivos de audio hacia un directorio vál
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="165"/>
         <source>Rescaling audio file...</source>
-        <translation type="unfinished">Re-escalando archivo de audio...</translation>
+        <translation>Re-escalando archivo de audio...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="174"/>
         <source>Generating audio preview...</source>
-        <translation type="unfinished">Generando vista preliminar.de audio</translation>
+        <translation>Generando vista preliminar.de audio...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="252"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
-        <translation type="unfinished">Pulse mayúsculas para evitar ajustar el tiempo a la cuadrícula de ritmo</translation>
+        <translation>Pulse mayúsculas para evitar ajustar el tiempo a la cuadrícula de ritmo</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="258"/>
         <source>Hold Shift to avoid snapping to beat grid; hold Ctrl as well to rescale contents</source>
-        <translation type="unfinished">Pulse mayúsculas para evitar ajuste de tiempo a la cuadrícula rítmica; pulse Ctrl a la vez para escalar contenido</translation>
+        <translation>Pulse mayúsculas para evitar ajuste de tiempo a la cuadrícula rítmica; pulse Ctrl a la vez para escalar contenido</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="381"/>
         <source>Click and drag to resize a segment; hold Ctrl as well to rescale its contents</source>
-        <translation type="unfinished">Haga clic y arrastre para cambiar tamaño de un segmento; pulse Ctrl para escalar el contenido</translation>
+        <translation>Haga clic y arrastre para cambiar tamaño de un segmento; pulse Ctrl para escalar el contenido</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="383"/>
         <source>Click and drag to rescale segment</source>
-        <translation type="unfinished">Haga clic y arrastre para escalar un segmento</translation>
+        <translation>Haga clic y arrastre para escalar un segmento</translation>
     </message>
 </context>
 <context>
@@ -20688,55 +20728,55 @@ Por favor, configure el directorio de archivos de audio hacia un directorio vál
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="75"/>
         <source>Click and drag to select segments</source>
-        <translation type="unfinished">hacer clic y arrastre para seleccionar segmentos</translation>
+        <translation>Haga clic y arrastre para seleccionar segmentos</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="242"/>
         <source>Move Segment(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Mover segmento</numerusform>
+            <numerusform>Mover %n segmentos</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="384"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
-        <translation type="unfinished">Pulse mayúsculas para evitar ajustar el tiempo a la cuadrícula de ritmo</translation>
+        <translation>Pulse mayúsculas para evitar ajustar el tiempo a la cuadrícula de ritmo</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="492"/>
         <source>Click and drag to select segments; middle-click and drag to draw an empty segment</source>
-        <translation type="unfinished">Haga clic y arrastre para seleccionar segmentos; botón medio del ratón y arrastre para dibujar un segmento vacío</translation>
+        <translation>Haga clic y arrastre para seleccionar segmentos; botón medio del ratón y arrastre para dibujar un segmento vacío</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="509"/>
         <source>Click and drag to resize a segment; hold Ctrl as well to rescale its contents</source>
-        <translation type="unfinished">Haga clic y arrastre para cambiar tamaño de un segmento; pulse Ctrl para escalar el contenido</translation>
+        <translation>Haga clic y arrastre para cambiar tamaño de un segmento; pulse Ctrl para escalar el contenido</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="511"/>
         <source>Click and drag to rescale segment</source>
-        <translation type="unfinished">Haga clic y arrastre para escalar un segmento</translation>
+        <translation>Haga clic y arrastre para escalar un segmento</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="516"/>
         <source>Click and drag to move segments; hold Ctrl as well to copy them</source>
-        <translation type="unfinished">Haga clic y arrastre para mover segmentos; pulse Ctrl a la vez para copiarlos</translation>
+        <translation>Haga clic y arrastre para mover segmentos; pulse Ctrl a la vez para copiarlos</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="518"/>
         <source>Click and drag to copy segments</source>
-        <translation type="unfinished">Haga clic y arrastre para copiar segmentos</translation>
+        <translation>Haga clic y arrastre para copiar segmentos</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="522"/>
         <source>Click and drag to move segment; hold Ctrl as well to copy it; double-click to edit</source>
-        <translation type="unfinished">Haga clic y arrastre para mover segmentos; pulse Ctrl a la vez para copiar; doble clic para editar</translation>
+        <translation>Haga clic y arrastre para mover segmentos; pulse Ctrl a la vez para copiar; doble clic para editar</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="524"/>
         <source>Click and drag to copy segment</source>
-        <translation type="unfinished">Haga clic y arrastre para copiar segmentos</translation>
+        <translation>Haga clic y arrastre para copiar segmentos</translation>
     </message>
 </context>
 <context>
@@ -20744,7 +20784,7 @@ Por favor, configure el directorio de archivos de audio hacia un directorio vál
     <message>
         <location filename="../../src/commands/segment/SegmentSingleRepeatToCopyCommand.cpp" line="32"/>
         <source>Turn Single Repeat into Copy</source>
-        <translation type="unfinished">Convertir Repetición Simple en Copia</translation>
+        <translation>Convertir repetición simple en copia</translation>
     </message>
 </context>
 <context>
@@ -20752,22 +20792,22 @@ Por favor, configure el directorio de archivos de audio hacia un directorio vál
     <message>
         <location filename="../../src/commands/segment/SegmentSplitByPitchCommand.h" line="56"/>
         <source>Split by &amp;Pitch...</source>
-        <translation type="unfinished">Dividir por &amp;Tono</translation>
+        <translation>Dividir por &amp;tono...</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/SegmentSplitByPitchCommand.cpp" line="42"/>
         <source>Split by Pitch</source>
-        <translation type="unfinished">Dividir por tono</translation>
+        <translation>Dividir por tono</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/SegmentSplitByPitchCommand.cpp" line="166"/>
         <source>(upper)</source>
-        <translation type="unfinished">(superior)</translation>
+        <translation>(superior)</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/SegmentSplitByPitchCommand.cpp" line="167"/>
         <source>(lower)</source>
-        <translation type="unfinished">(inferior)</translation>
+        <translation>(inferior)</translation>
     </message>
 </context>
 <context>
@@ -20775,18 +20815,18 @@ Por favor, configure el directorio de archivos de audio hacia un directorio vál
     <message>
         <location filename="../../src/commands/segment/SegmentSplitByRecordingSrcCommand.h" line="44"/>
         <source>Split by &amp;Recording Source...</source>
-        <translation type="unfinished">Dividir por Fuente de Grabación</translation>
+        <translation>Dividir por &amp;Fuente de Grabación...</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/SegmentSplitByRecordingSrcCommand.cpp" line="36"/>
         <source>Split by Recording Source</source>
-        <translation type="unfinished">Dividir según la fuente de grabación</translation>
+        <translation>Dividir según la fuente de grabación</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/SegmentSplitByRecordingSrcCommand.cpp" line="114"/>
         <location filename="../../src/commands/segment/SegmentSplitByRecordingSrcCommand.cpp" line="115"/>
         <source>(split)</source>
-        <translation type="unfinished">(dividido)</translation>
+        <translation>(dividido)</translation>
     </message>
 </context>
 <context>
@@ -20794,13 +20834,13 @@ Por favor, configure el directorio de archivos de audio hacia un directorio vál
     <message>
         <location filename="../../src/commands/segment/SegmentSplitCommand.cpp" line="35"/>
         <source>Split Segment</source>
-        <translation type="unfinished">Dividir Segmento</translation>
+        <translation>Dividir segmento</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/SegmentSplitCommand.cpp" line="129"/>
         <location filename="../../src/commands/segment/SegmentSplitCommand.cpp" line="130"/>
         <source>(split)</source>
-        <translation type="unfinished">(dividido)</translation>
+        <translation>(dividido)</translation>
     </message>
 </context>
 <context>
@@ -20808,7 +20848,7 @@ Por favor, configure el directorio de archivos de audio hacia un directorio vál
     <message>
         <location filename="../../src/commands/segment/SegmentSplitTwiceCommand.cpp" line="44"/>
         <source>Split Twice Segment</source>
-        <translation type="unfinished">Dividir Segmento Dos Veces</translation>
+        <translation>Dividir segmento dos veces</translation>
     </message>
 </context>
 <context>
@@ -20816,12 +20856,12 @@ Por favor, configure el directorio de archivos de audio hacia un directorio vál
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentSplitter.cpp" line="164"/>
         <source>Click on a segment to split it in two; hold Shift to avoid snapping to beat grid</source>
-        <translation type="unfinished">Haga clic en un segmento para dividirlo en dos; pulse mayúsculas para evitar ajuste de tiempo</translation>
+        <translation>Haga clic en un segmento para dividirlo en dos; pulse mayúsculas para evitar ajuste de tiempo</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentSplitter.cpp" line="166"/>
         <source>Click on a segment to split it in two</source>
-        <translation type="unfinished">hacer clic en un segmento para dividirlo en dos</translation>
+        <translation>Haga clic en un segmento para dividirlo en dos</translation>
     </message>
 </context>
 <context>
@@ -20829,7 +20869,7 @@ Por favor, configure el directorio de archivos de audio hacia un directorio vál
     <message>
         <location filename="../../src/commands/segment/SegmentSyncClefCommand.cpp" line="27"/>
         <source>Sync segment clef</source>
-        <translation type="unfinished">Sincronizar clave del segmento</translation>
+        <translation>Sincronizar clave del segmento</translation>
     </message>
 </context>
 <context>
@@ -20840,7 +20880,7 @@ Por favor, configure el directorio de archivos de audio hacia un directorio vál
         <location filename="../../src/commands/segment/SegmentSyncCommand.cpp" line="48"/>
         <location filename="../../src/commands/segment/SegmentSyncCommand.cpp" line="56"/>
         <source>Sync segment parameters</source>
-        <translation type="unfinished">Sincronizar parámetros de segmento</translation>
+        <translation>Sincronizar parámetros de segmento</translation>
     </message>
 </context>
 <context>
@@ -20848,13 +20888,13 @@ Por favor, configure el directorio de archivos de audio hacia un directorio vál
     <message>
         <location filename="../../src/commands/segment/SegmentTransposeCommand.h" line="49"/>
         <source>Transpose by &amp;Interval...</source>
-        <translation type="unfinished">Transporte por intervalo...</translation>
+        <translation>Transportar por &amp;intervalo...</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/SegmentTransposeCommand.cpp" line="29"/>
         <location filename="../../src/commands/segment/SegmentTransposeCommand.cpp" line="35"/>
         <source>Change segment transposition</source>
-        <translation type="unfinished">Cambiar transporte de segmento</translation>
+        <translation>Cambiar transporte de segmento</translation>
     </message>
 </context>
 <context>
@@ -20862,7 +20902,7 @@ Por favor, configure el directorio de archivos de audio hacia un directorio vál
     <message>
         <location filename="../../src/commands/edit/SelectionPropertyCommand.h" line="61"/>
         <source>Set &amp;Property</source>
-        <translation type="unfinished">Establecer &amp;Propiedad</translation>
+        <translation>Establecer &amp;propiedad</translation>
     </message>
 </context>
 <context>
@@ -20873,8 +20913,8 @@ Por favor, configure el directorio de archivos de audio hacia un directorio vál
         <source>The JACK Audio subsystem has failed or it has stopped Rosegarden from processing audio.
 Please restart Rosegarden to continue working with audio.
 Quitting other running applications may improve Rosegarden&apos;s performance.</source>
-        <translation type="unfinished">El subsistema de Audio JACK ha muerto o ha dejado de procesar audio para Rosegarden.
-Por favor, reinicie Rosegarden para continuar trabajando con audio.
+        <translation>El subsistema de Audio JACK ha muerto o ha dejado de procesar audio para Rosegarden.
+Reinicie Rosegarden para continuar trabajando con audio.
 Cierre otras aplicaciones en ejecución para mejorar el rendimiento de Rosegarden. </translation>
     </message>
     <message>
@@ -20883,89 +20923,90 @@ Cierre otras aplicaciones en ejecución para mejorar el rendimiento de Rosegarde
         <source>The JACK Audio subsystem has stopped Rosegarden from processing audio, probably because of a processing overload.
 An attempt to restart the audio service has been made, but some problems may remain.
 Quitting other running applications may improve Rosegarden&apos;s performance.</source>
-        <translation type="unfinished">El subsistema de Audio JACK ha dejado de procesar audio para Rosegarden, probablemente debido a una sobrecarga de trabajo.
+        <translation>El subsistema de Audio JACK ha dejado de procesar audio para Rosegarden, probablemente debido a una sobrecarga de trabajo.
 Se ha realizado un intento de reiniciar el servicio, pero pueden quedar algunos problemas.
 Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosegarden.</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="941"/>
         <source>Out of processor power for real-time audio processing.  Cannot continue.</source>
-        <translation type="unfinished"></translation>
+        <translation>Se ha sobrepasado la capacidad de proceso para audio en tiempo real. No es posible continuar.</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="967"/>
         <source>A serious error has occurred in the ALSA MIDI subsystem.  It may not be possible to continue sequencing.  Please check console output for more information.</source>
-        <translation type="unfinished">Un error serio ha ocurrido en el subsistema ALSA MIDI.  Puede no serposible continuar secuenciando.  Por favor revisa la salida de consola para másinformación.</translation>
+        <translation>Un error serio ha ocurrido en el subsistema ALSA MIDI.  Puede no serposible continuar secuenciando.  Por favor revisa la salida de consola para másinformación.</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="993"/>
         <source>JACK Audio subsystem is losing sample frames.</source>
-        <translation type="unfinished">Subsistema de audio JACK está perdiendo muestras.</translation>
+        <translation>Subsistema de audio JACK está perdiendo muestras.</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1011"/>
         <source>Failed to read audio data from disk in time to service the audio subsystem.</source>
-        <translation type="unfinished"></translation>
+        <translation>Fallo leyendo datos de audio desde disco a tiempo para servir el subsistema de audio.</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1015"/>
         <source>Failed to write audio data to disk fast enough to service the audio subsystem.</source>
-        <translation type="unfinished"></translation>
+        <translation>Fallo escribiendo datos de audio en disco suficientemente rápido para servir el subsistema de audio.</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1066"/>
         <source>&lt;h3&gt;System timer resolution is too low!&lt;/h3&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;h3&gt;¡La resolución del temporizador del sistema es muy baja!&lt;/h3&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1101"/>
         <source>&lt;p&gt;Rosegarden was unable to find a high-resolution timing source for MIDI performance.&lt;/p&gt;&lt;p&gt;This may mean you are using a Linux system with the kernel timer resolution set too low.  Please contact your Linux distributor for more information.&lt;/p&gt;&lt;p&gt;Some Linux distributors already provide low latency kernels, see the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;Rosegarden website&lt;/a&gt; for instructions.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Rosegarden no ha sido capaz de encontrar una fuente de alta resolución para una temporización de alto rendimiento de MIDI.&lt;/p&gt;&lt;p&gt;Esto puede significar que usted está usando un sistema Linux con la resolución del temporizador muy baja.  Contacte a su distribuidor para mayor información.&lt;/p&gt;&lt;p&gt;Algunas distribuciones Linux proporcionan núcleos de baja latencia, vea  el &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;sitio de Rosegarden&lt;/a&gt; para más instrucciones.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1126"/>
         <source>&lt;p&gt;Rosegarden was unable to find a high-resolution timing source for MIDI performance.&lt;/p&gt;&lt;p&gt;You may be able to solve this problem by loading the RTC timer kernel module.  To do this, try running &lt;b&gt;sudo modprobe snd-rtctimer&lt;/b&gt; in a terminal window and then restarting Rosegarden.&lt;/p&gt;&lt;p&gt;Alternatively, check whether your Linux distributor provides a multimedia-optimized kernel.  See the &lt;a style=&quot;color:gold&quot;  href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;Rosegarden website&lt;/a&gt; for notes about this.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>I see the previous translator (in es.po) also just used the first version of this text the second time, and skipped the RTC nonsense.  It never works anyway.  So I just did that too.</translatorcomment>
+        <translation>&lt;p&gt;Rosegarden no ha sido capaz de encontrar una fuente de alta resolución para una temporización de alto rendimiento de MIDI.&lt;/p&gt;&lt;p&gt;Esto puede significar que usted está usando un sistema Linux con la resolución del temporizador muy baja.  Contacte a su distribuidor para mayor información.&lt;/p&gt;&lt;p&gt;Algunas distribuciones Linux proporcionan núcleos de baja latencia, vea  el &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;sitio de Rosegarden&lt;/a&gt; para más instrucciones.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1237"/>
         <source>&lt;h3&gt;Sequencer engine unavailable!&lt;/h3&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;h3&gt;¡Motor del secuenciador no disponible!&lt;/h3&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1238"/>
         <source>&lt;p&gt;Both MIDI and Audio subsystems have failed to initialize.&lt;/p&gt;&lt;p&gt;If you wish to run with no sequencer by design, then use &quot;rosegarden --nosequencer&quot; to avoid seeing this error in the future.  Otherwise, we recommend that you repair your system configuration and start Rosegarden again.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;&lt;p&gt;Los subsistemas MIDI y Audio han fallado en su inicialización.&lt;/p&gt;&lt;p&gt;Si desea ejecutar sin secuenciador, puede ejecutar Rosegarden con «rosegarden --nosequencer» para evitar este mensaje de error en el futuro.  Si no, se sugiere que arregle la configuración de su sistema e reinicie Rosegarden.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1240"/>
         <source>&lt;h3&gt;MIDI sequencing unavailable!&lt;/h3&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;h3&gt;¡Secuenciador de MIDI no disponible!&lt;/h3&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1258"/>
         <source>&lt;h3&gt;Audio sequencing and synth plugins unavailable!&lt;/h3&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;h3&gt;¡Secuenciador de audio y plugins sintes no disponibles!&lt;/h3&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1259"/>
         <source>&lt;p&gt;Rosegarden could not connect to the JACK audio server.  This probably means that Rosegarden was unable to start the audio server due to a problem with your configuration, your system installation, or both.&lt;/p&gt;&lt;p&gt;If you want to be able to play or record audio files or use plugins, we suggest that you exit Rosegarden and use the JACK Control utility (qjackctl) to try different settings until you arrive at a configuration that permits JACK to start.  You may also need to install a realtime kernel, edit your system security configuration, and so on.  Unfortunately, this is an extremely complex subject.&lt;/p&gt;&lt;p&gt; Once you establish a working JACK configuration, Rosegarden will be able to start the audio server automatically in the future.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt; Ha fallado la conexión al servidor de audio JACK  Esto significa que Rosegarden no pudo ejecutar el servidor de audio debido a un problema con su configuración, su instalación de sistema, o los dos.&lt;/p&gt;&lt;p&gt;Si quiere ser capaz de reproducir o grabar archivos de audio o utilizar plugins, debería cerrar Rosegarden e iniciar el servidor JACK con QJackCtl, probando preferencias distinatas hasta llegar a una configuración que funcione.  También puede que necesite instalar un núcleo de tiempo real (&lt;i&gt;realtime&lt;/i&gt;), editar la configuración de seguridad del sistema, etcétera.  Desafortunadamente, este es un subjeto muy complicado.&lt;/p&gt;&lt;p&gt;Una vez que haya establecido una configuración de JACK que funcione, Rosegarden puede ejecutar el servidor de audio automáticamente en el futuro.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1019"/>
         <source>The audio mixing subsystem is failing to keep up.</source>
-        <translation type="unfinished">El subsistema de mezclador de audio está fallando.</translation>
+        <translation>El subsistema de mezclador de audio está fallando.</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1023"/>
         <source>The audio subsystem is failing to keep up.</source>
-        <translation type="unfinished">El subsistema de audio está fallando</translation>
+        <translation>El subsistema de audio está fallando.</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1027"/>
         <source>Unknown sequencer failure mode!</source>
-        <translation type="unfinished">Fallo desconocido del secuenciador!</translation>
+        <translation>¡Fallo desconocido del secuenciador!</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1241"/>
@@ -20978,7 +21019,7 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
     <message>
         <location filename="../../src/commands/edit/SetLyricsCommand.h" line="45"/>
         <source>Edit L&amp;yrics</source>
-        <translation type="unfinished">Editar &amp;Letra</translation>
+        <translation>Editar &amp;letra</translation>
     </message>
 </context>
 <context>
@@ -20986,7 +21027,7 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
     <message>
         <location filename="../../src/commands/edit/SetNoteTypeCommand.h" line="51"/>
         <source>&amp;Set Note Type</source>
-        <translation type="unfinished">E&amp;stablecer Tipo de Nota</translation>
+        <translation>E&amp;stablecer tipo de nota</translation>
     </message>
 </context>
 <context>
@@ -20994,7 +21035,7 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
     <message>
         <location filename="../../src/commands/edit/SetTriggerCommand.h" line="58"/>
         <source>Tri&amp;gger Segment</source>
-        <translation type="unfinished">Acti&amp;var Segmento</translation>
+        <translation>Acti&amp;var segmento</translation>
     </message>
 </context>
 <context>
@@ -21002,7 +21043,7 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
     <message>
         <location filename="../../src/commands/segment/SetTriggerSegmentBasePitchCommand.cpp" line="31"/>
         <source>Set Base Pitch</source>
-        <translation type="unfinished">Establecer nota base</translation>
+        <translation>Establecer nota base</translation>
     </message>
 </context>
 <context>
@@ -21010,7 +21051,7 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
     <message>
         <location filename="../../src/commands/segment/SetTriggerSegmentBaseVelocityCommand.cpp" line="31"/>
         <source>Set Base Velocity</source>
-        <translation type="unfinished">Establecer Velocidad Base</translation>
+        <translation>Establecer velocidad base</translation>
     </message>
 </context>
 <context>
@@ -21018,7 +21059,7 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
     <message>
         <location filename="../../src/commands/segment/SetTriggerSegmentDefaultRetuneCommand.cpp" line="32"/>
         <source>Set Default Retune</source>
-        <translation type="unfinished">Establecer Transposición Predeterminada</translation>
+        <translation>Establecer transposición predeterminada</translation>
     </message>
 </context>
 <context>
@@ -21026,7 +21067,7 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
     <message>
         <location filename="../../src/commands/segment/SetTriggerSegmentDefaultTimeAdjustCommand.cpp" line="32"/>
         <source>Set Default Time Adjust</source>
-        <translation type="unfinished">Establecer Ajuste de Tiempo Predeterminado</translation>
+        <translation>Establecer ajuste de tiempo predeterminado</translation>
     </message>
 </context>
 <context>
@@ -21034,7 +21075,7 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
     <message>
         <location filename="../../src/commands/notation/SetVisibilityCommand.h" line="46"/>
         <source>Set Visibility</source>
-        <translation type="unfinished">Establecer Visibilidad</translation>
+        <translation>Establecer visibilidad</translation>
     </message>
 </context>
 <context>
@@ -21042,12 +21083,12 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
     <message>
         <location filename="../../src/gui/dialogs/ShowSequencerStatusDialog.cpp" line="40"/>
         <source>Sequencer status</source>
-        <translation type="unfinished">Estado del Secuenciador</translation>
+        <translation>Estado del secuenciador</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ShowSequencerStatusDialog.cpp" line="49"/>
         <source>Sequencer status:</source>
-        <translation type="unfinished">Estado del Secuenciador:</translation>
+        <translation>Estado del secuenciador:</translation>
     </message>
 </context>
 <context>
@@ -21055,35 +21096,35 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="74"/>
         <source>Event Properties</source>
-        <translation type="unfinished">Propiedades del Evento</translation>
+        <translation>Propiedades del evento</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="80"/>
         <source>Event type:</source>
-        <translation type="unfinished">Tipo de Evento</translation>
+        <translation>Tipo de evento</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="116"/>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="274"/>
         <source>Absolute time:</source>
-        <translation type="unfinished">Tiempo absoluto:</translation>
+        <translation>Tiempo absoluto:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="131"/>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="280"/>
         <source>Duration:</source>
-        <translation type="unfinished">Duración:</translation>
+        <translation>Duración:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="146"/>
         <source>Pitch:</source>
-        <translation type="unfinished">Altura:</translation>
+        <translation>Altura:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="161"/>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="358"/>
         <source>Controller name:</source>
-        <translation type="unfinished">Nombre del Controlador:</translation>
+        <translation>Nombre del controlador:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="162"/>
@@ -21093,187 +21134,187 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="658"/>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="689"/>
         <source>&lt;none&gt;</source>
-        <translation type="unfinished">&lt;nada&gt;</translation>
+        <translation>&lt;nada&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="168"/>
         <source>Velocity:</source>
-        <translation type="unfinished">Velocidad:</translation>
+        <translation>Velocidad:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="179"/>
         <source>Meta string:</source>
-        <translation type="unfinished">Cadena Meta:</translation>
+        <translation>Cadena meta:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="184"/>
         <source>Load data</source>
-        <translation type="unfinished">Cargar datos</translation>
+        <translation>Cargar datos</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="186"/>
         <source>Save data</source>
-        <translation type="unfinished">Guardar datos</translation>
+        <translation>Guardar datos</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="198"/>
         <source>Notation Properties</source>
-        <translation type="unfinished">Propiedades de edición de partitura</translation>
+        <translation>Propiedades de edición de partitura</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="205"/>
         <source>Lock to changes in performed values</source>
-        <translation type="unfinished">Atenerse a cambios en los valores interpretados</translation>
+        <translation>Atenerse a cambios en los valores interpretados</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="212"/>
         <source>Notation time:</source>
-        <translation type="unfinished">Tiempo de notación:</translation>
+        <translation>Tiempo de notación:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="227"/>
         <source>Notation duration:</source>
-        <translation type="unfinished">Duración de notación:</translation>
+        <translation>Duración de notación:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="316"/>
         <source>Note pitch:</source>
-        <translation type="unfinished">Altura de Nota:</translation>
+        <translation>Altura de nota:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="324"/>
         <source>Note velocity:</source>
-        <translation type="unfinished">Velocidad de Nota:</translation>
+        <translation>Velocidad de nota:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="352"/>
         <source>Controller number:</source>
-        <translation type="unfinished">Número de Controlador:</translation>
+        <translation>Número de controlador:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="361"/>
         <source>Controller value:</source>
-        <translation type="unfinished">Valor de Controlador:</translation>
+        <translation>Valor de controlador:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="391"/>
         <source>Key pitch:</source>
-        <translation type="unfinished">Altura de Nota:</translation>
+        <translation>Altura de nota:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="399"/>
         <source>Key pressure:</source>
-        <translation type="unfinished">Presión de Tecla:</translation>
+        <translation>Presión de tecla:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="429"/>
         <source>Channel pressure:</source>
-        <translation type="unfinished">Presión de Canal:</translation>
+        <translation>Presión de canal:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="462"/>
         <source>Program change:</source>
-        <translation type="unfinished">Cambio de Programa:</translation>
+        <translation>Cambio de programa:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="507"/>
         <source>Data length:</source>
-        <translation type="unfinished">Tamaño de Datos:</translation>
+        <translation>Tamaño de datos:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="508"/>
         <source>Data:</source>
-        <translation type="unfinished">Datos:</translation>
+        <translation>Datos:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="528"/>
         <source>Pitchbend MSB:</source>
-        <translation type="unfinished">Inflexión de Tono MSB:</translation>
+        <translation>Inflexión de tono MSB:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="536"/>
         <source>Pitchbend LSB:</source>
-        <translation type="unfinished">Inflexión de Tono LSB:</translation>
+        <translation>Inflexión de tono LSB:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="573"/>
         <source>Indication:</source>
-        <translation type="unfinished">Indicación:</translation>
+        <translation>Indicación:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="605"/>
         <source>Text type:</source>
-        <translation type="unfinished">Tipo de Texto:</translation>
+        <translation>Tipo de texto:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="606"/>
         <source>Text:</source>
-        <translation type="unfinished">Texto:</translation>
+        <translation>Texto:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="652"/>
         <source>Clef type:</source>
-        <translation type="unfinished">Tipo de Clave:</translation>
+        <translation>Tipo de clave:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="683"/>
         <source>Key name:</source>
-        <translation type="unfinished">Nombre de clave:</translation>
+        <translation>Nombre de clave:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="736"/>
         <source>Unsupported event type:</source>
-        <translation type="unfinished">Tipo de evento no soportado:</translation>
+        <translation>Tipo de evento no soportado:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="993"/>
         <source>Edit Event Time</source>
-        <translation type="unfinished">Editar Tiempo del Evento</translation>
+        <translation>Editar tiempo del evento</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="1005"/>
         <source>Edit Event Notation Time</source>
-        <translation type="unfinished">Editar Tiempo de Notación del Evento</translation>
+        <translation>Editar tiempo de notación del evento</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="1017"/>
         <source>Edit Duration</source>
-        <translation type="unfinished">Editar Duración</translation>
+        <translation>Editar duración</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="1030"/>
         <source>Edit Notation Duration</source>
-        <translation type="unfinished">Editar Duración de Notación</translation>
+        <translation>Editar duración de notación</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="1043"/>
         <source>Edit Pitch</source>
-        <translation type="unfinished">Editar Altura</translation>
+        <translation>Editar altura</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="1052"/>
         <source>Load System Exclusive data in File</source>
-        <translation type="unfinished">Cargar datos de Sistema Exclusivo en el Archivo</translation>
+        <translation>Cargar datos de sistema exclusivo en el archivo</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="1053"/>
         <source>System exclusive files</source>
-        <translation type="unfinished"></translation>
+        <translation>Archvios de datos de sistema exclusivo</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="1054"/>
         <source>All files</source>
-        <translation type="unfinished">Todos los archivos</translation>
+        <translation>Todos los archivos</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="1083"/>
         <source>*.syx|System exclusive files (*.syx)</source>
-        <translation type="unfinished">*.syx|Archivos de Sistema Exclusivo (*.syx)</translation>
+        <translation>*.syx|Archivos de sistema exclusivo (*.syx)</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="1082"/>
         <source>Save System Exclusive data to...</source>
-        <translation type="unfinished">Guardar datos de Sistema Exclusivo a...</translation>
+        <translation>Guardar datos de sistema exclusivo a...</translation>
     </message>
 </context>
 <context>
@@ -21281,42 +21322,42 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
     <message>
         <location filename="../../src/gui/dialogs/SplitByPitchDialog.cpp" line="42"/>
         <source>Split by Pitch</source>
-        <translation type="unfinished">Dividir por tono</translation>
+        <translation>Dividir por tono</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SplitByPitchDialog.cpp" line="59"/>
         <source>Starting split pitch</source>
-        <translation type="unfinished">Tono de inicio de división</translation>
+        <translation>Tono de inicio de división</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SplitByPitchDialog.cpp" line="62"/>
         <source>Range up and down to follow music</source>
-        <translation type="unfinished">Rango superior e inferior para seguir la música</translation>
+        <translation>Rango superior e inferior para seguir la música</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SplitByPitchDialog.cpp" line="68"/>
         <source>Duplicate non-note events</source>
-        <translation type="unfinished">Duplicar eventos distintos a notas</translation>
+        <translation>Duplicar eventos distintos a notas</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SplitByPitchDialog.cpp" line="71"/>
         <source>Clef handling:</source>
-        <translation type="unfinished">Gestión de claves:</translation>
+        <translation>Gestión de claves:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SplitByPitchDialog.cpp" line="74"/>
         <source>Leave clefs alone</source>
-        <translation type="unfinished">Dejar las claves como están</translation>
+        <translation>Dejar las claves como están</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SplitByPitchDialog.cpp" line="75"/>
         <source>Guess new clefs</source>
-        <translation type="unfinished">Adivinar nuevas claves</translation>
+        <translation>Adivinar nuevas claves</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SplitByPitchDialog.cpp" line="76"/>
         <source>Use treble and bass clefs</source>
-        <translation type="unfinished">Usar claves de Soprano y Bajo</translation>
+        <translation>Usar claves de fa y sol</translation>
     </message>
 </context>
 <context>
@@ -21324,33 +21365,33 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
     <message>
         <location filename="../../src/gui/dialogs/SplitByRecordingSrcDialog.cpp" line="46"/>
         <source>Split by Recording Source</source>
-        <translation type="unfinished">Dividir según la fuente de grabación</translation>
+        <translation>Dividir según la fuente de grabación</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SplitByRecordingSrcDialog.cpp" line="55"/>
         <source>Recording Source</source>
-        <translation type="unfinished">Fuente de grabación</translation>
+        <translation>Fuente de grabación</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SplitByRecordingSrcDialog.cpp" line="62"/>
         <source>Channel:</source>
-        <translation type="unfinished">Canal:</translation>
+        <translation>Canal:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SplitByRecordingSrcDialog.cpp" line="69"/>
         <location filename="../../src/gui/dialogs/SplitByRecordingSrcDialog.cpp" line="80"/>
         <source>any</source>
-        <translation type="unfinished">(cualquiera) </translation>
+        <translation>(cualquiera)</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SplitByRecordingSrcDialog.cpp" line="74"/>
         <source>Device:</source>
-        <translation type="unfinished">Dispositivo </translation>
+        <translation>Dispositivo:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SplitByRecordingSrcDialog.cpp" line="95"/>
         <source>No connection</source>
-        <translation type="unfinished">Sin conexión</translation>
+        <translation>Sin conexión</translation>
     </message>
 </context>
 <context>
@@ -21358,7 +21399,7 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
     <message>
         <location filename="../../src/gui/widgets/SqueezedLabel.cpp" line="170"/>
         <source>&amp;Copy Full Text</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Copiar todo el texto</translation>
     </message>
 </context>
 <context>
@@ -21371,27 +21412,27 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="126"/>
         <source>&lt;br&gt;Notate for: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;br&gt;Partitura para: %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="128"/>
         <source>normal</source>
-        <translation type="unfinished">normal</translation>
+        <translation>normal</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="131"/>
         <source>small</source>
-        <translation type="unfinished">pequeño</translation>
+        <translation>pequeño</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="134"/>
         <source>tiny</source>
-        <translation type="unfinished">pequeñito</translation>
+        <translation>pequeñito</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="163"/>
         <source>&lt;br&gt;Size: %1,  Bracket: %2 </source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;br&gt;Tamaño: %1,  Paréntesis: %2 </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="191"/>
@@ -21558,12 +21599,12 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
     <message>
         <location filename="../../src/commands/notation/SustainInsertionCommand.h" line="51"/>
         <source>Add Pedal &amp;Press</source>
-        <translation type="unfinished">Añadir Pedal &amp;Pulsado</translation>
+        <translation>Añadir pedal &amp;accionado</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/SustainInsertionCommand.h" line="53"/>
         <source>Add Pedal &amp;Release</source>
-        <translation type="unfinished">Añadir Pedal Libe&amp;rado</translation>
+        <translation>Añadir pedal &amp;soltado</translation>
     </message>
 </context>
 <context>
@@ -21571,39 +21612,34 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
     <message>
         <location filename="../../src/commands/notation/SymbolInsertionCommand.cpp" line="62"/>
         <source>Insert &amp;Symbol...</source>
-        <translation type="unfinished"></translation>
+        <translation>Insertar &amp;Símbolo...</translation>
     </message>
 </context>
 <context>
     <name>Rosegarden::SynthPluginManagerDialog</name>
     <message>
-        <location filename="../../src/gui/studio/SynthPluginManagerDialog.cpp" line="67"/>
+        <location filename="../../src/gui/studio/SynthPluginManagerDialog.cpp" line="69"/>
         <source>Manage Synth Plugins</source>
-        <translation type="unfinished">Gestionar plugins sintetizadores</translation>
+        <translation>Gestionar plugins sintetizadores</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/SynthPluginManagerDialog.cpp" line="193"/>
+        <location filename="../../src/gui/studio/SynthPluginManagerDialog.cpp" line="195"/>
         <source>&lt;none&gt;</source>
-        <translation type="unfinished">&lt;nada&gt;</translation>
+        <translation>&lt;nada&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/SynthPluginManagerDialog.cpp" line="217"/>
+        <location filename="../../src/gui/studio/SynthPluginManagerDialog.cpp" line="219"/>
         <source>Controls</source>
-        <translation type="unfinished">Controles</translation>
+        <translation>Controles</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/SynthPluginManagerDialog.cpp" line="222"/>
+        <location filename="../../src/gui/studio/SynthPluginManagerDialog.cpp" line="224"/>
         <source>Editor &gt;&gt;</source>
-        <translation type="unfinished">Editor &gt;&gt;</translation>
+        <translation>Editor &gt;&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/SynthPluginManagerDialog.cpp" line="245"/>
-        <source>Help for the Synth-Plugin Management Dialog</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/SynthPluginManagerDialog.cpp" line="246"/>
-        <source>Create plugin instances here, e.g. software synthesizers and effects. </source>
+        <location filename="../../src/gui/studio/SynthPluginManagerDialog.cpp" line="250"/>
+        <source>http://rosegardenmusic.com/wiki/doc:synth-plugin-manager-en</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -22236,87 +22272,87 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
     <message>
         <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="68"/>
         <source>Time Signature</source>
-        <translation type="unfinished">Medida del Compás</translation>
+        <translation>Medida del Compás</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="84"/>
         <source>Time signature</source>
-        <translation type="unfinished">Medida del compás</translation>
+        <translation>Medida del compás</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="134"/>
         <source>Time where signature takes effect</source>
-        <translation type="unfinished">Tiempo donde hace efecto el cambio</translation>
+        <translation>Tiempo donde hace efecto el cambio</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="147"/>
         <source>Scope</source>
-        <translation type="unfinished">Ámbito</translation>
+        <translation>Ámbito</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="161"/>
         <source>Insertion point is at start of measure %1.</source>
-        <translation type="unfinished">El punto de inserción está al comienzo del compás %1</translation>
+        <translation>El punto de inserción está al comienzo del compás %1.</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="165"/>
         <source>Insertion point is in the middle of measure %1.</source>
-        <translation type="unfinished">El punto de inserción está en medio del compás %1.</translation>
+        <translation>El punto de inserción está en medio del compás %1.</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="170"/>
         <source>Insertion point is at start of composition.</source>
-        <translation type="unfinished">El punto de inserción está al comienzo de la composición</translation>
+        <translation>El punto de inserción está al comienzo de la composición.</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="175"/>
         <source>Start measure %1 here</source>
-        <translation type="unfinished">Iniciar compás %1 aquí</translation>
+        <translation>Iniciar compás %1 aquí</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="179"/>
         <source>Change time from start of measure %1</source>
-        <translation type="unfinished">Cambiar tiempo desde el comienzo del compás %1</translation>
+        <translation>Cambiar tiempo desde el comienzo del compás %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="188"/>
         <source>Time change will take effect at the start of measure %1.</source>
-        <translation type="unfinished">El cambio de tiempo tendrá efecto al comienzo del compás %1.</translation>
+        <translation>El cambio de tiempo tendrá efecto al comienzo del compás %1.</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="194"/>
         <source>Options</source>
-        <translation type="unfinished">Opciones</translation>
+        <translation>Opciones</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="200"/>
         <source>Hide the time signature</source>
-        <translation type="unfinished">Ocultar la medida del compás</translation>
+        <translation>Ocultar la medida del compás</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="205"/>
         <source>Hide the affected bar lines</source>
-        <translation type="unfinished">Ocultar las barras de compás afectadas</translation>
+        <translation>Ocultar las barras de compás afectadas</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="210"/>
         <source>Show as common time</source>
-        <translation type="unfinished">Mostrar como tiempo común</translation>
+        <translation>Mostrar como tiempo común</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="216"/>
         <source>Correct the durations of following measures</source>
-        <translation type="unfinished">Corregir la duración de los siguientes compases</translation>
+        <translation>Corregir la duración de los siguientes compases</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="324"/>
         <source>Display as common time</source>
-        <translation type="unfinished">Mostrar como tiempo común</translation>
+        <translation>Mostrar como tiempo común</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="328"/>
         <source>Display as cut common time</source>
-        <translation type="unfinished">Mostrar como tiempo común</translation>
+        <translation>Mostrar como tiempo común</translation>
     </message>
 </context>
 <context>
@@ -22324,89 +22360,89 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
     <message>
         <location filename="../../src/gui/widgets/TimeWidget.cpp" line="95"/>
         <source>Note:</source>
-        <translation type="unfinished">Nota:</translation>
+        <translation>Nota:</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/TimeWidget.cpp" line="102"/>
         <location filename="../../src/gui/widgets/TimeWidget.cpp" line="137"/>
         <source>&lt;inexact&gt;</source>
-        <translation type="unfinished">&lt;inexacto&gt;</translation>
+        <translation>&lt;inexacto&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/TimeWidget.cpp" line="143"/>
         <source>Units:</source>
-        <translation type="unfinished">Unidades:</translation>
+        <translation>Unidades:</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/TimeWidget.cpp" line="165"/>
         <source>Time:</source>
-        <translation type="unfinished">Tiempo:</translation>
+        <translation>Tiempo:</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/TimeWidget.cpp" line="176"/>
         <source>units</source>
-        <translation type="unfinished">unidades</translation>
+        <translation>unidades</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/TimeWidget.cpp" line="185"/>
         <source>Measures:</source>
-        <translation type="unfinished">Compases:</translation>
+        <translation>Compases:</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/TimeWidget.cpp" line="185"/>
         <source>Measure:</source>
-        <translation type="unfinished">Compás:</translation>
+        <translation>Compás:</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/TimeWidget.cpp" line="204"/>
         <source>beats:</source>
-        <translation type="unfinished">partes</translation>
+        <translation>partes:</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/TimeWidget.cpp" line="204"/>
         <source>beat:</source>
-        <translation type="unfinished">parte:</translation>
+        <translation>parte:</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/TimeWidget.cpp" line="222"/>
         <source>%1:</source>
-        <translation type="unfinished">%1:</translation>
+        <translation>%1:</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/TimeWidget.cpp" line="244"/>
         <source>Seconds:</source>
-        <translation type="unfinished">Segundos:</translation>
+        <translation>Segundos:</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/TimeWidget.cpp" line="263"/>
         <source>msec:</source>
-        <translation type="unfinished">milisegundos:</translation>
+        <translation>ms:</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/TimeWidget.cpp" line="399"/>
         <location filename="../../src/gui/widgets/TimeWidget.cpp" line="524"/>
         <source>(%1/%2 time)</source>
-        <translation type="unfinished">(ritmo %1/%2)</translation>
+        <translation>(ritmo %1/%2)</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/TimeWidget.cpp" line="445"/>
         <source>(starting %1.%2 qpm, %3.%4 bpm)</source>
-        <translation type="unfinished">(empezando %1.%2 npm, %2.%3 ppm) {1.%2 ?} {3.%4 ?}</translation>
+        <translation>(empezando %1,%2 npm, %3,%4 ppm)</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/TimeWidget.cpp" line="451"/>
         <source>(starting %1.%2 bpm)</source>
-        <translation type="unfinished">(empezando %1.%2 npm)</translation>
+        <translation>(empezando %1,%2 npm)</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/TimeWidget.cpp" line="457"/>
         <source>(%1.%2 qpm, %3.%4 bpm)</source>
-        <translation type="unfinished">(%1.%2 npm, %2.%3 ppm) {1.%2 ?} {3.%4 ?}</translation>
+        <translation>(%1,%2 npm, %3,%4 ppm)</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/TimeWidget.cpp" line="463"/>
         <source>(%1.%2 bpm)</source>
-        <translation type="unfinished">(%1.%2 npm)</translation>
+        <translation>(%1,%2 npm)</translation>
     </message>
 </context>
 <context>
@@ -22461,17 +22497,17 @@ Por favor, configura el directorio de archivos de audio hacia un directorio vál
     <message>
         <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="681"/>
         <source>Turn Repeating Segment into Real Copies</source>
-        <translation type="unfinished">Convertir repeticiones de segmento en copias reales</translation>
+        <translation>Convertir repeticiones de segmento en copias reales</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="683"/>
         <source>Turn Repeating Segments into Real Copies</source>
-        <translation type="unfinished">Convertir repeticiones de segmentos en copias reales</translation>
+        <translation>Convertir repeticiones de segmentos en copias reales</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="904"/>
         <source>You can&apos;t drop files into Rosegarden from this client.  Try using Konqueror instead.</source>
-        <translation type="unfinished">No es posible arrastrar y soltar archivos en Rosegarden desde este cliente. Utilice un administrador de archivos como Konqueror.</translation>
+        <translation>No es posible arrastrar y soltar archivos en Rosegarden desde este cliente. Utilice un administrador de archivos como Konqueror.</translation>
     </message>
 </context>
 <context>
@@ -22484,12 +22520,12 @@ Por favor, configura el directorio de archivos de audio hacia un directorio vál
     <message>
         <location filename="../../src/gui/editors/segment/TrackLabel.cpp" line="221"/>
         <source>Change track name</source>
-        <translation type="unfinished">Cambiar nombre de pista</translation>
+        <translation>Cambiar nombre de pista</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TrackLabel.cpp" line="222"/>
         <source>Enter new track name</source>
-        <translation type="unfinished">Introducir nuevo nombre de la pista</translation>
+        <translation>Introducir nuevo nombre de la pista</translation>
     </message>
 </context>
 <context>
@@ -23351,7 +23387,7 @@ Por favor, configura el directorio de archivos de audio hacia un directorio vál
     <message>
         <location filename="../../src/gui/widgets/WarningWidget.cpp" line="64"/>
         <source>&lt;qt&gt;&lt;p&gt;Performance problems detected!&lt;/p&gt;&lt;p&gt;Click to display details&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;¡Se han detectado unos problemas de rendimiento del sistema!&lt;/p&gt;&lt;p&gt;Haga clic para ver los detalles&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/WarningWidget.cpp" line="87"/>
