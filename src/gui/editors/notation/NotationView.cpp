@@ -666,7 +666,7 @@ NotationView::setupActions()
 
     createAction("toggle_velocity_ruler", SLOT(slotToggleVelocityRuler()));
     createAction("toggle_pitchbend_ruler", SLOT(slotTogglePitchbendRuler()));
-    createAction("add_control_ruler", SLOT(slotAddControlRuler()));
+    createAction("add_control_ruler", SLOT(slotAddControlRuler(QAction *)));
 
     QMenu *addControlRulerMenu = new QMenu;
     Controllable *c =
@@ -737,20 +737,6 @@ NotationView::setupActions()
     // ensure both get carried across somehow
     createAction("add_dot", SLOT(slotAddDot()));
     createAction("add_notation_dot", SLOT(slotAddDotNotationOnly()));
-
-    //JAS actions copied from EditView::setupActions()
-// was disabled in kde3 version:
-// createAction("show_controller_events_ruler", SLOT(slotShowControllerEventsRuler()));
-// was disabled in kde3 version:
-// createAction("add_control_ruler", SLOT(slotShowPropertyControlRuler()));
-    createAction("insert_control_ruler_item", SLOT(slotInsertControlRulerItem()));
-    createAction("erase_control_ruler_item", SLOT(slotEraseControlRulerItem()));
-    createAction("clear_control_ruler_item", SLOT(slotClearControlRulerItem()));
-    createAction("start_control_line_item", SLOT(slotStartControlLineItem()));
-    createAction("flip_control_events_forward", SLOT(slotFlipForwards()));
-    createAction("flip_control_events_back", SLOT(slotFlipBackwards()));
-    createAction("draw_property_line", SLOT(slotDrawPropertyLine()));
-    createAction("select_all_properties", SLOT(slotSelectAllProperties()));
 
     //JAS insert note section is a rewrite
     //JAS from EditView::createInsertPitchActionMenu()
