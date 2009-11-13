@@ -102,7 +102,7 @@ cat << EOF
 
 Total:        total strings that are note obsolete
 
-Translated:   strings that have been marked as finished
+Translated:   strings that have been translated
 
 Untranslated: strings that have no translation (may be finished)
 
