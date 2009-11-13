@@ -2699,7 +2699,7 @@
         <location filename="../QMenuStrings.cpp" line="4110"/>
         <location filename="../QMenuStrings.cpp" line="4219"/>
         <source>Ctrl+W</source>
-        <translation>Ctrl+W</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="51"/>
@@ -2733,7 +2733,7 @@
         <location filename="../QMenuStrings.cpp" line="4200"/>
         <location filename="../QMenuStrings.cpp" line="4261"/>
         <source>F1</source>
-        <translation>F1</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="83"/>
@@ -2747,7 +2747,7 @@
         <location filename="../QMenuStrings.cpp" line="4120"/>
         <location filename="../QMenuStrings.cpp" line="4229"/>
         <source>Ctrl+Z</source>
-        <translation>Ctrl+Z</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="92"/>
@@ -2761,7 +2761,7 @@
         <location filename="../QMenuStrings.cpp" line="4129"/>
         <location filename="../QMenuStrings.cpp" line="4238"/>
         <source>Ctrl+Shift+Z</source>
-        <translation>Ctrl+Shift+Z</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="101"/>
@@ -2770,7 +2770,7 @@
         <location filename="../QMenuStrings.cpp" line="1866"/>
         <location filename="../QMenuStrings.cpp" line="3567"/>
         <source>Ctrl+C, F16, Ctrl+Ins</source>
-        <translation>Ctrl+C, F16, Ctrl+Ins</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="110"/>
@@ -2778,7 +2778,7 @@
         <location filename="../QMenuStrings.cpp" line="1875"/>
         <location filename="../QMenuStrings.cpp" line="3576"/>
         <source>Ctrl+V, F18, Shift+Ins</source>
-        <translation>Ctrl+V, F18, Shift+Ins</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="137"/>
@@ -2790,7 +2790,7 @@
         <location filename="../QMenuStrings.cpp" line="3497"/>
         <location filename="../QMenuStrings.cpp" line="4101"/>
         <source>Ctrl+S</source>
-        <translation>Ctrl+S</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="268"/>
@@ -2798,7 +2798,7 @@
         <location filename="../QMenuStrings.cpp" line="3007"/>
         <location filename="../QMenuStrings.cpp" line="4138"/>
         <source>I</source>
-        <translation>I</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="277"/>
@@ -2806,7 +2806,7 @@
         <location filename="../QMenuStrings.cpp" line="3585"/>
         <source>Delete</source>
         <translatorcomment>Keyboard shortcut, dont translate</translatorcomment>
-        <translation>Delete</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="296"/>
@@ -2814,7 +2814,7 @@
         <location filename="../QMenuStrings.cpp" line="1857"/>
         <location filename="../QMenuStrings.cpp" line="3558"/>
         <source>Ctrl+X, F20, Shift+Del</source>
-        <translation>Ctrl+X, F20, Shift+Del</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="323"/>
@@ -2823,7 +2823,7 @@
         <location filename="../QMenuStrings.cpp" line="3630"/>
         <location filename="../QMenuStrings.cpp" line="4174"/>
         <source>Ctrl+A</source>
-        <translation>Ctrl+A</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="332"/>
@@ -2831,14 +2831,14 @@
         <location filename="../QMenuStrings.cpp" line="1924"/>
         <location filename="../QMenuStrings.cpp" line="4183"/>
         <source>Escape</source>
-        <translation>Escape</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="341"/>
         <location filename="../QMenuStrings.cpp" line="637"/>
         <location filename="../QMenuStrings.cpp" line="1933"/>
         <source>Ctrl+F</source>
-        <translation>Ctrl+F</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="345"/>
@@ -2856,7 +2856,7 @@
         <location filename="../QMenuStrings.cpp" line="2558"/>
         <location filename="../QMenuStrings.cpp" line="3922"/>
         <source>F2</source>
-        <translation>F2</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="446"/>
@@ -2867,7 +2867,7 @@
         <location filename="../QMenuStrings.cpp" line="1677"/>
         <location filename="../QMenuStrings.cpp" line="3949"/>
         <source>F5</source>
-        <translation>F5</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="455"/>
@@ -2879,7 +2879,7 @@
         <location filename="../QMenuStrings.cpp" line="2567"/>
         <location filename="../QMenuStrings.cpp" line="3931"/>
         <source>F3</source>
-        <translation>F3</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="464"/>
@@ -2890,7 +2890,7 @@
         <location filename="../QMenuStrings.cpp" line="1686"/>
         <location filename="../QMenuStrings.cpp" line="3958"/>
         <source>F6</source>
-        <translation>F6</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="491"/>
@@ -2902,66 +2902,66 @@
         <location filename="../QMenuStrings.cpp" line="2576"/>
         <location filename="../QMenuStrings.cpp" line="3940"/>
         <source>F4</source>
-        <translation>F4</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="601"/>
         <source>Ctrl+V, F18, Shift+Insert</source>
-        <translation>Ctrl+V, F18, Shift+Insert</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="610"/>
         <location filename="../QMenuStrings.cpp" line="4156"/>
         <source>Delete, Ctrl+D</source>
-        <translation>Delete, Ctrl+D</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="650"/>
         <location filename="../QMenuStrings.cpp" line="2684"/>
         <source>0</source>
-        <translation>0</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="660"/>
         <location filename="../QMenuStrings.cpp" line="2675"/>
         <source>3</source>
-        <translation>3</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="670"/>
         <location filename="../QMenuStrings.cpp" line="2666"/>
         <source>6</source>
-        <translation>6</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="680"/>
         <location filename="../QMenuStrings.cpp" line="2657"/>
         <source>8</source>
-        <translation>8</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="690"/>
         <location filename="../QMenuStrings.cpp" line="2648"/>
         <source>4</source>
-        <translation>4</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="700"/>
         <location filename="../QMenuStrings.cpp" line="2639"/>
         <source>2</source>
-        <translation>2</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="709"/>
         <location filename="../QMenuStrings.cpp" line="2630"/>
         <source>1</source>
-        <translation>1</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="718"/>
         <location filename="../QMenuStrings.cpp" line="2621"/>
         <source>5</source>
-        <translation>5</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="728"/>
@@ -3004,102 +3004,102 @@
         <location filename="../QMenuStrings.cpp" line="2350"/>
         <location filename="../QMenuStrings.cpp" line="3801"/>
         <source>Alt+Left</source>
-        <translation>Alt+Left</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="786"/>
         <location filename="../QMenuStrings.cpp" line="2359"/>
         <location filename="../QMenuStrings.cpp" line="3810"/>
         <source>Alt+Right</source>
-        <translation>Alt+Right</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="795"/>
         <location filename="../QMenuStrings.cpp" line="2324"/>
         <location filename="../QMenuStrings.cpp" line="3872"/>
         <source>Shift+Up</source>
-        <translation>Shift+Up</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="804"/>
         <location filename="../QMenuStrings.cpp" line="2333"/>
         <location filename="../QMenuStrings.cpp" line="3863"/>
         <source>Shift+Down</source>
-        <translation>Shift+Down</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="816"/>
         <location filename="../QMenuStrings.cpp" line="2261"/>
         <source>Ctrl+H</source>
-        <translation>Ctrl+H</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="825"/>
         <location filename="../QMenuStrings.cpp" line="2270"/>
         <source>Ctrl+Shift+H</source>
-        <translation>Ctrl+Shift+H</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="836"/>
         <location filename="../QMenuStrings.cpp" line="2281"/>
         <location filename="../QMenuStrings.cpp" line="3890"/>
         <source>Up</source>
-        <translation>Up</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="845"/>
         <location filename="../QMenuStrings.cpp" line="2290"/>
         <location filename="../QMenuStrings.cpp" line="3881"/>
         <source>Down</source>
-        <translation>Down</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="854"/>
         <location filename="../QMenuStrings.cpp" line="2299"/>
         <source>Ctrl+Up</source>
-        <translation>Ctrl+Up</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="863"/>
         <location filename="../QMenuStrings.cpp" line="2308"/>
         <source>Ctrl+Down</source>
-        <translation>Ctrl+Down</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="875"/>
         <source>Shift+Alt+I</source>
-        <translation>Shift+Alt+I</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="884"/>
         <source>Shift+Alt+R</source>
-        <translation>Shift+Alt+R</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="954"/>
         <location filename="../QMenuStrings.cpp" line="2458"/>
         <source>Left</source>
         <translatorcomment>Keyboard shortcut, dont translate</translatorcomment>
-        <translation>Left</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="969"/>
         <location filename="../QMenuStrings.cpp" line="2473"/>
         <source>Right</source>
         <translatorcomment>Keyboard shortcut, dont translate</translatorcomment>
-        <translation>Right</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="984"/>
         <location filename="../QMenuStrings.cpp" line="2488"/>
         <source>Ctrl+Left</source>
-        <translation>Ctrl+Left</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="993"/>
         <location filename="../QMenuStrings.cpp" line="2497"/>
         <source>Ctrl+Right</source>
-        <translation>Ctrl+Right</translation>
+        <translation></translation>
     </message>
     <message>
         <source>Ctrl+E</source>
@@ -3114,7 +3114,7 @@
         <location filename="../QMenuStrings.cpp" line="907"/>
         <location filename="../QMenuStrings.cpp" line="2381"/>
         <source>Shift+Right</source>
-        <translation>Shift+Right</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="925"/>
@@ -3126,20 +3126,20 @@
         <location filename="../QMenuStrings.cpp" line="934"/>
         <location filename="../QMenuStrings.cpp" line="2426"/>
         <source>Alt+PgUp</source>
-        <translation>Alt+PgUp</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="943"/>
         <location filename="../QMenuStrings.cpp" line="2435"/>
         <source>Alt+PgDown</source>
-        <translation>Alt+PgDown</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1005"/>
         <location filename="../QMenuStrings.cpp" line="2527"/>
         <location filename="../QMenuStrings.cpp" line="4031"/>
         <source>Pause</source>
-        <translation>Pause</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1014"/>
@@ -3148,201 +3148,201 @@
         <location filename="../QMenuStrings.cpp" line="2542"/>
         <location filename="../QMenuStrings.cpp" line="4040"/>
         <source>Alt+Ctrl+P</source>
-        <translation>Alt+Ctrl+P</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1069"/>
         <location filename="../QMenuStrings.cpp" line="1078"/>
         <location filename="../QMenuStrings.cpp" line="3967"/>
         <source>F7</source>
-        <translation>F7</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1097"/>
         <location filename="../QMenuStrings.cpp" line="2745"/>
         <source>Shift+A</source>
-        <translation>Shift+A</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1106"/>
         <location filename="../QMenuStrings.cpp" line="2754"/>
         <location filename="../QMenuStrings.cpp" line="3506"/>
         <source>Ctrl+Shift+S</source>
-        <translation>Ctrl+Shift+S</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1115"/>
         <location filename="../QMenuStrings.cpp" line="2763"/>
         <source>S</source>
-        <translation>S</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1124"/>
         <location filename="../QMenuStrings.cpp" line="2772"/>
         <source>Shift+S</source>
-        <translation>Shift+S</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1133"/>
         <location filename="../QMenuStrings.cpp" line="2781"/>
         <source>Ctrl+Shift+D</source>
-        <translation>Ctrl+Shift+D</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1160"/>
         <location filename="../QMenuStrings.cpp" line="2808"/>
         <source>Shift+F</source>
-        <translation>Shift+F</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1169"/>
         <location filename="../QMenuStrings.cpp" line="2817"/>
         <source>Ctrl+Shift+J</source>
-        <translation>Ctrl+Shift+J</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1178"/>
         <location filename="../QMenuStrings.cpp" line="2826"/>
         <source>J</source>
-        <translation>J</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1187"/>
         <location filename="../QMenuStrings.cpp" line="2835"/>
         <source>Shift+J</source>
-        <translation>Shift+J</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1196"/>
         <location filename="../QMenuStrings.cpp" line="2844"/>
         <source>Ctrl+Shift+K</source>
-        <translation>Ctrl+Shift+K</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1205"/>
         <location filename="../QMenuStrings.cpp" line="2853"/>
         <source>K</source>
-        <translation>K</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1214"/>
         <location filename="../QMenuStrings.cpp" line="2862"/>
         <source>Shift+K</source>
-        <translation>Shift+K</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1223"/>
         <location filename="../QMenuStrings.cpp" line="2871"/>
         <source>Ctrl+Shift+L</source>
-        <translation>Ctrl+Shift+L</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1232"/>
         <location filename="../QMenuStrings.cpp" line="2880"/>
         <source>L</source>
-        <translation>L</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1242"/>
         <location filename="../QMenuStrings.cpp" line="2890"/>
         <source>Q</source>
-        <translation>Q</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1251"/>
         <location filename="../QMenuStrings.cpp" line="2899"/>
         <source>Shift+Q</source>
-        <translation>Shift+Q</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1260"/>
         <location filename="../QMenuStrings.cpp" line="2908"/>
         <source>Ctrl+Shift+W</source>
-        <translation>Ctrl+Shift+W</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1269"/>
         <location filename="../QMenuStrings.cpp" line="2917"/>
         <source>W</source>
-        <translation>W</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1278"/>
         <location filename="../QMenuStrings.cpp" line="2926"/>
         <source>Shift+W</source>
-        <translation>Shift+W</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1287"/>
         <location filename="../QMenuStrings.cpp" line="2935"/>
         <source>Ctrl+Shift+E</source>
-        <translation>Ctrl+Shift+E</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1305"/>
         <location filename="../QMenuStrings.cpp" line="2953"/>
         <location filename="../QMenuStrings.cpp" line="3908"/>
         <source>R</source>
-        <translation>R</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1314"/>
         <location filename="../QMenuStrings.cpp" line="2962"/>
         <source>Shift+R</source>
-        <translation>Shift+R</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1323"/>
         <location filename="../QMenuStrings.cpp" line="2971"/>
         <source>Ctrl+Shift+U</source>
-        <translation>Ctrl+Shift+U</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1332"/>
         <location filename="../QMenuStrings.cpp" line="2980"/>
         <location filename="../QMenuStrings.cpp" line="3899"/>
         <source>U</source>
-        <translation>U</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1341"/>
         <location filename="../QMenuStrings.cpp" line="2989"/>
         <source>Shift+U</source>
-        <translation>Shift+U</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1350"/>
         <location filename="../QMenuStrings.cpp" line="2998"/>
         <source>Ctrl+Shift+I</source>
-        <translation>Ctrl+Shift+I</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1368"/>
         <location filename="../QMenuStrings.cpp" line="3016"/>
         <source>Shift+I</source>
-        <translation>Shift+I</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1377"/>
         <location filename="../QMenuStrings.cpp" line="3025"/>
         <source>Ctrl+Shift+O</source>
-        <translation>Ctrl+Shift+O</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1386"/>
         <location filename="../QMenuStrings.cpp" line="3034"/>
         <source>O</source>
-        <translation>O</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1396"/>
         <source>Z,Y</source>
-        <translation>Z,Y</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1405"/>
         <source>Shift+Z,Shift+Y</source>
-        <translation>Shift+Z,Shift+Y</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1414"/>
@@ -3350,83 +3350,83 @@
         <location filename="../QMenuStrings.cpp" line="3062"/>
         <location filename="../QMenuStrings.cpp" line="3594"/>
         <source>Ctrl+Shift+X</source>
-        <translation>Ctrl+Shift+X</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1423"/>
         <location filename="../QMenuStrings.cpp" line="3071"/>
         <source>X</source>
-        <translation>X</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1432"/>
         <location filename="../QMenuStrings.cpp" line="3080"/>
         <source>Shift+X</source>
-        <translation>Shift+X</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1441"/>
         <location filename="../QMenuStrings.cpp" line="3089"/>
         <location filename="../QMenuStrings.cpp" line="3603"/>
         <source>Ctrl+Shift+C</source>
-        <translation>Ctrl+Shift+C</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1468"/>
         <location filename="../QMenuStrings.cpp" line="3116"/>
         <source>Shift+V</source>
-        <translation>Shift+V</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1477"/>
         <location filename="../QMenuStrings.cpp" line="3125"/>
         <source>Ctrl+Shift+B</source>
-        <translation>Ctrl+Shift+B</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1495"/>
         <location filename="../QMenuStrings.cpp" line="3143"/>
         <source>Shift+B</source>
-        <translation>Shift+B</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1504"/>
         <location filename="../QMenuStrings.cpp" line="3152"/>
         <source>Ctrl+Shift+N</source>
-        <translation>Ctrl+Shift+N</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1513"/>
         <location filename="../QMenuStrings.cpp" line="3161"/>
         <location filename="../QMenuStrings.cpp" line="3760"/>
         <source>N</source>
-        <translation>N</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1522"/>
         <location filename="../QMenuStrings.cpp" line="3170"/>
         <source>Shift+N</source>
-        <translation>Shift+N</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1531"/>
         <location filename="../QMenuStrings.cpp" line="3179"/>
         <location filename="../QMenuStrings.cpp" line="3692"/>
         <source>Ctrl+Shift+M</source>
-        <translation>Ctrl+Shift+M</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1540"/>
         <location filename="../QMenuStrings.cpp" line="3188"/>
         <location filename="../QMenuStrings.cpp" line="3742"/>
         <source>M</source>
-        <translation>M</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1549"/>
         <location filename="../QMenuStrings.cpp" line="3206"/>
         <source>H</source>
-        <translation>H</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1570"/>
@@ -3455,68 +3455,68 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2019"/>
         <source>Alt+0</source>
-        <translation>Alt+0</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2028"/>
         <source>Alt+1</source>
-        <translation>Alt+1</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2037"/>
         <source>Alt+2</source>
-        <translation>Alt+2</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2046"/>
         <source>Alt+3</source>
-        <translation>Alt+3</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2055"/>
         <source>Alt+4</source>
-        <translation>Alt+4</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2064"/>
         <source>Alt+5</source>
-        <translation>Alt+5</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2073"/>
         <source>Alt+9</source>
-        <translation>Alt+9</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2104"/>
         <source>Ctrl+PgUp</source>
-        <translation>Ctrl+PgUp</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2113"/>
         <source>Ctrl+PgDown</source>
-        <translation>Ctrl+PgDown</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2125"/>
         <source>Ctrl+B</source>
-        <translation>Ctrl+B</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2135"/>
         <source>Ctrl+U</source>
-        <translation>Ctrl+U</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2144"/>
         <location filename="../QMenuStrings.cpp" line="3836"/>
         <source>Ctrl+T</source>
-        <translation>Ctrl+T</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2153"/>
         <source>Ctrl+R</source>
-        <translation>Ctrl+R</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2163"/>
@@ -3547,7 +3547,7 @@
         <location filename="../QMenuStrings.cpp" line="2225"/>
         <location filename="../QMenuStrings.cpp" line="3461"/>
         <source>Ctrl+N</source>
-        <translation>Ctrl+N</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2236"/>
@@ -3764,50 +3764,50 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2408"/>
         <source>Alt+Up</source>
-        <translation>Alt+Up</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2417"/>
         <source>Alt+Down</source>
-        <translation>Alt+Down</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2602"/>
         <source>F8</source>
-        <translation>F8</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2611"/>
         <source>F9</source>
-        <translation>F9</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2699"/>
         <location filename="../QMenuStrings.cpp" line="2708"/>
         <source>Y</source>
-        <translation>Y</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2717"/>
         <location filename="../QMenuStrings.cpp" line="2726"/>
         <source>.</source>
-        <translation>.</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3044"/>
         <source>Z</source>
-        <translation>Z</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3053"/>
         <source>Shift+Z</source>
-        <translation>Shift+Z</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3197"/>
         <location filename="../QMenuStrings.cpp" line="3662"/>
         <source>P</source>
-        <translation>P</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3425"/>
@@ -3986,7 +3986,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3487"/>
         <source>Ctrl+O</source>
-        <translation>Ctrl+O</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3489"/>
@@ -4031,7 +4031,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3530"/>
         <source>Ctrl+Q</source>
-        <translation>Ctrl+Q</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3587"/>
@@ -4071,7 +4071,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3653"/>
         <source>T</source>
-        <translation>T</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3671"/>
@@ -4096,7 +4096,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3682"/>
         <source>Ctrl+K</source>
-        <translation>Ctrl+K</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3684"/>
@@ -4106,7 +4106,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3701"/>
         <source>Ctrl+M</source>
-        <translation>Ctrl+M</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3703"/>
@@ -4171,7 +4171,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3723"/>
         <source>Ctrl+Shift+R</source>
-        <translation>Ctrl+Shift+R</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3726"/>
@@ -4216,7 +4216,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3819"/>
         <source>Ctrl+J</source>
-        <translation>Ctrl+J</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3821"/>
@@ -4271,7 +4271,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3845"/>
         <source>Ctrl+Shift+T</source>
-        <translation>Ctrl+Shift+T</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3847"/>
@@ -4281,7 +4281,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3854"/>
         <source>Ctrl+D</source>
-        <translation>Ctrl+D</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3856"/>
@@ -4336,27 +4336,27 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3977"/>
         <source>Enter, Media Play, Ctrl+Return</source>
-        <translation>Enter, Media Play, Ctrl+Return</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3986"/>
         <source>Insert, Media Stop</source>
-        <translation>Insert, Media Stop</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3995"/>
         <source>PgUp, Media Previous</source>
-        <translation>PgUp, Media Previous</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="4004"/>
         <source>PgDown, Media Next</source>
-        <translation>PgDown, Media Next</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="4013"/>
         <source>Media Record</source>
-        <translation>Media Record</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="4015"/>
@@ -4446,7 +4446,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="4022"/>
         <source>Space</source>
-        <translation>Space</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="4056"/>
@@ -4472,7 +4472,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="4070"/>
         <source>Home</source>
-        <translation>Home</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2511"/>
@@ -4483,7 +4483,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="4079"/>
         <source>End</source>
-        <translation>End</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="4085"/>
@@ -7140,7 +7140,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../AutoloadStrings.cpp" line="172"/>
         <source>Coupled Harpsichord</source>
-        <translation type="unfinished"></translation>
+        <translation>Kerrattu cembalo</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="173"/>
@@ -10052,18 +10052,18 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../../src/sound/MidiFile.cpp" line="105"/>
         <source>Wrong length for long data in MIDI stream</source>
-        <translation type="unfinished"></translation>
+        <translation>Long-datatyypin väärä pituus MIDI-virrassa</translation>
     </message>
     <message>
         <location filename="../../src/sound/MidiFile.cpp" line="128"/>
         <source>Wrong length for int data in MIDI stream</source>
-        <translation type="unfinished"></translation>
+        <translation>Int-datatyypin väärä pituus MIDI-virrassa</translation>
     </message>
     <message>
         <location filename="../../src/sound/MidiFile.cpp" line="148"/>
         <location filename="../../src/sound/MidiFile.cpp" line="195"/>
         <source>End of MIDI file encountered while reading</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI-tiedoston loppu saavutettiin luettaessa</translation>
     </message>
     <message>
         <location filename="../../src/sound/MidiFile.cpp" line="152"/>
@@ -10075,32 +10075,32 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
         <location filename="../../src/sound/MidiFile.cpp" line="173"/>
         <location filename="../../src/sound/MidiFile.cpp" line="231"/>
         <source>Attempt to read past MIDI file end</source>
-        <translation type="unfinished"></translation>
+        <translation>Yritettiin lukea MIDI-tiedoston lopun yli</translation>
     </message>
     <message>
         <location filename="../../src/sound/MidiFile.cpp" line="515"/>
         <source>Invalid event code found</source>
-        <translation type="unfinished"></translation>
+        <translation>Epäkelpo tapahtumatyyppi löydetty</translation>
     </message>
     <message>
         <location filename="../../src/sound/MidiFile.cpp" line="529"/>
         <source>Running status used for first event in track</source>
-        <translation type="unfinished"></translation>
+        <translation>Statusjuoksutusta käytetään raidan ensimmäisessä tapahtumassa</translation>
     </message>
     <message>
         <location filename="../../src/sound/RIFFAudioFile.cpp" line="59"/>
         <source>Rosegarden currently only supports 16 or 32-bit PCM or IEEE floating-point RIFF files for writing</source>
-        <translation type="unfinished"></translation>
+        <translation>Rosegarden tukee tällä hetkellä vain 16- tai 32-bittisten PCM tai IEEE liukuluku RIFF-tiedostojen kirjoitusta</translation>
     </message>
     <message>
         <location filename="../../src/sound/RIFFAudioFile.cpp" line="376"/>
         <source>Can&apos;t find RIFF identifier</source>
-        <translation type="unfinished"></translation>
+        <translation>RIFF-tunnistetta ei löydy</translation>
     </message>
     <message>
         <location filename="../../src/sound/RIFFAudioFile.cpp" line="386"/>
         <source>Can&apos;t find WAV identifier</source>
-        <translation type="unfinished"></translation>
+        <translation>WAV-tunnistetta ei löydy</translation>
     </message>
     <message>
         <location filename="../../src/sound/RIFFAudioFile.cpp" line="399"/>
@@ -13880,7 +13880,7 @@ Haluatko yrittää paikallistaa tiedostoa vai sivuuttaa sen?</translation>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="328"/>
         <source>HPLIP (Qt 4)</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="240"/>
@@ -13964,7 +13964,7 @@ Haluatko yrittää paikallistaa tiedostoa vai sivuuttaa sen?</translation>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="324"/>
         <source>KPrinter (KDE 3)</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="325"/>
@@ -15272,7 +15272,7 @@ sen sijaan?</translation>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="235"/>
         <source>Rehearsal marks</source>
-        <translation>Hengitysmerkit</translation>
+        <translation>Harjoitusmerkit</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="236"/>
@@ -15350,7 +15350,7 @@ sen sijaan?</translation>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="277"/>
         <source>&lt;qt&gt;&lt;p&gt;LilyPond processed the file successfully, but &lt;b&gt;%1&lt;/b&gt; did not run!&lt;/p&gt;&lt;p&gt;Please configure a valid %2 under &lt;b&gt;Edit -&gt; Preferences -&gt; General -&gt; External Applications&lt;/b&gt; and try again.&lt;/p&gt;&lt;p&gt;Processing terminated due to fatal errors.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;LilyPond prosessoi tiedoston onnistuneesti, mutta &lt;b&gt;%1&lt;/b&gt; ei käynnistynyt!&lt;p&gt;&lt;p&gt;Ole hyvä ja määritä kelvollinen %2 kohdasta &lt;b&gt;Muokkaa -&gt; Asetukset... -&gt; Yleinen -&gt; Ulkoiset ohjelmat&lt;/b&gt; ja yritä uudelleen.&lt;p&gt;&lt;p&gt;Prosessointi päättyi vakaviin virheisiin.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="131"/>
@@ -15624,7 +15624,7 @@ toiston alussa siirrettävän tiedon määrän takia.</translation>
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="106"/>
         <source>&lt;qt&gt;Set variations on the program above, if available in the studio&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Aseta ylläolevan instrumentin variaatioita, jos saatavilla&lt;/qt&gt;</translation>
     </message>
     <message>
         <source>&lt;qt&gt;Enable the control to the right&lt;/qt&gt;</source>
@@ -15637,12 +15637,12 @@ toiston alussa siirrettävän tiedon määrän takia.</translation>
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="103"/>
         <source>&lt;qt&gt;Set the MIDI bank from which to select programs&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Aseta MIDI-pankki josta instrumentit valitaan&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="105"/>
         <source>&lt;qt&gt;Set the MIDI program or &amp;quot;patch&amp;quot;&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Aseta MIDI-instrumentti&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="107"/>
@@ -22973,7 +22973,7 @@ Haluatko asettaa sen nyt?</translation>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="356"/>
         <source>&lt;qt&gt;&lt;p&gt;New segments will be created with this transpose property set&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Uudet osat luodaan tämä transponointimääritys asetettuna&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="372"/>
