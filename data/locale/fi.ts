@@ -10105,27 +10105,27 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../../src/sound/RIFFAudioFile.cpp" line="399"/>
         <source>Can&apos;t find FORMAT identifier</source>
-        <translation type="unfinished"></translation>
+        <translation>FORMAT-tunnistetta ei löydy</translation>
     </message>
     <message>
         <location filename="../../src/sound/RIFFAudioFile.cpp" line="452"/>
         <source>Rosegarden currently only supports PCM or IEEE floating-point RIFF files</source>
-        <translation type="unfinished"></translation>
+        <translation>Rosegarden tukee tällä hetkellä vain PCM tai IEEE liukuluku RIFF-tiedostoja</translation>
     </message>
     <message>
         <location filename="../../src/sound/RIFFAudioFile.cpp" line="467"/>
         <source>Unsupported number of channels</source>
-        <translation type="unfinished"></translation>
+        <translation>Tukematon määrä kanavia</translation>
     </message>
     <message>
         <location filename="../../src/sound/RIFFAudioFile.cpp" line="481"/>
         <source>Rosegarden currently only supports 8-, 16- or 24-bit PCM in RIFF files</source>
-        <translation type="unfinished"></translation>
+        <translation>Rosegarden tukee tällä hetkellä vain 8-, 16- tai 24-bittistä PCM:ää RIFF-tiedostoissa</translation>
     </message>
     <message>
         <location filename="../../src/sound/RIFFAudioFile.cpp" line="485"/>
         <source>Rosegarden currently only supports 32-bit floating-point in RIFF files</source>
-        <translation type="unfinished"></translation>
+        <translation>Rosegarden tukee tällä hetkellä vain 32-bittisiä liukulukuja RIFF-tiedostoissa</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/TranzportClient.cpp" line="59"/>
@@ -10146,7 +10146,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../../src/sound/AudioFileTimeStretcher.h" line="49"/>
         <source>Cancelled</source>
-        <translation type="unfinished"></translation>
+        <translation>Peruttu</translation>
     </message>
     <message>
         <location filename="../../src/sound/PeakFileManager.h" line="61"/>
