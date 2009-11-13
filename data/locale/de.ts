@@ -4005,188 +4005,188 @@
         <location filename="../QMenuStrings.cpp" line="960"/>
         <location filename="../QMenuStrings.cpp" line="2464"/>
         <source>Step Back (Left)</source>
-        <translation type="unfinished"></translation>
+        <translation>Schritt zurück (links)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2442"/>
         <source>Play</source>
-        <translation type="unfinished">Wiedergabe</translation>
+        <translation>Wiedergabe</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="975"/>
         <location filename="../QMenuStrings.cpp" line="2479"/>
         <source>Step Forward (Right)</source>
-        <translation type="unfinished"></translation>
+        <translation>Schritt vorwärts (rechts)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2449"/>
         <source>Stop</source>
-        <translation type="unfinished">Stopp</translation>
+        <translation>Stopp</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2518"/>
         <source>Solo the Active Track</source>
-        <translation type="unfinished"></translation>
+        <translation>Die aktive Spur als Solo spielen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2533"/>
         <source>Scroll to Follow Playback</source>
-        <translation type="unfinished"></translation>
+        <translation>Ansicht folgt der Wiedergabe</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2548"/>
         <source>Panic! (Ctrl+Alt+P)</source>
-        <translation type="unfinished"></translation>
+        <translation>Panik! (Strg+Alt+P)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3241"/>
         <source>Double Whole Note (5)</source>
-        <translation type="unfinished"></translation>
+        <translation>Doppelte ganze Note (5)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3247"/>
         <source>Whole Note (1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ganze Note (1)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3253"/>
         <source>Half Note (2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Halbe Note (2)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3259"/>
         <source>Quarter Note (4)</source>
-        <translation type="unfinished"></translation>
+        <translation>Viertelnote (4)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3265"/>
         <source>Eighth Note (8)</source>
-        <translation type="unfinished"></translation>
+        <translation>Achtelnote (8)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3271"/>
         <source>Sixteenth Note (6)</source>
-        <translation type="unfinished"></translation>
+        <translation>16tel-Note (6)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3277"/>
         <source>Thirty-Second Note (3)</source>
-        <translation type="unfinished"></translation>
+        <translation>32tel-Note (3)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3283"/>
         <source>Sixty-Fourth Note (0)</source>
-        <translation type="unfinished"></translation>
+        <translation>64tel-Note (0)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3289"/>
         <source>Dotted Double Whole Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Punktierte doppelte ganze Note</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3295"/>
         <source>Dotted Whole Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Punktierte ganze Note</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3301"/>
         <source>Dotted Half Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Punktierte halbe Note</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3307"/>
         <source>Dotted Quarter Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Punktierte Viertelnote</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3313"/>
         <source>Dotted Eighth Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Punktierte Achtelnote</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3319"/>
         <source>Dotted Sixteenth Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Punktierte 16tel Note</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3325"/>
         <source>Dotted Thirty-Second Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Punktierte 32tel Note</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3331"/>
         <source>Double Whole Rest (5)</source>
-        <translation type="unfinished"></translation>
+        <translation>Doppelte ganze Pause (5)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3337"/>
         <source>Whole Rest (1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ganze Pause (1)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3343"/>
         <source>Half Rest (2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Halbe Pause (2)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3349"/>
         <source>Quarter Rest (4)</source>
-        <translation type="unfinished"></translation>
+        <translation>Viertelpause (4)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3355"/>
         <source>Eighth Rest (8)</source>
-        <translation type="unfinished"></translation>
+        <translation>Achtelpause (8)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3361"/>
         <source>Sixteenth Rest (6)</source>
-        <translation type="unfinished"></translation>
+        <translation>16tel-Pause (6)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3367"/>
         <source>Thirty-Second Rest (3)</source>
-        <translation type="unfinished"></translation>
+        <translation>32tel-Pause (3)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3373"/>
         <source>Sixty-Fourth Rest (0)</source>
-        <translation type="unfinished"></translation>
+        <translation>64tel-Pause (0)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3379"/>
         <source>Dotted Double Whole Rest</source>
-        <translation type="unfinished"></translation>
+        <translation>Punktierte doppelte ganze Pause</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3385"/>
         <source>Dotted Whole Rest</source>
-        <translation type="unfinished"></translation>
+        <translation>Punktierte ganze Pause</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3391"/>
         <source>Dotted Half Rest</source>
-        <translation type="unfinished"></translation>
+        <translation>Punktierte halbe Pause</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3397"/>
         <source>Dotted Quarter Rest</source>
-        <translation type="unfinished"></translation>
+        <translation>Punktierte Viertelpause</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3403"/>
         <source>Dotted Eighth Rest</source>
-        <translation type="unfinished"></translation>
+        <translation>Punktierte Achtelpause</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3409"/>
         <source>Dotted Sixteenth Rest</source>
-        <translation type="unfinished"></translation>
+        <translation>Punktierte 16tel Pause</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3415"/>
         <source>Dotted Thirty-Second Rest</source>
-        <translation type="unfinished"></translation>
+        <translation>Punktierte 32tel Pause</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="898"/>
@@ -8097,7 +8097,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="266"/>
         <source>Ride Bell</source>
-        <translation type="unfinished"></translation>
+        <translation>Ride Glocke</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="268"/>
@@ -10541,124 +10541,127 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="790"/>
         <source>&lt;qt&gt;&lt;p&gt;Couldn&apos;t start recording audio.&lt;/p&gt;&lt;p&gt;Please set a valid recording path in &lt;b&gt;Composition -&gt; Edit Document Properties... -&gt; Audio&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>XXX menue</translatorcomment>
+        <translation>&lt;qt&gt;&lt;p&gt;Audio-Aufnahme kann nicht gestartet werden.&lt;/p&gt;&lt;p&gt;Bitte einen gültigen Aufnahme-Pfad in &lt;b&gt;Komposition-&gt;Dokumenteigenschaften editieren...-&gt;Audio&lt;/b&gt; definieren.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/sound/SoundFile.h" line="67"/>
         <location filename="../../src/sound/SoundFile.h" line="69"/>
         <location filename="../../src/sound/SoundFile.h" line="71"/>
         <source>Bad sound file </source>
-        <translation type="unfinished"></translation>
+        <translation>Ungültige Sound Datei</translation>
     </message>
     <message>
         <location filename="../../src/sound/MidiFile.cpp" line="105"/>
         <source>Wrong length for long data in MIDI stream</source>
-        <translation type="unfinished"></translation>
+        <translation>Daten im &apos;long&apos;-Format haben die falsche Länge im MIDI-Strom</translation>
     </message>
     <message>
         <location filename="../../src/sound/MidiFile.cpp" line="128"/>
         <source>Wrong length for int data in MIDI stream</source>
-        <translation type="unfinished"></translation>
+        <translation>Daten im &apos;int&apos;-Format haben die falsche Länge im MIDI-Strom</translation>
     </message>
     <message>
         <location filename="../../src/sound/MidiFile.cpp" line="148"/>
         <location filename="../../src/sound/MidiFile.cpp" line="195"/>
         <source>End of MIDI file encountered while reading</source>
-        <translation type="unfinished"></translation>
+        <translation>Das Ende der MIDI Datei wurde beim Lesen erreicht</translation>
     </message>
     <message>
         <location filename="../../src/sound/MidiFile.cpp" line="152"/>
         <location filename="../../src/sound/MidiFile.cpp" line="211"/>
         <source>Attempt to get more bytes than expected on Track</source>
-        <translation type="unfinished"></translation>
+        <translation>Es wurde versucht mehr Bytes als erwartet von der Spur zu erhalten</translation>
     </message>
     <message>
         <location filename="../../src/sound/MidiFile.cpp" line="173"/>
         <location filename="../../src/sound/MidiFile.cpp" line="231"/>
         <source>Attempt to read past MIDI file end</source>
-        <translation type="unfinished"></translation>
+        <translation>Es wurde versucht über das Ende der MIDI-Datei zu lesen</translation>
     </message>
     <message>
         <location filename="../../src/sound/MidiFile.cpp" line="515"/>
         <source>Invalid event code found</source>
-        <translation type="unfinished"></translation>
+        <translation>Ungültiges Ereignis gefunden</translation>
     </message>
     <message>
         <location filename="../../src/sound/MidiFile.cpp" line="529"/>
         <source>Running status used for first event in track</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>XXX</translatorcomment>
+        <translation>&apos;Running&apos;-Status beim ersten Ereignis der Spur benutzt</translation>
     </message>
     <message>
         <location filename="../../src/sound/RIFFAudioFile.cpp" line="59"/>
         <source>Rosegarden currently only supports 16 or 32-bit PCM or IEEE floating-point RIFF files for writing</source>
-        <translation type="unfinished"></translation>
+        <translation>Momentan unterstützt Rosegarden nur 16 oder 32-bit PCM oder IEEE Fließkomma RIFF Dateien bei der Ausgabe</translation>
     </message>
     <message>
         <location filename="../../src/sound/RIFFAudioFile.cpp" line="376"/>
         <source>Can&apos;t find RIFF identifier</source>
-        <translation type="unfinished"></translation>
+        <translation>RIFF Identifier nicht gefunden</translation>
     </message>
     <message>
         <location filename="../../src/sound/RIFFAudioFile.cpp" line="386"/>
         <source>Can&apos;t find WAV identifier</source>
-        <translation type="unfinished"></translation>
+        <translation>WAV Identifier nicht gefunden</translation>
     </message>
     <message>
         <location filename="../../src/sound/RIFFAudioFile.cpp" line="399"/>
         <source>Can&apos;t find FORMAT identifier</source>
-        <translation type="unfinished"></translation>
+        <translation>FORMAT Identifier nicht gefunden</translation>
     </message>
     <message>
         <location filename="../../src/sound/RIFFAudioFile.cpp" line="452"/>
         <source>Rosegarden currently only supports PCM or IEEE floating-point RIFF files</source>
-        <translation type="unfinished"></translation>
+        <translation>Momentan unterstützt Rosegarden nur PCM oder IEEE Fließkomma RIFF Dateien</translation>
     </message>
     <message>
         <location filename="../../src/sound/RIFFAudioFile.cpp" line="467"/>
         <source>Unsupported number of channels</source>
-        <translation type="unfinished"></translation>
+        <translation>Nicht unterstützte Anzahl von Kanälen</translation>
     </message>
     <message>
         <location filename="../../src/sound/RIFFAudioFile.cpp" line="481"/>
         <source>Rosegarden currently only supports 8-, 16- or 24-bit PCM in RIFF files</source>
-        <translation type="unfinished"></translation>
+        <translation>Momentan unterstützt Rosegarden nur 8-, 16- oder 24-bit PCM in RIFF Dateien</translation>
     </message>
     <message>
         <location filename="../../src/sound/RIFFAudioFile.cpp" line="485"/>
         <source>Rosegarden currently only supports 32-bit floating-point in RIFF files</source>
-        <translation type="unfinished"></translation>
+        <translation>Momentan unterstützt Rosegarden nur 32 bit Fließkomma in RIFF Dateien</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/TranzportClient.cpp" line="59"/>
         <source>Failed to open tranzport device /dev/tranzport0</source>
-        <translation type="unfinished"></translation>
+        <translation>tranzport Gerätedatei /dev/tranzport0 konnte nicht geöffnet werden</translation>
     </message>
     <message>
         <location filename="../../src/sound/AudioFileManager.h" line="71"/>
         <location filename="../../src/sound/AudioFileManager.h" line="73"/>
         <source>Bad audio file path </source>
-        <translation type="unfinished"></translation>
+        <translation>Ungültiger Pfad für Audiodateien</translation>
     </message>
     <message>
         <location filename="../../src/sound/AudioFileManager.h" line="75"/>
         <source>Bad audio file path (malformed file?) </source>
-        <translation type="unfinished"></translation>
+        <translation>Ungültiger Pfad für Audiodateien (deformierte Datei?)</translation>
     </message>
     <message>
         <location filename="../../src/sound/AudioFileTimeStretcher.h" line="49"/>
         <source>Cancelled</source>
-        <translation type="unfinished"></translation>
+        <translation>Abgebrochen</translation>
     </message>
     <message>
         <location filename="../../src/sound/PeakFileManager.h" line="61"/>
         <location filename="../../src/sound/PeakFileManager.h" line="63"/>
         <source>Bad peak file </source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>XXX</translatorcomment>
+        <translation>Ungültige Datei mit Höchstwerten</translation>
     </message>
     <message>
         <location filename="../../src/sound/PeakFileManager.h" line="65"/>
         <source>Bad peak file (malformed audio?) </source>
-        <translation type="unfinished"></translation>
+        <translation>Ungültige Datei mit Höchstwerten (deformierte Datei?)</translation>
     </message>
 </context>
 <context>
@@ -11223,12 +11226,12 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="80"/>
         <source>Click to rename this instrument</source>
-        <translation type="unfinished"></translation>
+        <translation>Anklicken um den Namen des Instrumentes zu ändern</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="92"/>
         <source>Click the button above to rename this instrument</source>
-        <translation type="unfinished"></translation>
+        <translation>Den Knopf oberhalb anklicken um den Namen des Instrumentes zu ändern</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="195"/>
@@ -11311,7 +11314,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="518"/>
         <source>Save File As</source>
-        <translation type="unfinished"></translation>
+        <translation>Datei speichern unter</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="520"/>
@@ -11520,7 +11523,7 @@ Bitte wählen Sie diejenigen aus, die permanent von der Festplatte gelöscht wer
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="340"/>
         <source>Click to rename this instrument</source>
-        <translation type="unfinished"></translation>
+        <translation>Anklicken um den Namen dieses Instrumentes zu ändern</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="346"/>
@@ -11535,7 +11538,7 @@ Bitte wählen Sie diejenigen aus, die permanent von der Festplatte gelöscht wer
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="356"/>
         <source>Click the button above to rename this instrument</source>
-        <translation type="unfinished"></translation>
+        <translation>Den Knopf oberhalb anklicken um den Namen dieses Instrumentes zu ändern</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="452"/>
@@ -12648,7 +12651,7 @@ Möchten Sie die Änderungen vor dem verlassen des Bank-Editors anwenden?</trans
     <message>
         <location filename="../../src/gui/dialogs/ConfigureDialog.cpp" line="47"/>
         <source>Rosegarden - Preferences</source>
-        <translation type="unfinished"></translation>
+        <translation>Rosegarden - Einstellungen</translation>
     </message>
 </context>
 <context>
@@ -14451,12 +14454,12 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="324"/>
         <source>KPrinter (KDE 3)</source>
-        <translation type="unfinished"></translation>
+        <translation>KPrinter (KDE 3)</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="328"/>
         <source>HPLIP (Qt 4)</source>
-        <translation type="unfinished"></translation>
+        <translation>HPLIP (Qt 4)</translation>
     </message>
     <message>
         <source>Matrix</source>
@@ -18555,8 +18558,10 @@ Dies ist ein Fehler (das Programm ist vermutlich inzwischen abgestürzt)</transl
         <translation>Kein Einfügen an diesem Punkt möglich.</translation>
     </message>
     <message>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3767"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3802"/>
         <source>Move Events to Staff Above</source>
-        <translation type="obsolete">Events auf Notensystem oberhalb verschieben</translation>
+        <translation type="unfinished">Events auf Notensystem oberhalb verschieben</translation>
     </message>
     <message>
         <source>Move Events to Staff TicksBelow</source>
@@ -20376,7 +20381,7 @@ Fehler war: %2</translation>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="774"/>
         <source>Ctrl+R</source>
-        <translation type="unfinished">CTRL+R</translation>
+        <translation>Strg+R</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1684"/>
@@ -20653,17 +20658,17 @@ Segmente-&gt;Segmente zusammenfassen.
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6213"/>
         <source>Input</source>
-        <translation type="unfinished">Eingabe</translation>
+        <translation>Eingabe</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7309"/>
         <source>http://rosegardenmusic.com/wiki/doc:manual-en</source>
-        <translation type="unfinished">http://rosegardenmusic.com/wiki/doc:manual-en</translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:manual-en</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7336"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7783"/>
@@ -22199,73 +22204,73 @@ Das Beenden anderer laufender Anwendung könnte u.U. die Leistung von Rosegarden
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="457"/>
         <source>C</source>
         <comment>note name</comment>
-        <translation type="unfinished">C</translation>
+        <translation>C</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="458"/>
         <source>C#</source>
         <comment>note name</comment>
-        <translation type="unfinished">C#</translation>
+        <translation>C#</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="459"/>
         <source>D</source>
         <comment>note name</comment>
-        <translation type="unfinished">D</translation>
+        <translation>D</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="460"/>
         <source>Eb</source>
         <comment>note name</comment>
-        <translation type="unfinished">Eb</translation>
+        <translation>Eb</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="461"/>
         <source>E</source>
         <comment>note name</comment>
-        <translation type="unfinished">E</translation>
+        <translation>E</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="462"/>
         <source>F</source>
         <comment>note name</comment>
-        <translation type="unfinished">F</translation>
+        <translation>F</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="463"/>
         <source>F#</source>
         <comment>note name</comment>
-        <translation type="unfinished">F#</translation>
+        <translation>F#</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="464"/>
         <source>G</source>
         <comment>note name</comment>
-        <translation type="unfinished">G</translation>
+        <translation>G</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="465"/>
         <source>G#</source>
         <comment>note name</comment>
-        <translation type="unfinished">G#</translation>
+        <translation>G#</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="466"/>
         <source>A</source>
         <comment>note name</comment>
-        <translation type="unfinished">A</translation>
+        <translation>A</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="467"/>
         <source>Bb</source>
         <comment>note name</comment>
-        <translation type="unfinished">B</translation>
+        <translation>B</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="468"/>
         <source>B</source>
         <comment>note name</comment>
-        <translation type="unfinished">H</translation>
+        <translation>H</translation>
     </message>
     <message>
         <source>C</source>
@@ -22388,7 +22393,7 @@ Das Beenden anderer laufender Anwendung könnte u.U. die Leistung von Rosegarden
     <message>
         <location filename="../../src/gui/studio/SynthPluginManagerDialog.cpp" line="250"/>
         <source>http://rosegardenmusic.com/wiki/doc:synth-plugin-manager-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:synth-plugin-manager-en</translation>
     </message>
     <message>
         <source>Help for the Synth-Plugin Management Dialog</source>
