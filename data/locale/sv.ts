@@ -9694,13 +9694,13 @@ Om du ändå vill klistra in, fundera på att använda en av de andra inklistrin
         <translation type="unfinished">Okänd</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="320"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="316"/>
         <source>[ %1 ]</source>
         <translation type="unfinished">[ %1 ]</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="759"/>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="881"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="755"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="877"/>
         <source>%1. %2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9723,7 +9723,7 @@ Om du ändå vill klistra in, fundera på att använda en av de andra inklistrin
         <translation type="unfinished">%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="389"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="388"/>
         <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="836"/>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="695"/>
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1444"/>
@@ -15331,18 +15331,8 @@ fördröjning vid uppspelningens start, på grund av mängden data som skickas.<
 <context>
     <name>Rosegarden::MIDIInstrumentParameterPanel</name>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="103"/>
-        <source>&lt;qt&gt;Set the MIDI bank from which programs will be selected upon loading a new file or (if so configured) at the start of playback&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="104"/>
         <source>&lt;qt&gt;&lt;p&gt;Set the MIDI channel number.&lt;/p&gt;&lt;p&gt;Before changing this, consider switching to a different instrument instead.  Instruments #1 through #16 match MIDI channels 1 through 16 by default.  You may change this relationship using this control if you wish, but this can lead to confusion&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="105"/>
-        <source>&lt;qt&gt;Set the MIDI program or &amp;quot;patch&amp;quot;&lt;/p&gt;&lt;p&gt;This will be transmitted upon loading a new file and (if Rosegarden is so configured) at the start of playback&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -15351,57 +15341,62 @@ fördröjning vid uppspelningens start, på grund av mängden data som skickas.<
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="103"/>
+        <source>&lt;qt&gt;Set the MIDI bank from which to select programs&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="105"/>
+        <source>&lt;qt&gt;Set the MIDI program or &amp;quot;patch&amp;quot;&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="107"/>
-        <source>&lt;qt&gt;Enable the control to the right&lt;/qt&gt;</source>
+        <source>&lt;qt&gt;&lt;p&gt;Check this to tell Rosegarden that this is a percussion instrument.  This allows you access to any percussion key maps and drum kits you may have configured in the studio&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="111"/>
-        <source>&lt;qt&gt;&lt;p&gt;Check this to tell Rosegarden that this is a percussion instrument.  This allows you access to any percussion key maps and/or Roland-style drum kits you may have configured in the studio&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="117"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="113"/>
         <source>Bank</source>
         <translation type="unfinished">Bank</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="118"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="114"/>
         <source>Variation</source>
         <translation type="unfinished">Variant</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="119"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="115"/>
         <source>Program</source>
         <translation type="unfinished">Program</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="120"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="116"/>
         <source>Channel out</source>
         <translation type="unfinished">Kanal ut</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="121"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="117"/>
         <source>Percussion</source>
         <translation type="unfinished">Slagverk</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="149"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="145"/>
         <source>&lt;qt&gt;Use program changes from an external source to manipulate these controls (only valid for the currently-active track) [Shift + P]&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="152"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="148"/>
         <source>Receive external</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="314"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="310"/>
         <source>[ %1 ]</source>
         <translation type="unfinished">[ %1 ]</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="314"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="310"/>
         <source>No connection</source>
         <translation type="unfinished">Ingen anslutning</translation>
     </message>
@@ -16050,7 +16045,7 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
         <translation type="obsolete">Tar bort markering ...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1630"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1629"/>
         <source>Unknown note insert action %1</source>
         <translation type="unfinished">Okänd notinfogningsåtgärd %1</translation>
     </message>
@@ -16098,42 +16093,42 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
         <translation type="obsolete">Händelsetyp som inte stöds</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="542"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="541"/>
         <source> Grid: </source>
         <translation type="unfinished"> Rutnät: </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="558"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="557"/>
         <source>None</source>
         <translation type="unfinished">Ingen</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="560"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="559"/>
         <source>Unit</source>
         <translation type="unfinished">Enhet</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="562"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="561"/>
         <source>Beat</source>
         <translation type="unfinished">Taktslag</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="564"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="563"/>
         <source>Bar</source>
         <translation type="unfinished">Takt</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="584"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="583"/>
         <source> Velocity: </source>
         <translation type="unfinished">Ljudstyrka:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="602"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="601"/>
         <source> Quantize: </source>
         <translation type="unfinished"> Kvantisera: </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="620"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="619"/>
         <source>Off</source>
         <translation type="unfinished"></translation>
     </message>
@@ -16146,17 +16141,17 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
         <translation type="obsolete">%1%</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1218"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1217"/>
         <source>Estimated time signature shown</source>
         <translation type="unfinished">Uppskattad taktart visas</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1301"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1300"/>
         <source>Transpose</source>
         <translation type="unfinished">Transponera</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1302"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1301"/>
         <source>By number of semitones: </source>
         <translation type="unfinished">Skriv in antal halvtonsteg att transponera:</translation>
     </message>
@@ -16169,7 +16164,7 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
         <translation type="obsolete">Minskar ljudstyrkor ...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="946"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="945"/>
         <source>Set Event Velocities</source>
         <translation type="unfinished">Ställ in händelseljudstyrkor</translation>
     </message>
@@ -16178,12 +16173,12 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
         <translation type="obsolete">Ställer in ljudstyrkor ...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="990"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="989"/>
         <source>Trigger Segment</source>
         <translation type="unfinished">Utlösande segment</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1000"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="999"/>
         <source>Remove Triggers</source>
         <translation type="unfinished">Ta bort utlösare</translation>
     </message>
@@ -16205,7 +16200,7 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
         <translation type="obsolete">%1 - alla segment - %2</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1516"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1515"/>
         <source>Can&apos;t insert note: No grid duration selected</source>
         <translation type="unfinished">Kan inte infoga not: Ingen rutnätslängd vald</translation>
     </message>
@@ -17335,17 +17330,17 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat).</transl
         <translation type="obsolete">Förbereder utskrift ...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="807"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="793"/>
         <source>Note &amp;Font</source>
         <translation type="unfinished">Not&amp;teckensnitt</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="835"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="821"/>
         <source>Si&amp;ze</source>
         <translation type="unfinished">St&amp;orlek</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="855"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="841"/>
         <source>S&amp;pacing</source>
         <translation type="unfinished">&amp;Avstånd</translation>
     </message>
@@ -17358,7 +17353,7 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat).</transl
         <translation type="obsolete">Ingen</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="847"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="833"/>
         <source>%n pixel(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -17366,22 +17361,22 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat).</transl
         </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="954"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="940"/>
         <source>  Font:  </source>
         <translation type="unfinished">  Teckensnitt:  </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="989"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="975"/>
         <source>Unknown font &quot;%1&quot;, using default</source>
         <translation type="unfinished">Okänt teckensnitt &quot;%1&quot;, använder förval</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="997"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="983"/>
         <source>  Size:  </source>
         <translation type="unfinished">  Storlek:  </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1021"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1007"/>
         <source>  Spacing:  </source>
         <translation type="unfinished">  Avstånd:  </translation>
     </message>
@@ -17402,7 +17397,7 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat).</transl
         <translation type="obsolete">Gör notsystem förenliga ...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="934"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="920"/>
         <source>  No selection </source>
         <translation type="unfinished">  Ingen markering </translation>
     </message>
@@ -17427,17 +17422,17 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat).</transl
         <translation type="obsolete">%1 - alla segment - notskrift</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3113"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3099"/>
         <source>Triplet</source>
         <translation type="unfinished">Triol</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3114"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3100"/>
         <source>Chord</source>
         <translation type="unfinished">Ackord</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3115"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3101"/>
         <source>Grace</source>
         <translation type="unfinished">Prydnad</translation>
     </message>
@@ -17454,7 +17449,7 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat).</transl
         <translation type="obsolete">Dolda Lilypond-direktiv</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1291"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1277"/>
         <source>Unknown spacing action %1</source>
         <translation type="unfinished">Okänd avståndsåtgärd %1</translation>
     </message>
@@ -17463,7 +17458,7 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat).</transl
         <translation type="obsolete">Okänd förhållandeåtgärd %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1240"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1226"/>
         <source>Unknown font action %1</source>
         <translation type="unfinished">Okänd teckenåtgärd %1</translation>
     </message>
@@ -17472,7 +17467,7 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat).</transl
         <translation type="obsolete">Okänd teckenstorlek %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1266"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1252"/>
         <source>Unknown font size action %1</source>
         <translation type="unfinished">Okänd teckenstorleksåtgärd %1</translation>
     </message>
@@ -17497,12 +17492,12 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat).</transl
         <translation type="obsolete">Förhandsgranskar Lilypond-fil ...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1119"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1105"/>
         <source>LilyPond Preview Options</source>
         <translation type="unfinished">Förhandsgranskningsalternativ för Lilypond</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1120"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1106"/>
         <source>LilyPond preview options</source>
         <translation type="unfinished">Förhandsgranskningsalternativ för Lilypond</translation>
     </message>
@@ -17511,7 +17506,7 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat).</transl
         <translation type="obsolete">Exporterar Lilypond-fil ...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1131"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1117"/>
         <source>Export failed.  The file could not be opened for writing.</source>
         <translation type="unfinished">Export misslyckades. Filen kunde inte öppnas för skrivning.</translation>
     </message>
@@ -17528,17 +17523,17 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat).</transl
         <translation type="obsolete">Kopierar markering till klippbord ...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1422"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1408"/>
         <source>Clipboard is empty</source>
         <translation type="unfinished">Klippbordet är tomt</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1363"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1349"/>
         <source>Can&apos;t paste multiple Segments into one</source>
         <translation type="unfinished">Kan inte klistra in flera segment i ett</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="931"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="917"/>
         <source>  %n event(s) selected </source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -17546,48 +17541,48 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat).</transl
         </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1131"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1183"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1240"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1266"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1291"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1398"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1467"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2202"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2778"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3737"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1117"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1169"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1226"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1252"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1277"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1384"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1453"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2188"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2764"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3723"/>
         <source>Rosegarden</source>
         <translation type="unfinished">Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1141"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1127"/>
         <source>Printing with LilyPond...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1159"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1145"/>
         <source>Previewing with LilyPond...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1184"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1170"/>
         <source>&lt;qt&gt;&lt;p&gt;Failed to open a temporary file for LilyPond export.&lt;/p&gt;&lt;p&gt;This probably means you have run out of disk space on &lt;pre&gt;%1&lt;/pre&gt;&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1401"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1470"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1387"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1456"/>
         <source>&lt;qt&gt;&lt;p&gt;The Restricted paste type requires enough empty space (containing only rests) at the paste position to hold all of the events to be pasted.&lt;/p&gt;&lt;p&gt;Not enough space was found.&lt;/p&gt;&lt;p&gt;If you want to paste anyway, consider using one of the other paste types from the &lt;b&gt;Paste...&lt;/b&gt; option on the Edit menu.  You can also change the default paste type to something other than Restricted if you wish.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1426"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1412"/>
         <source>Inserting clipboard contents...</source>
         <translation type="unfinished">Infogar klippbordets innehåll ...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1400"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1469"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1386"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1455"/>
         <source>Couldn&apos;t paste at this point.</source>
         <translation type="unfinished">Kunde inte klistra in på den här platsen.</translation>
     </message>
@@ -17596,22 +17591,22 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat).</transl
         <translation type="obsolete">Flytta händelser till systemet ovanför</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1585"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1571"/>
         <source>Raising velocities...</source>
         <translation type="unfinished">Ökar ljudstyrkor ...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1596"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1582"/>
         <source>Lowering velocities...</source>
         <translation type="unfinished">Minskar ljudstyrkor ...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1633"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1619"/>
         <source>Set Event Velocities</source>
         <translation type="unfinished">Ställ in händelseljudstyrkor</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1638"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1624"/>
         <source>Setting Velocities...</source>
         <translation type="unfinished">Ställer in ljudstyrkor ...</translation>
     </message>
@@ -17628,12 +17623,12 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat).</transl
         <translation type="obsolete">Inget notvärde valt</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2202"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2188"/>
         <source>Unknown note insert action %1</source>
         <translation type="unfinished">Okänd notinfogningsåtgärd %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2206"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2192"/>
         <source>Inserting note</source>
         <translation type="unfinished">Infogar not</translation>
     </message>
@@ -17658,64 +17653,64 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat).</transl
         <translation type="obsolete">Lägger till punkt ...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2579"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2565"/>
         <source>Ornament track %1 bar %2</source>
         <translation type="unfinished">Ornament spår %1 takt %2</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2581"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2567"/>
         <source>Ornament bar %1</source>
         <translation type="unfinished">Ornament takt %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2591"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2577"/>
         <source>Make Ornament</source>
         <translation type="unfinished">Skapa ornament</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2636"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2622"/>
         <source>Use Ornament</source>
         <translation type="unfinished">Använd ornament</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2647"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2633"/>
         <source>Remove Ornaments</source>
         <translation type="unfinished">Ta bort ornament</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2705"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2691"/>
         <source>Estimated key signature shown</source>
         <translation type="unfinished">Uppskattad tonartssignatur visas</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2762"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2748"/>
         <source>Sustain</source>
         <translation type="unfinished">Förlängning</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2778"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2764"/>
         <source>There is no sustain controller defined for this device.
 Please ensure the device is configured correctly in the Manage MIDI Devices dialog in the main window.</source>
         <translation type="unfinished">Det finns igen förlängningseffekt definierad för enheten.
 Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-enheter i huvudfönstret.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2947"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2933"/>
         <source>Estimated time signature shown</source>
         <translation type="unfinished">Uppskattad taktart visas</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3007"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2993"/>
         <source>%1%2 - Segment Track #%3 - Notation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3014"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3000"/>
         <source>%1%2 - All Segments - Notation</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3020"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3006"/>
         <source>%1%2 - %n Segment(s) - Notation</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -17723,37 +17718,37 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
         </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3272"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3258"/>
         <source>Transpose</source>
         <translation type="unfinished">Transponera</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3273"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3259"/>
         <source>By number of semitones: </source>
         <translation type="unfinished">Skriv in antal halvtonsteg att transponera:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3635"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3621"/>
         <source>Time: %1 (%2.%3s)</source>
         <translation type="unfinished">Tid: %1 (%2,%3 s)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3710"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3696"/>
         <source>http://rosegardenmusic.com/wiki/doc:notation-en</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3717"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3703"/>
         <source>http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3724"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3710"/>
         <source>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</source>
         <translation type="unfinished">http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3471"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3457"/>
         <source>Can&apos;t insert note: No note duration selected</source>
         <translation type="unfinished">Kan inte infoga not: Inget notvärde valt</translation>
     </message>
@@ -19146,7 +19141,7 @@ för att försäkra dig om att den kan laddas igen i framtida versioner.</transl
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="434"/>
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="598"/>
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="660"/>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="833"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="834"/>
         <source>No non-audio segments selected</source>
         <translation type="unfinished">Inga segment utan ljud markerade</translation>
     </message>
@@ -19157,39 +19152,39 @@ See Settings -&gt; Configure Rosegarden -&gt; Audio.</source>
 Se Inställningar -&gt; Anpassa Rosegarden -&gt; Audio.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="909"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="910"/>
         <source>You&apos;ve not yet defined an audio editor for Rosegarden to use.
 See Edit -&gt; Preferences -&gt; Audio.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1598"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1599"/>
         <source>importing a remote audio file</source>
         <translation type="unfinished">Importerar ljudfil ...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1600"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1601"/>
         <source>importing an audio file that needs to be converted or resampled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1603"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1604"/>
         <source>Adding audio file...</source>
         <translation type="unfinished">Lägger till ljudfil ...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1624"/>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1629"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1625"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1630"/>
         <source>Can&apos;t add dropped file. </source>
         <translation type="unfinished">Kan inte lägga till släppt fil. </translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1639"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1640"/>
         <source>Generating audio preview...</source>
         <translation type="unfinished">Skapar förhandsgranskning av ljud ...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1646"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1647"/>
         <source>Try copying this file to a directory where you have write permission and re-add it</source>
         <translation type="unfinished">Försök att kopiera filen till en katalog där du har skrivrättighet och lägga till den igen</translation>
     </message>
