@@ -1684,7 +1684,8 @@
         <location filename="../QMenuStrings.cpp" line="730"/>
         <location filename="../QMenuStrings.cpp" line="1963"/>
         <source>Add &amp;Control Ruler...</source>
-        <translation>&amp;Kontroll Lineal hinzufügen</translation>
+        <translatorcomment>XXX</translatorcomment>
+        <translation>&amp;Kontroll Lineal hinzufügen...</translation>
     </message>
     <message>
         <source>Show &amp;Instrument Parameters</source>
@@ -7710,7 +7711,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="187"/>
         <source>Orchestral Pad</source>
-        <translation type="unfinished"></translation>
+        <translation>Orchester Pad</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="188"/>
@@ -10439,7 +10440,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../../src/gui/application/main.cpp" line="725"/>
         <source>&lt;h2&gt;Welcome to Rosegarden!&lt;/h2&gt;&lt;p&gt;Welcome to the Rosegarden audio and MIDI sequencer and musical notation editor.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;If you have not already done so, you may wish to install some DSSI synth plugins, or a separate synth program such as QSynth.  Rosegarden does not synthesize sounds from MIDI on its own, so without these you will hear nothing.&lt;/li&gt;&lt;li&gt;Rosegarden uses the JACK audio server for recording and playback of audio, and for playback from DSSI synth plugins.  These features will only be available if the JACK server is running.&lt;/li&gt;&lt;li&gt;Rosegarden has comprehensive documentation: see the &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&quot;&gt;Rosegarden website&lt;/a&gt; for the &lt;a style=&quot;color:gold&quot; href=&quot;%1&quot;&gt;manual&lt;/a&gt;, &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;tutorials&lt;/a&gt;, and other information!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  To learn more, go to the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;Rosegarden website&lt;/a&gt;.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;h2&gt;Willkommen bei Rosegarden!&lt;/h2&gt;&lt;p&gt;Willkommen bei Rosegarden, dem Audio- und MIDI-Sequenzer und Noteneditor.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Falls noch nicht geschehem, möchten Sie vielleicht einige DSSI Synthesizer Plugins oder ein extra Synthesizer Programm (z.B. QSynth) installieren. Rosegarden erzeugt keine Töne aus den MIDI Daten. Ohne diese Zusatzprogramme wird also leider keine Musik zu hören sein.&lt;/li&gt;&lt;li&gt;Rosegarden benutzt den Audio Server JACK um Audio aufzunehmen und wiederzugeben, sowie für die Wiedergabe von DSSI Synthesizer Plugins. Diese Dinge werden nur verfügbar sein, falls der JACK Server aktiv ist.&lt;/li&gt;&lt;li&gt;Rosgarden besitzt eine umfangreiche Dokumentation. Siehe dazu  auf der &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&quot;&gt;Rosegarden Webseite&lt;/a&gt; das &lt;a style=&quot;color:gold&quot; href=&quot;%1&quot;&gt;Handbuch&lt;/a&gt;, das &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;Tutorial&lt;/a&gt; und viele andere Informationen!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosgarden wurde von einem Team von Freiwilligen entwickelt. Um mehr zu erfahren, besuchen Sie die &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;Rosegarden Webseite&lt;/a&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="35"/>
@@ -10712,7 +10713,8 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../../src/commands/edit/AddDotCommand.h" line="47"/>
         <source>&amp;Add Dot</source>
-        <translation>Punktierung hinzufügen</translation>
+        <translatorcomment>XXX</translatorcomment>
+        <translation>&amp;Punktierung hinzufügen</translation>
     </message>
 </context>
 <context>
@@ -10748,7 +10750,8 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../../src/commands/notation/AddIndicationCommand.cpp" line="227"/>
         <source>Add S&amp;lur</source>
-        <translation type="unfinished">&amp;Bindebogen hinzufügen</translation>
+        <translatorcomment>XXX</translatorcomment>
+        <translation>&amp;Bindebogen hinzufügen</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddIndicationCommand.cpp" line="229"/>
@@ -10838,7 +10841,8 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="51"/>
         <source>Trill &amp;with Line</source>
-        <translation type="unfinished">Triller folgt der Linie</translation>
+        <translatorcomment>XXX</translatorcomment>
+        <translation>Triller &amp;folgt der Linie</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="53"/>
@@ -10848,7 +10852,8 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="55"/>
         <source>&amp;Turn</source>
-        <translation type="unfinished">&amp;Doppelschlag</translation>
+        <translatorcomment>XXX</translatorcomment>
+        <translation>&amp;Doppelschlag</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="57"/>
@@ -10874,7 +10879,8 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="65"/>
         <source>&amp;Stopped</source>
-        <translation type="unfinished">Angehalten</translation>
+        <translatorcomment>XXX</translatorcomment>
+        <translation>&amp;Angehalten</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="67"/>
@@ -10894,7 +10900,8 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="73"/>
         <source>&amp;Down-Bow</source>
-        <translation type="unfinished">A&amp;bstrich</translation>
+        <translatorcomment>XXX</translatorcomment>
+        <translation>A&amp;bstrich</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="75"/>
@@ -12239,7 +12246,8 @@ Möchten Sie die Änderungen vor dem verlassen des Bank-Editors anwenden?</trans
     <message>
         <location filename="../../src/commands/notation/BreakCommand.h" line="45"/>
         <source>&amp;Unbeam</source>
-        <translation type="unfinished">Balken &amp;entfernen</translation>
+        <translatorcomment>XXX</translatorcomment>
+        <translation>Balken e&amp;ntfernen</translation>
     </message>
 </context>
 <context>
@@ -12247,7 +12255,8 @@ Möchten Sie die Änderungen vor dem verlassen des Bank-Editors anwenden?</trans
     <message>
         <location filename="../../src/commands/segment/ChangeCompositionLengthCommand.h" line="48"/>
         <source>Change &amp;Composition Start and End...</source>
-        <translation type="unfinished">Anfang und Ende der &amp;Komposition ändern...</translation>
+        <translatorcomment>XXX</translatorcomment>
+        <translation>Anfang und Ende der &amp;Komposition ändern...</translation>
     </message>
 </context>
 <context>
@@ -12276,7 +12285,8 @@ Möchten Sie die Änderungen vor dem verlassen des Bank-Editors anwenden?</trans
     <message>
         <location filename="../../src/commands/notation/ChangeStemsCommand.h" line="47"/>
         <source>Stems &amp;Down</source>
-        <translation type="unfinished">&amp;Notenhälse abwärts</translation>
+        <translatorcomment>XXX</translatorcomment>
+        <translation>&amp;Notenhälse abwärts</translation>
     </message>
 </context>
 <context>
@@ -12477,7 +12487,8 @@ Möchten Sie die Änderungen vor dem verlassen des Bank-Editors anwenden?</trans
     <message>
         <location filename="../../src/commands/notation/CollapseRestsCommand.h" line="50"/>
         <source>&amp;Collapse Rests</source>
-        <translation type="unfinished">Pausen &amp;zusammenfassen</translation>
+        <translatorcomment>XXX</translatorcomment>
+        <translation>Pausen &amp;zusammenfassen</translation>
     </message>
 </context>
 <context>
@@ -12976,7 +12987,8 @@ Möchten Sie die Änderungen vor dem verlassen des Bank-Editors anwenden?</trans
     <message>
         <location filename="../../src/commands/edit/CutCommand.h" line="50"/>
         <source>Cu&amp;t</source>
-        <translation type="unfinished">Sch&amp;neiden</translation>
+        <translatorcomment>XXX</translatorcomment>
+        <translation>A&amp;usschneiden</translation>
     </message>
 </context>
 <context>
@@ -12992,7 +13004,8 @@ Möchten Sie die Änderungen vor dem verlassen des Bank-Editors anwenden?</trans
     <message>
         <location filename="../../src/commands/notation/DeCounterpointCommand.h" line="51"/>
         <source>Split-and-Tie Overlapping &amp;Chords</source>
-        <translation type="unfinished">Überlappende A&amp;kkorde aufteilen und verbinden</translation>
+        <translatorcomment>XXX</translatorcomment>
+        <translation>Überlappende A&amp;kkorde aufteilen und verbinden</translation>
     </message>
 </context>
 <context>
@@ -13035,7 +13048,7 @@ Möchten Sie die Änderungen vor dem verlassen des Bank-Editors anwenden?</trans
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="916"/>
         <source>http://rosegardenmusic.com/wiki/doc:device-manager-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:device-manager-en</translation>
     </message>
     <message>
         <source>Help for the Midi Devices-Manager Dialog</source>
@@ -13647,7 +13660,8 @@ Das Löschen benötigter Eigenschaften kann unerwartetes Verhalten hervorrufen.<
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="523"/>
         <source>&amp;Delete</source>
-        <translation type="unfinished">&amp;Löschen</translation>
+        <translatorcomment>XXX</translatorcomment>
+        <translation>&amp;Löschen</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="552"/>
@@ -13661,7 +13675,8 @@ Dies könnte Probleme verursachen, wenn so später ein berechneter Wert übersch
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="556"/>
         <source>Make &amp;Persistent</source>
-        <translation type="unfinished">&amp;Dauerhaft machen</translation>
+        <translatorcomment>XXX</translatorcomment>
+        <translation>&amp;Dauerhaft machen</translation>
     </message>
 </context>
 <context>
@@ -14153,7 +14168,8 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location filename="../../src/gui/dialogs/FileLocateDialog.cpp" line="72"/>
         <source>&amp;Locate</source>
-        <translation type="unfinished">&amp;Finden</translation>
+        <translatorcomment>XXX</translatorcomment>
+        <translation>&amp;Finden</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/FileLocateDialog.cpp" line="86"/>
@@ -15328,12 +15344,14 @@ Beispieltext aus Datei:</translation>
     <message>
         <location filename="../../src/commands/notation/KeyInsertionCommand.h" line="65"/>
         <source>Change to &amp;Key %1...</source>
-        <translation type="unfinished">Wechsel zu Tonart %1...</translation>
+        <translatorcomment>XXX</translatorcomment>
+        <translation>Wechsel zu &amp;Tonart %1...</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/KeyInsertionCommand.h" line="67"/>
         <source>Add &amp;Key Change...</source>
-        <translation type="unfinished">&amp;Tonartveränderung hinzufügen...</translation>
+        <translatorcomment>XXX</translatorcomment>
+        <translation>&amp;Tonartveränderung hinzufügen...</translation>
     </message>
 </context>
 <context>
@@ -15701,7 +15719,7 @@ Wollen Sie stattdessen
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="178"/>
         <source>Advanced options</source>
-        <translation type="unfinished"></translation>
+        <translation>Experteneinstellungen</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="189"/>
@@ -17327,7 +17345,8 @@ Doppel-Klick öffnet den Marker Editor.</translation>
     <message>
         <location filename="../../src/commands/studio/ModifyDeviceMappingCommand.h" line="50"/>
         <source>Modify &amp;Device Mapping</source>
-        <translation type="unfinished">&amp;Gerätezuordnung ändern</translation>
+        <translatorcomment>XXX</translatorcomment>
+        <translation>&amp;Gerätezuordnung ändern</translation>
     </message>
 </context>
 <context>
@@ -17370,12 +17389,14 @@ Doppel-Klick öffnet den Marker Editor.</translation>
     <message>
         <location filename="../../src/commands/notation/MultiKeyInsertionCommand.h" line="58"/>
         <source>Change all to &amp;Key %1...</source>
-        <translation type="unfinished">Alles ändern auf &amp;Tonart %1...</translation>
+        <translatorcomment>XXX</translatorcomment>
+        <translation>Alles ändern auf &amp;Tonart %1...</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/MultiKeyInsertionCommand.h" line="60"/>
         <source>Add &amp;Key Change...</source>
-        <translation type="unfinished">&amp;Tonartveränderung hinzufügen...</translation>
+        <translatorcomment>XXX</translatorcomment>
+        <translation>&amp;Tonartveränderung hinzufügen...</translation>
     </message>
 </context>
 <context>
@@ -18561,7 +18582,7 @@ Dies ist ein Fehler (das Programm ist vermutlich inzwischen abgestürzt)</transl
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3767"/>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3802"/>
         <source>Move Events to Staff Above</source>
-        <translation type="unfinished">Events auf Notensystem oberhalb verschieben</translation>
+        <translation>Events auf Notensystem oberhalb verschieben</translation>
     </message>
     <message>
         <source>Move Events to Staff TicksBelow</source>
@@ -18851,7 +18872,8 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location filename="../../src/commands/edit/PasteEventsCommand.h" line="85"/>
         <source>&amp;Paste</source>
-        <translation type="unfinished">Einfügen</translation>
+        <translatorcomment>XXX</translatorcomment>
+        <translation>&amp;Einfügen</translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/PasteEventsCommand.cpp" line="91"/>
@@ -18915,7 +18937,8 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location filename="../../src/commands/edit/PasteSegmentsCommand.h" line="55"/>
         <source>&amp;Paste</source>
-        <translation type="unfinished">Einfügen</translation>
+        <translatorcomment>XXX</translatorcomment>
+        <translation>&amp;Einfügen</translation>
     </message>
 </context>
 <context>
@@ -19786,7 +19809,8 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location filename="../../src/commands/edit/RescaleCommand.h" line="45"/>
         <source>Stretch or S&amp;quash...</source>
-        <translation type="unfinished">Strecken oder Stauchen...</translation>
+        <translatorcomment>XXX</translatorcomment>
+        <translation>&amp;Strecken oder Stauchen...</translation>
     </message>
 </context>
 <context>
@@ -19831,47 +19855,56 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location filename="../../src/commands/notation/RespellCommand.cpp" line="43"/>
         <source>Do&amp;uble Sharp</source>
-        <translation type="unfinished">Do&amp;ppelkreuz</translation>
+        <translatorcomment>XXX</translatorcomment>
+        <translation>Do&amp;ppelkreuz</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/RespellCommand.cpp" line="45"/>
         <source>&amp;Sharp</source>
-        <translation type="unfinished">&amp;Kreuz</translation>
+        <translatorcomment>XXX</translatorcomment>
+        <translation>&amp;Kreuz</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/RespellCommand.cpp" line="47"/>
         <source>&amp;Flat</source>
-        <translation type="unfinished">&amp;b</translation>
+        <translatorcomment>XXX</translatorcomment>
+        <translation>&amp;b</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/RespellCommand.cpp" line="49"/>
         <source>Dou&amp;ble Flat</source>
-        <translation type="unfinished">Doppe&amp;l-b</translation>
+        <translatorcomment>XXX</translatorcomment>
+        <translation>Doppe&amp;l-b</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/RespellCommand.cpp" line="51"/>
         <source>&amp;Natural</source>
-        <translation type="unfinished">Auf&amp;lösungszeichen</translation>
+        <translatorcomment>XXX</translatorcomment>
+        <translation>Auf&amp;lösungszeichen</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/RespellCommand.cpp" line="53"/>
         <source>N&amp;one</source>
-        <translation type="unfinished">&amp;Kein</translation>
+        <translatorcomment>XXX</translatorcomment>
+        <translation>&amp;Kein</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/RespellCommand.cpp" line="59"/>
         <source>Respell Accidentals &amp;Upward</source>
-        <translation type="unfinished">Enharmonisch nach oben</translation>
+        <translatorcomment>XXX</translatorcomment>
+        <translation>Enharmonisch nach &amp;oben</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/RespellCommand.cpp" line="62"/>
         <source>Respell Accidentals &amp;Downward</source>
-        <translation type="unfinished">Enharmonisch nach unten</translation>
+        <translatorcomment>XXX</translatorcomment>
+        <translation>Enharmonisch nach &amp;unten</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/RespellCommand.cpp" line="65"/>
         <source>&amp;Restore Accidentals</source>
-        <translation type="unfinished">&amp;Wiederherstelle die Enharmonie (Accidentals)</translation>
+        <translatorcomment>XXX</translatorcomment>
+        <translation>&amp;Wiederherstellen der Enharmonie (Accidentals)</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/RespellCommand.cpp" line="68"/>
@@ -19911,7 +19944,8 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location filename="../../src/commands/edit/RetrogradeCommand.h" line="46"/>
         <source>&amp;Retrograde</source>
-        <translation type="unfinished">&amp;Zeitlich spiegeln (retro)</translation>
+        <translatorcomment>XXX</translatorcomment>
+        <translation>&amp;Zeitlich spiegeln (retro)</translation>
     </message>
 </context>
 <context>
@@ -21171,7 +21205,8 @@ Fehler: %2</translation>
     <message>
         <location filename="../../src/commands/segment/SegmentJoinCommand.h" line="48"/>
         <source>&amp;Join</source>
-        <translation type="unfinished">&amp;Verbinden</translation>
+        <translatorcomment>XXX</translatorcomment>
+        <translation>&amp;Verbinden</translation>
     </message>
 </context>
 <context>
@@ -21179,7 +21214,8 @@ Fehler: %2</translation>
     <message>
         <location filename="../../src/commands/segment/SegmentLabelCommand.h" line="47"/>
         <source>Re&amp;label...</source>
-        <translation type="unfinished">Um&amp;benennen...</translation>
+        <translatorcomment>XXX</translatorcomment>
+        <translation>Um&amp;benennen...</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/SegmentLabelCommand.cpp" line="33"/>
@@ -21406,7 +21442,8 @@ Fehler: %2</translation>
     <message>
         <location filename="../../src/commands/segment/SegmentRescaleCommand.h" line="53"/>
         <source>Stretch or S&amp;quash...</source>
-        <translation type="unfinished">Strecken oder Stauchen...</translation>
+        <translatorcomment>XXX</translatorcomment>
+        <translation>&amp;Strecken oder Stauchen...</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/SegmentRescaleCommand.cpp" line="97"/>
@@ -21479,7 +21516,7 @@ Möchten Sie den Pfad jetzt setzen?</translation>
     <message numerus="yes">
         <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="242"/>
         <source>Move Segment(s)</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>Bewege Segment</numerusform>
             <numerusform>Bewege Segmente</numerusform>
         </translation>
@@ -21538,7 +21575,8 @@ Möchten Sie den Pfad jetzt setzen?</translation>
     <message>
         <location filename="../../src/commands/segment/SegmentSplitByPitchCommand.h" line="56"/>
         <source>Split by &amp;Pitch...</source>
-        <translation type="unfinished">Nach &amp;Tonhöhe aufteilen...</translation>
+        <translatorcomment>XXX</translatorcomment>
+        <translation>Nach &amp;Tonhöhe aufteilen...</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/SegmentSplitByPitchCommand.cpp" line="42"/>
@@ -21561,7 +21599,8 @@ Möchten Sie den Pfad jetzt setzen?</translation>
     <message>
         <location filename="../../src/commands/segment/SegmentSplitByRecordingSrcCommand.h" line="44"/>
         <source>Split by &amp;Recording Source...</source>
-        <translation type="unfinished">Nach Aufnahmequelle aufteilen...</translation>
+        <translatorcomment>XXX</translatorcomment>
+        <translation>Nach &amp;Aufnahmequelle aufteilen...</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/SegmentSplitByRecordingSrcCommand.cpp" line="36"/>
@@ -21649,7 +21688,8 @@ Möchten Sie den Pfad jetzt setzen?</translation>
     <message>
         <location filename="../../src/commands/edit/SelectionPropertyCommand.h" line="61"/>
         <source>Set &amp;Property</source>
-        <translation type="unfinished">&amp;Eigenschaft setzen</translation>
+        <translatorcomment>XXX</translatorcomment>
+        <translation>&amp;Eigenschaft setzen</translation>
     </message>
 </context>
 <context>
@@ -22149,7 +22189,8 @@ Das Beenden anderer laufender Anwendung könnte u.U. die Leistung von Rosegarden
     <message>
         <location filename="../../src/gui/widgets/SqueezedLabel.cpp" line="170"/>
         <source>&amp;Copy Full Text</source>
-        <translation type="unfinished">Gesamten Text &amp;kopieren</translation>
+        <translatorcomment>XXX</translatorcomment>
+        <translation>Gesamten Text &amp;kopieren</translation>
     </message>
 </context>
 <context>
@@ -23026,7 +23067,8 @@ Das Beenden anderer laufender Anwendung könnte u.U. die Leistung von Rosegarden
     <message>
         <location filename="../../src/commands/notation/TieNotesCommand.h" line="45"/>
         <source>&amp;Tie</source>
-        <translation type="unfinished">Verbinden</translation>
+        <translatorcomment>XXX</translatorcomment>
+        <translation>&amp;Verbinden</translation>
     </message>
 </context>
 <context>
@@ -23740,7 +23782,8 @@ Möchten Sie den Pfad jetzt setzen?</translation>
     <message>
         <location filename="../../src/commands/edit/TransposeCommand.h" line="57"/>
         <source>&amp;Down a Semitone</source>
-        <translation type="unfinished">Halbton a&amp;bwärts</translation>
+        <translatorcomment>XXX</translatorcomment>
+        <translation>Halbton a&amp;bwärts</translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/TransposeCommand.h" line="58"/>
@@ -23919,7 +23962,8 @@ Möchten Sie den Pfad jetzt setzen?</translation>
     <message>
         <location filename="../../src/commands/notation/TupletCommand.h" line="49"/>
         <source>Tu&amp;plet...</source>
-        <translation type="unfinished">T&amp;uole...</translation>
+        <translatorcomment>XXX</translatorcomment>
+        <translation>T&amp;uole...</translation>
     </message>
 </context>
 <context>
