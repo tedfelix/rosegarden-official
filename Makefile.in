@@ -162,7 +162,7 @@ qrc:	locale
 
 install:
 	$(MKDIR_P) -m 755 $(INSTBINDIR)
-	$(INSTALL) -m 755 rosegarden $(INSTBINDIR)/rosegarden
+	$(INSTALL) -m 755 rosegarden $(INSTBINDIR)/rosegarden-$(VERSION)
 	$(MKDIR_P) -m 755 $(INSTMIME16DIR)
 	$(MKDIR_P) -m 755 $(INSTMIME32DIR)
 	$(MKDIR_P) -m 755 $(INSTMIME64DIR)
@@ -188,7 +188,7 @@ install:
 
 uninstall:
 	rm -rf $(INSTDATADIR)
-	rm -f $(INSTBINDIR)/rosegarden
+	rm -f $(INSTBINDIR)/rosegarden-$(VERSION)
 	rm -f $(INSTMIME16DIR)/audio-x-rosegarden*
 	rm -f $(INSTMIME32DIR)/audio-x-rosegarden*
 	rm -f $(INSTMIME64DIR)/audio-x-rosegarden*

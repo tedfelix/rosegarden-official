@@ -1,80 +1,119 @@
-#!/bin/sh
+#!/bin/bash
+#
+# make-release-tarball
+#
+# Copyright (c) 2009  D. Michael McIntyre <rosegarden.trumpeter@gmail.com>
+# Released under the GPL
+#
+# REQUIRES: 
+#
+#
+# PURPOSE:
+#
+#
+#
 
-if [ ! -f SConstruct ] || [ ! -f gui/rosegardengui.cpp ]; then
-    echo "ERROR: This script must be run from the top-level Rosegarden directory" 1>&2
+myname=$(basename $0)
+target=$1
+
+usage() {
+    cat << EOF
+Usage: $myname [TARGET]
+
+Must run from a valid rosegarden/ directory.  Examines the current directory to
+determine where it resides in the Subversion repository (typically
+branches/stable_YY_MM for release candidates) and pulls a clean copy from there.
+Bootstraps the fresh checkout and performs some preparatory cleanups, then
+leaves rosegarden-[VERSION]-[TARGET].tar.bz2 ready for release.
+
+VERSION - extracted from source
+
+TARGET  - assumes that configure.ac already has the correct version in the
+          AC_INIT call and the codename has been set on the CODENAME= line; use
+          the target "RELEASE" for a final release or a release candidate (as
+          opposed to an alpha, beta, pre, etc.)
+
+Example: $myname alpha-2
+EOF
     exit 1
-fi
+}
 
-update_version=""
+puke() {
+    echo $1
+    exit 2
+}
 
-case $1 in
-    [0-9]*)
-	version="$1"
-	update_version=1
-	;;
-    -e)
-	version=`grep VERSION SConstruct|head -1|sed 's/^.*"\([^"]*\)" *$/\1/'|grep -v ' '`
-	if [ -z "$version" ]; then
-	    echo "ERROR: Failed to extract version number from SConstruct"
-	    exit 1
-	fi
-	;;
-    *)
-	echo 1>&2
-	echo "`basename $0`: Build a release tarball of Rosegarden from the Subversion trunk" 1>&2
-	echo 1>&2
-	echo "Usage:" 1>&2
-	echo "    `basename $0` <version>" 1>&2
-	echo "    `basename $0` -e" 1>&2
-	echo "Where <version> is a number such as 1.0 or 2.5.1rc2." 1>&2
-	echo "Use -e to extract the version number from SConstruct.  Otherwise SConstruct" 1>&2
-	echo "will be updated with the new version number." 1>&2
-	echo 1>&2
-	exit 1
-	;;
-esac
+[ -z "$target" ] && usage
 
-tmpdir="release_tmp_$$"
-rgname="rosegarden-$version"
+[ -d "src" ] || puke "$myname must be run from a top level directory!"
+[ -f "configure.ac" ] || puke "No configure.ac!  Is this a top level directory?"
+[ -d ".svn" ] || puke "No .svn directory.  Is this a development tree?"
 
-echo "Building tarball for $rgname..."
+VERSION=$(grep AC_INIT configure.ac|cut -d \, -f 2|sed 's/ //g')
 
-tarname="$rgname.tar.bz2"
-cvstag=RELEASE_`echo "$version" | sed 's/[\.-]/_/g'`
+URL=
+for v in $(grep http .svn/entries); do
+    # The only way I can find to determine what branch we're sitting in is to
+    # look at the first return of "grep http" in .svn/entries, discarding all
+    # subsequent returns.  This might not actually work in other situations, but
+    # the pattern is appropriate for all the trees I happen to have available.
+    if [ -z "$URL" ]; then
+        URL=$v; 
+    fi
+done
 
-echo "[Tarball file will be $tarname]"
-echo "[Subversion tag will be $cvstag]"
+# insert $TARGET for alpha, beta, pre, etc. releases, otherwise use $VERSION
+# straight up
+NEW_VERSION=$VERSION
+[ "$target" != "RELEASE" ] && NEW_VERSION="$VERSION-$target"
 
-if [ -f "$tarname" ]; then
-    echo "ERROR: Tarball file $tarname already exists, exiting" 1>&2
-    exit 1
-fi
+outDir="rosegarden-$NEW_VERSION"
+[ -d "$outDir" ] && puke "$outDir already exists!  Aborting!"
 
-mkdir "$tmpdir" || exit 1
-cd "$tmpdir"
+echo "Checking out a clean copy of $URL..."
+svn co $URL $outDir || puke "Unable to check out $URL!"
 
-echo "Checking out current Subversion trunk..."
-svn co https://svn.sourceforge.net/svnroot/rosegarden/trunk/rosegarden "$rgname"
+cd $outDir || puke "Unable to change to $outDir!"
 
-cd "$rgname"
-if [ -n "$update_version" ]; then
-    echo "Updating version number in SConstruct..."
-    perl -i -p -e 's/^VERSION = "[^"]*"\s*$/VERSION = "'"$version"'"\n/' SConstruct
-    svn commit -m "Update version number for $version" SConstruct
-fi
+echo "Rewriting version from $VERSION to $NEW_VERSION in configure.ac..."
+# NOTE: . is a regex wildcard, but it does match a simple . so I've elected not
+# to bother with some hackery to escape it to \. here
+sed "s/$VERSION/$NEW_VERSION/" configure.ac > foo42 && mv foo42 configure.ac
 
-echo "Tagging Subversion with tag $cvstag..."
-svn copy -m "Tag for release $version" \
-         https://svn.sourceforge.net/svnroot/rosegarden/trunk/rosegarden \
-        "https://svn.sourceforge.net/svnroot/rosegarden/tags/$cvstag"
+echo "Purging unwanted files..."
+# templates/ and test/ are of no value to people doing an end use build
+rm -rf templates test
 
-echo "Bundling up..."
+# attic/ will be disappearing before the real release, but if it still exists,
+# remove it
+echo [ -d "attic" ] && rm -rf attic
+
+# NOTE: data/data.qrc will still refer to these files, but they are rebuilt
+# early enough in the process that removing them will not cause a catastrophic
+# failure, so while they have to remain under version control for development
+# purposes, they don't have to be included in release tarballs
+rm -rf data/locale/*.qm
+
+# remove all the .svn directories and their contents 
+find . -name \.svn|xargs rm -rf
+
+echo "Bootstrapping..."
+sh ./bootstrap.sh || "Bootstrapping failed!"
+
 cd ..
-tar cvjf "$tarname" "$rgname" --exclude=RGbuild --exclude=CVS --exclude=.svn --exclude=web --exclude=docs/test --exclude=admin --exclude=gettext-0.10.35-kde || exit 1
 
-echo "Tidying..."
-cd ..
-mv "$tmpdir/$tarname" .
-rm -rf "$tmpdir"
+outFile="$outDir.tar.bz2"
+echo "Assembling $outFile..."
+tar cjf $outFile $outDir || puke "Making tarball failed!"
 
-echo "Done, tarball is $tarname"
+echo "Cleaning up..."
+rm -rf $outDir
+
+# deal with tagging later, but it will be nice to automate this
+# read -p "Do you want to tag this release?"
+# "copied from trunk/rosegarden to tags/rosegarden-1.7.1-rc1"
+
+# hack around my personal umask, to ensure files are world readable if I forget
+chmod 644 $outFile
+
+exit 0
