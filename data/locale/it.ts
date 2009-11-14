@@ -172,17 +172,17 @@
     <message>
         <location filename="../../src/gui/editors/notation/NoteFontMap.cpp" line="44"/>
         <source>unknown error</source>
-        <translation type="unfinished">errore sconosciuto</translation>
+        <translation>errore sconosciuto</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NoteFontMap.cpp" line="70"/>
         <source>Can&apos;t open font mapping file %1 or %2</source>
-        <translation type="unfinished">Non è possibile aprire il font %1 o %2</translation>
+        <translation>Non è possibile aprire il font %1 o %2</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NoteFontMap.cpp" line="74"/>
         <source>Can&apos;t open font mapping file %1</source>
-        <translation type="unfinished">Non è possibile aprire il font %1</translation>
+        <translation>Non è possibile aprire il font %1</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="30"/>
@@ -198,17 +198,17 @@
         <location filename="../QMenuStrings.cpp" line="4093"/>
         <location filename="../QMenuStrings.cpp" line="4211"/>
         <source>&amp;File</source>
-        <translation type="unfinished">&amp;File</translation>
+        <translation>&amp;File</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="31"/>
         <source>&amp;Add Audio File...</source>
-        <translation type="unfinished">&amp;Aggiungi file audio...</translation>
+        <translation>&amp;Aggiungi file audio...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="32"/>
         <source>&amp;Export Audio File...</source>
-        <translation type="unfinished">&amp;Esporta file audio...</translation>
+        <translation>&amp;Esporta file audio...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="33"/>
@@ -225,7 +225,7 @@
         <location filename="../QMenuStrings.cpp" line="4103"/>
         <location filename="../QMenuStrings.cpp" line="4212"/>
         <source>&amp;Close</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Chiudi</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="42"/>
@@ -244,7 +244,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="43"/>
         <source>&amp;Unload Audio File</source>
-        <translation type="unfinished">Togli il file audio</translation>
+        <translation>Togli il file a&amp;udio</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="44"/>
@@ -259,7 +259,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="46"/>
         <source>&amp;Delete Unused Audio Files...</source>
-        <translation type="unfinished">Cancella i file audio non usati...</translation>
+        <translation>Cancella i file au&amp;dio non usati...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="47"/>
@@ -325,7 +325,7 @@
         <location filename="../QMenuStrings.cpp" line="4203"/>
         <location filename="../QMenuStrings.cpp" line="4264"/>
         <source>&amp;Bug Reporting Guidelines</source>
-        <translation type="unfinished">Linee-guida per comunicare un &amp;Bug</translation>
+        <translation>Linee-guida per comunicare un &amp;Bug</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="62"/>
@@ -349,7 +349,7 @@
         <location filename="../QMenuStrings.cpp" line="1566"/>
         <location filename="../QMenuStrings.cpp" line="3233"/>
         <source>General Toolbar</source>
-        <translation type="unfinished">Barra degli strumenti generale</translation>
+        <translation>Barra degli strumenti generale</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="76"/>
@@ -363,7 +363,7 @@
         <location filename="../QMenuStrings.cpp" line="4113"/>
         <location filename="../QMenuStrings.cpp" line="4222"/>
         <source>&amp;Nothing to undo</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Nulla da ripristinare</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="85"/>
@@ -377,7 +377,7 @@
         <location filename="../QMenuStrings.cpp" line="4122"/>
         <location filename="../QMenuStrings.cpp" line="4231"/>
         <source>N&amp;othing to redo</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">N&amp;ulla da rifare</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="94"/>
@@ -386,7 +386,7 @@
         <location filename="../QMenuStrings.cpp" line="1859"/>
         <location filename="../QMenuStrings.cpp" line="3560"/>
         <source>&amp;Copy</source>
-        <translation type="unfinished">Co&amp;pia</translation>
+        <translation>&amp;Copia</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="103"/>
@@ -395,7 +395,7 @@
         <location filename="../QMenuStrings.cpp" line="1868"/>
         <location filename="../QMenuStrings.cpp" line="3569"/>
         <source>&amp;Paste</source>
-        <translation type="unfinished">&amp;Incolla</translation>
+        <translation>&amp;Incolla</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="126"/>
@@ -410,7 +410,7 @@
         <location filename="../QMenuStrings.cpp" line="4082"/>
         <location filename="../QMenuStrings.cpp" line="4208"/>
         <source>Switch to Select Tool</source>
-        <translation type="unfinished">Tasto per lo Strumento Selezione</translation>
+        <translation>Tasto per lo Strumento Selezione</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="127"/>
@@ -418,7 +418,7 @@
         <location filename="../QMenuStrings.cpp" line="4083"/>
         <location filename="../QMenuStrings.cpp" line="4209"/>
         <source>Switch to Inserting Notes</source>
-        <translation type="unfinished">Tasto per Inserimento Note</translation>
+        <translation>Tasto per Inserimento Note</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="128"/>
@@ -433,7 +433,7 @@
         <location filename="../QMenuStrings.cpp" line="4084"/>
         <location filename="../QMenuStrings.cpp" line="4210"/>
         <source>Switch to Erase Tool</source>
-        <translation type="unfinished">Tasto per lo Strumento Cancella</translation>
+        <translation>Tasto per lo Strumento Cancella</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="130"/>
@@ -445,12 +445,12 @@
         <location filename="../QMenuStrings.cpp" line="3490"/>
         <location filename="../QMenuStrings.cpp" line="4094"/>
         <source>&amp;Save</source>
-        <translation type="unfinished">&amp;Salva</translation>
+        <translation>&amp;Salva</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="261"/>
         <source>&amp;Insert Event</source>
-        <translation type="unfinished">&amp;Inserisci evento</translation>
+        <translation>&amp;Inserisci evento</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="270"/>
@@ -465,7 +465,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="288"/>
         <source>&amp;Advanced Event Editor</source>
-        <translation type="unfinished">Editor &amp;avanzato degli eventi</translation>
+        <translation>Editor &amp;avanzato degli eventi</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="289"/>
@@ -473,7 +473,7 @@
         <location filename="../QMenuStrings.cpp" line="1850"/>
         <location filename="../QMenuStrings.cpp" line="3551"/>
         <source>Cu&amp;t</source>
-        <translation type="unfinished">&amp;Taglia</translation>
+        <translation>&amp;Taglia</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="316"/>
@@ -491,17 +491,17 @@
         <location filename="../QMenuStrings.cpp" line="630"/>
         <location filename="../QMenuStrings.cpp" line="1926"/>
         <source>&amp;Filter Selection</source>
-        <translation type="unfinished">&amp;Filtra la selezione</translation>
+        <translation>&amp;Filtra la selezione</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="343"/>
         <source>Set Se&amp;gment Start Time...</source>
-        <translation type="unfinished"></translation>
+        <translation>Imposta il tempo d&apos;inizio del se&amp;gmento...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="344"/>
         <source>Set Seg&amp;ment Duration...</source>
-        <translation type="unfinished"></translation>
+        <translation>Imposta la durata del seg&amp;mento...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="346"/>
@@ -512,7 +512,7 @@
         <location filename="../QMenuStrings.cpp" line="4186"/>
         <location filename="../QMenuStrings.cpp" line="4249"/>
         <source>&amp;View</source>
-        <translation type="unfinished">&amp;Vedi</translation>
+        <translation>&amp;Vedi</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="347"/>
@@ -520,7 +520,7 @@
         <location filename="../QMenuStrings.cpp" line="4187"/>
         <location filename="../QMenuStrings.cpp" line="4250"/>
         <source>&amp;Musical Times</source>
-        <translation type="unfinished">Tempi &amp;Musicali</translation>
+        <translation>Tempi &amp;Musicali</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="348"/>
@@ -528,7 +528,7 @@
         <location filename="../QMenuStrings.cpp" line="4188"/>
         <location filename="../QMenuStrings.cpp" line="4251"/>
         <source>&amp;Real Times</source>
-        <translation type="unfinished">Tempo &amp;reale</translation>
+        <translation>Tempo &amp;reale</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="349"/>
@@ -542,7 +542,7 @@
         <location filename="../QMenuStrings.cpp" line="352"/>
         <location filename="../QMenuStrings.cpp" line="1970"/>
         <source>Se&amp;gment</source>
-        <translation type="unfinished">Se&amp;gmento</translation>
+        <translation>Se&amp;gmento</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="353"/>
@@ -557,14 +557,14 @@
         <location filename="../QMenuStrings.cpp" line="1973"/>
         <location filename="../QMenuStrings.cpp" line="3735"/>
         <source>Open in Matri&amp;x Editor</source>
-        <translation type="unfinished">Apri nell&apos;editor di matri&amp;ce</translation>
+        <translation>Apri nell&apos;editor di matri&amp;ce</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="355"/>
         <location filename="../QMenuStrings.cpp" line="737"/>
         <location filename="../QMenuStrings.cpp" line="3753"/>
         <source>Open in &amp;Notation Editor</source>
-        <translation type="unfinished">Apri nell&apos;editor di notazione</translation>
+        <translation>Apri nell&apos;editor di &amp;notazione</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="63"/>
@@ -587,13 +587,13 @@
         <location filename="../QMenuStrings.cpp" line="2592"/>
         <location filename="../QMenuStrings.cpp" line="3420"/>
         <source>Add &amp;Segno</source>
-        <translation type="unfinished"></translation>
+        <translation>Aggiungi &amp;Segno</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2593"/>
         <location filename="../QMenuStrings.cpp" line="3421"/>
         <source>Add &amp;Coda</source>
-        <translation type="unfinished"></translation>
+        <translation>Aggiungi &amp;Coda</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2594"/>
@@ -672,7 +672,7 @@
         <location filename="../QMenuStrings.cpp" line="1569"/>
         <location filename="../QMenuStrings.cpp" line="4206"/>
         <source>Actions Toolbar</source>
-        <translation type="unfinished">Barra delle azioni</translation>
+        <translation>Barra delle azioni</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="371"/>
@@ -680,7 +680,7 @@
         <location filename="../QMenuStrings.cpp" line="4207"/>
         <location filename="../QMenuStrings.cpp" line="4267"/>
         <source>Time Toolbar</source>
-        <translation type="unfinished">Barra degli strumenti del tempo</translation>
+        <translation>Barra degli strumenti del tempo</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="372"/>
@@ -690,33 +690,33 @@
         <location filename="../QMenuStrings.cpp" line="3235"/>
         <location filename="../QMenuStrings.cpp" line="4062"/>
         <source>Transport Toolbar</source>
-        <translation type="unfinished">Barra degli strumenti per il Trasporto</translation>
+        <translation>Barra degli strumenti per il Trasporto</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="374"/>
         <location filename="../QMenuStrings.cpp" line="4081"/>
         <source>Zoom Toolbar</source>
-        <translation type="unfinished">Barra degli strumenti per l&apos;ingrandimento</translation>
+        <translation>Barra degli strumenti per l&apos;ingrandimento</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="426"/>
         <source>Insert Marker</source>
-        <translation type="unfinished">Inserisci marcatore</translation>
+        <translation>Inserisci marcatore</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="427"/>
         <source>Insert Marker at Playback Position</source>
-        <translation type="unfinished">Inserisci marcatore alla posizione di riproduzione</translation>
+        <translation>Inserisci marcatore alla posizione di riproduzione</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="428"/>
         <source>Delete Marker</source>
-        <translation type="unfinished">Elimina marcatore</translation>
+        <translation>Elimina marcatore</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="429"/>
         <source>Edit Marker</source>
-        <translation type="unfinished">Modifica marcatore</translation>
+        <translation>Modifica marcatore</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="439"/>
@@ -725,7 +725,7 @@
         <location filename="../QMenuStrings.cpp" line="1616"/>
         <location filename="../QMenuStrings.cpp" line="1670"/>
         <source>Switch to Move Tool</source>
-        <translation type="unfinished">Commuta per muovere lo strumento</translation>
+        <translation>Commuta per muovere lo strumento</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="448"/>
@@ -734,7 +734,7 @@
         <location filename="../QMenuStrings.cpp" line="1607"/>
         <location filename="../QMenuStrings.cpp" line="1652"/>
         <source>Switch to Draw Tool</source>
-        <translation type="unfinished">Commuta per trascinare lo strumento</translation>
+        <translation>Commuta per trascinare lo strumento</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="457"/>
@@ -743,39 +743,39 @@
         <location filename="../QMenuStrings.cpp" line="1634"/>
         <location filename="../QMenuStrings.cpp" line="1679"/>
         <source>Switch to Resize Tool</source>
-        <translation type="unfinished">Commuta per ridimensionare lo strumento</translation>
+        <translation>Commuta per ridimensionare lo strumento</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="557"/>
         <source>E&amp;dit</source>
-        <translation type="unfinished"></translation>
+        <translation>Mo&amp;difica</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="558"/>
         <source>Nothing to &amp;undo</source>
-        <translation type="unfinished"></translation>
+        <translation>N&amp;ulla da ripristinare</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="567"/>
         <source>Nothing to &amp;redo</source>
-        <translation type="unfinished"></translation>
+        <translation>Nulla da &amp;rifare</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="603"/>
         <location filename="../QMenuStrings.cpp" line="3578"/>
         <location filename="../QMenuStrings.cpp" line="4149"/>
         <source>&amp;Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Cancella</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="641"/>
         <source>&amp;Grid</source>
-        <translation type="unfinished">&amp;Griglia</translation>
+        <translation>&amp;Griglia</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="642"/>
         <source>&amp;No Snap</source>
-        <translation type="unfinished">Se&amp;nza battuta</translation>
+        <translation>Se&amp;nza battuta</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="643"/>
@@ -835,19 +835,19 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="702"/>
         <source>Snap to Bea&amp;t</source>
-        <translation type="unfinished">Spezza sul ba&amp;ttito</translation>
+        <translation>Spezza sul ba&amp;ttito</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="711"/>
         <source>Snap to &amp;Bar</source>
-        <translation type="unfinished">Spezza alla &amp;battuta</translation>
+        <translation>Spezza alla &amp;battuta</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="731"/>
         <location filename="../QMenuStrings.cpp" line="1967"/>
         <location filename="../QMenuStrings.cpp" line="3668"/>
         <source>&amp;Composition</source>
-        <translation type="unfinished">&amp;Composizione</translation>
+        <translation>&amp;Composizione</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="732"/>
@@ -855,7 +855,7 @@
         <location filename="../QMenuStrings.cpp" line="3669"/>
         <location filename="../QMenuStrings.cpp" line="4131"/>
         <source>Add Te&amp;mpo Change...</source>
-        <translation type="unfinished">Aggiungi cambio di te&amp;mpo...</translation>
+        <translation>Aggiungi cambio di te&amp;mpo...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="733"/>
@@ -863,48 +863,48 @@
         <location filename="../QMenuStrings.cpp" line="3670"/>
         <location filename="../QMenuStrings.cpp" line="4140"/>
         <source>Add Time Si&amp;gnature Change...</source>
-        <translation type="unfinished">Aggiungi Cambio di misura...</translation>
+        <translation>A&amp;ggiungi Cambio di misura...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="734"/>
         <source>&amp;Segment</source>
-        <translation type="unfinished">&amp;Segmento</translation>
+        <translation>&amp;Segmento</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="736"/>
         <location filename="../QMenuStrings.cpp" line="1972"/>
         <location filename="../QMenuStrings.cpp" line="3762"/>
         <source>Open in &amp;Event List Editor</source>
-        <translation type="unfinished">Apri nell&apos;editor della lista degli &amp;eventi</translation>
+        <translation>Apri nell&apos;editor della lista degli &amp;eventi</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="738"/>
         <source>Set Segment Start &amp;Time...</source>
-        <translation type="unfinished"></translation>
+        <translation>Imposta il &amp;tempo d&apos;inizio del segmento...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="739"/>
         <location filename="../QMenuStrings.cpp" line="1980"/>
         <source>Set Segment &amp;Duration...</source>
-        <translation type="unfinished"></translation>
+        <translation>Imposta la &amp;durata del segmento...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2216"/>
         <source>Ad&amp;just</source>
-        <translation type="unfinished">Ag&amp;giusta</translation>
+        <translation>Ag&amp;giusta</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="741"/>
         <location filename="../QMenuStrings.cpp" line="2240"/>
         <source>&amp;Quantize</source>
-        <translation type="unfinished">&amp;Quantizza</translation>
+        <translation>&amp;Quantizza</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="742"/>
         <location filename="../QMenuStrings.cpp" line="2241"/>
         <location filename="../QMenuStrings.cpp" line="3772"/>
         <source>&amp;Quantize...</source>
-        <translation type="unfinished">&amp;Quantizza...</translation>
+        <translation>&amp;Quantizza...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="751"/>
@@ -914,13 +914,13 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="760"/>
         <source>&amp;Legato</source>
-        <translation type="unfinished">&amp;Legato</translation>
+        <translation>&amp;Legato</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="769"/>
         <location filename="../QMenuStrings.cpp" line="2229"/>
         <source>Collapse &amp;Equal-Pitch Notes</source>
-        <translation type="unfinished">Unisci le note alla st&amp;essa altezza</translation>
+        <translation>Unisci le note alla st&amp;essa altezza</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="770"/>
@@ -932,7 +932,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="779"/>
         <source>&amp;Jog Right</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Avanza a &amp;destra</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="788"/>
@@ -944,7 +944,7 @@
         <location filename="../QMenuStrings.cpp" line="797"/>
         <location filename="../QMenuStrings.cpp" line="2326"/>
         <source>&amp;Reduce Velocity</source>
-        <translation type="unfinished">&amp;Riduci la velocità</translation>
+        <translation>&amp;Riduci la velocità</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="806"/>
@@ -954,7 +954,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="807"/>
         <source>Set Event &amp;Velocities...</source>
-        <translation type="unfinished">Imposta &amp;velocità degli eventi...</translation>
+        <translation>Imposta &amp;velocità degli eventi...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="808"/>
@@ -971,7 +971,7 @@
         <location filename="../QMenuStrings.cpp" line="818"/>
         <location filename="../QMenuStrings.cpp" line="2263"/>
         <source>&amp;Double Durations</source>
-        <translation type="unfinished">Raddoppia le durate</translation>
+        <translation>Raddoppia le &amp;durate</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="827"/>
@@ -983,44 +983,44 @@
         <location filename="../QMenuStrings.cpp" line="828"/>
         <location filename="../QMenuStrings.cpp" line="2273"/>
         <source>Trans&amp;pose</source>
-        <translation type="unfinished">Tras&amp;poni</translation>
+        <translation>Tras&amp;poni</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="829"/>
         <location filename="../QMenuStrings.cpp" line="2274"/>
         <source>&amp;Up a Semitone</source>
-        <translation type="unfinished">Alza di &amp;un semitono</translation>
+        <translation>Alza di &amp;un semitono</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="838"/>
         <location filename="../QMenuStrings.cpp" line="2283"/>
         <source>&amp;Down a Semitone</source>
-        <translation type="unfinished">Abbassa &amp;di un semitono</translation>
+        <translation>Abbassa &amp;di un semitono</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="847"/>
         <location filename="../QMenuStrings.cpp" line="2292"/>
         <source>Up an &amp;Octave</source>
-        <translation type="unfinished">Alza di un&apos;&amp;ottava</translation>
+        <translation>Alza di un&apos;&amp;ottava</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="856"/>
         <location filename="../QMenuStrings.cpp" line="2301"/>
         <source>Down an Octa&amp;ve</source>
-        <translation type="unfinished">Abbassa di un&apos;otta&amp;va</translation>
+        <translation>Abbassa di un&apos;otta&amp;va</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="865"/>
         <location filename="../QMenuStrings.cpp" line="2310"/>
         <source>&amp;Transpose by Semitones...</source>
-        <translation type="unfinished">&amp;Trasponi per semitoni...</translation>
+        <translation>&amp;Trasponi per semitoni...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="866"/>
         <location filename="../QMenuStrings.cpp" line="2311"/>
         <location filename="../QMenuStrings.cpp" line="3790"/>
         <source>Transpose by &amp;Interval...</source>
-        <translation type="unfinished">Trasponi per &amp;Intervallo...</translation>
+        <translation>Trasponi per &amp;Intervallo...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="867"/>
@@ -1031,19 +1031,19 @@
         <location filename="../QMenuStrings.cpp" line="868"/>
         <location filename="../QMenuStrings.cpp" line="2313"/>
         <source>&amp;Invert</source>
-        <translation type="unfinished">&amp;Inverti</translation>
+        <translation>&amp;Inverti</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="877"/>
         <location filename="../QMenuStrings.cpp" line="2314"/>
         <source>&amp;Retrograde</source>
-        <translation type="unfinished">&amp;Retrogrado</translation>
+        <translation>&amp;Retrogrado</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="886"/>
         <location filename="../QMenuStrings.cpp" line="2315"/>
         <source>Re&amp;trograde Invert</source>
-        <translation type="unfinished">Inverti re&amp;trogrado</translation>
+        <translation>Inverti re&amp;trogrado</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="887"/>
@@ -1847,37 +1847,37 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2012"/>
         <source>Add Fingering &amp;0 (Thumb)</source>
-        <translation type="unfinished">Aggiungi diteggiatura &amp;0 (Pollice)</translation>
+        <translation>Aggiungi diteggiatura &amp;0 (Pollice)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2021"/>
         <source>Add Fingering &amp;1</source>
-        <translation type="unfinished"></translation>
+        <translation>Aggiungi diteggiatura &amp;1</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2030"/>
         <source>Add Fingering &amp;2</source>
-        <translation type="unfinished"></translation>
+        <translation>Aggiungi diteggiatura &amp;2</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2039"/>
         <source>Add Fingering &amp;3</source>
-        <translation type="unfinished"></translation>
+        <translation>Aggiungi diteggiatura &amp;3</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2048"/>
         <source>Add Fingering &amp;4</source>
-        <translation type="unfinished"></translation>
+        <translation>Aggiungi diteggiatura &amp;4</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2057"/>
         <source>Add Fingering &amp;5</source>
-        <translation type="unfinished"></translation>
+        <translation>Aggiungi diteggiatura &amp;5</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2066"/>
         <source>&amp;Add Fingering +</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Aggiungi diteggiatura +</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2075"/>
@@ -1887,42 +1887,42 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2076"/>
         <source>S&amp;lashes</source>
-        <translation type="unfinished">S&amp;lashes</translation>
+        <translation>S&amp;lashes</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2077"/>
         <source>&amp;None</source>
-        <translation type="unfinished">&amp;Nessuno</translation>
+        <translation>&amp;Nessuno</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2078"/>
         <source>&amp;1</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;1</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2079"/>
         <source>&amp;2</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;2</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2080"/>
         <source>&amp;3</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;3</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2081"/>
         <source>&amp;4</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;4</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2082"/>
         <source>&amp;5</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;5</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2083"/>
         <source>Note &amp;Style</source>
-        <translation type="unfinished">&amp;Stile della nota</translation>
+        <translation>&amp;Stile della nota</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2084"/>
@@ -1948,12 +1948,12 @@
         <location filename="../QMenuStrings.cpp" line="2088"/>
         <location filename="../QMenuStrings.cpp" line="2578"/>
         <source>&amp;Accidentals</source>
-        <translation type="unfinished">&amp;Accidenti</translation>
+        <translation>&amp;Accidenti</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2089"/>
         <source>&amp;Restore Accidentals</source>
-        <translation type="unfinished">&amp;Ripristina gli accidenti</translation>
+        <translation>&amp;Ripristina gli accidenti</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2090"/>
@@ -1983,12 +1983,12 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2095"/>
         <source>Use &amp;Cautionary Accidentals</source>
-        <translation type="unfinished">Usa gli a&amp;ccidenti di precauzione</translation>
+        <translation>Usa gli a&amp;ccidenti di precauzione</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2096"/>
         <source>Cancel C&amp;autionary Accidentals</source>
-        <translation type="unfinished">Cancella gli a&amp;ccidenti di precauzione</translation>
+        <translation>Cancella gli &amp;accidenti di precauzione</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2097"/>
@@ -2003,12 +2003,12 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2115"/>
         <source>&amp;Restore Stems</source>
-        <translation type="unfinished">&amp;Ripristina i gambi</translation>
+        <translation>&amp;Ripristina i gambi</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2116"/>
         <source>&amp;Phrase</source>
-        <translation type="unfinished">Frase</translation>
+        <translation type="unfinished">&amp;Frase</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2117"/>
@@ -2023,7 +2023,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2127"/>
         <source>&amp;Auto-Beam</source>
-        <translation type="unfinished">&amp;Auto-collega</translation>
+        <translation>&amp;Auto-collega</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2128"/>
@@ -2038,7 +2038,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2146"/>
         <source>&amp;Triplet</source>
-        <translation type="unfinished">&amp;Terzina</translation>
+        <translation>&amp;Terzina</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2155"/>
@@ -2048,7 +2048,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2156"/>
         <source>Add S&amp;lur</source>
-        <translation type="unfinished">Aggiungi &amp;legatura</translation>
+        <translation>Aggiungi &amp;legatura</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2165"/>
@@ -2058,17 +2058,17 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2174"/>
         <source>Slur &amp;Position</source>
-        <translation type="unfinished">&amp;Posizione della legatura</translation>
+        <translation>&amp;Posizione della legatura</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2175"/>
         <source>&amp;Restore Slur Positions</source>
-        <translation type="unfinished">&amp;Ripristina le posizioni delle legature</translation>
+        <translation>&amp;Ripristina le posizioni delle legature</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2176"/>
         <source>Slur &amp;Above</source>
-        <translation type="unfinished">Legatura sopr&amp;a</translation>
+        <translation>Legatura sopr&amp;a</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2177"/>
@@ -2083,12 +2083,12 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2187"/>
         <source>&amp;Untie</source>
-        <translation type="unfinished">&amp;Slega</translation>
+        <translation>&amp;Slega</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2188"/>
         <source>Tie &amp;Position</source>
-        <translation type="unfinished">&amp;Posizione della legatura</translation>
+        <translation>&amp;Posizione della legatura</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2189"/>
@@ -2098,7 +2098,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2190"/>
         <source>Tie &amp;Above</source>
-        <translation type="unfinished">Legatura sopr&amp;a</translation>
+        <translation>Legatura sopr&amp;a</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2191"/>
@@ -2108,12 +2108,12 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2192"/>
         <source>Add &amp;Crescendo</source>
-        <translation type="unfinished">Aggiungi &amp;Crescendo</translation>
+        <translation>Aggiungi &amp;Crescendo</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2201"/>
         <source>Add &amp;Decescendo</source>
-        <translation type="unfinished"></translation>
+        <translation>Aggiungi &amp;Decescendo</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2210"/>
@@ -2123,7 +2123,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2211"/>
         <source>&amp;Octaves</source>
-        <translation type="unfinished">&amp;Ottave</translation>
+        <translation>&amp;Ottave</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2212"/>
@@ -2133,7 +2133,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2213"/>
         <source>Add Octave &amp;Up</source>
-        <translation type="unfinished">Aggiungi ottava s&amp;uperiore</translation>
+        <translation>Aggiungi ottava s&amp;uperiore</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2214"/>
@@ -2148,32 +2148,32 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2217"/>
         <source>R&amp;ests</source>
-        <translation type="unfinished">Paus&amp;e</translation>
+        <translation>Paus&amp;e</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2218"/>
         <source>&amp;Normalize Rests</source>
-        <translation type="unfinished">&amp;Normalizza le pause</translation>
+        <translation>&amp;Normalizza le pause</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2227"/>
         <source>&amp;Collapse Rests</source>
-        <translation type="unfinished">&amp;Unisci le pause</translation>
+        <translation>&amp;Unisci le pause</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2228"/>
         <source>&amp;Notes</source>
-        <translation type="unfinished">&amp;Note</translation>
+        <translation>&amp;Note</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2238"/>
         <source>Tie Notes at &amp;Barlines</source>
-        <translation type="unfinished">Lega le note alle &amp;battute</translation>
+        <translation>Lega le note alle &amp;battute</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2239"/>
         <source>Split-and-Tie Overlapping &amp;Chords</source>
-        <translation type="unfinished">Dividi-e-lega gli a&amp;ccordi sovrapposti</translation>
+        <translation>Dividi-e-lega gli a&amp;ccordi sovrapposti</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2250"/>
@@ -2183,22 +2183,22 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2251"/>
         <source>Remo&amp;ve Notation Quantization</source>
-        <translation type="unfinished">Rimuo&amp;vi la quantizzazione della notazione</translation>
+        <translation>Rimuo&amp;vi la quantizzazione della notazione</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2252"/>
         <source>&amp;Interpret...</source>
-        <translation type="unfinished">&amp;Interpreta...</translation>
+        <translation>&amp;Interpreta...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2253"/>
         <source>Rescale</source>
-        <translation type="unfinished">Riscala</translation>
+        <translation>Riscala</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2312"/>
         <source>Convert</source>
-        <translation type="unfinished">Converti</translation>
+        <translation>Converti</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2316"/>
@@ -2213,12 +2213,12 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2336"/>
         <source>&amp;Fine Positioning</source>
-        <translation type="unfinished">Posizionamento &amp;fine</translation>
+        <translation>Posizionamento &amp;fine</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2337"/>
         <source>&amp;Restore Positions</source>
-        <translation type="unfinished">&amp;Ripristina le posizioni</translation>
+        <translation>&amp;Ripristina le posizioni</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2338"/>
@@ -2243,7 +2243,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2342"/>
         <source>Fine Ti&amp;ming</source>
-        <translation type="unfinished">Suddivisione fine del te&amp;mpo</translation>
+        <translation>Suddivisione fine del te&amp;mpo</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2352"/>
@@ -2254,17 +2254,17 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2361"/>
         <source>&amp;Visibility</source>
-        <translation type="unfinished">&amp;Visibilità</translation>
+        <translation>&amp;Visibilità</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2362"/>
         <source>Make &amp;Invisible</source>
-        <translation type="unfinished">Rendi &amp;invisibile</translation>
+        <translation>Rendi &amp;invisibile</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2363"/>
         <source>Make &amp;Visible</source>
-        <translation type="unfinished">Rendi &amp;visibile</translation>
+        <translation>Rendi &amp;visibile</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2560"/>
@@ -2393,7 +2393,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2581"/>
         <source>&amp;Sharp</source>
-        <translation type="unfinished">&amp;Diesis</translation>
+        <translation>&amp;Diesis</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2582"/>
@@ -2418,7 +2418,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2586"/>
         <source>&amp;Clefs</source>
-        <translation type="unfinished">&amp;Chiavi</translation>
+        <translation>&amp;Chiavi</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2587"/>
@@ -2428,22 +2428,22 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2588"/>
         <source>&amp;Alto Clef</source>
-        <translation type="unfinished">Chiave di &amp;Alto</translation>
+        <translation>Chiave di &amp;Alto</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2589"/>
         <source>Te&amp;nor Clef</source>
-        <translation type="unfinished">Chiave di Te&amp;nore</translation>
+        <translation>Chiave di Te&amp;nore</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2590"/>
         <source>&amp;Bass Clef</source>
-        <translation type="unfinished">Chiave di &amp;Basso</translation>
+        <translation>Chiave di &amp;Basso</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2595"/>
         <source>&amp;Text</source>
-        <translation type="unfinished">&amp;Testo</translation>
+        <translation>&amp;Testo</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2604"/>
@@ -2469,7 +2469,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2728"/>
         <source>&amp;Insert Note</source>
-        <translation type="unfinished">&amp;Inserisci nota</translation>
+        <translation>&amp;Inserisci nota</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1388"/>
@@ -2662,7 +2662,7 @@
         <location filename="../QMenuStrings.cpp" line="4120"/>
         <location filename="../QMenuStrings.cpp" line="4229"/>
         <source>Ctrl+Z</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ctrl+Z</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="92"/>
@@ -2676,7 +2676,7 @@
         <location filename="../QMenuStrings.cpp" line="4129"/>
         <location filename="../QMenuStrings.cpp" line="4238"/>
         <source>Ctrl+Shift+Z</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ctrl+Shift+Z</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="101"/>
@@ -10010,7 +10010,7 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location filename="../../src/commands/studio/AddControlParameterCommand.h" line="56"/>
         <source>&amp;Add Control Parameter</source>
-        <translation type="unfinished">&amp;Aggiungi parametro di controllo</translation>
+        <translation>&amp;Aggiungi parametro di controllo</translation>
     </message>
 </context>
 <context>
@@ -10018,7 +10018,7 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location filename="../../src/commands/edit/AddDotCommand.h" line="47"/>
         <source>&amp;Add Dot</source>
-        <translation type="unfinished">&amp;Aggiungi punto</translation>
+        <translation>&amp;Aggiungi punto</translation>
     </message>
 </context>
 <context>
@@ -10031,17 +10031,17 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location filename="../../src/commands/notation/AddFingeringMarkCommand.cpp" line="56"/>
         <source>Add Fingering &amp;0 (Thumb)</source>
-        <translation type="unfinished">Aggiungi diteggiatura &amp;0 (Pollice)</translation>
+        <translation>Aggiungi diteggiatura &amp;0 (Pollice)</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddFingeringMarkCommand.cpp" line="58"/>
         <source>Add Fingering &amp;%1</source>
-        <translation type="unfinished">Aggiungi diteggiatura &amp;%1</translation>
+        <translation>Aggiungi diteggiatura &amp;%1</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddFingeringMarkCommand.cpp" line="85"/>
         <source>Fingering: </source>
-        <translation type="unfinished">Diteggiatura:</translation>
+        <translation>Diteggiatura:</translation>
     </message>
 </context>
 <context>
@@ -10054,7 +10054,7 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location filename="../../src/commands/notation/AddIndicationCommand.cpp" line="227"/>
         <source>Add S&amp;lur</source>
-        <translation type="unfinished">Aggiungi &amp;legatura</translation>
+        <translation>Aggiungi &amp;legatura</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddIndicationCommand.cpp" line="229"/>
@@ -10064,12 +10064,12 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location filename="../../src/commands/notation/AddIndicationCommand.cpp" line="231"/>
         <source>Add Double-Octave Up</source>
-        <translation type="unfinished">Aggiungi doppia ottava superiore</translation>
+        <translation>Aggiungi doppia ottava superiore</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddIndicationCommand.cpp" line="233"/>
         <source>Add Octave &amp;Up</source>
-        <translation type="unfinished">Aggiungi ottava s&amp;uperiore</translation>
+        <translation>Aggiungi ottava s&amp;uperiore</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddIndicationCommand.cpp" line="235"/>
@@ -10079,22 +10079,22 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location filename="../../src/commands/notation/AddIndicationCommand.cpp" line="237"/>
         <source>Add Double Octave Down</source>
-        <translation type="unfinished">Aggiungi doppia ottava inferiore</translation>
+        <translation>Aggiungi doppia ottava inferiore</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddIndicationCommand.cpp" line="242"/>
         <source>Add &amp;Crescendo</source>
-        <translation type="unfinished">Aggiungi &amp;Crescendo</translation>
+        <translation>Aggiungi &amp;Crescendo</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddIndicationCommand.cpp" line="244"/>
         <source>Add &amp;Decrescendo</source>
-        <translation type="unfinished">Aggiungi &amp;Decrescendo</translation>
+        <translation>Aggiungi &amp;Decrescendo</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddIndicationCommand.cpp" line="246"/>
         <source>Add &amp;Glissando</source>
-        <translation type="unfinished">Aggiungi &amp;Glissando</translation>
+        <translation>Aggiungi &amp;Glissando</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddIndicationCommand.cpp" line="248"/>
@@ -10104,7 +10104,7 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location filename="../../src/commands/notation/AddIndicationCommand.cpp" line="251"/>
         <source>Add &amp;%1%2</source>
-        <translation type="unfinished">Aggiungi &amp;%1%2</translation>
+        <translation>Aggiungi &amp;%1%2</translation>
     </message>
 </context>
 <context>
@@ -10112,27 +10112,27 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="41"/>
         <source>S&amp;forzando</source>
-        <translation type="unfinished">S&amp;forzando</translation>
+        <translation>S&amp;forzando</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="43"/>
         <source>Sta&amp;ccato</source>
-        <translation type="unfinished">Sta&amp;ccato</translation>
+        <translation>Sta&amp;ccato</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="45"/>
         <source>R&amp;inforzando</source>
-        <translation type="unfinished">R&amp;inforzando</translation>
+        <translation>R&amp;inforzando</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="47"/>
         <source>T&amp;enuto</source>
-        <translation type="unfinished">T&amp;enuto</translation>
+        <translation>T&amp;enuto</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="49"/>
         <source>Tri&amp;ll</source>
-        <translation type="unfinished">Tr&amp;illo</translation>
+        <translation>Tr&amp;illo</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="51"/>
@@ -10142,7 +10142,7 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="53"/>
         <source>Trill Line</source>
-        <translation type="unfinished">Linea di trillo</translation>
+        <translation>Linea di trillo</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="55"/>
@@ -10152,17 +10152,17 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="57"/>
         <source>&amp;Accent</source>
-        <translation type="unfinished">&amp;Accento</translation>
+        <translation>&amp;Accento</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="59"/>
         <source>&amp;Staccatissimo</source>
-        <translation type="unfinished">&amp;Staccatissimo</translation>
+        <translation>&amp;Staccatissimo</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="61"/>
         <source>&amp;Marcato</source>
-        <translation type="unfinished">&amp;Marcato</translation>
+        <translation>&amp;Marcato</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="63"/>
@@ -10182,47 +10182,47 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="69"/>
         <source>&amp;Pause</source>
-        <translation type="unfinished">&amp;Pausa</translation>
+        <translation>&amp;Pausa</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="71"/>
         <source>&amp;Up-Bow</source>
-        <translation type="unfinished">&amp;Up-Bow</translation>
+        <translation>&amp;Up-Bow</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="73"/>
         <source>&amp;Down-Bow</source>
-        <translation type="unfinished">&amp;Down-Bow</translation>
+        <translation>&amp;Down-Bow</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="75"/>
         <source>Mo&amp;rdent</source>
-        <translation type="unfinished">Mo&amp;rdente</translation>
+        <translation>Mo&amp;rdente</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="77"/>
         <source>Inverted Mordent</source>
-        <translation type="unfinished">Mordente invertito</translation>
+        <translation>Mordente invertito</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="79"/>
         <source>Long Mordent</source>
-        <translation type="unfinished">Mordente lungo</translation>
+        <translation>Mordente lungo</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="81"/>
         <source>Lon&amp;g Inverted Mordent</source>
-        <translation type="unfinished">Mordente invertito lungo</translation>
+        <translation>Mordente invertito lun&amp;go</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="83"/>
         <source>&amp;%1%2</source>
-        <translation type="unfinished">&amp;%1%2</translation>
+        <translation>&amp;%1%2</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="88"/>
         <source>Add %1</source>
-        <translation type="unfinished">Aggiungi %1</translation>
+        <translation>Aggiungi %1</translation>
     </message>
 </context>
 <context>
@@ -10230,7 +10230,7 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location filename="../../src/commands/edit/AddMarkerCommand.h" line="49"/>
         <source>&amp;Add Marker</source>
-        <translation type="unfinished">&amp;Aggiungi marcatore</translation>
+        <translation>&amp;Aggiungi marcatore</translation>
     </message>
 </context>
 <context>
@@ -10238,12 +10238,12 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location filename="../../src/commands/notation/AddSlashesCommand.h" line="38"/>
         <source>Slashes</source>
-        <translation type="unfinished">Slashes</translation>
+        <translation>Slashes</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddSlashesCommand.cpp" line="34"/>
         <source>&amp;None</source>
-        <translation type="unfinished">&amp;Nessuno</translation>
+        <translation>&amp;Nessuno</translation>
     </message>
 </context>
 <context>
@@ -10251,7 +10251,7 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location filename="../../src/commands/segment/AddTempoChangeCommand.h" line="53"/>
         <source>Add Te&amp;mpo Change...</source>
-        <translation type="unfinished">Aggiungi cambio di te&amp;mpo...</translation>
+        <translation>Aggiungi cambio di te&amp;mpo...</translation>
     </message>
 </context>
 <context>
@@ -10264,7 +10264,7 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location filename="../../src/commands/notation/AddTextMarkCommand.cpp" line="46"/>
         <source>Text:</source>
-        <translation type="unfinished">Testo:</translation>
+        <translation>Testo:</translation>
     </message>
 </context>
 <context>
@@ -10272,7 +10272,7 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location filename="../../src/commands/segment/AddTimeSignatureCommand.h" line="47"/>
         <source>Add Time Si&amp;gnature Change...</source>
-        <translation type="unfinished">Aggiungi Cambio di misura...</translation>
+        <translation>A&amp;ggiungi Cambio di misura...</translation>
     </message>
 </context>
 <context>
@@ -10280,7 +10280,7 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location filename="../../src/commands/segment/AddTracksCommand.h" line="50"/>
         <source>Add Tracks...</source>
-        <translation type="unfinished">Aggiungi le tracce...</translation>
+        <translation>Aggiungi le tracce...</translation>
     </message>
 </context>
 <context>
@@ -10288,38 +10288,38 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location filename="../../src/gui/dialogs/AddTracksDialog.cpp" line="43"/>
         <source>Add Tracks</source>
-        <translation type="unfinished">Aggiungi tracce</translation>
+        <translation>Aggiungi tracce</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AddTracksDialog.cpp" line="51"/>
         <source>How many tracks do you want to add?</source>
-        <translation type="unfinished">Quante tracce vuoi aggiungere?</translation>
+        <translation>Quante tracce vuoi aggiungere?</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AddTracksDialog.cpp" line="69"/>
         <source>Add tracks</source>
-        <translation type="unfinished">Aggiungi tracce</translation>
+        <translation>Aggiungi tracce</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AddTracksDialog.cpp" line="73"/>
         <source>At the top</source>
-        <translation type="unfinished">All&apos;inizio</translation>
+        <translation>All&apos;inizio</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AddTracksDialog.cpp" line="74"/>
         <location filename="../../src/gui/dialogs/AddTracksDialog.cpp" line="78"/>
         <source>Above the current selected track</source>
-        <translation type="unfinished">Sopra la traccia selezionata</translation>
+        <translation>Sopra la traccia selezionata</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AddTracksDialog.cpp" line="75"/>
         <source>Below the current selected track</source>
-        <translation type="unfinished">Sotto la traccia selezionata</translation>
+        <translation>Sotto la traccia selezionata</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AddTracksDialog.cpp" line="76"/>
         <source>At the bottom</source>
-        <translation type="unfinished">Alla fine</translation>
+        <translation>Alla fine</translation>
     </message>
 </context>
 <context>
@@ -10327,7 +10327,7 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location filename="../../src/commands/segment/AddTriggerSegmentCommand.cpp" line="34"/>
         <source>Add Triggered Segment</source>
-        <translation type="unfinished">Aggiungi segmento attivo</translation>
+        <translation>Aggiungi segmento attivo</translation>
     </message>
 </context>
 <context>
@@ -10335,82 +10335,82 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.h" line="54"/>
         <source>Audio</source>
-        <translation type="unfinished">Audio</translation>
+        <translation>Audio</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.h" line="55"/>
         <source>Audio Settings</source>
-        <translation type="unfinished">Impostazioni audio</translation>
+        <translation>Impostazioni audio</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="88"/>
         <source>Audio preview scale</source>
-        <translation type="unfinished">Scala dell&apos;anteprima audio</translation>
+        <translation>Scala dell&apos;anteprima audio</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="93"/>
         <source>Linear - easier to see loud peaks</source>
-        <translation type="unfinished">Lineare - picchi di volume più visibili</translation>
+        <translation>Lineare - picchi di volume più visibili</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="94"/>
         <source>Meter scaling - easier to see quiet activity</source>
-        <translation type="unfinished">Meter scaling - easier to see quiet activity</translation>
+        <translation>Meter scaling - easier to see quiet activity</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="104"/>
         <source>Record audio files as</source>
-        <translation type="unfinished">Registra i file audio come</translation>
+        <translation>Registra i file audio come</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="107"/>
         <source>16-bit PCM WAV format (smaller files)</source>
-        <translation type="unfinished">Formato PCM WAV 16-bit (file più piccoli)</translation>
+        <translation>Formato PCM WAV 16-bit (file più piccoli)</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="108"/>
         <source>32-bit float WAV format (higher quality)</source>
-        <translation type="unfinished">Formato WAV 32-bit (migliore qualità)</translation>
+        <translation>Formato WAV 32-bit (migliore qualità)</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="119"/>
         <source>External audio editor</source>
-        <translation type="unfinished">Editor audio esterni</translation>
+        <translation>Editor audio esterni</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="140"/>
         <source>Choose...</source>
-        <translation type="unfinished">Scegli...</translation>
+        <translation>Scegli...</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="148"/>
         <source>Create JACK outputs</source>
-        <translation type="unfinished">Crea output JACK</translation>
+        <translation>Crea output JACK</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="155"/>
         <source>for individual audio instruments</source>
-        <translation type="unfinished">per strumenti audio individuali</translation>
+        <translation>per strumenti audio individuali</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="163"/>
         <source>for submasters</source>
-        <translation type="unfinished">per submaster</translation>
+        <translation>per submaster</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="176"/>
         <source>General</source>
-        <translation type="unfinished">Generale</translation>
+        <translation>Generale</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="182"/>
         <source>External audio editor path</source>
-        <translation type="unfinished">Percorso dell&apos;editor audio esterno</translation>
+        <translation>Percorso dell&apos;editor audio esterno</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="216"/>
         <source>External audio editor &quot;%1&quot; not found or not executable</source>
-        <translation type="unfinished">Editor esterno dell&apos;audio &quot;%1&quot; non trovato o non eseguibile</translation>
+        <translation>Editor esterno dell&apos;audio &quot;%1&quot; non trovato o non eseguibile</translation>
     </message>
 </context>
 <context>
@@ -10418,22 +10418,22 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="79"/>
         <source>&lt;no plugin&gt;</source>
-        <translation type="unfinished">&lt;nessun plugin&gt;</translation>
+        <translation>&lt;nessun plugin&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="91"/>
         <source>&lt;no synth&gt;</source>
-        <translation type="unfinished">&lt;nessun sintetizzatore&gt;</translation>
+        <translation>&lt;nessun sintetizzatore&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="151"/>
         <source>Editor</source>
-        <translation type="unfinished">Editor</translation>
+        <translation>Editor</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="168"/>
         <source>Set the audio pan position in the stereo field</source>
-        <translation type="unfinished">Metti la posizione del pan dell&apos;audio in stereo</translation>
+        <translation>Metti la posizione del pan dell&apos;audio in stereo</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="81"/>
@@ -10453,32 +10453,32 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="170"/>
         <source>Mono or Stereo Instrument</source>
-        <translation type="unfinished">Strumento Mono e Stereo</translation>
+        <translation>Strumento Mono e Stereo</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="171"/>
         <source>Record level</source>
-        <translation type="unfinished">Livello registrazione</translation>
+        <translation>Livello registrazione</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="172"/>
         <source>Playback level</source>
-        <translation type="unfinished">Livello riproduzione</translation>
+        <translation>Livello riproduzione</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="173"/>
         <source>Audio level</source>
-        <translation type="unfinished">Livello audio</translation>
+        <translation>Livello audio</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="184"/>
         <source>In:</source>
-        <translation type="unfinished">In:</translation>
+        <translation>In:</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="189"/>
         <source>Out:</source>
-        <translation type="unfinished">Out:</translation>
+        <translation>Out:</translation>
     </message>
 </context>
 <context>
@@ -10486,32 +10486,32 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location filename="../../src/sound/AudioFileManager.cpp" line="651"/>
         <source>Cannot download file %1</source>
-        <translation type="unfinished">Non è possibile scaricare il file %1</translation>
+        <translation>Non è possibile scaricare il file %1</translation>
     </message>
     <message>
         <location filename="../../src/sound/AudioFileManager.cpp" line="721"/>
         <source>Converting audio file...</source>
-        <translation type="unfinished">Conversione del file audio...</translation>
+        <translation>Conversione del file audio...</translation>
     </message>
     <message>
         <location filename="../../src/sound/AudioFileManager.cpp" line="723"/>
         <source>Resampling audio file...</source>
-        <translation type="unfinished">Ricampionamento del file audio...</translation>
+        <translation>Ricampionamento del file audio...</translation>
     </message>
     <message>
         <location filename="../../src/sound/AudioFileManager.cpp" line="725"/>
         <source>Converting and resampling audio file...</source>
-        <translation type="unfinished">Conversione e ricampionamento del file audio...</translation>
+        <translation>Conversione e ricampionamento del file audio...</translation>
     </message>
     <message>
         <location filename="../../src/sound/AudioFileManager.cpp" line="727"/>
         <source>Importing audio file...</source>
-        <translation type="unfinished">Importazione del file audio...</translation>
+        <translation>Importazione del file audio...</translation>
     </message>
     <message>
         <location filename="../../src/sound/AudioFileManager.cpp" line="789"/>
         <source>Failed to convert or resample audio file on import</source>
-        <translation type="unfinished">Conversione o ricampionamento del file audio non riuscita</translation>
+        <translation>Conversione o ricampionamento del file audio non riuscita</translation>
     </message>
 </context>
 <context>
@@ -10530,13 +10530,13 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
         <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="195"/>
         <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="372"/>
         <source>&lt;no synth&gt;</source>
-        <translation type="unfinished">&lt;nessun sintetizzatore&gt;</translation>
+        <translation>&lt;nessun sintetizzatore&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="198"/>
         <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="376"/>
         <source>&lt;no plugin&gt;</source>
-        <translation type="unfinished">&lt;nessun plugin&gt;</translation>
+        <translation>&lt;nessun plugin&gt;</translation>
     </message>
 </context>
 <context>
@@ -10544,7 +10544,7 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="106"/>
         <source>Audio File Manager</source>
-        <translation type="unfinished">Gestore file audio</translation>
+        <translation>Gestore file audio</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="131"/>
@@ -10554,42 +10554,42 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="170"/>
         <source>Name</source>
-        <translation type="unfinished">Nome</translation>
+        <translation>Nome</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="171"/>
         <source>Duration</source>
-        <translation type="unfinished">Durata</translation>
+        <translation>Durata</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="172"/>
         <source>Envelope</source>
-        <translation type="unfinished">Busta</translation>
+        <translation>Busta</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="173"/>
         <source>Sample rate</source>
-        <translation type="unfinished">Campionamento</translation>
+        <translation>Campionamento</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="174"/>
         <source>Channels</source>
-        <translation type="unfinished">Canali</translation>
+        <translation>Canali</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="175"/>
         <source>Resolution</source>
-        <translation type="unfinished">Risoluzione</translation>
+        <translation>Risoluzione</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="176"/>
         <source>File</source>
-        <translation type="unfinished"></translation>
+        <translation>File</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="288"/>
         <source>&lt;no audio files&gt;</source>
-        <translation type="unfinished">&lt;nessun file audio&gt;</translation>
+        <translation>&lt;nessun file audio&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="518"/>
@@ -10599,17 +10599,17 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="520"/>
         <source>*.wav|WAV files (*.wav)</source>
-        <translation type="unfinished">File *.wav|WAV (*.wav)</translation>
+        <translation>File *.wav|WAV (*.wav)</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="530"/>
         <source>Exporting audio file...</source>
-        <translation type="unfinished">Esportazione in corso del file audio...</translation>
+        <translation>Esportazione in corso del file audio...</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="644"/>
         <source>This will unload audio file &quot;%1&quot; and remove all associated segments.  Are you sure?</source>
-        <translation type="unfinished">Questo vuoterà il file audio &quot;%1&quot; e rimuoverà tutti i segmenti associati.  Sei sicuro?</translation>
+        <translation>Questo vuoterà il file audio &quot;%1&quot; e rimuoverà tutti i segmenti associati.  Sei sicuro?</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="732"/>
@@ -10621,7 +10621,7 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="733"/>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="744"/>
         <source>All files</source>
-        <translation type="unfinished">Tutti i file</translation>
+        <translation>Tutti i file</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="739"/>
@@ -10646,7 +10646,7 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="756"/>
         <source>Select one or more audio files</source>
-        <translation type="unfinished">Scegli uno o più file audio</translation>
+        <translation>Scegli uno o più file audio</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="838"/>
@@ -10654,7 +10654,7 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
 This action cannot be undone, and associations with these files will be lost.
 Files will not be removed from your disk.
 Are you sure?</source>
-        <translation type="unfinished">Questo toglierà tutti i file audio e cancellerà i segmenti associati.
+        <translation>Questo toglierà tutti i file audio e cancellerà i segmenti associati.
 L&apos;azione è irreversibile, e le associazioni con questi file verranno perse.
 I file non verranno rimossi dal disco.
 Sei sicuro?</translation>
@@ -10665,7 +10665,7 @@ Sei sicuro?</translation>
 This action cannot be undone, and associations with these files will be lost.
 Files will not be removed from your disk.
 Are you sure?</source>
-        <translation type="unfinished">Questo toglierà tutti i file audio che non sono associati ad un segmento di questa composizione.
+        <translation>Questo toglierà tutti i file audio che non sono associati ad un segmento di questa composizione.
 L&apos;azione è irreversibile, e le associazioni con questi file verranno perse.
 I file non verranno rimossi dal disco.
 Sei sicuro?</translation>
@@ -10676,7 +10676,7 @@ Sei sicuro?</translation>
 
 Please select the ones you wish to delete permanently from the hard disk.
 </source>
-        <translation type="unfinished">I seguenti file audio non sono usati nella composizione attuale.
+        <translation>I seguenti file audio non sono usati nella composizione attuale.
 
 Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
 </translation>
@@ -10686,53 +10686,54 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
         <source>&lt;qt&gt;About to delete %n audio file(s) permanently from the hard disk.&lt;br&gt;This action cannot be undone, and there will be no way to recover the files.&lt;br&gt;Are you sure?&lt;/qt&gt;</source>
         <translation type="unfinished">
             <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="963"/>
         <source>File %1 could not be deleted.</source>
-        <translation type="unfinished">Il file %1 non può essere cancellato.</translation>
+        <translation>Il file %1 non può essere cancellato.</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="996"/>
         <source>Change Audio File label</source>
-        <translation type="unfinished">Cambia l&apos;etichetta del file audio</translation>
+        <translation>Cambia l&apos;etichetta del file audio</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="997"/>
         <source>Enter new label</source>
-        <translation type="unfinished">Inserisci una nuova etichetta</translation>
+        <translation>Inserisci una nuova etichetta</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1171"/>
         <source>importing a remote audio file</source>
-        <translation type="unfinished">Importazione di un file audio esterno</translation>
+        <translation>Importazione di un file audio esterno</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1173"/>
         <source>importing an audio file that needs to be converted or resampled</source>
-        <translation type="unfinished">importando un file audio che deve essere convertito o ricampionato</translation>
+        <translation>importando un file audio che deve essere convertito o ricampionato</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1176"/>
         <source>Adding audio file...</source>
-        <translation type="unfinished">Aggiunta file audio...</translation>
+        <translation>Aggiunta file audio...</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1198"/>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1203"/>
         <source>Failed to add audio file. </source>
-        <translation type="unfinished">Impossibile aggiungere il file audio</translation>
+        <translation>Impossibile aggiungere il file audio. </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1213"/>
         <source>Generating audio preview...</source>
-        <translation type="unfinished">Generazione anteprima audio...</translation>
+        <translation>Generazione anteprima audio...</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1221"/>
         <source>Try copying this file to a directory where you have write permission and re-add it</source>
-        <translation type="unfinished">Prova a copiare questo file in una directory dove hai i diritti di scrittura e riaggiungilo</translation>
+        <translation>Prova a copiare questo file in una directory dove hai i diritti di scrittura e riaggiungilo</translation>
     </message>
 </context>
 <context>
@@ -10740,23 +10741,23 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="231"/>
         <source>Audio Mixer</source>
-        <translation type="unfinished">Mixer Audio</translation>
+        <translation>Mixer Audio</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="263"/>
         <source>Record input source</source>
-        <translation type="unfinished">Registra la sorgente in entrata</translation>
+        <translation>Registra la sorgente in entrata</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="273"/>
         <source>Output destination</source>
-        <translation type="unfinished">Destinazione in uscita</translation>
+        <translation>Destinazione in uscita</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="286"/>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="423"/>
         <source>Pan</source>
-        <translation type="unfinished">Pan</translation>
+        <translation>Pan</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="294"/>
@@ -10764,12 +10765,12 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="430"/>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="431"/>
         <source>Audio level</source>
-        <translation type="unfinished">Livello audio</translation>
+        <translation>Livello audio</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="302"/>
         <source>Mono or stereo</source>
-        <translation type="unfinished">Mono o stereo</translation>
+        <translation>Mono o stereo</translation>
     </message>
     <message>
         <source>Mute</source>
@@ -10782,7 +10783,7 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="310"/>
         <source>Arm recording</source>
-        <translation type="unfinished">Arm recording</translation>
+        <translation>Arm recording</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="321"/>
@@ -10791,7 +10792,7 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="638"/>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="816"/>
         <source>&lt;none&gt;</source>
-        <translation type="unfinished">&lt;nessuno&gt;</translation>
+        <translation>&lt;nessuno&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="323"/>
@@ -10807,12 +10808,12 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="346"/>
         <source>Audio %1</source>
-        <translation type="unfinished">Audio %1</translation>
+        <translation>Audio %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="351"/>
         <source>Synth %1</source>
-        <translation type="unfinished">Sintetizzatore %1</translation>
+        <translation>Sintetizzatore %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="356"/>
@@ -10822,25 +10823,25 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="452"/>
         <source>Sub %1</source>
-        <translation type="unfinished">Sub %1</translation>
+        <translation>Sub %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="491"/>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="492"/>
         <source>Audio master output level</source>
-        <translation type="unfinished">Livello di uscita dell&apos;audio principale</translation>
+        <translation>Livello di uscita dell&apos;audio principale</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="494"/>
         <source>Master</source>
-        <translation type="unfinished">Master</translation>
+        <translation>Master</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="584"/>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="639"/>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="817"/>
         <source>&lt;no plugin&gt;</source>
-        <translation type="unfinished">&lt;nessun plugin&gt;</translation>
+        <translation>&lt;nessun plugin&gt;</translation>
     </message>
 </context>
 <context>
@@ -10848,12 +10849,12 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/gui/dialogs/AudioPlayingDialog.cpp" line="37"/>
         <source>Playing audio file</source>
-        <translation type="unfinished">File audio in esecuzione</translation>
+        <translation>File audio in esecuzione</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPlayingDialog.cpp" line="45"/>
         <source>Playing audio file &quot;%1&quot;</source>
-        <translation type="unfinished">File audio &quot;%1&quot; in esecuzione</translation>
+        <translation>File audio &quot;%1&quot; in esecuzione</translation>
     </message>
 </context>
 <context>
@@ -10861,83 +10862,83 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="78"/>
         <source>Audio Plugin</source>
-        <translation type="unfinished">Plugin audio</translation>
+        <translation>Plugin audio</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="86"/>
         <source>Plugin</source>
-        <translation type="unfinished">Plugin</translation>
+        <translation>Plugin</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="98"/>
         <source>Category:</source>
-        <translation type="unfinished">Categoria:</translation>
+        <translation>Categoria:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="109"/>
         <source>Plugin:</source>
-        <translation type="unfinished">Plugin:</translation>
+        <translation>Plugin:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="126"/>
         <source>Bypass</source>
-        <translation type="unfinished">Salta</translation>
+        <translation>Salta</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="135"/>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="413"/>
         <source>&lt;ports&gt;</source>
-        <translation type="unfinished">&lt;ports&gt;</translation>
+        <translation>&lt;ports&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="414"/>
         <source>&lt;id&gt;</source>
-        <translation type="unfinished">&lt;id&gt;</translation>
+        <translation>&lt;id&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="155"/>
         <source>Copy</source>
-        <translation type="unfinished">Copia</translation>
+        <translation>Copia</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="160"/>
         <source>Copy plugin parameters</source>
-        <translation type="unfinished">Copia i parametri del plugin</translation>
+        <translation>Copia i parametri del plugin</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="162"/>
         <source>Paste</source>
-        <translation type="unfinished">Incolla</translation>
+        <translation>Incolla</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="167"/>
         <source>Paste plugin parameters</source>
-        <translation type="unfinished">Incolla i parametri del plugin</translation>
+        <translation>Incolla i parametri del plugin</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="183"/>
         <source>Editor</source>
-        <translation type="unfinished">Editor</translation>
+        <translation>Editor</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="258"/>
         <source>(any)</source>
-        <translation type="unfinished">(qualsiasi)</translation>
+        <translation>(qualsiasi)</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="259"/>
         <source>(unclassified)</source>
-        <translation type="unfinished">(non classificato)</translation>
+        <translation>(non classificato)</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="282"/>
         <source>(none)</source>
-        <translation type="unfinished">(nessuno)</translation>
+        <translation>(nessuno)</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="412"/>
         <source>&lt;no plugin&gt;</source>
-        <translation type="unfinished">&lt;nessun plugin&gt;</translation>
+        <translation>&lt;nessun plugin&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="119"/>
@@ -10959,7 +10960,7 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="140"/>
         <source>&lt;id&gt;</source>
         <comment>&apos;id&apos; is short for &apos;identification&apos;</comment>
-        <translation type="unfinished">&lt;id&gt;</translation>
+        <translation>&lt;id&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="142"/>
@@ -10969,7 +10970,7 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="169"/>
         <source>Reset</source>
-        <translation type="unfinished">Ripristina</translation>
+        <translation>Ripristina</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="174"/>
@@ -10989,28 +10990,28 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="468"/>
         <source>Id: %1</source>
-        <translation type="unfinished">Id: %1</translation>
+        <translation>Id: %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="516"/>
         <source>mono</source>
-        <translation type="unfinished">mono</translation>
+        <translation>mono</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="518"/>
         <source>stereo</source>
-        <translation type="unfinished">stereo</translation>
+        <translation>stereo</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="520"/>
         <source>%1 in, %2 out</source>
-        <translation type="unfinished">%1 in, %2 out</translation>
+        <translation>%1 in, %2 out</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="544"/>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="781"/>
         <source>Program:  </source>
-        <translation type="unfinished">Programma:  </translation>
+        <translation>Programma:  </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="548"/>
@@ -11019,7 +11020,7 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="790"/>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="819"/>
         <source>&lt;none selected&gt;</source>
-        <translation type="unfinished">&lt;nessuna selezione&gt;</translation>
+        <translation>&lt;nessuna selezione&gt;</translation>
     </message>
 </context>
 <context>
@@ -11027,22 +11028,22 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/gui/studio/AudioPluginOSCGUIManager.cpp" line="432"/>
         <source>Rosegarden Plugin</source>
-        <translation type="unfinished">Plugin di Rosegarden</translation>
+        <translation>Plugin di Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioPluginOSCGUIManager.cpp" line="435"/>
         <source>Rosegarden: %1</source>
-        <translation type="unfinished">Rosegarden: %1</translation>
+        <translation>Rosegarden: %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioPluginOSCGUIManager.cpp" line="437"/>
         <source>Rosegarden: %1: %2</source>
-        <translation type="unfinished">Rosegarden: %1: %2</translation>
+        <translation>Rosegarden: %1: %2</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioPluginOSCGUIManager.cpp" line="438"/>
         <source>Plugin slot %1</source>
-        <translation type="unfinished">Plugin slot %1</translation>
+        <translation>Plugin slot %1</translation>
     </message>
 </context>
 <context>
@@ -11050,37 +11051,37 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/gui/configuration/AudioPropertiesPage.h" line="49"/>
         <source>Audio</source>
-        <translation type="unfinished">Audio</translation>
+        <translation>Audio</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioPropertiesPage.h" line="50"/>
         <source>Audio Settings</source>
-        <translation type="unfinished">Impostazioni audio</translation>
+        <translation>Impostazioni audio</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioPropertiesPage.cpp" line="63"/>
         <source>Audio file path:</source>
-        <translation type="unfinished">Percorso file audio:</translation>
+        <translation>Percorso file audio:</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioPropertiesPage.cpp" line="68"/>
         <source>Choose...</source>
-        <translation type="unfinished">Scegli...</translation>
+        <translation>Scegli...</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioPropertiesPage.cpp" line="73"/>
         <source>Disk space remaining:</source>
-        <translation type="unfinished">Spazio disco rimanente:</translation>
+        <translation>Spazio disco rimanente:</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioPropertiesPage.cpp" line="78"/>
         <source>Equivalent minutes of 16-bit stereo:</source>
-        <translation type="unfinished">Minuti equivalenti a 16 bit stereo:</translation>
+        <translation>Minuti equivalenti a 16 bit stereo:</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioPropertiesPage.cpp" line="91"/>
         <source>Modify audio path</source>
-        <translation type="unfinished">Modifica percorso audio</translation>
+        <translation>Modifica percorso audio</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioPropertiesPage.cpp" line="133"/>
@@ -11090,7 +11091,7 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/gui/configuration/AudioPropertiesPage.cpp" line="156"/>
         <source>minutes at</source>
-        <translation type="unfinished">minuti a</translation>
+        <translation>minuti a</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioPropertiesPage.cpp" line="165"/>
@@ -11103,49 +11104,49 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/gui/widgets/AudioRouteMenu.cpp" line="229"/>
         <source>In %1</source>
-        <translation type="unfinished">In %1</translation>
+        <translation>In %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioRouteMenu.cpp" line="231"/>
         <location filename="../../src/gui/widgets/AudioRouteMenu.cpp" line="254"/>
         <source>Master</source>
-        <translation type="unfinished">Master</translation>
+        <translation>Master</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioRouteMenu.cpp" line="233"/>
         <location filename="../../src/gui/widgets/AudioRouteMenu.cpp" line="256"/>
         <source>Sub %1</source>
-        <translation type="unfinished">Sub %1</translation>
+        <translation>Sub %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioRouteMenu.cpp" line="239"/>
         <source>In %1 R</source>
-        <translation type="unfinished">In %1 R</translation>
+        <translation>In %1 R</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioRouteMenu.cpp" line="240"/>
         <source>In %1 L</source>
-        <translation type="unfinished">In %1 L</translation>
+        <translation>In %1 L</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioRouteMenu.cpp" line="242"/>
         <source>Master R</source>
-        <translation type="unfinished">Master R</translation>
+        <translation>Master R</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioRouteMenu.cpp" line="243"/>
         <source>Master L</source>
-        <translation type="unfinished">Master L</translation>
+        <translation>Master L</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioRouteMenu.cpp" line="245"/>
         <source>Sub %1 R</source>
-        <translation type="unfinished">Sub %1 R</translation>
+        <translation>Sub %1 R</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioRouteMenu.cpp" line="246"/>
         <source>Sub %1 L</source>
-        <translation type="unfinished">Sub %1 L</translation>
+        <translation>Sub %1 L</translation>
     </message>
 </context>
 <context>
@@ -11153,12 +11154,12 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/commands/segment/AudioSegmentAutoSplitCommand.h" line="52"/>
         <source>&amp;Split on Silence</source>
-        <translation type="unfinished">&amp;Dividi sul silenzio</translation>
+        <translation>Dividi sul &amp;silenzio</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/AudioSegmentAutoSplitCommand.cpp" line="142"/>
         <source>(part %1)</source>
-        <translation type="unfinished">(parte %1)</translation>
+        <translation>(parte %1)</translation>
     </message>
 </context>
 <context>
@@ -11166,7 +11167,7 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/commands/segment/AudioSegmentDistributeCommand.h" line="61"/>
         <source>Distribute Audio Segments over MIDI</source>
-        <translation type="unfinished">Segmenti Audio Distribuiti su MIDI</translation>
+        <translation>Segmenti Audio Distribuiti su MIDI</translation>
     </message>
 </context>
 <context>
@@ -11174,17 +11175,17 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/commands/segment/AudioSegmentInsertCommand.cpp" line="44"/>
         <source>Create Segment</source>
-        <translation type="unfinished">Crea segmento</translation>
+        <translation>Crea segmento</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/AudioSegmentInsertCommand.cpp" line="106"/>
         <source>(inserted)</source>
-        <translation type="unfinished">(inserito)</translation>
+        <translation>(inserito)</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/AudioSegmentInsertCommand.cpp" line="108"/>
         <source>unknown audio file</source>
-        <translation type="unfinished">file audio sconosciuto</translation>
+        <translation>file audio sconosciuto</translation>
     </message>
 </context>
 <context>
@@ -11197,7 +11198,7 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/commands/segment/AudioSegmentRescaleCommand.cpp" line="122"/>
         <source>(rescaled)</source>
-        <translation type="unfinished">(riscalato)</translation>
+        <translation>(riscalato)</translation>
     </message>
 </context>
 <context>
@@ -11205,7 +11206,7 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/commands/segment/AudioSegmentResizeFromStartCommand.cpp" line="32"/>
         <source>Resize Segment</source>
-        <translation type="unfinished">Ridimensiona segmento</translation>
+        <translation>Ridimensiona segmento</translation>
     </message>
 </context>
 <context>
@@ -11213,12 +11214,12 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/commands/segment/AudioSegmentSplitCommand.cpp" line="35"/>
         <source>Split Audio Segment</source>
-        <translation type="unfinished">Dividi segmento audio</translation>
+        <translation>Dividi segmento audio</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/AudioSegmentSplitCommand.cpp" line="95"/>
         <source>(split)</source>
-        <translation type="unfinished">(dividi)</translation>
+        <translation>(dividi)</translation>
     </message>
 </context>
 <context>
@@ -11226,22 +11227,22 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/gui/dialogs/AudioSplitDialog.cpp" line="67"/>
         <source>Autosplit Audio Segment</source>
-        <translation type="unfinished">Suddividi automaticamente il segmento audio</translation>
+        <translation>Suddividi automaticamente il segmento audio</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioSplitDialog.cpp" line="76"/>
         <source>AutoSplit Segment &quot;</source>
-        <translation type="unfinished">Dividi automaticamente il segmento &quot;</translation>
+        <translation>Dividi automaticamente il segmento &quot;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioSplitDialog.cpp" line="97"/>
         <source>Threshold</source>
-        <translation type="unfinished">Soglia</translation>
+        <translation>Soglia</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioSplitDialog.cpp" line="163"/>
         <source>&lt;no preview generated for this audio file&gt;</source>
-        <translation type="unfinished">&lt;nessuna anteprima per questo file audio&gt;</translation>
+        <translation>&lt;nessuna anteprima per questo file audio&gt;</translation>
     </message>
 </context>
 <context>
@@ -11249,7 +11250,7 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/commands/notation/AutoBeamCommand.h" line="48"/>
         <source>&amp;Auto-Beam</source>
-        <translation type="unfinished">&amp;Auto-collega</translation>
+        <translation>&amp;Auto-collega</translation>
     </message>
 </context>
 <context>
@@ -11257,7 +11258,7 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="95"/>
         <source>Manage MIDI Banks and Programs</source>
-        <translation type="unfinished">Gestisci banchi MIDI e programmi</translation>
+        <translation>Gestisci banchi MIDI e programmi</translation>
     </message>
     <message>
         <source>Apply</source>
@@ -11275,109 +11276,110 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="119"/>
         <source>Type</source>
-        <translation type="unfinished">Tipo</translation>
+        <translation>Tipo</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="120"/>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="232"/>
         <source>MSB</source>
-        <translation type="unfinished">MSB</translation>
+        <translation>MSB</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="121"/>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="231"/>
         <source>LSB</source>
-        <translation type="unfinished">LSB</translation>
+        <translation>LSB</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="139"/>
         <source>Add Bank</source>
-        <translation type="unfinished">Aggiungi Banco</translation>
+        <translation>Aggiungi Banco</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="140"/>
         <source>Add Key Mapping</source>
-        <translation type="unfinished">Aggiungi mappatura della tastiera</translation>
+        <translation>Aggiungi mappatura della tastiera</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="141"/>
         <source>Delete</source>
-        <translation type="unfinished">Cancella</translation>
+        <translation>Cancella</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="142"/>
         <source>Delete All</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>XXX</translatorcomment>
+        <translation>Cancella tutto</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="150"/>
         <source>Add a Bank to the current device</source>
-        <translation type="unfinished">Aggiungi un banco al dispositivo corrente</translation>
+        <translation>Aggiungi un banco al dispositivo corrente</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="152"/>
         <source>Add a Percussion Key Mapping to the current device</source>
-        <translation type="unfinished">Aggiungi una mappatura della tastiera per le percussioni al dispositivo corrente</translation>
+        <translation>Aggiungi una mappatura della tastiera per le percussioni al dispositivo corrente</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="154"/>
         <source>Delete the current Bank or Key Mapping</source>
-        <translation type="unfinished">Elimina il banco o la mappatura della tastiera corrente</translation>
+        <translation>Elimina il banco o la mappatura della tastiera corrente</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="156"/>
         <source>Delete all Banks and Key Mappings from the current Device</source>
-        <translation type="unfinished">Elimina tutti i banchi e le mappature della tastiera dal dispositivo corrente</translation>
+        <translation>Elimina tutti i banchi e le mappature della tastiera dal dispositivo corrente</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="158"/>
         <source>Import...</source>
-        <translation type="unfinished">Importazione in corso...</translation>
+        <translation>Importazione in corso...</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="159"/>
         <source>Export...</source>
-        <translation type="unfinished">Esportazione in corso...</translation>
+        <translation>Esportazione in corso...</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="165"/>
         <source>Import Bank and Program data from a Rosegarden file to the current Device</source>
-        <translation type="unfinished">Importa i banchi e i dati del programma da un file di Rosegarden all&apos;attuale dispositivo</translation>
+        <translation>Importa i banchi e i dati del programma da un file di Rosegarden all&apos;attuale dispositivo</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="166"/>
         <source>Export all Device and Bank information to a Rosegarden format  interchange file</source>
-        <translation type="unfinished">Esporta tutti i dispositivi e le informazioni sul banco nel formato di scambio di Rosegarden</translation>
+        <translation>Esporta tutti i dispositivi e le informazioni sul banco nel formato di scambio di Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="168"/>
         <source>Copy</source>
-        <translation type="unfinished">Copia</translation>
+        <translation>Copia</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="169"/>
         <source>Paste</source>
-        <translation type="unfinished">Incolla</translation>
+        <translation>Incolla</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="177"/>
         <source>Copy all Program names from current Bank to clipboard</source>
-        <translation type="unfinished">Copia tutti i nomi dei programmi dal banco attuale agli appunti</translation>
+        <translation>Copia tutti i nomi dei programmi dal banco attuale agli appunti</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="179"/>
         <source>Paste Program names from clipboard to current Bank</source>
-        <translation type="unfinished">Incolla i nomi dei programmi dagli appunti al banco attuale</translation>
+        <translation>Incolla i nomi dei programmi dagli appunti al banco attuale</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="216"/>
         <source>Options</source>
-        <translation type="unfinished">Opzioni</translation>
+        <translation>Opzioni</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="226"/>
         <source>Show Variation list based on </source>
-        <translation type="unfinished">Mostra le liste di variazione basate su </translation>
+        <translation>Mostra le liste di variazione basate su </translation>
     </message>
     <message>
         <source>Close</source>
@@ -11386,37 +11388,37 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1072"/>
         <source>&lt;new bank&gt;</source>
-        <translation type="unfinished">&lt;nuovo banco&gt;</translation>
+        <translation>&lt;nuovo banco&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1108"/>
         <source>&lt;new mapping&gt;</source>
-        <translation type="unfinished">&lt;nuova mappatura&gt;</translation>
+        <translation>&lt;nuova mappatura&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1110"/>
         <source>&lt;new mapping %1&gt;</source>
-        <translation type="unfinished">&lt;nuova mappatura %1&gt;</translation>
+        <translation>&lt;nuova mappatura %1&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1154"/>
         <source>Really delete this bank?</source>
-        <translation type="unfinished">Vuoi eliminare veramente questo banco?</translation>
+        <translation>Vuoi eliminare veramente questo banco?</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1207"/>
         <source>Really delete this key mapping?</source>
-        <translation type="unfinished">Vuoi eliminare veramente questa mappatura?</translation>
+        <translation>Vuoi eliminare veramente questa mappatura?</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1259"/>
         <source>Really delete all banks for </source>
-        <translation type="unfinished">Vuoi veramente eliminare tutti i banchi per </translation>
+        <translation>Vuoi veramente eliminare tutti i banchi per </translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1537"/>
         <source>Import Banks from Device in File</source>
-        <translation type="unfinished">Importa i banchi dal dispositivo nel file</translation>
+        <translation>Importa i banchi dal dispositivo nel file</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1538"/>
@@ -11426,7 +11428,7 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1539"/>
         <source>Rosegarden files</source>
-        <translation type="unfinished">File di Rosegarden</translation>
+        <translation>File di Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1540"/>
@@ -11441,7 +11443,7 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1542"/>
         <source>All files</source>
-        <translation type="unfinished">Tutti i file</translation>
+        <translation>Tutti i file</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1560"/>
@@ -11451,17 +11453,17 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1713"/>
         <source>Export Device as...</source>
-        <translation type="unfinished">Esporta dispositivo come...</translation>
+        <translation>Esporta dispositivo come...</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1735"/>
         <source>You have specified a directory</source>
-        <translation type="unfinished">Hai specificato una directory.</translation>
+        <translation>Hai specificato una directory</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1745"/>
         <source>The specified file exists.  Overwrite?</source>
-        <translation type="unfinished">Il file specificato esiste.  Sovrascrivere?</translation>
+        <translation>Il file specificato esiste.  Sovrascrivere?</translation>
     </message>
     <message>
         <source>Unsaved Changes</source>
@@ -11473,7 +11475,7 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/commands/notation/BeamCommand.h" line="42"/>
         <source>&amp;Beam Group</source>
-        <translation type="unfinished">Collega il gruppo</translation>
+        <translation type="unfinished">&amp;Collega il gruppo</translation>
     </message>
 </context>
 <context>
@@ -11481,22 +11483,22 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/gui/dialogs/BeatsBarsDialog.cpp" line="40"/>
         <source>Audio Segment Duration</source>
-        <translation type="unfinished">Durata Segmento Audio</translation>
+        <translation>Durata Segmento Audio</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/BeatsBarsDialog.cpp" line="45"/>
         <source>The selected audio segment contains:</source>
-        <translation type="unfinished">Il segmento audio selezionato contiene:</translation>
+        <translation>Il segmento audio selezionato contiene:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/BeatsBarsDialog.cpp" line="60"/>
         <source>beat(s)</source>
-        <translation type="unfinished">ritmo(i)</translation>
+        <translation>ritmo(i)</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/BeatsBarsDialog.cpp" line="61"/>
         <source>bar(s)</source>
-        <translation type="unfinished">battuta(e)</translation>
+        <translation>battuta(e)</translation>
     </message>
 </context>
 <context>
@@ -11504,7 +11506,7 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/commands/notation/BreakCommand.h" line="45"/>
         <source>&amp;Unbeam</source>
-        <translation type="unfinished">Scollega</translation>
+        <translation type="unfinished">&amp;Scollega</translation>
     </message>
 </context>
 <context>
@@ -11512,7 +11514,7 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/commands/segment/ChangeCompositionLengthCommand.h" line="48"/>
         <source>Change &amp;Composition Start and End...</source>
-        <translation type="unfinished">Cambia inizio e fine della &amp;composizione...</translation>
+        <translation>Cambia inizio e fine della &amp;composizione...</translation>
     </message>
 </context>
 <context>
@@ -11520,7 +11522,7 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/commands/notation/ChangeSlurPositionCommand.h" line="47"/>
         <source>Slur &amp;Above</source>
-        <translation type="unfinished">Legatura sopr&amp;a</translation>
+        <translation>Legatura sopr&amp;a</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/ChangeSlurPositionCommand.h" line="47"/>
@@ -11546,7 +11548,7 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/commands/notation/ChangeStyleCommand.h" line="49"/>
         <source>Change &amp;Note Style</source>
-        <translation type="unfinished">Cambia stile della &amp;nota</translation>
+        <translation>Cambia stile della &amp;nota</translation>
     </message>
 </context>
 <context>
@@ -11554,7 +11556,7 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/commands/notation/ChangeTiePositionCommand.h" line="44"/>
         <source>Tie &amp;Above</source>
-        <translation type="unfinished">Legatura sopr&amp;a</translation>
+        <translation>Legatura sopr&amp;a</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/ChangeTiePositionCommand.h" line="44"/>
@@ -11572,7 +11574,7 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/commands/edit/ChangeVelocityCommand.h" line="49"/>
         <source>&amp;Reduce Velocity</source>
-        <translation type="unfinished">&amp;Riduci la velocità</translation>
+        <translation>&amp;Riduci la velocità</translation>
     </message>
 </context>
 <context>
@@ -11598,112 +11600,112 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="60"/>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="126"/>
         <source>Clef</source>
-        <translation type="unfinished">Chiave</translation>
+        <translation>Chiave</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="132"/>
         <source>Existing notes following clef change</source>
-        <translation type="unfinished">Le note esistenti seguono il cambio di chiave</translation>
+        <translation>Le note esistenti seguono il cambio di chiave</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="86"/>
         <source>Lower clef</source>
-        <translation type="unfinished">Chiave più bassa</translation>
+        <translation>Chiave più bassa</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="74"/>
         <source>Up an Octave</source>
-        <translation type="unfinished">Su di un&apos;ottava</translation>
+        <translation>Su di un&apos;ottava</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="116"/>
         <source>Down an Octave</source>
-        <translation type="unfinished">Giù di un&apos;ottava</translation>
+        <translation>Giù di un&apos;ottava</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="105"/>
         <source>Higher clef</source>
-        <translation type="unfinished">Chiave più alta</translation>
+        <translation>Chiave più alta</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="138"/>
         <source>Maintain current pitches</source>
-        <translation type="unfinished">Mantieni le altezze correnti</translation>
+        <translation>Mantieni le altezze correnti</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="141"/>
         <source>Transpose into appropriate octave</source>
-        <translation type="unfinished">Trasponi nell&apos;ottava appropriata</translation>
+        <translation>Trasponi nell&apos;ottava appropriata</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="288"/>
         <source>%1 down an octave</source>
-        <translation type="unfinished">%1 giù di un&apos;ottava</translation>
+        <translation>%1 giù di un&apos;ottava</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="291"/>
         <source>%1 down two octaves</source>
-        <translation type="unfinished">%1 giù di due ottave</translation>
+        <translation>%1 giù di due ottave</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="294"/>
         <source>%1 up an octave</source>
-        <translation type="unfinished">%1 su di un&apos;ottava</translation>
+        <translation>%1 su di un&apos;ottava</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="297"/>
         <source>%1 up two octaves</source>
-        <translation type="unfinished">%1 su di due ottave</translation>
+        <translation>%1 su di due ottave</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="306"/>
         <source>Treble</source>
-        <translation type="unfinished">Alti</translation>
+        <translation>Alti</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="308"/>
         <source>French violin</source>
-        <translation type="unfinished">Violino francese</translation>
+        <translation>Violino francese</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="310"/>
         <source>Soprano</source>
-        <translation type="unfinished">Soprano</translation>
+        <translation>Soprano</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="312"/>
         <source>Mezzo-soprano</source>
-        <translation type="unfinished">Mezzosoprano</translation>
+        <translation>Mezzosoprano</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="314"/>
         <source>Alto</source>
-        <translation type="unfinished">Alto</translation>
+        <translation>Alto</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="316"/>
         <source>Tenor</source>
-        <translation type="unfinished">Tenore</translation>
+        <translation>Tenore</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="318"/>
         <source>C-baritone</source>
-        <translation type="unfinished">Baritono in Do</translation>
+        <translation>Baritono in Do</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="320"/>
         <source>F-baritone</source>
-        <translation type="unfinished">Baritono in Fa</translation>
+        <translation>Baritono in Fa</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="322"/>
         <source>Bass</source>
-        <translation type="unfinished">Basso</translation>
+        <translation>Basso</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="324"/>
         <source>Sub-bass</source>
-        <translation type="unfinished">sotto-basso</translation>
+        <translation>sotto-basso</translation>
     </message>
 </context>
 <context>
@@ -11719,7 +11721,7 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/commands/edit/CollapseNotesCommand.h" line="45"/>
         <source>Collapse &amp;Equal-Pitch Notes</source>
-        <translation type="unfinished">Unisci le note alla st&amp;essa altezza</translation>
+        <translation>Unisci le note alla st&amp;essa altezza</translation>
     </message>
 </context>
 <context>
@@ -11735,42 +11737,42 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/gui/configuration/ColourConfigurationPage.h" line="52"/>
         <source>Color</source>
-        <translation type="unfinished">Colore</translation>
+        <translation>Colore</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/ColourConfigurationPage.h" line="53"/>
         <source>Color Settings</source>
-        <translation type="unfinished">Impostazioni colore</translation>
+        <translation>Impostazioni colore</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/ColourConfigurationPage.cpp" line="67"/>
         <source>Add New Color</source>
-        <translation type="unfinished">Aggiungi nuovo colore</translation>
+        <translation>Aggiungi nuovo colore</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/ColourConfigurationPage.cpp" line="71"/>
         <source>Delete Color</source>
-        <translation type="unfinished">Elimina colore</translation>
+        <translation>Elimina colore</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/ColourConfigurationPage.cpp" line="90"/>
         <source>Color Map</source>
-        <translation type="unfinished">Mappa colori</translation>
+        <translation>Mappa colori</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/ColourConfigurationPage.cpp" line="125"/>
         <source>New Color Name</source>
-        <translation type="unfinished">Nuovo nome colore</translation>
+        <translation>Nuovo nome colore</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/ColourConfigurationPage.cpp" line="126"/>
         <source>Enter new name</source>
-        <translation type="unfinished">Inserisci un nuovo nome</translation>
+        <translation>Inserisci un nuovo nome</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/ColourConfigurationPage.cpp" line="127"/>
         <source>New</source>
-        <translation type="unfinished">Nuovo</translation>
+        <translation>Nuovo</translation>
     </message>
 </context>
 <context>
@@ -11778,27 +11780,27 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/gui/widgets/ColourTable.cpp" line="58"/>
         <source>Name</source>
-        <translation type="unfinished">Nome</translation>
+        <translation>Nome</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/ColourTable.cpp" line="58"/>
         <source>Color</source>
-        <translation type="unfinished">Colore</translation>
+        <translation>Colore</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/ColourTable.cpp" line="76"/>
         <source>Modify Color Name</source>
-        <translation type="unfinished">Modifica nome colore</translation>
+        <translation>Modifica nome colore</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/ColourTable.cpp" line="77"/>
         <source>Enter new name</source>
-        <translation type="unfinished">Inserisci un nuovo nome</translation>
+        <translation>Inserisci un nuovo nome</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/ColourTable.cpp" line="117"/>
         <source>Default Color</source>
-        <translation type="unfinished">Colore predefinito</translation>
+        <translation>Colore predefinito</translation>
     </message>
 </context>
 <context>
@@ -11808,12 +11810,12 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
         <location filename="../../src/document/CommandHistory.cpp" line="56"/>
         <location filename="../../src/document/CommandHistory.cpp" line="60"/>
         <source>&amp;Undo</source>
-        <translation type="unfinished">Annu&amp;lla</translation>
+        <translation>Ann&amp;ulla</translation>
     </message>
     <message>
         <location filename="../../src/document/CommandHistory.cpp" line="52"/>
         <source>Ctrl+Z</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Z</translation>
     </message>
     <message>
         <location filename="../../src/document/CommandHistory.cpp" line="53"/>
@@ -11830,7 +11832,7 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/document/CommandHistory.cpp" line="67"/>
         <source>Ctrl+Shift+Z</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+Z</translation>
     </message>
     <message>
         <location filename="../../src/document/CommandHistory.cpp" line="68"/>
@@ -11840,18 +11842,18 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/document/CommandHistory.cpp" line="495"/>
         <source>Nothing to undo</source>
-        <translation type="unfinished">Nulla da ripristinare</translation>
+        <translation>Nulla da ripristinare</translation>
     </message>
     <message>
         <location filename="../../src/document/CommandHistory.cpp" line="495"/>
         <source>Nothing to redo</source>
-        <translation type="unfinished">Nulla da rifare</translation>
+        <translation>Nulla da rifare</translation>
     </message>
     <message>
         <location filename="../../src/document/CommandHistory.cpp" line="511"/>
         <location filename="../../src/document/CommandHistory.cpp" line="533"/>
         <source>&amp;Undo %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ann&amp;ulla %1</translation>
     </message>
     <message>
         <location filename="../../src/document/CommandHistory.cpp" line="511"/>
@@ -11865,7 +11867,7 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/gui/dialogs/CompositionLengthDialog.cpp" line="43"/>
         <source>Change Composition Length</source>
-        <translation type="unfinished">Cambia la lunghezza della composizione</translation>
+        <translation>Cambia la lunghezza della composizione</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/CompositionLengthDialog.cpp" line="59"/>
@@ -11875,12 +11877,12 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/gui/dialogs/CompositionLengthDialog.cpp" line="76"/>
         <source>Start Bar</source>
-        <translation type="unfinished">Barra di avvio</translation>
+        <translation>Barra di avvio</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/CompositionLengthDialog.cpp" line="94"/>
         <source>End Bar</source>
-        <translation type="unfinished">Barra di fine</translation>
+        <translation>Barra di fine</translation>
     </message>
 </context>
 <context>
@@ -11901,7 +11903,7 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/gui/dialogs/ConfigureDialogBase.cpp" line="45"/>
         <source>Configure Rosegarden</source>
-        <translation type="unfinished">Configura Rosegarden</translation>
+        <translation>Configura Rosegarden</translation>
     </message>
 </context>
 <context>
@@ -11909,7 +11911,7 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/gui/rulers/ControlChangeCommand.cpp" line="29"/>
         <source>Control Change</source>
-        <translation type="unfinished">Cambio controllo</translation>
+        <translation>Cambio controllo</translation>
     </message>
 </context>
 <context>
@@ -11917,12 +11919,12 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="92"/>
         <source>&lt;no device&gt;</source>
-        <translation type="unfinished">&lt;nessun dispositivo&gt;</translation>
+        <translation>&lt;nessun dispositivo&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="109"/>
         <source>Description  </source>
-        <translation type="unfinished">Descrizione  </translation>
+        <translation>Descrizione  </translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="90"/>
@@ -11942,7 +11944,7 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="107"/>
         <source>Type  </source>
-        <translation type="unfinished">Tipo  </translation>
+        <translation>Tipo  </translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="108"/>
@@ -11952,73 +11954,73 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="110"/>
         <source>Min. value  </source>
-        <translation type="unfinished"></translation>
+        <translation>Valore minimo  </translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="111"/>
         <source>Max. value  </source>
-        <translation type="unfinished"></translation>
+        <translation>Valore massima  </translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="112"/>
         <source>Default value  </source>
-        <translation type="unfinished"></translation>
+        <translation>Valore predefinito  </translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="113"/>
         <source>Color  </source>
-        <translation type="unfinished">Colore  </translation>
+        <translation>Colore  </translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="114"/>
         <source>Position on instrument panel</source>
-        <translation type="unfinished">Posizione sul pannello degli strumenti</translation>
+        <translation>Posizione sul pannello degli strumenti</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="130"/>
         <source>Add</source>
-        <translation type="unfinished">Aggiungi</translation>
+        <translation>Aggiungi</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="131"/>
         <source>Delete</source>
-        <translation type="unfinished">Cancella</translation>
+        <translation>Cancella</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="133"/>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="371"/>
         <source>Close</source>
-        <translation type="unfinished">Chiudi</translation>
+        <translation>Chiudi</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="135"/>
         <source>Add a Control Parameter to the Studio</source>
-        <translation type="unfinished">Aggiungi un parametro di controllo allo Studio</translation>
+        <translation>Aggiungi un parametro di controllo allo Studio</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="137"/>
         <source>Delete a Control Parameter from the Studio</source>
-        <translation type="unfinished">Elimina un parametro di controllo dallo Studio</translation>
+        <translation>Elimina un parametro di controllo dallo Studio</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="139"/>
         <source>Close the Control Parameter editor</source>
-        <translation type="unfinished">Chiudi l&apos;editor del parametro di controllo</translation>
+        <translation>Chiudi l&apos;editor del parametro di controllo</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="221"/>
         <source>&lt;default&gt;</source>
-        <translation type="unfinished">&lt;predefinito&gt;</translation>
+        <translation>&lt;predefinito&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="225"/>
         <source>&lt;not showing&gt;</source>
-        <translation type="unfinished">&lt;non sto mostrando&gt;</translation>
+        <translation>&lt;non sto mostrando&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="276"/>
         <source>&lt;none&gt;</source>
-        <translation type="unfinished">&lt;nessuno&gt;</translation>
+        <translation>&lt;nessuno&gt;</translation>
     </message>
 </context>
 <context>
@@ -12026,17 +12028,17 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="76"/>
         <source>Name:</source>
-        <translation type="unfinished">Nome:</translation>
+        <translation>Nome:</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="81"/>
         <source>Type:</source>
-        <translation type="unfinished">Tipo:</translation>
+        <translation>Tipo:</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="90"/>
         <source>Description:</source>
-        <translation type="unfinished">Descrizione:</translation>
+        <translation>Descrizione:</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="60"/>
@@ -12051,37 +12053,37 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="98"/>
         <source>Controller number:</source>
-        <translation type="unfinished">Numero del controller:</translation>
+        <translation>Numero del controller:</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="102"/>
         <source>Minimum value:</source>
-        <translation type="unfinished">Valore minimo:</translation>
+        <translation>Valore minimo:</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="106"/>
         <source>Maximum value:</source>
-        <translation type="unfinished">Valore massimo:</translation>
+        <translation>Valore massimo:</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="110"/>
         <source>Default value:</source>
-        <translation type="unfinished">Valore predefinito:</translation>
+        <translation>Valore predefinito:</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="114"/>
         <source>Color:</source>
-        <translation type="unfinished">Colore:</translation>
+        <translation>Colore:</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="118"/>
         <source>Instrument Parameter Box position:</source>
-        <translation type="unfinished">Posizione Casella parametri dello strumento:</translation>
+        <translation>Posizione Casella parametri dello strumento:</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="190"/>
         <source>&lt;not showing&gt;</source>
-        <translation type="unfinished">&lt;non sto mostrando&gt;</translation>
+        <translation>&lt;non sto mostrando&gt;</translation>
     </message>
 </context>
 <context>
@@ -12089,7 +12091,7 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/gui/rulers/ControlRulerEventEraseCommand.cpp" line="31"/>
         <source>Erase Controller Event(s)</source>
-        <translation type="unfinished">Cancella eventi del controller</translation>
+        <translation>Cancella eventi del controller</translation>
     </message>
 </context>
 <context>
@@ -12097,7 +12099,7 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/gui/rulers/ControlRulerEventInsertCommand.cpp" line="28"/>
         <source>Insert Controller Event</source>
-        <translation type="unfinished">Inserisci evento del controller</translation>
+        <translation>Inserisci evento del controller</translation>
     </message>
 </context>
 <context>
@@ -12105,7 +12107,7 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/gui/rulers/ControlRulerWidget.cpp" line="294"/>
         <source>Velocity</source>
-        <translation type="unfinished"></translation>
+        <translation>Velocità</translation>
     </message>
 </context>
 <context>
@@ -12113,22 +12115,22 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="277"/>
         <source>Unsupported Event Type</source>
-        <translation type="unfinished">Tipo di evento non supportato</translation>
+        <translation>Tipo di evento non supportato</translation>
     </message>
     <message>
         <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="287"/>
         <source>Pitch Bend</source>
-        <translation type="unfinished">Curva dell&apos;altezza</translation>
+        <translation>Curva dell&apos;altezza</translation>
     </message>
     <message>
         <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="292"/>
         <source>Controller Events</source>
-        <translation type="unfinished">Eventi del controller</translation>
+        <translation>Eventi del controller</translation>
     </message>
     <message>
         <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="407"/>
         <source>Controller Event Number</source>
-        <translation type="unfinished">Numero eventi del controller</translation>
+        <translation>Numero eventi del controller</translation>
     </message>
 </context>
 <context>
@@ -12141,17 +12143,17 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/commands/edit/CopyCommand.cpp" line="41"/>
         <source>(excerpt)</source>
-        <translation type="unfinished">(brano)</translation>
+        <translation>(brano)</translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/CopyCommand.cpp" line="56"/>
         <source>(copied)</source>
-        <translation type="unfinished">(copiato)</translation>
+        <translation>(copiato)</translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/CopyCommand.cpp" line="64"/>
         <source>Copy Range</source>
-        <translation type="unfinished">Copia intervallo</translation>
+        <translation>Copia intervallo</translation>
     </message>
 </context>
 <context>
@@ -12159,27 +12161,27 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/gui/dialogs/CountdownDialog.cpp" line="48"/>
         <source>Recording...</source>
-        <translation type="unfinished">Registrazione in corso...</translation>
+        <translation>Registrazione in corso...</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/CountdownDialog.cpp" line="60"/>
         <source>Recording time remaining:  </source>
-        <translation type="unfinished">Tempo rimanente di registrazione:  </translation>
+        <translation>Tempo rimanente di registrazione:  </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/CountdownDialog.cpp" line="68"/>
         <source>Stop</source>
-        <translation type="unfinished">Iterrompi</translation>
+        <translation>Iterrompi</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/CountdownDialog.cpp" line="121"/>
         <source>Just how big is your hard disk?</source>
-        <translation type="unfinished">Quanto è grande il tuo disco fisso?</translation>
+        <translation>Quanto è grande il tuo disco fisso?</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/CountdownDialog.cpp" line="155"/>
         <source>Recording beyond end of composition:  </source>
-        <translation type="unfinished">Registrando oltre la fine della composizione:  </translation>
+        <translation>Registrando oltre la fine della composizione:  </translation>
     </message>
 </context>
 <context>
@@ -12187,12 +12189,12 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/commands/studio/CreateOrDeleteDeviceCommand.h" line="61"/>
         <source>Delete Device</source>
-        <translation type="unfinished">Elimina dispositivo</translation>
+        <translation>Elimina dispositivo</translation>
     </message>
     <message>
         <location filename="../../src/commands/studio/CreateOrDeleteDeviceCommand.h" line="61"/>
         <source>Create Device</source>
-        <translation type="unfinished">Crea dispositivo</translation>
+        <translation>Crea dispositivo</translation>
     </message>
 </context>
 <context>
@@ -12200,7 +12202,7 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/commands/segment/CreateTempoMapFromSegmentCommand.cpp" line="32"/>
         <source>Set Tempos from Beat Segment</source>
-        <translation type="unfinished">Imposta il ritmo dal battito del segmento</translation>
+        <translation>Imposta il ritmo dal battito del segmento</translation>
     </message>
 </context>
 <context>
@@ -12208,7 +12210,7 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/commands/edit/CutAndCloseCommand.h" line="48"/>
         <source>C&amp;ut and Close</source>
-        <translation type="unfinished">Taglia e chi&amp;udi</translation>
+        <translation>Taglia e chi&amp;udi</translation>
     </message>
 </context>
 <context>
@@ -12224,7 +12226,7 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/commands/segment/CutRangeCommand.cpp" line="33"/>
         <source>Cut Range</source>
-        <translation type="unfinished">Taglia intervallo</translation>
+        <translation>Taglia intervallo</translation>
     </message>
 </context>
 <context>
@@ -12232,7 +12234,7 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/commands/notation/DeCounterpointCommand.h" line="51"/>
         <source>Split-and-Tie Overlapping &amp;Chords</source>
-        <translation type="unfinished">Dividi-e-lega gli a&amp;ccordi sovrapposti</translation>
+        <translation>Dividi-e-lega gli a&amp;ccordi sovrapposti</translation>
     </message>
 </context>
 <context>
@@ -12240,12 +12242,12 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/commands/segment/DeleteRangeCommand.h" line="54"/>
         <source>Rejoin Command</source>
-        <translation type="unfinished">Comando Riunisci</translation>
+        <translation>Comando Riunisci</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/DeleteRangeCommand.cpp" line="37"/>
         <source>Delete Range</source>
-        <translation type="unfinished">Elimina ampiezza</translation>
+        <translation>Elimina ampiezza</translation>
     </message>
 </context>
 <context>
@@ -12253,7 +12255,7 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/commands/segment/DeleteTracksCommand.h" line="46"/>
         <source>Delete Tracks...</source>
-        <translation type="unfinished">Elimina le tracce...</translation>
+        <translation>Elimina le tracce...</translation>
     </message>
 </context>
 <context>
@@ -12261,7 +12263,7 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/commands/segment/DeleteTriggerSegmentCommand.cpp" line="32"/>
         <source>Delete Triggered Segment</source>
-        <translation type="unfinished">Cancella segmento attivo</translation>
+        <translation>Cancella segmento attivo</translation>
     </message>
 </context>
 <context>
@@ -12270,7 +12272,7 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
         <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="798"/>
         <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="819"/>
         <source>New Device</source>
-        <translation type="unfinished">Nuovo dispositivo</translation>
+        <translation>Nuovo dispositivo</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="916"/>
@@ -12312,118 +12314,118 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="59"/>
         <source>C</source>
         <comment>note name</comment>
-        <translation type="unfinished">Do</translation>
+        <translation>Do</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="60"/>
         <source>D</source>
         <comment>note name</comment>
-        <translation type="unfinished">Re</translation>
+        <translation>Re</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="61"/>
         <source>E</source>
         <comment>note name</comment>
-        <translation type="unfinished">Mi</translation>
+        <translation>Mi</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="62"/>
         <source>F</source>
         <comment>note name</comment>
-        <translation type="unfinished">Fa</translation>
+        <translation>Fa</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="63"/>
         <source>G</source>
         <comment>note name</comment>
-        <translation type="unfinished">Sol</translation>
+        <translation>Sol</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="64"/>
         <source>A</source>
         <comment>note name</comment>
-        <translation type="unfinished">La</translation>
+        <translation>La</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="65"/>
         <source>B</source>
         <comment>note name</comment>
-        <translation type="unfinished">Si</translation>
+        <translation>Si</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="70"/>
         <source>-2</source>
-        <translation type="unfinished">-2</translation>
+        <translation>-2</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="71"/>
         <source>-1</source>
-        <translation type="unfinished">-1</translation>
+        <translation>-1</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="72"/>
         <source>0</source>
-        <translation type="unfinished">0</translation>
+        <translation>0</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="73"/>
         <source>1</source>
-        <translation type="unfinished">1</translation>
+        <translation>1</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="74"/>
         <source>2</source>
-        <translation type="unfinished">2</translation>
+        <translation>2</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="75"/>
         <source>3</source>
-        <translation type="unfinished">3</translation>
+        <translation>3</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="76"/>
         <source>4</source>
-        <translation type="unfinished">4</translation>
+        <translation>4</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="77"/>
         <source>5</source>
-        <translation type="unfinished">5</translation>
+        <translation>5</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="78"/>
         <source>6</source>
-        <translation type="unfinished">6</translation>
+        <translation>6</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="79"/>
         <source>7</source>
-        <translation type="unfinished">7</translation>
+        <translation>7</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="84"/>
         <source>double flat</source>
-        <translation type="unfinished">doppio bemolle</translation>
+        <translation>doppio bemolle</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="85"/>
         <source>flat</source>
-        <translation type="unfinished">bemolle</translation>
+        <translation>bemolle</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="86"/>
         <source>natural</source>
-        <translation type="unfinished">naturale</translation>
+        <translation>naturale</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="87"/>
         <source>sharp</source>
-        <translation type="unfinished">diesis</translation>
+        <translation>diesis</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="88"/>
         <source>double sharp</source>
-        <translation type="unfinished">doppio diesis</translation>
+        <translation>doppio diesis</translation>
     </message>
 </context>
 <context>
@@ -12431,7 +12433,7 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/gui/dialogs/DocumentConfigureDialog.cpp" line="39"/>
         <source>Document Properties</source>
-        <translation type="unfinished">Proprietà documento</translation>
+        <translation>Proprietà documento</translation>
     </message>
 </context>
 <context>
@@ -12440,132 +12442,132 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.h" line="48"/>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.h" line="49"/>
         <source>About</source>
-        <translation type="unfinished">Informazioni</translation>
+        <translation>Informazioni</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.h" line="61"/>
         <source>%1 minutes %2.%3%4 seconds (%5 units, %6 measures)</source>
-        <translation type="unfinished">%1 minuti %2.%3%4 secondi (%5 unità, %6 battute)</translation>
+        <translation>%1 minuti %2.%3%4 secondi (%5 unità, %6 battute)</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="91"/>
         <source>Headers</source>
-        <translation type="unfinished">Intestazioni</translation>
+        <translation>Intestazioni</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="112"/>
         <source>Filename:</source>
-        <translation type="unfinished">Nome file:</translation>
+        <translation>Nome file:</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="115"/>
         <source>Formal duration (to end marker):</source>
-        <translation type="unfinished">Durata formale (al marcatore finale):</translation>
+        <translation>Durata formale (al marcatore finale):</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="120"/>
         <source>Playing duration:</source>
-        <translation type="unfinished">Durata della riproduzione:</translation>
+        <translation>Durata della riproduzione:</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="125"/>
         <source>Tracks:</source>
-        <translation type="unfinished">Tracce:</translation>
+        <translation>Tracce:</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="126"/>
         <source>%1 used, %2 total</source>
-        <translation type="unfinished">%1 usati, %2 totali</translation>
+        <translation>%1 usati, %2 totali</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="131"/>
         <source>Segments:</source>
-        <translation type="unfinished">Segmenti:</translation>
+        <translation>Segmenti:</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="132"/>
         <source>%1 MIDI, %2 audio, %3 total</source>
-        <translation type="unfinished">%1 MIDI, %2 audio, %3 totali</translation>
+        <translation>%1 MIDI, %2 audio, %3 totali</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="140"/>
         <source>Statistics</source>
-        <translation type="unfinished">Statistiche</translation>
+        <translation>Statistiche</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="155"/>
         <source>Type</source>
-        <translation type="unfinished">Tipo</translation>
+        <translation>Tipo</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="156"/>
         <source>Track</source>
-        <translation type="unfinished">Traccia</translation>
+        <translation>Traccia</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="157"/>
         <source>Label</source>
-        <translation type="unfinished">Etichetta</translation>
+        <translation>Etichetta</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="158"/>
         <source>Time</source>
-        <translation type="unfinished">Velocità</translation>
+        <translation>Velocità</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="159"/>
         <source>Duration</source>
-        <translation type="unfinished">Durata</translation>
+        <translation>Durata</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="160"/>
         <source>Events</source>
-        <translation type="unfinished">Eventi</translation>
+        <translation>Eventi</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="161"/>
         <source>Polyphony</source>
-        <translation type="unfinished">Polifonia</translation>
+        <translation>Polifonia</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="162"/>
         <source>Repeat</source>
-        <translation type="unfinished">Ripeti</translation>
+        <translation>Ripeti</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="163"/>
         <source>Quantize</source>
-        <translation type="unfinished">Quantizza</translation>
+        <translation>Quantizza</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="164"/>
         <source>Transpose</source>
-        <translation type="unfinished">Trasporto</translation>
+        <translation>Trasporto</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="165"/>
         <source>Delay</source>
-        <translation type="unfinished">Ritardo</translation>
+        <translation>Ritardo</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="192"/>
         <source>Audio</source>
-        <translation type="unfinished">Audio</translation>
+        <translation>Audio</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="192"/>
         <source>MIDI</source>
-        <translation type="unfinished">MIDI</translation>
+        <translation>MIDI</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="254"/>
         <source>Yes</source>
-        <translation type="unfinished">Sì</translation>
+        <translation>Sì</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="254"/>
         <source>No</source>
-        <translation type="unfinished">No</translation>
+        <translation>No</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="267"/>
@@ -12575,12 +12577,12 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="298"/>
         <source>None</source>
-        <translation type="unfinished">Nessuno</translation>
+        <translation>Nessuno</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="306"/>
         <source>Segment Summary</source>
-        <translation type="unfinished">Riassunto del segmento</translation>
+        <translation>Riassunto del segmento</translation>
     </message>
 </context>
 <context>
@@ -12719,27 +12721,27 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/gui/general/EditViewBase.cpp" line="203"/>
         <source>Toggle the statusbar...</source>
-        <translation type="unfinished">Mostra/Nascondi la barra di stato...</translation>
+        <translation>Mostra/Nascondi la barra di stato...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/EditViewBase.cpp" line="267"/>
         <source>Segment Start Time</source>
-        <translation type="unfinished">Tempo d&apos;inizio del segmento</translation>
+        <translation>Tempo d&apos;inizio del segmento</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/EditViewBase.cpp" line="274"/>
         <source>Set Segment Start Time</source>
-        <translation type="unfinished">Imposta il tempo d&apos;inizio del segmento</translation>
+        <translation>Imposta il tempo d&apos;inizio del segmento</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/EditViewBase.cpp" line="292"/>
         <source>Segment Duration</source>
-        <translation type="unfinished">Durata del segmento</translation>
+        <translation>Durata del segmento</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/EditViewBase.cpp" line="300"/>
         <source>Set Segment Duration</source>
-        <translation type="unfinished">Imposta la durata del segmento</translation>
+        <translation>Imposta la durata del segmento</translation>
     </message>
 </context>
 <context>
@@ -12747,7 +12749,7 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/commands/edit/EraseCommand.h" line="45"/>
         <source>&amp;Erase</source>
-        <translation type="unfinished">Canc&amp;ella</translation>
+        <translation>Canc&amp;ella</translation>
     </message>
 </context>
 <context>
@@ -12755,7 +12757,7 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/commands/segment/EraseSegmentsStartingInRangeCommand.cpp" line="31"/>
         <source>Delete Range</source>
-        <translation type="unfinished">Elimina ampiezza</translation>
+        <translation>Elimina ampiezza</translation>
     </message>
 </context>
 <context>
@@ -12763,7 +12765,7 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/commands/edit/EventEditCommand.h" line="50"/>
         <source>Edit E&amp;vent</source>
-        <translation type="unfinished">Modifica e&amp;vento</translation>
+        <translation>Modifica e&amp;vento</translation>
     </message>
 </context>
 <context>
@@ -12771,77 +12773,77 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="84"/>
         <source>Intrinsics</source>
-        <translation type="unfinished">Intrinseci</translation>
+        <translation>Intrinseci</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="90"/>
         <source>Event type: </source>
-        <translation type="unfinished">Tipo di evento: </translation>
+        <translation>Tipo di evento: </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="98"/>
         <source>Absolute time: </source>
-        <translation type="unfinished">Tempo assoluto: </translation>
+        <translation>Tempo assoluto: </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="112"/>
         <source>Duration: </source>
-        <translation type="unfinished">Durata: </translation>
+        <translation>Durata: </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="130"/>
         <source>Sub-ordering: </source>
-        <translation type="unfinished">Sotto-ordine: </translation>
+        <translation>Sotto-ordine: </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="145"/>
         <source>Persistent properties</source>
-        <translation type="unfinished">Proprietà persistenti</translation>
+        <translation>Proprietà persistenti</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="151"/>
         <source>Name</source>
-        <translation type="unfinished">Nome</translation>
+        <translation>Nome</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="157"/>
         <source>Type</source>
-        <translation type="unfinished">Tipo</translation>
+        <translation>Tipo</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="161"/>
         <source>Value</source>
-        <translation type="unfinished">Valore</translation>
+        <translation>Valore</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="189"/>
         <source>Non-persistent properties</source>
-        <translation type="unfinished">Proprietà non persistenti</translation>
+        <translation>Proprietà non persistenti</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="194"/>
         <source>These are cached values, lost if the event is modified.</source>
-        <translation type="unfinished">Ci sono valori memorizzati, si perdono se l&apos;evento viene modificato.</translation>
+        <translation>Ci sono valori memorizzati, si perdono se l&apos;evento viene modificato.</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="205"/>
         <source>Name       </source>
-        <translation type="unfinished">Nome       </translation>
+        <translation>Nome       </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="209"/>
         <source>Type       </source>
-        <translation type="unfinished">Tipo       </translation>
+        <translation>Tipo       </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="213"/>
         <source>Value      </source>
-        <translation type="unfinished">Valore       </translation>
+        <translation>Valore       </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="242"/>
         <source>Make persistent</source>
-        <translation type="unfinished">Rendi persistente</translation>
+        <translation>Rendi persistente</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="321"/>
@@ -12856,41 +12858,41 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="375"/>
         <source>Delete this property</source>
-        <translation type="unfinished">Elimina questa proprietà</translation>
+        <translation>Elimina questa proprietà</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="518"/>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="551"/>
         <source>Edit Event</source>
-        <translation type="unfinished">Modifica evento</translation>
+        <translation>Modifica evento</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="519"/>
         <source>Are you sure you want to delete the &quot;%1&quot; property?
 
 Removing necessary properties may cause unexpected behavior.</source>
-        <translation type="unfinished">Sei sicuro di voler eliminare la proprietà &quot;%1&quot; ?
+        <translation>Sei sicuro di voler eliminare la proprietà &quot;%1&quot; ?
 
 La rimozione di proprietà necessarie può causare comportamenti imprevisti.</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="523"/>
         <source>&amp;Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Cancella</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="552"/>
         <source>Are you sure you want to make the &quot;%1&quot; property persistent?
 
 This could cause problems if it overrides a different computed value later on.</source>
-        <translation type="unfinished">Sei sicuro di voler rendere persistente la proprietà &quot;%1&quot; ?
+        <translation>Sei sicuro di voler rendere persistente la proprietà &quot;%1&quot; ?
 
 Questo può causare problemi se si sovrappone a un valore differente più avanti.</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="556"/>
         <source>Make &amp;Persistent</source>
-        <translation type="unfinished">Rendi &amp;persistente</translation>
+        <translation>Rendi &amp;persistente</translation>
     </message>
 </context>
 <context>
@@ -12898,105 +12900,105 @@ Questo può causare problemi se si sovrappone a un valore differente più avanti
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="78"/>
         <source>Event Filter</source>
-        <translation type="unfinished">Filtro eventi</translation>
+        <translation>Filtro eventi</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="88"/>
         <source>Note Events</source>
-        <translation type="unfinished">Eventi delle note</translation>
+        <translation>Eventi delle note</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="95"/>
         <source>lowest:</source>
-        <translation type="unfinished">più basso:</translation>
+        <translation>più basso:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="98"/>
         <source>highest:</source>
-        <translation type="unfinished">più alto:</translation>
+        <translation>più alto:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="101"/>
         <source>Pitch:</source>
-        <translation type="unfinished">Altezza:</translation>
+        <translation>Altezza:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="104"/>
         <source>Velocity:</source>
-        <translation type="unfinished">Velocità:</translation>
+        <translation>Velocità:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="107"/>
         <source>Duration:</source>
-        <translation type="unfinished">Durata:</translation>
+        <translation>Durata:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="113"/>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="124"/>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="132"/>
         <source>include</source>
-        <translation type="unfinished">includi</translation>
+        <translation>includi</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="114"/>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="125"/>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="133"/>
         <source>exclude</source>
-        <translation type="unfinished">escludi</translation>
+        <translation>escludi</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="147"/>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="165"/>
         <source>edit</source>
-        <translation type="unfinished">modifica</translation>
+        <translation>modifica</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="151"/>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="166"/>
         <source>choose a pitch using a staff</source>
-        <translation type="unfinished">scegli un&apos;altezza usando il rigo</translation>
+        <translation>scegli un&apos;altezza usando il rigo</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="192"/>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="199"/>
         <source>longest</source>
-        <translation type="unfinished">più lungo</translation>
+        <translation>più lungo</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="214"/>
         <source>Include all</source>
-        <translation type="unfinished">Includi tutti</translation>
+        <translation>Includi tutti</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="216"/>
         <source>Include entire range of values</source>
-        <translation type="unfinished">Includi l&apos;intero intervallo di valori</translation>
+        <translation>Includi l&apos;intero intervallo di valori</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="219"/>
         <source>Exclude all</source>
-        <translation type="unfinished">Escludi tutti</translation>
+        <translation>Escludi tutti</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="221"/>
         <source>Exclude entire range of values</source>
-        <translation type="unfinished">Escludi l&apos;intero intervallo di valori</translation>
+        <translation>Escludi l&apos;intero intervallo di valori</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="254"/>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="255"/>
         <source>shortest</source>
-        <translation type="unfinished">più corto</translation>
+        <translation>più corto</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="359"/>
         <source>Lowest pitch</source>
-        <translation type="unfinished">Nota più bassa</translation>
+        <translation>Nota più bassa</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="369"/>
         <source>Highest pitch</source>
-        <translation type="unfinished">Nota più alta</translation>
+        <translation>Nota più alta</translation>
     </message>
 </context>
 <context>
@@ -13004,7 +13006,7 @@ Questo può causare problemi se si sovrappone a un valore differente più avanti
     <message>
         <location filename="../../src/commands/edit/EventInsertionCommand.cpp" line="31"/>
         <source>Insert Event</source>
-        <translation type="unfinished">Inserisci evento</translation>
+        <translation>Inserisci evento</translation>
     </message>
 </context>
 <context>
@@ -13012,68 +13014,68 @@ Questo può causare problemi se si sovrappone a un valore differente più avanti
     <message>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="60"/>
         <source>Set the %1 property of the event selection:</source>
-        <translation type="unfinished">Seleziona la proprietà %1 dalla selezione eventi:</translation>
+        <translation>Seleziona la proprietà %1 dalla selezione eventi:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="70"/>
         <source>Pattern</source>
-        <translation type="unfinished">Motivo</translation>
+        <translation>Motivo</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="77"/>
         <source>Flat - set %1 to value</source>
-        <translation type="unfinished">Appiattisci - imposta %1 al valore</translation>
+        <translation>Appiattisci - imposta %1 al valore</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="81"/>
         <source>Alternating - set %1 to max and min on alternate events</source>
-        <translation type="unfinished">Alternato - imposta %1 al max e min sugli eventi alternati</translation>
+        <translation>Alternato - imposta %1 al max e min sugli eventi alternati</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="85"/>
         <source>Crescendo - set %1 rising from min to max</source>
-        <translation type="unfinished">Crescendo - imposta %1 crescendo da min a max</translation>
+        <translation>Crescendo - imposta %1 crescendo da min a max</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="89"/>
         <source>Diminuendo - set %1 falling from max to min</source>
-        <translation type="unfinished">Diminuendo - imposta %1% calando da max a min</translation>
+        <translation>Diminuendo - imposta %1% calando da max a min</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="93"/>
         <source>Ringing - set %1 alternating from max to min with both dying to zero</source>
-        <translation type="unfinished">Rintocco - imposta %1 alternando da max a min e sfumando a zero</translation>
+        <translation>Rintocco - imposta %1 alternando da max a min e sfumando a zero</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="103"/>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="109"/>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="139"/>
         <source>Value</source>
-        <translation type="unfinished">Valore</translation>
+        <translation>Valore</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="147"/>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="174"/>
         <source>First Value</source>
-        <translation type="unfinished">Primo valore</translation>
+        <translation>Primo valore</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="148"/>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="175"/>
         <source>Second Value</source>
-        <translation type="unfinished">Secondo valore</translation>
+        <translation>Secondo valore</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="156"/>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="166"/>
         <source>Low Value</source>
-        <translation type="unfinished">Valore inferiore</translation>
+        <translation>Valore inferiore</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="157"/>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="165"/>
         <source>High Value</source>
-        <translation type="unfinished">Valore superiore</translation>
+        <translation>Valore superiore</translation>
     </message>
 </context>
 <context>
@@ -13086,12 +13088,12 @@ Questo può causare problemi se si sovrappone a un valore differente più avanti
     <message>
         <location filename="../../src/commands/edit/EventQuantizeCommand.cpp" line="110"/>
         <source>Grid &amp;Quantize</source>
-        <translation type="unfinished">Quantizza con griglia</translation>
+        <translation>&amp;Quantizza con griglia</translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/EventQuantizeCommand.cpp" line="114"/>
         <source>&amp;Quantize...</source>
-        <translation type="unfinished">&amp;Quantizza...</translation>
+        <translation>&amp;Quantizza...</translation>
     </message>
 </context>
 <context>
@@ -13100,12 +13102,12 @@ Questo può causare problemi se si sovrappone a un valore differente più avanti
         <location filename="../../src/commands/edit/EventUnquantizeCommand.cpp" line="35"/>
         <location filename="../../src/commands/edit/EventUnquantizeCommand.cpp" line="46"/>
         <source>Unquantize Events</source>
-        <translation type="unfinished">Dequantizza gli eventi</translation>
+        <translation>Dequantizza gli eventi</translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/EventUnquantizeCommand.cpp" line="79"/>
         <source>&amp;Quantize...</source>
-        <translation type="unfinished">&amp;Quantizza...</translation>
+        <translation>&amp;Quantizza...</translation>
     </message>
 </context>
 <context>
@@ -13113,195 +13115,195 @@ Questo può causare problemi se si sovrappone a un valore differente più avanti
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="121"/>
         <source>Event filters</source>
-        <translation type="unfinished">Filtri degli eventi</translation>
+        <translation>Filtri degli eventi</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="125"/>
         <source>Note</source>
-        <translation type="unfinished">Nota</translation>
+        <translation>Nota</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="126"/>
         <source>Program Change</source>
-        <translation type="unfinished">Cambia programma</translation>
+        <translation>Cambia programma</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="127"/>
         <source>Controller</source>
-        <translation type="unfinished">Controller</translation>
+        <translation>Controller</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="128"/>
         <source>Pitch Bend</source>
-        <translation type="unfinished">Curva dell&apos;altezza</translation>
+        <translation>Curva dell&apos;altezza</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="129"/>
         <source>System Exclusive</source>
-        <translation type="unfinished">Esclusione di sistema</translation>
+        <translation>Esclusione di sistema</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="130"/>
         <source>Key Pressure</source>
-        <translation type="unfinished">Pressione tasto</translation>
+        <translation>Pressione tasto</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="131"/>
         <source>Channel Pressure</source>
-        <translation type="unfinished">Sensibilità canale</translation>
+        <translation>Sensibilità canale</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="132"/>
         <source>Rest</source>
-        <translation type="unfinished">Silenzio</translation>
+        <translation>Silenzio</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="133"/>
         <source>Indication</source>
-        <translation type="unfinished">Indicazione</translation>
+        <translation>Indicazione</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="134"/>
         <source>Text</source>
-        <translation type="unfinished">Testo</translation>
+        <translation>Testo</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="135"/>
         <source>Other</source>
-        <translation type="unfinished">Altro</translation>
+        <translation>Altro</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="170"/>
         <source>Triggered Segment Properties</source>
-        <translation type="unfinished">Proprietà del segmento attivato</translation>
+        <translation>Proprietà del segmento attivato</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="176"/>
         <source>Label:  </source>
-        <translation type="unfinished">Etichetta:  </translation>
+        <translation>Etichetta:  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="179"/>
         <source>&lt;no label&gt;</source>
-        <translation type="unfinished">&lt;nessuno&gt;</translation>
+        <translation>&lt;nessuno&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="182"/>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="189"/>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="196"/>
         <source>edit</source>
-        <translation type="unfinished">modifica</translation>
+        <translation>modifica</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="186"/>
         <source>Base pitch:  </source>
-        <translation type="unfinished">Altezza di base:  </translation>
+        <translation>Altezza di base:  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="193"/>
         <source>Base velocity:  </source>
-        <translation type="unfinished">Velocità di base:  </translation>
+        <translation>Velocità di base:  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="268"/>
         <source>Time  </source>
-        <translation type="unfinished">Velocità  </translation>
+        <translation>Velocità  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="269"/>
         <source>Duration  </source>
-        <translation type="unfinished">Durata  </translation>
+        <translation>Durata  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="270"/>
         <source>Event Type  </source>
-        <translation type="unfinished">Tipo di evento  </translation>
+        <translation>Tipo di evento  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="271"/>
         <source>Pitch  </source>
-        <translation type="unfinished">Altezza  </translation>
+        <translation>Altezza  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="272"/>
         <source>Velocity  </source>
-        <translation type="unfinished">Velocità  </translation>
+        <translation>Velocità  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="273"/>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="274"/>
         <source>Type (Data1)  </source>
-        <translation type="unfinished">Tipo (Data1)  </translation>
+        <translation>Tipo (Data1)  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="275"/>
         <source>Value (Data2)  </source>
-        <translation type="unfinished">Valore (Data2)  </translation>
+        <translation>Valore (Data2)  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="530"/>
         <source>(group %1)  </source>
-        <translation type="unfinished">(gruppo %1)  </translation>
+        <translation>(gruppo %1)  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="592"/>
         <source>&lt;no events at this filter level&gt;</source>
-        <translation type="unfinished">&lt;nessun evento a questo livello di filtro&gt;</translation>
+        <translation>&lt;nessun evento a questo livello di filtro&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="594"/>
         <source>&lt;no events&gt;</source>
-        <translation type="unfinished">&lt;nessun evento&gt;</translation>
+        <translation>&lt;nessun evento&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="776"/>
         <source>Segment label</source>
-        <translation type="unfinished">Etichetta del segmento</translation>
+        <translation>Etichetta del segmento</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="777"/>
         <source>Label:</source>
-        <translation type="unfinished">Etichetta:</translation>
+        <translation>Etichetta:</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="799"/>
         <source>Base pitch</source>
-        <translation type="unfinished">Altezza di base</translation>
+        <translation>Altezza di base</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="817"/>
         <source>Base velocity</source>
-        <translation type="unfinished">Velocità di base</translation>
+        <translation>Velocità di base</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="970"/>
         <source>Clipboard is empty</source>
-        <translation type="unfinished">Gli appunti sono vuoti</translation>
+        <translation>Gli appunti sono vuoti</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="974"/>
         <source>Inserting clipboard contents...</source>
-        <translation type="unfinished">Inserimento del contenuto degli appunti in corso...</translation>
+        <translation>Inserimento del contenuto degli appunti in corso...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="1008"/>
         <source>Couldn&apos;t paste at this point</source>
-        <translation type="unfinished">Non è possibile incollare in questo punto</translation>
+        <translation>Non è possibile incollare in questo punto</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="1742"/>
         <source>Open in Event Editor</source>
-        <translation type="unfinished">Apri nell&apos;editor dell&apos;evento</translation>
+        <translation>Apri nell&apos;editor dell&apos;evento</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="1743"/>
         <source>Open in Expert Event Editor</source>
-        <translation type="unfinished">Apri nell&apos;editor avanzato degli eventi</translation>
+        <translation>Apri nell&apos;editor avanzato degli eventi</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="1810"/>
         <source>%1%2 - Triggered Segment: %3</source>
-        <translation type="unfinished"></translation>
+        <translation>%1%2 - Segmento attivato: %3</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="1826"/>
@@ -13331,22 +13333,22 @@ Questo può causare problemi se si sovrappone a un valore differente più avanti
     <message>
         <location filename="../../src/gui/dialogs/ExportDeviceDialog.cpp" line="38"/>
         <source>Export Devices...</source>
-        <translation type="unfinished">Esporta Dispositivi...</translation>
+        <translation>Esporta Dispositivi...</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ExportDeviceDialog.cpp" line="44"/>
         <source>Export all devices</source>
-        <translation type="unfinished">Esporta tutti i dispositivi</translation>
+        <translation>Esporta tutti i dispositivi</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ExportDeviceDialog.cpp" line="46"/>
         <source>Export selected device only</source>
-        <translation type="unfinished">Esporta solo il dispositivo selezionato</translation>
+        <translation>Esporta solo il dispositivo selezionato</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ExportDeviceDialog.cpp" line="48"/>
         <source>         (&quot;%1&quot;)</source>
-        <translation type="unfinished">         (&quot;%1&quot;)</translation>
+        <translation>         (&quot;%1&quot;)</translation>
     </message>
 </context>
 <context>
@@ -13354,34 +13356,34 @@ Questo può causare problemi se si sovrappone a un valore differente più avanti
     <message>
         <location filename="../../src/gui/dialogs/FileLocateDialog.cpp" line="44"/>
         <source>Locate audio file</source>
-        <translation type="unfinished">Localizza file audio</translation>
+        <translation>Localizza file audio</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/FileLocateDialog.cpp" line="52"/>
         <source>Can&apos;t find file &quot;%1&quot;.
 Would you like to try and locate this file or skip it?</source>
-        <translation type="unfinished">Non trovo il file &quot;%1&quot;.
+        <translation>Non trovo il file &quot;%1&quot;.
 Vuoi provare a cercarlo o saltarlo?</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/FileLocateDialog.cpp" line="64"/>
         <source>&amp;Skip</source>
-        <translation type="unfinished">&amp;Salta</translation>
+        <translation>&amp;Salta</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/FileLocateDialog.cpp" line="68"/>
         <source>Skip &amp;All</source>
-        <translation type="unfinished">S&amp;alta tutto</translation>
+        <translation>S&amp;alta tutto</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/FileLocateDialog.cpp" line="72"/>
         <source>&amp;Locate</source>
-        <translation type="unfinished">&amp;Localizza</translation>
+        <translation>&amp;Localizza</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/FileLocateDialog.cpp" line="86"/>
         <source>Select an Audio File</source>
-        <translation type="unfinished">Scegli un file audio</translation>
+        <translation>Scegli un file audio</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/FileLocateDialog.cpp" line="87"/>
@@ -13396,7 +13398,7 @@ Vuoi provare a cercarlo o saltarlo?</translation>
     <message>
         <location filename="../../src/gui/dialogs/FileLocateDialog.cpp" line="89"/>
         <source>All files</source>
-        <translation type="unfinished">Tutti i file</translation>
+        <translation>Tutti i file</translation>
     </message>
 </context>
 <context>
@@ -13404,32 +13406,32 @@ Vuoi provare a cercarlo o saltarlo?</translation>
     <message>
         <location filename="../../src/gui/dialogs/FileMergeDialog.cpp" line="51"/>
         <source>Merge File</source>
-        <translation type="unfinished">Inserisci File</translation>
+        <translation>Inserisci File</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/FileMergeDialog.cpp" line="63"/>
         <source>Merge new file  </source>
-        <translation type="unfinished">Inserisci nuovo file</translation>
+        <translation>Inserisci nuovo file</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/FileMergeDialog.cpp" line="69"/>
         <source>At start of existing composition</source>
-        <translation type="unfinished">All&apos;inizio della composizione esistente</translation>
+        <translation>All&apos;inizio della composizione esistente</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/FileMergeDialog.cpp" line="70"/>
         <source>From end of existing composition</source>
-        <translation type="unfinished">Dalla fine della composizione esistente</translation>
+        <translation>Dalla fine della composizione esistente</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/FileMergeDialog.cpp" line="74"/>
         <source>The file has different time signatures or tempos.</source>
-        <translation type="unfinished">Il file ha metri o tempi diversi.</translation>
+        <translation>Il file ha metri o tempi diversi.</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/FileMergeDialog.cpp" line="75"/>
         <source>Import these as well</source>
-        <translation type="unfinished">Importa anche questi</translation>
+        <translation>Importa anche questi</translation>
     </message>
 </context>
 <context>
@@ -13495,12 +13497,12 @@ Vuoi provare a cercarlo o saltarlo?</translation>
     <message>
         <location filename="../../src/gui/widgets/FontRequester.cpp" line="39"/>
         <source>Choose...</source>
-        <translation type="unfinished">Scegli...</translation>
+        <translation>Scegli...</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/FontRequester.cpp" line="56"/>
         <source>%1 %2</source>
-        <translation type="unfinished">%1 %2</translation>
+        <translation>%1 %2</translation>
     </message>
 </context>
 <context>
@@ -13508,18 +13510,18 @@ Vuoi provare a cercarlo o saltarlo?</translation>
     <message>
         <location filename="../../src/gui/editors/notation/FontViewFrame.cpp" line="99"/>
         <source>Error: Unable to match font name %1</source>
-        <translation type="unfinished">Errore: non trovo il font %1</translation>
+        <translation>Errore: non trovo il font %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/FontViewFrame.cpp" line="107"/>
         <source>Warning: No good match for font name %1 (best is %2)</source>
-        <translation type="unfinished">Attenzione: non c&apos;è corrispondenza del nome del font %1
+        <translation>Attenzione: non c&apos;è corrispondenza del nome del font %1
 (il migliore è %2)</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/FontViewFrame.cpp" line="114"/>
         <source>Error: Unable to open best-match font %1</source>
-        <translation type="unfinished">Errore: non riesco a caricare il font corrispondente %1</translation>
+        <translation>Errore: non riesco a caricare il font corrispondente %1</translation>
     </message>
 </context>
 <context>
@@ -13527,117 +13529,117 @@ Vuoi provare a cercarlo o saltarlo?</translation>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.h" line="83"/>
         <source>General</source>
-        <translation type="unfinished">Generale</translation>
+        <translation>Generale</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.h" line="84"/>
         <source>General Configuration</source>
-        <translation type="unfinished">Configurazione generale</translation>
+        <translation>Configurazione generale</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="83"/>
         <source>Double-click opens segment in</source>
-        <translation type="unfinished">Doppio clic apre il segmento in</translation>
+        <translation>Doppio clic apre il segmento in</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="88"/>
         <source>Notation editor</source>
-        <translation type="unfinished">Editor di notazione</translation>
+        <translation>Editor di notazione</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="89"/>
         <source>Matrix editor</source>
-        <translation type="unfinished">Editor di matrice</translation>
+        <translation>Editor di matrice</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="90"/>
         <source>Event List editor</source>
-        <translation type="unfinished">Editor della lista degli eventi</translation>
+        <translation>Editor della lista degli eventi</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="96"/>
         <source>Number of count-in measures when recording</source>
-        <translation type="unfinished">Numero di battute durante la registrazione</translation>
+        <translation>Numero di battute durante la registrazione</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="107"/>
         <source>Auto-save interval</source>
-        <translation type="unfinished">Intervallo per il salvataggio automatico</translation>
+        <translation>Intervallo per il salvataggio automatico</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="111"/>
         <source>Every 30 seconds</source>
-        <translation type="unfinished">Ogni 30 secondi</translation>
+        <translation>Ogni 30 secondi</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="112"/>
         <source>Every minute</source>
-        <translation type="unfinished">Ogni minuto</translation>
+        <translation>Ogni minuto</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="113"/>
         <source>Every five minutes</source>
-        <translation type="unfinished">Ogni cinque minuti</translation>
+        <translation>Ogni cinque minuti</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="114"/>
         <source>Every half an hour</source>
-        <translation type="unfinished">Ogni mezz&apos;ora</translation>
+        <translation>Ogni mezz&apos;ora</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="115"/>
         <source>Never</source>
-        <translation type="unfinished">Mai</translation>
+        <translation>Mai</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="134"/>
         <source>Append suffixes to segment labels</source>
-        <translation type="unfinished">Aggiungi i suffissi alle etichette dei segmenti</translation>
+        <translation>Aggiungi i suffissi alle etichette dei segmenti</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="149"/>
         <source>Use JACK transport</source>
-        <translation type="unfinished">Usa il trasporto JACK</translation>
+        <translation>Usa il trasporto JACK</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="182"/>
         <source>Sequencer status</source>
-        <translation type="unfinished">Stato sequencer</translation>
+        <translation>Stato sequencer</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="184"/>
         <source>Unknown</source>
-        <translation type="unfinished">Sconosciuto</translation>
+        <translation>Sconosciuto</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="190"/>
         <source>No MIDI, audio OK</source>
-        <translation type="unfinished">Senza MIDI, audio OK</translation>
+        <translation>Senza MIDI, audio OK</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="193"/>
         <source>MIDI OK, no audio</source>
-        <translation type="unfinished">MIDI OK, senza audio</translation>
+        <translation>MIDI OK, senza audio</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="196"/>
         <source>MIDI OK, audio OK</source>
-        <translation type="unfinished">MIDI OK, audio OK</translation>
+        <translation>MIDI OK, audio OK</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="199"/>
         <source>No driver</source>
-        <translation type="unfinished">Nessun driver</translation>
+        <translation>Nessun driver</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="206"/>
         <source>Details...</source>
-        <translation type="unfinished">Dettagli...</translation>
+        <translation>Dettagli...</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="215"/>
         <source>Behavior</source>
-        <translation type="unfinished">Comportamento</translation>
+        <translation>Comportamento</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="230"/>
@@ -13652,32 +13654,32 @@ Vuoi provare a cercarlo o saltarlo?</translation>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="328"/>
         <source>HPLIP (Qt 4)</source>
-        <translation type="unfinished"></translation>
+        <translation>HPLIP (Qt 4)</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="240"/>
         <source>Note name style</source>
-        <translation type="unfinished">Stile del nome delle note</translation>
+        <translation>Stile del nome delle note</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="245"/>
         <source>Always use US names (e.g. quarter, 8th)</source>
-        <translation type="unfinished">Usa sempre i nomi USA (per esempio quarter, 8th)</translation>
+        <translation>Usa sempre i nomi USA (per esempio quarter, 8th)</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="246"/>
         <source>Localized (where available)</source>
-        <translation type="unfinished">Localizzati (quando esistono)</translation>
+        <translation>Localizzati (quando esistono)</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="260"/>
         <source>Show textured background on</source>
-        <translation type="unfinished">Mostra lo sfondo texture su</translation>
+        <translation>Mostra lo sfondo texture su</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="262"/>
         <source>Main window</source>
-        <translation type="unfinished">Finestra principale</translation>
+        <translation>Finestra principale</translation>
     </message>
     <message>
         <source>Matrix</source>
@@ -13686,12 +13688,12 @@ Vuoi provare a cercarlo o saltarlo?</translation>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="266"/>
         <source>Notation</source>
-        <translation type="unfinished">Notazione</translation>
+        <translation>Notazione</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="283"/>
         <source>Presentation</source>
-        <translation type="unfinished">Presentazione</translation>
+        <translation>Presentazione</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="300"/>
@@ -13706,12 +13708,12 @@ Vuoi provare a cercarlo o saltarlo?</translation>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="310"/>
         <source>Okular (KDE 4.x)</source>
-        <translation type="unfinished"></translation>
+        <translation>Okular (KDE 4.x)</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="311"/>
         <source>Evince (GNOME)</source>
-        <translation type="unfinished"></translation>
+        <translation>Evince (GNOME)</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="312"/>
@@ -13721,7 +13723,7 @@ Vuoi provare a cercarlo o saltarlo?</translation>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="313"/>
         <source>KPDF (KDE 3.x)</source>
-        <translation type="unfinished"></translation>
+        <translation>KPDF (KDE 3.x)</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="314"/>
@@ -13736,12 +13738,12 @@ Vuoi provare a cercarlo o saltarlo?</translation>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="324"/>
         <source>KPrinter (KDE 3)</source>
-        <translation type="unfinished"></translation>
+        <translation>KPrinter (KDE 3)</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="325"/>
         <source>Gtk-LP (GNOME)</source>
-        <translation type="unfinished"></translation>
+        <translation>Gtk-LP (GNOME)</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="326"/>
@@ -13774,7 +13776,7 @@ Vuoi provare a cercarlo o saltarlo?</translation>
     <message>
         <location filename="../../src/gui/editors/guitar/Fingering.cpp" line="110"/>
         <source>couldn&apos;t parse fingering &apos;%1&apos; in &apos;%2&apos;</source>
-        <translation type="unfinished">non posso analizzare la diteggiatura &quot;%1&quot; in &quot;%2&quot;</translation>
+        <translation>non posso analizzare la diteggiatura &quot;%1&quot; in &quot;%2&quot;</translation>
     </message>
 </context>
 <context>
@@ -13782,22 +13784,22 @@ Vuoi provare a cercarlo o saltarlo?</translation>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordEditorDialog.cpp" line="40"/>
         <source>Guitar Chord Editor</source>
-        <translation type="unfinished">Editor degli accordi di chitarra</translation>
+        <translation>Editor degli accordi di chitarra</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordEditorDialog.cpp" line="47"/>
         <source>Start fret</source>
-        <translation type="unfinished">Avvia fret</translation>
+        <translation>Avvia fret</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordEditorDialog.cpp" line="56"/>
         <source>Root</source>
-        <translation type="unfinished">Radice</translation>
+        <translation>Radice</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordEditorDialog.cpp" line="60"/>
         <source>Extension</source>
-        <translation type="unfinished">Estensione</translation>
+        <translation>Estensione</translation>
     </message>
 </context>
 <context>
@@ -13805,7 +13807,7 @@ Vuoi provare a cercarlo o saltarlo?</translation>
     <message>
         <location filename="../../src/commands/notation/GuitarChordInsertionCommand.cpp" line="32"/>
         <source>Insert Guitar Chord</source>
-        <translation type="unfinished">Inserisci accordo di chitarra</translation>
+        <translation>Inserisci accordo di chitarra</translation>
     </message>
 </context>
 <context>
@@ -13813,62 +13815,62 @@ Vuoi provare a cercarlo o saltarlo?</translation>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="59"/>
         <source>Guitar Chord Selector</source>
-        <translation type="unfinished">Selettore degli accordi di chitarra</translation>
+        <translation>Selettore degli accordi di chitarra</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="68"/>
         <source>Root</source>
-        <translation type="unfinished">Radice</translation>
+        <translation>Radice</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="73"/>
         <source>Extension</source>
-        <translation type="unfinished">Estensione</translation>
+        <translation>Estensione</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="78"/>
         <source>New</source>
-        <translation type="unfinished">Nuovo</translation>
+        <translation>Nuovo</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="79"/>
         <source>Delete</source>
-        <translation type="unfinished">Cancella</translation>
+        <translation>Cancella</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="80"/>
         <source>Edit</source>
-        <translation type="unfinished">Modifica</translation>
+        <translation>Modifica</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="83"/>
         <source>beginner</source>
-        <translation type="unfinished">novizio</translation>
+        <translation>novizio</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="84"/>
         <source>common</source>
-        <translation type="unfinished">comune</translation>
+        <translation>comune</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="85"/>
         <source>all</source>
-        <translation type="unfinished">tutti</translation>
+        <translation>tutti</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="108"/>
         <source>Fingerings</source>
-        <translation type="unfinished">Diteggiature</translation>
+        <translation>Diteggiature</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="498"/>
         <source>couldn&apos;t open file &apos;%1&apos;</source>
-        <translation type="unfinished">non posso aprire il file &quot;%1&quot;</translation>
+        <translation>non posso aprire il file &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="508"/>
         <source>couldn&apos;t parse chord dictionary : %1</source>
-        <translation type="unfinished">non posso analizzare il dizionario di accordi : %1</translation>
+        <translation>non posso analizzare il dizionario di accordi : %1</translation>
     </message>
 </context>
 <context>
@@ -13876,77 +13878,77 @@ Vuoi provare a cercarlo o saltarlo?</translation>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="60"/>
         <source>Printable headers</source>
-        <translation type="unfinished">Intestazioni stampabili</translation>
+        <translation>Intestazioni stampabili</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="105"/>
         <source>Dedication</source>
-        <translation type="unfinished">Dedica</translation>
+        <translation>Dedica</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="109"/>
         <source>Title</source>
-        <translation type="unfinished">Titolo</translation>
+        <translation>Titolo</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="113"/>
         <source>Subtitle</source>
-        <translation type="unfinished">Sottotitolo</translation>
+        <translation>Sottotitolo</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="117"/>
         <source>Subsubtitle</source>
-        <translation type="unfinished">Sotto-sottotitolo</translation>
+        <translation>Sotto-sottotitolo</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="121"/>
         <source>Poet</source>
-        <translation type="unfinished">Poeta</translation>
+        <translation>Poeta</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="125"/>
         <source>Instrument</source>
-        <translation type="unfinished">Strumento</translation>
+        <translation>Strumento</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="129"/>
         <source>Composer</source>
-        <translation type="unfinished">Compositore</translation>
+        <translation>Compositore</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="133"/>
         <source>Meter</source>
-        <translation type="unfinished">Misurazione</translation>
+        <translation>Misurazione</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="137"/>
         <source>Arranger</source>
-        <translation type="unfinished">Arrangiatore</translation>
+        <translation>Arrangiatore</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="141"/>
         <source>Piece</source>
-        <translation type="unfinished">Pezzo</translation>
+        <translation>Pezzo</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="145"/>
         <source>Opus</source>
-        <translation type="unfinished">Opus</translation>
+        <translation>Opus</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="149"/>
         <source>Copyright</source>
-        <translation type="unfinished">Copyright</translation>
+        <translation>Copyright</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="153"/>
         <source>Tagline</source>
-        <translation type="unfinished">Tagline</translation>
+        <translation>Tagline</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="174"/>
         <source>The composition comes here.</source>
-        <translation type="unfinished">La composizione viene qui.</translation>
+        <translation>La composizione viene qui.</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="196"/>
@@ -13956,32 +13958,32 @@ Vuoi provare a cercarlo o saltarlo?</translation>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="216"/>
         <source>Name</source>
-        <translation type="unfinished">Nome</translation>
+        <translation>Nome</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="217"/>
         <source>Value</source>
-        <translation type="unfinished">Valore</translation>
+        <translation>Valore</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="254"/>
         <source>Add New Property</source>
-        <translation type="unfinished">Aggiungi nuova proprietà</translation>
+        <translation>Aggiungi nuova proprietà</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="258"/>
         <source>Delete Property</source>
-        <translation type="unfinished">Elimina proprietà</translation>
+        <translation>Elimina proprietà</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="280"/>
         <source>{new property %1}</source>
-        <translation type="unfinished">{nuova proprietà %1}</translation>
+        <translation>{nuova proprietà %1}</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="280"/>
         <source>{new property}</source>
-        <translation type="unfinished">{nuova proprietà}</translation>
+        <translation>{nuova proprietà}</translation>
     </message>
 </context>
 <context>
@@ -13989,7 +13991,7 @@ Vuoi provare a cercarlo o saltarlo?</translation>
     <message>
         <location filename="../../src/document/io/HydrogenXMLHandler.cpp" line="269"/>
         <source> imported from Hydrogen </source>
-        <translation type="unfinished"> importato da Hydrogen </translation>
+        <translation> importato da Hydrogen </translation>
     </message>
 </context>
 <context>
@@ -13997,7 +13999,7 @@ Vuoi provare a cercarlo o saltarlo?</translation>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="67"/>
         <source>Choose Text Encoding</source>
-        <translation type="unfinished">Scegli la codifica del testo</translation>
+        <translation>Scegli la codifica del testo</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="75"/>
@@ -14007,7 +14009,7 @@ This file contains text in an unknown language encoding.
 Please select one of the following estimated text encodings
 for use with the text in this file:
 </source>
-        <translation type="unfinished">
+        <translation>
 Questo file contiene del testo in una codifica sconosciuta.
 
 Scegli tra le seguenti codifiche la più indicata da usare per il testo di questo file:
@@ -14017,123 +14019,123 @@ Scegli tra le seguenti codifiche la più indicata da usare per il testo di quest
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="85"/>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="101"/>
         <source>Japanese Shift-JIS</source>
-        <translation type="unfinished">Japanese Shift-JIS</translation>
+        <translation>Japanese Shift-JIS</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="86"/>
         <source>Unicode variable-width</source>
-        <translation type="unfinished">Ampiezza variabile di unicode</translation>
+        <translation>Ampiezza variabile di unicode</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="87"/>
         <source>Western Europe</source>
-        <translation type="unfinished">Europa occidentale</translation>
+        <translation>Europa occidentale</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="88"/>
         <source>Western Europe + Euro</source>
-        <translation type="unfinished">Europa occidentale + Euro</translation>
+        <translation>Europa occidentale + Euro</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="89"/>
         <source>Eastern Europe</source>
-        <translation type="unfinished">Europa orientale</translation>
+        <translation>Europa orientale</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="90"/>
         <source>Southern Europe</source>
-        <translation type="unfinished">Europa meridionale</translation>
+        <translation>Europa meridionale</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="91"/>
         <source>Northern Europe</source>
-        <translation type="unfinished">Europa settentrionale</translation>
+        <translation>Europa settentrionale</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="92"/>
         <source>Cyrillic</source>
-        <translation type="unfinished">Cirillico</translation>
+        <translation>Cirillico</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="93"/>
         <source>Arabic</source>
-        <translation type="unfinished">Arabo</translation>
+        <translation>Arabo</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="94"/>
         <source>Greek</source>
-        <translation type="unfinished">Greco</translation>
+        <translation>Greco</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="95"/>
         <source>Hebrew</source>
-        <translation type="unfinished">Ebraico</translation>
+        <translation>Ebraico</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="96"/>
         <source>Turkish</source>
-        <translation type="unfinished">Turco</translation>
+        <translation>Turco</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="97"/>
         <source>Nordic</source>
-        <translation type="unfinished">Nordico</translation>
+        <translation>Nordico</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="98"/>
         <source>Thai</source>
-        <translation type="unfinished">Thailandese</translation>
+        <translation>Thailandese</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="99"/>
         <source>Baltic</source>
-        <translation type="unfinished">Baltico</translation>
+        <translation>Baltico</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="100"/>
         <source>Celtic</source>
-        <translation type="unfinished">Celtico</translation>
+        <translation>Celtico</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="102"/>
         <source>Traditional Chinese</source>
-        <translation type="unfinished">Cinese tradizionale</translation>
+        <translation>Cinese tradizionale</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="103"/>
         <source>Simplified Chinese</source>
-        <translation type="unfinished">Cinese semplificato</translation>
+        <translation>Cinese semplificato</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="104"/>
         <source>Russian</source>
-        <translation type="unfinished">Russo</translation>
+        <translation>Russo</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="105"/>
         <source>Ukrainian</source>
-        <translation type="unfinished">Ucraino</translation>
+        <translation>Ucraino</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="106"/>
         <source>Tamil</source>
-        <translation type="unfinished">Tamil</translation>
+        <translation>Tamil</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="149"/>
         <source>Microsoft Code Page %1</source>
-        <translation type="unfinished">Microsoft Code Page %1</translation>
+        <translation>Microsoft Code Page %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="155"/>
         <source>%1 (%2)</source>
-        <translation type="unfinished">%1 (%2)</translation>
+        <translation>%1 (%2)</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="174"/>
         <source>
 Example text from file:</source>
-        <translation type="unfinished">
+        <translation>
 Testo di esempio dal file:</translation>
     </message>
 </context>
@@ -14142,83 +14144,83 @@ Testo di esempio dal file:</translation>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="72"/>
         <source>Import from Device...</source>
-        <translation type="unfinished">Importa dal dispositivo...</translation>
+        <translation>Importa dal dispositivo...</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="90"/>
         <source>Cannot download file %1</source>
-        <translation type="unfinished">Non è possibile scaricare il file %1</translation>
+        <translation>Non è possibile scaricare il file %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="112"/>
         <source>Cannot open file %1</source>
-        <translation type="unfinished">Impossibile aprire il file &apos;%1&apos;</translation>
+        <translation>Impossibile aprire il file &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="123"/>
         <source>No devices found in file %1</source>
-        <translation type="unfinished">Nessun dispositivo trovato nel file %1</translation>
+        <translation>Nessun dispositivo trovato nel file %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="131"/>
         <source>Source device</source>
-        <translation type="unfinished">Dispositivo sorgente</translation>
+        <translation>Dispositivo sorgente</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="139"/>
         <source>Import from: </source>
-        <translation type="unfinished">Importa da: </translation>
+        <translation>Importa da: </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="161"/>
         <source>Device %1</source>
-        <translation type="unfinished">Dispositivo %1</translation>
+        <translation>Dispositivo %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="175"/>
         <source>Options</source>
-        <translation type="unfinished">Opzioni</translation>
+        <translation>Opzioni</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="179"/>
         <source>Import banks</source>
-        <translation type="unfinished">Importa banchi</translation>
+        <translation>Importa banchi</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="181"/>
         <source>Import key mappings</source>
-        <translation type="unfinished">Importa mappature di tastiera</translation>
+        <translation>Importa mappature di tastiera</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="183"/>
         <source>Import controllers</source>
-        <translation type="unfinished">Importa controller</translation>
+        <translation>Importa controller</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="187"/>
         <source>Import device name</source>
-        <translation type="unfinished">Importa nome dispositivo</translation>
+        <translation>Importa nome dispositivo</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="193"/>
         <source>Bank import behavior</source>
-        <translation type="unfinished">Comportamento importazione banchi</translation>
+        <translation>Comportamento importazione banchi</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="198"/>
         <source>Merge banks</source>
-        <translation type="unfinished">Inserisci banchi</translation>
+        <translation>Inserisci banchi</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="202"/>
         <source>Overwrite banks</source>
-        <translation type="unfinished">Sovrascrivi banchi</translation>
+        <translation>Sovrascrivi banchi</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="420"/>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="465"/>
         <source>Bank %1:%2</source>
-        <translation type="unfinished">Banco %1:%2</translation>
+        <translation>Banco %1:%2</translation>
     </message>
 </context>
 <context>
@@ -14226,7 +14228,7 @@ Testo di esempio dal file:</translation>
     <message>
         <location filename="../../src/commands/notation/IncrementDisplacementsCommand.h" line="54"/>
         <source>Fine Reposition</source>
-        <translation type="unfinished">Posizionamento fine</translation>
+        <translation>Posizionamento fine</translation>
     </message>
 </context>
 <context>
@@ -14234,7 +14236,7 @@ Testo di esempio dal file:</translation>
     <message>
         <location filename="../../src/commands/segment/InsertRangeCommand.cpp" line="35"/>
         <source>Insert Range</source>
-        <translation type="unfinished">Inserisci intervallo</translation>
+        <translation>Inserisci intervallo</translation>
     </message>
 </context>
 <context>
@@ -14242,7 +14244,7 @@ Testo di esempio dal file:</translation>
     <message>
         <location filename="../../src/commands/edit/InsertTriggerNoteCommand.cpp" line="48"/>
         <source>Insert Trigger Note</source>
-        <translation type="unfinished">Inserisci nota attivata</translation>
+        <translation>Inserisci nota attivata</translation>
     </message>
 </context>
 <context>
@@ -14250,7 +14252,7 @@ Testo di esempio dal file:</translation>
     <message>
         <location filename="../../src/gui/widgets/InstrumentAliasButton.cpp" line="49"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/InstrumentAliasButton.cpp" line="50"/>
@@ -14263,17 +14265,17 @@ Testo di esempio dal file:</translation>
     <message>
         <location filename="../../src/gui/editors/parameters/InstrumentParameterBox.cpp" line="46"/>
         <source>Instrument</source>
-        <translation type="unfinished">Strumento</translation>
+        <translation>Strumento</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/InstrumentParameterBox.cpp" line="47"/>
         <source>Instrument Parameters</source>
-        <translation type="unfinished">Parametri dello strumento</translation>
+        <translation>Parametri dello strumento</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/InstrumentParameterBox.cpp" line="157"/>
         <source>Track</source>
-        <translation type="unfinished">Traccia</translation>
+        <translation>Traccia</translation>
     </message>
 </context>
 <context>
@@ -14281,7 +14283,7 @@ Testo di esempio dal file:</translation>
     <message>
         <location filename="../../src/commands/notation/InterpretCommand.h" line="65"/>
         <source>&amp;Interpret...</source>
-        <translation type="unfinished">&amp;Interpreta...</translation>
+        <translation>&amp;Interpreta...</translation>
     </message>
 </context>
 <context>
@@ -14289,37 +14291,37 @@ Testo di esempio dal file:</translation>
     <message>
         <location filename="../../src/gui/dialogs/InterpretDialog.cpp" line="43"/>
         <source>Interpret</source>
-        <translation type="unfinished">Interprete</translation>
+        <translation>Interprete</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/InterpretDialog.cpp" line="47"/>
         <source>Interpretations to apply</source>
-        <translation type="unfinished">Interpretazioni da applicare</translation>
+        <translation>Interpretazioni da applicare</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/InterpretDialog.cpp" line="52"/>
         <source>Apply text dynamics (p, mf, ff etc)</source>
-        <translation type="unfinished">Applica dinamiche del testo (p, mf, ff ecc)</translation>
+        <translation>Applica dinamiche del testo (p, mf, ff ecc)</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/InterpretDialog.cpp" line="55"/>
         <source>Apply hairpin dynamics</source>
-        <translation type="unfinished">Applica dinamiche a forcina</translation>
+        <translation>Applica dinamiche a forcina</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/InterpretDialog.cpp" line="58"/>
         <source>Stress beats</source>
-        <translation type="unfinished">Accentua i battiti</translation>
+        <translation>Accentua i battiti</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/InterpretDialog.cpp" line="61"/>
         <source>Articulate slurs, staccato, tenuto etc</source>
-        <translation type="unfinished">Articola legature, staccato, tenuto, ecc.</translation>
+        <translation>Articola legature, staccato, tenuto, ecc</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/InterpretDialog.cpp" line="64"/>
         <source>All available interpretations</source>
-        <translation type="unfinished">Tutte le interpretazioni disponibili</translation>
+        <translation>Tutte le interpretazioni disponibili</translation>
     </message>
 </context>
 <context>
@@ -14327,168 +14329,169 @@ Testo di esempio dal file:</translation>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="47"/>
         <source>Specify Interval</source>
-        <translation type="unfinished">Specifica intervallo</translation>
+        <translation>Specifica intervallo</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="60"/>
         <source>Reference note:</source>
-        <translation type="unfinished">Nota di riferimento:</translation>
+        <translation>Nota di riferimento:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="62"/>
         <source>Target note:</source>
-        <translation type="unfinished">Nota obbiettivo:</translation>
+        <translation>Nota obbiettivo:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="69"/>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="310"/>
         <source>a perfect unison</source>
-        <translation type="unfinished">unisono perfetto</translation>
+        <translation>unisono perfetto</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="77"/>
         <source>Effect on Key</source>
-        <translation type="unfinished">Effetto sulla tonalità</translation>
+        <translation>Effetto sulla tonalità</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="80"/>
         <source>Transpose within key</source>
-        <translation type="unfinished">Trasponi nella tonalità</translation>
+        <translation>Trasponi nella tonalità</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="83"/>
         <source>Change key for selection</source>
-        <translation type="unfinished">Cambia il tasto della selezione</translation>
+        <translation>Cambia il tasto della selezione</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="92"/>
         <source>Adjust segment transposition in opposite direction (maintain audible pitch)</source>
-        <translation type="unfinished">Modifica la trasposizione del segmento nella direzione opposta (mantenendo le altezze udibili)</translation>
+        <translation>Modifica la trasposizione del segmento nella direzione opposta (mantenendo le altezze udibili)</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="196"/>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="226"/>
         <source>a diminished</source>
-        <translation type="unfinished">una diminuita</translation>
+        <translation>una diminuita</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="198"/>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="228"/>
         <source>an augmented</source>
-        <translation type="unfinished">una eccedente</translation>
+        <translation>una eccedente</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="200"/>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="230"/>
         <source>a doubly diminished</source>
-        <translation type="unfinished">una più che diminuita</translation>
+        <translation>una più che diminuita</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="202"/>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="232"/>
         <source>a doubly augmented</source>
-        <translation type="unfinished">una più che eccedente</translation>
+        <translation>una più che eccedente</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="204"/>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="234"/>
         <source>a triply diminished</source>
-        <translation type="unfinished">una triplamente diminuita</translation>
+        <translation>una triplamente diminuita</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="206"/>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="236"/>
         <source>a triply augmented</source>
-        <translation type="unfinished">una triplamente eccedente</translation>
+        <translation>una triplamente eccedente</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="208"/>
         <source>a quadruply diminished</source>
-        <translation type="unfinished">una quadruplamente diminuita</translation>
+        <translation>una quadruplamente diminuita</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="210"/>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="238"/>
         <source>a quadruply augmented</source>
-        <translation type="unfinished">una quadruplamente eccedente</translation>
+        <translation>una quadruplamente eccedente</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="212"/>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="240"/>
         <source>a perfect</source>
-        <translation type="unfinished">una giusta</translation>
+        <translation>una giusta</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="214"/>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="242"/>
         <source>an (unknown, %1)</source>
-        <translation type="unfinished">una (sconosciuta, %1)</translation>
+        <translation>una (sconosciuta, %1)</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="222"/>
         <source>a minor</source>
-        <translation type="unfinished">una minore</translation>
+        <translation>una minore</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="224"/>
         <source>a major</source>
-        <translation type="unfinished">una maggiore</translation>
+        <translation>una maggiore</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="245"/>
         <source>an (unknown)</source>
-        <translation type="unfinished">una (sconosciuta)</translation>
+        <translation>una (sconosciuta)</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="253"/>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="256"/>
         <source>%1 octave</source>
-        <translation type="unfinished">%1 ottave</translation>
+        <translation>%1 ottave</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="259"/>
         <source>%1 unison</source>
-        <translation type="unfinished">%1 unisono</translation>
+        <translation>%1 unisono</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="263"/>
         <source>%1 second</source>
-        <translation type="unfinished">%1 seconda</translation>
+        <translation>%1 seconda</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="266"/>
         <source>%1 third</source>
-        <translation type="unfinished">%1 terza</translation>
+        <translation>%1 terza</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="269"/>
         <source>%1 fourth</source>
-        <translation type="unfinished">%1 quarta</translation>
+        <translation>%1 quarta</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="272"/>
         <source>%1 fifth</source>
-        <translation type="unfinished">%1 quinta</translation>
+        <translation>%1 quinta</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="275"/>
         <source>%1 sixth</source>
-        <translation type="unfinished">%1 sesta</translation>
+        <translation>%1 sesta</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="278"/>
         <source>%1 seventh</source>
-        <translation type="unfinished">%1 settima</translation>
+        <translation>%1 settima</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="281"/>
         <source>%1</source>
-        <translation type="unfinished">%1</translation>
+        <translation>%1</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="289"/>
         <source>up %n octave(s) and %1</source>
         <translation type="unfinished">
+            <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
@@ -14497,17 +14500,19 @@ Testo di esempio dal file:</translation>
         <source>up %n octave(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="295"/>
         <source>up %1</source>
-        <translation type="unfinished">su %1</translation>
+        <translation>su %1</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="300"/>
         <source>down %n octave(s) and %1</source>
         <translation type="unfinished">
+            <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
@@ -14516,12 +14521,13 @@ Testo di esempio dal file:</translation>
         <source>down %n octave(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="306"/>
         <source>down %1</source>
-        <translation type="unfinished">giù %1</translation>
+        <translation>giù %1</translation>
     </message>
 </context>
 <context>
@@ -14529,7 +14535,7 @@ Testo di esempio dal file:</translation>
     <message>
         <location filename="../../src/commands/edit/InvertCommand.h" line="46"/>
         <source>&amp;Invert</source>
-        <translation type="unfinished">&amp;Inverti</translation>
+        <translation>&amp;Inverti</translation>
     </message>
 </context>
 <context>
@@ -14537,12 +14543,12 @@ Testo di esempio dal file:</translation>
     <message>
         <location filename="../../src/commands/notation/KeyInsertionCommand.h" line="65"/>
         <source>Change to &amp;Key %1...</source>
-        <translation type="unfinished">Cambia nella tonalità %1...</translation>
+        <translation type="unfinished">Cambia nella &amp;tonalità %1...</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/KeyInsertionCommand.h" line="67"/>
         <source>Add &amp;Key Change...</source>
-        <translation type="unfinished">Aggiungi cambio di tonalità...</translation>
+        <translation type="unfinished">Aggiungi &amp;cambio di tonalità...</translation>
     </message>
 </context>
 <context>
@@ -14550,93 +14556,93 @@ Testo di esempio dal file:</translation>
     <message>
         <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="68"/>
         <source>Key Change</source>
-        <translation type="unfinished">Cambio di tonalità</translation>
+        <translation>Cambio di tonalità</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="80"/>
         <source>Key signature</source>
-        <translation type="unfinished">Tonalità (armatura di chiave)</translation>
+        <translation>Tonalità (armatura di chiave)</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="84"/>
         <source>Key transposition</source>
-        <translation type="unfinished">Trasporto di tonalità</translation>
+        <translation>Trasporto di tonalità</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="88"/>
         <source>Scope</source>
-        <translation type="unfinished">Intervallo di visibilità</translation>
+        <translation>Intervallo di visibilità</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="92"/>
         <source>Existing notes following key change</source>
-        <translation type="unfinished">Le note esistenti seguono il cambio di tonalità</translation>
+        <translation>Le note esistenti seguono il cambio di tonalità</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="114"/>
         <source>Flatten</source>
-        <translation type="unfinished">Bemolle</translation>
+        <translation>Bemolle</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="136"/>
         <source>Sharpen</source>
-        <translation type="unfinished">Diesis</translation>
+        <translation>Diesis</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="143"/>
         <source>Major</source>
-        <translation type="unfinished">Maggiore</translation>
+        <translation>Maggiore</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="144"/>
         <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="425"/>
         <source>Minor</source>
-        <translation type="unfinished">Minore</translation>
+        <translation>Minore</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="157"/>
         <source>Transpose key according to segment transposition</source>
-        <translation type="unfinished">Trasporta la tonalità secondo il trasporto del segmento</translation>
+        <translation>Trasporta la tonalità secondo il trasporto del segmento</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="161"/>
         <source>Use specified key.  Do not transpose</source>
-        <translation type="unfinished">Usa la tonalità specificata. Non trasporre</translation>
+        <translation>Usa la tonalità specificata. Non trasporre</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="172"/>
         <source>Apply to current segment only</source>
-        <translation type="unfinished">Applica solo al segmento corrente</translation>
+        <translation>Applica solo al segmento corrente</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="176"/>
         <source>Apply to all segments at this time</source>
-        <translation type="unfinished">Applica a tutti i segmenti in questo momento</translation>
+        <translation>Applica a tutti i segmenti in questo momento</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="181"/>
         <source>Exclude percussion segments</source>
-        <translation type="unfinished">Escludi i segmenti di percussioni</translation>
+        <translation>Escludi i segmenti di percussioni</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="194"/>
         <source>Maintain current pitches</source>
-        <translation type="unfinished">Mantieni le altezze correnti</translation>
+        <translation>Mantieni le altezze correnti</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="198"/>
         <source>Maintain current accidentals</source>
-        <translation type="unfinished">Mantieni gli accidenti correnti</translation>
+        <translation>Mantieni gli accidenti correnti</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="202"/>
         <source>Transpose into this key</source>
-        <translation type="unfinished">Trasponi in questa tonalità</translation>
+        <translation>Trasponi in questa tonalità</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="387"/>
         <source>No such key</source>
-        <translation type="unfinished">Non c&apos;è questa tonalità</translation>
+        <translation>Non c&apos;è questa tonalità</translation>
     </message>
 </context>
 <context>
@@ -14689,7 +14695,7 @@ Would you like to use
  %1
 
  instead?</source>
-        <translation type="unfinished">Lilypond non ammette spazi o barre rovesciate nei nomi dei file.
+        <translation>Lilypond non ammette spazi o barre rovesciate nei nomi dei file.
 
 Vuoi usare
 
@@ -14700,12 +14706,12 @@ Vuoi usare
     <message>
         <location filename="../../src/document/io/LilyPondExporter.cpp" line="2379"/>
         <source>warning: overlong bar truncated here</source>
-        <translation type="unfinished">attenzione: battuta troppo lunga troncata qui</translation>
+        <translation>attenzione: battuta troppo lunga troncata qui</translation>
     </message>
     <message>
         <location filename="../../src/document/io/LilyPondExporter.cpp" line="2390"/>
         <source>warning: bar too short, padding with rests</source>
-        <translation type="unfinished">attenzione: battuta troppo breve, riempita con silenzio</translation>
+        <translation>attenzione: battuta troppo breve, riempita con silenzio</translation>
     </message>
 </context>
 <context>
@@ -14713,22 +14719,22 @@ Vuoi usare
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="61"/>
         <source>LilyPond Export/Preview</source>
-        <translation type="unfinished">Esportazione/Anteprima Lilypond</translation>
+        <translation>Esportazione/Anteprima Lilypond</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="77"/>
         <source>Layout</source>
-        <translation type="unfinished">Aspetto</translation>
+        <translation>Aspetto</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="84"/>
         <source>Headers</source>
-        <translation type="unfinished">Intestazioni</translation>
+        <translation>Intestazioni</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="93"/>
         <source>Basic options</source>
-        <translation type="unfinished">Opzioni di base</translation>
+        <translation>Opzioni di base</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="108"/>
@@ -14743,7 +14749,7 @@ Vuoi usare
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="117"/>
         <source>Compatibility level</source>
-        <translation type="unfinished">Livello di compatibilità</translation>
+        <translation>Livello di compatibilità</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="122"/>
@@ -14751,77 +14757,77 @@ Vuoi usare
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="124"/>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="125"/>
         <source>LilyPond %1</source>
-        <translation type="unfinished">LilyPond %1</translation>
+        <translation>LilyPond %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="122"/>
         <source>2.6</source>
-        <translation type="unfinished">2.6</translation>
+        <translation>2.6</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="123"/>
         <source>2.8</source>
-        <translation type="unfinished">2.8</translation>
+        <translation>2.8</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="124"/>
         <source>2.10</source>
-        <translation type="unfinished">2.10</translation>
+        <translation>2.10</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="125"/>
         <source>2.12</source>
-        <translation type="unfinished">2.12</translation>
+        <translation>2.12</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="129"/>
         <source>Paper size</source>
-        <translation type="unfinished">Dimensione carta</translation>
+        <translation>Dimensione carta</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="134"/>
         <source>A3</source>
-        <translation type="unfinished">A3</translation>
+        <translation>A3</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="135"/>
         <source>A4</source>
-        <translation type="unfinished">A4</translation>
+        <translation>A4</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="136"/>
         <source>A5</source>
-        <translation type="unfinished">A5</translation>
+        <translation>A5</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="137"/>
         <source>A6</source>
-        <translation type="unfinished">A6</translation>
+        <translation>A6</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="138"/>
         <source>Legal</source>
-        <translation type="unfinished">Legal</translation>
+        <translation>Legal</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="139"/>
         <source>US Letter</source>
-        <translation type="unfinished">US Letter</translation>
+        <translation>US Letter</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="140"/>
         <source>Tabloid</source>
-        <translation type="unfinished">Tabloid</translation>
+        <translation>Tabloid</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="141"/>
         <source>do not specify</source>
-        <translation type="unfinished">non specificare</translation>
+        <translation>non specificare</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="143"/>
         <source>Landscape</source>
-        <translation type="unfinished">Orizzontale</translation>
+        <translation>Orizzontale</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="219"/>
@@ -14831,27 +14837,27 @@ Vuoi usare
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="277"/>
         <source>http://rosegardenmusic.com/wiki/doc:manual-lilypondoptions-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:manual-lilypondoptions-en</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="105"/>
         <source>Export content</source>
-        <translation type="unfinished">Esporta il contenuto</translation>
+        <translation>Esporta il contenuto</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="109"/>
         <source>All tracks</source>
-        <translation type="unfinished">Tutte le tracce</translation>
+        <translation>Tutte le tracce</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="110"/>
         <source>Non-muted tracks</source>
-        <translation type="unfinished">Tracce non mute</translation>
+        <translation>Tracce non mute</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="112"/>
         <source>Selected segments</source>
-        <translation type="unfinished">Segmenti selezionati</translation>
+        <translation>Segmenti selezionati</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="120"/>
@@ -14881,12 +14887,12 @@ Vuoi usare
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="169"/>
         <source>%1 pt %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 pt %2</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="169"/>
         <source> *</source>
-        <translation type="unfinished"></translation>
+        <translation> *</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="178"/>
@@ -14897,22 +14903,22 @@ Vuoi usare
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="189"/>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="201"/>
         <source>None</source>
-        <translation type="unfinished">Nessuno</translation>
+        <translation>Nessuno</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="190"/>
         <source>First</source>
-        <translation type="unfinished">Primo</translation>
+        <translation>Primo</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="191"/>
         <source>All</source>
-        <translation type="unfinished">Tutti</translation>
+        <translation>Tutti</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="194"/>
         <source>Export tempo marks </source>
-        <translation type="unfinished">Esporta i marcatori del tempo</translation>
+        <translation>Esporta i marcatori del tempo</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="231"/>
@@ -14927,22 +14933,22 @@ Vuoi usare
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="199"/>
         <source>Export lyrics</source>
-        <translation type="unfinished">Esporta le parole</translation>
+        <translation>Esporta le parole</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="210"/>
         <source>Export beamings</source>
-        <translation type="unfinished">Esporta collegamenti</translation>
+        <translation>Esporta collegamenti</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="217"/>
         <source>Export track staff brackets</source>
-        <translation type="unfinished">Esporta le parentesi del rigo</translation>
+        <translation>Esporta le parentesi del rigo</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="202"/>
         <source>Left</source>
-        <translation type="unfinished">A Sinistra</translation>
+        <translation>A Sinistra</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="196"/>
@@ -14952,12 +14958,12 @@ Vuoi usare
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="203"/>
         <source>Center</source>
-        <translation type="unfinished">Centro</translation>
+        <translation>Centro</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="204"/>
         <source>Right</source>
-        <translation type="unfinished">A Destra</translation>
+        <translation>A Destra</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="206"/>
@@ -14972,12 +14978,12 @@ Vuoi usare
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="229"/>
         <source>Ragged bottom (systems will not be spread vertically across the page)</source>
-        <translation type="unfinished">Disallineato (i sistemi non verranno allineati verticalmente nella pagina)</translation>
+        <translation>Disallineato (i sistemi non verranno allineati verticalmente nella pagina)</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="224"/>
         <source>Interpret chord texts as lead sheet chord names</source>
-        <translation type="unfinished">Interpreta il testo di ogni accordo come nome nel foglio guida</translation>
+        <translation>Interpreta il testo di ogni accordo come nome nel foglio guida</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="226"/>
@@ -14987,22 +14993,22 @@ Vuoi usare
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="234"/>
         <source>No markers</source>
-        <translation type="unfinished">Nessun marcatore</translation>
+        <translation>Nessun marcatore</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="235"/>
         <source>Rehearsal marks</source>
-        <translation type="unfinished">Marcatori di prova</translation>
+        <translation>Marcatori di prova</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="236"/>
         <source>Marker text</source>
-        <translation type="unfinished">Testo del marcatore</translation>
+        <translation>Testo del marcatore</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="239"/>
         <source>Export markers</source>
-        <translation type="unfinished">Esporta i marcatori</translation>
+        <translation>Esporta i marcatori</translation>
     </message>
 </context>
 <context>
@@ -15010,12 +15016,12 @@ Vuoi usare
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="67"/>
         <source>Preview</source>
-        <translation type="unfinished">Anteprime</translation>
+        <translation>Anteprime</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="68"/>
         <source>Print</source>
-        <translation type="unfinished">Stampa</translation>
+        <translation>Stampa</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="70"/>
@@ -15025,7 +15031,7 @@ Vuoi usare
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="81"/>
         <source>Cancel</source>
-        <translation type="unfinished">Annulla</translation>
+        <translation>Annulla</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="104"/>
@@ -15146,27 +15152,27 @@ Vuoi usare
     <message>
         <location filename="../../src/gui/dialogs/LyricEditDialog.cpp" line="60"/>
         <source>Edit Lyrics</source>
-        <translation type="unfinished">Modifica parole</translation>
+        <translation>Modifica parole</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LyricEditDialog.cpp" line="69"/>
         <source>Lyrics for this segment</source>
-        <translation type="unfinished">Parole per questo segmento</translation>
+        <translation>Parole per questo segmento</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LyricEditDialog.cpp" line="83"/>
         <source>Add Verse</source>
-        <translation type="unfinished">Aggiungi verso</translation>
+        <translation>Aggiungi verso</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LyricEditDialog.cpp" line="86"/>
         <source>Remove Verse</source>
-        <translation type="unfinished">Rimuovi i versi</translation>
+        <translation>Rimuovi i versi</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LyricEditDialog.cpp" line="320"/>
         <source>Verse %1</source>
-        <translation type="unfinished">Verso %1</translation>
+        <translation>Verso %1</translation>
     </message>
 </context>
 <context>
@@ -15174,69 +15180,69 @@ Vuoi usare
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.h" line="53"/>
         <source>MIDI</source>
-        <translation type="unfinished">MIDI</translation>
+        <translation>MIDI</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.h" line="54"/>
         <source>MIDI Settings</source>
-        <translation type="unfinished">Impostazioni MIDI</translation>
+        <translation>Impostazioni MIDI</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="90"/>
         <source>Base octave number for MIDI pitch display</source>
-        <translation type="unfinished">Numero di ottava di base per il display MIDI di altezza</translation>
+        <translation>Numero di ottava di base per il display MIDI di altezza</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="105"/>
         <source>Always use default studio when loading files</source>
-        <translation type="unfinished">Usa sempre lo studio di default quando carichi i file</translation>
+        <translation>Usa sempre lo studio di default quando carichi i file</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="118"/>
         <source>Send all MIDI Controllers at start of each playback</source>
-        <translation type="unfinished">Invia tutti i controlli MIDI all&apos;inizio di ogni riproduzione</translation>
+        <translation>Invia tutti i controlli MIDI all&apos;inizio di ogni riproduzione</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="120"/>
         <source>Rosegarden can send all MIDI Controllers (Pan, Reverb etc) to all MIDI devices every
 time you hit play if you so wish.  Please note that this option will usually incur a
 delay at the start of playback due to the amount of data being transmitted.</source>
-        <translation type="unfinished">Rosegarden può mandare tutti i controller MIDI (Pan, Riverbero ecc) a tutti i dispositivi MIDI ogni volta che premi &quot;Riproduci&quot; se lo desideri. Questa opzione però di solito induce un ritardo nell&apos;inizio della riproduzione dovuto alla quantità di dati da trasmettere.</translation>
+        <translation>Rosegarden può mandare tutti i controller MIDI (Pan, Riverbero ecc) a tutti i dispositivi MIDI ogni volta che premi &quot;Riproduci&quot; se lo desideri. Questa opzione però di solito induce un ritardo nell&apos;inizio della riproduzione dovuto alla quantità di dati da trasmettere.</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="136"/>
         <source>Sequencer timing source</source>
-        <translation type="unfinished">Sorgente del tempo del sequencer</translation>
+        <translation>Sorgente del tempo del sequencer</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="162"/>
         <source>Load SoundFont to SoundBlaster card at startup</source>
-        <translation type="unfinished">Carica SoundFont sulla scheda SoundBlaster all&apos;avvio</translation>
+        <translation>Carica SoundFont sulla scheda SoundBlaster all&apos;avvio</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="163"/>
         <source>Check this box to enable soundfont loading on EMU10K-based cards when Rosegarden is launched</source>
-        <translation type="unfinished">Segna questo box per abilitare il caricamento dei soundfont sulle schede basate su EMU10K quando Rosegarden viene avviato</translation>
+        <translation>Segna questo box per abilitare il caricamento dei soundfont sulle schede basate su EMU10K quando Rosegarden viene avviato</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="173"/>
         <source>Path to &apos;asfxload&apos; or &apos;sfxload&apos; command</source>
-        <translation type="unfinished">Percorso per il comando &apos;asfxload&apos; o &apos;sfxload&apos;</translation>
+        <translation>Percorso per il comando &apos;asfxload&apos; o &apos;sfxload&apos;</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="180"/>
         <source>SoundFont</source>
-        <translation type="unfinished">SoundFont</translation>
+        <translation>SoundFont</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="207"/>
         <source>General</source>
-        <translation type="unfinished">Generale</translation>
+        <translation>Generale</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="225"/>
         <source>MIDI Clock and System messages</source>
-        <translation type="unfinished">Messaggi MIDI sull&apos;orologio e il sistema.</translation>
+        <translation>Messaggi MIDI sull&apos;orologio e il sistema</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="231"/>
@@ -15248,62 +15254,62 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="232"/>
         <source>Send MIDI Clock, Start and Stop</source>
-        <translation type="unfinished">Invia il Clock MIDI, inizio e fine</translation>
+        <translation>Invia il Clock MIDI, inizio e fine</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="233"/>
         <source>Accept Start, Stop and Continue</source>
-        <translation type="unfinished">Accetta inizio e fine e continua</translation>
+        <translation>Accetta inizio e fine e continua</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="244"/>
         <source>MIDI Machine Control mode</source>
-        <translation type="unfinished">Modo di controllo della macchina MIDI</translation>
+        <translation>Modo di controllo della macchina MIDI</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="252"/>
         <source>MMC Master</source>
-        <translation type="unfinished">MMC Master</translation>
+        <translation>MMC Master</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="253"/>
         <source>MMC Slave</source>
-        <translation type="unfinished">MMC Slave</translation>
+        <translation>MMC Slave</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="264"/>
         <source>MIDI Time Code mode</source>
-        <translation type="unfinished">Modo Time Code MIDI</translation>
+        <translation>Modo Time Code MIDI</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="272"/>
         <source>MTC Master</source>
-        <translation type="unfinished">MTC Master</translation>
+        <translation>MTC Master</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="273"/>
         <source>MTC Slave</source>
-        <translation type="unfinished">MTC Slave</translation>
+        <translation>MTC Slave</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="287"/>
         <source>Automatically connect sync output to all devices in use</source>
-        <translation type="unfinished">Connetti automaticamente l&apos;output sync a tutti i dispositivi in uso</translation>
+        <translation>Connetti automaticamente l&apos;output sync a tutti i dispositivi in uso</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="302"/>
         <source>MIDI Sync</source>
-        <translation type="unfinished">MIDI Sync</translation>
+        <translation>MIDI Sync</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="320"/>
         <source>sfxload path</source>
-        <translation type="unfinished">percorso di sfxload</translation>
+        <translation>percorso di sfxload</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="328"/>
         <source>Soundfont path</source>
-        <translation type="unfinished">Percorso del soundfont</translation>
+        <translation>Percorso del soundfont</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="329"/>
@@ -15313,7 +15319,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="330"/>
         <source>All files</source>
-        <translation type="unfinished">Tutti i file</translation>
+        <translation>Tutti i file</translation>
     </message>
 </context>
 <context>
@@ -15346,27 +15352,27 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="113"/>
         <source>Bank</source>
-        <translation type="unfinished">Banco</translation>
+        <translation>Banco</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="114"/>
         <source>Variation</source>
-        <translation type="unfinished">Variazione</translation>
+        <translation>Variazione</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="115"/>
         <source>Program</source>
-        <translation type="unfinished">Programma</translation>
+        <translation>Programma</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="116"/>
         <source>Channel out</source>
-        <translation type="unfinished">Channel out</translation>
+        <translation>Channel out</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="117"/>
         <source>Percussion</source>
-        <translation type="unfinished">Percussioni</translation>
+        <translation>Percussioni</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="145"/>
@@ -15381,12 +15387,12 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="310"/>
         <source>[ %1 ]</source>
-        <translation type="unfinished">[ %1 ]</translation>
+        <translation>[ %1 ]</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="310"/>
         <source>No connection</source>
-        <translation type="unfinished">Nessuna connessione</translation>
+        <translation>Nessuna connessione</translation>
     </message>
 </context>
 <context>
@@ -15394,12 +15400,12 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location filename="../../src/commands/notation/MakeAccidentalsCautionaryCommand.cpp" line="54"/>
         <source>Use &amp;Cautionary Accidentals</source>
-        <translation type="unfinished">Usa gli a&amp;ccidenti di precauzione</translation>
+        <translation>Usa gli a&amp;ccidenti di precauzione</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/MakeAccidentalsCautionaryCommand.cpp" line="56"/>
         <source>Cancel C&amp;autionary Accidentals</source>
-        <translation type="unfinished">Cancella gli a&amp;ccidenti di precauzione</translation>
+        <translation>Cancella gli &amp;accidenti di precauzione</translation>
     </message>
 </context>
 <context>
@@ -15407,7 +15413,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location filename="../../src/commands/notation/MakeChordCommand.h" line="41"/>
         <source>Make &amp;Chord</source>
-        <translation type="unfinished">Crea A&amp;ccordo</translation>
+        <translation>Crea A&amp;ccordo</translation>
     </message>
 </context>
 <context>
@@ -15415,7 +15421,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location filename="../../src/commands/notation/MakeNotesViableCommand.h" line="51"/>
         <source>Tie Notes at &amp;Barlines</source>
-        <translation type="unfinished">Lega le note alle &amp;battute</translation>
+        <translation>Lega le note alle &amp;battute</translation>
     </message>
 </context>
 <context>
@@ -15423,12 +15429,12 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location filename="../../src/gui/dialogs/MakeOrnamentDialog.cpp" line="44"/>
         <source>Make Ornament</source>
-        <translation type="unfinished">Fai ornamento</translation>
+        <translation>Fai ornamento</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/MakeOrnamentDialog.cpp" line="52"/>
         <source>Name</source>
-        <translation type="unfinished">Nome</translation>
+        <translation>Nome</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/MakeOrnamentDialog.cpp" line="56"/>
@@ -15438,12 +15444,12 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location filename="../../src/gui/dialogs/MakeOrnamentDialog.cpp" line="67"/>
         <source>Name:  </source>
-        <translation type="unfinished">Nome:  </translation>
+        <translation>Nome:  </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/MakeOrnamentDialog.cpp" line="77"/>
         <source>Base pitch</source>
-        <translation type="unfinished">Altezza di base</translation>
+        <translation>Altezza di base</translation>
     </message>
 </context>
 <context>
@@ -15451,7 +15457,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location filename="../../src/commands/notation/MakeRegionViableCommand.h" line="47"/>
         <source>Tie Notes at &amp;Barlines</source>
-        <translation type="unfinished">Lega le note alle &amp;battute</translation>
+        <translation>Lega le note alle &amp;battute</translation>
     </message>
 </context>
 <context>
@@ -15459,42 +15465,42 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="67"/>
         <source>Metronome</source>
-        <translation type="unfinished">Metronomo</translation>
+        <translation>Metronomo</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="86"/>
         <source>Metronome Instrument</source>
-        <translation type="unfinished">Strumento metronomo</translation>
+        <translation>Strumento metronomo</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="92"/>
         <source>Device</source>
-        <translation type="unfinished">Dispositivo</translation>
+        <translation>Dispositivo</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="114"/>
         <source>%1 - %2</source>
-        <translation type="unfinished">%1 - %2</translation>
+        <translation>%1 - %2</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="116"/>
         <source>%1 - No connection</source>
-        <translation type="unfinished">%1 - Nessuna connessione</translation>
+        <translation>%1 - Nessuna connessione</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="124"/>
         <source>Instrument</source>
-        <translation type="unfinished">Strumento</translation>
+        <translation>Strumento</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="132"/>
         <source>Beats</source>
-        <translation type="unfinished">Battiti</translation>
+        <translation>Battiti</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="138"/>
         <source>Resolution</source>
-        <translation type="unfinished">Risoluzione</translation>
+        <translation>Risoluzione</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="140"/>
@@ -15504,17 +15510,17 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="141"/>
         <source>None</source>
-        <translation type="unfinished">Nessuno</translation>
+        <translation>Nessuno</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="142"/>
         <source>Bars only</source>
-        <translation type="unfinished">Solo barre</translation>
+        <translation>Solo barre</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="143"/>
         <source>Bars and beats</source>
-        <translation type="unfinished">Barre e battiti</translation>
+        <translation>Barre e battiti</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="144"/>
@@ -15528,22 +15534,22 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="148"/>
         <source>Bar velocity</source>
-        <translation type="unfinished">Velocità della barra</translation>
+        <translation>Velocità della barra</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="156"/>
         <source>Beat velocity</source>
-        <translation type="unfinished">Velocità battito</translation>
+        <translation>Velocità battito</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="164"/>
         <source>Sub-beat velocity</source>
-        <translation type="unfinished">Velocità del sotto-battito</translation>
+        <translation>Velocità del sotto-battito</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="181"/>
         <source>Pitch</source>
-        <translation type="unfinished">Altezza</translation>
+        <translation>Altezza</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="94"/>
@@ -15578,42 +15584,42 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="188"/>
         <source>for Bar</source>
-        <translation type="unfinished">per la Barra</translation>
+        <translation>per la Barra</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="189"/>
         <source>for Beat</source>
-        <translation type="unfinished">per il Ritmo</translation>
+        <translation>per il Ritmo</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="190"/>
         <source>for Sub-beat</source>
-        <translation type="unfinished">per il sotto-ritmo</translation>
+        <translation>per il sotto-ritmo</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="194"/>
         <source>Metronome Activated</source>
-        <translation type="unfinished">Metronomo attivato</translation>
+        <translation>Metronomo attivato</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="197"/>
         <source>Playing</source>
-        <translation type="unfinished">In riproduzione</translation>
+        <translation>In riproduzione</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="199"/>
         <source>Recording</source>
-        <translation type="unfinished">In registrazione</translation>
+        <translation>In registrazione</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="296"/>
         <source>Synth plugin </source>
-        <translation type="unfinished">Plugin del sintetizzatore</translation>
+        <translation>Plugin del sintetizzatore</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="325"/>
         <source>%1 (%2)</source>
-        <translation type="unfinished">%1 (%2)</translation>
+        <translation>%1 (%2)</translation>
     </message>
 </context>
 <context>
@@ -15621,17 +15627,17 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="77"/>
         <source>Manage Markers</source>
-        <translation type="unfinished">Gestisci marcatori</translation>
+        <translation>Gestisci marcatori</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="83"/>
         <source>Time  </source>
-        <translation type="unfinished">Velocità  </translation>
+        <translation>Velocità  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="84"/>
         <source>Text  </source>
-        <translation type="unfinished"></translation>
+        <translation>Testo  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="85"/>
@@ -15641,73 +15647,73 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="89"/>
         <source>Pointer position</source>
-        <translation type="unfinished">Posizione del puntatore</translation>
+        <translation>Posizione del puntatore</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="94"/>
         <source>Absolute time:</source>
-        <translation type="unfinished">Tempo assoluto:</translation>
+        <translation>Tempo assoluto:</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="98"/>
         <source>Real time:</source>
-        <translation type="unfinished">Tempo reale:</translation>
+        <translation>Tempo reale:</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="102"/>
         <source>In measure:</source>
-        <translation type="unfinished">Nella battuta:</translation>
+        <translation>Nella battuta:</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="119"/>
         <source>Add</source>
-        <translation type="unfinished">Aggiungi</translation>
+        <translation>Aggiungi</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="120"/>
         <source>Delete</source>
-        <translation type="unfinished">Cancella</translation>
+        <translation>Cancella</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="121"/>
         <source>Delete All</source>
-        <translation type="unfinished"></translation>
+        <translation>Cancella tutto</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="123"/>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="393"/>
         <source>Close</source>
-        <translation type="unfinished">Chiudi</translation>
+        <translation>Chiudi</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="125"/>
         <source>Add a Marker</source>
-        <translation type="unfinished">Aggiungi un marcatore</translation>
+        <translation>Aggiungi un marcatore</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="127"/>
         <source>Delete a Marker</source>
-        <translation type="unfinished">Elimina un marcatore</translation>
+        <translation>Elimina un marcatore</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="129"/>
         <source>Delete All Markers</source>
-        <translation type="unfinished">Elimina tutti i marcatori</translation>
+        <translation>Elimina tutti i marcatori</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="131"/>
         <source>Close the Marker Editor</source>
-        <translation type="unfinished">Chiudi l&apos;editor del marcatore</translation>
+        <translation>Chiudi l&apos;editor del marcatore</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="292"/>
         <source>&lt;none&gt;</source>
-        <translation type="unfinished">&lt;nessuno&gt;</translation>
+        <translation>&lt;nessuno&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="311"/>
         <source>Remove all markers</source>
-        <translation type="unfinished">Rimuovi tutti i marcatori</translation>
+        <translation>Rimuovi tutti i marcatori</translation>
     </message>
 </context>
 <context>
@@ -15715,27 +15721,27 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location filename="../../src/gui/dialogs/MarkerModifyDialog.cpp" line="73"/>
         <source>Edit Marker</source>
-        <translation type="unfinished">Modifica marcatore</translation>
+        <translation>Modifica marcatore</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/MarkerModifyDialog.cpp" line="80"/>
         <source>Marker Time</source>
-        <translation type="unfinished">Tempo del marcatore  </translation>
+        <translation>Tempo del marcatore  </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/MarkerModifyDialog.cpp" line="97"/>
         <source>Marker Properties</source>
-        <translation type="unfinished">Proprietà marcatore</translation>
+        <translation>Proprietà marcatore</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/MarkerModifyDialog.cpp" line="107"/>
         <source>Text:</source>
-        <translation type="unfinished">Testo:</translation>
+        <translation>Testo:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/MarkerModifyDialog.cpp" line="111"/>
         <source>Comment:</source>
-        <translation type="unfinished">Commenti:</translation>
+        <translation>Commenti:</translation>
     </message>
 </context>
 <context>
@@ -15745,7 +15751,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
         <source>Click on a marker to move the playback pointer.
 Shift-click to set a range between markers.
 Double-click to open the marker editor.</source>
-        <translation type="unfinished">Clicca su un marcatore per muovere il puntatore di riproduzione.
+        <translation>Clicca su un marcatore per muovere il puntatore di riproduzione.
 Maiusc-click per impostare un intervallo tra marcatori.
 Doppio click per aprire l&apos;editor dei marcatori.</translation>
     </message>
@@ -15756,12 +15762,12 @@ Doppio click per aprire l&apos;editor dei marcatori.</translation>
         <location filename="../../src/gui/configuration/MatrixConfigurationPage.h" line="45"/>
         <location filename="../../src/gui/configuration/MatrixConfigurationPage.h" line="46"/>
         <source>Matrix</source>
-        <translation type="unfinished">Matrice</translation>
+        <translation>Matrice</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MatrixConfigurationPage.cpp" line="48"/>
         <source>General</source>
-        <translation type="unfinished">Generale</translation>
+        <translation>Generale</translation>
     </message>
 </context>
 <context>
@@ -15769,7 +15775,7 @@ Doppio click per aprire l&apos;editor dei marcatori.</translation>
     <message>
         <location filename="../../src/commands/matrix/MatrixEraseCommand.cpp" line="33"/>
         <source>Erase Note</source>
-        <translation type="unfinished">Cancella la nota</translation>
+        <translation>Cancella la nota</translation>
     </message>
 </context>
 <context>
@@ -15777,7 +15783,7 @@ Doppio click per aprire l&apos;editor dei marcatori.</translation>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixEraser.cpp" line="63"/>
         <source>Click on a note to delete it</source>
-        <translation type="unfinished">Clicca su una nota per cancellarla</translation>
+        <translation>Clicca su una nota per cancellarla</translation>
     </message>
 </context>
 <context>
@@ -15785,7 +15791,7 @@ Doppio click per aprire l&apos;editor dei marcatori.</translation>
     <message>
         <location filename="../../src/commands/matrix/MatrixInsertionCommand.cpp" line="38"/>
         <source>Insert Note</source>
-        <translation type="unfinished">Inserisci nota</translation>
+        <translation>Inserisci nota</translation>
     </message>
 </context>
 <context>
@@ -15793,12 +15799,12 @@ Doppio click per aprire l&apos;editor dei marcatori.</translation>
     <message>
         <location filename="../../src/commands/matrix/MatrixModifyCommand.cpp" line="35"/>
         <source>Move Note</source>
-        <translation type="unfinished">Sposta la nota</translation>
+        <translation>Sposta la nota</translation>
     </message>
     <message>
         <location filename="../../src/commands/matrix/MatrixModifyCommand.cpp" line="35"/>
         <source>Modify Note</source>
-        <translation type="unfinished">Modifica la nota</translation>
+        <translation>Modifica la nota</translation>
     </message>
 </context>
 <context>
@@ -15806,47 +15812,47 @@ Doppio click per aprire l&apos;editor dei marcatori.</translation>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixMover.cpp" line="161"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
-        <translation type="unfinished">Tieni premuto Maiusc per evitare la divisione sulla griglia del ritmo</translation>
+        <translation>Tieni premuto Maiusc per evitare la divisione sulla griglia del ritmo</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixMover.cpp" line="293"/>
         <source>Copy and Move Event</source>
-        <translation type="unfinished">Copia e sposta l&apos;evento</translation>
+        <translation>Copia e sposta l&apos;evento</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixMover.cpp" line="295"/>
         <source>Copy and Move Events</source>
-        <translation type="unfinished">Copia e sposta gli eventi</translation>
+        <translation>Copia e sposta gli eventi</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixMover.cpp" line="299"/>
         <source>Move Event</source>
-        <translation type="unfinished">Sposta evento</translation>
+        <translation>Sposta evento</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixMover.cpp" line="301"/>
         <source>Move Events</source>
-        <translation type="unfinished">Sposta eventi</translation>
+        <translation>Sposta eventi</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixMover.cpp" line="433"/>
         <source>Click and drag to move a note; hold Ctrl as well to copy it</source>
-        <translation type="unfinished">Clicca e trascina per muovere una nota; tieni premuto Control per copiarla</translation>
+        <translation>Clicca e trascina per muovere una nota; tieni premuto Control per copiarla</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixMover.cpp" line="435"/>
         <source>Click and drag to copy a note</source>
-        <translation type="unfinished">Clicca e trascina per copiare una nota</translation>
+        <translation>Clicca e trascina per copiare una nota</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixMover.cpp" line="439"/>
         <source>Click and drag to move selected notes; hold Ctrl as well to copy</source>
-        <translation type="unfinished">Clicca e trascina per muovere le note selezionate; tieni premuto Control per copiare</translation>
+        <translation>Clicca e trascina per muovere le note selezionate; tieni premuto Control per copiare</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixMover.cpp" line="441"/>
         <source>Click and drag to copy selected notes</source>
-        <translation type="unfinished">Clicca e trascina per copiare le note selezionate</translation>
+        <translation>Clicca e trascina per copiare le note selezionate</translation>
     </message>
 </context>
 <context>
@@ -15854,17 +15860,17 @@ Doppio click per aprire l&apos;editor dei marcatori.</translation>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixPainter.cpp" line="180"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
-        <translation type="unfinished">Tieni premuto Maiusc per evitare la divisione sulla griglia del ritmo</translation>
+        <translation>Tieni premuto Maiusc per evitare la divisione sulla griglia del ritmo</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixPainter.cpp" line="322"/>
         <source>Click and drag to draw a note; Shift to avoid snapping to grid</source>
-        <translation type="unfinished">Clicca e trascina per disegnare una nota; Maiusc per evitare di seguire la griglia</translation>
+        <translation>Clicca e trascina per disegnare una nota; Maiusc per evitare di seguire la griglia</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixPainter.cpp" line="324"/>
         <source>Click and drag to draw a note</source>
-        <translation type="unfinished">Clicca e trascina per disegnare una nota</translation>
+        <translation>Clicca e trascina per disegnare una nota</translation>
     </message>
 </context>
 <context>
@@ -15872,7 +15878,7 @@ Doppio click per aprire l&apos;editor dei marcatori.</translation>
     <message>
         <location filename="../../src/commands/matrix/MatrixPercussionInsertionCommand.cpp" line="39"/>
         <source>Insert Percussion Note</source>
-        <translation type="unfinished">Inserisci nota di percussione</translation>
+        <translation>Inserisci nota di percussione</translation>
     </message>
 </context>
 <context>
@@ -15880,27 +15886,27 @@ Doppio click per aprire l&apos;editor dei marcatori.</translation>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixResizer.cpp" line="108"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
-        <translation type="unfinished">Tieni premuto Maiusc per evitare la divisione sulla griglia del ritmo</translation>
+        <translation>Tieni premuto Maiusc per evitare la divisione sulla griglia del ritmo</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixResizer.cpp" line="174"/>
         <source>Resize Event</source>
-        <translation type="unfinished">Ridimensiona evento</translation>
+        <translation>Ridimensiona evento</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixResizer.cpp" line="175"/>
         <source>Resize Events</source>
-        <translation type="unfinished">Ridimensiona eventi</translation>
+        <translation>Ridimensiona eventi</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixResizer.cpp" line="275"/>
         <source>Click and drag to resize selected notes</source>
-        <translation type="unfinished">Clicca e trascina per ridimensionare le note selezionate</translation>
+        <translation>Clicca e trascina per ridimensionare le note selezionate</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixResizer.cpp" line="277"/>
         <source>Click and drag to resize a note</source>
-        <translation type="unfinished">Clicca e trascina per ridimensionare una nota</translation>
+        <translation>Clicca e trascina per ridimensionare una nota</translation>
     </message>
 </context>
 <context>
@@ -15909,37 +15915,37 @@ Doppio click per aprire l&apos;editor dei marcatori.</translation>
         <location filename="../../src/gui/editors/matrix/MatrixSelector.cpp" line="444"/>
         <location filename="../../src/gui/editors/matrix/MatrixSelector.cpp" line="595"/>
         <source>Click and drag to select; middle-click and drag to draw new note</source>
-        <translation type="unfinished">Clicca e trascina per selezionare; tasto centrale e trascina per disegnare una nuova nota</translation>
+        <translation>Clicca e trascina per selezionare; tasto centrale e trascina per disegnare una nuova nota</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixSelector.cpp" line="612"/>
         <source>Click and drag to resize selected notes</source>
-        <translation type="unfinished">Clicca e trascina per ridimensionare le note selezionate</translation>
+        <translation>Clicca e trascina per ridimensionare le note selezionate</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixSelector.cpp" line="614"/>
         <source>Click and drag to resize note</source>
-        <translation type="unfinished">Clicca e trascina per ridimensionare la nota</translation>
+        <translation>Clicca e trascina per ridimensionare la nota</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixSelector.cpp" line="619"/>
         <source>Click and drag to move selected notes; hold Ctrl as well to copy</source>
-        <translation type="unfinished">Clicca e trascina per muovere le note selezionate; tieni premuto Control per copiare</translation>
+        <translation>Clicca e trascina per muovere le note selezionate; tieni premuto Control per copiare</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixSelector.cpp" line="621"/>
         <source>Click and drag to copy selected notes</source>
-        <translation type="unfinished">Clicca e trascina per copiare le note selezionate</translation>
+        <translation>Clicca e trascina per copiare le note selezionate</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixSelector.cpp" line="625"/>
         <source>Click and drag to move note; hold Ctrl as well to copy</source>
-        <translation type="unfinished">Clicca e trascina muovere la nota; tieni premuto Control per copiare</translation>
+        <translation>Clicca e trascina muovere la nota; tieni premuto Control per copiare</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixSelector.cpp" line="627"/>
         <source>Click and drag to copy note</source>
-        <translation type="unfinished">Clicca e trascina per copiare la nota</translation>
+        <translation>Clicca e trascina per copiare la nota</translation>
     </message>
 </context>
 <context>
@@ -15947,27 +15953,27 @@ Doppio click per aprire l&apos;editor dei marcatori.</translation>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixVelocity.cpp" line="144"/>
         <source>Velocity change: %1</source>
-        <translation type="unfinished">Cambio di velocità: %1</translation>
+        <translation>Cambio di velocità: %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixVelocity.cpp" line="223"/>
         <source>Change Velocity</source>
-        <translation type="unfinished">Cambia la velocità</translation>
+        <translation>Cambia la velocità</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixVelocity.cpp" line="226"/>
         <source>Change Velocities</source>
-        <translation type="unfinished">Cambia le velocità</translation>
+        <translation>Cambia le velocità</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixVelocity.cpp" line="257"/>
         <source>Click and drag to scale velocity of selected notes</source>
-        <translation type="unfinished">Clicca e trascina per cambiare la velocità delle note selezionate</translation>
+        <translation>Clicca e trascina per cambiare la velocità delle note selezionate</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixVelocity.cpp" line="259"/>
         <source>Click and drag to scale velocity of note</source>
-        <translation type="unfinished">Clicca e trascina per cambiare la velocità della nota</translation>
+        <translation>Clicca e trascina per cambiare la velocità della nota</translation>
     </message>
 </context>
 <context>
@@ -16035,7 +16041,7 @@ Doppio click per aprire l&apos;editor dei marcatori.</translation>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1629"/>
         <source>Unknown note insert action %1</source>
-        <translation type="unfinished">Azione %1 di inserimento nota sconosciuta</translation>
+        <translation>Azione %1 di inserimento nota sconosciuta</translation>
     </message>
     <message>
         <source>Inserting note</source>
@@ -16048,7 +16054,7 @@ Doppio click per aprire l&apos;editor dei marcatori.</translation>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="265"/>
         <source>&lt;untitled&gt;</source>
-        <translation type="unfinished">&lt;senza titolo&gt;</translation>
+        <translation>&lt;senza titolo&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="271"/>
@@ -16064,6 +16070,7 @@ Doppio click per aprire l&apos;editor dei marcatori.</translation>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="288"/>
         <source>%1%2 - %n Segment(s) - %3</source>
         <translation type="unfinished">
+            <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
@@ -16082,37 +16089,37 @@ Doppio click per aprire l&apos;editor dei marcatori.</translation>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="541"/>
         <source> Grid: </source>
-        <translation type="unfinished"> Griglia: </translation>
+        <translation> Griglia: </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="557"/>
         <source>None</source>
-        <translation type="unfinished">Nessuno</translation>
+        <translation>Nessuno</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="559"/>
         <source>Unit</source>
-        <translation type="unfinished">Unità</translation>
+        <translation>Unità</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="561"/>
         <source>Beat</source>
-        <translation type="unfinished">Ritmo</translation>
+        <translation>Ritmo</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="563"/>
         <source>Bar</source>
-        <translation type="unfinished">Battuta</translation>
+        <translation>Battuta</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="583"/>
         <source> Velocity: </source>
-        <translation type="unfinished"> Velocità:</translation>
+        <translation> Velocità:</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="601"/>
         <source> Quantize: </source>
-        <translation type="unfinished"> Quantizza:</translation>
+        <translation> Quantizza:</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="619"/>
@@ -16130,17 +16137,17 @@ Doppio click per aprire l&apos;editor dei marcatori.</translation>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1217"/>
         <source>Estimated time signature shown</source>
-        <translation type="unfinished">Stima della misura del tempo mostrata</translation>
+        <translation>Stima della misura del tempo mostrata</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1300"/>
         <source>Transpose</source>
-        <translation type="unfinished">Trasporto</translation>
+        <translation>Trasporto</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1301"/>
         <source>By number of semitones: </source>
-        <translation type="unfinished">Per numero di semitoni: </translation>
+        <translation>Per numero di semitoni: </translation>
     </message>
     <message>
         <source>Raising velocities...</source>
@@ -16153,7 +16160,7 @@ Doppio click per aprire l&apos;editor dei marcatori.</translation>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="945"/>
         <source>Set Event Velocities</source>
-        <translation type="unfinished">Imposta velocità dell&apos;evento</translation>
+        <translation>Imposta velocità dell&apos;evento</translation>
     </message>
     <message>
         <source>Setting Velocities...</source>
@@ -16162,17 +16169,17 @@ Doppio click per aprire l&apos;editor dei marcatori.</translation>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="989"/>
         <source>Trigger Segment</source>
-        <translation type="unfinished">Attiva il segmento</translation>
+        <translation>Attiva il segmento</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="999"/>
         <source>Remove Triggers</source>
-        <translation type="unfinished">Rimuovi attivatori</translation>
+        <translation>Rimuovi attivatori</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="241"/>
         <source>Matrix</source>
-        <translation type="unfinished">Matrice</translation>
+        <translation>Matrice</translation>
     </message>
     <message>
         <source>Percussion</source>
@@ -16189,7 +16196,7 @@ Doppio click per aprire l&apos;editor dei marcatori.</translation>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1515"/>
         <source>Can&apos;t insert note: No grid duration selected</source>
-        <translation type="unfinished">Non posso inserire la nota. Nessuna durata di griglia selezionata</translation>
+        <translation>Non posso inserire la nota. Nessuna durata di griglia selezionata</translation>
     </message>
     <message>
         <source> Chord </source>
@@ -16201,7 +16208,7 @@ Doppio click per aprire l&apos;editor dei marcatori.</translation>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="160"/>
         <source>Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Ingrandimento</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="176"/>
@@ -16225,13 +16232,13 @@ Doppio click per aprire l&apos;editor dei marcatori.</translation>
         <location filename="../../src/gui/studio/MidiBankTreeWidgetItem.cpp" line="40"/>
         <location filename="../../src/gui/studio/MidiBankTreeWidgetItem.cpp" line="50"/>
         <source>Percussion Bank</source>
-        <translation type="unfinished">Banco delle percussioni</translation>
+        <translation>Banco delle percussioni</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/MidiBankTreeWidgetItem.cpp" line="40"/>
         <location filename="../../src/gui/studio/MidiBankTreeWidgetItem.cpp" line="50"/>
         <source>Bank</source>
-        <translation type="unfinished">Banco</translation>
+        <translation>Banco</translation>
     </message>
 </context>
 <context>
@@ -16239,17 +16246,17 @@ Doppio click per aprire l&apos;editor dei marcatori.</translation>
     <message>
         <location filename="../../src/gui/studio/MidiDeviceTreeWidgetItem.cpp" line="44"/>
         <source>Percussion Bank</source>
-        <translation type="unfinished">Banco delle percussioni</translation>
+        <translation>Banco delle percussioni</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/MidiDeviceTreeWidgetItem.cpp" line="44"/>
         <source>Bank</source>
-        <translation type="unfinished">Banco</translation>
+        <translation>Banco</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/MidiDeviceTreeWidgetItem.cpp" line="55"/>
         <source>Key Mapping</source>
-        <translation type="unfinished">Mappatura della tastiera</translation>
+        <translation>Mappatura della tastiera</translation>
     </message>
 </context>
 <context>
@@ -16257,64 +16264,64 @@ Doppio click per aprire l&apos;editor dei marcatori.</translation>
     <message>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="51"/>
         <source>Modify MIDI filters...</source>
-        <translation type="unfinished">Modifica filtri MIDI...</translation>
+        <translation>Modifica filtri MIDI...</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="61"/>
         <source>THRU events to ignore</source>
-        <translation type="unfinished">Eventi THRU da ignorare</translation>
+        <translation>Eventi THRU da ignorare</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="65"/>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="118"/>
         <source>Note</source>
-        <translation type="unfinished">Nota</translation>
+        <translation>Nota</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="66"/>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="119"/>
         <source>Program Change</source>
-        <translation type="unfinished">Cambia programma</translation>
+        <translation>Cambia programma</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="67"/>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="120"/>
         <source>Key Pressure</source>
-        <translation type="unfinished">Pressione tasto</translation>
+        <translation>Pressione tasto</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="68"/>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="121"/>
         <source>Channel Pressure</source>
-        <translation type="unfinished">Sensibilità canale</translation>
+        <translation>Sensibilità canale</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="69"/>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="122"/>
         <source>Pitch Bend</source>
-        <translation type="unfinished">Curva dell&apos;altezza</translation>
+        <translation>Curva dell&apos;altezza</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="70"/>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="123"/>
         <source>Controller</source>
-        <translation type="unfinished">Controller</translation>
+        <translation>Controller</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="71"/>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="124"/>
         <source>System Exclusive</source>
-        <translation type="unfinished">Esclusione di sistema</translation>
+        <translation>Esclusione di sistema</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="114"/>
         <source>RECORD events to ignore</source>
-        <translation type="unfinished">Eventi di registrazione da ignorare</translation>
+        <translation>Eventi di registrazione da ignorare</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="228"/>
         <source>http://rosegardenmusic.com/wiki/doc:midi-filter-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:midi-filter-en</translation>
     </message>
 </context>
 <context>
@@ -16322,7 +16329,7 @@ Doppio click per aprire l&apos;editor dei marcatori.</translation>
     <message>
         <location filename="../../src/gui/studio/MidiKeyMapTreeWidgetItem.cpp" line="42"/>
         <source>Key Mapping</source>
-        <translation type="unfinished">Mappatura della tastiera</translation>
+        <translation>Mappatura della tastiera</translation>
     </message>
 </context>
 <context>
@@ -16331,12 +16338,12 @@ Doppio click per aprire l&apos;editor dei marcatori.</translation>
         <location filename="../../src/gui/studio/MidiKeyMappingEditor.cpp" line="50"/>
         <location filename="../../src/gui/studio/MidiKeyMappingEditor.cpp" line="74"/>
         <source>Key Mapping details</source>
-        <translation type="unfinished">Dettagli della mappatura della tastiera</translation>
+        <translation>Dettagli della mappatura della tastiera</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/MidiKeyMappingEditor.cpp" line="51"/>
         <source>Pitches</source>
-        <translation type="unfinished">Altezze</translation>
+        <translation>Altezze</translation>
     </message>
 </context>
 <context>
@@ -16344,17 +16351,17 @@ Doppio click per aprire l&apos;editor dei marcatori.</translation>
     <message>
         <location filename="../../src/gui/studio/MidiMixerWindow.cpp" line="108"/>
         <source>MIDI Mixer</source>
-        <translation type="unfinished">Mixer MIDI</translation>
+        <translation>Mixer MIDI</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/MidiMixerWindow.cpp" line="148"/>
         <source>Volume</source>
-        <translation type="unfinished">Volume</translation>
+        <translation>Volume</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/MidiMixerWindow.cpp" line="153"/>
         <source>Instrument</source>
-        <translation type="unfinished">Strumento</translation>
+        <translation>Strumento</translation>
     </message>
 </context>
 <context>
@@ -16363,48 +16370,48 @@ Doppio click per aprire l&apos;editor dei marcatori.</translation>
         <location filename="../../src/gui/studio/MidiProgramsEditor.cpp" line="65"/>
         <location filename="../../src/gui/studio/MidiProgramsEditor.cpp" line="163"/>
         <source>Bank and Program details</source>
-        <translation type="unfinished">Dettagli Banco e Programma</translation>
+        <translation>Dettagli Banco e Programma</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/MidiProgramsEditor.cpp" line="66"/>
         <source>Programs</source>
-        <translation type="unfinished">Programmi</translation>
+        <translation>Programmi</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/MidiProgramsEditor.cpp" line="91"/>
         <source>Percussion</source>
-        <translation type="unfinished">Percussioni</translation>
+        <translation>Percussioni</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/MidiProgramsEditor.cpp" line="97"/>
         <source>MSB Value</source>
-        <translation type="unfinished">Valore MSB</translation>
+        <translation>Valore MSB</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/MidiProgramsEditor.cpp" line="103"/>
         <source>Selects a MSB controller Bank number (MSB/LSB pairs are always unique for any Device)</source>
-        <translation type="unfinished">Seleziona un numero di banco per il controller MSB (la coppia MSB/LSB è sempre unica per qualsiasi dispositivo)</translation>
+        <translation>Seleziona un numero di banco per il controller MSB (la coppia MSB/LSB è sempre unica per qualsiasi dispositivo)</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/MidiProgramsEditor.cpp" line="105"/>
         <source>Selects a LSB controller Bank number (MSB/LSB pairs are always unique for any Device)</source>
-        <translation type="unfinished">Seleziona un numero di banco per il controller LSB (la coppia MSB/LSB è sempre unica per qualsiasi dispositivo)</translation>
+        <translation>Seleziona un numero di banco per il controller LSB (la coppia MSB/LSB è sempre unica per qualsiasi dispositivo)</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/MidiProgramsEditor.cpp" line="110"/>
         <source>LSB Value</source>
-        <translation type="unfinished">Valore LSB</translation>
+        <translation>Valore LSB</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/MidiProgramsEditor.cpp" line="247"/>
         <location filename="../../src/gui/studio/MidiProgramsEditor.cpp" line="563"/>
         <source>Key Mapping: %1</source>
-        <translation type="unfinished">Mappatura del tasto: %1</translation>
+        <translation>Mappatura del tasto: %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/MidiProgramsEditor.cpp" line="491"/>
         <source>&lt;no key mapping&gt;</source>
-        <translation type="unfinished">&lt;nessuna mappatura della tastiera&gt;</translation>
+        <translation>&lt;nessuna mappatura della tastiera&gt;</translation>
     </message>
 </context>
 <context>
@@ -16412,7 +16419,7 @@ Doppio click per aprire l&apos;editor dei marcatori.</translation>
     <message>
         <location filename="../../src/commands/studio/ModifyControlParameterCommand.h" line="56"/>
         <source>&amp;Modify Control Parameter</source>
-        <translation type="unfinished">&amp;Modifica parametro di controllo</translation>
+        <translation>&amp;Modifica parametro di controllo</translation>
     </message>
 </context>
 <context>
@@ -16420,7 +16427,7 @@ Doppio click per aprire l&apos;editor dei marcatori.</translation>
     <message>
         <location filename="../../src/commands/segment/ModifyDefaultTempoCommand.h" line="46"/>
         <source>Modify &amp;Default Tempo...</source>
-        <translation type="unfinished">Modifica il ritmo pre&amp;definito...</translation>
+        <translation>Modifica il ritmo pre&amp;definito...</translation>
     </message>
 </context>
 <context>
@@ -16428,7 +16435,7 @@ Doppio click per aprire l&apos;editor dei marcatori.</translation>
     <message>
         <location filename="../../src/commands/studio/ModifyDeviceCommand.h" line="63"/>
         <source>Modify &amp;MIDI Bank</source>
-        <translation type="unfinished">Modifica il Banco &amp;MIDI</translation>
+        <translation>Modifica il Banco &amp;MIDI</translation>
     </message>
 </context>
 <context>
@@ -16436,7 +16443,7 @@ Doppio click per aprire l&apos;editor dei marcatori.</translation>
     <message>
         <location filename="../../src/commands/studio/ModifyDeviceMappingCommand.h" line="50"/>
         <source>Modify &amp;Device Mapping</source>
-        <translation type="unfinished">Modifica la mappatura dei &amp;dispositivi</translation>
+        <translation>Modifica la mappatura dei &amp;dispositivi</translation>
     </message>
 </context>
 <context>
@@ -16452,7 +16459,7 @@ Doppio click per aprire l&apos;editor dei marcatori.</translation>
     <message>
         <location filename="../../src/commands/edit/ModifyMarkerCommand.h" line="50"/>
         <source>&amp;Modify Marker</source>
-        <translation type="unfinished">&amp;Modifica marcatore</translation>
+        <translation>&amp;Modifica marcatore</translation>
     </message>
 </context>
 <context>
@@ -16460,7 +16467,7 @@ Doppio click per aprire l&apos;editor dei marcatori.</translation>
     <message>
         <location filename="../../src/commands/edit/MoveAcrossSegmentsCommand.cpp" line="65"/>
         <source>&amp;Move Events to Other Segment</source>
-        <translation type="unfinished">&amp;Muovi eventi su un altro segmento</translation>
+        <translation>&amp;Muovi eventi su un altro segmento</translation>
     </message>
 </context>
 <context>
@@ -16468,7 +16475,7 @@ Doppio click per aprire l&apos;editor dei marcatori.</translation>
     <message>
         <location filename="../../src/commands/segment/MoveTracksCommand.h" line="46"/>
         <source>Move Tracks...</source>
-        <translation type="unfinished">Sposta le tracce...</translation>
+        <translation>Sposta le tracce...</translation>
     </message>
 </context>
 <context>
@@ -16476,12 +16483,12 @@ Doppio click per aprire l&apos;editor dei marcatori.</translation>
     <message>
         <location filename="../../src/commands/notation/MultiKeyInsertionCommand.h" line="58"/>
         <source>Change all to &amp;Key %1...</source>
-        <translation type="unfinished">Cambia tutto nella tonalità %1...</translation>
+        <translation>Cambia tutto nella &amp;tonalità %1...</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/MultiKeyInsertionCommand.h" line="60"/>
         <source>Add &amp;Key Change...</source>
-        <translation type="unfinished">Aggiungi cambio di tonalità...</translation>
+        <translation type="unfinished">Aggiungi &amp;cambio di tonalità...</translation>
     </message>
 </context>
 <context>
@@ -16780,7 +16787,7 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location filename="../../src/commands/notation/NormalizeRestsCommand.h" line="49"/>
         <source>&amp;Normalize Rests</source>
-        <translation type="unfinished">&amp;Normalizza le pause</translation>
+        <translation>&amp;Normalizza le pause</translation>
     </message>
 </context>
 <context>
@@ -16789,37 +16796,37 @@ Accertati che il dispositivo sia correttamente configurato alla voce
         <location filename="../../src/gui/configuration/NotationConfigurationPage.h" line="53"/>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.h" line="54"/>
         <source>Notation</source>
-        <translation type="unfinished">Notazione</translation>
+        <translation>Notazione</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="81"/>
         <source>Default layout mode</source>
-        <translation type="unfinished">Modalità di visualizzazione predefinita</translation>
+        <translation>Modalità di visualizzazione predefinita</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="86"/>
         <source>Linear layout</source>
-        <translation type="unfinished">Visualizzazione lineare</translation>
+        <translation>Visualizzazione lineare</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="87"/>
         <source>Continuous page layout</source>
-        <translation type="unfinished">Visualizzazione su pagina continua</translation>
+        <translation>Visualizzazione su pagina continua</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="88"/>
         <source>Multiple page layout</source>
-        <translation type="unfinished">Visualizzazione su più pagine</translation>
+        <translation>Visualizzazione su più pagine</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="96"/>
         <source>Default spacing</source>
-        <translation type="unfinished">Spaziatura predefinita</translation>
+        <translation>Spaziatura predefinita</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="109"/>
         <source>%1 % (normal)</source>
-        <translation type="unfinished">%1 % (normale)</translation>
+        <translation>%1 % (normale)</translation>
     </message>
     <message>
         <source>Default duration factor</source>
@@ -16836,209 +16843,209 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="121"/>
         <source>Show track headers (linear layout only)</source>
-        <translation type="unfinished">Mostra le intestazioni della traccia (solo per la visualizzazione lineare)</translation>
+        <translation>Mostra le intestazioni della traccia (solo per la visualizzazione lineare)</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="128"/>
         <source>Never</source>
-        <translation type="unfinished">Mai</translation>
+        <translation>Mai</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="129"/>
         <source>When needed</source>
-        <translation type="unfinished">Al bisogno</translation>
+        <translation>Al bisogno</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="130"/>
         <source>Always</source>
-        <translation type="unfinished">Sempre</translation>
+        <translation>Sempre</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="137"/>
         <source>&quot;Always&quot; and &quot;Never&quot; mean what they usually mean
 &quot;When needed&quot; means &quot;when staves are too many to all fit in the current window&quot;</source>
-        <translation type="unfinished">&quot;Sempre&quot; e &quot;Mai&quot; significano quel che di solito significano
+        <translation>&quot;Sempre&quot; e &quot;Mai&quot; significano quel che di solito significano
 &quot;Al bisogno&quot; significa &quot;quando i righi sono troppi per stare tutti nella finestra corrente&quot;</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="150"/>
         <source>Show non-notation events as question marks</source>
-        <translation type="unfinished">Mostra gli eventi non di notazione come punti di domanda</translation>
+        <translation>Mostra gli eventi non di notazione come punti di domanda</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="161"/>
         <source>Show notation-quantized notes in a different color</source>
-        <translation type="unfinished">Mostra le note quantizzate in colore diverso</translation>
+        <translation>Mostra le note quantizzate in colore diverso</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="172"/>
         <source>Show &quot;invisible&quot; events in grey</source>
-        <translation type="unfinished">Mostra gli eventi &quot;invisibili&quot; in grigio</translation>
+        <translation>Mostra gli eventi &quot;invisibili&quot; in grigio</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="183"/>
         <source>Show notes outside suggested playable range in red</source>
-        <translation type="unfinished">Mostra in rosso le note fuori dall&apos;intervallo suggerito</translation>
+        <translation>Mostra in rosso le note fuori dall&apos;intervallo suggerito</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="194"/>
         <source>Highlight superimposed notes with a halo effect</source>
-        <translation type="unfinished">Evidenzia le note sovrapposte con un effetto di trasparenza</translation>
+        <translation>Evidenzia le note sovrapposte con un effetto di trasparenza</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="208"/>
         <source>When recording MIDI, split-and-tie long notes at barlines</source>
-        <translation type="unfinished">Nella registrazione MIDI, dividi e lega le note lunghe alle linee di battuta</translation>
+        <translation>Nella registrazione MIDI, dividi e lega le note lunghe alle linee di battuta</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="220"/>
         <source>Layout</source>
-        <translation type="unfinished">Aspetto</translation>
+        <translation>Aspetto</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="233"/>
         <source>Default note style for new notes</source>
-        <translation type="unfinished">Stile predefinito per le nuove note</translation>
+        <translation>Stile predefinito per le nuove note</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="265"/>
         <source>When inserting notes...</source>
-        <translation type="unfinished">Quando inserisci le note...</translation>
+        <translation>Quando inserisci le note...</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="273"/>
         <source>Split notes into ties to make durations match</source>
-        <translation type="unfinished">Dividi le note con legature per rispettare la durata delle battute</translation>
+        <translation>Dividi le note con legature per rispettare la durata delle battute</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="274"/>
         <source>Ignore existing durations</source>
-        <translation type="unfinished">Ignora le durate esistenti</translation>
+        <translation>Ignora le durate esistenti</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="284"/>
         <source>Auto-beam on insert when appropriate</source>
-        <translation type="unfinished">Auto-collega all&apos;inserimento quando appropriato</translation>
+        <translation>Auto-collega all&apos;inserimento quando appropriato</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="297"/>
         <source>Collapse rests after erase</source>
-        <translation type="unfinished">Unisci le pause dopo una cancellazione</translation>
+        <translation>Unisci le pause dopo una cancellazione</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="309"/>
         <source>Default paste type</source>
-        <translation type="unfinished">Modalità predefinita per incollare</translation>
+        <translation>Modalità predefinita per incollare</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="333"/>
         <source>Editing</source>
-        <translation type="unfinished">Modifica</translation>
+        <translation>Modifica</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="345"/>
         <source>Accidentals in one octave...</source>
-        <translation type="unfinished">Accidenti in una ottava...</translation>
+        <translation>Accidenti in una ottava...</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="348"/>
         <source>Affect only that octave</source>
-        <translation type="unfinished">Cambia soltanto quell&apos;ottava</translation>
+        <translation>Cambia soltanto quell&apos;ottava</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="349"/>
         <source>Require cautionaries in other octaves</source>
-        <translation type="unfinished">Chiedi conferma nelle altre ottave</translation>
+        <translation>Chiedi conferma nelle altre ottave</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="350"/>
         <source>Affect all subsequent octaves</source>
-        <translation type="unfinished">Cambia tutte le ottave successive</translation>
+        <translation>Cambia tutte le ottave successive</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="358"/>
         <source>Accidentals in one bar...</source>
-        <translation type="unfinished">Accidenti in una battuta...</translation>
+        <translation>Accidenti in una battuta...</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="361"/>
         <source>Affect only that bar</source>
-        <translation type="unfinished">Cambia solo quella battuta</translation>
+        <translation>Cambia solo quella battuta</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="362"/>
         <source>Require cautionary resets in following bar</source>
-        <translation type="unfinished">Chiedi l&apos;azzeramento delle precauzioni nella battuta seguente</translation>
+        <translation>Chiedi l&apos;azzeramento delle precauzioni nella battuta seguente</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="363"/>
         <source>Require explicit resets in following bar</source>
-        <translation type="unfinished">Chiedi esplicitamente il ripristino nella battuta seguente</translation>
+        <translation>Chiedi esplicitamente il ripristino nella battuta seguente</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="371"/>
         <source>Key signature cancellation style</source>
-        <translation type="unfinished">Stile di cancellazione della tonalità</translation>
+        <translation>Stile di cancellazione della tonalità</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="374"/>
         <source>Cancel only when entering C major or A minor</source>
-        <translation type="unfinished">Cancella solo quando parte in DO maggiore o LA minore</translation>
+        <translation>Cancella solo quando parte in DO maggiore o LA minore</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="375"/>
         <source>Cancel whenever removing sharps or flats</source>
-        <translation type="unfinished">Cancella quando sono rimossi diesis e bemolle</translation>
+        <translation>Cancella quando sono rimossi diesis e bemolle</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="376"/>
         <source>Cancel always</source>
-        <translation type="unfinished">Cancella sempre</translation>
+        <translation>Cancella sempre</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="387"/>
         <source>Accidentals</source>
-        <translation type="unfinished">Accidenti</translation>
+        <translation>Accidenti</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="398"/>
         <source>Notation font</source>
-        <translation type="unfinished">Carattere notazione</translation>
+        <translation>Carattere notazione</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="404"/>
         <source>View</source>
-        <translation type="unfinished">Vista</translation>
+        <translation>Vista</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="425"/>
         <source>Origin:</source>
-        <translation type="unfinished">Origine:</translation>
+        <translation>Origine:</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="429"/>
         <source>Copyright:</source>
-        <translation type="unfinished">Copyright:</translation>
+        <translation>Copyright:</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="433"/>
         <source>Mapped by:</source>
-        <translation type="unfinished">Mappato da:</translation>
+        <translation>Mappato da:</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="437"/>
         <source>Type:</source>
-        <translation type="unfinished">Tipo:</translation>
+        <translation>Tipo:</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="463"/>
         <source>Font size for single-staff views</source>
-        <translation type="unfinished">Dimensione dei caratteri per la vista a pentagramma singolo</translation>
+        <translation>Dimensione dei caratteri per la vista a pentagramma singolo</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="472"/>
         <source>Font size for multi-staff views</source>
-        <translation type="unfinished">Dimensione dei caratteri per la vista a più pentagrammi</translation>
+        <translation>Dimensione dei caratteri per la vista a più pentagrammi</translation>
     </message>
     <message>
         <source>Font size for printing (pt)</source>
@@ -17047,27 +17054,27 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="490"/>
         <source>Text font</source>
-        <translation type="unfinished">Font del testo</translation>
+        <translation>Font del testo</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="502"/>
         <source>Sans-serif font</source>
-        <translation type="unfinished">Font Sans-serif</translation>
+        <translation>Font Sans-serif</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="515"/>
         <source>Font</source>
-        <translation type="unfinished"></translation>
+        <translation>Font</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="609"/>
         <source>%1 (smooth)</source>
-        <translation type="unfinished">%1 (regolare)</translation>
+        <translation>%1 (regolare)</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="611"/>
         <source>%1 (jaggy)</source>
-        <translation type="unfinished">%1 (frastagliato)</translation>
+        <translation>%1 (frastagliato)</translation>
     </message>
 </context>
 <context>
@@ -17075,22 +17082,22 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="454"/>
         <source>Rendering staff %1...</source>
-        <translation type="unfinished">Disegnando il rigo %1...</translation>
+        <translation>Disegnando il rigo %1...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="517"/>
         <source>Rendering notes on staff %1...</source>
-        <translation type="unfinished">Posizionamento delle note sul rigo %1 in corso...</translation>
+        <translation>Posizionamento delle note sul rigo %1 in corso...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="646"/>
         <source>Positioning staff %1...</source>
-        <translation type="unfinished">Posizionando il rigo %1...</translation>
+        <translation>Posizionando il rigo %1...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="1203"/>
         <source>Sustain</source>
-        <translation type="unfinished">Sustain</translation>
+        <translation>Sustain</translation>
     </message>
 </context>
 <context>
@@ -17098,199 +17105,199 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="44"/>
         <source>%1-dotted-%2</source>
-        <translation type="unfinished">%1-puntata-%2</translation>
+        <translation>%1-puntata-%2</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="46"/>
         <source>%1-dotted %2</source>
-        <translation type="unfinished">%1-puntata %2</translation>
+        <translation>%1-puntata %2</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="49"/>
         <source>dotted-%1</source>
-        <translation type="unfinished">%1-puntata</translation>
+        <translation>%1-puntata</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="51"/>
         <source>dotted %1</source>
-        <translation type="unfinished">%1 puntata</translation>
+        <translation>%1 puntata</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="75"/>
         <source>sixty-fourth note</source>
-        <translation type="unfinished">semibiscroma</translation>
+        <translation>semibiscroma</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="75"/>
         <source>thirty-second note</source>
-        <translation type="unfinished">biscroma</translation>
+        <translation>biscroma</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="76"/>
         <source>sixteenth note</source>
-        <translation type="unfinished">semicroma</translation>
+        <translation>semicroma</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="76"/>
         <source>eighth note</source>
-        <translation type="unfinished">ottava</translation>
+        <translation>ottava</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="77"/>
         <source>quarter note</source>
-        <translation type="unfinished">semiminima</translation>
+        <translation>semiminima</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="77"/>
         <source>half note</source>
-        <translation type="unfinished">minima</translation>
+        <translation>minima</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="78"/>
         <source>whole note</source>
-        <translation type="unfinished">semibreve</translation>
+        <translation>semibreve</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="78"/>
         <source>double whole note</source>
-        <translation type="unfinished">breve</translation>
+        <translation>breve</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="81"/>
         <source>sixty-fourth notes</source>
-        <translation type="unfinished">semibiscrome</translation>
+        <translation>semibiscrome</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="81"/>
         <source>thirty-second notes</source>
-        <translation type="unfinished">biscrome</translation>
+        <translation>biscrome</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="82"/>
         <source>sixteenth notes</source>
-        <translation type="unfinished">semicrome</translation>
+        <translation>semicrome</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="82"/>
         <source>eighth notes</source>
-        <translation type="unfinished">ottave</translation>
+        <translation>ottave</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="83"/>
         <source>quarter notes</source>
-        <translation type="unfinished">semiminime</translation>
+        <translation>semiminime</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="83"/>
         <source>half notes</source>
-        <translation type="unfinished">minime</translation>
+        <translation>minime</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="84"/>
         <source>whole notes</source>
-        <translation type="unfinished">semibrevi</translation>
+        <translation>semibrevi</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="84"/>
         <source>double whole notes</source>
-        <translation type="unfinished">brevi</translation>
+        <translation>brevi</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="88"/>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="146"/>
         <source>%1 triplets</source>
-        <translation type="unfinished">%1 terzine</translation>
+        <translation>%1 terzine</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="92"/>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="150"/>
         <source>%1 triplet</source>
-        <translation type="unfinished">%1 terzina</translation>
+        <translation>%1 terzina</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="135"/>
         <source>64th</source>
-        <translation type="unfinished">sessantaquattresimo</translation>
+        <translation>sessantaquattresimo</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="135"/>
         <source>32nd</source>
-        <translation type="unfinished">trentaduesimo</translation>
+        <translation>trentaduesimo</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="135"/>
         <source>16th</source>
-        <translation type="unfinished">16</translation>
+        <translation>16</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="135"/>
         <source>8th</source>
-        <translation type="unfinished">8</translation>
+        <translation>8</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="136"/>
         <source>quarter</source>
-        <translation type="unfinished">quarto</translation>
+        <translation>quarto</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="136"/>
         <source>half</source>
-        <translation type="unfinished">metà</translation>
+        <translation>metà</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="136"/>
         <source>whole</source>
-        <translation type="unfinished">semibreve</translation>
+        <translation>semibreve</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="137"/>
         <source>double whole</source>
-        <translation type="unfinished">breve</translation>
+        <translation>breve</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="140"/>
         <source>64ths</source>
-        <translation type="unfinished">sessantaquattresimi</translation>
+        <translation>sessantaquattresimi</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="140"/>
         <source>32nds</source>
-        <translation type="unfinished">trentaduesimi</translation>
+        <translation>trentaduesimi</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="140"/>
         <source>16ths</source>
-        <translation type="unfinished">sedicesimi</translation>
+        <translation>sedicesimi</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="140"/>
         <source>8ths</source>
-        <translation type="unfinished">ottavi</translation>
+        <translation>ottavi</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="141"/>
         <source>quarters</source>
-        <translation type="unfinished">quarti</translation>
+        <translation>quarti</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="141"/>
         <source>halves</source>
-        <translation type="unfinished">metà</translation>
+        <translation>metà</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="141"/>
         <source>wholes</source>
-        <translation type="unfinished">semibrevi</translation>
+        <translation>semibrevi</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="142"/>
         <source>double wholes</source>
-        <translation type="unfinished">brevi</translation>
+        <translation>brevi</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="269"/>
         <source>%1 ticks</source>
-        <translation type="unfinished">%1 punti</translation>
+        <translation>%1 punti</translation>
     </message>
 </context>
 <context>
@@ -17299,7 +17306,7 @@ Accertati che il dispositivo sia correttamente configurato alla voce
         <location filename="../../src/gui/editors/notation/NotationVLayout.cpp" line="508"/>
         <source>Spanned note at %1 has no HEIGHT_ON_STAFF property!
 This is a bug (the program would previously have crashed by now)</source>
-        <translation type="unfinished">Le note incontrate in %1 non hanno la proprietà HEIGHT_ON_STAFF!
+        <translation>Le note incontrate in %1 non hanno la proprietà HEIGHT_ON_STAFF!
 Questo è un baco (il programma avrebbe dovuto interrompersi...)</translation>
     </message>
 </context>
@@ -17320,7 +17327,7 @@ Questo è un baco (il programma avrebbe dovuto interrompersi...)</translation>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="793"/>
         <source>Note &amp;Font</source>
-        <translation type="unfinished">&amp;Font delle note</translation>
+        <translation>&amp;Font delle note</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="821"/>
@@ -17330,7 +17337,7 @@ Questo è un baco (il programma avrebbe dovuto interrompersi...)</translation>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="841"/>
         <source>S&amp;pacing</source>
-        <translation type="unfinished">S&amp;paziatura</translation>
+        <translation>S&amp;paziatura</translation>
     </message>
     <message>
         <source>Du&amp;ration Factor</source>
@@ -17345,27 +17352,28 @@ Questo è un baco (il programma avrebbe dovuto interrompersi...)</translation>
         <source>%n pixel(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="940"/>
         <source>  Font:  </source>
-        <translation type="unfinished">  Font:  </translation>
+        <translation>  Font:  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="975"/>
         <source>Unknown font &quot;%1&quot;, using default</source>
-        <translation type="unfinished">Font &quot;%1&quot; sconosciuto, uso quello predefinito</translation>
+        <translation>Font &quot;%1&quot; sconosciuto, uso quello predefinito</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="983"/>
         <source>  Size:  </source>
-        <translation type="unfinished">  Dimensione:  </translation>
+        <translation>  Dimensione:  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1007"/>
         <source>  Spacing:  </source>
-        <translation type="unfinished">  Spaziatura:  </translation>
+        <translation>  Spaziatura:  </translation>
     </message>
     <message>
         <source>  Ready.</source>
@@ -17386,7 +17394,7 @@ Questo è un baco (il programma avrebbe dovuto interrompersi...)</translation>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="920"/>
         <source>  No selection </source>
-        <translation type="unfinished">  Nessuna selezione</translation>
+        <translation>  Nessuna selezione</translation>
     </message>
     <message>
         <source>Sizing and allocating canvas...</source>
@@ -17411,17 +17419,17 @@ Questo è un baco (il programma avrebbe dovuto interrompersi...)</translation>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3099"/>
         <source>Triplet</source>
-        <translation type="unfinished">Terzina</translation>
+        <translation>Terzina</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3100"/>
         <source>Chord</source>
-        <translation type="unfinished">Accordo</translation>
+        <translation>Accordo</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3101"/>
         <source>Grace</source>
-        <translation type="unfinished">Abbellimento</translation>
+        <translation>Abbellimento</translation>
     </message>
     <message>
         <source>%1 %2</source>
@@ -17438,7 +17446,7 @@ Questo è un baco (il programma avrebbe dovuto interrompersi...)</translation>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1277"/>
         <source>Unknown spacing action %1</source>
-        <translation type="unfinished">Azione %1 sulla spaziatura sconosciuta</translation>
+        <translation>Azione %1 sulla spaziatura sconosciuta</translation>
     </message>
     <message>
         <source>Unknown proportion action %1</source>
@@ -17447,7 +17455,7 @@ Questo è un baco (il programma avrebbe dovuto interrompersi...)</translation>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1226"/>
         <source>Unknown font action %1</source>
-        <translation type="unfinished">Azione %1 sul carattere sconosciuta</translation>
+        <translation>Azione %1 sul carattere sconosciuta</translation>
     </message>
     <message>
         <source>Unknown font size %1</source>
@@ -17456,7 +17464,7 @@ Questo è un baco (il programma avrebbe dovuto interrompersi...)</translation>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1252"/>
         <source>Unknown font size action %1</source>
-        <translation type="unfinished">Azione %1 sulla dimensione dei caratteri sconosciuta</translation>
+        <translation>Azione %1 sulla dimensione dei caratteri sconosciuta</translation>
     </message>
     <message>
         <source>Printing...</source>
@@ -17481,12 +17489,12 @@ Questo è un baco (il programma avrebbe dovuto interrompersi...)</translation>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1105"/>
         <source>LilyPond Preview Options</source>
-        <translation type="unfinished">Opzioni dell&apos;Anteprima Lilypond</translation>
+        <translation>Opzioni dell&apos;Anteprima Lilypond</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1106"/>
         <source>LilyPond preview options</source>
-        <translation type="unfinished">Opzioni dell&apos;anteprima Lilypond</translation>
+        <translation>Opzioni dell&apos;anteprima Lilypond</translation>
     </message>
     <message>
         <source>Exporting LilyPond file...</source>
@@ -17495,7 +17503,7 @@ Questo è un baco (il programma avrebbe dovuto interrompersi...)</translation>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1117"/>
         <source>Export failed.  The file could not be opened for writing.</source>
-        <translation type="unfinished">Esportazione fallita. Il file non può essere aperto per la scrittura.</translation>
+        <translation>Esportazione fallita. Il file non può essere aperto per la scrittura.</translation>
     </message>
     <message>
         <source>Cutting selection to clipboard...</source>
@@ -17512,17 +17520,18 @@ Questo è un baco (il programma avrebbe dovuto interrompersi...)</translation>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1408"/>
         <source>Clipboard is empty</source>
-        <translation type="unfinished">Gli appunti sono vuoti</translation>
+        <translation>Gli appunti sono vuoti</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1349"/>
         <source>Can&apos;t paste multiple Segments into one</source>
-        <translation type="unfinished">Non è possibile incollare segmenti multipli in uno solo</translation>
+        <translation>Non è possibile incollare segmenti multipli in uno solo</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="917"/>
         <source>  %n event(s) selected </source>
         <translation type="unfinished">
+            <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
@@ -17538,7 +17547,7 @@ Questo è un baco (il programma avrebbe dovuto interrompersi...)</translation>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2764"/>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3723"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1127"/>
@@ -17564,39 +17573,39 @@ Questo è un baco (il programma avrebbe dovuto interrompersi...)</translation>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1412"/>
         <source>Inserting clipboard contents...</source>
-        <translation type="unfinished">Inserimento del contenuto degli appunti in corso...</translation>
+        <translation>Inserimento del contenuto degli appunti in corso...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1386"/>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1455"/>
         <source>Couldn&apos;t paste at this point.</source>
-        <translation type="unfinished">Non è possibile incollare in questo punto.</translation>
+        <translation>Non è possibile incollare in questo punto.</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3767"/>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3802"/>
         <source>Move Events to Staff Above</source>
-        <translation type="unfinished">Muovi eventi sul rigo sopra</translation>
+        <translation>Muovi eventi sul rigo sopra</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1571"/>
         <source>Raising velocities...</source>
-        <translation type="unfinished">Aumento delle velocità...</translation>
+        <translation>Aumento delle velocità...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1582"/>
         <source>Lowering velocities...</source>
-        <translation type="unfinished">Diminuzione delle velocità...</translation>
+        <translation>Diminuzione delle velocità...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1619"/>
         <source>Set Event Velocities</source>
-        <translation type="unfinished">Imposta velocità dell&apos;evento</translation>
+        <translation>Imposta velocità dell&apos;evento</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1624"/>
         <source>Setting Velocities...</source>
-        <translation type="unfinished">Impostazione velocità...</translation>
+        <translation>Impostazione velocità...</translation>
     </message>
     <message>
         <source>Normalizing rests...</source>
@@ -17613,12 +17622,12 @@ Questo è un baco (il programma avrebbe dovuto interrompersi...)</translation>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2188"/>
         <source>Unknown note insert action %1</source>
-        <translation type="unfinished">Azione %1 di inserimento nota sconosciuta</translation>
+        <translation>Azione %1 di inserimento nota sconosciuta</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2192"/>
         <source>Inserting note</source>
-        <translation type="unfinished">Inserimento nota</translation>
+        <translation>Inserimento nota</translation>
     </message>
     <message>
         <source>No rest duration selected</source>
@@ -17643,50 +17652,50 @@ Questo è un baco (il programma avrebbe dovuto interrompersi...)</translation>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2565"/>
         <source>Ornament track %1 bar %2</source>
-        <translation type="unfinished">Ornamento traccia %1 battuta %2</translation>
+        <translation>Ornamento traccia %1 battuta %2</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2567"/>
         <source>Ornament bar %1</source>
-        <translation type="unfinished">Ornamento battuta %1</translation>
+        <translation>Ornamento battuta %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2577"/>
         <source>Make Ornament</source>
-        <translation type="unfinished">Fai ornamento</translation>
+        <translation>Fai ornamento</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2622"/>
         <source>Use Ornament</source>
-        <translation type="unfinished">Usa ornamento</translation>
+        <translation>Usa ornamento</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2633"/>
         <source>Remove Ornaments</source>
-        <translation type="unfinished">Rimuovi gli ornamenti</translation>
+        <translation>Rimuovi gli ornamenti</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2691"/>
         <source>Estimated key signature shown</source>
-        <translation type="unfinished">Tonalità stimata</translation>
+        <translation>Tonalità stimata</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2748"/>
         <source>Sustain</source>
-        <translation type="unfinished">Sustain</translation>
+        <translation>Sustain</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2764"/>
         <source>There is no sustain controller defined for this device.
 Please ensure the device is configured correctly in the Manage MIDI Devices dialog in the main window.</source>
-        <translation type="unfinished">Non c&apos;è un controllo del sustain per questo dispositivo.
+        <translation>Non c&apos;è un controllo del sustain per questo dispositivo.
 Accertati che il dispositivo sia correttamente configurato alla voce
 &apos;Gestisci dispositivi MIDI&apos; nella finestra principale.</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2933"/>
         <source>Estimated time signature shown</source>
-        <translation type="unfinished">Stima della misura del tempo mostrata</translation>
+        <translation>Stima della misura del tempo mostrata</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2993"/>
@@ -17703,42 +17712,43 @@ Accertati che il dispositivo sia correttamente configurato alla voce
         <source>%1%2 - %n Segment(s) - Notation</source>
         <translation type="unfinished">
             <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3258"/>
         <source>Transpose</source>
-        <translation type="unfinished">Trasporto</translation>
+        <translation>Trasporto</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3259"/>
         <source>By number of semitones: </source>
-        <translation type="unfinished">Per numero di semitoni: </translation>
+        <translation>Per numero di semitoni: </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3621"/>
         <source>Time: %1 (%2.%3s)</source>
-        <translation type="unfinished">Tempo: %1 (%2.%3s)</translation>
+        <translation>Tempo: %1 (%2.%3s)</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3696"/>
         <source>http://rosegardenmusic.com/wiki/doc:notation-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:notation-en</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3703"/>
         <source>http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</source>
-        <translation type="unfinished"></translation>
+        <translation>http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3710"/>
         <source>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</source>
-        <translation type="unfinished">http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</translation>
+        <translation>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3457"/>
         <source>Can&apos;t insert note: No note duration selected</source>
-        <translation type="unfinished">Non posso inserire la nota. Nessuna durata di nota selezionata</translation>
+        <translation>Non posso inserire la nota. Nessuna durata di nota selezionata</translation>
     </message>
 </context>
 <context>
@@ -17746,7 +17756,7 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="173"/>
         <source>Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Ingrandimento</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="189"/>
@@ -17769,7 +17779,7 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location filename="../../src/gui/editors/notation/NoteFontFactory.cpp" line="182"/>
         <source>Can&apos;t obtain a default font -- no fonts found</source>
-        <translation type="unfinished">Non c&apos;è un font predefinito -- nessun font trovato</translation>
+        <translation>Non c&apos;è un font predefinito -- nessun font trovato</translation>
     </message>
 </context>
 <context>
@@ -17777,32 +17787,32 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location filename="../../src/gui/editors/notation/NoteFontViewer.cpp" line="82"/>
         <source>Note Font Viewer: %1</source>
-        <translation type="unfinished">Visualizzatore dei font delle note: %1</translation>
+        <translation>Visualizzatore dei font delle note: %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NoteFontViewer.cpp" line="96"/>
         <source>  Component: </source>
-        <translation type="unfinished">  Componente: </translation>
+        <translation>  Componente: </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NoteFontViewer.cpp" line="105"/>
         <source>  View: </source>
-        <translation type="unfinished">  Vista: </translation>
+        <translation>  Vista: </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NoteFontViewer.cpp" line="109"/>
         <source>Glyphs</source>
-        <translation type="unfinished">Glifi</translation>
+        <translation>Glifi</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NoteFontViewer.cpp" line="110"/>
         <source>Codes</source>
-        <translation type="unfinished">Codici</translation>
+        <translation>Codici</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NoteFontViewer.cpp" line="112"/>
         <source>  Page: </source>
-        <translation type="unfinished">  Pagina: </translation>
+        <translation>  Pagina: </translation>
     </message>
 </context>
 <context>
@@ -17810,7 +17820,7 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location filename="../../src/commands/notation/NoteInsertionCommand.cpp" line="48"/>
         <source>Insert Note</source>
-        <translation type="unfinished">Inserisci nota</translation>
+        <translation>Inserisci nota</translation>
     </message>
 </context>
 <context>
@@ -17823,22 +17833,22 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location filename="../../src/gui/editors/notation/NoteStyleFileReader.cpp" line="89"/>
         <source>type is a required attribute of note</source>
-        <translation type="unfinished">il tipo è un attributo richiesto per la nota</translation>
+        <translation>il tipo è un attributo richiesto per la nota</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NoteStyleFileReader.cpp" line="98"/>
         <source>Unrecognised note name %1</source>
-        <translation type="unfinished">Nome della nota %1 non riconosciuto</translation>
+        <translation>Nome della nota %1 non riconosciuto</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NoteStyleFileReader.cpp" line="105"/>
         <source>global element must precede note elements</source>
-        <translation type="unfinished">l&apos;elemento globale deve precedere gli elementi nota</translation>
+        <translation>l&apos;elemento globale deve precedere gli elementi nota</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NoteStyleFileReader.cpp" line="134"/>
         <source>global and note elements may have shape or charname attribute, but not both</source>
-        <translation type="unfinished">gli elementi globali e le note possono avere attributi di forma o di nome, ma non entrambi.</translation>
+        <translation>gli elementi globali e le note possono avere attributi di forma o di nome, ma non entrambi</translation>
     </message>
 </context>
 <context>
@@ -17846,7 +17856,7 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location filename="../../src/commands/segment/OpenOrCloseRangeCommand.cpp" line="35"/>
         <source>Open or Close Range</source>
-        <translation type="unfinished">Apri o chiudi ampiezza</translation>
+        <translation>Apri o chiudi ampiezza</translation>
     </message>
 </context>
 <context>
@@ -17854,7 +17864,7 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location filename="../../src/commands/segment/PasteConductorDataCommand.cpp" line="34"/>
         <source>Paste Tempos and Time Signatures</source>
-        <translation type="unfinished">Incolla Tempi e Metri</translation>
+        <translation>Incolla Tempi e Metri</translation>
     </message>
 </context>
 <context>
@@ -17867,27 +17877,27 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location filename="../../src/commands/edit/PasteEventsCommand.cpp" line="91"/>
         <source>Paste into an existing gap [&quot;restricted&quot;]</source>
-        <translation type="unfinished">Incolla in uno spazio esistente [&quot;ristretto&quot;]</translation>
+        <translation>Incolla in uno spazio esistente [&quot;ristretto&quot;]</translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/PasteEventsCommand.cpp" line="93"/>
         <source>Erase existing events to make room [&quot;simple&quot;]</source>
-        <translation type="unfinished">Cancella gli eventi esistenti per fare spazio [&quot;semplice&quot;]</translation>
+        <translation>Cancella gli eventi esistenti per fare spazio [&quot;semplice&quot;]</translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/PasteEventsCommand.cpp" line="95"/>
         <source>Move existing events out of the way [&quot;open-n-paste&quot;]</source>
-        <translation type="unfinished">Muovi lontano gli eventi esistenti [&quot;apri-e-incolla&quot;]</translation>
+        <translation>Muovi lontano gli eventi esistenti [&quot;apri-e-incolla&quot;]</translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/PasteEventsCommand.cpp" line="97"/>
         <source>Overlay notes, tying against present notes [&quot;note-overlay&quot;]</source>
-        <translation type="unfinished">Sovrapponi le note, unendole a quelle presenti [&quot;sovrapposizione-note&quot;]</translation>
+        <translation>Sovrapponi le note, unendole a quelle presenti [&quot;sovrapposizione-note&quot;]</translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/PasteEventsCommand.cpp" line="99"/>
         <source>Overlay notes, ignoring present notes [&quot;matrix-overlay&quot;]</source>
-        <translation type="unfinished">Sovrapponi le note, ignorando quelle presenti [&quot;sovrapposizione-matrice&quot;]</translation>
+        <translation>Sovrapponi le note, ignorando quelle presenti [&quot;sovrapposizione-matrice&quot;]</translation>
     </message>
 </context>
 <context>
@@ -17895,22 +17905,22 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location filename="../../src/gui/dialogs/PasteNotationDialog.cpp" line="43"/>
         <source>Paste</source>
-        <translation type="unfinished">Incolla</translation>
+        <translation>Incolla</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PasteNotationDialog.cpp" line="52"/>
         <source>Paste type</source>
-        <translation type="unfinished">Modo di incollare</translation>
+        <translation>Modo di incollare</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PasteNotationDialog.cpp" line="73"/>
         <source>Options</source>
-        <translation type="unfinished">Opzioni</translation>
+        <translation>Opzioni</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PasteNotationDialog.cpp" line="79"/>
         <source>Make this the default paste type</source>
-        <translation type="unfinished">Rendi questo il modo di incollare predefinito</translation>
+        <translation>Rendi questo il modo di incollare predefinito</translation>
     </message>
 </context>
 <context>
@@ -17918,7 +17928,7 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location filename="../../src/commands/segment/PasteRangeCommand.cpp" line="37"/>
         <source>Paste Range</source>
-        <translation type="unfinished">Incolla intervallo</translation>
+        <translation>Incolla intervallo</translation>
     </message>
 </context>
 <context>
@@ -17934,7 +17944,7 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location filename="../../src/commands/segment/PasteToTriggerSegmentCommand.cpp" line="39"/>
         <source>Paste as New Triggered Segment</source>
-        <translation type="unfinished">Incolla come nuovo segmento attivo</translation>
+        <translation>Incolla come nuovo segmento attivo</translation>
     </message>
 </context>
 <context>
@@ -17948,12 +17958,12 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="59"/>
         <source>Preset</source>
-        <translation type="unfinished">Preset</translation>
+        <translation>Preset</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="65"/>
         <source>Preset:</source>
-        <translation type="unfinished"></translation>
+        <translation>Preset:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="68"/>
@@ -18036,7 +18046,7 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location filename="../../src/gui/widgets/PitchChooser.cpp" line="52"/>
         <source>Pitch:</source>
-        <translation type="unfinished">Altezza:</translation>
+        <translation>Altezza:</translation>
     </message>
 </context>
 <context>
@@ -18044,7 +18054,7 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location filename="../../src/gui/dialogs/PitchDialog.cpp" line="51"/>
         <source>Reset</source>
-        <translation type="unfinished">Ripristina</translation>
+        <translation>Ripristina</translation>
     </message>
 </context>
 <context>
@@ -18052,7 +18062,7 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location filename="../../src/gui/dialogs/PitchPickerDialog.cpp" line="38"/>
         <source>Pitch Selector</source>
-        <translation type="unfinished">Selettore di altezza</translation>
+        <translation>Selettore di altezza</translation>
     </message>
 </context>
 <context>
@@ -18060,22 +18070,22 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location filename="../../src/gui/editors/segment/PlayList.cpp" line="79"/>
         <source>Add...</source>
-        <translation type="unfinished">Aggiungi...</translation>
+        <translation>Aggiungi...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/PlayList.cpp" line="80"/>
         <source>Play</source>
-        <translation type="unfinished">Riproduci</translation>
+        <translation>Riproduci</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/PlayList.cpp" line="81"/>
         <source>Move Up</source>
-        <translation type="unfinished">Sposta in alto</translation>
+        <translation>Sposta in alto</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/PlayList.cpp" line="82"/>
         <source>Move Down</source>
-        <translation type="unfinished">Sposta in basso</translation>
+        <translation>Sposta in basso</translation>
     </message>
     <message>
         <source>Delete</source>
@@ -18098,12 +18108,12 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location filename="../../src/gui/editors/segment/PlayList.cpp" line="117"/>
         <source>Select one or more Rosegarden files</source>
-        <translation type="unfinished">Seleziona uno o più file di Rosegarden</translation>
+        <translation>Seleziona uno o più file di Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/PlayList.cpp" line="118"/>
         <source>Rosegarden files</source>
-        <translation type="unfinished">File di Rosegarden</translation>
+        <translation>File di Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/PlayList.cpp" line="119"/>
@@ -18118,7 +18128,7 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location filename="../../src/gui/editors/segment/PlayList.cpp" line="121"/>
         <source>All files</source>
-        <translation type="unfinished">Tutti i file</translation>
+        <translation>Tutti i file</translation>
     </message>
 </context>
 <context>
@@ -18126,12 +18136,12 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location filename="../../src/gui/editors/segment/PlayListView.cpp" line="41"/>
         <source>Title</source>
-        <translation type="unfinished">Titolo</translation>
+        <translation>Titolo</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/PlayListView.cpp" line="41"/>
         <source>File name</source>
-        <translation type="unfinished">Nome file</translation>
+        <translation>Nome file</translation>
     </message>
 </context>
 <context>
@@ -18139,12 +18149,12 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location filename="../../src/gui/general/PresetGroup.cpp" line="44"/>
         <source>unknown error</source>
-        <translation type="unfinished">errore sconosciuto</translation>
+        <translation>errore sconosciuto</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/PresetGroup.cpp" line="77"/>
         <source>Can&apos;t open preset file %1</source>
-        <translation type="unfinished">Non è possibile aprire il file dei preset %1</translation>
+        <translation>Non è possibile aprire il file dei preset %1</translation>
     </message>
 </context>
 <context>
@@ -18152,27 +18162,27 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="55"/>
         <source>Convert notation for...</source>
-        <translation type="unfinished">Converti la notazione per...</translation>
+        <translation>Converti la notazione per...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="74"/>
         <source>Load track parameters preset</source>
-        <translation type="unfinished">Carica il preset dei parametri di traccia</translation>
+        <translation>Carica il preset dei parametri di traccia</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="78"/>
         <source>Select preset track parameters for:</source>
-        <translation type="unfinished">Scegli il preset dei parametri di traccia per:</translation>
+        <translation>Scegli il preset dei parametri di traccia per:</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="79"/>
         <source>Create appropriate notation for:</source>
-        <translation type="unfinished">Crea una notazione appropriata per:</translation>
+        <translation>Crea una notazione appropriata per:</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="88"/>
         <source>Category</source>
-        <translation type="unfinished">Categoria</translation>
+        <translation>Categoria</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="96"/>
@@ -18182,52 +18192,52 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="99"/>
         <source>Instrument</source>
-        <translation type="unfinished">Strumento</translation>
+        <translation>Strumento</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="104"/>
         <source>Player Ability</source>
-        <translation type="unfinished">Abilità dell&apos;esecutore</translation>
+        <translation>Abilità dell&apos;esecutore</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="106"/>
         <source>Amateur</source>
-        <translation type="unfinished">Amatore</translation>
+        <translation>Amatore</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="107"/>
         <source>Professional</source>
-        <translation type="unfinished">Professionista</translation>
+        <translation>Professionista</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="111"/>
         <source>Scope</source>
-        <translation type="unfinished">Intervallo di visibilità</translation>
+        <translation>Intervallo di visibilità</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="119"/>
         <source>Only selected segments</source>
-        <translation type="unfinished">Solo i segmenti selezionati</translation>
+        <translation>Solo i segmenti selezionati</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="122"/>
         <source>All segments in this track</source>
-        <translation type="unfinished">Tutti i segmenti in questa traccia</translation>
+        <translation>Tutti i segmenti in questa traccia</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="128"/>
         <source>Only for new segments</source>
-        <translation type="unfinished">Solo per i segmenti nuovi</translation>
+        <translation>Solo per i segmenti nuovi</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="131"/>
         <source>Convert existing segments</source>
-        <translation type="unfinished">Converti i segmenti esistenti</translation>
+        <translation>Converti i segmenti esistenti</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="184"/>
         <source>http://rosegardenmusic.com/wiki/doc:manual-preset-handler-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:manual-preset-handler-en</translation>
     </message>
 </context>
 <context>
@@ -18236,7 +18246,7 @@ Accertati che il dispositivo sia correttamente configurato alla voce
         <location filename="../../src/gui/widgets/ProgressDialog.cpp" line="61"/>
         <location filename="../../src/gui/widgets/ProgressDialog.cpp" line="127"/>
         <source>Processing...</source>
-        <translation type="unfinished">Elaborazione in corso...</translation>
+        <translation>Elaborazione in corso...</translation>
     </message>
 </context>
 <context>
@@ -18259,7 +18269,7 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="99"/>
         <source>Cancel</source>
-        <translation type="unfinished">Annulla</translation>
+        <translation>Annulla</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="132"/>
@@ -18381,7 +18391,7 @@ Accertati che il dispositivo sia correttamente configurato alla voce
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="685"/>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="919"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="656"/>
@@ -18391,7 +18401,7 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="677"/>
         <source>All files</source>
-        <translation type="unfinished">Tutti i file</translation>
+        <translation>Tutti i file</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="686"/>
@@ -18434,7 +18444,7 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location filename="../../src/gui/rulers/PropertyViewRuler.cpp" line="65"/>
         <source>%1 controller</source>
-        <translation type="unfinished">%1 controller</translation>
+        <translation>%1 controller</translation>
     </message>
 </context>
 <context>
@@ -18442,7 +18452,7 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location filename="../../src/gui/dialogs/QuantizeDialog.cpp" line="36"/>
         <source>Quantize</source>
-        <translation type="unfinished">Quantizza</translation>
+        <translation>Quantizza</translation>
     </message>
     <message>
         <source>Advanced</source>
@@ -18454,129 +18464,129 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="64"/>
         <source>Quantizer</source>
-        <translation type="unfinished">Quantizzatore</translation>
+        <translation>Quantizzatore</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="71"/>
         <source>Quantizer type:</source>
-        <translation type="unfinished">Tipo di quantizzatore:</translation>
+        <translation>Tipo di quantizzatore:</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="73"/>
         <source>Grid quantizer</source>
-        <translation type="unfinished">Griglia del quantizzatore</translation>
+        <translation>Griglia del quantizzatore</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="74"/>
         <source>Legato quantizer</source>
-        <translation type="unfinished">Quantizzatore Legato</translation>
+        <translation>Quantizzatore Legato</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="75"/>
         <source>Heuristic notation quantizer</source>
-        <translation type="unfinished">Quantizzatore di notazione euristica</translation>
+        <translation>Quantizzatore di notazione euristica</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="79"/>
         <source>Quantize for notation only (leave performance unchanged)</source>
-        <translation type="unfinished">Quantizza solo la notazione (lascia inalterata la riproduzione)</translation>
+        <translation>Quantizza solo la notazione (lascia inalterata la riproduzione)</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="91"/>
         <source>Notation parameters</source>
-        <translation type="unfinished">Parametri notazione</translation>
+        <translation>Parametri notazione</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="97"/>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="133"/>
         <source>Base grid unit:</source>
-        <translation type="unfinished">Unità base della griglia:</translation>
+        <translation>Unità base della griglia:</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="102"/>
         <source>Complexity:</source>
-        <translation type="unfinished">Complessità:</translation>
+        <translation>Complessità:</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="106"/>
         <source>Very high</source>
-        <translation type="unfinished">Molto alto</translation>
+        <translation>Molto alto</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="107"/>
         <source>High</source>
-        <translation type="unfinished">Alta</translation>
+        <translation>Alta</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="108"/>
         <source>Normal</source>
-        <translation type="unfinished">Normale</translation>
+        <translation>Normale</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="109"/>
         <source>Low</source>
-        <translation type="unfinished">Bassa</translation>
+        <translation>Bassa</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="110"/>
         <source>Very low</source>
-        <translation type="unfinished">Molto basso</translation>
+        <translation>Molto basso</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="113"/>
         <source>Tuplet level:</source>
-        <translation type="unfinished">Livello tupla:</translation>
+        <translation>Livello tupla:</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="116"/>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="263"/>
         <source>None</source>
-        <translation type="unfinished">Nessuno</translation>
+        <translation>Nessuno</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="117"/>
         <source>2-in-the-time-of-3</source>
-        <translation type="unfinished">2 nel tempo di 3</translation>
+        <translation>2 nel tempo di 3</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="118"/>
         <source>Triplet</source>
-        <translation type="unfinished">Terzina</translation>
+        <translation>Terzina</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="119"/>
         <source>Any</source>
-        <translation type="unfinished">Qualsiasi</translation>
+        <translation>Qualsiasi</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="122"/>
         <source>Permit counterpoint</source>
-        <translation type="unfinished">Permetti il contrappunto</translation>
+        <translation>Permetti il contrappunto</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="127"/>
         <source>Grid parameters</source>
-        <translation type="unfinished">Parametri della griglia</translation>
+        <translation>Parametri della griglia</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="137"/>
         <source>Swing:</source>
-        <translation type="unfinished">Oscillazione:</translation>
+        <translation>Oscillazione:</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="142"/>
         <source>Iterative amount:</source>
-        <translation type="unfinished">numero di ripetizioni:</translation>
+        <translation>numero di ripetizioni:</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="148"/>
         <source>Quantize durations as well as start times</source>
-        <translation type="unfinished">Quantizza le durate e i tempi d&apos;inizio</translation>
+        <translation>Quantizza le durate e i tempi d&apos;inizio</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="155"/>
         <source>After quantization</source>
-        <translation type="unfinished">Dopo la quantizzazione</translation>
+        <translation>Dopo la quantizzazione</translation>
     </message>
     <message>
         <source>Show advanced options</source>
@@ -18585,27 +18595,27 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="162"/>
         <source>Re-beam</source>
-        <translation type="unfinished">Ri-collega</translation>
+        <translation>Ri-collega</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="164"/>
         <source>Add articulations (staccato, tenuto, slurs)</source>
-        <translation type="unfinished">Aggiungi articolazioni (staccato, tenuto, legato)</translation>
+        <translation>Aggiungi articolazioni (staccato, tenuto, legato)</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="165"/>
         <source>Tie notes at barlines etc</source>
-        <translation type="unfinished">Lega le note alle linee di battuta ecc</translation>
+        <translation>Lega le note alle linee di battuta ecc</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="166"/>
         <source>Split-and-tie overlapping chords</source>
-        <translation type="unfinished">Dividi-e-lega gli accordi sovrapposti</translation>
+        <translation>Dividi-e-lega gli accordi sovrapposti</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="269"/>
         <source>Full quantize</source>
-        <translation type="unfinished">Quantizzazione piena</translation>
+        <translation>Quantizzazione piena</translation>
     </message>
     <message>
         <source>Show Advanced Options</source>
@@ -18621,7 +18631,7 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location filename="../../src/gui/rulers/RawNoteRuler.cpp" line="451"/>
         <source>Track #%1, Segment &quot;%2&quot; (runtime id %3)</source>
-        <translation type="unfinished">Traccia #%1, Segmento &quot;%2&quot; (runtime id %3)</translation>
+        <translation>Traccia #%1, Segmento &quot;%2&quot; (runtime id %3)</translation>
     </message>
 </context>
 <context>
@@ -18629,7 +18639,7 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location filename="../../src/commands/studio/ReconnectDeviceCommand.h" line="50"/>
         <source>Reconnect Device</source>
-        <translation type="unfinished">Riconnetti dispositivo</translation>
+        <translation>Riconnetti dispositivo</translation>
     </message>
 </context>
 <context>
@@ -18637,48 +18647,48 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="51"/>
         <source>Remap Instrument assigments...</source>
-        <translation type="unfinished">Rimappatura delle assegnazioni degli strumenti...</translation>
+        <translation>Rimappatura delle assegnazioni degli strumenti...</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="60"/>
         <source>Device or Instrument</source>
-        <translation type="unfinished">Dispositivo o strumento</translation>
+        <translation>Dispositivo o strumento</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="64"/>
         <source>Remap Tracks by all Instruments on a Device or by single Instrument</source>
-        <translation type="unfinished">Rimappatura delle tracce per tutti gli strumenti su un dispositivo o un singolo strumento</translation>
+        <translation>Rimappatura delle tracce per tutti gli strumenti su un dispositivo o un singolo strumento</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="66"/>
         <source>Device</source>
-        <translation type="unfinished">Dispositivo</translation>
+        <translation>Dispositivo</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="68"/>
         <source>Instrument</source>
-        <translation type="unfinished">Strumento</translation>
+        <translation>Strumento</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="77"/>
         <source>Choose Source and Destination</source>
-        <translation type="unfinished">Scegli la sorgente e la destinazione</translation>
+        <translation>Scegli la sorgente e la destinazione</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="81"/>
         <source>From</source>
-        <translation type="unfinished">Da</translation>
+        <translation>Da</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="82"/>
         <source>To</source>
-        <translation type="unfinished">A</translation>
+        <translation>A</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="139"/>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="140"/>
         <source>&lt;no devices&gt;</source>
-        <translation type="unfinished">&lt;nessun dispositivo&gt;</translation>
+        <translation>&lt;nessun dispositivo&gt;</translation>
     </message>
 </context>
 <context>
@@ -18686,7 +18696,7 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location filename="../../src/commands/studio/RemoveControlParameterCommand.h" line="55"/>
         <source>&amp;Remove Control Parameter</source>
-        <translation type="unfinished">&amp;Rimuovi parametro di controllo</translation>
+        <translation>&amp;Rimuovi parametro di controllo</translation>
     </message>
 </context>
 <context>
@@ -18694,7 +18704,7 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location filename="../../src/commands/notation/RemoveFingeringMarksCommand.h" line="45"/>
         <source>&amp;Remove Fingerings</source>
-        <translation type="unfinished">&amp;Rimuovi diteggiature</translation>
+        <translation>&amp;Rimuovi diteggiature</translation>
     </message>
 </context>
 <context>
@@ -18702,7 +18712,7 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location filename="../../src/commands/edit/RemoveMarkerCommand.h" line="50"/>
         <source>&amp;Remove Marker</source>
-        <translation type="unfinished">&amp;Rimuovi marcatore</translation>
+        <translation>&amp;Rimuovi marcatore</translation>
     </message>
 </context>
 <context>
@@ -18710,7 +18720,7 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location filename="../../src/commands/notation/RemoveMarksCommand.h" line="45"/>
         <source>&amp;Remove All Marks</source>
-        <translation type="unfinished">&amp;Rimuovi tutti i marcatori</translation>
+        <translation>&amp;Rimuovi tutti i marcatori</translation>
     </message>
 </context>
 <context>
@@ -18718,7 +18728,7 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location filename="../../src/commands/notation/RemoveNotationQuantizeCommand.h" line="45"/>
         <source>Remo&amp;ve Notation Quantization</source>
-        <translation type="unfinished">Rimuo&amp;vi la quantizzazione della notazione</translation>
+        <translation>Rimuo&amp;vi la quantizzazione della notazione</translation>
     </message>
 </context>
 <context>
@@ -18726,7 +18736,7 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location filename="../../src/commands/segment/RemoveTempoChangeCommand.h" line="53"/>
         <source>Remove &amp;Tempo Change...</source>
-        <translation type="unfinished">Rimuovi cambio di ri&amp;tmo...</translation>
+        <translation>Rimuovi cambio di ri&amp;tmo...</translation>
     </message>
 </context>
 <context>
@@ -18742,7 +18752,7 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location filename="../../src/commands/studio/RenameDeviceCommand.h" line="50"/>
         <source>Rename Device</source>
-        <translation type="unfinished">Rinomina dispositivo</translation>
+        <translation>Rinomina dispositivo</translation>
     </message>
 </context>
 <context>
@@ -18750,7 +18760,7 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location filename="../../src/commands/segment/RenameTrackCommand.h" line="47"/>
         <source>Rename Track</source>
-        <translation type="unfinished">Rinomina la traccia</translation>
+        <translation>Rinomina la traccia</translation>
     </message>
 </context>
 <context>
@@ -18771,17 +18781,17 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location filename="../../src/gui/dialogs/RescaleDialog.cpp" line="56"/>
         <source>Duration of selection</source>
-        <translation type="unfinished">Durata della selezione</translation>
+        <translation>Durata della selezione</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RescaleDialog.cpp" line="62"/>
         <source>Options</source>
-        <translation type="unfinished">Opzioni</translation>
+        <translation>Opzioni</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RescaleDialog.cpp" line="66"/>
         <source>Adjust times of following events accordingly</source>
-        <translation type="unfinished">Aggiusta in accordo i tempi dei seguenti eventi</translation>
+        <translation>Aggiusta in accordo i tempi dei seguenti eventi</translation>
     </message>
 </context>
 <context>
@@ -18789,7 +18799,7 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location filename="../../src/commands/notation/ResetDisplacementsCommand.h" line="45"/>
         <source>&amp;Restore Positions</source>
-        <translation type="unfinished">&amp;Ripristina le posizioni</translation>
+        <translation>&amp;Ripristina le posizioni</translation>
     </message>
 </context>
 <context>
@@ -18797,57 +18807,57 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location filename="../../src/commands/notation/RespellCommand.cpp" line="40"/>
         <source>Respell with %1</source>
-        <translation type="unfinished">Rialtera con %1</translation>
+        <translation>Rialtera con %1</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/RespellCommand.cpp" line="43"/>
         <source>Do&amp;uble Sharp</source>
-        <translation type="unfinished">Do&amp;ppio diesis</translation>
+        <translation>Do&amp;ppio diesis</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/RespellCommand.cpp" line="45"/>
         <source>&amp;Sharp</source>
-        <translation type="unfinished">&amp;Diesis</translation>
+        <translation>&amp;Diesis</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/RespellCommand.cpp" line="47"/>
         <source>&amp;Flat</source>
-        <translation type="unfinished">&amp;Bemolle</translation>
+        <translation>&amp;Bemolle</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/RespellCommand.cpp" line="49"/>
         <source>Dou&amp;ble Flat</source>
-        <translation type="unfinished">Doppio &amp;bemolle</translation>
+        <translation>Doppio &amp;bemolle</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/RespellCommand.cpp" line="51"/>
         <source>&amp;Natural</source>
-        <translation type="unfinished">&amp;Naturale</translation>
+        <translation>&amp;Naturale</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/RespellCommand.cpp" line="53"/>
         <source>N&amp;one</source>
-        <translation type="unfinished">&amp;Nessuno</translation>
+        <translation>&amp;Nessuno</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/RespellCommand.cpp" line="59"/>
         <source>Respell Accidentals &amp;Upward</source>
-        <translation type="unfinished">Rialtera gli accidenti verso l&apos;&amp;alto</translation>
+        <translation>Rialtera gli accidenti verso l&apos;&amp;alto</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/RespellCommand.cpp" line="62"/>
         <source>Respell Accidentals &amp;Downward</source>
-        <translation type="unfinished">Rialtera gli accidenti verso il &amp;basso</translation>
+        <translation>Rialtera gli accidenti verso il &amp;basso</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/RespellCommand.cpp" line="65"/>
         <source>&amp;Restore Accidentals</source>
-        <translation type="unfinished">&amp;Ripristina gli accidenti</translation>
+        <translation>&amp;Ripristina gli accidenti</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/RespellCommand.cpp" line="68"/>
         <source>Respell Accidentals</source>
-        <translation type="unfinished">Rialtera gli accidenti</translation>
+        <translation>Rialtera gli accidenti</translation>
     </message>
 </context>
 <context>
@@ -18855,7 +18865,7 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location filename="../../src/commands/notation/RestoreSlursCommand.h" line="45"/>
         <source>&amp;Restore Slur Positions</source>
-        <translation type="unfinished">&amp;Ripristina le posizioni delle legature</translation>
+        <translation>&amp;Ripristina le posizioni delle legature</translation>
     </message>
 </context>
 <context>
@@ -18863,7 +18873,7 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location filename="../../src/commands/notation/RestoreStemsCommand.h" line="45"/>
         <source>&amp;Restore Stems</source>
-        <translation type="unfinished">&amp;Ripristina i gambi</translation>
+        <translation>&amp;Ripristina i gambi</translation>
     </message>
 </context>
 <context>
@@ -18959,6 +18969,7 @@ Vuoi salvarlo?</translation>
         <source>Delete the %n audio file(s) recorded during the unsaved session?</source>
         <translation type="unfinished">
             <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -18982,6 +18993,7 @@ Scegli quelli che vuoi cancellare definitivamente dal disco fisso.
         <location filename="../../src/document/RosegardenDocument.cpp" line="531"/>
         <source>&lt;qt&gt;About to delete %n audio file(s) permanently from the hard disk.&lt;br&gt;There will be no way to recover the file(s).&lt;br&gt;Are you sure?&lt;/qt&gt;</source>
         <translation type="unfinished">
+            <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
@@ -19496,6 +19508,7 @@ Vuoi impostarlo adesso?</translation>
         <source>Split %n Segment(s) at Time</source>
         <translation type="unfinished">
             <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -19977,7 +19990,7 @@ Vuoi impostarlo adesso?</translation>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7316"/>
         <source>http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7323"/>
@@ -20427,6 +20440,7 @@ Vuoi impostarlo adesso?</translation>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="242"/>
         <source>Move Segment(s)</source>
         <translation type="unfinished">
+            <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
@@ -22765,7 +22779,7 @@ Vuoi impostarlo adesso?</translation>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="112"/>
         <source>Delete All</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Cancella tutto</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="110"/>
@@ -22786,6 +22800,7 @@ Vuoi impostarlo adesso?</translation>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="233"/>
         <source>%1 on %n track(s)</source>
         <translation type="unfinished">
+            <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
@@ -22813,6 +22828,7 @@ Vuoi impostarlo adesso?</translation>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="329"/>
         <source>This triggered segment is used %n time(s) in the current composition.  Are you sure you want to remove it?</source>
         <translation type="unfinished">
+            <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
