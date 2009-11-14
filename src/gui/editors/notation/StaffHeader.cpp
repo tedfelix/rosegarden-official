@@ -49,8 +49,9 @@
 #include <QGraphicsPixmapItem>
 #include <QBitmap>
 #include <QEvent>
-
+#include <QMouseEvent>
 #include <QPainter>
+#include <QTimer>
 
 
 namespace Rosegarden
@@ -96,7 +97,8 @@ StaffHeader::StaffHeader(HeadersGroup *group,
         m_toolTipText(QString("")),
         m_colourIndex(0),
         m_indeterminableClef(0),
-        m_indeterminableKey(0)
+        m_indeterminableKey(0),
+        m_toolTipTimer(0)
 
 {
     // localStyle (search key)
@@ -247,6 +249,14 @@ StaffHeader::StaffHeader(HeadersGroup *group,
     // Icons are here, but they are hidden
     m_indeterminableClef->hide();
     m_indeterminableKey->hide();
+
+    // Implement a ToolTip event replacement (see enterEvent(), leaveEvent and
+    // mouseMoveEvent()).
+    m_toolTipTimer = new QTimer(this);
+    connect(m_toolTipTimer, SIGNAL(timeout()), this, SLOT(slotToolTip()));
+    m_toolTipTimer->setSingleShot(true);
+    m_toolTipTimer->setInterval(500);  // 0.5 s
+    setMouseTracking(true);
 }
 
 StaffHeader::~StaffHeader()
@@ -712,15 +722,53 @@ StaffHeader::SegmentCmp::operator()(const Segment * s1, const Segment * s2) cons
     return false;
 }
 
-bool
-StaffHeader::event(QEvent *event)
+
+// bool
+// StaffHeader::event(QEvent *event)
+// {
+//     if (event->type() == QEvent::ToolTip) {
+//         emit(showToolTip(m_toolTipText));
+//         return true;
+//     }
+// 
+//     return QWidget::event(event);
+// }
+//
+// For some reason ToolTip event is not received after a change of font size
+// (ie after staff headers have been deleted then recreated) or when the first
+// staff headers show() is called late (ie is called after some other action
+// occured, but I was unable to determine what this action is).
+// The 4 following methods and m_toolTipTimer are used to replace that
+// ToolTip event.
+
+void
+StaffHeader::enterEvent(QEvent *event)
 {
-    if (event->type() == QEvent::ToolTip) {
-        emit(showToolTip(m_toolTipText));
-        return true;
-    }
-    return QWidget::event(event);
+    // Start timer when mouse enters
+    m_toolTipTimer->start();
 }
+
+void
+StaffHeader::leaveEvent(QEvent *event)
+{
+    // Stop timer when mouse leaves
+    m_toolTipTimer->stop();
+}
+
+void
+StaffHeader::mouseMoveEvent(QMouseEvent *event)
+{
+    // Restart timer while mouse is moving
+    m_toolTipTimer->start();
+}
+
+void
+StaffHeader::slotToolTip()
+{
+    // Show the tool tip when timeout occured
+    emit(showToolTip(m_toolTipText));
+}
+
 
 }
 #include "StaffHeader.moc"

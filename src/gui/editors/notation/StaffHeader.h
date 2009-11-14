@@ -36,6 +36,8 @@ class QPixmap;
 class QGraphicsPixmapItem;
 class QString;
 class QToolButton;
+class QTimer;
+class QMouseEvent;
 
 
 namespace Rosegarden
@@ -166,7 +168,13 @@ signals :
 
 protected :
     virtual void paintEvent(QPaintEvent *);
-    virtual bool event(QEvent *event);
+//    virtual bool event(QEvent *event);
+    virtual void enterEvent(QEvent *event);
+    virtual void mouseMoveEvent(QMouseEvent *event);
+    virtual void leaveEvent(QEvent *event);
+
+protected slots :
+    void slotToolTip();
 
 private :
     /**
@@ -240,6 +248,7 @@ private :
     QToolButton *m_indeterminableClef;
     QToolButton *m_indeterminableKey;
 
+    QTimer *m_toolTipTimer;
 };
 
 }
