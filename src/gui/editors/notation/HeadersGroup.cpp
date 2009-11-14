@@ -209,14 +209,6 @@ HeadersGroup::slotUpdateAllHeaders(int x, bool force)
 
 
 
-void
-HeadersGroup::setCurrent(TrackId trackId)
-{
-    TrackHeaderVector::iterator i;
-    for (i=m_headers.begin(); i!=m_headers.end(); i++)
-                    (*i)->setCurrent((*i)->getId() == trackId);
-}
-
 NotationScene *
 HeadersGroup::getScene()
 {

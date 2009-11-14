@@ -84,11 +84,6 @@ public:
     /**
      * Highlight as "current" the header of the specified track.
      */
-    void setCurrent(TrackId trackId);
-
-    /**
-     * Highlight as "current" the header of the specified track.
-     */
     int getWidth()
     {
         return m_lastWidth;

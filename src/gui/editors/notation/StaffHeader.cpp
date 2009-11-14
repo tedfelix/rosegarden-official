@@ -82,7 +82,6 @@ StaffHeader::StaffHeader(HeadersGroup *group,
         m_lastTranspose(0),
         m_lastUpperText(QString("")),
         m_neverUpdated(true),
-        m_isCurrent(true),
         m_lastStatusPart(0),
         m_lastWidth(0),
         m_key(Rosegarden::Key()),
@@ -109,8 +108,6 @@ StaffHeader::StaffHeader(HeadersGroup *group,
     // release.
 
     m_scene = m_headersGroup->getScene();
-    setCurrent(false); 
-
 
     //
     // Tooltip text creation
@@ -250,6 +247,7 @@ StaffHeader::StaffHeader(HeadersGroup *group,
     m_indeterminableClef->hide();
     m_indeterminableKey->hide();
 
+
     // Implement a ToolTip event replacement (see enterEvent(), leaveEvent and
     // mouseMoveEvent()).
     m_toolTipTimer = new QTimer(this);
@@ -257,6 +255,9 @@ StaffHeader::StaffHeader(HeadersGroup *group,
     m_toolTipTimer->setSingleShot(true);
     m_toolTipTimer->setInterval(500);  // 0.5 s
     setMouseTracking(true);
+
+    connect(m_scene, SIGNAL(currentStaffChanged()),
+            this, SLOT(slotSetCurrent()));
 }
 
 StaffHeader::~StaffHeader()
@@ -350,7 +351,7 @@ StaffHeader::paintEvent(QPaintEvent *)
 
         // an experiment: fill the upper and lower text areas with 80% opaque
         // black regardless of other color concerns        
-        paint.fillRect(0, 0, width(), upperTextY, QColor(0, 0, 0, 200));
+        paint.fillRect(0, 1, width(), upperTextY, QColor(0, 0, 0, 200));
 //    }
 
 //    paint.setPen(QColor(m_foreGround));
@@ -402,7 +403,7 @@ StaffHeader::paintEvent(QPaintEvent *)
 //        paint.fillRect(0, lowerTextY, width(), height(), warningBackGround);
 
         // experiment        
-        paint.fillRect(0, lowerTextY, width(), height(), QColor(0, 0, 0, 200));
+        paint.fillRect(0, lowerTextY, width(), height() - 1, QColor(0, 0, 0, 200));
 //    }
 
     // TODO : use colours from GUIPalette
@@ -429,29 +430,41 @@ StaffHeader::paintEvent(QPaintEvent *)
         paint.drawText(charWidth / 4, lowerTextY, textLine);
     }
 
+    // Draw a blue rectangle around the header if staff is the current one
+    if (m_current) {
+        QPen pen;
+
+        // Select a visible color depending of the background intensity
+// Always use light color while headers always have dark background under text
+//        if (m_foreGround == Qt::black) {
+//            pen.setColor(QColor(0, 0, 255));       // Blue
+//        } else {
+            pen.setColor(QColor(170, 170, 255));   // Lighter blue
+//        }
+
+        // Draw the rectangle
+        // TODO : Use strokePath() rather than drawLine()
+        pen.setWidth(4);
+        paint.setPen(pen);
+        paint.drawLine(1, 1, width() - 1, 1);
+        paint.drawLine(width() - 1, 1, width() - 1, height() - 1);
+        paint.drawLine(width() - 1, height() - 1, 1, height() - 1);
+        paint.drawLine(1, height() - 1, 1, 1);
+    }
 }
 
-
-//!!!  I have no idea what this used to do.  I found it disabled like this, and
-// simply shut up the compiler warning about the unused variable 'current'
 void
-//StaffHeader::setCurrent(bool current)
-StaffHeader::setCurrent(bool)
+StaffHeader::slotSetCurrent()
 {
-    /// TODO : use colours from GUIPalette
+    NotationStaff *notationStaff = m_scene->getCurrentStaff();
+    Segment &segment = notationStaff->getSegment();
+    TrackId trackId = segment.getTrack();
+    bool current = trackId == m_track;
 
-//     if (current != m_isCurrent) {
-//         m_isCurrent = current;
-//         if (current) {
-//             setLineWidth(2);
-//             setMargin(0);
-//             setPaletteForegroundColor(QColor(0, 0, 255));
-//         } else {
-//             setLineWidth(1);
-//             setMargin(1);
-//             setPaletteForegroundColor(QColor(0, 0, 0));
-//         }
-//     }
+    if (current != m_current) {
+        m_current = current;
+        update();
+    }
 }
 
 void
@@ -524,14 +537,12 @@ StaffHeader::lookAtStaff(double x, int maxWidth)
                 label = strtoqstr(m_firstSeg->getLabel());
                 transpose = m_firstSeg->getTranspose();
                 colourIndex = m_firstSeg->getColourIndex();
-//!!!  getCurrentStaffNumber() doesn't exist still
-//!!!                current = current || (m_scene->getCurrentStaffNumber() == i);
+                current = current || (m_scene->getCurrentStaffNumber() == (int)i);
                 break;
             }
             timeT segStart = segment.getStartTime();
             timeT segEnd = segment.getEndMarkerTime();
-//!!!  getCurrentStaffNumber() doesn't exist still
-//!!!            current = current || (m_scene->getCurrentStaffNumber() == i);
+            current = current || (m_scene->getCurrentStaffNumber() == (int)i);
 
             if ((xTime >= segStart) && (xTime < segEnd)) {
 
@@ -706,9 +717,6 @@ StaffHeader::updateHeader(int width)
         else m_indeterminableKey->hide();
     }
 
-    // Highlight header if track is the current one
-    setCurrent(m_current);
-
     update();
 }
 
@@ -721,6 +729,7 @@ StaffHeader::SegmentCmp::operator()(const Segment * s1, const Segment * s2) cons
     if (s1->getEndMarkerTime() < s2->getEndMarkerTime()) return true;
     return false;
 }
+
 
 
 // bool
@@ -769,6 +778,19 @@ StaffHeader::slotToolTip()
     emit(showToolTip(m_toolTipText));
 }
 
+
+
+// void
+// StaffHeader::mousePressEvent(QMouseEvent *event)
+// {
+//     int h = height();
+//     int offset = (h - 10 * m_lineSpacing -1) / 2;
+//     if (event->y() > (h - offset)) {
+/// Here is a place to call a popup menu to select what segment is the current 
+/// one when segments are overlapping.
+//         std::cerr << "START MENU\n";
+//     }
+// }
 
 }
 #include "StaffHeader.moc"

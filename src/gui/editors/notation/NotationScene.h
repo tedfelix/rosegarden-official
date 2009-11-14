@@ -65,6 +65,7 @@ public:
     std::vector<NotationStaff *> *getStaffs() { return &m_staffs; }
     unsigned int getStaffCount() { return m_staffs.size(); }
 
+    int getCurrentStaffNumber() { return m_currentStaff; }
     NotationStaff *getCurrentStaff();
     void setCurrentStaff(NotationStaff *);
 

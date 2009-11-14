@@ -66,12 +66,6 @@ public:
     ~StaffHeader();
 
     /**
-     * Draw a blue line around header when current is true
-     * (intended to highlight the "current" track).
-     */
-    void setCurrent(bool current);
-
-    /**
      * Examine staff at x position and gather data needed to draw
      * the track header.
      * Return the minimum width required to display the track header.
@@ -172,9 +166,17 @@ protected :
     virtual void enterEvent(QEvent *event);
     virtual void mouseMoveEvent(QMouseEvent *event);
     virtual void leaveEvent(QEvent *event);
+//    virtual void mousePressEvent(QMouseEvent *event);
 
 protected slots :
     void slotToolTip();
+
+    /**
+     * Look if the staff is the current one and consequently draw or remove
+     * a blue line around the header.
+     * (intended to highlight the "current" track).
+     */
+    void slotSetCurrent();
 
 private :
     /**
@@ -206,7 +208,6 @@ private :
     int m_lastTranspose;
     QString m_lastUpperText;
     bool m_neverUpdated;
-    bool m_isCurrent;
     int m_lastStatusPart;
     int m_lastWidth;
 
