@@ -257,6 +257,12 @@ private:
 
     bool m_Thorn;
 
+    // There's some kind of race condition in slotPointerPositionChanged() when
+    // the window is below a certain size.  I haven't yet worked out what's
+    // causing the race condition, but this hack should help trap it and contain
+    // the damage.
+    timeT m_lastPointerPosition;
+
     /**
      * Widgets vertical positions inside the main QGridLayout
      */

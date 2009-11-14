@@ -114,7 +114,8 @@ NotationWidget::NotationWidget() :
     m_tripletMode(false),
     m_graceMode(false),
     m_hSliderHacked(false),
-    m_vSliderHacked(false)
+    m_vSliderHacked(false),
+    m_lastPointerPosition(-42)
 {
     m_layout = new QGridLayout;
     setLayout(m_layout);
@@ -708,10 +709,29 @@ NotationWidget::slotUpdatePointerPosition()
 void
 NotationWidget::slotPointerPositionChanged(timeT t)
 {
+    std::cerr << "NotationWidget::slotPointerPositionChanged from: " << m_lastPointerPosition
+              << " to: " << t << std::endl;
+
+    if (t == m_lastPointerPosition) {
+        //!!! I imagine m_view->>slotShowPositionPointer(),
+        // m_hpanner->slotShowPositionPointer(), and/or
+        // m_view->slotEnsurePositionPointerInView() set up a chain of events,
+        // signals, and slots that lead back here in a race condition.
+        //
+        // I can't determine if this is bad design, or simply the absence of
+        // this check, so I'm not flagging this with a "This is a BUG!" warning,
+        // and we're just going to call it business as usual, and avoid crashing
+        // in an infinite loop, which is always sensible.  No use crashing in an
+        // infinite loop when there are so many more spectacular and exciting
+        // ways to crash!
+        std::cerr << "NotationWidget::slotPointerPositionChanged: new position idential to old position.  Returning..." << std::endl;
+        return;
+    } else {
+        m_lastPointerPosition = t;
+    }
+
     QObject *s = sender();
     bool fromDocument = (s == m_document);
-
-    NOTATION_DEBUG << "NotationWidget::slotPointerPositionChanged to " << t << endl;
 
     if (!m_scene) return;
 
@@ -724,7 +744,7 @@ NotationWidget::slotPointerPositionChanged(timeT t)
         rolling = true;
     }
 
-    NOTATION_DEBUG << "NotationWidget::slotPointerPositionChanged(" << t << "): rolling = " << rolling << endl;
+    std::cerr << "NotationWidget::slotPointerPositionChanged(" << t << "): rolling = " << rolling << std::endl;
 
     QLineF p = cc.currentStaff;
     if (rolling) p = cc.allStaffs;
