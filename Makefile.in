@@ -34,6 +34,7 @@ CXXFLAGS	:= @CXXFLAGS@ \
 		   @ENDIANNESS@ \
 		   -D'VERSION="$(VERSION)"' \
 		   -D'CODENAME="$(CODENAME)"' \
+		   -DUNSTABLE=1 \
 		   -Isrc
 
 RCC_CXXFLAGS	:= @QT_CXXFLAGS@ \

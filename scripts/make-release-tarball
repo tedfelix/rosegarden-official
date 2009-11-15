@@ -70,8 +70,8 @@ NEW_VERSION=$VERSION
 outDir="rosegarden-$NEW_VERSION"
 [ -d "$outDir" ] && puke "$outDir already exists!  Aborting!"
 
-echo "Checking out a clean copy of $URL..."
-svn co $URL $outDir || puke "Unable to check out $URL!"
+echo "Checking out a clean copy of $URL (this will take some time)..."
+svn co $URL $outDir > /dev/null || puke "Unable to check out $URL!"
 
 cd $outDir || puke "Unable to change to $outDir!"
 
@@ -80,25 +80,43 @@ echo "Rewriting version from $VERSION to $NEW_VERSION in configure.ac..."
 # to bother with some hackery to escape it to \. here
 sed "s/$VERSION/$NEW_VERSION/" configure.ac > foo42 && mv foo42 configure.ac
 
+# only set this if this is a final release
+if [ "$target" == "RELEASE" ]; then
+    sed "s/UNSTABLE/STABLE/" Makefile.in > foo42 && mv foo42 Makefile.in
+fi
+
 echo "Purging unwanted files..."
 # templates/ and test/ are of no value to people doing an end use build
 rm -rf templates test
 
 # attic/ will be disappearing before the real release, but if it still exists,
 # remove it
-echo [ -d "attic" ] && rm -rf attic
-
-# NOTE: data/data.qrc will still refer to these files, but they are rebuilt
-# early enough in the process that removing them will not cause a catastrophic
-# failure, so while they have to remain under version control for development
-# purposes, they don't have to be included in release tarballs
-rm -rf data/locale/*.qm
+[ -d "attic" ] && rm -rf attic
 
 # remove all the .svn directories and their contents 
 find . -name \.svn|xargs rm -rf
 
 echo "Bootstrapping..."
 sh ./bootstrap.sh || "Bootstrapping failed!"
+
+cat > CONTRIBUTING << EOF
+This source tree is a release version that has been stripped of version-control
+information in order to reduce its size.  If you wish to submit a patch to fix a
+bug or add a new feature, PLEASE do not begin working from this directory!
+
+It is very difficult to use patches built against a release source tree, and we
+have had to reject some otherwise excellent patches due to their being built
+against a release tree so old and so far removed from the current development
+line that it was almost impossible to do anything with them.
+
+Please don't let this happen to you.  To learn about the recommended way to
+contribute patches, please see:
+
+http://rosegardenmusic.com/wiki/dev:contributing
+EOF
+
+rm -f README.DEVELOPERS
+
 
 cd ..
 

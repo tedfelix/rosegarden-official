@@ -43,8 +43,13 @@ StartupLogo::StartupLogo(QWidget * parent, const char *name) :
     m_showTip(true)
 {
     setObjectName("Splash");
+
+#ifdef STABLE
     m_pixmap = IconLoader().loadPixmap("splash");
-    //setBackgroundPixmap(m_pixmap); This is Qt3 support - doesn't work with style sheets
+#else
+    m_pixmap = IconLoader().loadPixmap("splash-devel");
+#endif
+
     setGeometry(QApplication::desktop()->width() / 2 - m_pixmap.width() / 2,
                 QApplication::desktop()->height() / 2 - m_pixmap.height() / 2,
                 m_pixmap.width(), m_pixmap.height());
