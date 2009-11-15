@@ -438,6 +438,15 @@ void ControlRuler::slotUpdate()
 ///TODO Set some update flag?
 }
 
+void ControlRuler::notationLayoutUpdated()
+{
+    for (ControlItemMap::iterator it = m_controlItemMap.begin(); it != m_controlItemMap.end(); ++it) {
+        it->second->update();
+    }
+    
+    update();
+}
+
 void ControlRuler::paintEvent(QPaintEvent *event)
 {
     RG_DEBUG << "ControlRuler::paintEvent: width()=" << width() << " height()=" << height();

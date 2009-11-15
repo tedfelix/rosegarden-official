@@ -108,6 +108,8 @@ public:
     Segment* getSegment() { return m_segment; }
 
     void updateSegment();
+    
+    virtual void notationLayoutUpdated();
 
     virtual void setRulerScale(RulerScale *rulerscale) { m_rulerScale = rulerscale; }
     RulerScale* getRulerScale() { return m_rulerScale; }

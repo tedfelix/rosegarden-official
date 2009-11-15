@@ -77,22 +77,22 @@ PropertyControlRuler::PropertyControlRuler(PropertyName propertyName,
 
 void PropertyControlRuler::update()
 {
-    ControlItemList tmplist;
-    for (ControlItemList::iterator it = m_visibleItems.begin(); it != m_visibleItems.end(); ++it) {
-        tmplist.push_back(*it);
-    }
+//    ControlItemList tmplist;
+//    for (ControlItemList::iterator it = m_visibleItems.begin(); it != m_visibleItems.end(); ++it) {
+//        tmplist.push_back(*it);
+//    }
     
-    for (ControlItemList::iterator it = tmplist.begin(); it != tmplist.end(); ++it) {
-        if (!(*it)->isSelected()) {
-            (*it)->update();
-            RG_DEBUG << "ControlItem updated: " << hex << (long)(*it);
-        }
-    }
+//    for (ControlItemList::iterator it = tmplist.begin(); it != tmplist.end(); ++it) {
+//        if (!(*it)->isSelected()) {
+//            (*it)->update();
+//            RG_DEBUG << "ControlItem updated: " << hex << (long)(*it);
+//        }
+//    }
 
-    for (ControlItemList::iterator it = m_selectedItems.begin(); it != m_selectedItems.end(); ++it) {
-        (*it)->update();        
-        RG_DEBUG << "ControlItem updated: " << hex << (long)(*it);
-    }
+//    for (ControlItemList::iterator it = m_selectedItems.begin(); it != m_selectedItems.end(); ++it) {
+//        (*it)->update();        
+//        RG_DEBUG << "ControlItem updated: " << hex << (long)(*it);
+//    }
 
     ControlRuler::update();
 }

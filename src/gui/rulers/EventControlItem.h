@@ -35,7 +35,8 @@ public:
                 QPolygonF polygon);
 
     ~EventControlItem();
-
+    
+    virtual void update();
     virtual void updateFromEvent();
 
     void setY(float y);

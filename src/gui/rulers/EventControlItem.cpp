@@ -39,6 +39,11 @@ EventControlItem::~EventControlItem()
 {
 }
 
+void EventControlItem::update()
+{
+    updateFromEvent();
+}
+
 void EventControlItem::setEvent(Event* event)
 {
     m_event = event;

@@ -383,6 +383,7 @@ MatrixWidget::setSegments(RosegardenDocument *document,
 
     m_controlsWidget->setSegments(document, segments);
     m_controlsWidget->setViewSegment((ViewSegment *)m_scene->getCurrentViewSegment());
+    m_controlsWidget->setRulerScale(m_referenceScale);
 
     // For some reason this doesn't work in the constructor - not looked in detail
     // ( ^^^ it's because m_scene is only set after construction --cc)

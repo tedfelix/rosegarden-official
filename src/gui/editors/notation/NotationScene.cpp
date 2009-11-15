@@ -869,9 +869,7 @@ NotationScene::checkUpdate()
 
     if (need) {
         if (all) layoutAll();
-        else layout(single, start, end);
-        
-        emit layoutUpdated();
+        else layout(single, start, end);        
     }
 }
 
@@ -1313,6 +1311,8 @@ NotationScene::layout(NotationStaff *singleStaff,
         staff->regenerate(startTime, endTime, secondary);
     }
     }
+
+    emit layoutUpdated();
 }
 
 void
