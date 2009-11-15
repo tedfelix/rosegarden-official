@@ -624,6 +624,7 @@ RosegardenMainWindow::setupActions()
     createAction("guidelines", SLOT(slotBugGuidelines()));
     createAction("help_about_app", SLOT(slotHelpAbout()));
     createAction("help_about_qt", SLOT(slotHelpAboutQt()));
+    createAction("donate", SLOT(slotDonate()));
 
     createAction("show_stock_toolbar", SLOT(slotToggleToolBar()));
     createAction("show_tools_toolbar", SLOT(slotToggleToolsToolBar()));
@@ -7321,7 +7322,7 @@ void
 RosegardenMainWindow::slotBugGuidelines()
 {
     QString glURL = tr("http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html");
-     QDesktopServices::openUrl(QUrl(glURL));
+    QDesktopServices::openUrl(QUrl(glURL));
 }
 
 void
@@ -7335,6 +7336,14 @@ RosegardenMainWindow::slotHelpAboutQt()
 {
     QMessageBox::aboutQt(this, tr("Rosegarden"));
 }
+
+void
+RosegardenMainWindow::slotDonate()
+{
+    QString url("https://sourceforge.net/project/project_donations.php?group_id=4932");
+    QDesktopServices::openUrl(QUrl(url));
+}
+
 
 void
 RosegardenMainWindow::slotBankEditorClosed()

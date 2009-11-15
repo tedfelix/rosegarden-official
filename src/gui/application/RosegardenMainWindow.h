@@ -1350,6 +1350,8 @@ public slots:
 
     void slotHelpAboutQt();
 
+    void slotDonate();
+
     /**
      * View the trigger segments manager
      */
