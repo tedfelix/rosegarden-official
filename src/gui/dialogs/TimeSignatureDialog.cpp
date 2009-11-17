@@ -75,14 +75,12 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
         timeSigFont->setPixelSize(20);
     }
 
-    QGridLayout *metagrid = new QGridLayout;
-    setLayout(metagrid);
-    QWidget *vbox = new QWidget(this);
     QVBoxLayout *vboxLayout = new QVBoxLayout;
-    metagrid->addWidget(vbox, 0, 0);
+    setLayout(vboxLayout);
 
     QGroupBox *groupBox = new QGroupBox(tr("Time signature"));
     QVBoxLayout *groupBoxLayout = new QVBoxLayout;
+    groupBoxLayout->setSpacing(0);
     vboxLayout->addWidget(groupBox);
 
     QWidget *numBox = new QWidget;
@@ -132,7 +130,7 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
 
         m_timeEditor = new TimeWidget
                        (tr("Time where signature takes effect"),
-                        vbox,
+                        this,
                         composition,
                         m_time,
                         true);
@@ -225,17 +223,14 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
     slotUpdateCommonTimeButton();
     m_explanatoryLabel = explanatoryLabel;
 
-    //setHelp("time-signature");
-
     settings.endGroup();
-
-    vbox->setLayout(vboxLayout);
 
     QDialogButtonBox *buttonBox = new QDialogButtonBox(  QDialogButtonBox::Ok
                                                        | QDialogButtonBox::Cancel
                                                        | QDialogButtonBox::Help);
-    metagrid->addWidget(buttonBox, 1, 0);
-    metagrid->setRowStretch(0, 10);
+
+    vboxLayout->addWidget(buttonBox);
+
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 
