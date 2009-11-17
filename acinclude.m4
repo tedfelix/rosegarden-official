@@ -13,6 +13,15 @@ if test x"$QTDIR" = x ; then
 	# some usual Qt locations
 	QT_SEARCH="/usr /opt /usr/lib/qt"
 else
+	case "$QTDIR" in *3*)
+	     AC_MSG_WARN([
+The QTDIR environment variable is set to "$QTDIR".
+This looks suspiciously like the location of a Qt3 installation
+instead of the Qt4 installation we require.  If configure fails,
+please ensure QTDIR is either set correctly or not set at all.
+])
+		;;
+	esac
 	QT_SEARCH=$QTDIR
 	QTDIR=""
 fi
@@ -138,6 +147,15 @@ if test x"$QTLIBDIR" = x ; then
     # QTDIR is /usr/lib/qt4
 	QTLIB_SEARCH="$QTDIR/lib $QTDIR/lib64 $QTDIR/lib32 $QTDIR/bin /usr/lib /usr/lib64"
 else
+	case "$QTLIBDIR" in *3*)
+	     AC_MSG_WARN([
+The QTLIBDIR environment variable is set to "$QTLIBDIR".
+This looks suspiciously like the location for Qt3 libraries
+instead of the Qt4 libraries we require.  If configure fails,
+please ensure QTLIBDIR is either set correctly or not set at all.
+])
+		;;
+	esac
 	QTLIB_SEARCH="$QTLIBDIR"
 	QTDIR=""
 fi
