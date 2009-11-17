@@ -3759,8 +3759,8 @@ NotationView::slotMoveEventsUpStaff()
 
     NotationScene *scene = m_notationWidget->getScene();
     if (!scene) return;
-//    NotationStaff *current_staff = scene->getCurrentStaff();
-//    if (!current_staff) return;
+    NotationStaff *current_staff = scene->getCurrentStaff();
+    if (!current_staff) return;
     NotationStaff *target_staff = scene->getStaffAbove();
     if (!target_staff) return;
 
@@ -3782,6 +3782,8 @@ NotationView::slotMoveEventsUpStaff()
     
     CommandHistory::getInstance()->addCommand(command);
 
+    scene->setCurrentStaff(current_staff);
+
     delete c;
 
 }
@@ -3794,8 +3796,8 @@ NotationView::slotMoveEventsDownStaff()
 
     NotationScene *scene = m_notationWidget->getScene();
     if (!scene) return;
-//    NotationStaff *current_staff = scene->getCurrentStaff();
-//    if (!current_staff) return;
+    NotationStaff *current_staff = scene->getCurrentStaff();
+    if (!current_staff) return;
     NotationStaff *target_staff = scene->getStaffBelow();
     if (!target_staff) return;
 
@@ -3816,6 +3818,8 @@ NotationView::slotMoveEventsDownStaff()
                          PasteEventsCommand::NoteOverlay));
     
     CommandHistory::getInstance()->addCommand(command);
+
+    scene->setCurrentStaff(current_staff);
 
     delete c;
 
