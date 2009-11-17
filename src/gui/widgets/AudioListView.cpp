@@ -36,7 +36,11 @@ namespace Rosegarden {
 AudioListView::AudioListView(QWidget *parent, const char *name)
     : QTreeWidget(parent)
 {
-    setObjectName( name );
+    if(name){
+        setObjectName( name );
+    }else{
+        setObjectName( "AudioListView" );
+    }
     setDragEnabled(false);  // start drag manually in mouseMoveEvent
     setAcceptDrops(true);
     setDropIndicatorShown(true);
@@ -91,6 +95,31 @@ void AudioListView::mouseMoveEvent(QMouseEvent *event){
     // mime stuff
     mimeData->setUrls(list); 
     //mimeData->setData( line.toUtf8(), "text/uri-list" );
+    
+    
+    // ----------------------------------------------------------------------
+    // provide a plain:text type, for accellerated access, when draging internaly
+    
+    AudioListItem* AuItem = dynamic_cast<AudioListItem*>(currentItem());
+    
+    QString audioDatax;
+    QTextStream ts(&audioDatax);
+    ts << "AudioFileManager\n"
+        << AuItem->getId() << '\n'
+        << AuItem->getStartTime().sec << '\n'
+        << AuItem->getStartTime().nsec << '\n'
+        << AuItem->getDuration().sec << '\n'
+        << AuItem->getDuration().nsec << '\n';
+    ts.flush();
+    
+    RG_DEBUG << "AudioListView::dragObject - "
+            << "file id = " << AuItem->getId()
+            << ", start time = " << AuItem->getStartTime() << endl;
+    
+    mimeData->setText( audioDatax ); 
+     // ----------------------------------------------------------------------
+    
+    
     drag->setMimeData(mimeData);
     
     RG_DEBUG << "Starting drag from AudioListView::mouseMoveEvent() with mime : " << mimeData->formats() << " - " << mimeData->urls()[0] << endl;

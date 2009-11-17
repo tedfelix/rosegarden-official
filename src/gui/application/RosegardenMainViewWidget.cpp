@@ -84,6 +84,7 @@
 #include <QString>
 #include <QWidget>
 #include <QVBoxLayout>
+#include <QTextStream>
 
 #include "gui/editors/parameters/MIDIInstrumentParameterPanel.h"
 
@@ -1573,8 +1574,10 @@ RosegardenMainViewWidget::slotAddAudioSegmentDefaultPosition(AudioFileId audioFi
 void
 RosegardenMainViewWidget::slotDroppedNewAudio(QString audioDesc)
 {
-    QTextIStream s(&audioDesc);
-
+//     QTextIStream s(&audioDesc);  // qt3 - remove
+    
+    QTextStream s(&audioDesc, QIODevice::ReadWrite); //### use QIODevice::ReadOnly instead ?
+    
     QString url;
     int trackId;
     timeT time;
@@ -1597,16 +1600,22 @@ RosegardenMainViewWidget::slotDroppedNewAudio(QString audioDesc)
     QUrl kurl(url);
     if (! QFile::exists(kurl.toLocalFile()) ) {
         if (!RosegardenMainWindow::self()->testAudioPath(tr("importing a remote audio file"))) return;
-    } else if (aFM.fileNeedsConversion(qstrtostr(kurl.path()), sampleRate)) {
-	if (!RosegardenMainWindow::self()->testAudioPath(tr("importing an audio file that needs to be converted or resampled"))) return;
+    }else if (aFM.fileNeedsConversion(qstrtostr(kurl.path()), sampleRate)) {
+        if (!RosegardenMainWindow::self()->testAudioPath(tr("importing an audio file that needs to be converted or resampled"))) return;
     }
 
+    // from qt4-doc : " don't use a (modal) QProgressDialog inside a paintEvent() !"
     ProgressDialog progressDlg(tr("Adding audio file..."),
                                100,
                                this);
-
-    CurrentProgressDialog::set(&progressDlg);
-    progressDlg.progressBar()->hide();
+    
+    
+    // warning: pointer &progressDlg becomes invalid, if function quits.
+//     CurrentProgressDialog::set(&progressDlg);
+    
+    //progressDlg.progressBar()->hide();
+    progressDlg.setValue( 0 );
+    progressDlg.progressBar()->show();
     progressDlg.show();
 
     // Connect the progress dialog
@@ -1636,9 +1645,13 @@ RosegardenMainViewWidget::slotDroppedNewAudio(QString audioDesc)
                &aFM, SLOT(slotStopImport()));
     connect(&progressDlg, SIGNAL(canceled()),
             &aFM, SLOT(slotStopPreview()));
-    progressDlg.progressBar()->show();
+    
+    
     progressDlg.slotSetOperationName(tr("Generating audio preview..."));
-
+    //progressDlg.progressBar()->show();
+    //progressDlg.setValue( 0 );
+    progressDlg.show();
+    
     try {
         aFM.generatePreview(audioFileId);
     } catch (Exception e) {
@@ -1670,6 +1683,10 @@ RosegardenMainViewWidget::slotDroppedNewAudio(QString audioDesc)
                             RealTime(0, 0), aF->getLength());
         
     }
+    
+    progressDlg.close();
+//     CurrentProgressDialog::get()->close();
+//     CurrentProgressDialog::set(0);
 }
 
 void

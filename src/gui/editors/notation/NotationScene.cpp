@@ -208,7 +208,7 @@ NotationScene::getCurrentStaff()
 void
 NotationScene::setCurrentStaff(NotationStaff *staff)
 {
-    for (int i = 0; i < m_staffs.size(); ++i) {
+    for (uint i = 0; i < m_staffs.size(); ++i) {
         if (m_staffs[i] == staff) {
             m_currentStaff = i;
             emit currentStaffChanged();
@@ -387,7 +387,7 @@ NotationScene::getNextStaffHorizontally(int direction, bool cycle)
     if (m_staffs.size() < 2 || m_currentStaff >= m_staffs.size()) return 0;
 
     NotationStaff *current = m_staffs[m_currentStaff];
-    Composition *composition = &m_document->getComposition();
+    //Composition *composition = &m_document->getComposition();
     TrackId trackId = current->getSegment().getTrack();
 
     QMultiMap<timeT, NotationStaff *> timeMap;
@@ -758,7 +758,7 @@ NotationScene::getCursorCoordinates(timeT t) const
 
     NotationStaff *topStaff = 0;
     NotationStaff *bottomStaff = 0;
-    for (int i = 0; i < m_staffs.size(); ++i) {
+    for (uint i = 0; i < m_staffs.size(); ++i) {
         if (!m_staffs[i]) continue;
         if (!topStaff || m_staffs[i]->getY() < topStaff->getY()) {
             topStaff = m_staffs[i];

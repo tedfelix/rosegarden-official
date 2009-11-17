@@ -17,7 +17,6 @@
 
 
 #include <iostream>
-#include <QApplication>
 #include <fstream>
 #include <string>
 #include <dirent.h> // for new recording file
@@ -25,12 +24,11 @@
 #include <cstdlib>
 #include <pthread.h>
 #include <signal.h>
-
 #include <sstream>
+
 
 #include <QApplication>
 #include <QMessageBox>
-
 #include <QProcess>
 #include <QPixmap>
 #include <QPainter>
@@ -38,7 +36,6 @@
 #include <QFile>
 
 #include "gui/general/FileSource.h"
-
 #include "AudioFile.h"
 #include "AudioFileManager.h"
 #include "WAVAudioFile.h"
@@ -49,6 +46,8 @@
 #include "sound/audiostream/AudioReadStreamFactory.h"
 #include "sound/audiostream/AudioWriteStream.h"
 #include "sound/audiostream/AudioWriteStreamFactory.h"
+
+
 
 namespace Rosegarden
 {
@@ -304,6 +303,8 @@ AudioFileManager::getFirstUnusedID()
 {
     return AudioFile::getNewAudioFileID(); // defined in AudioFile.h
 }
+// */
+
 /*
 AudioFileId
 AudioFileManager::getFirstUnusedID()
@@ -326,7 +327,8 @@ AudioFileManager::getFirstUnusedID()
 
     return rI;
 }
-*/
+// */
+
 
 bool
 AudioFileManager::insertFile(const std::string &name,
