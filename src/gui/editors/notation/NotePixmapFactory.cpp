@@ -1799,8 +1799,13 @@ NotePixmapFactory::makeClef(const Clef &clef, const ColourType colourType)
 
     m_p->painter().setFont(m_clefOttavaFont);
 
+    //!!! This fix may be turn out to be highly dependent on an individual
+    // user's random system preferences.  Here on my system today and now, the
+    // 8/15 above and below clef pixmaps was getting cut off.  Supplying an
+    // adjustment of -2 and 4 yields just perfect results, but who knows how
+    // this will turn out on somebody else's setup.
     m_p->drawText(plain.getWidth() / 2 - tw / 2,
-                  ascent + (oct < 0 ? plain.getHeight() : 0), text);
+                  ascent + (oct < 0 ? plain.getHeight() - 2 : 4), text);
 
     QPoint hotspot(plain.getHotspot());
     if (oct > 0) hotspot.setY(hotspot.y() + th);
