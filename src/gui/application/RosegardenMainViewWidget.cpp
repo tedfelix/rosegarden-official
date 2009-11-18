@@ -1611,7 +1611,7 @@ RosegardenMainViewWidget::slotDroppedNewAudio(QString audioDesc)
     
     
     // warning: pointer &progressDlg becomes invalid, if function quits.
-//     CurrentProgressDialog::set(&progressDlg);
+    //CurrentProgressDialog::set(&progressDlg);
     
     //progressDlg.progressBar()->hide();
     progressDlg.setValue( 0 );
@@ -1684,9 +1684,10 @@ RosegardenMainViewWidget::slotDroppedNewAudio(QString audioDesc)
         
     }
     
-    progressDlg.close();
-//     CurrentProgressDialog::get()->close();
-//     CurrentProgressDialog::set(0);
+    progressDlg.progressBar()->hide();
+    progressDlg.hide();
+    CurrentProgressDialog::get()->close();  // note: Qt::WA_DeleteOnClose set
+    CurrentProgressDialog::set(0);
 }
 
 void

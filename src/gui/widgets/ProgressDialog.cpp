@@ -54,6 +54,9 @@ ProgressDialog::ProgressDialog(QWidget *creator,
     }else{
         setWindowModality( Qt::NonModal );
     }
+    
+    setAttribute( Qt::WA_DeleteOnClose );
+    
 //     setMinimum();
 //     setMaximum();
 //     setValue();
@@ -120,6 +123,9 @@ ProgressDialog::ProgressDialog(
     }else{
         setWindowModality( Qt::NonModal );
     }
+    
+    setAttribute( Qt::WA_DeleteOnClose );
+    
 //     setMinimum();
 //     setMaximum();
 //     setValue();
@@ -154,6 +160,10 @@ ProgressDialog::ProgressDialog(
 ProgressDialog::~ProgressDialog()
 {
     m_modalVisible = false;
+    if( m_progressBar ){
+        delete m_progressBar;
+        m_progressBar = 0;
+    }
 }
 
 void
