@@ -1418,6 +1418,14 @@ NotePixmapFactory::drawSlashes(const QPoint &s0,
     if (gap < 1)
         gap = 1;
 
+    //!!! I think the thickness is coming out too heavy in this rewrite, which
+    // is what was really swallowing the gap, but given the number of pixel
+    // level drawing problems we already have (eg. stem location is randomly off
+    // by one pixel on a given user's system, but not on another's) let's just
+    // leave the thickness, and expand the gap by one.  Better too much space in
+    // some cases than globbing it all together illegibly.
+    gap++;
+
     int width = m_noteBodyWidth * 4 / 5;
     int sign = (params.m_stemGoesUp ? -1 : 1);
 
