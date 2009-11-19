@@ -186,9 +186,50 @@ Panned::slotEnsurePositionPointerInView(bool page)
     if (value < hMin) value = hMin;
     else if (value > hMax) value = hMax;
 
+
+    // If pointer doesn't fit vertically inside current view,
+    // mouseMoveEvent may be called from scene when ensureVisible()
+    // is called.
+    // Then setupMouseEvent() and setCurrentStaff() will be called from scene.
+    // Then slotUpdatePointerPosition() and slotpointerPositionChanged() will
+    // be called from NotationWidget.
+    // Then again Panned::slotEnsurePositionPointerInView() and probably the
+    // is moved again : this is an infinite recursive call loop which leads to
+    // crash.
+
+    // To avoid it, ensureVisible() should not be called on a rectangle
+    // highter than the view :
+
+    // Convert pointer height from scene coords to pixels
+    int hPointerPx = mapFromScene(0, 0, 1,
+                                  m_pointerHeight).boundingRect().height();
+
+    // Compute new pointer height and margin to ensure than pointer + margin
+    // vertically fit inside current view (default ensureVisible() margins
+    // are 50 pixels)
+    double ph;        // New height to call ensureVisible()
+    double ymargin;   // New vertical margin to call ensureVisible()
+    int h = height();
+    if (h < hPointerPx) {
+        // If pointer is taller than view replace it with a smaller object
+        // and use null margins
+        ph = (m_pointerHeight * h) / hPointerPx;
+        ymargin = 0;
+    } else if (h < (hPointerPx + 100)) {
+        // If pointer is smaller than view but taller than view + margins
+        // keep pointer as is but use null margins
+        ph = m_pointerHeight;
+        ymargin = 0;
+    } else {
+        // Sizes are OK : don't change anything
+        ph = m_pointerHeight;
+        ymargin = 50;             // Keep default margin
+    }
+
     // before h scroll
     if (y != 0) {
-        ensureVisible(QRectF(x, y, 1, m_pointerHeight));
+        if (ph > 6) ph = ph - 5;      // for safety
+        ensureVisible(QRectF(x, y, 1, ph), 50, ymargin);
     }
 
     horizontalScrollBar()->setValue(value);
