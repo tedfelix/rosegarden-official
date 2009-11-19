@@ -113,12 +113,13 @@ NotationSelector::handleLeftButtonPress(const NotationMouseEvent *e)
 
     delete m_selectionToMerge;
     const EventSelection *selectionToMerge = 0;
-    if (e->buttons & Qt::ShiftButton) {
+    if (e->modifiers & Qt::ShiftModifier) {
         m_clickedShift = true;
         selectionToMerge = m_scene->getSelection();
     } else {
         m_clickedShift = false;
     }
+    std::cout << "NotationSelector::handleLeftButtonPress(): m_clickedShift == " << (m_clickedShift ? "true" : "false") << std::endl;
     m_selectionToMerge =
         (selectionToMerge ? new EventSelection(*selectionToMerge) : 0);
 
