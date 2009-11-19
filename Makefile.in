@@ -140,6 +140,7 @@ clean:
 	rm -f $(QSOURCES) $(UIHEADERS) $(UISOURCES) $(UIMOC) $(OBJECTS) $(LIBRARIES) $(EXECUTABLES) data/data.o data/data.cpp
 
 distclean:	clean
+	rm data/desktop/rosegarden-$(VERSION).desktop
 	rm -rf autom4te.cache/
 	rm -f aclocal.m4
 	rm -f config.log config.status configure
@@ -162,6 +163,7 @@ qrc:	locale
 	@bash ./scripts/rebuild-qrc
 
 install:
+	@bash ./scripts/rewrite-desktop-file $(VERSION)
 	$(MKDIR_P) -m 755 $(INSTBINDIR)
 	$(INSTALL) -m 755 rosegarden $(INSTBINDIR)/rosegarden-$(VERSION)
 	$(MKDIR_P) -m 755 $(INSTMIME16DIR)
@@ -182,7 +184,7 @@ install:
 	$(MKDIR_P) -m 755 $(INSTMIMEXMLDIR)
 	$(INSTALL) -m 644 data/mime/rosegarden.xml $(INSTMIMEXMLDIR)
 	$(MKDIR_P) -m 755 $(INSTDESKTOPDIR)
-	$(INSTALL) -m 644 data/desktop/rosegarden.desktop $(INSTDESKTOPDIR)
+	$(INSTALL) -m 644 data/desktop/rosegarden-$(VERSION).desktop $(INSTDESKTOPDIR)
 	$(MKDIR_P) -m 755 $(INSTICONDIR)
 	$(INSTALL) -m 644 data/pixmaps/icons/rg-rwb-rose3-32x32.png $(INSTICONDIR)/rosegarden.png
 	update-mime-database $(INSTMIMEDIR)
@@ -194,7 +196,7 @@ uninstall:
 	rm -f $(INSTMIME32DIR)/audio-x-rosegarden*
 	rm -f $(INSTMIME64DIR)/audio-x-rosegarden*
 	rm -f $(INSTMIMEXMLDIR)/rosegarden.xml
-	rm -f $(INSTDESKTOPDIR)/rosegarden.desktop
+	rm -f $(INSTDESKTOPDIR)/rosegarden-$(VERSION).desktop
 	rm -f $(INSTICONDIR)/rosegarden.png
 	update-mime-database $(INSTMIMEDIR)
 	rmdir -p --ignore-fail-on-non-empty $(INSTMIME16DIR)

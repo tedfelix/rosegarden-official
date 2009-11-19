@@ -1,0 +1,26 @@
+#!/bin/bash
+#
+# rewrite-desktop-file
+#
+# Copyright (c) 2009  D. Michael McIntyre <rosegarden.trumpeter@gmail.com>
+# Released under the GPL
+#
+# REQUIRES: sed
+#
+#
+# PURPOSE: rewrite data/desktop/rosegarden.desktop into rosegarden-$1.desktop
+# where $1 is assumed to be the version number coming from $(VERSION) in the
+# makefile.  Replace "INSTALLED_BINARY" with "rosegarden-$1" in the .desktop
+# file so the resulting desktop menu entry will refer to the proper
+# /usr/bin/rosegarden-$1 binary, where this is assumed to be something like
+# /usr/bin/rosegarden-10.02.
+# 
+# Used to keep Thorn separate from Classic, so they can be installed
+# concurrently, and in the future, Thorn will be able to coexist with Abraham
+# Darby
+#
+#
+
+sed s/INSTALLED_BINARY/rosegarden-$1/g data/desktop/rosegarden.desktop > data/desktop/rosegarden-$1.desktop
+
+exit 0
