@@ -85,13 +85,6 @@ NotationSelector::NotationSelector(NotationWidget *widget) :
     createAction("make_visible", SLOT(slotMakeVisible()));
 
 
-    // (this crashed, and it might be superfluous with ^N anyway, so I'm
-    // commenting it out, but leaving it here in case I change my mind about
-    // fooling with it.)  (DMM)
-    //    new KAction(tr("Normalize Rests"), 0, 0, this,
-    //                SLOT(slotCollapseRests()), actionCollection(),
-    //                "collapse_rests");
-
     createMenu();
 }
 
@@ -119,7 +112,7 @@ NotationSelector::handleLeftButtonPress(const NotationMouseEvent *e)
     } else {
         m_clickedShift = false;
     }
-    std::cout << "NotationSelector::handleLeftButtonPress(): m_clickedShift == " << (m_clickedShift ? "true" : "false") << std::endl;
+//    std::cout << "NotationSelector::handleLeftButtonPress(): m_clickedShift == " << (m_clickedShift ? "true" : "false") << std::endl;
     m_selectionToMerge =
         (selectionToMerge ? new EventSelection(*selectionToMerge) : 0);
 
@@ -306,7 +299,28 @@ void NotationSelector::handleMouseRelease(const NotationMouseEvent *e)
     int w = int(e->sceneX - m_selectionRect->x());
     int h = int(e->sceneY - m_selectionRect->y());
 
-    if (w > -3 && w < 3 && h > -3 && h < 3 && !m_startedFineDrag) {
+//    std::cout << "e->sceneX: " << e->sceneX << " Y: " << e->sceneY 
+//              << " m_selectionRect->x(): " << m_selectionRect->x()
+//              << " y(): " << m_selectionRect->y() << std::endl
+//              << "w: " << w << " h: " << h << " m_startedFineDrag == " << m_startedFineDrag << std::endl;
+
+    //!!! Deeper bug here, surely.  The code commented out above revealed
+    // m_selectionRect was always (0,0) in every situation where I could get this
+    // code to fire.  This makes the above values for w and h above completely
+    // meaningless nonsense as far as I can see.  We needed to get past the next
+    // test, so I added a detour around it.  PLEASE REVIEW!
+    //
+    // NOTE: Adding this detour enabled me to Shift+click to select multiple
+    // notes one by one, and then de-select them by re-clicking.  It is possible
+    // to Shift+click and drag to add sweep selections to an existing selection,
+    // but if you sweep over existing notes, those are *not* removed from the
+    // broader selection.  I tested Classic, and it had the same behavior.  This
+    // is worth fixing I think, but since it's the same as in Classic now, at
+    // least at a casual testing-in-the-middle-of-development glance, I'm moving
+    // on for now.
+    if ((w > -3 && w < 3 && h > -3 && h < 3 && !m_startedFineDrag) ||
+        // detour:
+        (m_selectionRect->x() == 0 && m_selectionRect->y() == 0 && !m_startedFineDrag)) {
 
         if (m_clickedElement != 0 && m_selectedStaff) {
             
