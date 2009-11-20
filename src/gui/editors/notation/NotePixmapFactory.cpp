@@ -397,8 +397,7 @@ NotePixmapFactory::drawNoteAux(const NotePixmapParameters &params,
     bool isStemmed = m_style->hasStem(params.m_noteType);
     int flagCount = m_style->getFlagCount(params.m_noteType);
     int slashCount = params.m_slashes;
-    if (!slashCount)
-        slashCount = m_style->getSlashCount(params.m_noteType);
+    if (!slashCount) slashCount = m_style->getSlashCount(params.m_noteType);
 
     if (params.m_accidental != NoAccidental) {
         makeRoomForAccidental(params.m_accidental,
@@ -409,8 +408,7 @@ NotePixmapFactory::drawNoteAux(const NotePixmapParameters &params,
 
     NoteCharacter dot(getCharacter(NoteCharacterNames::DOT, PlainColour, charType));
     int dotWidth = dot.getWidth();
-    if (dotWidth < getNoteBodyWidth() / 2)
-        dotWidth = getNoteBodyWidth() / 2;
+    if (dotWidth < getNoteBodyWidth() / 2) dotWidth = getNoteBodyWidth() / 2;
 
     int stemLength = getStemLength(params);
 
@@ -533,13 +531,10 @@ NotePixmapFactory::drawNoteAux(const NotePixmapParameters &params,
         int x = m_left + m_noteBodyWidth + dotWidth / 2;
         int y = m_above + m_noteBodyHeight / 2 - dot.getHeight() / 2;
 
-        if (params.m_onLine)
-            y -= m_noteBodyHeight / 2;
+        if (params.m_onLine) y -= m_noteBodyHeight / 2;
 
-        if (params.m_shifted)
-            x += m_noteBodyWidth;
-        else if (params.m_dotShifted)
-            x += m_noteBodyWidth;
+        if (params.m_shifted) x += m_noteBodyWidth;
+        else if (params.m_dotShifted) x += m_noteBodyWidth;
 
         for (int i = 0; i < params.m_dots; ++i) {
             m_p->drawNoteCharacter(x, y, dot);
@@ -568,10 +563,8 @@ NotePixmapFactory::drawNoteAux(const NotePixmapParameters &params,
         // through the beam into the anti-aliased region on the
         // other side of the beam that faces away from the note-heads.
         int shortening;
-        if (flagCount > 0 && !drawFlag && params.m_beamed)
-            shortening = 2;
-        else
-            shortening = 0;
+        if (flagCount > 0 && !drawFlag && params.m_beamed) shortening = 2;
+        else shortening = 0;
         drawStem(params, startPoint, endPoint, shortening);
     }
 
