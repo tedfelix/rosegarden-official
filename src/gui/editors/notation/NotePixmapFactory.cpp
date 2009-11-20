@@ -3450,15 +3450,22 @@ NotePixmapFactory::getCharacter(CharName name, NoteCharacter &ch,
                 ch, charType, inverted);
     }
 
-    if (m_shaded) {
-        // future note: getCharacterShaded must be the one missing the alpha
-        // preservation and blowing out the antialiasing
-        return font->getCharacterShaded(name, ch, charType, inverted);
-    }
-
     QColor white = Qt::white;
     QColor red = Qt::red;
+    QColor gray = Qt::gray;
     int h, s, v;
+
+    // getCharacterShaded() has been removed and replaced with a call to
+    // getCharacterColoured() using Qt::gray, in order to preserve the
+    // antialiasing of the character, and avoid blowing it out
+    if (m_shaded) {
+        gray.getHsv(&h, &s, &v);
+        return font->getCharacterColoured
+               (name,
+                h,
+                v,
+                ch, charType, inverted, s);
+    }
 
     switch (type) {
 

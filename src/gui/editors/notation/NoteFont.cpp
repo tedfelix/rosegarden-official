@@ -574,52 +574,5 @@ NoteFont::getCharacterColoured(CharName charName,
     return character;
 }
 
-bool
-NoteFont::getCharacterShaded(CharName charName,
-                             NoteCharacter &character,
-                             CharacterType type,
-                             bool inverted)
-{
-    QPixmap pixmap;
-    if (!getShadedPixmap(charName, pixmap, inverted)) {
-        return false;
-    }
-
-    if (type == Screen) {
-
-        character = NoteCharacter(pixmap,
-                                  getHotspot(charName, inverted),
-                                  0);
-
-    } else {
-
-        // Get the pointer direct from cache (depends on earlier call
-        // to getPixmap to put it in the cache if available)
-
-        QPixmap *pmapptr = 0;
-        CharName cCharName(getNameShaded(charName));
-        bool found = lookup(cCharName, inverted, pmapptr);
-
-        NoteCharacterDrawRep *rep = 0;
-        if (found && pmapptr)
-            rep = lookupDrawRep(pmapptr);
-
-        character = NoteCharacter(pixmap,
-                                  getHotspot(charName, inverted),
-                                  rep);
-    }
-
-    return true;
-}
-
-NoteCharacter
-NoteFont::getCharacterShaded(CharName charName,
-                             CharacterType type,
-                             bool inverted)
-{
-    NoteCharacter character;
-    getCharacterShaded(charName, character, type, inverted);
-    return character;
-}
 
 }

@@ -107,12 +107,6 @@ public:
                                        CharacterType type = Screen,
                                        bool inverted = false);
 
-    /// Returns false if not available
-    bool getCharacterShaded(CharName charName,
-                            NoteCharacter &character,
-                            CharacterType type = Screen,
-                            bool inverted = false);
-
     /// Returns an empty character if not available
     NoteCharacter getCharacterShaded(CharName charName,
                                      CharacterType type = Screen,
