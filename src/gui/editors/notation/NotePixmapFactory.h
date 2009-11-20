@@ -62,7 +62,9 @@ class NotePixmapFactory
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::NotePixmapFactory)
 
 public:
-    NotePixmapFactory(QString fontName = "", int size = -1);
+    static const int NO_GRACE_SIZE = -1;
+
+    NotePixmapFactory(QString fontName = "", int size = -1, int graceSize = NO_GRACE_SIZE);
     NotePixmapFactory(const NotePixmapFactory &);
     NotePixmapFactory &operator=(const NotePixmapFactory &);
     ~NotePixmapFactory();
@@ -108,6 +110,8 @@ public:
     /** Returns true if the character is in the selected state
      */
     bool isSelected() const { return m_selected; }
+
+    int getGraceSize() const { return m_graceSize; }
 
     /** Used to notify the drawing code that the character is shaded, and should
      * therefore be drawn with a gray foreground.  This is used for "invisible"
@@ -267,7 +271,6 @@ public:
     static const char* const defaultSansSerifFontFamily;
     static const char* const defaultTimeSigFontFamily;
 
-
 protected:
     void init(QString fontName, int size);
     void initMaybe() { if (!m_font) init("", -1); }
@@ -342,10 +345,13 @@ protected:
     //--------------- Data members ---------------------------------
 
     NoteFont *m_font;
+    NoteFont *m_graceFont;
     NoteStyle *m_style;
     bool m_selected;
     bool m_shaded;
+    bool m_haveGrace;
 
+    int m_graceSize;
     int m_noteBodyWidth, m_noteBodyHeight;
     int m_left, m_right, m_above, m_below;
     int m_borderX, m_borderY;

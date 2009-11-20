@@ -114,7 +114,9 @@ NotationScene::setNotePixmapFactories(QString fontName, int size)
         small = sizes[i];
     }
 
-    m_notePixmapFactorySmall = new NotePixmapFactory(fontName, small);
+    // small NPF needs to know target size for grace noteheads and normal size
+    // so it can scale everything else sensibly
+    m_notePixmapFactorySmall = new NotePixmapFactory(fontName, size, small);
 
     if (m_hlayout) m_hlayout->setNotePixmapFactory(m_notePixmapFactory);
     if (m_vlayout) m_vlayout->setNotePixmapFactory(m_notePixmapFactory);

@@ -80,9 +80,11 @@ const char* const NotePixmapFactory::defaultSerifFontFamily = "Bitstream Vera Se
 const char* const NotePixmapFactory::defaultSansSerifFontFamily = "Bitstream Vera Sans";
 const char* const NotePixmapFactory::defaultTimeSigFontFamily = "Bitstream Vera Serif";
 
-NotePixmapFactory::NotePixmapFactory(QString fontName, int size) :
+NotePixmapFactory::NotePixmapFactory(QString fontName, int size, int graceSize) :
     m_selected(false),
     m_shaded(false),
+    m_haveGrace(graceSize != NO_GRACE_SIZE),
+    m_graceSize(graceSize),
     m_tupletCountFont(defaultSerifFontFamily, 8, QFont::Bold),
     m_tupletCountFontMetrics(m_tupletCountFont),
     m_textMarkFont(defaultSerifFontFamily, 8, QFont::Bold, true),
@@ -113,6 +115,7 @@ NotePixmapFactory::NotePixmapFactory(QString fontName, int size) :
 NotePixmapFactory::NotePixmapFactory(const NotePixmapFactory &npf) :
     m_selected(false),
     m_shaded(false),
+    m_graceSize(npf.m_graceSize),
     m_tupletCountFont(npf.m_tupletCountFont),
     m_tupletCountFontMetrics(m_tupletCountFont),
     m_textMarkFont(npf.m_textMarkFont),
@@ -188,6 +191,7 @@ NotePixmapFactory::init(QString fontName, int size)
             if (size < 0)
                 size = NoteFontFactory::getDefaultSize(fontName);
             m_font = NoteFontFactory::getFont(fontName, size);
+            m_graceFont = NoteFontFactory::getFont(fontName, m_graceSize);
         } catch (Exception f) {
             fontName = "";
             // fall through
@@ -201,6 +205,7 @@ NotePixmapFactory::init(QString fontName, int size)
             if (size < 0)
                 size = NoteFontFactory::getDefaultSize(fontName);
             m_font = NoteFontFactory::getFont(fontName, size);
+            m_graceFont = NoteFontFactory::getFont(fontName, m_graceSize);
         } catch (Exception f) { // already reported
             throw;
         }
@@ -344,6 +349,9 @@ void
 NotePixmapFactory::drawNoteAux(const NotePixmapParameters &params,
                                QPainter *painter, int x, int y)
 {
+    // use the full font for this unless a grace size was supplied in ctor
+    NoteFont *font = (m_haveGrace ? m_graceFont : m_font);
+
     NoteFont::CharacterType charType = m_inPrinterMethod ? NoteFont::Printer : NoteFont::Screen;
 
     if (m_selected) {
@@ -368,14 +376,14 @@ NotePixmapFactory::drawNoteAux(const NotePixmapParameters &params,
     // and actual heights of the note head pixmap.  For left and
     // right, we use the hotspot x coordinate of the head.
     int temp;
-    if (!m_font->getHotspot(m_style->getNoteHeadCharName(params.m_noteType).first,
-                            m_borderX, temp))
+    if (!font->getHotspot(m_style->getNoteHeadCharName(params.m_noteType).first,
+                           m_borderX, temp))
         m_borderX = 0;
 
     if (params.m_noteType == Note::Minim && params.m_stemGoesUp)
         m_borderX++;
     int actualNoteBodyHeight =
-        m_font->getHeight(m_style->getNoteHeadCharName(params.m_noteType).first);
+        font->getHeight(m_style->getNoteHeadCharName(params.m_noteType).first);
 
     m_left = m_right = m_borderX;
     m_above = m_borderY = (actualNoteBodyHeight - m_noteBodyHeight) / 2;
@@ -467,7 +475,7 @@ NotePixmapFactory::drawNoteAux(const NotePixmapParameters &params,
     // (same as the gap between staff lines), but here we want to know
     // if the pixmap itself is taller than that
     /*!!!
-        int actualNoteBodyHeight = m_font->getHeight
+        int actualNoteBodyHeight = font->getHeight
     	(m_style->getNoteHeadCharName(params.m_noteType).first);
     //	- 2*m_origin.y();
         if (actualNoteBodyHeight > m_noteBodyHeight) {
@@ -674,14 +682,17 @@ void
 NotePixmapFactory::makeRoomForAccidental(Accidental a,
                                          bool cautionary, int shift, bool extra)
 {
+    // use the full font for this unless a grace size was supplied in ctor
+    NoteFont *font = (m_haveGrace ? m_graceFont : m_font);
+
     // General observation: where we're only using a character to
     // determine its dimensions, we should (for the moment) just
     // request it in screen mode, because it may be quicker and we
     // don't need to render it, and the dimensions are the same.
     NoteCharacter ac
-    (m_font->getCharacter(m_style->getAccidentalCharName(a)));
+    (font->getCharacter(m_style->getAccidentalCharName(a)));
 
-    QPoint ah(m_font->getHotspot(m_style->getAccidentalCharName(a)));
+    QPoint ah(font->getHotspot(m_style->getAccidentalCharName(a)));
 
     m_left += ac.getWidth() + (m_noteBodyWidth / 4 - m_borderX);
 
@@ -705,10 +716,10 @@ NotePixmapFactory::makeRoomForAccidental(Accidental a,
             int step = ac.getWidth() - ah.x();
             if (a != Accidentals::Sharp) {
                 NoteCharacter acSharp
-                (m_font->getCharacter(m_style->getAccidentalCharName
+                (font->getCharacter(m_style->getAccidentalCharName
                                       (Accidentals::Sharp)));
                 QPoint ahSharp
-                (m_font->getHotspot(m_style->getAccidentalCharName
+                (font->getHotspot(m_style->getAccidentalCharName
                                     (Accidentals::Sharp)));
                 step = std::max(step, acSharp.getWidth() - ahSharp.x());
             }
@@ -732,10 +743,13 @@ NotePixmapFactory::makeRoomForAccidental(Accidental a,
 void
 NotePixmapFactory::drawAccidental(Accidental a, bool cautionary)
 {
+    // use the full font for this unless a grace size was supplied in ctor
+    NoteFont *font = (m_haveGrace ? m_graceFont : m_font);
+
     NoteCharacter ac = getCharacter
                        (m_style->getAccidentalCharName(a), PlainColour, false);
 
-    QPoint ah(m_font->getHotspot(m_style->getAccidentalCharName(a)));
+    QPoint ah(font->getHotspot(m_style->getAccidentalCharName(a)));
 
     int ax = 0;
 
@@ -3422,11 +3436,14 @@ bool
 NotePixmapFactory::getCharacter(CharName name, NoteCharacter &ch,
                                 ColourType type, bool inverted)
 {
+    // use the full font for this unless a grace size was supplied in ctor
+    NoteFont *font = (m_haveGrace ? m_graceFont : m_font);
+
     NoteFont::CharacterType charType =
         m_inPrinterMethod ? NoteFont::Printer : NoteFont::Screen;
 
     if (m_selected) {
-        return m_font->getCharacterColoured
+        return font->getCharacterColoured
                (name,
                 GUIPalette::SelectedElementHue,
                 GUIPalette::SelectedElementMinValue,
@@ -3434,7 +3451,9 @@ NotePixmapFactory::getCharacter(CharName name, NoteCharacter &ch,
     }
 
     if (m_shaded) {
-        return m_font->getCharacterShaded(name, ch, charType, inverted);
+        // future note: getCharacterShaded must be the one missing the alpha
+        // preservation and blowing out the antialiasing
+        return font->getCharacterShaded(name, ch, charType, inverted);
     }
 
     QColor white = Qt::white;
@@ -3444,31 +3463,31 @@ NotePixmapFactory::getCharacter(CharName name, NoteCharacter &ch,
     switch (type) {
 
     case PlainColour:
-        return m_font->getCharacter(name, ch, charType, inverted);
+        return font->getCharacter(name, ch, charType, inverted);
 
     case QuantizedColour:
-        return m_font->getCharacterColoured
+        return font->getCharacterColoured
                (name,
                 GUIPalette::QuantizedNoteHue,
                 GUIPalette::QuantizedNoteMinValue,
                 ch, charType, inverted);
 
     case HighlightedColour:
-        return m_font->getCharacterColoured
+        return font->getCharacterColoured
                (name,
                 GUIPalette::HighlightedElementHue,
                 GUIPalette::HighlightedElementMinValue,
                 ch, charType, inverted);
 
     case TriggerColour:
-        return m_font->getCharacterColoured
+        return font->getCharacterColoured
                (name,
                 GUIPalette::TriggerNoteHue,
                 GUIPalette::TriggerNoteMinValue,
                 ch, charType, inverted);
 
     case OutRangeColour:
-        return m_font->getCharacterColoured
+        return font->getCharacterColoured
                (name,
                 GUIPalette::OutRangeNoteHue,
                 GUIPalette::OutRangeNoteMinValue,
@@ -3476,7 +3495,7 @@ NotePixmapFactory::getCharacter(CharName name, NoteCharacter &ch,
 
     case PlainColourLight:
         white.getHsv(&h, &s, &v);
-        return m_font->getCharacterColoured
+        return font->getCharacterColoured
                (name,
                 h,
                 v,
@@ -3484,14 +3503,14 @@ NotePixmapFactory::getCharacter(CharName name, NoteCharacter &ch,
 
     case ConflictColour:
         red.getHsv(&h, &s, &v);
-        return m_font->getCharacterColoured
+        return font->getCharacterColoured
                (name,
                 h,
                 v,
                 ch, charType, inverted, s);
     }
 
-    return m_font->getCharacter(name, ch, charType, inverted);
+    return font->getCharacter(name, ch, charType, inverted);
 }
 
 QPoint
