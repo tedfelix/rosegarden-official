@@ -167,6 +167,19 @@ Segment::getStartTime() const
 }
 
 timeT
+Segment::getClippedStartTime() const
+{
+    // If there is a composition, and our start time is before the beginning of
+    // the composition, return the composition start time.  Otherwise (all
+    // other cases) return our start time.
+    if (m_composition) {
+        timeT compStart = m_composition->getStartMarker();
+         if (m_startTime < compStart) return compStart;
+    }
+    return m_startTime;
+}
+
+timeT
 Segment::getEndMarkerTime() const
 {
     timeT endTime;

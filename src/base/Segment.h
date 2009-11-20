@@ -174,6 +174,13 @@ public:
     timeT getStartTime() const;
 
     /**
+     * Return the start time of the Segment, clipped so that if there is a
+     * Composition, this will not return a time earlier than the Composition
+     * start marker.  (Used to constrain edit views non-destructively.)
+     */
+    timeT getClippedStartTime() const;
+
+    /**
      * Return the nominal end time of the Segment.  This must
      * be the same as or earlier than the getEndTime() value.
      * The return value will not necessarily be that last set
