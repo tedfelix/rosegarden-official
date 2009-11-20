@@ -1101,6 +1101,9 @@ NotePixmapFactory::makeRoomForStemAndFlags(int flagCount, int stemLength,
         const NotePixmapParameters &params,
         QPoint &s0, QPoint &s1)
 {
+    // use the full font for this unless a grace size was supplied in ctor
+    NoteFont *font = (m_haveGrace ? m_graceFont : m_font);
+
     // The coordinates we set in s0 and s1 are relative to (m_above, m_left)
 
     if (params.m_stemGoesUp) {
@@ -1114,9 +1117,9 @@ NotePixmapFactory::makeRoomForStemAndFlags(int flagCount, int stemLength,
     if (flagCount > 0) {
         if (params.m_stemGoesUp) {
             int width = 0, height = 0;
-            if (!m_font->getDimensions
+            if (!font->getDimensions
                     (m_style->getFlagCharName(flagCount), width, height)) {
-                width = m_font->getWidth(m_style->getPartialFlagCharName(false));
+                width = font->getWidth(m_style->getPartialFlagCharName(false));
             }
             m_right += width;
         }
@@ -3566,8 +3569,11 @@ int NotePixmapFactory::getAccidentalHeight(const Accidental &a) const
 
 int NotePixmapFactory::getStemLength() const
 {
+    // use the full font for this unless a grace size was supplied in ctor
+    NoteFont *font = (m_haveGrace ? m_graceFont : m_font);
+
     unsigned int l = 1;
-    (void)m_font->getStemLength(l);
+    (void)font->getStemLength(l);
     return l;
 }
 
