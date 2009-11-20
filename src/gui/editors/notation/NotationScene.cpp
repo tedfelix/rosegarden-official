@@ -293,7 +293,7 @@ NotationScene::getStaffForSceneCoords(double x, int y) const
 	// center.
 
 	timeT t0 = m_document->getComposition().getBarStartForTime
-            (m_staffs[m_currentStaff]->getSegment().getStartTime() + 1);
+            (m_staffs[m_currentStaff]->getSegment().getClippedStartTime() + 1);
 
 	timeT t1 = m_document->getComposition().getBarEndForTime
             (m_staffs[m_currentStaff]->getSegment().getEndTime() - 1);
@@ -321,7 +321,7 @@ NotationScene::getStaffForSceneCoords(double x, int y) const
 	    // towards its center.
 
 	    timeT t0 = m_document->getComposition().getBarStartForTime
-                (m_staffs[i]->getSegment().getStartTime() + 1);
+                (m_staffs[i]->getSegment().getClippedStartTime() + 1);
 	    timeT t1 = m_document->getComposition().getBarEndForTime
                 (m_staffs[i]->getSegment().getEndTime() - 1);
 
@@ -395,12 +395,12 @@ NotationScene::getNextStaffHorizontally(int direction, bool cycle)
     QMultiMap<timeT, NotationStaff *> timeMap;
     for (size_t i = 0; i < m_staffs.size(); ++i) {
         if (m_staffs[i]->getSegment().getTrack() == trackId) {
-            timeMap.insert(m_staffs[i]->getSegment().getStartTime(), m_staffs[i]);
+            timeMap.insert(m_staffs[i]->getSegment().getClippedStartTime(), m_staffs[i]);
         }
     }
 
     QMultiMap<timeT, NotationStaff *>::iterator i =
-        timeMap.find(current->getSegment().getStartTime(), current);
+        timeMap.find(current->getSegment().getClippedStartTime(), current);
 
     if (i == timeMap.end()) {
         std::cerr << "Argh! Can't find staff I just put in map" << std::endl;
@@ -1224,7 +1224,7 @@ NotationScene::layout(NotationStaff *singleStaff,
                 continue;
             }
 
-            timeT thisStart = m_segments[i]->getStartTime();
+            timeT thisStart = m_segments[i]->getClippedStartTime();
             timeT thisEnd = m_segments[i]->getEndMarkerTime();
 
             if (first || thisStart < startTime) startTime = thisStart;
@@ -1552,7 +1552,7 @@ NotationScene::constrainToSegmentArea(QPointF &scenePos)
     timeT t = m_scale->getTimeForX(scenePos.x());
     timeT start = 0, end = 0;
     for (size_t i = 0; i < m_segments.size(); ++i) {
-        timeT t0 = m_segments[i]->getStartTime();
+        timeT t0 = m_segments[i]->getClippedStartTime();
         timeT t1 = m_segments[i]->getEndMarkerTime();
         if (i == 0 || t0 < start) start = t0;
         if (i == 0 || t1 > end) end = t1; 

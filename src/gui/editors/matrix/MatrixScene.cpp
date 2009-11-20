@@ -240,8 +240,8 @@ MatrixScene::recreateLines()
     timeT start = 0, end = 0;
 
     for (unsigned int i = 0; i < m_segments.size(); ++i) {
-        if (i == 0 || m_segments[i]->getStartTime() < start) {
-            start = m_segments[i]->getStartTime();
+        if (i == 0 || m_segments[i]->getClippedStartTime() < start) {
+            start = m_segments[i]->getClippedStartTime();
         }
         if (i == 0 || m_segments[i]->getEndMarkerTime() > end) {
             end = m_segments[i]->getEndMarkerTime();
@@ -355,8 +355,8 @@ MatrixScene::recreatePitchHighlights()
     Segment *segment = getCurrentSegment();
     if (!segment) return;
 
-    timeT k0 = segment->getStartTime();
-    timeT k1 = segment->getStartTime();
+    timeT k0 = segment->getClippedStartTime();
+    timeT k1 = segment->getClippedStartTime();
 
     int i = 0;
 
@@ -476,7 +476,7 @@ MatrixScene::setupMouseEvent(QGraphicsSceneMouseEvent *e,
     }
 
     if (mme.viewSegment) {
-        timeT start = mme.viewSegment->getSegment().getStartTime();
+        timeT start = mme.viewSegment->getSegment().getClippedStartTime();
         timeT end = mme.viewSegment->getSegment().getEndMarkerTime();
         if (mme.snappedLeftTime < start) mme.snappedLeftTime = start;
         if (mme.snappedLeftTime + mme.snapUnit > end) {
@@ -796,7 +796,7 @@ MatrixScene::constrainToSegmentArea(QPointF &scenePos)
     timeT t = m_scale->getTimeForX(scenePos.x());
     timeT start = 0, end = 0;
     for (size_t i = 0; i < m_segments.size(); ++i) {
-        timeT t0 = m_segments[i]->getStartTime();
+        timeT t0 = m_segments[i]->getClippedStartTime();
         timeT t1 = m_segments[i]->getEndMarkerTime();
         if (i == 0 || t0 < start) start = t0;
         if (i == 0 || t1 > end) end = t1;
