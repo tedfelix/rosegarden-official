@@ -1545,8 +1545,6 @@ public slots:
     
     void slotJumpToQuickMarker();    
     
-    void slotOpenDeviceManagerNew();
-
     void slotDisplayWarning(int type,
                             QString text,
                             QString informativeText);

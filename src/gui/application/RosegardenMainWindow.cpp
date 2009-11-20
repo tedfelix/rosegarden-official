@@ -6290,7 +6290,16 @@ RosegardenMainWindow::slotManageMIDIDevices()
     if(tb){
         tb->setDown(true);
     }
-    
+  
+    // Prevent the device manager from being resized larger or smaller than the
+    // size it first renders at.  I tried to correct this in Designer, but long
+    // story short, the only way I could get the form preview to behave properly
+    // was to fix its size in the .ui file.  That can't possibly work well, so
+    // we'll try fixing its size here, after it has been calculated against the
+    // user environment.
+    QSize renderedSize = m_deviceManager->size();
+    m_deviceManager->setMinimumSize(renderedSize);
+    m_deviceManager->setMaximumSize(renderedSize);
     m_deviceManager->show();
 }
 
@@ -7809,11 +7818,6 @@ RosegardenMainWindow::slotJumpToQuickMarker()
     RG_DEBUG << "RosegardenMainWindow::slotJumpToQuickMarker" << endl;
 
     m_doc->jumpToQuickMarker();
-}
-
-void
-RosegardenMainWindow::slotOpenDeviceManagerNew()
-{
 }
 
 void
