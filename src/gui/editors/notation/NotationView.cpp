@@ -3801,7 +3801,7 @@ NotationView::slotMoveEventsDownStaff()
     NotationStaff *target_staff = scene->getStaffBelow();
     if (!target_staff) return;
 
-    MacroCommand *command = new MacroCommand(tr("Move Events to Staff Above"));
+    MacroCommand *command = new MacroCommand(tr("Move Events to Staff Below"));
 
     timeT insertionTime = selection->getStartTime();
 
