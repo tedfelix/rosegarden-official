@@ -966,6 +966,7 @@ NotationScene::positionStaffs()
             QString title(strtoqstr(metadata.get<String>
                                     (CompositionMetadataKeys::Title)));
             m_title = new QGraphicsTextItem(title);
+            m_title->setDefaultTextColor(Qt::black);
             addItem(m_title);
             m_title->setFont(font);
             m_title->setPos(m_leftGutter + pageWidth / 2 - metrics.width(title) / 2,
@@ -981,6 +982,7 @@ NotationScene::positionStaffs()
             QString subtitle(strtoqstr(metadata.get<String>
                                        (CompositionMetadataKeys::Subtitle)));
             m_subtitle = new QGraphicsTextItem(subtitle);
+            m_subtitle->setDefaultTextColor(Qt::black);
             addItem(m_subtitle);
             m_subtitle->setFont(font);
             m_subtitle->setPos(m_leftGutter + pageWidth / 2 - metrics.width(subtitle) / 2,
@@ -993,6 +995,7 @@ NotationScene::positionStaffs()
             QString composer(strtoqstr(metadata.get<String>
                                        (CompositionMetadataKeys::Composer)));
             m_composer = new QGraphicsTextItem(composer);
+            m_composer->setDefaultTextColor(Qt::black);
             addItem(m_composer);
             m_composer->setFont(font);
             m_composer->setPos(m_leftGutter + pageWidth - metrics.width(composer) - leftMargin,
@@ -1008,6 +1011,7 @@ NotationScene::positionStaffs()
             QString copyright(strtoqstr(metadata.get<String>
                                         (CompositionMetadataKeys::Copyright)));
             m_copyright = new QGraphicsTextItem(copyright);
+            m_copyright->setDefaultTextColor(Qt::black);
             addItem(m_copyright);
             m_copyright->setFont(font);
             m_copyright->setPos(m_leftGutter + leftMargin,
