@@ -29,6 +29,7 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QGroupBox>
 
 
 namespace Rosegarden
@@ -43,33 +44,39 @@ EventParameterDialog::EventParameterDialog(
         m_property(property)
 {
     setModal(true);
-    setWindowTitle(name);
+    setWindowTitle(tr("Rosegarden"));
+    setSizePolicy(QSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum));
 
-    QGridLayout *metagrid = new QGridLayout;
-    setLayout(metagrid);
-	
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    setLayout(mainLayout);
+
+    QGroupBox *controls = new QGroupBox(name);
+    QVBoxLayout *controlsLayout = new QVBoxLayout;
+    controlsLayout->setSpacing(0);    
+    controls->setLayout(controlsLayout);
+    mainLayout->addWidget(controls);
     
-	QWidget *topBox = new QWidget(this);
-	metagrid->addWidget(topBox, 0, 0);
-	QVBoxLayout *topBoxLayout = new QVBoxLayout;
-	topBox->setLayout(topBoxLayout);
+    QWidget *topBox = new QWidget;
+    QVBoxLayout *topBoxLayout = new QVBoxLayout;
+    topBox->setLayout(topBoxLayout);
+    controlsLayout->addWidget(topBox);
     
 
-    QLabel *explainLabel = new QLabel( topBox );
-    topBoxLayout->addWidget(explainLabel);
+    QLabel *explainLabel = new QLabel;
     QString text = tr("Set the %1 property of the event selection:")
                    .arg(strtoqstr(property));
     explainLabel->setText(text);
+    topBoxLayout->addWidget(explainLabel);
 
-	
-	QWidget *patternBox = new QWidget(this);
-	metagrid->addWidget(patternBox, 0, 0);
-	QVBoxLayout *patternBoxLayout = new QVBoxLayout;
-	patternBox->setLayout(topBoxLayout);
-	
-	QLabel *child_10 = new QLabel(tr("Pattern"), patternBox );
+    
+    QWidget *patternBox = new QWidget;
+    QHBoxLayout *patternBoxLayout = new QHBoxLayout;
+    patternBox->setLayout(patternBoxLayout);
+    controlsLayout->addWidget(patternBox);
+    
+    QLabel *child_10 = new QLabel(tr("Pattern"));
+    m_patternCombo = new QComboBox;
     patternBoxLayout->addWidget(child_10);
-    m_patternCombo = new QComboBox( patternBox );
     patternBoxLayout->addWidget(m_patternCombo);
 
     // create options
@@ -96,21 +103,23 @@ EventParameterDialog::EventParameterDialog(
     connect(m_patternCombo, SIGNAL(activated(int)),
             this, SLOT(slotPatternSelected(int)));
 
-	QWidget *value1Box = new QWidget( topBox );
-	topBoxLayout->addWidget(value1Box);
-//    topBox->setLayout(topBoxLayout);
+    QWidget *value1Box = new QWidget;
+    controlsLayout->addWidget(value1Box);
     QHBoxLayout *value1BoxLayout = new QHBoxLayout;
-    m_value1Label = new QLabel(tr("Value"), value1Box );
+    m_value1Label = new QLabel(tr("Value"));
     value1BoxLayout->addWidget(m_value1Label);
-    m_value1Combo = new QComboBox( value1Box );
+    m_value1Combo = new QComboBox;
     value1BoxLayout->addWidget(m_value1Combo);
     value1Box->setLayout(value1BoxLayout);
 
-	m_value2Label = new QLabel(tr("Value"), topBox );
-	topBoxLayout->addWidget(m_value2Label);
-	m_value2Combo = new QComboBox( topBox );
-	topBoxLayout->addWidget(m_value2Combo);
-	topBox->setLayout(topBoxLayout);
+    QWidget *value2Box = new QWidget;
+    controlsLayout->addWidget(value2Box);
+    QHBoxLayout *value2BoxLayout = new QHBoxLayout;
+    m_value2Label = new QLabel(tr("Value"));
+    value2BoxLayout->addWidget(m_value2Label);
+    m_value2Combo = new QComboBox;
+    value2BoxLayout->addWidget(m_value2Combo);
+    value2Box->setLayout(value2BoxLayout);
 
     for (unsigned int i = 0; i < 128; i++) {
         m_value1Combo->addItem(QString("%1").arg(i));
@@ -125,8 +134,8 @@ EventParameterDialog::EventParameterDialog(
     m_value2Combo->setCurrentIndex(startValue);
 
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-    metagrid->addWidget(buttonBox, 1, 0);
-    metagrid->setRowStretch(0, 10);
+    mainLayout->addWidget(buttonBox);
+
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
@@ -185,6 +194,7 @@ EventParameterDialog::slotPatternSelected(int value)
         break;
     }
 
+    adjustSize();
 }
 
 PropertyPattern
