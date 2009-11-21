@@ -1566,7 +1566,7 @@ NotationView::slotFilterSelection()
 void
 NotationView::slotVelocityUp()
 {
-    if (getSelection())
+    if (!getSelection())
         return ;
     TmpStatusMsg msg(tr("Raising velocities..."), this);
 
