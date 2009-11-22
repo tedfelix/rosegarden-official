@@ -13802,68 +13802,73 @@ Dies könnte Probleme verursachen, wenn so später ein berechneter Wert übersch
 <context>
     <name>Rosegarden::EventParameterDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="60"/>
+        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="47"/>
+        <source>Rosegarden</source>
+        <translation type="unfinished">Rosegarden</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="66"/>
         <source>Set the %1 property of the event selection:</source>
         <translation>Die %1 - Eigenschaft für die Eventauswahl setzen:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="70"/>
+        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="77"/>
         <source>Pattern</source>
         <translation>Muster</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="77"/>
+        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="84"/>
         <source>Flat - set %1 to value</source>
         <translation>Flach - %1 auf den Wert setzen</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="81"/>
+        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="88"/>
         <source>Alternating - set %1 to max and min on alternate events</source>
         <translation>Abwechselnd - %1 abwechselnd auf Max und Min setzen</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="85"/>
+        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="92"/>
         <source>Crescendo - set %1 rising from min to max</source>
         <translation>Crescendo - %1 von Min auf Max steigen lassen</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="89"/>
+        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="96"/>
         <source>Diminuendo - set %1 falling from max to min</source>
         <translation>Diminuendo - %1 von Max auf Min verringern</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="93"/>
+        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="100"/>
         <source>Ringing - set %1 alternating from max to min with both dying to zero</source>
         <translation>Ausklingen - %1 abwechselnd auf Max und Min setzen, dabei bis auf 0 verringern</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="103"/>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="109"/>
-        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="139"/>
+        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="118"/>
+        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="148"/>
         <source>Value</source>
         <translation>Wert</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="147"/>
-        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="174"/>
+        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="156"/>
+        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="183"/>
         <source>First Value</source>
         <translation>Erster Wert</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="148"/>
-        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="175"/>
+        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="157"/>
+        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="184"/>
         <source>Second Value</source>
         <translation>Zweiter Wert</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="156"/>
-        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="166"/>
+        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="165"/>
+        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="175"/>
         <source>Low Value</source>
         <translation>LSB-Wert</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="157"/>
-        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="165"/>
+        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="166"/>
+        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="174"/>
         <source>High Value</source>
         <translation>MSB Wert</translation>
     </message>
@@ -19296,9 +19301,8 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
         <translation>Answesenheit von flac überprüfen...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="469"/>
         <source>&lt;qt&gt;&lt;p&gt;The &lt;b&gt;flac&lt;/b&gt; command was not found.&lt;/p&gt;&lt;p&gt;FLAC is a lossless audio compression format used to reduce the size of Rosegarden project packages with no loss of audio quality.  Please install FLAC and try again.  This utility is typically available to most distros as a package called &quot;flac&quot;.&lt;/p&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Das &lt;b&gt;flac&lt;/b&gt;-Kommando konnte nicht gefunden werden.&lt;/p&gt;&lt;p&gt;FLAC ist ein verlustloses Audio-Komprimierungs-Format, welches die Größe von Rosegarden-Projekten verringern kann, ohne dabei die Audio-Qualität zu mindern.  Bitte installieren sie FLAC und versuchen es noch einmal. Dieses Hilfsprogramm ist bei den meisten Distributionen im Paket &quot;flac&quot; enthalten.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Das &lt;b&gt;flac&lt;/b&gt;-Kommando konnte nicht gefunden werden.&lt;/p&gt;&lt;p&gt;FLAC ist ein verlustloses Audio-Komprimierungs-Format, welches die Größe von Rosegarden-Projekten verringern kann, ohne dabei die Audio-Qualität zu mindern.  Bitte installieren sie FLAC und versuchen es noch einmal. Dieses Hilfsprogramm ist bei den meisten Distributionen im Paket &quot;flac&quot; enthalten.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="531"/>
@@ -19366,6 +19370,11 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="445"/>
         <source>&lt;qt&gt;&lt;p&gt;Could not remove&lt;br&gt;%1.&lt;/p&gt;%2&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;%1&lt;br&gt;kann nicht entfernt werden.&lt;/p&gt;%2&lt;/qt&gt;</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="469"/>
+        <source>&lt;qt&gt;&lt;p&gt;The &lt;b&gt;flac&lt;/b&gt; command was not found.&lt;/p&gt;&lt;p&gt;FLAC is a lossless audio compression format used to reduce the size of Rosegarden project packages with no loss of audio quality.  Please install FLAC and try again.  This utility is typically available to most distros as a package called &quot;flac&quot;.&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="487"/>
@@ -20100,77 +20109,77 @@ Bitte wählen diejenigen aus, die Sie permanent von der Festplatte entfernen mö
         <translation>Audio-Vorschau wird erzeugt...</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="711"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="714"/>
         <source>Merge</source>
         <translation>Zusammenfügen</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1179"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1182"/>
         <source>Could not create temporary file in directory of &apos;%1&apos;: %2</source>
         <translation>Kann tempoäre Datei nicht im Verzeichnis %1&apos; anlegen: %2</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1192"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1195"/>
         <source>Failure in temporary file handling for file &apos;%1&apos;: %2</source>
         <translation>Fehler in der Behandlung der temporären Datei %1&apos;: %2</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1210"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1213"/>
         <source>Failed to rename temporary output file &apos;%1&apos; to desired output file &apos;%2&apos;</source>
         <translation>Fehler bei der Umbenennung der temporären Ausgabe-Datei %1&apos; in %2&apos;</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1244"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1247"/>
         <source>Saving file...</source>
         <translation>Datei speichern...</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1347"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1354"/>
         <source>Error while writing on &apos;%1&apos;</source>
         <translation>Fehler beim Schreiben auf %1&apos;</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1644"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1655"/>
         <source>File load cancelled</source>
         <translation>Laden der Datei wurde abgebrochen</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1664"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1675"/>
         <source>&lt;h3&gt;Audio and plugins not available&lt;/h3&gt;&lt;p&gt;This composition uses audio files or plugins, but Rosegarden is currently running without audio because the JACK audio server was not available on startup.&lt;/p&gt;&lt;p&gt;Please exit Rosegarden, start the JACK audio server and re-start Rosegarden if you wish to load this complete composition.&lt;/p&gt;&lt;p&gt;&lt;b&gt;WARNING:&lt;/b&gt; If you re-save this composition, all audio and plugin data and settings in it will be lost.&lt;/p&gt;</source>
         <translation>&lt;h3&gt;Audio und Plugins sind nicht verfügbar&lt;/h3&gt;&lt;p&gt;Diese Komposition verwendet Audiodateien oder Plugins, aber Rosegarden läuft zur Zeit ohne Audio-Unterstützung, weil der &apos;JACK audio server&apos; bei Programstart nicht verfügbar war.&lt;/p&gt;&lt;p&gt;Bitte beenden Sie Rosegarden, starten Sie den &apos;JACK audio server&apos; und starten Sie Rosegarden danach neu, um die ganze Komposition zu laden.&lt;/p&gt;&lt;p&gt;&lt;b&gt;WARNUNG:&lt;/b&gt;Wenn Sie diese Komposition jetzt erneut speichern, gehen alle Audio- und Plugindaten verloren !.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1667"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1678"/>
         <source>&lt;h3&gt;Audio and plugins not available&lt;/h3&gt;&lt;p&gt;This composition uses audio files or plugins, but you are running a version of Rosegarden that was compiled without audio support.&lt;/p&gt;&lt;p&gt;&lt;b&gt;WARNING:&lt;/b&gt; If you re-save this composition from this version of Rosegarden, all audio and plugin data and settings in it will be lost.&lt;/p&gt;</source>
         <translation>&lt;h3&gt;Audio und Plugins sind nicht verfügbar.&lt;/h3&gt;&lt;p&gt;Diese Komposition verwendet Audiodateien oder Plugins, aber diese laufende Version von Rosegarden wurde ohne Unterstützung für Audio kompiliert.&lt;/p&gt;&lt;p&gt;&lt;b&gt;&lt;b&gt;WARNUNG:&lt;/b&gt;Wenn Sie diese Komposition mit dieser Version von Rosegarden erneut speichern, dann gehen alle Audio- und Plugindaten verloren !.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1704"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1715"/>
         <source>&lt;h3&gt;Incorrect audio sample rate&lt;/h3&gt;&lt;p&gt;This composition contains audio files that were recorded or imported with the audio server running at a different sample rate (%1 Hz) from the current JACK server sample rate (%2 Hz).&lt;/p&gt;&lt;p&gt;Rosegarden will play this composition at the correct speed, but any audio files in it will probably sound awful.&lt;/p&gt;&lt;p&gt;Please consider re-starting the JACK server at the correct rate (%3 Hz) and re-loading this composition before you do any more work with it.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1714"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1725"/>
         <source>&lt;h3&gt;Inconsistent audio sample rates&lt;/h3&gt;&lt;p&gt;This composition contains audio files at more than one sample rate.&lt;/p&gt;&lt;p&gt;Rosegarden will play them at the correct speed, but any audio files that were recorded or imported at rates different from the current JACK server sample rate (%1 Hz) will probably sound awful.&lt;/p&gt;&lt;p&gt;Please see the audio file manager dialog for more details, and consider resampling any files that are at the wrong rate.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1715"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1726"/>
         <source>Inconsistent sample rates</source>
         <translation>Nicht übereinstimmende &apos;sample rates&apos; (Anzahl der Samples pro Sekunde) </translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1729"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1740"/>
         <source>&lt;h3&gt;Plugins not found&lt;/h3&gt;&lt;p&gt;The following audio plugins could not be loaded:&lt;/p&gt;&lt;ul&gt;</source>
         <translation>&lt;h3&gt;Plugins wurden nicht gefunden&lt;/h3&gt;&lt;p&gt;Die folgenden Plugins konnten nicht geladen werden:&lt;/p&gt;&lt;ul&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1737"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1748"/>
         <source>&lt;li&gt;%1 (from %2)&lt;/li&gt;</source>
         <translation>&lt;li&gt;%1 (von %2)&lt;/li&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1751"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1762"/>
         <source>This file contains one or more old element types that are now deprecated.
 Support for these elements may disappear in future versions of Rosegarden.
 We recommend you re-save this file from this version of Rosegarden to ensure that it can still be re-loaded in future versions.</source>
@@ -20180,17 +20189,17 @@ Empfehlung: speichern Sie diese Datei aus dieser Version von Rosegarden heraus
 um sicherzustellen, daß sie auch in Zukunft gelesen werden kann.</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="2295"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="2306"/>
         <source>Insert Recorded MIDI</source>
         <translation>MIDI-Aufnahme einfügen</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="2422"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="2433"/>
         <source>(recorded)</source>
         <translation>(aufgenommen)</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="2656"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="2666"/>
         <source>Generating audio preview...</source>
         <translation>Audio-Vorschau wird erzeugt...</translation>
     </message>
@@ -20412,7 +20421,7 @@ Fehler war: %2</translation>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4683"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4719"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4829"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7540"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7549"/>
         <source>All files</source>
         <translation>Alle Dateien</translation>
     </message>
@@ -20442,7 +20451,7 @@ Fehler war: %2</translation>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3842"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3931"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3966"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7553"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7562"/>
         <source>Cannot open file %1</source>
         <translation>Datei %1 kann nicht geöfnet werden</translation>
     </message>
@@ -20705,22 +20714,22 @@ Segmente-&gt;Segmente zusammenfassen.
         <translation>Eingabe</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7310"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7319"/>
         <source>http://rosegardenmusic.com/wiki/doc:manual-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:manual-en</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7337"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7346"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7792"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7801"/>
         <source>&lt;h3&gt;Newer version available&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;Neuere Version verfügbar&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7793"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7802"/>
         <source>&lt;p&gt;You are using version %1.  Version %2 is now available.&lt;/p&gt;&lt;p&gt;Please consult the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;Rosegarden website&lt;/a&gt; for more information.&lt;/p&gt;</source>
         <translation>&lt;p&gt;SIe benutzen Version %1.  Version %2 ist nun verfügbar.&lt;/p&gt;&lt;p&gt;Bitte schauen SIe auf der &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;Webseite von Rosegarden&lt;/a&gt; nach weiteren Infomationen.&lt;/p&gt;</translation>
     </message>
@@ -21061,59 +21070,59 @@ Möchten Sie den Pfad jetzt setzen?</translation>
         <translation>Neue Bezeichnung eingeben</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7273"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7282"/>
         <source>Play List</source>
         <translation>Abspiel-Liste</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7317"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7326"/>
         <source>http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</source>
         <translation>http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7324"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7333"/>
         <source>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</source>
         <translation>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7422"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7431"/>
         <source>Queueing MIDI panic events for tranmission...</source>
         <translation>MIDI Panik Event in Transmissionswarteschlange eingestellt....</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7481"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7490"/>
         <source>Are you sure you want to save this as your default studio?</source>
         <translation>Sind Sie sicher, dass Sie dies als Ihr Standardstudio speichern wollen?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7487"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7496"/>
         <source>Saving current document as default studio...</source>
         <translation>Aktuelles Dokument wird als Standartstudio gespeichert...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7499"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7508"/>
         <source>Could not auto-save document at %1
 Error was : %2</source>
         <translation>Kann das Dokument nicht automatisch unter %1 speichern
 Fehler: %2</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7502"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7511"/>
         <source>Could not auto-save document at %1</source>
         <translation>Kann das Dokument nicht automatisch unter %1 speichern</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7512"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7521"/>
         <source>Are you sure you want to import your default studio and lose the current one?</source>
         <translation>Sind Sie sicher dass Sie Ihr Standardstudio importieren und dabei das Aktuelle überschreiben wollen?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7539"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7548"/>
         <source>Import Studio from File</source>
         <translation>Studio aus Datei importieren</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7584"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7593"/>
         <source>Import Studio</source>
         <translation>Studio importieren</translation>
     </message>
@@ -24259,7 +24268,7 @@ Möchten Sie den Pfad jetzt setzen?</translation>
 <context>
     <name>RosegardenDocument</name>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="2506"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="2517"/>
         <source>(recorded)</source>
         <translation>(aufgenommen)</translation>
     </message>

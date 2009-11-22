@@ -208,8 +208,8 @@
         <location filename="../QMenuStrings.cpp" line="1739"/>
         <location filename="../QMenuStrings.cpp" line="1810"/>
         <location filename="../QMenuStrings.cpp" line="3453"/>
-        <location filename="../QMenuStrings.cpp" line="4093"/>
-        <location filename="../QMenuStrings.cpp" line="4211"/>
+        <location filename="../QMenuStrings.cpp" line="4094"/>
+        <location filename="../QMenuStrings.cpp" line="4212"/>
         <source>&amp;File</source>
         <translation>&amp;Tiedosto</translation>
     </message>
@@ -235,8 +235,8 @@
         <location filename="../QMenuStrings.cpp" line="1749"/>
         <location filename="../QMenuStrings.cpp" line="1822"/>
         <location filename="../QMenuStrings.cpp" line="3514"/>
-        <location filename="../QMenuStrings.cpp" line="4103"/>
-        <location filename="../QMenuStrings.cpp" line="4212"/>
+        <location filename="../QMenuStrings.cpp" line="4104"/>
+        <location filename="../QMenuStrings.cpp" line="4213"/>
         <source>&amp;Close</source>
         <translation>&amp;Sulje</translation>
     </message>
@@ -249,8 +249,8 @@
         <location filename="../QMenuStrings.cpp" line="388"/>
         <location filename="../QMenuStrings.cpp" line="1831"/>
         <location filename="../QMenuStrings.cpp" line="3532"/>
-        <location filename="../QMenuStrings.cpp" line="4112"/>
-        <location filename="../QMenuStrings.cpp" line="4221"/>
+        <location filename="../QMenuStrings.cpp" line="4113"/>
+        <location filename="../QMenuStrings.cpp" line="4222"/>
         <source>&amp;Edit</source>
         <translation>&amp;Muokkaa</translation>
     </message>
@@ -296,8 +296,8 @@
         <location filename="../QMenuStrings.cpp" line="1792"/>
         <location filename="../QMenuStrings.cpp" line="3219"/>
         <location filename="../QMenuStrings.cpp" line="4042"/>
-        <location filename="../QMenuStrings.cpp" line="4192"/>
-        <location filename="../QMenuStrings.cpp" line="4253"/>
+        <location filename="../QMenuStrings.cpp" line="4193"/>
+        <location filename="../QMenuStrings.cpp" line="4254"/>
         <source>&amp;Help</source>
         <translation>&amp;Ohje</translation>
     </message>
@@ -321,8 +321,8 @@
         <location filename="../QMenuStrings.cpp" line="1802"/>
         <location filename="../QMenuStrings.cpp" line="3229"/>
         <location filename="../QMenuStrings.cpp" line="4052"/>
-        <location filename="../QMenuStrings.cpp" line="4202"/>
-        <location filename="../QMenuStrings.cpp" line="4263"/>
+        <location filename="../QMenuStrings.cpp" line="4203"/>
+        <location filename="../QMenuStrings.cpp" line="4264"/>
         <source>&amp;Rosegarden tutorial</source>
         <translation>&amp;Rosegardenin esiopastus</translation>
     </message>
@@ -338,8 +338,8 @@
         <location filename="../QMenuStrings.cpp" line="1803"/>
         <location filename="../QMenuStrings.cpp" line="3230"/>
         <location filename="../QMenuStrings.cpp" line="4053"/>
-        <location filename="../QMenuStrings.cpp" line="4203"/>
-        <location filename="../QMenuStrings.cpp" line="4264"/>
+        <location filename="../QMenuStrings.cpp" line="4204"/>
+        <location filename="../QMenuStrings.cpp" line="4265"/>
         <source>&amp;Bug Reporting Guidelines</source>
         <translation>&amp;Ohjelmointivirheiden raportoimisohjeet</translation>
     </message>
@@ -371,8 +371,8 @@
         <location filename="../QMenuStrings.cpp" line="1804"/>
         <location filename="../QMenuStrings.cpp" line="3231"/>
         <location filename="../QMenuStrings.cpp" line="4054"/>
-        <location filename="../QMenuStrings.cpp" line="4204"/>
-        <location filename="../QMenuStrings.cpp" line="4265"/>
+        <location filename="../QMenuStrings.cpp" line="4205"/>
+        <location filename="../QMenuStrings.cpp" line="4266"/>
         <source>&amp;About Rosegarden</source>
         <translation>&amp;Lisätietoja Rosegardenista</translation>
     </message>
@@ -395,9 +395,9 @@
         <location filename="../QMenuStrings.cpp" line="389"/>
         <location filename="../QMenuStrings.cpp" line="1832"/>
         <location filename="../QMenuStrings.cpp" line="3533"/>
-        <location filename="../QMenuStrings.cpp" line="4057"/>
-        <location filename="../QMenuStrings.cpp" line="4113"/>
-        <location filename="../QMenuStrings.cpp" line="4222"/>
+        <location filename="../QMenuStrings.cpp" line="4058"/>
+        <location filename="../QMenuStrings.cpp" line="4114"/>
+        <location filename="../QMenuStrings.cpp" line="4223"/>
         <source>&amp;Nothing to undo</source>
         <translation>&amp;Ei peruttavaa</translation>
     </message>
@@ -409,9 +409,9 @@
         <location filename="../QMenuStrings.cpp" line="398"/>
         <location filename="../QMenuStrings.cpp" line="1841"/>
         <location filename="../QMenuStrings.cpp" line="3542"/>
-        <location filename="../QMenuStrings.cpp" line="4058"/>
-        <location filename="../QMenuStrings.cpp" line="4122"/>
-        <location filename="../QMenuStrings.cpp" line="4231"/>
+        <location filename="../QMenuStrings.cpp" line="4059"/>
+        <location filename="../QMenuStrings.cpp" line="4123"/>
+        <location filename="../QMenuStrings.cpp" line="4232"/>
         <source>N&amp;othing to redo</source>
         <translation>Ei &amp;palautettavaa</translation>
     </message>
@@ -443,16 +443,16 @@
         <location filename="../QMenuStrings.cpp" line="1643"/>
         <location filename="../QMenuStrings.cpp" line="1807"/>
         <location filename="../QMenuStrings.cpp" line="3439"/>
-        <location filename="../QMenuStrings.cpp" line="4082"/>
-        <location filename="../QMenuStrings.cpp" line="4208"/>
+        <location filename="../QMenuStrings.cpp" line="4083"/>
+        <location filename="../QMenuStrings.cpp" line="4209"/>
         <source>Switch to Select Tool</source>
         <translation>Vaihda valintatyökaluun</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="127"/>
         <location filename="../QMenuStrings.cpp" line="376"/>
-        <location filename="../QMenuStrings.cpp" line="4083"/>
-        <location filename="../QMenuStrings.cpp" line="4209"/>
+        <location filename="../QMenuStrings.cpp" line="4084"/>
+        <location filename="../QMenuStrings.cpp" line="4210"/>
         <source>Switch to Inserting Notes</source>
         <translation>Vaihda nuottien syöttöön</translation>
     </message>
@@ -466,8 +466,8 @@
         <location filename="../QMenuStrings.cpp" line="1661"/>
         <location filename="../QMenuStrings.cpp" line="3428"/>
         <location filename="../QMenuStrings.cpp" line="3440"/>
-        <location filename="../QMenuStrings.cpp" line="4084"/>
-        <location filename="../QMenuStrings.cpp" line="4210"/>
+        <location filename="../QMenuStrings.cpp" line="4085"/>
+        <location filename="../QMenuStrings.cpp" line="4211"/>
         <source>Switch to Erase Tool</source>
         <translation>Vaihda poistotyökaluun</translation>
     </message>
@@ -479,7 +479,7 @@
         <location filename="../QMenuStrings.cpp" line="1740"/>
         <location filename="../QMenuStrings.cpp" line="1811"/>
         <location filename="../QMenuStrings.cpp" line="3490"/>
-        <location filename="../QMenuStrings.cpp" line="4094"/>
+        <location filename="../QMenuStrings.cpp" line="4095"/>
         <source>&amp;Save</source>
         <translation>&amp;Tallenna</translation>
     </message>
@@ -545,32 +545,32 @@
         <location filename="../QMenuStrings.cpp" line="640"/>
         <location filename="../QMenuStrings.cpp" line="1936"/>
         <location filename="../QMenuStrings.cpp" line="3633"/>
-        <location filename="../QMenuStrings.cpp" line="4186"/>
-        <location filename="../QMenuStrings.cpp" line="4249"/>
+        <location filename="../QMenuStrings.cpp" line="4187"/>
+        <location filename="../QMenuStrings.cpp" line="4250"/>
         <source>&amp;View</source>
         <translation>&amp;Näkymä</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="347"/>
         <location filename="../QMenuStrings.cpp" line="408"/>
-        <location filename="../QMenuStrings.cpp" line="4187"/>
-        <location filename="../QMenuStrings.cpp" line="4250"/>
+        <location filename="../QMenuStrings.cpp" line="4188"/>
+        <location filename="../QMenuStrings.cpp" line="4251"/>
         <source>&amp;Musical Times</source>
         <translation>&amp;Musiikkiajat</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="348"/>
         <location filename="../QMenuStrings.cpp" line="409"/>
-        <location filename="../QMenuStrings.cpp" line="4188"/>
-        <location filename="../QMenuStrings.cpp" line="4251"/>
+        <location filename="../QMenuStrings.cpp" line="4189"/>
+        <location filename="../QMenuStrings.cpp" line="4252"/>
         <source>&amp;Real Times</source>
         <translation>&amp;Kellonajat</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="349"/>
         <location filename="../QMenuStrings.cpp" line="410"/>
-        <location filename="../QMenuStrings.cpp" line="4189"/>
-        <location filename="../QMenuStrings.cpp" line="4252"/>
+        <location filename="../QMenuStrings.cpp" line="4190"/>
+        <location filename="../QMenuStrings.cpp" line="4253"/>
         <source>Ra&amp;w Times</source>
         <translation>Kä&amp;sittelemättömät ajat</translation>
     </message>
@@ -618,8 +618,8 @@
         <location filename="../QMenuStrings.cpp" line="1805"/>
         <location filename="../QMenuStrings.cpp" line="3232"/>
         <location filename="../QMenuStrings.cpp" line="4055"/>
-        <location filename="../QMenuStrings.cpp" line="4205"/>
-        <location filename="../QMenuStrings.cpp" line="4266"/>
+        <location filename="../QMenuStrings.cpp" line="4206"/>
+        <location filename="../QMenuStrings.cpp" line="4267"/>
         <source>About &amp;Qt</source>
         <translation>Tietoja &amp;Qt:sta</translation>
     </message>
@@ -704,13 +704,13 @@
         <translation>Symbolit -työkalupalkki</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4190"/>
+        <location filename="../QMenuStrings.cpp" line="4191"/>
         <source>Show &amp;Toolbar</source>
         <translation>Näytä työ&amp;kalupalkki</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1956"/>
-        <location filename="../QMenuStrings.cpp" line="4191"/>
+        <location filename="../QMenuStrings.cpp" line="4192"/>
         <source>Hide St&amp;atusbar</source>
         <translation>&amp;Piilota tilarivi</translation>
     </message>
@@ -730,15 +730,15 @@
         <location filename="../QMenuStrings.cpp" line="370"/>
         <location filename="../QMenuStrings.cpp" line="373"/>
         <location filename="../QMenuStrings.cpp" line="1569"/>
-        <location filename="../QMenuStrings.cpp" line="4206"/>
+        <location filename="../QMenuStrings.cpp" line="4207"/>
         <source>Actions Toolbar</source>
         <translation>Toiminnot -työkalupalkki</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="371"/>
         <location filename="../QMenuStrings.cpp" line="425"/>
-        <location filename="../QMenuStrings.cpp" line="4207"/>
-        <location filename="../QMenuStrings.cpp" line="4267"/>
+        <location filename="../QMenuStrings.cpp" line="4208"/>
+        <location filename="../QMenuStrings.cpp" line="4268"/>
         <source>Time Toolbar</source>
         <translation>Aika -työkalupalkki</translation>
     </message>
@@ -748,13 +748,13 @@
         <location filename="../QMenuStrings.cpp" line="1738"/>
         <location filename="../QMenuStrings.cpp" line="1806"/>
         <location filename="../QMenuStrings.cpp" line="3235"/>
-        <location filename="../QMenuStrings.cpp" line="4062"/>
+        <location filename="../QMenuStrings.cpp" line="4063"/>
         <source>Transport Toolbar</source>
         <translation>Kuljetin -työkalupalkki</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="374"/>
-        <location filename="../QMenuStrings.cpp" line="4081"/>
+        <location filename="../QMenuStrings.cpp" line="4082"/>
         <source>Zoom Toolbar</source>
         <translation>Suurennos -työkalupalkki</translation>
     </message>
@@ -818,7 +818,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="603"/>
         <location filename="../QMenuStrings.cpp" line="3578"/>
-        <location filename="../QMenuStrings.cpp" line="4149"/>
+        <location filename="../QMenuStrings.cpp" line="4150"/>
         <source>&amp;Delete</source>
         <translation>&amp;Poista</translation>
     </message>
@@ -912,7 +912,7 @@
         <location filename="../QMenuStrings.cpp" line="732"/>
         <location filename="../QMenuStrings.cpp" line="1968"/>
         <location filename="../QMenuStrings.cpp" line="3669"/>
-        <location filename="../QMenuStrings.cpp" line="4131"/>
+        <location filename="../QMenuStrings.cpp" line="4132"/>
         <source>Add Te&amp;mpo Change...</source>
         <translation>Lisää te&amp;mpon vaihto...</translation>
     </message>
@@ -920,7 +920,7 @@
         <location filename="../QMenuStrings.cpp" line="733"/>
         <location filename="../QMenuStrings.cpp" line="1969"/>
         <location filename="../QMenuStrings.cpp" line="3670"/>
-        <location filename="../QMenuStrings.cpp" line="4140"/>
+        <location filename="../QMenuStrings.cpp" line="4141"/>
         <source>Add Time Si&amp;gnature Change...</source>
         <translation>Lisää ta&amp;htilajin muutos...</translation>
     </message>
@@ -1512,7 +1512,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="1567"/>
         <location filename="../QMenuStrings.cpp" line="3234"/>
-        <location filename="../QMenuStrings.cpp" line="4059"/>
+        <location filename="../QMenuStrings.cpp" line="4060"/>
         <source>Tools Toolbar</source>
         <translation>Työkalut -työkalupalkki</translation>
     </message>
@@ -2696,8 +2696,8 @@
         <location filename="../QMenuStrings.cpp" line="1756"/>
         <location filename="../QMenuStrings.cpp" line="1829"/>
         <location filename="../QMenuStrings.cpp" line="3521"/>
-        <location filename="../QMenuStrings.cpp" line="4110"/>
-        <location filename="../QMenuStrings.cpp" line="4219"/>
+        <location filename="../QMenuStrings.cpp" line="4111"/>
+        <location filename="../QMenuStrings.cpp" line="4220"/>
         <source>Ctrl+W</source>
         <translation></translation>
     </message>
@@ -2713,8 +2713,8 @@
         <location filename="../QMenuStrings.cpp" line="1793"/>
         <location filename="../QMenuStrings.cpp" line="3220"/>
         <location filename="../QMenuStrings.cpp" line="4043"/>
-        <location filename="../QMenuStrings.cpp" line="4193"/>
-        <location filename="../QMenuStrings.cpp" line="4254"/>
+        <location filename="../QMenuStrings.cpp" line="4194"/>
+        <location filename="../QMenuStrings.cpp" line="4255"/>
         <source>Rosegarden &amp;Manual</source>
         <translation>Rosegardenin &amp;ohje</translation>
     </message>
@@ -2730,8 +2730,8 @@
         <location filename="../QMenuStrings.cpp" line="1800"/>
         <location filename="../QMenuStrings.cpp" line="3227"/>
         <location filename="../QMenuStrings.cpp" line="4050"/>
-        <location filename="../QMenuStrings.cpp" line="4200"/>
-        <location filename="../QMenuStrings.cpp" line="4261"/>
+        <location filename="../QMenuStrings.cpp" line="4201"/>
+        <location filename="../QMenuStrings.cpp" line="4262"/>
         <source>F1</source>
         <translation></translation>
     </message>
@@ -2744,8 +2744,8 @@
         <location filename="../QMenuStrings.cpp" line="565"/>
         <location filename="../QMenuStrings.cpp" line="1839"/>
         <location filename="../QMenuStrings.cpp" line="3540"/>
-        <location filename="../QMenuStrings.cpp" line="4120"/>
-        <location filename="../QMenuStrings.cpp" line="4229"/>
+        <location filename="../QMenuStrings.cpp" line="4121"/>
+        <location filename="../QMenuStrings.cpp" line="4230"/>
         <source>Ctrl+Z</source>
         <translation></translation>
     </message>
@@ -2758,8 +2758,8 @@
         <location filename="../QMenuStrings.cpp" line="574"/>
         <location filename="../QMenuStrings.cpp" line="1848"/>
         <location filename="../QMenuStrings.cpp" line="3549"/>
-        <location filename="../QMenuStrings.cpp" line="4129"/>
-        <location filename="../QMenuStrings.cpp" line="4238"/>
+        <location filename="../QMenuStrings.cpp" line="4130"/>
+        <location filename="../QMenuStrings.cpp" line="4239"/>
         <source>Ctrl+Shift+Z</source>
         <translation></translation>
     </message>
@@ -2788,7 +2788,7 @@
         <location filename="../QMenuStrings.cpp" line="1747"/>
         <location filename="../QMenuStrings.cpp" line="1818"/>
         <location filename="../QMenuStrings.cpp" line="3497"/>
-        <location filename="../QMenuStrings.cpp" line="4101"/>
+        <location filename="../QMenuStrings.cpp" line="4102"/>
         <source>Ctrl+S</source>
         <translation></translation>
     </message>
@@ -2796,7 +2796,7 @@
         <location filename="../QMenuStrings.cpp" line="268"/>
         <location filename="../QMenuStrings.cpp" line="1359"/>
         <location filename="../QMenuStrings.cpp" line="3007"/>
-        <location filename="../QMenuStrings.cpp" line="4138"/>
+        <location filename="../QMenuStrings.cpp" line="4139"/>
         <source>I</source>
         <translation></translation>
     </message>
@@ -2821,7 +2821,7 @@
         <location filename="../QMenuStrings.cpp" line="619"/>
         <location filename="../QMenuStrings.cpp" line="1915"/>
         <location filename="../QMenuStrings.cpp" line="3630"/>
-        <location filename="../QMenuStrings.cpp" line="4174"/>
+        <location filename="../QMenuStrings.cpp" line="4175"/>
         <source>Ctrl+A</source>
         <translation></translation>
     </message>
@@ -2829,7 +2829,7 @@
         <location filename="../QMenuStrings.cpp" line="332"/>
         <location filename="../QMenuStrings.cpp" line="628"/>
         <location filename="../QMenuStrings.cpp" line="1924"/>
-        <location filename="../QMenuStrings.cpp" line="4183"/>
+        <location filename="../QMenuStrings.cpp" line="4184"/>
         <source>Escape</source>
         <translation></translation>
     </message>
@@ -2911,7 +2911,7 @@
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="610"/>
-        <location filename="../QMenuStrings.cpp" line="4156"/>
+        <location filename="../QMenuStrings.cpp" line="4157"/>
         <source>Delete, Ctrl+D</source>
         <translation></translation>
     </message>
@@ -3437,7 +3437,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="1893"/>
         <location filename="../QMenuStrings.cpp" line="3612"/>
-        <location filename="../QMenuStrings.cpp" line="4247"/>
+        <location filename="../QMenuStrings.cpp" line="4248"/>
         <source>Ctrl+Shift+V</source>
         <translation>Ctrl+Shift+V</translation>
     </message>
@@ -4449,104 +4449,109 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4056"/>
+        <location filename="../QMenuStrings.cpp" line="4057"/>
         <source>Main Toolbar</source>
         <translation>Päätyökalupalkki</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4060"/>
+        <location filename="../QMenuStrings.cpp" line="4061"/>
         <source>Tracks Toolbar</source>
         <translation>Raidat -työkalupalkki</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4061"/>
+        <location filename="../QMenuStrings.cpp" line="4062"/>
         <source>Editors Toolbar</source>
         <translation>Muokkaimet -työkalupalkki</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2504"/>
-        <location filename="../QMenuStrings.cpp" line="4063"/>
+        <location filename="../QMenuStrings.cpp" line="4064"/>
         <source>Rewind to Beginning</source>
         <translation>Kelaa alkuun</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4070"/>
+        <location filename="../QMenuStrings.cpp" line="4071"/>
         <source>Home</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2511"/>
-        <location filename="../QMenuStrings.cpp" line="4072"/>
+        <location filename="../QMenuStrings.cpp" line="4073"/>
         <source>Fast Forward to End</source>
         <translation>Kelaa loppuun</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4079"/>
+        <location filename="../QMenuStrings.cpp" line="4056"/>
+        <source>&amp;Support Rosegarden</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4080"/>
         <source>End</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4085"/>
+        <location filename="../QMenuStrings.cpp" line="4086"/>
         <source>Insert Tempo Change</source>
         <translation>Syötä tempon muutos</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4086"/>
+        <location filename="../QMenuStrings.cpp" line="4087"/>
         <source>Insert Tempo Change at Playback Position</source>
         <translation>Syötä tempon muutos toisto-osoittimen kohdalle</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4087"/>
+        <location filename="../QMenuStrings.cpp" line="4088"/>
         <source>Delete Tempo Change</source>
         <translation>Poista tempon muutos</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4088"/>
+        <location filename="../QMenuStrings.cpp" line="4089"/>
         <source>Ramp Tempo to Next Tempo</source>
         <translation>Liu&apos;uta tempo vähitellen seuraavaan tempoon</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4089"/>
+        <location filename="../QMenuStrings.cpp" line="4090"/>
         <source>Un-Ramp Tempo</source>
         <translation>Poista tempon liu&apos;uttaminen</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4090"/>
+        <location filename="../QMenuStrings.cpp" line="4091"/>
         <source>Edit Tempo...</source>
         <translation>Muokkaa tempoa...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4091"/>
+        <location filename="../QMenuStrings.cpp" line="4092"/>
         <source>Edit Time Signature...</source>
         <translation>Muokkaa tahtilajimerkintää...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4092"/>
+        <location filename="../QMenuStrings.cpp" line="4093"/>
         <source>Open Tempo and Time Signature Editor</source>
         <translation>Avaa tempo- ja tahtilajimerkintöjen muokkain</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4158"/>
+        <location filename="../QMenuStrings.cpp" line="4159"/>
         <source>&amp;Edit Item</source>
         <translation>&amp;Muokkaa oliota</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4167"/>
+        <location filename="../QMenuStrings.cpp" line="4168"/>
         <source>Select &amp;All</source>
         <translation>Valitse &amp;kaikki</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4176"/>
+        <location filename="../QMenuStrings.cpp" line="4177"/>
         <source>&amp;Clear Selection</source>
         <translation>T&amp;yhjennä valinta</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4185"/>
+        <location filename="../QMenuStrings.cpp" line="4186"/>
         <source>&amp;Preferences</source>
         <translation>&amp;Asetukset</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4240"/>
+        <location filename="../QMenuStrings.cpp" line="4241"/>
         <source>Pa&amp;ste as New Triggered Segment</source>
         <translation>Li&amp;itä uutena sysättävänä osana</translation>
     </message>
@@ -6478,7 +6483,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
         <location filename="../QMenuStrings.cpp" line="1296"/>
         <location filename="../QMenuStrings.cpp" line="2944"/>
         <location filename="../QMenuStrings.cpp" line="3769"/>
-        <location filename="../QMenuStrings.cpp" line="4165"/>
+        <location filename="../QMenuStrings.cpp" line="4166"/>
         <source>E</source>
         <translation>E</translation>
     </message>
@@ -6506,7 +6511,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3215"/>
-        <location filename="../QMenuStrings.cpp" line="4147"/>
+        <location filename="../QMenuStrings.cpp" line="4148"/>
         <source>G</source>
         <translation>G</translation>
     </message>
@@ -9908,7 +9913,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="388"/>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="836"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="837"/>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="695"/>
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1444"/>
         <source>%1 Controller %2 %3</source>
@@ -10673,32 +10678,32 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
 <context>
     <name>Rosegarden::AudioFileManager</name>
     <message>
-        <location filename="../../src/sound/AudioFileManager.cpp" line="651"/>
+        <location filename="../../src/sound/AudioFileManager.cpp" line="653"/>
         <source>Cannot download file %1</source>
         <translation>Ei voida ladata tiedostoa %1</translation>
     </message>
     <message>
-        <location filename="../../src/sound/AudioFileManager.cpp" line="721"/>
+        <location filename="../../src/sound/AudioFileManager.cpp" line="723"/>
         <source>Converting audio file...</source>
         <translation>Muunnetaan äänitiedostoa...</translation>
     </message>
     <message>
-        <location filename="../../src/sound/AudioFileManager.cpp" line="723"/>
+        <location filename="../../src/sound/AudioFileManager.cpp" line="725"/>
         <source>Resampling audio file...</source>
         <translation>Muutetaan äänitiedoston näytteenottotaajuutta...</translation>
     </message>
     <message>
-        <location filename="../../src/sound/AudioFileManager.cpp" line="725"/>
+        <location filename="../../src/sound/AudioFileManager.cpp" line="727"/>
         <source>Converting and resampling audio file...</source>
         <translation>Muunnetaan ja mitoitetaan uudelleen äänitiedostoa...</translation>
     </message>
     <message>
-        <location filename="../../src/sound/AudioFileManager.cpp" line="727"/>
+        <location filename="../../src/sound/AudioFileManager.cpp" line="729"/>
         <source>Importing audio file...</source>
         <translation>Tuodaan äänitiedostoa...</translation>
     </message>
     <message>
-        <location filename="../../src/sound/AudioFileManager.cpp" line="789"/>
+        <location filename="../../src/sound/AudioFileManager.cpp" line="791"/>
         <source>Failed to convert or resample audio file on import</source>
         <translation>Tuotaessa äänitiedoston muuntaminen epäonnistui</translation>
     </message>
@@ -13239,68 +13244,73 @@ Tämä voi aiheuttaa ongelmia, mikäli asetus ylikirjoitetaan myöhemmin toisess
 <context>
     <name>Rosegarden::EventParameterDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="60"/>
+        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="47"/>
+        <source>Rosegarden</source>
+        <translation type="unfinished">Rosegarden</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="66"/>
         <source>Set the %1 property of the event selection:</source>
         <translation>Aseta tapahtumavalinnan ominaisuus %1:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="70"/>
+        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="77"/>
         <source>Pattern</source>
         <translation>Kaava</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="77"/>
+        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="84"/>
         <source>Flat - set %1 to value</source>
         <translation>Alennus - aseta arvoksi %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="81"/>
+        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="88"/>
         <source>Alternating - set %1 to max and min on alternate events</source>
         <translation>Vaihteleva - aseta %1 vaihtelevien tapahtumien maksimiksi ja minimiksi</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="85"/>
+        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="92"/>
         <source>Crescendo - set %1 rising from min to max</source>
         <translation>Voimistuen - aseta %1 nousemaan minimistä maksimiin</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="89"/>
+        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="96"/>
         <source>Diminuendo - set %1 falling from max to min</source>
         <translation>Hiljentyen - aseta %1 laskemaan maksimasta minimiin</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="93"/>
+        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="100"/>
         <source>Ringing - set %1 alternating from max to min with both dying to zero</source>
         <translation>Huojuva - aseta %1 vaihtelemaan maksimin ja minimin välillä molempien häviten nollaan</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="103"/>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="109"/>
-        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="139"/>
+        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="118"/>
+        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="148"/>
         <source>Value</source>
         <translation>Arvo</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="147"/>
-        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="174"/>
+        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="156"/>
+        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="183"/>
         <source>First Value</source>
         <translation>Ensimmäinen arvo</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="148"/>
-        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="175"/>
+        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="157"/>
+        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="184"/>
         <source>Second Value</source>
         <translation>Toinen arvo</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="156"/>
-        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="166"/>
+        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="165"/>
+        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="175"/>
         <source>Low Value</source>
         <translation>Matala arvo</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="157"/>
-        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="165"/>
+        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="166"/>
+        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="174"/>
         <source>High Value</source>
         <translation>Korkea arvo</translation>
     </message>
@@ -17951,8 +17961,9 @@ Tämä on ohjelmointivirhe (aiemmin ohjelma kaatui tässä kohdassa)</translatio
         <translation>Ei voitu liittää tähän paikkaan.</translation>
     </message>
     <message>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3767"/>
         <source>Move Events to Staff Above</source>
-        <translation type="obsolete">Siirrä tapahtumat ylläolevaan viivastoon</translation>
+        <translation type="unfinished">Siirrä tapahtumat ylläolevaan viivastoon</translation>
     </message>
     <message>
         <source>Move Events to Staff TicksBelow</source>
@@ -18113,6 +18124,11 @@ Ole hyvä ja varmista, että laite on määritetty oikein pääikkunan Hallitse 
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3710"/>
         <source>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3804"/>
+        <source>Move Events to Staff Below</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -18637,8 +18653,8 @@ Ole hyvä ja varmista, että laite on määritetty oikein pääikkunan Hallitse 
 <context>
     <name>Rosegarden::ProgressDialog</name>
     <message>
-        <location filename="../../src/gui/widgets/ProgressDialog.cpp" line="61"/>
-        <location filename="../../src/gui/widgets/ProgressDialog.cpp" line="127"/>
+        <location filename="../../src/gui/widgets/ProgressDialog.cpp" line="64"/>
+        <location filename="../../src/gui/widgets/ProgressDialog.cpp" line="133"/>
         <source>Processing...</source>
         <translation>Käsitellään...</translation>
     </message>
@@ -18679,9 +18695,8 @@ Ole hyvä ja varmista, että laite on määritetty oikein pääikkunan Hallitse 
         <translation>Etsitään flac...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="469"/>
         <source>&lt;qt&gt;&lt;p&gt;The &lt;b&gt;flac&lt;/b&gt; command was not found.&lt;/p&gt;&lt;p&gt;FLAC is a lossless audio compression format used to reduce the size of Rosegarden project packages with no loss of audio quality.  Please install FLAC and try again.  This utility is typically available to most distros as a package called &quot;flac&quot;.&lt;/p&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Komentoa &lt;b&gt;flac&lt;/b&gt; ei löytynyt.&lt;/p&gt;&lt;p&gt;FLAC on häviötön äänenpakkausmuoto, jota käytetään pienentämään Rosegardenin projektipaketteja ilman äänen laadun huononemista.  Ole hyvä ja asenna FLAC ja yritä uudelleen.  Tämä työkalu on saatavissa useimmille jakeluille pakettina nimeltä &quot;flac&quot;.&lt;/p&gt;</translation>
+        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Komentoa &lt;b&gt;flac&lt;/b&gt; ei löytynyt.&lt;/p&gt;&lt;p&gt;FLAC on häviötön äänenpakkausmuoto, jota käytetään pienentämään Rosegardenin projektipaketteja ilman äänen laadun huononemista.  Ole hyvä ja asenna FLAC ja yritä uudelleen.  Tämä työkalu on saatavissa useimmille jakeluille pakettina nimeltä &quot;flac&quot;.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="531"/>
@@ -18749,6 +18764,11 @@ Ole hyvä ja varmista, että laite on määritetty oikein pääikkunan Hallitse 
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="445"/>
         <source>&lt;qt&gt;&lt;p&gt;Could not remove&lt;br&gt;%1.&lt;/p&gt;%2&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Ei voitu poistaa tiedostoa&lt;br&gt;%1&lt;/p&gt;%2&lt;/qt&gt;</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="469"/>
+        <source>&lt;qt&gt;&lt;p&gt;The &lt;b&gt;flac&lt;/b&gt; command was not found.&lt;/p&gt;&lt;p&gt;FLAC is a lossless audio compression format used to reduce the size of Rosegarden project packages with no loss of audio quality.  Please install FLAC and try again.  This utility is typically available to most distros as a package called &quot;flac&quot;.&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="487"/>
@@ -19475,77 +19495,77 @@ Ole hyvä ja valitse haluamasi tiedostot poistaaksesi ne pysyvästi kovalevyltä
         <translation>Luodaan ääniesikatseluja...</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="711"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="714"/>
         <source>Merge</source>
         <translation>Sulauta</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1179"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1182"/>
         <source>Could not create temporary file in directory of &apos;%1&apos;: %2</source>
         <translation>Väliaikaisen tiedoston luonti epäonnistui hakemistoon &apos;%1&apos;: %2</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1192"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1195"/>
         <source>Failure in temporary file handling for file &apos;%1&apos;: %2</source>
         <translation>Väliaikaisen tiedoston &apos;%1&apos;: %2 käsittely epäonnistui</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1210"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1213"/>
         <source>Failed to rename temporary output file &apos;%1&apos; to desired output file &apos;%2&apos;</source>
         <translation>Väliaikaisen tiedoston &apos;%1&apos; uudelleen nimeäminen halutuksi ulostulotiedostoksi &apos;%2&apos; epäonnistui</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1244"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1247"/>
         <source>Saving file...</source>
         <translation>Tiedoston tallennus...</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1347"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1354"/>
         <source>Error while writing on &apos;%1&apos;</source>
         <translation>Virhe kirjoitettaessa paikkaan &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1644"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1655"/>
         <source>File load cancelled</source>
         <translation>Tiedoston lataaminen keskeytettiin</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1664"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1675"/>
         <source>&lt;h3&gt;Audio and plugins not available&lt;/h3&gt;&lt;p&gt;This composition uses audio files or plugins, but Rosegarden is currently running without audio because the JACK audio server was not available on startup.&lt;/p&gt;&lt;p&gt;Please exit Rosegarden, start the JACK audio server and re-start Rosegarden if you wish to load this complete composition.&lt;/p&gt;&lt;p&gt;&lt;b&gt;WARNING:&lt;/b&gt; If you re-save this composition, all audio and plugin data and settings in it will be lost.&lt;/p&gt;</source>
         <translation>&lt;h3&gt;Ääni ja lisäosat eivät ole saatavilla&lt;/h3&gt;&lt;p&gt;Tämä sävellys käyttää äänitiedostoja tai lisäosia, mutta Rosegarden on tällä hetkellä käynnissä ilman ääntä, koska JACK-äänipalvelin ei ollut saatavilla käynnistyksen yhteydessä.&lt;/p&gt;&lt;p&gt;Ole hyvä ja sulje Rosegarden, käynnistä JACK-äänipalvelin, ja käynnistä Rosegarden uudelleen, jos haluat ladata sävellyksen kokonaan.&lt;/p&gt;&lt;p&gt;&lt;b&gt;VAROITUS:&lt;/b&gt; Jos tallennat tämän sävellyksen uudelleen, sen kaikki ääni- ja lisäosatiedot ja asetukset häviävät.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1667"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1678"/>
         <source>&lt;h3&gt;Audio and plugins not available&lt;/h3&gt;&lt;p&gt;This composition uses audio files or plugins, but you are running a version of Rosegarden that was compiled without audio support.&lt;/p&gt;&lt;p&gt;&lt;b&gt;WARNING:&lt;/b&gt; If you re-save this composition from this version of Rosegarden, all audio and plugin data and settings in it will be lost.&lt;/p&gt;</source>
         <translation>&lt;h3&gt;Ääni ja lisäosat eivät ole saatavilla&lt;/h3&gt;&lt;p&gt;Tämä sävellys käyttää äänitiedostoja tai lisäosia, mutta käytät Rosegardenin versiota, joka käännettiin ilman äänitukea.&lt;/p&gt;&lt;p&gt;&lt;b&gt;VAROITUS:&lt;/b&gt; Jos tallennat tämän sävellyksen uudelleen tällä Rosegardenin versiolla, sen kaikki ääni- ja lisäosatiedot ja asetukset häviävät.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1704"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1715"/>
         <source>&lt;h3&gt;Incorrect audio sample rate&lt;/h3&gt;&lt;p&gt;This composition contains audio files that were recorded or imported with the audio server running at a different sample rate (%1 Hz) from the current JACK server sample rate (%2 Hz).&lt;/p&gt;&lt;p&gt;Rosegarden will play this composition at the correct speed, but any audio files in it will probably sound awful.&lt;/p&gt;&lt;p&gt;Please consider re-starting the JACK server at the correct rate (%3 Hz) and re-loading this composition before you do any more work with it.&lt;/p&gt;</source>
         <translation>&lt;h3&gt;Väärä äänen näytteenottotaajuus&lt;/h3&gt;&lt;p&gt;Tämä sävellys sisältää äänitiedostoja, jotka nauhoitettiin tai tuotiin äänipalvelimelta, joka käyttää eri näytteenottotaajuutta (%1 Hz) kuin mikä on nykyinen JACK-palvelimen näytteenottotaajuus (%2 Hz).&lt;p/&gt;&lt;p&gt;Rosegarden toistaa tämän sävellyksen oikealla nopeudella, mutta äänitiedostojen äänen laatu on todennäköisesti huono.&lt;/p&gt;&lt;p&gt;Ole hyvä ja harkitse JACK-palvelimen käynnistämistä oikella taajuudella (%3 Hz) ja tämän sävellyksen uudelleen lataamista ennen kuin jatkat työskentelyä sen parissa.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1714"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1725"/>
         <source>&lt;h3&gt;Inconsistent audio sample rates&lt;/h3&gt;&lt;p&gt;This composition contains audio files at more than one sample rate.&lt;/p&gt;&lt;p&gt;Rosegarden will play them at the correct speed, but any audio files that were recorded or imported at rates different from the current JACK server sample rate (%1 Hz) will probably sound awful.&lt;/p&gt;&lt;p&gt;Please see the audio file manager dialog for more details, and consider resampling any files that are at the wrong rate.&lt;/p&gt;</source>
         <translation>&lt;h3&gt;Yhteensopimattomia äänen näytteenottotaajuuksia&lt;/h3&gt;&lt;p&gt;Tämä sävellys sisältää äänitiedostoja, joilla on useampi kuin yksi näytteenottotaajuus.&lt;p/&gt;&lt;p&gt;Rosegarden toistaa ne oikealla nopeudella, mutta äänitiedostojen, joiden näytteenottotaajuus poikkeaa nykyisen JACK-palvelimen näytteenottotaajudesta (%1 Hz) äänen laatu on todennäköisesti huono.&lt;/p&gt;&lt;p&gt;Ole hyvä ja katso äänitiedostojen hallinnasta lisää yksityiskohtia, ja harkitse väärällä näytteenottotaajudella olevien tiedostojen näytteistämistä uudelleen.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1715"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1726"/>
         <source>Inconsistent sample rates</source>
         <translation>Yhteensopimattomia näytteenottotaajuuksia</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1729"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1740"/>
         <source>&lt;h3&gt;Plugins not found&lt;/h3&gt;&lt;p&gt;The following audio plugins could not be loaded:&lt;/p&gt;&lt;ul&gt;</source>
         <translation>&lt;h3&gt;Lisäosia ei löytynyt&lt;/h3&gt;&lt;p&gt;Seuraavaa ääni-lisäosaa ei ladattu:&lt;/p&gt;&lt;ul&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1737"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1748"/>
         <source>&lt;li&gt;%1 (from %2)&lt;/li&gt;</source>
         <translation>&lt;li&gt;%1 (kohdasta %2)&lt;/li&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1751"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1762"/>
         <source>This file contains one or more old element types that are now deprecated.
 Support for these elements may disappear in future versions of Rosegarden.
 We recommend you re-save this file from this version of Rosegarden to ensure that it can still be re-loaded in future versions.</source>
@@ -19554,17 +19574,17 @@ Tuki näille osasille voi kadota tulevissa Rosegardenin versioissa.
 Suosittelemme, että talletat tämän tiedoston tällä Rosegarden-versiolla varmistaaksesi, että se voidaan ladata vielä tulevissa versioissa.</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="2295"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="2306"/>
         <source>Insert Recorded MIDI</source>
         <translation>Syötä nauhoitettu MIDI</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="2422"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="2433"/>
         <source>(recorded)</source>
         <translation>(nauhoitettu)</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="2656"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="2666"/>
         <source>Generating audio preview...</source>
         <translation>Luodaan äänen esikatselua...</translation>
     </message>
@@ -19572,20 +19592,20 @@ Suosittelemme, että talletat tämän tiedoston tällä Rosegarden-versiolla var
 <context>
     <name>Rosegarden::RosegardenMainViewWidget</name>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="256"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="257"/>
         <source>No non-audio segments in composition</source>
         <translation>Ei muita kuin ääniosia sävellyksessä</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="334"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="335"/>
         <source>Selection must contain only audio or non-audio segments</source>
         <translation>Valinta saa sisältää vain yhden ääniosan tai muun kuin ääniosan</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="434"/>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="598"/>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="660"/>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="834"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="435"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="599"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="661"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="835"/>
         <source>No non-audio segments selected</source>
         <translation>Muita kuin ääniosia ei valittuna</translation>
     </message>
@@ -19596,40 +19616,40 @@ See Settings -&gt; Configure Rosegarden -&gt; Audio.</source>
 Katso Asetukset -&gt; Muokkaa ohjelman Rosegarden asetuksia -&gt; Ääni.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="910"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="911"/>
         <source>You&apos;ve not yet defined an audio editor for Rosegarden to use.
 See Edit -&gt; Preferences -&gt; Audio.</source>
         <translation>Et ole vielä määritellyt Rosegardenin käyttämää äänimuokkainta.
 Katso Muokkaa -&gt; Asetukset -&gt; Ääni.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1599"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1602"/>
         <source>importing a remote audio file</source>
         <translation>tuodaan ulkoista äänitiedostoa</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1601"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1604"/>
         <source>importing an audio file that needs to be converted or resampled</source>
         <translation>tuodaan äänitiedostoa, joka täytyisi muuntaa tai sen näytteenottotaajuutta muuttaa</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1604"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1608"/>
         <source>Adding audio file...</source>
         <translation>Lisätään äänitiedosto...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1625"/>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1630"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1634"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1639"/>
         <source>Can&apos;t add dropped file. </source>
         <translation>Ei voitu lisätä tiputettua tiedostoa. </translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1640"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1650"/>
         <source>Generating audio preview...</source>
         <translation>Luodaan äänen esikatselua...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1647"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1660"/>
         <source>Try copying this file to a directory where you have write permission and re-add it</source>
         <translation>Yritä kopioida tämä tiedosto hakemistoon, jonne sinulla on kirjoitusoikeus ja lisää se uudelleen</translation>
     </message>
@@ -19667,7 +19687,7 @@ Katso Muokkaa -&gt; Asetukset -&gt; Ääni.</translation>
         <translation>Aloitetaan...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="810"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="811"/>
         <source>  Zoom:  </source>
         <translation>  Suurennos:  </translation>
     </message>
@@ -19676,272 +19696,272 @@ Katso Muokkaa -&gt; Asetukset -&gt; Ääni.</translation>
         <translation type="obsolete">tila</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="942"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1115"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1595"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2044"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="943"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1116"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1596"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2045"/>
         <source>%1 - %2</source>
         <translation>%1 - %2</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1302"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1303"/>
         <source>File &quot;%1&quot; does not exist</source>
         <translation>Tiedostoa &quot;%1&quot; ei ole</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1308"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1309"/>
         <source>File &quot;%1&quot; is actually a directory</source>
         <translation>Tiedosto &quot;%1&quot; onkin tiedosto</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1317"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1318"/>
         <source>You do not have read permission for &quot;%1&quot;</source>
         <translation>Sinulla ei ole lukuoikeuksia kohteeseen &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1394"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1395"/>
         <source>An auto-save file for this document has been found
 Do you want to open it instead ?</source>
         <translation>Löydettiin tämän dokumentin ajonaikainen tallenne.
 Haluatko avata sen tämän asemesta?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1541"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1542"/>
         <source>Untitled</source>
         <translation>Ei nimeä</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1554"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1893"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2033"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1555"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1894"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2034"/>
         <source>Could not save document at %1
 Error was : %2</source>
         <translation>Dokumenttia %1 ei voitu tallentaa
 Virhe oli: %2</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1556"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1896"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2036"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1557"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1897"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2037"/>
         <source>Could not save document at %1</source>
         <translation>Dokumenttia %1 ei voitu tallentaa</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1643"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1644"/>
         <source>Opening a new application window...</source>
         <translation>Avataan uutta sovellusikkunaa...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1654"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1655"/>
         <source>Creating new document...</source>
         <translation>Luodaan uutta dokumenttia...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1719"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1720"/>
         <source>Malformed URL
 %1</source>
         <translation>Vääränmuotoin URL
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1753"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1859"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1754"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1860"/>
         <source>Opening file...</source>
         <translation>Avataan tiedosto...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1780"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1781"/>
         <source>All supported files</source>
         <translation>Kaikki tuetut tiedostot</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1781"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1815"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2004"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1782"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1816"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2005"/>
         <source>Rosegarden files</source>
         <translation>Rosegarden-tiedostot</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1782"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3496"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3532"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1783"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3497"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3533"/>
         <source>MIDI files</source>
         <translation>MIDI-tiedostot</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1783"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1816"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2010"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3445"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3497"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3533"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3788"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3824"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3913"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3948"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4564"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4603"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4645"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4682"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4718"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4828"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7531"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1784"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1817"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2011"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3446"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3498"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3534"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3789"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3825"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3914"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3949"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4565"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4604"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4646"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4683"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4719"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4829"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7549"/>
         <source>All files</source>
         <translation>Kaikki tiedostot</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1779"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1814"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1780"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1815"/>
         <source>Open File</source>
         <translation>Avaa tiedosto</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="774"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="775"/>
         <source>Ctrl+R</source>
         <translation>Ctrl+R</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1684"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1685"/>
         <source>%1%2 - %3</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1733"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1834"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3462"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3514"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3550"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3805"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3841"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3930"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3965"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7544"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1734"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1835"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3463"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3515"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3551"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3806"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3842"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3931"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3966"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7562"/>
         <source>Cannot open file %1</source>
         <translation>Ei voitu avata tiedostoa %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1876"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1877"/>
         <source>Saving file...</source>
         <translation>Tiedoston tallennus...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1936"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1937"/>
         <source>Save File</source>
         <translation>Tallenna tiedosto</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1966"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1967"/>
         <source>&lt;qt&gt;Sorry.&lt;br&gt;&quot;%1&quot; is not a valid filename.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Valitan.&lt;br&gt;&quot;%1&quot; ei ole kelpo tiedostonnimi.&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1973"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1974"/>
         <source>You have specified a folder/directory.</source>
         <translation>Olet määritellyt hakemiston/polun.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1979"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1980"/>
         <source>The specified file exists.  Overwrite?</source>
         <translation>Määritetty tiedosto on jo olemassa.  Kirjoitetaanko päälle?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2001"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2002"/>
         <source>Saving file%1with a new filename...</source>
         <translation>Tallennetaan tiedosto %1 uudella nimellä...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2004"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2005"/>
         <source>Rosegarden templates</source>
         <translation>Rosegarden-luonnokset</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2006"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2007"/>
         <source>Save as template...</source>
         <translation>Tallenna luonnokseksi...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2006"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2007"/>
         <source>Save as...</source>
         <translation>Tallenna nimellä...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2060"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2061"/>
         <source>Closing file...</source>
         <translation>Suljetaan tiedosto...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2082"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2083"/>
         <source>Printing...</source>
         <translation>Tulostetaan...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2099"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2100"/>
         <source>Previewing...</source>
         <translation>Esikatsellaan...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2107"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2108"/>
         <source>Exiting...</source>
         <translation>Lopetetaan...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2119"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2120"/>
         <source>Cutting selection...</source>
         <translation>Leikataan valintaa...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2131"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2132"/>
         <source>Copying selection to clipboard...</source>
         <translation>Kopioidaan valinta leikepöydälle...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2142"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2143"/>
         <source>Clipboard is empty</source>
         <translation>Leikepöytä on tyhjä</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2145"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2146"/>
         <source>Inserting clipboard contents...</source>
         <translation>Syötetään leikepöydän tietoja...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2219"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2220"/>
         <source>Duration of empty range to insert</source>
         <translation>Syötettävän tyhjän alueen kesto</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2300"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2301"/>
         <source>This function needs no more than one segment to be selected.</source>
         <translation>Tämä toiminto ei tarvitse kuin yhden valitun osan.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2324"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2325"/>
         <source>Can&apos;t join Audio segments</source>
         <translation>Ei voitu liittää ääniosia</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2378"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2379"/>
         <source>rescaling an audio file</source>
         <translation>uudelleenmitoitetaan äänitiedosto</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2395"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2396"/>
         <source>Rescaling audio file...</source>
         <translation>Uudelleenmitoitetaan äänitiedosto...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2408"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2409"/>
         <source>Generating audio preview...</source>
         <translation>Luodaan äänen esikatselua...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2438"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4979"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2439"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4980"/>
         <source>Warning</source>
         <translation>Varoitus</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2439"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2440"/>
         <source>The audio file path does not exist or is not writable.
 You must set the audio file path to a valid directory in Document Properties before %1.
 Would you like to set it now?</source>
@@ -19950,12 +19970,12 @@ Ole hyvä ja aseta äänitiedostopoluksi kelpo hakemisto Asiakirjan ominaisuuksi
 Haluatko asettaa sen nyt?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2509"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2510"/>
         <source>Jog Selection</source>
         <translation>Askella valinta</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2651"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2652"/>
         <source>Split %n Segment(s) at Time</source>
         <translation>
             <numerusform>Jaa %n osa kerrallaan</numerusform>
@@ -19963,84 +19983,84 @@ Haluatko asettaa sen nyt?</translation>
         </translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2686"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2687"/>
         <source>Segment Start Time</source>
         <translation>Osan alkuaika</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2696"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2697"/>
         <source>Set Segment Start Times</source>
         <translation>Aseta osan alkuajat</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2697"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2698"/>
         <source>Set Segment Start Time</source>
         <translation>Aseta osan alkuaika</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2729"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2730"/>
         <source>Segment Duration</source>
         <translation>Osan kesto</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2741"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2742"/>
         <source>Set Segment Durations</source>
         <translation>Aseta osan kestot</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2742"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2743"/>
         <source>Set Segment Duration</source>
         <translation>Aseta osan kesto</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2852"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5606"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2853"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5607"/>
         <source>Set Global Tempo</source>
         <translation>Aseta yleistempo</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2919"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2920"/>
         <source>Toggle the toolbar...</source>
         <translation>Kytke työkalupalkki...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2930"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2931"/>
         <source>Toggle the tools toolbar...</source>
         <translation>Kytke Työkalut -työkalupalkki...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2941"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2942"/>
         <source>Toggle the tracks toolbar...</source>
         <translation>Kytke Raidat - työkalupalkki...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2952"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2953"/>
         <source>Toggle the editor toolbar...</source>
         <translation>Kytke Muokkain -työkalupalkki...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2963"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2964"/>
         <source>Toggle the transport toolbar...</source>
         <translation>Kytke Kuljetin -työkalupalkki...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2974"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2975"/>
         <source>Toggle the zoom toolbar...</source>
         <translation>Kytke Suurennos -työkalupalkki...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2985"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3004"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2986"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3005"/>
         <source>Toggle the Transport</source>
         <translation>Kytke Kuljetin</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3108"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3109"/>
         <source>Toggle the statusbar...</source>
         <translation>Kytke tilapalkki...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3176"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3177"/>
         <source>The join tool isn&apos;t implemented yet.  Instead please highlight the segments you want to join and then use the menu option:
 
         Segments-&gt;Collapse Segments.
@@ -20051,111 +20071,111 @@ Haluatko asettaa sen nyt?</translation>
 </translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3179"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3180"/>
         <source>Join tool not yet implemented</source>
         <translation>Liitäntätyökalua ei ole vielä toteutettu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3424"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3425"/>
         <source>Revert modified document to previous saved version?</source>
         <translation>Palauta muutettu dokumentti aiemmin tallennetuksi versioksi?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3443"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3444"/>
         <source>Import Rosegarden Project File</source>
         <translation>Tuo Rosegarden-projekti -tiedosto</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3444"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4563"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3445"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4564"/>
         <source>Rosegarden Project files</source>
         <translation>Rosegarden-projekti -tiedostot</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6213"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6214"/>
         <source>Input</source>
         <translation>Sisääntulo</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7309"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7319"/>
         <source>http://rosegardenmusic.com/wiki/doc:manual-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:manual-fi</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7336"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7346"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7783"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7801"/>
         <source>&lt;h3&gt;Newer version available&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;Uudempi versio saatavilla&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7784"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7802"/>
         <source>&lt;p&gt;You are using version %1.  Version %2 is now available.&lt;/p&gt;&lt;p&gt;Please consult the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;Rosegarden website&lt;/a&gt; for more information.&lt;/p&gt;</source>
         <translation>&lt;p&gt;Käytät versiota %1. Versio %2 on tällä hetkellä saatavilla.&lt;/p&gt;&lt;p&gt;Lisätietoja:&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;Rosegarden website&lt;/a&gt;&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3495"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3496"/>
         <source>Open MIDI File</source>
         <translation>Avaa MIDI-tiedosto</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3531"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3532"/>
         <source>Merge MIDI File</source>
         <translation>Sulauta MIDI-tiedosto</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3658"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3659"/>
         <source>Importing MIDI file...</source>
         <translation>Tuo MIDI-tiedosto...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3694"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3695"/>
         <source>Calculating notation...</source>
         <translation>Lasketaan nuotinnusta...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3742"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3743"/>
         <source>Calculate Notation</source>
         <translation>Laske nuotinnus</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3786"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3822"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3787"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3823"/>
         <source>Open X11 Rosegarden File</source>
         <translation>Avaa X11 Rosegarden -tiedosto</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3787"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3823"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3788"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3824"/>
         <source>X11 Rosegarden files</source>
         <translation>X11 Rosegarden-tiedostot</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3856"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3857"/>
         <source>Importing X11 Rosegarden file...</source>
         <translation>Tuodaan X11 Rosegarden -tiedosto...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3884"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3885"/>
         <source>Can&apos;t load X11 Rosegarden file.  It appears to be corrupted.</source>
         <translation>Ei voitu ladata X11 Rosegarden -tiedostoa.  Se vaikuttaa olevan viallinen.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3912"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3947"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3913"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3948"/>
         <source>Open Hydrogen File</source>
         <translation>Avaa Hydrogen-tiedosto</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3980"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3981"/>
         <source>Importing Hydrogen file...</source>
         <translation>Tuo Hydrogen-tiedosto...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4006"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4007"/>
         <source>Can&apos;t load Hydrogen file.  It appears to be corrupted.</source>
         <translation>Ei voitu ladata Hydrogen-tiedostoa.  Se vaikuttaa olevan viallinen.</translation>
     </message>
@@ -20220,130 +20240,130 @@ Haluatko asettaa sen nyt?</translation>
         <translation type="obsolete">Apuohjelmia ei löytynyt</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4772"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4773"/>
         <source>&lt;qt&gt;&lt;p&gt;Failed to open a temporary file for LilyPond export.&lt;/p&gt;&lt;p&gt;This probably means you have run out of disk space on &lt;pre&gt;%1&lt;/pre&gt;&lt;/p&gt;&lt;/qt&gt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4544"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4545"/>
         <source>The Rosegarden sequencer process has exited unexpectedly.  Sound and recording will no longer be available for this session.
 Please exit and restart Rosegarden to restore sound capability.</source>
         <translation>Rosegardenin sekvensseriprosessi keskeytyi odottamatta.  Ääni ja nauhoitus eivät ole enää tässä istunnossa käytössä.
 Ole hyvä, sulje ja käynnistä uudelleen Rosegarden palauttaaksesi äänitoiminnot.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4548"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4549"/>
         <source>The Rosegarden sequencer could not be started, so sound and recording will be unavailable for this session.
 For assistance with correct audio and MIDI configuration, go to http://rosegardenmusic.com.</source>
         <translation>Rosegardenin sekvensseriprosessi keskeytyi odottamatta.  Ääni ja nauhoitus eivät ole enää tässä istunnossa käytössä.
 Oikeiden ääni- ja MIDI-asetusten varalle löydät apua sivulta http://rosegardenmusic.com.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4560"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4561"/>
         <source>Exporting Rosegarden Project file...</source>
         <translation>Viedään Rosegarden-projekti -tiedosto...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4565"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4604"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4646"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4683"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4719"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4829"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4566"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4605"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4647"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4684"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4720"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4830"/>
         <source>Export as...</source>
         <translation>Vie...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4584"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4585"/>
         <source>Saving Rosegarden file to package failed: %1</source>
         <translation>Rosegarden-tiedoston tallennus ei onnistunut pakettiin: %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4599"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4615"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4600"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4616"/>
         <source>Exporting MIDI file...</source>
         <translation>Viedään MIDI-tiedosto...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4602"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4603"/>
         <source>Standard MIDI files</source>
         <translation>Oletusmuotoiset MIDI-tiedostot</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4634"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4671"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4707"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4814"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4855"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4635"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4672"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4708"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4815"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4856"/>
         <source>Export failed.  The file could not be opened for writing.</source>
         <translation>Vienti epäonnistui.  Tiedostoa ei voitu avata kirjoittamista varten.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4641"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4657"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4642"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4658"/>
         <source>Exporting Csound score file...</source>
         <translation>Viedään Csound-nuottitiedosto...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4644"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4645"/>
         <source>Csound files</source>
         <translation>Csound-tiedostot</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4678"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4693"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4679"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4694"/>
         <source>Exporting Mup file...</source>
         <translation>Viedään Mup-tiedosto...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4681"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4682"/>
         <source>Mup files</source>
         <translation>Mup-tiedostot</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4714"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4799"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4715"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4800"/>
         <source>Exporting LilyPond file...</source>
         <translation>Viedään LilyPond-tiedosto...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4717"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4718"/>
         <source>LilyPond files</source>
         <translation>LilyPond-tiedostot</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4731"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4732"/>
         <source>Printing with LilyPond...</source>
         <translation>Tulosta LilyPondilla...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4747"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4748"/>
         <source>Previewing LilyPond file...</source>
         <translation>Esikatsellaan LilyPond-tiedostoa...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4790"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4791"/>
         <source>LilyPond Preview Options</source>
         <translation>LilyPond-esikatselun ominaisuudet</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4791"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4792"/>
         <source>LilyPond preview options</source>
         <translation>LilyPond-esikatselun ominaisuudet</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4824"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4840"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4825"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4841"/>
         <source>Exporting MusicXML file...</source>
         <translation>Viedään MusicXML-tiedosto...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4827"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4828"/>
         <source>XML files</source>
         <translation>XML-tiedostot</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4980"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4981"/>
         <source>The audio file path does not exist or is not writable.
 Please set the audio file path to a valid directory in Document Properties before recording audio.
 Would you like to set it now?</source>
@@ -20352,12 +20372,12 @@ Ole hyvä ja aseta äänitiedostopoluksi kelpo hakemisto Asiakirjan ominaisuuksi
 Haluatko asettaa sen nyt?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5030"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5031"/>
         <source>Error</source>
         <translation>Virhe</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5031"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5032"/>
         <source>The audio file path does not exist or is not writable.
 Please set the audio file path to a valid directory in Document Properties before you start to record audio.
 Would you like to set it now?</source>
@@ -20366,124 +20386,124 @@ Ole hyvä ja aseta äänitiedostopoluksi kelpo hakemisto Asiakirjan ominaisuuksi
 Haluatko asettaa sen nyt?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5510"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5511"/>
         <source>Move playback pointer to time</source>
         <translation>Siirrä toisto-osoitin ajankohtaan</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5524"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5525"/>
         <source>%1%</source>
         <translation>%1%</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5592"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5593"/>
         <source>Replace Tempo Change at %1</source>
         <translation>Korvaa temponmuutos kohdassa %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5622"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5623"/>
         <source>Set Global and Default Tempo</source>
         <translation>Aseta yleis- ja oletustempo</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5645"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5646"/>
         <source>Move Tempo Change</source>
         <translation>Siirrä tempomuutos</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5680"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5681"/>
         <source>new marker</source>
         <translation>uusi merkintä</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5681"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5682"/>
         <source>no description</source>
         <translation>ei kuvausta</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6128"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6129"/>
         <source>Sequencer failed to add audio file %1</source>
         <translation>Sekvensseri ei onnistunut lisäämään äänitiedostoa %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6141"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6142"/>
         <source>Sequencer failed to remove audio file id %1</source>
         <translation>Sekvensseri ei onnistunut poistamaan äänitiedostoa, id %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6196"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6197"/>
         <source>Modify Segment label</source>
         <translation>Muuta osan nimeä</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6198"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6199"/>
         <source>Modify Segments label</source>
         <translation>Muuta osien nimiä</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6200"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6201"/>
         <source>Relabelling selection...</source>
         <translation>Nimeä uudelleen valinta...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6213"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6214"/>
         <source>Enter new label</source>
         <translation>Syötä uusi nimi</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7272"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7282"/>
         <source>Play List</source>
         <translation>Soittolista</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7316"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7326"/>
         <source>http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7323"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7333"/>
         <source>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7413"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7431"/>
         <source>Queueing MIDI panic events for tranmission...</source>
         <translation>Ketjutetaan MIDI:n paniikkitapahtumat lähettämistä varten...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7472"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7490"/>
         <source>Are you sure you want to save this as your default studio?</source>
         <translation>Haluatko todella tallentaa tämän oletusstudioksesi?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7478"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7496"/>
         <source>Saving current document as default studio...</source>
         <translation>Tallennetaan nykyinen dokumentti oletusstudioksi...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7490"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7508"/>
         <source>Could not auto-save document at %1
 Error was : %2</source>
         <translation>Dokumenttia %1 ei voitu tallentaa automaattisesti
 Virhe oli: %2</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7493"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7511"/>
         <source>Could not auto-save document at %1</source>
         <translation>Dokumenttia %1 ei voitu tallentaa automaattisesti</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7503"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7521"/>
         <source>Are you sure you want to import your default studio and lose the current one?</source>
         <translation>Haluatko todella tuoda oletusstudiosi ja hävittää tämänhetkisen studion?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7530"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7548"/>
         <source>Import Studio from File</source>
         <translation>Tuo studio tiedostosta</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7575"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7593"/>
         <source>Import Studio</source>
         <translation>Tuo studio</translation>
     </message>
@@ -21558,119 +21578,119 @@ Toisten ohjelmien lopettaminen saattaa parantaa Rosegardenin suorituskykyä.</tr
 <context>
     <name>Rosegarden::StaffHeader</name>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="120"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="119"/>
         <source>Track %1 : &quot;%2&quot;</source>
         <translation>Raita %1 : &quot;%2&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="126"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="125"/>
         <source>&lt;br&gt;Notate for: %1</source>
         <translation>&lt;br&gt;Nuotitus: %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="128"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="127"/>
         <source>normal</source>
         <translation>normaali</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="131"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="130"/>
         <source>small</source>
         <translation>pieni</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="134"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="133"/>
         <source>tiny</source>
         <translation>pikkuruinen</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="163"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="162"/>
         <source>&lt;br&gt;Size: %1,  Bracket: %2 </source>
         <translation>&lt;br&gt;Koko: %1  Sulkeet: %2 </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="191"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="190"/>
         <source>&lt;br&gt;bars [%1-%2] in %3 (tr=%4) : &quot;%5&quot;</source>
         <translation>&lt;br&gt;tahdit [%1-%2] lajissa %3 (tr=%4) : &quot;%5&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="198"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="197"/>
         <source>&lt;br&gt;bars [%1-%2] (tr=%3) : &quot;%4&quot;</source>
         <translation>&lt;br&gt;tahdit [%1-%2] (tr=%3) : &quot;%4&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="361"/>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="416"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="372"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="427"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="457"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="480"/>
         <source>C</source>
         <comment>note name</comment>
         <translation>C</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="458"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="481"/>
         <source>C#</source>
         <comment>note name</comment>
         <translation>C#</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="459"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="482"/>
         <source>D</source>
         <comment>note name</comment>
         <translation>D</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="460"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="483"/>
         <source>Eb</source>
         <comment>note name</comment>
         <translation>Eb</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="461"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="484"/>
         <source>E</source>
         <comment>note name</comment>
         <translation>E</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="462"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="485"/>
         <source>F</source>
         <comment>note name</comment>
         <translation>F</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="463"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="486"/>
         <source>F#</source>
         <comment>note name</comment>
         <translation>F#</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="464"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="487"/>
         <source>G</source>
         <comment>note name</comment>
         <translation>G</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="465"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="488"/>
         <source>G#</source>
         <comment>note name</comment>
         <translation>G#</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="466"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="489"/>
         <source>A</source>
         <comment>note name</comment>
         <translation>A</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="467"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="490"/>
         <source>Bb</source>
         <comment>note name</comment>
         <translation>Bb</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="468"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="491"/>
         <source>B</source>
         <comment>note name</comment>
         <translatorcomment>We decided not to translate note names in german system.</translatorcomment>
@@ -21725,12 +21745,12 @@ Toisten ohjelmien lopettaminen saattaa parantaa Rosegardenin suorituskykyä.</tr
         <translation type="obsolete">B</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="579"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="600"/>
         <source>%1: %2</source>
         <translation>%1: %2</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="582"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="603"/>
         <source> in %1</source>
         <translation>lajissa %1</translation>
     </message>
@@ -22437,82 +22457,82 @@ Toisten ohjelmien lopettaminen saattaa parantaa Rosegardenin suorituskykyä.</tr
         <translation>Tahtilajimerkintä</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="84"/>
+        <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="81"/>
         <source>Time signature</source>
         <translation>Tahtilajimerkintä</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="134"/>
+        <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="132"/>
         <source>Time where signature takes effect</source>
         <translation>Aika, jona merkintä tulee voimaan</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="147"/>
+        <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="145"/>
         <source>Scope</source>
         <translation>Laajuus</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="161"/>
+        <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="159"/>
         <source>Insertion point is at start of measure %1.</source>
         <translation>Syöttökohta alkaa tahdista %1.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="165"/>
+        <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="163"/>
         <source>Insertion point is in the middle of measure %1.</source>
         <translation>Syöttökohdan on tahdin %1 keskellä.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="170"/>
+        <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="168"/>
         <source>Insertion point is at start of composition.</source>
         <translation>Syöttökohta on sävellyksen alussa.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="175"/>
+        <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="173"/>
         <source>Start measure %1 here</source>
         <translation>Aloita tahti %1 tästä</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="179"/>
+        <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="177"/>
         <source>Change time from start of measure %1</source>
         <translation>Vaihda aika alkaen tahdista %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="188"/>
+        <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="186"/>
         <source>Time change will take effect at the start of measure %1.</source>
         <translation>Ajanvaihdon vaikutus alkaa tahdista %1.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="194"/>
+        <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="192"/>
         <source>Options</source>
         <translation>Valinnat</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="200"/>
+        <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="198"/>
         <source>Hide the time signature</source>
         <translation>Piilota tahtilajimerkintä</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="205"/>
+        <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="203"/>
         <source>Hide the affected bar lines</source>
         <translation>Piilota tahtiviivat, joihin tahtilaji vaikuttaa</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="210"/>
+        <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="208"/>
         <source>Show as common time</source>
         <translation>Näytä C-merkintänä</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="216"/>
+        <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="214"/>
         <source>Correct the durations of following measures</source>
         <translation>Korjaa seuraavien tahtien kestot</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="324"/>
+        <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="319"/>
         <source>Display as common time</source>
         <translation>Näytä C-merkintänä</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="328"/>
+        <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="323"/>
         <source>Display as cut common time</source>
         <translation>Näytä pystyviivallisena C-merkintänä</translation>
     </message>
@@ -22669,7 +22689,7 @@ Haluatko asettaa sen nyt?</translation>
         <translation>Muuta kertautuvat osat todellisiksi kopioiksi</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="904"/>
+        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="926"/>
         <source>You can&apos;t drop files into Rosegarden from this client.  Try using Konqueror instead.</source>
         <translation>Et voi pudottaa tiedostoja Rosegardenille tältä asiakasohjelmalta.  Yritä Konqueror:in käyttöä sen sijaan.</translation>
     </message>
@@ -23595,7 +23615,7 @@ Haluatko asettaa sen nyt?</translation>
 <context>
     <name>RosegardenDocument</name>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="2506"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="2517"/>
         <source>(recorded)</source>
         <translation>(nauhoitettu)</translation>
     </message>
