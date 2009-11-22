@@ -183,13 +183,16 @@ void NotationSelector::handleMouseDoubleClick(const NotationMouseEvent *e)
 
     bool advanced = (e->buttons & Qt::ShiftButton);
 
-    if (e->element) {
+    if (e->element && e->exact) {
 
+        // nothing to catch the signal yet
         emit editElement(staff, e->element, advanced);
 
     } else {
 
         QRect rect = staff->getBarExtents(e->sceneX, e->sceneY);
+        
+        std::cout << "sceneX: " << e->sceneX << " Y: " << e->sceneY << std::endl;
 
         m_selectionRect->setRect(rect.x() + 0.5, rect.y() + 0.5,
                                  rect.width(), rect.height());
@@ -210,6 +213,7 @@ void NotationSelector::handleMouseDoubleClick(const NotationMouseEvent *e)
 void NotationSelector::handleMouseTripleClick(const NotationMouseEvent *e)
 {
     NOTATION_DEBUG << "NotationSelector::handleMouseTripleClick" << endl;
+
     if (!m_justSelectedBar) return;
     m_justSelectedBar = false;
 
@@ -217,7 +221,7 @@ void NotationSelector::handleMouseTripleClick(const NotationMouseEvent *e)
     if (!staff) return;
     m_selectedStaff = staff;
 
-    if (e->element) {
+    if (e->element && e->exact) {
 
         // should be safe, as we've already set m_justSelectedBar false
         handleLeftButtonPress(e);
