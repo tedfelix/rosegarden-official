@@ -670,13 +670,16 @@ bool RosegardenDocument::openDocument(const QString& filename,
                                (QWidget*)parent());
     connect(&progressDlg, SIGNAL(canceled()),
             &m_audioFileManager, SLOT(slotStopPreview()));
-
+    
+    progressDlg.setValue(0);
+    progressDlg.show();
+    
     // old qt3:
     //connect(&m_audioFileManager, SIGNAL(setValue(int)),
     //         progressDlg.progressBar(), SLOT(setValue(int)));
     // new qt4:
-    connect(dynamic_cast<QObject*>(&m_audioFileManager), SIGNAL(setValue(int)),    
-            dynamic_cast<QObject*>(&progressDlg), SLOT(setValue(int)));        //@@@ &progressDlg persistent?
+    connect( &m_audioFileManager, SIGNAL(setValue(int)),
+            &progressDlg, SLOT(setValue(int)) );
     
     try {
         // generate any audio previews after loading the files
@@ -1245,8 +1248,12 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
                                          100,
                                          (QWidget*)parent());
         //progress = progressDlg->progressBar();
-        progress = new QProgressBar();    // deallocated by progressDlg, not use stack (qt4)
-        progressDlg->setBar( progress );
+        //progress = new QProgressBar();    // deallocated by progressDlg, not use stack (qt4)
+        //progressDlg->setBar( progress );
+        
+        // progressBar now assigned in ProgressDialog::Constructor
+        progress = progressDlg->progressBar();
+        progressDlg->show();
         
 //        progressDlg->setMinimumDuration(500);
         progressDlg->setAutoReset(true);
@@ -1354,7 +1361,11 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
         emit documentModified(false);
         setModified(false);
         CommandHistory::getInstance()->documentSaved();
-        delete progressDlg;
+        if( progressDlg ){
+            //delete progressDlg;   // is deleteOnClose now
+            progressDlg->close();     // is deleteOnClose
+            progressDlg = 0;
+        }
     } else {
         progress->setValue(0);
     }
@@ -2652,8 +2663,8 @@ RosegardenDocument::finalizeAudioFile(InstrumentId iid)
 
     // Create a progress dialog
     //
-    ProgressDialog *progressDlg = new ProgressDialog
-                                  (tr("Generating audio preview..."), 100, (QWidget*)parent());
+    ProgressDialog *progressDlg = new ProgressDialog ( tr("Generating audio preview..."), 100, (QWidget*)parent() );
+    //ProgressDialog progressDlg( tr("Generating audio preview..."), 100, (QWidget*)parent() );
     progressDlg->setAutoClose(false);
     progressDlg->setAutoReset(false);
     progressDlg->show();
@@ -2676,7 +2687,9 @@ RosegardenDocument::finalizeAudioFile(InstrumentId iid)
         CurrentProgressDialog::thaw();
     }
 
-    delete progressDlg;
+    //delete progressDlg;
+    progressDlg->close();    // is deleteOnClose
+    progressDlg = 0;
 
     if (!recordSegment->getComposition()) {
         getComposition().addSegment(recordSegment);
