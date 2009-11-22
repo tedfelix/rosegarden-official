@@ -466,7 +466,7 @@ ProjectPackager::sanityCheck() {
     // point (type 3) wav files
     m_info->setText(tr("Checking for flac..."));
     if (!m_process->waitForStarted()) {
-        puke(tr("<qt><p>The <b>flac</b> command was not found.</p><p>FLAC is a lossless audio compression format used to reduce the size of Rosegarden project packages with no loss of audio quality.  Please install FLAC and try again.  This utility is typically available to most distros as a package called \"flac\".</p>"));
+        puke(tr("<qt><p>The <b>flac</b> command was not found.</p><p>FLAC is a lossless audio compression format used to reduce the size of Rosegarden project packages with no loss of audio quality.  Please install FLAC and try again.  This utility is typically available to most distros as a package called \"flac\".</p></qt>"));
         return;
     }
     // should only have to wait less than a second, so go ahead and block
