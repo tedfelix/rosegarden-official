@@ -173,6 +173,8 @@ protected slots:
 
     void slotUpdateMenuStates();
 
+    void slotTransformsNormalizeRests();
+    void slotTransformsCollapseNotes();
     void slotTransformsQuantize();
     void slotTransformsInterpret();
 

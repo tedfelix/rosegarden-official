@@ -1925,6 +1925,11 @@ NotePixmapFactory::makeKey(const Key &key,
                            Key previousKey,
                            const ColourType colourType)
 {
+    std::cout << "NPF: makeKey(key: " << key.getName() << ", clef: "
+              <<  clef.getClefType() << " , prevKey: "
+              << previousKey.getName() <<  ", colType: " << (int)colourType
+              << ")" << std::endl;
+
     Profiler profiler("NotePixmapFactory::makeKeyPixmap");
 
     std::vector<int> ah0 = previousKey.getAccidentalHeights(clef);
@@ -1937,10 +1942,8 @@ NotePixmapFactory::makeKey(const Key &key,
         cancelCount = ah0.size() - ah1.size();
 
     CharName keyCharName;
-    if (key.isSharp())
-        keyCharName = NoteCharacterNames::SHARP;
-    else
-        keyCharName = NoteCharacterNames::FLAT;
+    if (key.isSharp()) keyCharName = NoteCharacterNames::SHARP;
+    else keyCharName = NoteCharacterNames::FLAT;
 
     NoteCharacter keyCharacter;
     NoteCharacter cancelCharacter;
@@ -3395,7 +3398,7 @@ NotePixmapFactory::makeItem(QPoint hotspot)
 
     if (!m_generatedPixmap->isNull()) {
         m_p->end();
-    }
+    } else std::cout << "m_generatedPixmap was NULL!" << std::endl;
 
     QGraphicsPixmapItem *p = new QGraphicsPixmapItem;
 

@@ -247,16 +247,16 @@ NotationSelector::handleMouseMove(const NotationMouseEvent *e)
 {
     if (!m_updateRect) return NoFollow;
 
-    std::cout << "NotationSelector::handleMouseMove: staff is " 
-              << m_selectedStaff << ", m_updateRect is " << m_updateRect
-              << std::endl;
+//    std::cout << "NotationSelector::handleMouseMove: staff is " 
+//              << m_selectedStaff << ", m_updateRect is " << m_updateRect
+//              << std::endl;
 
     if (!m_selectedStaff) m_selectedStaff = e->staff;
 
     int w = int(e->sceneX - m_selectionRect->x());
     int h = int(e->sceneY - m_selectionRect->y());
 
-    std::cout << "w: " << w << " h: " << h << std::endl;
+//    std::cout << "w: " << w << " h: " << h << std::endl;
 
     if (m_clickedElement /* && !m_clickedElement->isRest() */) {
 

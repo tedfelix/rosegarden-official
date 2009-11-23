@@ -70,6 +70,7 @@
 #include "commands/edit/EventQuantizeCommand.h"
 #include "commands/edit/SetLyricsCommand.h"
 #include "commands/edit/EventEditCommand.h"
+#include "commands/edit/CollapseNotesCommand.h"
 
 #include "commands/segment/AddTempoChangeCommand.h"
 #include "commands/segment/AddTimeSignatureAndNormalizeCommand.h"
@@ -85,6 +86,7 @@
 #include "commands/notation/ClefInsertionCommand.h"
 #include "commands/notation/KeyInsertionCommand.h"
 #include "commands/notation/EraseEventCommand.h"
+#include "commands/notation/NormalizeRestsCommand.h"
 
 #include "commands/segment/PasteToTriggerSegmentCommand.h"
 #include "commands/segment/SegmentTransposeCommand.h"
@@ -3980,6 +3982,32 @@ NotationView::slotEditElement(NotationStaff *staff,
             CommandHistory::getInstance()->addCommand(command);
         }
     }
+}
+
+void
+NotationView::slotTransformsNormalizeRests()
+{
+    EventSelection *selection = m_notationWidget->getSelection();
+
+    if (!selection)
+        return ;
+    TmpStatusMsg msg(tr("Normalizing rests..."), this);
+
+    CommandHistory::getInstance()->
+            addCommand(new NormalizeRestsCommand(*selection));
+}
+
+void
+NotationView::slotTransformsCollapseNotes()
+{
+    EventSelection *selection = m_notationWidget->getSelection();
+
+    if (!selection)
+        return ;
+    TmpStatusMsg msg(tr("Collapsing notes..."), this);
+
+    CommandHistory::getInstance()->
+            addCommand(new CollapseNotesCommand(*selection));
 }
 
 

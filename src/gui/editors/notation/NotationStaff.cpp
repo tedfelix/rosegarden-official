@@ -1275,6 +1275,7 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
             // No need, we already set and showed it in renderNote
 
         } else if (item) {
+            std::cout << "setting an item" << std::endl;
 
             setItem(elt, item, z, policy);
 

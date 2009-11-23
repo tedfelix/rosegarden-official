@@ -250,7 +250,6 @@
   <Separator/>
     <Action name="slur" text="Add S&amp;lur" icon="group-slur" shortcut=")" />
     <Action name="phrasing_slur" text="Add P&amp;hrasing Slur" shortcut="Ctrl+)" />
-	  <!--  <Action name="glissando"/> -->
     <Menu name="Slurs">
       <text>Slur &amp;Position</text>
       <Action name="restore_slurs" text="&amp;Restore Slur Positions" />
@@ -707,7 +706,6 @@
 <!--  <Action name="grace"/> -->
 <Separator/>
   <Action name="slur" />
-<!--  <Action name="glissando"/> -->
   <Action name="tie_notes" />
   <Action name="de_counterpoint" />
 <Separator/>
@@ -784,25 +782,6 @@
   </enable>
 </State>
 
-<!-- NOTE: I tried to enable a subset of Adjust for the have_clefs_in_selection
-and have_symbols_in_selection action states, but had no success at all.  If you
-enable the Adjust menu, you enable the whole kit and kaboodle.  If you don't
-enable the Adjust menu, then you can't enable any of its submenus.  I tried this
-four different ways and went to considerable lengths, and none of it worked.  So
-screw it.  We'll just enable the damn Adjust menu and let it go at that.  It's
-not ideal, but it's the best we can do without hacking apart the mechanism. -->
-<State name="have_clefs_in_selection">
-  <enable>
-    <Menu name="Adjust">
-  </enable>
-</State>
-
-<State name="have_symbols_in_selection">
-  <enable>
-    <Menu name="Adjust">
-  </enable>
-</State>
-
 <State name="have_notes_in_selection">
   <enable>
     <Action name="respell_doubleflat"/>
@@ -817,14 +796,10 @@ not ideal, but it's the best we can do without hacking apart the mechanism. -->
     <Action name="beam"/>
     <Action name="auto_beam"/>
     <Action name="break_group"/>
-<!--    <Action name="break_tuplets"/> -->
-<!--    <Action name="grace"/> -->
-<!--    <Action name="ungrace"/> -->
     <Action name="slur"/>
   <Action name="phrasing_slur"/>
     <Action name="crescendo"/>
     <Action name="decrescendo"/>
-<!--  <Action name="glissando"/> -->
      <Action name="octave_2up"/>
      <Action name="octave_up"/>
      <Action name="octave_down"/>
@@ -1052,6 +1027,18 @@ not ideal, but it's the best we can do without hacking apart the mechanism. -->
     <Action name="rest_dotted_demisemi" />
     <Action name="dummy_1" />
   </visible>
+</State>
+
+<State name="have_clefs_in_selection">
+  <enable>
+    <Menu name="Adjust">
+  </enable>
+</State>
+
+<State name="have_symbols_in_selection">
+  <enable>
+    <Menu name="Adjust">
+  </enable>
 </State>
 
 </kpartgui>
