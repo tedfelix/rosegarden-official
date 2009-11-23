@@ -44,6 +44,8 @@ class Note;
 class NotationToolBox;
 class NotationTool;
 class NotationMouseEvent;
+class NotationStaff;
+class NotationElement;
 class Panner;
 class Panned;
 class ZoomableRulerScale;
@@ -190,8 +192,10 @@ protected slots:
 
     void slotInitialHSliderHack(int);
     void slotInitialVSliderHack(int);
+
 signals :
     void adjustNeeded(bool last);
+    void editElement(NotationStaff *, NotationElement *, bool advanced);
 
 private:
     RosegardenDocument *m_document; // I do not own this

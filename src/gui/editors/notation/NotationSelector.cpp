@@ -69,7 +69,7 @@ NotationSelector::NotationSelector(NotationWidget *widget) :
             this, SLOT(slotHideSelection()));
 
     connect(this, SIGNAL(editElement(NotationStaff *, NotationElement *, bool)),
-            m_widget, SLOT(slotEditElement(NotationStaff *, NotationElement *, bool)));
+            m_widget, SIGNAL(editElement(NotationStaff *, NotationElement *, bool)));
 
     createAction("insert", SLOT(slotInsertSelected()));
     createAction("erase", SLOT(slotEraseSelected()));
@@ -185,15 +185,15 @@ void NotationSelector::handleMouseDoubleClick(const NotationMouseEvent *e)
 
     if (e->element && e->exact) {
 
-        // nothing to catch the signal yet
         emit editElement(staff, e->element, advanced);
 
     } else {
 
+        //!!! This code is completely broken.  getBarExtents() appears to be
+        // rubbish, and everything falls apart from there
+
         QRect rect = staff->getBarExtents(e->sceneX, e->sceneY);
         
-        std::cout << "sceneX: " << e->sceneX << " Y: " << e->sceneY << std::endl;
-
         m_selectionRect->setRect(rect.x() + 0.5, rect.y() + 0.5,
                                  rect.width(), rect.height());
 //        m_selectionRect->setY(rect.y());
@@ -247,7 +247,7 @@ NotationSelector::handleMouseMove(const NotationMouseEvent *e)
 {
     if (!m_updateRect) return NoFollow;
 
-    std::cerr << "NotationSelector::handleMouseMove: staff is " 
+    std::cout << "NotationSelector::handleMouseMove: staff is " 
               << m_selectedStaff << ", m_updateRect is " << m_updateRect
               << std::endl;
 
@@ -255,6 +255,8 @@ NotationSelector::handleMouseMove(const NotationMouseEvent *e)
 
     int w = int(e->sceneX - m_selectionRect->x());
     int h = int(e->sceneY - m_selectionRect->y());
+
+    std::cout << "w: " << w << " h: " << h << std::endl;
 
     if (m_clickedElement /* && !m_clickedElement->isRest() */) {
 
@@ -569,6 +571,7 @@ void NotationSelector::drag(int x, int y, bool final)
 void NotationSelector::dragFine(int x, int y, bool final)
 {
     NOTATION_DEBUG << "NotationSelector::drag " << x << ", " << y << endl;
+    std::cout << "fine drag..." << std::endl;
 
     if (!m_clickedElement || !m_selectedStaff)
         return ;

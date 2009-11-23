@@ -241,41 +241,6 @@ RosegardenMainViewWidget::getDocument() const
     return RosegardenMainWindow::self()->getDocument();
 }
 
-void RosegardenMainViewWidget::print(Composition* p, bool previewOnly)
-{
-    SetWaitCursor waitCursor;
-
-    std::vector<Segment *> segmentsToEdit;
-
-    for (Composition::iterator i = p->begin(); i != p->end(); ++i) {
-        if ((*i)->getType() != Segment::Audio) {
-            segmentsToEdit.push_back(*i);
-        }
-    }
-
-    if (segmentsToEdit.empty()) {
-        /* was sorry */ QMessageBox::warning(this, "", tr("No non-audio segments in composition"));
-        return ;
-    }
-
-#ifdef NOT_JUST_NOW //!!!
-    NotationView *notationView = new NotationView(getDocument(),
-                                 segmentsToEdit,
-                                 this,
-                                 (NotationView *)0);
-
-    if (!notationView->isOK()) {
-        RG_DEBUG << "RosegardenMainViewWidget::print : operation cancelled" << endl;
-        delete notationView;
-        return ;
-    }
-
-    notationView->print(previewOnly);
-
-    delete notationView;
-#endif
-}
-
 void RosegardenMainViewWidget::selectTool(QString toolName)
 {
     m_trackEditor->getCompositionView()->slotSetTool(toolName);

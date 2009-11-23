@@ -27,6 +27,9 @@
 #include "NotationSelector.h"
 #include "HeadersGroup.h"
 #include "NotationHLayout.h"
+#include "NotationStaff.h"
+#include "NotationElement.h"
+#include "NotePixmapFactory.h"
 
 #include "document/RosegardenDocument.h"
 #include "document/CommandHistory.h"
@@ -66,6 +69,8 @@
 #include "commands/edit/MoveCommand.h"
 #include "commands/edit/EventQuantizeCommand.h"
 #include "commands/edit/SetLyricsCommand.h"
+#include "commands/edit/EventEditCommand.h"
+
 #include "commands/segment/AddTempoChangeCommand.h"
 #include "commands/segment/AddTimeSignatureAndNormalizeCommand.h"
 #include "commands/segment/AddTimeSignatureCommand.h"
@@ -76,6 +81,10 @@
 #include "commands/notation/MultiKeyInsertionCommand.h"
 #include "commands/notation/SustainInsertionCommand.h"
 #include "commands/notation/TupletCommand.h"
+#include "commands/notation/TextInsertionCommand.h"
+#include "commands/notation/ClefInsertionCommand.h"
+#include "commands/notation/KeyInsertionCommand.h"
+#include "commands/notation/EraseEventCommand.h"
 
 #include "commands/segment/PasteToTriggerSegmentCommand.h"
 #include "commands/segment/SegmentTransposeCommand.h"
@@ -98,6 +107,9 @@
 #include "gui/dialogs/QuantizeDialog.h"
 #include "gui/dialogs/LyricEditDialog.h"
 #include "gui/dialogs/AboutDialog.h"
+#include "gui/dialogs/EventEditDialog.h"
+#include "gui/dialogs/TextEventDialog.h"
+#include "gui/dialogs/SimpleEventEditDialog.h"
 
 #include "gui/general/IconLoader.h"
 #include "gui/general/LilyPondProcessor.h"
@@ -158,6 +170,14 @@ NotationView::NotationView(RosegardenDocument *doc,
     m_notationWidget = new NotationWidget();
     setCentralWidget(m_notationWidget);
     m_notationWidget->setSegments(doc, segments);
+
+    // connect the editElement signal from NotationSelector, relayed through
+    // NotationWidget to be acted upon here in NotationView
+    connect(m_notationWidget, SIGNAL(editElement(NotationStaff *, NotationElement *, bool)),
+            this, SLOT(slotEditElement(NotationStaff *, NotationElement *, bool)));
+
+    // need to connect editTriggerSegment() (or whatever it really is) to
+    // RosegardenMainViewWidget
 
     // Many actions are created here
     m_commandRegistry = new NotationCommandRegistry(this);
@@ -3831,6 +3851,137 @@ NotationView::slotMoveEventsDownStaff()
 
     delete c;
 
+}
+
+void
+NotationView::slotEditElement(NotationStaff *staff,
+                              NotationElement *element,
+                              bool advanced)
+{
+    NOTATION_DEBUG << "NotationView::slotEditElement()" << endl;
+
+    NotationScene *scene = m_notationWidget->getScene();
+    if (!scene) return;
+
+    NotePixmapFactory *npf = scene->getNotePixmapFactory();
+
+    if (advanced) {
+
+        EventEditDialog dialog(this, *element->event(), true);
+
+        if (dialog.exec() == QDialog::Accepted &&
+            dialog.isModified()) {
+
+            EventEditCommand *command = new EventEditCommand
+                (staff->getSegment(),
+                 element->event(),
+                 dialog.getEvent());
+
+            CommandHistory::getInstance()->addCommand(command);
+        }
+
+    } else if (element->event()->isa(Clef::EventType)) {
+
+        try {
+            ClefDialog dialog(this, npf,
+                              Clef(*element->event()));
+
+            if (dialog.exec() == QDialog::Accepted) {
+
+                ClefDialog::ConversionType conversion = dialog.getConversionType();
+                bool shouldChangeOctave = (conversion != ClefDialog::NoConversion);
+                bool shouldTranspose = (conversion == ClefDialog::Transpose);
+                CommandHistory::getInstance()->addCommand
+                    (new ClefInsertionCommand
+                     (staff->getSegment(), element->event()->getAbsoluteTime(),
+                      dialog.getClef(), shouldChangeOctave, shouldTranspose));
+            }
+        } catch (Exception e) {
+            std::cerr << e.getMessage() << std::endl;
+        }
+
+        return ;
+
+    } else if (element->event()->isa(Rosegarden::Key::EventType)) {
+
+        try {
+            Clef clef(staff->getSegment().getClefAtTime
+                      (element->event()->getAbsoluteTime()));
+            KeySignatureDialog dialog
+                (this, npf, clef, Rosegarden::Key(*element->event()),
+                 false, true);
+
+            if (dialog.exec() == QDialog::Accepted &&
+                dialog.isValid()) {
+
+                KeySignatureDialog::ConversionType conversion =
+                    dialog.getConversionType();
+
+                CommandHistory::getInstance()->addCommand
+                    (new KeyInsertionCommand
+                     (staff->getSegment(),
+                      element->event()->getAbsoluteTime(), dialog.getKey(),
+                      conversion == KeySignatureDialog::Convert,
+                      conversion == KeySignatureDialog::Transpose,
+                      dialog.shouldBeTransposed(),
+              dialog.shouldIgnorePercussion()));
+            }
+
+        } catch (Exception e) {
+            std::cerr << e.getMessage() << std::endl;
+        }
+
+        return ;
+
+    } else if (element->event()->isa(Text::EventType)) {
+
+        try {
+            TextEventDialog dialog
+                (this, npf, Text(*element->event()));
+            
+            if (dialog.exec() == QDialog::Accepted) {
+                TextInsertionCommand *command = new TextInsertionCommand
+                    (staff->getSegment(),
+                     element->event()->getAbsoluteTime(),
+                     dialog.getText());
+                
+                MacroCommand *macroCommand = new MacroCommand(tr("Edit Text Event"));
+                
+                macroCommand->addCommand(new EraseEventCommand(staff->getSegment(),
+                                                               element->event(), false));
+                macroCommand->addCommand(command);
+                CommandHistory::getInstance()->addCommand(macroCommand);
+            }
+        } catch (Exception e) {
+            std::cerr << e.getMessage() << std::endl;
+        }
+
+        return ;
+
+    } else if (element->isNote() &&
+               element->event()->has(BaseProperties::TRIGGER_SEGMENT_ID)) {
+
+        int id = element->event()->get
+            <Int>
+            (BaseProperties::TRIGGER_SEGMENT_ID);
+        emit editTriggerSegment(id);
+        return ;
+
+    } else {
+
+        SimpleEventEditDialog dialog(this, getDocument(), *element->event(), false);
+
+        if (dialog.exec() == QDialog::Accepted &&
+            dialog.isModified()) {
+
+            EventEditCommand *command = new EventEditCommand
+                (staff->getSegment(),
+                 element->event(),
+                 dialog.getEvent());
+
+            CommandHistory::getInstance()->addCommand(command);
+        }
+    }
 }
 
 

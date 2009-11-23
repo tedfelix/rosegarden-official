@@ -37,6 +37,8 @@ namespace Rosegarden
 
 class RosegardenDocument;
 class NotationWidget;
+class NotationElement;
+class NotationStaff;
 class Segment;
 class CommandRegistry;
 	
@@ -74,7 +76,7 @@ signals:
     void rewindPlaybackToBeginning();
     void fastForwardPlaybackToEnd();
     void panic();
-
+    void editTriggerSegment(int);
     void stepByStepTargetRequested(QObject *);
 
 protected slots:
@@ -272,6 +274,12 @@ protected slots:
     void slotFontComboChanged(int);
     void slotSizeComboChanged(int);
     void slotSpacingComboChanged(int);
+
+    /** Decides what editor to open when the user double clicks on an event.
+     * Triggered by the editElement() signal emitted by NotationSelector and
+     * relayed through NotationWidget.
+     */
+    void slotEditElement(NotationStaff *, NotationElement *, bool advanced);
 
     void slotHelp();
     void slotTutorial();
