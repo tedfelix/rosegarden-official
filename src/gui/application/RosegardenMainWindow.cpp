@@ -916,6 +916,10 @@ RosegardenMainWindow::initView()
     disconnect(m_instrumentParameterBox, 0, oldView, 0);
     disconnect(m_trackParameterBox, 0, oldView, 0);
 
+    // and ensure we don't pass on this signal:
+    //
+    disconnect(this, SIGNAL(instrumentParametersChanged(InstrumentId)), 0, 0);
+
     RosegardenMainViewWidget *swapView = new RosegardenMainViewWidget
         (findAction("show_tracklabels")->isChecked(),
          m_segmentParameterBox,
