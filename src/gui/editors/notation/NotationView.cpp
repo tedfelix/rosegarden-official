@@ -176,9 +176,6 @@ NotationView::NotationView(RosegardenDocument *doc,
     connect(m_notationWidget, SIGNAL(editElement(NotationStaff *, NotationElement *, bool)),
             this, SLOT(slotEditElement(NotationStaff *, NotationElement *, bool)));
 
-    // need to connect editTriggerSegment() (or whatever it really is) to
-    // RosegardenMainViewWidget
-
     // Many actions are created here
     m_commandRegistry = new NotationCommandRegistry(this);
 
@@ -3964,6 +3961,7 @@ NotationView::slotEditElement(NotationStaff *staff,
         int id = element->event()->get
             <Int>
             (BaseProperties::TRIGGER_SEGMENT_ID);
+
         emit editTriggerSegment(id);
         return ;
 

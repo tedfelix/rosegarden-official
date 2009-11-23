@@ -822,6 +822,7 @@ void RosegardenMainViewWidget::slotEditSegmentsEventList(std::vector<Segment *> 
 
 void RosegardenMainViewWidget::slotEditTriggerSegment(int id)
 {
+    std::cerr << "RosegardenMainViewWidget caught editTriggerSegment signal" << std::endl;
     SetWaitCursor waitCursor;
 
     std::vector<Segment *> segmentsToEdit;
@@ -831,6 +832,7 @@ void RosegardenMainViewWidget::slotEditTriggerSegment(int id)
     if (s) {
         segmentsToEdit.push_back(s);
     } else {
+        std::cerr << "caught id: " << id << " and must not have been valid?" << std::endl;
         return ;
     }
 
