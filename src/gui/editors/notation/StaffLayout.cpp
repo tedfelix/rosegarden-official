@@ -405,6 +405,8 @@ StaffLayout::getBarExtents(double x, int y) const
 {
     int row = getRowForSceneCoords(x, y);
 
+    NOTATION_DEBUG << "StaffLayout::getBarExtents(" << x << "," << y << "), row " << row << ", have " << m_barLines.size() << " bar records" << endl;
+
     for (BarLineList::const_iterator i = m_barLines.begin();
          i != m_barLines.end(); ++i) {
 
@@ -412,6 +414,8 @@ StaffLayout::getBarExtents(double x, int y) const
 
         double layoutX = line->getLayoutX();
         int barRow = getRowForLayoutX(layoutX);
+
+        NOTATION_DEBUG << "bar layoutX " << layoutX << ", row " << barRow << ", page mode " << m_pageMode << ", x " << line->x() << endl;
 
         if (m_pageMode != LinearMode && (barRow < row)) continue;
 
@@ -422,10 +426,12 @@ StaffLayout::getBarExtents(double x, int y) const
         --j;
         BarLineItem *prevline = *j;
 
-        return QRect(int(prevline->x()),
-                     getSceneYForTopOfStaff(barRow),
-                     int(line->x() - prevline->x()),
-                     getHeightOfRow());
+        QRect r = QRect(int(prevline->x()),
+                        getSceneYForTopOfStaff(barRow),
+                        int(line->x() - prevline->x()),
+                        getHeightOfRow());
+        NOTATION_DEBUG << "Returning rect " << r << endl;
+        return r;
     }
 
     // failure
@@ -633,8 +639,8 @@ StaffLayout::insertBar(double layoutX, double width, bool isCorrect,
                       const TimeSignature &timeSig,
                       int barNo, bool showBarNo)
 {
-    //    RG_DEBUG << "insertBar: " << layoutX << ", " << width
-    //			 << ", " << isCorrect << endl;
+//    NOTATION_DEBUG << "insertBar: " << layoutX << ", " << width
+//                   << ", " << isCorrect << endl;
 
     int barThickness = m_lineThickness * 5 / 4;
 

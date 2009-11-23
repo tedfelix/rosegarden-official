@@ -649,9 +649,15 @@ protected:
     ItemMatrix m_staffLines;
     ItemList m_staffConnectingLines;
 
+    struct BarLineComparator {
+        bool operator()(const BarLineItem *a, const BarLineItem *b) const {
+            return compareBars(a, b);
+        }
+    };
+
     typedef std::pair<double, QGraphicsItem *> LineRec; // layout-x, line
     typedef std::vector<LineRec> LineRecList;
-    typedef std::multiset<BarLineItem *> BarLineList;
+    typedef std::multiset<BarLineItem *, BarLineComparator> BarLineList;
     static bool compareBars(const BarLineItem *, const BarLineItem *);
     static bool compareBarToLayoutX(const BarLineItem *, int);
     BarLineList m_barLines;
