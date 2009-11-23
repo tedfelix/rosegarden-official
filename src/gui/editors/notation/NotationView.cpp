@@ -879,6 +879,8 @@ NotationView::slotUpdateMenuStates()
     leaveActionState("have_selection");
     leaveActionState("have_notes_in_selection");
     leaveActionState("have_rests_in_selection");
+    leaveActionState("have_clefs_in_selection");
+    leaveActionState("have_symbols_in_selection");
 
     if (!m_notationWidget) return;
 
@@ -894,6 +896,12 @@ NotationView::slotUpdateMenuStates()
         }
         if (selection->contains(Note::EventRestType)) {
             enterActionState("have_rests_in_selection");
+        }
+        if (selection->contains(Clef::EventType)) {
+            enterActionState("have_clefs_in_selection");
+        }
+        if (selection->contains(Symbol::EventType)) {
+            enterActionState("have_symbols_in_selection");
         }
 
     } else {

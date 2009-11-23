@@ -24,8 +24,8 @@
     <Action name="edit_copy" text="&amp;Copy" icon="editcopy" shortcut="Ctrl+C, F16, Ctrl+Ins" />
     <Action name="edit_paste" text="&amp;Paste" icon="editpaste" shortcut="Ctrl+V, F18, Shift+Ins" />
   <Separator/>
-    <Action name="cut_and_close" text="C&amp;ut and Close" shortcut="Ctrl+Shift+X" />
-    <Action name="general_paste" text="Pa&amp;ste..." shortcut="Ctrl+Shift+V" />
+    <Action name="cut_and_close" text="C&amp;ut and Close" shortcut="Alt+Shift+X" />
+    <Action name="general_paste" text="Pa&amp;ste..." shortcut="Alt+Shift+V" />
     <Action name="delete" text="De&amp;lete" shortcut="Delete" />
   <Separator/>
     <Action name="move_events_up_staff" text="&amp;Move to Staff Above" />
@@ -778,9 +778,28 @@
     <Action name="remove_marks"/>
     <Action name="add_pause"/>
     <Action name="add_text_mark"/>
-<!--    <Action name="normalize_rests"/> -->
+    <Action name="normalize_rests"/> 
     <Action name="collapse_rests_aggressively"/>
     <Menu name="Adjust"/>
+  </enable>
+</State>
+
+<!-- NOTE: I tried to enable a subset of Adjust for the have_clefs_in_selection
+and have_symbols_in_selection action states, but had no success at all.  If you
+enable the Adjust menu, you enable the whole kit and kaboodle.  If you don't
+enable the Adjust menu, then you can't enable any of its submenus.  I tried this
+four different ways and went to considerable lengths, and none of it worked.  So
+screw it.  We'll just enable the damn Adjust menu and let it go at that.  It's
+not ideal, but it's the best we can do without hacking apart the mechanism. -->
+<State name="have_clefs_in_selection">
+  <enable>
+    <Menu name="Adjust">
+  </enable>
+</State>
+
+<State name="have_symbols_in_selection">
+  <enable>
+    <Menu name="Adjust">
   </enable>
 </State>
 
