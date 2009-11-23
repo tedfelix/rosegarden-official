@@ -13246,7 +13246,7 @@ Tämä voi aiheuttaa ongelmia, mikäli asetus ylikirjoitetaan myöhemmin toisess
     <message>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="47"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="66"/>
@@ -17963,7 +17963,7 @@ Tämä on ohjelmointivirhe (aiemmin ohjelma kaatui tässä kohdassa)</translatio
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3767"/>
         <source>Move Events to Staff Above</source>
-        <translation type="unfinished">Siirrä tapahtumat ylläolevaan viivastoon</translation>
+        <translation>Siirrä tapahtumat ylläpuoliseen viivastoon</translation>
     </message>
     <message>
         <source>Move Events to Staff TicksBelow</source>
@@ -18129,7 +18129,7 @@ Ole hyvä ja varmista, että laite on määritetty oikein pääikkunan Hallitse 
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3804"/>
         <source>Move Events to Staff Below</source>
-        <translation type="unfinished"></translation>
+        <translation>Siirrä tapahtumat alapuoliseen viivastoon</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3457"/>
