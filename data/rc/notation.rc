@@ -663,9 +663,9 @@
 
 <ToolBar name="Symbols Toolbar" hidden="false" position="left">
   <text>Symbols Toolbar</text>
-  <Action name="add_segno" text="Add &amp;Segno" checked="false" group="tools_note" />
-  <Action name="add_coda" text="Add &amp;Coda" checked="false" group="tools_note" />
-  <Action name="add_breath" text="Add &amp;Breath mark" checked="false" group="tools_note" />
+  <Action name="add_segno" text="Add &amp;Segno" checked="false" group="tools_symbol" />
+  <Action name="add_coda" text="Add &amp;Coda" checked="false" group="tools_symbol" />
+  <Action name="add_breath" text="Add &amp;Breath mark" checked="false" group="tools_symbol" /> 
 </ToolBar>
 
 <ToolBar name="Marks Toolbar" newline="true" hidden="false" position="right">
@@ -797,14 +797,13 @@
     <Action name="auto_beam"/>
     <Action name="break_group"/>
     <Action name="slur"/>
-  <Action name="phrasing_slur"/>
+    <Action name="phrasing_slur"/>
     <Action name="crescendo"/>
     <Action name="decrescendo"/>
-     <Action name="octave_2up"/>
-     <Action name="octave_up"/>
-     <Action name="octave_down"/>
-     <Action name="octave_2down"/>
-<!--    <Action name="remove_indications"/> -->
+    <Action name="octave_2up"/>
+    <Action name="octave_up"/>
+    <Action name="octave_down"/>
+    <Action name="octave_2down"/>
     <Action name="stems_up"/>
     <Action name="stems_down"/>
     <Action name="restore_stems"/>
@@ -1029,13 +1028,13 @@
   </visible>
 </State>
 
-<State name="have_clefs_in_selection">
+<State name="have_symbols_in_selection">
   <enable>
     <Menu name="Adjust">
   </enable>
 </State>
 
-<State name="have_symbols_in_selection">
+<State name="have_clefs_in_selection">
   <enable>
     <Menu name="Adjust">
   </enable>
