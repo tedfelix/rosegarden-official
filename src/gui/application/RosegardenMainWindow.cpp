@@ -6256,6 +6256,15 @@ RosegardenMainWindow::slotChangeCompositionLength()
 
         m_view->getTrackEditor()->getCompositionView()->clearSegmentRectsCache(true);
         CommandHistory::getInstance()->addCommand(command);
+
+        // If you change the composition length to 50 while the pointer is still
+        // at 100 and save, the pointer position is saved, and the document
+        // re-extends itself to 100 when you reload.  I was going to bother to
+        // do some nice "if the pointer is beyond the new end then move the
+        // pointer" logic here, but it's more than a oneliner, and so we'll just
+        // rewind the damn cursor to the beginning as insurance against this,
+        // and dust off our hands.
+        slotRewindToBeginning();
     }
 }
 
