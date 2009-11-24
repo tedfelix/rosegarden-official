@@ -599,29 +599,6 @@ void RosegardenMainViewWidget::slotEditSegmentPercussionMatrix(Segment* p)
         return ;
     }
 
-/*!!!
-    // unlike notation, if we're calling for this on a particular
-    // segment we don't open all the other selected segments as well
-    // (fine in notation because they're in a single window)
-
-    if (p) {
-        if (p->getType() != Segment::Audio) {
-            segmentsToEdit.push_back(p);
-        }
-    } else {
-        int count = 0;
-        SegmentSelection selection = getSelection();
-        for (SegmentSelection::iterator i = selection.begin();
-                i != selection.end(); ++i) {
-            if ((*i)->getType() != Segment::Audio) {
-                slotEditSegmentPercussionMatrix(*i);
-                if (++count == maxEditorsToOpen)
-                    break;
-            }
-        }
-        return ;
-    }
-*/
     if (segmentsToEdit.empty()) {
         /* was sorry */ QMessageBox::warning(this, "", tr("No non-audio segments selected"));
         return ;
@@ -634,20 +611,6 @@ void RosegardenMainViewWidget::slotEditSegmentsMatrix(std::vector<Segment *> seg
 {
     MatrixView *view = createMatrixView(segmentsToEdit, false);
     if (view) view->show();
-/*!!!
-    int count = 0;
-    for (std::vector<Segment *>::iterator i = segmentsToEdit.begin();
-            i != segmentsToEdit.end(); ++i) {
-        std::vector<Segment *> tmpvec;
-        tmpvec.push_back(*i);
-        MatrixView *view = createMatrixView(tmpvec, false);
-        if (view) {
-            view->show();
-            if (++count == maxEditorsToOpen)
-                break;
-        }
-    }
-*/
 }
 
 void RosegardenMainViewWidget::slotEditSegmentsPercussionMatrix(std::vector<Segment *> segmentsToEdit)
@@ -655,20 +618,6 @@ void RosegardenMainViewWidget::slotEditSegmentsPercussionMatrix(std::vector<Segm
     MatrixView *view = createMatrixView(segmentsToEdit, true);
     if (view) view->show();
 
-/*!!!
-    int count = 0;
-    for (std::vector<Segment *>::iterator i = segmentsToEdit.begin();
-            i != segmentsToEdit.end(); ++i) {
-        std::vector<Segment *> tmpvec;
-        tmpvec.push_back(*i);
-        MatrixView *view = createMatrixView(tmpvec, true);
-        if (view) {
-            view->show();
-            if (++count == maxEditorsToOpen)
-                break;
-        }
-    }
-*/
 }
 
 MatrixView *

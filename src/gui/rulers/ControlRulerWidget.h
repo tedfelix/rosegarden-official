@@ -57,6 +57,12 @@ public:
     QString getCurrentToolName() { return m_currentToolName; }
     void removeRuler(std::list<ControlRuler*>::iterator);
 
+    /** Returns true if we're showing any one of the myriad possible rulers we
+     * might be showing.  This allows our parent to show() or hide() this entire
+     * widget as appropriate for the sort of notation layout in effect.
+     */
+    bool isAnyRulerVisible();
+
 public slots:
     void slotTogglePropertyRuler(const PropertyName &);
     void slotToggleControlRuler(std::string);

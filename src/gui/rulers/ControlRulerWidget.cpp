@@ -409,6 +409,12 @@ ControlRulerWidget::slotChildRulerSelectionChanged(EventSelection *s)
     emit childRulerSelectionChanged(s);
 }
 
+bool
+ControlRulerWidget::isAnyRulerVisible()
+{
+    return m_controlRulerList.size();
+}
+
 }
 
 #include "ControlRulerWidget.moc"
