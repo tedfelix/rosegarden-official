@@ -1684,12 +1684,20 @@ SegmentNotationHelper::guessClef(iterator from, iterator to)
     if    (noteCount == 0) return Clef(Clef::Treble);
 
     int average = totalHeight / noteCount;
-    std::cout << "guess clef monitoring: average was: " << average << std::endl;
 
-    if      (average < -6) return Clef(Clef::Bass);
-    else if (average < -3) return Clef(Clef::Tenor);
-    else if (average <  1) return Clef(Clef::Alto);
-    else                   return Clef(Clef::Treble);
+    // Let's try these new extents and see how the fare.  Ideally these should
+    // pick plain treble and bass clefs a reasonable amount of the time, and not
+    // be too prone to picking transposed clefs, while picking transposed clefs
+    // when really necessary.
+    if      (average < -12) return Clef(Clef::Bass, -2);
+    else if (average < - 9) return Clef(Clef::Bass, -1);
+    else if (average <  -6) return Clef(Clef::Bass);
+    else if (average <  -3) return Clef(Clef::Tenor);
+    else if (average <   1) return Clef(Clef::Alto);
+    else if (average <  12) return Clef(Clef::Treble);
+    else if (average <  24) return Clef(Clef::Treble, 1);
+    else if (average <  48) return Clef(Clef::Treble, 2);
+    else                    return Clef(Clef::Treble);
 }
 
 
