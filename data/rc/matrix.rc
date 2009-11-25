@@ -249,9 +249,9 @@
       <!-- JAS invented "insert_note_lower_octave" name -->
       <Menu name="insert_note_lower_octave">
         <text>&amp;Lower Octave</text>
-        <!-- note by emrum: german keypads have Z and Y exchanged, so better allow both as shortcuts -->
-        <Action name="insert_0_low" text="&amp;I" shortcut="Z,Y" />
-        <Action name="insert_0_sharp_low" text="I &amp;sharp" shortcut="Shift+Z,Shift+Y" />
+        <!-- note by emrum: german keypads have Z and Y exchanged, so better allow both as shortcuts  but it doesn't work -Jani -->
+        <Action name="insert_0_low" text="&amp;I" shortcut="Z" />
+        <Action name="insert_0_sharp_low" text="I &amp;sharp" shortcut="Shift+Z" />
       <Separator/>
         <Action name="insert_1_flat_low" text="II &amp;flat" shortcut="Ctrl+Shift+X" />
         <Action name="insert_1_low" text="II" shortcut="X" />
