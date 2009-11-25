@@ -9879,18 +9879,18 @@
     <message>
         <location filename="../../src/gui/application/TranzportClient.cpp" line="59"/>
         <source>Failed to open tranzport device /dev/tranzport0</source>
-        <translation type="unfinished"></translation>
+        <translation>Kuljetinlaitteen /dev/tranzport0 avaaminen epäonnistui</translation>
     </message>
     <message>
         <location filename="../../src/sound/AudioFileManager.h" line="71"/>
         <location filename="../../src/sound/AudioFileManager.h" line="73"/>
         <source>Bad audio file path </source>
-        <translation type="unfinished"></translation>
+        <translation>Epäkelpo äänitiedostopolku </translation>
     </message>
     <message>
         <location filename="../../src/sound/AudioFileManager.h" line="75"/>
         <source>Bad audio file path (malformed file?) </source>
-        <translation type="unfinished"></translation>
+        <translation>Epäkelpo äänitiedostopolku (viallinen tiedosto?) </translation>
     </message>
     <message>
         <location filename="../../src/sound/AudioFileTimeStretcher.h" line="49"/>
@@ -14806,7 +14806,7 @@ sen sijaan?</translation>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="200"/>
         <source>&lt;qt&gt;&lt;p&gt;You opted to export staff group brackets, and LilyPond could not process the file.  Unfortunately, this useful feature can be very fragile.  Please go back and ensure that all the brackets you&apos;ve selected make logical sense, paying particular attention to nesting.  Also, please check that if you are working with a subset of the total number of tracks, the brackets on that subset make sense together when taken out of the context of the whole.  If you have any doubts, please try turning off the export of staff group brackets to see whether LilyPond can then successfully render the result.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Valitsit nuotistoryhmäsulkeet vietäväksi mutta LilyPond ei voinut käsitellä tiedostoa.  Valitettavasti tämä käytännöllinen toiminto voi olla vaativa lähdemateriaalin suhteen.  Ole hyvä ja tarkasta että kaikki valitsemasi sulutukset ovat järkeenkäyviä, kiinnittäen erityistä huomiota upotuksiin (nesting).  Jos käytät vain osaa raidoista tarkasta myös että niiden sulutukset ovat yhdessä järkeenkäyviä kun raidat otetaan erilleen koko teoksesta.  Jos olet epävarma, kokeile kytkeä pois sulutusten vienti pois nähdäksesi että LilyPond pystyy käsittelemään teosta.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="203"/>
@@ -15079,7 +15079,7 @@ toiston alussa siirrettävän tiedon määrän takia.</translation>
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="145"/>
         <source>&lt;qt&gt;Use program changes from an external source to manipulate these controls (only valid for the currently-active track) [Shift + P]&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Käytä ohjelman vaihtoja ulkopuolisista lähteistä säätääksesi näitä ohjaimia (pätee vain aktiivisella raidalla) [Shift + P]&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="148"/>
