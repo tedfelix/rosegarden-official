@@ -34,10 +34,10 @@ QuantizeDialog::QuantizeDialog(QWidget *parent, bool inNotation) :
 {
     setModal(true);
     setWindowTitle(tr("Quantize"));
+    setContentsMargins(5, 5, 5, 5);
 
     QVBoxLayout *vboxLayout = new QVBoxLayout;
     setLayout(vboxLayout);
-
 
     m_quantizeFrame = new QuantizeParameters(this , inNotation ?
             QuantizeParameters::Notation : QuantizeParameters::Grid,

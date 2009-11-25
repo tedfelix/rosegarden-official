@@ -29,7 +29,7 @@
 class QWidget;
 class QPushButton;
 class QLabel;
-class QGridLayout;
+class QVBoxLayout;
 class QCheckBox;
 class QComboBox;
 
@@ -72,7 +72,7 @@ protected:
 
     std::vector<timeT> m_standardQuantizations;
 
-    QGridLayout *m_mainLayout;
+    QVBoxLayout *m_mainLayout;
 
     QComboBox *m_typeCombo;
 

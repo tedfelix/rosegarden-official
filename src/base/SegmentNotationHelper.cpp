@@ -1684,6 +1684,7 @@ SegmentNotationHelper::guessClef(iterator from, iterator to)
     if    (noteCount == 0) return Clef(Clef::Treble);
 
     int average = totalHeight / noteCount;
+    std::cout << "guess clef monitoring: average was: " << average << std::endl;
 
     if      (average < -6) return Clef(Clef::Bass);
     else if (average < -3) return Clef(Clef::Tenor);

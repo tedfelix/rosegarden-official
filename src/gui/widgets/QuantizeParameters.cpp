@@ -41,6 +41,7 @@
 #include <QString>
 #include <QWidget>
 #include <QHBoxLayout>
+#include <QVBoxLayout>
 
 
 namespace Rosegarden
@@ -56,51 +57,44 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
         m_standardQuantizations
         (BasicQuantizer::getStandardQuantizations())
 {
-    m_mainLayout = new QGridLayout(this);
+    m_mainLayout = new QVBoxLayout;
     m_mainLayout->setSpacing(5);
     setContentsMargins(5, 5, 5, 5);
+    setLayout(m_mainLayout);
 
-    QGroupBox *quantizerBox = new QGroupBox
-                              (tr("Quantizer"), this);
-    quantizerBox->setContentsMargins(5, 5, 5, 5);
-    QGridLayout *layout = new QGridLayout(quantizerBox);
-    layout->setSpacing(5);
-    layout->setContentsMargins(5, 5, 5, 5);
-    m_mainLayout->addWidget(quantizerBox, 0, 0);
+    // Quantizer box
+    QGroupBox *quantizerBox = new QGroupBox(tr("Quantizer"));
+    QGridLayout *qbLayout = new QGridLayout;
+    quantizerBox->setLayout(qbLayout);
+    m_mainLayout->addWidget(quantizerBox);
 
-    layout->addWidget(new QLabel(tr("Quantizer type:"), quantizerBox), 0, 0);
+    qbLayout->addWidget(new QLabel(tr("Quantizer type:"), quantizerBox), 0, 0);
     m_typeCombo = new QComboBox(quantizerBox);
     m_typeCombo->addItem(tr("Grid quantizer"));
     m_typeCombo->addItem(tr("Legato quantizer"));
     m_typeCombo->addItem(tr("Heuristic notation quantizer"));
-    layout->addWidget(m_typeCombo, 0, 1);
+    qbLayout->addWidget(m_typeCombo, 0, 1);
 
     m_notationTarget = new QCheckBox
                        (tr("Quantize for notation only (leave performance unchanged)"),
                         quantizerBox);
-    layout->addWidget(m_notationTarget, 1, 0, 1, 2);
-    if (!showNotationOption)
-        m_notationTarget->hide();
-    quantizerBox->setLayout(layout);
+    qbLayout->addWidget(m_notationTarget, 1, 0, 1, 2);
 
-    QWidget *parameterBox = new QWidget(this);
-    QHBoxLayout *parameterBoxLayout = new QHBoxLayout;
-    m_mainLayout->addWidget(parameterBox, 1, 0);
-    parameterBoxLayout->setContentsMargins(5, 5, 5, 5);
+    if (!showNotationOption) m_notationTarget->hide();
 
-    m_notationBox = new QGroupBox( tr("Notation parameters"), parameterBox );
-    m_notationBox->setContentsMargins(5, 5, 5, 5);
-    layout = new QGridLayout(m_notationBox);
-    layout->setSpacing(3);
-    parameterBoxLayout->addWidget(m_notationBox);
 
-    layout->addWidget(new QLabel(tr("Base grid unit:"), m_notationBox),
-                      1, 0);
+    // Notation box
+    m_notationBox = new QGroupBox( tr("Notation parameters"));
+    QGridLayout *nbLayout = new QGridLayout;
+    nbLayout->setSpacing(3);
+    m_notationBox->setLayout(nbLayout);
+    m_mainLayout->addWidget(m_notationBox);
+
+    nbLayout->addWidget(new QLabel(tr("Base grid unit:"), m_notationBox), 1, 0);
     m_notationUnitCombo = new QComboBox(m_notationBox);
-    layout->addWidget(m_notationUnitCombo, 1, 1);
+    nbLayout->addWidget(m_notationUnitCombo, 1, 1);
 
-    layout->addWidget(new QLabel(tr("Complexity:"),
-                                 m_notationBox), 0, 0);
+    nbLayout->addWidget(new QLabel(tr("Complexity:"), m_notationBox), 0, 0);
 
     m_simplicityCombo = new QComboBox(m_notationBox);
     m_simplicityCombo->addItem(tr("Very high"));
@@ -108,56 +102,52 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     m_simplicityCombo->addItem(tr("Normal"));
     m_simplicityCombo->addItem(tr("Low"));
     m_simplicityCombo->addItem(tr("Very low"));
-    layout->addWidget(m_simplicityCombo, 0, 1);
+    nbLayout->addWidget(m_simplicityCombo, 0, 1);
 
-    layout->addWidget(new QLabel(tr("Tuplet level:"),
-                                 m_notationBox), 2, 0);
+    nbLayout->addWidget(new QLabel(tr("Tuplet level:"), m_notationBox), 2, 0);
     m_maxTuplet = new QComboBox(m_notationBox);
     m_maxTuplet->addItem(tr("None"));
     m_maxTuplet->addItem(tr("2-in-the-time-of-3"));
     m_maxTuplet->addItem(tr("Triplet"));
     m_maxTuplet->addItem(tr("Any"));
-    layout->addWidget(m_maxTuplet, 2, 1);
+    nbLayout->addWidget(m_maxTuplet, 2, 1);
 
     m_counterpoint = new QCheckBox(tr("Permit counterpoint"), m_notationBox);
-    layout->addWidget(m_counterpoint, 3, 0, 1, 1);
+    nbLayout->addWidget(m_counterpoint, 3, 0, 1, 1);
 
-    m_notationBox->setLayout(layout);
 
-    m_gridBox = new QGroupBox( tr("Grid parameters"), parameterBox );
-    m_gridBox->setContentsMargins(5, 5, 5, 5);
-    layout = new QGridLayout(m_gridBox);
-    layout->setSpacing(3);
-    parameterBoxLayout->addWidget(m_gridBox);
+    // Grid box
+    m_gridBox = new QGroupBox( tr("Grid parameters"));
+    QGridLayout *gbLayout = new QGridLayout;
+    gbLayout->setSpacing(3);
+    m_gridBox->setLayout(gbLayout);
+    m_mainLayout->addWidget(m_gridBox);
 
-    layout->addWidget(new QLabel(tr("Base grid unit:"), m_gridBox), 0, 0);
+    gbLayout->addWidget(new QLabel(tr("Base grid unit:"), m_gridBox), 0, 0);
     m_gridUnitCombo = new QComboBox(m_gridBox);
-    layout->addWidget(m_gridUnitCombo, 0, 1);
+    gbLayout->addWidget(m_gridUnitCombo, 0, 1);
 
     m_swingLabel = new QLabel(tr("Swing:"), m_gridBox);
-    layout->addWidget(m_swingLabel, 1, 0);
+    gbLayout->addWidget(m_swingLabel, 1, 0);
     m_swingCombo = new QComboBox(m_gridBox);
-    layout->addWidget(m_swingCombo, 1, 1);
+    gbLayout->addWidget(m_swingCombo, 1, 1);
 
     m_iterativeLabel = new QLabel(tr("Iterative amount:"), m_gridBox);
-    layout->addWidget(m_iterativeLabel, 2, 0);
+    gbLayout->addWidget(m_iterativeLabel, 2, 0);
     m_iterativeCombo = new QComboBox(m_gridBox);
-    layout->addWidget(m_iterativeCombo, 2, 1);
+    gbLayout->addWidget(m_iterativeCombo, 2, 1);
 
     m_durationCheckBox = new QCheckBox
                          (tr("Quantize durations as well as start times"), m_gridBox);
-    layout->addWidget(m_durationCheckBox, 3, 0, 1, 1);
+    gbLayout->addWidget(m_durationCheckBox, 3, 0, 1, 1);
 
-    m_gridBox->setLayout(layout);
-    parameterBox->setLayout(parameterBoxLayout);
-
+    // Post-processing box
     m_postProcessingBox = new QGroupBox
                           (tr("After quantization"), this);
-    m_postProcessingBox->setContentsMargins(5, 5, 5, 5);
-    layout = new QGridLayout(m_postProcessingBox);
-    layout->setSpacing(3);
-
-    m_mainLayout->addWidget(m_postProcessingBox, 3, 0);
+    QGridLayout *pbLayout = new QGridLayout;
+    pbLayout->setSpacing(3);
+    m_postProcessingBox->setLayout(pbLayout);
+    m_mainLayout->addWidget(m_postProcessingBox);
 
     m_rebeam = new QCheckBox(tr("Re-beam"), m_postProcessingBox);
     m_articulate = new QCheckBox
@@ -165,14 +155,10 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     m_makeViable = new QCheckBox(tr("Tie notes at barlines etc"), m_postProcessingBox);
     m_deCounterpoint = new QCheckBox(tr("Split-and-tie overlapping chords"), m_postProcessingBox);
 
-    layout->addWidget(m_rebeam, 0, 0);
-    layout->addWidget(m_articulate, 1, 0);
-    layout->addWidget(m_makeViable, 2, 0);
-    layout->addWidget(m_deCounterpoint, 3, 0);
-
-    m_postProcessingBox->setLayout(layout);
-
-    setLayout(m_mainLayout);
+    pbLayout->addWidget(m_rebeam, 0, 0);
+    pbLayout->addWidget(m_articulate, 1, 0);
+    pbLayout->addWidget(m_makeViable, 2, 0);
+    pbLayout->addWidget(m_deCounterpoint, 3, 0);
 
     QPixmap noMap = NotePixmapFactory::makeToolbarPixmap("menu-no-note");
 
@@ -410,7 +396,7 @@ QuantizeParameters::getQuantizer() const
 void
 QuantizeParameters::slotTypeChanged(int index)
 {
-    setSizePolicy(QSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum));
+    setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Maximum));
     parentWidget()->setSizePolicy(QSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum));
 
     if (index == 0) {
@@ -434,8 +420,8 @@ QuantizeParameters::slotTypeChanged(int index)
         m_notationBox->show();
     }
 
-    parentWidget()->adjustSize();
     adjustSize();
+    parentWidget()->adjustSize();
 }
 
 }
