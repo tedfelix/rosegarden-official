@@ -2198,7 +2198,6 @@
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1414"/>
-        <location filename="../QMenuStrings.cpp" line="1884"/>
         <location filename="../QMenuStrings.cpp" line="3062"/>
         <location filename="../QMenuStrings.cpp" line="3594"/>
         <source>Ctrl+Shift+X</source>
@@ -2303,7 +2302,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1893"/>
         <location filename="../QMenuStrings.cpp" line="3612"/>
         <location filename="../QMenuStrings.cpp" line="4248"/>
         <source>Ctrl+Shift+V</source>
@@ -2312,6 +2310,16 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="1895"/>
         <source>De&amp;lete</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="1884"/>
+        <source>Alt+Shift+X</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="1893"/>
+        <source>Alt+Shift+V</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -9650,8 +9658,8 @@
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="388"/>
         <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="837"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="695"/>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1444"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="714"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1446"/>
         <source>%1 Controller %2 %3</source>
         <translation type="unfinished"></translation>
     </message>
@@ -16544,295 +16552,310 @@ This is a bug (the program would previously have crashed by now)</source>
 <context>
     <name>Rosegarden::NotationView</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="793"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="812"/>
         <source>Note &amp;Font</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="821"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="840"/>
         <source>Si&amp;ze</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="841"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="860"/>
         <source>S&amp;pacing</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="833"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="852"/>
         <source>%n pixel(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="940"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="967"/>
         <source>  Font:  </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="975"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1002"/>
         <source>Unknown font &quot;%1&quot;, using default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="983"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1010"/>
         <source>  Size:  </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1007"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1034"/>
         <source>  Spacing:  </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3099"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3126"/>
         <source>Triplet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3100"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3127"/>
         <source>Chord</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3101"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3128"/>
         <source>Grace</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1277"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1304"/>
         <source>Unknown spacing action %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1226"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1253"/>
         <source>Unknown font action %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1252"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1279"/>
         <source>Unknown font size action %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1105"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1132"/>
         <source>LilyPond Preview Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1106"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1133"/>
         <source>LilyPond preview options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1117"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1144"/>
         <source>Export failed.  The file could not be opened for writing.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1408"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1435"/>
         <source>Clipboard is empty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1349"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1376"/>
         <source>Can&apos;t paste multiple Segments into one</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1117"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1169"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1226"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1252"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1277"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1384"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1453"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2188"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2764"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3723"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1144"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1196"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1253"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1279"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1304"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1411"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1480"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2215"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2791"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3750"/>
         <source>Rosegarden</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1127"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1154"/>
         <source>Printing with LilyPond...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1145"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1172"/>
         <source>Previewing with LilyPond...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1170"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1197"/>
         <source>&lt;qt&gt;&lt;p&gt;Failed to open a temporary file for LilyPond export.&lt;/p&gt;&lt;p&gt;This probably means you have run out of disk space on &lt;pre&gt;%1&lt;/pre&gt;&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1387"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1456"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1414"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1483"/>
         <source>&lt;qt&gt;&lt;p&gt;The Restricted paste type requires enough empty space (containing only rests) at the paste position to hold all of the events to be pasted.&lt;/p&gt;&lt;p&gt;Not enough space was found.&lt;/p&gt;&lt;p&gt;If you want to paste anyway, consider using one of the other paste types from the &lt;b&gt;Paste...&lt;/b&gt; option on the Edit menu.  You can also change the default paste type to something other than Restricted if you wish.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1412"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1439"/>
         <source>Inserting clipboard contents...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1386"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1455"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1413"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1482"/>
         <source>Couldn&apos;t paste at this point.</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="917"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="944"/>
         <source>  %n event(s) selected </source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="920"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="947"/>
         <source>  No selection </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1571"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1598"/>
         <source>Raising velocities...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1582"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1609"/>
         <source>Lowering velocities...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1619"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1646"/>
         <source>Set Event Velocities</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1624"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1651"/>
         <source>Setting Velocities...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2188"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2215"/>
         <source>Unknown note insert action %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2192"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2219"/>
         <source>Inserting note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2565"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2592"/>
         <source>Ornament track %1 bar %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2567"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2594"/>
         <source>Ornament bar %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2577"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2604"/>
         <source>Make Ornament</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2622"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2649"/>
         <source>Use Ornament</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2633"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2660"/>
         <source>Remove Ornaments</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2691"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2718"/>
         <source>Estimated key signature shown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2748"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2775"/>
         <source>Sustain</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2764"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2791"/>
         <source>There is no sustain controller defined for this device.
 Please ensure the device is configured correctly in the Manage MIDI Devices dialog in the main window.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2933"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2960"/>
         <source>Estimated time signature shown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2993"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3020"/>
         <source>%1%2 - Segment Track #%3 - Notation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3000"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3027"/>
         <source>%1%2 - All Segments - Notation</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3006"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3033"/>
         <source>%1%2 - %n Segment(s) - Notation</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3258"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3285"/>
         <source>Transpose</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3259"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3286"/>
         <source>By number of semitones: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3621"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3648"/>
         <source>Time: %1 (%2.%3s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3696"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3723"/>
         <source>http://rosegardenmusic.com/wiki/doc:notation-en</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3703"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3730"/>
         <source>http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3710"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3737"/>
         <source>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3767"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3794"/>
         <source>Move Events to Staff Above</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3804"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3831"/>
         <source>Move Events to Staff Below</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3457"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3947"/>
+        <source>Edit Text Event</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3994"/>
+        <source>Normalizing rests...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4007"/>
+        <source>Collapsing notes...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3484"/>
         <source>Can&apos;t insert note: No note duration selected</source>
         <translation type="unfinished"></translation>
     </message>
@@ -18169,57 +18192,52 @@ We recommend you re-save this file from this version of Rosegarden to ensure tha
 <context>
     <name>Rosegarden::RosegardenMainViewWidget</name>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="257"/>
-        <source>No non-audio segments in composition</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="335"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="300"/>
         <source>Selection must contain only audio or non-audio segments</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="435"/>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="599"/>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="661"/>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="835"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="400"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="564"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="603"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="749"/>
         <source>No non-audio segments selected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="911"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="827"/>
         <source>You&apos;ve not yet defined an audio editor for Rosegarden to use.
 See Edit -&gt; Preferences -&gt; Audio.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1602"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1518"/>
         <source>importing a remote audio file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1604"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1520"/>
         <source>importing an audio file that needs to be converted or resampled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1608"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1524"/>
         <source>Adding audio file...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1634"/>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1639"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1550"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1555"/>
         <source>Can&apos;t add dropped file. </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1650"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1566"/>
         <source>Generating audio preview...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1660"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1576"/>
         <source>Try copying this file to a directory where you have write permission and re-add it</source>
         <translation type="unfinished"></translation>
     </message>
@@ -18262,119 +18280,119 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="943"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1116"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1596"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2045"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="947"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1120"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1600"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2049"/>
         <source>%1 - %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1303"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1307"/>
         <source>File &quot;%1&quot; does not exist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1309"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1313"/>
         <source>File &quot;%1&quot; is actually a directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1318"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1322"/>
         <source>You do not have read permission for &quot;%1&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1395"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1399"/>
         <source>An auto-save file for this document has been found
 Do you want to open it instead ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1542"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1546"/>
         <source>Untitled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1555"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1894"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2034"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1559"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1898"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2038"/>
         <source>Could not save document at %1
 Error was : %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1557"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1897"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2037"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1561"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1901"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2041"/>
         <source>Could not save document at %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1644"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1648"/>
         <source>Opening a new application window...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1655"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1659"/>
         <source>Creating new document...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1720"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1724"/>
         <source>Malformed URL
 %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1754"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1860"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1758"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1864"/>
         <source>Opening file...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1781"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1785"/>
         <source>All supported files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1782"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1816"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2005"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1786"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1820"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2009"/>
         <source>Rosegarden files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1783"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3497"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3533"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1787"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3501"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3537"/>
         <source>MIDI files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1784"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1817"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2011"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3446"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3498"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3534"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3789"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3825"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3914"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3949"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4565"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4604"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4646"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4683"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4719"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4829"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7549"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1788"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1821"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2015"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3450"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3502"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3538"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3793"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3829"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3918"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3953"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4569"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4608"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4650"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4687"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4723"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4833"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7562"/>
         <source>All files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1780"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1815"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1784"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1819"/>
         <source>Open File</source>
         <translation type="unfinished"></translation>
     </message>
@@ -18384,243 +18402,243 @@ Error was : %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1685"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1689"/>
         <source>%1%2 - %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1734"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1835"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3463"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3515"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3551"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3806"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3842"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3931"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3966"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7562"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1738"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1839"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3467"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3519"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3555"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3810"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3846"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3935"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3970"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7575"/>
         <source>Cannot open file %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1877"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1881"/>
         <source>Saving file...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1937"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1941"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1967"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1971"/>
         <source>&lt;qt&gt;Sorry.&lt;br&gt;&quot;%1&quot; is not a valid filename.&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1974"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1978"/>
         <source>You have specified a folder/directory.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1980"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1984"/>
         <source>The specified file exists.  Overwrite?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2002"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2006"/>
         <source>Saving file%1with a new filename...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2005"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2009"/>
         <source>Rosegarden templates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2007"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2011"/>
         <source>Save as template...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2007"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2011"/>
         <source>Save as...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2061"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2065"/>
         <source>Closing file...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2083"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2087"/>
         <source>Printing...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2100"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2104"/>
         <source>Previewing...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2108"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2112"/>
         <source>Exiting...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2120"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2124"/>
         <source>Cutting selection...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2132"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2136"/>
         <source>Copying selection to clipboard...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2143"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2147"/>
         <source>Clipboard is empty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2146"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2150"/>
         <source>Inserting clipboard contents...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2220"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2224"/>
         <source>Duration of empty range to insert</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2301"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2305"/>
         <source>This function needs no more than one segment to be selected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2325"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2329"/>
         <source>Can&apos;t join Audio segments</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2379"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2383"/>
         <source>rescaling an audio file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2396"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2400"/>
         <source>Rescaling audio file...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2409"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2413"/>
         <source>Generating audio preview...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2439"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4980"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2443"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4984"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2440"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2444"/>
         <source>The audio file path does not exist or is not writable.
 You must set the audio file path to a valid directory in Document Properties before %1.
 Would you like to set it now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2510"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2514"/>
         <source>Jog Selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2652"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2656"/>
         <source>Split %n Segment(s) at Time</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2687"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2691"/>
         <source>Segment Start Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2697"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2701"/>
         <source>Set Segment Start Times</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2698"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2702"/>
         <source>Set Segment Start Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2730"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2734"/>
         <source>Segment Duration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2742"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2746"/>
         <source>Set Segment Durations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2743"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2747"/>
         <source>Set Segment Duration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2853"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5607"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2857"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5611"/>
         <source>Set Global Tempo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2920"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2924"/>
         <source>Toggle the toolbar...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2931"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2935"/>
         <source>Toggle the tools toolbar...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2942"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2946"/>
         <source>Toggle the tracks toolbar...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2953"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2957"/>
         <source>Toggle the editor toolbar...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2964"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2968"/>
         <source>Toggle the transport toolbar...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2975"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2979"/>
         <source>Toggle the zoom toolbar...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2986"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3005"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2990"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3009"/>
         <source>Toggle the Transport</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3109"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3113"/>
         <source>Toggle the statusbar...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3177"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3181"/>
         <source>The join tool isn&apos;t implemented yet.  Instead please highlight the segments you want to join and then use the menu option:
 
         Segments-&gt;Collapse Segments.
@@ -18628,372 +18646,372 @@ Would you like to set it now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3180"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3184"/>
         <source>Join tool not yet implemented</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3425"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3429"/>
         <source>Revert modified document to previous saved version?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3444"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3448"/>
         <source>Import Rosegarden Project File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3445"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4564"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3449"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4568"/>
         <source>Rosegarden Project files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6214"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6218"/>
         <source>Input</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7319"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7332"/>
         <source>http://rosegardenmusic.com/wiki/doc:manual-en</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7346"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7359"/>
         <source>Rosegarden</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7801"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7814"/>
         <source>&lt;h3&gt;Newer version available&lt;/h3&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7802"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7815"/>
         <source>&lt;p&gt;You are using version %1.  Version %2 is now available.&lt;/p&gt;&lt;p&gt;Please consult the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;Rosegarden website&lt;/a&gt; for more information.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3496"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3500"/>
         <source>Open MIDI File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3532"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3536"/>
         <source>Merge MIDI File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3659"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3663"/>
         <source>Importing MIDI file...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3695"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3699"/>
         <source>Calculating notation...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3743"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3747"/>
         <source>Calculate Notation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3787"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3823"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3791"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3827"/>
         <source>Open X11 Rosegarden File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3788"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3824"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3792"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3828"/>
         <source>X11 Rosegarden files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3857"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3861"/>
         <source>Importing X11 Rosegarden file...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3885"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3889"/>
         <source>Can&apos;t load X11 Rosegarden file.  It appears to be corrupted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3913"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3948"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3917"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3952"/>
         <source>Open Hydrogen File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3981"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3985"/>
         <source>Importing Hydrogen file...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4007"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4011"/>
         <source>Can&apos;t load Hydrogen file.  It appears to be corrupted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4773"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4777"/>
         <source>&lt;qt&gt;&lt;p&gt;Failed to open a temporary file for LilyPond export.&lt;/p&gt;&lt;p&gt;This probably means you have run out of disk space on &lt;pre&gt;%1&lt;/pre&gt;&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4545"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4549"/>
         <source>The Rosegarden sequencer process has exited unexpectedly.  Sound and recording will no longer be available for this session.
 Please exit and restart Rosegarden to restore sound capability.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4549"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4553"/>
         <source>The Rosegarden sequencer could not be started, so sound and recording will be unavailable for this session.
 For assistance with correct audio and MIDI configuration, go to http://rosegardenmusic.com.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4561"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4565"/>
         <source>Exporting Rosegarden Project file...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4566"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4605"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4647"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4684"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4720"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4830"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4570"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4609"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4651"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4688"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4724"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4834"/>
         <source>Export as...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4585"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4589"/>
         <source>Saving Rosegarden file to package failed: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4600"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4616"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4604"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4620"/>
         <source>Exporting MIDI file...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4603"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4607"/>
         <source>Standard MIDI files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4635"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4672"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4708"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4815"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4856"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4639"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4676"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4712"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4819"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4860"/>
         <source>Export failed.  The file could not be opened for writing.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4642"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4658"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4646"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4662"/>
         <source>Exporting Csound score file...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4645"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4649"/>
         <source>Csound files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4679"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4694"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4683"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4698"/>
         <source>Exporting Mup file...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4682"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4686"/>
         <source>Mup files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4715"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4800"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4719"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4804"/>
         <source>Exporting LilyPond file...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4718"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4722"/>
         <source>LilyPond files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4732"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4736"/>
         <source>Printing with LilyPond...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4748"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4752"/>
         <source>Previewing LilyPond file...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4791"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4795"/>
         <source>LilyPond Preview Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4792"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4796"/>
         <source>LilyPond preview options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4825"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4841"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4829"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4845"/>
         <source>Exporting MusicXML file...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4828"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4832"/>
         <source>XML files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4981"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4985"/>
         <source>The audio file path does not exist or is not writable.
 Please set the audio file path to a valid directory in Document Properties before recording audio.
 Would you like to set it now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5031"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5035"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5032"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5036"/>
         <source>The audio file path does not exist or is not writable.
 Please set the audio file path to a valid directory in Document Properties before you start to record audio.
 Would you like to set it now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5511"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5515"/>
         <source>Move playback pointer to time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5525"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5529"/>
         <source>%1%</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5593"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5597"/>
         <source>Replace Tempo Change at %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5623"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5627"/>
         <source>Set Global and Default Tempo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5646"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5650"/>
         <source>Move Tempo Change</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5681"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5685"/>
         <source>new marker</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5682"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5686"/>
         <source>no description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6129"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6133"/>
         <source>Sequencer failed to add audio file %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6142"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6146"/>
         <source>Sequencer failed to remove audio file id %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6197"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6201"/>
         <source>Modify Segment label</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6199"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6203"/>
         <source>Modify Segments label</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6201"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6205"/>
         <source>Relabelling selection...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6214"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6218"/>
         <source>Enter new label</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7282"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7295"/>
         <source>Play List</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7326"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7339"/>
         <source>http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7333"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7346"/>
         <source>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7431"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7444"/>
         <source>Queueing MIDI panic events for tranmission...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7490"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7503"/>
         <source>Are you sure you want to save this as your default studio?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7496"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7509"/>
         <source>Saving current document as default studio...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7508"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7521"/>
         <source>Could not auto-save document at %1
 Error was : %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7511"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7524"/>
         <source>Could not auto-save document at %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7521"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7534"/>
         <source>Are you sure you want to import your default studio and lose the current one?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7548"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7561"/>
         <source>Import Studio from File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7593"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7606"/>
         <source>Import Studio</source>
         <translation type="unfinished"></translation>
     </message>
