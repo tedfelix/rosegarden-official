@@ -80,7 +80,7 @@ while (<>) {
         print "\n * translation.  You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ";
         print "\n * keyboard.  Treat ASCII characters as single keys.  ; : < > [ ] - = ( ) and so on, even if they require Shift or some";
         print "\n * special combination on your keyboard.*/\n";
-        print 'QObject::tr("' . $shortcut . '");';
+        print 'QObject::tr("' . $shortcut . '", "keyboard shortcut");';
         if ($name) { print ' // ' . $name; }
         print "\n\n";
     }

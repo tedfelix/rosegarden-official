@@ -104,7 +104,12 @@ protected:
     bool enableMenuInState(QString stateName, QString menuName);
     bool disableMenuInState(QString stateName, QString menuName);
 
-    QString translate(QString actionName, QString text, QString purpose);
+    /** Translate a string with QObject::tr() and an optional disambiguation
+     *  \param text            The text to translate
+     *  \param disambiguation  Context disambiguation, if required
+     *  \return A translated QString
+     */
+    QString translate(QString text, QString disambiguation = "");
 
     QString findRcFile(QString name);
 

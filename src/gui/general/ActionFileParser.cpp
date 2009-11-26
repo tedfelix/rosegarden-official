@@ -424,32 +424,15 @@ ActionFileParser::findToolbar(QString toolbarName, Position position)
 }
 
 QString
-ActionFileParser::translate(QString actionName,
-                            QString text,
-                            QString purpose)
+ActionFileParser::translate(QString text,
+                            QString disambiguation)
 {
-    // These translations are extracted from data/ui/*.rc files.
-    // The translations appear in Rosegarden::ActionFileParser context.
-    //
-    // NOTE: We had a conflict between "C" the keyboard shortcut and "C" the
-    // note name.  Qt's method for handling this situation involves passing a
-    // second parameter, a translator comment, to tr().  It was less complicated
-    // to add the comment to the "note name" occurrences of this string than to
-    // add something to the keyboard shortcut, thus these strings should always
-    // translate straight across as single key shortcuts.  We'll allow
-    // translators to change the shortcuts if they desire (although I haven't
-    // figured out how I, as a translator, might accomplish this) and simply
-    // warn if these translations are more than one character long, which is
-    // probably an indication that something has gone awry:
-    if ((text == "C") || (text == "D") || (text == "E")||
-        (text == "F") || (text == "G") || (text == "A")||
-        (text == "B")) {
-        if (text.size() > 1) {
-            std::cerr << "ActionFileParser: TRANSLATION BUG: \"" << QObject::tr(text).toStdString()
-                      << "\" is probably invalid for \"" << text << std::endl;
-        }
-    }
-    return QObject::tr(text);
+    // These translations are extracted from data/ui/*.rc files via
+    // scripts/extract*.pl and pulled into the QObject translation context in
+    // one great lump.
+    
+    if (!disambiguation.isEmpty()) return QObject::tr(text, disambiguation);
+    else return QObject::tr(text);
 }                                       
 
 bool
@@ -459,7 +442,10 @@ ActionFileParser::setActionText(QString actionName, QString text)
     QAction *action = findAction(actionName);
     if (!action) action = findStandardAction(actionName);
     if (!action) return false;
-    action->setText(translate(actionName, text, "text"));
+
+    // action names do not have a disambiguation in order to avoid making the
+    // translators go fish 1000+ translations out of the obsolete strings pile
+    action->setText(translate(text));
     return true;
 }
 
@@ -489,7 +475,10 @@ ActionFileParser::setActionShortcut(QString actionName, QString shortcut, bool i
     QStringList shortcuts = shortcut.split(", ");
     QList<QKeySequence> shortcutList;
     for (int i = 0; i < shortcuts.size(); i++) {
-        shortcutList.append(translate(actionName, shortcuts.at(i), "shortcut"));
+
+        // Keyboard shortcuts require the disambiguation "keyboard shortcut"
+        // and this must match scripts/extract_menu_tr_strings.pl
+        shortcutList.append(translate(shortcuts.at(i), "keyboard shortcut"));
     }
     action->setShortcuts(shortcutList);
 
@@ -545,7 +534,10 @@ ActionFileParser::setMenuText(QString name, QString text)
     if (name == "" || text == "") return false;
     QMenu *menu = findMenu(name);
     if (!menu) return false;
-    menu->setTitle(translate(name, text, "menu title"));
+
+    // menu titles should not have disambiguation in order to avoid rendering a
+    // very large number of pre-translated texts obsolete
+    menu->setTitle(translate(text));
     return true;
 }
 
