@@ -29,7 +29,7 @@
 
   <Menu name="help" append="about_merge">
     <text>&amp;Help</text>
-    <Action name="manual" text="Rosegarden &amp;Manual" icon="wiki" shortcut="F1" />
+    <Action name="audio_help" text="Audio File Manager Help" icon="wiki" shortcut="F1" />
   <Separator/>
     <Action name="tutorial" text="&amp;Rosegarden tutorial" />
     <Action name="guidelines" text="&amp;Bug Reporting Guidelines" />

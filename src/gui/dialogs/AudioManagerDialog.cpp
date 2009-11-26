@@ -83,6 +83,7 @@
 #include <QDrag>
 #include <QDropEvent>
 #include <QMimeData>
+#include <QDesktopServices>
 
 
 
@@ -152,7 +153,7 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     createAction("distribute_audio", SLOT(slotDistributeOnMidiSegment()));
     
     // help menu
-    // NOTE: Help menu completely omitted - not required in AudioManagerDialog ?
+    createAction("audio_help", SLOT(slotHelp()));
     
     
     //!!! oh now hang on, does this one work?
@@ -1370,6 +1371,18 @@ AudioManagerDialog::slotDistributeOnMidiSegment()
         << "insert audio segment at " << insertTimes[i]
         << endl;
     }
+}
+
+void
+AudioManagerDialog::slotHelp()
+{
+    // TRANSLATORS: if the manual is translated into your language, you can
+    // change the two-letter language code in this URL to point to your language
+    // version, eg. "http://rosegardenmusic.com/wiki/doc:audioManager-es" for the
+    // Spanish version. If your language doesn't yet have a translation, feel
+    // free to create one.
+    QString helpURL = tr("http://rosegardenmusic.com/wiki/doc:audioManager-en");
+    QDesktopServices::openUrl(QUrl(helpURL));
 }
 
 }
