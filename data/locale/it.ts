@@ -243,7 +243,7 @@
         <location filename="../QMenuStrings.cpp" line="4220"/>
         <source>Ctrl+W</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">Ctrl+W</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="42"/>
@@ -327,7 +327,7 @@
         <location filename="../QMenuStrings.cpp" line="4262"/>
         <source>F1</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">F1</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="60"/>
@@ -414,7 +414,7 @@
         <location filename="../QMenuStrings.cpp" line="4230"/>
         <source>Ctrl+Z</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">Ctrl+Z</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="85"/>
@@ -428,7 +428,7 @@
         <location filename="../QMenuStrings.cpp" line="4123"/>
         <location filename="../QMenuStrings.cpp" line="4232"/>
         <source>N&amp;othing to redo</source>
-        <translation type="unfinished">N&amp;ulla da rifare</translation>
+        <translation>N&amp;ulla da rifare</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="92"/>
@@ -443,7 +443,7 @@
         <location filename="../QMenuStrings.cpp" line="4239"/>
         <source>Ctrl+Shift+Z</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">Ctrl+Shift+Z</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="94"/>
@@ -462,7 +462,7 @@
         <location filename="../QMenuStrings.cpp" line="3567"/>
         <source>Ctrl+C, F16, Ctrl+Ins</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">Ctrl+C, F16, Ctrl+Ins</translation>
+        <translation>Ctrl+C, F16, Ctrl+Ins</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="103"/>
@@ -480,7 +480,7 @@
         <location filename="../QMenuStrings.cpp" line="3576"/>
         <source>Ctrl+V, F18, Shift+Ins</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">Ctrl+V, F18, Shift+Ins</translation>
+        <translation>Ctrl+V, F18, Shift+Ins</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="126"/>
@@ -543,7 +543,7 @@
         <location filename="../QMenuStrings.cpp" line="4102"/>
         <source>Ctrl+S</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">Ctrl+S</translation>
+        <translation>Ctrl+S</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="261"/>
@@ -557,12 +557,12 @@
         <location filename="../QMenuStrings.cpp" line="4139"/>
         <source>I</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">I</translation>
+        <translation>I</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="270"/>
         <source>&amp;Delete Event</source>
-        <translation type="unfinished">&amp;Elimina evento</translation>
+        <translation>&amp;Elimina evento</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="277"/>
@@ -570,7 +570,7 @@
         <location filename="../QMenuStrings.cpp" line="3585"/>
         <source>Delete</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">Cancella</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="279"/>
@@ -585,7 +585,7 @@
         <location filename="../QMenuStrings.cpp" line="4166"/>
         <source>E</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">Mi</translation>
+        <translation>E</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="288"/>
@@ -607,12 +607,12 @@
         <location filename="../QMenuStrings.cpp" line="3558"/>
         <source>Ctrl+X, F20, Shift+Del</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">Ctrl+X, F20, Shift+Del</translation>
+        <translation>Ctrl+X, F20, Shift+Del</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="316"/>
         <source>&amp;Select All</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="323"/>
@@ -622,7 +622,7 @@
         <location filename="../QMenuStrings.cpp" line="4175"/>
         <source>Ctrl+A</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">Ctrl+A</translation>
+        <translation>Ctrl+A</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="325"/>
@@ -637,7 +637,7 @@
         <location filename="../QMenuStrings.cpp" line="4184"/>
         <source>Escape</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">Escape</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="334"/>
@@ -652,7 +652,7 @@
         <location filename="../QMenuStrings.cpp" line="1933"/>
         <source>Ctrl+F</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">Ctrl+F</translation>
+        <translation>Ctrl+F</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="343"/>
@@ -820,91 +820,91 @@
         <location filename="../QMenuStrings.cpp" line="3682"/>
         <source>Ctrl+K</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3701"/>
         <source>Ctrl+M</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3723"/>
         <source>Ctrl+Shift+R</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3733"/>
         <source>Return</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3819"/>
         <source>Ctrl+J</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3845"/>
         <source>Ctrl+Shift+T</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3854"/>
         <source>Ctrl+D</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3977"/>
         <source>Enter, Media Play, Ctrl+Return</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3986"/>
         <source>Insert, Media Stop</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3995"/>
         <source>PgUp, Media Previous</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="4004"/>
         <source>PgDown, Media Next</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="4013"/>
         <source>Media Record</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="4022"/>
         <source>Space</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="4071"/>
         <source>Home</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="4080"/>
         <source>End</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="4191"/>
@@ -980,7 +980,7 @@
         <location filename="../QMenuStrings.cpp" line="3922"/>
         <source>F2</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">F2</translation>
+        <translation>F2</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="439"/>
@@ -1001,7 +1001,7 @@
         <location filename="../QMenuStrings.cpp" line="3949"/>
         <source>F5</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">F5</translation>
+        <translation>F5</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="448"/>
@@ -1023,7 +1023,7 @@
         <location filename="../QMenuStrings.cpp" line="3931"/>
         <source>F3</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">F3</translation>
+        <translation>F3</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="457"/>
@@ -1044,7 +1044,7 @@
         <location filename="../QMenuStrings.cpp" line="3958"/>
         <source>F6</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">F6</translation>
+        <translation>F6</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="491"/>
@@ -1057,7 +1057,7 @@
         <location filename="../QMenuStrings.cpp" line="3940"/>
         <source>F4</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">F4</translation>
+        <translation>F4</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="557"/>
@@ -1078,7 +1078,7 @@
         <location filename="../QMenuStrings.cpp" line="601"/>
         <source>Ctrl+V, F18, Shift+Insert</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">Ctrl+V, F18, Shift+Insert</translation>
+        <translation>Ctrl+V, F18, Shift+Insert</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="603"/>
@@ -1092,7 +1092,7 @@
         <location filename="../QMenuStrings.cpp" line="4157"/>
         <source>Delete, Ctrl+D</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">Delete, Ctrl+D</translation>
+        <translation>Delete, Ctrl+D</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="641"/>
@@ -1114,7 +1114,7 @@
         <location filename="../QMenuStrings.cpp" line="2684"/>
         <source>0</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">0</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="652"/>
@@ -1131,7 +1131,7 @@
         <location filename="../QMenuStrings.cpp" line="2675"/>
         <source>3</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">3</translation>
+        <translation>3</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="662"/>
@@ -1148,7 +1148,7 @@
         <location filename="../QMenuStrings.cpp" line="2666"/>
         <source>6</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">6</translation>
+        <translation>6</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="672"/>
@@ -1165,7 +1165,7 @@
         <location filename="../QMenuStrings.cpp" line="2657"/>
         <source>8</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">8</translation>
+        <translation>8</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="682"/>
@@ -1182,7 +1182,7 @@
         <location filename="../QMenuStrings.cpp" line="2648"/>
         <source>4</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">4</translation>
+        <translation>4</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="692"/>
@@ -1199,7 +1199,7 @@
         <location filename="../QMenuStrings.cpp" line="2639"/>
         <source>2</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">2</translation>
+        <translation>2</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="702"/>
@@ -1211,7 +1211,7 @@
         <location filename="../QMenuStrings.cpp" line="2630"/>
         <source>1</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">1</translation>
+        <translation>1</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="711"/>
@@ -1223,7 +1223,7 @@
         <location filename="../QMenuStrings.cpp" line="2621"/>
         <source>5</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">5</translation>
+        <translation>5</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="731"/>
@@ -1277,20 +1277,20 @@
         <location filename="../QMenuStrings.cpp" line="3779"/>
         <source>=</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">=</translation>
+        <translation>=</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="758"/>
         <location filename="../QMenuStrings.cpp" line="3788"/>
         <source>+</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">+</translation>
+        <translation>+</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="767"/>
         <source>-</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">-</translation>
+        <translation>-</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="777"/>
@@ -1298,7 +1298,7 @@
         <location filename="../QMenuStrings.cpp" line="3801"/>
         <source>Alt+Left</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="786"/>
@@ -1306,7 +1306,7 @@
         <location filename="../QMenuStrings.cpp" line="3810"/>
         <source>Alt+Right</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="795"/>
@@ -1314,7 +1314,7 @@
         <location filename="../QMenuStrings.cpp" line="3872"/>
         <source>Shift+Up</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="804"/>
@@ -1322,21 +1322,21 @@
         <location filename="../QMenuStrings.cpp" line="3863"/>
         <source>Shift+Down</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="816"/>
         <location filename="../QMenuStrings.cpp" line="2261"/>
         <source>Ctrl+H</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">Ctrl+H</translation>
+        <translation>Ctrl+H</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="825"/>
         <location filename="../QMenuStrings.cpp" line="2270"/>
         <source>Ctrl+Shift+H</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">Ctrl+Shift+H</translation>
+        <translation>Ctrl+Shift+H</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="836"/>
@@ -1344,7 +1344,7 @@
         <location filename="../QMenuStrings.cpp" line="3890"/>
         <source>Up</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="845"/>
@@ -1352,103 +1352,103 @@
         <location filename="../QMenuStrings.cpp" line="3881"/>
         <source>Down</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="854"/>
         <location filename="../QMenuStrings.cpp" line="2299"/>
         <source>Ctrl+Up</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="863"/>
         <location filename="../QMenuStrings.cpp" line="2308"/>
         <source>Ctrl+Down</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="875"/>
         <source>Shift+Alt+I</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">Shift+Alt+I</translation>
+        <translation>Shift+Alt+I</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="884"/>
         <source>Shift+Alt+R</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">Shift+Alt+R</translation>
+        <translation>Shift+Alt+R</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="898"/>
         <location filename="../QMenuStrings.cpp" line="2372"/>
         <source>Shift+Left</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="907"/>
         <location filename="../QMenuStrings.cpp" line="2381"/>
         <source>Shift+Right</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="916"/>
         <location filename="../QMenuStrings.cpp" line="2390"/>
         <source>Ctrl+;</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="925"/>
         <location filename="../QMenuStrings.cpp" line="2399"/>
         <source>Ctrl+:</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">Ctrl+:</translation>
+        <translation>Ctrl+:</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="934"/>
         <location filename="../QMenuStrings.cpp" line="2426"/>
         <source>Alt+PgUp</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="943"/>
         <location filename="../QMenuStrings.cpp" line="2435"/>
         <source>Alt+PgDown</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="954"/>
         <location filename="../QMenuStrings.cpp" line="2458"/>
         <source>Left</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">A Sinistra</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="969"/>
         <location filename="../QMenuStrings.cpp" line="2473"/>
         <source>Right</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">A Destra</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="984"/>
         <location filename="../QMenuStrings.cpp" line="2488"/>
         <source>Ctrl+Left</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="993"/>
         <location filename="../QMenuStrings.cpp" line="2497"/>
         <source>Ctrl+Right</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1005"/>
@@ -1456,7 +1456,7 @@
         <location filename="../QMenuStrings.cpp" line="4031"/>
         <source>Pause</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1014"/>
@@ -1466,7 +1466,7 @@
         <location filename="../QMenuStrings.cpp" line="4040"/>
         <source>Alt+Ctrl+P</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">Alt+Ctrl+P</translation>
+        <translation>Alt+Ctrl+P</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1069"/>
@@ -1474,7 +1474,7 @@
         <location filename="../QMenuStrings.cpp" line="3967"/>
         <source>F7</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">F7</translation>
+        <translation>F7</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1081"/>
@@ -1484,14 +1484,14 @@
         <location filename="../QMenuStrings.cpp" line="2883"/>
         <location filename="../QMenuStrings.cpp" line="3037"/>
         <source>I/do</source>
-        <translation type="unfinished"></translation>
+        <translation>I</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1088"/>
         <location filename="../QMenuStrings.cpp" line="2736"/>
         <source>A</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">La</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1090"/>
@@ -1501,14 +1501,14 @@
         <location filename="../QMenuStrings.cpp" line="2892"/>
         <location filename="../QMenuStrings.cpp" line="3046"/>
         <source>I/do sharp</source>
-        <translation type="unfinished"></translation>
+        <translation>I diesis</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1097"/>
         <location filename="../QMenuStrings.cpp" line="2745"/>
         <source>Shift+A</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">Shift+A</translation>
+        <translation>Shift+A</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1099"/>
@@ -1518,7 +1518,7 @@
         <location filename="../QMenuStrings.cpp" line="2901"/>
         <location filename="../QMenuStrings.cpp" line="3055"/>
         <source>II/re flat</source>
-        <translation type="unfinished"></translation>
+        <translation>II bemolle</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1106"/>
@@ -1526,7 +1526,7 @@
         <location filename="../QMenuStrings.cpp" line="3506"/>
         <source>Ctrl+Shift+S</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">Ctrl+Shift+S</translation>
+        <translation>Ctrl+Shift+S</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1108"/>
@@ -1536,14 +1536,14 @@
         <location filename="../QMenuStrings.cpp" line="2910"/>
         <location filename="../QMenuStrings.cpp" line="3064"/>
         <source>II/re</source>
-        <translation type="unfinished"></translation>
+        <translation>II</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1115"/>
         <location filename="../QMenuStrings.cpp" line="2763"/>
         <source>S</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">S</translation>
+        <translation>S</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1117"/>
@@ -1553,14 +1553,14 @@
         <location filename="../QMenuStrings.cpp" line="2919"/>
         <location filename="../QMenuStrings.cpp" line="3073"/>
         <source>II/re sharp</source>
-        <translation type="unfinished"></translation>
+        <translation>II diesis</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1124"/>
         <location filename="../QMenuStrings.cpp" line="2772"/>
         <source>Shift+S</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">Shift+S</translation>
+        <translation>Shift+S</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1126"/>
@@ -1570,14 +1570,14 @@
         <location filename="../QMenuStrings.cpp" line="2928"/>
         <location filename="../QMenuStrings.cpp" line="3082"/>
         <source>III/mi flat</source>
-        <translation type="unfinished"></translation>
+        <translation>III bemolle</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1133"/>
         <location filename="../QMenuStrings.cpp" line="2781"/>
         <source>Ctrl+Shift+D</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">Ctrl+Shift+D</translation>
+        <translation>Ctrl+Shift+D</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1135"/>
@@ -1587,7 +1587,7 @@
         <location filename="../QMenuStrings.cpp" line="2937"/>
         <location filename="../QMenuStrings.cpp" line="3091"/>
         <source>III/mi</source>
-        <translation type="unfinished"></translation>
+        <translation>III</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1142"/>
@@ -1595,7 +1595,7 @@
         <location filename="../QMenuStrings.cpp" line="3751"/>
         <source>D</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">Re</translation>
+        <translation>Re</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1144"/>
@@ -1605,14 +1605,14 @@
         <location filename="../QMenuStrings.cpp" line="2946"/>
         <location filename="../QMenuStrings.cpp" line="3100"/>
         <source>IV/fa</source>
-        <translation type="unfinished"></translation>
+        <translation>IV</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1151"/>
         <location filename="../QMenuStrings.cpp" line="2799"/>
         <source>F</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">Fa</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1153"/>
@@ -1622,14 +1622,14 @@
         <location filename="../QMenuStrings.cpp" line="2955"/>
         <location filename="../QMenuStrings.cpp" line="3109"/>
         <source>IV/fa sharp</source>
-        <translation type="unfinished"></translation>
+        <translation>IV diesis</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1160"/>
         <location filename="../QMenuStrings.cpp" line="2808"/>
         <source>Shift+F</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">Shift+F</translation>
+        <translation>Shift+F</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1162"/>
@@ -1639,14 +1639,14 @@
         <location filename="../QMenuStrings.cpp" line="2964"/>
         <location filename="../QMenuStrings.cpp" line="3118"/>
         <source>V/sol flat</source>
-        <translation type="unfinished"></translation>
+        <translation>V bemolle</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1169"/>
         <location filename="../QMenuStrings.cpp" line="2817"/>
         <source>Ctrl+Shift+J</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">Ctrl+Shift+J</translation>
+        <translation>Ctrl+Shift+J</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1171"/>
@@ -1656,14 +1656,14 @@
         <location filename="../QMenuStrings.cpp" line="2973"/>
         <location filename="../QMenuStrings.cpp" line="3127"/>
         <source>V/sol</source>
-        <translation type="unfinished"></translation>
+        <translation>V</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1178"/>
         <location filename="../QMenuStrings.cpp" line="2826"/>
         <source>J</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">J</translation>
+        <translation>J</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1180"/>
@@ -1673,14 +1673,14 @@
         <location filename="../QMenuStrings.cpp" line="2982"/>
         <location filename="../QMenuStrings.cpp" line="3136"/>
         <source>V/sol sharp</source>
-        <translation type="unfinished"></translation>
+        <translation>V diesis</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1187"/>
         <location filename="../QMenuStrings.cpp" line="2835"/>
         <source>Shift+J</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">Shift+J</translation>
+        <translation>Shift+J</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1189"/>
@@ -1690,14 +1690,14 @@
         <location filename="../QMenuStrings.cpp" line="2991"/>
         <location filename="../QMenuStrings.cpp" line="3145"/>
         <source>VI/la flat</source>
-        <translation type="unfinished"></translation>
+        <translation>Vi bemolle</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1196"/>
         <location filename="../QMenuStrings.cpp" line="2844"/>
         <source>Ctrl+Shift+K</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">Ctrl+Shift+K</translation>
+        <translation>Ctrl+Shift+K</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1198"/>
@@ -1707,14 +1707,14 @@
         <location filename="../QMenuStrings.cpp" line="3000"/>
         <location filename="../QMenuStrings.cpp" line="3154"/>
         <source>VI/la</source>
-        <translation type="unfinished"></translation>
+        <translation>VI</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1205"/>
         <location filename="../QMenuStrings.cpp" line="2853"/>
         <source>K</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">K</translation>
+        <translation>K</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1207"/>
@@ -1724,14 +1724,14 @@
         <location filename="../QMenuStrings.cpp" line="3009"/>
         <location filename="../QMenuStrings.cpp" line="3163"/>
         <source>VI/la sharp</source>
-        <translation type="unfinished"></translation>
+        <translation>VI diesis</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1214"/>
         <location filename="../QMenuStrings.cpp" line="2862"/>
         <source>Shift+K</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">Shift+K</translation>
+        <translation>Shift+K</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1216"/>
@@ -1741,14 +1741,14 @@
         <location filename="../QMenuStrings.cpp" line="3018"/>
         <location filename="../QMenuStrings.cpp" line="3172"/>
         <source>VII/ti flat</source>
-        <translation type="unfinished"></translation>
+        <translation>VII bemolle</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1223"/>
         <location filename="../QMenuStrings.cpp" line="2871"/>
         <source>Ctrl+Shift+L</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">Ctrl+Shift+L</translation>
+        <translation>Ctrl+Shift+L</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1225"/>
@@ -1758,56 +1758,56 @@
         <location filename="../QMenuStrings.cpp" line="3027"/>
         <location filename="../QMenuStrings.cpp" line="3181"/>
         <source>VII/ti</source>
-        <translation type="unfinished"></translation>
+        <translation>VII</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1232"/>
         <location filename="../QMenuStrings.cpp" line="2880"/>
         <source>L</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">L</translation>
+        <translation>L</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1242"/>
         <location filename="../QMenuStrings.cpp" line="2890"/>
         <source>Q</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">Q</translation>
+        <translation>Q</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1251"/>
         <location filename="../QMenuStrings.cpp" line="2899"/>
         <source>Shift+Q</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">Shift+Q</translation>
+        <translation>Shift+Q</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1260"/>
         <location filename="../QMenuStrings.cpp" line="2908"/>
         <source>Ctrl+Shift+W</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">Ctrl+Shift+W</translation>
+        <translation>Ctrl+Shift+W</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1269"/>
         <location filename="../QMenuStrings.cpp" line="2917"/>
         <source>W</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">W</translation>
+        <translation>W</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1278"/>
         <location filename="../QMenuStrings.cpp" line="2926"/>
         <source>Shift+W</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">Shift+W</translation>
+        <translation>Shift+W</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1287"/>
         <location filename="../QMenuStrings.cpp" line="2935"/>
         <source>Ctrl+Shift+E</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1305"/>
@@ -1815,21 +1815,21 @@
         <location filename="../QMenuStrings.cpp" line="3908"/>
         <source>R</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1314"/>
         <location filename="../QMenuStrings.cpp" line="2962"/>
         <source>Shift+R</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1323"/>
         <location filename="../QMenuStrings.cpp" line="2971"/>
         <source>Ctrl+Shift+U</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1332"/>
@@ -1837,56 +1837,56 @@
         <location filename="../QMenuStrings.cpp" line="3899"/>
         <source>U</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1341"/>
         <location filename="../QMenuStrings.cpp" line="2989"/>
         <source>Shift+U</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1350"/>
         <location filename="../QMenuStrings.cpp" line="2998"/>
         <source>Ctrl+Shift+I</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1368"/>
         <location filename="../QMenuStrings.cpp" line="3016"/>
         <source>Shift+I</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1377"/>
         <location filename="../QMenuStrings.cpp" line="3025"/>
         <source>Ctrl+Shift+O</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1386"/>
         <location filename="../QMenuStrings.cpp" line="3034"/>
         <source>O</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1396"/>
         <location filename="../QMenuStrings.cpp" line="3044"/>
         <source>Z</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1405"/>
         <location filename="../QMenuStrings.cpp" line="3053"/>
         <source>Shift+Z</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1414"/>
@@ -1894,21 +1894,21 @@
         <location filename="../QMenuStrings.cpp" line="3594"/>
         <source>Ctrl+Shift+X</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1423"/>
         <location filename="../QMenuStrings.cpp" line="3071"/>
         <source>X</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1432"/>
         <location filename="../QMenuStrings.cpp" line="3080"/>
         <source>Shift+X</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1441"/>
@@ -1916,56 +1916,56 @@
         <location filename="../QMenuStrings.cpp" line="3603"/>
         <source>Ctrl+Shift+C</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1450"/>
         <location filename="../QMenuStrings.cpp" line="3098"/>
         <source>C</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">Do</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1459"/>
         <location filename="../QMenuStrings.cpp" line="3107"/>
         <source>V</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">V</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1468"/>
         <location filename="../QMenuStrings.cpp" line="3116"/>
         <source>Shift+V</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1477"/>
         <location filename="../QMenuStrings.cpp" line="3125"/>
         <source>Ctrl+Shift+B</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1486"/>
         <location filename="../QMenuStrings.cpp" line="3134"/>
         <source>B</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">Si</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1495"/>
         <location filename="../QMenuStrings.cpp" line="3143"/>
         <source>Shift+B</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1504"/>
         <location filename="../QMenuStrings.cpp" line="3152"/>
         <source>Ctrl+Shift+N</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1513"/>
@@ -1973,14 +1973,14 @@
         <location filename="../QMenuStrings.cpp" line="3760"/>
         <source>N</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1522"/>
         <location filename="../QMenuStrings.cpp" line="3170"/>
         <source>Shift+N</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1531"/>
@@ -1988,7 +1988,7 @@
         <location filename="../QMenuStrings.cpp" line="3692"/>
         <source>Ctrl+Shift+M</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1540"/>
@@ -1996,135 +1996,135 @@
         <location filename="../QMenuStrings.cpp" line="3742"/>
         <source>M</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1549"/>
         <location filename="../QMenuStrings.cpp" line="3206"/>
         <source>H</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1884"/>
         <source>Alt+Shift+X</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1893"/>
         <source>Alt+Shift+V</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2019"/>
         <source>Alt+0</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2028"/>
         <source>Alt+1</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2037"/>
         <source>Alt+2</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2046"/>
         <source>Alt+3</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2055"/>
         <source>Alt+4</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2064"/>
         <source>Alt+5</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2073"/>
         <source>Alt+9</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2104"/>
         <source>Ctrl+PgUp</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2113"/>
         <source>Ctrl+PgDown</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2125"/>
         <source>Ctrl+B</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2135"/>
         <source>Ctrl+U</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2144"/>
         <location filename="../QMenuStrings.cpp" line="3836"/>
         <source>Ctrl+T</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2153"/>
         <source>Ctrl+R</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">Ctrl+R</translation>
+        <translation>Ctrl+R</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2163"/>
         <source>)</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2172"/>
         <source>Ctrl+)</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2185"/>
         <source>~</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2199"/>
         <source>&amp;lt;</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2208"/>
         <source>&amp;gt;</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2216"/>
@@ -3293,7 +3293,7 @@
         <location filename="../QMenuStrings.cpp" line="3461"/>
         <source>Ctrl+N</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2227"/>
@@ -3309,7 +3309,7 @@
         <location filename="../QMenuStrings.cpp" line="2236"/>
         <source>Ctrl+=</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2238"/>
@@ -3416,13 +3416,13 @@
         <location filename="../QMenuStrings.cpp" line="2408"/>
         <source>Alt+Up</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2417"/>
         <source>Alt+Down</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2560"/>
@@ -3692,26 +3692,26 @@
         <location filename="../QMenuStrings.cpp" line="3487"/>
         <source>Ctrl+O</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3530"/>
         <source>Ctrl+Q</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3612"/>
         <location filename="../QMenuStrings.cpp" line="4248"/>
         <source>Ctrl+Shift+V</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3621"/>
         <source>Ctrl+Shift+Ins</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3644"/>
@@ -4131,41 +4131,41 @@
         <location filename="../QMenuStrings.cpp" line="2602"/>
         <source>F8</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2611"/>
         <source>F9</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2699"/>
         <location filename="../QMenuStrings.cpp" line="2708"/>
         <source>Y</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2717"/>
         <location filename="../QMenuStrings.cpp" line="2726"/>
         <source>.</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3197"/>
         <location filename="../QMenuStrings.cpp" line="3662"/>
         <source>P</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3215"/>
         <location filename="../QMenuStrings.cpp" line="4148"/>
         <source>G</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">Sol</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3241"/>
@@ -4891,7 +4891,7 @@
         <location filename="../QMenuStrings.cpp" line="3653"/>
         <source>T</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3655"/>
