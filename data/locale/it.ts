@@ -1595,7 +1595,7 @@
         <location filename="../QMenuStrings.cpp" line="3751"/>
         <source>D</source>
         <comment>keyboard shortcut</comment>
-        <translation>Re</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1144"/>
