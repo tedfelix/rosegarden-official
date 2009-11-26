@@ -69,6 +69,9 @@ ProgressDialog::ProgressDialog(QWidget *creator,
     m_progressBar = new QProgressBar();
     setBar( m_progressBar );
     
+    show();
+    m_progressBar->show();
+    
 //     progressBar()->setTotalSteps(totalSteps);
 //    progressBar()->setMaximum(totalSteps);
     

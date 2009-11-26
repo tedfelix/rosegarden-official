@@ -1195,7 +1195,7 @@
         <location filename="../QMenuStrings.cpp" line="808"/>
         <source>Resc&amp;ale</source>
         <translatorcomment>amp ok</translatorcomment>
-        <translation>M&amp;aßstäblich neu ändern</translation>
+        <translation type="unfinished">D&amp;auer der Auswahl ändern</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="809"/>
@@ -1272,7 +1272,7 @@
         <location filename="../QMenuStrings.cpp" line="867"/>
         <source>&amp;Convert</source>
         <translatorcomment>amp ok</translatorcomment>
-        <translation>&amp;Konvertieren</translation>
+        <translation type="unfinished">Auswahl sp&amp;iegeln</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="868"/>
@@ -1299,7 +1299,7 @@
         <location filename="../QMenuStrings.cpp" line="887"/>
         <source>Trigger Se&amp;gment...</source>
         <translatorcomment>amp ok</translatorcomment>
-        <translation>Trigger Se&amp;gment...</translation>
+        <translation type="unfinished">Trigger Se&amp;gment...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1016"/>
@@ -1656,7 +1656,7 @@
         <location filename="../QMenuStrings.cpp" line="728"/>
         <location filename="../QMenuStrings.cpp" line="1961"/>
         <source>Show &amp;Velocity Ruler</source>
-        <translation>Gesch&amp;windigkeitslineal anzeigen</translation>
+        <translation type="unfinished">Leiste für A&amp;nschlagstärke zeigen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="729"/>
@@ -1778,7 +1778,7 @@
         <location filename="../QMenuStrings.cpp" line="888"/>
         <source>Remove &amp;Triggers</source>
         <translatorcomment>amp ok</translatorcomment>
-        <translation>&amp;Trigger löschen</translation>
+        <translation type="unfinished">Trigger &amp;löschen</translation>
     </message>
     <message>
         <source>Control Ruler</source>
@@ -11925,12 +11925,12 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="93"/>
         <source>Linear - easier to see loud peaks</source>
-        <translation>Linear - macht es einfacher, laute Stellen zu erkennen</translation>
+        <translation type="unfinished">Lineare Skalierung - macht es einfacher, laute Stellen zu erkennen</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="94"/>
         <source>Meter scaling - easier to see quiet activity</source>
-        <translation>Meßgerät Skalierung - erleichtert das erkennen von Aktivität bei ruhigen Stellen</translation>
+        <translation type="unfinished">Skalierung wie bei Meßgerät - erleichtert das erkennen von Aktivität bei ruhigen Stellen</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="104"/>
