@@ -47,6 +47,7 @@ HeadersGroup(RosegardenDocument *document) :
         QWidget(0),
         m_composition(document->getComposition()),
         m_scene(0),
+        m_widget(0),
         m_usedHeight(0),
         m_filler(0),
         m_lastX(INT_MIN),

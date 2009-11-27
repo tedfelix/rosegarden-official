@@ -23,6 +23,7 @@
 
 #include "base/NotationTypes.h"
 #include "base/Track.h"
+#include "base/Overlaps.h"
 #include "NotePixmapFactory.h"
 
 #include <QSize>
@@ -47,6 +48,8 @@ class HeadersGroup;
 class NotationScene;
 class ColourMap;
 class Segment;
+class Clef;
+
 
 // Class rename from TrackHeader to StaffHeader since paintEvent() method
 // has been added : Qt disliked to have two different StaffHeader::paintEvent()
@@ -250,6 +253,10 @@ private :
     QToolButton *m_indeterminableKey;
 
     QTimer *m_toolTipTimer;
+
+    Overlaps<int> *m_transposeOverlaps;
+    Overlaps<Clef> *m_clefOverlaps;
+    Overlaps<Key> *m_keyOverlaps;
 };
 
 }

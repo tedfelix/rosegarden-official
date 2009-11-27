@@ -26,6 +26,7 @@
 #include "base/Colour.h"
 #include "base/ColourMap.h"
 #include "base/Track.h"
+#include "base/Overlaps.h"
 #include "gui/general/GUIPalette.h"
 #include "document/RosegardenDocument.h"
 #include "misc/Strings.h"
@@ -33,6 +34,7 @@
 #include "NotationScene.h"
 #include "NotationStaff.h"
 
+#include <vector>
 #include <map>
 #include <set>
 #include <string>
@@ -97,7 +99,10 @@ StaffHeader::StaffHeader(HeadersGroup *group,
         m_colourIndex(0),
         m_indeterminableClef(0),
         m_indeterminableKey(0),
-        m_toolTipTimer(0)
+        m_toolTipTimer(0),
+        m_transposeOverlaps(0),
+        m_clefOverlaps(0),
+        m_keyOverlaps(0)
 
 {
     // localStyle (search key)
@@ -258,12 +263,31 @@ StaffHeader::StaffHeader(HeadersGroup *group,
 
     connect(m_scene, SIGNAL(currentStaffChanged()),
             this, SLOT(slotSetCurrent()));
+
+    // Create an object where to find possible inconsistancies
+    // when segments overlap
+
+    // Use a vector to pass all the segments of a track to the Overlaps ctor
+    std::vector<Segment *> segVec;
+    for (SortedSegments::iterator i=segments.begin();
+          i!=segments.end();
+          ++i) {
+        segVec.push_back(*i);
+    }
+
+    m_clefOverlaps = new Overlaps<Clef>(segVec);
+    m_keyOverlaps = new Overlaps<Key>(segVec);
+    m_transposeOverlaps = new Overlaps<int>(segVec);
 }
 
 StaffHeader::~StaffHeader()
 {
     delete m_clefItem;
     delete m_keyItem;
+
+    delete m_clefOverlaps;
+    delete m_keyOverlaps;
+    delete m_transposeOverlaps;
 }
 
 void
@@ -289,6 +313,7 @@ StaffHeader::paintEvent(QPaintEvent *)
 
     wHeight -= 4;    // Make room to the label frame :
                      // 4 = 2 * (margin + lineWidth)
+wWidth -= 4; /// ???
 
     int lw = m_lineSpacing;
     int h;
@@ -446,9 +471,9 @@ StaffHeader::paintEvent(QPaintEvent *)
         // TODO : Use strokePath() rather than drawLine()
         pen.setWidth(4);
         paint.setPen(pen);
-        paint.drawLine(1, 1, width() - 1, 1);
-        paint.drawLine(width() - 1, 1, width() - 1, height() - 1);
-        paint.drawLine(width() - 1, height() - 1, 1, height() - 1);
+        paint.drawLine(1, 1, wWidth - 1, 1);
+        paint.drawLine(wWidth - 1, 1, wWidth - 1, height() - 1);
+        paint.drawLine(wWidth - 1, height() - 1, 1, height() - 1);
         paint.drawLine(1, height() - 1, 1, 1);
     }
 }
@@ -793,5 +818,6 @@ StaffHeader::slotToolTip()
 // }
 
 }
+
 #include "StaffHeader.moc"
 
