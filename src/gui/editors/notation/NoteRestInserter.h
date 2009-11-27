@@ -149,7 +149,8 @@ protected:
     bool m_followAccidental;
     bool m_isaRestInserter;
 
-    static const char* m_actionsAccidental[][4];
+// Obsolete ?
+//    static const char* m_actionsAccidental[][4];
 };
 
 

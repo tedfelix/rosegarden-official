@@ -78,9 +78,10 @@ NoteRestInserter::NoteRestInserter(NotationWidget* widget) :
     a = createAction("toggle_auto_beam", SLOT(slotToggleAutoBeam()));
     if (m_autoBeam) { a->setCheckable(true); a->setChecked(true); }
 
-    for (unsigned int i = 0; i < 6; ++i) {
-        a = createAction(m_actionsAccidental[i][1], m_actionsAccidental[i][0]);
-    }
+//  Obsolete?
+//    for (unsigned int i = 0; i < 6; ++i) {
+//        a = createAction(m_actionsAccidental[i][1], m_actionsAccidental[i][0]);
+//    }
 
     createAction("switch_dots_on", SLOT(slotToggleDot()));
     createAction("switch_dots_off", SLOT(slotToggleDot()));
@@ -741,16 +742,17 @@ void NoteRestInserter::slotNotesSelected()
     }
 }
 
-const char* NoteRestInserter::m_actionsAccidental[][4] =
-{
-    { "1slotNoAccidental()",  "no_accidental" },
-    { "1slotFollowAccidental()",  "follow_accidental" },
-    { "1slotSharp()",         "sharp_accidental" },
-    { "1slotFlat()",          "flat_accidental" },
-    { "1slotNatural()",       "natural_accidental" },
-    { "1slotDoubleSharp()",   "double_sharp_accidental" },
-    { "1slotDoubleFlat()",    "double_flat_accidental" }
-};
+// Obsolete ?
+//const char* NoteRestInserter::m_actionsAccidental[][4] =
+//{
+//    { "1slotNoAccidental()",  "no_accidental" },
+//    { "1slotFollowAccidental()",  "follow_accidental" },
+//    { "1slotSharp()",         "sharp_accidental" },
+//    { "1slotFlat()",          "flat_accidental" },
+//    { "1slotNatural()",       "natural_accidental" },
+//    { "1slotDoubleSharp()",   "double_sharp_accidental" },
+//    { "1slotDoubleFlat()",    "double_flat_accidental" }
+//};
 
 const QString NoteRestInserter::ToolName     = "noterestinserter";
 
