@@ -452,8 +452,9 @@ RosegardenMainViewWidget::createNotationView(std::vector<Segment *> segmentsToEd
 
     connect(notationView, SIGNAL(saveFile()),
             RosegardenMainWindow::self(), SLOT(slotFileSave()));
-    connect(notationView, SIGNAL(jumpPlaybackTo(timeT)),
-            getDocument(), SLOT(slotSetPointerPosition(timeT)));
+//  This probably is obsolete in Thorn.
+//    connect(notationView, SIGNAL(jumpPlaybackTo(timeT)),
+//            getDocument(), SLOT(slotSetPointerPosition(timeT)));
     connect(notationView, SIGNAL(openInNotation(std::vector<Segment *>)),
             this, SLOT(slotEditSegmentsNotation(std::vector<Segment *>)));
     connect(notationView, SIGNAL(openInMatrix(std::vector<Segment *>)),
@@ -663,8 +664,9 @@ RosegardenMainViewWidget::createMatrixView(std::vector<Segment *> segmentsToEdit
 
     connect(matrixView, SIGNAL(saveFile()),
             RosegardenMainWindow::self(), SLOT(slotFileSave()));
-    connect(matrixView, SIGNAL(jumpPlaybackTo(timeT)),
-            getDocument(), SLOT(slotSetPointerPosition(timeT)));
+//  This probably is obsolete in Thorn.
+//    connect(matrixView, SIGNAL(jumpPlaybackTo(timeT)),
+//            getDocument(), SLOT(slotSetPointerPosition(timeT)));
     connect(matrixView, SIGNAL(openInNotation(std::vector<Segment *>)),
             this, SLOT(slotEditSegmentsNotation(std::vector<Segment *>)));
     connect(matrixView, SIGNAL(openInMatrix(std::vector<Segment *>)),
