@@ -74,7 +74,7 @@ public slots:
     void slotSelectionChanged(EventSelection *);
     void slotHoveredOverNoteChanged();
     void slotHoveredOverNoteChanged(int evPitch, bool haveEvent, timeT evTime);
-    void slotUpdatePropertyRulers();
+    void slotUpdateRulers(timeT,timeT);
     void slotSetToolName(const QString &);
     void slotDragScroll(timeT);
 

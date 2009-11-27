@@ -366,20 +366,22 @@ ControlRulerWidget::slotHoveredOverNoteChanged(int evPitch, bool haveEvent, time
 void
 ControlRulerWidget::slotHoveredOverNoteChanged()
 {
-    slotUpdatePropertyRulers();
+    if (m_controlRulerList.size()) {
+        std::list<ControlRuler *>::iterator it;
+        for (it = m_controlRulerList.begin(); it != m_controlRulerList.end(); ++it) {
+            PropertyControlRuler *pr = dynamic_cast <PropertyControlRuler *> (*it);
+            if (pr) pr->updateSelectedItems();
+        }
+    }
 }
 
 void
-ControlRulerWidget::slotUpdatePropertyRulers()
+ControlRulerWidget::slotUpdateRulers(timeT startTime, timeT endTime)
 {
     if (m_controlRulerList.size()) {
         std::list<ControlRuler *>::iterator it;
         for (it = m_controlRulerList.begin(); it != m_controlRulerList.end(); ++it) {
-//            PropertyControlRuler *pr = dynamic_cast <PropertyControlRuler *> (*it);
-//            if (pr) {
-//                pr->layoutUpdated();
-//            }
-            (*it)->notationLayoutUpdated();
+            (*it)->notationLayoutUpdated(startTime,endTime);
         }
     }
 }

@@ -398,8 +398,8 @@ NotationWidget::setSegments(RosegardenDocument *document,
     m_controlsWidget->setViewSegment((ViewSegment *) m_scene->getCurrentStaff());
     m_controlsWidget->setRulerScale(m_referenceScale, m_leftGutter);
 
-    connect(m_scene, SIGNAL(layoutUpdated()),
-            m_controlsWidget, SLOT(slotUpdatePropertyRulers()));
+    connect(m_scene, SIGNAL(layoutUpdated(timeT,timeT)),
+            m_controlsWidget, SLOT(slotUpdateRulers(timeT,timeT)));
     
     // For some reason this doesn't work in the constructor - not looked in detail
     connect(m_scene, SIGNAL(selectionChanged(EventSelection *)),

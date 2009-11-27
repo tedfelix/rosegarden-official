@@ -1318,7 +1318,7 @@ NotationScene::layout(NotationStaff *singleStaff,
     }
     }
 
-    emit layoutUpdated();
+    emit layoutUpdated(startTime,endTime);
 }
 
 void

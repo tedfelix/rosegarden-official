@@ -115,6 +115,7 @@ void PropertyControlItem::reconfigure(float x0, float x1, float y)
     }
 
 //    m_controlRuler->update();
+    ControlItem::reconfigure();
 }
 
 void PropertyControlItem::updateSegment()

@@ -88,6 +88,7 @@ public:
     virtual void endMarkerTimeChanged(const Segment *, bool shorten);
 
     void updateSelection(std::vector<ViewElement*>*);
+    void updateSelectedItems();
 
 public slots:
     void slotHoveredOverNoteChanged(int evPitch, bool haveEvent, timeT evTime);

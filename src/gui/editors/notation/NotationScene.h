@@ -166,7 +166,7 @@ signals:
     void selectionChanged();
     void selectionChanged(EventSelection *);
     
-    void layoutUpdated();
+    void layoutUpdated(timeT,timeT);
     void staffsPositionned();
 
     void currentStaffChanged();

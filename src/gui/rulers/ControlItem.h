@@ -74,6 +74,7 @@ public:
     virtual void updateSegment();
 
     virtual void update();
+
     virtual void setX(int);
     virtual void setWidth(int);
 
@@ -81,12 +82,14 @@ public:
     virtual Event* getEvent() { return m_event; }
 
 protected:
-
+    virtual void reconfigure();
+    
     //--------------- Data members ---------------------------------
 
     QColor m_colour;
     double m_xstart;
     double m_xend;
+    double m_lastxstart;
     float m_y;
     bool m_handlingMouseMove;
     bool m_selected;

@@ -109,7 +109,7 @@ public:
 
     void updateSegment();
     
-    virtual void notationLayoutUpdated();
+    virtual void notationLayoutUpdated(timeT,timeT);
 
     virtual void setRulerScale(RulerScale *rulerscale) { m_rulerScale = rulerscale; }
     RulerScale* getRulerScale() { return m_rulerScale; }

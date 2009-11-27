@@ -324,6 +324,8 @@ void ControlRuler::moveItem(ControlItem* item)
     // Need to check changes in visibility
     // DO NOT change isSelected or m_selectedItems as this is used to loop this
     ControlItemMap::iterator it = findControlItem(item);
+    if (it == m_controlItemMap.end()) return;
+
     removeCheckVisibleLimits(it);
     m_controlItemMap.erase(it);
     it = static_cast <ControlItemMap::iterator> (m_controlItemMap.insert(ControlItemMap::value_type(item->xStart(),item)));
@@ -438,10 +440,35 @@ void ControlRuler::slotUpdate()
 ///TODO Set some update flag?
 }
 
-void ControlRuler::notationLayoutUpdated()
+void ControlRuler::notationLayoutUpdated(timeT startTime, timeT endTime)
 {
-    for (ControlItemMap::iterator it = m_controlItemMap.begin(); it != m_controlItemMap.end(); ++it) {
-        it->second->update();
+    // notationLayoutUpdated should be called after notation has adjusted the layout
+    // Clearly, for property control rulers, notes may have been moved so their position needs updating
+    // The rulers may also have changed so ControllerEventRulers also need updating
+    // Property control items may now need to be repositioned within the ControlItemMap
+    // as new items are all created with a zero x-position, and have now been put in place.
+    // For this reason, we need to collect items into a separate list otherwise we get the
+    // dreaded 'modifying a list within a loop of the list' problem which can take quite a long
+    // time to fix!
+    std::vector<ControlItem*> itemsToUpdate;
+    ControlItemMap::iterator it = m_controlItemMap.begin();
+    while (it != m_controlItemMap.end() && it->first == 0) {
+        itemsToUpdate.push_back(it->second);
+        ++it;
+    }
+    
+    while (it != m_controlItemMap.end() && it->first < getRulerScale()->getXForTime(startTime)) ++it;
+    
+    // Would like to only update in the defined region but, unfortunately, everything after this time
+    // may well have moved as well so we have to do everything after startTime
+    while (it != m_controlItemMap.end()) {
+        itemsToUpdate.push_back(it->second);
+        ++it;
+    }
+    
+    for (std::vector<ControlItem*>::iterator vit = itemsToUpdate.begin(); vit != itemsToUpdate.end(); ++vit) {
+        (*vit)->update();
+        RG_DEBUG << "Updated item: " << hex << (long)(*vit);
     }
     
     update();

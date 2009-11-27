@@ -105,8 +105,12 @@ void EventControlItem::reconfigure(float x, float y)
         m_xstart = x;
     }
     
+    ControlItem::reconfigure();
+    
+///@TODO ??
     ControlItem::update();
 
+///@TODO ??
     m_controlRuler->update();
 }
 

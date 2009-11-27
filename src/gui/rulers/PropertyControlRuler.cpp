@@ -272,6 +272,15 @@ void PropertyControlRuler::updateSelection(std::vector <ViewElement*> *elementLi
     update();
 }
 
+void PropertyControlRuler::updateSelectedItems()
+{
+    for (ControlItemList::iterator it = m_selectedItems.begin(); it != m_selectedItems.end(); ++it) {
+        (*it)->update();
+    }
+    
+    update();
+}
+
 //void PropertyControlRuler::slotHoveredOverNoteChanged(int evPitch, bool haveEvent, timeT evTime)
 //{
 //    RG_DEBUG << "slotHoveredJOBBY!!";

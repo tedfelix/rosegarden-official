@@ -200,6 +200,15 @@ void ControlItem::update()
 {
 }
 
+void ControlItem::reconfigure()
+{
+    if (m_xstart != m_lastxstart) {
+        m_controlRuler->moveItem(this);
+    }
+    
+    m_lastxstart = m_xstart;
+}
+
 void ControlItem::setX(int x)
 {
 }
