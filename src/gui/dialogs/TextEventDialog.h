@@ -61,6 +61,7 @@ public slots:
      * instance
      */
     void slotOK();
+    void slotHelpRequested();
 
     // convenience canned texts
     void slotDynamicShortcutChanged(const QString &);

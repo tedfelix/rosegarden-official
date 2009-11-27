@@ -27,6 +27,8 @@
 #include <QRadioButton>
 #include <QWidget>
 #include <QVBoxLayout>
+#include <QUrl>
+#include <QDesktopServices>
 
 
 namespace Rosegarden
@@ -86,6 +88,7 @@ PasteNotationDialog::PasteNotationDialog(QWidget *parent,
     metagrid->setRowStretch(0, 10);
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(buttonBox, SIGNAL(helpRequested()), this, SLOT(slotHelpRequested()));
 }
 
 PasteEventsCommand::PasteType
@@ -112,5 +115,17 @@ PasteNotationDialog::slotPasteTypeChanged()
     m_setAsDefaultButton->setChecked(m_defaultType == getPasteType());
 }
 
+
+void
+PasteNotationDialog::slotHelpRequested()
+{
+    // TRANSLATORS: if the manual is translated into your language, you can
+    // change the two-letter language code in this URL to point to your language
+    // version, eg. "http://rosegardenmusic.com/wiki/doc:pasteNotationDialog-es" for the
+    // Spanish version. If your language doesn't yet have a translation, feel
+    // free to create one.
+    QString helpURL = tr("http://rosegardenmusic.com/wiki/doc:pasteNotationDialog-en");
+    QDesktopServices::openUrl(QUrl(helpURL));
+}
 }
 #include "PasteNotationDialog.moc"

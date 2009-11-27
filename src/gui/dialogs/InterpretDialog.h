@@ -42,6 +42,7 @@ public:
 
 protected slots:
     void slotAllBoxChanged();
+    void slotHelpRequested();
 
 private:
     QCheckBox *m_allInterpretations;

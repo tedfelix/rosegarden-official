@@ -56,6 +56,7 @@ public slots:
     void slotUntupledChanged(const QString &);
     void slotTupledChanged(const QString &);
     void slotHasTimingChanged();
+    void slotHelpRequested();
 
 protected:
 

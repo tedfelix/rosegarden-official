@@ -47,6 +47,7 @@ public:
 
 public slots:
     void slotPasteTypeChanged();
+    void slotHelpRequested();
 
 protected:
 

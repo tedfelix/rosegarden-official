@@ -40,6 +40,8 @@
 #include <QVBoxLayout>
 #include <QSpinBox>
 #include <QApplication>
+#include <QUrl>
+#include <QDesktopServices>
 
 
 namespace Rosegarden
@@ -386,6 +388,7 @@ TextEventDialog::TextEventDialog(QWidget *parent,
     
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(slotOK()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(buttonBox, SIGNAL(helpRequested()), this, SLOT(slotHelpRequested()));
 
     settings.endGroup();
 
@@ -626,5 +629,17 @@ TextEventDialog::slotUpdateSize(int i)
 }
 
 
+
+void
+TextEventDialog::slotHelpRequested()
+{
+    // TRANSLATORS: if the manual is translated into your language, you can
+    // change the two-letter language code in this URL to point to your language
+    // version, eg. "http://rosegardenmusic.com/wiki/doc:textEventDialog-es" for the
+    // Spanish version. If your language doesn't yet have a translation, feel
+    // free to create one.
+    QString helpURL = tr("http://rosegardenmusic.com/wiki/doc:textEventDialog-en");
+    QDesktopServices::openUrl(QUrl(helpURL));
+}
 }
 #include "TextEventDialog.moc"

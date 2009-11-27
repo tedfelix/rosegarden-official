@@ -44,6 +44,7 @@ public:
 public slots:
     virtual void accept();
     void slotSequencePresetChanged(int);
+    void slotHelpRequested();
 
 protected:
     Segment *m_segment;

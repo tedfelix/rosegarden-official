@@ -29,6 +29,8 @@
 #include <QGroupBox>
 #include <QWidget>
 #include <QVBoxLayout>
+#include <QUrl>
+#include <QDesktopServices>
 
 
 namespace Rosegarden
@@ -89,6 +91,7 @@ InterpretDialog::InterpretDialog(QWidget *parent) :
     metagrid->setRowStretch(0, 10);
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(buttonBox, SIGNAL(helpRequested()), this, SLOT(slotHelpRequested()));
 
     settings.endGroup();
 }
@@ -134,5 +137,17 @@ InterpretDialog::getInterpretations()
     }
 }
 
+
+void
+InterpretDialog::slotHelpRequested()
+{
+    // TRANSLATORS: if the manual is translated into your language, you can
+    // change the two-letter language code in this URL to point to your language
+    // version, eg. "http://rosegardenmusic.com/wiki/doc:interpretDialog-es" for the
+    // Spanish version. If your language doesn't yet have a translation, feel
+    // free to create one.
+    QString helpURL = tr("http://rosegardenmusic.com/wiki/doc:interpretDialog-en");
+    QDesktopServices::openUrl(QUrl(helpURL));
+}
 }
 #include "InterpretDialog.moc"

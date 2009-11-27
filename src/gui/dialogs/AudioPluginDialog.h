@@ -83,6 +83,7 @@ public slots:
     void slotPaste();
     void slotDefault();
     void slotShowGUI();
+    void slotHelpRequested();
 
     virtual void slotEditor();
 

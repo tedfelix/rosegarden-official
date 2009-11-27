@@ -51,6 +51,8 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QScrollArea>
+#include <QUrl>
+#include <QDesktopServices>
 
 #include <set>
 
@@ -190,6 +192,7 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     metagrid->setRowStretch(0, 10);
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(buttonBox, SIGNAL ( helpRequested() ), this, SLOT ( slotHelpRequested() ) );
 
     RG_DEBUG << "About to KABOOM in the ctor!" << endl;
     populatePluginCategoryList();
@@ -984,6 +987,18 @@ AudioPluginDialog::slotDefault()
             }
         }
     }
+}
+
+void
+AudioPluginDialog::slotHelpRequested()
+{
+    // TRANSLATORS: if the manual is translated into your language, you can
+    // change the two-letter language code in this URL to point to your language
+    // version, eg. "http://rosegardenmusic.com/wiki/doc:audioPluginDialog-es" for the
+    // Spanish version. If your language doesn't yet have a translation, feel
+    // free to create one.
+    QString helpURL = tr("http://rosegardenmusic.com/wiki/doc:audioPluginDialog-en");
+    QDesktopServices::openUrl(QUrl(helpURL));
 }
 
 }

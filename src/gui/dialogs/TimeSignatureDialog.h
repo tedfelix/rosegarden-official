@@ -62,6 +62,7 @@ public slots:
     void slotDenomUp();
     void slotDenomDown();
     void slotUpdateCommonTimeButton();
+    void slotHelpRequested();
 
 protected:
     //--------------- Data members ---------------------------------

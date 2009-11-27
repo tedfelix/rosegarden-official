@@ -39,6 +39,8 @@
 #include <QHBoxLayout>
 #include <QCheckBox>
 #include <QSettings>
+#include <QUrl>
+#include <QDesktopServices>
 
 #include <algorithm>
 
@@ -224,6 +226,7 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
     metagrid->setRowStretch(0, 10);
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(buttonBox, SIGNAL(helpRequested()), this, SLOT(slotHelpRequested()));
 }
 
 KeySignatureDialog::ConversionType
@@ -455,5 +458,17 @@ KeySignatureDialog::getKeyName(const QString &s, bool minor)
     return name;
 }
 
+
+void
+KeySignatureDialog::slotHelpRequested()
+{
+    // TRANSLATORS: if the manual is translated into your language, you can
+    // change the two-letter language code in this URL to point to your language
+    // version, eg. "http://rosegardenmusic.com/wiki/doc:keySignatureDialog-es" for the
+    // Spanish version. If your language doesn't yet have a translation, feel
+    // free to create one.
+    QString helpURL = tr("http://rosegardenmusic.com/wiki/doc:keySignatureDialog-en");
+    QDesktopServices::openUrl(QUrl(helpURL));
+}
 }
 #include "KeySignatureDialog.moc"

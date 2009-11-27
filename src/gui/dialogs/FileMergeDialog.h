@@ -41,6 +41,9 @@ public:
     FileMergeDialog(QWidget *parent, QString fileName, bool timingsDiffer);
 
     int getMergeOptions();
+
+public slots:
+    void slotHelpRequested();
     
 private:
     QComboBox *m_choice;

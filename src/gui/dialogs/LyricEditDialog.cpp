@@ -40,6 +40,8 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QSettings>
+#include <QUrl>
+#include <QDesktopServices>
 
 
 namespace Rosegarden
@@ -121,6 +123,7 @@ LyricEditDialog::LyricEditDialog(QWidget *parent,
     metagrid->setRowStretch(0, 10);
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(buttonBox, SIGNAL(helpRequested()), this, SLOT(slotHelpRequested()));
 }
 
 void
@@ -336,5 +339,17 @@ LyricEditDialog::verseDialogRepopulate()
     m_textEdit->setText(m_texts[m_currentVerse]);
 }
 
+
+void
+LyricEditDialog::slotHelpRequested()
+{
+    // TRANSLATORS: if the manual is translated into your language, you can
+    // change the two-letter language code in this URL to point to your language
+    // version, eg. "http://rosegardenmusic.com/wiki/doc:lyricEditDialog-es" for the
+    // Spanish version. If your language doesn't yet have a translation, feel
+    // free to create one.
+    QString helpURL = tr("http://rosegardenmusic.com/wiki/doc:lyricEditDialog-en");
+    QDesktopServices::openUrl(QUrl(helpURL));
+}
 }
 #include "LyricEditDialog.moc"

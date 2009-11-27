@@ -53,6 +53,7 @@ protected slots:
     virtual void accept();
     virtual void slotApply();
     virtual void slotCancelOrClose();
+    virtual void slotHelpRequested();
 
     virtual void slotActivateApply();
 

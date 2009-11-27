@@ -70,6 +70,7 @@ public slots:
     void slotTempoRampToTargetClicked();
     void slotTargetChanged(double);
     void slotTapClicked();
+    void slotHelpRequested();
 
 signals:
     // Return results in this signal

@@ -50,6 +50,7 @@ protected slots:
     void slotVerseNumberChanged(int);
     void slotAddVerse();
     void slotRemoveVerse();
+    void slotHelpRequested();
 
 protected:
     Segment *m_segment;

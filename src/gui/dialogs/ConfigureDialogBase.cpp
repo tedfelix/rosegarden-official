@@ -32,6 +32,8 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QUrl>
+#include <QDesktopServices>
 
 namespace Rosegarden
 {
@@ -59,6 +61,7 @@ ConfigureDialogBase::ConfigureDialogBase(QWidget *parent, QString label, const c
 
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(slotCancelOrClose()));
+    connect(buttonBox, SIGNAL( helpRequested() ), this, SLOT ( slotHelpRequested() ) );
 
     m_applyButton = buttonBox->button(QDialogButtonBox::Apply);
     m_applyButton->setEnabled(false);
@@ -137,5 +140,17 @@ ConfigureDialogBase::slotCancelOrClose()
 }
 
 
+
+void
+ConfigureDialogBase::slotHelpRequested()
+{
+    // TRANSLATORS: if the manual is translated into your language, you can
+    // change the two-letter language code in this URL to point to your language
+    // version, eg. "http://rosegardenmusic.com/wiki/doc:configureDialogBase-es" for the
+    // Spanish version. If your language doesn't yet have a translation, feel
+    // free to create one.
+    QString helpURL = tr("http://rosegardenmusic.com/wiki/doc:configureDialogBase-en");
+    QDesktopServices::openUrl(QUrl(helpURL));
+}
 }
 #include "ConfigureDialogBase.moc"

@@ -39,6 +39,8 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QUrl>
+#include <QDesktopServices>
 
 
 namespace Rosegarden
@@ -233,6 +235,7 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
 
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(buttonBox, SIGNAL(helpRequested()), this, SLOT(slotHelpRequested()));
 
 }
 
@@ -351,5 +354,17 @@ TimeSignatureDialog::shouldNormalizeRests() const
             m_normalizeRestsButton->isChecked());
 }
 
+
+void
+TimeSignatureDialog::slotHelpRequested()
+{
+    // TRANSLATORS: if the manual is translated into your language, you can
+    // change the two-letter language code in this URL to point to your language
+    // version, eg. "http://rosegardenmusic.com/wiki/doc:timeSignatureDialog-es" for the
+    // Spanish version. If your language doesn't yet have a translation, feel
+    // free to create one.
+    QString helpURL = tr("http://rosegardenmusic.com/wiki/doc:timeSignatureDialog-en");
+    QDesktopServices::openUrl(QUrl(helpURL));
+}
 }
 #include "TimeSignatureDialog.moc"
