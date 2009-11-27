@@ -55,16 +55,19 @@ LSCPPatchExtractor::isLSCPFile(const QString& fileName)
 LSCPPatchExtractor::Device
 LSCPPatchExtractor::extractContent(const QString& fileName)
 {
-    std::cout << "Usao sam u extractContent u LSCPParser-u!" << std::endl;
+/////// Works for single device midi mappings!
+
     Device device;
     
     QFile lscpFile(fileName);
     QTextStream inStream(&lscpFile);
+
     QStringList splitLine;
-    
+
     unsigned int bank, program;
     std::string programName;
-//    std::string deviceName;
+    std::string bankName;
+    std::string tempDeviceName, tempBankName;
     
     if (!lscpFile.open(QFile::ReadOnly)) {
         return device;
@@ -73,43 +76,59 @@ LSCPPatchExtractor::extractContent(const QString& fileName)
             QString currentLine = inStream.readLine();
             currentLine = currentLine.simplified();
             
+            Bank_Prog currentDevice;
+
             if (!currentLine.isEmpty() && currentLine.startsWith("add", Qt::CaseInsensitive)) {
-// Preparation for returning device's name - do nothing for now!
+
+///// Useless for now. Will be needed if someone dedicates time to implement Device import!
+//                std::cout << "Usao sam u ADD!";
 //
-//                splitLine = currentLine.split(QRegExp("\\s+"));
-//                deviceName = splitLine.at(2).latin1();
+//                splitLine = splitQuotedString(currentLine);
+//                tempDeviceName = splitLine.at(2).latin1();
+//                //debug
+//                for (int i = 0; i < splitLine.size(); i++) std::cout << splitLine.at(i) << std::endl;
+//                std::cout << "  " << tempDeviceName << std::endl;
                 
             } else if (!currentLine.isEmpty() && currentLine.startsWith("map", Qt::CaseInsensitive)) {
 
+//                std::cout << "Usao sam u MAP!";
+
                 unsigned int positionOfBankElement = 3; //position of element in QStringList if NON_MODAL element is absent
                 unsigned int positionOfProgramElement = 4; //similar to above
+                unsigned int positionOfPatchFileName = 6; //we extract bank name from filesystem's file name.
 
                 splitLine = splitQuotedString(currentLine);
-//                std::cout << splitLine.size() << std::endl;
-//                for (int i = 0; i < splitLine.size(); i++) {
-//                    std::cout << i << ": " << splitLine.at(i) << std::endl;
-//                }
 
                 if (splitLine.at(2) == "NON_MODAL") {
-//                  std::cout << " Ima non_modal" << std::endl;
-// Shifting position of elements if optional element is present
+                    // Shifting position of elements if optional element (NON MODAL) is present
                     positionOfBankElement = 4;
                     positionOfProgramElement = 5;
+                    positionOfPatchFileName = 7;
                 }
 
-                bank = splitLine.at(positionOfBankElement).toInt();
-                program = splitLine.at(positionOfProgramElement).toInt();
-                
+                //Getting bank name HACK!!! Not in specification, so we use filename!
+                QString patchFileName = splitLine.at(positionOfPatchFileName);
+                QStringList splitPatchFileName = patchFileName.split("/");
+                QString temp = splitPatchFileName.at(splitPatchFileName.size()-1);
+                temp = temp.replace("x20"," ");
+                temp = temp.remove(".gig");
+
+                currentDevice.bankName = temp.latin1();
+                currentDevice.bankNumber = splitLine.at(positionOfBankElement).toInt();
+                currentDevice.programNumber = splitLine.at(positionOfProgramElement).toInt();
+
                 QString quotedName = splitLine.at(splitLine.size() - 1);
-//                std::cout << splitLine.at(splitLine.size() - 1).latin1() << std::cout;
-// Chacking for another optional element. This one is even more strange - program name may be absent as well!
-                if (quotedName.isEmpty() || quotedName.contains("ON_DEMAND") || quotedName.contains("ON_DEMAND_HOLD") || quotedName.contains("PERSISTENT")) {
-                    programName = "Unnamed instrument";
+                // Chacking for another optional element. This one is even more strange - program name may be absent as well!
+                if (quotedName.isEmpty() ||
+                    quotedName.contains("ON_DEMAND") ||
+                    quotedName.contains("ON_DEMAND_HOLD") ||
+                    quotedName.contains("PERSISTENT")) {
+                    currentDevice.programName = "Unnamed instrument";
                 } else {
-                    programName = quotedName.latin1();
+                    currentDevice.programName = quotedName.latin1();
                 }
 
-                device[bank][program] = programName;
+                device.push_back(currentDevice);
             }
             
         }

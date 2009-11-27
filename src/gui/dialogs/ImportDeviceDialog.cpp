@@ -44,6 +44,7 @@
 #include <QHBoxLayout>
 #include <QButtonGroup>
 
+#include <string>
 
 namespace Rosegarden
 {
@@ -441,7 +442,6 @@ ImportDeviceDialog::importFromSF2(QString filename)
     return true;
 }
 
-///Change function!!!!
 bool
 ImportDeviceDialog::importFromLSCP(QString filename)
 {
@@ -451,34 +451,33 @@ ImportDeviceDialog::importFromLSCP(QString filename)
     std::vector<MidiBank> banks;
     std::vector<MidiProgram> programs;
 
+    int comparableBankNumber = 0;
+
     for (LSCPPatchExtractor::Device::const_iterator i = lscpDevice.begin();
-            i != lscpDevice.end(); ++i) {
+    i != lscpDevice.end(); ++i) {
 
-        int bankNumber = i->first;
-        const LSCPPatchExtractor::Bank &lscpBank = i->second;
+        int bankNumber = (*i).bankNumber; //Local variable bankNumber gets value from struct's member bankNumber
 
+        std::string bankName = (*i).bankName; //Local variable bankName gets value from struct's member bankName
         int msb = bankNumber / 128;
         int lsb = bankNumber % 128;
 
-        MidiBank bank
-        (msb == 1, msb, lsb,
-         qstrtostr(tr("Bank %1:%2").arg(msb).arg(lsb)));
+        MidiBank bank (msb == 1, msb, lsb, bankName);
 
-        banks.push_back(bank);
-
-        for (LSCPPatchExtractor::Bank::const_iterator j = lscpBank.begin();
-                j != lscpBank.end(); ++j) {
-
-            MidiProgram program(bank, j->first, j->second);
-            programs.push_back(program);
+        if (comparableBankNumber != bankNumber) {
+            banks.push_back(bank);
+            comparableBankNumber = bankNumber;
         }
+
+        MidiProgram program(bank, (*i).programNumber, (*i).programName);
+        programs.push_back(program);
     }
 
     // This is a temporary device, so we can use device and instrument
     // IDs that other devices in the Studio may also be using without
     // expecting any problems
     MidiDevice *device = new MidiDevice
-        (0, MidiInstrumentBase, "", MidiDevice::Play);
+                         (0, MidiInstrumentBase, "", MidiDevice::Play);
     device->replaceBankList(banks);
     device->replaceProgramList(programs);
     m_devices.push_back(device);

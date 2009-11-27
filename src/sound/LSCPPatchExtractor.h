@@ -23,6 +23,7 @@
 
 #include <map>
 #include <string>
+#include <vector>
 
 class QString;
 
@@ -34,8 +35,15 @@ class LSCPPatchExtractor
 {
 
 public:
-    typedef std::map<int, std::string> Bank;
-    typedef std::map<int, Bank> Device;
+
+    typedef struct lscp_bank_program_data {
+        int         bankNumber;
+        std::string bankName;
+        int         programNumber;
+        std::string programName;
+    } Bank_Prog;
+
+    typedef std::vector<Bank_Prog> Device;
 
     static bool isLSCPFile(const QString& fileName);
     static Device extractContent(const QString& fileName);
