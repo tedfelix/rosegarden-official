@@ -1847,11 +1847,10 @@ MatrixView::slotExtendSelectionBackward(bool bar)
     if (!segment) return;
 
     MatrixViewSegment *vs = m_matrixWidget->getScene()->getCurrentViewSegment();
-
     ViewElementList *vel = vs->getViewElementList(); 
-
     EventSelection *s = getSelection();
     EventSelection *es = new EventSelection(*segment);
+
     if (s && &s->getSegment() == segment) es->addFromSelection(s);
 
     if (!s || &s->getSegment() != segment
@@ -1862,6 +1861,7 @@ MatrixView::slotExtendSelectionBackward(bool bar)
 
         while (extendFrom != vel->begin() &&
                 (*--extendFrom)->getViewAbsoluteTime() >= newTime) {
+            // Matrix: only select notes, because nothing else is visible
             if ((*extendFrom)->event()->isa(Note::EventType)) {
                 es->addEvent((*extendFrom)->event());
             }
@@ -1884,7 +1884,7 @@ MatrixView::slotExtendSelectionBackward(bool bar)
         }
     }
 
-    setSelection(es, true); /**/
+    setSelection(es, true);
 }
 
 void
@@ -1906,33 +1906,32 @@ MatrixView::slotExtendSelectionForward(bool bar)
     // to the left of the cursor, move the cursor right and add to the
     // selection
 
-/*    timeT oldTime = getInsertionTime();
-    if (bar)
-        slotJumpForward();
-    else
-        slotStepForward();
+    timeT oldTime = getInsertionTime();
+
+    if (bar) emit fastForwardPlayback();
+    else slotStepForward();
+
     timeT newTime = getInsertionTime();
 
-    Staff *staff = getCurrentStaff();
-    if (!staff)
-        return ;
-    Segment *segment = &staff->getSegment();
-    ViewElementList *vel = staff->getViewElementList();
+    Segment *segment = getCurrentSegment();
+    if (!segment) return;
 
+    MatrixViewSegment *vs = m_matrixWidget->getScene()->getCurrentViewSegment();
+    ViewElementList *vel = vs->getViewElementList(); 
+    EventSelection *s = getSelection();
     EventSelection *es = new EventSelection(*segment);
-    if (m_currentEventSelection &&
-            &m_currentEventSelection->getSegment() == segment)
-        es->addFromSelection(m_currentEventSelection);
 
-    if (!m_currentEventSelection ||
-            &m_currentEventSelection->getSegment() != segment ||
-            m_currentEventSelection->getSegmentEvents().size() == 0 ||
-            m_currentEventSelection->getEndTime() <= oldTime) {
+    if (s && &s->getSegment() == segment) es->addFromSelection(s);
+
+    if (!s || &s->getSegment() != segment
+           || s->getSegmentEvents().size() == 0
+           || s->getEndTime() <= oldTime) {
 
         ViewElementList::iterator extendFrom = vel->findTime(oldTime);
 
         while (extendFrom != vel->end() &&
                 (*extendFrom)->getViewAbsoluteTime() < newTime) {
+            // Matrix: only select notes, because nothing else is visible
             if ((*extendFrom)->event()->isa(Note::EventType)) {
                 es->addEvent((*extendFrom)->event());
             }
@@ -1957,7 +1956,7 @@ MatrixView::slotExtendSelectionForward(bool bar)
         }
     }
 
-    setCurrentSelection(es); */
+    setSelection(es, true);
 }
 
 
