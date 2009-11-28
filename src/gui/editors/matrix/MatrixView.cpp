@@ -18,6 +18,9 @@
 #include "MatrixView.h"
 
 #include "MatrixWidget.h"
+#include "MatrixElement.h"
+#include "MatrixViewSegment.h"
+#include "MatrixScene.h"
 #include "PianoKeyboard.h"
 
 #include "misc/Debug.h"
@@ -1833,28 +1836,27 @@ MatrixView::slotExtendSelectionBackward(bool bar)
     //createAction("playback_pointer_back_bar", SIGNAL(rewindPlayback()));
     //createAction("playback_pointer_forward_bar", SIGNAL(fastForwardPlayback()));
     
-/*    timeT oldTime = getInsertionTime();
+    timeT oldTime = getInsertionTime();
 
     if (bar) emit rewindPlayback();
     else slotStepBackward();
 
     timeT newTime = getInsertionTime();
 
-    MatrixStaff *staff = m_matrixWidget->getCurrentStaff();
-    if (!staff)
-        return ;
-    Segment *segment = &staff->getSegment();
-    ViewElementList *vel = staff->getViewElementList();
+    Segment *segment = getCurrentSegment();
+    if (!segment) return;
 
+    MatrixViewSegment *vs = m_matrixWidget->getScene()->getCurrentViewSegment();
+
+    ViewElementList *vel = vs->getViewElementList(); 
+
+    EventSelection *s = getSelection();
     EventSelection *es = new EventSelection(*segment);
-    if (m_currentEventSelection &&
-            &m_currentEventSelection->getSegment() == segment)
-        es->addFromSelection(m_currentEventSelection);
+    if (s && &s->getSegment() == segment) es->addFromSelection(s);
 
-    if (!m_currentEventSelection ||
-            &m_currentEventSelection->getSegment() != segment ||
-            m_currentEventSelection->getSegmentEvents().size() == 0 ||
-            m_currentEventSelection->getStartTime() >= oldTime) {
+    if (!s || &s->getSegment() != segment
+           || s->getSegmentEvents().size() == 0
+           || s->getStartTime() >= oldTime) {
 
         ViewElementList::iterator extendFrom = vel->findTime(oldTime);
 
@@ -1882,7 +1884,7 @@ MatrixView::slotExtendSelectionBackward(bool bar)
         }
     }
 
-    setCurrentSelection(es); */
+    setSelection(es, true); /**/
 }
 
 void
