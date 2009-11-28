@@ -22,7 +22,6 @@
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "base/MidiProgram.h"
-#include "gui/editors/matrix/MatrixStaff.h"
 #include "gui/editors/matrix/MatrixView.h"
 #include "gui/general/MidiPitchLabel.h"
 #include "PitchRuler.h"
@@ -153,16 +152,6 @@ void PercussionPitchRuler::drawHoverNote(int evPitch)
 
 void PercussionPitchRuler::mouseMoveEvent(QMouseEvent* e)
 {
-    // ugh
-/*!!!
-    MatrixView *matrixView = dynamic_cast<MatrixView*>(topLevelWidget());
-    if (matrixView) {
-        MatrixStaff *staff = matrixView->getStaff(0);
-        if (staff) {
-            drawHoverNote(staff->getHeightAtCanvasCoords(e->x(), e->y()));
-        }
-    }
-*/
     if (m_mouseDown)
         if (m_selecting)
             emit keySelected(e->y(), true);

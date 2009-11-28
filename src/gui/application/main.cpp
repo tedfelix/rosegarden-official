@@ -240,7 +240,7 @@ There are currently two editor views:
     are used to generate notes from component pixmap files.
  
  - MatrixView, with accompanying classes MatrixHLayout,
-    MatrixVLayout, MatrixStaff and other classes in the matrixview
+    MatrixVLayout, and other classes in the matrixview
     files.
  
 The editing process works as follows:

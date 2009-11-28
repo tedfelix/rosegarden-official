@@ -192,6 +192,13 @@ protected slots:
     void slotStepBackward();
     void slotStepForward();
 
+    void slotExtendSelectionBackward();
+    void slotExtendSelectionForward();
+    void slotExtendSelectionBackwardBar();
+    void slotExtendSelectionForwardBar();
+    void slotExtendSelectionBackward(bool bar);
+    void slotExtendSelectionForward(bool bar);
+
     /// keyboard insert
     void slotInsertNoteFromAction();
 

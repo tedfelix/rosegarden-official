@@ -152,6 +152,9 @@ MatrixSelector::handleLeftButtonPress(const MatrixMouseEvent *e)
         // elsewhere) will have to be refactored to draw a series of lines using
         // two different widths, based on calculating 200 / axisZoomPercent
         // to solve ((w * axisZoomPercent) / 100) = 2
+        //
+        // (Not sure how to do this now that we do.  It's obnoxious, but oh
+        // well.)
         if (!m_selectionRect) {
             m_selectionRect = new QGraphicsRectItem;
             m_scene->addItem(m_selectionRect);
@@ -170,51 +173,8 @@ MatrixSelector::handleLeftButtonPress(const MatrixMouseEvent *e)
         //
         if (!m_selectionToMerge) {
             m_scene->setSelection(0, false);
-//            m_widget->canvas()->update();
         }
-
-/*!!!
-
-        // Workaround for #930420 Positional error in sweep-selection box
-        // boundary
-        int zoomValue = (int)m_matrixView->m_hZoomSlider->getCurrentSize();
-        MatrixStaff *staff = m_widget->getStaff(staffNo);
-        int pitch = m_currentStaff->getHeightAtCanvasCoords(p.x(), p.y());
-        int pitchCentreHeight = staff->getTotalHeight() -
-                                pitch * staff->getLineSpacing() - 2; // 2 or ?
-        int pitchLineHeight = pitchCentreHeight + staff->getLineSpacing() / 2;
-        int drawHeight = p.y();
-        if (drawHeight <= pitchLineHeight + 1 &&
-                drawHeight >= pitchLineHeight - 1) {
-            if (drawHeight == pitchLineHeight)
-                drawHeight += 2;
-            else
-                drawHeight += 2 * (drawHeight - pitchLineHeight);
-        }
-        MATRIX_DEBUG << "#### MatrixSelector::handleLeftButtonPress() : zoom "
-                     << zoomValue
-                     << " pitch " << pitch
-                     << " pitchCentreHeight " << pitchCentreHeight
-                     << " pitchLineHeight " << pitchLineHeight
-                     << " lineSpacing " << staff->getLineSpacing()
-                     << " drawHeight " << drawHeight << endl;
-        m_selectionRect->setX(int(p.x() / 4)*4); // more workaround for #930420
-        m_selectionRect->setY(drawHeight);
-        m_selectionRect->setSize(0, 0);
-
-        m_selectionRect->show();
-        m_updateRect = true;
-
-        // Clear existing selection if we're not merging
-        //
-        if (!m_selectionToMerge) {
-            m_widget->setSelection(0, false, true);
-            m_widget->canvas()->update();
-        }
-*/
     }
-
-    //m_widget->setCursorPosition(p.x());
 }
 
 void

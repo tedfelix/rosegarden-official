@@ -322,16 +322,10 @@ MatrixView::setupActions()
     createAction("delete", SLOT(slotEditDelete()));
     createAction("cursor_back", SLOT(slotStepBackward()));
     createAction("cursor_forward", SLOT(slotStepForward()));
-//    createAction("cursor_back_bar", SLOT(slotJumpBackward())); obsolete
-//    createAction("cursor_forward_bar", SLOT(slotJumpForward())); obsolete
     createAction("extend_selection_backward", SLOT(slotExtendSelectionBackward()));
     createAction("extend_selection_forward", SLOT(slotExtendSelectionForward()));
     createAction("extend_selection_backward_bar", SLOT(slotExtendSelectionBackwardBar()));
     createAction("extend_selection_forward_bar", SLOT(slotExtendSelectionForwardBar()));
-//    createAction("cursor_start", SLOT(slotJumpToStart())); obsolete
-//    createAction("cursor_end", SLOT(slotJumpToEnd())); obsolete
-// Next one is obsolete since we have only one pointer now
-//    createAction("cursor_to_playback_pointer", SLOT(slotJumpCursorToPlayback()));
     //&&& NB Play has two shortcuts (Enter and Ctrl+Return) -- need to
     // ensure both get carried across somehow
     createAction("play", SIGNAL(play()));
@@ -340,8 +334,6 @@ MatrixView::setupActions()
     createAction("playback_pointer_forward_bar", SIGNAL(fastForwardPlayback()));
     createAction("playback_pointer_start", SIGNAL(rewindPlaybackToBeginning()));
     createAction("playback_pointer_end", SIGNAL(fastForwardPlaybackToEnd()));
-// Next one is obsolete since we have only one pointer now
-//    createAction("playback_pointer_to_cursor", SLOT(slotJumpPlaybackToCursor()));
     createAction("cursor_prior_segment", SLOT(slotCurrentSegmentPrior()));
     createAction("cursor_next_segment", SLOT(slotCurrentSegmentNext()));
     createAction("toggle_solo", SLOT(slotToggleSolo()));
@@ -1817,6 +1809,153 @@ MatrixView::getCurrentDevice()
 {
     if (m_matrixWidget) return m_matrixWidget->getCurrentDevice();
     else return 0;
+}
+
+void
+MatrixView::slotExtendSelectionBackward()
+{
+    slotExtendSelectionBackward(false);
+}
+
+void
+MatrixView::slotExtendSelectionBackwardBar()
+{
+    slotExtendSelectionBackward(true);
+}
+
+void
+MatrixView::slotExtendSelectionBackward(bool bar)
+{
+    // If there is no current selection, or the selection is entirely
+    // to the right of the cursor, move the cursor left and add to the
+    // selection
+
+    //createAction("playback_pointer_back_bar", SIGNAL(rewindPlayback()));
+    //createAction("playback_pointer_forward_bar", SIGNAL(fastForwardPlayback()));
+    
+/*    timeT oldTime = getInsertionTime();
+
+    if (bar) emit rewindPlayback();
+    else slotStepBackward();
+
+    timeT newTime = getInsertionTime();
+
+    MatrixStaff *staff = m_matrixWidget->getCurrentStaff();
+    if (!staff)
+        return ;
+    Segment *segment = &staff->getSegment();
+    ViewElementList *vel = staff->getViewElementList();
+
+    EventSelection *es = new EventSelection(*segment);
+    if (m_currentEventSelection &&
+            &m_currentEventSelection->getSegment() == segment)
+        es->addFromSelection(m_currentEventSelection);
+
+    if (!m_currentEventSelection ||
+            &m_currentEventSelection->getSegment() != segment ||
+            m_currentEventSelection->getSegmentEvents().size() == 0 ||
+            m_currentEventSelection->getStartTime() >= oldTime) {
+
+        ViewElementList::iterator extendFrom = vel->findTime(oldTime);
+
+        while (extendFrom != vel->begin() &&
+                (*--extendFrom)->getViewAbsoluteTime() >= newTime) {
+            if ((*extendFrom)->event()->isa(Note::EventType)) {
+                es->addEvent((*extendFrom)->event());
+            }
+        }
+
+    } else { // remove an event
+
+        EventSelection::eventcontainer::iterator i =
+            es->getSegmentEvents().end();
+
+        std::vector<Event *> toErase;
+
+        while (i != es->getSegmentEvents().begin() &&
+                (*--i)->getAbsoluteTime() >= newTime) {
+            toErase.push_back(*i);
+        }
+
+        for (unsigned int j = 0; j < toErase.size(); ++j) {
+            es->removeEvent(toErase[j]);
+        }
+    }
+
+    setCurrentSelection(es); */
+}
+
+void
+MatrixView::slotExtendSelectionForward()
+{
+    slotExtendSelectionForward(false);
+}
+
+void
+MatrixView::slotExtendSelectionForwardBar()
+{
+    slotExtendSelectionForward(true);
+}
+
+void
+MatrixView::slotExtendSelectionForward(bool bar)
+{
+    // If there is no current selection, or the selection is entirely
+    // to the left of the cursor, move the cursor right and add to the
+    // selection
+
+/*    timeT oldTime = getInsertionTime();
+    if (bar)
+        slotJumpForward();
+    else
+        slotStepForward();
+    timeT newTime = getInsertionTime();
+
+    Staff *staff = getCurrentStaff();
+    if (!staff)
+        return ;
+    Segment *segment = &staff->getSegment();
+    ViewElementList *vel = staff->getViewElementList();
+
+    EventSelection *es = new EventSelection(*segment);
+    if (m_currentEventSelection &&
+            &m_currentEventSelection->getSegment() == segment)
+        es->addFromSelection(m_currentEventSelection);
+
+    if (!m_currentEventSelection ||
+            &m_currentEventSelection->getSegment() != segment ||
+            m_currentEventSelection->getSegmentEvents().size() == 0 ||
+            m_currentEventSelection->getEndTime() <= oldTime) {
+
+        ViewElementList::iterator extendFrom = vel->findTime(oldTime);
+
+        while (extendFrom != vel->end() &&
+                (*extendFrom)->getViewAbsoluteTime() < newTime) {
+            if ((*extendFrom)->event()->isa(Note::EventType)) {
+                es->addEvent((*extendFrom)->event());
+            }
+            ++extendFrom;
+        }
+
+    } else { // remove an event
+
+        EventSelection::eventcontainer::iterator i =
+            es->getSegmentEvents().begin();
+
+        std::vector<Event *> toErase;
+
+        while (i != es->getSegmentEvents().end() &&
+                (*i)->getAbsoluteTime() < newTime) {
+            toErase.push_back(*i);
+            ++i;
+        }
+
+        for (unsigned int j = 0; j < toErase.size(); ++j) {
+            es->removeEvent(toErase[j]);
+        }
+    }
+
+    setCurrentSelection(es); */
 }
 
 
