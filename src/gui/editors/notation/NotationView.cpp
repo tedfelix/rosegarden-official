@@ -4010,6 +4010,171 @@ NotationView::slotTransformsCollapseNotes()
             addCommand(new CollapseNotesCommand(*selection));
 }
 
+void
+NotationView::slotExtendSelectionBackward()
+{
+    slotExtendSelectionBackward(false);
+}
+
+void
+NotationView::slotExtendSelectionBackwardBar()
+{
+    slotExtendSelectionBackward(true);
+}
+
+void
+NotationView::slotExtendSelectionBackward(bool bar)
+{
+    // If there is no current selection, or the selection is entirely
+    // to the right of the cursor, move the cursor left and add to the
+    // selection
+
+    timeT oldTime = getInsertionTime();
+
+    if (bar) emit rewindPlayback();
+    else slotStepBackward();
+
+    timeT newTime = getInsertionTime();
+
+    Segment *segment = getCurrentSegment();
+    if (!segment) return;
+
+    NotationStaff *currentStaff = m_notationWidget->getScene()->getCurrentStaff();
+    if (!currentStaff) return;
+
+    // ho ho, there is no NotationViewSegment whatever because a NotationStaff
+    // is a subclass of ViewSegment
+    ViewSegment *vs = dynamic_cast<ViewSegment*>(currentStaff);
+
+    ViewElementList *vel = vs->getViewElementList(); 
+    EventSelection *s = getSelection();
+    EventSelection *es = new EventSelection(*segment);
+
+    if (s && &s->getSegment() == segment) es->addFromSelection(s);
+
+    if (!s || &s->getSegment() != segment
+           || s->getSegmentEvents().size() == 0
+           || s->getStartTime() >= oldTime) {
+
+        ViewElementList::iterator extendFrom = vel->findTime(oldTime);
+
+        while (extendFrom != vel->begin() &&
+                (*--extendFrom)->getViewAbsoluteTime() >= newTime) {
+
+            //!!! This should actually grab every sort of event, and not just
+            // notes, but making that change makes the selection die every time
+            // the endpoint of an indication is encountered, and I'm just not
+            // seeing why, so I'm giving up on that and leaving it in the same
+            // stupid state I found it in (and it's probably in this state
+            // because the last guy had the same problem with indications.)
+            //
+            // I don't like this, because it makes it very easy to go along and
+            // orphan indications, text events, controllers, and all sorts of
+            // whatnot.  However, I have to call it quits for today, and have no
+            // idea if I'll ever remember to come back to this, so I'm leaving a
+            // reminder to someone that all of this is stupid.
+
+            if ((*extendFrom)->event()->isa(Note::EventType)) {
+                es->addEvent((*extendFrom)->event());
+            }
+        }
+
+    } else { // remove an event
+
+        EventSelection::eventcontainer::iterator i =
+            es->getSegmentEvents().end();
+
+        std::vector<Event *> toErase;
+
+        while (i != es->getSegmentEvents().begin() &&
+                (*--i)->getAbsoluteTime() >= newTime) {
+            toErase.push_back(*i);
+        }
+
+        for (unsigned int j = 0; j < toErase.size(); ++j) {
+            es->removeEvent(toErase[j]);
+        }
+    }
+
+    setSelection(es, true);
+}
+
+void
+NotationView::slotExtendSelectionForward()
+{
+    slotExtendSelectionForward(false);
+}
+
+void
+NotationView::slotExtendSelectionForwardBar()
+{
+    slotExtendSelectionForward(true);
+}
+
+void
+NotationView::slotExtendSelectionForward(bool bar)
+{
+    // If there is no current selection, or the selection is entirely
+    // to the right of the cursor, move the cursor left and add to the
+    // selection
+
+    timeT oldTime = getInsertionTime();
+
+    if (bar) emit fastForwardPlayback();
+    else slotStepForward();
+
+    timeT newTime = getInsertionTime();
+
+    Segment *segment = getCurrentSegment();
+    if (!segment) return;
+
+    NotationStaff *currentStaff = m_notationWidget->getScene()->getCurrentStaff();
+    if (!currentStaff) return;
+
+    // ho ho, there is no NotationViewSegment whatever because a NotationStaff
+    // is a subclass of ViewSegment
+    ViewSegment *vs = dynamic_cast<ViewSegment*>(currentStaff);
+
+    ViewElementList *vel = vs->getViewElementList(); 
+    EventSelection *s = getSelection();
+    EventSelection *es = new EventSelection(*segment);
+
+    if (s && &s->getSegment() == segment) es->addFromSelection(s);
+
+    if (!s || &s->getSegment() != segment
+           || s->getSegmentEvents().size() == 0
+           || s->getEndTime() <= oldTime) {
+
+        ViewElementList::iterator extendFrom = vel->findTime(oldTime);
+
+        while (extendFrom != vel->end() &&
+                (*extendFrom)->getViewAbsoluteTime() < newTime) {
+            if ((*extendFrom)->event()->isa(Note::EventType)) {
+                es->addEvent((*extendFrom)->event());
+            }
+            ++extendFrom;
+        }
+
+    } else { // remove an event
+
+        EventSelection::eventcontainer::iterator i =
+            es->getSegmentEvents().begin();
+
+        std::vector<Event *> toErase;
+
+        while (i != es->getSegmentEvents().end() &&
+                (*i)->getAbsoluteTime() < newTime) {
+            toErase.push_back(*i);
+            ++i;
+        }
+
+        for (unsigned int j = 0; j < toErase.size(); ++j) {
+            es->removeEvent(toErase[j]);
+        }
+    }
+
+    setSelection(es, true); 
+}
 
 } // end namespace Rosegarden
 

@@ -1833,9 +1833,6 @@ MatrixView::slotExtendSelectionBackward(bool bar)
     // to the right of the cursor, move the cursor left and add to the
     // selection
 
-    //createAction("playback_pointer_back_bar", SIGNAL(rewindPlayback()));
-    //createAction("playback_pointer_forward_bar", SIGNAL(fastForwardPlayback()));
-    
     timeT oldTime = getInsertionTime();
 
     if (bar) emit rewindPlayback();
@@ -1861,7 +1858,23 @@ MatrixView::slotExtendSelectionBackward(bool bar)
 
         while (extendFrom != vel->begin() &&
                 (*--extendFrom)->getViewAbsoluteTime() >= newTime) {
-            // Matrix: only select notes, because nothing else is visible
+
+            //!!! This should actually grab every sort of event, and not just
+            // notes, but making that change makes the selection die every time
+            // the endpoint of an indication is encountered, and I'm just not
+            // seeing why, so I'm giving up on that and leaving it in the same
+            // stupid state I found it in (and it's probably in this state
+            // because the last guy had the same problem with indications.)
+            //
+            // I don't like this, because it makes it very easy to go along and
+            // orphan indications, text events, controllers, and all sorts of
+            // whatnot.  However, I have to call it quits for today, and have no
+            // idea if I'll ever remember to come back to this, so I'm leaving a
+            // reminder to someone that all of this is stupid.
+            //
+            // Note that here in the matrix, we still wouldn't want to orphan
+            // indications, etc., even though they're not visible from here.
+            
             if ((*extendFrom)->event()->isa(Note::EventType)) {
                 es->addEvent((*extendFrom)->event());
             }
@@ -1930,8 +1943,7 @@ MatrixView::slotExtendSelectionForward(bool bar)
         ViewElementList::iterator extendFrom = vel->findTime(oldTime);
 
         while (extendFrom != vel->end() &&
-                (*extendFrom)->getViewAbsoluteTime() < newTime) {
-            // Matrix: only select notes, because nothing else is visible
+                (*extendFrom)->getViewAbsoluteTime() < newTime)  {
             if ((*extendFrom)->event()->isa(Note::EventType)) {
                 es->addEvent((*extendFrom)->event());
             }

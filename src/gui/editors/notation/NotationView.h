@@ -283,6 +283,13 @@ protected slots:
      */
     void slotEditElement(NotationStaff *, NotationElement *, bool advanced);
 
+    void slotExtendSelectionBackward();
+    void slotExtendSelectionForward();
+    void slotExtendSelectionBackwardBar();
+    void slotExtendSelectionForwardBar();
+    void slotExtendSelectionBackward(bool bar);
+    void slotExtendSelectionForward(bool bar);
+
     void slotHelp();
     void slotTutorial();
     void slotBugGuidelines();
