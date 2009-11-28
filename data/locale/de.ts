@@ -19908,7 +19908,7 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="72"/>
         <source>Fast vibrato arm release</source>
-        <translation type="unfinished"></translation>
+        <translation>Schnelles Lösen des Vibrato-Hebels (Tremolo)</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="73"/>
@@ -20993,8 +20993,8 @@ Bitte wählen diejenigen aus, die Sie permanent von der Festplatte entfernen mö
         <location filename="../../src/document/RosegardenDocument.cpp" line="531"/>
         <source>&lt;qt&gt;About to delete %n audio file(s) permanently from the hard disk.&lt;br&gt;There will be no way to recover the file(s).&lt;br&gt;Are you sure?&lt;/qt&gt;</source>
         <translation>
-            <numerusform>&lt;qt&gt;Es werden %n Audio-Datei(en) komplett von der Festplatte gelöscht.&lt;br&gt;Es gibt keine Möglichkeit, die Files wieder herzustellen.&lt;br&gt;Sind Sie sicher?&lt;/qt&gt;</numerusform>
-            <numerusform></numerusform>
+            <numerusform>&lt;qt&gt;Es wird %n Audio-Datei komplett von der Festplatte gelöscht.&lt;br&gt;Es gibt keine Möglichkeit, die Files wieder herzustellen.&lt;br&gt;Sind Sie sicher?&lt;/qt&gt;</numerusform>
+            <numerusform>&lt;qt&gt;Es werden %n Audio-Dateien komplett von der Festplatte gelöscht.&lt;br&gt;Es gibt keine Möglichkeit, die Files wieder herzustellen.&lt;br&gt;Sind Sie sicher?&lt;/qt&gt;</numerusform>
         </translation>
     </message>
     <message>
@@ -21075,12 +21075,12 @@ Bitte wählen diejenigen aus, die Sie permanent von der Festplatte entfernen mö
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="1715"/>
         <source>&lt;h3&gt;Incorrect audio sample rate&lt;/h3&gt;&lt;p&gt;This composition contains audio files that were recorded or imported with the audio server running at a different sample rate (%1 Hz) from the current JACK server sample rate (%2 Hz).&lt;/p&gt;&lt;p&gt;Rosegarden will play this composition at the correct speed, but any audio files in it will probably sound awful.&lt;/p&gt;&lt;p&gt;Please consider re-starting the JACK server at the correct rate (%3 Hz) and re-loading this composition before you do any more work with it.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;h3&gt;Falsche Audio Sample Rate&lt;/h3&gt;&lt;p&gt;Diese Komposition enthält Audio Dateien, die aufgenommen oder importiert wurden, als der Audio Server mit einer Sample Rate (%1 Hz) lief.die sich von der aktuellen Sample Rate (%2 Hz) des JACK Servers unterscheidet.&lt;/p&gt;&lt;p&gt;Rosegarden spielt diese Komposition mit der korrekten Geschwindigkeitab, wobei aber alle enthaltenen Audio-Dateien merkwürdig klingen können.&lt;/p&gt;&lt;p&gt;Bitte ziehen Sie in Betracht den JACK Server mit der richtigen Rate (%3 Hz) neu zu starten und die Komposition erneut zu laden, bevor Sie damit arbeiten.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="1725"/>
         <source>&lt;h3&gt;Inconsistent audio sample rates&lt;/h3&gt;&lt;p&gt;This composition contains audio files at more than one sample rate.&lt;/p&gt;&lt;p&gt;Rosegarden will play them at the correct speed, but any audio files that were recorded or imported at rates different from the current JACK server sample rate (%1 Hz) will probably sound awful.&lt;/p&gt;&lt;p&gt;Please see the audio file manager dialog for more details, and consider resampling any files that are at the wrong rate.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;h3&gt;Inkonsistente Audio Sample Raten&lt;/h3&gt;&lt;p&gt;Diese Komposition enthält Audio Dateien mit mehreren unterschiedlichen Sample Raten.&lt;/p&gt;&lt;p&gt;Rosegarden wird sie mit der korrekten Geschwindigkeit abspielen, aber alle Audio-Dateien, deren Raten sich von der aktuellen Einstellung des JACK servers (%1 Hz) unterscheiden, werden sich wahrscheinlich merkwürdig anhören.&lt;/p&gt;&lt;p&gt;Bitte schauen Sie im Audio-Datei-Manager-Dialog nach weiteren Informationen und erwägen Sie eine Änderung der Sample Rate bei Dateien mit falschen Raten.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="1726"/>
@@ -22242,7 +22242,7 @@ Fehler: %2</translation>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="156"/>
         <source>&lt;qt&gt;&lt;p&gt;When checked,     any selected segments will repeat until they run into another segment,  or the end of the composition.&lt;/p&gt;&lt;p&gt;When viewed in the notation editor or printed via LilyPond, the segments will be bracketed by repeat signs.&lt;/p&gt;&lt;p&gt;&lt;center&gt;&lt;img src=&quot;:pixmaps/tooltip/repeats.png&quot;&gt;&lt;/img&gt;&lt;/center&gt;&lt;/p&gt;&lt;br&gt;These can be used in conjunction with special LilyPond export directives to create repeats with first and second alternate endings. See rosegardenmusic.com for a tutorial. [Ctrl+Shift+R] &lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Wenn markiert,      jedes ausgewählte Segment wird wiederholt, bis es mit einem anderen Segment überlappt oder das Ende der Komposition erreicht ist.&lt;/p&gt;&lt;p&gt;Bei der Anzeige im Noteneditor oder beim Ausdruck mit LilyPond werden die Segmente mit Wiederholungszeichen geklammert.&lt;/p&gt;&lt;p&gt;&lt;center&gt;&lt;img src=&quot;:pixmaps/tooltip/repeats.png&quot;&gt;&lt;/img&gt;&lt;/center&gt;&lt;/p&gt;&lt;br&gt;Diese können im Zusammenhang mit speziellen LilyPond Export Anweisungen benutzt werden um Wiederholungen mit erstem und zweiten alternativem Ende zu erzeugen. Siehe dazu auch das Tutorial auf rosegardenmusic.com.[Ctrl+Shift+R] &lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="187"/>
@@ -22689,7 +22689,7 @@ Das Beenden anderer laufender Anwendung könnte u.U. die Leistung von Rosegarden
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1126"/>
         <source>&lt;p&gt;Rosegarden was unable to find a high-resolution timing source for MIDI performance.&lt;/p&gt;&lt;p&gt;You may be able to solve this problem by loading the RTC timer kernel module.  To do this, try running &lt;b&gt;sudo modprobe snd-rtctimer&lt;/b&gt; in a terminal window and then restarting Rosegarden.&lt;/p&gt;&lt;p&gt;Alternatively, check whether your Linux distributor provides a multimedia-optimized kernel.  See the &lt;a style=&quot;color:gold&quot;  href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;Rosegarden website&lt;/a&gt; for notes about this.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Rosegarden war nicht in der Lage einen hochauflösenden Zeitgeber für ausreichende MIDI Leistung zu finden.&lt;/p&gt;&lt;p&gt;Das Problem könnte durch das Laden des RTC Timer Modul in den Kernel behoben werden. Bitte führen Sie dazu &lt;b&gt;sudo modprobe snd-rtctimer&lt;/b&gt; in einem Terminal-Fenster aus und starten Rosegarden erneut.&lt;/p&gt;&lt;p&gt;Alternativ können Sie prüfen ob Ihr Linux-Distributor einen optimierten Kernel für Multimedia-Anwendungen anbietet.  Bitte schauen Sie auf der &lt;a style=&quot;color:gold&quot;  href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;Rosegarden Webseite&lt;/a&gt; für weitere Hinweise dazu.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1237"/>
@@ -22699,7 +22699,7 @@ Das Beenden anderer laufender Anwendung könnte u.U. die Leistung von Rosegarden
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1238"/>
         <source>&lt;p&gt;Both MIDI and Audio subsystems have failed to initialize.&lt;/p&gt;&lt;p&gt;If you wish to run with no sequencer by design, then use &quot;rosegarden --nosequencer&quot; to avoid seeing this error in the future.  Otherwise, we recommend that you repair your system configuration and start Rosegarden again.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Sowohl das MIDI- als auch das Audio-System konnten nicht initialisiert werden.&lt;/p&gt;&lt;p&gt;Falls Sie Rosegarden absichtlich ohne Sequenzer laufen lassen möchten, können Sie &quot;rosegarden --nosequencer&quot; verwenden um diese Fehlermeldung in Zukunft nicht mehr zu sehen. Anderenfalls empfehlen wir die Konfiguration des Systems zu reparieren und Rosegarden neu zu starten.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1240"/>
@@ -22714,7 +22714,7 @@ Das Beenden anderer laufender Anwendung könnte u.U. die Leistung von Rosegarden
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1259"/>
         <source>&lt;p&gt;Rosegarden could not connect to the JACK audio server.  This probably means that Rosegarden was unable to start the audio server due to a problem with your configuration, your system installation, or both.&lt;/p&gt;&lt;p&gt;If you want to be able to play or record audio files or use plugins, we suggest that you exit Rosegarden and use the JACK Control utility (qjackctl) to try different settings until you arrive at a configuration that permits JACK to start.  You may also need to install a realtime kernel, edit your system security configuration, and so on.  Unfortunately, this is an extremely complex subject.&lt;/p&gt;&lt;p&gt; Once you establish a working JACK configuration, Rosegarden will be able to start the audio server automatically in the future.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Rosegarden konnte sich nicht mit dem JACK Audio Server verbinden.  Dies bedeutet wahrscheinlich, das Rosegarden den Audio Server nicht starten konnte, weil entweder die Konfiguration, die Installation oder beides nicht korrekt ist.&lt;/p&gt;&lt;p&gt;Falls Sie Audio-Dateien abspielen oder aufnehmen, bzw. Plugins benutzen wollen, müssen Sie Rosegarden verlassen und die Einstellungen von JACK z.B. mit qjackctl solange verändern, bis JACK gestartet werden kann.   Außerdem könnte die Installation eines Echtzeit-Kernels nötig sein, die Sicherheits-Einstellungen des Systems verändert werden, etc.  Unglücklicherweise ist dies ein sehr komplexes Thema.&lt;/p&gt;&lt;p&gt;Sobald eine funktionierende Konfiguration von JACK gefunden wurde, kann Rosegarden den Audio Server in Zukunft automatisch starten.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1019"/>
