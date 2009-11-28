@@ -49,6 +49,7 @@
 #include "sound/MappedStudio.h"
 #include "gui/widgets/PluginPushButton.h"
 #include "gui/widgets/InstrumentAliasButton.h"
+#include "gui/dialogs/AboutDialog.h"
 
 #include <QLayout>
 #include <QApplication>
@@ -70,6 +71,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QGroupBox>
+#include <QDesktopServices>
 
 
 namespace Rosegarden
@@ -102,6 +104,8 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
     createAction("playback_pointer_end", SIGNAL(fastForwardPlaybackToEnd()));
     createAction("record", SIGNAL(record()));
     createAction("panic", SIGNAL(panic()));
+    createAction("mixer_help", SLOT(slotHelpRequested()));
+    createAction("help_about_app", SLOT(slotHelpAbout()));
 
     unsigned int mixerOptions = m_studio->getMixerDisplayOptions();
 
@@ -1632,5 +1636,23 @@ AudioMixerWindow::slotRepopulate()
 }
 
 
+
+void
+AudioMixerWindow::slotHelpRequested()
+{
+    // TRANSLATORS: if the manual is translated into your language, you can
+    // change the two-letter language code in this URL to point to your language
+    // version, eg. "http://rosegardenmusic.com/wiki/doc:audioMixerWindow-es" for the
+    // Spanish version. If your language doesn't yet have a translation, feel
+    // free to create one.
+    QString helpURL = tr("http://rosegardenmusic.com/wiki/doc:audioMixerWindow-en");
+    QDesktopServices::openUrl(QUrl(helpURL));
+}
+
+void
+AudioMixerWindow::slotHelpAbout()
+{
+    new AboutDialog(this);
+}
 }
 #include "AudioMixerWindow.moc"

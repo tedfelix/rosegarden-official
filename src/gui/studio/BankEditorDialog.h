@@ -119,6 +119,8 @@ public slots:
 
     void slotVariationToggled();
     void slotVariationChanged(int);
+    void slotHelpRequested();
+    void slotHelpAbout();
 
 signals:
     void closing();

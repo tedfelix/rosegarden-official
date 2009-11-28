@@ -80,6 +80,8 @@ public slots:
     void slotClose();
 
     void slotEdit(QTreeWidgetItem *, int);
+    void slotHelpRequested();
+    void slotHelpAbout();
 
 signals:
     void closing();

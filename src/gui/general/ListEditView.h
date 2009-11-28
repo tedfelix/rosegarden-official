@@ -112,7 +112,7 @@ protected:
     /**
      * create menus and toolbars
      */
-    virtual void setupActions(QString rcFileName, bool haveClipboard = true);
+    void setupActions(QString rcFileName, bool haveClipboard = true);
 
     /**
      * Make a widget visible depending on the state of a

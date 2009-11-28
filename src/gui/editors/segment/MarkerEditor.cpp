@@ -31,6 +31,7 @@
 #include "misc/ConfigGroups.h"
 #include "document/Command.h"
 #include "gui/dialogs/MarkerModifyDialog.h"
+#include "gui/dialogs/AboutDialog.h"
 #include "gui/widgets/TmpStatusMsg.h"
 #include "gui/general/IconLoader.h"
 
@@ -54,6 +55,7 @@
 #include <QWidget>
 #include <QSettings>
 #include <QStringList>
+#include <QDesktopServices>
 
 #include <QList>
 
@@ -410,6 +412,8 @@ MarkerEditor::setupActions()
     a = createAction("time_raw", SLOT(slotRawTime()));
     a->setCheckable(true);
     if (timeMode == 2) a->setChecked(true);
+    createAction("marker_help", SLOT(slotHelpRequested()));
+    createAction("help_about_app", SLOT(slotHelpAbout()));
 
     createGUI("markereditor.rc"); //@@@ JAS orig 0
 
@@ -605,5 +609,23 @@ MarkerEditor::slotRawTime()
 }
 
 
+
+void
+MarkerEditor::slotHelpRequested()
+{
+    // TRANSLATORS: if the manual is translated into your language, you can
+    // change the two-letter language code in this URL to point to your language
+    // version, eg. "http://rosegardenmusic.com/wiki/doc:markerEditor-es" for the
+    // Spanish version. If your language doesn't yet have a translation, feel
+    // free to create one.
+    QString helpURL = tr("http://rosegardenmusic.com/wiki/doc:markerEditor-en");
+    QDesktopServices::openUrl(QUrl(helpURL));
+}
+
+void
+MarkerEditor::slotHelpAbout()
+{
+    new AboutDialog(this);
+}
 }
 #include "MarkerEditor.moc"

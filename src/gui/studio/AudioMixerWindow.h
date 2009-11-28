@@ -112,6 +112,8 @@ protected slots:
     void slotUpdateSynthFaderVisibility();
     void slotUpdateSubmasterVisibility();
     void slotUpdatePluginButtonVisibility();
+    void slotHelpRequested();
+    void slotHelpAbout();
 
 protected:
     virtual void sendControllerRefresh();

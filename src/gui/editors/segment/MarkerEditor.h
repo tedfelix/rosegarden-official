@@ -82,6 +82,8 @@ public slots:
     void slotMusicalTime();
     void slotRealTime();
     void slotRawTime();
+    void slotHelpRequested();
+    void slotHelpAbout();
 
 signals:
     void closing();

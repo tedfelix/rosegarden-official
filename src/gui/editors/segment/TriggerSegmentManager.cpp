@@ -38,6 +38,7 @@
 #include "gui/general/MidiPitchLabel.h"
 #include "gui/general/IconLoader.h"
 #include "gui/widgets/TmpStatusMsg.h"
+#include "gui/dialogs/AboutDialog.h"
 #include "document/Command.h"
 
 #include <QLayout>
@@ -59,6 +60,7 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QDialogButtonBox>
+#include <QDesktopServices>
 
 
 namespace Rosegarden
@@ -386,6 +388,8 @@ TriggerSegmentManager::setupActions()
 
     a = createAction("time_raw", SLOT(slotRawTime()));
     if (timeMode == 2) { a->setCheckable(true); a->setChecked(true); }
+    createAction("trigger_help", SLOT(slotHelpRequested()));
+    createAction("help_about_app", SLOT(slotHelpAbout()));
 
     createGUI("triggermanager.rc"); //@@@ JAS orig. 0
 
@@ -532,5 +536,23 @@ TriggerSegmentManager::slotRawTime()
     settings.endGroup();
 }
 
+
+void
+TriggerSegmentManager::slotHelpRequested()
+{
+    // TRANSLATORS: if the manual is translated into your language, you can
+    // change the two-letter language code in this URL to point to your language
+    // version, eg. "http://rosegardenmusic.com/wiki/doc:triggerSegmentManager-es" for the
+    // Spanish version. If your language doesn't yet have a translation, feel
+    // free to create one.
+    QString helpURL = tr("http://rosegardenmusic.com/wiki/doc:triggerSegmentManager-en");
+    QDesktopServices::openUrl(QUrl(helpURL));
+}
+
+void
+TriggerSegmentManager::slotHelpAbout()
+{
+    new AboutDialog(this);
+}
 }
 #include "TriggerSegmentManager.moc"

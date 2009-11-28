@@ -66,6 +66,8 @@ public slots:
                                            const void *);
 
     void slotCurrentTabChanged(QWidget *);
+    void slotHelpRequested();
+    void slotHelpAbout();
 
 signals:
     void play();

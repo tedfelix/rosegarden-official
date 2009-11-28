@@ -34,6 +34,7 @@
 #include "gui/widgets/VUMeter.h"
 #include "gui/general/IconLoader.h"
 #include "gui/widgets/TmpStatusMsg.h"
+#include "gui/dialogs/AboutDialog.h"
 #include "MidiMixerVUMeter.h"
 #include "MixerWindow.h"
 #include "sound/MappedEvent.h"
@@ -51,6 +52,7 @@
 #include <QWidget>
 #include <QLayout>
 #include <QShortcut>
+#include <QDesktopServices>
 
 
 namespace Rosegarden
@@ -75,6 +77,8 @@ MidiMixerWindow::MidiMixerWindow(QWidget *parent,
     createAction("playback_pointer_end", SIGNAL(fastForwardPlaybackToEnd()));
     createAction("record", SIGNAL(record()));
     createAction("panic", SIGNAL(panic()));
+    createAction("midimix_help", SLOT(slotHelpRequested()));
+    createAction("help_about_app", SLOT(slotHelpAbout()));
 
     createGUI("midimixer.rc");
 }
@@ -689,5 +693,23 @@ MidiMixerWindow::slotSynchronise()
     //setupTabs();
 }
 
+
+void
+MidiMixerWindow::slotHelpRequested()
+{
+    // TRANSLATORS: if the manual is translated into your language, you can
+    // change the two-letter language code in this URL to point to your language
+    // version, eg. "http://rosegardenmusic.com/wiki/doc:midiMixerWindow-es" for the
+    // Spanish version. If your language doesn't yet have a translation, feel
+    // free to create one.
+    QString helpURL = tr("http://rosegardenmusic.com/wiki/doc:midiMixerWindow-en");
+    QDesktopServices::openUrl(QUrl(helpURL));
+}
+
+void
+MidiMixerWindow::slotHelpAbout()
+{
+    new AboutDialog(this);
+}
 }
 #include "MidiMixerWindow.moc"

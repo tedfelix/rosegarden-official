@@ -90,7 +90,7 @@ public:
 
     virtual void updateView();
 
-    virtual void setupActions();
+    void setupActions();
     virtual void initStatusBar();
     virtual QSize getViewSize(); 
     virtual void setViewSize(QSize);
@@ -141,6 +141,9 @@ public slots:
     virtual void eventRemoved(const Segment *, Event *);
     virtual void endMarkerTimeChanged(const Segment *, bool) { }
     virtual void segmentDeleted(const Segment *);
+
+    void slotHelpRequested();
+    void slotHelpAbout();
 
 signals:
     void editTriggerSegment(int);

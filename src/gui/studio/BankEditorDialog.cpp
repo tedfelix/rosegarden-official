@@ -40,6 +40,7 @@
 #include "gui/widgets/TmpStatusMsg.h"
 #include "gui/widgets/FileDialog.h"
 #include "gui/general/ResourceFinder.h"
+#include "gui/dialogs/AboutDialog.h"
 #include "document/Command.h"
 
 #include <QLayout>
@@ -341,6 +342,8 @@ BankEditorDialog::setupActions()
 
     createAction("edit_copy", SLOT(slotEditCopy()));
     createAction("edit_paste", SLOT(slotEditPaste()));
+    createAction("bank_help", SLOT(slotHelpRequested()));
+    createAction("help_about_app", SLOT(slotHelpAbout()));
 
     
 //     connect(m_treeWidget, SIGNAL(itemChanged(QTreeWidgetItem*)),
@@ -1803,5 +1806,23 @@ BankEditorDialog::closeEvent(QCloseEvent *e)
     QMainWindow::closeEvent(e);
 }
 
+
+void
+BankEditorDialog::slotHelpRequested()
+{
+    // TRANSLATORS: if the manual is translated into your language, you can
+    // change the two-letter language code in this URL to point to your language
+    // version, eg. "http://rosegardenmusic.com/wiki/doc:bankEditorDialog-es" for the
+    // Spanish version. If your language doesn't yet have a translation, feel
+    // free to create one.
+    QString helpURL = tr("http://rosegardenmusic.com/wiki/doc:bankEditorDialog-en");
+    QDesktopServices::openUrl(QUrl(helpURL));
+}
+
+void
+BankEditorDialog::slotHelpAbout()
+{
+    new AboutDialog(this);
+}
 }
 #include "BankEditorDialog.moc"

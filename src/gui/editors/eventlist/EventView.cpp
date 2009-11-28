@@ -47,6 +47,7 @@
 #include "gui/dialogs/EventFilterDialog.h"
 #include "gui/dialogs/PitchDialog.h"
 #include "gui/dialogs/SimpleEventEditDialog.h"
+#include "gui/dialogs/AboutDialog.h"
 #include "gui/general/ListEditView.h"
 #include "gui/general/IconLoader.h"
 #include "gui/general/MidiPitchLabel.h"
@@ -77,6 +78,7 @@
 #include <QTreeWidgetItem>
 #include <QVBoxLayout>
 #include <QWidget>
+#include <QDesktopServices>
 
 #include <algorithm>
 
@@ -849,7 +851,7 @@ EventView::slotTriggerTimeAdjustChanged(int option)
 
     int id = m_segments[0]->getComposition()->getTriggerSegmentId(m_segments[0]);
 
-    TriggerSegmentRec *rec =
+//    TriggerSegmentRec *rec =  // remove warning
         m_segments[0]->getComposition()->getTriggerSegmentRec(id);
 
     addCommandToHistory(new SetTriggerSegmentDefaultTimeAdjustCommand
@@ -1232,6 +1234,8 @@ EventView::setupActions()
     createAction("filter_selection", SLOT(slotFilterSelection()));
     createAction("select_all", SLOT(slotSelectAll()));
     createAction("clear_selection", SLOT(slotClearSelection()));
+    createAction("event_help", SLOT(slotHelpRequested()));
+    createAction("help_about_app", SLOT(slotHelpAbout()));
 
     QAction *musical = createAction("time_musical", SLOT(slotMusicalTime()));
     QAction *real = createAction("time_real", SLOT(slotRealTime()));
@@ -1839,5 +1843,23 @@ EventView::updateWindowTitle(bool m)
 
 }
 
+
+void
+EventView::slotHelpRequested()
+{
+    // TRANSLATORS: if the manual is translated into your language, you can
+    // change the two-letter language code in this URL to point to your language
+    // version, eg. "http://rosegardenmusic.com/wiki/doc:eventView-es" for the
+    // Spanish version. If your language doesn't yet have a translation, feel
+    // free to create one.
+    QString helpURL = tr("http://rosegardenmusic.com/wiki/doc:eventView-en");
+    QDesktopServices::openUrl(QUrl(helpURL));
+}
+
+void
+EventView::slotHelpAbout()
+{
+    new AboutDialog(this);
+}
 }
 #include "EventView.moc"

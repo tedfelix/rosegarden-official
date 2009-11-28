@@ -47,6 +47,7 @@
 #include "gui/widgets/InputDialog.h"
 #include "gui/widgets/WarningGroupBox.h"
 #include "gui/general/IconLoader.h"
+#include "gui/dialogs/AboutDialog.h"
 #include "sound/AudioFile.h"
 #include "sound/AudioFileManager.h"
 #include "sound/WAVAudioFile.h"
@@ -153,7 +154,8 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     createAction("distribute_audio", SLOT(slotDistributeOnMidiSegment()));
     
     // help menu
-    createAction("audio_help", SLOT(slotHelp()));
+    createAction("audio_help", SLOT(slotHelpRequested()));
+    createAction("help_about_app", SLOT(slotHelpAbout()));
     
     
     //!!! oh now hang on, does this one work?
@@ -1374,7 +1376,7 @@ AudioManagerDialog::slotDistributeOnMidiSegment()
 }
 
 void
-AudioManagerDialog::slotHelp()
+AudioManagerDialog::slotHelpRequested()
 {
     // TRANSLATORS: if the manual is translated into your language, you can
     // change the two-letter language code in this URL to point to your language
@@ -1385,5 +1387,11 @@ AudioManagerDialog::slotHelp()
     QDesktopServices::openUrl(QUrl(helpURL));
 }
 
+
+void
+AudioManagerDialog::slotHelpAbout()
+{
+    new AboutDialog(this);
+}
 }
 #include "AudioManagerDialog.moc"

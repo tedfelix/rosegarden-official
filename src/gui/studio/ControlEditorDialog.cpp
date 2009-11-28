@@ -37,6 +37,7 @@
 #include "misc/ConfigGroups.h"
 #include "document/Command.h"
 #include "document/CommandHistory.h"
+#include "gui/dialogs/AboutDialog.h"
 
 #include <QShortcut>
 #include <QMainWindow>
@@ -58,6 +59,7 @@
 #include <QVBoxLayout>
 #include <QList>
 #include <QSettings>
+#include <QDesktopServices>
 
 
 namespace Rosegarden
@@ -370,6 +372,8 @@ ControlEditorDialog::setupActions()
     createAction("file_close", SLOT(slotClose()));
     m_closeButton->setText(tr("Close"));
     connect(m_closeButton, SIGNAL(released()), this, SLOT(slotClose()));
+    createAction("control_help", SLOT(slotHelpRequested()));
+    createAction("help_about_app", SLOT(slotHelpAbout()));
 
     createGUI("controleditor.rc");
 }
@@ -429,7 +433,7 @@ ControlEditorDialog::slotEdit(QTreeWidgetItem *i, int)
 }
 
 void
-ControlEditorDialog::closeEvent(QCloseEvent *e)
+ControlEditorDialog::closeEvent(QCloseEvent*)
 {
     emit closing();
     close();
@@ -446,5 +450,23 @@ ControlEditorDialog::setDocument(RosegardenDocument *doc)
     slotUpdate();
 }
 
+
+void
+ControlEditorDialog::slotHelpRequested()
+{
+    // TRANSLATORS: if the manual is translated into your language, you can
+    // change the two-letter language code in this URL to point to your language
+    // version, eg. "http://rosegardenmusic.com/wiki/doc:controlEditorDialog-es" for the
+    // Spanish version. If your language doesn't yet have a translation, feel
+    // free to create one.
+    QString helpURL = tr("http://rosegardenmusic.com/wiki/doc:controlEditorDialog-en");
+    QDesktopServices::openUrl(QUrl(helpURL));
+}
+
+void
+ControlEditorDialog::slotHelpAbout()
+{
+    new AboutDialog(this);
+}
 }
 #include "ControlEditorDialog.moc"

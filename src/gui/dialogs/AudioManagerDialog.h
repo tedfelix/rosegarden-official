@@ -102,7 +102,8 @@ public slots:
     void slotRemoveAllUnused();
     void slotDeleteUnused();
     void slotExportAudio();
-    void slotHelp();
+    void slotHelpRequested();
+    void slotHelpAbout();
 	
 	//void slotItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
 	

@@ -31,11 +31,7 @@
     <text>&amp;Help</text>
     <Action name="audio_help" text="Help" icon="wiki" shortcut="F1" />
   <Separator/>
-    <Action name="tutorial" text="&amp;Rosegarden tutorial" />
-    <Action name="guidelines" text="&amp;Bug Reporting Guidelines" />
-  <Separator/>
     <Action name="help_about_app" text="&amp;About Rosegarden" icon="rg-rwb-rose3-16x16" />
-    <Action name="help_about_qt" text="About &amp;Qt" />
   </Menu>
 
 </MenuBar>
