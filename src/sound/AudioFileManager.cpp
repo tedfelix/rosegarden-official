@@ -517,7 +517,7 @@ AudioFileManager::clear()
 }
 
 AudioFile *
-AudioFileManager::createRecordingAudioFile()
+AudioFileManager::createRecordingAudioFile(QString instrumentAlias)
 {
     MutexLock lock (&_audioFileManagerLock)
         ;
@@ -527,8 +527,9 @@ AudioFileManager::createRecordingAudioFile()
 
     while (fileName == "") {
 
-        fileName = QString("rg-%1-%2.wav")
-                   .arg(QDateTime::currentDateTime().toString("yyyyMMdd-hhmmss"))
+        fileName = QString("rg_%1-%2-%3.wav")
+                   .arg(instrumentAlias)
+                   .arg(QDateTime::currentDateTime().toString("yyyy-MM-dd_hh.mm.ss"))
                    .arg(newId + 1);
 
         if (QFile(m_audioPath.c_str() + fileName).exists()) {
@@ -554,19 +555,6 @@ AudioFileManager::createRecordingAudioFile()
     }
 
     return aF;
-}
-
-std::vector<std::string>
-AudioFileManager::createRecordingAudioFiles(unsigned int n)
-{
-    std::vector<std::string> v;
-    for (unsigned int i = 0; i < n; ++i) {
-        AudioFile *af = createRecordingAudioFile();
-        if (af)
-            v.push_back(m_audioPath + af->getFilename().data());
-        // !af should not happen, and we have no good recovery if it does
-    }
-    return v;
 }
 
 bool

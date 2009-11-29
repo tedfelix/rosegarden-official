@@ -170,14 +170,11 @@ public:
     //
     void testAudioPath() throw(BadAudioPathException);
 
-    // Get a new audio filename at the audio record path
+    // Get a new audio filename at the audio record path, inserting the
+    // instrumentAlias into the filename for easier recognition away from the
+    // file's original context
     //
-    AudioFile *createRecordingAudioFile();
-    // throw BadAudioPathException
-
-    // Get a set of new audio filenames at the audio record path
-    //
-    std::vector<std::string> createRecordingAudioFiles(unsigned int number);
+    AudioFile *createRecordingAudioFile(QString instrumentAlias);
     // throw BadAudioPathException
 
     // Return whether a file was created by recording within this "session"

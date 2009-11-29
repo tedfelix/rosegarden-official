@@ -5939,7 +5939,10 @@ RosegardenMainWindow::createRecordAudioFiles(const QVector<InstrumentId> &record
     for (int i = 0; i < recordInstruments.size(); ++i) {
         AudioFile *aF = 0;
         try {
-            aF = m_doc->getAudioFileManager().createRecordingAudioFile();
+            std::string alias = "";
+            Instrument *ins = m_doc->getStudio().getInstrumentById(recordInstruments[i]);
+            if (ins) alias = ins->getAlias();
+            aF = m_doc->getAudioFileManager().createRecordingAudioFile(strtoqstr(alias));
             if (aF) {
                 // createRecordingAudioFile doesn't actually write to the disk,
                 // and in principle it shouldn't fail
