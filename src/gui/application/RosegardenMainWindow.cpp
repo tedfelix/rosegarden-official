@@ -5936,13 +5936,47 @@ QVector<QString>
 RosegardenMainWindow::createRecordAudioFiles(const QVector<InstrumentId> &recordInstruments)
 {
     QVector<QString> qv;
+
+    // Refuse to start recording to "Untitled" for the user's own good.  (Want
+    // proof?  Look at my 3.9G ~/rosegarden full of meaningless files not
+    // associated with anything particular.  The ones since 2005, at least I
+    // know the date I recorded them, but that isn't very helpful.)
+    //
+    // I weighed the user inconvenience carefully, and decided to do this to
+    // maximize the value of the new filenames that include the title and
+    // instrument alias.  It's worthelss if they all say "Untitled" and there's
+    // no way to make "pick this and set that up before you hit this" intuitive,
+    // so I've had to throw instructions in their face.
+    if (m_doc->getTitle() == tr("Untitled")) {
+        QMessageBox::information(this,
+                                 tr("Rosegarden"),
+        // TRANSLATOR: you may change "doc:audio-filename-en" to a page in your
+        // language if you wish.  The n in <i>n</i>.wav refers to an unknown
+        // number, such as might be used in a mathematical equation
+                                 tr("<qt><p>You must choose a name for this composition before recording audio.</p><p>Audio files will be saved to <b>%1</b> as <b>rg-[<i>title</i>]-[<i>audio instrument</i>]-<i>date</i>_<i>time</i>-<i>n</i>.wav</b>.  You may wish to rename audio instruments before recording as well.  For more information, please see the <a style=\"color:gold\" href=\"http://www.rosegardenmusic.com/wiki/doc:audio-filenames-en\">Rosegarden Wiki</a>.</p></qt>")
+                                    .arg(strtoqstr(m_doc->getAudioFileManager().getAudioPath())),
+                                 QMessageBox::Ok,
+                                 QMessageBox::Ok);
+
+        slotFileSave();
+
+        //!!!
+        // We should return and cancel here, but the way all of this is strung
+        // together makes that tricky.  Let's see if we ever get a bug about "I
+        // tried to record audio, and it told me I had to choose a new name, and
+        // I decided to test my boundaries as a user and canceled the dialog,
+        // and recording started anyway!"  If so, this is the place!  Anyway,
+        // the aim here is to be helpful, not draconian.
+    }
+
     for (int i = 0; i < recordInstruments.size(); ++i) {
         AudioFile *aF = 0;
         try {
             std::string alias = "";
             Instrument *ins = m_doc->getStudio().getInstrumentById(recordInstruments[i]);
             if (ins) alias = ins->getAlias();
-            aF = m_doc->getAudioFileManager().createRecordingAudioFile(strtoqstr(alias));
+            aF = m_doc->getAudioFileManager().createRecordingAudioFile(m_doc->getTitle(),
+                                                                       strtoqstr(alias));
             if (aF) {
                 // createRecordingAudioFile doesn't actually write to the disk,
                 // and in principle it shouldn't fail

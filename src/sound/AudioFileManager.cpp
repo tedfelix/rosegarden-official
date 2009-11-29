@@ -517,7 +517,7 @@ AudioFileManager::clear()
 }
 
 AudioFile *
-AudioFileManager::createRecordingAudioFile(QString instrumentAlias)
+AudioFileManager::createRecordingAudioFile(QString projectName, QString instrumentAlias)
 {
     MutexLock lock (&_audioFileManagerLock)
         ;
@@ -537,14 +537,15 @@ AudioFileManager::createRecordingAudioFile(QString instrumentAlias)
     instrumentAlias.replace(QRegExp("~"),   "_");
     instrumentAlias.replace(QRegExp(" "),   "_");
 
-    if (instrumentAlias.isEmpty()) instrumentAlias = "none";
+    if (instrumentAlias.isEmpty()) instrumentAlias = "not_specified";
 
     AudioFileId newId = getFirstUnusedID();
     QString fileName = "";
 
     while (fileName == "") {
 
-        fileName = QString("rg-[%1]-%2-%3.wav")
+        fileName = QString("rg-[%1]-[%2]-%3-%4.wav")
+                   .arg(projectName)
                    .arg(instrumentAlias)
                    .arg(QDateTime::currentDateTime().toString("yyyy-MM-dd_hh.mm.ss"))
                    .arg(newId + 1);
