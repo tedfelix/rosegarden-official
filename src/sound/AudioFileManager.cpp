@@ -522,12 +522,29 @@ AudioFileManager::createRecordingAudioFile(QString instrumentAlias)
     MutexLock lock (&_audioFileManagerLock)
         ;
 
+    // just throw an _ in place of any characters that should be avoided
+    instrumentAlias.replace(QRegExp("&"),   "_");
+    instrumentAlias.replace(QRegExp("\\\\"),"_");
+    instrumentAlias.replace(QRegExp("\\/"), "_");
+    instrumentAlias.replace(QRegExp("%"),   "_");
+    instrumentAlias.replace(QRegExp("\\*"), "_");
+    instrumentAlias.replace(QRegExp("\\?"), "_");
+    instrumentAlias.replace(QRegExp("\""),  "_");
+    instrumentAlias.replace(QRegExp("'"),   "_");
+    instrumentAlias.replace(QRegExp(">"),   "_");
+    instrumentAlias.replace(QRegExp("<"),   "_");
+    instrumentAlias.replace(QRegExp("\\|"), "_");
+    instrumentAlias.replace(QRegExp("~"),   "_");
+    instrumentAlias.replace(QRegExp(" "),   "_");
+
+    if (instrumentAlias.isEmpty()) instrumentAlias = "none";
+
     AudioFileId newId = getFirstUnusedID();
     QString fileName = "";
 
     while (fileName == "") {
 
-        fileName = QString("rg_%1-%2-%3.wav")
+        fileName = QString("rg-[%1]-%2-%3.wav")
                    .arg(instrumentAlias)
                    .arg(QDateTime::currentDateTime().toString("yyyy-MM-dd_hh.mm.ss"))
                    .arg(newId + 1);
