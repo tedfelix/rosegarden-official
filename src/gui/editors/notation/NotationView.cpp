@@ -3786,10 +3786,10 @@ NotationView::slotMoveEventsUpStaff()
 
     NotationScene *scene = m_notationWidget->getScene();
     if (!scene) return;
-    NotationStaff *current_staff = scene->getCurrentStaff();
-    if (!current_staff) return;
     NotationStaff *target_staff = scene->getStaffAbove();
     if (!target_staff) return;
+
+    Segment *segment = &target_staff->getSegment();
 
     MacroCommand *command = new MacroCommand(tr("Move Events to Staff Above"));
 
@@ -3801,18 +3801,13 @@ NotationView::slotMoveEventsUpStaff()
 
     command->addCommand(new EraseCommand(*selection));
 
-    scene->setCurrentStaff(target_staff);
-
     command->addCommand(new PasteEventsCommand
-                        (*getCurrentSegment(), c, insertionTime,
+                        (*segment, c, insertionTime,
                          PasteEventsCommand::NoteOverlay));
     
     CommandHistory::getInstance()->addCommand(command);
 
-    scene->setCurrentStaff(current_staff);
-
     delete c;
-
 }
 
 void
@@ -3823,10 +3818,10 @@ NotationView::slotMoveEventsDownStaff()
 
     NotationScene *scene = m_notationWidget->getScene();
     if (!scene) return;
-    NotationStaff *current_staff = scene->getCurrentStaff();
-    if (!current_staff) return;
     NotationStaff *target_staff = scene->getStaffBelow();
     if (!target_staff) return;
+
+    Segment *segment = &target_staff->getSegment();
 
     MacroCommand *command = new MacroCommand(tr("Move Events to Staff Below"));
 
@@ -3838,18 +3833,13 @@ NotationView::slotMoveEventsDownStaff()
 
     command->addCommand(new EraseCommand(*selection));
 
-    scene->setCurrentStaff(target_staff);
-
     command->addCommand(new PasteEventsCommand
-                        (*getCurrentSegment(), c, insertionTime,
+                        (*segment, c, insertionTime,
                          PasteEventsCommand::NoteOverlay));
     
     CommandHistory::getInstance()->addCommand(command);
 
-    scene->setCurrentStaff(current_staff);
-
     delete c;
-
 }
 
 void
