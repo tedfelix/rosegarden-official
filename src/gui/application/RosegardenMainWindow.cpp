@@ -5953,7 +5953,7 @@ RosegardenMainWindow::createRecordAudioFiles(const QVector<InstrumentId> &record
         // TRANSLATOR: you may change "doc:audio-filename-en" to a page in your
         // language if you wish.  The n in <i>n</i>.wav refers to an unknown
         // number, such as might be used in a mathematical equation
-                                 tr("<qt><p>You must choose a name for this composition before recording audio.</p><p>Audio files will be saved to <b>%1</b> as <b>rg-[<i>title</i>]-[<i>audio instrument</i>]-<i>date</i>_<i>time</i>-<i>n</i>.wav</b>.  You may wish to rename audio instruments before recording as well.  For more information, please see the <a style=\"color:gold\" href=\"http://www.rosegardenmusic.com/wiki/doc:audio-filenames-en\">Rosegarden Wiki</a>.</p></qt>")
+                                 tr("<qt><p>You must choose a filename for this composition before recording audio.</p><p>Audio files will be saved to <b>%1</b> as <b>rg-[<i>filename</i>]-[<i>instrument</i>]-<i>date</i>_<i>time</i>-<i>n</i>.wav</b>.  You may wish to rename audio instruments before recording as well.  For more information, please see the <a style=\"color:gold\" href=\"http://www.rosegardenmusic.com/wiki/doc:audio-filenames-en\">Rosegarden Wiki</a>.</p></qt>")
                                     .arg(strtoqstr(m_doc->getAudioFileManager().getAudioPath())),
                                  QMessageBox::Ok,
                                  QMessageBox::Ok);

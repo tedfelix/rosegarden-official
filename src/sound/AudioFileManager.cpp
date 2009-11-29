@@ -535,6 +535,7 @@ AudioFileManager::createRecordingAudioFile(QString projectName, QString instrume
     instrumentAlias.replace(QRegExp("<"),   "_");
     instrumentAlias.replace(QRegExp("\\|"), "_");
     instrumentAlias.replace(QRegExp("~"),   "_");
+    instrumentAlias.replace(QRegExp(":"),   "_");
     instrumentAlias.replace(QRegExp(" "),   "_");
 
     if (instrumentAlias.isEmpty()) instrumentAlias = "not_specified";
