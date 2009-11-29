@@ -451,7 +451,7 @@ ImportDeviceDialog::importFromLSCP(QString filename)
     std::vector<MidiBank> banks;
     std::vector<MidiProgram> programs;
 
-    int comparableBankNumber = 0;
+    int comparableBankNumber = -1; //Make sure that first bank is read too by comparing to -1 first (invalid bank number)
 
     for (LSCPPatchExtractor::Device::const_iterator i = lscpDevice.begin();
     i != lscpDevice.end(); ++i) {
