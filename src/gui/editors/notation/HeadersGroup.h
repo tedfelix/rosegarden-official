@@ -21,6 +21,7 @@
 #ifndef _RG_HEADERSGROUP_H_
 #define _RG_HEADERSGROUP_H_
 
+#include "base/NotationTypes.h"
 #include "base/Track.h"
 
 #include <vector>
@@ -66,9 +67,9 @@ public:
      */
     void completeToHeight(int height);
 
-//     NotationView * getNotationView()
-//     { return m_notationView;
-//     }
+    NotationWidget * getNotationWidget()
+    { return m_widget;
+    }
 
     Composition *getComposition()
     { return &m_composition;
@@ -106,6 +107,10 @@ public:
     QSize sizeHint() const;
     QSize minimumSizeHint() const;
 
+    timeT getStartOfViewTime() { return m_startOfView; }
+    timeT getEndOfViewTime() { return m_endOfView; }
+
+
 
 
 public slots :
@@ -134,6 +139,9 @@ private :
     int m_lastWidth;
 
     QVBoxLayout *m_layout;
+
+    timeT m_startOfView;
+    timeT m_endOfView;
 };
 
 

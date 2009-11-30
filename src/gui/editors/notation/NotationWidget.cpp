@@ -999,6 +999,12 @@ NotationWidget::getViewLeftX()
     return m_view->mapToScene(0, 0).x();
 }
 
+double
+NotationWidget::getViewRightX()
+{
+    return m_view->mapToScene(m_view->width(), 0).x();
+}
+
 int
 NotationWidget::getNotationViewWidth()
 {

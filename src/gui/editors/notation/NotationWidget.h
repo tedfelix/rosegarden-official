@@ -101,6 +101,7 @@ public:
     void toggleHeadersView();
 
     double getViewLeftX();
+    double getViewRightX();
     int getNotationViewWidth();
     double getNotationSceneHeight();
 

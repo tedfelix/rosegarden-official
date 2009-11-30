@@ -97,13 +97,15 @@ StaffHeader::StaffHeader(HeadersGroup *group,
         m_backGround(Qt::black),
         m_toolTipText(QString("")),
         m_colourIndex(0),
-        m_indeterminableClef(0),
-        m_indeterminableKey(0),
+        m_clefOrKeyInconsistency(0),
         m_toolTipTimer(0),
         m_transposeOverlaps(0),
         m_clefOverlaps(0),
-        m_keyOverlaps(0)
-
+        m_keyOverlaps(0),
+        m_clefOrKeyIsInconsistent(false),
+        m_clefOrKeyWasInconsistent(false),
+        m_transposeIsInconsistent(false),
+        m_transposeWasInconsistent(false)
 {
     // localStyle (search key)
     //
@@ -234,23 +236,20 @@ StaffHeader::StaffHeader(HeadersGroup *group,
     ///          lookAtStaff() and not here.
 
 
-    // Create two warning icons
-    m_indeterminableClef = new QToolButton;
-    m_indeterminableClef->setIcon(QIcon(":/pixmaps/misc/warning.png"));
-    m_indeterminableClef->setIconSize(QSize(32, 32));
-    m_indeterminableKey = new QToolButton;
-    m_indeterminableKey->setIcon(QIcon(":/pixmaps/misc/warning.png"));
-    m_indeterminableKey->setIconSize(QSize(32, 32));
+    // Create a warning
+    int size = 4 * m_scene->getNotePixmapFactory()->getSize();
+    m_clefOrKeyInconsistency = new QToolButton;
+    m_clefOrKeyInconsistency->setIcon(QIcon(":/pixmaps/misc/inconsistency.png"));
+    m_clefOrKeyInconsistency->setIconSize(QSize(size, size));
 
     // Add a layout where to place the warning icons
     QHBoxLayout *hbox = new QHBoxLayout;
-    hbox->addWidget(m_indeterminableClef);
-    hbox->addWidget(m_indeterminableKey);
+    hbox->addWidget(m_clefOrKeyInconsistency);
+    // hbox->addWidget(m_indeterminableKey);
     setLayout(hbox);
 
     // Icons are here, but they are hidden
-    m_indeterminableClef->hide();
-    m_indeterminableKey->hide();
+    m_clefOrKeyInconsistency->hide();
 
 
     // Implement a ToolTip event replacement (see enterEvent(), leaveEvent and
@@ -651,6 +650,12 @@ StaffHeader::lookAtStaff(double x, int maxWidth)
     // But clef and key width may override max header width
     if (width < clefAndKeyWidth) width = clefAndKeyWidth;
 
+    // Is clef or key inconsistent somewhere in the current view ?
+    timeT start = m_headersGroup->getStartOfViewTime();
+    timeT end = m_headersGroup->getEndOfViewTime();
+    m_clefOrKeyIsInconsistent = !m_clefOverlaps->isConsistent(start, end)
+        || !m_keyOverlaps->isConsistent(start, end);
+
     return width;
 }
 
@@ -678,7 +683,9 @@ StaffHeader::updateHeader(int width)
          || (m_clef != m_lastClef)
          || (m_label != m_lastLabel)
          || (m_upperText != m_lastUpperText)
-         || (m_transpose != m_lastTranspose)) {
+         || (m_transpose != m_lastTranspose)
+         || (m_clefOrKeyIsInconsistent != m_clefOrKeyWasInconsistent)
+         || (m_transposeIsInconsistent != m_transposeWasInconsistent)) {
 
         m_neverUpdated = false;
         m_lastStatusPart = statusPart;
@@ -687,6 +694,9 @@ StaffHeader::updateHeader(int width)
         m_lastLabel = m_label;
         m_lastTranspose = m_transpose;
         m_lastUpperText = m_upperText;
+        m_clefOrKeyWasInconsistent = m_clefOrKeyIsInconsistent;
+        m_transposeWasInconsistent = m_transposeIsInconsistent;
+        
 
         bool drawClef = true;
         //QColor clefColour;
@@ -736,10 +746,8 @@ StaffHeader::updateHeader(int width)
         m_lastWidth = width;
 
         // Show or hide the warning icons
-        if (isClefInconsistent()) m_indeterminableClef->show();
-        else m_indeterminableClef->hide();
-        if (isKeyInconsistent()) m_indeterminableKey->show();
-        else m_indeterminableKey->hide();
+        if (m_clefOrKeyIsInconsistent) m_clefOrKeyInconsistency->show();
+        else m_clefOrKeyInconsistency->hide();
     }
 
     update();

@@ -249,14 +249,18 @@ private :
 
     unsigned int m_colourIndex;
 
-    QToolButton *m_indeterminableClef;
-    QToolButton *m_indeterminableKey;
+    QToolButton *m_clefOrKeyInconsistency;
 
     QTimer *m_toolTipTimer;
 
     Overlaps<int> *m_transposeOverlaps;
     Overlaps<Clef> *m_clefOverlaps;
     Overlaps<Key> *m_keyOverlaps;
+
+    bool m_clefOrKeyIsInconsistent;
+    bool m_clefOrKeyWasInconsistent;
+    bool m_transposeIsInconsistent;
+    bool m_transposeWasInconsistent;
 };
 
 }

@@ -24,6 +24,7 @@
 #include "StaffHeader.h"
 #include "NotationWidget.h"
 #include "NotationScene.h"
+#include "NotationHLayout.h"
 #include "NotePixmapFactory.h"
 #include "document/RosegardenDocument.h"
 
@@ -186,6 +187,17 @@ HeadersGroup::slotUpdateAllHeaders(int x, bool force)
             if ((deltaWidth < treshold) && (deltaWidth > -treshold))
                 neededWidth = m_lastWidth;
         }
+
+        // Compute times of left and right of view
+        NotationHLayout *nhl = m_scene->getHLayout();
+        m_startOfView = nhl->getTimeForX(x);
+        m_endOfView = nhl->getTimeForX(m_widget->getViewRightX());
+
+// int barStart = m_composition.getBarNumber(m_startOfView) + 1;
+// int barEnd = m_composition.getBarNumber(m_endOfView) + 1;
+// std::cerr << "XXX (" << m_startOfView << ", " << m_endOfView
+//           << "   ["<< barStart << ", " << barEnd << "]\n";
+
 
         // Pass 2 : redraw the headers when necessary
         for (i=m_headers.begin(); i!=m_headers.end(); i++) {
