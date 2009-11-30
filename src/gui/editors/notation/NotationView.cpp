@@ -683,6 +683,7 @@ NotationView::setupActions()
     createAction("guidelines", SLOT(slotBugGuidelines()));
     createAction("help_about_app", SLOT(slotHelpAbout()));
     createAction("help_about_qt", SLOT(slotHelpAboutQt()));
+    createAction("donate", SLOT(slotDonate()));
 
     createAction("toggle_velocity_ruler", SLOT(slotToggleVelocityRuler()));
     createAction("toggle_pitchbend_ruler", SLOT(slotTogglePitchbendRuler()));
@@ -3749,6 +3750,13 @@ void
 NotationView::slotHelpAboutQt()
 {
     QMessageBox::aboutQt(this, tr("Rosegarden"));
+}
+
+void
+NotationView::slotDonate()
+{
+    QString url("https://sourceforge.net/project/project_donations.php?group_id=4932");
+    QDesktopServices::openUrl(QUrl(url));
 }
 
 void

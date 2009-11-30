@@ -550,6 +550,8 @@
   <Separator/>
     <Action name="help_about_app" text="&amp;About Rosegarden" icon="rg-rwb-rose3-16x16" />
     <Action name="help_about_qt" text="About &amp;Qt" />
+  <Separator/>
+    <Action name="donate" text="&amp;Support Rosegarden" icon="donate" />
   </Menu>
 </MenuBar>
 

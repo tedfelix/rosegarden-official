@@ -119,6 +119,8 @@ public slots:
     void slotMusicalTime();
     void slotRealTime();
     void slotRawTime();
+    void slotHelpRequested();
+    void slotHelpAbout();
 
     // on double click on the event list
     //

@@ -34,6 +34,7 @@
 #include "misc/ConfigGroups.h"
 #include "gui/dialogs/TempoDialog.h"
 #include "gui/dialogs/TimeSignatureDialog.h"
+#include "gui/dialogs/AboutDialog.h"
 #include "gui/general/ListEditView.h"
 #include "gui/general/IconLoader.h"
 #include "gui/widgets/TmpStatusMsg.h"
@@ -53,6 +54,7 @@
 #include <QVBoxLayout>
 #include <QStatusBar>
 #include <QList>
+#include <QDesktopServices>
 
 
 namespace Rosegarden
@@ -589,6 +591,8 @@ TempoView::setupActions()
     createAction("edit", SLOT(slotEdit()));
     createAction("select_all", SLOT(slotSelectAll()));
     createAction("clear_selection", SLOT(slotClearSelection()));
+    createAction("tempo_help", SLOT(slotHelpRequested()));
+    createAction("help_about_app", SLOT(slotHelpAbout()));
 
     QSettings settings;
     settings.beginGroup(TempoViewConfigGroup);
@@ -780,5 +784,22 @@ TempoView::updateViewCaption()
                 .arg(getDocument()->getTitle()));
 }
 
+void
+TempoView::slotHelpRequested()
+{
+    // TRANSLATORS: if the manual is translated into your language, you can
+    // change the two-letter language code in this URL to point to your language
+    // version, eg. "http://rosegardenmusic.com/wiki/doc:tempoView-es" for the
+    // Spanish version. If your language doesn't yet have a translation, feel
+    // free to create one.
+    QString helpURL = tr("http://rosegardenmusic.com/wiki/doc:tempoView-en");
+    QDesktopServices::openUrl(QUrl(helpURL));
+}
+
+void
+TempoView::slotHelpAbout()
+{
+    new AboutDialog(this);
+}
 }
 #include "TempoView.moc"

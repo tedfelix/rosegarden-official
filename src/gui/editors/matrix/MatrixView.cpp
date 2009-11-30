@@ -101,6 +101,7 @@
 #include <QMessageBox>
 #include <QToolButton>
 #include <QStatusBar>
+#include <QDesktopServices>
 
 
 namespace Rosegarden
@@ -442,8 +443,12 @@ MatrixView::setupActions()
     createAction("show_transport_toolbar", SLOT(slotToggleTransportToolBar()));
 
     
+    createAction("manual", SLOT(slotHelp()));
+    createAction("tutorial", SLOT(slotTutorial()));
+    createAction("guidelines", SLOT(slotBugGuidelines()));
     createAction("help_about_app", SLOT(slotHelpAbout()));
-//     createAction("help_about_qt", SLOT(slot()));
+    createAction("help_about_qt", SLOT(slotHelpAboutQt()));
+    createAction("donate", SLOT(slotDonate()));
     
     // grid snap values
     timeT crotchetDuration = Note(Note::Crotchet).getDuration();
@@ -1398,9 +1403,48 @@ void MatrixView::slotRetrogradeInvert()
 }
 
 void
+MatrixView::slotHelp()
+{
+    // TRANSLATORS: if the manual is translated into your language, you can
+    // change the two-letter language code in this URL to point to your language
+    // version, eg. "http://rosegardenmusic.com/wiki/doc:matrix-es" for the
+    // Spanish version. If your language doesn't yet have a translation, feel
+    // free to create one.
+    QString helpURL = tr("http://rosegardenmusic.com/wiki/doc:matrix-en");
+    QDesktopServices::openUrl(QUrl(helpURL));
+}
+
+void
+MatrixView::slotTutorial()
+{
+    QString tutorialURL = tr("http://www.rosegardenmusic.com/tutorials/en/chapter-0.html");
+    QDesktopServices::openUrl(QUrl(tutorialURL));
+}
+
+void
+MatrixView::slotBugGuidelines()
+{
+    QString glURL = tr("http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html");
+     QDesktopServices::openUrl(QUrl(glURL));
+}
+
+void
 MatrixView::slotHelpAbout()
 {
     new AboutDialog(this);
+}
+
+void
+MatrixView::slotHelpAboutQt()
+{
+    QMessageBox::aboutQt(this, tr("Rosegarden"));
+}
+
+void
+MatrixView::slotDonate()
+{
+    QString url("https://sourceforge.net/project/project_donations.php?group_id=4932");
+    QDesktopServices::openUrl(QUrl(url));
 }
 
 void

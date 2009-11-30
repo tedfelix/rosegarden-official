@@ -155,7 +155,12 @@ protected slots:
     /**
      * Call the Rosegaden about box.
      */
+    void slotHelp();
+    void slotTutorial();
+    void slotBugGuidelines();
     void slotHelpAbout();
+    void slotHelpAboutQt();
+    void slotDonate();
 
     void slotShowContextHelp(const QString &);
         

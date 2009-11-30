@@ -308,6 +308,7 @@ protected slots:
     void slotBugGuidelines();
     void slotHelpAbout();
     void slotHelpAboutQt();
+    void slotDonate();
 
 private:
     /**
