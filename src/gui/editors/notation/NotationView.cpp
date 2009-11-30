@@ -1501,7 +1501,7 @@ NotationView::slotEditGeneralPaste()
 void
 NotationView::slotPreviewSelection()
 {
-    if (getSelection())
+    if (!getSelection())
         return ;
 
     getDocument()->slotSetLoop(getSelection()->getStartTime(),
