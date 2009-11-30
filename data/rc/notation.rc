@@ -294,6 +294,8 @@
       <Action name="collapse_notes" text="Collapse &amp;Equal-Pitch Notes" shortcut="Ctrl+=" />
       <Action name="make_notes_viable" text="Tie Notes at &amp;Barlines" />
       <Action name="de_counterpoint" text="Split-and-Tie Overlapping &amp;Chords" icon="transforms-decounterpoint" />
+      <Action name="add_dot" text="Cycle &amp;Dots" icon="cycle-dots" shortcut="Ctrl+." />
+      <Action name="add_notation_dot" text="Cycle Dots With&amp;out Duration Change" shortcut="Ctrl+Alt+." />
     </Menu>
     <Separator/>
     <Menu name="quantize_notes">
@@ -713,6 +715,8 @@
   <Action name="decrescendo" />
   <Action name="octave_up" />
   <Action name="trill_line" />
+<Separator/>
+  <Action name="add_dot" />
 </ToolBar>
 
 <ToolBar name="Layout Toolbar" hidden="true">
@@ -853,6 +857,7 @@
     <Action name="untie_notes"/>
     <Action name="make_notes_viable"/>
     <Action name="de_counterpoint"/>
+    <Action name="add_dot" />
     <Action name="quantize"/>
     <Action name="interpret"/>
     <Action name="fix_quantization"/>

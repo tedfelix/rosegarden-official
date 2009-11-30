@@ -147,6 +147,19 @@ protected slots:
     void slotToggleDot(); 
 
     /**
+     * Cycle through the dots from . to .. to _ back to ., relative to the point
+     * of entry.
+     */
+    void slotAddDot();
+
+    /**
+     * Cycle through the dots from . to .. to _ back to ., relative to the point
+     * of entry.  Do not change performance duration.  Change notation duration
+     * only.  Maybe?  I have no idea, really, and almost dumped this function.
+     */
+    void slotAddDotNotationOnly();
+
+    /**
      * Process calls to insert a notes.
      */
     void slotNoteAction();

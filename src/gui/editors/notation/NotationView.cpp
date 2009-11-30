@@ -71,6 +71,7 @@
 #include "commands/edit/SetLyricsCommand.h"
 #include "commands/edit/EventEditCommand.h"
 #include "commands/edit/CollapseNotesCommand.h"
+#include "commands/edit/AddDotCommand.h"
 
 #include "commands/segment/AddTempoChangeCommand.h"
 #include "commands/segment/AddTimeSignatureAndNormalizeCommand.h"
@@ -4165,6 +4166,27 @@ NotationView::slotExtendSelectionForward(bool bar)
 
     setSelection(es, true); 
 }
+
+
+void
+NotationView::slotAddDot()
+{
+    EventSelection *selection = getSelection();
+    if (!selection) return;
+    TmpStatusMsg msg(tr("Adding dot..."), this);
+    CommandHistory::getInstance()->addCommand
+            (new AddDotCommand(*selection, false));
+}
+
+void NotationView::slotAddDotNotationOnly()
+{
+    EventSelection *selection = getSelection();
+    if (!selection) return;
+    TmpStatusMsg msg(tr("Adding dot..."), this);
+    CommandHistory::getInstance()->addCommand
+            (new AddDotCommand(*selection, true));
+}
+
 
 } // end namespace Rosegarden
 
