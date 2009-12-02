@@ -299,8 +299,7 @@ AudioPluginDialog::populatePluginList()
 
     // Check for plugin and setup as required
     AudioPluginInstance *inst = m_pluginContainer->getPlugin(m_index);
-    if (inst)
-        m_bypass->setChecked(inst->isBypassed());
+    if (inst) m_bypass->setChecked(inst->isBypassed());
 
     // Use this temporary map to ensure that the plugins are sorted
     // by name when they go into the combobox

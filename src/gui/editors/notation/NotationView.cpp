@@ -749,8 +749,6 @@ NotationView::setupActions()
     createAction("show_annotations", SLOT(slotToggleAnnotations()));
     createAction("show_lilypond_directives", SLOT(slotToggleLilyPondDirectives()));
 
-    createAction("lilypond_directive", SLOT(slotLilyPondDirective()));
-    createAction("debug_dump", SLOT(slotDebugDump()));
     createAction("extend_selection_backward_bar", SLOT(slotExtendSelectionBackwardBar()));
     createAction("extend_selection_forward_bar", SLOT(slotExtendSelectionForwardBar()));
     //!!! not here yet createAction("move_selection_left", SLOT(slotMoveSelectionLeft()));

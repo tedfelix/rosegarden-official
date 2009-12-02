@@ -732,7 +732,15 @@ RosegardenSequencer::setMappedPropertyList(int id, const QString &property,
         return "";
     }
 
-    return "(object not found)";
+//    return "(object not found)";
+
+    //!!! This is where the "object not found" error is coming from when changing
+    // the category combo.  I suspect something isn't wired quite right in here
+    // somewhere in the chain, and that's what's causing this error to come up,
+    // but testing with this simply disabled, everything seems to be working as
+    // expected if we ignore the error and move right along.  I have to admit I
+    // have only a very tenuous grasp on any of this, however.
+    return "";
 }
 
 int
