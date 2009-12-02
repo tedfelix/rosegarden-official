@@ -95,11 +95,6 @@ public:
     RosegardenDocument* getDocument() const;
 
     TrackEditor* getTrackEditor() { return m_trackEditor; }
-    
-    /**
-     * contains the implementation for printing functionality
-     */
-    void print(Composition*, bool previewOnly = false);
 
     // the following aren't slots because they're called from
     // RosegardenMainWindow

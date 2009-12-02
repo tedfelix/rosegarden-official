@@ -582,16 +582,6 @@ public slots:
     void slotFileClose();
 
     /**
-     * print the actual file
-     */
-    void slotFilePrint();
-
-    /**
-     * print preview 
-     */
-    void slotFilePrintPreview();
-
-    /**
      * Let the user select a Rosegarden Project file for import
      */
     void slotImportProject();
