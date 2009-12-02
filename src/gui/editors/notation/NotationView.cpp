@@ -228,7 +228,7 @@ NotationView::NotationView(RosegardenDocument *doc,
 
     // Set font size for single or multiple staffs (hopefully this happens
     // before we've drawn anything, so there's no penalty changing it)
-    m_fontSize =  NoteFontFactory::getDefaultSize(m_fontName);
+    m_fontSize = NoteFontFactory::getDefaultSize(m_fontName);
     if (m_notationWidget->getScene()->getStaffCount() > 1) {
         m_fontSize = settings.value("multistaffnotesize", 6).toInt();
         //std::cout << "setting multi staff size to " << size << std::endl;
@@ -687,38 +687,39 @@ NotationView::setupActions()
 
     createAction("toggle_velocity_ruler", SLOT(slotToggleVelocityRuler()));
     createAction("toggle_pitchbend_ruler", SLOT(slotTogglePitchbendRuler()));
-    createAction("add_control_ruler", SLOT(slotAddControlRuler(QAction *)));
 
     QMenu *addControlRulerMenu = new QMenu;
     Controllable *c =
         dynamic_cast<MidiDevice *>(getCurrentDevice());
     if (!c) {
         c = dynamic_cast<SoftSynthDevice *>(getCurrentDevice());
-        if (!c)
-            return ;
     }
 
-    const ControlList &list = c->getControlParameters();
+    if (c) {
 
-    QString itemStr;
+        const ControlList &list = c->getControlParameters();
 
-    for (ControlList::const_iterator it = list.begin();
-            it != list.end(); ++it) {
+        QString itemStr;
 
-        // Pitch Bend is treated separately now, and there's no point in adding
-        // "unsupported" controllers to the menu, so skip everything else
-        if (it->getType() != Controller::EventType) continue;
+        for (ControlList::const_iterator it = list.begin();
+             it != list.end(); ++it) {
 
-        QString hexValue;
-        hexValue.sprintf("(0x%x)", it->getControllerValue());
+            // Pitch Bend is treated separately now, and there's no
+            // point in adding "unsupported" controllers to the menu,
+            // so skip everything else
+            if (it->getType() != Controller::EventType) continue;
 
-        // strings extracted from data files must be QObject::tr()
-        itemStr = QObject::tr("%1 Controller %2 %3")
-                        .arg(QObject::tr(strtoqstr(it->getName())))
-                        .arg(it->getControllerValue())
-                        .arg(hexValue);
+            QString hexValue;
+            hexValue.sprintf("(0x%x)", it->getControllerValue());
 
-        addControlRulerMenu->addAction(itemStr);
+            // strings extracted from data files must be QObject::tr()
+            itemStr = QObject::tr("%1 Controller %2 %3")
+                .arg(QObject::tr(strtoqstr(it->getName())))
+                .arg(it->getControllerValue())
+                .arg(hexValue);
+
+            addControlRulerMenu->addAction(itemStr);
+        }
     }
 
     connect(addControlRulerMenu, SIGNAL(triggered(QAction*)),
@@ -1039,7 +1040,7 @@ NotationView::initLayoutToolbar()
     //
     // spacing combo
     //
-    int m_spacing = m_notationWidget->getScene()->getHSpacing();
+    int spacing = m_notationWidget->getScene()->getHSpacing();
     m_availableSpacings = NotationHLayout::getAvailableSpacings();
 
     m_spacingCombo = new QComboBox(layoutToolbar);
@@ -1049,7 +1050,7 @@ NotationView::initLayoutToolbar()
         value.setNum(*i);
         value += "%";
         m_spacingCombo->addItem(value);
-        if ((*i) == m_spacing) {
+        if ((*i) == spacing) {
             m_spacingCombo->setCurrentIndex(m_spacingCombo->count() - 1);
         }
     }
@@ -1071,7 +1072,9 @@ NotationView::initRulersToolbar()
 
     // set the "ruler n" tool button to pop up its menu instantly
     QToolButton *tb = dynamic_cast<QToolButton *>(findToolbar("Rulers Toolbar")->widgetForAction(findAction("add_control_ruler")));
-    tb->setPopupMode(QToolButton::InstantPopup);
+    if (tb) {
+        tb->setPopupMode(QToolButton::InstantPopup);
+    }
 }
 
 void
