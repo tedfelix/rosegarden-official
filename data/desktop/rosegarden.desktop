@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Type=Application
 Categories=AudioVideo;Audio;Midi;Sequencer;X-SuSE-Sequencer;X-Red-Hat-Base;
-Exec=INSTALLED_BINARY %f
+Exec=rosegarden %f
 MimeType=audio/x-rosegarden-composition;audio/x-rosegarden-device;audio/x-rosegarden-project;audio/x-rosegarden-template;audio/x-wav;audio/midi;audio/ogg;audio/mp3;audio/x-flac;
 X-KDE-NativeMimeType=audio/x-rosegarden-composition
 Icon=rosegarden.png

@@ -64,7 +64,6 @@ INSTMIMEDIR	:= $(DESTDIR)$(PREFIX)/share/mime
 INSTMIMEXMLDIR	:= $(INSTMIMEDIR)/packages
 INSTDESKTOPDIR	:= $(DESTDIR)$(PREFIX)/share/applications
 INSTICONDIR	:= $(DESTDIR)$(PREFIX)/share/icons/hicolor/32x32/apps
-INSTDATADIR	:= $(DESTDIR)$(PREFIX)/share/rosegarden-$(VERSION)
 
 RESOURCES	:= $(wildcard data/*.qrc data/*/*.qrc src/*.qrc src/*/*.qrc src/*/*/*.qrc src/*/*/*/*.qrc)
 QRCSOURCES	:= $(patsubst %.qrc,%.cpp,$(RESOURCES))
@@ -163,9 +162,8 @@ qrc:	locale
 	@bash ./scripts/rebuild-qrc
 
 install:
-	@bash ./scripts/rewrite-desktop-file $(VERSION)
 	$(MKDIR_P) -m 755 $(INSTBINDIR)
-	$(INSTALL) -m 755 rosegarden $(INSTBINDIR)/rosegarden-$(VERSION)
+	$(INSTALL) -m 755 rosegarden $(INSTBINDIR)/rosegarden
 	$(MKDIR_P) -m 755 $(INSTMIME16DIR)
 	$(MKDIR_P) -m 755 $(INSTMIME32DIR)
 	$(MKDIR_P) -m 755 $(INSTMIME64DIR)
@@ -184,19 +182,18 @@ install:
 	$(MKDIR_P) -m 755 $(INSTMIMEXMLDIR)
 	$(INSTALL) -m 644 data/mime/rosegarden.xml $(INSTMIMEXMLDIR)
 	$(MKDIR_P) -m 755 $(INSTDESKTOPDIR)
-	$(INSTALL) -m 644 data/desktop/rosegarden-$(VERSION).desktop $(INSTDESKTOPDIR)
+	$(INSTALL) -m 644 data/desktop/rosegarden.desktop $(INSTDESKTOPDIR)
 	$(MKDIR_P) -m 755 $(INSTICONDIR)
 	$(INSTALL) -m 644 data/pixmaps/icons/rg-rwb-rose3-32x32.png $(INSTICONDIR)/rosegarden.png
 	update-mime-database $(INSTMIMEDIR)
 
 uninstall:
-	rm -rf $(INSTDATADIR)
-	rm -f $(INSTBINDIR)/rosegarden-$(VERSION)
+	rm -f $(INSTBINDIR)/rosegarden
 	rm -f $(INSTMIME16DIR)/audio-x-rosegarden*
 	rm -f $(INSTMIME32DIR)/audio-x-rosegarden*
 	rm -f $(INSTMIME64DIR)/audio-x-rosegarden*
 	rm -f $(INSTMIMEXMLDIR)/rosegarden.xml
-	rm -f $(INSTDESKTOPDIR)/rosegarden-$(VERSION).desktop
+	rm -f $(INSTDESKTOPDIR)/rosegarden.desktop
 	rm -f $(INSTICONDIR)/rosegarden.png
 	update-mime-database $(INSTMIMEDIR)
 	rmdir -p --ignore-fail-on-non-empty $(INSTMIME16DIR)
