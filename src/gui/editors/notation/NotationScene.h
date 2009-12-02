@@ -73,7 +73,12 @@ public:
     NotationStaff *getStaffBelow();
     NotationStaff *getPriorStaffOnTrack();
     NotationStaff *getNextStaffOnTrack();
-    
+ 
+    NotationStaff *getStaffForSceneCoords(double x, int y) const;
+
+    NotationStaff *getNextStaffVertically(int direction);
+    NotationStaff *getNextStaffHorizontally(int direction, bool cycle);
+
     Segment *getCurrentSegment();
 
     bool segmentsContainNotes() const;
@@ -244,11 +249,6 @@ private:
 
     /// Returns the margins within the page (zero if not in MultiPageMode)
     void getPageMargins(int &left, int &top);
-
-    NotationStaff *getStaffForSceneCoords(double x, int y) const;
-
-    NotationStaff *getNextStaffVertically(int direction);
-    NotationStaff *getNextStaffHorizontally(int direction, bool cycle);
 
     void setupMouseEvent(QGraphicsSceneMouseEvent *, NotationMouseEvent &);
 

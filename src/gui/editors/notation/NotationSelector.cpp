@@ -42,6 +42,8 @@
 
 #include "gui/general/GUIPalette.h"
 
+#include "document/CommandHistory.h"
+
 #include <QAction>
 #include <QApplication>
 #include <QIcon>
@@ -324,9 +326,10 @@ void NotationSelector::handleMouseRelease(const NotationMouseEvent *e)
     // is worth fixing I think, but since it's the same as in Classic now, at
     // least at a casual testing-in-the-middle-of-development glance, I'm moving
     // on for now.
-    if ((w > -3 && w < 3 && h > -3 && h < 3 && !m_startedFineDrag) ||
+
+    if ((w > -3 && w < 3 && h > -3 && h < 3 && !m_startedFineDrag) //||
         // detour:
-        (m_selectionRect->x() == 0 && m_selectionRect->y() == 0 && !m_startedFineDrag)) {
+/*        (m_selectionRect->x() == 0 && m_selectionRect->y() == 0 && !m_startedFineDrag)*/) {
 
         if (m_clickedElement != 0 && m_selectedStaff) {
             
@@ -399,10 +402,9 @@ void NotationSelector::drag(int x, int y, bool final)
     }
     m_scene->setSelection(selection, false);
 
-#ifdef NOT_JUST_YET
-    LinedStaff *targetStaff = m_nParentView->getStaffForCanvasCoords(x, y);
-    if (!targetStaff)
-        targetStaff = m_selectedStaff;
+//#ifdef NOT_JUST_YET
+    NotationStaff *targetStaff = m_scene->getStaffForSceneCoords(x, y);
+    if (!targetStaff) targetStaff = m_selectedStaff;
 
     // Calculate time and height
 
@@ -427,7 +429,8 @@ void NotationSelector::drag(int x, int y, bool final)
     timeT duration = m_clickedElement->getViewDuration();
 
     NotationElementList::iterator itr =
-        targetStaff->getElementUnderCanvasCoords(x, y, clefEvt, keyEvt);
+//        targetStaff->getElementUnderCanvasCoords(x, y, clefEvt, keyEvt);
+        targetStaff->getElementUnderLayoutX(layoutX, clefEvt, keyEvt);
 
     if (itr != targetStaff->getViewElementList()->end()) {
 
@@ -435,10 +438,10 @@ void NotationSelector::drag(int x, int y, bool final)
         dragTime = elt->getViewAbsoluteTime();
         layoutX = elt->getLayoutX();
 
-        if (elt->isRest() && duration > 0 && elt->getCanvasItem()) {
+        if (elt->isRest() && duration > 0 && elt->getItem()) {
 
             double restX = 0, restWidth = 0;
-            elt->getCanvasAirspace(restX, restWidth);
+            elt->getSceneAirspace(restX, restWidth);
 
             timeT restDuration = elt->getViewDuration();
 
@@ -454,7 +457,7 @@ void NotationSelector::drag(int x, int y, bool final)
 
                 dragTime += part * restDuration / parts;
                 layoutX += part * restWidth / parts +
-                           (restX - elt->getCanvasX());
+                           (restX - elt->getSceneX());
             }
         }
     }
@@ -464,7 +467,7 @@ void NotationSelector::drag(int x, int y, bool final)
     if (keyEvt)
         key = ::Rosegarden::Key(*keyEvt);
 
-    int height = targetStaff->getHeightAtCanvasCoords(x, y);
+    int height = targetStaff->getHeightAtSceneCoords(x, y);
     int pitch = clickedPitch;
 
     if (height != clickedHeight)
@@ -494,7 +497,7 @@ void NotationSelector::drag(int x, int y, bool final)
         if ((pitch != m_lastDragPitch || dragTime != m_lastDragTime) &&
             m_clickedElement->isNote()) {
 
-            m_nParentView->showPreviewNote(targetStaff->getId(),
+            m_scene->showPreviewNote(targetStaff,
                                            layoutX, pitch, height,
                                            Note::getNearestNote(duration),
                                            m_clickedElement->isGrace());
@@ -504,7 +507,7 @@ void NotationSelector::drag(int x, int y, bool final)
 
     } else {
 
-        m_nParentView->clearPreviewNote();
+        m_scene->clearPreviewNote(targetStaff);
 
         MacroCommand *command = new MacroCommand(MoveCommand::getGlobalName());
         bool haveSomething = false;
@@ -538,15 +541,16 @@ void NotationSelector::drag(int x, int y, bool final)
 
         if (haveSomething) {
 
-            m_nParentView->addCommandToHistory(command);
+	    CommandHistory::getInstance()->addCommand(command);
 
             if (mc && singleNonNotePreview) {
 
                 lastInsertedEvent = mc->getLastInsertedEvent();
 
                 if (lastInsertedEvent) {
-                    m_nParentView->setSingleSelectedEvent(targetStaff->getId(),
-                                                          lastInsertedEvent);
+                    m_scene->setSingleSelectedEvent(&targetStaff->getSegment(),
+                                                    lastInsertedEvent,
+						    true);
 
                     ViewElementList::iterator vli =
                         targetStaff->findEvent(lastInsertedEvent);
@@ -557,15 +561,16 @@ void NotationSelector::drag(int x, int y, bool final)
                         m_clickedElement = 0;
                     }
 
-                    m_selectionRect->setX(x);
-                    m_selectionRect->setY(y);
+                    m_selectionRect->setPos(x, y);
+//                    m_selectionRect->setX(x);
+//                    m_selectionRect->setY(y);
                 }
             }
         } else {
             delete command;
-        }
+	}
     }
-#endif
+//#endif
 }
 
 void NotationSelector::dragFine(int x, int y, bool final)
