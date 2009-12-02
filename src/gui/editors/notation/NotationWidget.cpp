@@ -29,6 +29,7 @@
 #include "NotationEraser.h"
 #include "StaffLayout.h"
 #include "HeadersGroup.h"
+#include "NotationStaff.h"
 
 #include "base/RulerScale.h"
 #include "base/BaseProperties.h"
@@ -789,6 +790,13 @@ NotationWidget::slotDispatchMouseMove(const NotationMouseEvent *e)
         m_lastMouseMoveScenePos = QPointF(e->sceneX, e->sceneY);
         slotEnsureLastMouseMoveVisible();
         QTimer::singleShot(100, this, SLOT(slotEnsureLastMouseMoveVisible()));
+    }
+
+    if (e->staff)
+    {
+	QString s = strtoqstr(e->staff->getNoteNameAtSceneCoords(e->sceneX,
+                                                                 e->sceneY));
+        emit hoveredOverNoteChanged(s);
     }
 
     /*!!!

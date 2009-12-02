@@ -725,6 +725,9 @@ NotationView::setupActions()
     connect(addControlRulerMenu, SIGNAL(triggered(QAction*)),
             SLOT(slotAddControlRuler(QAction*)));
 
+    connect(m_notationWidget, SIGNAL(hoveredOverNoteChanged(const QString&)),
+            SLOT (slotHoveredOverNoteChanged(const QString&)));
+
     findAction("add_control_ruler")->setMenu(addControlRulerMenu);
 
     //Actions first appear in "settings" Menubar menu

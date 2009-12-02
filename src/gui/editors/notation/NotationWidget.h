@@ -117,6 +117,7 @@ signals:
     void segmentDeleted(Segment *);
     void sceneDeleted();
     void toolChanged(QString);
+    void hoveredOverNoteChanged(QString);
 
 public slots:
     void slotSetTool(QString name);
