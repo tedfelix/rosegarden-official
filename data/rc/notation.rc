@@ -1038,13 +1038,13 @@
 
 <State name="have_symbols_in_selection">
   <enable>
-    <Menu name="Adjust">
+    <Menu name="Adjust"/>
   </enable>
 </State>
 
 <State name="have_clefs_in_selection">
   <enable>
-    <Menu name="Adjust">
+    <Menu name="Adjust"/>
   </enable>
 </State>
 
