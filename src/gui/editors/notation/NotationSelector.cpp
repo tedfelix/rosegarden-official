@@ -464,22 +464,22 @@ void NotationSelector::drag(int x, int y, bool final)
     int height = targetStaff->getHeightAtSceneCoords(x, y);
     int pitch = clickedPitch;
 
-    if (height != clickedHeight)
-        pitch =
-            Pitch
-            (height, clef, key, clickedAccidental).getPerformancePitch();
+    if (height != clickedHeight) {
+        pitch = Pitch(height, clef, key,
+                      clickedAccidental).getPerformancePitch();
+    }
 
     if (pitch < clickedPitch) {
         if (height < -10) {
             height = -10;
-            pitch = Pitch
-                    (height, clef, key, clickedAccidental).getPerformancePitch();
+            pitch = Pitch(height, clef, key,
+                          clickedAccidental).getPerformancePitch();
         }
     } else if (pitch > clickedPitch) {
         if (height > 18) {
             height = 18;
-            pitch = Pitch
-                    (height, clef, key, clickedAccidental).getPerformancePitch();
+            pitch = Pitch(height, clef, key,
+                          clickedAccidental).getPerformancePitch();
         }
     }
 
@@ -491,10 +491,9 @@ void NotationSelector::drag(int x, int y, bool final)
         if ((pitch != m_lastDragPitch || dragTime != m_lastDragTime) &&
             m_clickedElement->isNote()) {
 
-            m_scene->showPreviewNote(targetStaff,
-                                           layoutX, pitch, height,
-                                           Note::getNearestNote(duration),
-                                           m_clickedElement->isGrace());
+            m_scene->showPreviewNote(targetStaff, layoutX, pitch, height,
+                                     Note::getNearestNote(duration),
+                                     m_clickedElement->isGrace());
             m_lastDragPitch = pitch;
             m_lastDragTime = dragTime;
         }
