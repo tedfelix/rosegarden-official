@@ -357,6 +357,23 @@ MatrixView::setupActions()
     createAction("toggle_pitchbend_ruler", SLOT(slotTogglePitchbendRuler()));
     createAction("add_control_ruler", SLOT(slotAddControlRuler(QAction *)));
     
+    createAction("add_tempo_change", SLOT(slotAddTempo()));
+    createAction("add_time_signature", SLOT(slotAddTimeSignature()));
+    createAction("halve_durations", SLOT(slotHalveDurations()));
+    createAction("double_durations", SLOT(slotDoubleDurations()));
+    createAction("rescale", SLOT(slotRescale()));
+    createAction("transpose_up", SLOT(slotTransposeUp()));
+    createAction("transpose_up_octave", SLOT(slotTransposeUpOctave()));
+    createAction("transpose_down", SLOT(slotTransposeDown()));
+    createAction("transpose_down_octave", SLOT(slotTransposeDownOctave()));
+    createAction("general_transpose", SLOT(slotTranspose()));
+    createAction("general_diatonic_transpose", SLOT(slotDiatonicTranspose()));
+    createAction("invert", SLOT(slotInvert()));
+    createAction("retrograde", SLOT(slotRetrograde()));
+    createAction("retrograde_invert", SLOT(slotRetrogradeInvert()));    
+//     createAction("jog_left", SLOT(slotJogLeft()));
+//     createAction("jog_right", SLOT(slotJogRight()));
+    
     QMenu *addControlRulerMenu = new QMenu;
     Controllable *c =
         dynamic_cast<MidiDevice *>(getCurrentDevice());
@@ -487,31 +504,6 @@ MatrixView::setupActions()
             createAction(actionName, SLOT(slotSetSnapFromAction()));
         }
     }
-    
-    
-    
-    // actions formerly located in EditView
-    // --
-    
-    //createInsertPitchActionMenu();
-    
-    createAction("add_tempo_change", SLOT(slotAddTempo()));
-    createAction("add_time_signature", SLOT(slotAddTimeSignature()));
-    createAction("halve_durations", SLOT(slotHalveDurations()));
-    createAction("double_durations", SLOT(slotDoubleDurations()));
-    createAction("rescale", SLOT(slotRescale()));
-    createAction("transpose_up", SLOT(slotTransposeUp()));
-    createAction("transpose_up_octave", SLOT(slotTransposeUpOctave()));
-    createAction("transpose_down", SLOT(slotTransposeDown()));
-    createAction("transpose_down_octave", SLOT(slotTransposeDownOctave()));
-    createAction("general_transpose", SLOT(slotTranspose()));
-    createAction("general_diatonic_transpose", SLOT(slotDiatonicTranspose()));
-    createAction("invert", SLOT(slotInvert()));
-    createAction("retrograde", SLOT(slotRetrograde()));
-    createAction("retrograde_invert", SLOT(slotRetrogradeInvert()));    
-//     createAction("jog_left", SLOT(slotJogLeft()));
-//     createAction("jog_right", SLOT(slotJogRight()));
-    
 }
 
 
@@ -1343,7 +1335,6 @@ void MatrixView::slotDiatonicTranspose()
 void MatrixView::slotTransposeUp()
 {
     EventSelection *selection = getSelection();
-    if (!selection) std::cout << "Hint: selection is NULL in slotTranposeUp() " << std::endl;
     if (!selection) return ;
     CommandHistory::getInstance()->addCommand(new TransposeCommand(1, *selection));
 }
