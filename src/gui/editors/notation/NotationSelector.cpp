@@ -392,8 +392,7 @@ void NotationSelector::drag(int x, int y, bool final)
 {
     NOTATION_DEBUG << "NotationSelector::drag " << x << ", " << y << endl;
 
-    if (!m_clickedElement || !m_selectedStaff)
-        return ;
+    if (!m_clickedElement || !m_selectedStaff) return ;
 
     EventSelection *selection = m_scene->getSelection();
     if (!selection || !selection->contains(m_clickedElement->event())) {
@@ -402,7 +401,6 @@ void NotationSelector::drag(int x, int y, bool final)
     }
     m_scene->setSelection(selection, false);
 
-//#ifdef NOT_JUST_YET
     NotationStaff *targetStaff = m_scene->getStaffForSceneCoords(x, y);
     if (!targetStaff) targetStaff = m_selectedStaff;
 
@@ -429,8 +427,7 @@ void NotationSelector::drag(int x, int y, bool final)
     timeT duration = m_clickedElement->getViewDuration();
 
     NotationElementList::iterator itr =
-//        targetStaff->getElementUnderCanvasCoords(x, y, clefEvt, keyEvt);
-        targetStaff->getElementUnderLayoutX(layoutX, clefEvt, keyEvt);
+        targetStaff->getElementUnderSceneCoords(x, y, clefEvt, keyEvt);
 
     if (itr != targetStaff->getViewElementList()->end()) {
 
@@ -445,19 +442,16 @@ void NotationSelector::drag(int x, int y, bool final)
 
             timeT restDuration = elt->getViewDuration();
 
-            if (restWidth > 0 &&
-                    restDuration >= duration * 2) {
+            if (restWidth > 0 && restDuration >= duration * 2) {
 
                 int parts = restDuration / duration;
                 double encroachment = x - restX;
                 NOTATION_DEBUG << "encroachment is " << encroachment << ", restWidth is " << restWidth << endl;
                 int part = (int)((encroachment / restWidth) * parts);
-                if (part >= parts)
-                    part = parts - 1;
+                if (part >= parts) part = parts - 1;
 
                 dragTime += part * restDuration / parts;
-                layoutX += part * restWidth / parts +
-                           (restX - elt->getSceneX());
+                layoutX += part * restWidth / parts + (restX - elt->getSceneX());
             }
         }
     }
@@ -570,7 +564,6 @@ void NotationSelector::drag(int x, int y, bool final)
             delete command;
 	}
     }
-//#endif
 }
 
 void NotationSelector::dragFine(int x, int y, bool final)
@@ -618,8 +611,8 @@ void NotationSelector::dragFine(int x, int y, bool final)
     double dx = x - m_selectionRect->x();
     double dy = y - m_selectionRect->y();
 
-    double noteBodyWidth = m_nParentView->getNotePixmapFactory()->getNoteBodyWidth();
-    double lineSpacing = m_nParentView->getNotePixmapFactory()->getLineSpacing();
+    double noteBodyWidth = m_scene->getNotePixmapFactory()->getNoteBodyWidth();
+    double lineSpacing = m_scene->getNotePixmapFactory()->getLineSpacing();
     dx = (1000.0 * dx) / noteBodyWidth;
     dy = (1000.0 * dy) / lineSpacing;
 
@@ -642,7 +635,8 @@ void NotationSelector::dragFine(int x, int y, bool final)
 
         IncrementDisplacementsCommand *command = new IncrementDisplacementsCommand
                 (*selection, long(dx), long(dy));
-        m_nParentView->addCommandToHistory(command);
+//        m_nParentView->addCommandToHistory(command);
+        CommandHistory::getInstance()->addCommand(command);
 
     } else {
 
@@ -665,7 +659,7 @@ void NotationSelector::dragFine(int x, int y, bool final)
         if (startTime == endTime)
             ++endTime;
         selection->getSegment().updateRefreshStatuses(startTime, endTime);
-        m_nParentView->update();
+        m_scene->update();
     }
 
 #endif
