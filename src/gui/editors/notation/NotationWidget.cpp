@@ -406,6 +406,9 @@ NotationWidget::setSegments(RosegardenDocument *document,
     connect(m_scene, SIGNAL(selectionChanged(EventSelection *)),
             m_controlsWidget, SLOT(slotSelectionChanged(EventSelection *)));
 
+    connect(m_scene, SIGNAL(currentViewSegmentChanged(ViewSegment *)),
+            m_controlsWidget, SLOT(slotSetCurrentViewSegment(ViewSegment *)));
+    
     m_topStandardRuler = new StandardRuler(document,
                                            m_referenceScale,
                                            0, 25,

@@ -45,6 +45,7 @@ class NotationElement;
 class NotationWidget;
 class RosegardenDocument;
 class Segment;
+class ViewSegment;
 class RulerScale;
 
 typedef std::map<int, int> TrackIntMap;
@@ -175,6 +176,7 @@ signals:
     void staffsPositionned();
 
     void currentStaffChanged();
+    void currentViewSegmentChanged(ViewSegment *);
 
     /**
      * Emitted when the mouse cursor moves to a different height

@@ -45,6 +45,7 @@ class NotationToolBox;
 class NotationTool;
 class NotationMouseEvent;
 class NotationStaff;
+class ViewSegment;
 class NotationElement;
 class Panner;
 class Panned;

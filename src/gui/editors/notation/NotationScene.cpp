@@ -214,6 +214,7 @@ NotationScene::setCurrentStaff(NotationStaff *staff)
         if (m_staffs[i] == staff) {
             m_currentStaff = i;
             emit currentStaffChanged();
+            emit currentViewSegmentChanged(staff);
             return;
         }
     }
