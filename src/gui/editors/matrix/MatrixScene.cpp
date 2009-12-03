@@ -732,6 +732,7 @@ MatrixScene::updateCurrentSegment()
             if (!mel) continue;
             mel->setCurrent(current);
         }
+        if (current) emit currentViewSegmentChanged(m_viewSegments[i]);
     }
 
     // changing the current segment may have overridden selection border colours

@@ -36,6 +36,7 @@ class EventSelection;
 class MatrixElement;
 class MatrixMouseEvent;
 class MatrixViewSegment;
+class ViewSegment;
 class RulerScale;
 class ZoomableRulerScale;
 class SnapGrid;
@@ -110,6 +111,7 @@ signals:
 
     void eventRemoved(Event *e);
 
+    void currentViewSegmentChanged(ViewSegment *);
     void selectionChanged();
     void selectionChanged(EventSelection *s);
     void segmentDeleted(Segment *);

@@ -49,7 +49,8 @@ public:
 
     void setSegments(RosegardenDocument *document,
                      std::vector<Segment *> segments);
-
+    
+    void setSegment(Segment *segment);
     void setViewSegment(ViewSegment *);
     void setRulerScale(RulerScale *);
     void setRulerScale(RulerScale *,int);
@@ -71,6 +72,7 @@ public slots:
     void slotAddPropertyRuler(const PropertyName &);
     void slotRemoveRuler(int);
     void slotSetPannedRect(QRectF pr);
+    void slotSetCurrentViewSegment(ViewSegment *);
     void slotSelectionChanged(EventSelection *);
     void slotHoveredOverNoteChanged();
     void slotHoveredOverNoteChanged(int evPitch, bool haveEvent, timeT evTime);

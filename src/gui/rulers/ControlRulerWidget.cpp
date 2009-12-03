@@ -112,13 +112,20 @@ ControlRulerWidget::setSegments(RosegardenDocument *document, std::vector<Segmen
     selection.insert(segments.begin(), segments.end());
 
     delete m_scale;
-    m_scale = new SegmentsRulerScale(&m_document->getComposition(),
-                                     selection,
-                                     0,
-                                     Note(Note::Shortest).getDuration() / 2.0);
 
+    setRulerScale(new SegmentsRulerScale(&m_document->getComposition(),
+            selection,
+            0,
+            Note(Note::Shortest).getDuration() / 2.0));
+    
     // This is single segment code
-    m_segment = segments[0];
+    setSegment(segments[0]);
+}
+
+void
+ControlRulerWidget::setSegment(Segment *segment)
+{
+    m_segment = segment;
 
     RG_DEBUG << "ControlRulerWidget::setSegments Widget contains " << m_controlRulerList.size() << " rulers.";
 
@@ -126,9 +133,8 @@ ControlRulerWidget::setSegments(RosegardenDocument *document, std::vector<Segmen
         std::list<ControlRuler *>::iterator it;
         for (it = m_controlRulerList.begin(); it != m_controlRulerList.end(); ++it) {
             (*it)->setSegment(m_segment);
-            (*it)->setRulerScale(m_scale);
         }
-    }
+    }    
 }
 
 void
@@ -136,18 +142,25 @@ ControlRulerWidget::setViewSegment(ViewSegment *viewSegment)
 {
     m_viewSegment = viewSegment;
 
-    PropertyControlRuler *propertyruler;
-    if (m_controlRulerList.size()) {
-        std::list<ControlRuler *>::iterator it;
-        for (it = m_controlRulerList.begin(); it != m_controlRulerList.end(); ++it) {
-            propertyruler = dynamic_cast<PropertyControlRuler *> (*it);
-            if (propertyruler) {
-                propertyruler->setViewSegment(m_viewSegment);
-            }
-        }
+//    PropertyControlRuler *propertyruler;
+//    if (m_controlRulerList.size()) {
+    for (std::list<ControlRuler *>::iterator it = m_controlRulerList.begin(); it != m_controlRulerList.end(); ++it) {
+        (*it)->setViewSegment(viewSegment);
     }
+//            propertyruler = dynamic_cast<PropertyControlRuler *> (*it);
+//            if (propertyruler) {
+//                propertyruler->setViewSegment(m_viewSegment);
+//            }
+//    }
 //    
 //    slotTogglePropertyRuler(BaseProperties::VELOCITY);
+}
+
+void ControlRulerWidget::slotSetCurrentViewSegment(ViewSegment *viewSegment)
+{
+    if (viewSegment == m_viewSegment) return;
+    
+    setViewSegment(viewSegment);
 }
 
 void

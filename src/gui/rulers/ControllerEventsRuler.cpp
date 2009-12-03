@@ -142,10 +142,12 @@ ControllerEventsRuler::setViewSegment(ViewSegment *segment)
 void
 ControllerEventsRuler::init()
 {
-    // Reset range information for this controller type
     if (!m_controller)
         return;
 
+    clear();
+    
+    // Reset range information for this controller type
     setMaxItemValue(m_controller->getMax());
     setMinItemValue(m_controller->getMin());
 
@@ -155,6 +157,8 @@ ControllerEventsRuler::init()
             addControlItem(*it);
         }
     }
+    
+    update();
 }
 
 void ControllerEventsRuler::paintEvent(QPaintEvent *event)

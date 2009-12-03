@@ -781,6 +781,10 @@ void ControlRuler::clear()
         }
     }
     m_controlItemMap.clear();
+    m_firstVisibleItem = m_controlItemMap.end();
+    m_lastVisibleItem = m_controlItemMap.end();
+    m_nextItemLeft = m_controlItemMap.end(); 
+    
     m_visibleItems.clear();
     m_selectedItems.clear();
 }

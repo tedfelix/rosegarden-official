@@ -387,6 +387,9 @@ MatrixWidget::setSegments(RosegardenDocument *document,
 
     // For some reason this doesn't work in the constructor - not looked in detail
     // ( ^^^ it's because m_scene is only set after construction --cc)
+    connect(m_scene, SIGNAL(currentViewSegmentChanged(ViewSegment *)),
+            m_controlsWidget, SLOT(slotSetCurrentViewSegment(ViewSegment *)));
+    
     connect(m_scene, SIGNAL(selectionChanged(EventSelection *)),
             m_controlsWidget, SLOT(slotSelectionChanged(EventSelection *)));
 
