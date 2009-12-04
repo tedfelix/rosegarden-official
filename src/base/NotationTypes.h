@@ -866,7 +866,7 @@ public:
      */
     Accidental getDisplayAccidental(const Key &key) const;
 
-	/**
+    /**
      * Return the accidental that should be used to display this pitch
      * in a given key, using the given strategy to resolve pitches where
      * an accidental is needed but not specified.

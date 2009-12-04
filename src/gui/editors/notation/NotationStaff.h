@@ -210,10 +210,9 @@ public:
      * Return the note name (C4, Bb3, whatever) corresponding to the
      * given scene coordinates
      */
-    virtual std::string getNoteNameAtSceneCoords
-    (double x, int y,
-     Accidental accidental =
-     Accidentals::NoAccidental) const;
+    QString getNoteNameAtSceneCoords(double x, int y,
+                                     Accidental accidental =
+                                     Accidentals::NoAccidental) const;
 
     /**
      * Find the NotationElement whose layout x-coord is closest to x,

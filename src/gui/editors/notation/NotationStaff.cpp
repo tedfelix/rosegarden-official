@@ -417,10 +417,21 @@ NotationStaff::getElementUnderLayoutX(double x,
     return notes->end();
 }
 
-std::string
+QString
 NotationStaff::getNoteNameAtSceneCoords(double x, int y,
         Accidental) const
 {
+    //!!! We have one version of this translate note name stuff in
+    // MidiPitchLabel, another one in TrackParameterBox, and now this one.
+    //
+    // This needs to be refactored one day to avoid all the frigged up hackery,
+    // and just have one unified way of making these strings, used everywhere.
+    // I think putting the tr() nonsense in base/ probably makes sense for
+    // this, and just have a Pitch method that returns a pre-translated string.
+    //
+    // But not just now.  I'll slap a couple of pieces of duct tape on it for
+    // now, and we'll worry about bigger issues.
+
     Clef clef;
     ::Rosegarden::Key key;
     getClefAndKeyAtSceneCoords(x, y, clef, key);
@@ -433,9 +444,31 @@ NotationStaff::getNoteNameAtSceneCoords(double x, int y,
 
     Pitch p(getHeightAtSceneCoords(x, y), clef, key);
 
-    // rewrite coming in phase 3:
-    return "Foo 42!";
-//    return p.getAsString(key.isSharp(), true, baseOctave);
+    // This duplicates a lot of code in Pitch::getAsString and elsewhere, but
+    // I'm not taking time out to gather all of this up and merge it together
+    // into something nice and clean we could just call here.
+
+    // get the note letter name in the key (eg. A)
+    std::string s;
+    s = p.getNoteName(key);
+    
+    // get the accidental, and append it immediately after the letter name, to
+    // create an English style string (eg. Ab)
+    Accidental acc = p.getAccidental(key);
+    if (acc == Accidentals::Sharp) s += "#";
+    else if (acc == Accidentals::Flat) s += "b";
+
+    // run the English string through tr() to get it translated by way of the
+    // QObject context (all variants are in the extracted QMenuStrings.cpp
+    // file, and available for translation, so this *should* get us the best
+    // spelling for a given key, since we're using the actual key, and not a
+    // guess
+    QString tmp = QObject::tr(strtoqstr(s), "note name");
+
+    // now tack on the octave, so translators don't have to deal with it
+    tmp += tr(" %1").arg(baseOctave);
+
+    return tmp;
 }
 
 void

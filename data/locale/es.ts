@@ -19913,7 +19913,7 @@ Error fue : %2</translation>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="400"/>
         <source>Default</source>
-        <translation>Por omisión</translation>
+        <translation>Predeterminado</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="413"/>

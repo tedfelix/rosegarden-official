@@ -676,11 +676,11 @@ TrackParameterBox::updateHighLow()
     // Separate the note letter from the octave to avoid undue burden on
     // translators having to retranslate the same thing but for a number
     // difference
-    QString tmp = QObject::tr(strtoqstr(highest.getAsString(includeOctave, base)));
+    QString tmp = QObject::tr(strtoqstr(highest.getAsString(includeOctave, base)), "note name");
     tmp += tr(" %1").arg(highest.getOctave(base));
     m_highButton->setText(tmp);
 
-    tmp = QObject::tr(strtoqstr(lowest.getAsString(includeOctave, base)));
+    tmp = QObject::tr(strtoqstr(lowest.getAsString(includeOctave, base)), "note name");
     tmp += tr(" %1").arg(lowest.getOctave(base));
     m_lowButton->setText(tmp);
 

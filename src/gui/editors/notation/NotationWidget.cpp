@@ -795,10 +795,8 @@ NotationWidget::slotDispatchMouseMove(const NotationMouseEvent *e)
         QTimer::singleShot(100, this, SLOT(slotEnsureLastMouseMoveVisible()));
     }
 
-    if (e->staff)
-    {
-	QString s = strtoqstr(e->staff->getNoteNameAtSceneCoords(e->sceneX,
-                                                                 e->sceneY));
+    if (e->staff) {
+	QString s = e->staff->getNoteNameAtSceneCoords(e->sceneX, e->sceneY);
         emit hoveredOverNoteChanged(s);
     }
 
