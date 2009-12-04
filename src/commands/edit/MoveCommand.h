@@ -21,10 +21,8 @@
 
 #include "document/BasicCommand.h"
 #include <QString>
+#include <QCoreApplication>
 #include "base/Event.h"
-
-
-
 
 namespace Rosegarden
 {
@@ -36,6 +34,7 @@ class Event;
 
 class MoveCommand : public BasicCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::MoveCommand)
 public:
     MoveCommand(Segment &segment,
                 timeT delta,

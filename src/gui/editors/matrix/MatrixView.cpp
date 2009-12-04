@@ -1818,7 +1818,7 @@ void
 MatrixView::slotToggleStepByStep()
 {
     QAction *action = findAction("toggle_step_by_step");
-	        
+            
     if (!action) {
         MATRIX_DEBUG << "WARNING: No toggle_step_by_step action" << endl;
         return ;
@@ -1834,7 +1834,7 @@ void
 MatrixView::slotStepByStepTargetRequested(QObject *obj)
 {
     QAction *action = findAction("toggle_step_by_step");
-	        
+          
     if (!action) {
         MATRIX_DEBUG << "WARNING: No toggle_step_by_step action" << endl;
         return ;

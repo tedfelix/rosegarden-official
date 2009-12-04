@@ -20,7 +20,6 @@
 
 #include "base/Segment.h"
 #include "base/BasicQuantizer.h"
-#include "gui/editors/notation/NotationStrings.h"
 #include <QString>
 
 
@@ -91,18 +90,6 @@ SegmentChangeQuantizationCommand::addSegment(Segment *s)
     rec.oldUnit = 0; // shouldn't matter what we initialise this to
     rec.wasQuantized = false; // shouldn't matter what we initialise this to
     m_records.push_back(rec);
-}
-
-QString
-SegmentChangeQuantizationCommand::getGlobalName(timeT unit)
-{
-    if (!unit) {
-        return "Unquantize";
-    } else {
-        timeT error = 0;
-        QString label = NotationStrings::makeNoteMenuLabel(unit, true, error);
-        return QString("Quantize to %1").arg(label);
-    }
 }
 
 }

@@ -49,11 +49,11 @@ QString
 MoveCommand::getGlobalName(timeT delta)
 {
     if (delta == 0) {
-        return "&Move Events";
+        return tr("&Move Events");
     } else if (delta < 0) {
-        return "&Move Events Back";
+        return tr("&Move Events Back");
     } else {
-        return "&Move Events Forward";
+        return tr("&Move Events Forward");
     }
 }
 

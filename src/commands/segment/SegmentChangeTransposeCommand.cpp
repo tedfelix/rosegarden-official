@@ -43,23 +43,13 @@ void
 SegmentChangeTransposeCommand::execute()
 {
     m_oldUnit = m_segment->getTranspose();
-	m_segment->setTranspose(m_unit);
+    m_segment->setTranspose(m_unit);
 }
 
 void
 SegmentChangeTransposeCommand::unexecute()
 {
-   	m_segment->setTranspose(m_oldUnit);
-}
-
-QString
-SegmentChangeTransposeCommand::getGlobalName(int unit)
-{
-    if (!unit) {
-        return "Undo change transposition";
-    } else {
-        return QString("Change transposition to %1").arg(unit);
-    }
+       m_segment->setTranspose(m_oldUnit);
 }
 
 }

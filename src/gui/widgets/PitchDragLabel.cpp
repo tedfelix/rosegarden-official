@@ -115,18 +115,18 @@ PitchDragLabel::mouseMoveEvent(QMouseEvent *e)
             m_usingSharps = up;
             calculatePixmap();
             emit pitchDragged(m_pitch);
-	    if (up)
-	    {
-		// use sharps
-		emit pitchDragged(m_pitch, (int)(((long)m_pitch) / 12),
+        if (up)
+        {
+        // use sharps
+        emit pitchDragged(m_pitch, (int)(((long)m_pitch) / 12),
                                   steps_Cmajor_with_sharps[m_pitch % 12]);
-	    }
-	    else
-	    {
-		// use flats
-		emit pitchDragged(m_pitch, (int)(((long)m_pitch) / 12),
+        }
+        else
+        {
+        // use flats
+        emit pitchDragged(m_pitch, (int)(((long)m_pitch) / 12),
                                   steps_Cmajor_with_flats[m_pitch % 12]);
-	    }
+        }
             emit preview(m_pitch);
             update();
         }
@@ -146,18 +146,15 @@ PitchDragLabel::emitPitchChange()
 {
     emit pitchChanged(m_pitch);
     
-	Pitch newPitch(m_pitch);
-	
-	if (m_usingSharps)
-	{
-		Rosegarden::Key key = Rosegarden::Key("C major");
-    	emit pitchDragged(m_pitch, newPitch.getOctave(0), newPitch.getNoteInScale(key));
-	}
-	else
-	{
-		Rosegarden::Key key = Rosegarden::Key("A minor");
-		emit pitchDragged(m_pitch, newPitch.getOctave(0), (newPitch.getNoteInScale(key) + 5) % 7);
-	}
+    Pitch newPitch(m_pitch);
+    
+    if (m_usingSharps) {
+        Rosegarden::Key key = Rosegarden::Key("C major");
+        emit pitchDragged(m_pitch, newPitch.getOctave(0), newPitch.getNoteInScale(key));
+    } else {
+        Rosegarden::Key key = Rosegarden::Key("A minor");
+        emit pitchDragged(m_pitch, newPitch.getOctave(0), (newPitch.getNoteInScale(key) + 5) % 7);
+    }
 }
 
 void
@@ -168,7 +165,7 @@ PitchDragLabel::wheelEvent(QWheelEvent *e)
             ++m_pitch;
             m_usingSharps = true;
             calculatePixmap();
-			emitPitchChange();
+            emitPitchChange();
             emit preview(m_pitch);
             update();
         }

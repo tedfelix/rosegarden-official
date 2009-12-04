@@ -21,11 +21,9 @@
 
 #include "document/Command.h"
 #include <QString>
+#include <QCoreApplication>
 #include <vector>
 #include "base/Event.h"
-
-
-
 
 namespace Rosegarden
 {
@@ -35,6 +33,7 @@ class Segment;
 
 class SegmentChangeTransposeCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentChangeTransposeCommand)
 public:
     /// Set transpose on segments.
     SegmentChangeTransposeCommand(int, Segment *segment);
@@ -43,7 +42,13 @@ public:
     virtual void execute();
     virtual void unexecute();
 
-    static QString getGlobalName(int);
+    static QString getGlobalName(int unit) {
+        if (!unit) {
+            return tr("Undo change transposition");
+        } else {
+            return tr("Change transposition to %1").arg(unit);
+        }
+    }
 
 private:
     Segment *m_segment;

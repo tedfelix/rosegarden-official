@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -21,11 +20,10 @@
 
 #include "document/Command.h"
 #include <QString>
+#include <QCoreApplication>
 #include <vector>
 #include "base/Event.h"
-
-
-
+#include "gui/editors/notation/NotationStrings.h"
 
 namespace Rosegarden
 {
@@ -35,6 +33,7 @@ class Segment;
 
 class SegmentChangeQuantizationCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS (Rosegarden::SegmentChangeQuantizationCommand)
 public:
     /// Set quantization on segments.  If unit is zero, switch quantization off
     SegmentChangeQuantizationCommand(timeT);
@@ -45,7 +44,16 @@ public:
     virtual void execute();
     virtual void unexecute();
 
-    static QString getGlobalName(timeT);
+    static QString getGlobalName(timeT unit) {
+        if (!unit) {
+            return tr("Unquantize");
+        } else {
+            timeT error = 0;
+            QString label = NotationStrings::makeNoteMenuLabel(unit, true, error);
+            return tr("Quantize to %1").arg(label);
+        }
+    }
+
 
 private:
     struct SegmentRec {

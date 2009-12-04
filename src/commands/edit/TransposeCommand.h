@@ -24,8 +24,6 @@
 #include <QCoreApplication>
 
 
-
-
 namespace Rosegarden
 {
 
