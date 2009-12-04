@@ -202,7 +202,7 @@ Led::paintEvent(QPaintEvent *)
         width /= 3;
         i = i.smoothScale(width, width);
         delete tmpMap;
-        dest = new QPixmap(i);
+        dest = new QPixmap(QPixmap::fromImage(i));
         paint.begin(this);
         paint.drawPixmap(0, 0, *dest);
         paint.end();

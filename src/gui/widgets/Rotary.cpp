@@ -295,7 +295,7 @@ Rotary::paintEvent(QPaintEvent *)
     paint.end();
 
     QImage i = map.convertToImage().smoothScale(m_size, m_size);
-    m_pixmaps[index] = QPixmap(i);
+    m_pixmaps[index] = QPixmap::fromImage(i);
     paint.begin(this);
     paint.drawPixmap(0, 0, m_pixmaps[index]);
     paint.end();
