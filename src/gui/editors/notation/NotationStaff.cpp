@@ -432,7 +432,10 @@ NotationStaff::getNoteNameAtSceneCoords(double x, int y,
     settings.endGroup();
 
     Pitch p(getHeightAtSceneCoords(x, y), clef, key);
-    return p.getAsString(key.isSharp(), true, baseOctave);
+
+    // rewrite coming in phase 3:
+    return "Foo 42!";
+//    return p.getAsString(key.isSharp(), true, baseOctave);
 }
 
 void

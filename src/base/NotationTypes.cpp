@@ -1708,24 +1708,6 @@ Pitch::isDiatonicInKey(const Key &key) const
 }
 
 std::string
-Pitch::getAsString(bool useSharps, bool inclOctave, int octaveBase) const
-{
-    Accidental acc = getAccidental(useSharps);
-
-    std::string s;
-    s += getNoteName(useSharps ? Key("C major") : Key("A minor"));
-
-    if (acc == Accidentals::Sharp) s += "#";
-    else if (acc == Accidentals::Flat) s += "b";
-
-    if (!inclOctave) return s;
-
-    char tmp[10];
-    sprintf(tmp, "%s%d", s.c_str(), getOctave(octaveBase));
-    return std::string(tmp);
-}
-
-std::string
 Pitch::getAsString(bool inclOctave, int octaveBase) const
 {
     std::string s;
