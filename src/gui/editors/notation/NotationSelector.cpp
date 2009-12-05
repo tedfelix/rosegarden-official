@@ -580,7 +580,7 @@ void NotationSelector::dragFine(int x, int y, bool final)
         selection->addEvent(m_clickedElement->event());
     m_scene->setSelection(selection, false);
 
-#ifdef NOT_JUST_YET
+//#ifdef NOT_JUST_YET
     // Fine drag modifies the DISPLACED_X and DISPLACED_Y properties on
     // each event.  The modifications have to be relative to the previous
     // values of these properties, not to zero, so for each event we need
@@ -661,7 +661,7 @@ void NotationSelector::dragFine(int x, int y, bool final)
         m_scene->update();
     }
 
-#endif
+//#endif
 }
 
 void NotationSelector::ready()
