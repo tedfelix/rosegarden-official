@@ -687,7 +687,7 @@ NotationView::setupActions()
 
     createAction("toggle_velocity_ruler", SLOT(slotToggleVelocityRuler()));
     createAction("toggle_pitchbend_ruler", SLOT(slotTogglePitchbendRuler()));
-    createAction("add_control_ruler", SLOT(slotAddControlRuler(QAction *)));
+    createAction("add_control_ruler", SLOT(slotAddControlRuler()));
 
     QMenu *addControlRulerMenu = new QMenu;
     Controllable *c =

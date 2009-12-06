@@ -355,7 +355,7 @@ MatrixView::setupActions()
     
     createAction("toggle_velocity_ruler", SLOT(slotToggleVelocityRuler()));
     createAction("toggle_pitchbend_ruler", SLOT(slotTogglePitchbendRuler()));
-    createAction("add_control_ruler", SLOT(slotAddControlRuler(QAction *)));
+    createAction("add_control_ruler", SLOT(slotAddControlRuler()));
     
     createAction("add_tempo_change", SLOT(slotAddTempo()));
     createAction("add_time_signature", SLOT(slotAddTimeSignature()));
