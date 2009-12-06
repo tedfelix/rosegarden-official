@@ -1305,7 +1305,9 @@ AlsaDriver::connectSomething()
         }
     }            
 
-    setPlausibleConnection(toConnect->getId(), "");
+    // If the studio was absolutely empty, we'll make it to here with this still
+    // null, so in that case we'll simply move along without doing anything.
+    if (toConnect) setPlausibleConnection(toConnect->getId(), "");
 }
 
 void
