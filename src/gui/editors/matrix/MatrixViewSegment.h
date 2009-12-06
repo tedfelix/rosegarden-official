@@ -38,6 +38,11 @@ public:
 
     void endMarkerTimeChanged(const Segment *segment, bool shorten);
 
+    SegmentRefreshStatus &getRefreshStatus() const;
+    void resetRefreshStatus();
+
+    void updateElements(timeT from, timeT to);
+
 protected:
 //!!!    const MidiKeyMapping *getKeyMapping() const;
 
@@ -62,6 +67,7 @@ protected:
 
     MatrixScene *m_scene;
     bool m_drum;
+    unsigned int m_refreshStatusId;
 };
 
 }

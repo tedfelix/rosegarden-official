@@ -36,12 +36,25 @@ MatrixViewSegment::MatrixViewSegment(MatrixScene *scene,
                                      bool drum) :
     ViewSegment(*segment),
     m_scene(scene),
-    m_drum(drum)
+    m_drum(drum),
+    m_refreshStatusId(segment->getNewRefreshStatusId())
 {
 }
 
 MatrixViewSegment::~MatrixViewSegment()
 {
+}
+
+SegmentRefreshStatus &
+MatrixViewSegment::getRefreshStatus() const
+{
+    return m_segment.getRefreshStatus(m_refreshStatusId);
+}
+
+void
+MatrixViewSegment::resetRefreshStatus()
+{
+    m_segment.getRefreshStatus(m_refreshStatusId).setNeedsRefresh(false);
 }
 
 bool
@@ -79,6 +92,20 @@ MatrixViewSegment::endMarkerTimeChanged(const Segment *s, bool shorten)
 {
     ViewSegment::endMarkerTimeChanged(s, shorten);
     if (m_scene) m_scene->segmentEndMarkerTimeChanged(s, shorten);
+}
+
+void
+MatrixViewSegment::updateElements(timeT from, timeT to)
+{
+    if (!m_viewElementList) return;
+    ViewElementList::iterator i = m_viewElementList->findTime(from);
+    ViewElementList::iterator j = m_viewElementList->findTime(to);
+    while (i != m_viewElementList->end()) {
+        MatrixElement *e = static_cast<MatrixElement *>(*i);
+        e->reconfigure();
+        if (i == j) break;
+        ++i;
+    }
 }
 
 }

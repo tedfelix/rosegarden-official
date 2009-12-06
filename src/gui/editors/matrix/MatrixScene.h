@@ -163,6 +163,7 @@ private:
     void updateCurrentSegment();
     void setSelectionElementStatus(EventSelection *, bool set);
     void previewSelection(EventSelection *, EventSelection *oldSelection);
+    void checkUpdate();
 };
 
 }

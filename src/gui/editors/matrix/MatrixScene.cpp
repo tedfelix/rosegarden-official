@@ -536,6 +536,22 @@ MatrixScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *e)
 void
 MatrixScene::slotCommandExecuted()
 {
+    checkUpdate();
+}
+
+void
+MatrixScene::checkUpdate()
+{
+    for (unsigned int i = 0; i < m_viewSegments.size(); ++i) {
+
+        SegmentRefreshStatus &rs = m_viewSegments[i]->getRefreshStatus();
+        
+        if (rs.needsRefresh()) {
+            m_viewSegments[i]->updateElements(rs.from(), rs.to());
+        }
+            
+        rs.setNeedsRefresh(false);
+    }
 }
 
 void
