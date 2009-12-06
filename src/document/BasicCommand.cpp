@@ -102,11 +102,9 @@ BasicCommand::execute()
     beginExecute();
 
     if (!m_doBruteForceRedo) {
-
-    modifySegment();
-
+        modifySegment();
     } else {
-    copyFrom(m_redoEvents);
+        copyFrom(m_redoEvents);
     }
 
     m_segment.updateRefreshStatuses(getStartTime(), getRelayoutEndTime());

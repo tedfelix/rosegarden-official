@@ -38,12 +38,11 @@ TransposeCommand::modifySegment()
     EventSelection::eventcontainer::iterator i;
     
     for (i = m_selection->getSegmentEvents().begin();
-            i != m_selection->getSegmentEvents().end(); ++i) {
+         i != m_selection->getSegmentEvents().end(); ++i) {
         
         if ((*i)->isa(Note::EventType)) {
             
-            if (m_diatonic)
-            { 
+            if (m_diatonic) { 
             
                 Pitch oldPitch(**i);
         
@@ -56,9 +55,7 @@ TransposeCommand::modifySegment()
 
                 (*i)->set<Int>(PITCH, newPitch.getPerformancePitch());
                 (*i)->set<String>(ACCIDENTAL, newAccidental);
-            }
-            else
-            {
+            } else {
                 try {
                     long pitch = (*i)->get<Int>(PITCH);
                     pitch += m_semitones;
