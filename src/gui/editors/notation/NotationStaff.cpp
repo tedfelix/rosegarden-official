@@ -466,7 +466,7 @@ NotationStaff::getNoteNameAtSceneCoords(double x, int y,
     QString tmp = QObject::tr(strtoqstr(s), "note name");
 
     // now tack on the octave, so translators don't have to deal with it
-    tmp += tr(" %1").arg(baseOctave);
+    tmp += tr(" %1").arg(p.getOctave(baseOctave));
 
     return tmp;
 }
