@@ -134,7 +134,7 @@
     <Action name="set_segment_start" text="&amp;Set Segment Start Time..." />
     <Action name="set_segment_duration" text="Set Segment &amp;Duration..." />
   <Separator/>
-    <Action name="transpose_segment" text="Transpose by &amp;Inverval..." />
+    <Action name="transpose_segment" text="Transpose by &amp;Interval..." />
     <Action name="switch_preset" text="&amp;Convert Notation for..." />
   </Menu>
 

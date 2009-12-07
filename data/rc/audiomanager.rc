@@ -21,7 +21,7 @@
   </Menu>
 
   <Menu name="action">
-    <Text>&amp;Action</Text>
+    <text>&amp;Action</text>
     <Action name="preview_audio" text="Play Preview" icon="transport-play" />
     <Action name="insert_audio" text="Insert into Selected Audio Track" icon="insert_audio_into_track" />
     <Action name="distribute_audio" text="Distribute Audio on MIDI Segment"/>
