@@ -2001,8 +2001,9 @@ RosegardenMainWindow::slotFileSaveAs(bool asTemplate)
     if (!m_doc)
         return false;
 
-    TmpStatusMsg msg(tr("Saving file%1with a new filename...").
-                        arg(asTemplate ? " as a template " : " "), this);
+    TmpStatusMsg msg(tr("Saving file%1with a new filename...",
+                        "'file%1with' is correct. %1 will either become ' ' or ' as a template ' at runtime").
+                        arg(asTemplate ? tr(" as a template ") : " "), this);
 
     QString fileType(asTemplate ? tr("Rosegarden templates") : tr("Rosegarden files"));
     QString fileExtension(asTemplate ? " (*.rgt *.RGT)" : " (*.rg *.RG)");

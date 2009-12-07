@@ -875,7 +875,7 @@ ProjectPackager::runUnpack()
     QFile contents(ofile);
 
     if (!contents.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        puke(tr("<qt><p>Unable to read to temporary file list.</p>%1</qt>").arg(m_abortText));
+        puke(tr("<qt><p>Unable to create file list.</p>%1</qt>").arg(m_abortText));
         return;
     }
 

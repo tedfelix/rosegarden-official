@@ -173,14 +173,14 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     layout->addWidget(new QLabel(tr("Path to 'asfxload' or 'sfxload' command"), frame), row, 0);
     m_sfxLoadPath = new LineEdit(settings.value("sfxloadpath", "/usr/bin/asfxload").toString() , frame);
     layout->addWidget(m_sfxLoadPath, row, 1, row- row+1, 2);
-    m_sfxLoadChoose = new QPushButton("Choose...", frame);
+    m_sfxLoadChoose = new QPushButton(tr("Choose..."), frame);
     layout->addWidget(m_sfxLoadChoose, row, 3);
     ++row;
 
     layout->addWidget(new QLabel(tr("SoundFont"), frame), row, 0);
     m_soundFontPath = new LineEdit(settings.value("soundfontpath", "").toString() , frame);
     layout->addWidget(m_soundFontPath, row, 1, row- row+1, 2);
-    m_soundFontChoose = new QPushButton("Choose...", frame);
+    m_soundFontChoose = new QPushButton(tr("Choose..."), frame);
     layout->addWidget(m_soundFontChoose, row, 3);
     ++row;
 

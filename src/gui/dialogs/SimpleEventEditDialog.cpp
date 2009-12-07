@@ -62,7 +62,7 @@ SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
         m_modified(false)
 {
     setModal(true);
-    setWindowTitle(tr(inserting ? "Insert Event" : "Edit Event"));
+    setWindowTitle(tr(inserting ? tr("Insert Event") : tr("Edit Event")));
 
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
@@ -119,7 +119,7 @@ SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
     m_timeSpinBox->setMinimum(INT_MIN);
     m_timeSpinBox->setMaximum(INT_MAX);
     m_timeSpinBox->setSingleStep(Note(Note::Shortest).getDuration());
-    m_timeEditButton = new QPushButton("edit", frame);
+    m_timeEditButton = new QPushButton(tr("edit"), frame);
     layout->addWidget(m_timeSpinBox, 1, 1);
     layout->addWidget(m_timeEditButton, 1, 2);
 
@@ -134,7 +134,7 @@ SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
     m_durationSpinBox->setMinimum(0);
     m_durationSpinBox->setMaximum(INT_MAX);
     m_durationSpinBox->setSingleStep(Note(Note::Shortest).getDuration());
-    m_durationEditButton = new QPushButton("edit", frame);
+    m_durationEditButton = new QPushButton(tr("edit"), frame);
     layout->addWidget(m_durationSpinBox, 2, 1);
     layout->addWidget(m_durationEditButton, 2, 2);
 
@@ -146,7 +146,7 @@ SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
     m_pitchLabel = new QLabel(tr("Pitch:"), frame);
     layout->addWidget(m_pitchLabel, 3, 0);
     m_pitchSpinBox = new QSpinBox(frame);
-    m_pitchEditButton = new QPushButton("edit", frame);
+    m_pitchEditButton = new QPushButton(tr("edit"), frame);
     layout->addWidget(m_pitchSpinBox, 3, 1);
     layout->addWidget(m_pitchEditButton, 3, 2);
 
@@ -215,7 +215,7 @@ SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
     m_notationTimeSpinBox->setMinimum(INT_MIN);
     m_notationTimeSpinBox->setMaximum(INT_MAX);
     m_notationTimeSpinBox->setSingleStep(Note(Note::Shortest).getDuration());
-    m_notationTimeEditButton = new QPushButton("edit", m_notationGroupBox);
+    m_notationTimeEditButton = new QPushButton(tr("edit"), m_notationGroupBox);
     layout->addWidget(m_notationTimeSpinBox, 1, 1);
     layout->addWidget(m_notationTimeEditButton, 1, 2);
 
@@ -230,7 +230,7 @@ SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
     m_notationDurationSpinBox->setMinimum(0);
     m_notationDurationSpinBox->setMaximum(INT_MAX);
     m_notationDurationSpinBox->setSingleStep(Note(Note::Shortest).getDuration());
-    m_notationDurationEditButton = new QPushButton("edit", m_notationGroupBox);
+    m_notationDurationEditButton = new QPushButton(tr("edit"), m_notationGroupBox);
     layout->addWidget(m_notationDurationSpinBox, 2, 1);
     layout->addWidget(m_notationDurationEditButton, 2, 2);
 
