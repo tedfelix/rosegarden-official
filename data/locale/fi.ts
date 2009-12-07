@@ -1728,6 +1728,12 @@
         <translation></translation>
     </message>
     <message>
+        <location filename="../QMenuStrings.cpp" line="674"/>
+        <location filename="../QMenuStrings.cpp" line="1920"/>
+        <source>Add &amp;Control Ruler</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../QMenuStrings.cpp" line="693"/>
         <location filename="../QMenuStrings.cpp" line="2223"/>
         <location filename="../QMenuStrings.cpp" line="3773"/>
@@ -3681,10 +3687,8 @@
         <translation>Näytä T&amp;aivutusviivain</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="674"/>
-        <location filename="../QMenuStrings.cpp" line="1920"/>
         <source>Add &amp;Control Ruler...</source>
-        <translation>Lisää &amp;ohjainviivain...</translation>
+        <translation type="obsolete">Lisää &amp;ohjainviivain...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="835"/>

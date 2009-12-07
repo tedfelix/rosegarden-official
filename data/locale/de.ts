@@ -1637,11 +1637,9 @@
         <translation>Zeige Lineal für Tonhöhen-&amp;Biegung</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="674"/>
-        <location filename="../QMenuStrings.cpp" line="1920"/>
         <source>Add &amp;Control Ruler...</source>
         <translatorcomment>XXX</translatorcomment>
-        <translation>&amp;Kontroll Lineal hinzufügen...</translation>
+        <translation type="obsolete">&amp;Kontroll Lineal hinzufügen...</translation>
     </message>
     <message>
         <source>Show &amp;Instrument Parameters</source>
@@ -3974,6 +3972,12 @@
         <source>5</source>
         <comment>keyboard shortcut</comment>
         <translation>5</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="674"/>
+        <location filename="../QMenuStrings.cpp" line="1920"/>
+        <source>Add &amp;Control Ruler</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="693"/>

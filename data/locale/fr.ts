@@ -2686,12 +2686,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="674"/>
-        <location filename="../QMenuStrings.cpp" line="1920"/>
-        <source>Add &amp;Control Ruler...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Left</source>
         <translation type="obsolete">Gauche</translation>
     </message>
@@ -3025,6 +3019,12 @@
         <source>5</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="674"/>
+        <location filename="../QMenuStrings.cpp" line="1920"/>
+        <source>Add &amp;Control Ruler</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="693"/>

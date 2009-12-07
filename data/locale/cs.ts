@@ -1910,6 +1910,12 @@
         <translation>Ukázat pravítko s &amp;tempem</translation>
     </message>
     <message>
+        <location filename="../QMenuStrings.cpp" line="674"/>
+        <location filename="../QMenuStrings.cpp" line="1920"/>
+        <source>Add &amp;Control Ruler</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../QMenuStrings.cpp" line="853"/>
         <location filename="../QMenuStrings.cpp" line="2358"/>
         <source>Cursor Back &amp;Bar and Select</source>
@@ -3857,10 +3863,8 @@
         <translation>Ukázat pravítko se &amp;změnami výšek tónů</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="674"/>
-        <location filename="../QMenuStrings.cpp" line="1920"/>
         <source>Add &amp;Control Ruler...</source>
-        <translation>Přidat &amp;ovládací pravítko...</translation>
+        <translation type="obsolete">Přidat &amp;ovládací pravítko...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="835"/>

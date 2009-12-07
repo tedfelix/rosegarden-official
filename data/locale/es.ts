@@ -1202,6 +1202,12 @@
         <translation>5</translation>
     </message>
     <message>
+        <location filename="../QMenuStrings.cpp" line="674"/>
+        <location filename="../QMenuStrings.cpp" line="1920"/>
+        <source>Add &amp;Control Ruler</source>
+        <translation>Añadir regla de &amp;Controlador</translation>
+    </message>
+    <message>
         <location filename="../QMenuStrings.cpp" line="675"/>
         <location filename="../QMenuStrings.cpp" line="1924"/>
         <location filename="../QMenuStrings.cpp" line="3662"/>
@@ -3901,10 +3907,8 @@
         <translation>Mostrar la regla de &amp;Inflexión de Tono</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="674"/>
-        <location filename="../QMenuStrings.cpp" line="1920"/>
         <source>Add &amp;Control Ruler...</source>
-        <translation>Añadir regla de &amp;Controlador...</translation>
+        <translation type="obsolete">Añadir regla de &amp;Controlador...</translation>
     </message>
     <message>
         <source>=</source>

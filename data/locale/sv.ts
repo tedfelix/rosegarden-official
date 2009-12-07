@@ -1211,6 +1211,12 @@
         <translation>5</translation>
     </message>
     <message>
+        <location filename="../QMenuStrings.cpp" line="674"/>
+        <location filename="../QMenuStrings.cpp" line="1920"/>
+        <source>Add &amp;Control Ruler</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../QMenuStrings.cpp" line="675"/>
         <location filename="../QMenuStrings.cpp" line="1924"/>
         <location filename="../QMenuStrings.cpp" line="3662"/>
@@ -3809,10 +3815,8 @@
         <translation>Visa ton&amp;höjdsavvikelselinjal</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="674"/>
-        <location filename="../QMenuStrings.cpp" line="1920"/>
         <source>Add &amp;Control Ruler...</source>
-        <translation>Lägg till &amp;styrlinjal...</translation>
+        <translation type="obsolete">Lägg till &amp;styrlinjal...</translation>
     </message>
     <message>
         <source>Left</source>

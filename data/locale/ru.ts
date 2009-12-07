@@ -1520,6 +1520,12 @@
         <translation type="unfinished">5</translation>
     </message>
     <message>
+        <location filename="../QMenuStrings.cpp" line="674"/>
+        <location filename="../QMenuStrings.cpp" line="1920"/>
+        <source>Add &amp;Control Ruler</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../QMenuStrings.cpp" line="693"/>
         <location filename="../QMenuStrings.cpp" line="2223"/>
         <location filename="../QMenuStrings.cpp" line="3773"/>
@@ -4187,12 +4193,6 @@ If you want to paste anyway, consider using one of the other paste types from th
         <location filename="../QMenuStrings.cpp" line="673"/>
         <location filename="../QMenuStrings.cpp" line="1919"/>
         <source>Show Pitch &amp;Bend Ruler</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="674"/>
-        <location filename="../QMenuStrings.cpp" line="1920"/>
-        <source>Add &amp;Control Ruler...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

@@ -1179,6 +1179,12 @@
         <translation type="unfinished">5</translation>
     </message>
     <message>
+        <location filename="../QMenuStrings.cpp" line="674"/>
+        <location filename="../QMenuStrings.cpp" line="1920"/>
+        <source>Add &amp;Control Ruler</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../QMenuStrings.cpp" line="675"/>
         <location filename="../QMenuStrings.cpp" line="1924"/>
         <location filename="../QMenuStrings.cpp" line="3662"/>
@@ -3736,12 +3742,6 @@
         <location filename="../QMenuStrings.cpp" line="673"/>
         <location filename="../QMenuStrings.cpp" line="1919"/>
         <source>Show Pitch &amp;Bend Ruler</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="674"/>
-        <location filename="../QMenuStrings.cpp" line="1920"/>
-        <source>Add &amp;Control Ruler...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
