@@ -79,6 +79,8 @@ void
 FontRequester::slotChoose()
 {
     bool ok = false;
+    //$$$ We're going to have to subclass QFontDialog to fix the "Sample" style,
+    // but I'm not going to bother with that at this time.
     QFont newFont = QFontDialog::getFont(&ok, getFont());
     if (ok) {
         setFont(newFont);

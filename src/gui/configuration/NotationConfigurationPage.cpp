@@ -507,7 +507,6 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
     QFont sansFont = defaultTextFont;
     fv = settings.value("sansfont", sansFont);
     if (fv.canConvert(QVariant::Font)) sansFont = fv.value<QFont>();
-    else std::cout << "CAN'T CONVERT FONT!" << std::endl;
     m_sansFont->setFont(sansFont);
     layout->addWidget(m_sansFont, row, 1, 1, 3);
     ++row;
@@ -646,10 +645,8 @@ NotationConfigurationPage::apply()
                       m_singleStaffSize->currentText().toUInt());
     settings.setValue("multistaffnotesize",
                       m_multiStaffSize->currentText().toUInt());
-    settings.setValue("textfont",
-                      m_textFont->font());
-    settings.setValue("sansfont",
-                      m_sansFont->font());
+    settings.setValue("textfont", m_textFont->getFont());
+    settings.setValue("sansfont", m_sansFont->getFont());
     std::vector<int> s = NotationHLayout::getAvailableSpacings();
     settings.setValue("spacing", s[m_spacing->currentIndex()]);
 
