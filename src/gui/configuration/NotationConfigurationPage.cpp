@@ -134,6 +134,7 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
         m_showTrackHeaders->setCurrentIndex(defaultShowTrackHeaders);
     }
 
+    //$$$ After Thorn, reword this string into better English:
     m_showTrackHeaders->setToolTip(QString(tr(
         "\"Always\" and \"Never\" mean what they usually mean\n"
         "\"When needed\" means \"when staves are too many to all fit"
@@ -506,6 +507,7 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
     QFont sansFont = defaultTextFont;
     fv = settings.value("sansfont", sansFont);
     if (fv.canConvert(QVariant::Font)) sansFont = fv.value<QFont>();
+    else std::cout << "CAN'T CONVERT FONT!" << std::endl;
     m_sansFont->setFont(sansFont);
     layout->addWidget(m_sansFont, row, 1, 1, 3);
     ++row;
