@@ -229,7 +229,7 @@ NotationView::NotationView(RosegardenDocument *doc,
     // Set font size for single or multiple staffs (hopefully this happens
     // before we've drawn anything, so there's no penalty changing it)
     m_fontSize = NoteFontFactory::getDefaultSize(m_fontName);
-    if (m_notationWidget->getScene()->getStaffCount() > 1) {
+    if (m_notationWidget->getScene()->getVisibleStaffCount() > 1) {
         m_fontSize = settings.value("multistaffnotesize", 6).toInt();
         //std::cout << "setting multi staff size to " << size << std::endl;
     } else {

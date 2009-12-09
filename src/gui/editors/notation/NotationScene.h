@@ -64,7 +64,24 @@ public:
     void setStaffs(RosegardenDocument *document, std::vector<Segment *> segments);
 
     std::vector<NotationStaff *> *getStaffs() { return &m_staffs; }
+
+    /** Returns the total number of staffs irrespective of whether they are
+      * visible individually or not.  This may return a number higher than the
+      * apparent number of staffs, due to segment overlaps.
+      *
+      * If there are five total staffs spread across two apparent staffs, this
+      * returns 5.
+      */
     unsigned int getStaffCount() { return m_staffs.size(); }
+
+    /** Returns the number of staffs that are visible individually as discrete
+     * staffs, irrespective of how many real staffs might be represented by each
+     * apparent staff.
+     *
+     * If there are five total staffs spread across two apparent staffs, this
+     * returns 2.
+     */
+    unsigned int getVisibleStaffCount() { return m_visibleStaffs; }
 
     int getCurrentStaffNumber() { return m_currentStaff; }
     NotationStaff *getCurrentStaff();
@@ -239,6 +256,7 @@ private:
     int m_leftGutter;
 
     int m_currentStaff;
+    int m_visibleStaffs;
 
     unsigned int m_compositionRefreshStatusId;
     bool m_timeSignatureChanged;

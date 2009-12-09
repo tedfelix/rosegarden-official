@@ -63,11 +63,11 @@ NotationScene::NotationScene() :
     m_subtitle(0),
     m_composer(0),
     m_copyright(0),
-//    m_pageMode(StaffLayout::MultiPageMode),
     m_pageMode(StaffLayout::LinearMode),
     m_printSize(5),
     m_leftGutter(0),
     m_currentStaff(0),
+    m_visibleStaffs(0),
     m_compositionRefreshStatusId(0),
     m_timeSignatureChanged(false),
     m_minTrack(0),
@@ -256,6 +256,8 @@ NotationScene::setStaffs(RosegardenDocument *document,
     }
     m_staffs.clear();
 
+    TrackId lastTrackId = 0;
+
     for (unsigned int i = 0; i < m_segments.size(); ++i) {
         NotationStaff *staff = new NotationStaff
             (this,
@@ -264,7 +266,17 @@ NotationScene::setStaffs(RosegardenDocument *document,
              i,
              m_notePixmapFactory,
              m_notePixmapFactorySmall);
+
         m_staffs.push_back(staff);
+
+        TrackId id = m_segments[i]->getTrack();
+
+        // increment the number of visually apparent staffs for each new TrackId
+        // encountered
+        if (lastTrackId != id) {
+            lastTrackId = id;
+            m_visibleStaffs++;
+        }
     }
 
     positionStaffs();
