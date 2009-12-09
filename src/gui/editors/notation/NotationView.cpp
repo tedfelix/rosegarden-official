@@ -2732,7 +2732,7 @@ NotationView::slotEditAddKeySignature()
 
         bool transposeKey = dialog.shouldBeTransposed();
         bool applyToAll = dialog.shouldApplyToAll();
-    bool ignorePercussion = dialog.shouldIgnorePercussion();
+        bool ignorePercussion = dialog.shouldIgnorePercussion();
 
         if (applyToAll) {
             CommandHistory::getInstance()->addCommand(

@@ -10,7 +10,7 @@
   </Menu>
 
   <Menu name="edit">
-    <text>E&amp;dit</text>
+    <text>&amp;Edit</text>
     <!-- JAS 'Undo' and 'Redo' use dynamic text.  Put default text for new project in. -->
     <Action name="edit_undo" text="Nothing to &amp;undo" icon="undo" shortcut="Ctrl+Z" />
     <Action name="edit_redo" text="Nothing to &amp;redo" icon="redo" shortcut="Ctrl+Shift+Z" />
@@ -86,22 +86,24 @@
 
   <!-- JAS name="Segments" in rosegardenui.rc -->
   <Menu name="segments">
-    <text>&amp;Segment</text>
+    <text>Se&amp;gment</text>
     <!-- JAS name="edit_with" in rosaegardenui.rc -->
     <Menu name="open-with">
       <text>Edit &amp;With</text>
       <Action name="open_in_event_list" text="Open in &amp;Event List Editor" icon="eventlist" />
       <Action name="open_in_notation" text="Open in &amp;Notation Editor" icon="notation" />
+      <Action name="open_in_matrix" text="Open in Matri&amp;x Editor" icon="matrix" />
+      <Action name="open_in_percussion_matrix" text="Open in &amp;Percussion Matrix Editor" icon="matrix-percussion" />
     </Menu>
-  <Separator/>	
-    <!-- JAS word "Segment" in text tag does not appear in rosegardenui.rc -->
-    <Action name="set_segment_start" text="Set Segment Start &amp;Time..." />
-    <!-- JAS word "Segment" in text tag does not appear in rosegardenui.rc -->
-    <Action name="set_segment_duration" text="Set Segment &amp;Duration..." />
+  <Separator/>
+    <Action name="add_key_signature" text="Add &amp;Key Change..." />
+  <Separator/>
+    <Action name="set_segment_start" text="Set Start &amp;Time..." />
+    <Action name="set_segment_duration" text="Set &amp;Duration..." />
   </Menu>
 
   <Menu name="Transforms">
-    <text>&amp;Events</text>
+    <text>Ad&amp;just</text>
     <Menu name="quantize_notes">
       <text>&amp;Quantize</text>
       <Action name="quantize" text="&amp;Quantize..." icon="quantize" shortcut="=" />
@@ -398,6 +400,24 @@
   <enable>
     <Action name="edit_paste"/>
   </enable>
+</State>
+
+<State name="in_standard_matrix">
+  <enable>
+      <Action name="open_in_percussion_matrix"/>
+  </enable>
+  <disable>
+      <Action name="open_in_matrix"/>
+  </disable>
+</State>
+
+<State name="in_percussion_matrix">
+  <enable>
+      <Action name="open_in_matrix"/>
+  </enable>
+  <disable>
+      <Action name="open_in_percussion_matrix"/>
+  </disable>
 </State>
 
 </kpartgui>

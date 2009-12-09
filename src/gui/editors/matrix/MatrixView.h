@@ -108,6 +108,7 @@ protected slots:
     void slotClearLoop();
     void slotClearSelection();
     void slotFilterSelection();
+    void slotEditAddKeySignature();
 
     void slotCurrentSegmentPrior();
     void slotCurrentSegmentNext();

@@ -158,7 +158,7 @@
   <!-- JAS Consider breaking out some of "Segments" action to an new "Adjust" pulldown to match matrix.rc -->
   <!-- JAS some of matrix.rc "Transpose" shortcuts might interfere with rosegardenui arrow keys.  -->
   <Menu name="Segments">
-    <text>Se&amp;gments</text>
+    <text>Se&amp;gment</text>
    
     <Action name="repeat_segment_onoff" text="Toggle Repeat" shortcut="Ctrl+Shift+R" shortcut-context="application" />
 

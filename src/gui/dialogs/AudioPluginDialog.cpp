@@ -647,6 +647,10 @@ AudioPluginDialog::slotPluginSelected(int i)
 
     bool gui = false;
     m_pluginGUIManager->hasGUI(m_containerId, m_index);
+    std::cout << "gui is: " << gui
+              << " container ID: " << m_containerId
+              << " index: " << m_index
+              << std::endl;
     m_editorButton->setEnabled(gui);    
 
     parentWidget()->adjustSize();

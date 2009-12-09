@@ -36,6 +36,7 @@
 #include "gui/dialogs/EventParameterDialog.h"
 #include "gui/dialogs/TriggerSegmentDialog.h"
 #include "gui/dialogs/PitchBendSequenceDialog.h"
+#include "gui/dialogs/KeySignatureDialog.h"
 
 #include "commands/edit/ChangeVelocityCommand.h"
 #include "commands/edit/ClearTriggersCommand.h"
@@ -55,11 +56,15 @@
 #include "commands/edit/RetrogradeCommand.h"
 #include "commands/edit/RetrogradeInvertCommand.h"
 #include "commands/edit/TransposeCommand.h"
+
 #include "commands/segment/AddTempoChangeCommand.h"
 #include "commands/segment/AddTimeSignatureAndNormalizeCommand.h"
 #include "commands/segment/AddTimeSignatureCommand.h"
 
 #include "commands/matrix/MatrixInsertionCommand.h"
+
+#include "commands/notation/KeyInsertionCommand.h"
+#include "commands/notation/MultiKeyInsertionCommand.h"
 
 #include "gui/editors/notation/NotationStrings.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
@@ -202,6 +207,12 @@ MatrixView::MatrixView(RosegardenDocument *doc,
         enterActionState("have_multiple_segments");
     } else {
         leaveActionState("have_multiple_segments");
+    }
+
+    if (m_drumMode) {
+        enterActionState("in_percussion_matrix");
+    } else {
+        enterActionState("in_standard_matrix");
     }
 
     // Restore window geometry
@@ -359,6 +370,8 @@ MatrixView::setupActions()
     
     createAction("add_tempo_change", SLOT(slotAddTempo()));
     createAction("add_time_signature", SLOT(slotAddTimeSignature()));
+    createAction("add_key_signature", SLOT(slotEditAddKeySignature()));
+
     createAction("halve_durations", SLOT(slotHalveDurations()));
     createAction("double_durations", SLOT(slotDoubleDurations()));
     createAction("rescale", SLOT(slotRescale()));
@@ -371,8 +384,8 @@ MatrixView::setupActions()
     createAction("invert", SLOT(slotInvert()));
     createAction("retrograde", SLOT(slotRetrograde()));
     createAction("retrograde_invert", SLOT(slotRetrogradeInvert()));    
-//     createAction("jog_left", SLOT(slotJogLeft()));
-//     createAction("jog_right", SLOT(slotJogRight()));
+    createAction("jog_left", SLOT(slotJogLeft()));
+    createAction("jog_right", SLOT(slotJogRight()));
     
     QMenu *addControlRulerMenu = new QMenu;
     Controllable *c =
@@ -2008,6 +2021,66 @@ MatrixView::slotExtendSelectionForward(bool bar)
     setSelection(es, true);
 }
 
+
+void
+MatrixView::slotEditAddKeySignature()
+{
+    Segment *segment = getCurrentSegment();
+    timeT insertionTime = getInsertionTime();
+    Clef clef = segment->getClefAtTime(insertionTime);
+    Key key = segment->getKeyAtTime(insertionTime);
+
+    //!!! experimental:
+    CompositionTimeSliceAdapter adapter
+        (&getDocument()->getComposition(), insertionTime,
+         getDocument()->getComposition().getDuration());
+    AnalysisHelper helper;
+    key = helper.guessKey(adapter);
+
+    MatrixScene *scene = m_matrixWidget->getScene();
+    if (!scene) return;
+
+    NotePixmapFactory npf;
+
+    KeySignatureDialog dialog(this,
+                              &npf,
+                              clef,
+                              key,
+                              true,
+                              true,
+                              tr("Estimated key signature shown"));
+
+    if (dialog.exec() == QDialog::Accepted &&
+        dialog.isValid()) {
+
+        KeySignatureDialog::ConversionType conversion =
+            dialog.getConversionType();
+
+        bool transposeKey = dialog.shouldBeTransposed();
+        bool applyToAll = dialog.shouldApplyToAll();
+        bool ignorePercussion = dialog.shouldIgnorePercussion();
+
+        if (applyToAll) {
+            CommandHistory::getInstance()->addCommand(
+                    new MultiKeyInsertionCommand(
+                            getDocument(),
+                            insertionTime, dialog.getKey(),
+                            conversion == KeySignatureDialog::Convert,
+                            conversion == KeySignatureDialog::Transpose,
+                            transposeKey,
+                            ignorePercussion));
+        } else {
+            CommandHistory::getInstance()->addCommand(
+                    new KeyInsertionCommand(*segment,
+                                            insertionTime,
+                                            dialog.getKey(),
+                                            conversion == KeySignatureDialog::Convert,
+                                            conversion == KeySignatureDialog::Transpose,
+                                            transposeKey,
+                                            false));
+        }
+    }
+}
 
 }
 #include "MatrixView.moc"

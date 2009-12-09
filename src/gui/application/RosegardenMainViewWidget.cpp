@@ -452,9 +452,6 @@ RosegardenMainViewWidget::createNotationView(std::vector<Segment *> segmentsToEd
 
     connect(notationView, SIGNAL(saveFile()),
             RosegardenMainWindow::self(), SLOT(slotFileSave()));
-//  This probably is obsolete in Thorn.
-//    connect(notationView, SIGNAL(jumpPlaybackTo(timeT)),
-//            getDocument(), SLOT(slotSetPointerPosition(timeT)));
     connect(notationView, SIGNAL(openInNotation(std::vector<Segment *>)),
             this, SLOT(slotEditSegmentsNotation(std::vector<Segment *>)));
     connect(notationView, SIGNAL(openInMatrix(std::vector<Segment *>)),
@@ -463,10 +460,6 @@ RosegardenMainViewWidget::createNotationView(std::vector<Segment *> segmentsToEd
             this, SLOT(slotEditSegmentsPercussionMatrix(std::vector<Segment *>)));
     connect(notationView, SIGNAL(openInEventList(std::vector<Segment *>)),
             this, SLOT(slotEditSegmentsEventList(std::vector<Segment *>)));
-/* hjj: WHAT DO DO WITH THIS ?
-    connect(notationView, SIGNAL(editMetadata(QString)),
-            this, SLOT(slotEditMetadata(QString)));
-*/
     connect(notationView, SIGNAL(editTriggerSegment(int)),
             this, SLOT(slotEditTriggerSegment(int)));
     connect(notationView, SIGNAL(staffLabelChanged(TrackId, QString)),
@@ -664,13 +657,12 @@ RosegardenMainViewWidget::createMatrixView(std::vector<Segment *> segmentsToEdit
 
     connect(matrixView, SIGNAL(saveFile()),
             RosegardenMainWindow::self(), SLOT(slotFileSave()));
-//  This probably is obsolete in Thorn.
-//    connect(matrixView, SIGNAL(jumpPlaybackTo(timeT)),
-//            getDocument(), SLOT(slotSetPointerPosition(timeT)));
     connect(matrixView, SIGNAL(openInNotation(std::vector<Segment *>)),
             this, SLOT(slotEditSegmentsNotation(std::vector<Segment *>)));
     connect(matrixView, SIGNAL(openInMatrix(std::vector<Segment *>)),
             this, SLOT(slotEditSegmentsMatrix(std::vector<Segment *>)));
+    connect(matrixView, SIGNAL(openInPercussionMatrix(std::vector<Segment *>)),
+            this, SLOT(slotEditSegmentsPercussionMatrix(std::vector<Segment *>)));
     connect(matrixView, SIGNAL(openInEventList(std::vector<Segment *>)),
             this, SLOT(slotEditSegmentsEventList(std::vector<Segment *>)));
     connect(matrixView, SIGNAL(editTriggerSegment(int)),
@@ -695,13 +687,6 @@ RosegardenMainViewWidget::createMatrixView(std::vector<Segment *> segmentsToEdit
             matrixView, SLOT(slotCompositionStateUpdate()));
     connect(this, SIGNAL(compositionStateUpdate()),
             matrixView, SLOT(slotCompositionStateUpdate()));
-//  This is obsolete?
-//    connect(this,
-//            SIGNAL(instrumentLevelsChanged(InstrumentId,
-//                                           const LevelInfo &)),
-//            matrixView,
-//            SLOT(slotInstrumentLevelsChanged(InstrumentId,
-//                                             const LevelInfo &)));
 
     // Encourage the matrix view window to open to the same
     // interval as the current segment view
