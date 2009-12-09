@@ -100,7 +100,7 @@ done | sort -k 5,5n -k 1
 
 cat << EOF
 
-Total:        total strings that are note obsolete
+Total:        total strings that are not obsolete
 
 Translated:   strings that have been translated
 

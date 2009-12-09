@@ -2370,74 +2370,6 @@
         <translation></translation>
     </message>
     <message>
-        <source>&amp;I</source>
-        <translation type="obsolete">&amp;Do</translation>
-    </message>
-    <message>
-        <source>I &amp;sharp</source>
-        <translation type="obsolete">Do &amp;sharp</translation>
-    </message>
-    <message>
-        <source>II &amp;flat</source>
-        <translation type="obsolete">Re &amp;flat</translation>
-    </message>
-    <message>
-        <source>II</source>
-        <translation type="obsolete">Re</translation>
-    </message>
-    <message>
-        <source>II sh&amp;arp</source>
-        <translation type="obsolete">Re &amp;sharp</translation>
-    </message>
-    <message>
-        <source>III flat</source>
-        <translation type="obsolete">Mi flat</translation>
-    </message>
-    <message>
-        <source>III</source>
-        <translation type="obsolete">Mi</translation>
-    </message>
-    <message>
-        <source>IV</source>
-        <translation type="obsolete">Fa</translation>
-    </message>
-    <message>
-        <source>IV sha&amp;rp</source>
-        <translation type="obsolete">Fa &amp;sharp</translation>
-    </message>
-    <message>
-        <source>&amp;V flat</source>
-        <translation type="obsolete">Sol &amp;flat</translation>
-    </message>
-    <message>
-        <source>V</source>
-        <translation type="obsolete">Sol</translation>
-    </message>
-    <message>
-        <source>V s&amp;harp</source>
-        <translation type="obsolete">Sol &amp;sharp</translation>
-    </message>
-    <message>
-        <source>VI fla&amp;t</source>
-        <translation type="obsolete">La &amp;flat</translation>
-    </message>
-    <message>
-        <source>VI</source>
-        <translation type="obsolete">La</translation>
-    </message>
-    <message>
-        <source>VI shar&amp;p</source>
-        <translation type="obsolete">La &amp;sharp</translation>
-    </message>
-    <message>
-        <source>VII flat</source>
-        <translation type="obsolete">Ti flat</translation>
-    </message>
-    <message>
-        <source>VII</source>
-        <translation type="obsolete">Ti</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="1196"/>
         <location filename="../QMenuStrings.cpp" line="2875"/>
         <source>&amp;Upper Octave</source>
@@ -20188,12 +20120,12 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="65"/>
         <source>Insert Event</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="65"/>
         <source>Edit Event</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="74"/>
@@ -20218,7 +20150,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="218"/>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="233"/>
         <source>edit</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="131"/>

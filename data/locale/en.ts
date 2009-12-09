@@ -1135,7 +1135,7 @@
         <location filename="../QMenuStrings.cpp" line="674"/>
         <location filename="../QMenuStrings.cpp" line="1920"/>
         <source>Add &amp;Control Ruler</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="675"/>
@@ -1310,27 +1310,27 @@
         <location filename="../QMenuStrings.cpp" line="853"/>
         <location filename="../QMenuStrings.cpp" line="2358"/>
         <source>Cursor Back &amp;Bar and Select</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="860"/>
         <location filename="../QMenuStrings.cpp" line="2365"/>
         <source>Ctrl+Shift+Left</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="862"/>
         <location filename="../QMenuStrings.cpp" line="2367"/>
         <source>Cursor For&amp;ward and Select</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="869"/>
         <location filename="../QMenuStrings.cpp" line="2374"/>
         <source>Ctrl+Shift+Right</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="878"/>
@@ -2370,74 +2370,6 @@
         <translation></translation>
     </message>
     <message>
-        <source>&amp;I</source>
-        <translation type="obsolete">&amp;Do</translation>
-    </message>
-    <message>
-        <source>I &amp;sharp</source>
-        <translation type="obsolete">Do &amp;sharp</translation>
-    </message>
-    <message>
-        <source>II &amp;flat</source>
-        <translation type="obsolete">Re &amp;flat</translation>
-    </message>
-    <message>
-        <source>II</source>
-        <translation type="obsolete">Re</translation>
-    </message>
-    <message>
-        <source>II sh&amp;arp</source>
-        <translation type="obsolete">Re &amp;sharp</translation>
-    </message>
-    <message>
-        <source>III flat</source>
-        <translation type="obsolete">Mi flat</translation>
-    </message>
-    <message>
-        <source>III</source>
-        <translation type="obsolete">Mi</translation>
-    </message>
-    <message>
-        <source>IV</source>
-        <translation type="obsolete">Fa</translation>
-    </message>
-    <message>
-        <source>IV sha&amp;rp</source>
-        <translation type="obsolete">Fa &amp;sharp</translation>
-    </message>
-    <message>
-        <source>&amp;V flat</source>
-        <translation type="obsolete">Sol &amp;flat</translation>
-    </message>
-    <message>
-        <source>V</source>
-        <translation type="obsolete">Sol</translation>
-    </message>
-    <message>
-        <source>V s&amp;harp</source>
-        <translation type="obsolete">Sol &amp;sharp</translation>
-    </message>
-    <message>
-        <source>VI fla&amp;t</source>
-        <translation type="obsolete">La &amp;flat</translation>
-    </message>
-    <message>
-        <source>VI</source>
-        <translation type="obsolete">La</translation>
-    </message>
-    <message>
-        <source>VI shar&amp;p</source>
-        <translation type="obsolete">La &amp;sharp</translation>
-    </message>
-    <message>
-        <source>VII flat</source>
-        <translation type="obsolete">Ti flat</translation>
-    </message>
-    <message>
-        <source>VII</source>
-        <translation type="obsolete">Ti</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="1196"/>
         <location filename="../QMenuStrings.cpp" line="2875"/>
         <source>&amp;Upper Octave</source>
@@ -2614,17 +2546,17 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="49"/>
         <source>Insert into Selected Audio Track</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="50"/>
         <source>Distribute Audio on MIDI Segment</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="52"/>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1515"/>
@@ -3230,24 +3162,24 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2197"/>
         <source>Cycle &amp;Dots</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2204"/>
         <source>Ctrl+.</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2206"/>
         <source>Cycle Dots With&amp;out Duration Change</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2213"/>
         <source>Ctrl+Alt+.</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2225"/>
@@ -3899,7 +3831,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="47"/>
         <source>&amp;Action</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="673"/>
@@ -10892,7 +10824,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1386"/>
         <source>http://rosegardenmusic.com/wiki/doc:audioManager-en</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -10997,7 +10929,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="1648"/>
         <source>http://rosegardenmusic.com/wiki/doc:audioMixerWindow-en</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -11181,7 +11113,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="999"/>
         <source>http://rosegardenmusic.com/wiki/doc:audioPluginDialog-en</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -11616,7 +11548,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1818"/>
         <source>http://rosegardenmusic.com/wiki/doc:bankEditorDialog-en</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -12052,7 +11984,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/gui/dialogs/ConfigureDialogBase.cpp" line="152"/>
         <source>http://rosegardenmusic.com/wiki/doc:configureDialogBase-en</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -12174,7 +12106,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="462"/>
         <source>http://rosegardenmusic.com/wiki/doc:controlEditorDialog-en</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -12768,12 +12700,12 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="75"/>
         <source>Advanced Event Edit</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="75"/>
         <source>Advanced Event Viewer</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="84"/>
@@ -13324,7 +13256,7 @@ This could cause problems if it overrides a different computed value later on.</
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="1855"/>
         <source>http://rosegardenmusic.com/wiki/doc:eventView-en</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -13434,7 +13366,7 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location filename="../../src/gui/dialogs/FileMergeDialog.cpp" line="115"/>
         <source>http://rosegardenmusic.com/wiki/doc:fileMergeDialog-en</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -14318,7 +14250,7 @@ Example text from file:</source>
     <message>
         <location filename="../../src/gui/dialogs/InterpretDialog.cpp" line="149"/>
         <source>http://rosegardenmusic.com/wiki/doc:interpretDialog-en</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -14644,7 +14576,7 @@ Example text from file:</source>
     <message>
         <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="470"/>
         <source>http://rosegardenmusic.com/wiki/doc:keySignatureDialog-en</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -15134,7 +15066,7 @@ Would you like to use
     <message>
         <location filename="../../src/gui/dialogs/LyricEditDialog.cpp" line="351"/>
         <source>http://rosegardenmusic.com/wiki/doc:lyricEditDialog-en</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -15195,7 +15127,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="176"/>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="183"/>
         <source>Choose...</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="180"/>
@@ -15682,7 +15614,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="621"/>
         <source>http://rosegardenmusic.com/wiki/doc:markerEditor-en</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -16011,22 +15943,22 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1404"/>
         <source>http://rosegardenmusic.com/wiki/doc:matrix-en</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1411"/>
         <source>http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1418"/>
         <source>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1431"/>
         <source>Rosegarden</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1659"/>
@@ -16237,7 +16169,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/studio/MidiMixerWindow.cpp" line="705"/>
         <source>http://rosegardenmusic.com/wiki/doc:midiMixerWindow-en</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -16351,17 +16283,17 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/commands/edit/MoveCommand.cpp" line="52"/>
         <source>&amp;Move Events</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/MoveCommand.cpp" line="54"/>
         <source>&amp;Move Events Back</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/MoveCommand.cpp" line="56"/>
         <source>&amp;Move Events Forward</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -16528,7 +16460,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="298"/>
         <source>Tie notes at barlines automatically</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="312"/>
@@ -16681,7 +16613,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="469"/>
         <source> %1</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="489"/>
@@ -17225,7 +17157,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4189"/>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4198"/>
         <source>Adding dot...</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3491"/>
@@ -17407,7 +17339,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/dialogs/PasteNotationDialog.cpp" line="127"/>
         <source>http://rosegardenmusic.com/wiki/doc:pasteNotationDialog-en</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -17510,7 +17442,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="308"/>
         <source>http://rosegardenmusic.com/wiki/doc:pitchBendSequenceDialog-en</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="102"/>
@@ -17905,7 +17837,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="878"/>
         <source>&lt;qt&gt;&lt;p&gt;Unable to create file list.&lt;/p&gt;%1&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="920"/>
@@ -19041,7 +18973,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5921"/>
         <source>&lt;qt&gt;&lt;p&gt;You must choose a filename for this composition before recording audio.&lt;/p&gt;&lt;p&gt;Audio files will be saved to &lt;b&gt;%1&lt;/b&gt; as &lt;b&gt;rg-[&lt;i&gt;filename&lt;/i&gt;]-[&lt;i&gt;instrument&lt;/i&gt;]-&lt;i&gt;date&lt;/i&gt;_&lt;i&gt;time&lt;/i&gt;-&lt;i&gt;n&lt;/i&gt;.wav&lt;/b&gt;.  You may wish to rename audio instruments before recording as well.  For more information, please see the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/doc:audio-filenames-en&quot;&gt;Rosegarden Wiki&lt;/a&gt;.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6220"/>
@@ -19147,12 +19079,12 @@ Please exit and restart Rosegarden to restore sound capability.</source>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2004"/>
         <source>Saving file%1with a new filename...</source>
         <comment>&apos;file%1with&apos; is correct. %1 will either become &apos; &apos; or &apos; as a template &apos; at runtime</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2006"/>
         <source> as a template </source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4518"/>
@@ -19441,12 +19373,12 @@ Error was : %2</source>
     <message>
         <location filename="../../src/commands/segment/SegmentChangeQuantizationCommand.h" line="49"/>
         <source>Unquantize</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/SegmentChangeQuantizationCommand.h" line="53"/>
         <source>Quantize to %1</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -19454,12 +19386,12 @@ Error was : %2</source>
     <message>
         <location filename="../../src/commands/segment/SegmentChangeTransposeCommand.h" line="47"/>
         <source>Undo change transposition</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/SegmentChangeTransposeCommand.h" line="49"/>
         <source>Change transposition to %1</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -20186,12 +20118,12 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="65"/>
         <source>Insert Event</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="65"/>
         <source>Edit Event</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="74"/>
@@ -20216,7 +20148,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="218"/>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="233"/>
         <source>edit</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="131"/>
@@ -20806,7 +20738,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/TempoDialog.cpp" line="516"/>
         <source>http://rosegardenmusic.com/wiki/doc:tempoDialog-en</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -20917,7 +20849,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/editors/tempo/TempoView.cpp" line="795"/>
         <source>http://rosegardenmusic.com/wiki/doc:tempoView-en</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -21298,7 +21230,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="641"/>
         <source>http://rosegardenmusic.com/wiki/doc:textEventDialog-en</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -21420,7 +21352,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="366"/>
         <source>http://rosegardenmusic.com/wiki/doc:timeSignatureDialog-en</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -22199,7 +22131,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="548"/>
         <source>http://rosegardenmusic.com/wiki/doc:triggerSegmentManager-en</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -22275,7 +22207,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/dialogs/TupletDialog.cpp" line="409"/>
         <source>http://rosegardenmusic.com/wiki/doc:tupletDialog-en</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>

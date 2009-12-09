@@ -282,10 +282,6 @@
         <translation>Tocar previsualización</translation>
     </message>
     <message>
-        <source>Insert Into Selected Audio track</source>
-        <translation type="obsolete">Insertar en pista de audio seleccionado</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="51"/>
         <location filename="../QMenuStrings.cpp" line="110"/>
         <location filename="../QMenuStrings.cpp" line="111"/>
@@ -891,10 +887,6 @@
         <translation>Esconder la b&amp;arra de estado</translation>
     </message>
     <message>
-        <source>Distribute Audio on Midi Segment</source>
-        <translation type="obsolete">Distribuir audio sobre segmento de MIDI</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="317"/>
         <location filename="../QMenuStrings.cpp" line="320"/>
         <location filename="../QMenuStrings.cpp" line="1532"/>
@@ -1050,11 +1042,6 @@
         <location filename="../QMenuStrings.cpp" line="511"/>
         <source>Nothing to &amp;redo</source>
         <translation>Nada &amp;que rehacer</translation>
-    </message>
-    <message>
-        <source>Ctrl+V, F18, Shift+Insert</source>
-        <comment>keyboard shortcut</comment>
-        <translation type="obsolete">Ctrl+V, F18, Shift+Insert</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="547"/>
@@ -2453,78 +2440,6 @@
         <translation>Apretar la &amp;alarma</translation>
     </message>
     <message>
-        <source>I&amp;nsert Note</source>
-        <translation type="obsolete">I&amp;nsertar nota</translation>
-    </message>
-    <message>
-        <source>&amp;I</source>
-        <translation type="obsolete">&amp;I</translation>
-    </message>
-    <message>
-        <source>I &amp;sharp</source>
-        <translation type="obsolete">I &amp;sostenido</translation>
-    </message>
-    <message>
-        <source>II &amp;flat</source>
-        <translation type="obsolete">II &amp;bemol</translation>
-    </message>
-    <message>
-        <source>II</source>
-        <translation type="obsolete">II</translation>
-    </message>
-    <message>
-        <source>II sh&amp;arp</source>
-        <translation type="obsolete">II sosten&amp;ido</translation>
-    </message>
-    <message>
-        <source>III flat</source>
-        <translation type="obsolete">III bemol</translation>
-    </message>
-    <message>
-        <source>III</source>
-        <translation type="obsolete">III</translation>
-    </message>
-    <message>
-        <source>IV</source>
-        <translation type="obsolete">IV</translation>
-    </message>
-    <message>
-        <source>IV sha&amp;rp</source>
-        <translation type="obsolete">IV sostenid&amp;o</translation>
-    </message>
-    <message>
-        <source>&amp;V flat</source>
-        <translation type="obsolete">&amp;V bemol</translation>
-    </message>
-    <message>
-        <source>V</source>
-        <translation type="obsolete">V</translation>
-    </message>
-    <message>
-        <source>V s&amp;harp</source>
-        <translation type="obsolete">V sosteni&amp;do</translation>
-    </message>
-    <message>
-        <source>VI fla&amp;t</source>
-        <translation type="obsolete">VI be&amp;mol</translation>
-    </message>
-    <message>
-        <source>VI</source>
-        <translation type="obsolete">VI</translation>
-    </message>
-    <message>
-        <source>VI shar&amp;p</source>
-        <translation type="obsolete">VI sos&amp;tenido</translation>
-    </message>
-    <message>
-        <source>VII flat</source>
-        <translation type="obsolete">VII bemol</translation>
-    </message>
-    <message>
-        <source>VII</source>
-        <translation type="obsolete">VII</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="1196"/>
         <location filename="../QMenuStrings.cpp" line="2875"/>
         <source>&amp;Upper Octave</source>
@@ -2694,17 +2609,9 @@
         <translation>C&amp;ortar y cerrar</translation>
     </message>
     <message>
-        <source>Alt+Shift+X</source>
-        <translation type="obsolete">Alt+Shift+X</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="1843"/>
         <source>Pa&amp;ste...</source>
         <translation>&amp;Pegar...</translation>
-    </message>
-    <message>
-        <source>Alt+Shift+V</source>
-        <translation type="obsolete">Alt+Shift+V</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1852"/>
@@ -2816,10 +2723,6 @@
         <location filename="../QMenuStrings.cpp" line="1936"/>
         <source>&amp;Set Segment Start Time...</source>
         <translation>E&amp;stablecer el tiempo de comienzo del segmento...</translation>
-    </message>
-    <message>
-        <source>Transpose by &amp;Inverval...</source>
-        <translation type="obsolete">Transporte por &amp;intervalo...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1939"/>
@@ -3774,10 +3677,6 @@
         <translation>Mostrar barra de herramientas de &amp;Transporte</translation>
     </message>
     <message>
-        <source>Ctrl+W</source>
-        <translation type="obsolete">Ctrl+W</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="1515"/>
         <location filename="../QMenuStrings.cpp" line="3213"/>
         <location filename="../QMenuStrings.cpp" line="4037"/>
@@ -3785,114 +3684,10 @@
         <translation>&amp;Manual de Rosegarden</translation>
     </message>
     <message>
-        <source>Ctrl+Z</source>
-        <translation type="obsolete">Ctrl+Z</translation>
-    </message>
-    <message>
-        <source>Ctrl+Shift+Z</source>
-        <translation type="obsolete">Ctrl+Shift+Z</translation>
-    </message>
-    <message>
-        <source>Ctrl+C, F16, Ctrl+Ins</source>
-        <translation type="obsolete">Ctrl+C, F16, Ctrl+Ins</translation>
-    </message>
-    <message>
-        <source>Ctrl+V, F18, Shift+Ins</source>
-        <translation type="obsolete">Ctrl+V, F18, Shift+Ins</translation>
-    </message>
-    <message>
-        <source>Ctrl+S</source>
-        <translation type="obsolete">Ctrl+S</translation>
-    </message>
-    <message>
-        <source>I</source>
-        <translation type="obsolete">I</translation>
-    </message>
-    <message>
-        <source>Delete</source>
-        <translation type="obsolete">Delete</translation>
-    </message>
-    <message>
-        <source>Ctrl+X, F20, Shift+Del</source>
-        <translation type="obsolete">Ctrl+X, F20, Shift+Del</translation>
-    </message>
-    <message>
-        <source>Ctrl+A</source>
-        <translation type="obsolete">Ctrl+A</translation>
-    </message>
-    <message>
-        <source>Escape</source>
-        <translation type="obsolete">Esc</translation>
-    </message>
-    <message>
-        <source>Ctrl+F</source>
-        <translation type="obsolete">Ctrl+F</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="295"/>
         <location filename="../QMenuStrings.cpp" line="583"/>
         <source>Preferences...</source>
         <translation>Preferencias...</translation>
-    </message>
-    <message>
-        <source>F2</source>
-        <translation type="obsolete">F2</translation>
-    </message>
-    <message>
-        <source>F5</source>
-        <translation type="obsolete">F5</translation>
-    </message>
-    <message>
-        <source>F3</source>
-        <translation type="obsolete">F3</translation>
-    </message>
-    <message>
-        <source>F6</source>
-        <translation type="obsolete">F6</translation>
-    </message>
-    <message>
-        <source>F4</source>
-        <translation type="obsolete">F4</translation>
-    </message>
-    <message>
-        <source>Ctrl+V, F18, Shift+Insert</source>
-        <translation type="obsolete">Ctrl+V, F18, Shift+Insert</translation>
-    </message>
-    <message>
-        <source>Delete, Ctrl+D</source>
-        <translation type="obsolete">Delete, Ctrl+D</translation>
-    </message>
-    <message>
-        <source>0</source>
-        <translation type="obsolete">0</translation>
-    </message>
-    <message>
-        <source>3</source>
-        <translation type="obsolete">3</translation>
-    </message>
-    <message>
-        <source>6</source>
-        <translation type="obsolete">6</translation>
-    </message>
-    <message>
-        <source>8</source>
-        <translation type="obsolete">8</translation>
-    </message>
-    <message>
-        <source>4</source>
-        <translation type="obsolete">4</translation>
-    </message>
-    <message>
-        <source>2</source>
-        <translation type="obsolete">2</translation>
-    </message>
-    <message>
-        <source>1</source>
-        <translation type="obsolete">1</translation>
-    </message>
-    <message>
-        <source>5</source>
-        <translation type="obsolete">5</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="672"/>
@@ -3907,105 +3702,9 @@
         <translation>Mostrar la regla de &amp;Inflexión de Tono</translation>
     </message>
     <message>
-        <source>Add &amp;Control Ruler...</source>
-        <translation type="obsolete">Añadir regla de &amp;Controlador...</translation>
-    </message>
-    <message>
-        <source>=</source>
-        <translation type="obsolete">=</translation>
-    </message>
-    <message>
-        <source>+</source>
-        <translation type="obsolete">+</translation>
-    </message>
-    <message>
-        <source>-</source>
-        <translation type="obsolete">-</translation>
-    </message>
-    <message>
-        <source>Alt+Left</source>
-        <translation type="obsolete">Alt+Left</translation>
-    </message>
-    <message>
-        <source>Alt+Right</source>
-        <translation type="obsolete">Alt+Right</translation>
-    </message>
-    <message>
-        <source>Shift+Up</source>
-        <translation type="obsolete">Shift+Up</translation>
-    </message>
-    <message>
-        <source>Shift+Down</source>
-        <translation type="obsolete">Shift+Down</translation>
-    </message>
-    <message>
-        <source>Ctrl+H</source>
-        <translation type="obsolete">Ctrl+H</translation>
-    </message>
-    <message>
-        <source>Ctrl+Shift+H</source>
-        <translation type="obsolete">Ctrl+Shift+H</translation>
-    </message>
-    <message>
-        <source>Up</source>
-        <translation type="obsolete">Arriba</translation>
-    </message>
-    <message>
-        <source>Down</source>
-        <translation type="obsolete">Abajo</translation>
-    </message>
-    <message>
-        <source>Ctrl+Up</source>
-        <translation type="obsolete">Ctrl+Up</translation>
-    </message>
-    <message>
-        <source>Ctrl+Down</source>
-        <translation type="obsolete">Ctrl+Down</translation>
-    </message>
-    <message>
-        <source>Shift+Alt+I</source>
-        <translation type="obsolete">Shift+Alt+I</translation>
-    </message>
-    <message>
-        <source>Shift+Alt+R</source>
-        <translation type="obsolete">Shift+Alt+R</translation>
-    </message>
-    <message>
-        <source>Left</source>
-        <translation type="obsolete">Left</translation>
-    </message>
-    <message>
-        <source>Right</source>
-        <translation type="obsolete">Right</translation>
-    </message>
-    <message>
-        <source>Ctrl+Left</source>
-        <translation type="obsolete">Ctrl+Left</translation>
-    </message>
-    <message>
-        <source>Ctrl+Right</source>
-        <translation type="obsolete">Ctrl+Right</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="835"/>
         <source>Cursor Back and Se&amp;lect</source>
         <translation>Cursor atr&amp;ás y seleccionar</translation>
-    </message>
-    <message>
-        <source>Shift+Right</source>
-        <translation type="obsolete">Shift+Right</translation>
-    </message>
-    <message>
-        <source>Ctrl+:</source>
-        <translation type="obsolete">Ctrl+:</translation>
-    </message>
-    <message>
-        <source>Alt+PgUp</source>
-        <translation type="obsolete">Alt+PgUp</translation>
-    </message>
-    <message>
-        <source>Alt+PgDown</source>
-        <translation type="obsolete">Alt+PgDown</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1533"/>
@@ -4023,34 +3722,6 @@
         <location filename="../QMenuStrings.cpp" line="1912"/>
         <source>Show &amp;Rulers Toolbar</source>
         <translation>Mostrar ba&amp;rra de herramientas de Reglas</translation>
-    </message>
-    <message>
-        <source>)</source>
-        <translation type="obsolete">)</translation>
-    </message>
-    <message>
-        <source>Ctrl+)</source>
-        <translation type="obsolete">Ctrl+)</translation>
-    </message>
-    <message>
-        <source>~</source>
-        <translation type="obsolete">~</translation>
-    </message>
-    <message>
-        <source>&amp;lt;</source>
-        <translation type="obsolete">&amp;lt;</translation>
-    </message>
-    <message>
-        <source>&amp;gt;</source>
-        <translation type="obsolete">&amp;gt;</translation>
-    </message>
-    <message>
-        <source>Ctrl+N</source>
-        <translation type="obsolete">Ctrl+N</translation>
-    </message>
-    <message>
-        <source>Ctrl+=</source>
-        <translation type="obsolete">Ctrl+=</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="922"/>
@@ -4290,50 +3961,6 @@
         <translation>Silencio de fusa con puntillo</translation>
     </message>
     <message>
-        <source>Shift+Left</source>
-        <translation type="obsolete">Shift+Left</translation>
-    </message>
-    <message>
-        <source>Ctrl+;</source>
-        <translation type="obsolete">Ctrl+;</translation>
-    </message>
-    <message>
-        <source>Alt+Up</source>
-        <translation type="obsolete">Alt+Arriba</translation>
-    </message>
-    <message>
-        <source>Alt+Down</source>
-        <translation type="obsolete">Alt+Abajo</translation>
-    </message>
-    <message>
-        <source>F8</source>
-        <translation type="obsolete">F8</translation>
-    </message>
-    <message>
-        <source>F9</source>
-        <translation type="obsolete">F9</translation>
-    </message>
-    <message>
-        <source>Y</source>
-        <translation type="obsolete">Y</translation>
-    </message>
-    <message>
-        <source>.</source>
-        <translation type="obsolete">.</translation>
-    </message>
-    <message>
-        <source>Z</source>
-        <translation type="obsolete">Z</translation>
-    </message>
-    <message>
-        <source>Shift+Z</source>
-        <translation type="obsolete">Shift+Z</translation>
-    </message>
-    <message>
-        <source>P</source>
-        <translation type="obsolete">P</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="3419"/>
         <source>Layout Toolbar</source>
         <translation>Barra de Herramientas de Formato</translation>
@@ -4514,10 +4141,6 @@
         <translation>&amp;Abrir...</translation>
     </message>
     <message>
-        <source>Ctrl+O</source>
-        <translation type="obsolete">Ctrl+O</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="3483"/>
         <source>Open &amp;Recent</source>
         <translation>Abrir &amp;reciente</translation>
@@ -4558,10 +4181,6 @@
         <translation>&amp;Salir</translation>
     </message>
     <message>
-        <source>Ctrl+Q</source>
-        <translation type="obsolete">Ctrl+Q</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="3581"/>
         <source>Cut &amp;Range</source>
         <translation>Cortar &amp;ámbito</translation>
@@ -4592,10 +4211,6 @@
         <translation>P&amp;ropiedades del documento...</translation>
     </message>
     <message>
-        <source>T</source>
-        <translation type="obsolete">T</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="3665"/>
         <source>&amp;Open Tempo and Time Signature Editor</source>
         <translation>Abrir editor de Temp&amp;o y Medida</translation>
@@ -4621,10 +4236,6 @@
         <translation>Editar Mar&amp;cadores...</translation>
     </message>
     <message>
-        <source>Ctrl+K</source>
-        <translation type="obsolete">Ctrl+K</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="3678"/>
         <source>Edit Document P&amp;roperties...</source>
         <translation>Editar P&amp;ropiedades del Documento...</translation>
@@ -4638,10 +4249,6 @@
         <location filename="../QMenuStrings.cpp" line="3688"/>
         <source>&amp;Jump to Quick Marker</source>
         <translation>Sal&amp;tar a Marcador Rápido</translation>
-    </message>
-    <message>
-        <source>Ctrl+M</source>
-        <translation type="obsolete">Ctrl+M</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3697"/>
@@ -4709,17 +4316,9 @@
         <translation>Conmutar repetición</translation>
     </message>
     <message>
-        <source>Ctrl+Shift+R</source>
-        <translation type="obsolete">Ctrl+Shift+R</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="3720"/>
         <source>Open in &amp;Default editor</source>
         <translation>Abrir en editor pre&amp;determinado</translation>
-    </message>
-    <message>
-        <source>Return</source>
-        <translation type="obsolete">Return</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3765"/>
@@ -4750,10 +4349,6 @@
         <location filename="../QMenuStrings.cpp" line="3806"/>
         <source>Join</source>
         <translation>Unir</translation>
-    </message>
-    <message>
-        <source>Ctrl+J</source>
-        <translation type="obsolete">Ctrl+J</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3815"/>
@@ -4806,17 +4401,9 @@
         <translation>Añadir pista&amp;s...</translation>
     </message>
     <message>
-        <source>Ctrl+Shift+T</source>
-        <translation type="obsolete">Ctrl+Shift+T</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="3841"/>
         <source>D&amp;elete Track</source>
         <translation>&amp;Borrar pista</translation>
-    </message>
-    <message>
-        <source>Ctrl+D</source>
-        <translation type="obsolete">Ctrl+D</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3850"/>
@@ -4872,26 +4459,6 @@
         <location filename="../QMenuStrings.cpp" line="3945"/>
         <source>&amp;Resize</source>
         <translation>&amp;Cambiar tamaño</translation>
-    </message>
-    <message>
-        <source>Enter, Media Play, Ctrl+Return</source>
-        <translation type="obsolete">Enter, Media Play, Ctrl+Return</translation>
-    </message>
-    <message>
-        <source>Insert, Media Stop</source>
-        <translation type="obsolete">Insert, Media Stop</translation>
-    </message>
-    <message>
-        <source>PgUp, Media Previous</source>
-        <translation type="obsolete">PgUp, Media Previous</translation>
-    </message>
-    <message>
-        <source>PgDown, Media Next</source>
-        <translation type="obsolete">PgDown, Media Next</translation>
-    </message>
-    <message>
-        <source>Media Record</source>
-        <translation type="obsolete">Media Record</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="4009"/>
@@ -4990,10 +4557,6 @@
         <translation>Mostrar &amp;etiquetas de Pista</translation>
     </message>
     <message>
-        <source>Space</source>
-        <translation type="obsolete">Space</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="4051"/>
         <source>Main Toolbar</source>
         <translation>Barra de herramientas Principal</translation>
@@ -5015,10 +4578,6 @@
         <translation>Rebobinar al principio</translation>
     </message>
     <message>
-        <source>Home</source>
-        <translation type="obsolete">Home</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="2504"/>
         <location filename="../QMenuStrings.cpp" line="4067"/>
         <source>Fast Forward to End</source>
@@ -5030,10 +4589,6 @@
         <location filename="../QMenuStrings.cpp" line="4050"/>
         <source>&amp;Support Rosegarden</source>
         <translation>&amp;Donaciones</translation>
-    </message>
-    <message>
-        <source>End</source>
-        <translation type="obsolete">End</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="4080"/>
@@ -6893,34 +6448,6 @@
         <location filename="../InstrumentStrings.cpp" line="373"/>
         <source>Pistol shot</source>
         <translation>Disparo de pistola</translation>
-    </message>
-    <message>
-        <source>C</source>
-        <translation type="obsolete">C</translation>
-    </message>
-    <message>
-        <source>D</source>
-        <translation type="obsolete">D</translation>
-    </message>
-    <message>
-        <source>E</source>
-        <translation type="obsolete">E</translation>
-    </message>
-    <message>
-        <source>F</source>
-        <translation type="obsolete">F</translation>
-    </message>
-    <message>
-        <source>G</source>
-        <translation type="obsolete">G</translation>
-    </message>
-    <message>
-        <source>A</source>
-        <translation type="obsolete">A</translation>
-    </message>
-    <message>
-        <source>B</source>
-        <translation type="obsolete">B</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="39"/>
@@ -18224,10 +17751,6 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
         <translation>Buscando flac...</translation>
     </message>
     <message>
-        <source>&lt;qt&gt;&lt;p&gt;The &lt;b&gt;flac&lt;/b&gt; command was not found.&lt;/p&gt;&lt;p&gt;FLAC is a lossless audio compression format used to reduce the size of Rosegarden project packages with no loss of audio quality.  Please install FLAC and try again.  This utility is typically available to most distros as a package called &quot;flac&quot;.&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;El orden &lt;b&gt;flac&lt;/b&gt; no se encontró.&lt;/p&gt;&lt;p&gt;FLAC (códec libre de compresión de audio sin pérdida) es un formato para codificar que se utiliza para reducir el tamaño de un archivo de proyecto de Rosegarden sin pérdida de calidad.  Instale FLAC e intente de nuevo.  Esta utilidad se encuentra típicamente en un paquete que se llama «flac».&lt;/p&gt;</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="531"/>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="733"/>
         <source>Packing project...</source>
@@ -18248,10 +17771,6 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="800"/>
         <source>&lt;qt&gt;&lt;p&gt;Encoding and compressing files failed with exit status %1. Checking %2 for the line that ends with &quot;exit %1&quot; may be useful for diagnostic purposes.&lt;/p&gt;%3&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Fallo al empaquetar archivos con estado de salida %1. Véase %2 y busque la línea que empieza con «&quot;exit %1&quot; para diagnosticar el problema.&lt;/p&gt;%3&lt;/qt&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;qt&gt;&lt;p&gt;Unable to read to temporary file list.&lt;/p&gt;%1&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Fallo al leer la lista de archivos temporarios.&lt;/p&gt;%1&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="1044"/>
@@ -19029,10 +18548,6 @@ Rosegarden para garantizar que podrá ser reconocida por futuras versiones.</tra
 <context>
     <name>Rosegarden::RosegardenMainViewWidget</name>
     <message>
-        <source>No non-audio segments in composition</source>
-        <translation type="obsolete">No hay segmentos no-audio en la composición</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="300"/>
         <source>Selection must contain only audio or non-audio segments</source>
         <translation>La selección sólo puede contener o segmentos de audio o segmentos de MIDI, no ambos</translation>
@@ -19292,10 +18807,6 @@ Error fue: %2</translation>
         <translation>El archivo especificado ya existe. ¿Sobreescribir?</translation>
     </message>
     <message>
-        <source>Saving file%1with a new filename...</source>
-        <translation type="obsolete">Guardando archivo%1con nombre nuevo...</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2008"/>
         <source>Rosegarden templates</source>
         <translation>Plantillas de Rosegarden</translation>
@@ -19314,14 +18825,6 @@ Error fue: %2</translation>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2064"/>
         <source>Closing file...</source>
         <translation>Cerrando archivo...</translation>
-    </message>
-    <message>
-        <source>Printing...</source>
-        <translation type="obsolete">Imprimiendo...</translation>
-    </message>
-    <message>
-        <source>Previewing...</source>
-        <translation type="obsolete">Pre-visualización...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2077"/>
@@ -21131,17 +20634,6 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="627"/>
         <source> in %1</source>
         <translation> en %1</translation>
-    </message>
-</context>
-<context>
-    <name>Rosegarden::Studio</name>
-    <message>
-        <source>Audio</source>
-        <translation type="obsolete">Audio </translation>
-    </message>
-    <message>
-        <source>Synth plugin</source>
-        <translation type="obsolete">Plugin sinte</translation>
     </message>
 </context>
 <context>
