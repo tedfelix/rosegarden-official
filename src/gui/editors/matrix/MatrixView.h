@@ -165,8 +165,6 @@ protected slots:
 
     void slotShowContextHelp(const QString &);
         
-    // start of slots, formerly in located in EditView.h (which is obsolete now)
-    // --
     void slotAddTempo();
     void slotAddTimeSignature();
     
@@ -189,12 +187,9 @@ protected slots:
     void slotRetrogradeInvert();
 
     // jog events
-//     void slotJogLeft();
-//     void slotJogRight();
+    void slotJogLeft();
+    void slotJogRight();
     
-    // --
-    // end of slots, formerly in located in EditView.h (which is obsolete now)
-
     void slotStepBackward();
     void slotStepForward();
 

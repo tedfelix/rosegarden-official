@@ -80,8 +80,7 @@ MoveCommand::modifySegment()
 
         RG_DEBUG << "MoveCommand::modifySegment: event at " << (*i)->getAbsoluteTime() << " type " << (*i)->getType() << endl;
 
-        if ((*i)->isa(Note::EventRestType))
-            continue;
+        if ((*i)->isa(Note::EventRestType)) continue;
 
         toErase.push_back(*i);
         timeT newTime =

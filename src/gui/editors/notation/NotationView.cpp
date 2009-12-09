@@ -3374,10 +3374,12 @@ NotationView::slotJogLeft()
 
     RG_DEBUG << "NotationView::slotJogLeft" << endl;
 
+    bool useNotationTimings = true;
+
     CommandHistory::getInstance()->addCommand(new MoveCommand
                                               (*getCurrentSegment(),
                                               -Note(Note::Demisemiquaver).getDuration(),
-                                              false,  // don't use notation timings
+                                              useNotationTimings,
                                               *selection));
 }
 
@@ -3389,10 +3391,12 @@ NotationView::slotJogRight()
 
     RG_DEBUG << "NotationView::slotJogRight"<< endl;
 
+    bool useNotationTimings = true;
+
     CommandHistory::getInstance()->addCommand(new MoveCommand
                                               (*getCurrentSegment(),
                                               Note(Note::Demisemiquaver).getDuration(),
-                                              false,  // don't use notation timings
+                                              useNotationTimings,
                                               *selection));
 }
 

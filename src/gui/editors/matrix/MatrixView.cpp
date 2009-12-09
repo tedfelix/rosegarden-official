@@ -1607,42 +1607,6 @@ MatrixView::slotPitchBendSequence()
     dialog.exec();
 }
 
-/*
-
-void MatrixView::slotJogLeft()
-{
-    if (!selection)
-        return ;
-    TmpStatusMsg msg(tr("Jogging left..."), this);
-
-    RG_DEBUG << "MatrixView::slotJogLeft" << endl;
-
-    CommandHistory::getInstance()->addCommand(
-        new MoveCommand(*getCurrentSegment(),
-                        -Note(Note::Demisemiquaver).getDuration(),
-                        false,  // don't use matrix timings
-                        *selection));
-}
-
-void MatrixView::slotJogRight()
-{
-    if (!selection)
-        return ;
-    TmpStatusMsg msg(tr("Jogging right..."), this);
-
-    RG_DEBUG << "MatrixView::slotJogRight" << endl;
-
-    CommandHistory::getInstance()->addCommand(
-        new MoveCommand(*getCurrentSegment(),
-                        Note(Note::Demisemiquaver).getDuration(),
-                        false,  // don't use matrix timings
-                        *selection));
-}
-*/
-
-// --
-// end of code formerly located in EditView.cpp
-
 void
 MatrixView::slotInsertNoteFromAction()
 {
@@ -2081,6 +2045,41 @@ MatrixView::slotEditAddKeySignature()
         }
     }
 }
+
+void
+MatrixView::slotJogLeft()
+{
+    EventSelection *selection = getSelection();
+    if (!selection) return ;
+
+    RG_DEBUG << "MatrixView::slotJogLeft" << endl;
+
+    bool useNotationTimings = false;
+
+    CommandHistory::getInstance()->addCommand(new MoveCommand
+                                              (*getCurrentSegment(),
+                                              -Note(Note::Demisemiquaver).getDuration(),
+                                              useNotationTimings,
+                                              *selection));
+}
+
+void
+MatrixView::slotJogRight()
+{
+    EventSelection *selection = getSelection();
+    if (!selection) return ;
+
+    RG_DEBUG << "MatrixView::slotJogRight"<< endl;
+
+    bool useNotationTimings = false;
+
+    CommandHistory::getInstance()->addCommand(new MoveCommand
+                                              (*getCurrentSegment(),
+                                              Note(Note::Demisemiquaver).getDuration(),
+                                              useNotationTimings,
+                                              *selection));
+}
+
 
 }
 #include "MatrixView.moc"
