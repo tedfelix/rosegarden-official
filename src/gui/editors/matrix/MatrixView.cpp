@@ -379,31 +379,33 @@ MatrixView::setupActions()
         dynamic_cast<MidiDevice *>(getCurrentDevice());
     if (!c) {
         c = dynamic_cast<SoftSynthDevice *>(getCurrentDevice());
-        if (!c)
-            return ;
     }
 
-    const ControlList &list = c->getControlParameters();
+    if (c) {
 
-    QString itemStr;
+        const ControlList &list = c->getControlParameters();
 
-    for (ControlList::const_iterator it = list.begin();
-            it != list.end(); ++it) {
+        QString itemStr;
 
-        // Pitch Bend is treated separately now, and there's no point in adding
-        // "unsupported" controllers to the menu, so skip everything else
-        if (it->getType() != Controller::EventType) continue;
+        for (ControlList::const_iterator it = list.begin();
+             it != list.end(); ++it) {
 
-        QString hexValue;
-        hexValue.sprintf("(0x%x)", it->getControllerValue());
+            // Pitch Bend is treated separately now, and there's no
+            // point in adding "unsupported" controllers to the menu,
+            // so skip everything else
+            if (it->getType() != Controller::EventType) continue;
 
-        // strings extracted from data files must be QObject::tr()
-        itemStr = QObject::tr("%1 Controller %2 %3")
-                        .arg(QObject::tr(strtoqstr(it->getName())))
-                        .arg(it->getControllerValue())
-                        .arg(hexValue);
+            QString hexValue;
+            hexValue.sprintf("(0x%x)", it->getControllerValue());
 
-        addControlRulerMenu->addAction(itemStr);
+            // strings extracted from data files must be QObject::tr()
+            itemStr = QObject::tr("%1 Controller %2 %3")
+                .arg(QObject::tr(strtoqstr(it->getName())))
+                .arg(it->getControllerValue())
+                .arg(hexValue);
+
+            addControlRulerMenu->addAction(itemStr);
+        }
     }
 
     connect(addControlRulerMenu, SIGNAL(triggered(QAction*)),
