@@ -131,7 +131,7 @@
     <Action name="add_sustain_down" text="Add Pedal &amp;Press" />
     <Action name="add_sustain_up" text="Add Pedal &amp;Release" />
   <Separator/>
-    <Action name="set_segment_start" text="&amp;Set Start Time..." />
+    <Action name="set_segment_start" text="Set Start &amp;Time..." />
     <Action name="set_segment_duration" text="Set &amp;Duration..." />
   <Separator/>
     <Action name="transpose_segment" text="Transpose by &amp;Interval..." />
