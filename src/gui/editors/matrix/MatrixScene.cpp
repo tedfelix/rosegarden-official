@@ -363,6 +363,11 @@ MatrixScene::recreatePitchHighlights()
     while (k0 < segment->getEndMarkerTime()) {
 
         Rosegarden::Key key = segment->getKeyAtTime(k0);
+
+        // offset the highlights according to how far this key's tonic pitch is
+        // from C major (0)
+        int offset = key.getTonicPitch();
+
         if (!segment->getNextKeyTime(k0, k1)) k1 = segment->getEndMarkerTime();
 
         if (k0 == k1) {
@@ -374,17 +379,17 @@ MatrixScene::recreatePitchHighlights()
         double x0 = m_scale->getXForTime(k0);
         double x1 = m_scale->getXForTime(k1);
 
-        // rudimentary
-
+        // calculate the highlights relative to C major, plus offset
+        // (I think this enough to do the job.  It passes casual tests.)
         const int hcount = 3;
         int hsteps[hcount];
-        hsteps[0] = scale_Cmajor[0]; // tonic
-        hsteps[2] = scale_Cmajor[4]; // fifth
+        hsteps[0] = scale_Cmajor[0] + offset; // tonic
+        hsteps[2] = scale_Cmajor[4] + offset; // fifth
 
         if (key.isMinor()) {
-            hsteps[1] = scale_Cminor[2]; // minor third
+            hsteps[1] = scale_Cminor[2] + offset; // minor third
         } else {
-            hsteps[1] = scale_Cmajor[2]; // major third
+            hsteps[1] = scale_Cmajor[2] + offset; // major third
         }
 
         for (int j = 0; j < hcount; ++j) {
