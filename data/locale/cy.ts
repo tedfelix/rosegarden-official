@@ -13728,12 +13728,12 @@ Ydych eisiau ceisio lleoli&apos;r ffeil yma neu&apos;i osgoi?</translation>
 <context>
     <name>Rosegarden::FontRequester</name>
     <message>
-        <location filename="../../src/gui/widgets/FontRequester.cpp" line="39"/>
+        <location filename="../../src/gui/widgets/FontRequester.cpp" line="51"/>
         <source>Choose...</source>
         <translation type="unfinished">Dewis...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/widgets/FontRequester.cpp" line="56"/>
+        <location filename="../../src/gui/widgets/FontRequester.cpp" line="69"/>
         <source>%1 %2</source>
         <translation type="unfinished">&amp;%1%2</translation>
     </message>
@@ -17144,188 +17144,193 @@ os hoffech chi.</translation>
         <translation type="unfinished">Slaesau</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="137"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="138"/>
         <source>&quot;Always&quot; and &quot;Never&quot; mean what they usually mean
 &quot;When needed&quot; means &quot;when staves are too many to all fit in the current window&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="150"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="151"/>
         <source>Show non-notation events as question marks</source>
         <translation type="unfinished">Dangos digwyddiadau di-nodiant fel gofynnodau</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="161"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="162"/>
         <source>Show notation-quantized notes in a different color</source>
         <translation type="unfinished">Dangos nodau wedi eu cwanteiddio yn y nodiant mewn lliw gwahanol</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="172"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="173"/>
         <source>Show &quot;invisible&quot; events in grey</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="183"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="184"/>
         <source>Show notes outside suggested playable range in red</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="194"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="195"/>
         <source>Highlight superimposed notes with a halo effect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="208"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="209"/>
         <source>When recording MIDI, split-and-tie long notes at barlines</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="220"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="221"/>
         <source>Layout</source>
         <translation type="unfinished">Haenlun</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="233"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="234"/>
         <source>Default note style for new notes</source>
         <translation type="unfinished">Arddull nodyn rhagosodedig i nodau newydd</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="265"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="266"/>
         <source>When inserting notes...</source>
         <translation type="unfinished">Wrth fewnosod nodau...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="273"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="274"/>
         <source>Split notes into ties to make durations match</source>
         <translation type="unfinished">Hollti nodau i mewn i glymau i wneud i&apos;r parhadau gydweddu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="274"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="275"/>
         <source>Ignore existing durations</source>
         <translation type="unfinished">Anwybyddu parhadau mewn bod</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="284"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="285"/>
         <source>Auto-beam on insert when appropriate</source>
         <translation type="unfinished">Hunan-drawstio wrth mewnosod, lle addas</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="297"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="298"/>
+        <source>Tie notes at barlines automatically</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="312"/>
         <source>Collapse rests after erase</source>
         <translation type="unfinished">Dat-ehangu seibiau ar ol dileu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="309"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="324"/>
         <source>Default paste type</source>
         <translation type="unfinished">Math gludo rhagosodedig</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="333"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="348"/>
         <source>Editing</source>
         <translation type="unfinished">Golygu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="345"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="360"/>
         <source>Accidentals in one octave...</source>
         <translation type="unfinished">Trawsgyweirio i fyny un wythfed...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="348"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="363"/>
         <source>Affect only that octave</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="349"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="364"/>
         <source>Require cautionaries in other octaves</source>
         <translation type="unfinished">Nid oes newidiadau tempo eraill.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="350"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="365"/>
         <source>Affect all subsequent octaves</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="358"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="373"/>
         <source>Accidentals in one bar...</source>
         <translation type="unfinished">Bar Hapnodau</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="361"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="376"/>
         <source>Affect only that bar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="362"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="377"/>
         <source>Require cautionary resets in following bar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="363"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="378"/>
         <source>Require explicit resets in following bar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="371"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="386"/>
         <source>Key signature cancellation style</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="374"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="389"/>
         <source>Cancel only when entering C major or A minor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="375"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="390"/>
         <source>Cancel whenever removing sharps or flats</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="376"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="391"/>
         <source>Cancel always</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="387"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="402"/>
         <source>Accidentals</source>
         <translation type="unfinished">&amp;Hapnodau</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="398"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="413"/>
         <source>Notation font</source>
         <translation type="unfinished">Ffont Nodiant</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="404"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="419"/>
         <source>View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="425"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="440"/>
         <source>Origin:</source>
         <translation type="unfinished">Tarddiad:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="429"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="444"/>
         <source>Copyright:</source>
         <translation type="unfinished">Hawlfraint:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="433"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="448"/>
         <source>Mapped by:</source>
         <translation type="unfinished">Wedi ei fapio gan:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="437"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="452"/>
         <source>Type:</source>
         <translation type="unfinished">Math:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="463"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="478"/>
         <source>Font size for single-staff views</source>
         <translation type="unfinished">Maint ffont i olygon erwydd sengl</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="472"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="487"/>
         <source>Font size for multi-staff views</source>
         <translation type="unfinished">Maint ffont i olygon erwydd lluosol</translation>
     </message>
@@ -17334,27 +17339,27 @@ os hoffech chi.</translation>
         <translation type="obsolete">Maint wynebfath ar gyfer argraffu (pt)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="490"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="505"/>
         <source>Text font</source>
         <translation type="unfinished">Testun:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="502"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="517"/>
         <source>Sans-serif font</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="515"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="530"/>
         <source>Font</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="609"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="624"/>
         <source>%1 (smooth)</source>
         <translation type="unfinished">%1 (wedi&apos;i hollti)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="611"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="626"/>
         <source>%1 (jaggy)</source>
         <translation type="unfinished">%1 (rhan)</translation>
     </message>
@@ -18113,7 +18118,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::NoteInsertionCommand</name>
     <message>
-        <location filename="../../src/commands/notation/NoteInsertionCommand.cpp" line="48"/>
+        <location filename="../../src/commands/notation/NoteInsertionCommand.cpp" line="49"/>
         <source>Insert Note</source>
         <translation type="unfinished">Mewnosod Nodyn</translation>
     </message>

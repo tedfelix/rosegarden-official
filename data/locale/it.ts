@@ -14070,12 +14070,12 @@ Vuoi provare a cercarlo o saltarlo?</translation>
 <context>
     <name>Rosegarden::FontRequester</name>
     <message>
-        <location filename="../../src/gui/widgets/FontRequester.cpp" line="39"/>
+        <location filename="../../src/gui/widgets/FontRequester.cpp" line="51"/>
         <source>Choose...</source>
         <translation>Scegli...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/widgets/FontRequester.cpp" line="56"/>
+        <location filename="../../src/gui/widgets/FontRequester.cpp" line="69"/>
         <source>%1 %2</source>
         <translation>%1 %2</translation>
     </message>
@@ -17504,189 +17504,194 @@ Accertati che il dispositivo sia correttamente configurato alla voce
         <translation>Sempre</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="137"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="138"/>
         <source>&quot;Always&quot; and &quot;Never&quot; mean what they usually mean
 &quot;When needed&quot; means &quot;when staves are too many to all fit in the current window&quot;</source>
         <translation>&quot;Sempre&quot; e &quot;Mai&quot; significano quel che di solito significano
 &quot;Al bisogno&quot; significa &quot;quando i righi sono troppi per stare tutti nella finestra corrente&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="150"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="151"/>
         <source>Show non-notation events as question marks</source>
         <translation>Mostra gli eventi non di notazione come punti di domanda</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="161"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="162"/>
         <source>Show notation-quantized notes in a different color</source>
         <translation>Mostra le note quantizzate in colore diverso</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="172"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="173"/>
         <source>Show &quot;invisible&quot; events in grey</source>
         <translation>Mostra gli eventi &quot;invisibili&quot; in grigio</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="183"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="184"/>
         <source>Show notes outside suggested playable range in red</source>
         <translation>Mostra in rosso le note fuori dall&apos;intervallo suggerito</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="194"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="195"/>
         <source>Highlight superimposed notes with a halo effect</source>
         <translation>Evidenzia le note sovrapposte con un effetto di trasparenza</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="208"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="209"/>
         <source>When recording MIDI, split-and-tie long notes at barlines</source>
         <translation>Nella registrazione MIDI, dividi e lega le note lunghe alle linee di battuta</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="220"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="221"/>
         <source>Layout</source>
         <translation>Aspetto</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="233"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="234"/>
         <source>Default note style for new notes</source>
         <translation>Stile predefinito per le nuove note</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="265"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="266"/>
         <source>When inserting notes...</source>
         <translation>Quando inserisci le note...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="273"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="274"/>
         <source>Split notes into ties to make durations match</source>
         <translation>Dividi le note con legature per rispettare la durata delle battute</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="274"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="275"/>
         <source>Ignore existing durations</source>
         <translation>Ignora le durate esistenti</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="284"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="285"/>
         <source>Auto-beam on insert when appropriate</source>
         <translation>Auto-collega all&apos;inserimento quando appropriato</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="297"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="298"/>
+        <source>Tie notes at barlines automatically</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="312"/>
         <source>Collapse rests after erase</source>
         <translation>Unisci le pause dopo una cancellazione</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="309"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="324"/>
         <source>Default paste type</source>
         <translation>Modalità predefinita per incollare</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="333"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="348"/>
         <source>Editing</source>
         <translation>Modifica</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="345"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="360"/>
         <source>Accidentals in one octave...</source>
         <translation>Accidenti in una ottava...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="348"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="363"/>
         <source>Affect only that octave</source>
         <translation>Cambia soltanto quell&apos;ottava</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="349"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="364"/>
         <source>Require cautionaries in other octaves</source>
         <translation>Chiedi conferma nelle altre ottave</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="350"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="365"/>
         <source>Affect all subsequent octaves</source>
         <translation>Cambia tutte le ottave successive</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="358"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="373"/>
         <source>Accidentals in one bar...</source>
         <translation>Accidenti in una battuta...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="361"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="376"/>
         <source>Affect only that bar</source>
         <translation>Cambia solo quella battuta</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="362"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="377"/>
         <source>Require cautionary resets in following bar</source>
         <translation>Chiedi l&apos;azzeramento delle precauzioni nella battuta seguente</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="363"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="378"/>
         <source>Require explicit resets in following bar</source>
         <translation>Chiedi esplicitamente il ripristino nella battuta seguente</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="371"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="386"/>
         <source>Key signature cancellation style</source>
         <translation>Stile di cancellazione della tonalità</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="374"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="389"/>
         <source>Cancel only when entering C major or A minor</source>
         <translation>Cancella solo quando parte in DO maggiore o LA minore</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="375"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="390"/>
         <source>Cancel whenever removing sharps or flats</source>
         <translation>Cancella quando sono rimossi diesis e bemolle</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="376"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="391"/>
         <source>Cancel always</source>
         <translation>Cancella sempre</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="387"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="402"/>
         <source>Accidentals</source>
         <translation>Accidenti</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="398"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="413"/>
         <source>Notation font</source>
         <translation>Carattere notazione</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="404"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="419"/>
         <source>View</source>
         <translation>Vista</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="425"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="440"/>
         <source>Origin:</source>
         <translation>Origine:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="429"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="444"/>
         <source>Copyright:</source>
         <translation>Copyright:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="433"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="448"/>
         <source>Mapped by:</source>
         <translation>Mappato da:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="437"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="452"/>
         <source>Type:</source>
         <translation>Tipo:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="463"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="478"/>
         <source>Font size for single-staff views</source>
         <translation>Dimensione dei caratteri per la vista a pentagramma singolo</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="472"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="487"/>
         <source>Font size for multi-staff views</source>
         <translation>Dimensione dei caratteri per la vista a più pentagrammi</translation>
     </message>
@@ -17695,27 +17700,27 @@ Accertati che il dispositivo sia correttamente configurato alla voce
         <translation type="obsolete">Dimensione dei caratteri per la stampa (punti)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="490"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="505"/>
         <source>Text font</source>
         <translation>Font del testo</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="502"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="517"/>
         <source>Sans-serif font</source>
         <translation>Font Sans-serif</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="515"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="530"/>
         <source>Font</source>
         <translation>Font</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="609"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="624"/>
         <source>%1 (smooth)</source>
         <translation>%1 (regolare)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="611"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="626"/>
         <source>%1 (jaggy)</source>
         <translation>%1 (frastagliato)</translation>
     </message>
@@ -18479,7 +18484,7 @@ Accertati che il dispositivo sia correttamente configurato alla voce
 <context>
     <name>Rosegarden::NoteInsertionCommand</name>
     <message>
-        <location filename="../../src/commands/notation/NoteInsertionCommand.cpp" line="48"/>
+        <location filename="../../src/commands/notation/NoteInsertionCommand.cpp" line="49"/>
         <source>Insert Note</source>
         <translation>Inserisci nota</translation>
     </message>

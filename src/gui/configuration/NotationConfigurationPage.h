@@ -85,6 +85,7 @@ protected:
     QComboBox *m_noteStyle;
     QComboBox *m_insertType;
     QCheckBox *m_autoBeam;
+    QCheckBox *m_autoTieBarlines;
     QCheckBox *m_collapseRests;
     QComboBox *m_pasteType;
     QComboBox *m_accOctavePolicy;

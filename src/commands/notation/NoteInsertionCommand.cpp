@@ -41,6 +41,7 @@ NoteInsertionCommand::NoteInsertionCommand(Segment &segment, timeT time,
                                            timeT endTime, Note note, int pitch,
                                            Accidental accidental,
                                            AutoBeamMode autoBeam,
+                                           AutoTieBarlinesMode autoTieBarlines,
                                            MatrixMode matrixType,
                                            GraceMode grace,
                                            float targetSubordering,
@@ -53,6 +54,7 @@ NoteInsertionCommand::NoteInsertionCommand(Segment &segment, timeT time,
         m_pitch(pitch),
         m_accidental(accidental),
         m_autoBeam(autoBeam == AutoBeamOn),
+        m_autoTieBarlines(autoTieBarlines == AutoTieBarlinesOn),
         m_matrixType(matrixType == MatrixModeOn),
         m_grace(grace),
         m_targetSubordering(targetSubordering),
@@ -293,6 +295,9 @@ NoteInsertionCommand::modifySegment()
         }
 
         helper.autoBeam(m_insertionTime, m_insertionTime, GROUP_TYPE_BEAMED);
+        if (m_autoTieBarlines) {
+            helper.makeNotesViable(segment.getStartTime(),segment.getEndTime());
+        }
     }
 }
 

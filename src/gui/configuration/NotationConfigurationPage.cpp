@@ -291,6 +291,20 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
 
     ++row;
 
+     bool autoCorrect = qStrToBool(settings.value("autotieatbarlines","true"));
+
+     layout->addWidget(
+             new QLabel
+             (tr("Tie notes at barlines automatically"), frame),
+             row, 0, 1, 2);
+     m_autoTieBarlines = new QCheckBox(frame);
+     connect(m_autoTieBarlines, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
+     m_autoTieBarlines->setChecked(autoCorrect);
+     layout->addWidget(m_autoTieBarlines, row, 2, 1, 1);
+
+     ++row;
+
+
     bool collapse = qStrToBool(settings.value("collapse", "false")) ;
 
     layout->addWidget
@@ -661,6 +675,7 @@ NotationConfigurationPage::apply()
     settings.setValue("style", m_untranslatedNoteStyle[m_noteStyle->currentIndex()]);
     settings.setValue("inserttype", m_insertType->currentIndex());
     settings.setValue("autobeam", m_autoBeam->isChecked());
+    settings.setValue("autotieatbarlines", m_autoTieBarlines->isChecked());
     settings.setValue("collapse", m_collapseRests->isChecked());
     settings.setValue("pastetype", m_pasteType->currentIndex());
     settings.setValue("accidentaloctavemode", m_accOctavePolicy->currentIndex());

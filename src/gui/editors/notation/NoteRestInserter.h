@@ -132,6 +132,7 @@ protected:
     Note::Type m_noteType;
     unsigned int m_noteDots;
     bool m_autoBeam;
+    bool m_autoTieBarlines;
     bool m_matrixInsertType;
     NoteStyleName m_defaultStyle;
 

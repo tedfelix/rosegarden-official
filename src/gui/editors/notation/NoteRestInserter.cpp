@@ -69,6 +69,7 @@ NoteRestInserter::NoteRestInserter(NotationWidget* widget) :
     settings.beginGroup( NotationViewConfigGroup );
 
     m_autoBeam = qStrToBool( settings.value("autobeam", "true" ) ) ;
+    m_autoTieBarlines = qStrToBool( settings.value("autotieatbarlines","true"));
     m_matrixInsertType = (settings.value("inserttype", 0).toInt()  > 0);
     m_defaultStyle = settings.value("style", NoteStyleFactory::DefaultStyle).toString();
     settings.endGroup();
@@ -583,6 +584,7 @@ NoteRestInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
             (segment, time, endTime, note, pitch, accidental,
              (m_autoBeam && !m_widget->isInTripletMode() && !m_widget->isInGraceMode()) ?
              NoteInsertionCommand::AutoBeamOn : NoteInsertionCommand::AutoBeamOff,
+             m_autoTieBarlines ? NoteInsertionCommand::AutoTieBarlinesOn : NoteInsertionCommand::AutoTieBarlinesOff,
              m_matrixInsertType && !m_widget->isInGraceMode() ?
              NoteInsertionCommand::MatrixModeOn : NoteInsertionCommand::MatrixModeOff,
              m_widget->isInGraceMode() ?

@@ -43,6 +43,11 @@ public:
         AutoBeamOn
     };
 
+    enum AutoTieBarlinesMode {
+        AutoTieBarlinesOff,
+        AutoTieBarlinesOn
+    };
+
     enum MatrixMode {
         MatrixModeOff,
         MatrixModeOn
@@ -65,6 +70,18 @@ public:
                          GraceMode grace,
                          float targetSubordering,
                          NoteStyleName noteStyle);
+    NoteInsertionCommand(Segment &segment,
+                             timeT time,
+                             timeT endTime,
+                             Note note,
+                             int pitch,
+                             Accidental accidental,
+                             AutoBeamMode autoBeam,
+                             AutoTieBarlinesMode autoTieBarlines,
+                             MatrixMode matrixType,
+                             GraceMode grace,
+                             float targetSubordering,
+                             NoteStyleName noteStyle);
     virtual ~NoteInsertionCommand();
 
     virtual EventSelection *getSubsequentSelection();
@@ -80,6 +97,7 @@ protected:
     int m_pitch;
     Accidental m_accidental;
     bool m_autoBeam;
+    bool m_autoTieBarlines;
     bool m_matrixType;
     GraceMode m_grace;
     float m_targetSubordering;

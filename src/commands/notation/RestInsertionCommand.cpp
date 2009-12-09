@@ -34,7 +34,7 @@ RestInsertionCommand::RestInsertionCommand(Segment &segment, timeT time,
                                            timeT endTime, Note note) :
     NoteInsertionCommand(segment, time, endTime, note, 0,
                          Accidentals::NoAccidental,
-                         AutoBeamOff, MatrixModeOff, GraceModeOff, 0,
+                         AutoBeamOff, AutoTieBarlinesOn, MatrixModeOff, GraceModeOff, 0,
                          NoteStyleFactory::DefaultStyle)
 {
     setName("Insert Rest");
