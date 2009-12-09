@@ -491,21 +491,17 @@ NotationStaff::renderElements(NotationElementList::iterator from,
 
     throwIfCancelled();
 
-    // These are only used when rendering keys, and we don't have the
-    // right start data here so we choose not to render keys at all in
-    // this method (see below) so that we can pass bogus clef and key
-    // data to renderSingleElement
-    Clef currentClef;
-    ::Rosegarden::Key currentKey;
-
     int elementCount = 0;
     timeT endTime =
         (to != getViewElementList()->end() ? (*to)->getViewAbsoluteTime() :
          getSegment().getEndMarkerTime());
     timeT startTime = (from != to ? (*from)->getViewAbsoluteTime() : endTime);
 
+    Clef currentClef = getSegment().getClefAtTime(startTime);
+    ::Rosegarden::Key currentKey = getSegment().getKeyAtTime(startTime);
+
     for (NotationElementList::iterator it = from, nextIt = from;
-            it != to; it = nextIt) {
+         it != to; it = nextIt) {
 
         ++nextIt;
 
@@ -515,21 +511,13 @@ NotationStaff::renderElements(NotationElementList::iterator from,
             continue;
         }
 
-        if ((*it)->event()->isa(::Rosegarden::Key::EventType)) {
-            // force rendering in positionElements instead
-            NotationElement* el = static_cast<NotationElement*>(*it);
-            el->removeItem();
-            continue;
-        }
-
         bool selected = isSelected(it);
         //	NOTATION_DEBUG << "Rendering at " << (*it)->getAbsoluteTime()
         //			     << " (selected = " << selected << ")" << endl;
 
         renderSingleElement(it, currentClef, currentKey, selected);
 
-        if ((endTime > startTime) &&
-                (++elementCount % 200 == 0)) {
+        if ((endTime > startTime) && (++elementCount % 200 == 0)) {
 
             timeT myTime = (*it)->getViewAbsoluteTime();
             emit setValue((myTime - startTime) * 100 / (endTime - startTime));
