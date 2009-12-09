@@ -54,6 +54,12 @@ public:
     Clef getClef() const;
     ConversionType getConversionType() const;
 
+    // Code extracted from redrawClefPixmap() and made static to
+    // reuse it from notation/Inconsistencies.h
+    // TODO : Should be move in a better place (may be something
+    //        like gui/general/Translation.cpp)
+    static QString translatedClefName(Clef clef);
+
 public slots:
     void slotClefUp();
     void slotClefDown();

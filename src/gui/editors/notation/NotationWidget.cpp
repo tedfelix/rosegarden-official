@@ -251,6 +251,7 @@ NotationWidget::NotationWidget() :
     QToolButton *headersCloseButton = new QToolButton;
     headersCloseButton->setIcon(IconLoader().loadPixmap("header-close-button"));
     headersCloseButton->setIconSize(QSize(14, 14));
+    headersCloseButton->setToolTip(tr("Close track headers"));
     connect(headersCloseButton, SIGNAL(clicked(bool)),
             this, SLOT(slotCloseHeaders()));
 

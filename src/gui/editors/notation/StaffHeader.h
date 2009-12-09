@@ -49,6 +49,9 @@ class NotationScene;
 class ColourMap;
 class Segment;
 class Clef;
+class Key;
+
+template<class T> class Inconsistencies;
 
 
 // Class rename from TrackHeader to StaffHeader since paintEvent() method
@@ -160,6 +163,15 @@ public:
         return m_status & INCONSISTENT_TRANSPOSITIONS;
     }
 
+    // Method made static to reuse it from notation/Inconsistencies.h
+    // TODO : Should be move in a better place (may be something
+    //        like gui/general/Translation.cpp)
+    /**
+     * Convert the transpose value to the instrument tune and
+     * return it in a printable string.
+     */
+    static QString transposeValueToName(int transpose);
+
 signals :
     void showToolTip(QString toolTipText);
 
@@ -181,14 +193,9 @@ protected slots :
      */
     void slotSetCurrent();
 
+    void slotShowInconsistencies();
+
 private :
-    /**
-     * Convert the transpose value to the instrument tune and
-     * return it in a printable string.
-     */
-    void transposeValueToName(int transpose, QString &transposeName);
-
-
     // Status bits
     static const int SEGMENT_HERE;
     static const int SUPERIMPOSED_SEGMENTS;
@@ -253,9 +260,9 @@ private :
 
     QTimer *m_toolTipTimer;
 
-    Overlaps<int> *m_transposeOverlaps;
-    Overlaps<Clef> *m_clefOverlaps;
-    Overlaps<Key> *m_keyOverlaps;
+    Inconsistencies<int> *m_transposeOverlaps;
+    Inconsistencies<Clef> *m_clefOverlaps;
+    Inconsistencies<Key> *m_keyOverlaps;
 
     bool m_clefOrKeyIsInconsistent;
     bool m_clefOrKeyWasInconsistent;

@@ -27,12 +27,15 @@
 #include "base/ColourMap.h"
 #include "base/Track.h"
 #include "base/Overlaps.h"
+#include "gui/application/RosegardenMainWindow.h"
 #include "gui/general/GUIPalette.h"
 #include "document/RosegardenDocument.h"
 #include "misc/Strings.h"
 #include "NotePixmapFactory.h"
 #include "NotationScene.h"
 #include "NotationStaff.h"
+
+#include "Inconsistencies.h"
 
 #include <vector>
 #include <map>
@@ -54,6 +57,7 @@
 #include <QMouseEvent>
 #include <QPainter>
 #include <QTimer>
+#include <QTextEdit>
 
 
 namespace Rosegarden
@@ -192,8 +196,7 @@ StaffHeader::StaffHeader(HeadersGroup *group,
 
         int transpose = (*i)->getTranspose();
         if (transpose) {
-            QString transposeName;
-            transposeValueToName(transpose, transposeName);
+            QString transposeName = transposeValueToName(transpose);
             toolTipText += QString(tr("<br>bars [%1-%2] in %3 (tr=%4) : \"%5\""))
                                     .arg(barStart)
                                     .arg(barEnd)
@@ -236,20 +239,25 @@ StaffHeader::StaffHeader(HeadersGroup *group,
     ///          lookAtStaff() and not here.
 
 
-    // Create a warning
+    // Create buttons to warn/inform on inconsistencies in overlapping segments
     int size = 4 * m_scene->getNotePixmapFactory()->getSize();
     m_clefOrKeyInconsistency = new QToolButton;
     m_clefOrKeyInconsistency->setIcon(QIcon(":/pixmaps/misc/inconsistency.png"));
     m_clefOrKeyInconsistency->setIconSize(QSize(size, size));
+    m_clefOrKeyInconsistency->setToolTip(tr("<qt>Notation is not consistent<br>"
+                                            "Click to get more information</qt>"));
 
-    // Add a layout where to place the warning icons
+    // Add a layout where to place the warning icon
     QHBoxLayout *hbox = new QHBoxLayout;
     hbox->addWidget(m_clefOrKeyInconsistency);
-    // hbox->addWidget(m_indeterminableKey);
     setLayout(hbox);
 
-    // Icons are here, but they are hidden
+    // Icon is hidden
     m_clefOrKeyInconsistency->hide();
+
+    // Connect the warning icon to a show popup slot
+    connect(m_clefOrKeyInconsistency, SIGNAL(clicked()),
+            this, SLOT(slotShowInconsistencies()));
 
 
     // Implement a ToolTip event replacement (see enterEvent(), leaveEvent and
@@ -274,9 +282,9 @@ StaffHeader::StaffHeader(HeadersGroup *group,
         segVec.push_back(*i);
     }
 
-    m_clefOverlaps = new Overlaps<Clef>(segVec);
-    m_keyOverlaps = new Overlaps<Key>(segVec);
-    m_transposeOverlaps = new Overlaps<int>(segVec);
+    m_clefOverlaps = new Inconsistencies<Clef>(segVec);
+    m_keyOverlaps = new Inconsistencies<Key>(segVec);
+    m_transposeOverlaps = new Inconsistencies<int>(segVec);
 }
 
 StaffHeader::~StaffHeader()
@@ -373,14 +381,15 @@ wWidth -= 4; /// ???
 //                                                       Qt::black : Qt::white;
 //        paint.fillRect(0, 0, width(), upperTextY, warningBackGround);
 
-        // an experiment: fill the upper and lower text areas with 80% opaque
-        // black regardless of other color concerns        
-        paint.fillRect(0, 1, width(), upperTextY, QColor(0, 0, 0, 200));
+        // // an experiment: fill the upper and lower text areas with 80% opaque
+        // // black regardless of other color concerns        
+        // paint.fillRect(0, 1, width(), upperTextY, QColor(0, 0, 0, 200));
 //    }
 
 //    paint.setPen(QColor(m_foreGround));
-    // always use white as default foreground for text areas    
-    QColor textForeground = Qt::white;
+    // // always use white as default foreground for text areas    
+    // QColor textForeground = Qt::white;
+    QColor textForeground = m_foreGround; 
     paint.setPen(textForeground);
     text = getUpperText();
 
@@ -407,7 +416,8 @@ wWidth -= 4; /// ???
 
     // TODO : use colours from GUIPalette
 //    colour = isTransposeInconsistent() ? QColor(Qt::red) : QColor(m_foreGround);
-    colour = isTransposeInconsistent() ? QColor(Qt::red) : QColor(textForeground);
+//    colour = isTransposeInconsistent() ? QColor(Qt::red) : QColor(textForeground);
+    colour = QColor(textForeground);;
     paint.setFont(npf->getTrackHeaderBoldFont());
      // m_p->maskPainter().setFont(m_trackHeaderBoldFont);
     paint.setPen(colour);
@@ -426,17 +436,24 @@ wWidth -= 4; /// ???
 //        QColor warningBackGround = m_foreGround == Qt::white ? Qt::black : Qt::white;
 //        paint.fillRect(0, lowerTextY, width(), height(), warningBackGround);
 
-        // experiment        
-        paint.fillRect(0, lowerTextY, width(), height() - 1, QColor(0, 0, 0, 200));
+        // // experiment        
+        // paint.fillRect(0, lowerTextY, width(), height() - 1, QColor(0, 0, 0, 200));
 //    }
+
+    // Draw top and bottom separation line
+    paint.setPen(QColor(m_foreGround));
+    paint.drawLine(0, 0, width(), 0);
+    paint.drawLine(0, height(), width(), height());
 
     // TODO : use colours from GUIPalette
 //    colour = isLabelInconsistent() ? QColor(Qt::red) : QColor(m_foreGround);
-    colour = isLabelInconsistent() ? QColor(Qt::red) : QColor(textForeground);
+//    colour = isLabelInconsistent() ? QColor(Qt::red) : QColor(textForeground);
+    colour = QColor(textForeground);
     paint.setFont(npf->getTrackHeaderFont());
 
     paint.setPen(colour);
-    text = getLowerText();
+    // text = getLowerText();
+    text = isLabelInconsistent() ? QString("???????") : getLowerText();
 
     for (int l=1; l<=numberOfTextLines; l++) {
         int lowerTextY = wHeight - 4            // -4 : adjust
@@ -459,12 +476,12 @@ wWidth -= 4; /// ???
         QPen pen;
 
         // Select a visible color depending of the background intensity
-// Always use light color while headers always have dark background under text
-//        if (m_foreGround == Qt::black) {
-//            pen.setColor(QColor(0, 0, 255));       // Blue
-//        } else {
+// //Always use light color while headers always have dark background under text
+        if (m_foreGround == Qt::black) {
+            pen.setColor(QColor(0, 0, 255));       // Blue
+        } else {
             pen.setColor(QColor(170, 170, 255));   // Lighter blue
-//        }
+        }
 
         // Draw the rectangle
         // TODO : Use strokePath() rather than drawLine()
@@ -491,8 +508,8 @@ StaffHeader::slotSetCurrent()
     }
 }
 
-void
-StaffHeader::transposeValueToName(int transpose, QString &transposeName)
+QString
+StaffHeader::transposeValueToName(int transpose)
 {
 
     /// TODO : Should be rewritten using methods from Pitch class
@@ -501,19 +518,21 @@ StaffHeader::transposeValueToName(int transpose, QString &transposeName)
     if (noteIndex < 0) noteIndex += 12;
 
     switch(noteIndex) {
-        case  0 : transposeName = tr("C",  "note name"); break;
-        case  1 : transposeName = tr("C#", "note name"); break;
-        case  2 : transposeName = tr("D",  "note name"); break;
-        case  3 : transposeName = tr("Eb", "note name"); break;
-        case  4 : transposeName = tr("E",  "note name"); break;
-        case  5 : transposeName = tr("F",  "note name"); break;
-        case  6 : transposeName = tr("F#", "note name"); break;
-        case  7 : transposeName = tr("G",  "note name"); break;
-        case  8 : transposeName = tr("G#", "note name"); break;
-        case  9 : transposeName = tr("A",  "note name"); break;
-        case 10 : transposeName = tr("Bb", "note name"); break;
-        case 11 : transposeName = tr("B",  "note name"); break;
+        case  0 : return tr("C",  "note name");
+        case  1 : return tr("C#", "note name");
+        case  2 : return tr("D",  "note name");
+        case  3 : return tr("Eb", "note name");
+        case  4 : return tr("E",  "note name");
+        case  5 : return tr("F",  "note name");
+        case  6 : return tr("F#", "note name");
+        case  7 : return tr("G",  "note name");
+        case  8 : return tr("G#", "note name");
+        case  9 : return tr("A",  "note name");
+        case 10 : return tr("Bb", "note name");
+        case 11 : return tr("B",  "note name");
     }
+
+    return QString("???");   // Only here to remove compiler warning
 }
 
 int
@@ -618,8 +637,8 @@ StaffHeader::lookAtStaff(double x, int maxWidth)
     m_colourIndex = colourIndex;
     m_status = status;
 
-    QString noteName;
-    transposeValueToName(m_transpose, noteName);
+    QString noteName = isTransposeInconsistent() ? transposeValueToName(m_transpose)
+                                                 : QString("???");
 
     m_upperText = QString(tr("%1: %2")
                                  .arg(trackPos + 1)
@@ -656,9 +675,11 @@ StaffHeader::lookAtStaff(double x, int maxWidth)
     m_clefOrKeyIsInconsistent = !m_clefOverlaps->isConsistent(start, end)
         || !m_keyOverlaps->isConsistent(start, end);
 
+    // Is transposition inconsistent somewhere in the current view ?
+    m_transposeIsInconsistent = !m_transposeOverlaps->isConsistent(start, end);
+
     return width;
 }
-
 
 
 void
@@ -725,13 +746,15 @@ StaffHeader::updateHeader(int width)
             m_foreGroundType = NotePixmapFactory::PlainColourLight;
         }
 
-        colourType = (m_status & INCONSISTENT_CLEFS) ?
-                         NotePixmapFactory::ConflictColour : m_foreGroundType;
+//         colourType = (m_status & INCONSISTENT_CLEFS) ?
+//                          NotePixmapFactory::ConflictColour : m_foreGroundType;
+        colourType = m_foreGroundType;
         delete m_clefItem;
         m_clefItem = npf->makeClef(m_clef, colourType);
 
-        colourType = (m_status & INCONSISTENT_KEYS) ?
-                         NotePixmapFactory::ConflictColour : m_foreGroundType;
+//         colourType = (m_status & INCONSISTENT_KEYS) ?
+//                          NotePixmapFactory::ConflictColour : m_foreGroundType;
+        colourType = m_foreGroundType;
         delete m_keyItem;
         m_keyItem = npf->makeKey(m_key, m_clef, Rosegarden::Key("C major"), colourType); 
 
@@ -746,12 +769,18 @@ StaffHeader::updateHeader(int width)
         m_lastWidth = width;
 
         // Show or hide the warning icons
-        if (m_clefOrKeyIsInconsistent) m_clefOrKeyInconsistency->show();
-        else m_clefOrKeyInconsistency->hide();
+        if (m_clefOrKeyIsInconsistent || m_transposeIsInconsistent) {
+            m_clefOrKeyInconsistency->show();
+        } else { 
+            m_clefOrKeyInconsistency->hide();
+        }
+//         if (m_transposeIsInconsistent) m_transposeInconsistency->show();
+//         else m_transposeInconsistency->hide();
     }
 
     update();
 }
+
 
 bool
 StaffHeader::SegmentCmp::operator()(const Segment * s1, const Segment * s2) const
@@ -824,6 +853,49 @@ StaffHeader::slotToolTip()
 //         std::cerr << "START MENU\n";
 //     }
 // }
+
+
+void
+StaffHeader::slotShowInconsistencies()
+{
+    Composition *comp = m_headersGroup->getComposition();
+    Track *track = comp->getTrackById(m_track);
+    int trackPos = comp->getTrackPositionById(m_track);
+
+    QString str = tr("<h3>File : %1 </h3>")
+                      .arg(RosegardenMainWindow::self()->getDocument()->getTitle());
+
+    str += tr("<h3>Track %1 : \"%2\"</h3>").arg(trackPos + 1)
+                                           .arg(strtoqstr(track->getLabel()));
+
+    if (!m_clefOverlaps->isConsistent()) {
+        str += QString("<br><b>");
+        str += tr("Overlapping segments with inconsistent clefs :");
+        str += QString("</b>");
+        m_clefOverlaps->display(str, comp, tr("Segment \"%1\" : %2 clef"));
+    }
+
+    if (!m_keyOverlaps->isConsistent()) {
+        str += QString("<br><b>");
+        str += tr("Overlapping segments with inconsistent keys :");
+        str += QString("</b>");
+        m_keyOverlaps->display(str, comp, tr("Segment \"%1\" : %2 key"));
+    }
+
+    if (!m_transposeOverlaps->isConsistent()) {
+        str += QString("<br><b>");
+        str += tr("Overlapping segments with inconsistent transpositions :");
+        str += QString("</b>");
+        m_transposeOverlaps->display(str, comp, tr("Segment \"%1\" : %2"));
+    }
+
+    QTextEdit *warning = new QTextEdit(str);
+    warning->setReadOnly(true);
+    warning->setAttribute(Qt::WA_DeleteOnClose);
+    warning->setWindowTitle(tr("Notation inconsistencies"));
+    warning->setWindowFlags(Qt::Dialog); // Get a popup in middle of screen
+    warning->show();
+}
 
 }
 

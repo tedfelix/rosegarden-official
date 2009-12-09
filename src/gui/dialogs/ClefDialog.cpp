@@ -53,7 +53,6 @@ ClefDialog::ClefDialog(QWidget *parent,
     setModal(true);
     setWindowTitle(tr("Clef"));
 
-    QWidget *vbox = new QWidget(this);
     QVBoxLayout *vboxLayout = new QVBoxLayout;
     setLayout(vboxLayout);
 
@@ -280,8 +279,14 @@ ClefDialog::redrawClefPixmap()
     QPixmap pmap = m_notePixmapFactory->makeClefDisplayPixmap(m_clef, ct);
     m_clefPixmap->setPixmap(pmap);
 
+    m_clefNameLabel->setText(translatedClefName(m_clef));
+}
+
+QString
+ClefDialog::translatedClefName(Clef clef)
+{
     QString name;
-    int octave = m_clef.getOctaveOffset();
+    int octave = clef.getOctaveOffset();
 
     switch (octave) {
     case - 1:
@@ -301,7 +306,7 @@ ClefDialog::redrawClefPixmap()
         break;
     }
 
-    std::string type = m_clef.getClefType();
+    std::string type = clef.getClefType();
     if (type == Clef::Treble)
         name = name.arg(tr("Treble"));
     else if (type == Clef::French)
@@ -323,7 +328,7 @@ ClefDialog::redrawClefPixmap()
     else if (type == Clef::Subbass)
         name = name.arg(tr("Sub-bass"));
 
-    m_clefNameLabel->setText(name);
+    return name;
 }
 
 }

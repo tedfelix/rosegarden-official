@@ -18,15 +18,12 @@
 #ifndef _OVERLAPS_RANGE_H_
 #define _OVERLAPS_RANGE_H_
 
-
 #include <vector>
 #include <map>
-
 
 #include "Event.h"
 
 
-class QWidget;
 
 namespace Rosegarden
 {
