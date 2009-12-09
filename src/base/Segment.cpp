@@ -1100,7 +1100,9 @@ Segment::getKeyAtTime(timeT time, timeT &ktime) const
 
     try {
 	ktime = (*i)->getAbsoluteTime();
-	return Key(**i);
+        Key k(**i);
+//        std::cerr << "Segment::getKeyAtTime: Requested time " << time << ", found key " << k.getName() << " at time " << ktime << std::endl;
+        return k;
     } catch (const Exception &e) {
 	std::cerr << "Segment::getClefAtTime(" << time
 		  << "): bogus key in ClefKeyList: event dump follows:"

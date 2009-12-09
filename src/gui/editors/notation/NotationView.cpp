@@ -2204,8 +2204,8 @@ NotationView::slotInsertNoteFromAction()
             Accidental accidental = Accidentals::NoAccidental;
 
             timeT insertionTime = getInsertionTime();
-            static Rosegarden::Key key = segment->getKeyAtTime(insertionTime);
-            static Clef clef = segment->getClefAtTime(insertionTime);
+            Rosegarden::Key key = segment->getKeyAtTime(insertionTime);
+            Clef clef = segment->getClefAtTime(insertionTime);
 
             try {
 
@@ -2702,8 +2702,8 @@ NotationView::slotEditAddKeySignature()
 {
     Segment *segment = getCurrentSegment();
     timeT insertionTime = getInsertionTime();
-    static Clef clef = segment->getClefAtTime(insertionTime);
-    static Key key = segment->getKeyAtTime(insertionTime);
+    Clef clef = segment->getClefAtTime(insertionTime);
+    Key key = segment->getKeyAtTime(insertionTime);
 
     //!!! experimental:
     CompositionTimeSliceAdapter adapter
