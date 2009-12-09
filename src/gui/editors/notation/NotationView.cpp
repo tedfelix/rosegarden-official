@@ -241,7 +241,7 @@ NotationView::NotationView(RosegardenDocument *doc,
 
     // Set initial notation layout mode
     int layoutMode = settings.value("layoutmode", 0).toInt();
-    switch(layoutMode) {
+    switch (layoutMode) {
         case 0 :
             findAction("linear_mode")->setChecked(true);
             findAction("continuous_page_mode")->setChecked(false);
@@ -3139,21 +3139,19 @@ NotationView::slotUpdateInsertModeStatus()
     m_notationWidget->setTripletMode(isInTripletMode());
     m_notationWidget->setGraceMode(isInGraceMode());
 
-// We don't have a status bar yet, but somebody needs to bring it back across
-// and uncomment all these various status messages here and throughout
-//    if (isInTripletMode()) {
-//        message = tr("%1 %2").arg(message).arg(tripletMessage);
-//    }
-//
-//    if (isInChordMode()) {
-//        message = tr("%1 %2").arg(message).arg(chordMessage);
-//    }
-//
-//    if (isInGraceMode()) {
-//        message = tr("%1 %2").arg(message).arg(graceMessage);
-//    }
-//
-//    m_insertModeLabel->setText(message);
+    if (isInTripletMode()) {
+        message = tr("%1 %2").arg(message).arg(tripletMessage);
+    }
+
+    if (isInChordMode()) {
+        message = tr("%1 %2").arg(message).arg(chordMessage);
+    }
+
+    if (isInGraceMode()) {
+        message = tr("%1 %2").arg(message).arg(graceMessage);
+    }
+
+    m_insertModeLabel->setText(message);
 }
 
 bool
