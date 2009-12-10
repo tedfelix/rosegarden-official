@@ -2,19 +2,6 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="fr">
 <context>
-    <name></name>
-    <message>
-        <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="117"/>
-        <source>minor</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="118"/>
-        <source>major</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>DeviceManagerDialogUi</name>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="472"/>
@@ -10343,19 +10330,29 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="63"/>
+        <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="64"/>
         <source>Bar %1:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="65"/>
+        <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="66"/>
         <source>Bars %1 to %2:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="116"/>
+        <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="120"/>
         <source>%1 %2</source>
         <translation type="unfinished">%1 %2</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="121"/>
+        <source>minor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="122"/>
+        <source>major</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

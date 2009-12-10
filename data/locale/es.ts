@@ -2,19 +2,6 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="es" sourcelanguage="en_US">
 <context>
-    <name></name>
-    <message>
-        <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="117"/>
-        <source>minor</source>
-        <translation>menor</translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="118"/>
-        <source>major</source>
-        <translation>mayor</translation>
-    </message>
-</context>
-<context>
     <name>DeviceManagerDialogUi</name>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="472"/>
@@ -1046,10 +1033,6 @@
         <translation>F4</translation>
     </message>
     <message>
-        <source>E&amp;dit</source>
-        <translation type="obsolete">&amp;Editar</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="502"/>
         <source>Nothing to &amp;undo</source>
         <translation>&amp;Nada que deshacer</translation>
@@ -1234,23 +1217,11 @@
         <translation>Añadir cambio de m&amp;edida del compás...</translation>
     </message>
     <message>
-        <source>&amp;Segment</source>
-        <translation type="obsolete">&amp;Segmento</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="680"/>
         <location filename="../QMenuStrings.cpp" line="1932"/>
         <location filename="../QMenuStrings.cpp" line="3759"/>
         <source>Open in &amp;Event List Editor</source>
         <translation>Abrir en el editor de lista de &amp;eventos</translation>
-    </message>
-    <message>
-        <source>Set Segment Start &amp;Time...</source>
-        <translation type="obsolete">E&amp;stablecer el tiempo de comienzo del segmento...</translation>
-    </message>
-    <message>
-        <source>Set Segment &amp;Duration...</source>
-        <translation type="obsolete">E&amp;stablecer la duración del segmento...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="696"/>
@@ -2735,10 +2706,6 @@
         <translation>Añadir pedal libe&amp;rado</translation>
     </message>
     <message>
-        <source>&amp;Set Segment Start Time...</source>
-        <translation type="obsolete">E&amp;stablecer el tiempo de comienzo del segmento...</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="1942"/>
         <source>&amp;Convert Notation for...</source>
         <translation>&amp;Convertir partitura...</translation>
@@ -3671,10 +3638,6 @@
         <translation>Mostra &amp;herramientas</translation>
     </message>
     <message>
-        <source>&amp;Events</source>
-        <translation type="obsolete">&amp;Eventos</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="835"/>
         <source>Remove &amp;Triggers</source>
         <translation>Eliminar &amp;Activadores</translation>
@@ -4317,10 +4280,6 @@
         <location filename="../QMenuStrings.cpp" line="3711"/>
         <source>&amp;Save Current Document as Default Studio</source>
         <translation>Guardar documento actual como E&amp;studio predeterminado</translation>
-    </message>
-    <message>
-        <source>Se&amp;gments</source>
-        <translation type="obsolete">Se&amp;gmentos</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3713"/>
@@ -10082,19 +10041,29 @@
         <translation>Estado de ejecución usado por primero evento en pista</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="63"/>
+        <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="64"/>
         <source>Bar %1:</source>
         <translation>Compás %1:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="65"/>
+        <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="66"/>
         <source>Bars %1 to %2:</source>
         <translation>Compáses %1 a %2:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="116"/>
+        <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="120"/>
         <source>%1 %2</source>
         <translation>%1 %2</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="121"/>
+        <source>minor</source>
+        <translation>menor</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="122"/>
+        <source>major</source>
+        <translation>mayor</translation>
     </message>
 </context>
 <context>
@@ -20692,10 +20661,6 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="864"/>
         <source>&lt;h2&gt;Notation Inconsistencies&lt;/h2&gt;</source>
         <translation>&lt;h2&gt;Partitura incoherente&lt;/h2&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;h1&gt;Notation Inconsistencies&lt;/h1&gt;</source>
-        <translation type="obsolete">&lt;h1&gt;Partitura incoherente&lt;/h1&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="866"/>
