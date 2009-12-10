@@ -3229,7 +3229,7 @@
         <location filename="../QMenuStrings.cpp" line="2216"/>
         <source>Ctrl+Alt+.</source>
         <comment>keyboard shortcut</comment>
-        <translation></translation>
+        <translation>Ctrl+Alt+.</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2228"/>
@@ -3710,7 +3710,7 @@
         <location filename="../QMenuStrings.cpp" line="1536"/>
         <location filename="../QMenuStrings.cpp" line="3423"/>
         <source>Rulers Toolbar</source>
-        <translation></translation>
+        <translation>Barra de herramientas de Reglas</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1895"/>
@@ -7410,7 +7410,7 @@
         <location filename="../AutoloadStrings.cpp" line="246"/>
         <location filename="../AutoloadStrings.cpp" line="247"/>
         <source> </source>
-        <translation></translation>
+        <translation> </translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="248"/>
@@ -8049,7 +8049,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="387"/>
         <source>DeepPink</source>
-        <translation></translation>
+        <translation>Rosa profunda</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="388"/>
@@ -9739,7 +9739,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="725"/>
         <source>generalmap</source>
-        <translation></translation>
+        <translation>generalmap</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="726"/>
@@ -9774,7 +9774,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="732"/>
         <source>Copyright (c) xxxx Copyright Holder</source>
-        <translation></translation>
+        <translation>Copyright (c) xxxx El Usuario</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="733"/>
@@ -9824,7 +9824,7 @@
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="415"/>
         <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="840"/>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="717"/>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1461"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1462"/>
         <source>%1 Controller %2 %3</source>
         <translation>%2 %3 controlador %1</translation>
     </message>
@@ -10068,6 +10068,16 @@
         <source>Running status used for first event in track</source>
         <translation>Estado de ejecución usado por primero evento en pista</translation>
     </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="63"/>
+        <source>Bar %1:</source>
+        <translation>Compás %1:</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="65"/>
+        <source>Bars %1 to %2:</source>
+        <translation>Compáses %1 to %2:</translation>
+    </message>
 </context>
 <context>
     <name>Rosegarden::AboutDialog</name>
@@ -10084,7 +10094,7 @@
     <message>
         <location filename="../../src/gui/dialogs/AboutDialog.cpp" line="54"/>
         <source>&lt;p&gt;Copyright 2000-2009 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2&lt;/p&gt;</source>
-        <translation></translation>
+        <translation>&lt;p&gt;Copyright 2000-2009 el equipo de Rosegarden&lt;/p&gt;&lt;p&gt;Versión: %1 &amp;nbsp; Versión de Qt: %2&lt;br&gt;Clave: %3&lt;/p&gt;&lt;p&gt;Rosegarden se realizó por un equipo de voluntarios ubicado por todas partes del mundo.  Para aprender quíen desarolló Rosegarden, consulte el &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;sitio Rosegarden&lt;/a&gt;&lt;br&gt;Para más información acerda de Rosegarden, consulte &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Licencia: GNU General Public License Version 2&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
@@ -10147,7 +10157,7 @@
     <message>
         <location filename="../../src/commands/notation/AddIndicationCommand.cpp" line="127"/>
         <source>Can&apos;t add identical overlapping indications</source>
-        <translation></translation>
+        <translation>No es posible añadir indicaciones solapadas idénticas</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddIndicationCommand.cpp" line="227"/>
@@ -10617,12 +10627,12 @@
     <message>
         <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="80"/>
         <source>Click to rename this instrument</source>
-        <translation></translation>
+        <translation>Haga clic para renombrar este instrumento</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="92"/>
         <source>Click the button above to rename this instrument</source>
-        <translation></translation>
+        <translation>Haga clic en el botón arriba para renombrar este instrumento</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="195"/>
@@ -11686,113 +11696,113 @@ Por favor, seleccione cuáles de ellos quiere borrar permanentemente del disco d
     <name>Rosegarden::ClefDialog</name>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="54"/>
-        <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="60"/>
-        <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="126"/>
+        <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="59"/>
+        <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="125"/>
         <source>Clef</source>
         <translation>Clave</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="132"/>
+        <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="131"/>
         <source>Existing notes following clef change</source>
         <translation>Existen notas a continuación del cambio de clave</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="86"/>
+        <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="85"/>
         <source>Lower clef</source>
         <translation>Clave más grave</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="74"/>
+        <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="73"/>
         <source>Up an Octave</source>
         <translation>Subir una octava</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="116"/>
+        <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="115"/>
         <source>Down an Octave</source>
         <translation>Bajar una octava</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="105"/>
+        <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="104"/>
         <source>Higher clef</source>
         <translation>Clave más aguda</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="138"/>
+        <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="137"/>
         <source>Maintain current pitches</source>
         <translation>Mantener los tonos actuales</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="141"/>
+        <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="140"/>
         <source>Transpose into appropriate octave</source>
         <translation>Transporte a la octava apropiada</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="288"/>
+        <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="293"/>
         <source>%1 down an octave</source>
         <translation>%1 una octava inferior</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="291"/>
+        <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="296"/>
         <source>%1 down two octaves</source>
         <translation>%1 dos octavas abajo</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="294"/>
+        <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="299"/>
         <source>%1 up an octave</source>
         <translation>%1 una octava superior</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="297"/>
+        <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="302"/>
         <source>%1 up two octaves</source>
         <translation>%1 dos octabas arriba</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="306"/>
+        <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="311"/>
         <source>Treble</source>
         <translation>Do</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="308"/>
+        <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="313"/>
         <source>French violin</source>
         <translation>Violín francés</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="310"/>
+        <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="315"/>
         <source>Soprano</source>
         <translation>Soprano</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="312"/>
+        <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="317"/>
         <source>Mezzo-soprano</source>
         <translation>Mezzo soprano</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="314"/>
+        <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="319"/>
         <source>Alto</source>
         <translation>Alto</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="316"/>
+        <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="321"/>
         <source>Tenor</source>
         <translation>Tenor</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="318"/>
+        <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="323"/>
         <source>C-baritone</source>
         <translation>Do barítono</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="320"/>
+        <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="325"/>
         <source>F-baritone</source>
         <translation>Fa barítono</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="322"/>
+        <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="327"/>
         <source>Bass</source>
         <translation>Fa</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="324"/>
+        <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="329"/>
         <source>Sub-bass</source>
         <translation>Contrabajo</translation>
     </message>
@@ -14313,7 +14323,7 @@ Ejemplo de texto perteneciente del archivo:</translation>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="92"/>
         <source>Adjust segment transposition in opposite direction (maintain audible pitch)</source>
-        <translation>Ajustar transposición del segmento en sentido opuesto (mantener tono audible)</translation>
+        <translation>Ajustar transporte del segmento en sentido opuesto (mantener tono audible)</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="196"/>
@@ -15430,7 +15440,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="140"/>
         <source>&lt;qt&gt;The metronome can sound bars only, bars and beats, or bars, beats and sub-beats.  The latter mode can be particularly useful for playing in compound time signatures like 12/8.&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;El metrónomo puede reproducir compáses, compases y partes, o compases, partes y divisiones.  El último modo es especialmente útil para reproducir música de compases de subdivisión ternaria como 12/8.&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;El metrónomo puede reproducir compáses, compáses y partes, o compases, partes y divisiones.  El último modo es especialmente útil para reproducir música de compases de subdivisión ternaria como 12/8.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="141"/>
@@ -15905,7 +15915,7 @@ Doble clic para abrir el editor de marcadores.</translation>
 <context>
     <name>Rosegarden::MatrixView</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1674"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1638"/>
         <source>Unknown note insert action %1</source>
         <translation>Acción de insertar nota desconocida: %1</translation>
     </message>
@@ -15988,7 +15998,7 @@ Doble clic para abrir el editor de marcadores.</translation>
         <translation>Por número de semitonos: </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="2051"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="2015"/>
         <source>Estimated key signature shown</source>
         <translation>Se muestra la armadura estimada</translation>
     </message>
@@ -17002,7 +17012,7 @@ Esto es un bug (el programa debería haber fallado ya)</translation>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1487"/>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2222"/>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2798"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3757"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3759"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
@@ -17134,68 +17144,75 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
         </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3292"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3143"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3147"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3151"/>
+        <source>%1 %2</source>
+        <translation>%1 %2</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3290"/>
         <source>Transpose</source>
         <translation>Transportar</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3293"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3291"/>
         <source>By number of semitones: </source>
         <translation>Por número de semitonos: </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3655"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3657"/>
         <source>Time: %1 (%2.%3s)</source>
         <translation>Tiempo: %1 (%2.%3s)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3730"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3732"/>
         <source>http://rosegardenmusic.com/wiki/doc:notation-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:notation-es</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3737"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3739"/>
         <source>http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</source>
         <translation>http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3744"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3746"/>
         <source>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</source>
         <translation>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3808"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3810"/>
         <source>Move Events to Staff Above</source>
         <translation>Mover eventos hacia pentagrama arriba</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3840"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3842"/>
         <source>Move Events to Staff Below</source>
         <translation>Mover eventos hacia pentagrama abajo</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3951"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3953"/>
         <source>Edit Text Event</source>
         <translation>Editar evento de Texto</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3998"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4000"/>
         <source>Normalizing rests...</source>
         <translation>Normalizando silencios...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4011"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4013"/>
         <source>Collapsing notes...</source>
         <translation>Fusionando notas...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4189"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4198"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4191"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4200"/>
         <source>Adding dot...</source>
         <translation>Añadiendo puntillo...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3491"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3493"/>
         <source>Can&apos;t insert note: No note duration selected</source>
         <translation>No es posible insertar nota: No hay una duración seleccionada</translation>
     </message>
@@ -17221,6 +17238,11 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="215"/>
         <source>Reset Zoom</source>
         <translation>Reiniciar ampliación</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="254"/>
+        <source>Close track headers</source>
+        <translation>Cerrar cabeceras de pista</translation>
     </message>
 </context>
 <context>
@@ -20516,132 +20538,187 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
 <context>
     <name>Rosegarden::StaffHeader</name>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="126"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="130"/>
         <source>Track %1 : &quot;%2&quot;</source>
         <translation>Pista %1 : «%2»</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="132"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="136"/>
         <source>&lt;br&gt;Notate for: %1</source>
         <translation>&lt;br&gt;Partitura para: %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="134"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="138"/>
         <source>normal</source>
         <translation>normal</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="137"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="141"/>
         <source>small</source>
         <translation>pequeño</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="140"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="144"/>
         <source>tiny</source>
         <translation>pequeñito</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="169"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="173"/>
         <source>&lt;br&gt;Size: %1,  Bracket: %2 </source>
         <translation>&lt;br&gt;Tamaño: %1,  Paréntesis: %2 </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="197"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="200"/>
         <source>&lt;br&gt;bars [%1-%2] in %3 (tr=%4) : &quot;%5&quot;</source>
         <translation>&lt;br&gt;compáses [%1-%2] en %3 (tr=%4) : «%5»</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="204"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="207"/>
         <source>&lt;br&gt;bars [%1-%2] (tr=%3) : &quot;%4&quot;</source>
         <translation>&lt;br&gt;compáses [%1-%2] (tr=%3) : «%4»</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="396"/>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="451"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="247"/>
+        <source>&lt;qt&gt;&lt;p&gt;Notation is not consistent&lt;/p&gt;&lt;p&gt;Click to get more information&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation>&lt;qt&gt;&lt;p&gt;Partitura incoherente&lt;/p&gt;&lt;p&gt;Haga clic para aprender más&lt;/p&gt;&lt;/qt&gt;</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="404"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="467"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="504"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="520"/>
         <source>C</source>
         <comment>note name</comment>
         <translation>Do</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="505"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="521"/>
         <source>C#</source>
         <comment>note name</comment>
         <translation>Do sostenido</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="506"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="522"/>
         <source>D</source>
         <comment>note name</comment>
         <translation>Re</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="507"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="523"/>
         <source>Eb</source>
         <comment>note name</comment>
         <translation>Mi bemol</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="508"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="524"/>
         <source>E</source>
         <comment>note name</comment>
         <translation>Mi</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="509"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="525"/>
         <source>F</source>
         <comment>note name</comment>
         <translation>Fa</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="510"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="526"/>
         <source>F#</source>
         <comment>note name</comment>
         <translation>Fa sostenido</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="511"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="527"/>
         <source>G</source>
         <comment>note name</comment>
         <translation>Sol</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="512"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="528"/>
         <source>G#</source>
         <comment>note name</comment>
         <translation>Sol sostenido</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="513"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="529"/>
         <source>A</source>
         <comment>note name</comment>
         <translation>La</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="514"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="530"/>
         <source>Bb</source>
         <comment>note name</comment>
         <translation>Si bemol</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="515"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="531"/>
         <source>B</source>
         <comment>note name</comment>
         <translation>Si</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="624"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="642"/>
         <source>%1: %2</source>
         <translation>%1: %2</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="627"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="645"/>
         <source> in %1</source>
         <translation> en %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="864"/>
+        <source>&lt;h1&gt;Notation Inconsistencies&lt;/h1&gt;</source>
+        <translation>&lt;h1&gt;Partitura incoherente&lt;/h1&gt;</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="866"/>
+        <source>&lt;h3&gt;Filename: %1 &lt;/h3&gt;</source>
+        <translation>&lt;h3&gt;Nombre de archivo: %1 &lt;/h3&gt;</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="869"/>
+        <source>&lt;h3&gt;Track %1: &quot;%2&quot;&lt;/h3&gt;</source>
+        <translation>&lt;h3&gt;Pista %1: &quot;%2&quot;&lt;/h3&gt;</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="874"/>
+        <source>Overlapping segments with inconsistent clefs:</source>
+        <translation>Segmentos solapados con claves distinos:</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="876"/>
+        <source>Segment &quot;%1&quot;: %2 clef</source>
+        <translation>Segmento &quot;%1&quot;: clave de %2</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="881"/>
+        <source>Overlapping segments with inconsistent keys:</source>
+        <translation>Segmentos solapados con tonalidades distintas:</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="883"/>
+        <source>Segment &quot;%1&quot;: %2 key</source>
+        <translation>Segmento &quot;%1&quot;: tonalidad de %2</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="888"/>
+        <source>Overlapping segments with inconsistent transpositions:</source>
+        <translation>Segmentos solapados con transportes distintos:</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="890"/>
+        <source>Segment &quot;%1&quot;: %2</source>
+        <translation>Segmento &quot;%1&quot;: %2</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="896"/>
+        <source>Rosegarden</source>
+        <translation>Rosegarden</translation>
     </message>
 </context>
 <context>
