@@ -10076,7 +10076,7 @@
     <message>
         <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="65"/>
         <source>Bars %1 to %2:</source>
-        <translation>Compáses %1 to %2:</translation>
+        <translation>Compáses %1 a %2:</translation>
     </message>
 </context>
 <context>
@@ -11754,7 +11754,7 @@ Por favor, seleccione cuáles de ellos quiere borrar permanentemente del disco d
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="302"/>
         <source>%1 up two octaves</source>
-        <translation>%1 dos octabas arriba</translation>
+        <translation>%1 dos octavas arriba</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="311"/>
