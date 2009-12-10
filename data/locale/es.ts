@@ -2,6 +2,19 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="es" sourcelanguage="en_US">
 <context>
+    <name></name>
+    <message>
+        <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="117"/>
+        <source>minor</source>
+        <translation>menor</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="118"/>
+        <source>major</source>
+        <translation>mayor</translation>
+    </message>
+</context>
+<context>
     <name>DeviceManagerDialogUi</name>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="472"/>
@@ -10077,6 +10090,11 @@
         <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="65"/>
         <source>Bars %1 to %2:</source>
         <translation>Compáses %1 a %2:</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="116"/>
+        <source>%1 %2</source>
+        <translation>%1 %2</translation>
     </message>
 </context>
 <context>

@@ -2,6 +2,19 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="cs">
 <context>
+    <name></name>
+    <message>
+        <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="117"/>
+        <source>minor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="118"/>
+        <source>major</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>DeviceManagerDialogUi</name>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="472"/>
@@ -10383,6 +10396,11 @@ Chcete-li i přesto provést vložení, zvažte použití jednoho z dalších ty
         <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="65"/>
         <source>Bars %1 to %2:</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="116"/>
+        <source>%1 %2</source>
+        <translation type="unfinished">%1 %2</translation>
     </message>
 </context>
 <context>
