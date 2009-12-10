@@ -20672,8 +20672,12 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="864"/>
+        <source>&lt;h2&gt;Notation Inconsistencies&lt;/h2&gt;</source>
+        <translation>&lt;h2&gt;Partitura incoherente&lt;/h2&gt;</translation>
+    </message>
+    <message>
         <source>&lt;h1&gt;Notation Inconsistencies&lt;/h1&gt;</source>
-        <translation>&lt;h1&gt;Partitura incoherente&lt;/h1&gt;</translation>
+        <translation type="obsolete">&lt;h1&gt;Partitura incoherente&lt;/h1&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="866"/>

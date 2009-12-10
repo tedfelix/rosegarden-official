@@ -21688,7 +21688,7 @@ Zamknięcie innych programów może spowodować wzrost wydajności Różanego Og
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="864"/>
-        <source>&lt;h1&gt;Notation Inconsistencies&lt;/h1&gt;</source>
+        <source>&lt;h2&gt;Notation Inconsistencies&lt;/h2&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
