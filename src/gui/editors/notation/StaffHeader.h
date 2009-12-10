@@ -253,6 +253,8 @@ private :
     NotePixmapFactory::ColourType m_foreGroundType;
 
     QString m_toolTipText;
+    QString m_warningToolTipText;
+    QPoint m_cursorPos;
 
     unsigned int m_colourIndex;
 

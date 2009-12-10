@@ -100,6 +100,8 @@ StaffHeader::StaffHeader(HeadersGroup *group,
         m_foreGround(Qt::white),
         m_backGround(Qt::black),
         m_toolTipText(QString("")),
+        m_warningToolTipText(QString("")),
+        m_cursorPos(QPoint()),
         m_colourIndex(0),
         m_clefOrKeyInconsistency(0),
         m_toolTipTimer(0),
@@ -244,7 +246,12 @@ StaffHeader::StaffHeader(HeadersGroup *group,
     m_clefOrKeyInconsistency = new QToolButton;
     m_clefOrKeyInconsistency->setIcon(QIcon(":/pixmaps/misc/inconsistency.png"));
     m_clefOrKeyInconsistency->setIconSize(QSize(size, size));
-    m_clefOrKeyInconsistency->setToolTip(tr("<qt><p>Notation is not consistent</p><p>Click to get more information</p></qt>"));
+    // Don't call setToolTip directly but use the local tooltip implementation
+    m_warningToolTipText = tr("<qt><p>Notation is not consistent</p>"
+                              "<p>Click to get more information</p></qt>");
+    // Needed to see mouseMoveEvent inside this QToolButton widget from
+    // the current StaffHeader widget and to know when to show the tooltip
+    m_clefOrKeyInconsistency->setMouseTracking(true);
 
     // Add a layout where to place the warning icon
     QHBoxLayout *hbox = new QHBoxLayout;
@@ -270,10 +277,10 @@ StaffHeader::StaffHeader(HeadersGroup *group,
     connect(m_scene, SIGNAL(currentStaffChanged()),
             this, SLOT(slotSetCurrent()));
 
-    // Create an object where to find possible inconsistancies
+    // Create three objects where to find possible inconsistencies
     // when segments overlap
 
-    // Use a vector to pass all the segments of a track to the Overlaps ctor
+    // Use a vector to pass all the segments of a track to the Overlaps ctors
     std::vector<Segment *> segVec;
     for (SortedSegments::iterator i=segments.begin();
           i!=segments.end();
@@ -830,13 +837,24 @@ StaffHeader::mouseMoveEvent(QMouseEvent *event)
 {
     // Restart timer while mouse is moving
     m_toolTipTimer->start();
+
+    // and remember current cursor position
+    m_cursorPos = event->pos();
 }
 
 void
 StaffHeader::slotToolTip()
 {
-    // Show the tool tip when timeout occured
-    emit(showToolTip(m_toolTipText));
+    // Timeout occured : show the tool tip
+
+    // First select what tool tip to display then show it
+    QRect inconIconRect = m_clefOrKeyInconsistency->frameGeometry();
+    if ((m_clefOrKeyIsInconsistent || m_transposeIsInconsistent)
+         && inconIconRect.contains(m_cursorPos)) {
+        emit(showToolTip(m_warningToolTipText));
+    } else {
+        emit(showToolTip(m_toolTipText));
+    }
 }
 
 
