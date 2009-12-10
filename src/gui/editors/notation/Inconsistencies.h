@@ -31,6 +31,7 @@
 
 #include <QObject>
 #include <QString>
+#include <QCoreApplication>
 
 namespace Rosegarden
 {
@@ -38,7 +39,7 @@ namespace Rosegarden
 template <class T>
 class Inconsistencies : public Overlaps<T>
 {
-
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::Inconsistencies)
 public :
 
     Inconsistencies(std::vector<Segment *> segments) : Overlaps<T>(segments) {}
@@ -108,12 +109,17 @@ template <>
 inline QString
 Inconsistencies<Key>::getTranslatedName(Key key) const
 {
-
-// TODO : The function is named getTranslatedName, but the name
-//        is never translated !!!
-//    Still not done because not so easy as clefs and transpositions
-//    cases were. 
-    return QString::fromStdString(key.getName());
+    // Key::getName() returns strings like "F# minor" from it's detail map.
+    // I started three different approaches to this one, and by far the least
+    // complicated is to just perform surgery on the string.  The left part of
+    // the string "F#" exists in the QObject translation context, and the
+    // major/minor bit is easy to re-create, so there's no real point in
+    // preserving it from the original string.  This gets it done without the
+    // pointless addition of a pile of new strings.
+    QString keyName = QString::fromStdString(key.getName());
+    return QObject::tr("%1 %2").arg(QObject::tr(keyName.left(keyName.indexOf(" ")), "note name" ))
+                               .arg(key.isMinor() ? QObject::tr("minor")
+                                                  : QObject::tr("major"));
 }
 
 template <>
