@@ -244,8 +244,7 @@ StaffHeader::StaffHeader(HeadersGroup *group,
     m_clefOrKeyInconsistency = new QToolButton;
     m_clefOrKeyInconsistency->setIcon(QIcon(":/pixmaps/misc/inconsistency.png"));
     m_clefOrKeyInconsistency->setIconSize(QSize(size, size));
-    m_clefOrKeyInconsistency->setToolTip(tr("<qt>Notation is not consistent<br>"
-                                            "Click to get more information</qt>"));
+    m_clefOrKeyInconsistency->setToolTip(tr("<qt><p>Notation is not consistent</p><p>Click to get more information</p></qt>"));
 
     // Add a layout where to place the warning icon
     QHBoxLayout *hbox = new QHBoxLayout;
@@ -306,7 +305,7 @@ StaffHeader::paintEvent(QPaintEvent *)
                   << std::endl
                   << "  Skipping this paintEvent to avoid a crash."
                   << std::endl
-                  << "  This is a BUG which should no more occur. (rev 11137)"
+                  << "  This is a BUG which should no longer occur. (rev 11137)"
                   << std::endl
                   << std::endl;
         return;
@@ -862,38 +861,41 @@ StaffHeader::slotShowInconsistencies()
     Track *track = comp->getTrackById(m_track);
     int trackPos = comp->getTrackPositionById(m_track);
 
-    QString str = tr("<h3>File : %1 </h3>")
-                      .arg(RosegardenMainWindow::self()->getDocument()->getTitle());
+    QString str = tr("<h2>Notation Inconsistencies</h2>");
+       
+    str += tr("<h3>Filename: %1 </h3>")
+             .arg(RosegardenMainWindow::self()->getDocument()->getTitle());
 
-    str += tr("<h3>Track %1 : \"%2\"</h3>").arg(trackPos + 1)
-                                           .arg(strtoqstr(track->getLabel()));
+    str += tr("<h3>Track %1: \"%2\"</h3>").arg(trackPos + 1)
+                                          .arg(strtoqstr(track->getLabel()));
 
     if (!m_clefOverlaps->isConsistent()) {
         str += QString("<br><b>");
-        str += tr("Overlapping segments with inconsistent clefs :");
+        str += tr("Overlapping segments with inconsistent clefs:");
         str += QString("</b>");
-        m_clefOverlaps->display(str, comp, tr("Segment \"%1\" : %2 clef"));
+        m_clefOverlaps->display(str, comp, tr("Segment \"%1\": %2 clef"));
     }
 
     if (!m_keyOverlaps->isConsistent()) {
         str += QString("<br><b>");
-        str += tr("Overlapping segments with inconsistent keys :");
+        str += tr("Overlapping segments with inconsistent keys:");
         str += QString("</b>");
-        m_keyOverlaps->display(str, comp, tr("Segment \"%1\" : %2 key"));
+        m_keyOverlaps->display(str, comp, tr("Segment \"%1\": %2 key"));
     }
 
     if (!m_transposeOverlaps->isConsistent()) {
         str += QString("<br><b>");
-        str += tr("Overlapping segments with inconsistent transpositions :");
+        str += tr("Overlapping segments with inconsistent transpositions:");
         str += QString("</b>");
-        m_transposeOverlaps->display(str, comp, tr("Segment \"%1\" : %2"));
+        m_transposeOverlaps->display(str, comp, tr("Segment \"%1\": %2"));
     }
 
     QTextEdit *warning = new QTextEdit(str);
     warning->setReadOnly(true);
     warning->setAttribute(Qt::WA_DeleteOnClose);
-    warning->setWindowTitle(tr("Notation inconsistencies"));
+    warning->setWindowTitle(tr("Rosegarden")); // (in case we ever go cross-platform)
     warning->setWindowFlags(Qt::Dialog); // Get a popup in middle of screen
+    warning->setMinimumWidth(500);
     warning->show();
 }
 

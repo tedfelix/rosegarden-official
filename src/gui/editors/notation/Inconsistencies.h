@@ -60,9 +60,9 @@ public :
                     int bar2 = comp->getBarNumber(t2) + 1;
                     str += QString("<blockquote>");
                     if (bar1 == bar2) {
-                        str += QObject::tr("Bar %1 :").arg(bar1);
+                        str += QObject::tr("Bar %1:").arg(bar1);
                     } else {
-                        str += QObject::tr("Bars %1 to %2 :").arg(bar1)
+                        str += QObject::tr("Bars %1 to %2:").arg(bar1)
                                                              .arg(bar2);
                     }
 
