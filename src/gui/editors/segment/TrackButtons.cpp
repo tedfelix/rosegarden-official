@@ -649,7 +649,23 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
         if (!(*it)) continue; // sanity check
 
         QString iname(strtoqstr((*it)->getPresentationName()));
+        // take everything left of the # - 1 to get the "General MIDI Device"
+        // out of "General MIDI Device #16"  (It would be cleaner just to have
+        // base/ provide translated names before catting these strings together
+        // in the first place, but let's just deal with it on the surface for
+        // now.)
+        QString inameL = iname.left(iname.indexOf("#") - 1);
+        QString inameR = iname.right(iname.indexOf("#"));
+        std::cout << "iname: " << iname.toStdString() << " L: " << inameL.toStdString() << " R: " << inameR.toStdString() << std::endl;
+
+        // translate the left piece (we'll leave the #1..#n as an untranslatable
+        // Rosegarden-specific concept unless people are really bothered by it)
+        iname = QString("%1 %2").arg(QObject::tr(inameL)).arg(inameR);
+
+        // translate the program name
         QString pname(strtoqstr((*it)->getProgramName()));
+        pname = QObject::tr(pname);
+
         Device *device = (*it)->getDevice();
         DeviceId devId = device->getId();
         bool connected = false;
