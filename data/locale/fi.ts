@@ -7773,6 +7773,7 @@
     <message>
         <location filename="../../src/base/Studio.cpp" line="56"/>
         <location filename="../../src/sound/AlsaDriver.cpp" line="657"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="519"/>
         <location filename="../AutoloadStrings.cpp" line="305"/>
         <source>Synth plugin</source>
         <translation>Synth-lisäosa</translation>
@@ -10227,6 +10228,11 @@
         <source>major</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="296"/>
+        <source>Synth plugin </source>
+        <translation type="unfinished">Synth-lisäosa </translation>
+    </message>
 </context>
 <context>
     <name>Rosegarden::AboutDialog</name>
@@ -10785,13 +10791,13 @@
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="195"/>
-        <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="372"/>
+        <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="371"/>
         <source>&lt;no synth&gt;</source>
         <translation>&lt;ei syntetisaattoria&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="198"/>
-        <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="376"/>
+        <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="375"/>
         <source>&lt;no plugin&gt;</source>
         <translation>&lt;ei lisäosaa&gt;</translation>
     </message>
@@ -15699,9 +15705,8 @@ toiston alussa siirrettävän tiedon määrän takia.</translation>
         <translation>Nauhoitetaan</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="296"/>
         <source>Synth plugin </source>
-        <translation>Synth-lisäosa </translation>
+        <translation type="obsolete">Synth-lisäosa </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="325"/>
@@ -16355,17 +16360,17 @@ Tupla-klikkaa avataksesi merkintöjen muokkaimen.</translation>
         <translation>MIDI-sekoitin</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/MidiMixerWindow.cpp" line="152"/>
+        <location filename="../../src/gui/studio/MidiMixerWindow.cpp" line="154"/>
         <source>Volume</source>
         <translation>Äänenvoimakkuus</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/MidiMixerWindow.cpp" line="157"/>
+        <location filename="../../src/gui/studio/MidiMixerWindow.cpp" line="159"/>
         <source>Instrument</source>
         <translation>Instrumentti</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/MidiMixerWindow.cpp" line="705"/>
+        <location filename="../../src/gui/studio/MidiMixerWindow.cpp" line="708"/>
         <source>http://rosegardenmusic.com/wiki/doc:midiMixerWindow-en</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19833,7 +19838,7 @@ Virhe oli: %2</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="333"/>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="681"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="685"/>
         <source>%1 ms</source>
         <translation>%1 ms</translation>
     </message>
@@ -19843,52 +19848,52 @@ Virhe oli: %2</translation>
         <translation>Oletus  </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="413"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="416"/>
         <source>Add New Color</source>
         <translation>Lisää uusi väri</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="878"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="882"/>
         <source>New Color Name</source>
         <translation>Uusi värinimi</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="879"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="883"/>
         <source>Enter new name</source>
         <translation>Syötä uusi nimi</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="881"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="885"/>
         <source>New</source>
         <translation>Uusi</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="918"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="922"/>
         <source>Highest playable note</source>
         <translation>Korkein soiva nuotti</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="938"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="942"/>
         <source>Lowest playable note</source>
         <translation>Alin soiva nuotti</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="967"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="973"/>
         <source>Modify Segment label</source>
         <translation>Muuta osan nimeä</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="969"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="974"/>
         <source>Modify Segments label</source>
         <translation>Muuta osien nimiä</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="981"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="986"/>
         <source>Enter new label:</source>
         <translation>Syötä uusi nimi:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1047"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1052"/>
         <source>Instrument</source>
         <translation>Instrumentti</translation>
     </message>
@@ -20708,186 +20713,186 @@ Toisten ohjelmien lopettaminen saattaa parantaa Rosegardenin suorituskykyä.</tr
 <context>
     <name>Rosegarden::StaffHeader</name>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="130"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="132"/>
         <source>Track %1 : &quot;%2&quot;</source>
         <translation>Raita %1 : &quot;%2&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="136"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="138"/>
         <source>&lt;br&gt;Notate for: %1</source>
         <translation>&lt;br&gt;Nuotitus: %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="138"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="140"/>
         <source>normal</source>
         <translation>normaali</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="141"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="143"/>
         <source>small</source>
         <translation>pieni</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="144"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="146"/>
         <source>tiny</source>
         <translation>pikkuruinen</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="173"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="175"/>
         <source>&lt;br&gt;Size: %1,  Bracket: %2 </source>
         <translation>&lt;br&gt;Koko: %1  Sulkeet: %2 </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="200"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="202"/>
         <source>&lt;br&gt;bars [%1-%2] in %3 (tr=%4) : &quot;%5&quot;</source>
         <translation>&lt;br&gt;tahdit [%1-%2] lajissa %3 (tr=%4) : &quot;%5&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="207"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="209"/>
         <source>&lt;br&gt;bars [%1-%2] (tr=%3) : &quot;%4&quot;</source>
         <translation>&lt;br&gt;tahdit [%1-%2] (tr=%3) : &quot;%4&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="247"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="250"/>
         <source>&lt;qt&gt;&lt;p&gt;Notation is not consistent&lt;/p&gt;&lt;p&gt;Click to get more information&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="404"/>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="467"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="411"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="474"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="520"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="527"/>
         <source>C</source>
         <comment>note name</comment>
         <translation>C</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="521"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="528"/>
         <source>C#</source>
         <comment>note name</comment>
         <translation>C#</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="522"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="529"/>
         <source>D</source>
         <comment>note name</comment>
         <translation>D</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="523"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="530"/>
         <source>Eb</source>
         <comment>note name</comment>
         <translation>Eb</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="524"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="531"/>
         <source>E</source>
         <comment>note name</comment>
         <translation>E</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="525"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="532"/>
         <source>F</source>
         <comment>note name</comment>
         <translation>F</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="526"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="533"/>
         <source>F#</source>
         <comment>note name</comment>
         <translation>F#</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="527"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="534"/>
         <source>G</source>
         <comment>note name</comment>
         <translation>G</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="528"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="535"/>
         <source>G#</source>
         <comment>note name</comment>
         <translation>G#</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="529"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="536"/>
         <source>A</source>
         <comment>note name</comment>
         <translation>A</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="530"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="537"/>
         <source>Bb</source>
         <comment>note name</comment>
         <translation>Bb</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="531"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="538"/>
         <source>B</source>
         <comment>note name</comment>
         <translatorcomment>We decided not to translate note names in german system.</translatorcomment>
         <translation>B</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="642"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="649"/>
         <source>%1: %2</source>
         <translation>%1: %2</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="645"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="652"/>
         <source> in %1</source>
         <translation>lajissa %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="864"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="882"/>
         <source>&lt;h2&gt;Notation Inconsistencies&lt;/h2&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="866"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="884"/>
         <source>&lt;h3&gt;Filename: %1 &lt;/h3&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="869"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="887"/>
         <source>&lt;h3&gt;Track %1: &quot;%2&quot;&lt;/h3&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="874"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="892"/>
         <source>Overlapping segments with inconsistent clefs:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="876"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="894"/>
         <source>Segment &quot;%1&quot;: %2 clef</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="881"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="899"/>
         <source>Overlapping segments with inconsistent keys:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="883"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="901"/>
         <source>Segment &quot;%1&quot;: %2 key</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="888"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="906"/>
         <source>Overlapping segments with inconsistent transpositions:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="890"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="908"/>
         <source>Segment &quot;%1&quot;: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="896"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="914"/>
         <source>Rosegarden</source>
         <translation type="unfinished">Rosegarden</translation>
     </message>
@@ -21781,20 +21786,20 @@ Toisten ohjelmien lopettaminen saattaa parantaa Rosegardenin suorituskykyä.</tr
     <message>
         <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="204"/>
         <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="554"/>
-        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="912"/>
-        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="1096"/>
+        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="916"/>
+        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="1100"/>
         <source>&lt;no instrument&gt;</source>
         <translation>&lt;ei instrumenttia&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="347"/>
-        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="1063"/>
+        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="1067"/>
         <source>&lt;untitled audio&gt;</source>
         <translation>&lt;nimeämätön ääni&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="349"/>
-        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="1065"/>
+        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="1069"/>
         <source>&lt;untitled&gt;</source>
         <translation>&lt;ei nimeä&gt;</translation>
     </message>
@@ -21813,12 +21818,12 @@ Ole hyvä ja aseta tiedostopoluksi kelvollinen hakemisto Asiakirjan ominaisuuksi
 Haluatko asettaa sen nyt?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="1029"/>
+        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="1033"/>
         <source>Mute track</source>
         <translation>Vaienna raita</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="1034"/>
+        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="1038"/>
         <source>Record on this track</source>
         <translation>Nauhoita tälle raidalle</translation>
     </message>
@@ -22198,42 +22203,42 @@ Haluatko asettaa sen nyt?</translation>
         <translation>Oletus  </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="975"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="978"/>
         <source>Add New Color</source>
         <translation>Lisää uusi väri</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1001"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1004"/>
         <source>New Color Name</source>
         <translation>Uusi värinimi</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1002"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1005"/>
         <source>Enter new name:</source>
         <translation>Syötä uusi nimi:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1004"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1007"/>
         <source>New</source>
         <translation>Uusi</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1036"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1039"/>
         <source>Highest playable note</source>
         <translation>Korkein soiva nuotti</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1058"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1061"/>
         <source>Lowest playable note</source>
         <translation>Alin soiva nuotti</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1119"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1122"/>
         <source>The instrument preset database is corrupt.  Check your installation.</source>
         <translation>Instrumentin esiasetus-tietokanta on turmeltunut.  Tarkista asennuksesi.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1163"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1166"/>
         <source>Segment</source>
         <translation>Osa</translation>
     </message>
