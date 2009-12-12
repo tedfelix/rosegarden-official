@@ -643,8 +643,8 @@ StaffHeader::lookAtStaff(double x, int maxWidth)
     m_colourIndex = colourIndex;
     m_status = status;
 
-    QString noteName = isTransposeInconsistent() ? transposeValueToName(m_transpose)
-                                                 : QString("???");
+    QString noteName = isTransposeInconsistent() ?
+                           QString("???") : transposeValueToName(m_transpose);
 
     m_upperText = QString(tr("%1: %2")
                                  .arg(trackPos + 1)
