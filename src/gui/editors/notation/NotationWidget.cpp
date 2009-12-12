@@ -1391,9 +1391,9 @@ NotationWidget::slotInitialHSliderHack(int)
 
     m_hSliderHacked = true;
 
-    std::cout << "h slider position was: " << m_view->horizontalScrollBar()->sliderPosition() << std::endl;;
+//    std::cout << "h slider position was: " << m_view->horizontalScrollBar()->sliderPosition() << std::endl;;
     m_view->horizontalScrollBar()->setSliderPosition(0);
-    std::cout << "h slider position now: " << m_view->horizontalScrollBar()->sliderPosition() << std::endl;;
+//    std::cout << "h slider position now: " << m_view->horizontalScrollBar()->sliderPosition() << std::endl;;
 }
 
 void
@@ -1403,9 +1403,9 @@ NotationWidget::slotInitialVSliderHack(int)
 
     m_vSliderHacked = true;
 
-    std::cout << "v slider position was: " << m_view->verticalScrollBar()->sliderPosition() << std::endl;;
+//    std::cout << "v slider position was: " << m_view->verticalScrollBar()->sliderPosition() << std::endl;;
     m_view->verticalScrollBar()->setSliderPosition(0);
-    std::cout << "v slider position now: " << m_view->verticalScrollBar()->sliderPosition() << std::endl;;
+//    std::cout << "v slider position now: " << m_view->verticalScrollBar()->sliderPosition() << std::endl;;
 }
 
 void
@@ -1425,7 +1425,7 @@ NotationWidget::slotAddControlRuler(QAction *action)
 {
     QString name = action->text();
 
-    std::cout << "my name is " << name.toStdString() << std::endl;
+//    std::cout << "my name is " << name.toStdString() << std::endl;
 
     // we just cheaply paste the code from NotationView that created the menu to
     // figure out what its indices must point to (and thinking about this whole
