@@ -23,6 +23,8 @@
 #include <sstream>
 #include <cstdio>
 
+#include <QString>
+#include <QCoreApplication>
 
 namespace Rosegarden
 {
@@ -302,6 +304,26 @@ std::string
 Instrument::getPresentationName() const
 {
     return m_name;
+}
+
+QString
+Instrument::getLocalizedPresentationName() const
+{
+    // This is hacky, but m_name is always set externally, and I don't feel like
+    // tracking down all the different places where this could occur.  Instead,
+    // we at least limit the spread of hackery to one centralized function to
+    // cut the name string apart and translate the relevant part of it.
+
+
+    // take everything left of the # - 1 to get the "General MIDI Device"
+    // out of a string like "General MIDI Device #16"
+    QString iname = QString::fromStdString(m_name);
+    QString inameL = iname.left(iname.indexOf("#") - 1);
+    QString inameR = iname.right(iname.length() - inameL.length());
+
+    // translate the left piece (we'll leave the #1..#n as an untranslatable
+    // Rosegarden-specific concept unless people are really bothered by it)
+    return QString("%1 %2").arg(QObject::tr(inameL)).arg(inameR);
 }
 
 std::string

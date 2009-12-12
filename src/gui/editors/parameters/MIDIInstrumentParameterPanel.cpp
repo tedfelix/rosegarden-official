@@ -300,7 +300,7 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
 
     // Set instrument name
     //
-    m_instrumentLabel->setText(QObject::tr(strtoqstr(instrument->getPresentationName())));
+    m_instrumentLabel->setText(instrument->getLocalizedPresentationName());
 
     // Set Studio Device name
     //

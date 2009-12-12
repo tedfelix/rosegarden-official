@@ -106,7 +106,8 @@ ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
         bool hasConnection = false;
         if (!isSuitable(dev, &hasConnection)) continue;
 
-        QString label = strtoqstr(dev->getName());
+        QString label = QObject::tr(strtoqstr(dev->getName()));
+        // connections imply some untranslatable external string
         QString connection = RosegardenSequencer::getInstance()->getConnection
             (dev->getId());
 
@@ -285,15 +286,15 @@ ManageMetronomeDialog::populate(int deviceIndex)
 
         for (iit = list.begin(); iit != list.end(); ++iit) {
 
-            QString iname(strtoqstr((*iit)->getName()));
-            QString ipname(strtoqstr((*iit)->getPresentationName()));
-            QString pname(strtoqstr((*iit)->getProgramName()));
+            QString iname(QObject::tr(strtoqstr((*iit)->getName())));
+            QString ipname((*iit)->getLocalizedPresentationName());
+            QString pname(QObject::tr(strtoqstr((*iit)->getProgramName())));
 
             QString text;
 
             if ((*iit)->getType() == Instrument::SoftSynth) {
 
-                iname.replace(tr("Synth plugin "), "");
+                iname.replace(QObject::tr("Synth plugin "), "");
                 pname = "";
 
                 AudioPluginInstance *plugin = (*iit)->getPlugin

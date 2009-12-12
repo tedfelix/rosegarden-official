@@ -345,9 +345,9 @@ AudioInstrumentParameterPanel::setupForInstrument(Instrument* instrument)
 
     m_selectedInstrument = instrument;
 
-    std::string l = instrument->getAlias();
-    if (!l.size()) l = instrument->getName();
-    m_instrumentLabel->setText(strtoqstr(l));
+    QString l = QString::fromStdString(instrument->getAlias());
+    if (l.isEmpty()) l = instrument->getLocalizedPresentationName();
+    m_instrumentLabel->setText(l);
     m_aliasButton->setInstrument(instrument);
 
     m_audioFader->m_recordFader->setFader(instrument->getRecordLevel());

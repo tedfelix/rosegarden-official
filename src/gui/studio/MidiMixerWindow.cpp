@@ -141,7 +141,9 @@ MidiMixerWindow::setupTabs()
 
             // control labels
             for (size_t i = 0; i < controls.size(); ++i) {
-                label = new QLabel(strtoqstr(controls[i].getName()), m_tabFrame);
+                label = new QLabel(QObject::tr(
+                            QString::fromStdString(
+                                controls[i].getName())), m_tabFrame);
                 mainLayout->addWidget(label, i + 1, 0, Qt::AlignCenter);
             }
 
@@ -260,7 +262,8 @@ MidiMixerWindow::setupTabs()
                 faderCount++;
             }
 
-            QString name = QString("%1 (%2)").arg(strtoqstr(dev->getName()))
+            QString name = QString("%1 (%2)")
+                           .arg(QObject::tr(QString::fromStdString(dev->getName())))
                            .arg(deviceCount++);
 
             addTab(m_tabFrame, name);

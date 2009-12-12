@@ -121,16 +121,16 @@ RemapInstrumentDialog::populateCombo()
             if (md) {
                 if (md->getDirection() == MidiDevice::Play) {
                     m_devices.push_back(*it);
-                    m_fromCombo->addItem(strtoqstr((*it)->getName()));
-                    m_toCombo->addItem(strtoqstr((*it)->getName()));
+                    m_fromCombo->addItem(QObject::tr(strtoqstr((*it)->getName())));
+                    m_toCombo->addItem(QObject::tr(strtoqstr((*it)->getName())));
                 }
             } else {
                 SoftSynthDevice *sd =
                     dynamic_cast<SoftSynthDevice *>(*it);
                 if (sd) {
                     m_devices.push_back(*it);
-                    m_fromCombo->addItem(strtoqstr((*it)->getName()));
-                    m_toCombo->addItem(strtoqstr((*it)->getName()));
+                    m_fromCombo->addItem(QObject::tr(strtoqstr((*it)->getName())));
+                    m_toCombo->addItem(QObject::tr(strtoqstr((*it)->getName())));
                 }
             }
         }
@@ -144,8 +144,8 @@ RemapInstrumentDialog::populateCombo()
         InstrumentList::iterator it = m_instruments.begin();
 
         for (; it != m_instruments.end(); it++) {
-            m_fromCombo->addItem(strtoqstr((*it)->getPresentationName()));
-            m_toCombo->addItem(strtoqstr((*it)->getPresentationName()));
+            m_fromCombo->addItem((*it)->getLocalizedPresentationName());
+            m_toCombo->addItem((*it)->getLocalizedPresentationName());
         }
     }
 }

@@ -510,13 +510,13 @@ TrackParameterBox::populatePlaybackDeviceList()
             continue; // sanity check
 
         //QString iname(strtoqstr((*it)->getPresentationName()));
-        QString iname(strtoqstr((*it)->getName()));
+        QString iname(QObject::tr(QString::fromStdString((*it)->getName())));
         QString pname(QObject::tr(strtoqstr((*it)->getProgramName())));
         Device *device = (*it)->getDevice();
         DeviceId devId = device->getId();
 
         if ((*it)->getType() == Instrument::SoftSynth) {
-            iname.replace("Synth plugin ", "");
+            iname.replace(QObject::tr("Synth plugin"), "");
             pname = "";
             AudioPluginInstance *plugin = (*it)->getPlugin
                                           (Instrument::SYNTH_PLUGIN_POSITION);
@@ -961,10 +961,13 @@ TrackParameterBox::slotDocColoursChanged()
         if (qtrunc == "") {
             m_defColor->addItem(colour, tr("Default"), i);
         } else {
-            // truncate name to 15 characters to avoid the combo forcing the
-            // whole kit and kaboodle too wide
-            if (qtrunc.length() > 15)
-                qtrunc = qtrunc.left(12) + "...";
+            // truncate name to 25 characters to avoid the combo forcing the
+            // whole kit and kaboodle too wide (This expands from 15 because the
+            // translators wrote books instead of copying the style of
+            // TheShortEnglishNames, and because we have that much room to
+            // spare.)
+            if (qtrunc.length() > 25)
+                qtrunc = qtrunc.left(22) + "...";
             m_defColor->addItem(colour, qtrunc, i);
         }
         m_colourList[it->first] = i; // maps colour number to menu index

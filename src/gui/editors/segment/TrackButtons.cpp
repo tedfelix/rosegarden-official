@@ -194,10 +194,10 @@ TrackButtons::populateButtons()
         }
 
         if (ins) {
-            m_trackLabels[i]->getInstrumentLabel()->setText
-                (strtoqstr(ins->getPresentationName()));
+            m_trackLabels[i]->getInstrumentLabel()->setText(ins->getLocalizedPresentationName());
             if (ins->sendsProgramChange()) {
-                m_trackLabels[i]->setAlternativeLabel(strtoqstr(ins->getProgramName()));
+                m_trackLabels[i]->setAlternativeLabel(QObject::tr(
+                            strtoqstr(ins->getProgramName())));
             }
 
         } else {
@@ -558,7 +558,7 @@ TrackButtons::slotInstrumentSelection(int trackId)
     if (track != 0) {
         instrument = studio.getInstrumentById(track->getInstrument());
         if (instrument)
-            instrumentName = strtoqstr(instrument->getPresentationName());
+            instrumentName = instrument->getLocalizedPresentationName();
     }
 
     //
@@ -570,8 +570,6 @@ TrackButtons::slotInstrumentSelection(int trackId)
 
     // Yes, well as we might've changed the Device name in the
     // Device/Bank dialog then we reload the whole menu here.
-    //
-    //@@@ was QPopupMenu
     QMenu instrumentPopup(this);
 
     populateInstrumentPopup(instrument, &instrumentPopup);
@@ -592,11 +590,11 @@ TrackButtons::slotInstrumentSelection(int trackId)
         instrument = studio.getInstrumentById(track->getInstrument());
         if (instrument) {
             m_trackLabels[position]->getInstrumentLabel()->
-                setText(strtoqstr(instrument->getPresentationName()));
+                setText(instrument->getLocalizedPresentationName());
             m_trackLabels[position]->clearAlternativeLabel();
             if (instrument->sendsProgramChange()) {
                 m_trackLabels[position]->setAlternativeLabel
-                    (strtoqstr(instrument->getProgramName()));
+                    (QObject::tr(QString::fromStdString(instrument->getProgramName())));
             }
         }
     }
@@ -641,26 +639,15 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
     InstrumentList::iterator it;
     int currentDevId = -1;
     bool deviceUsedByAnyone = false;
-//     QMenu* tempMenu = 0;
     QAction* tempMenu = 0;
 
     for (it = list.begin(); it != list.end(); it++) {
 
         if (!(*it)) continue; // sanity check
 
-        QString iname(strtoqstr((*it)->getPresentationName()));
-        // take everything left of the # - 1 to get the "General MIDI Device"
-        // out of "General MIDI Device #16"  (It would be cleaner just to have
-        // base/ provide translated names before catting these strings together
-        // in the first place, but let's just deal with it on the surface for
-        // now.)
-        QString inameL = iname.left(iname.indexOf("#") - 1);
-        QString inameR = iname.right(iname.indexOf("#"));
-        std::cout << "iname: " << iname.toStdString() << " L: " << inameL.toStdString() << " R: " << inameR.toStdString() << std::endl;
-
-        // translate the left piece (we'll leave the #1..#n as an untranslatable
-        // Rosegarden-specific concept unless people are really bothered by it)
-        iname = QString("%1 %2").arg(QObject::tr(inameL)).arg(inameR);
+        // get the Localized instrument name, with the string hackery performed
+        // in Instrument
+        QString iname((*it)->getLocalizedPresentationName());
 
         // translate the program name
         QString pname(strtoqstr((*it)->getProgramName()));
@@ -675,6 +662,7 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
             AudioPluginInstance *plugin = (*it)->getPlugin
                 (Instrument::SYNTH_PLUGIN_POSITION);
             if (plugin) {
+                // we don't translate any plugin program names or other texts
                 pname = strtoqstr(plugin->getProgram());
                 QString identifier = strtoqstr(plugin->getIdentifier());
                 if (identifier != "") {
@@ -744,7 +732,7 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
             currentDevId = int(devId);
 
             QMenu *subMenu = new QMenu(instrumentPopup);
-            QString deviceName = strtoqstr(device->getName());
+            QString deviceName = QObject::tr(QString::fromStdString(device->getName()));
 
 //          instrumentPopup->addItem(iconSet, deviceName, subMenu);
             subMenu->setObjectName(deviceName);
@@ -833,7 +821,7 @@ TrackButtons::slotInstrumentPopupActivated(int item)
             emit instrumentSelected((int)inst->getId());
 
             m_trackLabels[m_popupItem]->getInstrumentLabel()->
-                setText(strtoqstr(inst->getPresentationName()));
+                setText(inst->getLocalizedPresentationName());
 
             // reset the alternative label
             m_trackLabels[m_popupItem]->clearAlternativeLabel();
@@ -842,7 +830,7 @@ TrackButtons::slotInstrumentPopupActivated(int item)
             // and if so reset the label
             //
             if (inst->sendsProgramChange())
-                m_trackLabels[m_popupItem]->setAlternativeLabel(strtoqstr(inst->getProgramName()));
+                m_trackLabels[m_popupItem]->setAlternativeLabel(QObject::tr(strtoqstr(inst->getProgramName())));
 
             m_recordLeds[m_popupItem]->setColor(getRecordLedColour(inst));
 
@@ -927,7 +915,7 @@ TrackButtons::slotSynchroniseWithComposition()
 
             QString instrumentName(tr("<no instrument>"));
             if (ins)
-                instrumentName = strtoqstr(ins->getPresentationName());
+                instrumentName = ins->getLocalizedPresentationName();
 
             m_trackLabels[i]->getInstrumentLabel()->setText(instrumentName);
 
@@ -1110,12 +1098,12 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
         m_doc->getStudio().getInstrumentById(track->getInstrument());
 
     QString instrumentName(tr("<no instrument>"));
-    if (ins) instrumentName = strtoqstr(ins->getPresentationName());
+    if (ins) instrumentName = ins->getLocalizedPresentationName();
 
     // Set label to program change if it's being sent
     //
     if (ins != 0 && ins->sendsProgramChange())
-        trackLabel->setAlternativeLabel(strtoqstr(ins->getProgramName()));
+        trackLabel->setAlternativeLabel(QObject::tr(strtoqstr(ins->getProgramName())));
 
     trackLabel->showLabel(m_trackInstrumentLabels);
 

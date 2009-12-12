@@ -22,6 +22,9 @@
 #include "XmlExportable.h"
 #include "MidiProgram.h"
 
+#include <QString>
+#include <QCoreApplication>
+
 // An Instrument connects a Track (which itself contains
 // a list of Segments) to a device that can play that
 // Track.  
@@ -95,6 +98,7 @@ protected:
 
 class Instrument : public XmlExportable, public PluginContainer
 {
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::Instrument)
 public:
     static const unsigned int SYNTH_PLUGIN_POSITION;
 
@@ -121,6 +125,10 @@ public:
 
     virtual std::string getName() const { return m_name; }
     virtual std::string getPresentationName() const;
+
+    /** Returns a translated QString suitable for presentation to the user */
+    virtual QString getLocalizedPresentationName() const;
+
     virtual std::string getAlias() const;
 
     void setId(InstrumentId id) { m_id = id; }

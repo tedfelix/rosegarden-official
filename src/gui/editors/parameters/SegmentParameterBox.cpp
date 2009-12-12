@@ -399,10 +399,13 @@ SegmentParameterBox::slotDocColoursChanged()
         if (qtrunc == "") {
             m_colourValue->addItem(colour, tr("Default"), i);
         } else {
-            // truncate name to 15 characters to avoid the combo forcing the
-            // whole kit and kaboodle too wide
-            if (qtrunc.length() > 15)
-                qtrunc = qtrunc.left(12) + "...";
+            // truncate name to 25 characters to avoid the combo forcing the
+            // whole kit and kaboodle too wide (This expands from 15 because the
+            // translators wrote books instead of copying the style of
+            // TheShortEnglishNames, and because we have that much room to
+            // spare.)
+            if (qtrunc.length() > 25)
+                qtrunc = qtrunc.left(22) + "...";
             m_colourValue->addItem(colour, qtrunc, i);
         }
         m_colourList[it->first] = i; // maps colour number to menu index
@@ -576,9 +579,10 @@ SegmentParameterBox::populateBoxFromSegments()
         if (it == m_segments.begin()) {
             myCol = (*it)->getColourIndex();
         } else {
-            if (myCol != (*it)->getColourIndex())
-                ;
-            diffcolours = All;
+            //!!! the following if statement had been empty since who knows
+            // when, and made no logical sense, so let's see if this is what the
+            // original coder was trying to say here:
+            if (myCol != (*it)->getColourIndex()) diffcolours = All;
         }
 
         // Highest/Lowest playable
@@ -961,12 +965,13 @@ SegmentParameterBox::slotEditSegmentLabel()
 {
     QString editLabel;
 
-    if (m_segments.size() == 0)
-        return ;
-    else if (m_segments.size() == 1)
-        editLabel = tr("Modify Segment label");
-    else
-        editLabel = tr("Modify Segments label");
+    //!!!  This is too simplistic to be translated properly, but I'm leaving it
+    // alone.  The right way is to use %n and all that, but we don't want the
+    // number to appear in any version of the string, and I don't see a way to
+    // handle plurals without a %n placemarker.
+    if (m_segments.size() == 0) return;
+    else if (m_segments.size() == 1) editLabel = tr("Modify Segment label");
+    else editLabel = tr("Modify Segments label");
 
     bool ok = false;
 
