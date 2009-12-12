@@ -647,11 +647,23 @@ AudioPluginDialog::slotPluginSelected(int i)
 
     bool gui = false;
     m_pluginGUIManager->hasGUI(m_containerId, m_index);
-    std::cout << "gui is: " << gui
-              << " container ID: " << m_containerId
-              << " index: " << m_index
-              << std::endl;
-    m_editorButton->setEnabled(gui);    
+//    std::cout << "gui is: " << gui
+//              << " container ID: " << m_containerId
+//              << " index: " << m_index
+//              << std::endl;
+//    m_editorButton->setEnabled(gui);    
+
+    //!!!  I can't get to the bottom of this in a reasonable amount of time.
+    // m_containerId is always 10013, and m_index is either 0 (LADSPA plugin) or
+    // 999 (DSSI plugin) with no variation, and hasGUI() always tests false.
+    // This means the editor button is never enabled, and this is unacceptable
+    // for plugins that have no controls that can be edited from within
+    // Rosegarden.  I'm hacking the button always enabled, even if no GUI is
+    // available.  This seems to fail silently until the user randomly switches
+    // to a plugin that does have a GUI, in which case its GUI pops up, even
+    // though they're five plugins away from the one where the pushed the button
+    // originally.  Compared with never making it available, this is tolerable.
+    m_editorButton->setEnabled(true);
 
     parentWidget()->adjustSize();
     adjustSize();
