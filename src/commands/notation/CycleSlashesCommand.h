@@ -37,8 +37,6 @@ public:
         BasicSelectionCommand(tr("Cycle Slashes"), selection, true),
         m_selection(&selection) { }
 
-    static void registerCommand(CommandRegistry *r);
-
 protected:
     virtual void modifySegment();
 

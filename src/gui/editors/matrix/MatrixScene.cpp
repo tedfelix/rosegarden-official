@@ -368,6 +368,42 @@ MatrixScene::recreatePitchHighlights()
         // from C major (0)
         int offset = key.getTonicPitch();
 
+        // DESIGN NOTE: Now that the matrix can display multiple segments, we've
+        // got to consider transposition issues that were never before a
+        // problem.  The initial test case is a Bb major scale with a Bb key
+        // signature in one segment, and the same segment converted for an Eb
+        // instrument in a copy of the same segment (works out to a G major scale
+        // in key of G major).  We have to have the matrix as a concert pitch
+        // standard, because it's the only sane thing to do in this kind of
+        // environment.
+        //
+        // 1.  It has to represent the actual concert pitch notes you
+        // will hear when clicking on existing notes.  This means if you open
+        // each of these segments independently, each independent view should
+        // have the highlights for a Bb scale, and you will hear Bb when
+        // clicking the Bb in the first case, and again when clicking the G in
+        // the second case.
+        //
+        // We're also going to have to adjust the height at which notes are
+        // drawn for the Bb in Eb transposition case, but that will happen
+        // elsewhere.
+        //
+        // 2. When clicking new notes into existence, the preview notes should
+        // sound with transposition taken into account, so clicking a G in the
+        // Eb transposition segment should sound Bb.
+
+        // correct for segment transposition, moving representation the opposite
+        // of pitch to cancel it out (C (MIDI pitch 0) in Bb (-2) is concert
+        // Bb (10), so 0 -1 == 11 -1 == 10, we have to go +1 == 11 +1 == 0)
+        int correction = segment->getTranspose(); // eg. -2
+        correction *= -1;                         // eg.  2
+
+        // key is Bb for Bb instrument, getTonicPitch() returned 10, correction
+        // is +2
+        offset -= correction;
+        offset += 12;
+        offset %= 12;
+
         if (!segment->getNextKeyTime(k0, k1)) k1 = segment->getEndMarkerTime();
 
         if (k0 == k1) {
