@@ -103,7 +103,11 @@ MatrixElement::reconfigure(timeT time, timeT duration, int pitch, int velocity)
 
     QColor colour;
     if (event()->has(BaseProperties::TRIGGER_SEGMENT_ID)) {
-        colour = Qt::gray;
+        //!!! Using gray for trigger events and events from other, non-active
+        // segments won't work.  This should be handled some other way, with a
+        // color outside the range of possible velocity choices, which probably
+        // leaves some kind of curious light blue or something
+        colour = Qt::cyan;
     } else {
         colour = DefaultVelocityColour::getInstance()->getColour(velocity);
     }
