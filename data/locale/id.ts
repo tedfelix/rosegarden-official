@@ -6,165 +6,165 @@
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="472"/>
         <source>Manage MIDI Devices</source>
-        <translation type="unfinished">Memanajemen Perangkat MIDi</translation>
+        <translation>Kelola Perangkat MIDi</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="473"/>
         <source>MIDI Playback</source>
-        <translation type="unfinished"></translation>
+        <translation>Pemutar MIDI</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="475"/>
         <source>Sends its data through</source>
-        <translation type="unfinished"></translation>
+        <translation>Mengirim data melalui</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="476"/>
         <source>Rosegarden playback device</source>
-        <translation type="unfinished"></translation>
+        <translation>Perangkat pemutar Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="481"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="513"/>
         <source>Internal Synth</source>
-        <translation type="unfinished"></translation>
+        <translation>Sintetiser Internal</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="482"/>
         <source>Default playback device</source>
-        <translation type="unfinished"></translation>
+        <translation>Perangkat pemutar utama</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="486"/>
         <source>&lt;qt&gt;&lt;p&gt;Create new playback devices here. Click the device name to change it. Select a device here and connect it to a MIDI output port by clicking on a port to the right.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Membuat perangkat pemutar yang baru di sini. Klik nama perangkat untuk mengubahnya. Pilih salah satu perangkat di sini dan hubungkan ke port keluaran MIDI dengan menklik pada port ke kanan.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="489"/>
         <source>&lt;qt&gt;&lt;p&gt;Bank definitions allow you to tell Rosegarden about the programs or patches available for use on the equipment (hardware or software synth) connected to this device.&lt;/p&gt;&lt;p&gt;You must have something defined for any program or bank changes you wish to transmit, as Rosegarden hides all bank and program numbers that are undefined.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Dengan definisi bank, Anda bisa memberi tahu Rosegarden mengenai program yang akan dipakai pada perlengkapan (sintetiser peranti keras maupun lunak) yang terhubung ke perangkat ini.&lt;/p&gt;&lt;p&gt;Anda harus sudah memiliki sesuatu yang terdefinisi untuk setiap program atau perubahan bank yang hendak Anda transmisikan, atau Rosegarden akan menyembunyikan semua bank dan program yang tidak terdefinisi.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="491"/>
         <source>Banks...</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
-        <translation type="unfinished">Bank...</translation>
+        <translation>Bank...</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="493"/>
         <source>&lt;qt&gt;&lt;p&gt;Edit the controllers associated with this device.&lt;/p&gt;&lt;p&gt;You must define controllers here in order to use them anywhere in Rosegarden, such as on control rulers or in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box,  You can change which controllers are displayed in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box, and rearrange their layout&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Menyunting kontroler yang diasosiasikan dengan perangkat ini.&lt;/p&gt;&lt;p&gt;Anda harus mendefinisikan kontroler di sini untuk bisa memakainya di segala tempat di Rosegarden, seperti pada penggaris kontrol atau di kotak &lt;b&gt;Parameter Instrumen&lt;/b&gt;.  Anda bisa menentukan kontroler mana yang ditampilkan pada kotak &lt;b&gt;Parameter Instrumen&lt;/b&gt;, anda menyusun ulang tataletak mereka&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="495"/>
         <source>Controllers...</source>
-        <translation type="unfinished"></translation>
+        <translation>Kontroler...</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="497"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new playback device&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Membuat perangkat putar yang baru&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="499"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="527"/>
         <source>New</source>
-        <translation type="unfinished">Baru</translation>
+        <translation>Baru</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="501"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected playback device.  Any tracks using this device will need to be reassigned, and any program or bank changes on those tracks will be lost permanently&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Menghapus perangkat putar yang dipilih.  Semua jalur yang menggunakan perangkat ini nantinya perlu diatur ulang, dan semua perubahan program atau bank pada jalur tersebut akan hilang selamanya&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="503"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Hapus</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="504"/>
         <source>MIDI outputs</source>
-        <translation type="unfinished"></translation>
+        <translation>Keluaran MIDI</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="506"/>
         <source>Available outputs</source>
-        <translation type="unfinished"></translation>
+        <translation>Keluaran yang tersedia</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="511"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="539"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="553"/>
         <source>No port</source>
-        <translation type="unfinished"></translation>
+        <translation>Tiada port</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="517"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI outputs (hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Keluaran MIDI yang tersedia (perangkat keras maupun lunak)&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="557"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI inputs (from hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Masukan MIDI yang tersedia (dari perangkat keras maupun lunak)&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="520"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="560"/>
         <source>&lt;qt&gt;&lt;p&gt;Click to refresh the port list after connecting a new piece of equipment or starting a new soft synth&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Klik untuk menyegarkan daftar port usai membuat hubungan perangkat keras atau sintetiser perangkat lunak baru&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="522"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="562"/>
         <source>Refresh</source>
-        <translation type="unfinished"></translation>
+        <translation>Segarkan</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="523"/>
         <source>MIDI Recording</source>
-        <translation type="unfinished"></translation>
+        <translation>Perekaman MIDI</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="525"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new recording device&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Membuat perangkat rekam yang baru&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="529"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected recording device&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Menghapus perangkat rekam yang dipilih&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="531"/>
         <source>Delete</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
-        <translation type="unfinished"></translation>
+        <translation>Hapus</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="533"/>
         <source>Receives its data from</source>
-        <translation type="unfinished"></translation>
+        <translation>Menerima data dari</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="534"/>
         <source>Rosegarden recording device</source>
-        <translation type="unfinished"></translation>
+        <translation>Perangkat rekam Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="540"/>
         <source>Default record device</source>
-        <translation type="unfinished"></translation>
+        <translation>Perangkat baku untuk merekam</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="546"/>
         <source>MIDI inputs</source>
-        <translation type="unfinished"></translation>
+        <translation>Masukan MIDI</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="548"/>
         <source>Available inputs</source>
-        <translation type="unfinished"></translation>
+        <translation>Masukan yang tersedia</translation>
     </message>
 </context>
 <context>
@@ -172,17 +172,17 @@
     <message>
         <location filename="../../src/gui/editors/notation/NoteFontMap.cpp" line="44"/>
         <source>unknown error</source>
-        <translation type="unfinished">kesalahan tak dikenal</translation>
+        <translation>kesalahan tak dikenal</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NoteFontMap.cpp" line="70"/>
         <source>Can&apos;t open font mapping file %1 or %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak bisa membuka berkas pemetaan huruf %1 atau %2</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NoteFontMap.cpp" line="74"/>
         <source>Can&apos;t open font mapping file %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak bisa membuka berkas pemetaan huruf %1</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="30"/>
@@ -198,17 +198,17 @@
         <location filename="../QMenuStrings.cpp" line="4100"/>
         <location filename="../QMenuStrings.cpp" line="4215"/>
         <source>&amp;File</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Berkas</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="31"/>
         <source>&amp;Add Audio File...</source>
-        <translation type="unfinished">T&amp;ambah Berkas Suara...</translation>
+        <translation>T&amp;ambah Berkas Suara...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="32"/>
         <source>&amp;Export Audio File...</source>
-        <translation type="unfinished">&amp;Ekspor Berkas Suara...</translation>
+        <translation>&amp;Ekspor Berkas Suara...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="33"/>
@@ -224,7 +224,7 @@
         <location filename="../QMenuStrings.cpp" line="4110"/>
         <location filename="../QMenuStrings.cpp" line="4216"/>
         <source>&amp;Close</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Tutup</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="40"/>
@@ -241,7 +241,7 @@
         <location filename="../QMenuStrings.cpp" line="4223"/>
         <source>Ctrl+W</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+W</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="42"/>
@@ -255,32 +255,40 @@
         <location filename="../QMenuStrings.cpp" line="4119"/>
         <location filename="../QMenuStrings.cpp" line="4225"/>
         <source>&amp;Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Sunting</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="43"/>
         <source>&amp;Unload Audio File</source>
-        <translation type="unfinished">Kel&amp;uarkan Berkas Suara</translation>
+        <translation>Melepas Berkas S&amp;uara</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="44"/>
         <source>Unload &amp;All Audio Files</source>
-        <translation type="unfinished"></translation>
+        <translation>Melepas Semua Berkas Suar&amp;a</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="45"/>
         <source>Unload All Unused Audio &amp;Files</source>
-        <translation type="unfinished"></translation>
+        <translation>Melepas Semua Berkas Suara yang Tak &amp;Terpakai</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="46"/>
         <source>&amp;Delete Unused Audio Files...</source>
-        <translation type="unfinished">Hapus Berkas Suara Tak &amp;Dipakai</translation>
+        <translation>Hapus &amp;Berkas tak Terpakai...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="48"/>
         <source>Play Preview</source>
-        <translation type="unfinished"></translation>
+        <translation>Putar Pratampil</translation>
+    </message>
+    <message>
+        <source>Insert Into Selected Audio track</source>
+        <translation type="obsolete">Sisip ke Jalur Suara Terpilih</translation>
+    </message>
+    <message>
+        <source>Distribute Audio on Midi Segment</source>
+        <translation type="obsolete">Distribusikan Suara pada Segmen MIDI</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="51"/>
@@ -304,7 +312,7 @@
         <location filename="../QMenuStrings.cpp" line="4257"/>
         <location filename="../QMenuStrings.cpp" line="4258"/>
         <source>&amp;Help</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Bantuan</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="59"/>
@@ -321,21 +329,21 @@
         <location filename="../QMenuStrings.cpp" line="4265"/>
         <source>F1</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>F1</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1527"/>
         <location filename="../QMenuStrings.cpp" line="3234"/>
         <location filename="../QMenuStrings.cpp" line="4058"/>
         <source>&amp;Rosegarden tutorial</source>
-        <translation type="unfinished"></translation>
+        <translation>Tutorial &amp;Rosegarden</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1528"/>
         <location filename="../QMenuStrings.cpp" line="3235"/>
         <location filename="../QMenuStrings.cpp" line="4059"/>
         <source>&amp;Bug Reporting Guidelines</source>
-        <translation type="unfinished"></translation>
+        <translation>Panduan Melaporkan &amp;Kode Hama</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="61"/>
@@ -351,14 +359,14 @@
         <location filename="../QMenuStrings.cpp" line="4209"/>
         <location filename="../QMenuStrings.cpp" line="4267"/>
         <source>&amp;About Rosegarden</source>
-        <translation type="unfinished"></translation>
+        <translation>Tent&amp;ang Rosegarden</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="62"/>
         <location filename="../QMenuStrings.cpp" line="1532"/>
         <location filename="../QMenuStrings.cpp" line="3239"/>
         <source>General Toolbar</source>
-        <translation type="unfinished">Baris Alat Umum</translation>
+        <translation>Baris Alat Umum</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="74"/>
@@ -371,7 +379,7 @@
         <location filename="../QMenuStrings.cpp" line="4120"/>
         <location filename="../QMenuStrings.cpp" line="4226"/>
         <source>&amp;Nothing to undo</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak ada yang bisa dibatalka&amp;n</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="81"/>
@@ -385,7 +393,7 @@
         <location filename="../QMenuStrings.cpp" line="4233"/>
         <source>Ctrl+Z</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Z</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="83"/>
@@ -398,7 +406,7 @@
         <location filename="../QMenuStrings.cpp" line="4129"/>
         <location filename="../QMenuStrings.cpp" line="4235"/>
         <source>N&amp;othing to redo</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak ada &amp;yang bisa diulang</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="90"/>
@@ -412,7 +420,7 @@
         <location filename="../QMenuStrings.cpp" line="4242"/>
         <source>Ctrl+Shift+Z</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+Z</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="92"/>
@@ -421,7 +429,7 @@
         <location filename="../QMenuStrings.cpp" line="1819"/>
         <location filename="../QMenuStrings.cpp" line="3566"/>
         <source>&amp;Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Salin</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="99"/>
@@ -431,7 +439,7 @@
         <location filename="../QMenuStrings.cpp" line="3573"/>
         <source>Ctrl+C, F16, Ctrl+Ins</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+C, F16m Ctrl+Ins</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="101"/>
@@ -440,7 +448,7 @@
         <location filename="../QMenuStrings.cpp" line="1828"/>
         <location filename="../QMenuStrings.cpp" line="3575"/>
         <source>&amp;Paste</source>
-        <translation type="unfinished"></translation>
+        <translation>Tem&amp;pel</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="108"/>
@@ -450,7 +458,7 @@
         <location filename="../QMenuStrings.cpp" line="3582"/>
         <source>Ctrl+V, F18, Shift+Ins</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+V, F18, Shift+Ins</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="121"/>
@@ -465,7 +473,7 @@
         <location filename="../QMenuStrings.cpp" line="4089"/>
         <location filename="../QMenuStrings.cpp" line="4212"/>
         <source>Switch to Select Tool</source>
-        <translation type="unfinished">Pindah ke Perkakas Seleksi</translation>
+        <translation>Pindah ke Perkakas Seleksi</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="122"/>
@@ -473,7 +481,7 @@
         <location filename="../QMenuStrings.cpp" line="4090"/>
         <location filename="../QMenuStrings.cpp" line="4213"/>
         <source>Switch to Inserting Notes</source>
-        <translation type="unfinished"></translation>
+        <translation>Pindah ke Modus Sisip Not</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="123"/>
@@ -488,7 +496,7 @@
         <location filename="../QMenuStrings.cpp" line="4091"/>
         <location filename="../QMenuStrings.cpp" line="4214"/>
         <source>Switch to Erase Tool</source>
-        <translation type="unfinished">Pindah ke Perkakas Hapus</translation>
+        <translation>Pindah ke Perkakas Hapus</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="125"/>
@@ -500,7 +508,7 @@
         <location filename="../QMenuStrings.cpp" line="3496"/>
         <location filename="../QMenuStrings.cpp" line="4101"/>
         <source>&amp;Save</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Simpan</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="132"/>
@@ -513,7 +521,7 @@
         <location filename="../QMenuStrings.cpp" line="4108"/>
         <source>Ctrl+S</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+S</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="211"/>
@@ -527,7 +535,7 @@
         <location filename="../QMenuStrings.cpp" line="4145"/>
         <source>I</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">I</translation>
+        <translation>I</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="220"/>
@@ -540,7 +548,7 @@
         <location filename="../QMenuStrings.cpp" line="3591"/>
         <source>Delete</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Delete</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="229"/>
@@ -555,7 +563,7 @@
         <location filename="../QMenuStrings.cpp" line="4172"/>
         <source>E</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">E</translation>
+        <translation>E</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="238"/>
@@ -568,7 +576,7 @@
         <location filename="../QMenuStrings.cpp" line="1810"/>
         <location filename="../QMenuStrings.cpp" line="3557"/>
         <source>Cu&amp;t</source>
-        <translation type="unfinished">Po&amp;tong</translation>
+        <translation>Po&amp;tong</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="246"/>
@@ -577,12 +585,12 @@
         <location filename="../QMenuStrings.cpp" line="3564"/>
         <source>Ctrl+X, F20, Shift+Del</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+X, F20, Shift+Del</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="266"/>
         <source>&amp;Select All</source>
-        <translation type="unfinished"></translation>
+        <translation>Pilih &amp;Semua</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="273"/>
@@ -592,13 +600,13 @@
         <location filename="../QMenuStrings.cpp" line="4181"/>
         <source>Ctrl+A</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+A</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="275"/>
         <location filename="../QMenuStrings.cpp" line="565"/>
         <source>C&amp;lear Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Bersihkan Se&amp;leksi</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="282"/>
@@ -607,14 +615,14 @@
         <location filename="../QMenuStrings.cpp" line="4190"/>
         <source>Escape</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Escape</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="284"/>
         <location filename="../QMenuStrings.cpp" line="574"/>
         <location filename="../QMenuStrings.cpp" line="1886"/>
         <source>&amp;Filter Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Penyaring Seleksi</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="291"/>
@@ -622,17 +630,17 @@
         <location filename="../QMenuStrings.cpp" line="1893"/>
         <source>Ctrl+F</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+F</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="293"/>
         <source>Set Se&amp;gment Start Time...</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="294"/>
         <source>Set Seg&amp;ment Duration...</source>
-        <translation type="unfinished"></translation>
+        <translation>Atur Durasi Seg&amp;men...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="296"/>
@@ -643,7 +651,7 @@
         <location filename="../QMenuStrings.cpp" line="4193"/>
         <location filename="../QMenuStrings.cpp" line="4253"/>
         <source>&amp;View</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Tampilan</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="297"/>
@@ -651,7 +659,7 @@
         <location filename="../QMenuStrings.cpp" line="4194"/>
         <location filename="../QMenuStrings.cpp" line="4254"/>
         <source>&amp;Musical Times</source>
-        <translation type="unfinished">Waktu &amp;Musikal</translation>
+        <translation>Waktu &amp;Musikal</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="298"/>
@@ -659,7 +667,7 @@
         <location filename="../QMenuStrings.cpp" line="4195"/>
         <location filename="../QMenuStrings.cpp" line="4255"/>
         <source>&amp;Real Times</source>
-        <translation type="unfinished">Waktu &amp;Nyata</translation>
+        <translation>Waktu N&amp;yata</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="299"/>
@@ -675,7 +683,7 @@
         <location filename="../QMenuStrings.cpp" line="1930"/>
         <location filename="../QMenuStrings.cpp" line="3721"/>
         <source>Se&amp;gment</source>
-        <translation type="unfinished">Se&amp;gmen</translation>
+        <translation>Se&amp;gmen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="303"/>
@@ -683,7 +691,7 @@
         <location filename="../QMenuStrings.cpp" line="1931"/>
         <location filename="../QMenuStrings.cpp" line="3731"/>
         <source>Edit &amp;With</source>
-        <translation type="unfinished">Sunting Deng&amp;an</translation>
+        <translation>Sunting &amp;Dengan</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="304"/>
@@ -691,33 +699,33 @@
         <location filename="../QMenuStrings.cpp" line="1933"/>
         <location filename="../QMenuStrings.cpp" line="3741"/>
         <source>Open in Matri&amp;x Editor</source>
-        <translation type="unfinished">Buka di Penyunting Metri&amp;ks</translation>
+        <translation>Buka di Penyunting Matri&amp;ks</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="305"/>
         <location filename="../QMenuStrings.cpp" line="681"/>
         <location filename="../QMenuStrings.cpp" line="3759"/>
         <source>Open in &amp;Notation Editor</source>
-        <translation type="unfinished">Buka di Penyunting &amp;Notasi</translation>
+        <translation>Buka di Penyunting &amp;Notasi</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1530"/>
         <location filename="../QMenuStrings.cpp" line="3237"/>
         <location filename="../QMenuStrings.cpp" line="4061"/>
         <source>About &amp;Qt</source>
-        <translation type="unfinished"></translation>
+        <translation>Tentang &amp;Qt</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2597"/>
         <location filename="../QMenuStrings.cpp" line="3426"/>
         <source>Add &amp;Segno</source>
-        <translation type="unfinished"></translation>
+        <translation>Tambah &amp;Segno</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2598"/>
         <location filename="../QMenuStrings.cpp" line="3427"/>
         <source>Add &amp;Coda</source>
-        <translation type="unfinished"></translation>
+        <translation>Tambah &amp;Coda</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2599"/>
@@ -767,59 +775,59 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="1912"/>
         <source>Show &amp;Symbols Toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>Tampilkan Baris Alat &amp;Simbol</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3242"/>
         <source>Duration Toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>Baris Alat Durasi</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3425"/>
         <source>Symbols Toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>Baris Alat Simbol</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3688"/>
         <source>Ctrl+K</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+K</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3707"/>
         <source>Ctrl+M</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+M</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3729"/>
         <source>Ctrl+Shift+R</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+R</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3739"/>
         <source>Return</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Enter</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3825"/>
         <source>Ctrl+J</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+J</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3851"/>
         <source>Ctrl+Shift+T</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+T</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3860"/>
         <source>Ctrl+D</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+D</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3983"/>
@@ -855,30 +863,30 @@
         <location filename="../QMenuStrings.cpp" line="4028"/>
         <source>Space</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Spasi</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="4077"/>
         <source>Home</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Home</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="4086"/>
         <source>End</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>End</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="4197"/>
         <source>Show &amp;Toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Tampilkan Baris Alat</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1916"/>
         <location filename="../QMenuStrings.cpp" line="4198"/>
         <source>Hide St&amp;atusbar</source>
-        <translation type="unfinished"></translation>
+        <translation>Sembunyik&amp;an Baris Status</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="317"/>
@@ -886,7 +894,7 @@
         <location filename="../QMenuStrings.cpp" line="1535"/>
         <location filename="../QMenuStrings.cpp" line="4210"/>
         <source>Actions Toolbar</source>
-        <translation type="unfinished">Baris Alat Aksi</translation>
+        <translation>Baris Alat Aksi</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="318"/>
@@ -894,7 +902,7 @@
         <location filename="../QMenuStrings.cpp" line="4211"/>
         <location filename="../QMenuStrings.cpp" line="4268"/>
         <source>Time Toolbar</source>
-        <translation type="unfinished">Baris Alat Waktu</translation>
+        <translation>Baris Alat Waktu</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="319"/>
@@ -904,18 +912,18 @@
         <location filename="../QMenuStrings.cpp" line="3241"/>
         <location filename="../QMenuStrings.cpp" line="4069"/>
         <source>Transport Toolbar</source>
-        <translation type="unfinished">Baris Alat Transpor</translation>
+        <translation>Baris Alat Transpor</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="321"/>
         <location filename="../QMenuStrings.cpp" line="4088"/>
         <source>Zoom Toolbar</source>
-        <translation type="unfinished">Baris Alat Zum</translation>
+        <translation>Baris Alat Zum</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="370"/>
         <source>Insert Marker</source>
-        <translation type="unfinished">Sisip Penanda</translation>
+        <translation>Sisip Penanda</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="371"/>
@@ -925,12 +933,12 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="372"/>
         <source>Delete Marker</source>
-        <translation type="unfinished">Hapus Penanda</translation>
+        <translation>Hapus Penanda</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="373"/>
         <source>Edit Marker</source>
-        <translation type="unfinished">Sunting Penanda</translation>
+        <translation>Sunting Penanda</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="381"/>
@@ -943,7 +951,7 @@
         <location filename="../QMenuStrings.cpp" line="3928"/>
         <source>F2</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>F2</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="383"/>
@@ -952,7 +960,7 @@
         <location filename="../QMenuStrings.cpp" line="1582"/>
         <location filename="../QMenuStrings.cpp" line="1636"/>
         <source>Switch to Move Tool</source>
-        <translation type="unfinished">Pindah ke Perkakas Pindah</translation>
+        <translation>Pindah ke Perkakas Pindah</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="390"/>
@@ -964,7 +972,7 @@
         <location filename="../QMenuStrings.cpp" line="3955"/>
         <source>F5</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>F5</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="392"/>
@@ -973,7 +981,7 @@
         <location filename="../QMenuStrings.cpp" line="1573"/>
         <location filename="../QMenuStrings.cpp" line="1618"/>
         <source>Switch to Draw Tool</source>
-        <translation type="unfinished">Pindah ke Perkakas Gambar</translation>
+        <translation>Pindah ke Perkakas Gambar</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="399"/>
@@ -986,7 +994,7 @@
         <location filename="../QMenuStrings.cpp" line="3937"/>
         <source>F3</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>F3</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="401"/>
@@ -995,7 +1003,7 @@
         <location filename="../QMenuStrings.cpp" line="1600"/>
         <location filename="../QMenuStrings.cpp" line="1645"/>
         <source>Switch to Resize Tool</source>
-        <translation type="unfinished">Pindah ke Perkakas Ubah Ukuran</translation>
+        <translation>Pindah ke Perkakas Pengubah Ukuran</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="408"/>
@@ -1007,7 +1015,7 @@
         <location filename="../QMenuStrings.cpp" line="3964"/>
         <source>F6</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>F6</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="435"/>
@@ -1020,175 +1028,178 @@
         <location filename="../QMenuStrings.cpp" line="3946"/>
         <source>F4</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>F4</translation>
+    </message>
+    <message>
+        <source>E&amp;dit</source>
+        <translation type="obsolete">Sun&amp;ting</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="502"/>
         <source>Nothing to &amp;undo</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak ada yang bisa dibatalka&amp;n</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="511"/>
         <source>Nothing to &amp;redo</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak ada &amp;yang bisa diulang</translation>
+    </message>
+    <message>
+        <source>Ctrl+V, F18, Shift+Insert</source>
+        <comment>keyboard shortcut</comment>
+        <translation type="obsolete">Ctrl+V, F18, Shift+Insert</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="547"/>
         <location filename="../QMenuStrings.cpp" line="3584"/>
         <location filename="../QMenuStrings.cpp" line="4156"/>
         <source>&amp;Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Hapus</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="554"/>
         <location filename="../QMenuStrings.cpp" line="4163"/>
         <source>Delete, Ctrl+D</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Delete, Ctrl+D</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="585"/>
         <source>&amp;Grid</source>
-        <translation type="unfinished">Jejarin&amp;g</translation>
+        <translation>&amp;Kisi-kisi</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="586"/>
         <source>&amp;No Snap</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta&amp;npa Kancing</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="587"/>
         <source>&amp;Snap to 1/64</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Kancing ke 1/64</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="594"/>
         <location filename="../QMenuStrings.cpp" line="2689"/>
         <source>0</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">0</translation>
+        <translation>0</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="596"/>
         <source>Snap to &amp;1/48</source>
-        <translation type="unfinished"></translation>
+        <translation>Kancing ke &amp;1/48</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="597"/>
         <source>Sn&amp;ap to 1/32</source>
-        <translation type="unfinished"></translation>
+        <translation>K&amp;ancing ke 1/32</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="604"/>
         <location filename="../QMenuStrings.cpp" line="2680"/>
         <source>3</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">3</translation>
+        <translation>3</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="606"/>
         <source>Snap to 1/&amp;24</source>
-        <translation type="unfinished"></translation>
+        <translation>Kancing ke 1/&amp;24</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="607"/>
         <source>Sna&amp;p to 1/16</source>
-        <translation type="unfinished"></translation>
+        <translation>Kancin&amp;g ke 1/16</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="614"/>
         <location filename="../QMenuStrings.cpp" line="2671"/>
         <source>6</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">6</translation>
+        <translation>6</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="616"/>
         <source>Snap t&amp;o 1/12</source>
-        <translation type="unfinished"></translation>
+        <translation>Kan&amp;cing ke 1/12</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="617"/>
         <source>Snap to 1/&amp;8</source>
-        <translation type="unfinished"></translation>
+        <translation>Kancing ke 1/&amp;8</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="624"/>
         <location filename="../QMenuStrings.cpp" line="2662"/>
         <source>8</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>8</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="626"/>
         <source>Snap to &amp;3/16</source>
-        <translation type="unfinished"></translation>
+        <translation>Kancing ke &amp;3/16</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="627"/>
         <source>Snap to 1/4</source>
-        <translation type="unfinished"></translation>
+        <translation>Kancing ke 1/4</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="634"/>
         <location filename="../QMenuStrings.cpp" line="2653"/>
         <source>4</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">4</translation>
+        <translation>4</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="636"/>
         <source>Snap to 3/8</source>
-        <translation type="unfinished"></translation>
+        <translation>Kancing ke 3/8</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="637"/>
         <source>Snap to 1/2</source>
-        <translation type="unfinished"></translation>
+        <translation>Kancing ke 1/2</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="644"/>
         <location filename="../QMenuStrings.cpp" line="2644"/>
         <source>2</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">2</translation>
+        <translation>2</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="646"/>
         <source>Snap to Bea&amp;t</source>
-        <translation type="unfinished"></translation>
+        <translation>Kancing ke Ke&amp;tukan</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="653"/>
         <location filename="../QMenuStrings.cpp" line="2635"/>
         <source>1</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">1</translation>
+        <translation>1</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="655"/>
         <source>Snap to &amp;Bar</source>
-        <translation type="unfinished"></translation>
+        <translation>Kancing ke &amp;Bar</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="662"/>
         <location filename="../QMenuStrings.cpp" line="2626"/>
         <source>5</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">5</translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="674"/>
-        <location filename="../QMenuStrings.cpp" line="1923"/>
-        <source>Add &amp;Control Ruler</source>
-        <translation type="unfinished"></translation>
+        <translation>5</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="675"/>
         <location filename="../QMenuStrings.cpp" line="1927"/>
         <location filename="../QMenuStrings.cpp" line="3674"/>
         <source>&amp;Composition</source>
-        <translation type="unfinished">&amp;Komposisi</translation>
+        <translation>&amp;Komposisi</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="676"/>
@@ -1196,7 +1207,7 @@
         <location filename="../QMenuStrings.cpp" line="3675"/>
         <location filename="../QMenuStrings.cpp" line="4138"/>
         <source>Add Te&amp;mpo Change...</source>
-        <translation type="unfinished">Tambah Perubahan Te&amp;mpo...</translation>
+        <translation>Tambah Perubahan Te&amp;mpo...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="677"/>
@@ -1204,7 +1215,7 @@
         <location filename="../QMenuStrings.cpp" line="3676"/>
         <location filename="../QMenuStrings.cpp" line="4147"/>
         <source>Add Time Si&amp;gnature Change...</source>
-        <translation type="unfinished">Tambah Perubahan Paraf &amp;Waktu...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&amp;Segment</source>
@@ -1218,25 +1229,33 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Set Segment Start &amp;Time...</source>
+        <translation type="obsolete">Atur Wak&amp;tu Mulai Segmen...</translation>
+    </message>
+    <message>
+        <source>Set Segment &amp;Duration...</source>
+        <translation type="obsolete">Atur &amp;Durasi Segmen...</translation>
+    </message>
+    <message>
         <location filename="../QMenuStrings.cpp" line="696"/>
         <location filename="../QMenuStrings.cpp" line="2235"/>
         <location filename="../QMenuStrings.cpp" line="3785"/>
         <source>=</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>=</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="705"/>
         <location filename="../QMenuStrings.cpp" line="3794"/>
         <source>+</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>+</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="714"/>
         <source>-</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>-</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="724"/>
@@ -1244,7 +1263,7 @@
         <location filename="../QMenuStrings.cpp" line="3807"/>
         <source>Alt+Left</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Alt+Kiri</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="733"/>
@@ -1252,7 +1271,7 @@
         <location filename="../QMenuStrings.cpp" line="3816"/>
         <source>Alt+Right</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Alt+Kanan</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="742"/>
@@ -1260,7 +1279,7 @@
         <location filename="../QMenuStrings.cpp" line="3878"/>
         <source>Shift+Up</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Shift+Atas</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="751"/>
@@ -1268,21 +1287,21 @@
         <location filename="../QMenuStrings.cpp" line="3869"/>
         <source>Shift+Down</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Shift+Bawah</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="763"/>
         <location filename="../QMenuStrings.cpp" line="2248"/>
         <source>Ctrl+H</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+H</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="772"/>
         <location filename="../QMenuStrings.cpp" line="2257"/>
         <source>Ctrl+Shift+H</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+H</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="783"/>
@@ -1290,7 +1309,7 @@
         <location filename="../QMenuStrings.cpp" line="3896"/>
         <source>Up</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Atas</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="792"/>
@@ -1298,47 +1317,47 @@
         <location filename="../QMenuStrings.cpp" line="3887"/>
         <source>Down</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Bawah</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="801"/>
         <location filename="../QMenuStrings.cpp" line="2286"/>
         <source>Ctrl+Up</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Atas</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="810"/>
         <location filename="../QMenuStrings.cpp" line="2295"/>
         <source>Ctrl+Down</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Bawah</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="822"/>
         <source>Shift+Alt+I</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Shift+Alt+I</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="831"/>
         <source>Shift+Alt+R</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Shift+Alt+R</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="845"/>
         <location filename="../QMenuStrings.cpp" line="2359"/>
         <source>Shift+Left</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Shift+Kiri</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="854"/>
         <location filename="../QMenuStrings.cpp" line="2368"/>
         <source>Shift+Right</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Shift+Kanan</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="856"/>
@@ -1371,56 +1390,56 @@
         <location filename="../QMenuStrings.cpp" line="2395"/>
         <source>Ctrl+;</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+;</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="890"/>
         <location filename="../QMenuStrings.cpp" line="2404"/>
         <source>Ctrl+:</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+:</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="899"/>
         <location filename="../QMenuStrings.cpp" line="2431"/>
         <source>Alt+PgUp</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Alt+PgUp</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="908"/>
         <location filename="../QMenuStrings.cpp" line="2440"/>
         <source>Alt+PgDown</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Alt+PgDown</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="919"/>
         <location filename="../QMenuStrings.cpp" line="2463"/>
         <source>Left</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Kiri</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="934"/>
         <location filename="../QMenuStrings.cpp" line="2478"/>
         <source>Right</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Kanan</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="949"/>
         <location filename="../QMenuStrings.cpp" line="2493"/>
         <source>Ctrl+Left</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Kiri</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="958"/>
         <location filename="../QMenuStrings.cpp" line="2502"/>
         <source>Ctrl+Right</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Kanan</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="970"/>
@@ -1438,7 +1457,7 @@
         <location filename="../QMenuStrings.cpp" line="4046"/>
         <source>Alt+Ctrl+P</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Alt+Ctrl+P</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1034"/>
@@ -1446,7 +1465,7 @@
         <location filename="../QMenuStrings.cpp" line="3973"/>
         <source>F7</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>F7</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1046"/>
@@ -1456,14 +1475,14 @@
         <location filename="../QMenuStrings.cpp" line="2888"/>
         <location filename="../QMenuStrings.cpp" line="3042"/>
         <source>I/do</source>
-        <translation type="unfinished"></translation>
+        <translation>I/do</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1053"/>
         <location filename="../QMenuStrings.cpp" line="2741"/>
         <source>A</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">A</translation>
+        <translation>A</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1055"/>
@@ -1473,14 +1492,14 @@
         <location filename="../QMenuStrings.cpp" line="2897"/>
         <location filename="../QMenuStrings.cpp" line="3051"/>
         <source>I/do sharp</source>
-        <translation type="unfinished"></translation>
+        <translation>I/do tajam</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1062"/>
         <location filename="../QMenuStrings.cpp" line="2750"/>
         <source>Shift+A</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Shift+A</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1064"/>
@@ -1490,7 +1509,7 @@
         <location filename="../QMenuStrings.cpp" line="2906"/>
         <location filename="../QMenuStrings.cpp" line="3060"/>
         <source>II/re flat</source>
-        <translation type="unfinished"></translation>
+        <translation>II/re datar</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1071"/>
@@ -1498,7 +1517,7 @@
         <location filename="../QMenuStrings.cpp" line="3512"/>
         <source>Ctrl+Shift+S</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+S</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1073"/>
@@ -1508,14 +1527,14 @@
         <location filename="../QMenuStrings.cpp" line="2915"/>
         <location filename="../QMenuStrings.cpp" line="3069"/>
         <source>II/re</source>
-        <translation type="unfinished"></translation>
+        <translation>II/re</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1080"/>
         <location filename="../QMenuStrings.cpp" line="2768"/>
         <source>S</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>S</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1082"/>
@@ -1525,14 +1544,14 @@
         <location filename="../QMenuStrings.cpp" line="2924"/>
         <location filename="../QMenuStrings.cpp" line="3078"/>
         <source>II/re sharp</source>
-        <translation type="unfinished"></translation>
+        <translation>II/re tajam</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1089"/>
         <location filename="../QMenuStrings.cpp" line="2777"/>
         <source>Shift+S</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Shift+S</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1091"/>
@@ -1542,14 +1561,14 @@
         <location filename="../QMenuStrings.cpp" line="2933"/>
         <location filename="../QMenuStrings.cpp" line="3087"/>
         <source>III/mi flat</source>
-        <translation type="unfinished"></translation>
+        <translation>III/mi datar</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1098"/>
         <location filename="../QMenuStrings.cpp" line="2786"/>
         <source>Ctrl+Shift+D</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+D</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1100"/>
@@ -1559,7 +1578,7 @@
         <location filename="../QMenuStrings.cpp" line="2942"/>
         <location filename="../QMenuStrings.cpp" line="3096"/>
         <source>III/mi</source>
-        <translation type="unfinished"></translation>
+        <translation>III/mi</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1107"/>
@@ -1567,7 +1586,7 @@
         <location filename="../QMenuStrings.cpp" line="3757"/>
         <source>D</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">D</translation>
+        <translation>D</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1109"/>
@@ -1577,14 +1596,14 @@
         <location filename="../QMenuStrings.cpp" line="2951"/>
         <location filename="../QMenuStrings.cpp" line="3105"/>
         <source>IV/fa</source>
-        <translation type="unfinished"></translation>
+        <translation>IV/fa</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1116"/>
         <location filename="../QMenuStrings.cpp" line="2804"/>
         <source>F</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">F</translation>
+        <translation>F</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1118"/>
@@ -1594,14 +1613,14 @@
         <location filename="../QMenuStrings.cpp" line="2960"/>
         <location filename="../QMenuStrings.cpp" line="3114"/>
         <source>IV/fa sharp</source>
-        <translation type="unfinished"></translation>
+        <translation>IV/fa tajam</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1125"/>
         <location filename="../QMenuStrings.cpp" line="2813"/>
         <source>Shift+F</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Shift+F</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1127"/>
@@ -1611,14 +1630,14 @@
         <location filename="../QMenuStrings.cpp" line="2969"/>
         <location filename="../QMenuStrings.cpp" line="3123"/>
         <source>V/sol flat</source>
-        <translation type="unfinished"></translation>
+        <translation>V/sol datar</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1134"/>
         <location filename="../QMenuStrings.cpp" line="2822"/>
         <source>Ctrl+Shift+J</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+J</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1136"/>
@@ -1628,14 +1647,14 @@
         <location filename="../QMenuStrings.cpp" line="2978"/>
         <location filename="../QMenuStrings.cpp" line="3132"/>
         <source>V/sol</source>
-        <translation type="unfinished"></translation>
+        <translation>V/sol</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1143"/>
         <location filename="../QMenuStrings.cpp" line="2831"/>
         <source>J</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>J</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1145"/>
@@ -1645,14 +1664,14 @@
         <location filename="../QMenuStrings.cpp" line="2987"/>
         <location filename="../QMenuStrings.cpp" line="3141"/>
         <source>V/sol sharp</source>
-        <translation type="unfinished"></translation>
+        <translation>V/sol tajam</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1152"/>
         <location filename="../QMenuStrings.cpp" line="2840"/>
         <source>Shift+J</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Shift+J</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1154"/>
@@ -1662,14 +1681,14 @@
         <location filename="../QMenuStrings.cpp" line="2996"/>
         <location filename="../QMenuStrings.cpp" line="3150"/>
         <source>VI/la flat</source>
-        <translation type="unfinished"></translation>
+        <translation>VI/la datar</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1161"/>
         <location filename="../QMenuStrings.cpp" line="2849"/>
         <source>Ctrl+Shift+K</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+K</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1163"/>
@@ -1679,14 +1698,14 @@
         <location filename="../QMenuStrings.cpp" line="3005"/>
         <location filename="../QMenuStrings.cpp" line="3159"/>
         <source>VI/la</source>
-        <translation type="unfinished"></translation>
+        <translation>VI/la</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1170"/>
         <location filename="../QMenuStrings.cpp" line="2858"/>
         <source>K</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>K</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1172"/>
@@ -1696,14 +1715,14 @@
         <location filename="../QMenuStrings.cpp" line="3014"/>
         <location filename="../QMenuStrings.cpp" line="3168"/>
         <source>VI/la sharp</source>
-        <translation type="unfinished"></translation>
+        <translation>VI/la tajam</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1179"/>
         <location filename="../QMenuStrings.cpp" line="2867"/>
         <source>Shift+K</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Shift+K</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1181"/>
@@ -1713,14 +1732,14 @@
         <location filename="../QMenuStrings.cpp" line="3023"/>
         <location filename="../QMenuStrings.cpp" line="3177"/>
         <source>VII/ti flat</source>
-        <translation type="unfinished"></translation>
+        <translation>VII/ti datar</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1188"/>
         <location filename="../QMenuStrings.cpp" line="2876"/>
         <source>Ctrl+Shift+L</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+L</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1190"/>
@@ -1730,56 +1749,56 @@
         <location filename="../QMenuStrings.cpp" line="3032"/>
         <location filename="../QMenuStrings.cpp" line="3186"/>
         <source>VII/ti</source>
-        <translation type="unfinished"></translation>
+        <translation>VII/ti</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1197"/>
         <location filename="../QMenuStrings.cpp" line="2885"/>
         <source>L</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>L</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1207"/>
         <location filename="../QMenuStrings.cpp" line="2895"/>
         <source>Q</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Q</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1216"/>
         <location filename="../QMenuStrings.cpp" line="2904"/>
         <source>Shift+Q</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Shift+Q</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1225"/>
         <location filename="../QMenuStrings.cpp" line="2913"/>
         <source>Ctrl+Shift+W</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+W</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1234"/>
         <location filename="../QMenuStrings.cpp" line="2922"/>
         <source>W</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>W</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1243"/>
         <location filename="../QMenuStrings.cpp" line="2931"/>
         <source>Shift+W</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Shift+W</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1252"/>
         <location filename="../QMenuStrings.cpp" line="2940"/>
         <source>Ctrl+Shift+E</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+E</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1270"/>
@@ -1787,21 +1806,21 @@
         <location filename="../QMenuStrings.cpp" line="3914"/>
         <source>R</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>R</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1279"/>
         <location filename="../QMenuStrings.cpp" line="2967"/>
         <source>Shift+R</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Shift+R</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1288"/>
         <location filename="../QMenuStrings.cpp" line="2976"/>
         <source>Ctrl+Shift+U</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+U</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1297"/>
@@ -1809,56 +1828,56 @@
         <location filename="../QMenuStrings.cpp" line="3905"/>
         <source>U</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>U</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1306"/>
         <location filename="../QMenuStrings.cpp" line="2994"/>
         <source>Shift+U</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Shift+U</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1315"/>
         <location filename="../QMenuStrings.cpp" line="3003"/>
         <source>Ctrl+Shift+I</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+I</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1333"/>
         <location filename="../QMenuStrings.cpp" line="3021"/>
         <source>Shift+I</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Shift+I</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1342"/>
         <location filename="../QMenuStrings.cpp" line="3030"/>
         <source>Ctrl+Shift+O</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+O</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1351"/>
         <location filename="../QMenuStrings.cpp" line="3039"/>
         <source>O</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>O</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1361"/>
         <location filename="../QMenuStrings.cpp" line="3049"/>
         <source>Z</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Z</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1370"/>
         <location filename="../QMenuStrings.cpp" line="3058"/>
         <source>Shift+Z</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Shift+Z</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1379"/>
@@ -1866,21 +1885,21 @@
         <location filename="../QMenuStrings.cpp" line="3600"/>
         <source>Ctrl+Shift+X</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+X</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1388"/>
         <location filename="../QMenuStrings.cpp" line="3076"/>
         <source>X</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>X</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1397"/>
         <location filename="../QMenuStrings.cpp" line="3085"/>
         <source>Shift+X</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Shift+X</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1406"/>
@@ -1888,56 +1907,56 @@
         <location filename="../QMenuStrings.cpp" line="3609"/>
         <source>Ctrl+Shift+C</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+C</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1415"/>
         <location filename="../QMenuStrings.cpp" line="3103"/>
         <source>C</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">C</translation>
+        <translation>C</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1424"/>
         <location filename="../QMenuStrings.cpp" line="3112"/>
         <source>V</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">V</translation>
+        <translation>V</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1433"/>
         <location filename="../QMenuStrings.cpp" line="3121"/>
         <source>Shift+V</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Shift+V</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1442"/>
         <location filename="../QMenuStrings.cpp" line="3130"/>
         <source>Ctrl+Shift+B</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+B</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1451"/>
         <location filename="../QMenuStrings.cpp" line="3139"/>
         <source>B</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">B</translation>
+        <translation>B</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1460"/>
         <location filename="../QMenuStrings.cpp" line="3148"/>
         <source>Shift+B</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Shift+B</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1469"/>
         <location filename="../QMenuStrings.cpp" line="3157"/>
         <source>Ctrl+Shift+N</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+N</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1478"/>
@@ -1945,14 +1964,14 @@
         <location filename="../QMenuStrings.cpp" line="3766"/>
         <source>N</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>N</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1487"/>
         <location filename="../QMenuStrings.cpp" line="3175"/>
         <source>Shift+N</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Shift+N</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1496"/>
@@ -1960,7 +1979,7 @@
         <location filename="../QMenuStrings.cpp" line="3698"/>
         <source>Ctrl+Shift+M</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+M</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1505"/>
@@ -1968,66 +1987,77 @@
         <location filename="../QMenuStrings.cpp" line="3748"/>
         <source>M</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>M</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1514"/>
         <location filename="../QMenuStrings.cpp" line="3211"/>
         <source>H</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>H</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1844"/>
         <source>Alt+Shift+X</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Alt+Shift+X</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1853"/>
         <source>Alt+Shift+V</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Alt+Shift+V</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1979"/>
         <source>Alt+0</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Alt+0</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1988"/>
         <source>Alt+1</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Alt+1</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1997"/>
         <source>Alt+2</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Alt+2</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2006"/>
         <source>Alt+3</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Alt+3</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2015"/>
         <source>Alt+4</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Alt+4</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2024"/>
         <source>Alt+5</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Alt+5</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2033"/>
         <source>Alt+9</source>
+        <comment>keyboard shortcut</comment>
+        <translation>Alt+9</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="2043"/>
+        <source>&amp;Cycle Slashes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="2050"/>
+        <source>/</source>
         <comment>keyboard shortcut</comment>
         <translation type="unfinished"></translation>
     </message>
@@ -2035,97 +2065,97 @@
         <location filename="../QMenuStrings.cpp" line="2073"/>
         <source>Ctrl+PgUp</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+PgUp</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2082"/>
         <source>Ctrl+PgDown</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+PgDown</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2094"/>
         <source>Ctrl+B</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+B</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2104"/>
         <source>Ctrl+U</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+U</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2113"/>
         <location filename="../QMenuStrings.cpp" line="3842"/>
         <source>Ctrl+T</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+T</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2122"/>
         <source>Ctrl+R</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+R</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2132"/>
         <source>)</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2141"/>
         <source>Ctrl+)</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2154"/>
         <source>~</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>~</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2168"/>
         <source>&amp;lt;</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>&amp;lt;</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2177"/>
         <source>&amp;gt;</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>&amp;gt;</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="687"/>
         <location filename="../QMenuStrings.cpp" line="2185"/>
         <source>Ad&amp;just</source>
-        <translation type="unfinished">Se&amp;tel</translation>
+        <translation>Se&amp;tel</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="688"/>
         <location filename="../QMenuStrings.cpp" line="2227"/>
         <source>&amp;Quantize</source>
-        <translation type="unfinished">&amp;Kuantisasi</translation>
+        <translation>&amp;Kuantisasi</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="689"/>
         <location filename="../QMenuStrings.cpp" line="2228"/>
         <location filename="../QMenuStrings.cpp" line="3778"/>
         <source>&amp;Quantize...</source>
-        <translation type="unfinished">&amp;Kuantisasi...</translation>
+        <translation>&amp;Kuantisasi...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="698"/>
         <source>&amp;Repeat Last Quantize</source>
-        <translation type="unfinished"></translation>
+        <translation>Ulang Kuantisasi Terakhi&amp;r</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="707"/>
         <source>&amp;Legato</source>
-        <translation type="unfinished">&amp;Legato</translation>
+        <translation>&amp;Legato</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="716"/>
@@ -2149,13 +2179,13 @@
         <location filename="../QMenuStrings.cpp" line="735"/>
         <location filename="../QMenuStrings.cpp" line="2304"/>
         <source>&amp;Increase Velocity</source>
-        <translation type="unfinished">Na&amp;ikkan Kecepatan</translation>
+        <translation>Na&amp;ikkan Velositas</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="744"/>
         <location filename="../QMenuStrings.cpp" line="2313"/>
         <source>&amp;Reduce Velocity</source>
-        <translation type="unfinished">Tu&amp;runkan Kecepatan</translation>
+        <translation>Ku&amp;rangi Velositas</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="753"/>
@@ -2170,19 +2200,19 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="755"/>
         <source>Resc&amp;ale</source>
-        <translation type="unfinished"></translation>
+        <translation>Ubah Sk&amp;ala</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="756"/>
         <location filename="../QMenuStrings.cpp" line="2241"/>
         <source>&amp;Halve Durations</source>
-        <translation type="unfinished">Durasi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="765"/>
         <location filename="../QMenuStrings.cpp" line="2250"/>
         <source>&amp;Double Durations</source>
-        <translation type="unfinished">Durasi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="774"/>
@@ -2194,37 +2224,37 @@
         <location filename="../QMenuStrings.cpp" line="775"/>
         <location filename="../QMenuStrings.cpp" line="2260"/>
         <source>Trans&amp;pose</source>
-        <translation type="unfinished">Trans&amp;posisi</translation>
+        <translation>Trans&amp;pos</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="776"/>
         <location filename="../QMenuStrings.cpp" line="2261"/>
         <source>&amp;Up a Semitone</source>
-        <translation type="unfinished">Naik Setengah &amp;Nada</translation>
+        <translation>Naik Setengah &amp;Nada</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="785"/>
         <location filename="../QMenuStrings.cpp" line="2270"/>
         <source>&amp;Down a Semitone</source>
-        <translation type="unfinished">Turun Setengah Na&amp;da</translation>
+        <translation>Turun Setengah Na&amp;da</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="794"/>
         <location filename="../QMenuStrings.cpp" line="2279"/>
         <source>Up an &amp;Octave</source>
-        <translation type="unfinished">Naik Satu &amp;Oktaf</translation>
+        <translation>Naik Satu &amp;Oktaf</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="803"/>
         <location filename="../QMenuStrings.cpp" line="2288"/>
         <source>Down an Octa&amp;ve</source>
-        <translation type="unfinished">Turun Satu Okta&amp;f</translation>
+        <translation>Turun Satu Okta&amp;f</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="812"/>
         <location filename="../QMenuStrings.cpp" line="2297"/>
         <source>&amp;Transpose by Semitones...</source>
-        <translation type="unfinished">&amp;Transposisi oleh Setengah Nada...</translation>
+        <translation>&amp;Transpose oleh Setengah Nada...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="813"/>
@@ -2232,30 +2262,30 @@
         <location filename="../QMenuStrings.cpp" line="2298"/>
         <location filename="../QMenuStrings.cpp" line="3796"/>
         <source>Transpose by &amp;Interval...</source>
-        <translation type="unfinished">Transposisi oleh &amp;Interval...</translation>
+        <translation>Transpose oleh &amp;Interval...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="814"/>
         <source>&amp;Convert</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Konversi</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="815"/>
         <location filename="../QMenuStrings.cpp" line="2300"/>
         <source>&amp;Invert</source>
-        <translation type="unfinished">Kebal&amp;ikan</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="824"/>
         <location filename="../QMenuStrings.cpp" line="2301"/>
         <source>&amp;Retrograde</source>
-        <translation type="unfinished">&amp;Retrograde</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="833"/>
         <location filename="../QMenuStrings.cpp" line="2302"/>
         <source>Re&amp;trograde Invert</source>
-        <translation type="unfinished">Kebalikan Re&amp;trograde</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="834"/>
@@ -2267,27 +2297,27 @@
         <location filename="../QMenuStrings.cpp" line="2555"/>
         <location filename="../QMenuStrings.cpp" line="3920"/>
         <source>&amp;Tools</source>
-        <translation type="unfinished"></translation>
+        <translation>Perkaka&amp;s</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="982"/>
         <location filename="../QMenuStrings.cpp" line="2556"/>
         <location filename="../QMenuStrings.cpp" line="3921"/>
         <source>&amp;Select and Edit</source>
-        <translation type="unfinished">Pilih dan &amp;Sunting</translation>
+        <translation>Pilih dan &amp;Sunting</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="991"/>
         <location filename="../QMenuStrings.cpp" line="3930"/>
         <source>&amp;Draw</source>
-        <translation type="unfinished">&amp;Gambar</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1000"/>
         <location filename="../QMenuStrings.cpp" line="2574"/>
         <location filename="../QMenuStrings.cpp" line="3939"/>
         <source>&amp;Erase</source>
-        <translation type="unfinished">Hapu&amp;s</translation>
+        <translation>Hapu&amp;s</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="837"/>
@@ -2295,23 +2325,23 @@
         <location filename="../QMenuStrings.cpp" line="2351"/>
         <location filename="../QMenuStrings.cpp" line="3948"/>
         <source>&amp;Move</source>
-        <translation type="unfinished">&amp;Pindahkan</translation>
+        <translation>&amp;Pindah</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1018"/>
         <source>Resi&amp;ze</source>
-        <translation type="unfinished">&amp;Ubah Ukuran</translation>
+        <translation>Ubah Uku&amp;ran</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1027"/>
         <location filename="../QMenuStrings.cpp" line="3966"/>
         <source>S&amp;plit</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Pisah</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1036"/>
         <source>&amp;Velocity</source>
-        <translation type="unfinished">Kecepatan:</translation>
+        <translation>&amp;Velositas</translation>
     </message>
     <message>
         <source>Local &amp;Cursor</source>
@@ -2361,7 +2391,7 @@
         <location filename="../QMenuStrings.cpp" line="1721"/>
         <location filename="../QMenuStrings.cpp" line="3975"/>
         <source>T&amp;ransport</source>
-        <translation type="unfinished">T&amp;ranspor</translation>
+        <translation>T&amp;ranspor</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="910"/>
@@ -2370,7 +2400,7 @@
         <location filename="../QMenuStrings.cpp" line="2442"/>
         <location filename="../QMenuStrings.cpp" line="3976"/>
         <source>&amp;Play</source>
-        <translation type="unfinished">&amp;Putar</translation>
+        <translation>&amp;Putar</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="911"/>
@@ -2379,7 +2409,7 @@
         <location filename="../QMenuStrings.cpp" line="2449"/>
         <location filename="../QMenuStrings.cpp" line="3985"/>
         <source>&amp;Stop</source>
-        <translation type="unfinished">&amp;Henti</translation>
+        <translation>&amp;Henti</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="942"/>
@@ -2388,7 +2418,7 @@
         <location filename="../QMenuStrings.cpp" line="2486"/>
         <location filename="../QMenuStrings.cpp" line="3994"/>
         <source>Re&amp;wind</source>
-        <translation type="unfinished"></translation>
+        <translation>Putar &amp;Ulang</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="951"/>
@@ -2397,7 +2427,7 @@
         <location filename="../QMenuStrings.cpp" line="2495"/>
         <location filename="../QMenuStrings.cpp" line="4003"/>
         <source>&amp;Fast Forward</source>
-        <translation type="unfinished">Maju Cepa&amp;t</translation>
+        <translation>Putar Ce&amp;pat</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="960"/>
@@ -2405,7 +2435,7 @@
         <location filename="../QMenuStrings.cpp" line="1726"/>
         <location filename="../QMenuStrings.cpp" line="2504"/>
         <source>Rewind to &amp;Beginning</source>
-        <translation type="unfinished">Ulang hing&amp;ga Awal</translation>
+        <translation>Putar Ulang &amp;ke Awal</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="961"/>
@@ -2413,13 +2443,13 @@
         <location filename="../QMenuStrings.cpp" line="1727"/>
         <location filename="../QMenuStrings.cpp" line="2511"/>
         <source>Fast Forward to &amp;End</source>
-        <translation type="unfinished">Maju C&amp;epat hingg Akhir</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="962"/>
         <location filename="../QMenuStrings.cpp" line="2518"/>
         <source>S&amp;olo</source>
-        <translation type="unfinished"></translation>
+        <translation>S&amp;olo</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="963"/>
@@ -2435,7 +2465,7 @@
         <location filename="../QMenuStrings.cpp" line="2540"/>
         <location filename="../QMenuStrings.cpp" line="4039"/>
         <source>P&amp;anic</source>
-        <translation type="unfinished"></translation>
+        <translation>P&amp;anic</translation>
     </message>
     <message>
         <source>II</source>
@@ -2471,7 +2501,7 @@
         <location filename="../QMenuStrings.cpp" line="1507"/>
         <location filename="../QMenuStrings.cpp" line="3204"/>
         <source>C&amp;hord Insert Mode</source>
-        <translation type="unfinished">Mode Sisip Pa&amp;du Nada</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1516"/>
@@ -2484,100 +2514,100 @@
         <location filename="../QMenuStrings.cpp" line="1905"/>
         <location filename="../QMenuStrings.cpp" line="3641"/>
         <source>&amp;Toolbars</source>
-        <translation type="unfinished">Baris Ala&amp;t</translation>
+        <translation>Baris Ala&amp;t</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="669"/>
         <location filename="../QMenuStrings.cpp" line="1917"/>
         <location filename="../QMenuStrings.cpp" line="3648"/>
         <source>&amp;Rulers</source>
-        <translation type="unfinished">Pengga&amp;ris</translation>
+        <translation>Pengga&amp;ris</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="670"/>
         <location filename="../QMenuStrings.cpp" line="1918"/>
         <source>Show Ch&amp;ord Name Ruler</source>
-        <translation type="unfinished"></translation>
+        <translation>Tampilkan Peng&amp;garis Nama Padu Nada</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="671"/>
         <location filename="../QMenuStrings.cpp" line="1920"/>
         <source>Show &amp;Tempo Ruler</source>
-        <translation type="unfinished"></translation>
+        <translation>Tampilkan Penggaris &amp;Tempo</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1533"/>
         <location filename="../QMenuStrings.cpp" line="3240"/>
         <location filename="../QMenuStrings.cpp" line="4066"/>
         <source>Tools Toolbar</source>
-        <translation type="unfinished">Baris Alat Perkakas</translation>
+        <translation>Baris Alat Perkakas</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1680"/>
         <location filename="../QMenuStrings.cpp" line="1728"/>
         <location filename="../QMenuStrings.cpp" line="4012"/>
         <source>&amp;Record</source>
-        <translation type="unfinished">&amp;Rekam</translation>
+        <translation>&amp;Rekam</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1738"/>
         <source>&amp;Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Pengatur&amp;an</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1739"/>
         <source>Number of Stereo &amp;Inputs</source>
-        <translation type="unfinished">Jumlah Masuk&amp;an Stereo</translation>
+        <translation>Jumlah Masuk&amp;an Stereo</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1740"/>
         <source>&amp;1 Input</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;1 Masukan</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1741"/>
         <source>&amp;2 Inputs</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;2 Masukan</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1742"/>
         <source>&amp;4 Inputs</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;4 Masukan</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1743"/>
         <source>&amp;8 Inputs</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;8 Masukan</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1744"/>
         <source>1&amp;6 Inputs</source>
-        <translation type="unfinished"></translation>
+        <translation>1&amp;6 Masukan</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1745"/>
         <source>&amp;Number of Submasters</source>
-        <translation type="unfinished">Jumlah Su&amp;bmaster</translation>
+        <translation>Jumlah Su&amp;bmaster</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1746"/>
         <source>No Submasters</source>
-        <translation type="unfinished">Tanpa Submaster</translation>
+        <translation>Tanpa Submaster</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1747"/>
         <source>&amp;2 Submasters</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;2 Submaster</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1748"/>
         <source>&amp;4 Submasters</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;4 Submaster</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1749"/>
         <source>&amp;8 Submasters</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;8 Submaster</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1750"/>
@@ -2592,12 +2622,12 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="1752"/>
         <source>Show Audio Su&amp;bmasters</source>
-        <translation type="unfinished"></translation>
+        <translation>Tampilkan Su&amp;bmaster Suara</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1753"/>
         <source>Show &amp;Plugin Buttons</source>
-        <translation type="unfinished"></translation>
+        <translation>Tampilkan Tombol &amp;Pengaya</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1754"/>
@@ -2607,7 +2637,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="1768"/>
         <source>Switch to Inserting Tool</source>
-        <translation type="unfinished"></translation>
+        <translation>Pindah ke Perkakas Sisip</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1769"/>
@@ -2618,27 +2648,27 @@
         <location filename="../QMenuStrings.cpp" line="1781"/>
         <location filename="../QMenuStrings.cpp" line="3517"/>
         <source>&amp;Print...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Cetak...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1780"/>
         <source>P&amp;rint preview...</source>
-        <translation type="unfinished"></translation>
+        <translation>P&amp;ratampil cetak...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1837"/>
         <source>C&amp;ut and Close</source>
-        <translation type="unfinished">Potong dan T&amp;utup</translation>
+        <translation>Potong dan T&amp;utup</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1846"/>
         <source>Pa&amp;ste...</source>
-        <translation type="unfinished"></translation>
+        <translation>Tem&amp;pel...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1855"/>
         <source>De&amp;lete</source>
-        <translation type="unfinished"></translation>
+        <translation>Ha&amp;pus</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1864"/>
@@ -2668,17 +2698,17 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="1877"/>
         <source>Clear Select&amp;ion</source>
-        <translation type="unfinished"></translation>
+        <translation>Bersihkan Seleks&amp;i</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1897"/>
         <source>Note &amp;Font</source>
-        <translation type="unfinished"></translation>
+        <translation>Huru&amp;f Not</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1898"/>
         <source>Si&amp;ze</source>
-        <translation type="unfinished"></translation>
+        <translation>Ukur&amp;an</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1899"/>
@@ -2688,27 +2718,27 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="1900"/>
         <source>&amp;Layout Mode</source>
-        <translation type="unfinished">Mode Tata&amp;letak</translation>
+        <translation>Modus Tampi&amp;lan</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1901"/>
         <source>&amp;Linear Layout</source>
-        <translation type="unfinished"></translation>
+        <translation>Tampilan &amp;Linear</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1902"/>
         <source>&amp;Continuous Page Layout</source>
-        <translation type="unfinished"></translation>
+        <translation>Tampilan &amp;Bersambung</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1903"/>
         <source>&amp;Multiple Page Layout</source>
-        <translation type="unfinished"></translation>
+        <translation>Tampilan &amp;Multihalaman</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1904"/>
         <source>Open L&amp;yric Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Buka Pen&amp;yunting Lirik</translation>
     </message>
     <message>
         <source>Add Event Ruler</source>
@@ -2717,14 +2747,14 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="1924"/>
         <source>Show &amp;Track Headers</source>
-        <translation type="unfinished"></translation>
+        <translation>Tampilkan &amp;Tajuk Jalur</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="683"/>
         <location filename="../QMenuStrings.cpp" line="1934"/>
         <location filename="../QMenuStrings.cpp" line="3750"/>
         <source>Open in &amp;Percussion Matrix Editor</source>
-        <translation type="unfinished">Buka di Penyunting Metriks &amp;Perkusi</translation>
+        <translation>Buka di Penyunting Matriks &amp;Perkusi</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1935"/>
@@ -2735,17 +2765,21 @@
         <location filename="../QMenuStrings.cpp" line="684"/>
         <location filename="../QMenuStrings.cpp" line="1936"/>
         <source>Add &amp;Key Change...</source>
-        <translation type="unfinished">Tambah Perubahan &amp;Kunci...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1937"/>
         <source>Add Pedal &amp;Press</source>
-        <translation type="unfinished">Tambah Tekanan &amp;Pedal</translation>
+        <translation>Tambah Tekanan &amp;Pedal</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1938"/>
         <source>Add Pedal &amp;Release</source>
-        <translation type="unfinished">Tambah Pelepasan Peda&amp;l</translation>
+        <translation>Tambah Pelepasan Peda&amp;l</translation>
+    </message>
+    <message>
+        <source>Transpose by &amp;Inverval...</source>
+        <translation type="obsolete">Transpos oleh &amp;Interval...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1942"/>
@@ -2755,52 +2789,52 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="1943"/>
         <source>N&amp;ote</source>
-        <translation type="unfinished">N&amp;ot</translation>
+        <translation>N&amp;ot</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1944"/>
         <source>Mar&amp;ks</source>
-        <translation type="unfinished">Penan&amp;da</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1945"/>
         <source>Add &amp;Accent</source>
-        <translation type="unfinished"></translation>
+        <translation>Tambah &amp;Aksen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1946"/>
         <source>Add T&amp;enuto</source>
-        <translation type="unfinished"></translation>
+        <translation>Tambah T&amp;enuto</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1947"/>
         <source>Add Sta&amp;ccato</source>
-        <translation type="unfinished"></translation>
+        <translation>Tambah Sta&amp;ccato</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1948"/>
         <source>Add &amp;Staccatissimo</source>
-        <translation type="unfinished"></translation>
+        <translation>Tambah &amp;Staccatissimo</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1949"/>
         <source>Add &amp;Marcato</source>
-        <translation type="unfinished"></translation>
+        <translation>Tambah &amp;Marcato</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1952"/>
         <source>Add S&amp;forzando</source>
-        <translation type="unfinished"></translation>
+        <translation>Tambah S&amp;forzando</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1953"/>
         <source>Add R&amp;inforzando</source>
-        <translation type="unfinished"></translation>
+        <translation>Tambah R&amp;inforzando</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1954"/>
         <source>Add Tri&amp;ll</source>
-        <translation type="unfinished"></translation>
+        <translation>Tambah Bunyi Ge&amp;tar</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1955"/>
@@ -2810,17 +2844,17 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="1956"/>
         <source>Add M&amp;ordent</source>
-        <translation type="unfinished"></translation>
+        <translation>Tambah M&amp;ordent</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1957"/>
         <source>Add I&amp;nverted Mordent</source>
-        <translation type="unfinished"></translation>
+        <translation>Tambah Morde&amp;nt Berbalik</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1958"/>
         <source>Add Long Mordent</source>
-        <translation type="unfinished"></translation>
+        <translation>Tambah Modent Panjang</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1959"/>
@@ -2840,7 +2874,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="1962"/>
         <source>Add &amp;Harmonic</source>
-        <translation type="unfinished"></translation>
+        <translation>Tambah &amp;Harmonik</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1963"/>
@@ -2850,17 +2884,17 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="1964"/>
         <source>Add Te&amp;xt Mark...</source>
-        <translation type="unfinished">Tambah Penanda Te&amp;ks</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1965"/>
         <source>&amp;Remove All Marks</source>
-        <translation type="unfinished">Buang Semua Pen&amp;anda</translation>
+        <translation>Buang &amp;Semua Penanda</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1966"/>
         <source>&amp;Ornaments</source>
-        <translation type="unfinished">&amp;Ornamen</translation>
+        <translation>&amp;Ornamen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1967"/>
@@ -2870,62 +2904,62 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="1968"/>
         <source>&amp;Remove Ornament...</source>
-        <translation type="unfinished"></translation>
+        <translation>Buang O&amp;rnamen...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1969"/>
         <source>Ma&amp;ke Ornament...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Buat Ornamen...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1970"/>
         <source>&amp;Fingerings</source>
-        <translation type="unfinished">Pen&amp;jarian</translation>
+        <translation>Pen&amp;jarian</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1971"/>
         <source>&amp;Remove Fingerings</source>
-        <translation type="unfinished">Buang Penja&amp;rian</translation>
+        <translation>Buang Penja&amp;rian</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1972"/>
         <source>Add Fingering &amp;0 (Thumb)</source>
-        <translation type="unfinished">Tambah Penjarian &amp;0 (Jempol)</translation>
+        <translation>Tambah Penjarian &amp;0 (Jempol)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1981"/>
         <source>Add Fingering &amp;1</source>
-        <translation type="unfinished"></translation>
+        <translation>Tambah Penjarian &amp;1</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1990"/>
         <source>Add Fingering &amp;2</source>
-        <translation type="unfinished"></translation>
+        <translation>Tambah Penjarian &amp;2</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1999"/>
         <source>Add Fingering &amp;3</source>
-        <translation type="unfinished"></translation>
+        <translation>Tambah Penjarian &amp;3</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2008"/>
         <source>Add Fingering &amp;4</source>
-        <translation type="unfinished"></translation>
+        <translation>Tambah Penjarian &amp;4</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2017"/>
         <source>Add Fingering &amp;5</source>
-        <translation type="unfinished"></translation>
+        <translation>Tambah Penjarian &amp;5</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2026"/>
         <source>&amp;Add Fingering +</source>
-        <translation type="unfinished"></translation>
+        <translation>T&amp;ambah Penjarian +</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2035"/>
         <source>Add Other &amp;Fingering...</source>
-        <translation type="unfinished">Tambah Penjarian &amp;Lainnya...</translation>
+        <translation>Tambah Penjarian &amp;Lainnya...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2036"/>
@@ -2935,53 +2969,42 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2037"/>
         <source>&amp;None</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Nihil</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2038"/>
         <source>&amp;1</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;1</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2039"/>
         <source>&amp;2</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;2</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2040"/>
         <source>&amp;3</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;3</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2041"/>
         <source>&amp;4</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;4</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2042"/>
         <source>&amp;5</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="2043"/>
-        <source>&amp;Cycle Slashes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="2050"/>
-        <source>/</source>
-        <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>&amp;5</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2052"/>
         <source>Note &amp;Style</source>
-        <translation type="unfinished"></translation>
+        <translation>Ga&amp;ya Not</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2053"/>
         <source>&amp;Classical</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Klasikal</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2054"/>
@@ -3062,7 +3085,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2085"/>
         <source>&amp;Phrase</source>
-        <translation type="unfinished">&amp;Frase</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2086"/>
@@ -3092,7 +3115,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2115"/>
         <source>&amp;Triplet</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Triplet</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2124"/>
@@ -3102,7 +3125,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2125"/>
         <source>Add S&amp;lur</source>
-        <translation type="unfinished"></translation>
+        <translation>Tambah S&amp;lur</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2134"/>
@@ -3142,7 +3165,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2157"/>
         <source>Tie &amp;Position</source>
-        <translation type="unfinished">Posisi penunjuk</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2158"/>
@@ -3162,12 +3185,12 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2161"/>
         <source>Add &amp;Crescendo</source>
-        <translation type="unfinished">Tambah &amp;Crescendo</translation>
+        <translation>Tambah &amp;Crescendo</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2170"/>
         <source>Add &amp;Decescendo</source>
-        <translation type="unfinished"></translation>
+        <translation>Tambah &amp;Decescendo</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2179"/>
@@ -3177,7 +3200,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2180"/>
         <source>&amp;Octaves</source>
-        <translation type="unfinished">&amp;Oktaf</translation>
+        <translation>&amp;Oktaf</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2181"/>
@@ -3187,12 +3210,12 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2182"/>
         <source>Add Octave &amp;Up</source>
-        <translation type="unfinished">Tambah Oktaf Na&amp;ik</translation>
+        <translation>Tambah Oktaf Na&amp;ik</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2183"/>
         <source>Add Octave &amp;Down</source>
-        <translation type="unfinished">Tambah Oktaf Tu&amp;run</translation>
+        <translation>Tambah Oktaf Tu&amp;run</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2184"/>
@@ -3214,7 +3237,7 @@
         <location filename="../QMenuStrings.cpp" line="3467"/>
         <source>Ctrl+N</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+N</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2196"/>
@@ -3224,13 +3247,13 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2197"/>
         <source>&amp;Notes</source>
-        <translation type="unfinished">&amp;Not</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2205"/>
         <source>Ctrl+=</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+=</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2207"/>
@@ -3243,34 +3266,56 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../QMenuStrings.cpp" line="2209"/>
+        <source>Cycle &amp;Dots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="2216"/>
+        <source>Ctrl+.</source>
+        <comment>keyboard shortcut</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="2218"/>
+        <source>Cycle Dots With&amp;out Duration Change</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="2225"/>
+        <source>Ctrl+Alt+.</source>
+        <comment>keyboard shortcut</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../QMenuStrings.cpp" line="2237"/>
         <source>Fi&amp;x Notation Quantization</source>
-        <translation type="unfinished">Perbai&amp;ki Kuantisasi Notasi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2238"/>
         <source>Remo&amp;ve Notation Quantization</source>
-        <translation type="unfinished">Buang Kuantisasi No&amp;tasi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2239"/>
         <source>&amp;Interpret...</source>
-        <translation type="unfinished">&amp;Interpretasi...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2240"/>
         <source>Rescale</source>
-        <translation type="unfinished">Skala Ulang</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2299"/>
         <source>Convert</source>
-        <translation type="unfinished">Konversi</translation>
+        <translation>Konversi</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2303"/>
         <source>Ve&amp;locities</source>
-        <translation type="unfinished"></translation>
+        <translation>Ve&amp;lositas</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2322"/>
@@ -3285,7 +3330,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2324"/>
         <source>&amp;Restore Positions</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Kembalikan Posisi</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2325"/>
@@ -3321,29 +3366,29 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2348"/>
         <source>&amp;Visibility</source>
-        <translation type="unfinished">&amp;Visibilitas</translation>
+        <translation>&amp;Visibilitas</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2349"/>
         <source>Make &amp;Invisible</source>
-        <translation type="unfinished"></translation>
+        <translation>Buat Tak Terl&amp;ihat</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2350"/>
         <source>Make &amp;Visible</source>
-        <translation type="unfinished"></translation>
+        <translation>Buat Terli&amp;hat</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2413"/>
         <source>Alt+Up</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Alt+Atas</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2422"/>
         <source>Alt+Down</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Alt+Bawah</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2565"/>
@@ -3353,7 +3398,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2596"/>
         <source>S&amp;ymbols</source>
-        <translation type="unfinished"></translation>
+        <translation>S&amp;imbol</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2406"/>
@@ -3369,13 +3414,13 @@
         <location filename="../QMenuStrings.cpp" line="892"/>
         <location filename="../QMenuStrings.cpp" line="2424"/>
         <source>Pre&amp;vious Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Segmen Sebelumn&amp;ya</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="901"/>
         <location filename="../QMenuStrings.cpp" line="2433"/>
         <source>Ne&amp;xt Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Segmen Selanjutn&amp;ya</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="912"/>
@@ -3392,7 +3437,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2618"/>
         <source>&amp;Durations</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Durasi</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2619"/>
@@ -3402,17 +3447,17 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2628"/>
         <source>&amp;Whole Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Not Pen&amp;uh</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2637"/>
         <source>&amp;Half Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Setenga&amp;h Not</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2646"/>
         <source>&amp;Quarter Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Seperempat No&amp;t</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2655"/>
@@ -3472,17 +3517,17 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2586"/>
         <source>&amp;Sharp</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta&amp;jam</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2587"/>
         <source>F&amp;lat</source>
-        <translation type="unfinished"></translation>
+        <translation>Da&amp;tar</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2588"/>
         <source>N&amp;atural</source>
-        <translation type="unfinished"></translation>
+        <translation>N&amp;atural</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2589"/>
@@ -3522,12 +3567,12 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2600"/>
         <source>&amp;Text</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Teks</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2609"/>
         <source>&amp;Guitar Chord</source>
-        <translation type="unfinished">Padu Nada &amp;Gitar</translation>
+        <translation>Padu Nada &amp;Gitar</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1045"/>
@@ -3539,7 +3584,7 @@
         <location filename="../QMenuStrings.cpp" line="1353"/>
         <location filename="../QMenuStrings.cpp" line="3041"/>
         <source>&amp;Lower Octave</source>
-        <translation type="unfinished">Oktaf Ren&amp;dah</translation>
+        <translation>Oktaf Ren&amp;dah</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3195"/>
@@ -3597,26 +3642,26 @@
         <location filename="../QMenuStrings.cpp" line="3493"/>
         <source>Ctrl+O</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+O</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3536"/>
         <source>Ctrl+Q</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Q</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3618"/>
         <location filename="../QMenuStrings.cpp" line="4251"/>
         <source>Ctrl+Shift+V</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+V</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3627"/>
         <source>Ctrl+Shift+Ins</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+Ins</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3650"/>
@@ -3646,12 +3691,12 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3430"/>
         <source>Group Toolbar</source>
-        <translation type="unfinished">Baris Alat Kelompok</translation>
+        <translation>Baris Alat Kelompok</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3429"/>
         <source>Marks Toolbar</source>
-        <translation type="unfinished">Baris Alat Penanda</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="556"/>
@@ -3683,7 +3728,7 @@
         <location filename="../QMenuStrings.cpp" line="3225"/>
         <location filename="../QMenuStrings.cpp" line="4049"/>
         <source>Rosegarden &amp;Manual</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Manual Rosegarden</translation>
     </message>
     <message>
         <source>I</source>
@@ -3693,7 +3738,7 @@
         <location filename="../QMenuStrings.cpp" line="295"/>
         <location filename="../QMenuStrings.cpp" line="583"/>
         <source>Preferences...</source>
-        <translation type="unfinished"></translation>
+        <translation>Preferensi...</translation>
     </message>
     <message>
         <source>0</source>
@@ -3744,18 +3789,18 @@
         <location filename="../QMenuStrings.cpp" line="1536"/>
         <location filename="../QMenuStrings.cpp" line="3432"/>
         <source>Rulers Toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>Baris Alat Penggaris</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1895"/>
         <location filename="../QMenuStrings.cpp" line="3638"/>
         <source>&amp;Preferences...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Preferensi...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1915"/>
         <source>Show &amp;Rulers Toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>Tampilkan Ba&amp;ris Alat Penggaris</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1919"/>
@@ -3771,7 +3816,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2447"/>
         <source>Play</source>
-        <translation type="unfinished">Putar</translation>
+        <translation>Putar</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="940"/>
@@ -3800,31 +3845,15 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2209"/>
-        <source>Cycle &amp;Dots</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="2216"/>
-        <source>Ctrl+.</source>
-        <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="2218"/>
-        <source>Cycle Dots With&amp;out Duration Change</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="2225"/>
-        <source>Ctrl+Alt+.</source>
-        <comment>keyboard shortcut</comment>
+        <location filename="../QMenuStrings.cpp" line="674"/>
+        <location filename="../QMenuStrings.cpp" line="1923"/>
+        <source>Add &amp;Control Ruler</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2454"/>
         <source>Stop</source>
-        <translation type="unfinished"></translation>
+        <translation>Henti</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2523"/>
@@ -3839,47 +3868,47 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2553"/>
         <source>Panic! (Ctrl+Alt+P)</source>
-        <translation type="unfinished"></translation>
+        <translation>Panic! (Ctrl+Alt+P)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2607"/>
         <source>F8</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>F8</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2616"/>
         <source>F9</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>F9</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2704"/>
         <location filename="../QMenuStrings.cpp" line="2713"/>
         <source>Y</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Y</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2722"/>
         <location filename="../QMenuStrings.cpp" line="2731"/>
         <source>.</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>.</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3202"/>
         <location filename="../QMenuStrings.cpp" line="3668"/>
         <source>P</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>P</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3220"/>
         <location filename="../QMenuStrings.cpp" line="4154"/>
         <source>G</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">G</translation>
+        <translation>G</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3247"/>
@@ -3889,22 +3918,22 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3253"/>
         <source>Whole Note (1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Not Penuh (1)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3259"/>
         <source>Half Note (2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Not Setengah (2)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3265"/>
         <source>Quarter Note (4)</source>
-        <translation type="unfinished"></translation>
+        <translation>Not Seperempat (4)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3271"/>
         <source>Eighth Note (8)</source>
-        <translation type="unfinished"></translation>
+        <translation>Not Seperdelapan (8)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3277"/>
@@ -4034,7 +4063,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3431"/>
         <source>Layout Toolbar</source>
-        <translation type="unfinished">Baris Alat Tataletak</translation>
+        <translation>Baris Alat Tataletak</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3433"/>
@@ -4069,7 +4098,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3440"/>
         <source>Interpret</source>
-        <translation type="unfinished">Interpretasi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3441"/>
@@ -4084,12 +4113,12 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3443"/>
         <source>Make Invisible</source>
-        <translation type="unfinished"></translation>
+        <translation>Buat Tak Terlihat</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3444"/>
         <source>Make Visible</source>
-        <translation type="unfinished"></translation>
+        <translation>Buat Terlihat</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3451"/>
@@ -4109,17 +4138,17 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3454"/>
         <source>Sharp</source>
-        <translation type="unfinished"></translation>
+        <translation>Tajam</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3455"/>
         <source>Flat</source>
-        <translation type="unfinished"></translation>
+        <translation>Datar</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3456"/>
         <source>Natural</source>
-        <translation type="unfinished"></translation>
+        <translation>Natural</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3457"/>
@@ -4134,97 +4163,97 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3460"/>
         <source>&amp;New</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Baru</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3469"/>
         <source>&amp;Import</source>
-        <translation type="unfinished">&amp;Impor</translation>
+        <translation>&amp;Impor</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3470"/>
         <source>Import Rosegarden &amp;Project file...</source>
-        <translation type="unfinished">Mengimpor berkas &amp;Proyek Rosegarden...</translation>
+        <translation>Impor berkas &amp;Proyek Rosegarden...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3471"/>
         <source>Import &amp;MIDI file...</source>
-        <translation type="unfinished">Mengimpor berkas &amp;MIDI...</translation>
+        <translation>Impor berkas &amp;MIDI...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3473"/>
         <source>Import &amp;Hydrogen file...</source>
-        <translation type="unfinished">Mengimpor berkas &amp;Hydrogen...</translation>
+        <translation>Impor berkas &amp;Hydrogen...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3474"/>
         <source>&amp;Merge</source>
-        <translation type="unfinished">Gabun&amp;g</translation>
+        <translation>Gabun&amp;g</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3475"/>
         <source>Merge &amp;File...</source>
-        <translation type="unfinished">Menggabungkan &amp;Berkas...</translation>
+        <translation>Gabungkan Ber&amp;kas...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3476"/>
         <source>Merge &amp;MIDI file...</source>
-        <translation type="unfinished">Menggabungkan berkas &amp;MIDI...</translation>
+        <translation>Gabungkan berkas &amp;MIDI...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3478"/>
         <source>Merge &amp;Hydrogen file...</source>
-        <translation type="unfinished">Menggabungkan berkas &amp;Hydrogen...</translation>
+        <translation>Gabungkan berkas &amp;Hydrogen...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3479"/>
         <source>&amp;Export</source>
-        <translation type="unfinished">&amp;Ekspor</translation>
+        <translation>&amp;Ekspor</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3480"/>
         <source>Export Rosegarden &amp;Project file...</source>
-        <translation type="unfinished">Mengekspor berkas &amp;Proyek Rosegarden...</translation>
+        <translation>Ekspor berkas &amp;Proyek Rosegarden...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3482"/>
         <source>Export &amp;MIDI file...</source>
-        <translation type="unfinished">Mengekspor berkas &amp;MIDI...</translation>
+        <translation>Ekspor berkas &amp;MIDI...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3483"/>
         <source>Export &amp;Csound score file...</source>
-        <translation type="unfinished">Mengekspor berkas skor &amp;Csound...</translation>
+        <translation>Ekspor berkas skor &amp;Csound...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3484"/>
         <source>Export M&amp;up file...</source>
-        <translation type="unfinished">Mengekspor berkas M&amp;up...</translation>
+        <translation>Ekspor berkas M&amp;up...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3485"/>
         <source>Export Music&amp;XML file...</source>
-        <translation type="unfinished">Mengekspor berkas Music&amp;XML...</translation>
+        <translation>Ekspor berkas Music&amp;XML...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3486"/>
         <source>&amp;Open...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Buka...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3495"/>
         <source>Open &amp;Recent</source>
-        <translation type="unfinished"></translation>
+        <translation>Te&amp;rakhir Dibuka</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3505"/>
         <source>Save &amp;As...</source>
-        <translation type="unfinished"></translation>
+        <translation>Simpan Sebag&amp;ai...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3514"/>
         <source>Save as &amp;Template...</source>
-        <translation type="unfinished"></translation>
+        <translation>Simpan sebagai Pale&amp;t...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3515"/>
@@ -4234,52 +4263,52 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3516"/>
         <source>Prin&amp;t preview...</source>
-        <translation type="unfinished"></translation>
+        <translation>Pra&amp;tampil cetak...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3518"/>
         <source>Manage A&amp;udio Files</source>
-        <translation type="unfinished">Memanajemen Berkas S&amp;uara</translation>
+        <translation>Kelola Berkas S&amp;uara</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3519"/>
         <source>Play&amp;list</source>
-        <translation type="unfinished">Daftar Ma&amp;in</translation>
+        <translation>Daftar Ma&amp;in</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3529"/>
         <source>&amp;Quit</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Keluar</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3593"/>
         <source>Cut &amp;Range</source>
-        <translation type="unfinished"></translation>
+        <translation>Potong &amp;Jangkauan</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3602"/>
         <source>Cop&amp;y Range</source>
-        <translation type="unfinished"></translation>
+        <translation>Sa&amp;lin Jangkauan</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3611"/>
         <source>Pa&amp;ste Range</source>
-        <translation type="unfinished"></translation>
+        <translation>Tem&amp;pel Jangkauan</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3620"/>
         <source>&amp;Insert Range...</source>
-        <translation type="unfinished"></translation>
+        <translation>S&amp;isip Jangkauan...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3629"/>
         <source>Select &amp;All Segments</source>
-        <translation type="unfinished">Pilih Semu&amp;a Segmen</translation>
+        <translation>Pilih Semu&amp;a Segmen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3640"/>
         <source>Document P&amp;roperties...</source>
-        <translation type="unfinished"></translation>
+        <translation>P&amp;roperti Dokumen...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3677"/>
@@ -4299,17 +4328,17 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3680"/>
         <source>Change &amp;Composition Start and End...</source>
-        <translation type="unfinished">Ubah Awal dan Akhir &amp;Komposisi...</translation>
+        <translation>Ubah Awal dan Akhir &amp;Komposisi...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3681"/>
         <source>Edit Mar&amp;kers...</source>
-        <translation type="unfinished">Sunting Penan&amp;da...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3690"/>
         <source>Edit Document P&amp;roperties...</source>
-        <translation type="unfinished">Sunting P&amp;roperti Dokumen...</translation>
+        <translation>Sunting P&amp;roperti Dokumen...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3691"/>
@@ -4324,17 +4353,17 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3709"/>
         <source>&amp;Studio</source>
-        <translation type="unfinished">&amp;Studio</translation>
+        <translation>&amp;Studio</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3710"/>
         <source>&amp;Audio Mixer</source>
-        <translation type="unfinished">Mikser Suar&amp;a</translation>
+        <translation>Mikser Suar&amp;a</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3712"/>
         <source>Manage MIDI &amp;Devices</source>
-        <translation type="unfinished">Memanajemen Perangkat MI&amp;DI</translation>
+        <translation>Kelola Perangkat MI&amp;DI</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3713"/>
@@ -4344,12 +4373,12 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3714"/>
         <source>Manage &amp;Metronome</source>
-        <translation type="unfinished">Memanajemen &amp;Metronom</translation>
+        <translation>Kelola &amp;Metronom</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3715"/>
         <source>Modify MIDI &amp;Filters</source>
-        <translation type="unfinished">Ubah Penyari&amp;ng MIDI</translation>
+        <translation>Ubah Penyari&amp;ng MIDI</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3716"/>
@@ -4359,22 +4388,22 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3717"/>
         <source>&amp;Reset MIDI Network</source>
-        <translation type="unfinished">Set Ulang Ja&amp;ringan MIDI</translation>
+        <translation>Atu&amp;r Ulang Jaringan MIDI</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3718"/>
         <source>Im&amp;port Studio from File...</source>
-        <translation type="unfinished">Mengim&amp;por Studi dari Berkas...</translation>
+        <translation>Im&amp;por Studio dari Berkas...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3719"/>
         <source>&amp;Import Default Studio</source>
-        <translation type="unfinished">&amp;Impor Studio Utama</translation>
+        <translation>&amp;Impor Studio Baku</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3720"/>
         <source>&amp;Save Current Document as Default Studio</source>
-        <translation type="unfinished">&amp;Simpan Dokumen Bersangkutan sebagai Studio Utama</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Se&amp;gments</source>
@@ -4398,7 +4427,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3787"/>
         <source>Repe&amp;at Last Quantize</source>
-        <translation type="unfinished"></translation>
+        <translation>Ul&amp;angi Kuantisasi Terakhir</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3797"/>
@@ -4417,17 +4446,17 @@
         <location filename="../QMenuStrings.cpp" line="1940"/>
         <location filename="../QMenuStrings.cpp" line="3799"/>
         <source>Set &amp;Duration...</source>
-        <translation type="unfinished"></translation>
+        <translation>Atur &amp;Durasi...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3818"/>
         <source>Join</source>
-        <translation type="unfinished"></translation>
+        <translation>Gabung</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3827"/>
         <source>&amp;Split</source>
-        <translation type="unfinished">&amp;Bagi</translation>
+        <translation>Pi&amp;sah</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3828"/>
@@ -4442,7 +4471,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3830"/>
         <source>Split by &amp;Recording Source...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pisah oleh Sumber &amp;Rekaman...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3831"/>
@@ -4462,42 +4491,42 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3834"/>
         <source>Trac&amp;ks</source>
-        <translation type="unfinished">Ja&amp;lur</translation>
+        <translation>Ja&amp;lur</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3835"/>
         <source>Add &amp;Track</source>
-        <translation type="unfinished">&amp;Tambah Jalur</translation>
+        <translation>&amp;Tambah Jalur</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3844"/>
         <source>&amp;Add Tracks...</source>
-        <translation type="unfinished">T&amp;ambah Jalur...</translation>
+        <translation>T&amp;ambah Jalur...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3853"/>
         <source>D&amp;elete Track</source>
-        <translation type="unfinished">Hapus Jal&amp;ur</translation>
+        <translation>Hapus Jal&amp;ur</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3862"/>
         <source>Move Track &amp;Down</source>
-        <translation type="unfinished">Memin&amp;dah Jalur Turun</translation>
+        <translation>Turunkan Ja&amp;lur</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3871"/>
         <source>Mo&amp;ve Track Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Naikkan Jalu&amp;r</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3880"/>
         <source>Select &amp;Next Track</source>
-        <translation type="unfinished">Pilih Jalur Sela&amp;njutnya</translation>
+        <translation>Pilih Jalur Sela&amp;njutnya</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3889"/>
         <source>Select &amp;Previous Track</source>
-        <translation type="unfinished">&amp;Pilih Jalur Sebelumnya</translation>
+        <translation>&amp;Pilih Jalur Sebelumnya</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3898"/>
@@ -4512,27 +4541,27 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3916"/>
         <source>&amp;Unmute all Tracks</source>
-        <translation type="unfinished">Suarakan Semua Jal&amp;ur</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3917"/>
         <source>&amp;Mute all Tracks</source>
-        <translation type="unfinished">Bisukan Se&amp;mua Jalur</translation>
+        <translation>Bisukan Se&amp;mua Jalur</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3918"/>
         <source>Set &amp;Instrument</source>
-        <translation type="unfinished">Atur &amp;Instrumen</translation>
+        <translation>Atur &amp;Instrumen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3919"/>
         <source>&amp;Remap Instruments...</source>
-        <translation type="unfinished">Petakan Ulang Inst&amp;rumen...</translation>
+        <translation>Petakan Ulang Inst&amp;rumen...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3957"/>
         <source>&amp;Resize</source>
-        <translation type="unfinished">Mengubah Uku&amp;ran</translation>
+        <translation>Ubah Uku&amp;ran</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="4021"/>
@@ -4545,29 +4574,29 @@
         <location filename="../QMenuStrings.cpp" line="1906"/>
         <location filename="../QMenuStrings.cpp" line="3642"/>
         <source>Show Main &amp;Toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>Tampilkan Baris Ala&amp;t Utama</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3644"/>
         <source>Show Trac&amp;ks Toolbar</source>
-        <translation type="unfinished">Tampil&amp;kan Baris Alat Jalur</translation>
+        <translation>Tampil&amp;kan Baris Alat Jalur</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3645"/>
         <source>Show &amp;Editors Toolbar</source>
-        <translation type="unfinished">Tampilkan Baris Alat &amp;Editor</translation>
+        <translation>Tampilkan Baris Alat P&amp;enyunting</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3647"/>
         <source>Show &amp;Zoom Toolbar</source>
-        <translation type="unfinished">Menampilkan Baris Alat &amp;Zum</translation>
+        <translation>Tampilkan Baris Alat &amp;Zum</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="301"/>
         <location filename="../QMenuStrings.cpp" line="668"/>
         <location filename="../QMenuStrings.cpp" line="3673"/>
         <source>Show St&amp;atusbar</source>
-        <translation type="unfinished"></translation>
+        <translation>Tampilkan B&amp;aris Status</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3649"/>
@@ -4577,73 +4606,73 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3472"/>
         <source>Import &amp;X11 Rosegarden file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Impor berkas &amp;X11 Rosegarden...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3477"/>
         <source>Merge &amp;X11 Rosegarden file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Gabungkan berkas &amp;X11 Rosegarden...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3711"/>
         <source>MIDI Mi&amp;xer</source>
-        <translation type="unfinished"></translation>
+        <translation>Mi&amp;kser MIDI</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3651"/>
         <source>Show Te&amp;mpo Ruler</source>
-        <translation type="unfinished">Menampilkan Penggaris Te&amp;mpo</translation>
+        <translation>Tampilkan Penggaris Te&amp;mpo</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3481"/>
         <source>Export &amp;LilyPond file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ekspor berkas &amp;LilyPond...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3652"/>
         <source>Show Tra&amp;nsport</source>
-        <translation type="unfinished">Menampilkan Tra&amp;nspor</translation>
+        <translation>Tampilkan Tra&amp;nspor</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3659"/>
         <source>T</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>T</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3661"/>
         <source>Show Special &amp;Parameters</source>
-        <translation type="unfinished">Menampilkan &amp;Parameter Khusus</translation>
+        <translation>Tampilkan &amp;Parameter Khusus</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3670"/>
         <source>Show Segment Pre&amp;views</source>
-        <translation type="unfinished">Menampilkan Pratamp&amp;il Segmen</translation>
+        <translation>Tampilkan Pratampil Se&amp;gmen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3671"/>
         <source>Sh&amp;ow Segment Labels</source>
-        <translation type="unfinished"></translation>
+        <translation>Tampilkan Label &amp;Segmen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3672"/>
         <source>Show Track &amp;Labels</source>
-        <translation type="unfinished">Menampilkan &amp;Label Jalur</translation>
+        <translation>Tampilkan &amp;Label Jalur</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="4063"/>
         <source>Main Toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>Baris Alat Utama</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="4067"/>
         <source>Tracks Toolbar</source>
-        <translation type="unfinished">Baris Alat Jalur</translation>
+        <translation>Baris Alat Jalur</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="4068"/>
         <source>Editors Toolbar</source>
-        <translation type="unfinished">Baris Alat Penyunting</translation>
+        <translation>Baris Alat Penyunting</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2509"/>
@@ -4662,12 +4691,12 @@
         <location filename="../QMenuStrings.cpp" line="3238"/>
         <location filename="../QMenuStrings.cpp" line="4062"/>
         <source>&amp;Support Rosegarden</source>
-        <translation type="unfinished"></translation>
+        <translation>Dukung &amp;Rosegarden</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="4092"/>
         <source>Insert Tempo Change</source>
-        <translation type="unfinished">Sisipkan Perubahan Tempo</translation>
+        <translation>Sisip Perubahan Tempo</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="4093"/>
@@ -4677,7 +4706,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="4094"/>
         <source>Delete Tempo Change</source>
-        <translation type="unfinished">Hapus Perubahan Tempo</translation>
+        <translation>Hapus Perubahan Tempo</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="4095"/>
@@ -4692,37 +4721,37 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="4097"/>
         <source>Edit Tempo...</source>
-        <translation type="unfinished">Sunting Tempo...</translation>
+        <translation>Sunting Tempo...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="4098"/>
         <source>Edit Time Signature...</source>
-        <translation type="unfinished">Sunting Paraf Waktu...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="4099"/>
         <source>Open Tempo and Time Signature Editor</source>
-        <translation type="unfinished">Buka Penyunting Tempo dan Paraf Waktu</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="4165"/>
         <source>&amp;Edit Item</source>
-        <translation type="unfinished"></translation>
+        <translation>Sunting It&amp;em</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="4174"/>
         <source>Select &amp;All</source>
-        <translation type="unfinished">Pilih Semu&amp;a</translation>
+        <translation>Pilih Semu&amp;a</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="4183"/>
         <source>&amp;Clear Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Bersihkan Seleks&amp;i</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="4192"/>
         <source>&amp;Preferences</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Preferensi</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="4244"/>
@@ -4737,22 +4766,22 @@
     <message>
         <location filename="../../src/gui/editors/notation/NoteFont.cpp" line="62"/>
         <source>Font &quot;%1&quot; not available in size %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Huruf &quot;%1&quot; tidak tersedia dalam ukuran %2</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="357"/>
         <source>Tenor</source>
-        <translation type="unfinished">Tenor</translation>
+        <translation>Tenor</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="359"/>
         <source>Bass</source>
-        <translation type="unfinished">Bass</translation>
+        <translation>Bas</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="354"/>
         <source>Soprano</source>
-        <translation type="unfinished">Soprano</translation>
+        <translation>Sopran</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="31"/>
@@ -4763,7 +4792,7 @@
         <location filename="../InstrumentStrings.cpp" line="32"/>
         <location filename="../AutoloadStrings.cpp" line="81"/>
         <source>Violin</source>
-        <translation type="unfinished"></translation>
+        <translation>Biola</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="33"/>
@@ -4774,7 +4803,7 @@
         <location filename="../InstrumentStrings.cpp" line="34"/>
         <location filename="../AutoloadStrings.cpp" line="82"/>
         <source>Viola</source>
-        <translation type="unfinished"></translation>
+        <translation>Biola Alto</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="35"/>
@@ -4784,7 +4813,7 @@
     <message>
         <location filename="../InstrumentStrings.cpp" line="36"/>
         <source>Violoncello</source>
-        <translation type="unfinished"></translation>
+        <translation>Selo</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="37"/>
@@ -4795,7 +4824,7 @@
         <location filename="../InstrumentStrings.cpp" line="38"/>
         <location filename="../AutoloadStrings.cpp" line="84"/>
         <source>Contrabass</source>
-        <translation type="unfinished"></translation>
+        <translation>Kontrabas</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="39"/>
@@ -4835,12 +4864,12 @@
     <message>
         <location filename="../InstrumentStrings.cpp" line="46"/>
         <source>Soprano guitar</source>
-        <translation type="unfinished"></translation>
+        <translation>Gitar sopran</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="47"/>
         <source>Alto guitar</source>
-        <translation type="unfinished"></translation>
+        <translation>Gitar alto</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="48"/>
@@ -4850,17 +4879,17 @@
     <message>
         <location filename="../InstrumentStrings.cpp" line="49"/>
         <source>Contrabass guitar</source>
-        <translation type="unfinished"></translation>
+        <translation>Gitar kontrabas</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="50"/>
         <source>11-string alto guitar (treble)</source>
-        <translation type="unfinished"></translation>
+        <translation>11-senar gitar alto (tribel)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="51"/>
         <source>11-string alto guitar (bass)</source>
-        <translation type="unfinished"></translation>
+        <translation>11-senar gitar alto (bass)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="52"/>
@@ -4875,12 +4904,12 @@
     <message>
         <location filename="../InstrumentStrings.cpp" line="54"/>
         <source>12-string guitar</source>
-        <translation type="unfinished"></translation>
+        <translation>12-senar gitar</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="55"/>
         <source>Electric guitar</source>
-        <translation type="unfinished"></translation>
+        <translation>Gitar listrik</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="56"/>
@@ -4895,7 +4924,7 @@
     <message>
         <location filename="../InstrumentStrings.cpp" line="58"/>
         <source>Lute</source>
-        <translation type="unfinished"></translation>
+        <translation>Lute</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="59"/>
@@ -4905,117 +4934,117 @@
     <message>
         <location filename="../InstrumentStrings.cpp" line="60"/>
         <source>Piccolo balalaika</source>
-        <translation type="unfinished"></translation>
+        <translation>Balalaika pikolo</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="61"/>
         <source>Prima balalaika</source>
-        <translation type="unfinished"></translation>
+        <translation>Balalaika prima</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="62"/>
         <source>Secunda balalaika</source>
-        <translation type="unfinished"></translation>
+        <translation>Balalaika sekunda</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="63"/>
         <source>Alto balalaika</source>
-        <translation type="unfinished"></translation>
+        <translation>Balalaika alto</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="64"/>
         <source>Bass balalaika</source>
-        <translation type="unfinished"></translation>
+        <translation>Balalaika bas</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="65"/>
         <source>Contrabass balalaika</source>
-        <translation type="unfinished"></translation>
+        <translation>Balalaika kontrabas</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="66"/>
         <location filename="../AutoloadStrings.cpp" line="201"/>
         <source>Mandolin</source>
-        <translation type="unfinished"></translation>
+        <translation>Mandolin</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="67"/>
         <source>Mandola</source>
-        <translation type="unfinished"></translation>
+        <translation>Mandola</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="68"/>
         <location filename="../AutoloadStrings.cpp" line="178"/>
         <source>Ukulele</source>
-        <translation type="unfinished"></translation>
+        <translation>Ukulele</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="69"/>
         <source>Banjo (5-string)</source>
-        <translation type="unfinished"></translation>
+        <translation>Banjo (5-senar)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="70"/>
         <source>Tenor banjo</source>
-        <translation type="unfinished"></translation>
+        <translation>Banjo tenor</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="71"/>
         <source>Harp (treble)</source>
-        <translation type="unfinished"></translation>
+        <translation>Harpa (tribel)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="72"/>
         <source>Harp (bass)</source>
-        <translation type="unfinished"></translation>
+        <translation>Harpa (bas)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="73"/>
         <location filename="../AutoloadStrings.cpp" line="148"/>
         <source>Koto</source>
-        <translation type="unfinished"></translation>
+        <translation>Koto</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="74"/>
         <source>Flutes</source>
-        <translation type="unfinished"></translation>
+        <translation>Seruling</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="75"/>
         <location filename="../AutoloadStrings.cpp" line="113"/>
         <source>Piccolo</source>
-        <translation type="unfinished"></translation>
+        <translation>Pikolo</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="76"/>
         <source>Eb flute</source>
-        <translation type="unfinished"></translation>
+        <translation>Seruling Eb</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="77"/>
         <location filename="../AutoloadStrings.cpp" line="114"/>
         <source>Flute</source>
-        <translation type="unfinished"></translation>
+        <translation>Seruling</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="78"/>
         <source>Alto flute</source>
-        <translation type="unfinished"></translation>
+        <translation>Seruling alto</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="79"/>
         <source>Bass flute</source>
-        <translation type="unfinished"></translation>
+        <translation>Seruling bas</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="80"/>
         <source>Contra-alto flute</source>
-        <translation type="unfinished"></translation>
+        <translation>Seruling kontra-alto</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="81"/>
         <source>Contrabass flute</source>
-        <translation type="unfinished"></translation>
+        <translation>Seruling kontrabas</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="82"/>
@@ -5045,27 +5074,27 @@
     <message>
         <location filename="../InstrumentStrings.cpp" line="87"/>
         <source>Sopranino recorder</source>
-        <translation type="unfinished"></translation>
+        <translation>Rekorder sopranino</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="88"/>
         <source>Soprano recorder</source>
-        <translation type="unfinished"></translation>
+        <translation>Rekorder sopran</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="89"/>
         <source>Alto recorder</source>
-        <translation type="unfinished"></translation>
+        <translation>Rekorder alto</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="90"/>
         <source>Tenor recorder</source>
-        <translation type="unfinished"></translation>
+        <translation>Rekorder tenor</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="91"/>
         <source>Bass recorder</source>
-        <translation type="unfinished"></translation>
+        <translation>Rekorder bas</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="92"/>
@@ -5075,7 +5104,7 @@
     <message>
         <location filename="../InstrumentStrings.cpp" line="93"/>
         <source>Contrabass recorder</source>
-        <translation type="unfinished"></translation>
+        <translation>Rekorder kontrabas</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="94"/>
@@ -5136,7 +5165,7 @@
         <location filename="../InstrumentStrings.cpp" line="105"/>
         <location filename="../AutoloadStrings.cpp" line="118"/>
         <source>Shakuhachi</source>
-        <translation type="unfinished"></translation>
+        <translation>Shakuhachi</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="106"/>
@@ -5146,18 +5175,18 @@
     <message>
         <location filename="../InstrumentStrings.cpp" line="107"/>
         <source>Piccolo oboe in F</source>
-        <translation type="unfinished"></translation>
+        <translation>Pikolo obo pada F</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="108"/>
         <source>Piccolo oboe in Eb</source>
-        <translation type="unfinished"></translation>
+        <translation>Pikolo obo pada Eb</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="109"/>
         <location filename="../AutoloadStrings.cpp" line="109"/>
         <source>Oboe</source>
-        <translation type="unfinished"></translation>
+        <translation>Obo</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="110"/>
@@ -5167,12 +5196,12 @@
     <message>
         <location filename="../InstrumentStrings.cpp" line="111"/>
         <source>English horn</source>
-        <translation type="unfinished"></translation>
+        <translation>Terompet Inggris</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="112"/>
         <source>Baritone oboe</source>
-        <translation type="unfinished"></translation>
+        <translation>Obo bariton</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="113"/>
@@ -5298,7 +5327,7 @@
     <message>
         <location filename="../InstrumentStrings.cpp" line="137"/>
         <source>Alto sarrusophone</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="138"/>
@@ -5338,32 +5367,32 @@
     <message>
         <location filename="../InstrumentStrings.cpp" line="145"/>
         <source>Eb clarinet</source>
-        <translation type="unfinished"></translation>
+        <translation>Klarinet Eb</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="146"/>
         <source>D clarinet</source>
-        <translation type="unfinished"></translation>
+        <translation>Klarinet D</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="147"/>
         <source>C clarinet</source>
-        <translation type="unfinished"></translation>
+        <translation>Klarinet C</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="148"/>
         <source>Bb clarinet</source>
-        <translation type="unfinished"></translation>
+        <translation>Klarinet Bb</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="149"/>
         <source>A clarinet</source>
-        <translation type="unfinished"></translation>
+        <translation>Klarinet</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="150"/>
         <source>Alto clarinet</source>
-        <translation type="unfinished"></translation>
+        <translation>Klarinet alto</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="151"/>
@@ -5373,17 +5402,17 @@
     <message>
         <location filename="../InstrumentStrings.cpp" line="152"/>
         <source>Bass clarinet</source>
-        <translation type="unfinished"></translation>
+        <translation>Klarinet bas</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="153"/>
         <source>Contra-alto clarinet</source>
-        <translation type="unfinished"></translation>
+        <translation>Klarinet kontra-alto</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="154"/>
         <source>Contrabass clarinet</source>
-        <translation type="unfinished"></translation>
+        <translation>Klarinet kontrabas</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="155"/>
@@ -5408,37 +5437,37 @@
     <message>
         <location filename="../InstrumentStrings.cpp" line="159"/>
         <source>Sopranino saxophone</source>
-        <translation type="unfinished"></translation>
+        <translation>Saksofon sopranino</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="160"/>
         <source>Soprano saxophone</source>
-        <translation type="unfinished"></translation>
+        <translation>Saksofon sopran</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="161"/>
         <source>Alto saxophone</source>
-        <translation type="unfinished"></translation>
+        <translation>Saksofon alto</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="162"/>
         <source>Tenor saxophone</source>
-        <translation type="unfinished"></translation>
+        <translation>Saksofon tenor</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="163"/>
         <source>Baritone saxophone</source>
-        <translation type="unfinished"></translation>
+        <translation>Saksofon bariton</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="164"/>
         <source>Bass saxophone</source>
-        <translation type="unfinished"></translation>
+        <translation>Saksofon bas</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="165"/>
         <source>Contrabass saxophone</source>
-        <translation type="unfinished"></translation>
+        <translation>Saksofon kontrabas</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="166"/>
@@ -5458,42 +5487,42 @@
     <message>
         <location filename="../InstrumentStrings.cpp" line="169"/>
         <source>Piccolo trumpet in Bb</source>
-        <translation type="unfinished"></translation>
+        <translation>Terompet pikolo pada Bb</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="170"/>
         <source>Piccolo trumpet in A</source>
-        <translation type="unfinished"></translation>
+        <translation>Terompet pikolo pada A</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="171"/>
         <source>Trumpet in Eb</source>
-        <translation type="unfinished"></translation>
+        <translation>Terompet di Eb</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="172"/>
         <source>Trumpet in D</source>
-        <translation type="unfinished"></translation>
+        <translation>Terompet di D</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="173"/>
         <source>Trumpet in C</source>
-        <translation type="unfinished"></translation>
+        <translation>Terompet di C</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="174"/>
         <source>Trumpet in Bb</source>
-        <translation type="unfinished"></translation>
+        <translation>Terompet di Bb</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="175"/>
         <source>Bass trumpet in Eb</source>
-        <translation type="unfinished"></translation>
+        <translation>Terompet bas pada Eb</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="176"/>
         <source>Bass trumpet in Bb</source>
-        <translation type="unfinished"></translation>
+        <translation>Terompet bas pada Bb</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="177"/>
@@ -5523,12 +5552,12 @@
     <message>
         <location filename="../InstrumentStrings.cpp" line="182"/>
         <source>Cornet in Eb</source>
-        <translation type="unfinished"></translation>
+        <translation>Kornet pada Eb</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="183"/>
         <source>Cornet in Bb</source>
-        <translation type="unfinished"></translation>
+        <translation>Kornet pada Bb</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="184"/>
@@ -5583,47 +5612,47 @@
     <message>
         <location filename="../InstrumentStrings.cpp" line="194"/>
         <source>French horn</source>
-        <translation type="unfinished"></translation>
+        <translation>Terompet Perancis</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="195"/>
         <source>French horn in C alto</source>
-        <translation type="unfinished"></translation>
+        <translation>Terompet Perancis pada C alto</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="196"/>
         <source>French horn in Bb alto</source>
-        <translation type="unfinished"></translation>
+        <translation>Terompet Perancis pada Bb alto</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="197"/>
         <source>French horn in A</source>
-        <translation type="unfinished"></translation>
+        <translation>Terompet Perancis pada A</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="198"/>
         <source>French horn in Ab</source>
-        <translation type="unfinished"></translation>
+        <translation>Terompet Perancis pada Ab</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="199"/>
         <source>French horn in G</source>
-        <translation type="unfinished"></translation>
+        <translation>Terompet perancis pada G</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="200"/>
         <source>French horn in E</source>
-        <translation type="unfinished"></translation>
+        <translation>Terompet perancis pada E</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="201"/>
         <source>French horn in Eb</source>
-        <translation type="unfinished"></translation>
+        <translation>Terompet perancis pada Eb</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="202"/>
         <source>French horn in D</source>
-        <translation type="unfinished"></translation>
+        <translation>Terompet perancis pada D</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="203"/>
@@ -5638,17 +5667,17 @@
     <message>
         <location filename="../InstrumentStrings.cpp" line="205"/>
         <source>Alto horn in F</source>
-        <translation type="unfinished"></translation>
+        <translation>Terompet alto pada F</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="206"/>
         <source>Alto horn in Eb</source>
-        <translation type="unfinished"></translation>
+        <translation>Terompet alto pada Eb</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="207"/>
         <source>Baritone horn</source>
-        <translation type="unfinished"></translation>
+        <translation>Terompet bariton</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="208"/>
@@ -5688,7 +5717,7 @@
     <message>
         <location filename="../InstrumentStrings.cpp" line="215"/>
         <source>Alto trombone</source>
-        <translation type="unfinished"></translation>
+        <translation>Trombon alto</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="216"/>
@@ -5698,32 +5727,32 @@
     <message>
         <location filename="../InstrumentStrings.cpp" line="217"/>
         <source>Bass trombone</source>
-        <translation type="unfinished"></translation>
+        <translation>Trombon bas</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="218"/>
         <source>Contrabass trombone</source>
-        <translation type="unfinished"></translation>
+        <translation>Trombon kontrabas</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="219"/>
         <source>Euphonium</source>
-        <translation type="unfinished"></translation>
+        <translation>Eufonium</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="220"/>
         <source>F tuba</source>
-        <translation type="unfinished"></translation>
+        <translation>Tuba F</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="221"/>
         <source>C tuba</source>
-        <translation type="unfinished"></translation>
+        <translation>Tuba C</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="222"/>
         <source>Bb tuba</source>
-        <translation type="unfinished"></translation>
+        <translation>Tuba Bb</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="223"/>
@@ -5734,7 +5763,7 @@
         <location filename="../InstrumentStrings.cpp" line="224"/>
         <location filename="../AutoloadStrings.cpp" line="88"/>
         <source>Timpani</source>
-        <translation type="unfinished"></translation>
+        <translation>Timpani</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="225"/>
@@ -5770,23 +5799,23 @@
     <message>
         <location filename="../InstrumentStrings.cpp" line="231"/>
         <source>Tubaphone</source>
-        <translation type="unfinished"></translation>
+        <translation>Tubafon</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="232"/>
         <source>Almglocken (treble)</source>
-        <translation type="unfinished"></translation>
+        <translation>Almglocken (tribel)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="233"/>
         <source>Almglocken (bass)</source>
-        <translation type="unfinished"></translation>
+        <translation>Almglocken (bas)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="234"/>
         <location filename="../AutoloadStrings.cpp" line="52"/>
         <source>Vibraphone</source>
-        <translation type="unfinished"></translation>
+        <translation>Vibrafon</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="235"/>
@@ -5871,13 +5900,13 @@
     <message>
         <location filename="../InstrumentStrings.cpp" line="251"/>
         <source>Glass harmonica</source>
-        <translation type="unfinished"></translation>
+        <translation>Harmonika gelas</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="252"/>
         <location filename="../AutoloadStrings.cpp" line="54"/>
         <source>Xylophone</source>
-        <translation type="unfinished"></translation>
+        <translation>Silofon</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="253"/>
@@ -5897,12 +5926,12 @@
     <message>
         <location filename="../InstrumentStrings.cpp" line="256"/>
         <source>Marimba (treble)</source>
-        <translation type="unfinished"></translation>
+        <translation>Marimba (tribel)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="257"/>
         <source>Marimba (bass)</source>
-        <translation type="unfinished"></translation>
+        <translation>Marimba (bas)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="258"/>
@@ -5942,7 +5971,7 @@
     <message>
         <location filename="../InstrumentStrings.cpp" line="265"/>
         <source>Military drum</source>
-        <translation type="unfinished"></translation>
+        <translation>Drum militer</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="266"/>
@@ -5952,12 +5981,12 @@
     <message>
         <location filename="../InstrumentStrings.cpp" line="267"/>
         <source>Chinese tom-toms</source>
-        <translation type="unfinished"></translation>
+        <translation>Tom-tom Cina</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="268"/>
         <source>Bongos</source>
-        <translation type="unfinished"></translation>
+        <translation>Bongos</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="269"/>
@@ -5972,13 +6001,13 @@
     <message>
         <location filename="../InstrumentStrings.cpp" line="271"/>
         <source>Bass drum</source>
-        <translation type="unfinished"></translation>
+        <translation>Drum bas</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="272"/>
         <location filename="../AutoloadStrings.cpp" line="267"/>
         <source>Tambourine</source>
-        <translation type="unfinished"></translation>
+        <translation>Tamborin</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="273"/>
@@ -5988,7 +6017,7 @@
     <message>
         <location filename="../InstrumentStrings.cpp" line="274"/>
         <source>Tablas</source>
-        <translation type="unfinished"></translation>
+        <translation>Tabla</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="275"/>
@@ -6003,7 +6032,7 @@
     <message>
         <location filename="../InstrumentStrings.cpp" line="277"/>
         <source>Cymbals</source>
-        <translation type="unfinished"></translation>
+        <translation>Simbal</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="278"/>
@@ -6038,7 +6067,7 @@
     <message>
         <location filename="../InstrumentStrings.cpp" line="284"/>
         <source>Chinese cymbal</source>
-        <translation type="unfinished"></translation>
+        <translation>Simbal Cina</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="285"/>
@@ -6048,7 +6077,7 @@
     <message>
         <location filename="../InstrumentStrings.cpp" line="286"/>
         <source>Cowbells</source>
-        <translation type="unfinished"></translation>
+        <translation>Lonceng sapi</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="287"/>
@@ -6125,7 +6154,7 @@
         <location filename="../InstrumentStrings.cpp" line="301"/>
         <location filename="../AutoloadStrings.cpp" line="194"/>
         <source>Castanets</source>
-        <translation type="unfinished"></translation>
+        <translation>Kastanyet</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="302"/>
@@ -6220,55 +6249,55 @@
     <message>
         <location filename="../InstrumentStrings.cpp" line="323"/>
         <source>Percussion synthesizer</source>
-        <translation type="unfinished"></translation>
+        <translation>Sintetiser perkusi</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="374"/>
         <source>Cb</source>
         <comment>note name</comment>
-        <translation type="unfinished"></translation>
+        <translation>Cb</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="377"/>
         <source>Db</source>
         <comment>note name</comment>
-        <translation type="unfinished"></translation>
+        <translation>Db</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="379"/>
         <source>Eb</source>
         <comment>note name</comment>
-        <translation type="unfinished">E</translation>
+        <translation>Eb</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="381"/>
         <source>E#</source>
         <comment>note name</comment>
-        <translation type="unfinished"></translation>
+        <translation>E#</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="382"/>
         <source>Fb</source>
         <comment>note name</comment>
-        <translation type="unfinished"></translation>
+        <translation>Fb</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="387"/>
         <source>Ab</source>
         <comment>note name</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ab</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="390"/>
         <source>Bb</source>
         <comment>note name</comment>
-        <translation type="unfinished">B</translation>
+        <translation>Bb</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="392"/>
         <source>B#</source>
         <comment>note name</comment>
-        <translation type="unfinished"></translation>
+        <translation>B#</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="303"/>
@@ -6290,17 +6319,17 @@
     <message>
         <location filename="../InstrumentStrings.cpp" line="324"/>
         <source>Keyboards</source>
-        <translation type="unfinished"></translation>
+        <translation>Kibor</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="325"/>
         <source>Piano (treble)</source>
-        <translation type="unfinished"></translation>
+        <translation>Piano (tribel)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="326"/>
         <source>Piano (bass)</source>
-        <translation type="unfinished"></translation>
+        <translation>Piano (bas)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="327"/>
@@ -6335,12 +6364,12 @@
     <message>
         <location filename="../InstrumentStrings.cpp" line="333"/>
         <source>Electric piano (treble)</source>
-        <translation type="unfinished"></translation>
+        <translation>Piano listrik (tribel)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="334"/>
         <source>Electric piano (bass)</source>
-        <translation type="unfinished"></translation>
+        <translation>Piano listrik (bas)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="335"/>
@@ -6350,42 +6379,42 @@
     <message>
         <location filename="../InstrumentStrings.cpp" line="336"/>
         <source>Keyboard synthesizer (treble)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sintetiser kibor (tribel)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="337"/>
         <source>Keyboard synthesizer (bass)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sitentiser kibor (bas)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="338"/>
         <source>Organ (manual) (treble)</source>
-        <translation type="unfinished"></translation>
+        <translation>Organ (manual) (tribel)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="339"/>
         <source>Organ (manual) (bass)</source>
-        <translation type="unfinished"></translation>
+        <translation>Organ (manual) (bas)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="340"/>
         <source>Organ (pedal)</source>
-        <translation type="unfinished"></translation>
+        <translation>Organ (pedal)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="341"/>
         <source>Electronic organ (manual) (treble)</source>
-        <translation type="unfinished"></translation>
+        <translation>Organ elektronik (manual) (tribel)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="342"/>
         <source>Electronic organ (manual) (bass)</source>
-        <translation type="unfinished"></translation>
+        <translation>Organ elektronik (manual) (bas)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="343"/>
         <source>Electronic organ (pedal)</source>
-        <translation type="unfinished"></translation>
+        <translation>Organ elektronik (pedal)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="344"/>
@@ -6405,12 +6434,12 @@
     <message>
         <location filename="../InstrumentStrings.cpp" line="347"/>
         <source>Accordion (treble)</source>
-        <translation type="unfinished"></translation>
+        <translation>Akordion (tribel)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="348"/>
         <source>Accordion (bass)</source>
-        <translation type="unfinished"></translation>
+        <translation>Akordion (bas)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="349"/>
@@ -6426,7 +6455,7 @@
         <location filename="../InstrumentStrings.cpp" line="351"/>
         <location filename="../AutoloadStrings.cpp" line="63"/>
         <source>Harmonica</source>
-        <translation type="unfinished"></translation>
+        <translation>Harmonika</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="352"/>
@@ -6436,22 +6465,22 @@
     <message>
         <location filename="../InstrumentStrings.cpp" line="353"/>
         <source>Voices</source>
-        <translation type="unfinished"></translation>
+        <translation>Suara</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="355"/>
         <source>Mezzosoprano</source>
-        <translation type="unfinished"></translation>
+        <translation>Mesosopran</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="356"/>
         <source>Alto</source>
-        <translation type="unfinished">Alto</translation>
+        <translation>Alto</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="358"/>
         <source>Baritone</source>
-        <translation type="unfinished"></translation>
+        <translation>Bariton</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="360"/>
@@ -6461,7 +6490,7 @@
     <message>
         <location filename="../InstrumentStrings.cpp" line="361"/>
         <source>Miscellaneous</source>
-        <translation type="unfinished"></translation>
+        <translation>Lain-lain</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="362"/>
@@ -6506,12 +6535,12 @@
     <message>
         <location filename="../InstrumentStrings.cpp" line="370"/>
         <source>Klaxon horn</source>
-        <translation type="unfinished"></translation>
+        <translation>Klakson</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="371"/>
         <source>Lion&apos;s roar</source>
-        <translation type="unfinished"></translation>
+        <translation>Auman singa</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="372"/>
@@ -6521,7 +6550,7 @@
     <message>
         <location filename="../InstrumentStrings.cpp" line="373"/>
         <source>Pistol shot</source>
-        <translation type="unfinished"></translation>
+        <translation>Tembakan pistol</translation>
     </message>
     <message>
         <source>C</source>
@@ -6574,17 +6603,17 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="39"/>
         <source>General MIDI Device</source>
-        <translation type="unfinished"></translation>
+        <translation>Perangkat MIDI Umum</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="40"/>
         <source>General MIDI</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI Umum</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="41"/>
         <source>Acoustic Grand Piano</source>
-        <translation type="unfinished"></translation>
+        <translation>Grand Piano Akustik</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="42"/>
@@ -6604,12 +6633,12 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="45"/>
         <source>Electric Piano 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Piano Listrik 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="46"/>
         <source>Electric Piano 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Piano Listrik 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="47"/>
@@ -6634,7 +6663,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="53"/>
         <source>Marimba</source>
-        <translation type="unfinished"></translation>
+        <translation>Marimba</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="55"/>
@@ -6664,7 +6693,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="60"/>
         <source>Church Organ</source>
-        <translation type="unfinished"></translation>
+        <translation>Organ Gereja</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="61"/>
@@ -6674,7 +6703,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="62"/>
         <source>Accordion</source>
-        <translation type="unfinished"></translation>
+        <translation>Akordion</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="64"/>
@@ -6684,22 +6713,22 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="65"/>
         <source>Acoustic Guitar (nylon)</source>
-        <translation type="unfinished"></translation>
+        <translation>Gitar Akustik (nilon)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="66"/>
         <source>Acoustic Guitar (steel)</source>
-        <translation type="unfinished"></translation>
+        <translation>Gitar Akustik (baja)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="67"/>
         <source>Electric Guitar (jazz)</source>
-        <translation type="unfinished"></translation>
+        <translation>Gitar Listrik (jaz)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="68"/>
         <source>Electric Guitar (clean)</source>
-        <translation type="unfinished"></translation>
+        <translation>Gitar Listrik (bersih)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="69"/>
@@ -6724,7 +6753,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="73"/>
         <source>Acoustic Bass</source>
-        <translation type="unfinished"></translation>
+        <translation>Bas Akustik</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="74"/>
@@ -6764,7 +6793,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="83"/>
         <source>Cello</source>
-        <translation type="unfinished"></translation>
+        <translation>Selo</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="85"/>
@@ -6804,12 +6833,12 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="93"/>
         <source>Choir Aahs</source>
-        <translation type="unfinished"></translation>
+        <translation>Paduan Suara Aahs</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="94"/>
         <source>Voice Oohs</source>
-        <translation type="unfinished"></translation>
+        <translation>Suara Oohs</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="95"/>
@@ -6824,7 +6853,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="97"/>
         <source>Trumpet</source>
-        <translation type="unfinished"></translation>
+        <translation>Terompet</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="98"/>
@@ -6834,7 +6863,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="99"/>
         <source>Tuba</source>
-        <translation type="unfinished"></translation>
+        <translation>Tuba</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="100"/>
@@ -6844,7 +6873,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="101"/>
         <source>French Horn</source>
-        <translation type="unfinished"></translation>
+        <translation>Terompet Perancis</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="102"/>
@@ -6884,17 +6913,17 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="110"/>
         <source>English Horn</source>
-        <translation type="unfinished"></translation>
+        <translation>Terompet Inggris</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="112"/>
         <source>Clarinet</source>
-        <translation type="unfinished"></translation>
+        <translation>Klarinet</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="115"/>
         <source>Recorder</source>
-        <translation type="unfinished"></translation>
+        <translation>Rekorder</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="116"/>
@@ -6914,7 +6943,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="120"/>
         <source>Ocarina</source>
-        <translation type="unfinished"></translation>
+        <translation>Okarina</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="121"/>
@@ -6999,22 +7028,22 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="137"/>
         <source>FX 1 (rain)</source>
-        <translation type="unfinished"></translation>
+        <translation>FX 1 (hujan)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="138"/>
         <source>FX 2 (soundtrack)</source>
-        <translation type="unfinished"></translation>
+        <translation>FX 2 (jalur suara)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="139"/>
         <source>FX 3 (crystal)</source>
-        <translation type="unfinished"></translation>
+        <translation>FX 3 (kristal)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="140"/>
         <source>FX 4 (atmosphere)</source>
-        <translation type="unfinished"></translation>
+        <translation>FX 4 (atmosfer)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="141"/>
@@ -7029,7 +7058,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="143"/>
         <source>FX 7 (echoes)</source>
-        <translation type="unfinished"></translation>
+        <translation>FX 7 (gema)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="144"/>
@@ -7039,12 +7068,12 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="145"/>
         <source>Sitar</source>
-        <translation type="unfinished"></translation>
+        <translation>Sitar</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="146"/>
         <source>Banjo</source>
-        <translation type="unfinished"></translation>
+        <translation>Banjo</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="147"/>
@@ -7054,7 +7083,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="149"/>
         <source>Kalimba</source>
-        <translation type="unfinished"></translation>
+        <translation>Kalimba</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="150"/>
@@ -7079,7 +7108,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="154"/>
         <source>Agogo</source>
-        <translation type="unfinished"></translation>
+        <translation>Agogo</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="155"/>
@@ -7134,27 +7163,27 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="165"/>
         <source>Telephone Ring</source>
-        <translation type="unfinished"></translation>
+        <translation>Dering Telepon</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="166"/>
         <source>Helicopter</source>
-        <translation type="unfinished"></translation>
+        <translation>Helikopter</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="167"/>
         <source>Applause</source>
-        <translation type="unfinished"></translation>
+        <translation>Tepuk tangan</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="168"/>
         <source>Gunshot</source>
-        <translation type="unfinished"></translation>
+        <translation>Tembakan Pistol</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="169"/>
         <source>Bank 0:8</source>
-        <translation type="unfinished"></translation>
+        <translation>Bank 0:8</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="170"/>
@@ -7174,7 +7203,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="173"/>
         <source>Church Bell</source>
-        <translation type="unfinished"></translation>
+        <translation>Lonceng Gereja</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="174"/>
@@ -7189,22 +7218,22 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="176"/>
         <source>Church Organ 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Organ Gereja 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="177"/>
         <source>Italian Accordion</source>
-        <translation type="unfinished"></translation>
+        <translation>Akordion Italia</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="179"/>
         <source>12 String Guitar</source>
-        <translation type="unfinished"></translation>
+        <translation>12 Senar Gitar</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="180"/>
         <source>Hawaiian Guitar</source>
-        <translation type="unfinished"></translation>
+        <translation>Gitar Hawai</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="181"/>
@@ -7284,12 +7313,12 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="197"/>
         <source>808 Tom</source>
-        <translation type="unfinished"></translation>
+        <translation>808 Tom</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="198"/>
         <source>Bank 0:9</source>
-        <translation type="unfinished"></translation>
+        <translation>Bank 0:9</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="199"/>
@@ -7299,52 +7328,52 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="200"/>
         <source>Bank 0:16</source>
-        <translation type="unfinished"></translation>
+        <translation>Bank 0:16</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="202"/>
         <source>Bank 1:0</source>
-        <translation type="unfinished"></translation>
+        <translation>Bank 1:0</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="203"/>
         <source>Standard</source>
-        <translation type="unfinished"></translation>
+        <translation>Standar</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="204"/>
         <source>Standard 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Standar 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="205"/>
         <source>Standard 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Standar 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="206"/>
         <source>Standard 3</source>
-        <translation type="unfinished"></translation>
+        <translation>Standar 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="207"/>
         <source>Standard 4</source>
-        <translation type="unfinished"></translation>
+        <translation>Standar 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="208"/>
         <source>Standard 5</source>
-        <translation type="unfinished"></translation>
+        <translation>Standar 5</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="209"/>
         <source>Standard 6</source>
-        <translation type="unfinished"></translation>
+        <translation>Standar 6</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="210"/>
         <source>Standard 7</source>
-        <translation type="unfinished"></translation>
+        <translation>Standar 7</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="211"/>
@@ -7409,37 +7438,37 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="223"/>
         <source>Electronic</source>
-        <translation type="unfinished"></translation>
+        <translation>Elektronik</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="224"/>
         <source>TR-808</source>
-        <translation type="unfinished"></translation>
+        <translation>TR-808</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="225"/>
         <source>Jazz</source>
-        <translation type="unfinished"></translation>
+        <translation>Jaz</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="226"/>
         <source>Jazz 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Jaz 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="227"/>
         <source>Jazz 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Jaz 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="228"/>
         <source>Jazz 3</source>
-        <translation type="unfinished"></translation>
+        <translation>Jaz 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="229"/>
         <source>Jazz 4</source>
-        <translation type="unfinished"></translation>
+        <translation>Jaz 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="230"/>
@@ -7480,7 +7509,7 @@
         <location filename="../AutoloadStrings.cpp" line="299"/>
         <location filename="../AutoloadStrings.cpp" line="738"/>
         <source>Volume</source>
-        <translation type="unfinished">Volume</translation>
+        <translation>Volume</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="237"/>
@@ -7501,14 +7530,14 @@
         <location filename="../AutoloadStrings.cpp" line="302"/>
         <location filename="../AutoloadStrings.cpp" line="741"/>
         <source>Expression</source>
-        <translation type="unfinished"></translation>
+        <translation>Ekspresi</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="240"/>
         <location filename="../AutoloadStrings.cpp" line="303"/>
         <location filename="../AutoloadStrings.cpp" line="742"/>
         <source>Modulation</source>
-        <translation type="unfinished"></translation>
+        <translation>Modulasi</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="241"/>
@@ -7520,7 +7549,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="242"/>
         <source>General MIDI Percussion</source>
-        <translation type="unfinished"></translation>
+        <translation>Perkusi MIDI Umum</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="243"/>
@@ -7529,17 +7558,17 @@
         <location filename="../AutoloadStrings.cpp" line="246"/>
         <location filename="../AutoloadStrings.cpp" line="247"/>
         <source> </source>
-        <translation type="unfinished"></translation>
+        <translation> </translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="248"/>
         <source>Acoustic Bass Drum</source>
-        <translation type="unfinished"></translation>
+        <translation>Drum Bas Akustik</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="249"/>
         <source>Bass Drum 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Drum Bas 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="250"/>
@@ -7549,7 +7578,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="251"/>
         <source>Acoustic Snare</source>
-        <translation type="unfinished"></translation>
+        <translation>Senar Akustik</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="252"/>
@@ -7619,7 +7648,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="265"/>
         <source>Chinese Cymbal</source>
-        <translation type="unfinished"></translation>
+        <translation>Simbal Cina</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="266"/>
@@ -7634,7 +7663,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="269"/>
         <source>Cowbell</source>
-        <translation type="unfinished"></translation>
+        <translation>Lonceng sapi</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="270"/>
@@ -7754,7 +7783,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="296"/>
         <source>&amp;lt;none&amp;gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;lt;nihil&amp;gt;</translation>
     </message>
     <message>
         <location filename="../../src/base/Studio.cpp" line="56"/>
@@ -7769,7 +7798,7 @@
         <location filename="../../src/sound/AlsaDriver.cpp" line="694"/>
         <location filename="../AutoloadStrings.cpp" line="306"/>
         <source>Audio</source>
-        <translation type="unfinished">Suara</translation>
+        <translation>Suara</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="308"/>
@@ -7824,7 +7853,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="318"/>
         <source>blue</source>
-        <translation type="unfinished"></translation>
+        <translation>biru</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="319"/>
@@ -7839,7 +7868,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="321"/>
         <source>SkyBlue</source>
-        <translation type="unfinished"></translation>
+        <translation>BiruLangit</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="322"/>
@@ -7859,7 +7888,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="325"/>
         <source>LightBlue</source>
-        <translation type="unfinished"></translation>
+        <translation>BiruMuda</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="326"/>
@@ -7889,7 +7918,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="331"/>
         <source>cyan</source>
-        <translation type="unfinished"></translation>
+        <translation>sian</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="332"/>
@@ -7914,7 +7943,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="336"/>
         <source>DarkGreen</source>
-        <translation type="unfinished"></translation>
+        <translation>HijauTua</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="337"/>
@@ -7929,7 +7958,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="339"/>
         <source>SeaGreen</source>
-        <translation type="unfinished"></translation>
+        <translation>HijauLaut</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="340"/>
@@ -7959,7 +7988,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="345"/>
         <source>green</source>
-        <translation type="unfinished"></translation>
+        <translation>hijau</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="346"/>
@@ -7974,7 +8003,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="348"/>
         <source>GreenYellow</source>
-        <translation type="unfinished"></translation>
+        <translation>HijauKuning</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="349"/>
@@ -7984,12 +8013,12 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="350"/>
         <source>YellowGreen</source>
-        <translation type="unfinished"></translation>
+        <translation>KuningHijau</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="351"/>
         <source>ForestGreen</source>
-        <translation type="unfinished"></translation>
+        <translation>HijauHutan</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="352"/>
@@ -8019,17 +8048,17 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="357"/>
         <source>LightYellow</source>
-        <translation type="unfinished"></translation>
+        <translation>KuningMuda</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="358"/>
         <source>yellow</source>
-        <translation type="unfinished"></translation>
+        <translation>kuning</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="359"/>
         <source>gold</source>
-        <translation type="unfinished"></translation>
+        <translation>emas</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="360"/>
@@ -8054,7 +8083,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="364"/>
         <source>IndianRed</source>
-        <translation type="unfinished"></translation>
+        <translation>MerahIndian</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="365"/>
@@ -8099,7 +8128,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="373"/>
         <source>chocolate</source>
-        <translation type="unfinished"></translation>
+        <translation>cokelat</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="374"/>
@@ -8109,7 +8138,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="375"/>
         <source>brown</source>
-        <translation type="unfinished"></translation>
+        <translation>coklat</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="376"/>
@@ -8119,7 +8148,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="377"/>
         <source>salmon</source>
-        <translation type="unfinished"></translation>
+        <translation>salmon</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="378"/>
@@ -8129,17 +8158,17 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="379"/>
         <source>orange</source>
-        <translation type="unfinished"></translation>
+        <translation>oranye</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="380"/>
         <source>DarkOrange</source>
-        <translation type="unfinished"></translation>
+        <translation>OranyeTua</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="381"/>
         <source>coral</source>
-        <translation type="unfinished"></translation>
+        <translation>koral</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="382"/>
@@ -8149,17 +8178,17 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="383"/>
         <source>tomato</source>
-        <translation type="unfinished"></translation>
+        <translation>tomat</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="384"/>
         <source>OrangeRed</source>
-        <translation type="unfinished"></translation>
+        <translation>OranyeMerah</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="385"/>
         <source>red</source>
-        <translation type="unfinished"></translation>
+        <translation>merah</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="386"/>
@@ -8174,7 +8203,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="388"/>
         <source>pink</source>
-        <translation type="unfinished"></translation>
+        <translation>merahmuda</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="389"/>
@@ -8189,7 +8218,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="391"/>
         <source>maroon</source>
-        <translation type="unfinished"></translation>
+        <translation>marun</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="392"/>
@@ -8199,17 +8228,17 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="393"/>
         <source>VioletRed</source>
-        <translation type="unfinished"></translation>
+        <translation>MerahViolet</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="394"/>
         <source>magenta</source>
-        <translation type="unfinished"></translation>
+        <translation>magenta</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="395"/>
         <source>violet</source>
-        <translation type="unfinished"></translation>
+        <translation>violet</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="396"/>
@@ -8239,12 +8268,12 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="401"/>
         <source>BlueViolet</source>
-        <translation type="unfinished"></translation>
+        <translation>BiruViolet</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="402"/>
         <source>purple</source>
-        <translation type="unfinished"></translation>
+        <translation>ungu</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="403"/>
@@ -8259,22 +8288,22 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="405"/>
         <source>snow1</source>
-        <translation type="unfinished"></translation>
+        <translation>salju1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="406"/>
         <source>snow2</source>
-        <translation type="unfinished"></translation>
+        <translation>salju2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="407"/>
         <source>snow3</source>
-        <translation type="unfinished"></translation>
+        <translation>salju3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="408"/>
         <source>snow4</source>
-        <translation type="unfinished"></translation>
+        <translation>salju4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="409"/>
@@ -8299,22 +8328,22 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="413"/>
         <source>AntiqueWhite1</source>
-        <translation type="unfinished"></translation>
+        <translation>PutihAntik1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="414"/>
         <source>AntiqueWhite2</source>
-        <translation type="unfinished"></translation>
+        <translation>PutihAntik2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="415"/>
         <source>AntiqueWhite3</source>
-        <translation type="unfinished"></translation>
+        <translation>PutihAntik3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="416"/>
         <source>AntiqueWhite4</source>
-        <translation type="unfinished"></translation>
+        <translation>PutihAntik4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="417"/>
@@ -8499,22 +8528,22 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="453"/>
         <source>azure1</source>
-        <translation type="unfinished"></translation>
+        <translation>birulangit1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="454"/>
         <source>azure2</source>
-        <translation type="unfinished"></translation>
+        <translation>birulangit2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="455"/>
         <source>azure3</source>
-        <translation type="unfinished"></translation>
+        <translation>birulangit3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="456"/>
         <source>azure4</source>
-        <translation type="unfinished"></translation>
+        <translation>birulangit4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="457"/>
@@ -8559,22 +8588,22 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="465"/>
         <source>blue1</source>
-        <translation type="unfinished"></translation>
+        <translation>biru1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="466"/>
         <source>blue2</source>
-        <translation type="unfinished"></translation>
+        <translation>biru2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="467"/>
         <source>blue3</source>
-        <translation type="unfinished"></translation>
+        <translation>biru3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="468"/>
         <source>blue4</source>
-        <translation type="unfinished"></translation>
+        <translation>biru4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="469"/>
@@ -8639,22 +8668,22 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="481"/>
         <source>SkyBlue1</source>
-        <translation type="unfinished"></translation>
+        <translation>BiruLangit1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="482"/>
         <source>SkyBlue2</source>
-        <translation type="unfinished"></translation>
+        <translation>BiruLangit2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="483"/>
         <source>SkyBlue3</source>
-        <translation type="unfinished"></translation>
+        <translation>BiruLangit3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="484"/>
         <source>SkyBlue4</source>
-        <translation type="unfinished"></translation>
+        <translation>BiruLangit4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="485"/>
@@ -8719,22 +8748,22 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="497"/>
         <source>LightBlue1</source>
-        <translation type="unfinished"></translation>
+        <translation>BiruMuda1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="498"/>
         <source>LightBlue2</source>
-        <translation type="unfinished"></translation>
+        <translation>BiruMuda2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="499"/>
         <source>LightBlue3</source>
-        <translation type="unfinished"></translation>
+        <translation>BiruMuda3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="500"/>
         <source>LightBlue4</source>
-        <translation type="unfinished"></translation>
+        <translation>BiruMuda4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="501"/>
@@ -8819,22 +8848,22 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="517"/>
         <source>cyan1</source>
-        <translation type="unfinished"></translation>
+        <translation>sian1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="518"/>
         <source>cyan2</source>
-        <translation type="unfinished"></translation>
+        <translation>sian2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="519"/>
         <source>cyan3</source>
-        <translation type="unfinished"></translation>
+        <translation>sian3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="520"/>
         <source>cyan4</source>
-        <translation type="unfinished"></translation>
+        <translation>sian4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="521"/>
@@ -8899,22 +8928,22 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="533"/>
         <source>SeaGreen1</source>
-        <translation type="unfinished"></translation>
+        <translation>HijauLaut1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="534"/>
         <source>SeaGreen2</source>
-        <translation type="unfinished"></translation>
+        <translation>HijauLaut2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="535"/>
         <source>SeaGreen3</source>
-        <translation type="unfinished"></translation>
+        <translation>HijauLaut3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="536"/>
         <source>SeaGreen4</source>
-        <translation type="unfinished"></translation>
+        <translation>HijauLaut4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="537"/>
@@ -8959,22 +8988,22 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="545"/>
         <source>green1</source>
-        <translation type="unfinished"></translation>
+        <translation>hijau1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="546"/>
         <source>green2</source>
-        <translation type="unfinished"></translation>
+        <translation>hijau2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="547"/>
         <source>green3</source>
-        <translation type="unfinished"></translation>
+        <translation>hijau3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="548"/>
         <source>green4</source>
-        <translation type="unfinished"></translation>
+        <translation>hijau4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="549"/>
@@ -9079,62 +9108,62 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="569"/>
         <source>LightYellow1</source>
-        <translation type="unfinished"></translation>
+        <translation>KuningMuda1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="570"/>
         <source>LightYellow2</source>
-        <translation type="unfinished"></translation>
+        <translation>KuningMuda2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="571"/>
         <source>LightYellow3</source>
-        <translation type="unfinished"></translation>
+        <translation>KuningMuda3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="572"/>
         <source>LightYellow4</source>
-        <translation type="unfinished"></translation>
+        <translation>KuningMuda4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="573"/>
         <source>yellow1</source>
-        <translation type="unfinished"></translation>
+        <translation>kuning1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="574"/>
         <source>yellow2</source>
-        <translation type="unfinished"></translation>
+        <translation>kuning2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="575"/>
         <source>yellow3</source>
-        <translation type="unfinished"></translation>
+        <translation>kuning3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="576"/>
         <source>yellow4</source>
-        <translation type="unfinished"></translation>
+        <translation>kuning4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="577"/>
         <source>gold1</source>
-        <translation type="unfinished"></translation>
+        <translation>emas1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="578"/>
         <source>gold2</source>
-        <translation type="unfinished"></translation>
+        <translation>emas2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="579"/>
         <source>gold3</source>
-        <translation type="unfinished"></translation>
+        <translation>emas3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="580"/>
         <source>gold4</source>
-        <translation type="unfinished"></translation>
+        <translation>emas4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="581"/>
@@ -9199,22 +9228,22 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="593"/>
         <source>IndianRed1</source>
-        <translation type="unfinished"></translation>
+        <translation>MerahIndian1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="594"/>
         <source>IndianRed2</source>
-        <translation type="unfinished"></translation>
+        <translation>MerahIndian2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="595"/>
         <source>IndianRed3</source>
-        <translation type="unfinished"></translation>
+        <translation>MerahIndian3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="596"/>
         <source>IndianRed4</source>
-        <translation type="unfinished"></translation>
+        <translation>MerahIndian4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="597"/>
@@ -9299,22 +9328,22 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="613"/>
         <source>chocolate1</source>
-        <translation type="unfinished"></translation>
+        <translation>cokelat1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="614"/>
         <source>chocolate2</source>
-        <translation type="unfinished"></translation>
+        <translation>cokelat2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="615"/>
         <source>chocolate3</source>
-        <translation type="unfinished"></translation>
+        <translation>cokelat3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="616"/>
         <source>chocolate4</source>
-        <translation type="unfinished"></translation>
+        <translation>cokelat4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="617"/>
@@ -9339,42 +9368,42 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="621"/>
         <source>brown1</source>
-        <translation type="unfinished"></translation>
+        <translation>coklat1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="622"/>
         <source>brown2</source>
-        <translation type="unfinished"></translation>
+        <translation>coklat2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="623"/>
         <source>brown3</source>
-        <translation type="unfinished"></translation>
+        <translation>coklat3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="624"/>
         <source>brown4</source>
-        <translation type="unfinished"></translation>
+        <translation>coklat4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="625"/>
         <source>salmon1</source>
-        <translation type="unfinished"></translation>
+        <translation>salmon1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="626"/>
         <source>salmon2</source>
-        <translation type="unfinished"></translation>
+        <translation>salmon2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="627"/>
         <source>salmon3</source>
-        <translation type="unfinished"></translation>
+        <translation>salmon3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="628"/>
         <source>salmon4</source>
-        <translation type="unfinished"></translation>
+        <translation>salmon4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="629"/>
@@ -9399,122 +9428,122 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="633"/>
         <source>orange1</source>
-        <translation type="unfinished"></translation>
+        <translation>oranye1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="634"/>
         <source>orange2</source>
-        <translation type="unfinished"></translation>
+        <translation>oranye2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="635"/>
         <source>orange3</source>
-        <translation type="unfinished"></translation>
+        <translation>oranye3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="636"/>
         <source>orange4</source>
-        <translation type="unfinished"></translation>
+        <translation>oranye4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="637"/>
         <source>DarkOrange1</source>
-        <translation type="unfinished"></translation>
+        <translation>OranyeTua1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="638"/>
         <source>DarkOrange2</source>
-        <translation type="unfinished"></translation>
+        <translation>OranyeTua2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="639"/>
         <source>DarkOrange3</source>
-        <translation type="unfinished"></translation>
+        <translation>OranyeTua3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="640"/>
         <source>DarkOrange4</source>
-        <translation type="unfinished"></translation>
+        <translation>OranyeTua4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="641"/>
         <source>coral1</source>
-        <translation type="unfinished"></translation>
+        <translation>koral1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="642"/>
         <source>coral2</source>
-        <translation type="unfinished"></translation>
+        <translation>koral2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="643"/>
         <source>coral3</source>
-        <translation type="unfinished"></translation>
+        <translation>koral3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="644"/>
         <source>coral4</source>
-        <translation type="unfinished"></translation>
+        <translation>koral4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="645"/>
         <source>tomato1</source>
-        <translation type="unfinished"></translation>
+        <translation>tomat1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="646"/>
         <source>tomato2</source>
-        <translation type="unfinished"></translation>
+        <translation>tomat2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="647"/>
         <source>tomato3</source>
-        <translation type="unfinished"></translation>
+        <translation>tomat3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="648"/>
         <source>tomato4</source>
-        <translation type="unfinished"></translation>
+        <translation>tomat4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="649"/>
         <source>OrangeRed1</source>
-        <translation type="unfinished"></translation>
+        <translation>OranyeMerah1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="650"/>
         <source>OrangeRed2</source>
-        <translation type="unfinished"></translation>
+        <translation>OranyeMerah2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="651"/>
         <source>OrangeRed3</source>
-        <translation type="unfinished"></translation>
+        <translation>OranyeMerah3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="652"/>
         <source>OrangeRed4</source>
-        <translation type="unfinished"></translation>
+        <translation>OranyeMerah4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="653"/>
         <source>red1</source>
-        <translation type="unfinished"></translation>
+        <translation>merah1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="654"/>
         <source>red2</source>
-        <translation type="unfinished"></translation>
+        <translation>merah2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="655"/>
         <source>red3</source>
-        <translation type="unfinished"></translation>
+        <translation>merah3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="656"/>
         <source>red4</source>
-        <translation type="unfinished"></translation>
+        <translation>merah4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="657"/>
@@ -9559,22 +9588,22 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="665"/>
         <source>pink1</source>
-        <translation type="unfinished"></translation>
+        <translation>merahmuda1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="666"/>
         <source>pink2</source>
-        <translation type="unfinished"></translation>
+        <translation>merahmuda2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="667"/>
         <source>pink3</source>
-        <translation type="unfinished"></translation>
+        <translation>merahmuda3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="668"/>
         <source>pink4</source>
-        <translation type="unfinished"></translation>
+        <translation>merahmuda4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="669"/>
@@ -9619,62 +9648,62 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="677"/>
         <source>maroon1</source>
-        <translation type="unfinished"></translation>
+        <translation>marun1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="678"/>
         <source>maroon2</source>
-        <translation type="unfinished"></translation>
+        <translation>marun2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="679"/>
         <source>maroon3</source>
-        <translation type="unfinished"></translation>
+        <translation>marun3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="680"/>
         <source>maroon4</source>
-        <translation type="unfinished"></translation>
+        <translation>marun4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="681"/>
         <source>VioletRed1</source>
-        <translation type="unfinished"></translation>
+        <translation>MerahViolet1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="682"/>
         <source>VioletRed2</source>
-        <translation type="unfinished"></translation>
+        <translation>MerahViolet2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="683"/>
         <source>VioletRed3</source>
-        <translation type="unfinished"></translation>
+        <translation>MerahViolet3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="684"/>
         <source>VioletRed4</source>
-        <translation type="unfinished"></translation>
+        <translation>MerahViolet4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="685"/>
         <source>magenta1</source>
-        <translation type="unfinished"></translation>
+        <translation>magenta1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="686"/>
         <source>magenta2</source>
-        <translation type="unfinished"></translation>
+        <translation>magenta2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="687"/>
         <source>magenta3</source>
-        <translation type="unfinished"></translation>
+        <translation>magenta3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="688"/>
         <source>magenta4</source>
-        <translation type="unfinished"></translation>
+        <translation>magenta4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="689"/>
@@ -9759,22 +9788,22 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="705"/>
         <source>purple1</source>
-        <translation type="unfinished"></translation>
+        <translation>ungu1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="706"/>
         <source>purple2</source>
-        <translation type="unfinished"></translation>
+        <translation>ungu2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="707"/>
         <source>purple3</source>
-        <translation type="unfinished"></translation>
+        <translation>ungu3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="708"/>
         <source>purple4</source>
-        <translation type="unfinished"></translation>
+        <translation>ungu4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="709"/>
@@ -9819,7 +9848,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="717"/>
         <source>black</source>
-        <translation type="unfinished"></translation>
+        <translation>hitam</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="718"/>
@@ -9854,7 +9883,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="724"/>
         <source>white</source>
-        <translation type="unfinished"></translation>
+        <translation>putih</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="725"/>
@@ -9864,63 +9893,63 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="726"/>
         <source>Blue pastel</source>
-        <translation type="unfinished"></translation>
+        <translation>Biru pastel</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="727"/>
         <source>Red pastel</source>
-        <translation type="unfinished"></translation>
+        <translation>Merah pastel</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="728"/>
         <source>Green pastel</source>
-        <translation type="unfinished"></translation>
+        <translation>Hijau pastel</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="729"/>
         <source>Orange pastel</source>
-        <translation type="unfinished"></translation>
+        <translation>Oranye pastel</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="730"/>
         <source>Yellow pastel</source>
-        <translation type="unfinished"></translation>
+        <translation>Kuning pastel</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="731"/>
         <source>default</source>
-        <translation type="unfinished"></translation>
+        <translation>baku</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="732"/>
         <source>Copyright (c) xxxx Copyright Holder</source>
-        <translation type="unfinished"></translation>
+        <translation>Hak Cipta (c) xxxx Pemegang Hak Cipta</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="733"/>
         <source>Not Yet Titled</source>
-        <translation type="unfinished"></translation>
+        <translation>Belum Berjudul</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="734"/>
         <source>not yet subtitled</source>
-        <translation type="unfinished"></translation>
+        <translation>belum bersubjudul</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="735"/>
         <source>Unknown</source>
-        <translation type="unfinished">Tak dikenal</translation>
+        <translation>Tak Dikenal</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="316"/>
         <source>[ %1 ]</source>
-        <translation type="unfinished">[ %1 ]</translation>
+        <translation>[ %1 ]</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="755"/>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="877"/>
         <source>%1. %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 %2</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="91"/>
@@ -9928,17 +9957,17 @@
         <location filename="../../src/gui/general/ActionFileParser.cpp" line="646"/>
         <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="450"/>
         <source>%1</source>
-        <translation type="unfinished">%1</translation>
+        <translation>%1</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/DialogSuppressor.cpp" line="76"/>
         <source>Do not show this warning again</source>
-        <translation type="unfinished"></translation>
+        <translation>Jangan tampilkan peringatan ini lagi</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ActionFileParser.cpp" line="655"/>
         <source>%1 (%2)</source>
-        <translation type="unfinished">%1 (%2)</translation>
+        <translation>%1 (%2)</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="415"/>
@@ -9946,27 +9975,27 @@
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="720"/>
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1462"/>
         <source>%1 Controller %2 %3</source>
-        <translation type="unfinished">%1 Kontroler %2 %3</translation>
+        <translation>%1 Kontroler %2 %3</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/main.cpp" line="318"/>
         <source>Rosegarden - A sequencer and musical notation editor</source>
-        <translation type="unfinished">Rosegarden - Editor sekuenser dan notasi musik</translation>
+        <translation>Rosegarden - Sekuenser dan penyunting notasi musikal</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/main.cpp" line="431"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/main.cpp" line="708"/>
         <source>Welcome!</source>
-        <translation type="unfinished"></translation>
+        <translation>Selamat Datang!</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/main.cpp" line="724"/>
         <source>http://rosegardenmusic.com/wiki/doc:manual-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:manual-en</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/main.cpp" line="725"/>
@@ -9978,83 +10007,83 @@
         <location filename="../InstrumentStrings.cpp" line="375"/>
         <source>C</source>
         <comment>note name</comment>
-        <translation type="unfinished">C</translation>
+        <translation>C</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="35"/>
         <location filename="../InstrumentStrings.cpp" line="376"/>
         <source>C#</source>
         <comment>note name</comment>
-        <translation type="unfinished">C#%1</translation>
+        <translation>C#</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="36"/>
         <location filename="../InstrumentStrings.cpp" line="378"/>
         <source>D</source>
         <comment>note name</comment>
-        <translation type="unfinished">D</translation>
+        <translation>D</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="36"/>
         <source>D#</source>
         <comment>note name</comment>
-        <translation type="unfinished"></translation>
+        <translation>D#</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="37"/>
         <location filename="../InstrumentStrings.cpp" line="380"/>
         <source>E</source>
         <comment>note name</comment>
-        <translation type="unfinished">E</translation>
+        <translation>E</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="37"/>
         <location filename="../InstrumentStrings.cpp" line="383"/>
         <source>F</source>
         <comment>note name</comment>
-        <translation type="unfinished">F</translation>
+        <translation>F</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="38"/>
         <location filename="../InstrumentStrings.cpp" line="384"/>
         <source>F#</source>
         <comment>note name</comment>
-        <translation type="unfinished">F#%1</translation>
+        <translation>F#</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="38"/>
         <location filename="../InstrumentStrings.cpp" line="385"/>
         <source>G</source>
         <comment>note name</comment>
-        <translation type="unfinished">G</translation>
+        <translation>G</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="39"/>
         <location filename="../InstrumentStrings.cpp" line="386"/>
         <source>G#</source>
         <comment>note name</comment>
-        <translation type="unfinished">G#%1</translation>
+        <translation>G#</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="39"/>
         <location filename="../InstrumentStrings.cpp" line="389"/>
         <source>A</source>
         <comment>note name</comment>
-        <translation type="unfinished">A</translation>
+        <translation>A</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="40"/>
         <location filename="../InstrumentStrings.cpp" line="388"/>
         <source>A#</source>
         <comment>note name</comment>
-        <translation type="unfinished"></translation>
+        <translation>A#</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="40"/>
         <location filename="../InstrumentStrings.cpp" line="391"/>
         <source>B</source>
         <comment>note name</comment>
-        <translation type="unfinished">B</translation>
+        <translation>B</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="524"/>
@@ -10076,7 +10105,7 @@
         <location filename="../../src/sound/SoundFile.h" line="69"/>
         <location filename="../../src/sound/SoundFile.h" line="71"/>
         <source>Bad sound file </source>
-        <translation type="unfinished"></translation>
+        <translation>Berkas suara jelek</translation>
     </message>
     <message>
         <location filename="../../src/sound/MidiFile.cpp" line="105"/>
@@ -10144,7 +10173,7 @@
     <message>
         <location filename="../../src/sound/RIFFAudioFile.cpp" line="467"/>
         <source>Unsupported number of channels</source>
-        <translation type="unfinished"></translation>
+        <translation>Jumlah kanal tak didukung</translation>
     </message>
     <message>
         <location filename="../../src/sound/RIFFAudioFile.cpp" line="481"/>
@@ -10159,7 +10188,7 @@
     <message>
         <location filename="../../src/gui/application/TranzportClient.cpp" line="59"/>
         <source>Failed to open tranzport device /dev/tranzport0</source>
-        <translation type="unfinished"></translation>
+        <translation>Gagal membuka perangkat tranzport /dev/tranzport0</translation>
     </message>
     <message>
         <location filename="../../src/sound/AudioFileManager.h" line="71"/>
@@ -10175,7 +10204,7 @@
     <message>
         <location filename="../../src/sound/AudioFileTimeStretcher.h" line="49"/>
         <source>Cancelled</source>
-        <translation type="unfinished"></translation>
+        <translation>Dibatalkan</translation>
     </message>
     <message>
         <location filename="../../src/sound/PeakFileManager.h" line="61"/>
@@ -10187,6 +10216,11 @@
         <location filename="../../src/sound/PeakFileManager.h" line="65"/>
         <source>Bad peak file (malformed audio?) </source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="297"/>
+        <source>Synth plugin </source>
+        <translation type="unfinished">Pengaya sintetiser </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="64"/>
@@ -10201,7 +10235,7 @@
     <message>
         <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="120"/>
         <source>%1 %2</source>
-        <translation type="unfinished">%1 (%2)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="121"/>
@@ -10213,28 +10247,23 @@
         <source>major</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="297"/>
-        <source>Synth plugin </source>
-        <translation type="unfinished">&lt;tak ada plugin&gt;</translation>
-    </message>
 </context>
 <context>
     <name>Rosegarden::AboutDialog</name>
     <message>
         <location filename="../../src/gui/dialogs/AboutDialog.cpp" line="32"/>
         <source>About Rosegarden</source>
-        <translation type="unfinished"></translation>
+        <translation>Tentang Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AboutDialog.cpp" line="48"/>
         <source>&lt;h2&gt;Rosegarden - &quot;%1&quot;&lt;/h2&gt;&lt;h3&gt;A sequencer and musical notation editor&lt;/h3&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;h2&gt;Rosegarden - &quot;%1&quot;&lt;/h2&gt;&lt;h3&gt;Sekuenser dan penyunting notasi musikal&lt;/h3&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AboutDialog.cpp" line="54"/>
         <source>&lt;p&gt;Copyright 2000-2009 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Hak cipta 2000-2009 pada tim pengembang Rosegarden&lt;/p&gt;&lt;p&gt;Versi %1 &amp;nbsp; versi Qt %2&lt;br&gt;Kunci bangun: %3&lt;/p&gt;&lt;p&gt;Rosegarden dipersembahkan untuk Anda oleh sebuah tim dari para relawan di penjuru dunia.  Untuk daftar kontributor, kunjungi &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;Untuk informasi lebih lanjut mengenai Rosegarden, kunjungi &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Lisensi: Lisensi Publik Umum GNU Versi 2&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
@@ -10242,7 +10271,7 @@
     <message>
         <location filename="../../src/gui/general/ActionCommandRegistry.cpp" line="63"/>
         <source>Rosegarden - Query</source>
-        <translation type="unfinished"></translation>
+        <translation>Rosegarden - Kuiri</translation>
     </message>
 </context>
 <context>
@@ -10250,7 +10279,7 @@
     <message>
         <location filename="../../src/gui/general/ActionCommandRegistry.cpp" line="115"/>
         <source>Rosegarden - Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Rosegarden - Peringatan</translation>
     </message>
 </context>
 <context>
@@ -10258,7 +10287,7 @@
     <message>
         <location filename="../../src/commands/studio/AddControlParameterCommand.h" line="56"/>
         <source>&amp;Add Control Parameter</source>
-        <translation type="unfinished">T&amp;ambah Parameter Kontrol</translation>
+        <translation>T&amp;ambah Parameter Kontrol</translation>
     </message>
 </context>
 <context>
@@ -10266,7 +10295,7 @@
     <message>
         <location filename="../../src/commands/edit/AddDotCommand.h" line="47"/>
         <source>&amp;Add Dot</source>
-        <translation type="unfinished">T&amp;ambah Titik</translation>
+        <translation>T&amp;ambah Titik</translation>
     </message>
 </context>
 <context>
@@ -10274,22 +10303,22 @@
     <message>
         <location filename="../../src/commands/notation/AddFingeringMarkCommand.cpp" line="54"/>
         <source>Add Other &amp;Fingering...</source>
-        <translation type="unfinished">Tambah Penjarian &amp;Lainnya...</translation>
+        <translation>Tambah Penjarian &amp;Lainnya...</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddFingeringMarkCommand.cpp" line="56"/>
         <source>Add Fingering &amp;0 (Thumb)</source>
-        <translation type="unfinished">Tambah Penjarian &amp;0 (Jempol)</translation>
+        <translation>Tambah Penjarian &amp;0 (Jempol)</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddFingeringMarkCommand.cpp" line="58"/>
         <source>Add Fingering &amp;%1</source>
-        <translation type="unfinished">Tambah Penjarian &amp;%1</translation>
+        <translation>Tambah Penjarian &amp;%1</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddFingeringMarkCommand.cpp" line="85"/>
         <source>Fingering: </source>
-        <translation type="unfinished">Penjarian: </translation>
+        <translation>Penjarian: </translation>
     </message>
 </context>
 <context>
@@ -10302,7 +10331,7 @@
     <message>
         <location filename="../../src/commands/notation/AddIndicationCommand.cpp" line="227"/>
         <source>Add S&amp;lur</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tambah S&amp;lur</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddIndicationCommand.cpp" line="229"/>
@@ -10312,7 +10341,7 @@
     <message>
         <location filename="../../src/commands/notation/AddIndicationCommand.cpp" line="231"/>
         <source>Add Double-Octave Up</source>
-        <translation type="unfinished">Tambah Oktaf-Ganda Naik</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddIndicationCommand.cpp" line="233"/>
@@ -10327,22 +10356,22 @@
     <message>
         <location filename="../../src/commands/notation/AddIndicationCommand.cpp" line="237"/>
         <source>Add Double Octave Down</source>
-        <translation type="unfinished">Tambah Oktaf Turun Ganda</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddIndicationCommand.cpp" line="242"/>
         <source>Add &amp;Crescendo</source>
-        <translation type="unfinished">Tambah &amp;Crescendo</translation>
+        <translation>Tambah &amp;Crescendo</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddIndicationCommand.cpp" line="244"/>
         <source>Add &amp;Decrescendo</source>
-        <translation type="unfinished">Tambah &amp;Decrescendo</translation>
+        <translation>Tambah &amp;Decrescendo</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddIndicationCommand.cpp" line="246"/>
         <source>Add &amp;Glissando</source>
-        <translation type="unfinished">Tambah &amp;Glissando</translation>
+        <translation>Tambah &amp;Glissando</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddIndicationCommand.cpp" line="248"/>
@@ -10352,7 +10381,7 @@
     <message>
         <location filename="../../src/commands/notation/AddIndicationCommand.cpp" line="251"/>
         <source>Add &amp;%1%2</source>
-        <translation type="unfinished">Tambah &amp;%1%2</translation>
+        <translation>Tambah &amp;%1%2</translation>
     </message>
 </context>
 <context>
@@ -10360,22 +10389,22 @@
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="41"/>
         <source>S&amp;forzando</source>
-        <translation type="unfinished">S&amp;forzando</translation>
+        <translation>S&amp;forzando</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="43"/>
         <source>Sta&amp;ccato</source>
-        <translation type="unfinished">Sta&amp;ccato</translation>
+        <translation>Sta&amp;ccato</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="45"/>
         <source>R&amp;inforzando</source>
-        <translation type="unfinished">R&amp;inforzando</translation>
+        <translation>R&amp;inforzando</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="47"/>
         <source>T&amp;enuto</source>
-        <translation type="unfinished">T&amp;enuto</translation>
+        <translation>T&amp;enuto</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="49"/>
@@ -10400,37 +10429,37 @@
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="57"/>
         <source>&amp;Accent</source>
-        <translation type="unfinished">&amp;Aksen</translation>
+        <translation>&amp;Aksen</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="59"/>
         <source>&amp;Staccatissimo</source>
-        <translation type="unfinished">&amp;Staccatissimo</translation>
+        <translation>&amp;Staccatissimo</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="61"/>
         <source>&amp;Marcato</source>
-        <translation type="unfinished">&amp;Marcato</translation>
+        <translation>&amp;Marcato</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="63"/>
         <source>&amp;Open</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Buka</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="65"/>
         <source>&amp;Stopped</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Henti</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="67"/>
         <source>&amp;Harmonic</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Harmonik</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="69"/>
         <source>&amp;Pause</source>
-        <translation type="unfinished">Hen&amp;ti</translation>
+        <translation>Taha&amp;n</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="71"/>
@@ -10445,32 +10474,32 @@
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="75"/>
         <source>Mo&amp;rdent</source>
-        <translation type="unfinished">Mo&amp;rdent</translation>
+        <translation>Mo&amp;rdent</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="77"/>
         <source>Inverted Mordent</source>
-        <translation type="unfinished">Mordent Berbalik</translation>
+        <translation>Mordent Berbalik</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="79"/>
         <source>Long Mordent</source>
-        <translation type="unfinished">Mordent Panjang</translation>
+        <translation>Mordent Panjang</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="81"/>
         <source>Lon&amp;g Inverted Mordent</source>
-        <translation type="unfinished">Mordent Panjan&amp;g Berbalik</translation>
+        <translation>Mordent Panjan&amp;g Berbalik</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="83"/>
         <source>&amp;%1%2</source>
-        <translation type="unfinished">&amp;%1%2</translation>
+        <translation>&amp;%1%2</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="88"/>
         <source>Add %1</source>
-        <translation type="unfinished">Tambah %1</translation>
+        <translation>Tambah %1</translation>
     </message>
 </context>
 <context>
@@ -10478,7 +10507,7 @@
     <message>
         <location filename="../../src/commands/edit/AddMarkerCommand.h" line="49"/>
         <source>&amp;Add Marker</source>
-        <translation type="unfinished">T&amp;ambah Penanda</translation>
+        <translation>T&amp;ambah Penanda</translation>
     </message>
 </context>
 <context>
@@ -10491,7 +10520,7 @@
     <message>
         <location filename="../../src/commands/notation/AddSlashesCommand.cpp" line="34"/>
         <source>&amp;None</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Nihil</translation>
     </message>
 </context>
 <context>
@@ -10499,7 +10528,7 @@
     <message>
         <location filename="../../src/commands/segment/AddTempoChangeCommand.h" line="53"/>
         <source>Add Te&amp;mpo Change...</source>
-        <translation type="unfinished">Tambah Perubahan Te&amp;mpo...</translation>
+        <translation>Tambah Perubahan Te&amp;mpo...</translation>
     </message>
 </context>
 <context>
@@ -10507,12 +10536,12 @@
     <message>
         <location filename="../../src/commands/notation/AddTextMarkCommand.h" line="46"/>
         <source>Add Te&amp;xt Mark...</source>
-        <translation type="unfinished">Tambah Penanda Te&amp;ks</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddTextMarkCommand.cpp" line="46"/>
         <source>Text:</source>
-        <translation type="unfinished">Teks:</translation>
+        <translation>Teks:</translation>
     </message>
 </context>
 <context>
@@ -10520,7 +10549,7 @@
     <message>
         <location filename="../../src/commands/segment/AddTimeSignatureCommand.h" line="47"/>
         <source>Add Time Si&amp;gnature Change...</source>
-        <translation type="unfinished">Tambah Perubahan Paraf &amp;Waktu...</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -10528,7 +10557,7 @@
     <message>
         <location filename="../../src/commands/segment/AddTracksCommand.h" line="50"/>
         <source>Add Tracks...</source>
-        <translation type="unfinished">Tambah Jalur...</translation>
+        <translation>Tambah Jalur...</translation>
     </message>
 </context>
 <context>
@@ -10536,38 +10565,38 @@
     <message>
         <location filename="../../src/gui/dialogs/AddTracksDialog.cpp" line="43"/>
         <source>Add Tracks</source>
-        <translation type="unfinished">Tambah Jalur</translation>
+        <translation>Tambah Jalur</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AddTracksDialog.cpp" line="51"/>
         <source>How many tracks do you want to add?</source>
-        <translation type="unfinished">Berapa banyak jalur yang hendak Anda tambah?</translation>
+        <translation>Berapa banyak jalur yang ingin ditambah?</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AddTracksDialog.cpp" line="69"/>
         <source>Add tracks</source>
-        <translation type="unfinished">Tambah jalur</translation>
+        <translation>Tambah jalur</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AddTracksDialog.cpp" line="73"/>
         <source>At the top</source>
-        <translation type="unfinished"></translation>
+        <translation>Di atas</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AddTracksDialog.cpp" line="74"/>
         <location filename="../../src/gui/dialogs/AddTracksDialog.cpp" line="78"/>
         <source>Above the current selected track</source>
-        <translation type="unfinished"></translation>
+        <translation>Di atas jalur terpilih</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AddTracksDialog.cpp" line="75"/>
         <source>Below the current selected track</source>
-        <translation type="unfinished"></translation>
+        <translation>Di bawah jalur terpilih</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AddTracksDialog.cpp" line="76"/>
         <source>At the bottom</source>
-        <translation type="unfinished"></translation>
+        <translation>Di bawah</translation>
     </message>
 </context>
 <context>
@@ -10575,7 +10604,7 @@
     <message>
         <location filename="../../src/commands/segment/AddTriggerSegmentCommand.cpp" line="34"/>
         <source>Add Triggered Segment</source>
-        <translation type="unfinished">Tambah Segmen Berpicu</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -10583,17 +10612,17 @@
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.h" line="54"/>
         <source>Audio</source>
-        <translation type="unfinished">Suara</translation>
+        <translation>Suara</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.h" line="55"/>
         <source>Audio Settings</source>
-        <translation type="unfinished">Pengaturan Suara</translation>
+        <translation>Pengaturan Suara</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="88"/>
         <source>Audio preview scale</source>
-        <translation type="unfinished">Skala pratampil suara</translation>
+        <translation>Skala pratampil suara</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="93"/>
@@ -10608,57 +10637,57 @@
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="104"/>
         <source>Record audio files as</source>
-        <translation type="unfinished">Rekam berkas suara sebagai</translation>
+        <translation>Rekam berkas suara sebagai</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="107"/>
         <source>16-bit PCM WAV format (smaller files)</source>
-        <translation type="unfinished">16-bit format PCM WAV (berkas lebih kecil)</translation>
+        <translation>Format 16-bit PCM WAV (berkas kecil)</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="108"/>
         <source>32-bit float WAV format (higher quality)</source>
-        <translation type="unfinished">32-bit format WAV mengalur (kualitas lebih tinggi)</translation>
+        <translation>Format 31-bit alur WAV (kualitas tinggi)</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="119"/>
         <source>External audio editor</source>
-        <translation type="unfinished">Editor suara eksternal</translation>
+        <translation>Penyunting-suara eksternal</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="140"/>
         <source>Choose...</source>
-        <translation type="unfinished">Pilih...</translation>
+        <translation>Pilih...</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="148"/>
         <source>Create JACK outputs</source>
-        <translation type="unfinished">Buat keluaran JACK</translation>
+        <translation>Buat keluaran JACK</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="155"/>
         <source>for individual audio instruments</source>
-        <translation type="unfinished">untuk instrumen suara individual</translation>
+        <translation>untuk instrumen suara masing-masing</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="163"/>
         <source>for submasters</source>
-        <translation type="unfinished">untuk submaster</translation>
+        <translation>untuk submaster</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="176"/>
         <source>General</source>
-        <translation type="unfinished">Umum</translation>
+        <translation>Umum</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="182"/>
         <source>External audio editor path</source>
-        <translation type="unfinished">Jalur penyunting suara eksternal</translation>
+        <translation>Jalur penyunting-suara eksternal</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="216"/>
         <source>External audio editor &quot;%1&quot; not found or not executable</source>
-        <translation type="unfinished">Penyunting suara eksternal &quot;%1&quot; tidak ditemukan atau tidak bisa dieksekusi</translation>
+        <translation>Penyunting-suara eksternal &quot;%1&quot; tidak ditemukan atau tidak bisa dieksekusi</translation>
     </message>
 </context>
 <context>
@@ -10666,17 +10695,17 @@
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="79"/>
         <source>&lt;no plugin&gt;</source>
-        <translation type="unfinished">&lt;tak ada plugin&gt;</translation>
+        <translation>&lt;tidak ada pengaya&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="91"/>
         <source>&lt;no synth&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;tidak ada sintetiser&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="151"/>
         <source>Editor</source>
-        <translation type="unfinished">Editor</translation>
+        <translation>Penyunting</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="168"/>
@@ -10686,7 +10715,7 @@
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="81"/>
         <source>Click to load an audio plugin</source>
-        <translation type="unfinished"></translation>
+        <translation>Klik untuk memuat pengaya suara</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="92"/>
@@ -10701,32 +10730,32 @@
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="170"/>
         <source>Mono or Stereo Instrument</source>
-        <translation type="unfinished">Instrumen Mono atau Stereo</translation>
+        <translation>Instrumen Mono atau Stereo</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="171"/>
         <source>Record level</source>
-        <translation type="unfinished">Tingkat rekam</translation>
+        <translation>Tingkat rekam</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="172"/>
         <source>Playback level</source>
-        <translation type="unfinished">Tingkat putar</translation>
+        <translation>Tingkat putar</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="173"/>
         <source>Audio level</source>
-        <translation type="unfinished">Tingkat suara</translation>
+        <translation>Tingkat suara</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="184"/>
         <source>In:</source>
-        <translation type="unfinished">Masuk:</translation>
+        <translation>Masuk:</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="189"/>
         <source>Out:</source>
-        <translation type="unfinished">Keluar:</translation>
+        <translation>Keluar:</translation>
     </message>
 </context>
 <context>
@@ -10734,32 +10763,32 @@
     <message>
         <location filename="../../src/sound/AudioFileManager.cpp" line="660"/>
         <source>Cannot download file %1</source>
-        <translation type="unfinished">Tak dapat mengunduh berkas %1</translation>
+        <translation>Tak dapat mengunduh berkas %1</translation>
     </message>
     <message>
         <location filename="../../src/sound/AudioFileManager.cpp" line="730"/>
         <source>Converting audio file...</source>
-        <translation type="unfinished">Mengonversi berkas suara...</translation>
+        <translation>Mengonversi berkas suara...</translation>
     </message>
     <message>
         <location filename="../../src/sound/AudioFileManager.cpp" line="732"/>
         <source>Resampling audio file...</source>
-        <translation type="unfinished">Mensampel ulang berkas suara...</translation>
+        <translation>Mensampel ulang berkas suara...</translation>
     </message>
     <message>
         <location filename="../../src/sound/AudioFileManager.cpp" line="734"/>
         <source>Converting and resampling audio file...</source>
-        <translation type="unfinished">Mengonversi dan mensampel ulang berkas suara...</translation>
+        <translation>Mengonversi dan mensampel ulang berkas suara...</translation>
     </message>
     <message>
         <location filename="../../src/sound/AudioFileManager.cpp" line="736"/>
         <source>Importing audio file...</source>
-        <translation type="unfinished">Mengimpor berkas suara...</translation>
+        <translation>Mengimpor berkas suara...</translation>
     </message>
     <message>
         <location filename="../../src/sound/AudioFileManager.cpp" line="798"/>
         <source>Failed to convert or resample audio file on import</source>
-        <translation type="unfinished">Gagal mengonversi dan mensampel ulang berkas suara saat mengimpor</translation>
+        <translation>Gagal mengonversi dan mensampel ulang berkas suara saat mengimpor</translation>
     </message>
 </context>
 <context>
@@ -10767,24 +10796,24 @@
     <message>
         <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="80"/>
         <source>Click to rename this instrument</source>
-        <translation type="unfinished"></translation>
+        <translation>Klik untuk mengubah nama instrumen ini</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="92"/>
         <source>Click the button above to rename this instrument</source>
-        <translation type="unfinished"></translation>
+        <translation>Klik tombol di atas untuk mengubah nama instrumen ini</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="195"/>
         <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="371"/>
         <source>&lt;no synth&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;tidak ada sintetiser&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="198"/>
         <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="375"/>
         <source>&lt;no plugin&gt;</source>
-        <translation type="unfinished">&lt;tak ada plugin&gt;</translation>
+        <translation>&lt;tidak ada pengaya&gt;</translation>
     </message>
 </context>
 <context>
@@ -10792,7 +10821,7 @@
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="108"/>
         <source>Audio File Manager</source>
-        <translation type="unfinished">Manajer Berkas Suara</translation>
+        <translation>Manajer Berkas Suara</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="133"/>
@@ -10802,99 +10831,99 @@
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="173"/>
         <source>Name</source>
-        <translation type="unfinished">Nama</translation>
+        <translation>Nama</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="174"/>
         <source>Duration</source>
-        <translation type="unfinished">Durasi</translation>
+        <translation>Durasi</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="175"/>
         <source>Envelope</source>
-        <translation type="unfinished">Amplop</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="176"/>
         <source>Sample rate</source>
-        <translation type="unfinished">Rerata sampel</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="177"/>
         <source>Channels</source>
-        <translation type="unfinished">Kanal</translation>
+        <translation>Kanal</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="178"/>
         <source>Resolution</source>
-        <translation type="unfinished">Resolusi</translation>
+        <translation>Resolusi</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="179"/>
         <source>File</source>
-        <translation type="unfinished"></translation>
+        <translation>Berkas</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="291"/>
         <source>&lt;no audio files&gt;</source>
-        <translation type="unfinished">&lt;tak ada berkas suara&gt;</translation>
+        <translation>&lt;tidak ada berkas suara&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="521"/>
         <source>Save File As</source>
-        <translation type="unfinished"></translation>
+        <translation>Simpan Berkas Sebagai</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="523"/>
         <source>*.wav|WAV files (*.wav)</source>
-        <translation type="unfinished">*.wav|berkas WAV (*.wav)</translation>
+        <translation>*.wav|berkas WAV (*.wav)</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="533"/>
         <source>Exporting audio file...</source>
-        <translation type="unfinished">Mengekspor berkas suara...</translation>
+        <translation>Mengekspor berkas suara...</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="647"/>
         <source>This will unload audio file &quot;%1&quot; and remove all associated segments.  Are you sure?</source>
-        <translation type="unfinished">Ini akan membuang berkas &quot;%1&quot; beserta seluruh segmen yang berhubungan dengan berkas tersebut.  Apakah Anda yakin?</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="735"/>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="743"/>
         <source>WAV files</source>
-        <translation type="unfinished"></translation>
+        <translation>berkas WAV</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="736"/>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="747"/>
         <source>All files</source>
-        <translation type="unfinished">Semua berkas</translation>
+        <translation>Semua berkas</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="742"/>
         <source>Audio files</source>
-        <translation type="unfinished"></translation>
+        <translation>Berkas suara</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="744"/>
         <source>FLAC files</source>
-        <translation type="unfinished"></translation>
+        <translation>berkas FLAC</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="745"/>
         <source>Ogg files</source>
-        <translation type="unfinished"></translation>
+        <translation>berkas Ogg</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="746"/>
         <source>MP3 files</source>
-        <translation type="unfinished"></translation>
+        <translation>berkas MP3</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="759"/>
         <source>Select one or more audio files</source>
-        <translation type="unfinished">Pilih satu atau lebih berkas suara</translation>
+        <translation>Pilih satu atau lebih berkas suara</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="841"/>
@@ -10902,10 +10931,7 @@
 This action cannot be undone, and associations with these files will be lost.
 Files will not be removed from your disk.
 Are you sure?</source>
-        <translation type="unfinished">Ini akan membuang semua berkas suara, begitupula dengan segmen-segmen yang berhubungan dengan berkas-berkas tersebut.
-Aksi ini tidak bisa diputar balik atau dibatalkan, dan semua hubungan pada berkas-berkas tersebut akan turut dihilangkan.
-Namun, berkas aslinya tetap tidak akan dibuang dari hard disk.
-Apakah Anda yakin?</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="878"/>
@@ -10913,10 +10939,7 @@ Apakah Anda yakin?</translation>
 This action cannot be undone, and associations with these files will be lost.
 Files will not be removed from your disk.
 Are you sure?</source>
-        <translation type="unfinished">Ini akan membuang semua berkas suara yang tidak memiliki hubungan dengan segmen manapun di dalam komposisi.
-Aksi ini tidak bisa diputar balik atau dibatalkan, dan semua hubungan dengan berkas-berkas ini akan turut dihapus.
-Namun, berkas asli tidak akan dibuang dari hard disk.
-Apakah Anda yakin?</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="943"/>
@@ -10924,7 +10947,7 @@ Apakah Anda yakin?</translation>
 
 Please select the ones you wish to delete permanently from the hard disk.
 </source>
-        <translation type="unfinished">Berkas suara berikut tidak dipakai pada komposisi bersangkutan.
+        <translation>Berkas suara berikut tidak dipakai pada komposisi yang sekarang.
 
 Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
 </translation>
@@ -10932,29 +10955,29 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message numerus="yes">
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="953"/>
         <source>&lt;qt&gt;About to delete %n audio file(s) permanently from the hard disk.&lt;br&gt;This action cannot be undone, and there will be no way to recover the files.&lt;br&gt;Are you sure?&lt;/qt&gt;</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>&lt;qt&gt;Akan menghapus %n berkas suara secara permanen.&lt;br&gt;Aksi ini tidak dapat dibalikkan, dan tidak ada cara untuk mengembalikan berkas yang telah dihapus.&lt;br&gt;Anda yakin?&lt;/qt&gt;</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="966"/>
         <source>File %1 could not be deleted.</source>
-        <translation type="unfinished">Berkas %1 tidak akan dihapus.</translation>
+        <translation>Berkas %1 tidak akan dihapus.</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="999"/>
         <source>Change Audio File label</source>
-        <translation type="unfinished">Ubah label Berkas Suara</translation>
+        <translation>Ubah label Berkas Suara</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1000"/>
         <source>Enter new label</source>
-        <translation type="unfinished">Masukkan label baru</translation>
+        <translation>Masukkan label baru</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1174"/>
         <source>importing a remote audio file</source>
-        <translation type="unfinished">Mengimpor berkas suara...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1176"/>
@@ -10964,23 +10987,23 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1179"/>
         <source>Adding audio file...</source>
-        <translation type="unfinished">Menambah berkas suara...</translation>
+        <translation>Menambah berkas suara...</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1201"/>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1206"/>
         <source>Failed to add audio file. </source>
-        <translation type="unfinished">Gagal menambah berkas suara. </translation>
+        <translation>Gagal menambah berkas suara. </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1216"/>
         <source>Generating audio preview...</source>
-        <translation type="unfinished">Megenerasikan pratampil suara...</translation>
+        <translation>Membuat pratampil suara...</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1224"/>
         <source>Try copying this file to a directory where you have write permission and re-add it</source>
-        <translation type="unfinished">Cobalah untuk menyalin berkas ini ke direktori di mana Anda memiliki akses menulis dan tambahkan ulang berkasi ini</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1386"/>
@@ -10993,17 +11016,17 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="235"/>
         <source>Audio Mixer</source>
-        <translation type="unfinished">Mikser Suara</translation>
+        <translation>Mikser Suara</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="267"/>
         <source>Record input source</source>
-        <translation type="unfinished">Sumber masukan rekam</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="277"/>
         <source>Output destination</source>
-        <translation type="unfinished">Tujuan keluaran</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="290"/>
@@ -11017,12 +11040,12 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="434"/>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="435"/>
         <source>Audio level</source>
-        <translation type="unfinished">Tingkat suara</translation>
+        <translation>Tingkat suara</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="306"/>
         <source>Mono or stereo</source>
-        <translation type="unfinished">Mono atau stereo</translation>
+        <translation>Mono atau stereo</translation>
     </message>
     <message>
         <source>Mute</source>
@@ -11044,56 +11067,56 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="642"/>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="820"/>
         <source>&lt;none&gt;</source>
-        <translation type="unfinished">&lt;nihil&gt;</translation>
+        <translation>&lt;nihil&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="327"/>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="448"/>
         <source>Click to load an audio plugin</source>
-        <translation type="unfinished"></translation>
+        <translation>Klik untuk memuat pengaya suara</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="344"/>
         <source>Click to rename this instrument</source>
-        <translation type="unfinished"></translation>
+        <translation>Klik untuk mengubah nama instrumen ini</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="350"/>
         <source>Audio %1</source>
-        <translation type="unfinished">Suara %1</translation>
+        <translation>Suara %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="355"/>
         <source>Synth %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Sintetiser %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="360"/>
         <source>Click the button above to rename this instrument</source>
-        <translation type="unfinished"></translation>
+        <translation>Klik tombol di atas untuk mengubah nama instrumen ini</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="456"/>
         <source>Sub %1</source>
-        <translation type="unfinished">Sub %1</translation>
+        <translation>Sub %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="495"/>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="496"/>
         <source>Audio master output level</source>
-        <translation type="unfinished">Tingkat keluaran master suara</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="498"/>
         <source>Master</source>
-        <translation type="unfinished">Master</translation>
+        <translation>Master</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="588"/>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="643"/>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="821"/>
         <source>&lt;no plugin&gt;</source>
-        <translation type="unfinished">&lt;tak ada plugin&gt;</translation>
+        <translation>&lt;tidak ada pengaya&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="1648"/>
@@ -11106,12 +11129,12 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/dialogs/AudioPlayingDialog.cpp" line="37"/>
         <source>Playing audio file</source>
-        <translation type="unfinished">Memutar berkas suara</translation>
+        <translation>Memutar berkas suara</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPlayingDialog.cpp" line="45"/>
         <source>Playing audio file &quot;%1&quot;</source>
-        <translation type="unfinished">Memutar berkas usara &quot;%1&quot;</translation>
+        <translation>Memutar berkas usara &quot;%1&quot;</translation>
     </message>
 </context>
 <context>
@@ -11119,22 +11142,22 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="80"/>
         <source>Audio Plugin</source>
-        <translation type="unfinished">Plugin Suara</translation>
+        <translation>Pengaya Suara</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="88"/>
         <source>Plugin</source>
-        <translation type="unfinished">Plugin</translation>
+        <translation>Pengaya</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="100"/>
         <source>Category:</source>
-        <translation type="unfinished">Kategori:</translation>
+        <translation>Kategori:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="111"/>
         <source>Plugin:</source>
-        <translation type="unfinished">Plugin:</translation>
+        <translation>Pengaya:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="128"/>
@@ -11145,63 +11168,63 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="137"/>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="415"/>
         <source>&lt;ports&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;port&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="416"/>
         <source>&lt;id&gt;</source>
-        <translation type="unfinished">&lt;id&gt;</translation>
+        <translation>&lt;id&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="157"/>
         <source>Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>Salin</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="162"/>
         <source>Copy plugin parameters</source>
-        <translation type="unfinished">Salin parameter plugin</translation>
+        <translation>Salin parameter pengaya</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="164"/>
         <source>Paste</source>
-        <translation type="unfinished"></translation>
+        <translation>Tempel</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="169"/>
         <source>Paste plugin parameters</source>
-        <translation type="unfinished">Tempel parameter plugin</translation>
+        <translation>Tempel parameter pengaya</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="185"/>
         <source>Editor</source>
-        <translation type="unfinished">Editor</translation>
+        <translation>Penyunting</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="261"/>
         <source>(any)</source>
-        <translation type="unfinished">(apa saja)</translation>
+        <translation>(apa saja)</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="262"/>
         <source>(unclassified)</source>
-        <translation type="unfinished">(tak diklasifikasikan)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="285"/>
         <source>(none)</source>
-        <translation type="unfinished">(nihil)</translation>
+        <translation>(nihil)</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="414"/>
         <source>&lt;no plugin&gt;</source>
-        <translation type="unfinished">&lt;tak ada plugin&gt;</translation>
+        <translation>&lt;tidak ada pengaya&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="121"/>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="418"/>
         <source>Select a plugin from this list</source>
-        <translation type="unfinished"></translation>
+        <translation>Pilih pengaya dari daftar ini</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="131"/>
@@ -11217,7 +11240,7 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="142"/>
         <source>&lt;id&gt;</source>
         <comment>&apos;id&apos; is short for &apos;identification&apos;</comment>
-        <translation type="unfinished">&lt;id&gt;</translation>
+        <translation>&lt;id&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="144"/>
@@ -11227,7 +11250,7 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="171"/>
         <source>Reset</source>
-        <translation type="unfinished">Reset</translation>
+        <translation>Atur Ulang</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="176"/>
@@ -11247,28 +11270,28 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="470"/>
         <source>Id: %1</source>
-        <translation type="unfinished">Id: %1</translation>
+        <translation>Id: %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="518"/>
         <source>mono</source>
-        <translation type="unfinished">mono</translation>
+        <translation>mono</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="520"/>
         <source>stereo</source>
-        <translation type="unfinished">stereo</translation>
+        <translation>stereo</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="522"/>
         <source>%1 in, %2 out</source>
-        <translation type="unfinished">%1 masuk, %2 keluar</translation>
+        <translation>%1 masuk, %2 keluar</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="546"/>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="799"/>
         <source>Program:  </source>
-        <translation type="unfinished">Program:  </translation>
+        <translation>Program:  </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="550"/>
@@ -11277,7 +11300,7 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="808"/>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="837"/>
         <source>&lt;none selected&gt;</source>
-        <translation type="unfinished">&lt;tak ada yang dipilih&gt;</translation>
+        <translation>&lt;tidak ada yang dipilih&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="1015"/>
@@ -11290,22 +11313,22 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/studio/AudioPluginOSCGUIManager.cpp" line="432"/>
         <source>Rosegarden Plugin</source>
-        <translation type="unfinished">Plugin Rosegarden</translation>
+        <translation>Pengaya Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioPluginOSCGUIManager.cpp" line="435"/>
         <source>Rosegarden: %1</source>
-        <translation type="unfinished">Rosegarden: %1</translation>
+        <translation>Rosegarden: %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioPluginOSCGUIManager.cpp" line="437"/>
         <source>Rosegarden: %1: %2</source>
-        <translation type="unfinished">Rosegarden: %1: %2</translation>
+        <translation>Rosegarden: %1: %2</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioPluginOSCGUIManager.cpp" line="438"/>
         <source>Plugin slot %1</source>
-        <translation type="unfinished">Slot plugin %1</translation>
+        <translation>Slot pengaya %1</translation>
     </message>
 </context>
 <context>
@@ -11313,27 +11336,27 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/configuration/AudioPropertiesPage.h" line="49"/>
         <source>Audio</source>
-        <translation type="unfinished">Suara</translation>
+        <translation>Suara</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioPropertiesPage.h" line="50"/>
         <source>Audio Settings</source>
-        <translation type="unfinished">Pengaturan Suara</translation>
+        <translation>Pengaturan Suara</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioPropertiesPage.cpp" line="63"/>
         <source>Audio file path:</source>
-        <translation type="unfinished">Jalur berkas suara:</translation>
+        <translation>Jalur berkas suara:</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioPropertiesPage.cpp" line="68"/>
         <source>Choose...</source>
-        <translation type="unfinished">Pilih...</translation>
+        <translation>Pilih...</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioPropertiesPage.cpp" line="73"/>
         <source>Disk space remaining:</source>
-        <translation type="unfinished">Ruang disk tersisa:</translation>
+        <translation>Ruang disk tersisa:</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioPropertiesPage.cpp" line="78"/>
@@ -11343,7 +11366,7 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/configuration/AudioPropertiesPage.cpp" line="91"/>
         <source>Modify audio path</source>
-        <translation type="unfinished">Ubah jalur suara</translation>
+        <translation>Ubah jalur suara</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioPropertiesPage.cpp" line="133"/>
@@ -11353,12 +11376,12 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/configuration/AudioPropertiesPage.cpp" line="156"/>
         <source>minutes at</source>
-        <translation type="unfinished">menit pada</translation>
+        <translation>menit pada</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioPropertiesPage.cpp" line="165"/>
         <source>Audio Recording Path</source>
-        <translation type="unfinished"></translation>
+        <translation>Jalur Rekaman Suara</translation>
     </message>
 </context>
 <context>
@@ -11366,49 +11389,49 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/widgets/AudioRouteMenu.cpp" line="229"/>
         <source>In %1</source>
-        <translation type="unfinished">Masuk %1</translation>
+        <translation>Masuk %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioRouteMenu.cpp" line="231"/>
         <location filename="../../src/gui/widgets/AudioRouteMenu.cpp" line="254"/>
         <source>Master</source>
-        <translation type="unfinished">Master</translation>
+        <translation>Master</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioRouteMenu.cpp" line="233"/>
         <location filename="../../src/gui/widgets/AudioRouteMenu.cpp" line="256"/>
         <source>Sub %1</source>
-        <translation type="unfinished">Sub %1</translation>
+        <translation>Sub %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioRouteMenu.cpp" line="239"/>
         <source>In %1 R</source>
-        <translation type="unfinished">Masuk %1 R</translation>
+        <translation>Masuk %1 R</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioRouteMenu.cpp" line="240"/>
         <source>In %1 L</source>
-        <translation type="unfinished">Masuk %1 L</translation>
+        <translation>Masuk %1 L</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioRouteMenu.cpp" line="242"/>
         <source>Master R</source>
-        <translation type="unfinished">Master R</translation>
+        <translation>Master R</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioRouteMenu.cpp" line="243"/>
         <source>Master L</source>
-        <translation type="unfinished">Master L</translation>
+        <translation>Master L</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioRouteMenu.cpp" line="245"/>
         <source>Sub %1 R</source>
-        <translation type="unfinished">Sub %1 R</translation>
+        <translation>Sub %1 R</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioRouteMenu.cpp" line="246"/>
         <source>Sub %1 L</source>
-        <translation type="unfinished">Sub %1 L</translation>
+        <translation>Sub %1 L</translation>
     </message>
 </context>
 <context>
@@ -11421,7 +11444,7 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/commands/segment/AudioSegmentAutoSplitCommand.cpp" line="142"/>
         <source>(part %1)</source>
-        <translation type="unfinished">%1 (bagian)</translation>
+        <translation>(bagian %1)</translation>
     </message>
 </context>
 <context>
@@ -11429,7 +11452,7 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/commands/segment/AudioSegmentDistributeCommand.h" line="61"/>
         <source>Distribute Audio Segments over MIDI</source>
-        <translation type="unfinished">Distribusi Segmen Suara melalui MIDI</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -11437,17 +11460,17 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/commands/segment/AudioSegmentInsertCommand.cpp" line="44"/>
         <source>Create Segment</source>
-        <translation type="unfinished">Buat Segmen</translation>
+        <translation>Buat Segmen</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/AudioSegmentInsertCommand.cpp" line="106"/>
         <source>(inserted)</source>
-        <translation type="unfinished">%1 (disisipkan)</translation>
+        <translation>(disisipkan)</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/AudioSegmentInsertCommand.cpp" line="108"/>
         <source>unknown audio file</source>
-        <translation type="unfinished">berkas suara tak dikenal</translation>
+        <translation>berkas suara tak dikenal</translation>
     </message>
 </context>
 <context>
@@ -11460,7 +11483,7 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/commands/segment/AudioSegmentRescaleCommand.cpp" line="122"/>
         <source>(rescaled)</source>
-        <translation type="unfinished">(diskala ulang)</translation>
+        <translation>(diskala ulang)</translation>
     </message>
 </context>
 <context>
@@ -11468,7 +11491,7 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/commands/segment/AudioSegmentResizeFromStartCommand.cpp" line="32"/>
         <source>Resize Segment</source>
-        <translation type="unfinished">Ukur Ulang Segmen</translation>
+        <translation>Ubah Ukuran Segmen</translation>
     </message>
 </context>
 <context>
@@ -11476,12 +11499,12 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/commands/segment/AudioSegmentSplitCommand.cpp" line="35"/>
         <source>Split Audio Segment</source>
-        <translation type="unfinished">Bagi Segmen Suara</translation>
+        <translation>Pisah Segmen Suara</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/AudioSegmentSplitCommand.cpp" line="95"/>
         <source>(split)</source>
-        <translation type="unfinished"> (bagi)</translation>
+        <translation>(pisah)</translation>
     </message>
 </context>
 <context>
@@ -11489,12 +11512,12 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/dialogs/AudioSplitDialog.cpp" line="67"/>
         <source>Autosplit Audio Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>PisahOtomatis Segmen Suara</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioSplitDialog.cpp" line="76"/>
         <source>AutoSplit Segment &quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>PisahOtomatis Segemen &quot;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioSplitDialog.cpp" line="97"/>
@@ -11504,7 +11527,7 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/dialogs/AudioSplitDialog.cpp" line="163"/>
         <source>&lt;no preview generated for this audio file&gt;</source>
-        <translation type="unfinished">&lt;tak ada pratampil yang digenerasikan untuk berkas suara ini&gt;</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -11520,7 +11543,7 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="96"/>
         <source>Manage MIDI Banks and Programs</source>
-        <translation type="unfinished">Memanajemen Bank dan Program MIDI</translation>
+        <translation>Kelola Bank MIDI dan Program</translation>
     </message>
     <message>
         <source>Reset</source>
@@ -11529,109 +11552,109 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="119"/>
         <source>Device and Banks</source>
-        <translation type="unfinished"></translation>
+        <translation>Perangkat dan Bank</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="120"/>
         <source>Type</source>
-        <translation type="unfinished">Jenis</translation>
+        <translation>Jenis</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="121"/>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="233"/>
         <source>MSB</source>
-        <translation type="unfinished">MSB</translation>
+        <translation>MSB</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="122"/>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="232"/>
         <source>LSB</source>
-        <translation type="unfinished">LSB</translation>
+        <translation>LSB</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="140"/>
         <source>Add Bank</source>
-        <translation type="unfinished">Tambah Bank</translation>
+        <translation>Tambah Bank</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="141"/>
         <source>Add Key Mapping</source>
-        <translation type="unfinished">Tambah Pemetaan Kunci</translation>
+        <translation>Tambah Pemetaan Kunci</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="142"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Hapus</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="143"/>
         <source>Delete All</source>
-        <translation type="unfinished"></translation>
+        <translation>Hapus Semua</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="151"/>
         <source>Add a Bank to the current device</source>
-        <translation type="unfinished">Tambahkan Bank pada perangkat bersangkutan</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="153"/>
         <source>Add a Percussion Key Mapping to the current device</source>
-        <translation type="unfinished">Tambah Pemetaan Kunci Perkusi pada perangkat bersangkutan</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="155"/>
         <source>Delete the current Bank or Key Mapping</source>
-        <translation type="unfinished">Hapus Bank bersangkutan atau Pemetaan Kunci</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="157"/>
         <source>Delete all Banks and Key Mappings from the current Device</source>
-        <translation type="unfinished">Hapus semua Bank dan Pemetaan Kunci dari Perangkat bersangkutan</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="159"/>
         <source>Import...</source>
-        <translation type="unfinished">Impor...</translation>
+        <translation>Impor...</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="160"/>
         <source>Export...</source>
-        <translation type="unfinished">Ekspor...</translation>
+        <translation>Ekspor...</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="166"/>
         <source>Import Bank and Program data from a Rosegarden file to the current Device</source>
-        <translation type="unfinished">Impor data Bank dan Program dari berkas Rosegarden ke Perangkat bersangkutan</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="167"/>
         <source>Export all Device and Bank information to a Rosegarden format  interchange file</source>
-        <translation type="unfinished">Ekspor semua informasi Perangkat dan Bank ke bentuk berkas pertukaran milik Rosegarden</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="169"/>
         <source>Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>Salin</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="170"/>
         <source>Paste</source>
-        <translation type="unfinished"></translation>
+        <translation>Tempel</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="178"/>
         <source>Copy all Program names from current Bank to clipboard</source>
-        <translation type="unfinished">Salin semua nama Program dari Bank bersangkutan ke papan klip</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="180"/>
         <source>Paste Program names from clipboard to current Bank</source>
-        <translation type="unfinished">Tempel nama Program dari papan klip ke Bank bersangkutan</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="217"/>
         <source>Options</source>
-        <translation type="unfinished"></translation>
+        <translation>Opsi</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="227"/>
@@ -11641,27 +11664,27 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1075"/>
         <source>&lt;new bank&gt;</source>
-        <translation type="unfinished">&lt;bank baru&gt;</translation>
+        <translation>&lt;bank baru&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1111"/>
         <source>&lt;new mapping&gt;</source>
-        <translation type="unfinished">&lt;pemetaan baru&gt;</translation>
+        <translation>&lt;pemetaan baru&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1113"/>
         <source>&lt;new mapping %1&gt;</source>
-        <translation type="unfinished">&lt;pemetaan baru %1&gt;</translation>
+        <translation>&lt;pemetaan baru %1&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1157"/>
         <source>Really delete this bank?</source>
-        <translation type="unfinished">Benar-benar ingin menghapus bank ini?</translation>
+        <translation>Sungguh-sungguh ingin menghapus bank ini?</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1210"/>
         <source>Really delete this key mapping?</source>
-        <translation type="unfinished">Sungguh-sungguh ingin menghapus pemetaan kunci ini?</translation>
+        <translation>Sungguh-sungguh ingin menghapus pemetaan kunci ini?</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1262"/>
@@ -11671,17 +11694,17 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1540"/>
         <source>Import Banks from Device in File</source>
-        <translation type="unfinished">Impor Bank dari Perangkat dalam Berkas</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1541"/>
         <source>Rosegarden Device files</source>
-        <translation type="unfinished"></translation>
+        <translation>Berkas Perangkat Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1542"/>
         <source>Rosegarden files</source>
-        <translation type="unfinished">Berkas Rosegarden</translation>
+        <translation>Berkas Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1543"/>
@@ -11691,12 +11714,12 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1544"/>
         <source>LinuxSampler configuration files</source>
-        <translation type="unfinished"></translation>
+        <translation>Berkas konfigurasi LinuxSampler</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1545"/>
         <source>All files</source>
-        <translation type="unfinished">Semua berkas</translation>
+        <translation>Semua berkas</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1563"/>
@@ -11706,7 +11729,7 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1716"/>
         <source>Export Device as...</source>
-        <translation type="unfinished">Ekspor Perangkat sebagai...</translation>
+        <translation>Ekspor Perangkat sebagai...</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1738"/>
@@ -11716,7 +11739,7 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1748"/>
         <source>The specified file exists.  Overwrite?</source>
-        <translation type="unfinished">Berkas yang ditentukan sudah ada.  Ditimpa?</translation>
+        <translation>Berkas yang ditentukan sudah ada.  Ditimpa?</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1818"/>
@@ -11741,22 +11764,22 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/dialogs/BeatsBarsDialog.cpp" line="40"/>
         <source>Audio Segment Duration</source>
-        <translation type="unfinished">Durasi Segmen Suara</translation>
+        <translation>Durasi Segmen Suara</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/BeatsBarsDialog.cpp" line="45"/>
         <source>The selected audio segment contains:</source>
-        <translation type="unfinished">Segmen suara yang dipilih mengandung:</translation>
+        <translation>Segmen suara terpilih memiliki:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/BeatsBarsDialog.cpp" line="60"/>
         <source>beat(s)</source>
-        <translation type="unfinished">ketukan</translation>
+        <translation>ketukan</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/BeatsBarsDialog.cpp" line="61"/>
         <source>bar(s)</source>
-        <translation type="unfinished">bar</translation>
+        <translation>bar</translation>
     </message>
 </context>
 <context>
@@ -11772,7 +11795,7 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/commands/segment/ChangeCompositionLengthCommand.h" line="48"/>
         <source>Change &amp;Composition Start and End...</source>
-        <translation type="unfinished">Ubah Awal dan Akhir &amp;Komposisi...</translation>
+        <translation>Ubah Awal dan Akhir &amp;Komposisi...</translation>
     </message>
 </context>
 <context>
@@ -11806,7 +11829,7 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/commands/notation/ChangeStyleCommand.h" line="49"/>
         <source>Change &amp;Note Style</source>
-        <translation type="unfinished">Ubah Gaya &amp;Not</translation>
+        <translation>Ubah Gaya &amp;Not</translation>
     </message>
 </context>
 <context>
@@ -11827,12 +11850,12 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/commands/edit/ChangeVelocityCommand.h" line="45"/>
         <source>&amp;Increase Velocity</source>
-        <translation type="unfinished">Na&amp;ikkan Kecepatan</translation>
+        <translation>Naikkan Velos&amp;itas</translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/ChangeVelocityCommand.h" line="46"/>
         <source>&amp;Reduce Velocity</source>
-        <translation type="unfinished">Tu&amp;runkan Kecepatan</translation>
+        <translation>Tu&amp;runkan Velositas</translation>
     </message>
 </context>
 <context>
@@ -11840,7 +11863,7 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/rulers/ChordNameRuler.cpp" line="90"/>
         <source>&lt;qt&gt;&lt;p&gt;Chord name ruler.  This ruler analyzes your harmonies and attempts to guess what chords your composition contains.  These chords cannot be printed or manipulated, and this is only a reference for your information.&lt;/p&gt;&lt;p&gt;Turn it on and off with the &lt;b&gt;View -&gt; Rulers&lt;/b&gt; menu.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Penggaris nama padu nada.  Penggaris ini menganalisa harmoni dan mencoba memprakirakan padu nada apa saja yang ada di dalam komposisi yang Anda buat.  Padu nada tersebut tidak bisa dicetak maupun diubah, karena hanya berlaku sebagai referensi bagi Anda.&lt;/p&gt;&lt;p&gt;Tampilkan atau sembunyikan penggaris ini dengan menu &lt;b&gt;Tampilan -&gt; Penggaris.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -11848,7 +11871,7 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/commands/edit/ClearTriggersCommand.h" line="46"/>
         <source>&amp;Clear Triggers</source>
-        <translation type="unfinished">Bersihkan Pi&amp;cu</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -11873,12 +11896,12 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="73"/>
         <source>Up an Octave</source>
-        <translation type="unfinished">Naik Satu Oktaf</translation>
+        <translation>Naik Satu Oktaf</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="115"/>
         <source>Down an Octave</source>
-        <translation type="unfinished">Turun Satu Oktaf</translation>
+        <translation>Turun Satu Oktaf</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="104"/>
@@ -11893,77 +11916,77 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="140"/>
         <source>Transpose into appropriate octave</source>
-        <translation type="unfinished">Transposisi ke oktaf yang sesuai</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="293"/>
         <source>%1 down an octave</source>
-        <translation type="unfinished">%1 turun satu oktaf</translation>
+        <translation>%1 turun satu oktaf</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="296"/>
         <source>%1 down two octaves</source>
-        <translation type="unfinished">%1 turun dua oktaf</translation>
+        <translation>%1 turun dua oktaf</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="299"/>
         <source>%1 up an octave</source>
-        <translation type="unfinished">%1 naik satu oktaf</translation>
+        <translation>%1 naik satu oktaf</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="302"/>
         <source>%1 up two octaves</source>
-        <translation type="unfinished">%1 naik dua oktaf</translation>
+        <translation>%1 naik dua oktaf</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="311"/>
         <source>Treble</source>
-        <translation type="unfinished"></translation>
+        <translation>Tribel</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="313"/>
         <source>French violin</source>
-        <translation type="unfinished">Biola Perancis</translation>
+        <translation>Biola Perancis</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="315"/>
         <source>Soprano</source>
-        <translation type="unfinished">Soprano</translation>
+        <translation>Sopran</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="317"/>
         <source>Mezzo-soprano</source>
-        <translation type="unfinished">Mezzo-soprano</translation>
+        <translation>Mesosopran</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="319"/>
         <source>Alto</source>
-        <translation type="unfinished">Alto</translation>
+        <translation>Alto</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="321"/>
         <source>Tenor</source>
-        <translation type="unfinished">Tenor</translation>
+        <translation>Tenor</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="323"/>
         <source>C-baritone</source>
-        <translation type="unfinished">C-baritone</translation>
+        <translation>C-bariton</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="325"/>
         <source>F-baritone</source>
-        <translation type="unfinished">F-baritone</translation>
+        <translation>F-bariton</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="327"/>
         <source>Bass</source>
-        <translation type="unfinished">Bass</translation>
+        <translation>Bas</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="329"/>
         <source>Sub-bass</source>
-        <translation type="unfinished">Sub-bass</translation>
+        <translation>Subbas</translation>
     </message>
 </context>
 <context>
@@ -11995,42 +12018,42 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/configuration/ColourConfigurationPage.h" line="52"/>
         <source>Color</source>
-        <translation type="unfinished">Warna</translation>
+        <translation>Warna</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/ColourConfigurationPage.h" line="53"/>
         <source>Color Settings</source>
-        <translation type="unfinished">Pengaturan Warna</translation>
+        <translation>Pengaturan Warna</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/ColourConfigurationPage.cpp" line="67"/>
         <source>Add New Color</source>
-        <translation type="unfinished">Tambah Warna Baru</translation>
+        <translation>Tambah Warna Baru</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/ColourConfigurationPage.cpp" line="71"/>
         <source>Delete Color</source>
-        <translation type="unfinished">Hapus Warna</translation>
+        <translation>Hapus Warna</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/ColourConfigurationPage.cpp" line="90"/>
         <source>Color Map</source>
-        <translation type="unfinished">Peta Warna</translation>
+        <translation>Peta Warna</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/ColourConfigurationPage.cpp" line="125"/>
         <source>New Color Name</source>
-        <translation type="unfinished">Nama Warna Baru</translation>
+        <translation>Nama Warna Baru</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/ColourConfigurationPage.cpp" line="126"/>
         <source>Enter new name</source>
-        <translation type="unfinished">Masukkan nama baru</translation>
+        <translation>Masukkan nama baru</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/ColourConfigurationPage.cpp" line="127"/>
         <source>New</source>
-        <translation type="unfinished">Baru</translation>
+        <translation>Baru</translation>
     </message>
 </context>
 <context>
@@ -12038,27 +12061,27 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/widgets/ColourTable.cpp" line="58"/>
         <source>Name</source>
-        <translation type="unfinished">Nama</translation>
+        <translation>Nama</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/ColourTable.cpp" line="58"/>
         <source>Color</source>
-        <translation type="unfinished">Warna</translation>
+        <translation>Warna</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/ColourTable.cpp" line="76"/>
         <source>Modify Color Name</source>
-        <translation type="unfinished">Ubah Nama Warna</translation>
+        <translation>Ubah Nama Warna</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/ColourTable.cpp" line="77"/>
         <source>Enter new name</source>
-        <translation type="unfinished">Masukkan nama baru</translation>
+        <translation>Masukkan nama baru</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/ColourTable.cpp" line="117"/>
         <source>Default Color</source>
-        <translation type="unfinished">Warna Utama</translation>
+        <translation>Warna Utama</translation>
     </message>
 </context>
 <context>
@@ -12068,56 +12091,56 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
         <location filename="../../src/document/CommandHistory.cpp" line="56"/>
         <location filename="../../src/document/CommandHistory.cpp" line="60"/>
         <source>&amp;Undo</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Batalkan</translation>
     </message>
     <message>
         <location filename="../../src/document/CommandHistory.cpp" line="52"/>
         <source>Ctrl+Z</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Z</translation>
     </message>
     <message>
         <location filename="../../src/document/CommandHistory.cpp" line="53"/>
         <source>Undo the last editing operation</source>
-        <translation type="unfinished"></translation>
+        <translation>Batalkan operasi sunting terakhir</translation>
     </message>
     <message>
         <location filename="../../src/document/CommandHistory.cpp" line="65"/>
         <location filename="../../src/document/CommandHistory.cpp" line="71"/>
         <location filename="../../src/document/CommandHistory.cpp" line="75"/>
         <source>Re&amp;do</source>
-        <translation type="unfinished"></translation>
+        <translation>Ula&amp;ng</translation>
     </message>
     <message>
         <location filename="../../src/document/CommandHistory.cpp" line="67"/>
         <source>Ctrl+Shift+Z</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+Z</translation>
     </message>
     <message>
         <location filename="../../src/document/CommandHistory.cpp" line="68"/>
         <source>Redo the last operation that was undone</source>
-        <translation type="unfinished"></translation>
+        <translation>Ulang operasi terakhir yang belum selesai</translation>
     </message>
     <message>
         <location filename="../../src/document/CommandHistory.cpp" line="495"/>
         <source>Nothing to undo</source>
-        <translation type="unfinished">Tak ada yang mesti dibatalkan</translation>
+        <translation>Tak ada yang mesti dibatalkan</translation>
     </message>
     <message>
         <location filename="../../src/document/CommandHistory.cpp" line="495"/>
         <source>Nothing to redo</source>
-        <translation type="unfinished">Tak ada yang mesi diulang</translation>
+        <translation>Tak ada yang mesti diulang</translation>
     </message>
     <message>
         <location filename="../../src/document/CommandHistory.cpp" line="511"/>
         <location filename="../../src/document/CommandHistory.cpp" line="533"/>
         <source>&amp;Undo %1</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Batalkan %1</translation>
     </message>
     <message>
         <location filename="../../src/document/CommandHistory.cpp" line="511"/>
         <location filename="../../src/document/CommandHistory.cpp" line="534"/>
         <source>Re&amp;do %1</source>
-        <translation type="unfinished">Ula&amp;ng %1</translation>
+        <translation>Ula&amp;ng %1</translation>
     </message>
 </context>
 <context>
@@ -12125,7 +12148,7 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/dialogs/CompositionLengthDialog.cpp" line="43"/>
         <source>Change Composition Length</source>
-        <translation type="unfinished">Ubah Panjang Komposisi</translation>
+        <translation>Ubah Panjang Komposisi</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/CompositionLengthDialog.cpp" line="59"/>
@@ -12135,12 +12158,12 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/dialogs/CompositionLengthDialog.cpp" line="76"/>
         <source>Start Bar</source>
-        <translation type="unfinished">Bar Mulai</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/CompositionLengthDialog.cpp" line="94"/>
         <source>End Bar</source>
-        <translation type="unfinished">Bari Akhir</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -12153,7 +12176,7 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/dialogs/ConfigureDialog.cpp" line="47"/>
         <source>Rosegarden - Preferences</source>
-        <translation type="unfinished"></translation>
+        <translation>Rosegarden - Preferensi</translation>
     </message>
 </context>
 <context>
@@ -12161,7 +12184,7 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/dialogs/ConfigureDialogBase.cpp" line="47"/>
         <source>Configure Rosegarden</source>
-        <translation type="unfinished">Konfigurasi Rosegarden</translation>
+        <translation>Konfigurasi Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ConfigureDialogBase.cpp" line="152"/>
@@ -12182,32 +12205,32 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="94"/>
         <source>&lt;no device&gt;</source>
-        <translation type="unfinished">&lt;tak ada perangkat&gt;</translation>
+        <translation>&lt;tiada perangkat&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="111"/>
         <source>Description  </source>
-        <translation type="unfinished">Deskripsi  </translation>
+        <translation>Deskripsi  </translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="92"/>
         <source>Manage Controllers</source>
-        <translation type="unfinished"></translation>
+        <translation>Kelola Kontroler</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="102"/>
         <source>  Controllers for %1 (device %2)</source>
-        <translation type="unfinished"></translation>
+        <translation>  Kontroler untuk %1 (perangkat %2)</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="108"/>
         <source>Name  </source>
-        <translation type="unfinished"></translation>
+        <translation>Nama  </translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="109"/>
         <source>Type  </source>
-        <translation type="unfinished">Jenis  </translation>
+        <translation>Jenis  </translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="110"/>
@@ -12217,73 +12240,73 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="112"/>
         <source>Min. value  </source>
-        <translation type="unfinished"></translation>
+        <translation>Nilai min  </translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="113"/>
         <source>Max. value  </source>
-        <translation type="unfinished"></translation>
+        <translation>Nilai maks  </translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="114"/>
         <source>Default value  </source>
-        <translation type="unfinished"></translation>
+        <translation>Nilai baku  </translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="115"/>
         <source>Color  </source>
-        <translation type="unfinished">Warna  </translation>
+        <translation>Warna  </translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="116"/>
         <source>Position on instrument panel</source>
-        <translation type="unfinished">Posisi pada panel instrumen</translation>
+        <translation>Posisi pada panel instrumen</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="132"/>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation>Tambah</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="133"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Hapus</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="135"/>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="373"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Tutup</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="137"/>
         <source>Add a Control Parameter to the Studio</source>
-        <translation type="unfinished">Tambah Parameter Kontrol ke Studio</translation>
+        <translation>Tambah Parameter Kontrol ke Studio</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="139"/>
         <source>Delete a Control Parameter from the Studio</source>
-        <translation type="unfinished">Hapus Parameter Kontrol dari Studio</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="141"/>
         <source>Close the Control Parameter editor</source>
-        <translation type="unfinished">Tutup editor Parameter Kontrol</translation>
+        <translation>Tutup penyunting Parameter Kontrol</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="223"/>
         <source>&lt;default&gt;</source>
-        <translation type="unfinished">&lt;seting dasar&gt;</translation>
+        <translation>&lt;baku&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="227"/>
         <source>&lt;not showing&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;tidak ditampilkan&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="278"/>
         <source>&lt;none&gt;</source>
-        <translation type="unfinished">&lt;nihil&gt;</translation>
+        <translation>&lt;nihil&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="462"/>
@@ -12296,62 +12319,62 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="76"/>
         <source>Name:</source>
-        <translation type="unfinished">Nama:</translation>
+        <translation>Nama:</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="81"/>
         <source>Type:</source>
-        <translation type="unfinished">Jenis:</translation>
+        <translation>Jenis:</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="90"/>
         <source>Description:</source>
-        <translation type="unfinished">Deskripsi:</translation>
+        <translation>Deskripsi:</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="60"/>
         <source>Edit Controller</source>
-        <translation type="unfinished"></translation>
+        <translation>Sunting Kontroler</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="69"/>
         <source>Controller Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Properti Kontroler</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="98"/>
         <source>Controller number:</source>
-        <translation type="unfinished">Nomor/angka kontroler:</translation>
+        <translation>Nomor kontroler:</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="102"/>
         <source>Minimum value:</source>
-        <translation type="unfinished">Nilai minimum:</translation>
+        <translation>Nilai minimal:</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="106"/>
         <source>Maximum value:</source>
-        <translation type="unfinished">Nilai maksimum:</translation>
+        <translation>Nilai maksimal:</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="110"/>
         <source>Default value:</source>
-        <translation type="unfinished">Nilai dasar:</translation>
+        <translation>Nilai baku:</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="114"/>
         <source>Color:</source>
-        <translation type="unfinished">Warna:</translation>
+        <translation>Warna:</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="118"/>
         <source>Instrument Parameter Box position:</source>
-        <translation type="unfinished">Posisi Kotak Parameter Instrumen:</translation>
+        <translation>Posisi Kotak Parameter Instrumen:</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="190"/>
         <source>&lt;not showing&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;tidak ditampilkan&gt;</translation>
     </message>
 </context>
 <context>
@@ -12375,7 +12398,7 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/rulers/ControlRulerWidget.cpp" line="307"/>
         <source>Velocity</source>
-        <translation type="unfinished"></translation>
+        <translation>Velositas</translation>
     </message>
 </context>
 <context>
@@ -12406,22 +12429,22 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/commands/edit/CopyCommand.h" line="62"/>
         <source>&amp;Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Salin</translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/CopyCommand.cpp" line="41"/>
         <source>(excerpt)</source>
-        <translation type="unfinished"></translation>
+        <translation>(kutipan)</translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/CopyCommand.cpp" line="56"/>
         <source>(copied)</source>
-        <translation type="unfinished">(disalin)</translation>
+        <translation>(disalin)</translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/CopyCommand.cpp" line="64"/>
         <source>Copy Range</source>
-        <translation type="unfinished">Jangkauan Salin</translation>
+        <translation>Salin Jangkauan</translation>
     </message>
 </context>
 <context>
@@ -12429,22 +12452,22 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/dialogs/CountdownDialog.cpp" line="48"/>
         <source>Recording...</source>
-        <translation type="unfinished">Merekam...</translation>
+        <translation>Merekam...</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/CountdownDialog.cpp" line="60"/>
         <source>Recording time remaining:  </source>
-        <translation type="unfinished">Siswa waktu perekaman:  </translation>
+        <translation>Siswa waktu perekaman:  </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/CountdownDialog.cpp" line="68"/>
         <source>Stop</source>
-        <translation type="unfinished"></translation>
+        <translation>Henti</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/CountdownDialog.cpp" line="121"/>
         <source>Just how big is your hard disk?</source>
-        <translation type="unfinished">Seberapa besar hard disk Anda?</translation>
+        <translation>Seberapa besar kapasitas hard disk Anda?</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/CountdownDialog.cpp" line="155"/>
@@ -12457,12 +12480,12 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/commands/studio/CreateOrDeleteDeviceCommand.h" line="61"/>
         <source>Delete Device</source>
-        <translation type="unfinished">Hapus Perangkat</translation>
+        <translation>Hapus Perangkat</translation>
     </message>
     <message>
         <location filename="../../src/commands/studio/CreateOrDeleteDeviceCommand.h" line="61"/>
         <source>Create Device</source>
-        <translation type="unfinished">Membuat Perangkat</translation>
+        <translation>Buat Perangkat</translation>
     </message>
 </context>
 <context>
@@ -12470,7 +12493,7 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/commands/segment/CreateTempoMapFromSegmentCommand.cpp" line="32"/>
         <source>Set Tempos from Beat Segment</source>
-        <translation type="unfinished">Atur Tempo dari Segmen Ketukan</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -12478,7 +12501,7 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/commands/edit/CutAndCloseCommand.h" line="48"/>
         <source>C&amp;ut and Close</source>
-        <translation type="unfinished">Potong dan T&amp;utup</translation>
+        <translation>Potong dan T&amp;utup</translation>
     </message>
 </context>
 <context>
@@ -12486,7 +12509,7 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/commands/edit/CutCommand.h" line="50"/>
         <source>Cu&amp;t</source>
-        <translation type="unfinished">Po&amp;tong</translation>
+        <translation>Po&amp;tong</translation>
     </message>
 </context>
 <context>
@@ -12494,7 +12517,7 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/commands/segment/CutRangeCommand.cpp" line="33"/>
         <source>Cut Range</source>
-        <translation type="unfinished">Potong Jangkauan</translation>
+        <translation>Potong Jangkauan</translation>
     </message>
 </context>
 <context>
@@ -12523,7 +12546,7 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/commands/segment/DeleteRangeCommand.cpp" line="37"/>
         <source>Delete Range</source>
-        <translation type="unfinished">Hapus Jangkauan</translation>
+        <translation>Hapus Jangkauan</translation>
     </message>
 </context>
 <context>
@@ -12531,7 +12554,7 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/commands/segment/DeleteTracksCommand.h" line="46"/>
         <source>Delete Tracks...</source>
-        <translation type="unfinished">Hapus Jalur...</translation>
+        <translation>Hapus Jalur...</translation>
     </message>
 </context>
 <context>
@@ -12539,7 +12562,7 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/commands/segment/DeleteTriggerSegmentCommand.cpp" line="32"/>
         <source>Delete Triggered Segment</source>
-        <translation type="unfinished">Hapus Segmen Berpicu</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -12548,12 +12571,12 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
         <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="798"/>
         <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="819"/>
         <source>New Device</source>
-        <translation type="unfinished">Perangkat Baru</translation>
+        <translation>Perangkat Baru</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="916"/>
         <source>http://rosegardenmusic.com/wiki/doc:device-manager-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:device-manager-en</translation>
     </message>
 </context>
 <context>
@@ -12590,93 +12613,93 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="59"/>
         <source>C</source>
         <comment>note name</comment>
-        <translation type="unfinished">C</translation>
+        <translation>C</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="60"/>
         <source>D</source>
         <comment>note name</comment>
-        <translation type="unfinished">D</translation>
+        <translation>D</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="61"/>
         <source>E</source>
         <comment>note name</comment>
-        <translation type="unfinished">E</translation>
+        <translation>E</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="62"/>
         <source>F</source>
         <comment>note name</comment>
-        <translation type="unfinished">F</translation>
+        <translation>F</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="63"/>
         <source>G</source>
         <comment>note name</comment>
-        <translation type="unfinished">G</translation>
+        <translation>G</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="64"/>
         <source>A</source>
         <comment>note name</comment>
-        <translation type="unfinished">A</translation>
+        <translation>A</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="65"/>
         <source>B</source>
         <comment>note name</comment>
-        <translation type="unfinished">B</translation>
+        <translation>B</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="70"/>
         <source>-2</source>
-        <translation type="unfinished">-2</translation>
+        <translation>-2</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="71"/>
         <source>-1</source>
-        <translation type="unfinished">-1</translation>
+        <translation>-1</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="72"/>
         <source>0</source>
-        <translation type="unfinished">0</translation>
+        <translation>0</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="73"/>
         <source>1</source>
-        <translation type="unfinished">1</translation>
+        <translation>1</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="74"/>
         <source>2</source>
-        <translation type="unfinished">2</translation>
+        <translation>2</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="75"/>
         <source>3</source>
-        <translation type="unfinished">3</translation>
+        <translation>3</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="76"/>
         <source>4</source>
-        <translation type="unfinished">4</translation>
+        <translation>4</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="77"/>
         <source>5</source>
-        <translation type="unfinished">5</translation>
+        <translation>5</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="78"/>
         <source>6</source>
-        <translation type="unfinished">6</translation>
+        <translation>6</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="79"/>
         <source>7</source>
-        <translation type="unfinished">7</translation>
+        <translation>7</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="84"/>
@@ -12686,17 +12709,17 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="85"/>
         <source>flat</source>
-        <translation type="unfinished"></translation>
+        <translation>datar</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="86"/>
         <source>natural</source>
-        <translation type="unfinished">natural</translation>
+        <translation>natural</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="87"/>
         <source>sharp</source>
-        <translation type="unfinished"></translation>
+        <translation>tajam</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="88"/>
@@ -12709,7 +12732,7 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/dialogs/DocumentConfigureDialog.cpp" line="39"/>
         <source>Document Properties</source>
-        <translation type="unfinished">Properti Dokumen</translation>
+        <translation>Properti Dokumen</translation>
     </message>
 </context>
 <context>
@@ -12718,92 +12741,92 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.h" line="48"/>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.h" line="49"/>
         <source>About</source>
-        <translation type="unfinished"></translation>
+        <translation>Tentang</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.h" line="61"/>
         <source>%1 minutes %2.%3%4 seconds (%5 units, %6 measures)</source>
-        <translation type="unfinished">%1 menit %2.%3%4 detik (%5 unit, %6 ukuran)</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="91"/>
         <source>Headers</source>
-        <translation type="unfinished">Tajuk</translation>
+        <translation>Tajuk</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="112"/>
         <source>Filename:</source>
-        <translation type="unfinished">Nama berkas:</translation>
+        <translation>Nama berkas:</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="115"/>
         <source>Formal duration (to end marker):</source>
-        <translation type="unfinished">Durasi formal (hingga akhir penanda):</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="120"/>
         <source>Playing duration:</source>
-        <translation type="unfinished">Durasi permainan:</translation>
+        <translation>Durasi permainan:</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="125"/>
         <source>Tracks:</source>
-        <translation type="unfinished">Jalur:</translation>
+        <translation>Jalur:</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="126"/>
         <source>%1 used, %2 total</source>
-        <translation type="unfinished">%1 digunakan, %2 total</translation>
+        <translation>%1 digunakan, %2 total</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="131"/>
         <source>Segments:</source>
-        <translation type="unfinished">Segment:</translation>
+        <translation>Segment:</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="132"/>
         <source>%1 MIDI, %2 audio, %3 total</source>
-        <translation type="unfinished">%1 MIDI, %2 suara, %3 total</translation>
+        <translation>%1 MIDI, %2 suara, %3 total</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="140"/>
         <source>Statistics</source>
-        <translation type="unfinished">Statistik</translation>
+        <translation>Statistik</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="155"/>
         <source>Type</source>
-        <translation type="unfinished">Jenis</translation>
+        <translation>Jenis</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="156"/>
         <source>Track</source>
-        <translation type="unfinished">Jalur</translation>
+        <translation>Jalur</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="157"/>
         <source>Label</source>
-        <translation type="unfinished">Label</translation>
+        <translation>Label</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="158"/>
         <source>Time</source>
-        <translation type="unfinished">Waktu</translation>
+        <translation>Waktu</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="159"/>
         <source>Duration</source>
-        <translation type="unfinished">Durasi</translation>
+        <translation>Durasi</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="160"/>
         <source>Events</source>
-        <translation type="unfinished">Peristiwa</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="161"/>
         <source>Polyphony</source>
-        <translation type="unfinished">Polifoni</translation>
+        <translation>Polifoni</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="162"/>
@@ -12813,12 +12836,12 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="163"/>
         <source>Quantize</source>
-        <translation type="unfinished">Kuantisasi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="164"/>
         <source>Transpose</source>
-        <translation type="unfinished">Transposisi</translation>
+        <translation>Transposisi</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="165"/>
@@ -12828,22 +12851,22 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="192"/>
         <source>Audio</source>
-        <translation type="unfinished">Suara</translation>
+        <translation>Suara</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="192"/>
         <source>MIDI</source>
-        <translation type="unfinished">MIDI</translation>
+        <translation>MIDI</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="254"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>Ya</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="254"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="267"/>
@@ -12853,12 +12876,12 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="298"/>
         <source>None</source>
-        <translation type="unfinished">Nihil</translation>
+        <translation>Nihil</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="306"/>
         <source>Segment Summary</source>
-        <translation type="unfinished">Ikhtisar Segmen</translation>
+        <translation>Ikhtisar Segmen</translation>
     </message>
 </context>
 <context>
@@ -12976,12 +12999,12 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/general/EditViewBase.cpp" line="292"/>
         <source>Segment Duration</source>
-        <translation type="unfinished">Durasi Segmen</translation>
+        <translation>Durasi Segmen</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/EditViewBase.cpp" line="300"/>
         <source>Set Segment Duration</source>
-        <translation type="unfinished">Atur Durasi Segmen</translation>
+        <translation>Atur Durasi Segmen</translation>
     </message>
 </context>
 <context>
@@ -12989,7 +13012,7 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/commands/edit/EraseCommand.h" line="45"/>
         <source>&amp;Erase</source>
-        <translation type="unfinished">Hapu&amp;s</translation>
+        <translation>Hapu&amp;s</translation>
     </message>
 </context>
 <context>
@@ -12997,7 +13020,7 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/commands/segment/EraseSegmentsStartingInRangeCommand.cpp" line="31"/>
         <source>Delete Range</source>
-        <translation type="unfinished">Hapus Jangkauan</translation>
+        <translation>Hapus Jangkauan</translation>
     </message>
 </context>
 <context>
@@ -13005,7 +13028,7 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/commands/edit/EventEditCommand.h" line="50"/>
         <source>Edit E&amp;vent</source>
-        <translation type="unfinished">Sunting Peristi&amp;wa</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -13023,22 +13046,22 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="84"/>
         <source>Intrinsics</source>
-        <translation type="unfinished">Intrinsik</translation>
+        <translation>Intrinsik</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="90"/>
         <source>Event type: </source>
-        <translation type="unfinished">Jenis peristiwa: </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="98"/>
         <source>Absolute time: </source>
-        <translation type="unfinished">Waktu absolut: </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="112"/>
         <source>Duration: </source>
-        <translation type="unfinished">Durasi: </translation>
+        <translation>Durasi: </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="130"/>
@@ -13053,17 +13076,17 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="151"/>
         <source>Name</source>
-        <translation type="unfinished">Nama</translation>
+        <translation>Nama</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="157"/>
         <source>Type</source>
-        <translation type="unfinished">Jenis</translation>
+        <translation>Jenis</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="161"/>
         <source>Value</source>
-        <translation type="unfinished">Nilai</translation>
+        <translation>Nilai</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="189"/>
@@ -13078,17 +13101,17 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="205"/>
         <source>Name       </source>
-        <translation type="unfinished">Nama       </translation>
+        <translation>Nama       </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="209"/>
         <source>Type       </source>
-        <translation type="unfinished">Jenis      </translation>
+        <translation>Jenis      </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="213"/>
         <source>Value      </source>
-        <translation type="unfinished">Nilai      </translation>
+        <translation>Nilai      </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="242"/>
@@ -13098,17 +13121,17 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="321"/>
         <source>sec</source>
-        <translation type="unfinished"></translation>
+        <translation>det</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="335"/>
         <source>nsec</source>
-        <translation type="unfinished"></translation>
+        <translation>ndet</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="375"/>
         <source>Delete this property</source>
-        <translation type="unfinished">Hapus properti ini</translation>
+        <translation>Hapus properti ini</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="518"/>
@@ -13126,7 +13149,7 @@ Removing necessary properties may cause unexpected behavior.</source>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="523"/>
         <source>&amp;Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Hapus</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="552"/>
@@ -13146,7 +13169,7 @@ This could cause problems if it overrides a different computed value later on.</
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="78"/>
         <source>Event Filter</source>
-        <translation type="unfinished">Penyaring Peristiwa</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="88"/>
@@ -13156,47 +13179,47 @@ This could cause problems if it overrides a different computed value later on.</
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="95"/>
         <source>lowest:</source>
-        <translation type="unfinished">terendah:</translation>
+        <translation>terendah:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="98"/>
         <source>highest:</source>
-        <translation type="unfinished">tertinggi:</translation>
+        <translation>tertinggi:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="101"/>
         <source>Pitch:</source>
-        <translation type="unfinished">Titi nada:</translation>
+        <translation>Titi nada:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="104"/>
         <source>Velocity:</source>
-        <translation type="unfinished">Kecepatan:</translation>
+        <translation>Velositas:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="107"/>
         <source>Duration:</source>
-        <translation type="unfinished">Durasi:</translation>
+        <translation>Durasi:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="113"/>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="124"/>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="132"/>
         <source>include</source>
-        <translation type="unfinished">termasuk</translation>
+        <translation>termasuk</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="114"/>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="125"/>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="133"/>
         <source>exclude</source>
-        <translation type="unfinished">tidak termasuk</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="147"/>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="165"/>
         <source>edit</source>
-        <translation type="unfinished">sunting</translation>
+        <translation>sunting</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="151"/>
@@ -13208,43 +13231,43 @@ This could cause problems if it overrides a different computed value later on.</
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="192"/>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="199"/>
         <source>longest</source>
-        <translation type="unfinished">terpanjang</translation>
+        <translation>terpanjang</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="214"/>
         <source>Include all</source>
-        <translation type="unfinished">termasuk semua</translation>
+        <translation>termasuk semua</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="216"/>
         <source>Include entire range of values</source>
-        <translation type="unfinished">Termasuk semua jangkauan nilai</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="219"/>
         <source>Exclude all</source>
-        <translation type="unfinished">Tidak termasuk semua</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="221"/>
         <source>Exclude entire range of values</source>
-        <translation type="unfinished">Tidak termasuk semua jangkauan nilai</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="254"/>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="255"/>
         <source>shortest</source>
-        <translation type="unfinished">terpendek</translation>
+        <translation>terpendek</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="359"/>
         <source>Lowest pitch</source>
-        <translation type="unfinished">Titi nada terendah</translation>
+        <translation>Titi nada terendah</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="369"/>
         <source>Highest pitch</source>
-        <translation type="unfinished">Titi nada tertinggi</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -13252,7 +13275,7 @@ This could cause problems if it overrides a different computed value later on.</
     <message>
         <location filename="../../src/commands/edit/EventInsertionCommand.cpp" line="31"/>
         <source>Insert Event</source>
-        <translation type="unfinished">Sisip Peristiwa</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -13260,7 +13283,7 @@ This could cause problems if it overrides a different computed value later on.</
     <message>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="47"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="66"/>
@@ -13270,7 +13293,7 @@ This could cause problems if it overrides a different computed value later on.</
     <message>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="77"/>
         <source>Pattern</source>
-        <translation type="unfinished">Pola</translation>
+        <translation>Pola</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="84"/>
@@ -13302,31 +13325,31 @@ This could cause problems if it overrides a different computed value later on.</
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="118"/>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="148"/>
         <source>Value</source>
-        <translation type="unfinished">Nilai</translation>
+        <translation>Nilai</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="156"/>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="183"/>
         <source>First Value</source>
-        <translation type="unfinished">Nilai Pertama</translation>
+        <translation>Nilai Pertama</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="157"/>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="184"/>
         <source>Second Value</source>
-        <translation type="unfinished">Nilai Kedua</translation>
+        <translation>Nilai Kedua</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="165"/>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="175"/>
         <source>Low Value</source>
-        <translation type="unfinished">Nilai Rendah</translation>
+        <translation>Nilai Rendah</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="166"/>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="174"/>
         <source>High Value</source>
-        <translation type="unfinished">Nilai Tinggi</translation>
+        <translation>Nilai Tinggi</translation>
     </message>
 </context>
 <context>
@@ -13339,7 +13362,7 @@ This could cause problems if it overrides a different computed value later on.</
     <message>
         <location filename="../../src/commands/edit/EventQuantizeCommand.cpp" line="110"/>
         <source>Grid &amp;Quantize</source>
-        <translation type="unfinished">Kuantisasi &amp;Jejaring</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/EventQuantizeCommand.cpp" line="114"/>
@@ -13371,17 +13394,17 @@ This could cause problems if it overrides a different computed value later on.</
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="127"/>
         <source>Note</source>
-        <translation type="unfinished">Catatan</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="128"/>
         <source>Program Change</source>
-        <translation type="unfinished">Perubahan Program</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="129"/>
         <source>Controller</source>
-        <translation type="unfinished">Kontroler</translation>
+        <translation>Kontroler</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="130"/>
@@ -13391,17 +13414,17 @@ This could cause problems if it overrides a different computed value later on.</
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="131"/>
         <source>System Exclusive</source>
-        <translation type="unfinished">Eksklusif Sistem</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="132"/>
         <source>Key Pressure</source>
-        <translation type="unfinished">Tekanan Kunci</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="133"/>
         <source>Channel Pressure</source>
-        <translation type="unfinished">Tekanan Kanal</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="134"/>
@@ -13411,17 +13434,17 @@ This could cause problems if it overrides a different computed value later on.</
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="135"/>
         <source>Indication</source>
-        <translation type="unfinished">Indikasi</translation>
+        <translation>Indikasi</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="136"/>
         <source>Text</source>
-        <translation type="unfinished">Teks</translation>
+        <translation>Teks</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="137"/>
         <source>Other</source>
-        <translation type="unfinished">Lainnya</translation>
+        <translation>Lainnya</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="172"/>
@@ -13431,110 +13454,110 @@ This could cause problems if it overrides a different computed value later on.</
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="178"/>
         <source>Label:  </source>
-        <translation type="unfinished">Label:  </translation>
+        <translation>Label:  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="181"/>
         <source>&lt;no label&gt;</source>
-        <translation type="unfinished">&lt;tak ada label&gt;</translation>
+        <translation>&lt;tidak ada label&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="184"/>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="191"/>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="198"/>
         <source>edit</source>
-        <translation type="unfinished">sunting</translation>
+        <translation>sunting</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="188"/>
         <source>Base pitch:  </source>
-        <translation type="unfinished">Titi nada dasar:  </translation>
+        <translation>Titi nada dasar:  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="195"/>
         <source>Base velocity:  </source>
-        <translation type="unfinished">Velositas dasar:  </translation>
+        <translation>Velositas dasar:  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="270"/>
         <source>Time  </source>
-        <translation type="unfinished">Waktu  </translation>
+        <translation>Waktu  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="271"/>
         <source>Duration  </source>
-        <translation type="unfinished">Durasi  </translation>
+        <translation>Durasi  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="272"/>
         <source>Event Type  </source>
-        <translation type="unfinished">Jenis Peristiwa</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="273"/>
         <source>Pitch  </source>
-        <translation type="unfinished">Titi nada  </translation>
+        <translation>Titi nada  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="274"/>
         <source>Velocity  </source>
-        <translation type="unfinished">Velositas</translation>
+        <translation>Velositas  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="275"/>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="276"/>
         <source>Type (Data1)  </source>
-        <translation type="unfinished">Jenis (Data1)  </translation>
+        <translation>Jenis (Data1)  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="277"/>
         <source>Value (Data2)  </source>
-        <translation type="unfinished">Nilai (Data2)  </translation>
+        <translation>Nilai (Data2)  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="532"/>
         <source>(group %1)  </source>
-        <translation type="unfinished">(kelompok %1)  </translation>
+        <translation>(kelompok %1)  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="594"/>
         <source>&lt;no events at this filter level&gt;</source>
-        <translation type="unfinished">&lt;tak ada peristiwa untuk tingkat penyaringan ini&gt;</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="596"/>
         <source>&lt;no events&gt;</source>
-        <translation type="unfinished">&lt;tak ada peristiwa&gt;</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="778"/>
         <source>Segment label</source>
-        <translation type="unfinished">Label segmen</translation>
+        <translation>Label segmen</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="779"/>
         <source>Label:</source>
-        <translation type="unfinished">Label:</translation>
+        <translation>Label:</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="801"/>
         <source>Base pitch</source>
-        <translation type="unfinished">Titi nada dasar</translation>
+        <translation>Titi nada dasar</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="819"/>
         <source>Base velocity</source>
-        <translation type="unfinished">Velositas dasar</translation>
+        <translation>Velositas dasar</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="972"/>
         <source>Clipboard is empty</source>
-        <translation type="unfinished">Papan klip kosong</translation>
+        <translation>Papan klip kosong</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="976"/>
         <source>Inserting clipboard contents...</source>
-        <translation type="unfinished">Menyisipkan isi papan klip...</translation>
+        <translation>Menyisipkan isi papan klip...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="1010"/>
@@ -13544,7 +13567,7 @@ This could cause problems if it overrides a different computed value later on.</
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="1746"/>
         <source>Open in Event Editor</source>
-        <translation type="unfinished">Buka di Penyunting Peristiwa</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="1747"/>
@@ -13581,22 +13604,22 @@ This could cause problems if it overrides a different computed value later on.</
     <message>
         <location filename="../../src/gui/dialogs/ExportDeviceDialog.cpp" line="38"/>
         <source>Export Devices...</source>
-        <translation type="unfinished">Ekspor Perangkat...</translation>
+        <translation>Ekspor Perangkat...</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ExportDeviceDialog.cpp" line="44"/>
         <source>Export all devices</source>
-        <translation type="unfinished">Ekspor semua perangkat</translation>
+        <translation>Ekspor semua perangkat</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ExportDeviceDialog.cpp" line="46"/>
         <source>Export selected device only</source>
-        <translation type="unfinished">Ekspor hanya perangkat yang dipilih</translation>
+        <translation>Ekspor hanya perangkat yang dipilih</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ExportDeviceDialog.cpp" line="48"/>
         <source>         (&quot;%1&quot;)</source>
-        <translation type="unfinished">         (&quot;%1&quot;)</translation>
+        <translation>         (&quot;%1&quot;)</translation>
     </message>
 </context>
 <context>
@@ -13604,49 +13627,49 @@ This could cause problems if it overrides a different computed value later on.</
     <message>
         <location filename="../../src/gui/dialogs/FileLocateDialog.cpp" line="44"/>
         <source>Locate audio file</source>
-        <translation type="unfinished"></translation>
+        <translation>Cari lokasi berkas suara</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/FileLocateDialog.cpp" line="52"/>
         <source>Can&apos;t find file &quot;%1&quot;.
 Would you like to try and locate this file or skip it?</source>
-        <translation type="unfinished">Tak dapat menemukan berkas &quot;%1&quot;.
+        <translation>Tidak menemukan berkas &quot;%1&quot;.
 Apakah Anda ingin tetap mencari berkas ini atau melewatinya saja?</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/FileLocateDialog.cpp" line="64"/>
         <source>&amp;Skip</source>
-        <translation type="unfinished">Lewa&amp;ti</translation>
+        <translation>Lewa&amp;ti</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/FileLocateDialog.cpp" line="68"/>
         <source>Skip &amp;All</source>
-        <translation type="unfinished">Lewati Semu&amp;a</translation>
+        <translation>Lewati Semu&amp;a</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/FileLocateDialog.cpp" line="72"/>
         <source>&amp;Locate</source>
-        <translation type="unfinished"></translation>
+        <translation>Cari &amp;Lokasi</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/FileLocateDialog.cpp" line="86"/>
         <source>Select an Audio File</source>
-        <translation type="unfinished">Pilih Berkas Suara</translation>
+        <translation>Pilih Berkas Suara</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/FileLocateDialog.cpp" line="87"/>
         <source>Requested file</source>
-        <translation type="unfinished"></translation>
+        <translation>Berkas yang dipinta</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/FileLocateDialog.cpp" line="88"/>
         <source>WAV files</source>
-        <translation type="unfinished"></translation>
+        <translation>Berkas WAV</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/FileLocateDialog.cpp" line="89"/>
         <source>All files</source>
-        <translation type="unfinished">Semua berkas</translation>
+        <translation>Semua berkas</translation>
     </message>
 </context>
 <context>
@@ -13654,27 +13677,27 @@ Apakah Anda ingin tetap mencari berkas ini atau melewatinya saja?</translation>
     <message>
         <location filename="../../src/gui/dialogs/FileMergeDialog.cpp" line="53"/>
         <source>Merge File</source>
-        <translation type="unfinished">Gabung Berkas</translation>
+        <translation>Gabung Berkas</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/FileMergeDialog.cpp" line="65"/>
         <source>Merge new file  </source>
-        <translation type="unfinished">Gabung berkas baru  </translation>
+        <translation>Gabung berkas baru  </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/FileMergeDialog.cpp" line="71"/>
         <source>At start of existing composition</source>
-        <translation type="unfinished">Dari permulaan komposisi yang ada</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/FileMergeDialog.cpp" line="72"/>
         <source>From end of existing composition</source>
-        <translation type="unfinished">Dari akhir komposisi yang ada</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/FileMergeDialog.cpp" line="76"/>
         <source>The file has different time signatures or tempos.</source>
-        <translation type="unfinished">Berkasnya memiliki tanda tangan waktu atau tempo yang berbeda.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/FileMergeDialog.cpp" line="77"/>
@@ -13699,12 +13722,12 @@ Apakah Anda ingin tetap mencari berkas ini atau melewatinya saja?</translation>
     <message>
         <location filename="../../src/gui/general/FileSource.cpp" line="304"/>
         <source>Downloading %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Mengunduh %1...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/FileSource.cpp" line="582"/>
         <source>Failed to connect to FTP server</source>
-        <translation type="unfinished"></translation>
+        <translation>Gagal terhubung ke server FTP</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/FileSource.cpp" line="584"/>
@@ -13724,17 +13747,17 @@ Apakah Anda ingin tetap mencari berkas ini atau melewatinya saja?</translation>
     <message>
         <location filename="../../src/gui/general/FileSource.cpp" line="608"/>
         <source>Download cancelled</source>
-        <translation type="unfinished"></translation>
+        <translation>Proses unduh dibatalkan</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/FileSource.cpp" line="639"/>
         <source>Failed to create local file %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Gagal membuat berkas lokal %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/FileSource.cpp" line="642"/>
         <source>File contains no data!</source>
-        <translation type="unfinished"></translation>
+        <translation>Berkas tidak mengandung data!</translation>
     </message>
 </context>
 <context>
@@ -13742,7 +13765,7 @@ Apakah Anda ingin tetap mencari berkas ini atau melewatinya saja?</translation>
     <message>
         <location filename="../../src/commands/notation/FixNotationQuantizeCommand.h" line="45"/>
         <source>Fi&amp;x Notation Quantization</source>
-        <translation type="unfinished">Perbai&amp;ki Kuantisasi Notasi</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -13750,12 +13773,12 @@ Apakah Anda ingin tetap mencari berkas ini atau melewatinya saja?</translation>
     <message>
         <location filename="../../src/gui/widgets/FontRequester.cpp" line="51"/>
         <source>Choose...</source>
-        <translation type="unfinished">Pilih...</translation>
+        <translation>Pilih...</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/FontRequester.cpp" line="69"/>
         <source>%1 %2</source>
-        <translation type="unfinished">%1 (%2)</translation>
+        <translation>%1 %2</translation>
     </message>
 </context>
 <context>
@@ -13781,32 +13804,32 @@ Apakah Anda ingin tetap mencari berkas ini atau melewatinya saja?</translation>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.h" line="83"/>
         <source>General</source>
-        <translation type="unfinished">Umum</translation>
+        <translation>Umum</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.h" line="84"/>
         <source>General Configuration</source>
-        <translation type="unfinished">Konfigurasi Umum</translation>
+        <translation>Konfigurasi Umum</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="83"/>
         <source>Double-click opens segment in</source>
-        <translation type="unfinished">Klik ganda membuka segmen dalam</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="88"/>
         <source>Notation editor</source>
-        <translation type="unfinished">Editor notasi</translation>
+        <translation>Penyunting notasi</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="89"/>
         <source>Matrix editor</source>
-        <translation type="unfinished">Editor metriks</translation>
+        <translation>Penyunting matriks</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="90"/>
         <source>Event List editor</source>
-        <translation type="unfinished">Penyunting Daftar Peristiwa</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="96"/>
@@ -13816,32 +13839,32 @@ Apakah Anda ingin tetap mencari berkas ini atau melewatinya saja?</translation>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="107"/>
         <source>Auto-save interval</source>
-        <translation type="unfinished">Interval simpan otomatis</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="111"/>
         <source>Every 30 seconds</source>
-        <translation type="unfinished">Setiap 30 detik</translation>
+        <translation>Setiap 30 detik</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="112"/>
         <source>Every minute</source>
-        <translation type="unfinished">Setiap menit</translation>
+        <translation>Setiap menit</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="113"/>
         <source>Every five minutes</source>
-        <translation type="unfinished">Setiap lima menit</translation>
+        <translation>Setiap lima menit</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="114"/>
         <source>Every half an hour</source>
-        <translation type="unfinished">Setiap setengah jam</translation>
+        <translation>Setiap setengah jam</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="115"/>
         <source>Never</source>
-        <translation type="unfinished">Tidak pernah</translation>
+        <translation>Tidak pernah</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="134"/>
@@ -13851,52 +13874,52 @@ Apakah Anda ingin tetap mencari berkas ini atau melewatinya saja?</translation>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="149"/>
         <source>Use JACK transport</source>
-        <translation type="unfinished">Gunakan transportasi JACK</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="182"/>
         <source>Sequencer status</source>
-        <translation type="unfinished">Status sekuenser</translation>
+        <translation>Status sekuenser</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="184"/>
         <source>Unknown</source>
-        <translation type="unfinished">Tak dikenal</translation>
+        <translation>Tak dikenal</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="190"/>
         <source>No MIDI, audio OK</source>
-        <translation type="unfinished">Tanpa MIDI, suara Oke</translation>
+        <translation>Tanpa MIDI, suara Oke</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="193"/>
         <source>MIDI OK, no audio</source>
-        <translation type="unfinished">MIDI Oke, tanpa suara</translation>
+        <translation>MIDI Oke, tanpa suara</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="196"/>
         <source>MIDI OK, audio OK</source>
-        <translation type="unfinished">MIDI Oke, suara Oke</translation>
+        <translation>MIDI Oke, suara Oke</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="199"/>
         <source>No driver</source>
-        <translation type="unfinished">Tanpa driver</translation>
+        <translation>Tanpa penggerak</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="206"/>
         <source>Details...</source>
-        <translation type="unfinished">Detil...</translation>
+        <translation>Detil...</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="215"/>
         <source>Behavior</source>
-        <translation type="unfinished">Kebiasaan</translation>
+        <translation>Kebiasaan</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="230"/>
         <source>Use Thorn style</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="236"/>
@@ -13906,32 +13929,32 @@ Apakah Anda ingin tetap mencari berkas ini atau melewatinya saja?</translation>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="328"/>
         <source>HPLIP (Qt 4)</source>
-        <translation type="unfinished"></translation>
+        <translation>HPLIP (Qt 4)</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="240"/>
         <source>Note name style</source>
-        <translation type="unfinished">Nama gaya not</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="245"/>
         <source>Always use US names (e.g. quarter, 8th)</source>
-        <translation type="unfinished">Selalu gunakan nama AS (cth: quarter, 8th)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="246"/>
         <source>Localized (where available)</source>
-        <translation type="unfinished">Lokalisasi (jika tersedia)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="260"/>
         <source>Show textured background on</source>
-        <translation type="unfinished">Aktifkan tampilan latar belakang bertekstur</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="262"/>
         <source>Main window</source>
-        <translation type="unfinished">Jendela utama</translation>
+        <translation>Jendela utama</translation>
     </message>
     <message>
         <source>Matrix</source>
@@ -13940,12 +13963,12 @@ Apakah Anda ingin tetap mencari berkas ini atau melewatinya saja?</translation>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="266"/>
         <source>Notation</source>
-        <translation type="unfinished">Notasi</translation>
+        <translation>Notasi</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="283"/>
         <source>Presentation</source>
-        <translation type="unfinished">Presentasi</translation>
+        <translation>Presentasi</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="300"/>
@@ -13955,17 +13978,17 @@ Apakah Anda ingin tetap mencari berkas ini atau melewatinya saja?</translation>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="305"/>
         <source>PDF viewer</source>
-        <translation type="unfinished"></translation>
+        <translation>Penampil PDF</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="310"/>
         <source>Okular (KDE 4.x)</source>
-        <translation type="unfinished"></translation>
+        <translation>Okular (KDE 4.x)</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="311"/>
         <source>Evince (GNOME)</source>
-        <translation type="unfinished"></translation>
+        <translation>Evince (GNOME)</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="312"/>
@@ -13975,7 +13998,7 @@ Apakah Anda ingin tetap mencari berkas ini atau melewatinya saja?</translation>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="313"/>
         <source>KPDF (KDE 3.x)</source>
-        <translation type="unfinished"></translation>
+        <translation>KPDF (KDE 3.x)</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="314"/>
@@ -13990,22 +14013,22 @@ Apakah Anda ingin tetap mencari berkas ini atau melewatinya saja?</translation>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="324"/>
         <source>KPrinter (KDE 3)</source>
-        <translation type="unfinished"></translation>
+        <translation>KPrinter (KDE 3)</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="325"/>
         <source>Gtk-LP (GNOME)</source>
-        <translation type="unfinished"></translation>
+        <translation>Gtk-LP (GNOME)</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="326"/>
         <source>lpr (no GUI)</source>
-        <translation type="unfinished"></translation>
+        <translation>lpr (tanpa GUI)</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="327"/>
         <source>lp (no GUI)</source>
-        <translation type="unfinished"></translation>
+        <translation>lp (tanpa GUI)</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="329"/>
@@ -14015,12 +14038,12 @@ Apakah Anda ingin tetap mencari berkas ini atau melewatinya saja?</translation>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="348"/>
         <source>External Applications</source>
-        <translation type="unfinished"></translation>
+        <translation>Aplikasi Eksternal</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="498"/>
         <source>Changes to the textured background in the main window will not take effect until you restart Rosegarden.</source>
-        <translation type="unfinished">Perubahan pada tekstur latar belakang di dalam jendela utama tidak akan tampak selama Anda belum menjalankan ulang Rosegarden.</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -14036,7 +14059,7 @@ Apakah Anda ingin tetap mencari berkas ini atau melewatinya saja?</translation>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordEditorDialog.cpp" line="40"/>
         <source>Guitar Chord Editor</source>
-        <translation type="unfinished">Penyunting Padu Nada Gitar</translation>
+        <translation>Penyunting Padu Nada Gitar</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordEditorDialog.cpp" line="47"/>
@@ -14046,12 +14069,12 @@ Apakah Anda ingin tetap mencari berkas ini atau melewatinya saja?</translation>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordEditorDialog.cpp" line="56"/>
         <source>Root</source>
-        <translation type="unfinished"></translation>
+        <translation>Root</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordEditorDialog.cpp" line="60"/>
         <source>Extension</source>
-        <translation type="unfinished">Ekstensi</translation>
+        <translation>Ekstensi</translation>
     </message>
 </context>
 <context>
@@ -14059,7 +14082,7 @@ Apakah Anda ingin tetap mencari berkas ini atau melewatinya saja?</translation>
     <message>
         <location filename="../../src/commands/notation/GuitarChordInsertionCommand.cpp" line="32"/>
         <source>Insert Guitar Chord</source>
-        <translation type="unfinished">Sisi Padu Nada Gitar</translation>
+        <translation>Sisip Padu Nada Gitar</translation>
     </message>
 </context>
 <context>
@@ -14067,62 +14090,62 @@ Apakah Anda ingin tetap mencari berkas ini atau melewatinya saja?</translation>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="59"/>
         <source>Guitar Chord Selector</source>
-        <translation type="unfinished">Selektor Padu Nada Gitar</translation>
+        <translation>Selektor Padu Nada Gitar</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="68"/>
         <source>Root</source>
-        <translation type="unfinished"></translation>
+        <translation>Root</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="73"/>
         <source>Extension</source>
-        <translation type="unfinished">Ekstensi</translation>
+        <translation>Ekstensi</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="78"/>
         <source>New</source>
-        <translation type="unfinished">Baru</translation>
+        <translation>Baru</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="79"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Hapus</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="80"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Sunting</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="83"/>
         <source>beginner</source>
-        <translation type="unfinished">pemula</translation>
+        <translation>pemula</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="84"/>
         <source>common</source>
-        <translation type="unfinished">umum</translation>
+        <translation>umum</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="85"/>
         <source>all</source>
-        <translation type="unfinished">semua</translation>
+        <translation>semua</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="108"/>
         <source>Fingerings</source>
-        <translation type="unfinished"></translation>
+        <translation>Penjarian</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="498"/>
         <source>couldn&apos;t open file &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>tidak dapat membuka berkas &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="508"/>
         <source>couldn&apos;t parse chord dictionary : %1</source>
-        <translation type="unfinished"></translation>
+        <translation>tidak dapat membaca kamus padu nada : %1</translation>
     </message>
 </context>
 <context>
@@ -14130,112 +14153,112 @@ Apakah Anda ingin tetap mencari berkas ini atau melewatinya saja?</translation>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="60"/>
         <source>Printable headers</source>
-        <translation type="unfinished">Tajuk yang dapat dicetak</translation>
+        <translation>Tajuk yang dapat dicetak</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="105"/>
         <source>Dedication</source>
-        <translation type="unfinished">Dedikasi</translation>
+        <translation>Dedikasi</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="109"/>
         <source>Title</source>
-        <translation type="unfinished">Judul</translation>
+        <translation>Judul</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="113"/>
         <source>Subtitle</source>
-        <translation type="unfinished">Subjudul</translation>
+        <translation>Subjudul</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="117"/>
         <source>Subsubtitle</source>
-        <translation type="unfinished">Subsubjudul</translation>
+        <translation>Subsubjudul</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="121"/>
         <source>Poet</source>
-        <translation type="unfinished"></translation>
+        <translation>Penyair</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="125"/>
         <source>Instrument</source>
-        <translation type="unfinished">Instrumen</translation>
+        <translation>Instrumen</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="129"/>
         <source>Composer</source>
-        <translation type="unfinished">Komposer</translation>
+        <translation>Komposer</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="133"/>
         <source>Meter</source>
-        <translation type="unfinished">Meter</translation>
+        <translation>Meter</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="137"/>
         <source>Arranger</source>
-        <translation type="unfinished">Penyusun</translation>
+        <translation>Penyusun</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="141"/>
         <source>Piece</source>
-        <translation type="unfinished"></translation>
+        <translation>Lagu</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="145"/>
         <source>Opus</source>
-        <translation type="unfinished"></translation>
+        <translation>Karya</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="149"/>
         <source>Copyright</source>
-        <translation type="unfinished">Hak Cipta</translation>
+        <translation>Hak Cipta</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="153"/>
         <source>Tagline</source>
-        <translation type="unfinished">Baris pataka (tagline)</translation>
+        <translation>Label</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="174"/>
         <source>The composition comes here.</source>
-        <translation type="unfinished"></translation>
+        <translation>Komposisinya diletakkan di sini.</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="196"/>
         <source>Additional headers</source>
-        <translation type="unfinished"></translation>
+        <translation>Tajuk tambahan</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="216"/>
         <source>Name</source>
-        <translation type="unfinished">Nama</translation>
+        <translation>Nama</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="217"/>
         <source>Value</source>
-        <translation type="unfinished">Nilai</translation>
+        <translation>Nilai</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="254"/>
         <source>Add New Property</source>
-        <translation type="unfinished">Tambah Properti Baru</translation>
+        <translation>Tambah Properti Baru</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="258"/>
         <source>Delete Property</source>
-        <translation type="unfinished">Hapus Properti</translation>
+        <translation>Hapus Properti</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="280"/>
         <source>{new property %1}</source>
-        <translation type="unfinished">{properti baru %1}</translation>
+        <translation>{properti baru %1}</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="280"/>
         <source>{new property}</source>
-        <translation type="unfinished">{properti baru}</translation>
+        <translation>{properti baru}</translation>
     </message>
 </context>
 <context>
@@ -14243,7 +14266,7 @@ Apakah Anda ingin tetap mencari berkas ini atau melewatinya saja?</translation>
     <message>
         <location filename="../../src/document/io/HydrogenXMLHandler.cpp" line="269"/>
         <source> imported from Hydrogen </source>
-        <translation type="unfinished"> mengimpor dari Hydrogen </translation>
+        <translation> diimpor dari Hydrogen </translation>
     </message>
 </context>
 <context>
@@ -14251,7 +14274,7 @@ Apakah Anda ingin tetap mencari berkas ini atau melewatinya saja?</translation>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="67"/>
         <source>Choose Text Encoding</source>
-        <translation type="unfinished">Pilih Enkode Teks</translation>
+        <translation>Pilih Enkode Teks</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="75"/>
@@ -14261,7 +14284,7 @@ This file contains text in an unknown language encoding.
 Please select one of the following estimated text encodings
 for use with the text in this file:
 </source>
-        <translation type="unfinished">
+        <translation>
 Berkas ini memiliki teks dengan bahasa enkode yang tidak diketahui.
 
 Silakan pilih satu dari beberapa enkode teks berikut
@@ -14272,7 +14295,7 @@ untuk digunakan dengan teks di dalam berkas ini:
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="85"/>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="101"/>
         <source>Japanese Shift-JIS</source>
-        <translation type="unfinished">Jepang Shift-JIS</translation>
+        <translation>Jepang Shift-JIS</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="86"/>
@@ -14282,113 +14305,113 @@ untuk digunakan dengan teks di dalam berkas ini:
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="87"/>
         <source>Western Europe</source>
-        <translation type="unfinished">Eropa Barat</translation>
+        <translation>Eropa Barat</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="88"/>
         <source>Western Europe + Euro</source>
-        <translation type="unfinished">Eropa Barat + Euro</translation>
+        <translation>Eropa Barat + Euro</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="89"/>
         <source>Eastern Europe</source>
-        <translation type="unfinished">Eropa Timur</translation>
+        <translation>Eropa Timur</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="90"/>
         <source>Southern Europe</source>
-        <translation type="unfinished">Eropa Selatan</translation>
+        <translation>Eropa Selatan</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="91"/>
         <source>Northern Europe</source>
-        <translation type="unfinished">Erupa Utara</translation>
+        <translation>Erupa Utara</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="92"/>
         <source>Cyrillic</source>
-        <translation type="unfinished"></translation>
+        <translation>Sirilik</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="93"/>
         <source>Arabic</source>
-        <translation type="unfinished">Arab</translation>
+        <translation>Arab</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="94"/>
         <source>Greek</source>
-        <translation type="unfinished">Yunani</translation>
+        <translation>Yunani</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="95"/>
         <source>Hebrew</source>
-        <translation type="unfinished">Yahudi</translation>
+        <translation>Yahudi</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="96"/>
         <source>Turkish</source>
-        <translation type="unfinished">Turki</translation>
+        <translation>Turki</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="97"/>
         <source>Nordic</source>
-        <translation type="unfinished"></translation>
+        <translation>Nordik</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="98"/>
         <source>Thai</source>
-        <translation type="unfinished">Thailand</translation>
+        <translation>Thailand</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="99"/>
         <source>Baltic</source>
-        <translation type="unfinished">Baltik</translation>
+        <translation>Baltik</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="100"/>
         <source>Celtic</source>
-        <translation type="unfinished"></translation>
+        <translation>Seltik</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="102"/>
         <source>Traditional Chinese</source>
-        <translation type="unfinished">Cina Tradisional</translation>
+        <translation>Cina Tradisional</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="103"/>
         <source>Simplified Chinese</source>
-        <translation type="unfinished">Cina Sederhana</translation>
+        <translation>Cina Sederhana</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="104"/>
         <source>Russian</source>
-        <translation type="unfinished">Rusia</translation>
+        <translation>Rusia</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="105"/>
         <source>Ukrainian</source>
-        <translation type="unfinished">Ukraina</translation>
+        <translation>Ukraina</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="106"/>
         <source>Tamil</source>
-        <translation type="unfinished">Tamil</translation>
+        <translation>Tamil</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="149"/>
         <source>Microsoft Code Page %1</source>
-        <translation type="unfinished">Halaman Kode Microsoft %1</translation>
+        <translation>Halaman Kode Microsoft %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="155"/>
         <source>%1 (%2)</source>
-        <translation type="unfinished">%1 (%2)</translation>
+        <translation>%1 (%2)</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="174"/>
         <source>
 Example text from file:</source>
-        <translation type="unfinished">
+        <translation>
 Teks contoh dari berkas:</translation>
     </message>
 </context>
@@ -14397,82 +14420,82 @@ Teks contoh dari berkas:</translation>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="73"/>
         <source>Import from Device...</source>
-        <translation type="unfinished">Impor dari Perangkat...</translation>
+        <translation>Impor dari Perangkat...</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="91"/>
         <source>Cannot download file %1</source>
-        <translation type="unfinished">Tak dapat mengunduh berkas %1</translation>
+        <translation>Tak dapat mengunduh berkas %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="113"/>
         <source>Cannot open file %1</source>
-        <translation type="unfinished">Tak dapat membuka berkas %1</translation>
+        <translation>Tak dapat membuka berkas %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="124"/>
         <source>No devices found in file %1</source>
-        <translation type="unfinished">Tak ditemukan perangkat dalam berkas %1</translation>
+        <translation>Tak ditemukan perangkat dalam berkas %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="132"/>
         <source>Source device</source>
-        <translation type="unfinished">Perangkat sumber</translation>
+        <translation>Perangkat sumber</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="140"/>
         <source>Import from: </source>
-        <translation type="unfinished">Diimpor dari: </translation>
+        <translation>Impor dari: </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="162"/>
         <source>Device %1</source>
-        <translation type="unfinished">Perangkat %1</translation>
+        <translation>Perangkat %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="176"/>
         <source>Options</source>
-        <translation type="unfinished"></translation>
+        <translation>Opsi</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="180"/>
         <source>Import banks</source>
-        <translation type="unfinished">Impor bank</translation>
+        <translation>Impor bank</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="182"/>
         <source>Import key mappings</source>
-        <translation type="unfinished">Impor pemetaan kunci</translation>
+        <translation>Impor pemetaan kunci</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="184"/>
         <source>Import controllers</source>
-        <translation type="unfinished">Impor kontroler</translation>
+        <translation>Impor kontroler</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="188"/>
         <source>Import device name</source>
-        <translation type="unfinished">Impor nama perangkat</translation>
+        <translation>Impor nama perangkat</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="194"/>
         <source>Bank import behavior</source>
-        <translation type="unfinished">Kebiasaan impor bank</translation>
+        <translation>Kebiasaan impor bank</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="199"/>
         <source>Merge banks</source>
-        <translation type="unfinished">Gabungkan bank</translation>
+        <translation>Gabungkan bank</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="203"/>
         <source>Overwrite banks</source>
-        <translation type="unfinished">Ditulis timpa pada bank</translation>
+        <translation>Timpa bank</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="421"/>
         <source>Bank %1:%2</source>
-        <translation type="unfinished">Bank %1:%2</translation>
+        <translation>Bank %1:%2</translation>
     </message>
 </context>
 <context>
@@ -14488,7 +14511,7 @@ Teks contoh dari berkas:</translation>
     <message>
         <location filename="../../src/commands/segment/InsertRangeCommand.cpp" line="35"/>
         <source>Insert Range</source>
-        <translation type="unfinished">Sisip Jangkauan</translation>
+        <translation>Sisip Jangkauan</translation>
     </message>
 </context>
 <context>
@@ -14504,12 +14527,12 @@ Teks contoh dari berkas:</translation>
     <message>
         <location filename="../../src/gui/widgets/InstrumentAliasButton.cpp" line="49"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/InstrumentAliasButton.cpp" line="50"/>
         <source>Enter instrument alias:</source>
-        <translation type="unfinished"></translation>
+        <translation>Masukkan alias instrumen:</translation>
     </message>
 </context>
 <context>
@@ -14517,17 +14540,17 @@ Teks contoh dari berkas:</translation>
     <message>
         <location filename="../../src/gui/editors/parameters/InstrumentParameterBox.cpp" line="46"/>
         <source>Instrument</source>
-        <translation type="unfinished">Instrumen</translation>
+        <translation>Instrumen</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/InstrumentParameterBox.cpp" line="47"/>
         <source>Instrument Parameters</source>
-        <translation type="unfinished">Parameter Instrumen</translation>
+        <translation>Parameter Instrumen</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/InstrumentParameterBox.cpp" line="157"/>
         <source>Track</source>
-        <translation type="unfinished">Jalur</translation>
+        <translation>Jalur</translation>
     </message>
 </context>
 <context>
@@ -14535,7 +14558,7 @@ Teks contoh dari berkas:</translation>
     <message>
         <location filename="../../src/commands/notation/InterpretCommand.h" line="65"/>
         <source>&amp;Interpret...</source>
-        <translation type="unfinished">&amp;Interpretasi...</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -14543,17 +14566,17 @@ Teks contoh dari berkas:</translation>
     <message>
         <location filename="../../src/gui/dialogs/InterpretDialog.cpp" line="45"/>
         <source>Interpret</source>
-        <translation type="unfinished">Interpretasi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/InterpretDialog.cpp" line="49"/>
         <source>Interpretations to apply</source>
-        <translation type="unfinished">Interpretasi yang hendak dipakai</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/InterpretDialog.cpp" line="54"/>
         <source>Apply text dynamics (p, mf, ff etc)</source>
-        <translation type="unfinished">Terapkan teks dinamis (p, mf, ff, dll.)</translation>
+        <translation>Terapkan teks dinamis (p, mf, ff, dll.)</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/InterpretDialog.cpp" line="57"/>
@@ -14563,7 +14586,7 @@ Teks contoh dari berkas:</translation>
     <message>
         <location filename="../../src/gui/dialogs/InterpretDialog.cpp" line="60"/>
         <source>Stress beats</source>
-        <translation type="unfinished">Tekanan ketukan</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/InterpretDialog.cpp" line="63"/>
@@ -14573,7 +14596,7 @@ Teks contoh dari berkas:</translation>
     <message>
         <location filename="../../src/gui/dialogs/InterpretDialog.cpp" line="66"/>
         <source>All available interpretations</source>
-        <translation type="unfinished">Semua interprestasi yang tersedia</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/InterpretDialog.cpp" line="149"/>
@@ -14586,17 +14609,17 @@ Teks contoh dari berkas:</translation>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="47"/>
         <source>Specify Interval</source>
-        <translation type="unfinished">Menentukan Interval</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="60"/>
         <source>Reference note:</source>
-        <translation type="unfinished">Not referensi:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="62"/>
         <source>Target note:</source>
-        <translation type="unfinished">Not target:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="69"/>
@@ -14607,7 +14630,7 @@ Teks contoh dari berkas:</translation>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="77"/>
         <source>Effect on Key</source>
-        <translation type="unfinished">Efek pada Kunci</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="80"/>
@@ -14686,23 +14709,23 @@ Teks contoh dari berkas:</translation>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="222"/>
         <source>a minor</source>
-        <translation type="unfinished">minor</translation>
+        <translation>minor</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="224"/>
         <source>a major</source>
-        <translation type="unfinished">mayor</translation>
+        <translation>mayor</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="245"/>
         <source>an (unknown)</source>
-        <translation type="unfinished">sebuah (tak dikenal)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="253"/>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="256"/>
         <source>%1 octave</source>
-        <translation type="unfinished">%1 oktaf</translation>
+        <translation>%1 oktaf</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="259"/>
@@ -14712,75 +14735,75 @@ Teks contoh dari berkas:</translation>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="263"/>
         <source>%1 second</source>
-        <translation type="unfinished">%1 kedua</translation>
+        <translation>%1 kedua</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="266"/>
         <source>%1 third</source>
-        <translation type="unfinished">%1 ketiga</translation>
+        <translation>%1 ketiga</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="269"/>
         <source>%1 fourth</source>
-        <translation type="unfinished">%1 keempat</translation>
+        <translation>%1 keempat</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="272"/>
         <source>%1 fifth</source>
-        <translation type="unfinished">%1 kelima</translation>
+        <translation>%1 kelima</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="275"/>
         <source>%1 sixth</source>
-        <translation type="unfinished">%1 keenam</translation>
+        <translation>%1 keenam</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="278"/>
         <source>%1 seventh</source>
-        <translation type="unfinished">%1 ketujuh</translation>
+        <translation>%1 ketujuh</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="281"/>
         <source>%1</source>
-        <translation type="unfinished">%1</translation>
+        <translation>%1</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="289"/>
         <source>up %n octave(s) and %1</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>naik %n oktaf dan %1</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="292"/>
         <source>up %n octave(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>naik %n oktaf</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="295"/>
         <source>up %1</source>
-        <translation type="unfinished">naik %1</translation>
+        <translation>naik %1</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="300"/>
         <source>down %n octave(s) and %1</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>turun %n oktaf dan %1</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="303"/>
         <source>down %n octave(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>turun %n oktaf</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="306"/>
         <source>down %1</source>
-        <translation type="unfinished">turun %1</translation>
+        <translation>turun %1</translation>
     </message>
 </context>
 <context>
@@ -14788,7 +14811,7 @@ Teks contoh dari berkas:</translation>
     <message>
         <location filename="../../src/commands/edit/InvertCommand.h" line="46"/>
         <source>&amp;Invert</source>
-        <translation type="unfinished">Kebal&amp;ikan</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -14796,12 +14819,12 @@ Teks contoh dari berkas:</translation>
     <message>
         <location filename="../../src/commands/notation/KeyInsertionCommand.h" line="65"/>
         <source>Change to &amp;Key %1...</source>
-        <translation type="unfinished">Ubah ke &amp;Kunci %1...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/KeyInsertionCommand.h" line="67"/>
         <source>Add &amp;Key Change...</source>
-        <translation type="unfinished">Tambah Perubahan &amp;Kunci...</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -14809,17 +14832,17 @@ Teks contoh dari berkas:</translation>
     <message>
         <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="70"/>
         <source>Key Change</source>
-        <translation type="unfinished">Perubahan Kunci</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="82"/>
         <source>Key signature</source>
-        <translation type="unfinished">Tanda tangan kunci</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="86"/>
         <source>Key transposition</source>
-        <translation type="unfinished">Transposisi kunci</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="90"/>
@@ -14844,18 +14867,18 @@ Teks contoh dari berkas:</translation>
     <message>
         <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="145"/>
         <source>Major</source>
-        <translation type="unfinished">Mayor</translation>
+        <translation>Mayor</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="146"/>
         <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="428"/>
         <source>Minor</source>
-        <translation type="unfinished">Minor</translation>
+        <translation>Minor</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="159"/>
         <source>Transpose key according to segment transposition</source>
-        <translation type="unfinished">Transposisi kunci berdasar transposisi segmen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="163"/>
@@ -14865,17 +14888,17 @@ Teks contoh dari berkas:</translation>
     <message>
         <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="174"/>
         <source>Apply to current segment only</source>
-        <translation type="unfinished">Hanya diterapkan pada segmen bersangkutan</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="178"/>
         <source>Apply to all segments at this time</source>
-        <translation type="unfinished">Terapkan untuk semua segmen saat ini</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="183"/>
         <source>Exclude percussion segments</source>
-        <translation type="unfinished">Tidak termasuk segmen perkusi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="196"/>
@@ -14890,12 +14913,12 @@ Teks contoh dari berkas:</translation>
     <message>
         <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="204"/>
         <source>Transpose into this key</source>
-        <translation type="unfinished">Transposisikan ke kunci ini</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="390"/>
         <source>No such key</source>
-        <translation type="unfinished">Bukan berupa kunci</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="470"/>
@@ -14937,7 +14960,7 @@ Would you like to use
  %1
 
  instead?</source>
-        <translation type="unfinished">Lilypond tidak memperbolehkan spasi atau garis miring dalam nama berkas.
+        <translation>Lilypond tidak memperbolehkan spasi atau garis miring dalam nama berkas.
 
 Apakah Anda ingin menggunakan
 
@@ -14961,22 +14984,22 @@ Apakah Anda ingin menggunakan
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="61"/>
         <source>LilyPond Export/Preview</source>
-        <translation type="unfinished">Ekspor/Pratampil LilyPond</translation>
+        <translation>Ekspor/Pratampil LilyPond</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="77"/>
         <source>Layout</source>
-        <translation type="unfinished">Tataletak</translation>
+        <translation>Tataletak</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="84"/>
         <source>Headers</source>
-        <translation type="unfinished">Tajuk</translation>
+        <translation>Tajuk</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="93"/>
         <source>Basic options</source>
-        <translation type="unfinished">Opsi dasar</translation>
+        <translation>Opsi dasar</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="108"/>
@@ -14986,12 +15009,12 @@ Apakah Anda ingin menggunakan
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="111"/>
         <source>Selected tracks</source>
-        <translation type="unfinished"></translation>
+        <translation>Jalur terpilih</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="117"/>
         <source>Compatibility level</source>
-        <translation type="unfinished">Tingkat kompatibilitas</translation>
+        <translation>Tingkat kompatibilitas</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="122"/>
@@ -14999,72 +15022,72 @@ Apakah Anda ingin menggunakan
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="124"/>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="125"/>
         <source>LilyPond %1</source>
-        <translation type="unfinished">LilyPond %1</translation>
+        <translation>LilyPond %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="122"/>
         <source>2.6</source>
-        <translation type="unfinished">2.6</translation>
+        <translation>2.6</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="123"/>
         <source>2.8</source>
-        <translation type="unfinished">2.8</translation>
+        <translation>2.8</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="124"/>
         <source>2.10</source>
-        <translation type="unfinished">2.10</translation>
+        <translation>2.10</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="125"/>
         <source>2.12</source>
-        <translation type="unfinished">2.12</translation>
+        <translation>2.12</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="129"/>
         <source>Paper size</source>
-        <translation type="unfinished">Ukuran kertas</translation>
+        <translation>Ukuran kertas</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="134"/>
         <source>A3</source>
-        <translation type="unfinished">A3</translation>
+        <translation>A3</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="135"/>
         <source>A4</source>
-        <translation type="unfinished">A4</translation>
+        <translation>A4</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="136"/>
         <source>A5</source>
-        <translation type="unfinished">A5</translation>
+        <translation>A5</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="137"/>
         <source>A6</source>
-        <translation type="unfinished">A6</translation>
+        <translation>A6</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="138"/>
         <source>Legal</source>
-        <translation type="unfinished">Legal</translation>
+        <translation>Legal</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="139"/>
         <source>US Letter</source>
-        <translation type="unfinished">Surat AS (Letter)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="140"/>
         <source>Tabloid</source>
-        <translation type="unfinished">Tabloid</translation>
+        <translation>Tabloid</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="141"/>
         <source>do not specify</source>
-        <translation type="unfinished">jangan ditentukan</translation>
+        <translation>jangan ditentukan</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="143"/>
@@ -15079,27 +15102,27 @@ Apakah Anda ingin menggunakan
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="277"/>
         <source>http://rosegardenmusic.com/wiki/doc:manual-lilypondoptions-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:manual-lilypondoptions-en</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="105"/>
         <source>Export content</source>
-        <translation type="unfinished">Ekpor isi</translation>
+        <translation>Ekpor isi</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="109"/>
         <source>All tracks</source>
-        <translation type="unfinished">Semua jalur</translation>
+        <translation>Semua jalur</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="110"/>
         <source>Non-muted tracks</source>
-        <translation type="unfinished">Jalur yang tak dibisukan</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="112"/>
         <source>Selected segments</source>
-        <translation type="unfinished">Segmen terpilih</translation>
+        <translation>Segmen terpilih</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="120"/>
@@ -15129,38 +15152,38 @@ Apakah Anda ingin menggunakan
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="169"/>
         <source>%1 pt %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 pt %2</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="169"/>
         <source> *</source>
-        <translation type="unfinished"></translation>
+        <translation>.*</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="178"/>
         <source>Advanced options</source>
-        <translation type="unfinished"></translation>
+        <translation>Opsi lanjutan</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="189"/>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="201"/>
         <source>None</source>
-        <translation type="unfinished">Nihil</translation>
+        <translation>Nihil</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="190"/>
         <source>First</source>
-        <translation type="unfinished">Pertama</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="191"/>
         <source>All</source>
-        <translation type="unfinished">Semua</translation>
+        <translation>Semua</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="194"/>
         <source>Export tempo marks </source>
-        <translation type="unfinished">Ekpor penanda tempo</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="231"/>
@@ -15175,7 +15198,7 @@ Apakah Anda ingin menggunakan
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="199"/>
         <source>Export lyrics</source>
-        <translation type="unfinished">Ekspor lirik</translation>
+        <translation>Ekspor lirik</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="210"/>
@@ -15190,7 +15213,7 @@ Apakah Anda ingin menggunakan
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="202"/>
         <source>Left</source>
-        <translation type="unfinished"></translation>
+        <translation>Kiri</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="196"/>
@@ -15200,12 +15223,12 @@ Apakah Anda ingin menggunakan
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="203"/>
         <source>Center</source>
-        <translation type="unfinished"></translation>
+        <translation>Tengah</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="204"/>
         <source>Right</source>
-        <translation type="unfinished"></translation>
+        <translation>Kanan</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="206"/>
@@ -15235,22 +15258,22 @@ Apakah Anda ingin menggunakan
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="234"/>
         <source>No markers</source>
-        <translation type="unfinished">Tanpa Submaster</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="235"/>
         <source>Rehearsal marks</source>
-        <translation type="unfinished">Buang semua penanda</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="236"/>
         <source>Marker text</source>
-        <translation type="unfinished">Waktu Penanda</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="239"/>
         <source>Export markers</source>
-        <translation type="unfinished">Ekpor penanda tempo</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -15258,12 +15281,12 @@ Apakah Anda ingin menggunakan
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="67"/>
         <source>Preview</source>
-        <translation type="unfinished">Pratampil</translation>
+        <translation>Pratampil</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="68"/>
         <source>Print</source>
-        <translation type="unfinished"></translation>
+        <translation>Cetak</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="70"/>
@@ -15273,7 +15296,7 @@ Apakah Anda ingin menggunakan
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="81"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Batal</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="104"/>
@@ -15308,7 +15331,7 @@ Apakah Anda ingin menggunakan
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="153"/>
         <source>Running &lt;b&gt;lilypond&lt;/b&gt;...</source>
-        <translation type="unfinished"></translation>
+        <translation>Menjalankan &lt;b&gt;lilypond&lt;/b&gt;....</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="160"/>
@@ -15358,7 +15381,7 @@ Apakah Anda ingin menggunakan
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="259"/>
         <source>Printing %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Mencetak %1...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="268"/>
@@ -15368,7 +15391,7 @@ Apakah Anda ingin menggunakan
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="275"/>
         <source>&lt;b&gt;%1&lt;/b&gt; started...</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;%1&lt;/b&gt; dimulai...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="278"/>
@@ -15378,7 +15401,7 @@ Apakah Anda ingin menggunakan
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="278"/>
         <source>PDF viewer</source>
-        <translation type="unfinished"></translation>
+        <translation>Penampil PDF</translation>
     </message>
 </context>
 <context>
@@ -15394,12 +15417,12 @@ Apakah Anda ingin menggunakan
     <message>
         <location filename="../../src/gui/dialogs/LyricEditDialog.cpp" line="62"/>
         <source>Edit Lyrics</source>
-        <translation type="unfinished">Sunting Lirik</translation>
+        <translation>Sunting Lirik</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LyricEditDialog.cpp" line="71"/>
         <source>Lyrics for this segment</source>
-        <translation type="unfinished">Lirik untuk segmen ini</translation>
+        <translation>Lirik untuk segmen ini</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LyricEditDialog.cpp" line="85"/>
@@ -15409,7 +15432,7 @@ Apakah Anda ingin menggunakan
     <message>
         <location filename="../../src/gui/dialogs/LyricEditDialog.cpp" line="88"/>
         <source>Remove Verse</source>
-        <translation type="unfinished">Buan&amp;g Penanda</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LyricEditDialog.cpp" line="323"/>
@@ -15427,12 +15450,12 @@ Apakah Anda ingin menggunakan
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.h" line="53"/>
         <source>MIDI</source>
-        <translation type="unfinished">MIDI</translation>
+        <translation>MIDI</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.h" line="54"/>
         <source>MIDI Settings</source>
-        <translation type="unfinished">Pengaturan MIDI</translation>
+        <translation>Pengaturan MIDI</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="90"/>
@@ -15442,7 +15465,7 @@ Apakah Anda ingin menggunakan
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="105"/>
         <source>Always use default studio when loading files</source>
-        <translation type="unfinished">Selalu gunakan studio utama/setingan dasar saat memuat berkas</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="118"/>
@@ -15464,17 +15487,17 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="162"/>
         <source>Load SoundFont to SoundBlaster card at startup</source>
-        <translation type="unfinished">Memuat SoundFont pada kartu SoundBlaster saat permulaan</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="163"/>
         <source>Check this box to enable soundfont loading on EMU10K-based cards when Rosegarden is launched</source>
-        <translation type="unfinished">Cek kotak ini untuk mengaktifkan pemuatan soundfont pada kartu berbasis EMU10K saat Rosegarden dijalankan</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="173"/>
         <source>Path to &apos;asfxload&apos; or &apos;sfxload&apos; command</source>
-        <translation type="unfinished">Jalur ke perintah &apos;asfxload&apos; atau &apos;sfxload&apos;</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="176"/>
@@ -15485,12 +15508,12 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="180"/>
         <source>SoundFont</source>
-        <translation type="unfinished">SoundFont</translation>
+        <translation>SoundFont</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="207"/>
         <source>General</source>
-        <translation type="unfinished">Umum</translation>
+        <translation>Umum</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="225"/>
@@ -15517,17 +15540,17 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="244"/>
         <source>MIDI Machine Control mode</source>
-        <translation type="unfinished">Mode Kontrol Mesin MIDI</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="252"/>
         <source>MMC Master</source>
-        <translation type="unfinished">MMC Master</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="253"/>
         <source>MMC Slave</source>
-        <translation type="unfinished">MMC Pembantu</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="264"/>
@@ -15537,12 +15560,12 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="272"/>
         <source>MTC Master</source>
-        <translation type="unfinished">MTC Master</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="273"/>
         <source>MTC Slave</source>
-        <translation type="unfinished">MTC Pembantu</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="287"/>
@@ -15557,12 +15580,12 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="320"/>
         <source>sfxload path</source>
-        <translation type="unfinished">Jalur sfxload</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="328"/>
         <source>Soundfont path</source>
-        <translation type="unfinished">Jalur Soundfont</translation>
+        <translation>Jalur Soundfont</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="329"/>
@@ -15572,7 +15595,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="330"/>
         <source>All files</source>
-        <translation type="unfinished">Semua berkas</translation>
+        <translation>Semua berkas</translation>
     </message>
 </context>
 <context>
@@ -15605,27 +15628,27 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="113"/>
         <source>Bank</source>
-        <translation type="unfinished">Bank</translation>
+        <translation>Bank</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="114"/>
         <source>Variation</source>
-        <translation type="unfinished">Variasi</translation>
+        <translation>Variasi</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="115"/>
         <source>Program</source>
-        <translation type="unfinished">Program</translation>
+        <translation>Program</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="116"/>
         <source>Channel out</source>
-        <translation type="unfinished">Kanal keluaran</translation>
+        <translation>Kanal keluar</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="117"/>
         <source>Percussion</source>
-        <translation type="unfinished">Perkusi</translation>
+        <translation>Perkusi</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="145"/>
@@ -15640,12 +15663,12 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="310"/>
         <source>[ %1 ]</source>
-        <translation type="unfinished">[ %1 ]</translation>
+        <translation>[ %1 ]</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="310"/>
         <source>No connection</source>
-        <translation type="unfinished">Tak ada koneksi</translation>
+        <translation>Tidak ada koneksi</translation>
     </message>
 </context>
 <context>
@@ -15666,7 +15689,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location filename="../../src/commands/notation/MakeChordCommand.h" line="41"/>
         <source>Make &amp;Chord</source>
-        <translation type="unfinished">Buat &amp;Padu Nada</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -15682,12 +15705,12 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location filename="../../src/gui/dialogs/MakeOrnamentDialog.cpp" line="44"/>
         <source>Make Ornament</source>
-        <translation type="unfinished">Buat Ornamen</translation>
+        <translation>Buat Ornamen</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/MakeOrnamentDialog.cpp" line="52"/>
         <source>Name</source>
-        <translation type="unfinished">Nama</translation>
+        <translation>Nama</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/MakeOrnamentDialog.cpp" line="56"/>
@@ -15697,12 +15720,12 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location filename="../../src/gui/dialogs/MakeOrnamentDialog.cpp" line="67"/>
         <source>Name:  </source>
-        <translation type="unfinished">Nama:  </translation>
+        <translation>Nama:  </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/MakeOrnamentDialog.cpp" line="77"/>
         <source>Base pitch</source>
-        <translation type="unfinished">Titi nada dasar</translation>
+        <translation>Titi nada dasar</translation>
     </message>
 </context>
 <context>
@@ -15718,42 +15741,42 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="67"/>
         <source>Metronome</source>
-        <translation type="unfinished">Metronom</translation>
+        <translation>Metronom</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="86"/>
         <source>Metronome Instrument</source>
-        <translation type="unfinished">Instrumen Metronom</translation>
+        <translation>Instrumen Metronom</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="92"/>
         <source>Device</source>
-        <translation type="unfinished">Perangkat</translation>
+        <translation>Perangkat</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="115"/>
         <source>%1 - %2</source>
-        <translation type="unfinished">%1 - %2.%3%4</translation>
+        <translation>%1 - %2</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="117"/>
         <source>%1 - No connection</source>
-        <translation type="unfinished">Tak ada koneksi</translation>
+        <translation>%1 - Tidak ada koneksi</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="125"/>
         <source>Instrument</source>
-        <translation type="unfinished">Instrumen</translation>
+        <translation>Instrumen</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="133"/>
         <source>Beats</source>
-        <translation type="unfinished">Ketukan</translation>
+        <translation>Ketukan</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="139"/>
         <source>Resolution</source>
-        <translation type="unfinished">Resolusi</translation>
+        <translation>Resolusi</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="141"/>
@@ -15763,22 +15786,22 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="142"/>
         <source>None</source>
-        <translation type="unfinished">Nihil</translation>
+        <translation>Nihil</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="143"/>
         <source>Bars only</source>
-        <translation type="unfinished">Hanya bar</translation>
+        <translation>Hanya bar</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="144"/>
         <source>Bars and beats</source>
-        <translation type="unfinished">Bar dan ketukan</translation>
+        <translation>Bar dan ketukan</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="145"/>
         <source>Bars, beats, and sub-beats</source>
-        <translation type="unfinished"></translation>
+        <translation>Bar, ketukan, dan subketukan</translation>
     </message>
     <message>
         <source>Bars, beats, and divisions</source>
@@ -15787,32 +15810,32 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="149"/>
         <source>Bar velocity</source>
-        <translation type="unfinished">Velositas bar</translation>
+        <translation>Velositas bar</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="157"/>
         <source>Beat velocity</source>
-        <translation type="unfinished">Velositas ketukan</translation>
+        <translation>Velositas ketukan</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="165"/>
         <source>Sub-beat velocity</source>
-        <translation type="unfinished">Velositas subketukan</translation>
+        <translation>Velositas subketukan</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="182"/>
         <source>Pitch</source>
-        <translation type="unfinished">Titi Nada</translation>
+        <translation>Titi Nada</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="94"/>
         <source>&lt;qt&gt;Choose the device you want to use to play the metronome&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Memilih perangkat untuk memainkan metronom&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="127"/>
         <source>&lt;qt&gt;Choose the instrument you want to use to play the metronome (typically #10)&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Memilih instrumen untuk memainkan metronom (khususnya #10)&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="151"/>
@@ -15837,41 +15860,41 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="189"/>
         <source>for Bar</source>
-        <translation type="unfinished">untuk Bar</translation>
+        <translation>untuk Bar</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="190"/>
         <source>for Beat</source>
-        <translation type="unfinished">untuk Ketukan</translation>
+        <translation>untuk Ketukan</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="191"/>
         <source>for Sub-beat</source>
-        <translation type="unfinished">Untuk Subketukan</translation>
+        <translation>Untuk Subketukan</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="195"/>
         <source>Metronome Activated</source>
-        <translation type="unfinished">Metronom Diaktifkan</translation>
+        <translation>Metronom Diaktifkan</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="198"/>
         <source>Playing</source>
-        <translation type="unfinished">Memutar</translation>
+        <translation>Memainkan</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="200"/>
         <source>Recording</source>
-        <translation type="unfinished">Merekam</translation>
+        <translation>Merekam</translation>
     </message>
     <message>
         <source>Synth plugin </source>
-        <translation type="obsolete">&lt;tak ada plugin&gt;</translation>
+        <translation type="obsolete">Pengaya sintetiser </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="326"/>
         <source>%1 (%2)</source>
-        <translation type="unfinished">%1 (%2)</translation>
+        <translation>%1 (%2)</translation>
     </message>
 </context>
 <context>
@@ -15884,27 +15907,27 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="85"/>
         <source>Time  </source>
-        <translation type="unfinished">Waktu  </translation>
+        <translation>Waktu  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="86"/>
         <source>Text  </source>
-        <translation type="unfinished"></translation>
+        <translation>Teks  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="87"/>
         <source>Comment </source>
-        <translation type="unfinished"></translation>
+        <translation>Komentar </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="91"/>
         <source>Pointer position</source>
-        <translation type="unfinished">Posisi penunjuk</translation>
+        <translation>Posisi penunjuk</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="96"/>
         <source>Absolute time:</source>
-        <translation type="unfinished">Waktu absolut:</translation>
+        <translation>Waktu absolut:</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="100"/>
@@ -15919,23 +15942,23 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="121"/>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation>Tambah</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="122"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Hapus</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="123"/>
         <source>Delete All</source>
-        <translation type="unfinished"></translation>
+        <translation>Hapus Semua</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="125"/>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="395"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Tutup</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="127"/>
@@ -15955,17 +15978,17 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="133"/>
         <source>Close the Marker Editor</source>
-        <translation type="unfinished">Tutup Editor Penanda</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="294"/>
         <source>&lt;none&gt;</source>
-        <translation type="unfinished">&lt;nihil&gt;</translation>
+        <translation>&lt;nihil&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="313"/>
         <source>Remove all markers</source>
-        <translation type="unfinished">Buang semua penanda</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="621"/>
@@ -15983,22 +16006,22 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location filename="../../src/gui/dialogs/MarkerModifyDialog.cpp" line="80"/>
         <source>Marker Time</source>
-        <translation type="unfinished">Waktu Penanda</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/MarkerModifyDialog.cpp" line="97"/>
         <source>Marker Properties</source>
-        <translation type="unfinished">Properti Penanda</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/MarkerModifyDialog.cpp" line="107"/>
         <source>Text:</source>
-        <translation type="unfinished">Teks:</translation>
+        <translation>Teks:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/MarkerModifyDialog.cpp" line="111"/>
         <source>Comment:</source>
-        <translation type="unfinished"></translation>
+        <translation>Komentar:</translation>
     </message>
 </context>
 <context>
@@ -16017,12 +16040,12 @@ Double-click to open the marker editor.</source>
         <location filename="../../src/gui/configuration/MatrixConfigurationPage.h" line="45"/>
         <location filename="../../src/gui/configuration/MatrixConfigurationPage.h" line="46"/>
         <source>Matrix</source>
-        <translation type="unfinished">Metriks</translation>
+        <translation>Matriks</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MatrixConfigurationPage.cpp" line="48"/>
         <source>General</source>
-        <translation type="unfinished">Umum</translation>
+        <translation>Umum</translation>
     </message>
 </context>
 <context>
@@ -16030,7 +16053,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/commands/matrix/MatrixEraseCommand.cpp" line="33"/>
         <source>Erase Note</source>
-        <translation type="unfinished">Hapus Not</translation>
+        <translation>Hapus Not</translation>
     </message>
 </context>
 <context>
@@ -16038,7 +16061,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixEraser.cpp" line="63"/>
         <source>Click on a note to delete it</source>
-        <translation type="unfinished"></translation>
+        <translation>Klik pada not untuk menghapusnya</translation>
     </message>
 </context>
 <context>
@@ -16046,7 +16069,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/commands/matrix/MatrixInsertionCommand.cpp" line="38"/>
         <source>Insert Note</source>
-        <translation type="unfinished">Sisip Not</translation>
+        <translation>Sisip Not</translation>
     </message>
 </context>
 <context>
@@ -16054,12 +16077,12 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/commands/matrix/MatrixModifyCommand.cpp" line="35"/>
         <source>Move Note</source>
-        <translation type="unfinished">Pindahkan Not</translation>
+        <translation>Pindahkan Not</translation>
     </message>
     <message>
         <location filename="../../src/commands/matrix/MatrixModifyCommand.cpp" line="35"/>
         <source>Modify Note</source>
-        <translation type="unfinished">Ubah Not</translation>
+        <translation>Ubah Not</translation>
     </message>
 </context>
 <context>
@@ -16067,47 +16090,47 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixMover.cpp" line="161"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
-        <translation type="unfinished">Tahan Shift untuk menghindari pengancingan pada jejaring ketukan</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixMover.cpp" line="293"/>
         <source>Copy and Move Event</source>
-        <translation type="unfinished">Salin dan Pindahkan Peristiwa</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixMover.cpp" line="295"/>
         <source>Copy and Move Events</source>
-        <translation type="unfinished">Salin dan Pindahkan Peristiwa</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixMover.cpp" line="299"/>
         <source>Move Event</source>
-        <translation type="unfinished">Pindahkan Peristiwa</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixMover.cpp" line="301"/>
         <source>Move Events</source>
-        <translation type="unfinished">Pindahkan Peristiwa</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixMover.cpp" line="433"/>
         <source>Click and drag to move a note; hold Ctrl as well to copy it</source>
-        <translation type="unfinished">Klik dan seret untuk memindahkan not; tahan Ctrl untuk menyalinnya</translation>
+        <translation>Klik dan seret untuk memindahkan not; tahan Ctrl untuk menyalinnya</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixMover.cpp" line="435"/>
         <source>Click and drag to copy a note</source>
-        <translation type="unfinished">Klik dan seret untuk menyalin not</translation>
+        <translation>Klik dan seret untuk menyalin not</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixMover.cpp" line="439"/>
         <source>Click and drag to move selected notes; hold Ctrl as well to copy</source>
-        <translation type="unfinished">Klik dan seret untuk memindahkan not yang dipilihl tanah Ctrl untuk menyalin</translation>
+        <translation>Klik dan seret untuk memindahkan not yang dipilihl; tahan Ctrl untuk menyalinnya</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixMover.cpp" line="441"/>
         <source>Click and drag to copy selected notes</source>
-        <translation type="unfinished">Klik dan seret untuk menyalin not yang dipilih</translation>
+        <translation>Klik dan seret untuk menyalin not yang dipilih</translation>
     </message>
 </context>
 <context>
@@ -16115,7 +16138,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixPainter.cpp" line="180"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
-        <translation type="unfinished">Tahan Shift untuk menghindari pengancingan pada jejaring ketukan</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixPainter.cpp" line="322"/>
@@ -16133,7 +16156,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/commands/matrix/MatrixPercussionInsertionCommand.cpp" line="39"/>
         <source>Insert Percussion Note</source>
-        <translation type="unfinished">Sisipkan Not Perkusi</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -16141,7 +16164,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixResizer.cpp" line="108"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
-        <translation type="unfinished">Tahan Shift untuk menghindari pengancingan pada jejaring ketukan</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixResizer.cpp" line="174"/>
@@ -16156,12 +16179,12 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixResizer.cpp" line="275"/>
         <source>Click and drag to resize selected notes</source>
-        <translation type="unfinished">Klik dan seret untuk mengubah ukuran not yang dipilih</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixResizer.cpp" line="277"/>
         <source>Click and drag to resize a note</source>
-        <translation type="unfinished">Klik dan seret untuk mengubah ukuran not</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -16175,7 +16198,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixSelector.cpp" line="572"/>
         <source>Click and drag to resize selected notes</source>
-        <translation type="unfinished">Klik dan seret untuk mengubah ukuran not yang dipilih</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixSelector.cpp" line="574"/>
@@ -16185,7 +16208,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixSelector.cpp" line="579"/>
         <source>Click and drag to move selected notes; hold Ctrl as well to copy</source>
-        <translation type="unfinished">Klik dan seret untuk memindahkan not yang dipilihl tanah Ctrl untuk menyalin</translation>
+        <translation type="unfinished">Klik dan seret untuk memindahkan not yang dipilihl; tahan Ctrl untuk menyalinnya</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixSelector.cpp" line="581"/>
@@ -16208,27 +16231,27 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixVelocity.cpp" line="144"/>
         <source>Velocity change: %1</source>
-        <translation type="unfinished">Velositas</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixVelocity.cpp" line="223"/>
         <source>Change Velocity</source>
-        <translation type="unfinished">Velositas dasar</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixVelocity.cpp" line="226"/>
         <source>Change Velocities</source>
-        <translation type="unfinished">Kecepatan:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixVelocity.cpp" line="257"/>
         <source>Click and drag to scale velocity of selected notes</source>
-        <translation type="unfinished">Klik dan seret untuk menyalin not yang dipilih</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixVelocity.cpp" line="259"/>
         <source>Click and drag to scale velocity of note</source>
-        <translation type="unfinished">Klik dan seret untuk menyalin not</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -16252,7 +16275,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="280"/>
         <source>&lt;untitled&gt;</source>
-        <translation type="unfinished">&lt;tak berjudul&gt;</translation>
+        <translation>&lt;tanpa judul&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="286"/>
@@ -16287,12 +16310,12 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="564"/>
         <source>None</source>
-        <translation type="unfinished">Nihil</translation>
+        <translation>Nihil</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="566"/>
         <source>Unit</source>
-        <translation type="unfinished">Unit</translation>
+        <translation>Unit</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="568"/>
@@ -16327,7 +16350,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1426"/>
         <source>http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1433"/>
@@ -16390,7 +16413,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="256"/>
         <source>Matrix</source>
-        <translation type="unfinished">Metriks</translation>
+        <translation>Matriks</translation>
     </message>
     <message>
         <source>Percussion</source>
@@ -16439,13 +16462,13 @@ Double-click to open the marker editor.</source>
         <location filename="../../src/gui/studio/MidiBankTreeWidgetItem.cpp" line="40"/>
         <location filename="../../src/gui/studio/MidiBankTreeWidgetItem.cpp" line="50"/>
         <source>Percussion Bank</source>
-        <translation type="unfinished">Bank Perkusi</translation>
+        <translation>Bank Perkusi</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/MidiBankTreeWidgetItem.cpp" line="40"/>
         <location filename="../../src/gui/studio/MidiBankTreeWidgetItem.cpp" line="50"/>
         <source>Bank</source>
-        <translation type="unfinished">Bank</translation>
+        <translation>Bank</translation>
     </message>
 </context>
 <context>
@@ -16453,17 +16476,17 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/studio/MidiDeviceTreeWidgetItem.cpp" line="44"/>
         <source>Percussion Bank</source>
-        <translation type="unfinished">Bank Perkusi</translation>
+        <translation>Bank Perkusi</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/MidiDeviceTreeWidgetItem.cpp" line="44"/>
         <source>Bank</source>
-        <translation type="unfinished">Bank</translation>
+        <translation>Bank</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/MidiDeviceTreeWidgetItem.cpp" line="55"/>
         <source>Key Mapping</source>
-        <translation type="unfinished">Pemetaan Jari</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -16471,7 +16494,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="51"/>
         <source>Modify MIDI filters...</source>
-        <translation type="unfinished">Ubah penyaring MIDI...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="61"/>
@@ -16482,25 +16505,25 @@ Double-click to open the marker editor.</source>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="65"/>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="118"/>
         <source>Note</source>
-        <translation type="unfinished">Catatan</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="66"/>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="119"/>
         <source>Program Change</source>
-        <translation type="unfinished">Perubahan Program</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="67"/>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="120"/>
         <source>Key Pressure</source>
-        <translation type="unfinished">Tekanan Kunci</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="68"/>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="121"/>
         <source>Channel Pressure</source>
-        <translation type="unfinished">Tekanan Kanal</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="69"/>
@@ -16512,13 +16535,13 @@ Double-click to open the marker editor.</source>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="70"/>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="123"/>
         <source>Controller</source>
-        <translation type="unfinished">Kontroler</translation>
+        <translation>Kontroler</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="71"/>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="124"/>
         <source>System Exclusive</source>
-        <translation type="unfinished">Eksklusif Sistem</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="114"/>
@@ -16528,7 +16551,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="228"/>
         <source>http://rosegardenmusic.com/wiki/doc:midi-filter-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:midi-filter-en</translation>
     </message>
 </context>
 <context>
@@ -16536,7 +16559,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/studio/MidiKeyMapTreeWidgetItem.cpp" line="42"/>
         <source>Key Mapping</source>
-        <translation type="unfinished">Pemetaan Jari</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -16545,12 +16568,12 @@ Double-click to open the marker editor.</source>
         <location filename="../../src/gui/studio/MidiKeyMappingEditor.cpp" line="50"/>
         <location filename="../../src/gui/studio/MidiKeyMappingEditor.cpp" line="74"/>
         <source>Key Mapping details</source>
-        <translation type="unfinished">Detil Pemetaan Kunci</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/MidiKeyMappingEditor.cpp" line="51"/>
         <source>Pitches</source>
-        <translation type="unfinished">Titi Nada</translation>
+        <translation>Titi Nada</translation>
     </message>
 </context>
 <context>
@@ -16558,17 +16581,17 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/studio/MidiMixerWindow.cpp" line="112"/>
         <source>MIDI Mixer</source>
-        <translation type="unfinished">Mikser MIDI</translation>
+        <translation>Mikser MIDI</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/MidiMixerWindow.cpp" line="154"/>
         <source>Volume</source>
-        <translation type="unfinished">Volume</translation>
+        <translation>Volume</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/MidiMixerWindow.cpp" line="159"/>
         <source>Instrument</source>
-        <translation type="unfinished">Instrumen</translation>
+        <translation>Instrumen</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/MidiMixerWindow.cpp" line="708"/>
@@ -16582,22 +16605,22 @@ Double-click to open the marker editor.</source>
         <location filename="../../src/gui/studio/MidiProgramsEditor.cpp" line="65"/>
         <location filename="../../src/gui/studio/MidiProgramsEditor.cpp" line="163"/>
         <source>Bank and Program details</source>
-        <translation type="unfinished">Detil Bank dan Program</translation>
+        <translation>Detil Bank dan Program</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/MidiProgramsEditor.cpp" line="66"/>
         <source>Programs</source>
-        <translation type="unfinished">Program</translation>
+        <translation>Program</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/MidiProgramsEditor.cpp" line="91"/>
         <source>Percussion</source>
-        <translation type="unfinished">Perkusi</translation>
+        <translation>Perkusi</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/MidiProgramsEditor.cpp" line="97"/>
         <source>MSB Value</source>
-        <translation type="unfinished">Nilai MSB</translation>
+        <translation>Nilai MSB</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/MidiProgramsEditor.cpp" line="103"/>
@@ -16612,18 +16635,18 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/studio/MidiProgramsEditor.cpp" line="110"/>
         <source>LSB Value</source>
-        <translation type="unfinished">Nilai LSB</translation>
+        <translation>Nilai LSB</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/MidiProgramsEditor.cpp" line="247"/>
         <location filename="../../src/gui/studio/MidiProgramsEditor.cpp" line="563"/>
         <source>Key Mapping: %1</source>
-        <translation type="unfinished">Pemetaan Kunci: %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/MidiProgramsEditor.cpp" line="491"/>
         <source>&lt;no key mapping&gt;</source>
-        <translation type="unfinished">&lt;tak ada pemetaan kunci&gt;</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -16631,7 +16654,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/commands/studio/ModifyControlParameterCommand.h" line="56"/>
         <source>&amp;Modify Control Parameter</source>
-        <translation type="unfinished">Ubah Para&amp;meter Kontrol</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -16639,7 +16662,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/commands/segment/ModifyDefaultTempoCommand.h" line="46"/>
         <source>Modify &amp;Default Tempo...</source>
-        <translation type="unfinished">Ubah Tempo Stan&amp;dar...</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -16647,7 +16670,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/commands/studio/ModifyDeviceCommand.h" line="63"/>
         <source>Modify &amp;MIDI Bank</source>
-        <translation type="unfinished">Ubah Bank &amp;MIDI</translation>
+        <translation>Ubah Bank &amp;MIDI</translation>
     </message>
 </context>
 <context>
@@ -16655,7 +16678,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/commands/studio/ModifyDeviceMappingCommand.h" line="50"/>
         <source>Modify &amp;Device Mapping</source>
-        <translation type="unfinished">Ubah Pemetaan Perangka&amp;t</translation>
+        <translation>Ubah Pemetaan Perangka&amp;t</translation>
     </message>
 </context>
 <context>
@@ -16663,7 +16686,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/commands/studio/ModifyInstrumentMappingCommand.h" line="50"/>
         <source>Modify &amp;Instrument Mapping</source>
-        <translation type="unfinished">Ubah Pemetaan &amp;Instrumen</translation>
+        <translation>Ubah Pemetaan &amp;Instrumen</translation>
     </message>
 </context>
 <context>
@@ -16671,7 +16694,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/commands/edit/ModifyMarkerCommand.h" line="50"/>
         <source>&amp;Modify Marker</source>
-        <translation type="unfinished">Ubah Penand&amp;a</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -16679,7 +16702,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/commands/edit/MoveAcrossSegmentsCommand.cpp" line="65"/>
         <source>&amp;Move Events to Other Segment</source>
-        <translation type="unfinished">Pindahkan Peristiwa ke Seg&amp;men Lainnya</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -16705,7 +16728,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/commands/segment/MoveTracksCommand.h" line="46"/>
         <source>Move Tracks...</source>
-        <translation type="unfinished">Pindahkan Jalur...</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -16713,12 +16736,12 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/commands/notation/MultiKeyInsertionCommand.h" line="58"/>
         <source>Change all to &amp;Key %1...</source>
-        <translation type="unfinished">Ubah Semua ke &amp;Kunci %1...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/MultiKeyInsertionCommand.h" line="60"/>
         <source>Add &amp;Key Change...</source>
-        <translation type="unfinished">Tambah Perubahan &amp;Kunci...</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -16849,37 +16872,37 @@ Double-click to open the marker editor.</source>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.h" line="53"/>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.h" line="54"/>
         <source>Notation</source>
-        <translation type="unfinished">Notasi</translation>
+        <translation>Notasi</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="81"/>
         <source>Default layout mode</source>
-        <translation type="unfinished">Mode tataletak utama/dasar</translation>
+        <translation>Modus tampilan baku</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="86"/>
         <source>Linear layout</source>
-        <translation type="unfinished">Tataletak linear</translation>
+        <translation>Tampilan linear</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="87"/>
         <source>Continuous page layout</source>
-        <translation type="unfinished">Tataletak halaman bersambung</translation>
+        <translation>Tampilan bersambung</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="88"/>
         <source>Multiple page layout</source>
-        <translation type="unfinished">Tataletak multihalaman</translation>
+        <translation>Tampilan multihalaman</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="96"/>
         <source>Default spacing</source>
-        <translation type="unfinished">Spasi standar</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="109"/>
         <source>%1 % (normal)</source>
-        <translation type="unfinished">%1 (diskala ulang)</translation>
+        <translation>%1 % (normal)</translation>
     </message>
     <message>
         <source>Default duration factor</source>
@@ -16911,7 +16934,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="130"/>
         <source>Always</source>
-        <translation type="unfinished">Selalu</translation>
+        <translation>Selalu</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="138"/>
@@ -16952,7 +16975,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="221"/>
         <source>Layout</source>
-        <translation type="unfinished">Tataletak</translation>
+        <translation>Tataletak</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="234"/>
@@ -16962,7 +16985,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="266"/>
         <source>When inserting notes...</source>
-        <translation type="unfinished">Saat menyisipkan not...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="274"/>
@@ -16972,7 +16995,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="275"/>
         <source>Ignore existing durations</source>
-        <translation type="unfinished">Abaikan durasi yang ada</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="285"/>
@@ -16997,7 +17020,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="348"/>
         <source>Editing</source>
-        <translation type="unfinished">Editing</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="360"/>
@@ -17007,7 +17030,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="363"/>
         <source>Affect only that octave</source>
-        <translation type="unfinished">Hanya mempengaruhi oktaf itu</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="364"/>
@@ -17017,7 +17040,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="365"/>
         <source>Affect all subsequent octaves</source>
-        <translation type="unfinished">Mempengaruhi semua subsekuen oktaf</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="373"/>
@@ -17027,7 +17050,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="376"/>
         <source>Affect only that bar</source>
-        <translation type="unfinished">Hanya mempengaruhi bar tersebut</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="377"/>
@@ -17047,7 +17070,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="389"/>
         <source>Cancel only when entering C major or A minor</source>
-        <translation type="unfinished">Hanya batal apabila memasuki C mayor atau A minor</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="390"/>
@@ -17057,7 +17080,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="391"/>
         <source>Cancel always</source>
-        <translation type="unfinished">Selalu batal</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="402"/>
@@ -17067,7 +17090,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="413"/>
         <source>Notation font</source>
-        <translation type="unfinished">Huruf notasi</translation>
+        <translation>Huruf notasi</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="419"/>
@@ -17077,32 +17100,32 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="440"/>
         <source>Origin:</source>
-        <translation type="unfinished">Asli:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="444"/>
         <source>Copyright:</source>
-        <translation type="unfinished">Hak Cipta:</translation>
+        <translation>Hak Cipta:</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="448"/>
         <source>Mapped by:</source>
-        <translation type="unfinished">Dipetakan oleh:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="452"/>
         <source>Type:</source>
-        <translation type="unfinished">Jenis:</translation>
+        <translation>Jenis:</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="478"/>
         <source>Font size for single-staff views</source>
-        <translation type="unfinished">Ukuran huruf untuk tampilan staf tunggal</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="487"/>
         <source>Font size for multi-staff views</source>
-        <translation type="unfinished">Ukuran huruf untuk tampilan multistaf</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Font size for printing (pt)</source>
@@ -17111,7 +17134,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="505"/>
         <source>Text font</source>
-        <translation type="unfinished">Huruf teks</translation>
+        <translation>Huruf teks</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="517"/>
@@ -17126,7 +17149,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="624"/>
         <source>%1 (smooth)</source>
-        <translation type="unfinished">%1 (halus)</translation>
+        <translation>%1 (halus)</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="626"/>
@@ -17139,7 +17162,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="469"/>
         <source> %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"> %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="489"/>
@@ -17380,12 +17403,12 @@ This is a bug (the program would previously have crashed by now)</source>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="820"/>
         <source>Note &amp;Font</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Huru&amp;f Not</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="848"/>
         <source>Si&amp;ze</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Ukuran</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="868"/>
@@ -17406,7 +17429,7 @@ This is a bug (the program would previously have crashed by now)</source>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="975"/>
         <source>  Font:  </source>
-        <translation type="unfinished"></translation>
+        <translation>  Huruf:  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1010"/>
@@ -17416,7 +17439,7 @@ This is a bug (the program would previously have crashed by now)</source>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1018"/>
         <source>  Size:  </source>
-        <translation type="unfinished">  Ukuran:  </translation>
+        <translation>  Ukuran:  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1042"/>
@@ -17439,7 +17462,7 @@ This is a bug (the program would previously have crashed by now)</source>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3137"/>
         <source>Chord</source>
-        <translation type="unfinished">Padu Nada</translation>
+        <translation>Padu Nada</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3138"/>
@@ -17502,7 +17525,7 @@ This is a bug (the program would previously have crashed by now)</source>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1445"/>
         <source>Clipboard is empty</source>
-        <translation type="unfinished">Papan klip kosong</translation>
+        <translation>Papan klip kosong</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1386"/>
@@ -17519,7 +17542,7 @@ This is a bug (the program would previously have crashed by now)</source>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="955"/>
         <source>  No selection </source>
-        <translation type="unfinished"></translation>
+        <translation>  Tidak ada seleksi </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1154"/>
@@ -17533,17 +17556,17 @@ This is a bug (the program would previously have crashed by now)</source>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2801"/>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3762"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1164"/>
         <source>Printing with LilyPond...</source>
-        <translation type="unfinished"></translation>
+        <translation>Mencetak dengan LilyPond...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1182"/>
         <source>Previewing with LilyPond...</source>
-        <translation type="unfinished"></translation>
+        <translation>Mempratampil dengan LilyPond...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1207"/>
@@ -17570,7 +17593,7 @@ This is a bug (the program would previously have crashed by now)</source>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3813"/>
         <source>Move Events to Staff Above</source>
-        <translation type="unfinished">Pindahkan Peristiwa ke Seg&amp;men Lainnya</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1608"/>
@@ -17615,17 +17638,17 @@ This is a bug (the program would previously have crashed by now)</source>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2614"/>
         <source>Make Ornament</source>
-        <translation type="unfinished">Buat Ornamen</translation>
+        <translation>Buat Ornamen</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2659"/>
         <source>Use Ornament</source>
-        <translation type="unfinished">Pakai Ornamen</translation>
+        <translation>Pakai Ornamen</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2670"/>
         <source>Remove Ornaments</source>
-        <translation type="unfinished">Buang Ornamen</translation>
+        <translation>Buang Ornamen</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2728"/>
@@ -17683,17 +17706,17 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3735"/>
         <source>http://rosegardenmusic.com/wiki/doc:notation-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:notation-en</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3742"/>
         <source>http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</source>
-        <translation type="unfinished"></translation>
+        <translation>http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3749"/>
         <source>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</source>
-        <translation type="unfinished">http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</translation>
+        <translation>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3845"/>
@@ -17778,7 +17801,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/editors/notation/NoteFontViewer.cpp" line="96"/>
         <source>  Component: </source>
-        <translation type="unfinished">  Komponen: </translation>
+        <translation>  Komponen: </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NoteFontViewer.cpp" line="105"/>
@@ -17793,12 +17816,12 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/editors/notation/NoteFontViewer.cpp" line="110"/>
         <source>Codes</source>
-        <translation type="unfinished">Kode</translation>
+        <translation>Kode</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NoteFontViewer.cpp" line="112"/>
         <source>  Page: </source>
-        <translation type="unfinished">  Halaman: </translation>
+        <translation>  Halaman: </translation>
     </message>
 </context>
 <context>
@@ -17842,7 +17865,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/segment/OpenOrCloseRangeCommand.cpp" line="35"/>
         <source>Open or Close Range</source>
-        <translation type="unfinished">Buka atau Tutup Jangkauan</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -17850,7 +17873,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/segment/PasteConductorDataCommand.cpp" line="34"/>
         <source>Paste Tempos and Time Signatures</source>
-        <translation type="unfinished">Tempel Tempo dan Paraf Waktu</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -17858,22 +17881,22 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/edit/PasteEventsCommand.h" line="85"/>
         <source>&amp;Paste</source>
-        <translation type="unfinished"></translation>
+        <translation>Tem&amp;pel</translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/PasteEventsCommand.cpp" line="91"/>
         <source>Paste into an existing gap [&quot;restricted&quot;]</source>
-        <translation type="unfinished">Tempel pada gap yang sudah ada [&quot;terbatas&quot;]</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/PasteEventsCommand.cpp" line="93"/>
         <source>Erase existing events to make room [&quot;simple&quot;]</source>
-        <translation type="unfinished">Hapus peristiwa yang ada untuk menambah ruang [&quot;sederhana&quot;]</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/PasteEventsCommand.cpp" line="95"/>
         <source>Move existing events out of the way [&quot;open-n-paste&quot;]</source>
-        <translation type="unfinished">Singkirkan peristiwa yang ada [&quot;buka-dan-tempel&quot;]</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/PasteEventsCommand.cpp" line="97"/>
@@ -17891,22 +17914,22 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/dialogs/PasteNotationDialog.cpp" line="45"/>
         <source>Paste</source>
-        <translation type="unfinished"></translation>
+        <translation>Tempel</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PasteNotationDialog.cpp" line="54"/>
         <source>Paste type</source>
-        <translation type="unfinished"></translation>
+        <translation>Cara tempel</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PasteNotationDialog.cpp" line="75"/>
         <source>Options</source>
-        <translation type="unfinished"></translation>
+        <translation>Opsi</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PasteNotationDialog.cpp" line="81"/>
         <source>Make this the default paste type</source>
-        <translation type="unfinished"></translation>
+        <translation>Jadikan ini cara tempel yang baku</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PasteNotationDialog.cpp" line="127"/>
@@ -17919,7 +17942,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/segment/PasteRangeCommand.cpp" line="37"/>
         <source>Paste Range</source>
-        <translation type="unfinished">Tempel Jangkauan</translation>
+        <translation>Tempel Jangkauan</translation>
     </message>
 </context>
 <context>
@@ -17927,7 +17950,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/edit/PasteSegmentsCommand.h" line="55"/>
         <source>&amp;Paste</source>
-        <translation type="unfinished"></translation>
+        <translation>Tem&amp;pel</translation>
     </message>
 </context>
 <context>
@@ -17935,7 +17958,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/segment/PasteToTriggerSegmentCommand.cpp" line="39"/>
         <source>Paste as New Triggered Segment</source>
-        <translation type="unfinished">Tempel sebagai Segmen Berpicu yang Baru</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -17984,12 +18007,12 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="82"/>
         <source>Value (%):</source>
-        <translation type="unfinished"></translation>
+        <translation>Nilai (%):</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="93"/>
         <source>Duration (%):</source>
-        <translation type="unfinished"></translation>
+        <translation>Durasi (%):</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="108"/>
@@ -18029,7 +18052,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="152"/>
         <source>Resolution:</source>
-        <translation type="unfinished"></translation>
+        <translation>Resolusi:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="167"/>
@@ -18042,7 +18065,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/widgets/PitchChooser.cpp" line="52"/>
         <source>Pitch:</source>
-        <translation type="unfinished">Titi nada:</translation>
+        <translation>Titi nada:</translation>
     </message>
 </context>
 <context>
@@ -18050,7 +18073,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/dialogs/PitchDialog.cpp" line="51"/>
         <source>Reset</source>
-        <translation type="unfinished">Reset</translation>
+        <translation>Atur Ulang</translation>
     </message>
 </context>
 <context>
@@ -18058,7 +18081,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/dialogs/PitchPickerDialog.cpp" line="38"/>
         <source>Pitch Selector</source>
-        <translation type="unfinished">Selektor Titi Nada</translation>
+        <translation>Selektor Titi Nada</translation>
     </message>
 </context>
 <context>
@@ -18066,57 +18089,57 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/editors/segment/PlayList.cpp" line="79"/>
         <source>Add...</source>
-        <translation type="unfinished">Tambah...</translation>
+        <translation>Tambah...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/PlayList.cpp" line="80"/>
         <source>Play</source>
-        <translation type="unfinished">Putar</translation>
+        <translation>Putar</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/PlayList.cpp" line="81"/>
         <source>Move Up</source>
-        <translation type="unfinished">Naik</translation>
+        <translation>Naik</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/PlayList.cpp" line="82"/>
         <source>Move Down</source>
-        <translation type="unfinished">Turun</translation>
+        <translation>Turun</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/PlayList.cpp" line="83"/>
         <source>Remove</source>
-        <translation type="unfinished"></translation>
+        <translation>Buang</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/PlayList.cpp" line="84"/>
         <source>Clear whole List</source>
-        <translation type="unfinished"></translation>
+        <translation>Bersihkan seluruh daftar</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/PlayList.cpp" line="117"/>
         <source>Select one or more Rosegarden files</source>
-        <translation type="unfinished">Pilih satu atau lebih berkas Rosegarden</translation>
+        <translation>Pilih satu atau lebih berkas Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/PlayList.cpp" line="118"/>
         <source>Rosegarden files</source>
-        <translation type="unfinished">Berkas Rosegarden</translation>
+        <translation>Berkas Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/PlayList.cpp" line="119"/>
         <source>MIDI files</source>
-        <translation type="unfinished"></translation>
+        <translation>Berkas MIDI</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/PlayList.cpp" line="120"/>
         <source>X11 Rosegaden files</source>
-        <translation type="unfinished"></translation>
+        <translation>Berkas X11 Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/PlayList.cpp" line="121"/>
         <source>All files</source>
-        <translation type="unfinished">Semua berkas</translation>
+        <translation>Semua berkas</translation>
     </message>
 </context>
 <context>
@@ -18124,12 +18147,12 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/editors/segment/PlayListView.cpp" line="41"/>
         <source>Title</source>
-        <translation type="unfinished">Judul</translation>
+        <translation>Judul</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/PlayListView.cpp" line="41"/>
         <source>File name</source>
-        <translation type="unfinished">Nama berkas</translation>
+        <translation>Nama berkas</translation>
     </message>
 </context>
 <context>
@@ -18137,12 +18160,12 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/general/PresetGroup.cpp" line="44"/>
         <source>unknown error</source>
-        <translation type="unfinished">kesalahan tak dikenal</translation>
+        <translation>kesalahan tak dikenal</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/PresetGroup.cpp" line="77"/>
         <source>Can&apos;t open preset file %1</source>
-        <translation type="unfinished">Tak dapat membuka berkas preset %1</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -18150,7 +18173,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="55"/>
         <source>Convert notation for...</source>
-        <translation type="unfinished">Mengonversi berkas suara...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="74"/>
@@ -18170,32 +18193,32 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="88"/>
         <source>Category</source>
-        <translation type="unfinished">Kategori</translation>
+        <translation>Kategori</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="96"/>
         <source>Electronic organ (manual) (treble)</source>
-        <translation type="unfinished"></translation>
+        <translation>Organ elektronik (manual) (tribel)</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="99"/>
         <source>Instrument</source>
-        <translation type="unfinished">Instrumen</translation>
+        <translation>Instrumen</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="104"/>
         <source>Player Ability</source>
-        <translation type="unfinished">Kemampuan Pemutar</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="106"/>
         <source>Amateur</source>
-        <translation type="unfinished">Amatir</translation>
+        <translation>Amatir</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="107"/>
         <source>Professional</source>
-        <translation type="unfinished">Profesional</translation>
+        <translation>Profesional</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="111"/>
@@ -18205,27 +18228,27 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="119"/>
         <source>Only selected segments</source>
-        <translation type="unfinished">Segmen terpilih</translation>
+        <translation>Hanya segmen terpilih</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="122"/>
         <source>All segments in this track</source>
-        <translation type="unfinished">Terapkan untuk semua segmen saat ini</translation>
+        <translation>Semua segmen di jalur ini</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="128"/>
         <source>Only for new segments</source>
-        <translation type="unfinished">Lirik untuk segmen ini</translation>
+        <translation>Hanya segmen baru</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="131"/>
         <source>Convert existing segments</source>
-        <translation type="unfinished">Tak dapat menggabungkan segmen Suara</translation>
+        <translation>Konversi segmen yang ada</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="184"/>
         <source>http://rosegardenmusic.com/wiki/doc:manual-preset-handler-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:manual-preset-handler-en</translation>
     </message>
 </context>
 <context>
@@ -18234,7 +18257,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <location filename="../../src/gui/widgets/ProgressDialog.cpp" line="64"/>
         <location filename="../../src/gui/widgets/ProgressDialog.cpp" line="136"/>
         <source>Processing...</source>
-        <translation type="unfinished">Memproses...</translation>
+        <translation>Memproses...</translation>
     </message>
 </context>
 <context>
@@ -18257,49 +18280,49 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="99"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Batal</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="132"/>
         <source>&lt;qt&gt;&lt;p&gt;Fatal error.&lt;/p&gt;%1&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Kesalahan fatal.&lt;/p&gt;%1&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="260"/>
         <source>&lt;qt&gt;&lt;p&gt;Unable to read %1.&lt;/p&gt;%2&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Tidak dapat membaca %1.&lt;/p&gt;%2&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="430"/>
         <source>&lt;qt&gt;&lt;p&gt;Could not write&lt;br&gt;%1.&lt;/p&gt;%2&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Tidak dapat menulis&lt;br&gt;%1.&lt;/p&gt;%2&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="436"/>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="815"/>
         <source>&lt;qt&gt;Could not remove&lt;br&gt;%1&lt;br&gt;&lt;br&gt;%2&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Tidak dapat membuang&lt;br&gt;%1&lt;br&gt;&lt;br&gt;%2&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="441"/>
         <source>&lt;qt&gt;Could not copy&lt;br&gt;%1&lt;br&gt;  to&lt;br&gt;%2&lt;br&gt;&lt;br&gt;%3&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Tidak dapat menyalin&lt;br&gt;%1&lt;br&gt;  ke&lt;br&gt;%2&lt;br&gt;&lt;br&gt;%3&lt;qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="445"/>
         <source>&lt;qt&gt;&lt;p&gt;Could not remove&lt;br&gt;%1.&lt;/p&gt;%2&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Tidak dapat membuang&lt;br&gt;%1.&lt;/p&gt;%2&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="467"/>
         <source>Checking for flac...</source>
-        <translation type="unfinished"></translation>
+        <translation>Memeriksa keberadaan flac...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="531"/>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="733"/>
         <source>Packing project...</source>
-        <translation type="unfinished"></translation>
+        <translation>Memaket proyek...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="566"/>
@@ -18337,12 +18360,12 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="485"/>
         <source>Checking for wavpack...</source>
-        <translation type="unfinished"></translation>
+        <translation>Memeriksa wavpack...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="64"/>
         <source>&lt;p&gt;Processing aborted&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Membatalkan proses&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="469"/>
@@ -18357,7 +18380,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="496"/>
         <source>Checking for wvunpack...</source>
-        <translation type="unfinished"></translation>
+        <translation>Memeriksa wvunpack...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="498"/>
@@ -18367,14 +18390,14 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="570"/>
         <source>Copying audio files...</source>
-        <translation type="unfinished"></translation>
+        <translation>Menyalin berkas suara...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="655"/>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="685"/>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="919"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="656"/>
@@ -18384,7 +18407,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="677"/>
         <source>All files</source>
-        <translation type="unfinished">Semua berkas</translation>
+        <translation>Semua berkas</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="686"/>
@@ -18394,7 +18417,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="690"/>
         <source>Copying plugin data and extra files...</source>
-        <translation type="unfinished"></translation>
+        <translation>Menyalin data pengaya dan berkas-berkas ekstra...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="871"/>
@@ -18404,7 +18427,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="834"/>
         <source>Unpacking project...</source>
-        <translation type="unfinished"></translation>
+        <translation>Membongkar paket proyek...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="878"/>
@@ -18419,7 +18442,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="1019"/>
         <source>Decoding audio files...</source>
-        <translation type="unfinished"></translation>
+        <translation>Mendekode berkas suara...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="1021"/>
@@ -18432,7 +18455,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/rulers/PropertyViewRuler.cpp" line="65"/>
         <source>%1 controller</source>
-        <translation type="unfinished">%1 kontroler</translation>
+        <translation>%1 kontroler</translation>
     </message>
 </context>
 <context>
@@ -18440,7 +18463,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/dialogs/QuantizeDialog.cpp" line="36"/>
         <source>Quantize</source>
-        <translation type="unfinished">Kuantisasi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Advanced</source>
@@ -18452,22 +18475,22 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="66"/>
         <source>Quantizer</source>
-        <translation type="unfinished">Kuantiser</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="71"/>
         <source>Quantizer type:</source>
-        <translation type="unfinished">Jenis kuantiser:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="73"/>
         <source>Grid quantizer</source>
-        <translation type="unfinished">Kuantiser jejaring</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="74"/>
         <source>Legato quantizer</source>
-        <translation type="unfinished">Kuantiser legato</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="75"/>
@@ -18477,48 +18500,48 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="79"/>
         <source>Quantize for notation only (leave performance unchanged)</source>
-        <translation type="unfinished">Hanya kuantisasi untuk notasi (biarkan performanya tidak diubah)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="87"/>
         <source>Notation parameters</source>
-        <translation type="unfinished">Parameter notasi</translation>
+        <translation>Parameter notasi</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="93"/>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="126"/>
         <source>Base grid unit:</source>
-        <translation type="unfinished">Unit jejaring dasar:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="97"/>
         <source>Complexity:</source>
-        <translation type="unfinished">Kompleksitas:</translation>
+        <translation>Kompleksitas:</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="100"/>
         <source>Very high</source>
-        <translation type="unfinished">Sangat tinggi</translation>
+        <translation>Sangat tinggi</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="101"/>
         <source>High</source>
-        <translation type="unfinished">Tinggi</translation>
+        <translation>Tinggi</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="102"/>
         <source>Normal</source>
-        <translation type="unfinished">Normal</translation>
+        <translation>Normal</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="103"/>
         <source>Low</source>
-        <translation type="unfinished">Rendah</translation>
+        <translation>Rendah</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="104"/>
         <source>Very low</source>
-        <translation type="unfinished">Sangat rendah</translation>
+        <translation>Sangat rendah</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="107"/>
@@ -18529,12 +18552,12 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="109"/>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="249"/>
         <source>None</source>
-        <translation type="unfinished">Nihil</translation>
+        <translation>Nihil</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="110"/>
         <source>2-in-the-time-of-3</source>
-        <translation type="unfinished">2-dalam-waktu-dari-3</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="111"/>
@@ -18544,7 +18567,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="112"/>
         <source>Any</source>
-        <translation type="unfinished">Lainnya</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="115"/>
@@ -18554,12 +18577,12 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="120"/>
         <source>Grid parameters</source>
-        <translation type="unfinished">Parameter jejaring</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="130"/>
         <source>Swing:</source>
-        <translation type="unfinished">Ayunan:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="135"/>
@@ -18574,7 +18597,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="146"/>
         <source>After quantization</source>
-        <translation type="unfinished">Usai kuantisasi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Show advanced options</source>
@@ -18603,7 +18626,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="255"/>
         <source>Full quantize</source>
-        <translation type="unfinished">Kuantisasi penuh</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Show Advanced Options</source>
@@ -18619,7 +18642,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/rulers/RawNoteRuler.cpp" line="451"/>
         <source>Track #%1, Segment &quot;%2&quot; (runtime id %3)</source>
-        <translation type="unfinished">Jalur #%1, Segmen &quot;%2&quot; (id waktu-jalan %3)</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -18627,7 +18650,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/studio/ReconnectDeviceCommand.h" line="50"/>
         <source>Reconnect Device</source>
-        <translation type="unfinished">Koneksikan Ulang Perangkat</translation>
+        <translation>Koneksi Ulang Perangkat</translation>
     </message>
 </context>
 <context>
@@ -18640,7 +18663,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="60"/>
         <source>Device or Instrument</source>
-        <translation type="unfinished">Perangkat atau Instrumen</translation>
+        <translation>Perangkat atau Instrumen</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="64"/>
@@ -18650,33 +18673,33 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="66"/>
         <source>Device</source>
-        <translation type="unfinished">Perangkat</translation>
+        <translation>Perangkat</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="68"/>
         <source>Instrument</source>
-        <translation type="unfinished">Instrumen</translation>
+        <translation>Instrumen</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="77"/>
         <source>Choose Source and Destination</source>
-        <translation type="unfinished">Pilih Sumber dan Tujuan</translation>
+        <translation>Pilih Sumber dan Tujuan</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="81"/>
         <source>From</source>
-        <translation type="unfinished">Dari</translation>
+        <translation>Dari</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="82"/>
         <source>To</source>
-        <translation type="unfinished">Ke</translation>
+        <translation>Ke</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="139"/>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="140"/>
         <source>&lt;no devices&gt;</source>
-        <translation type="unfinished">&lt;tak ada perangkat&gt;</translation>
+        <translation>&lt;tidak ada perangkat&gt;</translation>
     </message>
 </context>
 <context>
@@ -18684,7 +18707,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/studio/RemoveControlParameterCommand.h" line="55"/>
         <source>&amp;Remove Control Parameter</source>
-        <translation type="unfinished">Buang Pa&amp;rameter Kontrol</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -18692,7 +18715,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/notation/RemoveFingeringMarksCommand.h" line="45"/>
         <source>&amp;Remove Fingerings</source>
-        <translation type="unfinished">Buang Penja&amp;rian</translation>
+        <translation>Buang Penja&amp;rian</translation>
     </message>
 </context>
 <context>
@@ -18700,7 +18723,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/edit/RemoveMarkerCommand.h" line="50"/>
         <source>&amp;Remove Marker</source>
-        <translation type="unfinished">Buan&amp;g Penanda</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -18708,7 +18731,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/notation/RemoveMarksCommand.h" line="45"/>
         <source>&amp;Remove All Marks</source>
-        <translation type="unfinished">Buang Semua Pen&amp;anda</translation>
+        <translation type="unfinished">Buang &amp;Semua Penanda</translation>
     </message>
 </context>
 <context>
@@ -18716,7 +18739,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/notation/RemoveNotationQuantizeCommand.h" line="45"/>
         <source>Remo&amp;ve Notation Quantization</source>
-        <translation type="unfinished">Buang Kuantisasi No&amp;tasi</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -18724,7 +18747,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/segment/RemoveTempoChangeCommand.h" line="53"/>
         <source>Remove &amp;Tempo Change...</source>
-        <translation type="unfinished">Buang Perubahan &amp;Tempo</translation>
+        <translation>Buang Perubahan &amp;Tempo...</translation>
     </message>
 </context>
 <context>
@@ -18732,7 +18755,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/segment/RemoveTimeSignatureCommand.h" line="53"/>
         <source>Remove &amp;Time Signature Change...</source>
-        <translation type="unfinished">Buang Perubahan Paraf Wak&amp;tu...</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -18740,7 +18763,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/studio/RenameDeviceCommand.h" line="50"/>
         <source>Rename Device</source>
-        <translation type="unfinished">Namai Ulang Perangkat</translation>
+        <translation>Ubah Nama Perangkat</translation>
     </message>
 </context>
 <context>
@@ -18748,7 +18771,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/segment/RenameTrackCommand.h" line="47"/>
         <source>Rename Track</source>
-        <translation type="unfinished">Namai Ulang Jalur</translation>
+        <translation>Ubah Nama Jalur</translation>
     </message>
 </context>
 <context>
@@ -18769,12 +18792,12 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/dialogs/RescaleDialog.cpp" line="56"/>
         <source>Duration of selection</source>
-        <translation type="unfinished">Durasi seleksi</translation>
+        <translation>Durasi seleksi</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RescaleDialog.cpp" line="62"/>
         <source>Options</source>
-        <translation type="unfinished"></translation>
+        <translation>Opsi</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RescaleDialog.cpp" line="66"/>
@@ -18787,7 +18810,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/notation/ResetDisplacementsCommand.h" line="45"/>
         <source>&amp;Restore Positions</source>
-        <translation type="unfinished"></translation>
+        <translation>Ke&amp;mbalikan Posisi</translation>
     </message>
 </context>
 <context>
@@ -18795,7 +18818,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/notation/RespellCommand.cpp" line="40"/>
         <source>Respell with %1</source>
-        <translation type="unfinished">Eja ulang dengan %1</translation>
+        <translation>Eja ulang dengan %1</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/RespellCommand.cpp" line="43"/>
@@ -18805,12 +18828,12 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/notation/RespellCommand.cpp" line="45"/>
         <source>&amp;Sharp</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta&amp;jam</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/RespellCommand.cpp" line="47"/>
         <source>&amp;Flat</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Datar</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/RespellCommand.cpp" line="49"/>
@@ -18820,12 +18843,12 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/notation/RespellCommand.cpp" line="51"/>
         <source>&amp;Natural</source>
-        <translation type="unfinished">&amp;Natural</translation>
+        <translation>&amp;Natural</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/RespellCommand.cpp" line="53"/>
         <source>N&amp;one</source>
-        <translation type="unfinished">N&amp;ihil</translation>
+        <translation>N&amp;ihil</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/RespellCommand.cpp" line="59"/>
@@ -18869,7 +18892,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/notation/RestoreTiesCommand.h" line="45"/>
         <source>&amp;Restore Tie Positions</source>
-        <translation type="unfinished">Kembalikan Posisi</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -18877,7 +18900,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/edit/RetrogradeCommand.h" line="46"/>
         <source>&amp;Retrograde</source>
-        <translation type="unfinished">&amp;Retrograde</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -18885,7 +18908,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/edit/RetrogradeInvertCommand.h" line="46"/>
         <source>Re&amp;trograde Invert</source>
-        <translation type="unfinished">Kebalikan Re&amp;trograde</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -18894,14 +18917,14 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <location filename="../../src/document/RoseXmlHandler.cpp" line="438"/>
         <source>This file was written by Rosegarden %1, and it uses
 a different file format that cannot be read by this version.</source>
-        <translation type="unfinished">Berkas ini ditulis oleh Rosegarden %1, dan menggunakan
+        <translation>Berkas ini ditulis oleh Rosegarden %1, dan menggunakan
 format berkas yang berbeda yang tidak bisa dibaca oleh versi ini.</translation>
     </message>
     <message>
         <location filename="../../src/document/RoseXmlHandler.cpp" line="448"/>
         <source>This file was written by Rosegarden %1, which is more recent than this version.
 There may be some incompatibilities with the file format.</source>
-        <translation type="unfinished">Berkas ini ditulis oleh Rosegarden %1, yang merupakan versi lebih baru dari versi yang digunakan saat ini.
+        <translation>Berkas ini ditulis oleh Rosegarden %1, yang merupakan versi lebih baru dari versi yang digunakan saat ini.
 Mungkin saja ada beberapa ketidakcocokan dengan format berkasnya.</translation>
     </message>
     <message>
@@ -18920,7 +18943,7 @@ Mungkin saja ada beberapa ketidakcocokan dengan format berkasnya.</translation>
     <message>
         <location filename="../../src/gui/application/RosegardenApplication.cpp" line="67"/>
         <source>Failed to load soundfont %1</source>
-        <translation type="unfinished">Gagal memuat soundfont %1</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -18934,7 +18957,7 @@ Anda ingin menyimpannya?</translation>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="346"/>
         <source>Rosegarden - Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Rosegarden - Peringatan</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="346"/>
@@ -18980,7 +19003,7 @@ Please select any you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="539"/>
         <source>File %1 could not be deleted.</source>
-        <translation type="unfinished">Berkas %1 tidak akan dihapus.</translation>
+        <translation>Berkas %1 tidak akan dihapus.</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="555"/>
@@ -18990,12 +19013,12 @@ Please select any you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="591"/>
         <source>Can&apos;t open file &apos;%1&apos;</source>
-        <translation type="unfinished">Tak dapat membuka berkas &apos;%1&apos;</translation>
+        <translation>Tidak dapat membuka berkas &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="613"/>
         <source>Could not open Rosegarden file</source>
-        <translation type="unfinished">Tak dapat membuka berkas Rosegarden</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="621"/>
@@ -19005,12 +19028,12 @@ Please select any you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="668"/>
         <source>Generating audio previews...</source>
-        <translation type="unfinished">Megenerasikan pratampil suara...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="714"/>
         <source>Merge</source>
-        <translation type="unfinished">Gabung</translation>
+        <translation>Gabung</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="1182"/>
@@ -19030,7 +19053,7 @@ Please select any you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="1247"/>
         <source>Saving file...</source>
-        <translation type="unfinished">Menyimpan berkas...</translation>
+        <translation>Menyimpan berkas...</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="1354"/>
@@ -19040,7 +19063,7 @@ Please select any you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="1655"/>
         <source>File load cancelled</source>
-        <translation type="unfinished">Memuat berkas dibatalkan</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="1675"/>
@@ -19065,7 +19088,7 @@ Please select any you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="1726"/>
         <source>Inconsistent sample rates</source>
-        <translation type="unfinished">Rerata sampel tak konsisten</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="1740"/>
@@ -19075,31 +19098,31 @@ Please select any you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="1748"/>
         <source>&lt;li&gt;%1 (from %2)&lt;/li&gt;</source>
-        <translation type="unfinished">&lt;li&gt;%1 (dari %2)&lt;/li&gt;</translation>
+        <translation>&lt;li&gt;%1 (dari %2)&lt;/li&gt;</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="1762"/>
         <source>This file contains one or more old element types that are now deprecated.
 Support for these elements may disappear in future versions of Rosegarden.
 We recommend you re-save this file from this version of Rosegarden to ensure that it can still be re-loaded in future versions.</source>
-        <translation type="unfinished">Berkas ini mengandung satu atau dua jenis elemen lama.
+        <translation>Berkas ini mengandung satu atau dua jenis elemen lama.
 Dukungan untuk elemen ini mungkin akan ditiadakan untuk versi Rosegarden yang lebih lanjut.
-Kami menyarankan supaya Anda menyimpan ulang berkas ini dari versi Rosegarden yang sekarang untuk menjamin bahea berkas tersebut masih bisa dibuka oleh versi yang lebih baru.</translation>
+Kami menyarankan supaya Anda menyimpan ulang berkas ini dari versi Rosegarden yang sekarang untuk menjamin bahwa berkas tersebut masih bisa dibuka oleh versi yang lebih baru.</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="2306"/>
         <source>Insert Recorded MIDI</source>
-        <translation type="unfinished">Sisip MIDI yang telah Direkam</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="2433"/>
         <source>(recorded)</source>
-        <translation type="unfinished">%1 (direkam)</translation>
+        <translation>(direkam)</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="2666"/>
         <source>Generating audio preview...</source>
-        <translation type="unfinished">Megenerasikan pratampil suara...</translation>
+        <translation type="unfinished">Membuat pratampil suara...</translation>
     </message>
 </context>
 <context>
@@ -19111,7 +19134,7 @@ Kami menyarankan supaya Anda menyimpan ulang berkas ini dari versi Rosegarden ya
     <message>
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="300"/>
         <source>Selection must contain only audio or non-audio segments</source>
-        <translation type="unfinished">Seleksi harus mengandung hanya segmen suara atau nonsuara</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="400"/>
@@ -19119,7 +19142,7 @@ Kami menyarankan supaya Anda menyimpan ulang berkas ini dari versi Rosegarden ya
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="597"/>
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="736"/>
         <source>No non-audio segments selected</source>
-        <translation type="unfinished">Tak ada segmen nonsuara yang dipilih</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="814"/>
@@ -19130,7 +19153,7 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
     <message>
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1505"/>
         <source>importing a remote audio file</source>
-        <translation type="unfinished">Mengimpor berkas suara...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1507"/>
@@ -19140,7 +19163,7 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
     <message>
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1511"/>
         <source>Adding audio file...</source>
-        <translation type="unfinished">Menambah berkas suara...</translation>
+        <translation>Menambah berkas suara...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1537"/>
@@ -19151,12 +19174,12 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
     <message>
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1553"/>
         <source>Generating audio preview...</source>
-        <translation type="unfinished">Megenerasikan pratampil suara...</translation>
+        <translation>Membuat pratampil suara...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1563"/>
         <source>Try copying this file to a directory where you have write permission and re-add it</source>
-        <translation type="unfinished">Cobalah untuk menyalin berkas ini ke direktori di mana Anda memiliki akses menulis dan tambahkan ulang berkasi ini</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -19174,27 +19197,27 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="309"/>
         <source>Special Parameters</source>
-        <translation type="unfinished">Parameter Khusus</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="355"/>
         <source>Starting sequence manager...</source>
-        <translation type="unfinished">Memulai manajer sekuenser...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="398"/>
         <source>Clearing studio data...</source>
-        <translation type="unfinished">Membersihkan data studio...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="417"/>
         <source>Starting...</source>
-        <translation type="unfinished"></translation>
+        <translation>Memulai...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="809"/>
         <source>  Zoom:  </source>
-        <translation type="unfinished">  Zum:  </translation>
+        <translation>  Zum:  </translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="945"/>
@@ -19202,29 +19225,28 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1598"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2048"/>
         <source>%1 - %2</source>
-        <translation type="unfinished">%1 - %2.%3%4</translation>
+        <translation>%1 - %2</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1305"/>
         <source>File &quot;%1&quot; does not exist</source>
-        <translation type="unfinished">Berkas &quot;%1&quot; tidak ada</translation>
+        <translation>Berkas &quot;%1&quot; tidak ada</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1311"/>
         <source>File &quot;%1&quot; is actually a directory</source>
-        <translation type="unfinished">Berkas &quot;%1&quot; sebenarnya adalah direktori</translation>
+        <translation>Berkas &quot;%1&quot; sebenarnya direktori</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1320"/>
         <source>You do not have read permission for &quot;%1&quot;</source>
-        <translation type="unfinished">Anda tidak memiliki izin menulis untuk &quot;%1&quot;</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1397"/>
         <source>An auto-save file for this document has been found
 Do you want to open it instead ?</source>
-        <translation type="unfinished">Berkas simpan-otomatis untuk dukumen ini telah ditemukan
-Apakah Anda hendak membukanya?</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1544"/>
@@ -19250,12 +19272,12 @@ Error was : %2</source>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1646"/>
         <source>Opening a new application window...</source>
-        <translation type="unfinished">Membuka jendela aplikasi yang baru...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1657"/>
         <source>Creating new document...</source>
-        <translation type="unfinished">Membuat dokumen yang baru...</translation>
+        <translation>Membuat dokumen baru...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1722"/>
@@ -19267,12 +19289,12 @@ Error was : %2</source>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1756"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1862"/>
         <source>Opening file...</source>
-        <translation type="unfinished">Membuka berkas...</translation>
+        <translation>Membuka berkas...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1783"/>
         <source>All supported files</source>
-        <translation type="unfinished"></translation>
+        <translation>Semua berkas yang didukung</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1784"/>
@@ -19286,7 +19308,7 @@ Error was : %2</source>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3466"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3502"/>
         <source>MIDI files</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Berkas MIDI</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1786"/>
@@ -19307,23 +19329,23 @@ Error was : %2</source>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4798"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7564"/>
         <source>All files</source>
-        <translation type="unfinished">Semua berkas</translation>
+        <translation>Semua berkas</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1782"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1817"/>
         <source>Open File</source>
-        <translation type="unfinished">Buka Berkas</translation>
+        <translation>Buka Berkas</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="773"/>
         <source>Ctrl+R</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+R</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1687"/>
         <source>%1%2 - %3</source>
-        <translation type="unfinished"></translation>
+        <translation>%1%2 - %3</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1736"/>
@@ -19377,22 +19399,26 @@ Error was : %2</source>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2010"/>
         <source>Save as...</source>
-        <translation type="unfinished">Menyimpan sebagai...</translation>
+        <translation>Simpan sebagai...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2064"/>
         <source>Closing file...</source>
-        <translation type="unfinished">Menutup berkas...</translation>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Printing...</source>
+        <translation type="obsolete">Mencetak...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2077"/>
         <source>Exiting...</source>
-        <translation type="unfinished">Keluar...</translation>
+        <translation>Keluar...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2089"/>
         <source>Cutting selection...</source>
-        <translation type="unfinished">Memotong seleksi...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2101"/>
@@ -19417,42 +19443,40 @@ Error was : %2</source>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2270"/>
         <source>This function needs no more than one segment to be selected.</source>
-        <translation type="unfinished">Fungsi ini memerlukan tidak lebih dari satu segmen yang dipilih.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2294"/>
         <source>Can&apos;t join Audio segments</source>
-        <translation type="unfinished">Tak dapat menggabungkan segmen Suara</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2348"/>
         <source>rescaling an audio file</source>
-        <translation type="unfinished">menskalakan ulang berkas suara</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2365"/>
         <source>Rescaling audio file...</source>
-        <translation type="unfinished">Menskala ulang berkas suara...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2378"/>
         <source>Generating audio preview...</source>
-        <translation type="unfinished">Megenerasikan pratampil suara...</translation>
+        <translation type="unfinished">Membuat pratampil suara...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2408"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4949"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Peringatan</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2409"/>
         <source>The audio file path does not exist or is not writable.
 You must set the audio file path to a valid directory in Document Properties before %1.
 Would you like to set it now?</source>
-        <translation type="unfinished">Jalur berkas suara tidak ada atau tidak bisa ditulis.
-Anda harus mengeset jalur berkas suara pada direktori yang benar dalam Properti Dokumen sebelum %1.
-Apakah Anda hendak mengesetnya sekarang?</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2479"/>
@@ -19484,12 +19508,12 @@ Apakah Anda hendak mengesetnya sekarang?</translation>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2699"/>
         <source>Segment Duration</source>
-        <translation type="unfinished">Durasi Segmen</translation>
+        <translation>Durasi Segmen</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2711"/>
         <source>Set Segment Durations</source>
-        <translation type="unfinished">Atur Durasi Segmen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2712"/>
@@ -19500,7 +19524,7 @@ Apakah Anda hendak mengesetnya sekarang?</translation>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2822"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5576"/>
         <source>Set Global Tempo</source>
-        <translation type="unfinished">Atur Tempo Global</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2889"/>
@@ -19554,7 +19578,7 @@ Apakah Anda hendak mengesetnya sekarang?</translation>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3149"/>
         <source>Join tool not yet implemented</source>
-        <translation type="unfinished">Perkakas gabung (join) belum diimplementasikan</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3394"/>
@@ -19564,17 +19588,12 @@ Apakah Anda hendak mengesetnya sekarang?</translation>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3413"/>
         <source>Import Rosegarden Project File</source>
-        <translation type="unfinished">Impor Berkas Proyek Rosegarden</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3414"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4533"/>
         <source>Rosegarden Project files</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5921"/>
-        <source>&lt;qt&gt;&lt;p&gt;You must choose a filename for this composition before recording audio.&lt;/p&gt;&lt;p&gt;Audio files will be saved to &lt;b&gt;%1&lt;/b&gt; as &lt;b&gt;rg-[&lt;i&gt;filename&lt;/i&gt;]-[&lt;i&gt;instrument&lt;/i&gt;]-&lt;i&gt;date&lt;/i&gt;_&lt;i&gt;time&lt;/i&gt;-&lt;i&gt;n&lt;/i&gt;.wav&lt;/b&gt;.  You may wish to rename audio instruments before recording as well.  For more information, please see the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/doc:audio-filenames-en&quot;&gt;Rosegarden Wiki&lt;/a&gt;.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -19585,13 +19604,13 @@ Apakah Anda hendak mengesetnya sekarang?</translation>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7334"/>
         <source>http://rosegardenmusic.com/wiki/doc:manual-en</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">http://rosegardenmusic.com/wiki/doc:manual-en</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5917"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7361"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7816"/>
@@ -19606,27 +19625,27 @@ Apakah Anda hendak mengesetnya sekarang?</translation>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3465"/>
         <source>Open MIDI File</source>
-        <translation type="unfinished">Membuka Berkas MIDI</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3501"/>
         <source>Merge MIDI File</source>
-        <translation type="unfinished">Menggabung Berkas MIDI</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3628"/>
         <source>Importing MIDI file...</source>
-        <translation type="unfinished">Mengimpor berkas MIDI...</translation>
+        <translation>Mengimpor berkas MIDI...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3664"/>
         <source>Calculating notation...</source>
-        <translation type="unfinished">Menkalkulasi notasi...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3712"/>
         <source>Calculate Notation</source>
-        <translation type="unfinished">Menkalkulasi Notasi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3756"/>
@@ -19654,17 +19673,17 @@ Apakah Anda hendak mengesetnya sekarang?</translation>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3882"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3917"/>
         <source>Open Hydrogen File</source>
-        <translation type="unfinished">Buka Berkas Hydrogen</translation>
+        <translation>Buka Berkas Hydrogen</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3950"/>
         <source>Importing Hydrogen file...</source>
-        <translation type="unfinished">Mengimpor berkas Hydrogen...</translation>
+        <translation>Mengimpor berkas Hydrogen...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3976"/>
         <source>Can&apos;t load Hydrogen file.  It appears to be corrupted.</source>
-        <translation type="unfinished">Tak dapat memuat berkas Hydrogen.  Berkas tersebut sepertinya rusak.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Export and import of Rosegarden Project files</source>
@@ -19691,8 +19710,7 @@ Apakah Anda hendak mengesetnya sekarang?</translation>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4514"/>
         <source>The Rosegarden sequencer process has exited unexpectedly.  Sound and recording will no longer be available for this session.
 Please exit and restart Rosegarden to restore sound capability.</source>
-        <translation type="unfinished">Proses sekuenser Rosegarden telah mati tanpa terduga.  Fungsi suara dan perekaman tidak dapat tersedia bagi sesi kali ini.
-Silakan untuk keluar dan menjalankan kembali Rosegarden untuk mengembalikan kemampuan suaranya.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2004"/>
@@ -19709,13 +19727,12 @@ Silakan untuk keluar dan menjalankan kembali Rosegarden untuk mengembalikan kema
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4518"/>
         <source>The Rosegarden sequencer could not be started, so sound and recording will be unavailable for this session.
 For assistance with correct audio and MIDI configuration, go to http://rosegardenmusic.com.</source>
-        <translation type="unfinished">Sekuenser Rosegarden tidak dapat dijalankan, sehingga fungsi suara dan perekaman tidak akan tersedia untuk sesi ini.
-Untuk asistensi dengan suara dan konfigurasi MIDI yang tepat, kunjungilah http://rosegardenmusic.com.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4530"/>
         <source>Exporting Rosegarden Project file...</source>
-        <translation type="unfinished">Mengekspor berkas Proyek Rosegarden...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4535"/>
@@ -19725,18 +19742,18 @@ Untuk asistensi dengan suara dan konfigurasi MIDI yang tepat, kunjungilah http:/
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4689"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4799"/>
         <source>Export as...</source>
-        <translation type="unfinished">Diekspor sebagai...</translation>
+        <translation>Ekspor sebagai...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4554"/>
         <source>Saving Rosegarden file to package failed: %1</source>
-        <translation type="unfinished">Gagal menyimpan berkas Rosegarden ke paket: %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4569"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4585"/>
         <source>Exporting MIDI file...</source>
-        <translation type="unfinished">Mengekspor berkas MIDI...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4572"/>
@@ -19756,7 +19773,7 @@ Untuk asistensi dengan suara dan konfigurasi MIDI yang tepat, kunjungilah http:/
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4611"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4627"/>
         <source>Exporting Csound score file...</source>
-        <translation type="unfinished">Mengekspor berkas skor Csound...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4614"/>
@@ -19767,7 +19784,7 @@ Untuk asistensi dengan suara dan konfigurasi MIDI yang tepat, kunjungilah http:/
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4648"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4663"/>
         <source>Exporting Mup file...</source>
-        <translation type="unfinished">Mengekspor berkas Mup...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4651"/>
@@ -19783,12 +19800,12 @@ Untuk asistensi dengan suara dan konfigurasi MIDI yang tepat, kunjungilah http:/
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4687"/>
         <source>LilyPond files</source>
-        <translation type="unfinished">Berkas Lilypond</translation>
+        <translation>Berkas Lilypond</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4701"/>
         <source>Printing with LilyPond...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mencetak dengan LilyPond...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4717"/>
@@ -19809,12 +19826,12 @@ Untuk asistensi dengan suara dan konfigurasi MIDI yang tepat, kunjungilah http:/
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4794"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4810"/>
         <source>Exporting MusicXML file...</source>
-        <translation type="unfinished">Mengekspor berkas MusicXML...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4797"/>
         <source>XML files</source>
-        <translation type="unfinished">Berkas XML</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4950"/>
@@ -19833,9 +19850,7 @@ Would you like to set it now?</source>
         <source>The audio file path does not exist or is not writable.
 Please set the audio file path to a valid directory in Document Properties before you start to record audio.
 Would you like to set it now?</source>
-        <translation type="unfinished">Jalur berkas suara tidak ada atau tidak bisa ditulis.
-Silakan untuk mengeset jalur berkas suara pada direktori yang benar di dalam Properti Dokumen sebelum Anda memulai untuk merekam suara.
-Apakah Anda hendak mengesetnya sekarang?</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5480"/>
@@ -19845,12 +19860,12 @@ Apakah Anda hendak mengesetnya sekarang?</translation>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5494"/>
         <source>%1%</source>
-        <translation type="unfinished">%1%</translation>
+        <translation>%1%</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5562"/>
         <source>Replace Tempo Change at %1</source>
-        <translation type="unfinished">Ganti Perubahan Tempo pada %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5592"/>
@@ -19860,42 +19875,47 @@ Apakah Anda hendak mengesetnya sekarang?</translation>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5615"/>
         <source>Move Tempo Change</source>
-        <translation type="unfinished">PIndahkan Perubahan Tempo</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5650"/>
         <source>new marker</source>
-        <translation type="unfinished">Sisip Penanda</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5651"/>
         <source>no description</source>
-        <translation type="unfinished">Deskripsi:</translation>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5921"/>
+        <source>&lt;qt&gt;&lt;p&gt;You must choose a filename for this composition before recording audio.&lt;/p&gt;&lt;p&gt;Audio files will be saved to &lt;b&gt;%1&lt;/b&gt; as &lt;b&gt;rg-[&lt;i&gt;filename&lt;/i&gt;]-[&lt;i&gt;instrument&lt;/i&gt;]-&lt;i&gt;date&lt;/i&gt;_&lt;i&gt;time&lt;/i&gt;-&lt;i&gt;n&lt;/i&gt;.wav&lt;/b&gt;.  You may wish to rename audio instruments before recording as well.  For more information, please see the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/doc:audio-filenames-en&quot;&gt;Rosegarden Wiki&lt;/a&gt;.&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6135"/>
         <source>Sequencer failed to add audio file %1</source>
-        <translation type="unfinished">Sekuenser gagal menambahkan berkas suara %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6148"/>
         <source>Sequencer failed to remove audio file id %1</source>
-        <translation type="unfinished">Sekuenser gagal membuang berkas suara %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6203"/>
         <source>Modify Segment label</source>
-        <translation type="unfinished">Ubah label Segmen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6205"/>
         <source>Modify Segments label</source>
-        <translation type="unfinished">Ubah label Segmen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6207"/>
         <source>Relabelling selection...</source>
-        <translation type="unfinished">Melabeli ulang seleksi...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6220"/>
@@ -19905,17 +19925,17 @@ Apakah Anda hendak mengesetnya sekarang?</translation>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7297"/>
         <source>Play List</source>
-        <translation type="unfinished">Daftar Main</translation>
+        <translation>Daftar Main</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7341"/>
         <source>http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</source>
-        <translation type="unfinished"></translation>
+        <translation>http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7348"/>
         <source>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</source>
-        <translation type="unfinished">http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</translation>
+        <translation>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7446"/>
@@ -19925,12 +19945,12 @@ Apakah Anda hendak mengesetnya sekarang?</translation>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7505"/>
         <source>Are you sure you want to save this as your default studio?</source>
-        <translation type="unfinished">Apakah Anda yakin untuk menyimpan ini sebagai studio utama Anda?</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7511"/>
         <source>Saving current document as default studio...</source>
-        <translation type="unfinished">Menyimpan dokumen saat ini sebagai studio utama...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7523"/>
@@ -19946,17 +19966,17 @@ Error was : %2</source>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7536"/>
         <source>Are you sure you want to import your default studio and lose the current one?</source>
-        <translation type="unfinished">Apakah Anda yakin untuk mengimpor studio utama Anda dan kehilangan studio saat ini?</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7563"/>
         <source>Import Studio from File</source>
-        <translation type="unfinished">Mengimpor Studio dari Berkas</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7608"/>
         <source>Import Studio</source>
-        <translation type="unfinished">Impor Studio</translation>
+        <translation>Impor Studio</translation>
     </message>
 </context>
 <context>
@@ -19969,12 +19989,12 @@ Error was : %2</source>
     <message>
         <location filename="../../src/gui/widgets/Rotary.cpp" line="430"/>
         <source>Select a new value</source>
-        <translation type="unfinished">Pilih nilai baru</translation>
+        <translation>Pilih nilai baru</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/Rotary.cpp" line="431"/>
         <source>Enter a new value</source>
-        <translation type="unfinished">Masukkan nilai baru</translation>
+        <translation>Masukkan nilai baru</translation>
     </message>
 </context>
 <context>
@@ -19987,7 +20007,7 @@ Error was : %2</source>
     <message>
         <location filename="../../src/commands/segment/SegmentAutoSplitCommand.cpp" line="143"/>
         <source>(part %1)</source>
-        <translation type="unfinished">%1 (bagian)</translation>
+        <translation>(bagian %1)</translation>
     </message>
 </context>
 <context>
@@ -20021,12 +20041,12 @@ Error was : %2</source>
     <message>
         <location filename="../../src/commands/segment/SegmentColourCommand.h" line="47"/>
         <source>Change Segment Color...</source>
-        <translation type="unfinished">Ubah Warna Segmen...</translation>
+        <translation>Ubah Warna Segmen...</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/SegmentColourCommand.cpp" line="32"/>
         <source>Change Segment Color</source>
-        <translation type="unfinished">Ubah Warna Segmen</translation>
+        <translation>Ubah Warna Segmen</translation>
     </message>
 </context>
 <context>
@@ -20034,12 +20054,12 @@ Error was : %2</source>
     <message>
         <location filename="../../src/commands/segment/SegmentColourMapCommand.h" line="47"/>
         <source>Change Segment Color Map...</source>
-        <translation type="unfinished">Ubah Peta Warna Segmen...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/SegmentColourMapCommand.cpp" line="33"/>
         <source>Change Segment Color Map</source>
-        <translation type="unfinished">Ubah Peta Warna Segmen</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -20047,7 +20067,7 @@ Error was : %2</source>
     <message>
         <location filename="../../src/commands/segment/SegmentCommandRepeat.cpp" line="31"/>
         <source>Repeat Segments</source>
-        <translation type="unfinished">Ulang Segmen</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -20056,7 +20076,7 @@ Error was : %2</source>
         <location filename="../../src/commands/segment/SegmentEraseCommand.cpp" line="32"/>
         <location filename="../../src/commands/segment/SegmentEraseCommand.cpp" line="44"/>
         <source>Erase Segment</source>
-        <translation type="unfinished">Hapus Segmen</translation>
+        <translation>Hapus Segmen</translation>
     </message>
 </context>
 <context>
@@ -20064,7 +20084,7 @@ Error was : %2</source>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentEraser.cpp" line="75"/>
         <source>Click on a segment to delete it</source>
-        <translation type="unfinished">Klik [ada segmen untuk menghapusnya</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -20073,7 +20093,7 @@ Error was : %2</source>
         <location filename="../../src/commands/segment/SegmentInsertCommand.cpp" line="37"/>
         <location filename="../../src/commands/segment/SegmentInsertCommand.cpp" line="50"/>
         <source>Create Segment</source>
-        <translation type="unfinished">Buat Segmen</translation>
+        <translation>Buat Segmen</translation>
     </message>
 </context>
 <context>
@@ -20081,7 +20101,7 @@ Error was : %2</source>
     <message>
         <location filename="../../src/commands/segment/SegmentJoinCommand.h" line="48"/>
         <source>&amp;Join</source>
-        <translation type="unfinished">&amp;Gabung</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -20089,12 +20109,12 @@ Error was : %2</source>
     <message>
         <location filename="../../src/commands/segment/SegmentLabelCommand.h" line="47"/>
         <source>Re&amp;label...</source>
-        <translation type="unfinished">Labeli Ulang...</translation>
+        <translation>&amp;Labeli Ulang...</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/SegmentLabelCommand.cpp" line="33"/>
         <source>Label Segments</source>
-        <translation type="unfinished">Label Segmen</translation>
+        <translation>Label Segmen</translation>
     </message>
 </context>
 <context>
@@ -20102,22 +20122,22 @@ Error was : %2</source>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentMover.cpp" line="155"/>
         <source>Move Segment</source>
-        <translation type="unfinished">Memindah Segmen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentMover.cpp" line="155"/>
         <source>Move Segments</source>
-        <translation type="unfinished">Memindah Segmen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentMover.cpp" line="224"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
-        <translation type="unfinished">Tahan Shift untuk menghindari pengancingan pada jejaring ketukan</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentMover.cpp" line="338"/>
         <source>Click and drag to move a segment</source>
-        <translation type="unfinished">Klik dan seret untuk memindah segmen</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -20125,17 +20145,17 @@ Error was : %2</source>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="84"/>
         <source>Segment</source>
-        <translation type="unfinished">Segmen</translation>
+        <translation>Segmen</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="85"/>
         <source>Segment Parameters</source>
-        <translation type="unfinished">Parameter Segmen</translation>
+        <translation>Parameter Segmen</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="126"/>
         <source>Label</source>
-        <translation type="unfinished">Label</translation>
+        <translation>Label</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="127"/>
@@ -20145,7 +20165,7 @@ Error was : %2</source>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="128"/>
         <source>Quantize</source>
-        <translation type="unfinished">Kuantisasi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="129"/>
@@ -20160,12 +20180,12 @@ Error was : %2</source>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="131"/>
         <source>Color</source>
-        <translation type="unfinished">Warna</translation>
+        <translation>Warna</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="146"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Sunting</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="148"/>
@@ -20201,62 +20221,62 @@ Error was : %2</source>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="333"/>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="685"/>
         <source>%1 ms</source>
-        <translation type="unfinished">%1 ms</translation>
+        <translation>%1 md</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="400"/>
         <source>Default</source>
-        <translation type="unfinished"></translation>
+        <translation>Baku</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="416"/>
         <source>Add New Color</source>
-        <translation type="unfinished">Tambah Warna Baru</translation>
+        <translation>Tambah Warna Baru</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="882"/>
         <source>New Color Name</source>
-        <translation type="unfinished">Nama Warna Baru</translation>
+        <translation>Nama Warna Baru</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="883"/>
         <source>Enter new name</source>
-        <translation type="unfinished">Masukkan nama baru</translation>
+        <translation>Masukkan nama baru</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="885"/>
         <source>New</source>
-        <translation type="unfinished">Baru</translation>
+        <translation>Baru</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="922"/>
         <source>Highest playable note</source>
-        <translation type="unfinished">Not tertinggi yang dapat dimainkan</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="942"/>
         <source>Lowest playable note</source>
-        <translation type="unfinished">Not terendah yang dapat dimainkan</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="973"/>
         <source>Modify Segment label</source>
-        <translation type="unfinished">Ubah label Segmen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="974"/>
         <source>Modify Segments label</source>
-        <translation type="unfinished">Ubah label Segmen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="986"/>
         <source>Enter new label:</source>
-        <translation type="unfinished"></translation>
+        <translation>Berikan label baru:</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1052"/>
         <source>Instrument</source>
-        <translation type="unfinished">Instrumen</translation>
+        <translation>Instrumen</translation>
     </message>
 </context>
 <context>
@@ -20264,17 +20284,17 @@ Error was : %2</source>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentPencil.cpp" line="219"/>
         <source>Hold Shift to avoid snapping to bar lines</source>
-        <translation type="unfinished">Tahan Shift untuk menghindari dikancingkannya pada baris bar</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentPencil.cpp" line="277"/>
         <source>Record or drop audio here</source>
-        <translation type="unfinished">Rekam atau jatuhkan suara di sini</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentPencil.cpp" line="283"/>
         <source>Click and drag to draw an empty segment.  Control+Alt click and drag to draw in overlap mode.</source>
-        <translation type="unfinished">Klik dan seret untuk memilih segmen; klik tombol tengah dan seret untuk membuat segmen kosong</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -20282,12 +20302,12 @@ Error was : %2</source>
     <message>
         <location filename="../../src/commands/segment/SegmentQuickCopyCommand.h" line="50"/>
         <source>Quick-Copy Segment</source>
-        <translation type="unfinished">Salin-Cepat Segmen</translation>
+        <translation>Salin-Cepat Segmen</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/SegmentQuickCopyCommand.cpp" line="52"/>
         <source>(copied)</source>
-        <translation type="unfinished">(disalin)</translation>
+        <translation>(disalin)</translation>
     </message>
 </context>
 <context>
@@ -20295,7 +20315,7 @@ Error was : %2</source>
     <message>
         <location filename="../../src/commands/segment/SegmentRecordCommand.cpp" line="30"/>
         <source>Record</source>
-        <translation type="unfinished">Rekam</translation>
+        <translation>Rekam</translation>
     </message>
 </context>
 <context>
@@ -20316,7 +20336,7 @@ Error was : %2</source>
     <message>
         <location filename="../../src/commands/segment/SegmentRescaleCommand.cpp" line="97"/>
         <source>(rescaled)</source>
-        <translation type="unfinished">(diskala ulang)</translation>
+        <translation>(diubah skala)</translation>
     </message>
 </context>
 <context>
@@ -20324,7 +20344,7 @@ Error was : %2</source>
     <message>
         <location filename="../../src/commands/segment/SegmentResizeFromStartCommand.cpp" line="31"/>
         <source>Resize Segment</source>
-        <translation type="unfinished">Ukur Ulang Segmen</translation>
+        <translation>Ubah Ukuran Segmen</translation>
     </message>
 </context>
 <context>
@@ -20332,7 +20352,7 @@ Error was : %2</source>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="148"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Peringatan</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="149"/>
@@ -20344,32 +20364,32 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="165"/>
         <source>Rescaling audio file...</source>
-        <translation type="unfinished">Menskala ulang berkas suara...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="174"/>
         <source>Generating audio preview...</source>
-        <translation type="unfinished">Megenerasikan pratampil suara...</translation>
+        <translation type="unfinished">Membuat pratampil suara...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="252"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
-        <translation type="unfinished">Tahan Shift untuk menghindari pengancingan pada jejaring ketukan</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="258"/>
         <source>Hold Shift to avoid snapping to beat grid; hold Ctrl as well to rescale contents</source>
-        <translation type="unfinished">Tahan Shift agar tidak terkancing ke jejaring ketukan; tahan Ctrl untuk menskala ulang isinya</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="381"/>
         <source>Click and drag to resize a segment; hold Ctrl as well to rescale its contents</source>
-        <translation type="unfinished">Klik dan seret untuk mengubah ukuran segmen; tahan Ctrl untuk menskala ulang isinya</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="383"/>
         <source>Click and drag to rescale segment</source>
-        <translation type="unfinished">Klik dan seret untuk menskala ulang segmen</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -20377,7 +20397,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="75"/>
         <source>Click and drag to select segments</source>
-        <translation type="unfinished">Klik dan seret untuk memilih segmen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="242"/>
@@ -20389,42 +20409,42 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="384"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
-        <translation type="unfinished">Tahan Shift untuk menghindari pengancingan pada jejaring ketukan</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="492"/>
         <source>Click and drag to select segments; middle-click and drag to draw an empty segment</source>
-        <translation type="unfinished">Klik dan seret untuk memilih segmen; klik tombol tengah dan seret untuk membuat segmen kosong</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="509"/>
         <source>Click and drag to resize a segment; hold Ctrl as well to rescale its contents</source>
-        <translation type="unfinished">Klik dan seret untuk mengubah ukuran segmen; tahan Ctrl untuk menskala ulang isinya</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="511"/>
         <source>Click and drag to rescale segment</source>
-        <translation type="unfinished">Klik dan seret untuk menskala ulang segmen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="516"/>
         <source>Click and drag to move segments; hold Ctrl as well to copy them</source>
-        <translation type="unfinished">Klik dan seret untuk memindahkan segmen; tahan Ctrl untuk menyalinnya</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="518"/>
         <source>Click and drag to copy segments</source>
-        <translation type="unfinished">Klik dan seret untuk menyalin segmen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="522"/>
         <source>Click and drag to move segment; hold Ctrl as well to copy it; double-click to edit</source>
-        <translation type="unfinished">Klik dan seret untuk memindahkan segmen; tahan Ctrl untuk menyalinnya; klik ganda untuk menyunting</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="524"/>
         <source>Click and drag to copy segment</source>
-        <translation type="unfinished">Klik dan seret untuk menyalin segmen</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -20445,17 +20465,17 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/commands/segment/SegmentSplitByPitchCommand.cpp" line="42"/>
         <source>Split by Pitch</source>
-        <translation type="unfinished">Bagi oleh Titi Nada</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/SegmentSplitByPitchCommand.cpp" line="166"/>
         <source>(upper)</source>
-        <translation type="unfinished">%1 (atas)</translation>
+        <translation>(atas)</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/SegmentSplitByPitchCommand.cpp" line="167"/>
         <source>(lower)</source>
-        <translation type="unfinished">%1 (bawah)</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -20463,18 +20483,18 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/commands/segment/SegmentSplitByRecordingSrcCommand.h" line="44"/>
         <source>Split by &amp;Recording Source...</source>
-        <translation type="unfinished"></translation>
+        <translation>Pisah oleh Sumber &amp;Rekaman...</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/SegmentSplitByRecordingSrcCommand.cpp" line="36"/>
         <source>Split by Recording Source</source>
-        <translation type="unfinished"></translation>
+        <translation>Pisah oleh Sumber Rekaman</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/SegmentSplitByRecordingSrcCommand.cpp" line="114"/>
         <location filename="../../src/commands/segment/SegmentSplitByRecordingSrcCommand.cpp" line="115"/>
         <source>(split)</source>
-        <translation type="unfinished"> (bagi)</translation>
+        <translation>(pisah)</translation>
     </message>
 </context>
 <context>
@@ -20482,13 +20502,13 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/commands/segment/SegmentSplitCommand.cpp" line="35"/>
         <source>Split Segment</source>
-        <translation type="unfinished">Bagi Segmen</translation>
+        <translation>Pisah Segmen</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/SegmentSplitCommand.cpp" line="129"/>
         <location filename="../../src/commands/segment/SegmentSplitCommand.cpp" line="130"/>
         <source>(split)</source>
-        <translation type="unfinished"> (bagi)</translation>
+        <translation>(pisah)</translation>
     </message>
 </context>
 <context>
@@ -20496,7 +20516,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/commands/segment/SegmentSplitTwiceCommand.cpp" line="44"/>
         <source>Split Twice Segment</source>
-        <translation type="unfinished">Bagi Segmen</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -20504,12 +20524,12 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentSplitter.cpp" line="164"/>
         <source>Click on a segment to split it in two; hold Shift to avoid snapping to beat grid</source>
-        <translation type="unfinished">Klik pada segmen untuk memotongnya menjadi dua; tahan Shift agar tidak terkancing ke jejaring ketukan</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentSplitter.cpp" line="166"/>
         <source>Click on a segment to split it in two</source>
-        <translation type="unfinished">Klik pada segmen untuk membaginya menjadi dua</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -20517,7 +20537,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/commands/segment/SegmentSyncClefCommand.cpp" line="27"/>
         <source>Sync segment clef</source>
-        <translation type="unfinished">Label segmen</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -20528,7 +20548,7 @@ Would you like to set it now?</source>
         <location filename="../../src/commands/segment/SegmentSyncCommand.cpp" line="48"/>
         <location filename="../../src/commands/segment/SegmentSyncCommand.cpp" line="56"/>
         <source>Sync segment parameters</source>
-        <translation type="unfinished">Parameter Segmen</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -20536,13 +20556,13 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/commands/segment/SegmentTransposeCommand.h" line="49"/>
         <source>Transpose by &amp;Interval...</source>
-        <translation type="unfinished">Transposisi oleh &amp;Interval...</translation>
+        <translation type="unfinished">Transpose oleh &amp;Interval...</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/SegmentTransposeCommand.cpp" line="29"/>
         <location filename="../../src/commands/segment/SegmentTransposeCommand.cpp" line="35"/>
         <source>Change segment transposition</source>
-        <translation type="unfinished">Mengubah transposisi segmen</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -20550,7 +20570,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/commands/edit/SelectionPropertyCommand.h" line="61"/>
         <source>Set &amp;Property</source>
-        <translation type="unfinished">Atur &amp;Properti</translation>
+        <translation>Atur &amp;Properti</translation>
     </message>
 </context>
 <context>
@@ -20579,12 +20599,12 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="967"/>
         <source>A serious error has occurred in the ALSA MIDI subsystem.  It may not be possible to continue sequencing.  Please check console output for more information.</source>
-        <translation type="unfinished">Kesalahan serius telah terjadi pada subsistem MIDI ALSA.  Tidak mungkin untuk dapat melanjutkan sekuensi.  Silakan periksa keluaran konsol untuk informasi lebih lanjut.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="993"/>
         <source>JACK Audio subsystem is losing sample frames.</source>
-        <translation type="unfinished">Subsistem Suara JACK kehilangan bingkai-bingkai sampel (sample frame).</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1011"/>
@@ -20649,7 +20669,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1027"/>
         <source>Unknown sequencer failure mode!</source>
-        <translation type="unfinished">Kegagalan mode sekuenser tak dikenal!</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1241"/>
@@ -20662,7 +20682,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/commands/edit/SetLyricsCommand.h" line="45"/>
         <source>Edit L&amp;yrics</source>
-        <translation type="unfinished">Sunting L&amp;irik</translation>
+        <translation>Sunting L&amp;irik</translation>
     </message>
 </context>
 <context>
@@ -20670,7 +20690,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/commands/edit/SetNoteTypeCommand.h" line="51"/>
         <source>&amp;Set Note Type</source>
-        <translation type="unfinished">Atur Jeni&amp;s Not</translation>
+        <translation>Atur Jeni&amp;s Not</translation>
     </message>
 </context>
 <context>
@@ -20686,7 +20706,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/commands/segment/SetTriggerSegmentBasePitchCommand.cpp" line="31"/>
         <source>Set Base Pitch</source>
-        <translation type="unfinished">Atur Titi Nada Dasar</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -20694,7 +20714,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/commands/segment/SetTriggerSegmentBaseVelocityCommand.cpp" line="31"/>
         <source>Set Base Velocity</source>
-        <translation type="unfinished">Atur Kecapatan Dasar</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -20718,7 +20738,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/commands/notation/SetVisibilityCommand.h" line="46"/>
         <source>Set Visibility</source>
-        <translation type="unfinished">Atur Visibilitas (Kenampakan)</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -20726,12 +20746,12 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/ShowSequencerStatusDialog.cpp" line="40"/>
         <source>Sequencer status</source>
-        <translation type="unfinished">Status sekuenser</translation>
+        <translation>Status sekuenser</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ShowSequencerStatusDialog.cpp" line="49"/>
         <source>Sequencer status:</source>
-        <translation type="unfinished">Status sekuenser:</translation>
+        <translation>Status sekuenser:</translation>
     </message>
 </context>
 <context>
@@ -20739,7 +20759,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="65"/>
         <source>Insert Event</source>
-        <translation type="unfinished">Sisip Peristiwa</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="65"/>
@@ -20749,18 +20769,18 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="74"/>
         <source>Event Properties</source>
-        <translation type="unfinished">Properti Peristiwa</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="80"/>
         <source>Event type:</source>
-        <translation type="unfinished">Jenis peristiwa:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="116"/>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="274"/>
         <source>Absolute time:</source>
-        <translation type="unfinished">Waktu absolut:</translation>
+        <translation>Waktu absolut:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="122"/>
@@ -20775,7 +20795,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="131"/>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="280"/>
         <source>Duration:</source>
-        <translation type="unfinished">Durasi:</translation>
+        <translation>Durasi:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="146"/>
@@ -20786,7 +20806,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="161"/>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="358"/>
         <source>Controller name:</source>
-        <translation type="unfinished">Nama kontroler:</translation>
+        <translation>Nama kontroler:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="162"/>
@@ -20796,32 +20816,32 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="658"/>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="689"/>
         <source>&lt;none&gt;</source>
-        <translation type="unfinished">&lt;nihil&gt;</translation>
+        <translation>&lt;nihil&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="168"/>
         <source>Velocity:</source>
-        <translation type="unfinished">Kecepatan:</translation>
+        <translation type="unfinished">Velositas:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="179"/>
         <source>Meta string:</source>
-        <translation type="unfinished">String meta:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="184"/>
         <source>Load data</source>
-        <translation type="unfinished">Memuat data</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="186"/>
         <source>Save data</source>
-        <translation type="unfinished">Menyimpan data</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="198"/>
         <source>Notation Properties</source>
-        <translation type="unfinished">Properti Notasi</translation>
+        <translation>Properti Notasi</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="205"/>
@@ -20831,62 +20851,62 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="212"/>
         <source>Notation time:</source>
-        <translation type="unfinished">Waktu notasi:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="227"/>
         <source>Notation duration:</source>
-        <translation type="unfinished">Durasi notasi:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="316"/>
         <source>Note pitch:</source>
-        <translation type="unfinished">Titi nada not:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="324"/>
         <source>Note velocity:</source>
-        <translation type="unfinished">Velositas not:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="352"/>
         <source>Controller number:</source>
-        <translation type="unfinished">Nomor/angka kontroler:</translation>
+        <translation type="unfinished">Nomor kontroler:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="361"/>
         <source>Controller value:</source>
-        <translation type="unfinished">Nilai kontroler:</translation>
+        <translation>Nilai kontroler:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="391"/>
         <source>Key pitch:</source>
-        <translation type="unfinished">Titi nada kunci:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="399"/>
         <source>Key pressure:</source>
-        <translation type="unfinished">Tekanan kunci:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="429"/>
         <source>Channel pressure:</source>
-        <translation type="unfinished">Tekanan kanal:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="462"/>
         <source>Program change:</source>
-        <translation type="unfinished">Perubahan program:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="507"/>
         <source>Data length:</source>
-        <translation type="unfinished">Panjang data:</translation>
+        <translation>Panjang data:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="508"/>
         <source>Data:</source>
-        <translation type="unfinished">Data:</translation>
+        <translation>Data:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="528"/>
@@ -20901,17 +20921,17 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="573"/>
         <source>Indication:</source>
-        <translation type="unfinished">Indikasi:</translation>
+        <translation>Indikasi:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="605"/>
         <source>Text type:</source>
-        <translation type="unfinished">Jenis teks:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="606"/>
         <source>Text:</source>
-        <translation type="unfinished">Teks:</translation>
+        <translation>Teks:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="652"/>
@@ -20921,12 +20941,12 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="683"/>
         <source>Key name:</source>
-        <translation type="unfinished">Nama kunci:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="736"/>
         <source>Unsupported event type:</source>
-        <translation type="unfinished">Jenis peristiwa yang tidak didukung:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="993"/>
@@ -20941,22 +20961,22 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="1017"/>
         <source>Edit Duration</source>
-        <translation type="unfinished">Sunting Durasi</translation>
+        <translation>Sunting Durasi</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="1030"/>
         <source>Edit Notation Duration</source>
-        <translation type="unfinished">Sunting Durasi Notasi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="1043"/>
         <source>Edit Pitch</source>
-        <translation type="unfinished">Sunting Titi Nada</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="1052"/>
         <source>Load System Exclusive data in File</source>
-        <translation type="unfinished">Muatkan data Eksklusif Sistem dalam Berkas</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="1053"/>
@@ -20966,17 +20986,17 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="1054"/>
         <source>All files</source>
-        <translation type="unfinished">Semua berkas</translation>
+        <translation>Semua berkas</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="1083"/>
         <source>*.syx|System exclusive files (*.syx)</source>
-        <translation type="unfinished">*.syx|Berkas eksklusif sistem (*.syx)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="1082"/>
         <source>Save System Exclusive data to...</source>
-        <translation type="unfinished">Simpan data Eksklusif Sistem ke...</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -20984,17 +21004,17 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/SplitByPitchDialog.cpp" line="42"/>
         <source>Split by Pitch</source>
-        <translation type="unfinished">Bagi oleh Titi Nada</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SplitByPitchDialog.cpp" line="59"/>
         <source>Starting split pitch</source>
-        <translation type="unfinished">Memulai membagi titi nada</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SplitByPitchDialog.cpp" line="62"/>
         <source>Range up and down to follow music</source>
-        <translation type="unfinished">Jangkauan naik dan turun mengikuti musik</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SplitByPitchDialog.cpp" line="68"/>
@@ -21027,33 +21047,33 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/SplitByRecordingSrcDialog.cpp" line="46"/>
         <source>Split by Recording Source</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pisah oleh Sumber Rekaman</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SplitByRecordingSrcDialog.cpp" line="55"/>
         <source>Recording Source</source>
-        <translation type="unfinished">Sumber Merekam</translation>
+        <translation>Sumber Merekam</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SplitByRecordingSrcDialog.cpp" line="62"/>
         <source>Channel:</source>
-        <translation type="unfinished">Kanal:</translation>
+        <translation>Kanal:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SplitByRecordingSrcDialog.cpp" line="69"/>
         <location filename="../../src/gui/dialogs/SplitByRecordingSrcDialog.cpp" line="80"/>
         <source>any</source>
-        <translation type="unfinished">apa saja</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SplitByRecordingSrcDialog.cpp" line="74"/>
         <source>Device:</source>
-        <translation type="unfinished">Perangkat:</translation>
+        <translation>Perangkat:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SplitByRecordingSrcDialog.cpp" line="95"/>
         <source>No connection</source>
-        <translation type="unfinished">Tak ada koneksi</translation>
+        <translation>Tidak ada koneksi</translation>
     </message>
 </context>
 <context>
@@ -21069,7 +21089,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="132"/>
         <source>Track %1 : &quot;%2&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>Jalur %1 : &quot;%2&quot;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="138"/>
@@ -21079,12 +21099,12 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="140"/>
         <source>normal</source>
-        <translation type="unfinished">Normal</translation>
+        <translation>normal</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="143"/>
         <source>small</source>
-        <translation type="unfinished">semua</translation>
+        <translation>kecil</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="146"/>
@@ -21115,79 +21135,79 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="411"/>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="474"/>
         <source>...</source>
-        <translation type="unfinished">Tambah...</translation>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="527"/>
         <source>C</source>
         <comment>note name</comment>
-        <translation type="unfinished">C</translation>
+        <translation>C</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="528"/>
         <source>C#</source>
         <comment>note name</comment>
-        <translation type="unfinished">C#%1</translation>
+        <translation>C#</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="529"/>
         <source>D</source>
         <comment>note name</comment>
-        <translation type="unfinished">D</translation>
+        <translation>D</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="530"/>
         <source>Eb</source>
         <comment>note name</comment>
-        <translation type="unfinished">E</translation>
+        <translation>Eb</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="531"/>
         <source>E</source>
         <comment>note name</comment>
-        <translation type="unfinished">E</translation>
+        <translation>E</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="532"/>
         <source>F</source>
         <comment>note name</comment>
-        <translation type="unfinished">F</translation>
+        <translation>F</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="533"/>
         <source>F#</source>
         <comment>note name</comment>
-        <translation type="unfinished">F#%1</translation>
+        <translation>F#</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="534"/>
         <source>G</source>
         <comment>note name</comment>
-        <translation type="unfinished">G</translation>
+        <translation>G</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="535"/>
         <source>G#</source>
         <comment>note name</comment>
-        <translation type="unfinished">G#%1</translation>
+        <translation>G#</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="536"/>
         <source>A</source>
         <comment>note name</comment>
-        <translation type="unfinished">A</translation>
+        <translation>A</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="537"/>
         <source>Bb</source>
         <comment>note name</comment>
-        <translation type="unfinished">B</translation>
+        <translation>Bb</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="538"/>
         <source>B</source>
         <comment>note name</comment>
-        <translation type="unfinished">B</translation>
+        <translation>B</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="882"/>
@@ -21290,12 +21310,12 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="649"/>
         <source>%1: %2</source>
-        <translation type="unfinished">%1 (%2)</translation>
+        <translation>%1: %2</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="652"/>
         <source> in %1</source>
-        <translation type="unfinished">Masuk %1</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -21323,7 +21343,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/commands/notation/SymbolInsertionCommand.cpp" line="62"/>
         <source>Insert &amp;Symbol...</source>
-        <translation type="unfinished"></translation>
+        <translation>Sisip &amp;Simbol...</translation>
     </message>
 </context>
 <context>
@@ -21336,22 +21356,22 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/studio/SynthPluginManagerDialog.cpp" line="195"/>
         <source>&lt;none&gt;</source>
-        <translation type="unfinished">&lt;nihil&gt;</translation>
+        <translation>&lt;nihil&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/SynthPluginManagerDialog.cpp" line="219"/>
         <source>Controls</source>
-        <translation type="unfinished">Kontrol</translation>
+        <translation>Kontrol</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/SynthPluginManagerDialog.cpp" line="224"/>
         <source>Editor &gt;&gt;</source>
-        <translation type="unfinished">Penyunting &gt;&gt;</translation>
+        <translation>Penyunting &gt;&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/SynthPluginManagerDialog.cpp" line="250"/>
         <source>http://rosegardenmusic.com/wiki/doc:synth-plugin-manager-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:synth-plugin-manager-en</translation>
     </message>
 </context>
 <context>
@@ -21359,17 +21379,17 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/TempoDialog.cpp" line="56"/>
         <source>Insert Tempo Change</source>
-        <translation type="unfinished">Sisipkan Perubahan Tempo</translation>
+        <translation type="unfinished">Sisip Perubahan Tempo</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TempoDialog.cpp" line="64"/>
         <source>Tempo</source>
-        <translation type="unfinished">Tempo</translation>
+        <translation>Tempo</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TempoDialog.cpp" line="71"/>
         <source>New tempo:</source>
-        <translation type="unfinished">Tempo baru:</translation>
+        <translation>Tempo baru:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TempoDialog.cpp" line="83"/>
@@ -21394,7 +21414,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/TempoDialog.cpp" line="135"/>
         <source>Time of tempo change</source>
-        <translation type="unfinished">Waktu perubahan tempo</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TempoDialog.cpp" line="142"/>
@@ -21404,7 +21424,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/TempoDialog.cpp" line="152"/>
         <source>The pointer is currently at </source>
-        <translation type="unfinished">Penunjuk saat ini berada di </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TempoDialog.cpp" line="179"/>
@@ -21414,27 +21434,27 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/TempoDialog.cpp" line="182"/>
         <source>Replace the last tempo change</source>
-        <translation type="unfinished">Gantikan perubahan tempo terakhir</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TempoDialog.cpp" line="188"/>
         <source>Apply this tempo from the start of this bar</source>
-        <translation type="unfinished">Gunakan tempo berikut mulai dari permulaan bar ini</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TempoDialog.cpp" line="191"/>
         <source>Apply this tempo to the whole composition</source>
-        <translation type="unfinished">Gunakan tempo ini ke semua komposisi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TempoDialog.cpp" line="200"/>
         <source>Also make this the default tempo</source>
-        <translation type="unfinished">Juga jadikan ini sebagai tempo dasar</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TempoDialog.cpp" line="293"/>
         <source>%1.%2 s,</source>
-        <translation type="unfinished">%1.%2 s,</translation>
+        <translation>%1.%2 s,</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TempoDialog.cpp" line="299"/>
@@ -21459,12 +21479,12 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/TempoDialog.cpp" line="347"/>
         <source>There are no other tempo changes.</source>
-        <translation type="unfinished">Tidak ada perubahan tempo yang lain.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TempoDialog.cpp" line="365"/>
         <source> bpm</source>
-        <translation type="unfinished"> bpm</translation>
+        <translation> bpm</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TempoDialog.cpp" line="516"/>
@@ -21477,17 +21497,17 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/rulers/TempoRuler.cpp" line="534"/>
         <source>%1.%2%3 (%4.%5%6 bpm)</source>
-        <translation type="unfinished">%1.%2%3 (%4.%5%6 bpm)</translation>
+        <translation>%1.%2%3 (%4.%5%6 bpm)</translation>
     </message>
     <message>
         <location filename="../../src/gui/rulers/TempoRuler.cpp" line="542"/>
         <source>%1.%2%3 bpm</source>
-        <translation type="unfinished">%1.%2%3 bpm</translation>
+        <translation>%1.%2%3 bpm</translation>
     </message>
     <message>
         <location filename="../../src/gui/rulers/TempoRuler.cpp" line="550"/>
         <source>%1 - %2.%3%4</source>
-        <translation type="unfinished">%1 - %2.%3%4</translation>
+        <translation>%1 - %2.%3%4</translation>
     </message>
 </context>
 <context>
@@ -21495,37 +21515,37 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/editors/tempo/TempoView.cpp" line="73"/>
         <source>Filter</source>
-        <translation type="unfinished"></translation>
+        <translation>Penyaring</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/tempo/TempoView.cpp" line="77"/>
         <source>Tempo</source>
-        <translation type="unfinished">Tempo</translation>
+        <translation>Tempo</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/tempo/TempoView.cpp" line="80"/>
         <source>Time Signature</source>
-        <translation type="unfinished">Paraf Waktu</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/tempo/TempoView.cpp" line="108"/>
         <source>Time  </source>
-        <translation type="unfinished">Waktu  </translation>
+        <translation>Waktu  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/tempo/TempoView.cpp" line="109"/>
         <source>Type  </source>
-        <translation type="unfinished">Jenis  </translation>
+        <translation>Jenis  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/tempo/TempoView.cpp" line="110"/>
         <source>Value  </source>
-        <translation type="unfinished">Nilai  </translation>
+        <translation>Nilai  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/tempo/TempoView.cpp" line="111"/>
         <source>Properties  </source>
-        <translation type="unfinished">Properti  </translation>
+        <translation>Properti  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/tempo/TempoView.cpp" line="199"/>
@@ -21535,12 +21555,12 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/editors/tempo/TempoView.cpp" line="201"/>
         <source>Hidden</source>
-        <translation type="unfinished">Tersembunyi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/tempo/TempoView.cpp" line="204"/>
         <source>Common</source>
-        <translation type="unfinished">Umum</translation>
+        <translation>Umum</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/tempo/TempoView.cpp" line="213"/>
@@ -21550,17 +21570,17 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/editors/tempo/TempoView.cpp" line="238"/>
         <source>%1.%2%3</source>
-        <translation type="unfinished">%1.%2%3</translation>
+        <translation>%1.%2%3</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/tempo/TempoView.cpp" line="248"/>
         <source>%1.%2%3 qpm (%4.%5%6 bpm)   </source>
-        <translation type="unfinished">%1.%2%3 qpm (%4.%5%6 bpm)   </translation>
+        <translation>%1.%2%3 qpm (%4.%5%6 bpm)   </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/tempo/TempoView.cpp" line="257"/>
         <source>Tempo   </source>
-        <translation type="unfinished">Tempo   </translation>
+        <translation>Tempo   </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/tempo/TempoView.cpp" line="264"/>
@@ -21588,7 +21608,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/commands/notation/TextChangeCommand.cpp" line="33"/>
         <source>Edit Text</source>
-        <translation type="unfinished">Sunting Teks</translation>
+        <translation>Sunting Teks</translation>
     </message>
 </context>
 <context>
@@ -21596,72 +21616,72 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="60"/>
         <source>Text</source>
-        <translation type="unfinished">Teks</translation>
+        <translation>Teks</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="67"/>
         <source>Specification</source>
-        <translation type="unfinished">Spesifikasi</translation>
+        <translation>Spesifikasi</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="69"/>
         <source>Preview</source>
-        <translation type="unfinished">Pratampil</translation>
+        <translation>Pratampil</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="82"/>
         <source>Text:  </source>
-        <translation type="unfinished">Teks:  </translation>
+        <translation>Teks:  </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="89"/>
         <source>Style:  </source>
-        <translation type="unfinished">Gaya:  </translation>
+        <translation>Gaya:  </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="116"/>
         <source>Dynamic</source>
-        <translation type="unfinished">Dinamis</translation>
+        <translation>Dinamis</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="119"/>
         <source>Direction</source>
-        <translation type="unfinished">Direksi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="122"/>
         <source>Local Direction</source>
-        <translation type="unfinished">Direksi Lokal</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="125"/>
         <source>Tempo</source>
-        <translation type="unfinished">Tempo</translation>
+        <translation>Tempo</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="128"/>
         <source>Local Tempo</source>
-        <translation type="unfinished">Tempo Lokal</translation>
+        <translation>Tempo Lokal</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="131"/>
         <source>Lyric</source>
-        <translation type="unfinished">Lirik</translation>
+        <translation>Lirik</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="134"/>
         <source>Chord</source>
-        <translation type="unfinished">Padu Nada</translation>
+        <translation>Padu Nada</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="137"/>
         <source>Annotation</source>
-        <translation type="unfinished">Anotasi</translation>
+        <translation>Anotasi</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="140"/>
         <source>LilyPond Directive</source>
-        <translation type="unfinished">Direktif LilyPond</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="164"/>
@@ -21671,72 +21691,72 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="174"/>
         <source>Dynamic:  </source>
-        <translation type="unfinished">Dinamis:  </translation>
+        <translation>Dinamis:  </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="179"/>
         <source>ppp</source>
-        <translation type="unfinished">ppp</translation>
+        <translation>ppp</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="180"/>
         <source>pp</source>
-        <translation type="unfinished">pp</translation>
+        <translation>pp</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="181"/>
         <source>p</source>
-        <translation type="unfinished">p</translation>
+        <translation>p</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="182"/>
         <source>mp</source>
-        <translation type="unfinished">mp</translation>
+        <translation>mp</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="183"/>
         <source>mf</source>
-        <translation type="unfinished">mf</translation>
+        <translation>mf</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="184"/>
         <source>f</source>
-        <translation type="unfinished">f</translation>
+        <translation>f</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="185"/>
         <source>ff</source>
-        <translation type="unfinished">ff</translation>
+        <translation>ff</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="186"/>
         <source>fff</source>
-        <translation type="unfinished">fff</translation>
+        <translation>fff</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="187"/>
         <source>rfz</source>
-        <translation type="unfinished">rfz</translation>
+        <translation>rfz</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="188"/>
         <source>sf</source>
-        <translation type="unfinished">sf</translation>
+        <translation>sf</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="191"/>
         <source>Direction:  </source>
-        <translation type="unfinished">Direksi:  </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="198"/>
         <source>D.C. al Fine</source>
-        <translation type="unfinished">D.C. al Fine</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="199"/>
         <source>D.S. al Fine</source>
-        <translation type="unfinished">D.S. al Fine</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="200"/>
@@ -21746,7 +21766,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="201"/>
         <source>D.S. al Coda</source>
-        <translation type="unfinished">D.S. al Coda</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="202"/>
@@ -21756,12 +21776,12 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="203"/>
         <source>Coda</source>
-        <translation type="unfinished">Coda</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="206"/>
         <source>Local Direction:  </source>
-        <translation type="unfinished">Direksi Lokal:  </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="211"/>
@@ -21771,12 +21791,12 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="212"/>
         <source>ritard.</source>
-        <translation type="unfinished">ritard.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="213"/>
         <source>ralletando</source>
-        <translation type="unfinished">ralletando</translation>
+        <translation>ralletando</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="214"/>
@@ -21786,22 +21806,22 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="215"/>
         <source>legato</source>
-        <translation type="unfinished">legato</translation>
+        <translation>legato</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="216"/>
         <source>simile</source>
-        <translation type="unfinished">simile</translation>
+        <translation>simile</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="217"/>
         <source>pizz.</source>
-        <translation type="unfinished">pizz.</translation>
+        <translation>pizz.</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="218"/>
         <source>arco</source>
-        <translation type="unfinished">arco</translation>
+        <translation>arco</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="219"/>
@@ -21817,146 +21837,146 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="221"/>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="223"/>
         <source>sul tasto</source>
-        <translation type="unfinished">sul tasto</translation>
+        <translation>sul tasto</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="222"/>
         <source>con legno</source>
-        <translation type="unfinished">con legno</translation>
+        <translation>con legno</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="224"/>
         <source>sul G</source>
-        <translation type="unfinished">sul G</translation>
+        <translation>sul G</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="225"/>
         <source>ordinario</source>
-        <translation type="unfinished">ordinario</translation>
+        <translation>ordinario</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="226"/>
         <source>Muta in </source>
-        <translation type="unfinished">Muta in </translation>
+        <translation>Muta in </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="227"/>
         <source>volti subito </source>
-        <translation type="unfinished">volti subito </translation>
+        <translation>volti subito </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="228"/>
         <source>soli</source>
-        <translation type="unfinished">soli</translation>
+        <translation>soli</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="229"/>
         <source>div.</source>
-        <translation type="unfinished">div.</translation>
+        <translation>div.</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="232"/>
         <source>Tempo:  </source>
-        <translation type="unfinished">Tempo:  </translation>
+        <translation>Tempo:  </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="237"/>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="261"/>
         <source>Grave</source>
-        <translation type="unfinished">Grave</translation>
+        <translation>Grave</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="238"/>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="262"/>
         <source>Adagio</source>
-        <translation type="unfinished">Adagio</translation>
+        <translation>Adagio</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="239"/>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="263"/>
         <source>Largo</source>
-        <translation type="unfinished">Largo</translation>
+        <translation>Largo</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="240"/>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="264"/>
         <source>Lento</source>
-        <translation type="unfinished">Lento</translation>
+        <translation>Lento</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="241"/>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="265"/>
         <source>Andante</source>
-        <translation type="unfinished">Andante</translation>
+        <translation>Andante</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="242"/>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="266"/>
         <source>Moderato</source>
-        <translation type="unfinished">Moderato</translation>
+        <translation>Moderato</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="243"/>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="267"/>
         <source>Allegretto</source>
-        <translation type="unfinished">Allegretto</translation>
+        <translation>Allegretto</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="244"/>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="268"/>
         <source>Allegro</source>
-        <translation type="unfinished">Allegro</translation>
+        <translation>Allegro</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="245"/>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="269"/>
         <source>Vivace</source>
-        <translation type="unfinished">Vivace</translation>
+        <translation>Vivace</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="246"/>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="270"/>
         <source>Presto</source>
-        <translation type="unfinished">Presto</translation>
+        <translation>Presto</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="247"/>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="271"/>
         <source>Prestissimo</source>
-        <translation type="unfinished">Prestissimo</translation>
+        <translation>Prestissimo</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="248"/>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="272"/>
         <source>Maestoso</source>
-        <translation type="unfinished">Maestoso</translation>
+        <translation>Maestoso</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="249"/>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="273"/>
         <source>Sostenuto</source>
-        <translation type="unfinished">Sostenuto</translation>
+        <translation>Sostenuto</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="250"/>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="274"/>
         <source>Tempo Primo</source>
-        <translation type="unfinished">Tempo Primo</translation>
+        <translation>Tempo Primo</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="256"/>
         <source>Local Tempo:  </source>
-        <translation type="unfinished">Tempo Local:  </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="277"/>
         <source>Directive:  </source>
-        <translation type="unfinished">Direktif:  </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="333"/>
         <source>Example</source>
-        <translation type="unfinished">Contoh</translation>
+        <translation>Contoh</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="641"/>
@@ -21969,7 +21989,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/commands/notation/TextInsertionCommand.cpp" line="34"/>
         <source>Insert Text</source>
-        <translation type="unfinished">Sisip Teks</translation>
+        <translation>Sisip Teks</translation>
     </message>
 </context>
 <context>
@@ -21977,12 +21997,12 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/widgets/Thumbwheel.cpp" line="266"/>
         <source>Enter new value</source>
-        <translation type="unfinished"></translation>
+        <translation>Masukkan nilai baru</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/Thumbwheel.cpp" line="267"/>
         <source>Enter a new value from %1 to %2:</source>
-        <translation type="unfinished"></translation>
+        <translation>Masukkan nilai baru dari %1 sampai %2:</translation>
     </message>
 </context>
 <context>
@@ -21998,12 +22018,12 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="70"/>
         <source>Time Signature</source>
-        <translation type="unfinished">Paraf Waktu</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="83"/>
         <source>Time signature</source>
-        <translation type="unfinished">Paraf waktu</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="134"/>
@@ -22048,12 +22068,12 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="194"/>
         <source>Options</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Opsi</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="200"/>
         <source>Hide the time signature</source>
-        <translation type="unfinished">Sembunyikan paraf waktu</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="205"/>
@@ -22063,7 +22083,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="210"/>
         <source>Show as common time</source>
-        <translation type="unfinished">Tampilkan sebagai waktu biasa</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="216"/>
@@ -22073,7 +22093,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="322"/>
         <source>Display as common time</source>
-        <translation type="unfinished">Tampilkan sebagai waktu biasa</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="326"/>
@@ -22102,78 +22122,78 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/widgets/TimeWidget.cpp" line="143"/>
         <source>Units:</source>
-        <translation type="unfinished">Unit:</translation>
+        <translation>Unit:</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/TimeWidget.cpp" line="165"/>
         <source>Time:</source>
-        <translation type="unfinished">Waktu:</translation>
+        <translation>Waktu:</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/TimeWidget.cpp" line="176"/>
         <source>units</source>
-        <translation type="unfinished">unit</translation>
+        <translation>unit</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/TimeWidget.cpp" line="185"/>
         <source>Measures:</source>
-        <translation type="unfinished">Ukuran:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/TimeWidget.cpp" line="185"/>
         <source>Measure:</source>
-        <translation type="unfinished">Ukuran:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/TimeWidget.cpp" line="204"/>
         <source>beats:</source>
-        <translation type="unfinished">ketukan:</translation>
+        <translation>ketukan:</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/TimeWidget.cpp" line="204"/>
         <source>beat:</source>
-        <translation type="unfinished">ketukan:</translation>
+        <translation>ketukan:</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/TimeWidget.cpp" line="222"/>
         <source>%1:</source>
-        <translation type="unfinished">%1:</translation>
+        <translation>%1:</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/TimeWidget.cpp" line="244"/>
         <source>Seconds:</source>
-        <translation type="unfinished">Detik:</translation>
+        <translation>Detik:</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/TimeWidget.cpp" line="263"/>
         <source>msec:</source>
-        <translation type="unfinished">mdet:</translation>
+        <translation>mdet:</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/TimeWidget.cpp" line="399"/>
         <location filename="../../src/gui/widgets/TimeWidget.cpp" line="524"/>
         <source>(%1/%2 time)</source>
-        <translation type="unfinished">(%1/%2 waktu)</translation>
+        <translation>(%1/%2 waktu)</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/TimeWidget.cpp" line="445"/>
         <source>(starting %1.%2 qpm, %3.%4 bpm)</source>
-        <translation type="unfinished">(memulai %1.%2 qpm, %2.%3 bpm) {1.%2 ?} {3.%4 ?}</translation>
+        <translation>(memulai %1.%2 qpm, %3.%4 bpm)</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/TimeWidget.cpp" line="451"/>
         <source>(starting %1.%2 bpm)</source>
-        <translation type="unfinished">(memulai %1.%2 bpm)</translation>
+        <translation>(memulai %1.%2 bpm)</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/TimeWidget.cpp" line="457"/>
         <source>(%1.%2 qpm, %3.%4 bpm)</source>
-        <translation type="unfinished">(%1.%2 qpm, %2.%3 bpm) {1.%2 ?} {3.%4 ?}</translation>
+        <translation>(%1.%2 qpm, %3.%4 bpm)</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/TimeWidget.cpp" line="463"/>
         <source>(%1.%2 bpm)</source>
-        <translation type="unfinished">(%1.%2 bpm)</translation>
+        <translation>(%1.%2 bpm)</translation>
     </message>
 </context>
 <context>
@@ -22184,24 +22204,24 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="916"/>
         <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="1100"/>
         <source>&lt;no instrument&gt;</source>
-        <translation type="unfinished">&lt;tak ada instrumen&gt;</translation>
+        <translation>&lt;tidak ada instrumen&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="347"/>
         <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="1067"/>
         <source>&lt;untitled audio&gt;</source>
-        <translation type="unfinished">&lt;suara tak berjudul&gt;</translation>
+        <translation>&lt;suara belum berjudul&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="349"/>
         <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="1069"/>
         <source>&lt;untitled&gt;</source>
-        <translation type="unfinished">&lt;tak berjudul&gt;</translation>
+        <translation>&lt;belum berjudul&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="406"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Peringatan</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="407"/>
@@ -22218,7 +22238,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="1038"/>
         <source>Record on this track</source>
-        <translation type="unfinished"></translation>
+        <translation>Rekam di jalur ini</translation>
     </message>
 </context>
 <context>
@@ -22249,12 +22269,12 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/editors/segment/TrackLabel.cpp" line="221"/>
         <source>Change track name</source>
-        <translation type="unfinished">Ubah nama jalur</translation>
+        <translation>Ubah nama jalur</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TrackLabel.cpp" line="222"/>
         <source>Enter new track name</source>
-        <translation type="unfinished">Masukkan nama jalur yang baru</translation>
+        <translation>Masukkan nama jalur yang baru</translation>
     </message>
 </context>
 <context>
@@ -22262,18 +22282,18 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="90"/>
         <source>Track</source>
-        <translation type="unfinished">Jalur</translation>
+        <translation>Jalur</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="91"/>
         <source>Track Parameters</source>
-        <translation type="unfinished">Parameter Jalur</translation>
+        <translation>Parameter Jalur</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="138"/>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="756"/>
         <source>&lt;untitled&gt;</source>
-        <translation type="unfinished">&lt;tak berjudul&gt;</translation>
+        <translation>&lt;tanpa judul&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="145"/>
@@ -22284,12 +22304,12 @@ Would you like to set it now?</source>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="161"/>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="203"/>
         <source>Device</source>
-        <translation type="unfinished">Perangkat</translation>
+        <translation>Perangkat</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="173"/>
         <source>Instrument</source>
-        <translation type="unfinished">Instrumen</translation>
+        <translation>Instrumen</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="178"/>
@@ -22299,42 +22319,42 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="189"/>
         <source>Recording filters</source>
-        <translation type="unfinished"></translation>
+        <translation>Penyaring rekaman</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="215"/>
         <source>Channel</source>
-        <translation type="unfinished">Kanal</translation>
+        <translation>Kanal</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="231"/>
         <source>Staff export options</source>
-        <translation type="unfinished">Opsi tingkat staf</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="250"/>
         <source>Notation size:</source>
-        <translation type="unfinished">Waktu notasi:</translation>
+        <translation>Ukuran notasi:</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="257"/>
         <source>Normal</source>
-        <translation type="unfinished">Normal</translation>
+        <translation>Normal</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="258"/>
         <source>Small</source>
-        <translation type="unfinished">semua</translation>
+        <translation>Kecil</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="259"/>
         <source>Tiny</source>
-        <translation type="unfinished"></translation>
+        <translation>Halus</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="266"/>
         <source>Bracket type:</source>
-        <translation type="unfinished">Jenis teks:</translation>
+        <translation>Jenis tanda kurung:</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="271"/>
@@ -22344,47 +22364,47 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="273"/>
         <source>-----</source>
-        <translation type="unfinished">---</translation>
+        <translation>-----</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="274"/>
         <source>[----</source>
-        <translation type="unfinished">---</translation>
+        <translation>[----</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="275"/>
         <source>----]</source>
-        <translation type="unfinished">---</translation>
+        <translation>----]</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="276"/>
         <source>[---]</source>
-        <translation type="unfinished">---</translation>
+        <translation>[---]</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="277"/>
         <source>{----</source>
-        <translation type="unfinished">---</translation>
+        <translation>{----</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="278"/>
         <source>----}</source>
-        <translation type="unfinished">---</translation>
+        <translation>----}</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="279"/>
         <source>{[---</source>
-        <translation type="unfinished">---</translation>
+        <translation>{[---</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="280"/>
         <source>---]}</source>
-        <translation type="unfinished">---</translation>
+        <translation>---]}</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="289"/>
         <source>Create segments with</source>
-        <translation type="unfinished">Membuat segmen dengan:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="302"/>
@@ -22394,12 +22414,12 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="306"/>
         <source>&lt;none&gt;</source>
-        <translation type="unfinished">&lt;nihil&gt;</translation>
+        <translation>&lt;nihil&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="313"/>
         <source>Load</source>
-        <translation type="unfinished">Memuat</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="321"/>
@@ -22449,12 +22469,12 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="328"/>
         <source>treble</source>
-        <translation type="unfinished"></translation>
+        <translation>tribel</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="329"/>
         <source>bass</source>
-        <translation type="unfinished">bas</translation>
+        <translation>bas</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="330"/>
@@ -22464,22 +22484,22 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="331"/>
         <source>xylophone</source>
-        <translation type="unfinished">silofon</translation>
+        <translation>silofon</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="332"/>
         <source>guitar</source>
-        <translation type="unfinished">gitar</translation>
+        <translation>gitar</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="333"/>
         <source>contrabass</source>
-        <translation type="unfinished">kontrabas</translation>
+        <translation>kontrabas</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="334"/>
         <source>celesta</source>
-        <translation type="unfinished">kalista</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="335"/>
@@ -22494,37 +22514,37 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="337"/>
         <source>soprano</source>
-        <translation type="unfinished">soprano</translation>
+        <translation>sopran</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="338"/>
         <source>mezzosoprano</source>
-        <translation type="unfinished">mezzosoprano</translation>
+        <translation>mesosopran</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="339"/>
         <source>alto</source>
-        <translation type="unfinished">alto</translation>
+        <translation>alto</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="340"/>
         <source>tenor</source>
-        <translation type="unfinished">tenor</translation>
+        <translation>tenor</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="341"/>
         <source>baritone</source>
-        <translation type="unfinished">baritone</translation>
+        <translation>bariton</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="342"/>
         <source>varbaritone</source>
-        <translation type="unfinished">varbaritone</translation>
+        <translation>varbariton</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="343"/>
         <source>subbass</source>
-        <translation type="unfinished">subbass</translation>
+        <translation>subbas</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="351"/>
@@ -22539,91 +22559,91 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="372"/>
         <source>Pitch</source>
-        <translation type="unfinished">Titi Nada</translation>
+        <translation>Titi Nada</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="376"/>
         <source>Lowest</source>
-        <translation type="unfinished">Terendah</translation>
+        <translation>Terendah</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="380"/>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="390"/>
         <source>---</source>
-        <translation type="unfinished">---</translation>
+        <translation>---</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="386"/>
         <source>Highest</source>
-        <translation type="unfinished">Tertinggi</translation>
+        <translation>Tertinggi</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="403"/>
         <source>Color</source>
-        <translation type="unfinished">Warna</translation>
+        <translation>Warna</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="408"/>
         <source>&lt;qt&gt;&lt;p&gt;New segments will be created using this color&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Segmen baru akan dibuat dengan warna ini&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="587"/>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="588"/>
         <source>Audio</source>
-        <translation type="unfinished">Suara</translation>
+        <translation>Audio</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="602"/>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="623"/>
         <source>All</source>
-        <translation type="unfinished">Semua</translation>
+        <translation>Semua</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="680"/>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="684"/>
         <source> %1</source>
-        <translation type="unfinished"></translation>
+        <translation> %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="760"/>
         <source>[ Track %1 - %2 ]</source>
-        <translation type="unfinished">[ Jalur %1 - %2 ]</translation>
+        <translation>[ Jalur %1 - %2 ]</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="962"/>
         <source>Default</source>
-        <translation type="unfinished"></translation>
+        <translation>Baku</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="978"/>
         <source>Add New Color</source>
-        <translation type="unfinished">Tambah Warna Baru</translation>
+        <translation>Tambah Warna Baru</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1004"/>
         <source>New Color Name</source>
-        <translation type="unfinished">Nama Warna Baru</translation>
+        <translation>Nama Warna Baru</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1005"/>
         <source>Enter new name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Masukkan nama baru:</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1007"/>
         <source>New</source>
-        <translation type="unfinished">Baru</translation>
+        <translation>Baru</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1039"/>
         <source>Highest playable note</source>
-        <translation type="unfinished">Not tertinggi yang dapat dimainkan</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1061"/>
         <source>Lowest playable note</source>
-        <translation type="unfinished">Not terendah yang dapat dimainkan</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1122"/>
@@ -22633,7 +22653,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1166"/>
         <source>Segment</source>
-        <translation type="unfinished">Segmen</translation>
+        <translation>Segmen</translation>
     </message>
 </context>
 <context>
@@ -22641,19 +22661,19 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="95"/>
         <source>Rosegarden Transport</source>
-        <translation type="unfinished">Transportasi Rosegarden</translation>
+        <translation>Transport Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="923"/>
         <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="983"/>
         <source>PITCH WHEEL</source>
-        <translation type="unfinished">RODA TITI NADA</translation>
+        <translation>RODA TITI NADA</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="927"/>
         <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="987"/>
         <source>CONTROLLER</source>
-        <translation type="unfinished">KONTROLER</translation>
+        <translation>KONTROLER</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="931"/>
@@ -22665,19 +22685,19 @@ Would you like to set it now?</source>
         <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="936"/>
         <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="996"/>
         <source>PRESSURE</source>
-        <translation type="unfinished">TEKANAN</translation>
+        <translation>TEKANAN</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="940"/>
         <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="1000"/>
         <source>SYS MESSAGE</source>
-        <translation type="unfinished">PESAN SISTEM</translation>
+        <translation>PESAN SISTEM</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="960"/>
         <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="1020"/>
         <source>NO EVENTS</source>
-        <translation type="unfinished">TANPA PERISTIWA</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -22685,32 +22705,32 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/commands/edit/TransposeCommand.h" line="47"/>
         <source>Transpose by &amp;Interval...</source>
-        <translation type="unfinished">Transposisi oleh &amp;Interval...</translation>
+        <translation type="unfinished">Transpose oleh &amp;Interval...</translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/TransposeCommand.h" line="53"/>
         <source>&amp;Up a Semitone</source>
-        <translation type="unfinished">Naik Setengah &amp;Nada</translation>
+        <translation>Naik Setengah &amp;Nada</translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/TransposeCommand.h" line="54"/>
         <source>&amp;Down a Semitone</source>
-        <translation type="unfinished">Turun Setengah Na&amp;da</translation>
+        <translation>Turun Setengah Na&amp;da</translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/TransposeCommand.h" line="55"/>
         <source>Up an &amp;Octave</source>
-        <translation type="unfinished">Naik Satu &amp;Oktaf</translation>
+        <translation>Naik Satu &amp;Oktaf</translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/TransposeCommand.h" line="56"/>
         <source>Down an Octa&amp;ve</source>
-        <translation type="unfinished">Turun Satu Okta&amp;f</translation>
+        <translation>Turun Satu Okta&amp;f</translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/TransposeCommand.h" line="57"/>
         <source>&amp;Transpose by Semitones...</source>
-        <translation type="unfinished">&amp;Transposisi oleh Setengah Nada...</translation>
+        <translation type="unfinished">&amp;Transpose oleh Setengah Nada...</translation>
     </message>
 </context>
 <context>
@@ -22738,7 +22758,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/dialogs/TriggerSegmentDialog.cpp" line="82"/>
         <source>Truncate if longer than note</source>
-        <translation type="unfinished">Dipotong apabila lebih panjang dari not</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TriggerSegmentDialog.cpp" line="83"/>
@@ -22766,22 +22786,22 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="90"/>
         <source>ID</source>
-        <translation type="unfinished">ID</translation>
+        <translation>ID</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="91"/>
         <source>Label</source>
-        <translation type="unfinished">Label</translation>
+        <translation>Label</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="92"/>
         <source>Duration</source>
-        <translation type="unfinished">Durasi</translation>
+        <translation>Durasi</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="93"/>
         <source>Base pitch</source>
-        <translation type="unfinished">Titi nada dasar</translation>
+        <translation>Titi nada dasar</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="94"/>
@@ -22801,7 +22821,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="114"/>
         <source>Delete All</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hapus Semua</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="112"/>
@@ -22816,7 +22836,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="233"/>
         <source>&lt;no label&gt;</source>
-        <translation type="unfinished">&lt;tak ada label&gt;</translation>
+        <translation type="unfinished">&lt;tidak ada label&gt;</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="235"/>
@@ -22828,17 +22848,17 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="262"/>
         <source>&lt;none&gt;</source>
-        <translation type="unfinished">&lt;nihil&gt;</translation>
+        <translation>&lt;nihil&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="279"/>
         <source>This will remove all triggered segments from the whole composition.  Are you sure?</source>
-        <translation type="unfinished">Ini akan membuang semua segmen berpicu dari keseluruhan komposisi.  Apakah Anda yakin?</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="283"/>
         <source>Remove all triggered segments</source>
-        <translation type="unfinished">Membuang semua segmen berpicu</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="309"/>
@@ -22855,7 +22875,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="349"/>
         <source>Clipboard is empty</source>
-        <translation type="unfinished">Papan klip kosong</translation>
+        <translation>Papan klip kosong</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="548"/>
@@ -22868,12 +22888,12 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/commands/notation/TupletCommand.h" line="48"/>
         <source>&amp;Triplet</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Triplet</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/TupletCommand.h" line="49"/>
         <source>Tu&amp;plet...</source>
-        <translation type="unfinished"></translation>
+        <translation>Tu&amp;plet...</translation>
     </message>
 </context>
 <context>
@@ -22891,12 +22911,12 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/dialogs/TupletDialog.cpp" line="79"/>
         <source>Play </source>
-        <translation type="unfinished">Putar</translation>
+        <translation>Putar</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TupletDialog.cpp" line="100"/>
         <source>in the time of  </source>
-        <translation type="unfinished">dalam waktu  </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TupletDialog.cpp" line="106"/>
@@ -22906,12 +22926,12 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/dialogs/TupletDialog.cpp" line="117"/>
         <source>Timing calculations</source>
-        <translation type="unfinished">Kalkulasi waktu</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TupletDialog.cpp" line="125"/>
         <source>Selected region:</source>
-        <translation type="unfinished">Wilayah yang dipilih:</translation>
+        <translation>Wilayah yang dipilih:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TupletDialog.cpp" line="137"/>
@@ -22944,7 +22964,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="72"/>
         <source>[ No port ]</source>
-        <translation type="unfinished"></translation>
+        <translation>[ Tiada port ]</translation>
     </message>
 </context>
 <context>
@@ -22976,27 +22996,27 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/dialogs/UnusedAudioSelectionDialog.cpp" line="46"/>
         <source>Select Unused Audio Files</source>
-        <translation type="unfinished">Pilih Berkas Suara Tak Terpakai</translation>
+        <translation>Pilih Berkas Suara Tak Terpakai</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UnusedAudioSelectionDialog.cpp" line="62"/>
         <source>File name</source>
-        <translation type="unfinished">Nama berkas</translation>
+        <translation>Nama berkas</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UnusedAudioSelectionDialog.cpp" line="62"/>
         <source>File size</source>
-        <translation type="unfinished">Ukuran berkas</translation>
+        <translation>Ukuran berkas</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UnusedAudioSelectionDialog.cpp" line="62"/>
         <source>Last modified date</source>
-        <translation type="unfinished">Tanggal terakhir diubah</translation>
+        <translation>Tanggal terakhir diubah</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UnusedAudioSelectionDialog.cpp" line="74"/>
         <source> (not found) </source>
-        <translation type="unfinished"> (tak ketemu) </translation>
+        <translation> (tak ketemu) </translation>
     </message>
 </context>
 <context>
@@ -23004,17 +23024,17 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/dialogs/UseOrnamentDialog.cpp" line="54"/>
         <source>Use Ornament</source>
-        <translation type="unfinished">Pakai Ornamen</translation>
+        <translation>Pakai Ornamen</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UseOrnamentDialog.cpp" line="64"/>
         <source>Notation</source>
-        <translation type="unfinished">Notasi</translation>
+        <translation>Notasi</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UseOrnamentDialog.cpp" line="71"/>
         <source>Display as:  </source>
-        <translation type="unfinished">Tampilan sebagai:  </translation>
+        <translation>Tampilkan sebagai:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UseOrnamentDialog.cpp" line="87"/>
@@ -23039,37 +23059,37 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/dialogs/UseOrnamentDialog.cpp" line="88"/>
         <source>Mordent</source>
-        <translation type="unfinished">Mordent</translation>
+        <translation>Mordent</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UseOrnamentDialog.cpp" line="88"/>
         <source>Inverted mordent</source>
-        <translation type="unfinished">Mordent berbalik</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UseOrnamentDialog.cpp" line="89"/>
         <source>Long mordent</source>
-        <translation type="unfinished">Mordent panjang</translation>
+        <translation>Mordent panjang</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UseOrnamentDialog.cpp" line="89"/>
         <source>Long inverted mordent</source>
-        <translation type="unfinished">Mordent panjang berbalik</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UseOrnamentDialog.cpp" line="96"/>
         <source>Text mark</source>
-        <translation type="unfinished">Penanda teks</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UseOrnamentDialog.cpp" line="100"/>
         <source>   Text:  </source>
-        <translation type="unfinished">   Teks:  </translation>
+        <translation>   Teks:  </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UseOrnamentDialog.cpp" line="107"/>
         <source>Performance</source>
-        <translation type="unfinished">Performa</translation>
+        <translation>Performa</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UseOrnamentDialog.cpp" line="115"/>
@@ -23089,7 +23109,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/dialogs/UseOrnamentDialog.cpp" line="136"/>
         <source>Truncate if longer than note</source>
-        <translation type="unfinished">Dipotong apabila lebih panjang dari not</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UseOrnamentDialog.cpp" line="137"/>
@@ -23112,7 +23132,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/widgets/WarningDialog.cpp" line="50"/>
         <source>Performance Problems Detected</source>
-        <translation type="unfinished"></translation>
+        <translation>Masalah Performa Terdeteksi</translation>
     </message>
 </context>
 <context>
@@ -23120,22 +23140,22 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/widgets/WarningWidget.cpp" line="64"/>
         <source>&lt;qt&gt;&lt;p&gt;Performance problems detected!&lt;/p&gt;&lt;p&gt;Click to display details&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Masalah performa terdeteksi!&lt;/p&gt;&lt;p&gt;Klik untuk melihat detilnya&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/WarningWidget.cpp" line="87"/>
         <source>MIDI OK</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI OKE</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/WarningWidget.cpp" line="99"/>
         <source>audio OK</source>
-        <translation type="unfinished"></translation>
+        <translation>audio OKE</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/WarningWidget.cpp" line="111"/>
         <source>timer OK</source>
-        <translation type="unfinished"></translation>
+        <translation>pencatat waktu OKE</translation>
     </message>
 </context>
 <context>
@@ -23154,7 +23174,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="2517"/>
         <source>(recorded)</source>
-        <translation type="unfinished">%1 (direkam)</translation>
+        <translation>(direkam)</translation>
     </message>
 </context>
 <context>
@@ -23162,17 +23182,17 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1047"/>
         <source>Rosegarden Transport</source>
-        <translation type="unfinished">Transportasi Rosegarden</translation>
+        <translation>Transpor Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1049"/>
         <source>Hide additional controls</source>
-        <translation type="unfinished">Sembunyikan kontrol tambahan</translation>
+        <translation>Sembunyikan kontrol tambahan</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1053"/>
         <source>Panic Button</source>
-        <translation type="unfinished">Tombol Panik</translation>
+        <translation>Tombol Panik</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1056"/>
@@ -23182,7 +23202,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1060"/>
         <source>Metronome</source>
-        <translation type="unfinished">Metronom</translation>
+        <translation>Metronom</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1063"/>
@@ -23192,28 +23212,28 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1067"/>
         <source>Shows MIDI activity in and out of Rosegarden</source>
-        <translation type="unfinished">Tampilkan aktivitas keluar dan masuk MIDI dari Rosegarden</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1069"/>
         <source>IN</source>
-        <translation type="unfinished">MASUK</translation>
+        <translation>MASUK</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1070"/>
         <source>OUT</source>
-        <translation type="unfinished">KELUAR</translation>
+        <translation>KELUAR</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1071"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1072"/>
         <source>NO EVENTS</source>
-        <translation type="unfinished">TANPA PERISTIWA</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1074"/>
         <source>Record</source>
-        <translation type="unfinished">Rekam</translation>
+        <translation>Rekam</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1077"/>
@@ -23233,7 +23253,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1088"/>
         <source>Solo</source>
-        <translation type="unfinished">Solo</translation>
+        <translation>Solo</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1091"/>
@@ -23253,57 +23273,57 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1102"/>
         <source>SIG</source>
-        <translation type="unfinished">SIG</translation>
+        <translation>SIG</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1103"/>
         <source>DIV</source>
-        <translation type="unfinished">DIV</translation>
+        <translation>DIV</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1104"/>
         <source>/16</source>
-        <translation type="unfinished">/16</translation>
+        <translation>/16</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1105"/>
         <source>TEMPO</source>
-        <translation type="unfinished">TEMPO</translation>
+        <translation>TEMPO</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1106"/>
         <source>END</source>
-        <translation type="unfinished">AKHIR</translation>
+        <translation>AKHIR</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1107"/>
         <source>BAR</source>
-        <translation type="unfinished">BAR</translation>
+        <translation>BAR</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1109"/>
         <source>Switch between real time, musical time, and frame count</source>
-        <translation type="unfinished">Berpindah antara waktu nyata, waktu musik, dan hitungan bingkai</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1113"/>
         <source>Show additional controls</source>
-        <translation type="unfinished">Tampilkan kontrol tambahan</translation>
+        <translation>Tampilkan kontrol tambahan</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1117"/>
         <source>Rewind</source>
-        <translation type="unfinished"></translation>
+        <translation>Putar Ulang</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1120"/>
         <source>Moves the current pointer position back one bar.</source>
-        <translation type="unfinished">Memundurkan posisi penunjuk satu bar.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1124"/>
         <source>Rewind to beginning</source>
-        <translation type="unfinished"></translation>
+        <translation>Putar Ulang ke Awal</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1127"/>
@@ -23313,37 +23333,37 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1131"/>
         <source>Play/Pause</source>
-        <translation type="unfinished">Putar/Tahan</translation>
+        <translation>Putar/Tahan</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1134"/>
         <source>Plays from the current pointer position, or pauses playback if already in progress.</source>
-        <translation type="unfinished">Memainkan aransemen mulai dari posisi penunjuk, atau menghentikan permainan apabila sudah dalam posisi memainkan sebelumnya.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1138"/>
         <source>Stop</source>
-        <translation type="unfinished"></translation>
+        <translation>Henti</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1141"/>
         <source>Stops playback or recording.</source>
-        <translation type="unfinished">Menghentikan permainan atau perekaman.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1145"/>
         <source>Fast forward</source>
-        <translation type="unfinished">Maju cepat</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1148"/>
         <source>Moves the current pointer position forwards one bar.</source>
-        <translation type="unfinished">Memajukan posisi penunjuk satu bar.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1152"/>
         <source>Fast forward to end</source>
-        <translation type="unfinished">Maju cepat hingga akhir</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1155"/>
@@ -23353,7 +23373,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1159"/>
         <source>Display time to end</source>
-        <translation type="unfinished">Tampilkan waktu hingga akhir</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>
