@@ -199,6 +199,8 @@
       <Action name="slashes_3" text="&amp;3" />
       <Action name="slashes_4" text="&amp;4" />
       <Action name="slashes_5" text="&amp;5" />
+    <Separator/>
+      <Action name="cycle_slashes" text="&amp;Cycle Slashes" icon="cycle-slashes" shortcut="/" />
     </Menu>
     <!-- JAS original <Action name="note_style_actionmenu" /> -->
     <Menu name="note_style_actionmenu">
@@ -719,6 +721,7 @@
   <Action name="trill_line" />
 <Separator/>
   <Action name="add_dot" />
+  <Action name="cycle_slashes" />
 </ToolBar>
 
 <ToolBar name="Layout Toolbar" hidden="true">
@@ -819,6 +822,7 @@
     <Action name="slashes_3"/>
     <Action name="slashes_4"/>
     <Action name="slashes_5"/>
+    <Action name="cycle_slashes"/>
     <Action name="note_style_actionmenu"/>
     <Action name="remove_marks"/>
     <Action name="remove_fingering_marks"/>

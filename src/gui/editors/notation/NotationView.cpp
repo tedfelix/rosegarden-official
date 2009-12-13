@@ -88,6 +88,7 @@
 #include "commands/notation/KeyInsertionCommand.h"
 #include "commands/notation/EraseEventCommand.h"
 #include "commands/notation/NormalizeRestsCommand.h"
+#include "commands/notation/CycleSlashesCommand.h"
 
 #include "commands/segment/PasteToTriggerSegmentCommand.h"
 #include "commands/segment/SegmentTransposeCommand.h"
@@ -688,6 +689,8 @@ NotationView::setupActions()
     createAction("toggle_velocity_ruler", SLOT(slotToggleVelocityRuler()));
     createAction("toggle_pitchbend_ruler", SLOT(slotTogglePitchbendRuler()));
     createAction("add_control_ruler", "");
+
+    createAction("cycle_slashes", SLOT(slotCycleSlashes()));
 
     QMenu *addControlRulerMenu = new QMenu;
     Controllable *c =
@@ -4193,13 +4196,23 @@ NotationView::slotAddDot()
             (new AddDotCommand(*selection, false));
 }
 
-void NotationView::slotAddDotNotationOnly()
+void
+NotationView::slotAddDotNotationOnly()
 {
     EventSelection *selection = getSelection();
     if (!selection) return;
     TmpStatusMsg msg(tr("Adding dot..."), this);
     CommandHistory::getInstance()->addCommand
             (new AddDotCommand(*selection, true));
+}
+
+void
+NotationView::slotCycleSlashes()
+{
+    EventSelection *selection = getSelection();
+    if (!selection) return;
+    TmpStatusMsg msg(tr("Cycling slashes..."), this);
+    CommandHistory::getInstance()->addCommand(new CycleSlashesCommand(*selection));
 }
 
 

@@ -310,6 +310,8 @@ protected slots:
     void slotHelpAboutQt();
     void slotDonate();
 
+    void slotCycleSlashes();
+
 private:
     /**
      * export a LilyPond file (used by slotPrintLilyPond and
