@@ -15724,47 +15724,47 @@ Double-click to open the marker editor.</source>
 <context>
     <name>Rosegarden::MatrixMover</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixMover.cpp" line="161"/>
+        <location filename="../../src/gui/editors/matrix/MatrixMover.cpp" line="160"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixMover.cpp" line="293"/>
+        <location filename="../../src/gui/editors/matrix/MatrixMover.cpp" line="292"/>
         <source>Copy and Move Event</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixMover.cpp" line="295"/>
+        <location filename="../../src/gui/editors/matrix/MatrixMover.cpp" line="294"/>
         <source>Copy and Move Events</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixMover.cpp" line="299"/>
+        <location filename="../../src/gui/editors/matrix/MatrixMover.cpp" line="298"/>
         <source>Move Event</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixMover.cpp" line="301"/>
+        <location filename="../../src/gui/editors/matrix/MatrixMover.cpp" line="300"/>
         <source>Move Events</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixMover.cpp" line="433"/>
+        <location filename="../../src/gui/editors/matrix/MatrixMover.cpp" line="432"/>
         <source>Click and drag to move a note; hold Ctrl as well to copy it</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixMover.cpp" line="435"/>
+        <location filename="../../src/gui/editors/matrix/MatrixMover.cpp" line="434"/>
         <source>Click and drag to copy a note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixMover.cpp" line="439"/>
+        <location filename="../../src/gui/editors/matrix/MatrixMover.cpp" line="438"/>
         <source>Click and drag to move selected notes; hold Ctrl as well to copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixMover.cpp" line="441"/>
+        <location filename="../../src/gui/editors/matrix/MatrixMover.cpp" line="440"/>
         <source>Click and drag to copy selected notes</source>
         <translation type="unfinished"></translation>
     </message>
@@ -15772,17 +15772,17 @@ Double-click to open the marker editor.</source>
 <context>
     <name>Rosegarden::MatrixPainter</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixPainter.cpp" line="180"/>
+        <location filename="../../src/gui/editors/matrix/MatrixPainter.cpp" line="184"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixPainter.cpp" line="322"/>
+        <location filename="../../src/gui/editors/matrix/MatrixPainter.cpp" line="332"/>
         <source>Click and drag to draw a note; Shift to avoid snapping to grid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixPainter.cpp" line="324"/>
+        <location filename="../../src/gui/editors/matrix/MatrixPainter.cpp" line="334"/>
         <source>Click and drag to draw a note</source>
         <translation type="unfinished"></translation>
     </message>
