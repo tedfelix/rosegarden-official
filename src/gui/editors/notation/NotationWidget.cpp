@@ -707,11 +707,12 @@ NotationWidget::slotTogglePlayTracking()
 void
 NotationWidget::slotUpdatePointerPosition()
 {
-    slotPointerPositionChanged(m_document->getComposition().getPosition());
+    // Update pointer position, but don't scroll
+    slotPointerPositionChanged(m_document->getComposition().getPosition(), false);
 }
 
 void
-NotationWidget::slotPointerPositionChanged(timeT t)
+NotationWidget::slotPointerPositionChanged(timeT t, bool moveView)
 {
     QObject *s = sender();
     bool fromDocument = (s == m_document);
@@ -756,7 +757,7 @@ NotationWidget::slotPointerPositionChanged(timeT t)
     }
 
     if (getPlayTracking() || !fromDocument) {
-        m_view->slotEnsurePositionPointerInView(fromDocument);
+        if (moveView) m_view->slotEnsurePositionPointerInView(fromDocument);
     }
 }
 

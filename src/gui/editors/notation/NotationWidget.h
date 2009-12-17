@@ -159,7 +159,8 @@ protected slots:
     void slotDispatchMouseMove(const NotationMouseEvent *);
     void slotDispatchMouseDoubleClick(const NotationMouseEvent *);
 
-    void slotPointerPositionChanged(timeT);
+    // When moveView is false, the view is not scrolled toward the pointer
+    void slotPointerPositionChanged(timeT t, bool moveView = true);
     void slotEnsureLastMouseMoveVisible();
 
     void slotZoomInFromPanner();
