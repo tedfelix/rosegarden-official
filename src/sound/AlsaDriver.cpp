@@ -733,7 +733,9 @@ AlsaDriver::createMidiDevice(DeviceId deviceId,
                                          portName.toLocal8Bit(),
                                          SND_SEQ_PORT_CAP_READ |
                                          SND_SEQ_PORT_CAP_SUBS_READ,
-                                         SND_SEQ_PORT_TYPE_APPLICATION),
+                                         SND_SEQ_PORT_TYPE_APPLICATION |
+                                         SND_SEQ_PORT_TYPE_SOFTWARE |
+                                         SND_SEQ_PORT_TYPE_MIDI_GENERIC),
                                         "createMidiDevice - can't create output port");
 
         if (outputPort >= 0) {
@@ -1568,7 +1570,9 @@ AlsaDriver::initialiseMidi()
     snd_seq_port_info_set_capability(pinfo,
                                      SND_SEQ_PORT_CAP_WRITE |
                                      SND_SEQ_PORT_CAP_SUBS_WRITE );
-    snd_seq_port_info_set_type(pinfo, SND_SEQ_PORT_TYPE_APPLICATION);
+    snd_seq_port_info_set_type(pinfo, SND_SEQ_PORT_TYPE_APPLICATION |
+                                      SND_SEQ_PORT_TYPE_SOFTWARE |
+                                      SND_SEQ_PORT_TYPE_MIDI_GENERIC);
     snd_seq_port_info_set_midi_channels(pinfo, 16);
     /* we want to know when the events got delivered to us */
     snd_seq_port_info_set_timestamping(pinfo, 1);
@@ -1608,7 +1612,9 @@ AlsaDriver::initialiseMidi()
                                        "sync out",
                                        SND_SEQ_PORT_CAP_READ |
                                        SND_SEQ_PORT_CAP_SUBS_READ,
-                                       SND_SEQ_PORT_TYPE_APPLICATION),
+                                       SND_SEQ_PORT_TYPE_APPLICATION |
+                                       SND_SEQ_PORT_TYPE_SOFTWARE |
+                                       SND_SEQ_PORT_TYPE_MIDI_GENERIC),
                                       "initialiseMidi - can't create sync output port");
 
     // and port for hardware controller
@@ -1619,7 +1625,9 @@ AlsaDriver::initialiseMidi()
                                        SND_SEQ_PORT_CAP_WRITE |
                                        SND_SEQ_PORT_CAP_SUBS_READ |
                                        SND_SEQ_PORT_CAP_SUBS_WRITE,
-                                       SND_SEQ_PORT_TYPE_APPLICATION),
+                                       SND_SEQ_PORT_TYPE_APPLICATION |
+                                       SND_SEQ_PORT_TYPE_SOFTWARE |
+                                       SND_SEQ_PORT_TYPE_MIDI_GENERIC),
                                       "initialiseMidi - can't create controller port");
 
     getSystemInfo();
