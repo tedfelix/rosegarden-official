@@ -75,7 +75,6 @@ void
 ClefInserter::handleLeftButtonPress(const NotationMouseEvent *e)
 {
     if (!e->staff || !e->element) return;
-    Event *clef = 0, *key = 0;
 
     timeT time = e->element->event()->getAbsoluteTime(); // not getViewAbsoluteTime()
 

@@ -42,11 +42,31 @@ class ZoomableRulerScale;
 class SnapGrid;
 
 /**
- * Specialised graphics scene for matrix elements.  The note blocks
- * and horizontal and vertical grid lines are all represented by
- * graphics items owned by this scene.  This scene also owns the
- * MatrixViewSegment classes which track segment contents in view
- * objects.
+ * Specialised graphics scene for matrix elements.  The note blocks and
+ * horizontal and vertical grid lines are all represented by graphics items
+ * owned by this scene.  This scene also owns the MatrixViewSegment classes
+ * which track segment contents in view objects.
+ *
+ * The scene works with MatrixViewSegment, MatrixViewElement, MatrixPainter,
+ * and MatrixMover to support the new "concert pitch matrix" concept.  All
+ * pitches on the grid as well as the key signature pitch highlights are
+ * represented in concert pitch, presenting the pitches as they would look if
+ * they were struck as notes on a conventional piano.  If the user draws a Bb in
+ * a segment in -9 (Eb) transposition, the actual event is created with a pitch
+ * +9 higher, and the resulting MatrixElement representing that pitch is then
+ * drawn -9, so that it remains at the correct height.  If this note were viewed
+ * in notation, it would appear to be a G.
+ *
+ * The scene can display events from any number of segments spanning any number
+ * of tracks, and the concert pitch matrix is necessary in order to avoid the
+ * chaos that would ensue when working with segments in different transpositions
+ * on the same grid.  Note, however, the pitch highlights may come out
+ * incorrectly if the key signatures in various segments do not resolve to the
+ * same key after factoring the various segment transpositions into account.
+ * This kind of situation would be flagged as an error in the notation view, via
+ * the track/staff header warning icon, and it is not a problem that can be
+ * resolved.  In this case, the user must intervene to ensure sanity of the
+ * results.
  */
 class MatrixScene : public QGraphicsScene,
                     public CompositionObserver,

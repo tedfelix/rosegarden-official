@@ -67,6 +67,7 @@ void MatrixPainter::handleMidButtonPress(const MatrixMouseEvent *e)
 {
     // note: middle button == third button (== left+right at the same time)
     // pass
+    e = e;
 }
 
 
@@ -160,14 +161,24 @@ void MatrixPainter::handleLeftButtonPress(const MatrixMouseEvent *e)
 
     m_clickTime = e->snappedLeftTime;
 
+    // When entering notes, what you click on in concert pitch is what you
+    // should see and hear, so we have to alter the event's physical pitch to
+    // compensate.  In a concert pitch view of an Eb segment in -9, if you click
+    // on a Bb, you should get what will be represented in notation as a G.
+    long pitchOffset = m_currentViewSegment->getSegment().getTranspose();
+    long adjustedPitch = e->pitch + (pitchOffset * -1);
+
     Event *ev = new Event(Note::EventType, e->snappedLeftTime, e->snapUnit);
-    ev->set<Int>(BaseProperties::PITCH, e->pitch);
+    ev->set<Int>(BaseProperties::PITCH, adjustedPitch);
     ev->set<Int>(BaseProperties::VELOCITY, velocity);
 
-    m_currentElement = new MatrixElement(m_scene, ev, m_widget->isDrumMode());
+    std::cout << "MATRIX PAINTER: I'm working from segment \"" << m_currentViewSegment->getSegment().getLabel() << "\"" << std::endl
+              << "  clicked pitch: " << e->pitch << " adjusted pitch: " << adjustedPitch << std::endl;
+
+    m_currentElement = new MatrixElement(m_scene, ev, m_widget->isDrumMode(), pitchOffset);
 
     // preview
-    m_scene->playNote(m_currentViewSegment->getSegment(), e->pitch, velocity);
+    m_scene->playNote(m_currentViewSegment->getSegment(), adjustedPitch, velocity);
 }
 
 MatrixPainter::FollowMode
@@ -193,26 +204,34 @@ MatrixPainter::handleMouseMove(const MatrixMouseEvent *e)
 
     using BaseProperties::PITCH;
 
+    // we need the same pitch/height corrections for dragging notes as for
+    // entering new ones
+    m_currentViewSegment = e->viewSegment;
+    if (!m_currentViewSegment) return NoFollow;
+    long pitchOffset = m_currentViewSegment->getSegment().getTranspose();
+    long adjustedPitch = e->pitch + (pitchOffset * -1);
+
     long velocity = m_widget->getCurrentVelocity();
     m_currentElement->event()->get<Int>(BaseProperties::VELOCITY, velocity);
 
     Event *ev = new Event(Note::EventType, time, endTime - time);
-    ev->set<Int>(BaseProperties::PITCH, e->pitch);
+    ev->set<Int>(BaseProperties::PITCH, adjustedPitch);
     ev->set<Int>(BaseProperties::VELOCITY, velocity);
 
     bool preview = false;
     if (m_currentElement->event()->has(PITCH) &&
-        e->pitch != m_currentElement->event()->get<Int>(PITCH)) {
+        adjustedPitch != m_currentElement->event()->get<Int>(PITCH)) {
         preview = true;
     }
 
     Event *oldEv = m_currentElement->event();
     delete m_currentElement;
     delete oldEv;
-    m_currentElement = new MatrixElement(m_scene, ev, m_widget->isDrumMode());
+
+    m_currentElement = new MatrixElement(m_scene, ev, m_widget->isDrumMode(), pitchOffset);
 
     if (preview) {
-        m_scene->playNote(m_currentViewSegment->getSegment(), e->pitch, velocity);
+        m_scene->playNote(m_currentViewSegment->getSegment(), adjustedPitch, velocity);
     }
 
     return FollowMode(FollowHorizontal | FollowVertical);
@@ -295,6 +314,7 @@ void MatrixPainter::stow()
 
 void MatrixPainter::slotMatrixScrolled(int newX, int newY)
 {
+    newX = newY = 42;
 /*!!!
     if (!m_currentElement)
         return ;

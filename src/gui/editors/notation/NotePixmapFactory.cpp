@@ -1927,10 +1927,10 @@ NotePixmapFactory::makeKey(const Key &key,
                            Key previousKey,
                            const ColourType colourType)
 {
-    std::cout << "NPF: makeKey(key: " << key.getName() << ", clef: "
-              <<  clef.getClefType() << " , prevKey: "
-              << previousKey.getName() <<  ", colType: " << (int)colourType
-              << ")" << std::endl;
+//    std::cout << "NPF: makeKey(key: " << key.getName() << ", clef: "
+//              <<  clef.getClefType() << " , prevKey: "
+//              << previousKey.getName() <<  ", colType: " << (int)colourType
+//              << ")" << std::endl;
 
     Profiler profiler("NotePixmapFactory::makeKeyPixmap");
 
@@ -3400,7 +3400,7 @@ NotePixmapFactory::makeItem(QPoint hotspot)
 
     if (!m_generatedPixmap->isNull()) {
         m_p->end();
-    } else std::cout << "m_generatedPixmap was NULL!" << std::endl;
+    }// else std::cout << "m_generatedPixmap was NULL!" << std::endl;
 
     QGraphicsPixmapItem *p = new QGraphicsPixmapItem;
 

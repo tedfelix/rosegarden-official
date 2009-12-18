@@ -69,7 +69,7 @@ Panned::drawForeground(QPainter *paint, const QRectF &)
     QSizeF sz(far.x()-near.x(), far.y()-near.y());
     QRectF pr(near, sz);
 
-    RG_DEBUG << "Panned::drawForeground: pr = " << pr << endl;
+//    RG_DEBUG << "Panned::drawForeground: pr = " << pr << endl;
 
     if (pr != m_pannedRect) {
         if (pr.x() != m_pannedRect.x()) emit pannedContentsScrolled();
@@ -108,7 +108,7 @@ Panned::slotShowPositionPointer(float x) // scene coord; full height
         oldRect.moveTop(0);
         oldRect.moveLeft(oldRect.left() - 1);
         viewport()->update(oldRect);
-        RG_DEBUG << "Panned::slotShowPositionPointer: old rect " << oldRect << endl;
+//        RG_DEBUG << "Panned::slotShowPositionPointer: old rect " << oldRect << endl;
     }
     m_pointerVisible = true;
     m_pointerTop = QPointF(x, 0);
@@ -118,7 +118,7 @@ Panned::slotShowPositionPointer(float x) // scene coord; full height
     newRect.moveTop(0);
     newRect.moveLeft(newRect.left() - 1);
     viewport()->update(newRect);
-    RG_DEBUG << "Panned::slotShowPositionPointer: new rect " << newRect << endl;
+//    RG_DEBUG << "Panned::slotShowPositionPointer: new rect " << newRect << endl;
 }
 
 void

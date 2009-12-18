@@ -31,7 +31,7 @@ class Thumbwheel : public QWidget
     Q_OBJECT
 
 public:
-    Thumbwheel(Qt::Orientation orientation, QWidget *parent = 0);
+    Thumbwheel(Qt::Orientation orientation, bool useRed = false, QWidget *parent = 0);
     virtual ~Thumbwheel();
 
     int getMinimumValue() const;
@@ -91,6 +91,16 @@ protected:
     QImage m_cache;
     bool m_Thorn;
     bool m_bright;
+
+    // I wanted a red wheel for the segment changer.  It would be much nicer to
+    // step back and build some quality mechanism for setting the color of the
+    // wheel from the outside, but it's more of a refactoring project than I
+    // wanted to do today just to get a red wheel, so I used a cheap hack this
+    // time.  If we ever want to have a green wheel and so on, or for making
+    // this wheel generally more useful to other Qt projects, it would be nice
+    // to do something more involved with this at a later time, and replace this
+    // cheap hack with that much nicer mechanism.
+    bool m_useRed;
 };
 
 }

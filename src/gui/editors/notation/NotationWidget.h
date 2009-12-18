@@ -114,6 +114,8 @@ public:
     double getHorizontalZoomFactor() const;
     double getVerticalZoomFactor() const;
 
+    void updateSegmentChangerBackground();
+
 signals:
     void segmentDeleted(Segment *);
     void sceneDeleted();
@@ -194,12 +196,17 @@ protected slots:
     void slotAdjustHeadersVerticalPos(QRectF r);
     void slotCloseHeaders();
 
+    /// The segment control thumbwheel moved
+    void slotSegmentChangerMoved(int);
+    
     void slotInitialHSliderHack(int);
     void slotInitialVSliderHack(int);
 
 signals :
     void adjustNeeded(bool last);
     void editElement(NotationStaff *, NotationElement *, bool advanced);
+    void currentSegmentPrior();
+    void currentSegmentNext();
 
 private:
     RosegardenDocument *m_document; // I do not own this
@@ -207,14 +214,14 @@ private:
     Panner *m_hpanner; // I own this
     NotationScene *m_scene; // I own this
     int m_leftGutter;
+    NotationToolBox *m_toolBox;
+    NotationTool *m_currentTool;
     bool m_playTracking;
+    bool m_inMove;
+    QPointF m_lastMouseMoveScenePos;
     double m_hZoomFactor;
     double m_vZoomFactor;
     ZoomableRulerScale *m_referenceScale; // I own this (refers to scene scale)
-    NotationToolBox *m_toolBox;
-    NotationTool *m_currentTool;
-    bool m_inMove;
-    QPointF m_lastMouseMoveScenePos;
 
     QWidget     *m_panner;
     QBoxLayout  *m_pannerLayout;
@@ -232,6 +239,11 @@ private:
     bool m_lastZoomWasHV;
     int m_lastV;
     int m_lastH;
+
+    QWidget *m_changerWidget;
+    Thumbwheel  *m_HsegmentChanger;
+    Thumbwheel  *m_VsegmentChanger;
+    int m_lastSegmentChangerValue;
 
     StandardRuler *m_topStandardRuler; // I own this
     StandardRuler *m_bottomStandardRuler; // I own this

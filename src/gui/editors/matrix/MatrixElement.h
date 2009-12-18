@@ -34,7 +34,8 @@ class MatrixElement : public ViewElement
 public:
     MatrixElement(MatrixScene *scene,
                   Event *event,
-                  bool drum);
+                  bool drum,
+                  long pitchOffset);
     virtual ~MatrixElement();
 
     /// Returns true if the wrapped event is a note
@@ -71,6 +72,14 @@ protected:
     QGraphicsItem *m_item;
     double m_width;
     double m_velocity;
+
+    /** Events don't know anything about what segment owns them, so neither do
+     * MatrixElements.  In order to handle transposing segments properly, we
+     * have to adjust the pitch relative to the segment transpose, and this can
+     * only be known from the outside.  We have to take it as a construction
+     * parameter, and use it appropriately when doing height calculations
+     */
+    long m_pitchOffset;
 };
 
 

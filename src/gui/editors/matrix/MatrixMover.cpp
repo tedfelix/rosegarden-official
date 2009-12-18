@@ -68,7 +68,31 @@ MatrixMover::handleLeftButtonPress(const MatrixMouseEvent *e)
 
     if (!e->element) return;
 
+    // Check the scene's current segment (apparently not necessarily the same
+    // segment referred to by the scene's current view segment) for this event;
+    // return if not found, indicating that this event is from some other,
+    // non-active segment.
+    //
+    // I think notation just makes whatever segment active when you click an
+    // event outside the active segment, and I think that's what this code
+    // attempted to do too.  I couldn't get that to work at all.  This is better
+    // than being able to click on non-active elements to create new events by
+    // accident, and will probably fly.  Especially since the multi-segment
+    // matrix is new, and we're defining the terms of how it works.
+    Segment *segment = m_scene->getCurrentSegment();
+    if (!segment) return;
+    bool found = false;
+    for (Segment::iterator i = segment->begin(); i != segment->end(); ++i) {
+        if ((*i) == e->element->event()) found = true;
+    }
+
+    if (!found) {
+        MATRIX_DEBUG << "Clicked element not owned by active segment.  Returning..." << endl;
+        return;
+    }
+
     m_currentViewSegment = e->viewSegment;
+
     m_currentElement = e->element;
     m_clickSnappedLeftTime = e->snappedLeftTime;
 
@@ -107,39 +131,39 @@ MatrixMover::handleLeftButtonPress(const MatrixMouseEvent *e)
             newSelection->addEvent(event);
         }
         m_scene->setSelection(newSelection, true);
-//            m_mParentView->canvas()->update();
         selection = newSelection;
     } else {
         m_scene->setSingleSelectedEvent(m_currentViewSegment,
                                         m_currentElement, true);
-//            m_mParentView->setSingleSelectedEvent(m_currentViewSegment->getSegment(),
-//                                                  m_currentElement->event(),
-//                                                  true);
-//            m_mParentView->canvas()->update();
     }
     
     long velocity = m_widget->getCurrentVelocity();
     event->get<Int>(BaseProperties::VELOCITY, velocity);
+
+    long pitchOffset = m_currentViewSegment->getSegment().getTranspose();
+
     long pitch = 60;
     event->get<Int>(BaseProperties::PITCH, pitch);
-    m_scene->playNote(m_currentViewSegment->getSegment(), pitch, velocity);
+
+    // We used to m_scene->playNote() here, but the new concert pitch matrix was
+    // playing chords the first time I clicked a note.  Investigation with
+    // KMidiMon revealed two notes firing nearly simultaneously, and with
+    // segments of 0 transpose, they were simply identical to each other.  One
+    // of them came from here, and this was the one sounding at the wrong pitch
+    // in transposed segments.  I've simply removed it with no apparent ill side
+    // effects, and a problem solved super cheap.
+
     m_lastPlayedPitch = pitch;
-    
+
     if (m_quickCopy && selection) {
         for (EventSelection::eventcontainer::iterator i =
                  selection->getSegmentEvents().begin();
              i != selection->getSegmentEvents().end(); ++i) {
-            
+
             MatrixElement *duplicate = new MatrixElement
-                (m_scene, new Event(**i), m_widget->isDrumMode());
-/*
-  duplicate->setLayoutY(element->getLayoutY());
-  duplicate->setLayoutX(element->getLayoutX());
-  duplicate->setWidth(element->getWidth());
-  duplicate->setHeight(element->getHeight());
-  duplicate->setCanvasZ(-1);
-  m_currentViewSegment->positionElement(duplicate);
-*/
+                (m_scene, new Event(**i),
+                 m_widget->isDrumMode(), pitchOffset);
+
             m_duplicateElements.push_back(duplicate);
         }
     }
@@ -169,29 +193,25 @@ MatrixMover::handleMouseMove(const MatrixMouseEvent *e)
 
     emit hoveredOverNoteChanged(newPitch, true, newTime);
 
+    // get a basic pitch difference calculation comparing the current element's
+    // pitch to the clicked pitch (this does not take the transpose factor into
+    // account, so in a -9 segment, the initial result winds up being 9
+    // semitones too low)
     using BaseProperties::PITCH;
     int diffPitch = 0;
     if (m_currentElement->event()->has(PITCH)) {
         diffPitch = newPitch - m_currentElement->event()->get<Int>(PITCH);
     }
-/*
-    int diffY =
-        int(((m_currentViewSegment->getLayoutYForHeight(newPitch) -
-              m_currentViewSegment->getElementHeight() / 2) -
-             m_currentElement->getLayoutY()));
-*/
+    
     EventSelection* selection = m_scene->getSelection();
 
-//    MatrixElement *element = 0;
-//    int maxY = m_currentViewSegment->getCanvasYForHeight(0);
+    // factor in transpose to adjust the height calculation
+    long pitchOffset = selection->getSegment().getTranspose();
+    diffPitch += (pitchOffset * -1);
 
     for (EventSelection::eventcontainer::iterator it =
              selection->getSegmentEvents().begin();
          it != selection->getSegmentEvents().end(); ++it) {
-
-//        MatrixElement *element = m_currentViewSegment->getElement(*it);
-//        if (!element) continue;
-
 
         MatrixElement *element = 0;
         ViewElementList::iterator vi = m_currentViewSegment->findEvent(*it);
@@ -214,32 +234,15 @@ MatrixMover::handleMouseMove(const MatrixMouseEvent *e)
                              
         element->setSelected(true);
             
-//        int newX = getSnapGrid().getRulerScale()->
-//            getXForTime(newTime + diffTime);
-
-//        if (newX < 0) newX = 0;
-
-//        int newY = int(element->getLayoutY() + diffY);
-
-//            if (newY < 0) newY = 0;
-//            if (newY > maxY) newY = maxY;
-
-//            element->setLayoutX(newX);
-//            element->setLayoutY(newY);
-
-//            m_currentViewSegment->positionElement(element);
-        
-//        }
     }
 
     if (newPitch != m_lastPlayedPitch) {
         long velocity = m_widget->getCurrentVelocity();
         m_currentElement->event()->get<Int>(BaseProperties::VELOCITY, velocity);
-        m_scene->playNote(m_currentViewSegment->getSegment(), newPitch, velocity);
+        m_scene->playNote(m_currentViewSegment->getSegment(), newPitch + (pitchOffset * -1), velocity);
         m_lastPlayedPitch = newPitch;
     }
 
-//    m_mParentView->canvas()->update();
     return FollowMode(FollowHorizontal | FollowVertical);
 }
 
@@ -260,6 +263,9 @@ MatrixMover::handleMouseRelease(const MatrixMouseEvent *e)
     if (newPitch > 127) newPitch = 127;
     if (newPitch < 0) newPitch = 0;
 
+    // get a basic pitch difference calculation comparing the current element's
+    // pitch to the pitch the mouse was released at (see note in
+    // handleMouseMove)
     using BaseProperties::PITCH;
     timeT diffTime = newTime - m_currentElement->getViewAbsoluteTime();
     int diffPitch = 0;
@@ -267,7 +273,11 @@ MatrixMover::handleMouseRelease(const MatrixMouseEvent *e)
         diffPitch = newPitch - m_currentElement->event()->get<Int>(PITCH);
     }
 
-    EventSelection *selection = m_scene->getSelection();
+    EventSelection* selection = m_scene->getSelection();
+
+    // factor in transpose to adjust the height calculation
+    long pitchOffset = selection->getSegment().getTranspose();
+    diffPitch += (pitchOffset * -1);
 
     if ((diffTime == 0 && diffPitch == 0) || selection->getAddedEvents() == 0) {
         for (size_t i = 0; i < m_duplicateElements.size(); ++i) {
@@ -275,7 +285,6 @@ MatrixMover::handleMouseRelease(const MatrixMouseEvent *e)
             delete m_duplicateElements[i];
         }
         m_duplicateElements.clear();
-//        m_mParentView->canvas()->update();
         m_currentElement = 0;
         return;
     }
@@ -283,7 +292,7 @@ MatrixMover::handleMouseRelease(const MatrixMouseEvent *e)
     if (newPitch != m_lastPlayedPitch) {
         long velocity = m_widget->getCurrentVelocity();
         m_currentElement->event()->get<Int>(BaseProperties::VELOCITY, velocity);
-        m_scene->playNote(m_currentViewSegment->getSegment(), newPitch, velocity);
+        m_scene->playNote(m_currentViewSegment->getSegment(), newPitch + (pitchOffset * -1), velocity);
         m_lastPlayedPitch = newPitch;
     }
 

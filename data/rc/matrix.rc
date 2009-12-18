@@ -163,8 +163,8 @@
       <Action name="preview_selection" text="Set Loop &amp;to Selection" shortcut="Ctrl+;" />
       <Action name="clear_loop" text="Clear L&amp;oop" shortcut="Ctrl+:" />
     <Separator/>
-      <Action name="cursor_prior_segment" text="Pre&amp;vious Segment" icon="next-segment" shortcut="Alt+PgUp" />
-      <Action name="cursor_next_segment" text="Ne&amp;xt Segment" icon="previous-segment" shortcut="Alt+PgDown" />
+      <Action name="cursor_prior_segment" text="Pre&amp;vious Segment" shortcut="Alt+PgUp" />
+      <Action name="cursor_next_segment" text="Ne&amp;xt Segment" shortcut="Alt+PgDown" />
     <Separator/>
       <!-- JAS need to know how to add Qt::KeypadModifier in Human Readable shortcut for Play 'KP_Enter'-->
       <Action name="play" text="&amp;Play" icon="transport-play" /> 

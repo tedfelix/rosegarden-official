@@ -44,8 +44,11 @@
 #include <QPointF>
 #include <QRectF>
 
+//#define DEBUG_MOUSE
+
 namespace Rosegarden
 {
+
 
 using namespace BaseProperties;
 
@@ -204,7 +207,7 @@ MatrixScene::getPriorSegment()
 Segment *
 MatrixScene::getNextSegment()
 {
-    if (m_currentSegmentIndex + 1 >= m_segments.size()) return 0;
+    if ((unsigned int) m_currentSegmentIndex + 1 >= m_segments.size()) return 0;
     return m_segments[m_currentSegmentIndex+1];
 }
 
@@ -368,30 +371,6 @@ MatrixScene::recreatePitchHighlights()
         // from C major (0)
         int offset = key.getTonicPitch();
 
-        // DESIGN NOTE: Now that the matrix can display multiple segments, we've
-        // got to consider transposition issues that were never before a
-        // problem.  The initial test case is a Bb major scale with a Bb key
-        // signature in one segment, and the same segment converted for an Eb
-        // instrument in a copy of the same segment (works out to a G major scale
-        // in key of G major).  We have to have the matrix as a concert pitch
-        // standard, because it's the only sane thing to do in this kind of
-        // environment.
-        //
-        // 1.  It has to represent the actual concert pitch notes you
-        // will hear when clicking on existing notes.  This means if you open
-        // each of these segments independently, each independent view should
-        // have the highlights for a Bb scale, and you will hear Bb when
-        // clicking the Bb in the first case, and again when clicking the G in
-        // the second case.
-        //
-        // We're also going to have to adjust the height at which notes are
-        // drawn for the Bb in Eb transposition case, but that will happen
-        // elsewhere.
-        //
-        // 2. When clicking new notes into existence, the preview notes should
-        // sound with transposition taken into account, so clicking a G in the
-        // Eb transposition segment should sound Bb.
-
         // correct for segment transposition, moving representation the opposite
         // of pitch to cancel it out (C (MIDI pitch 0) in Bb (-2) is concert
         // Bb (10), so 0 -1 == 11 -1 == 10, we have to go +1 == 11 +1 == 0)
@@ -490,7 +469,7 @@ MatrixScene::setupMouseEvent(QGraphicsSceneMouseEvent *e,
     mme.element = 0;
 
     QList<QGraphicsItem *> l = items(e->scenePos());
-    MATRIX_DEBUG << "Found " << l.size() << " items at " << e->scenePos() << endl;
+//    MATRIX_DEBUG << "Found " << l.size() << " items at " << e->scenePos() << endl;
     for (int i = 0; i < l.size(); ++i) {
         MatrixElement *element = MatrixElement::getMatrixElement(l[i]);
         if (element) {
@@ -531,6 +510,7 @@ MatrixScene::setupMouseEvent(QGraphicsSceneMouseEvent *e,
     if (mme.pitch < 0) mme.pitch = 0;
     if (mme.pitch > 127) mme.pitch = 127;
 
+#ifdef DEBUG_MOUSE
     MATRIX_DEBUG << "MatrixScene::setupMouseEvent: sx = " << sx
                  << ", sy = " << sy
                  << ", modifiers = " << mme.modifiers
@@ -540,6 +520,7 @@ MatrixScene::setupMouseEvent(QGraphicsSceneMouseEvent *e,
                  << ", time = " << mme.time
                  << ", pitch = " << mme.pitch
                  << endl;
+#endif
 }
 
 void
@@ -873,6 +854,8 @@ MatrixScene::constrainToSegmentArea(QPointF &scenePos)
 void
 MatrixScene::playNote(Segment &segment, int pitch, int velocity)
 {
+//    std::cout << "Scene is playing a note of pitch: " << pitch
+//              << " + " <<  segment.getTranspose() << std::endl;
     if (!m_document) return;
 
     Instrument *instrument = m_document->getStudio().getInstrumentFor(&segment);

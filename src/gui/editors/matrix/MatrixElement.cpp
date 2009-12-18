@@ -38,12 +38,14 @@ namespace Rosegarden
 
 static const int MatrixElementData = 2;
 
-MatrixElement::MatrixElement(MatrixScene *scene, Event *event, bool drum) :
+MatrixElement::MatrixElement(MatrixScene *scene, Event *event,
+                             bool drum, long pitchOffset) :
     ViewElement(event),
     m_scene(scene),
     m_drum(drum),
     m_current(true),
-    m_item(0)
+    m_item(0),
+    m_pitchOffset(pitchOffset)
 {
     reconfigure();
 }
@@ -154,7 +156,15 @@ MatrixElement::reconfigure(timeT time, timeT duration, int pitch, int velocity)
     setLayoutX(x0);
 
     m_item->setData(MatrixElementData, QVariant::fromValue((void *)this));
-    m_item->setPos(x0, (127 - pitch) * (resolution + 1));
+
+    // set the Y position taking m_pitchOffset into account, subtracting the
+    // opposite of whatever the originating segment transpose was
+
+//    std::cout << "TRANSPOSITION TEST: event pitch: "
+//              << (pitch ) << " m_pitchOffset: " << m_pitchOffset
+//              << std::endl;
+
+    m_item->setPos(x0, (127 - pitch - m_pitchOffset) * (resolution + 1));
 }
 
 bool

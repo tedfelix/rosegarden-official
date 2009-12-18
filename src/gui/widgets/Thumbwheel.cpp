@@ -35,6 +35,7 @@ namespace Rosegarden
 {
 
 Thumbwheel::Thumbwheel(Qt::Orientation orientation,
+                       bool useRed,
 		       QWidget *parent) :
     QWidget(parent),
     m_min(0),
@@ -50,7 +51,8 @@ Thumbwheel::Thumbwheel(Qt::Orientation orientation,
     m_atDefault(true),
     m_clickRotation(m_rotation),
     m_showTooltip(true),
-    m_bright(true)
+    m_bright(true),
+    m_useRed(useRed)
 {
     // this widget was not even remotely trying to pay attention to anything I
     // attempted in the stylesheet, so what we'll do is use the old code for the
@@ -430,6 +432,7 @@ Thumbwheel::paintEvent(QPaintEvent *)
 
         QColor fc = QColor(grey, grey, grey);
         QColor oc = (m_Thorn ? QColor(0xAA, 0xAA, 0xFF) : palette().highlight().color());
+        if (m_useRed) oc = Qt::red;
         if (!m_bright) oc = oc.darker(125);
 
         paint.setPen(fc);
