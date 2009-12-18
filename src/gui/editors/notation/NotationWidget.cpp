@@ -500,6 +500,16 @@ NotationWidget::setSegments(RosegardenDocument *document,
 
     updateSegmentChangerBackground();
 
+    // hide the segment changer if only one segment
+    //
+    // NOTE: if we ever do have a "create a new segment 'here' as an alternate
+    // voice layer" function, we'll have to do some fancier wiring and rig up an
+    // update mechanism to make this come on when a second segment becomes
+    // available to the same view.  (Or will we?  It would have to call
+    // setSegments() again, and we could probably just have an else...show()
+    // here.  Hrm.  Cross that bridge when we come to it.  If we come to it.)
+    if (segments.size() == 1) m_changerWidget->hide();
+
     slotGenerateHeaders();
     
     // Regenerate headers when font size changed

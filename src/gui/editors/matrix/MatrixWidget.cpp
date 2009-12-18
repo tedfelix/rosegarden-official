@@ -468,10 +468,10 @@ MatrixWidget::setSegments(RosegardenDocument *document,
 
     m_chordNameRuler->setReady();
 
-    // fire this slot one time with a value ensuring no movement will be
-    // detected, in order to trigger the drawing of the background using the
-    // current segment's color
-    slotSegmentChangerMoved(m_lastSegmentChangerValue);
+    updateSegmentChangerBackground();
+
+    // hide the changer widget if only one segment
+    if (segments.size() == 1) m_changerWidget->hide();
 }
 
 bool
