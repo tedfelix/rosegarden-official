@@ -202,6 +202,8 @@ protected slots:
     void slotInitialHSliderHack(int);
     void slotInitialVSliderHack(int);
 
+    void slotRegenerateRawNoteRuler(ViewSegment *);
+
 signals :
     void adjustNeeded(bool last);
     void editElement(NotationStaff *, NotationElement *, bool advanced);

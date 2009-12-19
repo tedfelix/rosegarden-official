@@ -91,10 +91,10 @@ NotationWidget::NotationWidget() :
     m_leftGutter(20),
     m_currentTool(0),
     m_playTracking(true),
+    m_inMove(false),
     m_hZoomFactor(1.0),
     m_vZoomFactor(1.0),
     m_referenceScale(0),
-    m_inMove(false),
     m_lastZoomWasHV(true),
     m_lastV(0),
     m_lastH(0),
@@ -515,6 +515,10 @@ NotationWidget::setSegments(RosegardenDocument *document,
     // Regenerate headers when font size changed
     connect(m_scene, SIGNAL(staffsPositionned()),
             this, SLOT(slotGenerateHeaders()));
+
+    // Switch raw note ruler to another segment when needed
+    connect(m_scene, SIGNAL(currentViewSegmentChanged(ViewSegment *)),
+            this, SLOT(slotRegenerateRawNoteRuler(ViewSegment *)));
 }
 
 void
@@ -1610,6 +1614,16 @@ NotationWidget::updateSegmentChangerBackground()
                                 .arg(trackLabel));
 }
 
+void
+NotationWidget::slotRegenerateRawNoteRuler(ViewSegment *vs)
+{
+    Segment *seg = &(vs->getSegment());
+    m_layout->removeWidget(m_rawNoteRuler);
+    delete m_rawNoteRuler;
+    m_rawNoteRuler = new RawNoteRuler(m_referenceScale, seg, 0, 20);
+                                   // why 20 rather than 24 as other rulers ?   
+    m_layout->addWidget(m_rawNoteRuler, RAWNOTERULER_ROW, MAIN_COL, 1, 1);
+}
 
 }
 
