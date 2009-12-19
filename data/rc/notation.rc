@@ -238,7 +238,7 @@
     <Action name="make_chord" text="&amp;Make Chord" icon="group-chord" />
   <Separator/>
     <Action name="beam" text="&amp;Beam Group" icon="group-beam" shortcut="Ctrl+B" />
-    <Action name="auto_beam" text="&amp;Auto-Beam" />
+    <Action name="auto_beam" text="&amp;Auto-Beam" icon="group-autobeam" shortcut="Ctrl+Alt+B" />
     <Action name="break_group" text="&amp;Unbeam" icon="group-unbeam" shortcut="Ctrl+U" />
     <!-- JAS No text in menus for 'remove_indications' action name. -->
     <Action name="remove_indications" />
@@ -706,6 +706,7 @@
   <Action name="make_chord" />
   <Action name="beam" />
   <Action name="break_group" />
+  <Action name="auto_beam" />
 <Separator/>
   <Action name="tuplet" />
   <Action name="simple_tuplet" />
@@ -805,6 +806,7 @@
     <Action name="beam"/>
     <Action name="auto_beam"/>
     <Action name="break_group"/>
+    <Action name="auto_beam" />
     <Action name="slur"/>
     <Action name="phrasing_slur"/>
     <Action name="crescendo"/>
