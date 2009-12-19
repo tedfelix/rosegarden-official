@@ -102,7 +102,7 @@ TempoView::TempoView(RosegardenDocument *doc, QWidget *parent, timeT openTime):
             SLOT(slotPopupEditor(QTreeWidgetItem*, int)));
 
     m_list->setAllColumnsShowFocus(true);
-    m_list->setSelectionMode(QAbstractItemView::SingleSelection);
+    m_list->setSelectionMode(QAbstractItemView::ExtendedSelection);
     
     QStringList sl;
     sl << tr("Time  ")
@@ -265,7 +265,7 @@ TempoView::applyLayout(int /*staffNo*/)
         m_list->setSelectionMode(QTreeWidget::NoSelection);
         leaveActionState("have_selection");
     } else {
-        m_list->setSelectionMode(QAbstractItemView::SingleSelection);
+        m_list->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
         // If no selection then select the first event
         if (m_listSelection.size() == 0)
@@ -416,15 +416,13 @@ TempoView::slotEditDelete()
 {
     QList<QTreeWidgetItem*> selection = m_list->selectedItems();
     
-    if (selection.count() == 0)
-        return ;
+    if (selection.count() == 0) return ;
 
     RG_DEBUG << "TempoView::slotEditDelete - deleting "
     << selection.count() << " items" << endl;
 
     QTreeWidgetItem *listItem;
-    QTreeWidgetItem *it;
-    
+
     TempoListItem *item;
     int itemIndex = -1;
 
@@ -437,12 +435,10 @@ TempoView::slotEditDelete()
     // them off again.
     std::vector<Command *> commands;
 
-    it = m_list->topLevelItem(0);
-    do {
-        item = dynamic_cast<TempoListItem*>(it);
+    while (!selection.isEmpty()) {
+        item = dynamic_cast<TempoListItem*>(selection.first());
 
-        if (itemIndex == -1)
-            itemIndex = m_list->indexOfTopLevelItem(it);
+        if (itemIndex == -1) itemIndex = m_list->indexOfTopLevelItem(selection.first());
 
         if (item) {
             if (item->getType() == TempoListItem::TimeSignature) {
@@ -457,10 +453,9 @@ TempoView::slotEditDelete()
                 haveSomething = true;
             }
         }
-       //++it;
-    } while ( (it = m_list->itemBelow(it)) );
 
-    
+        delete selection.takeFirst();
+    }    
     
     if (haveSomething) {
         MacroCommand *command = new MacroCommand
