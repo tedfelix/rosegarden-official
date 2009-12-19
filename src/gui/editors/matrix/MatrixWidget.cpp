@@ -398,6 +398,22 @@ MatrixWidget::setSegments(RosegardenDocument *document,
     m_pianoView->setScene(m_pianoScene);
     m_pianoView->centerOn(pianoKbd);
 
+    QObject::connect
+    (m_pitchRuler, SIGNAL(hoveredOverKeyChanged(unsigned int)),
+     this, SLOT (slotHoveredOverKeyChanged(unsigned int)));
+
+    QObject::connect
+    (m_pitchRuler, SIGNAL(keyPressed(unsigned int, bool)),
+     this, SLOT (slotKeyPressed(unsigned int, bool)));
+
+    QObject::connect
+    (m_pitchRuler, SIGNAL(keySelected(unsigned int, bool)),
+     this, SLOT (slotKeySelected(unsigned int, bool)));
+
+    QObject::connect
+    (m_pitchRuler, SIGNAL(keyReleased(unsigned int, bool)),
+     this, SLOT (slotKeyReleased(unsigned int, bool)));
+
     // If piano scene and matrix scene don't have the same height
     // one may shift from the other when scrolling vertically
     QRectF viewRect = m_scene->sceneRect();
@@ -1169,6 +1185,194 @@ MatrixWidget::updateSegmentChangerBackground()
                                 .arg(trackLabel));
 }
 
+void
+MatrixWidget::slotHoveredOverKeyChanged(unsigned int y)
+{
+    int evPitch = m_scene->calculatePitchFromY(y);
+    m_pitchRuler->drawHoverNote(evPitch);
+    m_pianoView->update();   // Needed to remove black trailers left by
+                             // hover note at hight zoom levels
+/*    MatrixStaff& staff = *(m_staffs[0]);
+
+    int evPitch = staff.getHeightAtCanvasCoords( -1, y);
+
+    if (evPitch != m_previousEvPitch) {
+        MidiPitchLabel label(evPitch);
+        m_hoveredOverNoteName->setText(QString("%1 (%2)").
+                                       arg(label.getQString()).arg(evPitch));
+        m_previousEvPitch = evPitch;
+    }*/
+}
+
+void MatrixWidget::slotKeyPressed(unsigned int y, bool repeating)
+{
+    slotHoveredOverKeyChanged(y);
+    int evPitch = m_scene->calculatePitchFromY(y);
+
+    // Don't do anything if we're part of a run up the keyboard
+    // and the pitch hasn't changed
+    // Ilan's attempts to do something, which failed.....
+/*    if (m_lastNote == evPitch && repeating)
+        return ;
+
+    // Save value
+    m_lastNote = evPitch;
+    if (!repeating)
+        m_firstNote = evPitch;
+
+    Composition *comp = getDocument()->getComposition();
+    Studio *studio = getDocument()->getStudio();
+
+    NotationStaff *current = m_staffs[m_currentStaff];
+    Composition *composition = &m_document->getComposition();
+    Track *track = composition->getTrackById(current->getSegment().getTrack());
+    if (!track) return 0;*/
+
+/*    getCanvasView()->slotScrollVertSmallSteps(y);
+
+    Composition &comp = getDocument()->getComposition();
+    Studio &studio = getDocument()->getStudio();
+
+    MatrixStaff& staff = *(m_staffs[0]);
+    MidiByte evPitch = staff.getHeightAtCanvasCoords( -1, y);
+
+    // Don't do anything if we're part of a run up the keyboard
+    // and the pitch hasn't changed
+    //
+    if (m_lastNote == evPitch && repeating)
+        return ;
+
+    // Save value
+    m_lastNote = evPitch;
+    if (!repeating)
+        m_firstNote = evPitch;
+
+    Track *track = comp.getTrackById(
+                       staff.getSegment().getTrack());
+
+    Instrument *ins =
+        studio.getInstrumentById(track->getInstrument());
+
+    // check for null instrument
+    //
+    if (ins == 0)
+        return ;
+
+    MappedEvent mE(ins->getId(),
+                   MappedEvent::MidiNote,
+                   evPitch + staff.getSegment().getTranspose(),
+                   MidiMaxValue,
+                   RealTime::zeroTime,
+                   RealTime::zeroTime,
+                   RealTime::zeroTime);
+    StudioControl::sendMappedEvent(mE);*/
+
+}
+
+void MatrixWidget::slotKeySelected(unsigned int y, bool repeating)
+{
+    slotHoveredOverKeyChanged(y);
+
+/*    getCanvasView()->slotScrollVertSmallSteps(y);
+
+    MatrixStaff& staff = *(m_staffs[0]);
+    Segment &segment(staff.getSegment());
+    MidiByte evPitch = staff.getHeightAtCanvasCoords( -1, y);
+
+    // Don't do anything if we're part of a run up the keyboard
+    // and the pitch hasn't changed
+    //
+    if (m_lastNote == evPitch && repeating)
+        return ;
+
+    // Save value
+    m_lastNote = evPitch;
+    if (!repeating)
+        m_firstNote = evPitch;
+
+    EventSelection *s = new EventSelection(segment);
+
+    for (Segment::iterator i = segment.begin();
+            segment.isBeforeEndMarker(i); ++i) {
+
+        if ((*i)->isa(Note::EventType) &&
+                (*i)->has(BaseProperties::PITCH)) {
+
+            MidiByte p = (*i)->get
+                         <Int>
+                         (BaseProperties::PITCH);
+            if (p >= std::min(m_firstNote, evPitch) &&
+                    p <= std::max(m_firstNote, evPitch)) {
+                s->addEvent(*i);
+            }
+        }
+    }
+
+    if (m_currentEventSelection) {
+        // allow addFromSelection to deal with eliminating duplicates
+        s->addFromSelection(m_currentEventSelection);
+    }
+
+    setCurrentSelection(s, false);
+
+    // now play the note as well
+
+    Composition &comp = getDocument()->getComposition();
+    Studio &studio = getDocument()->getStudio();
+    Track *track = comp.getTrackById(segment.getTrack());
+    Instrument *ins =
+        studio.getInstrumentById(track->getInstrument());
+
+    // check for null instrument
+    //
+    if (ins == 0)
+        return ;
+
+    MappedEvent mE(ins->getId(),
+                   MappedEvent::MidiNoteOneShot,
+                   evPitch + segment.getTranspose(),
+                   MidiMaxValue,
+                   RealTime::zeroTime,
+                   RealTime(0, 250000000),
+                   RealTime::zeroTime);
+    StudioControl::sendMappedEvent(mE);*/
+}
+
+void MatrixWidget::slotKeyReleased(unsigned int y, bool repeating)
+{
+/*    MatrixStaff& staff = *(m_staffs[0]);
+    int evPitch = staff.getHeightAtCanvasCoords(-1, y);
+
+    if (m_lastNote == evPitch && repeating)
+        return;
+
+    Rosegarden::Segment &segment(staff.getSegment());
+
+    // send note off (note on at zero velocity)
+
+    Rosegarden::Composition &comp = getDocument()->getComposition();
+    Rosegarden::Studio &studio = getDocument()->getStudio();
+    Rosegarden::Track *track = comp.getTrackById(segment.getTrack());
+    Rosegarden::Instrument *ins =
+        studio.getInstrumentById(track->getInstrument());
+
+    // check for null instrument
+    //
+    if (ins == 0)
+        return;
+
+    evPitch = evPitch + segment.getTranspose();
+    if (evPitch < 0 || evPitch > 127) return;
+
+    Rosegarden::MappedEvent mE(ins->getId(),
+                               Rosegarden::MappedEvent::MidiNote,
+                               evPitch,
+                               0,
+                               Rosegarden::RealTime::zeroTime,
+                               Rosegarden::RealTime::zeroTime,
+                               Rosegarden::RealTime::zeroTime);
+    Rosegarden::StudioControl::sendMappedEvent(mE);*/
+}
 
 }
 

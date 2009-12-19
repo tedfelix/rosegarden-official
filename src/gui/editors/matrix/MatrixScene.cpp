@@ -506,9 +506,7 @@ MatrixScene::setupMouseEvent(QGraphicsSceneMouseEvent *e,
         if (mme.snappedRightTime > end) mme.snappedRightTime = end;
     }
 
-    mme.pitch = 127 - (sy / (m_resolution + 1)); //!!! function for this, to be used by MatrixElement as well
-    if (mme.pitch < 0) mme.pitch = 0;
-    if (mme.pitch > 127) mme.pitch = 127;
+   mme.pitch = calculatePitchFromY(sy);
 
 #ifdef DEBUG_MOUSE
     MATRIX_DEBUG << "MatrixScene::setupMouseEvent: sx = " << sx
@@ -521,6 +519,13 @@ MatrixScene::setupMouseEvent(QGraphicsSceneMouseEvent *e,
                  << ", pitch = " << mme.pitch
                  << endl;
 #endif
+}
+
+int MatrixScene::calculatePitchFromY(int y) const {
+    int pitch = 127 - (y / (m_resolution + 1));
+    if (pitch < 0) pitch = 0;
+    if (pitch > 127) pitch = 127;
+    return pitch;
 }
 
 void

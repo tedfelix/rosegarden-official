@@ -89,6 +89,7 @@ public:
     virtual EventSelection *getSelection() const { return m_selection; }
     virtual void setSelection(EventSelection* s, bool preview);
     void selectAll();
+    int calculatePitchFromY(int y) const;
 
     void setSingleSelectedEvent(MatrixViewSegment *viewSegment,
                                 MatrixElement *e,

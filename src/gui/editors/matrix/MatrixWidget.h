@@ -155,6 +155,10 @@ protected slots:
 
     void slotHScrollBarRangeChanged(int min, int max);
 
+    void slotHoveredOverKeyChanged(unsigned int);
+    void slotKeyPressed(unsigned int, bool);
+    void slotKeySelected(unsigned int, bool);
+    void slotKeyReleased(unsigned int, bool);
 
     /// The horizontal zoom thumbwheel moved
     void slotHorizontalThumbwheelMoved(int);
