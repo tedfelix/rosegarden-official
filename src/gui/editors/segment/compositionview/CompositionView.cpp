@@ -226,9 +226,9 @@ void CompositionView::slotUpdateSize()
     int width = std::max(computedWidth, minWidth);
     
     if (contentsWidth() != width || contentsHeight() != height) {
-        RG_DEBUG << "CompositionView::slotUpdateSize: Resizing contents from "
-                 << contentsWidth() << "x" << contentsHeight() << " to "
-                 << width << "x" << height << endl;
+//        RG_DEBUG << "CompositionView::slotUpdateSize: Resizing contents from "
+//                 << contentsWidth() << "x" << contentsHeight() << " to "
+//                 << width << "x" << height << endl;
 
         resizeContents(width, height);
     }
@@ -485,7 +485,7 @@ void CompositionView::resizeEvent(QResizeEvent* e)
 {
     if (e->size() == e->oldSize()) return;
 
-    RG_DEBUG << "CompositionView::resizeEvent() : from " << e->oldSize() << " to " << e->size() << endl;
+//    RG_DEBUG << "CompositionView::resizeEvent() : from " << e->oldSize() << " to " << e->size() << endl;
 
     //Q3ScrollView::resizeEvent(e);
     RosegardenScrollView::resizeEvent(e);
@@ -845,14 +845,14 @@ void CompositionView::drawArea(QPainter *p, const QRect& clipRect)
             CompositionModel::RectRange interval = *npi;
             p->save();
             p->translate(interval.basePoint.x(), interval.basePoint.y());
-            RG_DEBUG << "CompositionView::drawArea : translating to x = " << interval.basePoint.x() << endl;
+//            RG_DEBUG << "CompositionView::drawArea : translating to x = " << interval.basePoint.x() << endl;
             for (; interval.range.first != interval.range.second; ++interval.range.first) {
                 const PreviewRect& pr = *(interval.range.first);
                 QColor defaultCol = CompositionColourCache::getInstance()->SegmentInternalPreview;
                 QColor col = interval.color.isValid() ? interval.color : defaultCol;
                 p->setBrush(col);
-                p->setPen(col);
-                RG_DEBUG << "CompositionView::drawArea : drawing preview rect at x = " << pr.x() << endl;
+                p->setPen(QPen(col, 0));
+  //              RG_DEBUG << "CompositionView::drawArea : drawing preview rect at x = " << pr.x() << endl;
                 p->drawRect(pr);
             }
             p->restore();
@@ -963,7 +963,7 @@ void CompositionView::drawAreaArtifacts(QPainter * p, const QRect& clipRect)
     // Selection Rect
     //
     if (m_drawSelectionRect) {
-        RG_DEBUG << "about to draw selection rect" << endl;
+        //RG_DEBUG << "about to draw selection rect" << endl;
         drawRect(m_selectionRect.normalized(), p, clipRect, false, 0, false);
     }
 

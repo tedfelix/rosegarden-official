@@ -422,8 +422,6 @@ TempoView::slotEditDelete()
     RG_DEBUG << "TempoView::slotEditDelete - deleting "
     << selection.count() << " items" << endl;
 
-//     QPtrListIterator<QTreeWidgetItem> it(selection);
-    
     QTreeWidgetItem *listItem;
     QTreeWidgetItem *it;
     
@@ -439,10 +437,8 @@ TempoView::slotEditDelete()
     // them off again.
     std::vector<Command *> commands;
 
-//     while ((listItem = it.current()) != 0) 
     it = m_list->topLevelItem(0);
     do {
-        //item = dynamic_cast<TempoListItem*>((*it));
         item = dynamic_cast<TempoListItem*>(it);
 
         if (itemIndex == -1)
@@ -462,7 +458,7 @@ TempoView::slotEditDelete()
             }
         }
        //++it;
-    }while ( (it = m_list->itemBelow(it)) );
+    } while ( (it = m_list->itemBelow(it)) );
 
     
     

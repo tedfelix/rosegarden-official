@@ -374,10 +374,10 @@ void CompositionModelImpl::updatePreviewCacheForNotationSegment(const Segment* s
         double y1 = m_grid.getYSnap();
         double y = y1 + ((y0 - y1) * (pitch - 16)) / 96;
 
-        int height = 2;
+        int height = 1;
 
         if (isPercussion) {
-            height = 3;
+            height = 2;
             if (width > 2) width = 2;
         }
 
