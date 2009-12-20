@@ -21,7 +21,8 @@
 #include <QWidget>
 #include <QPushButton>
 
-#include "base/Event.h" // for timeT
+#include "base/Event.h"             // for timeT
+#include "base/MidiTypes.h"         // for MidiByte
 #include "gui/general/SelectionManager.h"
 #include "gui/widgets/Thumbwheel.h"
 
@@ -239,6 +240,18 @@ private:
     bool m_hSliderHacked;
 
     bool m_Thorn;
+
+    /// The last note we sent in case we're swooshing up and
+    /// down the keyboard and don't want repeat notes sending
+    ///
+    MidiByte m_lastNote;
+
+    /// The first note we sent in similar case (only used for
+    /// doing effective sweep selections
+    ///
+    MidiByte m_firstNote;
+
+
 
     /**
      * Widgets vertical positions inside the main QGridLayout

@@ -82,7 +82,7 @@ public:
 
     virtual QString getName() = 0;
 
-    virtual QSize sizeHint() { return QSize(1,100); }
+    virtual QSize sizeHint() const { return QSize(1,100); }
 
     virtual void paintEvent(QPaintEvent *);
 
