@@ -1233,7 +1233,7 @@ void MatrixWidget::slotKeyPressed(unsigned int y, bool repeating)
 
     // check for null instrument
     //
-    if (ins == 0) return ;
+    if (ins == 0) return;
 
     MappedEvent mE(ins->getId(),
                    MappedEvent::MidiNote,
@@ -1249,27 +1249,25 @@ void MatrixWidget::slotKeySelected(unsigned int y, bool repeating)
 {
     slotHoveredOverKeyChanged(y);
 
-/*    getCanvasView()->slotScrollVertSmallSteps(y);
-
-    MatrixStaff& staff = *(m_staffs[0]);
-    Segment &segment(staff.getSegment());
-    MidiByte evPitch = staff.getHeightAtCanvasCoords( -1, y);
+//    getCanvasView()->slotScrollVertSmallSteps(y);
+    
+    int evPitch = m_scene->calculatePitchFromY(y);
 
     // Don't do anything if we're part of a run up the keyboard
     // and the pitch hasn't changed
     //
-    if (m_lastNote == evPitch && repeating)
-        return ;
+    if (m_lastNote == evPitch && repeating) return ;
 
     // Save value
     m_lastNote = evPitch;
-    if (!repeating)
-        m_firstNote = evPitch;
+    if (!repeating) m_firstNote = evPitch;
 
-    EventSelection *s = new EventSelection(segment);
+    MatrixViewSegment *current = m_scene->getCurrentViewSegment();
 
-    for (Segment::iterator i = segment.begin();
-            segment.isBeforeEndMarker(i); ++i) {
+    EventSelection *s = new EventSelection(current->getSegment());
+
+    for (Segment::iterator i = current->getSegment().begin();
+            current->getSegment().isBeforeEndMarker(i); ++i) {
 
         if ((*i)->isa(Note::EventType) &&
                 (*i)->has(BaseProperties::PITCH)) {
@@ -1277,41 +1275,41 @@ void MatrixWidget::slotKeySelected(unsigned int y, bool repeating)
             MidiByte p = (*i)->get
                          <Int>
                          (BaseProperties::PITCH);
-            if (p >= std::min(m_firstNote, evPitch) &&
-                    p <= std::max(m_firstNote, evPitch)) {
+            if (p >= std::min((int)m_firstNote, evPitch) &&
+                    p <= std::max((int)m_firstNote, evPitch)) {
                 s->addEvent(*i);
             }
         }
     }
 
-    if (m_currentEventSelection) {
+    if (getSelection()) {
         // allow addFromSelection to deal with eliminating duplicates
-        s->addFromSelection(m_currentEventSelection);
+        s->addFromSelection(getSelection());
     }
 
-    setCurrentSelection(s, false);
+    setSelection(s, false);
 
     // now play the note as well
+    Composition &comp = m_document->getComposition();
+    Studio &studio = m_document->getStudio();
 
-    Composition &comp = getDocument()->getComposition();
-    Studio &studio = getDocument()->getStudio();
-    Track *track = comp.getTrackById(segment.getTrack());
-    Instrument *ins =
-        studio.getInstrumentById(track->getInstrument());
+    Track *track = comp.getTrackById(current->getSegment().getTrack());
+    if (!track) return;
+
+    Instrument *ins = studio.getInstrumentById(track->getInstrument());
 
     // check for null instrument
     //
-    if (ins == 0)
-        return ;
+    if (ins == 0) return;
 
     MappedEvent mE(ins->getId(),
-                   MappedEvent::MidiNoteOneShot,
-                   evPitch + segment.getTranspose(),
+                   MappedEvent::MidiNote,
+                   evPitch + current->getSegment().getTranspose(),
                    MidiMaxValue,
                    RealTime::zeroTime,
-                   RealTime(0, 250000000),
+                   RealTime::zeroTime,
                    RealTime::zeroTime);
-    StudioControl::sendMappedEvent(mE);*/
+    StudioControl::sendMappedEvent(mE);
 }
 
 void MatrixWidget::slotKeyReleased(unsigned int y, bool repeating)
@@ -1333,7 +1331,7 @@ void MatrixWidget::slotKeyReleased(unsigned int y, bool repeating)
 
     // check for null instrument
     //
-    if (ins == 0) return ;
+    if (ins == 0) return;
 
     evPitch = evPitch + current->getSegment().getTranspose();
     if (evPitch < 0 || evPitch > 127) return;
