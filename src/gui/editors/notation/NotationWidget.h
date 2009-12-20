@@ -202,7 +202,7 @@ protected slots:
     void slotInitialHSliderHack(int);
     void slotInitialVSliderHack(int);
 
-    void slotRegenerateRawNoteRuler(ViewSegment *);
+    void slotUpdateRawNoteRuler(ViewSegment *);
 
 signals :
     void adjustNeeded(bool last);

@@ -518,7 +518,7 @@ NotationWidget::setSegments(RosegardenDocument *document,
 
     // Switch raw note ruler to another segment when needed
     connect(m_scene, SIGNAL(currentViewSegmentChanged(ViewSegment *)),
-            this, SLOT(slotRegenerateRawNoteRuler(ViewSegment *)));
+            this, SLOT(slotUpdateRawNoteRuler(ViewSegment *)));
 }
 
 void
@@ -1615,14 +1615,11 @@ NotationWidget::updateSegmentChangerBackground()
 }
 
 void
-NotationWidget::slotRegenerateRawNoteRuler(ViewSegment *vs)
+NotationWidget::slotUpdateRawNoteRuler(ViewSegment *vs)
 {
     Segment *seg = &(vs->getSegment());
-    m_layout->removeWidget(m_rawNoteRuler);
-    delete m_rawNoteRuler;
-    m_rawNoteRuler = new RawNoteRuler(m_referenceScale, seg, 0, 20);
-                                   // why 20 rather than 24 as other rulers ?   
-    m_layout->addWidget(m_rawNoteRuler, RAWNOTERULER_ROW, MAIN_COL, 1, 1);
+    m_rawNoteRuler->setCurrentSegment(seg);
+    m_rawNoteRuler->update();
 }
 
 }
