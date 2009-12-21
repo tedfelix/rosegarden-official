@@ -29,6 +29,7 @@
 #include <QTextCodec>
 #include <QWidget>
 #include <QVBoxLayout>
+#include <QGroupBox>
 
 
 namespace Rosegarden
@@ -64,18 +65,22 @@ IdentifyTextCodecDialog::IdentifyTextCodecDialog(QWidget *parent,
         m_text(text)
 {
     setModal(true);
-    setWindowTitle(tr("Choose Text Encoding"));
+    setWindowTitle(tr("Rosegarden"));
 
-    QGridLayout *metagrid = new QGridLayout;
-    setLayout(metagrid);
-    QWidget *vbox = new QWidget(this);
     QVBoxLayout *vboxLayout = new QVBoxLayout;
-    metagrid->addWidget(vbox, 0, 0);
+    setLayout(vboxLayout);
 
-    new QLabel(tr("\nThis file contains text in an unknown language encoding.\n\nPlease select one of the following estimated text encodings\nfor use with the text in this file:\n"), vbox);
+    vboxLayout->addWidget(new QLabel(tr("<qt><h3>Choose Text Encoding</h3></qt>")));
 
-    QComboBox *codecs = new QComboBox( vbox );
-    vboxLayout->addWidget(codecs);
+    QGroupBox *g = new QGroupBox;
+    QVBoxLayout *gl = new QVBoxLayout;
+    vboxLayout->addWidget(g);
+    g->setLayout(gl);
+
+    gl->addWidget(new QLabel(tr("<qt><p>This file contains text in an unknown language encoding.</p><p>Please select one of the following estimated text encodings for use with the text in this file:</p></qt>")));
+
+    QComboBox *codecs = new QComboBox;
+    gl->addWidget(codecs);
 
     std::string defaultCodec;
     QTextCodec *cc = 0;
@@ -108,8 +113,6 @@ IdentifyTextCodecDialog::IdentifyTextCodecDialog(QWidget *parent,
     int i = 0;
     int current = -1;
 
-    int selectedProbability = 0;
-
     while ((codec = QTextCodec::codecForIndex(i)) != 0) {
 
         if (!codec) {
@@ -123,16 +126,6 @@ IdentifyTextCodecDialog::IdentifyTextCodecDialog(QWidget *parent,
             // prefer the first codec that seems OK with what we've got
             cc = codec;
         }
-
-/*
-  we're no longer confident enough to actually eliminate codecs on the
-  basis of our crappy test, though
-
-        if (probability <= 0) {
-            ++i;
-            continue;
-        }
-*/
 
         std::string name = qstrtostr(codec->name().data());
 
@@ -171,21 +164,18 @@ IdentifyTextCodecDialog::IdentifyTextCodecDialog(QWidget *parent,
     connect(codecs, SIGNAL(activated(int)),
             this, SLOT(slotCodecSelected(int)));
 
-    new QLabel(tr("\nExample text from file:"), vbox);
-    m_example = new QLabel("", vbox );
-    vboxLayout->addWidget(m_example);
-    vbox->setLayout(vboxLayout);
+    new QLabel(tr("\nExample text from file:"));
+    m_example = new QLabel;
+    m_example->setStyleSheet("background: #fff3c3; color: black;");
+    gl->addWidget(m_example);
     QFont font;
     font.setStyleHint(QFont::TypeWriter);
     m_example->setFont(font);
-    m_example->setPaletteForegroundColor(QColor(Qt::blue));
-//    std::cerr << "calling slotCodecSelected(" << current << ")" << std::endl;
     if (current < 0) current = 0;
     codecs->setCurrentIndex(current);
     slotCodecSelected(current);
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok);
-    metagrid->addWidget(buttonBox, 1, 0);
-    metagrid->setRowStretch(0, 10);
+    vboxLayout->addWidget(buttonBox);
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
@@ -193,16 +183,11 @@ IdentifyTextCodecDialog::IdentifyTextCodecDialog(QWidget *parent,
 void
 IdentifyTextCodecDialog::slotCodecSelected(int i)
 {
-//    std::cerr << "codec index = " << i << std::endl;
     if (i < 0 || i >= (int)m_codecs.size()) return;
     std::string name = m_codecs[i];
-//    std::cerr << "codecs: ";
-//    for (int j = 0; j < m_codecs.size(); ++j) std::cerr << m_codecs[j] << " ";
-//    std::cerr << std::endl;
     QTextCodec *codec = QTextCodec::codecForName(name.c_str());
     if (!codec) return;
     m_codec = qstrtostr( codec->name() );
-//    std::cerr << "Applying codec " << m_codec << std::endl;
     QString outText = codec->toUnicode(m_text.c_str(), m_text.length());
     if (outText.length() > 80) outText = outText.left(80);
     m_example->setText("\"" + outText + "\"");
