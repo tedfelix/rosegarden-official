@@ -2497,7 +2497,7 @@ NotePixmapFactory::makeSlur(int length, int dy, bool above, bool phrasing)
 
         delete m_generatedPixmap;
 //        delete m_generatedMask;
-        QPixmap newPixmap(i);
+        QPixmap newPixmap = QPixmap::fromImage(i);
         QGraphicsPixmapItem *p = new QGraphicsPixmapItem(newPixmap);
         p->setOffset(QPointF(-hotspot.x(), -hotspot.y()));
 //!!!        p->setMask(PixmapFunctions::generateMask(newPixmap,
