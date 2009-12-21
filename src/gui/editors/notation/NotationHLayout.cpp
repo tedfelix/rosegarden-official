@@ -1278,7 +1278,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
             continue;
 
         NOTATION_DEBUG << "NotationHLayout::looking for bar "
-        << bpi->first << endl;
+                       << bpi->first << endl;
         BarDataList::iterator bdi = barList.find(barNo);
         if (bdi == barList.end())
             continue;
@@ -1384,7 +1384,9 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
         double delta = 0;
         float sigx = 0.f;
 
-        for (NotationElementList::iterator it = from; it != to; ++it) {
+        for (NotationElementList::iterator it = from;
+             it != to && it != notes->end();
+             ++it) {
 
             NotationElement *el = static_cast<NotationElement*>(*it);
             delta = 0;
