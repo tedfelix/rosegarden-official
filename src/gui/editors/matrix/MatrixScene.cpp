@@ -639,7 +639,16 @@ void
 MatrixScene::setSelection(EventSelection *s, bool preview)
 {
     if (!m_selection && !s) return;
-    if (m_selection && s && (m_selection == s || *m_selection == *s)) return;
+    if (m_selection == s) return;
+    if (m_selection && s && *m_selection == *s) {
+        // selections are identical, no need to update elements, but
+        // still need to replace the old selection to avoid a leak
+        // (can't just delete s in case caller still refers to it)
+        EventSelection *oldSelection = m_selection;
+        m_selection = s;
+        delete oldSelection;
+        return;
+    }
 
     EventSelection *oldSelection = m_selection;
     m_selection = s;
