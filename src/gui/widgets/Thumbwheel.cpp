@@ -340,7 +340,7 @@ Thumbwheel::paintEvent(QPaintEvent *)
 
     Profiler profiler2("Thumbwheel::paintEvent (no cache)");
 
-    m_cache = QImage(size(), QImage::Format_ARGB32);
+    m_cache = QImage(size(), QImage::Format_ARGB32_Premultiplied);
     m_cache.fill(Qt::transparent);
 
     int bw = 3;

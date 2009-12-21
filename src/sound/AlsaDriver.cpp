@@ -1252,6 +1252,17 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection)
                         // don't connect hardware as the default, only connection
                         continue;
                     }
+                    if (idealConnection == "" &&
+                        strtoqstr(port->m_name).contains("osegarden")) {
+                        // Don't connect to any of our own ports per
+                        // default!  Note that our client name is set
+                        // to "rosegarden" in initialiseMidi -- this
+                        // string is not translated, and we'd have to
+                        // change this if ever it were.  We don't have
+                        // a capital R, but let's omit the R from the
+                        // test just in case...
+                        continue;
+                    }
 
                     // OK, this one will do
 
@@ -1539,6 +1550,10 @@ AlsaDriver::initialiseMidi()
         return false;
     }
 
+    // Set the client name.  Note that we depend on knowing this name
+    // elsewhere, e.g. in setPlausibleConnection below.  If it is ever
+    // changed, we may have to check for other occurrences
+    // 
     snd_seq_set_client_name(m_midiHandle, "rosegarden");
 
     if ((m_client = snd_seq_client_id(m_midiHandle)) < 0) {
