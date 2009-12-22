@@ -2070,7 +2070,7 @@
         <location filename="../QMenuStrings.cpp" line="2103"/>
         <source>Ctrl+Alt+B</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Alt+B</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2112"/>
@@ -13988,17 +13988,17 @@ para usar con el texto en este archivo:
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="68"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="73"/>
         <source>&lt;qt&gt;&lt;h3&gt;Choose Text Encoding&lt;/h3&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;h3&gt;Seleccione un tipo de codificación de texto&lt;/h3&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="80"/>
         <source>&lt;qt&gt;&lt;p&gt;This file contains text in an unknown language encoding.&lt;/p&gt;&lt;p&gt;Please select one of the following estimated text encodings for use with the text in this file:&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Este archivo contiene texto en un lenguaje de condificación desconocido.&lt;/p&gt;&lt;p&gt;Por favor, seleccione una de las siguientes codificaciones de texto estimadas para usar con el texto en este archivo:&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="90"/>
@@ -16099,12 +16099,12 @@ Doble clic para abrir el editor de marcadores.</translation>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="1186"/>
         <source>&lt;qt&gt;Rotate wheel to change the active segment&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Girar la rueda para cambiar el segmento activo&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="1187"/>
         <source>&lt;qt&gt;Segment: &quot;%1&quot;&lt;br&gt;Track: %2 &quot;%3&quot;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Segmento: &quot;%1&quot;&lt;br&gt;Pista: %2 &quot;%3&quot;&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -17289,12 +17289,12 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1609"/>
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1610"/>
         <source>&lt;qt&gt;Rotate wheel to change the active segment&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Girar la rueda para cambiar el segmento activo&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1611"/>
         <source>&lt;qt&gt;Segment: &quot;%1&quot;&lt;br&gt;Track: %2 &quot;%3&quot;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Segmento: &quot;%1&quot;&lt;br&gt;Pista: %2 &quot;%3&quot;&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
