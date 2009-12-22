@@ -285,7 +285,7 @@ MatrixView::updateWindowTitle(bool m)
 
         setWindowTitle(tr("%1%2 - Segment%3Track%4#%5 - %6")
                       .arg(indicator)
-                      .arg(getDocument()->getTitle())
+                      .arg(getDocument()->getShortTitle())
                       .arg(segLabel)
                       .arg(trkLabel)
                       .arg(trackPosition + 1)
@@ -295,14 +295,14 @@ MatrixView::updateWindowTitle(bool m)
 
         setWindowTitle(tr("%1%2 - All Segments - %3")
                       .arg(indicator)
-                      .arg(getDocument()->getTitle())
+                      .arg(getDocument()->getShortTitle())
                       .arg(view));
 
     } else {
 
         setWindowTitle(tr("%1%2 - %n Segment(s) - %3", "", m_segments.size())
                       .arg(indicator)
-                      .arg(getDocument()->getTitle())
+                      .arg(getDocument()->getShortTitle())
                       .arg(view));
     }
 

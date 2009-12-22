@@ -217,9 +217,14 @@ public:
     void setTitle(const QString &_t);
 
     /**
-     * returns the title of the document
+     * returns the title of the document, including the full path
      */
     const QString &getTitle() const;
+
+    /**
+     * returns the title of the document
+     */
+    const QString getShortTitle() const;
 
     /**
      * Returns true if the file is a regular Rosegarden ".rg" file,
@@ -633,7 +638,7 @@ protected:
     bool m_autoSaved;
 
     /**
-     * the title of the current document
+     * the title of the current document, including the path
      */
     QString m_title;
 

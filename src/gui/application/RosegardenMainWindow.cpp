@@ -942,7 +942,7 @@ RosegardenMainWindow::initView()
 
     m_doc->attachView(swapView);
 
-    setWindowTitle(tr("%1 - %2").arg(m_doc->getTitle()).arg(qApp->applicationName()));
+    setWindowTitle(tr("%1 - %2").arg(m_doc->getShortTitle()).arg(qApp->applicationName()));
     
     // Transport setup
     //
@@ -1115,7 +1115,7 @@ RosegardenMainWindow::setDocument(RosegardenDocument* newDocument)
     // Caption
     //
     QString caption = qApp->applicationName();
-    setWindowTitle(tr("%1 - %2").arg(newDocument->getTitle()).arg(caption));
+    setWindowTitle(tr("%1 - %2").arg(newDocument->getShortTitle()).arg(caption));
     
 
     //     // reset AudioManagerDialog
@@ -1291,6 +1291,8 @@ RosegardenMainWindow::openFile(QString filePath, ImportType type)
         
         settings.endGroup();
     }
+
+    slotUpdateTitle(false);
 }
 
 RosegardenDocument*
@@ -1595,7 +1597,7 @@ RosegardenMainWindow::readGlobalProperties()
     }
 
     QString caption = qApp->applicationName();
-        setWindowTitle(tr("%1 - %2").arg(m_doc->getTitle()).arg(caption));
+    setWindowTitle(tr("%1 - %2").arg(m_doc->getShortTitle()).arg(caption));
 }
 
 void
@@ -1684,7 +1686,7 @@ RosegardenMainWindow::slotUpdateTitle(bool m)
 
     QString caption = qApp->applicationName();
     QString indicator = (m ? "*" : "");
-    setWindowTitle(tr("%1%2 - %3").arg(indicator).arg(m_doc->getTitle()).arg(caption));
+    setWindowTitle(tr("%1%2 - %3").arg(indicator).arg(m_doc->getShortTitle()).arg(caption));
 }
 
 void
@@ -1726,7 +1728,6 @@ RosegardenMainWindow::openURL(const QUrl& url)
     }
 
     QString target;
-    QString caption(url.path());
 
     //&&& KIO used to show a progress dialog of its own; we need to
     //replicate that
@@ -1746,8 +1747,6 @@ RosegardenMainWindow::openURL(const QUrl& url)
 
     source.waitForData();
     openFile(target);
-
-    setWindowTitle(caption);
 }
 
 void
@@ -2045,7 +2044,7 @@ RosegardenMainWindow::slotFileSaveAs(bool asTemplate)
         m_recentFiles.add(newName);
 
         QString caption = qApp->applicationName();
-        setWindowTitle(tr("%1 - %2").arg(m_doc->getTitle()).arg(caption));
+        setWindowTitle(tr("%1 - %2").arg(m_doc->getShortTitle()).arg(caption));
         // update the edit view's captions too
         emit compositionStateUpdate();
     }
