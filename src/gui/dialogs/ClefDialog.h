@@ -65,6 +65,7 @@ public slots:
     void slotClefDown();
     void slotOctaveUp();
     void slotOctaveDown();
+    void accept();
 
 protected:
     void redrawClefPixmap();

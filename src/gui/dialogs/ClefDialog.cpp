@@ -148,8 +148,11 @@ ClefDialog::ClefDialog(QWidget *parent,
         // happen to want to ressurect it, although this seems unlikely.)
         //
         //m_transposeButton = new QRadioButton(tr("Maintain current positions on the staff"));
-        	
-        m_changeOctaveButton->setChecked(true);
+        
+        settings.beginGroup("Clef_Dialog");        	
+        m_changeOctaveButton->setChecked(settings.value("change_octave", true).toBool());
+        m_noConversionButton->setChecked(settings.value("transpose", false).toBool());
+        settings.endGroup();
     } else {
         m_noConversionButton = 0;
         m_changeOctaveButton = 0;
@@ -330,6 +333,18 @@ ClefDialog::translatedClefName(Clef clef)
 
     return name;
 }
+
+void
+ClefDialog::accept()
+{
+    QSettings settings;
+    settings.beginGroup("Clef_Dialog");
+    settings.setValue("change_octave", m_changeOctaveButton->isChecked());    
+    settings.setValue("transpose", m_noConversionButton->isChecked());    
+    settings.endGroup();
+    QDialog::accept();
+}
+
 
 }
 #include "ClefDialog.moc"
