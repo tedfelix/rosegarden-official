@@ -136,7 +136,9 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
 
     m_appendLabel = new QCheckBox(frame);
     connect(m_appendLabel, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
-    m_appendLabel->setChecked(qStrToBool(settings.value("appendlabel", "true")));
+    // I traditionally had these turned off, and when they reappeared, I found
+    // them incredibly annoying, so I'm making false the default:
+    m_appendLabel->setChecked(qStrToBool(settings.value("appendlabel", "false")));
     layout->addWidget(m_appendLabel, row, 1, row- row+1, 2);
     row++;
     settings.endGroup();
