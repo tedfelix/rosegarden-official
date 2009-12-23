@@ -1813,7 +1813,7 @@ EventView::updateWindowTitle(bool m)
 
         setWindowTitle(tr("%1%2 - Triggered Segment: %3")
                        .arg(indicator)
-                       .arg(getDocument()->getShortTitle())
+                       .arg(getDocument()->getTitle())
                        .arg(strtoqstr(m_segments[0]->getLabel())));
 
 
@@ -1829,13 +1829,13 @@ EventView::updateWindowTitle(bool m)
 
         setWindowTitle(tr("%1%2 - Segment Track #%3 - Event List")
                        .arg(indicator)
-                       .arg(getDocument()->getShortTitle())
+                       .arg(getDocument()->getTitle())
                        .arg(trackPosition + 1));
 
     } else {
 
         setWindowTitle(tr("%1%2 - %3 Segments - Event List")
-                       .arg(getDocument()->getShortTitle())
+                       .arg(getDocument()->getTitle())
                        .arg(m_segments.size()));
     }
 

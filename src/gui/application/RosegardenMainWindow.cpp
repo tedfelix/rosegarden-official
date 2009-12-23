@@ -942,7 +942,7 @@ RosegardenMainWindow::initView()
 
     m_doc->attachView(swapView);
 
-    setWindowTitle(tr("%1 - %2").arg(m_doc->getShortTitle()).arg(qApp->applicationName()));
+    setWindowTitle(tr("%1 - %2").arg(m_doc->getTitle()).arg(qApp->applicationName()));
     
     // Transport setup
     //
@@ -1115,7 +1115,7 @@ RosegardenMainWindow::setDocument(RosegardenDocument* newDocument)
     // Caption
     //
     QString caption = qApp->applicationName();
-    setWindowTitle(tr("%1 - %2").arg(newDocument->getShortTitle()).arg(caption));
+    setWindowTitle(tr("%1 - %2").arg(newDocument->getTitle()).arg(caption));
     
 
     //     // reset AudioManagerDialog
@@ -1291,8 +1291,6 @@ RosegardenMainWindow::openFile(QString filePath, ImportType type)
         
         settings.endGroup();
     }
-
-    slotUpdateTitle(false);
 }
 
 RosegardenDocument*
@@ -1597,7 +1595,7 @@ RosegardenMainWindow::readGlobalProperties()
     }
 
     QString caption = qApp->applicationName();
-    setWindowTitle(tr("%1 - %2").arg(m_doc->getShortTitle()).arg(caption));
+    setWindowTitle(tr("%1 - %2").arg(m_doc->getTitle()).arg(caption));
 }
 
 void
@@ -1686,7 +1684,7 @@ RosegardenMainWindow::slotUpdateTitle(bool m)
 
     QString caption = qApp->applicationName();
     QString indicator = (m ? "*" : "");
-    setWindowTitle(tr("%1%2 - %3").arg(indicator).arg(m_doc->getShortTitle()).arg(caption));
+    setWindowTitle(tr("%1%2 - %3").arg(indicator).arg(m_doc->getTitle()).arg(caption));
 }
 
 void
@@ -1729,6 +1727,13 @@ RosegardenMainWindow::openURL(const QUrl& url)
 
     QString target;
 
+    QSettings settings;
+    settings.beginGroup(GeneralOptionsConfigGroup);
+    bool useBrokenLegacyWindowTitles = settings.value("long_window_titles", false).toBool();
+    settings.endGroup();
+
+    QString caption(url.path());
+
     //&&& KIO used to show a progress dialog of its own; we need to
     //replicate that
 
@@ -1747,6 +1752,17 @@ RosegardenMainWindow::openURL(const QUrl& url)
 
     source.waitForData();
     openFile(target);
+
+    // A curious thing here.  The original intent everywhere is clear, and
+    // the document title was supposed to be set with (QFileInfo).fileName(),
+    // which changes "/home/foo/bar/blee/dog/rat/bob/dungleflungie/Foobar.rg"
+    // into "Foobar.rg" but that never worked, because of this next line.
+    //
+    // Chris Cherrett prefers the broken behavior, so I've added a config option
+    // to re-enable this line, which derives the caption from (QUrl).path().  If
+    // we don't set this here, it gets set in three or four other places shortly
+    // after loading a file, so there's nothing else to do here.
+    if (useBrokenLegacyWindowTitles) setWindowTitle(caption);
 }
 
 void
@@ -2044,7 +2060,7 @@ RosegardenMainWindow::slotFileSaveAs(bool asTemplate)
         m_recentFiles.add(newName);
 
         QString caption = qApp->applicationName();
-        setWindowTitle(tr("%1 - %2").arg(m_doc->getShortTitle()).arg(caption));
+        setWindowTitle(tr("%1 - %2").arg(m_doc->getTitle()).arg(caption));
         // update the edit view's captions too
         emit compositionStateUpdate();
     }

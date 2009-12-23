@@ -3036,23 +3036,23 @@ NotationView::updateWindowTitle(bool m)
         int trackPosition = -1;
         if (track)
             trackPosition = track->getPosition();
-        //    std::cout << std::endl << std::endl << std::endl << "DEBUG TITLE BAR: " << getDocument()->getShortTitle() << std::endl << std::endl << std::endl;
+        //    std::cout << std::endl << std::endl << std::endl << "DEBUG TITLE BAR: " << getDocument()->getTitle() << std::endl << std::endl << std::endl;
         setWindowTitle(tr("%1%2 - Segment Track #%3 - Notation")
                       .arg(indicator)
-                      .arg(getDocument()->getShortTitle())
+                      .arg(getDocument()->getTitle())
                       .arg(trackPosition + 1));
 
     } else if (m_segments.size() == getDocument()->getComposition().getNbSegments()) {
 
         setWindowTitle(tr("%1%2 - All Segments - Notation")
                       .arg(indicator)
-                      .arg(getDocument()->getShortTitle()));
+                      .arg(getDocument()->getTitle()));
 
     } else {
 
         setWindowTitle(tr("%1%2 - %n Segment(s) - Notation", "", m_segments.size())
                     .arg(indicator)
-                    .arg(getDocument()->getShortTitle()));
+                    .arg(getDocument()->getTitle()));
 
     }
 }

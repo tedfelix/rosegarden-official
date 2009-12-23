@@ -113,6 +113,7 @@ protected:
     QCheckBox *m_appendLabel;
     QCheckBox *m_jackTransport;
     QCheckBox *m_Thorn;
+    QCheckBox *m_longTitles;
 
     QComboBox *m_pdfViewer;
     QComboBox *m_filePrinter;

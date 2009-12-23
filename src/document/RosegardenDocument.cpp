@@ -225,17 +225,6 @@ const QString& RosegardenDocument::getTitle() const
     return m_title;
 }
 
-const QString RosegardenDocument::getShortTitle() const
-{
-    // I don't like having my username in all my screenshots, and other random
-    // apps I sampled don't display the entire path in the title bar, so strip
-    // the path out:
-    QFileInfo fi(m_title);
-
-    if (m_title == "Untitled") return m_title;
-    else return fi.fileName();
-}
-
 void RosegardenDocument::slotUpdateAllViews(RosegardenMainViewWidget *sender)
 {
     RG_DEBUG << "RosegardenDocument::slotUpdateAllViews" << endl;

@@ -772,7 +772,7 @@ void
 TempoView::updateViewCaption()
 {
     setWindowTitle(tr("%1 - Tempo and Time Signature Editor")
-                .arg(getDocument()->getShortTitle()));
+                .arg(getDocument()->getTitle()));
 }
 
 void

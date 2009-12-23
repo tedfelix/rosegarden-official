@@ -280,6 +280,17 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
 
     ++row;
 
+    layout->addWidget(new QLabel(tr("Show full path in window titles")), row, 0);
+
+    m_longTitles = new QCheckBox;
+    connect(m_longTitles, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
+    layout->addWidget(m_longTitles, row, 1);
+
+    settings.beginGroup(GeneralOptionsConfigGroup);
+    m_longTitles->setChecked(settings.value("long_window_titles", false).toBool());
+    settings.endGroup();
+
+    ++row;
     layout->setRowStretch(row, 10);
 
     addTab(frame, tr("Presentation"));
@@ -417,8 +428,9 @@ void GeneralConfigurationPage::apply()
 
     settings.beginGroup(GeneralOptionsConfigGroup);
 
-    int Thorn = m_Thorn->isChecked();
-    settings.setValue("use_thorn_style", Thorn);
+    settings.setValue("use_thorn_style", m_Thorn->isChecked());
+
+    settings.setValue("long_window_titles", m_longTitles->isChecked());
 
     unsigned int interval = 0;
 
