@@ -807,6 +807,7 @@ void BankEditorDialog::populateDeviceEditors(QTreeWidgetItem* item)
         m_keyMappingEditor->show();
 
         m_lastDevice = keyItem->getDeviceId();
+        m_rightSide->setEnabled(true);
 
         return ;
     }

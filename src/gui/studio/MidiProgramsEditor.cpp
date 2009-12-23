@@ -621,9 +621,11 @@ MidiProgramsEditor::getProgram(const MidiBank &bank, int programNo)
     ProgramList::iterator it = m_programList.begin();
 
     for (; it != m_programList.end(); it++) {
-        RG_DEBUG << "it->getBank() " << (it->getBank() == bank ? "==" : "!=") << " bank" << endl;
-        if (it->getBank() == bank && it->getProgram() == programNo)
+        if (it->getBank() == bank && it->getProgram() == programNo) {
+            //Only show hits to avoid overflow of console.
+            RG_DEBUG << "it->getBank() " << "== bank" << endl;
             return &(*it);
+        }
     }
 
     return 0;
