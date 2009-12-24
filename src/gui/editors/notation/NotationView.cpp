@@ -76,6 +76,7 @@
 #include "commands/segment/AddTempoChangeCommand.h"
 #include "commands/segment/AddTimeSignatureAndNormalizeCommand.h"
 #include "commands/segment/AddTimeSignatureCommand.h"
+#include "commands/segment/AddLayerCommand.h"
 
 #include "commands/notation/InterpretCommand.h"
 #include "commands/notation/ClefInsertionCommand.h"
@@ -169,7 +170,8 @@ NotationView::NotationView(RosegardenDocument *doc,
     m_hoveredOverAbsoluteTime(0),
     m_fontCombo(0),
     m_fontSizeCombo(0),
-    m_spacingCombo(0)
+    m_spacingCombo(0),
+    m_segments(segments)
 {
     m_notationWidget = new NotationWidget();
     setCentralWidget(m_notationWidget);
@@ -386,6 +388,7 @@ NotationView::setupActions()
     // Code deactivated.
 
     // "layout" submenu 
+    createAction("add_layer", SLOT(slotAddLayer()));
     createAction("linear_mode", SLOT(slotLinearMode()));
     createAction("continuous_page_mode", SLOT(slotContinuousPageMode()));
     createAction("multi_page_mode", SLOT(slotMultiPageMode()));
@@ -747,6 +750,7 @@ NotationView::setupActions()
     createAction("show_symbol_toolbar", SLOT(slotToggleSymbolsToolBar()));
     createAction("show_transport_toolbar", SLOT(slotToggleTransportToolBar()));
     createAction("show_layout_toolbar", SLOT(slotToggleLayoutToolBar()));
+    createAction("show_layer_toolbar", SLOT(slotToggleLayerToolBar()));
     createAction("show_rulers_toolbar", SLOT(slotToggleRulersToolBar()));
 
     //"rulers" subMenu
@@ -1791,6 +1795,12 @@ void
 NotationView::slotToggleTransportToolBar()
 {
     toggleNamedToolBar("Transport Toolbar");
+}
+
+void
+NotationView::slotToggleLayerToolBar()
+{
+    toggleNamedToolBar("Layer Toolbar");
 }
 
 void
@@ -4223,6 +4233,22 @@ NotationView::slotCycleSlashes()
     if (!selection) return;
     TmpStatusMsg msg(tr("Cycling slashes..."), this);
     CommandHistory::getInstance()->addCommand(new CycleSlashesCommand(*selection));
+}
+
+void
+NotationView::slotAddLayer()
+{
+    AddLayerCommand *command = new AddLayerCommand(getCurrentSegment(), getDocument()->getComposition());
+    CommandHistory::getInstance()->addCommand(command);
+
+    // get the pointer to the segment we just created and add it to m_segments
+    m_segments.push_back(command->getSegment());
+
+    // re-invoke setSegments with the ammended m_segments
+    m_notationWidget->setSegments(m_doc, m_segments);
+
+    // I bet undoing this goes kaboom somewhere, if doing this doesn't go kaboom
+    // immediately, but let's go for it!
 }
 
 

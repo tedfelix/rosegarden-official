@@ -386,14 +386,21 @@ void
 NotationWidget::setSegments(RosegardenDocument *document,
                             std::vector<Segment *> segments)
 {
+    std::cout << "NotationWidget::setSegments() - total segments: " << segments.size() << std::endl;
+
     if (m_document) {
         disconnect(m_document, SIGNAL(pointerPositionChanged(timeT)),
                    this, SLOT(slotPointerPositionChanged(timeT)));
     }
 
+    std::cout << __LINE__ << std::endl;
+
     m_document = document;
 
     delete m_referenceScale;
+
+
+    std::cout << __LINE__ << std::endl;
 
     delete m_scene;
     m_scene = new NotationScene();
@@ -402,6 +409,9 @@ NotationWidget::setSegments(RosegardenDocument *document,
     m_scene->setStaffs(document, segments);
 
     m_referenceScale = new ZoomableRulerScale(m_scene->getRulerScale());
+
+
+    std::cout << __LINE__ << std::endl;
 
     connect(m_scene, SIGNAL(mousePressed(const NotationMouseEvent *)),
             this, SLOT(slotDispatchMousePress(const NotationMouseEvent *)));
@@ -427,27 +437,52 @@ NotationWidget::setSegments(RosegardenDocument *document,
     connect(m_scene, SIGNAL(sceneDeleted()),
             this, SIGNAL(sceneDeleted()));
 
+
+    std::cout << __LINE__ << std::endl;
+
     m_view->setScene(m_scene);
 
+
+    std::cout << __LINE__ << std::endl;
+
     m_toolBox->setScene(m_scene);
+
+
+    std::cout << __LINE__ << std::endl;
 
     m_hpanner->setScene(m_scene);
     m_hpanner->fitInView(m_scene->sceneRect(), Qt::KeepAspectRatio);
 
-    m_controlsWidget->setSegments(document, segments);
+
+    std::cout << __LINE__ << std::endl;
+
+    //!!! should just remove the code from the ctor because this will wipe it
+    // out the first time setSegments() is called, but I don't want to poke
+    // around with that yet
+    if (m_controlsWidget) {
+        delete m_controlsWidget;
+        m_controlsWidget = new ControlRulerWidget;
+        m_layout->addWidget(m_controlsWidget, CONTROLS_ROW, MAIN_COL, 1, 1);
+        m_controlsWidget->setSegments(document, segments);
+    }
     m_controlsWidget->setViewSegment((ViewSegment *) m_scene->getCurrentStaff());
     m_controlsWidget->setRulerScale(m_referenceScale, m_leftGutter);
 
     connect(m_scene, SIGNAL(layoutUpdated(timeT,timeT)),
             m_controlsWidget, SLOT(slotUpdateRulers(timeT,timeT)));
     
-    // For some reason this doesn't work in the constructor - not looked in detail
     connect(m_scene, SIGNAL(selectionChanged(EventSelection *)),
             m_controlsWidget, SLOT(slotSelectionChanged(EventSelection *)));
 
     connect(m_scene, SIGNAL(currentViewSegmentChanged(ViewSegment *)),
             m_controlsWidget, SLOT(slotSetCurrentViewSegment(ViewSegment *)));
-    
+
+    // clean these up if they're left over from a previous run of setSegments
+    if (m_topStandardRuler) delete m_topStandardRuler;    
+    if (m_bottomStandardRuler) delete m_bottomStandardRuler;
+    if (m_chordNameRuler) delete m_chordNameRuler;
+    if (m_rawNoteRuler) delete m_rawNoteRuler;
+
     m_topStandardRuler = new StandardRuler(document,
                                            m_referenceScale,
                                            0, 25,
@@ -501,14 +536,8 @@ NotationWidget::setSegments(RosegardenDocument *document,
     updateSegmentChangerBackground();
 
     // hide the segment changer if only one segment
-    //
-    // NOTE: if we ever do have a "create a new segment 'here' as an alternate
-    // voice layer" function, we'll have to do some fancier wiring and rig up an
-    // update mechanism to make this come on when a second segment becomes
-    // available to the same view.  (Or will we?  It would have to call
-    // setSegments() again, and we could probably just have an else...show()
-    // here.  Hrm.  Cross that bridge when we come to it.  If we come to it.)
     if (segments.size() == 1) m_changerWidget->hide();
+    else m_changerWidget->show();
 
     slotGenerateHeaders();
     
@@ -519,6 +548,9 @@ NotationWidget::setSegments(RosegardenDocument *document,
     // Switch raw note ruler to another segment when needed
     connect(m_scene, SIGNAL(currentViewSegmentChanged(ViewSegment *)),
             this, SLOT(slotUpdateRawNoteRuler(ViewSegment *)));
+
+    std::cout << __LINE__ << std::endl;
+
 }
 
 void

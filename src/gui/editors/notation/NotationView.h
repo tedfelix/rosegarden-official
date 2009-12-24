@@ -244,6 +244,7 @@ protected slots:
     void slotToggleGroupToolBar();
     void slotToggleSymbolsToolBar();
     void slotToggleLayoutToolBar();
+    void slotToggleLayerToolBar();
     void slotToggleRulersToolBar();
     void slotToggleTransportToolBar();
 
@@ -311,6 +312,8 @@ protected slots:
     void slotDonate();
 
     void slotCycleSlashes();
+
+    void slotAddLayer();
 
 private:
     /**
@@ -436,6 +439,8 @@ private:
     std::vector<QString> m_availableFontNames;
     std::vector<int>     m_availableFontSizes;
     std::vector<int>     m_availableSpacings;
+
+    std::vector<Segment *> m_segments;
 };
 
 }
