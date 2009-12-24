@@ -20,12 +20,11 @@
 
 #include "base/Segment.h"
 #include "base/Composition.h"
-//#include "base/Studio.h"
 #include "base/Track.h"
-//#include "base/Colour.h"
-//#include "base/ColourMap.h"
-//#include "document/RosegardenDocument.h"
+#include "base/NotationTypes.h"
+#include "base/BaseProperties.h"
 
+#include "gui/general/ClefIndex.h"
 
 #include <QApplication>
 
@@ -72,20 +71,29 @@ AddLayerCommand::execute()
     layer->setLowestPlayable(m_segment->getLowestPlayable());
     layer->setTranspose(m_segment->getTranspose());
 
-    // segments have an initial clef, not put in by segment_insert_command
-    // apparently (because that's what this file used to be a copy of); must
-    // have done it at times when that command was invoked...  need to pick that
-    // code up, create a clef, make it invisible, and insert it into the
-    // segment, either here or out there somewhere in calling code
-    
-    // can we iterate through the segment and pre-set all the rests to be
-    // invisible, or do they not exist until the notation editor calculates
-    // them?  maybe this has to be done externally to this command, and hey ho,
-    // maye we can pre-set the micro-position hoopty on the damn things to avoid
-    // having to do the rest height jiggling in NPF!!! (that would be crude, and
-    // incapable of using multiple levels for layer 1 2 3 4, but I've
-    // practically never used more than two overlapping segments, and it's worth
-    // trying to deliver a practical amount of progress here and now)
+    // fill the segment with rests, so we can make them invisible
+    layer->fillWithRests(m_segment->getStartTime(), m_segment->getEndTime());
+
+    for (Segment::iterator i = m_segment->begin(); i != m_segment->end(); ++i) {
+        // copy over any clefs or key signatures, as these are needed to
+        // maintain compatibility between segments
+        if ((*i)->isa(Clef::EventType) ||
+            (*i)->isa(Key::EventType)) {
+
+            layer->insert(new Event(**i));
+
+        }
+    }
+
+    // set everything in the layer segment invisible
+    for (Segment::iterator i = layer->begin(); i != layer->end(); ++i) {
+        (*i)->set<Bool>(BaseProperties::INVISIBLE, true);
+
+        // raise the heights of alternate voice rests to get them out of the
+        // middle of the staff, where they may be easier to deal with
+        if ((*i)->isa(Note::EventRestType)) (*i)->setMaybe<Int>(BaseProperties::DISPLACED_Y, -1000);
+
+    }
 
     // get the total number of colors in the map
     int maxColors = m_composition.getSegmentColourMap().size();
