@@ -557,7 +557,7 @@ RosegardenMainWindow::closeEvent(QCloseEvent *event)
         settings.setValue("show_editors_toolbar", !findToolbar("Editors Toolbar")->isHidden());
         settings.setValue("show_transport_toolbar", !findToolbar("Transport Toolbar")->isHidden());
         settings.setValue("show_zoom_toolbar", !findToolbar("Zoom Toolbar")->isHidden());
-        settings.setValue("always_use_default_studio", m_alwaysUseDefaultStudio);
+        settings.setValue("alwaysusedefaultstudio", m_alwaysUseDefaultStudio);
         settings.setValue("show_transport", findAction("show_transport")->isChecked());
 
         if (m_transport) {
@@ -1270,7 +1270,7 @@ RosegardenMainWindow::openFile(QString filePath, ImportType type)
         QSettings settings;
         settings.beginGroup(GeneralOptionsConfigGroup);
 
-        if (qStrToBool(settings.value("always_use_default_studio", "false"))) {
+        if (qStrToBool(settings.value("alwaysusedefaultstudio", "false"))) {
 
             m_alwaysUseDefaultStudio = true;
 
@@ -7681,6 +7681,7 @@ RosegardenMainWindow::slotImportStudioFromFile(const QString &file)
 
         CommandHistory::getInstance()->addCommand(command);
         m_doc->initialiseStudio(); // The other document will have reset it
+        m_trackParameterBox->populateDeviceLists();
     }
 
     delete doc;
