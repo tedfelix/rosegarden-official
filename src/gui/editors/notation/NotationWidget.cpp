@@ -393,14 +393,9 @@ NotationWidget::setSegments(RosegardenDocument *document,
                    this, SLOT(slotPointerPositionChanged(timeT)));
     }
 
-    std::cout << __LINE__ << std::endl;
-
     m_document = document;
 
     delete m_referenceScale;
-
-
-    std::cout << __LINE__ << std::endl;
 
     delete m_scene;
     m_scene = new NotationScene();
@@ -409,9 +404,6 @@ NotationWidget::setSegments(RosegardenDocument *document,
     m_scene->setStaffs(document, segments);
 
     m_referenceScale = new ZoomableRulerScale(m_scene->getRulerScale());
-
-
-    std::cout << __LINE__ << std::endl;
 
     connect(m_scene, SIGNAL(mousePressed(const NotationMouseEvent *)),
             this, SLOT(slotDispatchMousePress(const NotationMouseEvent *)));
@@ -437,24 +429,12 @@ NotationWidget::setSegments(RosegardenDocument *document,
     connect(m_scene, SIGNAL(sceneDeleted()),
             this, SIGNAL(sceneDeleted()));
 
-
-    std::cout << __LINE__ << std::endl;
-
     m_view->setScene(m_scene);
-
-
-    std::cout << __LINE__ << std::endl;
 
     m_toolBox->setScene(m_scene);
 
-
-    std::cout << __LINE__ << std::endl;
-
     m_hpanner->setScene(m_scene);
     m_hpanner->fitInView(m_scene->sceneRect(), Qt::KeepAspectRatio);
-
-
-    std::cout << __LINE__ << std::endl;
 
     //!!! should just remove the code from the ctor because this will wipe it
     // out the first time setSegments() is called, but I don't want to poke
@@ -480,6 +460,7 @@ NotationWidget::setSegments(RosegardenDocument *document,
     // clean these up if they're left over from a previous run of setSegments
     if (m_topStandardRuler) delete m_topStandardRuler;    
     if (m_bottomStandardRuler) delete m_bottomStandardRuler;
+    if (m_tempoRuler) delete m_tempoRuler;
     if (m_chordNameRuler) delete m_chordNameRuler;
     if (m_rawNoteRuler) delete m_rawNoteRuler;
 
@@ -549,8 +530,7 @@ NotationWidget::setSegments(RosegardenDocument *document,
     connect(m_scene, SIGNAL(currentViewSegmentChanged(ViewSegment *)),
             this, SLOT(slotUpdateRawNoteRuler(ViewSegment *)));
 
-    std::cout << __LINE__ << std::endl;
-
+    hideOrShowRulers();
 }
 
 void

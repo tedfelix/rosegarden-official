@@ -4247,6 +4247,8 @@ NotationView::slotAddLayer()
     // re-invoke setSegments with the ammended m_segments
     m_notationWidget->setSegments(m_doc, m_segments);
 
+    std::cout << "MADE IT" << std::endl;
+
     // I bet undoing this goes kaboom somewhere, if doing this doesn't go kaboom
     // immediately, but let's go for it!
 }
