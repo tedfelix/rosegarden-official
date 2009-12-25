@@ -57,6 +57,9 @@ public:
     void setOverwrite  (bool overwrite) { m_overwrite = overwrite; }
     void setRename     (bool rename)    { m_rename = rename; }
 
+    // Use the "sendsX" settings for each instr. to update studio device.
+    void setSendsInstrumentList(const InstrumentList &instrumentList);
+
     /// supersedes setBankList() and setProgramList()
     void clearBankAndProgramList() { m_clearBankAndProgramList = true; }
 
@@ -77,6 +80,7 @@ protected:
     ProgramList                m_programList;
     ControlList                m_controlList;
     KeyMappingList             m_keyMappingList;
+    InstrumentList             m_instrumentList;
 
     std::string                            m_oldName;
     std::string                            m_oldLibrarianName;
@@ -86,6 +90,7 @@ protected:
     ProgramList                m_oldProgramList;
     ControlList                m_oldControlList;
     KeyMappingList             m_oldKeyMappingList;
+    InstrumentList             m_oldInstrumentList;
 
     bool                                   m_overwrite;
     bool                                   m_rename;
@@ -94,6 +99,7 @@ protected:
     bool                                   m_changePrograms;
     bool                                   m_changeControls;
     bool                                   m_changeKeyMappings;
+    bool                                   m_changeSendsInstrument;
     bool                                   m_clearBankAndProgramList;
 
 };

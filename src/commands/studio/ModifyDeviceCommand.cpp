@@ -80,6 +80,12 @@ void ModifyDeviceCommand::setKeyMappingList(const KeyMappingList &keyMappingList
     m_changeKeyMappings = true;
 }
 
+void ModifyDeviceCommand::setSendsInstrumentList(const InstrumentList &instrumentList)
+{
+    m_instrumentList = instrumentList;
+    m_changeSendsInstrument = true;
+}
+
 void
 ModifyDeviceCommand::execute()
 {
@@ -105,6 +111,7 @@ ModifyDeviceCommand::execute()
     m_oldProgramList = midiDevice->getPrograms();
     m_oldControlList = midiDevice->getControlParameters();
     m_oldKeyMappingList = midiDevice->getKeyMappings();
+    m_oldInstrumentList = midiDevice->getAllInstruments();
     m_oldLibrarianName = midiDevice->getLibrarianName();
     m_oldLibrarianEmail = midiDevice->getLibrarianEmail();
     m_oldVariationType = midiDevice->getVariationType();
@@ -155,6 +162,34 @@ ModifyDeviceCommand::execute()
     //!!! merge option?
     if (m_changeControls)
         midiDevice->replaceControlParameters(m_controlList);
+
+    // No merge option here.
+    if (m_changeSendsInstrument) {
+    
+       
+        InstrumentList studioInstrumentList = midiDevice->getAllInstruments();
+        
+        if (studioInstrumentList.size() != m_instrumentList.size()) {
+            // Something is wrong this should have been two MIDI devices with
+            // 16 channels to iterate over.
+            std::cerr << "ERROR: ModifyDeviceCommand::execute: device "
+            << m_device << " instrumemnt count not match given List" << std::endl;
+            
+            // do not make the unexecute attempt to try to restore this either.
+            m_changeSendsInstrument = false;
+        } else {     
+            InstrumentList::iterator stInsIt = studioInstrumentList.begin();
+            InstrumentList::const_iterator insIt = m_instrumentList.begin();
+        
+            for (; insIt != m_instrumentList.end(); insIt++, stInsIt++)
+            {
+                (*stInsIt)->setSendBankSelect((*insIt)->sendsBankSelect());
+                (*stInsIt)->setSendProgramChange((*insIt)->sendsProgramChange());
+                (*stInsIt)->setSendPan((*insIt)->sendsPan());
+                (*stInsIt)->setSendVolume((*insIt)->sendsVolume());
+            }
+        }
+    }
 }
 
 void
@@ -186,6 +221,21 @@ ModifyDeviceCommand::unexecute()
     midiDevice->setLibrarian(m_oldLibrarianName, m_oldLibrarianEmail);
     if (m_changeVariation)
         midiDevice->setVariationType(m_oldVariationType);
+        
+    if (m_changeSendsInstrument) {
+    
+        // No error checking.  We already successfully altered these.
+        InstrumentList::iterator stInsIt = midiDevice->getAllInstruments().begin();
+        InstrumentList::const_iterator insIt = m_oldInstrumentList.begin();
+        
+        for (; insIt != m_instrumentList.end(); insIt++, stInsIt++)
+        {
+            (*stInsIt)->setSendBankSelect((*insIt)->sendsBankSelect());
+            (*stInsIt)->setSendProgramChange((*insIt)->sendsProgramChange());
+            (*stInsIt)->setSendPan((*insIt)->sendsPan());
+            (*stInsIt)->setSendVolume((*insIt)->sendsVolume());
+        }
+    }   
 }
 
 }

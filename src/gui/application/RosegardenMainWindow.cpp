@@ -7651,6 +7651,8 @@ RosegardenMainWindow::slotImportStudioFromFile(const QString &file)
                     BankList bl(md->getBanks());
                     ProgramList pl(md->getPrograms());
                     ControlList cl(md->getControlParameters());
+                    // Grab the 16 instruments associated with the studio file.
+                    InstrumentList il(md->getAllInstruments());
 
                     ModifyDeviceCommand* mdCommand = new ModifyDeviceCommand(&oldStudio,
                                                      *di,
@@ -7663,6 +7665,8 @@ RosegardenMainWindow::slotImportStudioFromFile(const QString &file)
                     mdCommand->setControlList(cl);
                     mdCommand->setOverwrite(true);
                     mdCommand->setRename(md->getName() != "");
+                    // Update the "sends" Bank/Program/Volume/Pan
+                    mdCommand->setSendsInstrumentList(il);
 
                     command->addCommand(mdCommand);
                     ++di;
@@ -7681,9 +7685,19 @@ RosegardenMainWindow::slotImportStudioFromFile(const QString &file)
 
         CommandHistory::getInstance()->addCommand(command);
         m_doc->initialiseStudio(); // The other document will have reset it
+        
+        // Force repopulation of Device List and Instrument Parameters in IPB
         m_trackParameterBox->populateDeviceLists();
-    }
+        
+        // Force update of InstrumentParameters for current track.
+        Composition &comp = m_doc->getComposition();
+        Track *track = comp.getTrackById(comp.getSelectedTrack());
 
+        if (track) {
+            m_instrumentParameterBox->slotInstrumentParametersChanged(
+                    track->getInstrument());
+        }
+    }
     delete doc;
 }
 
