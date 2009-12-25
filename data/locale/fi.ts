@@ -1425,7 +1425,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="1768"/>
         <source>Switch to Inserting Tool</source>
-        <translation>Vaihda Syöttö -työkaluun</translation>
+        <translation>Vaihda syöttö -työkaluun</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1769"/>
@@ -1731,7 +1731,7 @@
         <location filename="../QMenuStrings.cpp" line="674"/>
         <location filename="../QMenuStrings.cpp" line="1923"/>
         <source>Add &amp;Control Ruler</source>
-        <translation type="unfinished"></translation>
+        <translation>Lisää &amp;ohjainviivain</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="696"/>
@@ -1860,27 +1860,27 @@
         <location filename="../QMenuStrings.cpp" line="856"/>
         <location filename="../QMenuStrings.cpp" line="2378"/>
         <source>Cursor Back &amp;Bar and Select</source>
-        <translation type="unfinished"></translation>
+        <translation>Kohdistin taakse &amp;tahti ja valitse</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="863"/>
         <location filename="../QMenuStrings.cpp" line="2385"/>
         <source>Ctrl+Shift+Left</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="865"/>
         <location filename="../QMenuStrings.cpp" line="2387"/>
         <source>Cursor For&amp;ward and Select</source>
-        <translation type="unfinished"></translation>
+        <translation>Kohdistin &amp;eteen ja valitse</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="872"/>
         <location filename="../QMenuStrings.cpp" line="2394"/>
         <source>Ctrl+Shift+Right</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="881"/>
@@ -3017,7 +3017,7 @@
         <location filename="../QMenuStrings.cpp" line="2103"/>
         <source>Ctrl+Alt+B</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2105"/>
@@ -3224,7 +3224,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2217"/>
         <source>Cycle &amp;Dots</source>
-        <translation type="unfinished"></translation>
+        <translation>Kierrätä &amp;pisteitä</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2224"/>
@@ -3235,7 +3235,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2226"/>
         <source>Cycle Dots With&amp;out Duration Change</source>
-        <translation type="unfinished"></translation>
+        <translation>Kierrätä pisteita &amp;ilman kestomuutosta</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2233"/>
@@ -3758,12 +3758,12 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="49"/>
         <source>Insert into Selected Audio Track</source>
-        <translation type="unfinished"></translation>
+        <translation>Lisää valittuun ääniraitaan</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="50"/>
         <source>Distribute Audio on MIDI Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Jaa äänidata MIDI-osalle</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="52"/>
@@ -3992,7 +3992,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3441"/>
         <source>Switch to Insert Tool</source>
-        <translation>Vaihda Syöttö-työkaluun</translation>
+        <translation>Vaihda syöttö-työkaluun</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3443"/>
@@ -4588,7 +4588,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="4100"/>
         <source>Insert Tempo Change</source>
-        <translation>Syötä tempon muutos</translation>
+        <translation>Lisää tempon muutos</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="4101"/>
@@ -10223,32 +10223,32 @@
     <message>
         <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="64"/>
         <source>Bar %1:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tahti %1:</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="66"/>
         <source>Bars %1 to %2:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tahdit %1 - %2:</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="120"/>
         <source>%1 %2</source>
-        <translation type="unfinished">%1 %2</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="121"/>
         <source>minor</source>
-        <translation type="unfinished"></translation>
+        <translation>molli</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="122"/>
         <source>major</source>
-        <translation type="unfinished"></translation>
+        <translation>duuri</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="297"/>
         <source>Synth plugin </source>
-        <translation type="unfinished">Synth-lisäosa </translation>
+        <translation>Synth-lisäosa </translation>
     </message>
 </context>
 <context>
@@ -11467,7 +11467,7 @@ Ole hyvä ja valitse halutessasi niistä joitakin poistaaksesi ne pysyvästi kov
     <message>
         <location filename="../../src/commands/segment/AudioSegmentInsertCommand.cpp" line="106"/>
         <source>(inserted)</source>
-        <translation>(syötetty)</translation>
+        <translation>(Lisätty)</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/AudioSegmentInsertCommand.cpp" line="108"/>
@@ -12903,12 +12903,12 @@ Ole hyvä ja valitse halutessasi niistä joitakin poistaaksesi ne pysyvästi kov
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="75"/>
         <source>Advanced Event Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Edistynyt tapahtumamuokkaus</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="75"/>
         <source>Advanced Event Viewer</source>
-        <translation type="unfinished"></translation>
+        <translation>Edistynyt tapahtumanäyttö</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="84"/>
@@ -13428,7 +13428,7 @@ Tämä voi aiheuttaa ongelmia, mikäli asetus ylikirjoitetaan myöhemmin toisess
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="976"/>
         <source>Inserting clipboard contents...</source>
-        <translation>Syötetään leikepöydän tietoja...</translation>
+        <translation>Lisätään leikepöydän tietoja...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="1010"/>
@@ -14155,12 +14155,12 @@ tätä tekstiä varten käytettäväksi:
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="68"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="73"/>
         <source>&lt;qt&gt;&lt;h3&gt;Choose Text Encoding&lt;/h3&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;h3&gt;Valitse tekstin koodaus&lt;/h3&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="80"/>
@@ -14387,7 +14387,7 @@ Esimerkkiteksti tiedostosta:</translation>
     <message>
         <location filename="../../src/commands/segment/InsertRangeCommand.cpp" line="35"/>
         <source>Insert Range</source>
-        <translation>Syötä alue</translation>
+        <translation>Lisää alue</translation>
     </message>
 </context>
 <context>
@@ -15362,7 +15362,7 @@ toiston alussa siirrettävän tiedon määrän takia.</translation>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="176"/>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="183"/>
         <source>Choose...</source>
-        <translation type="unfinished">Valitse...</translation>
+        <translation>Valitse...</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="180"/>
@@ -16199,7 +16199,7 @@ Tupla-klikkaa avataksesi merkintöjen muokkaimen.</translation>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="2015"/>
         <source>Estimated key signature shown</source>
-        <translation type="unfinished">Näytetty arvioitu sävellajimerkintä</translation>
+        <translation>Näytetään arvioitu sävellajimerkintä</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="952"/>
@@ -16239,7 +16239,7 @@ Tupla-klikkaa avataksesi merkintöjen muokkaimen.</translation>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1446"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1560"/>
@@ -16272,12 +16272,12 @@ Tupla-klikkaa avataksesi merkintöjen muokkaimen.</translation>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="1186"/>
         <source>&lt;qt&gt;Rotate wheel to change the active segment&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Kierrä kiekkoa valitaksesi aktiivisen osan&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="1187"/>
         <source>&lt;qt&gt;Segment: &quot;%1&quot;&lt;br&gt;Track: %2 &quot;%3&quot;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Osa: &quot;%1&quot;&lt;br&gt;Raita: %2 &quot;%3&quot;&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -16712,7 +16712,7 @@ Tupla-klikkaa avataksesi merkintöjen muokkaimen.</translation>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="298"/>
         <source>Tie notes at barlines automatically</source>
-        <translation type="unfinished"></translation>
+        <translation>Sido nuotit tahtiviivoilla automaattisesti</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="312"/>
@@ -16865,7 +16865,7 @@ Tupla-klikkaa avataksesi merkintöjen muokkaimen.</translation>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="469"/>
         <source> %1</source>
-        <translation type="unfinished"> %1</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="489"/>
@@ -17249,7 +17249,7 @@ Tämä on ohjelmointivirhe (aiemmin ohjelma kaatui tässä kohdassa)</translatio
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1455"/>
         <source>Inserting clipboard contents...</source>
-        <translation>Syötetään leikepöydän tietoja...</translation>
+        <translation>Lisätään leikepöydän tietoja...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1429"/>
@@ -17377,7 +17377,7 @@ Ole hyvä ja varmista, että laite on määritetty oikein pääikkunan Hallitse 
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3160"/>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3164"/>
         <source>%1 %2</source>
-        <translation type="unfinished">%1 %2</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3303"/>
@@ -17418,7 +17418,7 @@ Ole hyvä ja varmista, että laite on määritetty oikein pääikkunan Hallitse 
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4204"/>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4214"/>
         <source>Adding dot...</source>
-        <translation type="unfinished"></translation>
+        <translation>Lisätään pistettä...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4224"/>
@@ -17456,18 +17456,18 @@ Ole hyvä ja varmista, että laite on määritetty oikein pääikkunan Hallitse 
     <message>
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="292"/>
         <source>Close track headers</source>
-        <translation type="unfinished"></translation>
+        <translation>Sulje raitojen otsikot</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1609"/>
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1610"/>
         <source>&lt;qt&gt;Rotate wheel to change the active segment&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Kierrä kiekkoa valitaksesi aktiivisen osan&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1611"/>
         <source>&lt;qt&gt;Segment: &quot;%1&quot;&lt;br&gt;Track: %2 &quot;%3&quot;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Osa: &quot;%1&quot;&lt;br&gt;Raita: %2 &quot;%3&quot;&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -18123,7 +18123,7 @@ Ole hyvä ja varmista, että laite on määritetty oikein pääikkunan Hallitse 
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="878"/>
         <source>&lt;qt&gt;&lt;p&gt;Unable to create file list.&lt;/p&gt;%1&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Tiedostoluetteloa ei voitu luoda.&lt;/p&gt;%1&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="920"/>
@@ -18790,7 +18790,7 @@ Suosittelemme, että talletat tämän tiedoston tällä Rosegarden-versiolla var
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="2306"/>
         <source>Insert Recorded MIDI</source>
-        <translation>Syötä nauhoitettu MIDI</translation>
+        <translation>Lisää nauhoitettu MIDI</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="2433"/>
@@ -19398,12 +19398,12 @@ Ole hyvä, sulje ja käynnistä uudelleen Rosegarden palauttaaksesi äänitoimin
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2004"/>
         <source>Saving file%1with a new filename...</source>
         <comment>&apos;file%1with&apos; is correct. %1 will either become &apos; &apos; or &apos; as a template &apos; at runtime</comment>
-        <translation type="unfinished">Tallennetaan tiedosto %1 uudella nimellä...</translation>
+        <translation>Tallennetaan tiedosto%1uudella nimellä...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2006"/>
         <source> as a template </source>
-        <translation type="unfinished"></translation>
+        <translation> mallineeksi </translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4518"/>
@@ -20449,12 +20449,12 @@ Toisten ohjelmien lopettaminen saattaa parantaa Rosegardenin suorituskykyä.</tr
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="65"/>
         <source>Insert Event</source>
-        <translation type="unfinished">Lisää tapahtuma</translation>
+        <translation>Lisää tapahtuma</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="65"/>
         <source>Edit Event</source>
-        <translation type="unfinished">Muokkaa tapahtumaa</translation>
+        <translation>Muokkaa tapahtumaa</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="74"/>
@@ -20479,7 +20479,7 @@ Toisten ohjelmien lopettaminen saattaa parantaa Rosegardenin suorituskykyä.</tr
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="218"/>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="233"/>
         <source>edit</source>
-        <translation type="unfinished">muokkaa</translation>
+        <translation>muokkaa</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="131"/>
@@ -21026,7 +21026,7 @@ Toisten ohjelmien lopettaminen saattaa parantaa Rosegardenin suorituskykyä.</tr
     <message>
         <location filename="../../src/gui/dialogs/TempoDialog.cpp" line="56"/>
         <source>Insert Tempo Change</source>
-        <translation>Syötä tempon muutos</translation>
+        <translation>Lisää tempon muutos</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TempoDialog.cpp" line="64"/>
