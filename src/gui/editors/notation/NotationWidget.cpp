@@ -103,6 +103,7 @@ NotationWidget::NotationWidget() :
     m_tempoRuler(0),
     m_chordNameRuler(0),
     m_rawNoteRuler(0),
+    m_controlsWidget(0),
     m_headersGroup(0),
     m_headersView(0),
     m_headersScene(0),
@@ -147,9 +148,6 @@ NotationWidget::NotationWidget() :
                 Qt::white);
     m_view->setBackgroundBrush(bg);
     m_layout->addWidget(m_view, PANNED_ROW, MAIN_COL, 1, 1);
-
-    m_controlsWidget = new ControlRulerWidget;
-    m_layout->addWidget(m_controlsWidget, CONTROLS_ROW, MAIN_COL, 1, 1);
 
     m_panner = new QWidget;
     m_pannerLayout = new QBoxLayout(QBoxLayout::LeftToRight);
@@ -311,14 +309,8 @@ NotationWidget::NotationWidget() :
     connect(m_view, SIGNAL(pannedRectChanged(QRectF)),
             m_hpanner, SLOT(slotSetPannedRect(QRectF)));
 
-    connect(m_view, SIGNAL(pannedRectChanged(QRectF)),
-            m_controlsWidget, SLOT(slotSetPannedRect(QRectF)));
-
     connect(m_hpanner, SIGNAL(pannedRectChanged(QRectF)),
             m_view, SLOT(slotSetPannedRect(QRectF)));
-
-    connect(m_hpanner, SIGNAL(pannedRectChanged(QRectF)),
-            m_controlsWidget, SLOT(slotSetPannedRect(QRectF)));
 
     connect(m_hpanner, SIGNAL(pannerChanged(QRectF)),
              this, SLOT(slotAdjustHeadersVerticalPos(QRectF)));
@@ -326,9 +318,6 @@ NotationWidget::NotationWidget() :
     connect(m_view, SIGNAL(pannedContentsScrolled()),
             this, SLOT(slotHScroll()));
 
-    connect(m_controlsWidget, SIGNAL(dragScroll(timeT)),
-            this, SLOT(slotEnsureTimeVisible(timeT)));
-    
     connect(m_hpanner, SIGNAL(zoomIn()),
             this, SLOT(slotSyncPannerZoomIn()));
 
@@ -344,15 +333,6 @@ NotationWidget::NotationWidget() :
 
     m_toolBox = new NotationToolBox(this);
 
-
-    connect(this, SIGNAL(toolChanged(QString)),
-            m_controlsWidget, SLOT(slotSetToolName(QString)));
-
-    //!!! 
-//    NoteRestInserter *noteRestInserter = dynamic_cast<NoteRestInserter *>
-//        (m_toolBox->getTool(NoteRestInserter::ToolName));
-//    m_currentTool = noteRestInserter;
-//    m_currentTool->ready();
     slotSetTool(NoteRestInserter::ToolName); 
 
     // crude, but finally effective!
@@ -436,17 +416,25 @@ NotationWidget::setSegments(RosegardenDocument *document,
     m_hpanner->setScene(m_scene);
     m_hpanner->fitInView(m_scene->sceneRect(), Qt::KeepAspectRatio);
 
-    //!!! should just remove the code from the ctor because this will wipe it
-    // out the first time setSegments() is called, but I don't want to poke
-    // around with that yet
-    if (m_controlsWidget) {
-        delete m_controlsWidget;
-        m_controlsWidget = new ControlRulerWidget;
-        m_layout->addWidget(m_controlsWidget, CONTROLS_ROW, MAIN_COL, 1, 1);
-        m_controlsWidget->setSegments(document, segments);
-    }
+    // clean these up if they're left over from a previous run of setSegments
+    if (m_topStandardRuler) delete m_topStandardRuler;    
+    if (m_bottomStandardRuler) delete m_bottomStandardRuler;
+    if (m_tempoRuler) delete m_tempoRuler;
+    if (m_chordNameRuler) delete m_chordNameRuler;
+    if (m_rawNoteRuler) delete m_rawNoteRuler;
+    if (m_controlsWidget) delete m_controlsWidget;
+
+    m_controlsWidget = new ControlRulerWidget;
+    m_layout->addWidget(m_controlsWidget, CONTROLS_ROW, MAIN_COL, 1, 1);
+    m_controlsWidget->setSegments(document, segments);
     m_controlsWidget->setViewSegment((ViewSegment *) m_scene->getCurrentStaff());
     m_controlsWidget->setRulerScale(m_referenceScale, m_leftGutter);
+
+    connect(m_view, SIGNAL(pannedRectChanged(QRectF)),
+            m_controlsWidget, SLOT(slotSetPannedRect(QRectF)));
+
+    connect(m_controlsWidget, SIGNAL(dragScroll(timeT)),
+            this, SLOT(slotEnsureTimeVisible(timeT)));
 
     connect(m_scene, SIGNAL(layoutUpdated(timeT,timeT)),
             m_controlsWidget, SLOT(slotUpdateRulers(timeT,timeT)));
@@ -457,12 +445,8 @@ NotationWidget::setSegments(RosegardenDocument *document,
     connect(m_scene, SIGNAL(currentViewSegmentChanged(ViewSegment *)),
             m_controlsWidget, SLOT(slotSetCurrentViewSegment(ViewSegment *)));
 
-    // clean these up if they're left over from a previous run of setSegments
-    if (m_topStandardRuler) delete m_topStandardRuler;    
-    if (m_bottomStandardRuler) delete m_bottomStandardRuler;
-    if (m_tempoRuler) delete m_tempoRuler;
-    if (m_chordNameRuler) delete m_chordNameRuler;
-    if (m_rawNoteRuler) delete m_rawNoteRuler;
+    connect(this, SIGNAL(toolChanged(QString)),
+            m_controlsWidget, SLOT(slotSetToolName(QString)));
 
     m_topStandardRuler = new StandardRuler(document,
                                            m_referenceScale,
