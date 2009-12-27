@@ -76,6 +76,13 @@ public:
         HPLIP
     };
 
+    enum GraphicsSystem
+    {
+        Raster,
+        Native,
+        OpenGL
+    };
+
     GeneralConfigurationPage(RosegardenDocument *doc, QWidget *parent = 0);
 
     virtual void apply();
@@ -97,6 +104,7 @@ protected:
     int getAppendLabel()            { return m_appendLabel->isChecked(); }
     int getPdfViewer()              { return m_pdfViewer->currentIndex(); }
     int getFilePrinter()            { return m_filePrinter->currentIndex(); }
+    int getGraphicsSystem()         { return m_graphicsSystem->currentIndex(); }
     
     //--------------- Data members ---------------------------------
     RosegardenDocument* m_doc;
@@ -117,7 +125,9 @@ protected:
 
     QComboBox *m_pdfViewer;
     QComboBox *m_filePrinter;
+    QComboBox *m_graphicsSystem;
 
+    unsigned int m_lastGraphicsSystemIndex;
 };
 
 }

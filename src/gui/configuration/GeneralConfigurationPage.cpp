@@ -80,6 +80,23 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
     layout->setRowMinimumHeight(row, 15);
     ++row;
 
+    QLabel *gsLabel = new QLabel(tr("Graphics performance"));
+    layout->addWidget(gsLabel, row, 0);
+
+    m_graphicsSystem = new QComboBox(frame);
+    connect(m_graphicsSystem, SIGNAL(activated(int)), this, SLOT(slotModified()));
+    m_graphicsSystem->addItem(tr("Normal")); // raster
+    m_graphicsSystem->addItem(tr("Safe"));   // native
+    m_graphicsSystem->addItem(tr("Fast"));   // opengl
+    m_lastGraphicsSystemIndex = settings.value("graphics_system", Raster).toUInt();
+    m_graphicsSystem->setCurrentIndex(m_lastGraphicsSystemIndex);
+    layout->addWidget(m_graphicsSystem, row, 1, 1, 2);
+    ++row;
+
+    QString graphicsSystemTip(tr("<qt><p>Qt offers you the choice of three graphics systems. The normal (raster) graphics system offers the best tradeoff between performance and stability, but may cause problems for some users.  If you experience frequent crashes, or distorted graphics, you should try the safe (native) graphics system instead.  If you wish to experiment, the fast (OpenGL) graphics system delivers excellent performance for some users, but is generally less stable.</p></qt>"));
+    gsLabel->setToolTip(graphicsSystemTip);
+    m_graphicsSystem->setToolTip(graphicsSystemTip);
+
     layout->addWidget(new QLabel(tr("Double-click opens segment in"),
                                  frame), row, 0);
 
@@ -90,7 +107,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
     m_client->addItem(tr("Event List editor"));
     m_client->setCurrentIndex(settings.value("doubleclickclient", NotationView).toUInt());
 
-    layout->addWidget(m_client, row, 1, row- row+1, 2);
+    layout->addWidget(m_client, row, 1, 1, 2);
     ++row;
 
     layout->addWidget(new QLabel(tr("Number of count-in measures when recording"),
@@ -392,6 +409,11 @@ void GeneralConfigurationPage::apply()
     int countIn = getCountInSpin();
     settings.setValue("countinbars", countIn);
 
+    int graphicsSystem = getGraphicsSystem();
+    settings.setValue("graphics_system", graphicsSystem);
+    bool graphicsSystemChanged = false;
+    if (graphicsSystem != m_lastGraphicsSystemIndex) graphicsSystemChanged = true;
+
     int client = getDblClickClient();
     settings.setValue("doubleclickclient", client);
 
@@ -509,10 +531,14 @@ void GeneralConfigurationPage::apply()
 #endif // HAVE_LIBJACK
 
     if (mainTextureChanged) {
-        QMessageBox::information(this, "", tr("Changes to the textured background in the main window will not take effect until you restart Rosegarden."));
+        QMessageBox::information(this, tr("Rosegarden"), tr("Changes to the textured background in the main window will not take effect until you restart Rosegarden."));
     }
 
+    if (graphicsSystemChanged) {
+        QMessageBox::information(this, tr("Rosegarden"), tr("You must restart Rosegarden for the graphics system change to take effect."));
+    }
 }
+
 
 }
 #include "GeneralConfigurationPage.moc"

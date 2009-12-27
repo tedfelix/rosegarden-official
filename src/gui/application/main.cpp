@@ -337,6 +337,13 @@ static int _x_errhandler(Display *dpy, XErrorEvent *err)
 }
 #endif
 
+enum GraphicsSystem
+{
+    Raster,
+    Native,
+    OpenGL
+};
+
 void usage()
 {
     std::cerr << "Rosegarden: A sequencer and musical notation editor" << std::endl;
@@ -379,20 +386,52 @@ int main(int argc, char *argv[])
             break;
         }
     }
+
     if (!systemSpecified) {
-        // Set the raster graphics system unless the user has
-        // explicitly asked for something else on the command line.
-        // This should (?) override the option with which Qt was
-        // compiled, if it differs from raster.  The raster renderer
-        // is much faster than the usual default "native" renderer
-        RG_DEBUG << "Setting raster graphics system for Qt 4.5+" << endl;
-        QApplication::setGraphicsSystem("raster");
+        // Set the graphics system specified in QSettings unless the user has
+        // overridden this on the command line.
+        //
+        // We prefer the "raster" graphics system available since Qt 4.5.0,
+        // because it is dramatically faster on X11 than the "native" system.
+        // Unfortunately, users have reported a variety of crashes and horrible
+        // rendering problems, and it's just such a mixed bag we've got to offer
+        // the option.
+
+        // we have to set the graphics system before creating theApp, or it
+        // won't work, so we have to use an unusual QSettings ctor here.
+        QSettings preAppSettings("rosegardenmusic", "Rosegarden");
+        preAppSettings.beginGroup(GeneralOptionsConfigGroup);
+        unsigned int graphicsSystem = preAppSettings.value("graphics_system", Raster).toUInt();
+        preAppSettings.endGroup();
+
+        std::cerr << "Setting graphics system for Qt 4.5+ to: ";
+        switch (graphicsSystem) {
+        case Raster:
+            QApplication::setGraphicsSystem("raster");
+            std::cerr << "raster" << std::endl;
+            break;
+
+        case Native:
+            QApplication::setGraphicsSystem("native");
+            std::cerr << "native" << std::endl;
+            break;
+
+        case OpenGL:
+            QApplication::setGraphicsSystem("opengl");
+            std::cerr << "opengl" << std::endl;
+            break;
+
+        default:
+            QApplication::setGraphicsSystem("raster");
+            std::cerr << "raster (DEFAULTED!)" << std::endl;
+        }
     }
 #endif
 #endif
 
-    RosegardenApplication theApp(argc, argv);
-    
+    RosegardenApplication theApp(argc, argv);    
+    QSettings settings;
+
     // enable to load resources from rcc file (if not compiled in)
 #ifdef RESOURCE_FILE_NOT_COMPILED_IN
     std::cerr << "Loading resource file ./data/data.rcc..." << std::endl;
@@ -429,7 +468,6 @@ int main(int argc, char *argv[])
     theApp.setOrganizationName("rosegardenmusic");
     theApp.setOrganizationDomain("rosegardenmusic.com");
     theApp.setApplicationName(QObject::tr("Rosegarden"));
-
     QStringList args = theApp.arguments();
 
     bool nosplash = false;
@@ -459,7 +497,6 @@ int main(int argc, char *argv[])
     }
     theApp.setWindowIcon(icon);
 
-    QSettings settings;
     QString stylepath = ResourceFinder().getResourcePath("", "rosegarden.qss");
     if (stylepath != "") {
         std::cerr << "NOTE: Found stylesheet at \"" << stylepath << "\", applying it" << std::endl;
