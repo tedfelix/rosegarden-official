@@ -184,7 +184,6 @@ install:
 	$(INSTALL) -m 644 data/desktop/rosegarden.desktop $(INSTDESKTOPDIR)
 	$(MKDIR_P) -m 755 $(INSTICONDIR)
 	$(INSTALL) -m 644 data/pixmaps/icons/rg-rwb-rose3-32x32.png $(INSTICONDIR)/rosegarden.png
-	update-mime-database $(INSTMIMEDIR)
 
 uninstall:
 	rm -f $(INSTBINDIR)/rosegarden
@@ -194,7 +193,6 @@ uninstall:
 	rm -f $(INSTMIMEXMLDIR)/rosegarden.xml
 	rm -f $(INSTDESKTOPDIR)/rosegarden.desktop
 	rm -f $(INSTICONDIR)/rosegarden.png
-	update-mime-database $(INSTMIMEDIR)
 	rmdir -p --ignore-fail-on-non-empty $(INSTMIME16DIR)
 	rmdir -p --ignore-fail-on-non-empty $(INSTMIME32DIR)
 	rmdir -p --ignore-fail-on-non-empty $(INSTMIME64DIR)
