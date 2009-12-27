@@ -22,6 +22,7 @@
 #include "gui/widgets/StartupLogo.h"
 #include "gui/general/ResourceFinder.h"
 #include "gui/general/IconLoader.h"
+#include "gui/general/ThornStyle.h"
 #include "gui/application/RosegardenApplication.h"
 #include "base/RealTime.h"
 
@@ -43,7 +44,6 @@
 #include <QTimer>
 #include <QApplication>
 #include <QtGui>
-#include <QPlastiqueStyle>
 #include <QPixmapCache>
 #include <QStringList>
 
@@ -363,14 +363,6 @@ int main(int argc, char *argv[])
         }
     }
 
-    // Many elements of our GUI looked nauseating on a KDE4 box with the default
-    // Oxygen style.  Apparently I was depdending on having Plastique underneath
-    // everything to a larger extent than I realized.  To address this, we'll
-    // force Plastique.  We might eventually have to take a copy of Plastique
-    // and maintain it ourselves, or at least the subtle parts of Plastique we
-    // don't already override with our heavily customized UI.
-    QApplication::setStyle(new QPlastiqueStyle);
-
     QPixmapCache::setCacheLimit(8192); // KB
 
     setsid(); // acquire shiny new process group
@@ -431,6 +423,14 @@ int main(int argc, char *argv[])
 
     RosegardenApplication theApp(argc, argv);    
     QSettings settings;
+
+    settings.beginGroup(GeneralOptionsConfigGroup);
+    bool Thorn = settings.value("use_thorn_style", true).toBool();
+    settings.endGroup();
+
+    // In order to ensure the Thorn style comes out right, we need to set our
+    // custom style, which is based on QPlastiqueStyle
+    if (Thorn) QApplication::setStyle(new ThornStyle);
 
     // enable to load resources from rcc file (if not compiled in)
 #ifdef RESOURCE_FILE_NOT_COMPILED_IN
