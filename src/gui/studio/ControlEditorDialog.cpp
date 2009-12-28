@@ -175,11 +175,12 @@ ControlEditorDialog::~ControlEditorDialog()
 {
     RG_DEBUG << "\n*** ControlEditorDialog::~ControlEditorDialog\n" << endl;
 
-    // Save window geometry
+    // Save window geometry and toolbar/dock state
     QSettings settings;
     settings.beginGroup(WindowGeometryConfigGroup);
     RG_DEBUG << "[geometry] storing window geometry for ControlEditorDialog" << endl;
-    settings.setValue("Control_Editor_Dialog", this->saveGeometry());
+    settings.setValue("Control_Editor_Dialog_Geometry", this->saveGeometry());
+    settings.setValue("Control_Editor_Dialog_State", this->saveState());
     settings.endGroup();
 }
 
@@ -189,11 +190,12 @@ ControlEditorDialog::initDialog()
     RG_DEBUG << "ControlEditorDialog::initDialog" << endl;
     slotUpdate();
 
-    // Restore window geometry
+    // Restore window geometry and toolbar/dock state
     RG_DEBUG << "[geometry] ControlEditorDialog - Restoring saved geometry..." << endl;
     QSettings settings;
     settings.beginGroup(WindowGeometryConfigGroup);
-    this->restoreGeometry(settings.value("Control_Editor_Dialog").toByteArray());
+    this->restoreGeometry(settings.value("Control_Editor_Dialog_Geometry").toByteArray());
+    this->restoreState(settings.value("Control_Editor_Dialog_State").toByteArray());
     settings.endGroup();
 }
 

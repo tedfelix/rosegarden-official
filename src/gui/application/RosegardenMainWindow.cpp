@@ -453,10 +453,11 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
 
     settings.endGroup();
 
-    // Restore window geometry
+    // Restore window geometry and toolbar/dock state
     RG_DEBUG << "[geometry] RosegardenMainWindow - Restoring saved main window geometry..." << endl;
     settings.beginGroup(WindowGeometryConfigGroup);
-    this->restoreGeometry(settings.value("Main_Window").toByteArray());
+    this->restoreGeometry(settings.value("Main_Window_Geometry").toByteArray());
+    this->restoreState(settings.value("Main_Window_State").toByteArray());
     settings.endGroup();
 
     connectOutsideCtorHack();
@@ -536,17 +537,12 @@ void
 RosegardenMainWindow::closeEvent(QCloseEvent *event)
 {
     if (queryClose()) {
-        // Save window geometry
-        //
-        // NOTE: I would have used saveState() / restoreState() instead, to remember
-        // toolbar positions, &c., but this never worked for some unknown reason.
-        // Oh well.  I'm cutting my losses after a couple hours of chasing problems
-        // with code that worked great when I dropped in save/restoreGeometry()
-        // instead.  Fsck it.
+        // Save window geometry and toolbar/dock state
         RG_DEBUG << "[geometry] RosegardenMainWindow - Saving main window geometry..." << endl;
         QSettings settings;
         settings.beginGroup(WindowGeometryConfigGroup);
-        settings.setValue("Main_Window", this->saveGeometry());
+        settings.setValue("Main_Window_Geometry", this->saveGeometry());
+        settings.setValue("Main_Window_State", this->saveState());
         settings.endGroup();
 
         settings.beginGroup(GeneralOptionsConfigGroup);

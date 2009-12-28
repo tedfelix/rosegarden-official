@@ -308,9 +308,10 @@ NotationView::NotationView(RosegardenDocument *doc,
     connect(m_document, SIGNAL(documentModified(bool)),
             this, SLOT(updateWindowTitle(bool)));
 
-    // Restore window geometry
+    // Restore window geometry and toolbar/dock state
     settings.beginGroup(WindowGeometryConfigGroup);
-    this->restoreGeometry(settings.value("Notation_View").toByteArray());
+    this->restoreGeometry(settings.value("Notation_View_Geometry").toByteArray());
+    this->restoreState(settings.value("Notation_View_State").toByteArray());
     settings.endGroup();
 
     connect(m_notationWidget, SIGNAL(segmentDeleted(Segment *)),
@@ -328,11 +329,12 @@ NotationView::~NotationView()
 void
 NotationView::closeEvent(QCloseEvent *event)
 {
-    // Save window geometry
+    // Save window geometry and toolbar/dock state
     QSettings settings;
     settings.beginGroup(WindowGeometryConfigGroup);
     std::cerr << "storing window geometry for notation view" << std::endl;
-    settings.setValue("Notation_View", this->saveGeometry());
+    settings.setValue("Notation_View_Geometry", this->saveGeometry());
+    settings.setValue("Notation_View_State", this->saveState());
     settings.endGroup();
 
     QWidget::closeEvent(event);

@@ -290,10 +290,11 @@ EventView::EventView(RosegardenDocument *doc,
     slotCompositionStateUpdate();
 
 
-    // Restore window geometry
+    // Restore window geometry and toolbar/dock state
     QSettings settings;
     settings.beginGroup(WindowGeometryConfigGroup);
-    this->restoreGeometry(settings.value("Event_List_View").toByteArray());
+    this->restoreGeometry(settings.value("Event_List_View_Geometry").toByteArray());
+    this->restoreState(settings.value("Event_List_View_State").toByteArray());
     settings.endGroup();
 }
 
@@ -308,10 +309,11 @@ EventView::~EventView()
 void
 EventView::closeEvent(QCloseEvent *event)
 {
-    // Save window geometry
+    // Save window geometry and toolbar/dock state
     QSettings settings;
     settings.beginGroup(WindowGeometryConfigGroup);
-    settings.setValue("Event_List_View", this->saveGeometry());
+    settings.setValue("Event_List_View_Geometry", this->saveGeometry());
+    settings.setValue("Event_List_View_State", this->saveState());
     settings.endGroup();
 
     QWidget::closeEvent(event);

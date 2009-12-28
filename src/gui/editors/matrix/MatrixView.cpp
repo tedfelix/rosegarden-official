@@ -215,10 +215,12 @@ MatrixView::MatrixView(RosegardenDocument *doc,
         enterActionState("in_standard_matrix");
     }
 
-    // Restore window geometry
+    // Restore window geometry and toolbar/dock state
     settings.beginGroup(WindowGeometryConfigGroup);
-    QString modeStr = (m_drumMode ? "Percussion_Matrix_View" : "Matrix_View");
+    QString modeStr = (m_drumMode ? "Percussion_Matrix_View_Geometry" : "Matrix_View_Geometry");
     this->restoreGeometry(settings.value(modeStr).toByteArray());
+    modeStr = (m_drumMode ? "Percussion_Matrix_View_State" : "Matrix_View_State");
+    this->restoreState(settings.value(modeStr).toByteArray());
     settings.endGroup();
 
     connect(m_matrixWidget, SIGNAL(segmentDeleted(Segment *)),
@@ -236,11 +238,13 @@ MatrixView::~MatrixView()
 void
 MatrixView::closeEvent(QCloseEvent *event)
 {
-    // Save window geometry
+    // Save window geometry and toolbar/dock state
     QSettings settings;
     settings.beginGroup(WindowGeometryConfigGroup);
-    QString modeStr = (m_drumMode ? "Percussion_Matrix_View" : "Matrix_View");
+    QString modeStr = (m_drumMode ? "Percussion_Matrix_View_Geometry" : "Matrix_View_Geometry");
     settings.setValue(modeStr, this->saveGeometry());
+    modeStr = (m_drumMode ? "Percussion_Matrix_View_State" : "Matrix_View_State");
+    settings.setValue(modeStr, this->saveState());
     settings.endGroup();
 
     QWidget::closeEvent(event);
