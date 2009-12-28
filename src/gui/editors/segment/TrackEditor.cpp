@@ -883,11 +883,18 @@ void TrackEditor::dropEvent(QDropEvent* e)
             s >> endTime.sec;
             s >> endTime.nsec;
 
+            // QDragEvent::source() will only return non-zero if the drag was
+            // from another Rosegarden widget.  We can't call objectName() on a
+            // null QWidget, or it will go boom, and drags from external sources
+            // (eg. dragging an image or other unsupported file type) were
+            // winding up in this code for some reason.
+            QString sourceName = "NULL";
+            if (e->source()) sourceName = e->source()->objectName();
             
-            RG_DEBUG << "TrackEditor::dropEvent() - event source : " << e->source()->objectName() << endl;
+            RG_DEBUG << "TrackEditor::dropEvent() - event source : " << sourceName << endl;
             
             //if (id == "AudioFileManager") { // only create something if this is data from the right client
-            if( e->source()->objectName() == "AudioListView" ){
+            if (sourceName == "AudioListView") {
                 
                 
                 
@@ -923,7 +930,7 @@ void TrackEditor::dropEvent(QDropEvent* e)
             } else {
                 // data is not from AudioFileManager
 
-                /* was sorry */ QMessageBox::warning(this, "", tr("You can't drop files into Rosegarden from this client.  Try using Konqueror instead."));
+                QMessageBox::warning(this, tr("Rosegarden"), tr("Rosegarden cannot accept dropped files of this type."));
 
             }
 
