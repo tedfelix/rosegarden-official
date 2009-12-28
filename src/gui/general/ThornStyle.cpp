@@ -16,6 +16,7 @@
 */
 
 #include "ThornStyle.h"
+#include "gui/general/IconLoader.h"
 
 
 namespace Rosegarden
@@ -34,9 +35,15 @@ ThornStyle::standardIconImplementation(StandardPixmap standardIcon,
     // custom implementation of icons for message boxes and file dialog
     // navigation arrows to follow shortly...  nothing here yet except
     // groundwork
+    switch (standardIcon) {
 
-    // let QPlastiqueStyle handle the rest
-    return QPlastiqueStyle::standardPixmap(standardIcon, option, parent);
+    case SP_MessageBoxInformation:
+        return IconLoader().loadPixmap("messagebox-information");
+
+    default:
+        // let QPlastiqueStyle handle the rest
+        return QPlastiqueStyle::standardPixmap(standardIcon, option, parent);
+    }
 }
 
 
