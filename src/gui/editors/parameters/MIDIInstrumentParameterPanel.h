@@ -65,8 +65,6 @@ public slots:
     void slotSelectProgram(int index);
     void slotSelectBank(int index);
     void slotSelectVariation(int index);
-    void slotSelectChannel(int index);
-    //void slotSelectInputChannel(int index);
 
     void slotControllerChanged(int index);
 
@@ -102,9 +100,7 @@ protected:
 
     QComboBox          *m_bankValue;
     QComboBox          *m_variationValue;
-    QComboBox          *m_channelValue;
     QComboBox          *m_programValue;
-    //QComboBox          *m_channelInValue;
 
     QCheckBox          *m_percussionCheckBox;
     QCheckBox          *m_bankCheckBox;
@@ -116,6 +112,7 @@ protected:
     QLabel             *m_variationLabel;
     QLabel             *m_programLabel;
     QLabel             *m_evalMidiPrgChgLabel;
+    QLabel             *m_channelDisplay;
 
     QGridLayout        *m_mainGrid;
     QFrame             *m_rotaryFrame;
