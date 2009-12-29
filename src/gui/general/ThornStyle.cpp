@@ -32,13 +32,20 @@ ThornStyle::standardIconImplementation(StandardPixmap standardIcon,
                                         const QStyleOption *option,
                                         const QWidget *parent) const
 {
-    // custom implementation of icons for message boxes and file dialog
-    // navigation arrows to follow shortly...  nothing here yet except
-    // groundwork
     switch (standardIcon) {
 
+    // custom icons for QMessageBox
     case SP_MessageBoxInformation:
         return IconLoader().loadPixmap("messagebox-information");
+
+    case SP_MessageBoxWarning:
+        return IconLoader().loadPixmap("warning");
+
+    case SP_MessageBoxCritical:
+        return IconLoader().loadPixmap("messagebox-critical");
+
+    case SP_MessageBoxQuestion:
+        return IconLoader().loadPixmap("messagebox-question");
 
     default:
         // let QPlastiqueStyle handle the rest

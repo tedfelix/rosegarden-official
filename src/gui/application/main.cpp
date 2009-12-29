@@ -788,6 +788,14 @@ int main(int argc, char *argv[])
         RG_DEBUG << "RosegardenGUI - " << e.getMessage() << endl;
     }
 
+//#define STYLE_TEST
+#ifdef STYLE_TEST
+    QMessageBox::information(0, "", "Information.", QMessageBox::Ok, QMessageBox::Ok);
+    QMessageBox::critical(0, "", "Critical!", QMessageBox::Ok, QMessageBox::Ok);
+    QMessageBox::question(0, "", "Question?", QMessageBox::Ok, QMessageBox::Ok);
+    QMessageBox::warning(0, "", "Warning!", QMessageBox::Ok, QMessageBox::Ok);
+#endif
+
     return theApp.exec();
 }
 
