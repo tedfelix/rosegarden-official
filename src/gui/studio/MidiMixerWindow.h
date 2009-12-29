@@ -112,6 +112,8 @@ protected:
 
     QFrame *m_tabFrame;
 
+    void  setRewFFwdToAutoRepeat();
+
 };
 
 

@@ -441,6 +441,12 @@ private:
     std::vector<int>     m_availableSpacings;
 
     std::vector<Segment *> m_segments;
+
+    /**
+     * Set the <<< << >> >>> buttons in the transport toolbar to auto repeat
+     */
+    void setRewFFwdToAutoRepeat();
+
 };
 
 }

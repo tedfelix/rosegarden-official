@@ -37,6 +37,7 @@
 #include "gui/editors/notation/NotePixmapFactory.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/general/IconLoader.h"
+#include "gui/general/ActionFileClient.h"
 #include "misc/Strings.h"
 #include "gui/seqmanager/SequenceManager.h"
 #include "gui/widgets/AudioRouteMenu.h"
@@ -72,6 +73,8 @@
 #include <QHBoxLayout>
 #include <QGroupBox>
 #include <QDesktopServices>
+#include <QToolBar>
+#include <QToolButton>
 
 
 namespace Rosegarden
@@ -147,6 +150,7 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
     }
 
     createGUI("mixer.rc");
+    setRewFFwdToAutoRepeat();
 
     // We must populate AFTER the actions are created, or else all the
     // action->isChecked() based tests will use a default false action on the
@@ -1654,5 +1658,66 @@ AudioMixerWindow::slotHelpAbout()
 {
     new AboutDialog(this);
 }
+
+
+void
+AudioMixerWindow::setRewFFwdToAutoRepeat()
+{
+    // This one didn't work in Classic either.  Looking at it as a fresh
+    // problem, it was tricky.  The QAction has an objectName() of "rewind"
+    // but the QToolButton associated with that action has no object name at
+    // all.  We kind of have to go around our ass to get to our elbow on
+    // this one.
+    
+    // get pointers to the actual actions    
+    QAction *rewAction = findAction("playback_pointer_back_bar");    // rewind
+    QAction *ffwAction = findAction("playback_pointer_forward_bar"); // fast forward
+
+    QWidget* transportToolbar = this->findToolbar("Transport Toolbar");
+
+    if (transportToolbar) {
+
+        // get a list of all the toolbar's children (presumably they're
+        // QToolButtons, but use this kind of thing with caution on customized
+        // QToolBars!)
+        QList<QToolButton *> widgets = transportToolbar->findChildren<QToolButton *>();
+
+        // iterate through the entire list of children
+        for (QList<QToolButton *>::iterator i = widgets.begin(); i != widgets.end(); ++i) {
+
+            // get a pointer to the button's default action
+            QAction *act = (*i)->defaultAction();
+
+            // compare pointers, if they match, we've found the button
+            // associated with that action
+            //
+            // we then have to not only setAutoRepeat() on it, but also connect
+            // it up differently from what it got in createAction(), as
+            // determined empirically (bleargh!!)
+            if (act == rewAction) {
+
+                (*i)->setAutoRepeat(true);
+                connect((*i),
+                        SIGNAL(clicked()),
+                        this,
+                        SIGNAL(rewindPlayback()));
+
+            } else if (act == ffwAction) {
+
+                (*i)->setAutoRepeat(true);
+                connect((*i),
+                        SIGNAL(clicked()),
+                        this,
+                        SIGNAL(fastForwardPlayback()));
+
+            }
+
+        }
+
+    }
+
+}
+
+
 }
 #include "AudioMixerWindow.moc"

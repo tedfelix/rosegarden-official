@@ -180,6 +180,8 @@ private:
 
     QPixmap m_monoPixmap;
     QPixmap m_stereoPixmap;
+
+    void setRewFFwdToAutoRepeat();
 };
 
 

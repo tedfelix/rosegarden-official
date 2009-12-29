@@ -270,6 +270,12 @@ private:
     Device *getCurrentDevice();
 
     virtual void initStatusBar();
+
+    /**
+     * Set the <<< << >> >>> buttons in the transport toolbar to auto repeat
+     */
+    void setRewFFwdToAutoRepeat();
+
 };
 
 }
