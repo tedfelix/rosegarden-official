@@ -774,15 +774,55 @@ RosegardenMainWindow::setupRecentFilesMenu()
 void
 RosegardenMainWindow::setRewFFwdToAutoRepeat()
 {
-    //QWidget* transportToolbar = factory()->container("Transport Toolbar", this);
+    // This one didn't work in Classic either.  Looking at it as a fresh
+    // problem, it was tricky.  The QAction has an objectName() of "rewind"
+    // but the QToolButton associated with that action has no object name at
+    // all.  We kind of have to go around our ass to get to our elbow on
+    // this one.
+    
+    // get pointers to the actual actions    
+    QAction *rewAction = findAction("rewind");
+    QAction *ffwAction = findAction("fast_forward");
+
     QWidget* transportToolbar = this->findToolbar("Transport Toolbar");
 
     if (transportToolbar) {
-        //QList<QPushButton *> allPButtons = parentWidget.findChildren<QPushButton *>();
-        QToolButton *rew = transportToolbar->findChild<QToolButton*>("rewind");
-        QToolButton *ffw = transportToolbar->findChild<QToolButton*>("fast_forward");
-        if (rew) rew->setAutoRepeat(true);
-        if (ffw) ffw->setAutoRepeat(true);
+
+        // get a list of all the toolbar's children (presumably they're
+        // QToolButtons, but use this kind of thing with caution on customized
+        // QToolBars!)
+        QList<QToolButton *> widgets = transportToolbar->findChildren<QToolButton *>();
+
+        // iterate through the entire list of children
+        for (QList<QToolButton *>::iterator i = widgets.begin(); i != widgets.end(); ++i) {
+
+            // get a pointer to the button's default action
+            QAction *act = (*i)->defaultAction();
+
+            // compare pointers, if they match, we've found the button
+            // associated with that action
+            //
+            // we then have to not only setAutoRepeat() on it, but also connect
+            // it up differently from what it got in createAction(), as
+            // determined empirically (bleargh!!)
+            if (act == rewAction) {
+
+                (*i)->setAutoRepeat(true);
+                connect((*i),
+                        SIGNAL(clicked()),
+                        this,
+                        SLOT(slotRewind()));
+
+            } else if (act == ffwAction) {
+
+                (*i)->setAutoRepeat(true);
+                connect((*i),
+                        SIGNAL(clicked()),
+                        this,
+                        SLOT(slotFastforward()));
+            }
+        }
+
     } else {
         RG_DEBUG << "transportToolbar == 0\n";
     }
