@@ -115,6 +115,7 @@ using namespace BaseProperties;
 RosegardenDocument::RosegardenDocument(QWidget *parent,
                                    AudioPluginManager *pluginManager,
                                    bool skipAutoload,
+                                   bool clearCommandHistory,
                                    const char *name)
         : QObject(parent, name),
         m_modified(false),
@@ -124,7 +125,8 @@ RosegardenDocument::RosegardenDocument(QWidget *parent,
         m_audioRecordLatency(0, 0),
         m_quickMarkerTime(-1),
         m_autoSavePeriod(0),
-        m_beingDestroyed(false)
+        m_beingDestroyed(false),
+        m_clearCommandHistory(clearCommandHistory)
 {
     checkSequencerTimer();
 
@@ -157,7 +159,7 @@ RosegardenDocument::~RosegardenDocument()
 
     //     ControlRulerCanvasRepository::clear();
 
-    CommandHistory::getInstance()->clear(); // before Composition is deleted
+    if (m_clearCommandHistory) CommandHistory::getInstance()->clear(); // before Composition is deleted
 }
 
 unsigned int
@@ -552,7 +554,7 @@ void RosegardenDocument::newDocument()
     setModified(false);
     setAbsFilePath(QString::null);
     setTitle(tr("Untitled"));
-    CommandHistory::getInstance()->clear();
+    if (m_clearCommandHistory) CommandHistory::getInstance()->clear();
 }
 
 void RosegardenDocument::performAutoload()

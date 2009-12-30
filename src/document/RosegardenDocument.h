@@ -86,11 +86,18 @@ public:
 
     /**
      * Constructor for the fileclass of the application
+     *
+     * Our old command history under KDE didn't get wiped out when creating a
+     * temporary document to use alongside the application's current one, but
+     * that is no longer the case since Thorn.  We need to be able to avoid
+     * clearing the command history here, or certain commands wipe out the
+     * entire undo history needlessly.
      */
     RosegardenDocument(QWidget *parent,
                      AudioPluginManager *audioPluginManager = 0,
                      bool skipAutoload = false,
-                     const char *name=0);
+                     bool clearCommandHistory = true,
+                     const char *name = 0);
 
 private:
     RosegardenDocument(RosegardenDocument *doc);
@@ -722,6 +729,12 @@ protected:
 
     // Set to true when the dtor starts
     bool m_beingDestroyed;
+
+    /**
+     * Tells this document whether it should clear the command history upon
+     * construction.  Usually true.
+     */
+    bool m_clearCommandHistory;
 };
 
 

@@ -7639,7 +7639,10 @@ RosegardenMainWindow::slotImportStudio()
 void
 RosegardenMainWindow::slotImportStudioFromFile(const QString &file)
 {
-    RosegardenDocument *doc = new RosegardenDocument(this, 0, true); // skipAutoload
+    // We're only using this document temporarily, so we don't want to let it
+    // obliterate the command history!
+    bool clearCommandHistory = false, skipAutoload = true;
+    RosegardenDocument *doc = new RosegardenDocument(this, 0, skipAutoload, clearCommandHistory);
 
     Studio &oldStudio = m_doc->getStudio();
     Studio &newStudio = doc->getStudio();
@@ -7727,8 +7730,9 @@ RosegardenMainWindow::slotImportStudioFromFile(const QString &file)
             m_view->slotSelectTrackSegments(m_doc->getComposition().getSelectedTrack());
         }
     }
-
+    std::cout << __LINE__ << std::endl;
     delete doc;
+    std::cout << __LINE__ << std::endl;
 }
 
 void
