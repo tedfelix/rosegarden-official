@@ -131,7 +131,7 @@ public slots:
 
     // on double click on the event list
     //
-    void slotPopupEventEditor(QTreeWidgetItem*);
+    void slotPopupEventEditor(QTreeWidgetItem*, int);
 
     // Change filter parameters
     //

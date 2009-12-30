@@ -247,8 +247,8 @@ EventView::EventView(RosegardenDocument *doc,
 
     // Connect double clicker
     //
-    connect(m_eventList, SIGNAL(doubleClicked(QTreeWidgetItem*)),
-            SLOT(slotPopupEventEditor(QTreeWidgetItem*)));
+    connect(m_eventList, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)),
+            SLOT(slotPopupEventEditor(QTreeWidgetItem*, int)));
 
     connect(m_eventList,
             SIGNAL(rightButtonPressed(QTreeWidgetItem*, const QPoint&, int)),
@@ -1697,7 +1697,7 @@ EventView::slotRawTime()
 }
 
 void
-EventView::slotPopupEventEditor(QTreeWidgetItem *item)
+EventView::slotPopupEventEditor(QTreeWidgetItem *item, int)
 {
     EventViewItem *eItem = dynamic_cast<EventViewItem*>(item);
 
