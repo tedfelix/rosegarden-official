@@ -7654,8 +7654,8 @@ RosegardenMainWindow::slotImportStudioFromFile(const QString &file)
     //!DEVPUSH review this
 
     if (doc->openDocument(file, true)) { // true because we actually
-        // do want to create devices
-        // on the sequencer here
+                                         // do want to create devices
+                                         // on the sequencer here
 
         MacroCommand *command = new MacroCommand(tr("Import Studio"));
 
@@ -7727,6 +7727,7 @@ RosegardenMainWindow::slotImportStudioFromFile(const QString &file)
             m_view->slotSelectTrackSegments(m_doc->getComposition().getSelectedTrack());
         }
     }
+
     delete doc;
 }
 
