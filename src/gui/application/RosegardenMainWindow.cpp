@@ -7612,7 +7612,8 @@ RosegardenMainWindow::slotImportStudio()
     QString directory = settings.value("import_studio", ResourceFinder().getResourceDir("library")).toString();
 
     QUrl url = FileDialog::getOpenFileName(this, tr("Import Studio from File"), directory,
-               tr("All files") + " (*)", 0, 0);
+                    tr("All supported files") + " (*.rg *.RG *.rgt *.RGT *.rgp *.RGP)" + ";;" +
+                    tr("All files") + " (*)", 0, 0);
 
     if (url.isEmpty())
         return ;
