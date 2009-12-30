@@ -110,6 +110,9 @@ public:
     bool error(const QXmlParseException& exception);
     bool fatalError(const QXmlParseException& exception);
 
+    /// Returns true if any channels were remapped
+    bool channelsWereRemapped() const { return m_remappedChannels; }
+
 protected:
 
     // just for convenience -- just call to the document
@@ -181,6 +184,7 @@ protected:
     bool                              m_cancelled;
     bool                              m_skipAllAudio;
     bool                              m_hasActiveAudio;
+    bool                              m_remappedChannels;
 };
 
 

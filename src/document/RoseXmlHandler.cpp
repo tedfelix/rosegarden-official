@@ -233,7 +233,9 @@ RoseXmlHandler::RoseXmlHandler(RosegardenDocument *doc,
     m_haveControls(false),
     m_cancelled(false),
     m_skipAllAudio(false),
-    m_hasActiveAudio(false)
+    m_hasActiveAudio(false),
+    m_remappedChannels(false)
+
 {}
 
 RoseXmlHandler::~RoseXmlHandler()
@@ -1917,9 +1919,25 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         if (instrument && instrument->getType() == type) {
             m_instrument = instrument;
 
-            // We can also get the channel from this tag
-            //
+            // Synth and Audio instruments always have the channel set to 2.
+            // Preserve this.
             MidiByte channel = (MidiByte)atts.value("channel").toInt();
+
+            // If it's a MIDI instrument, ignore the channel specified in the
+            // file.  Instead, use getPresentationNumber to return the
+            // instrument's user-visible number (eg. 8 from "General MIDI Device #8")
+            // and set the channel to that ( -1 ) instead, thus enforcing a 1:1
+            // correspondence between MIDI channel and MIDI instrument number,
+            // and obviating the need for a channel display or a channel change
+            // control in the IPB.
+            MidiByte lastChannel = channel;
+            if (type == Instrument::Midi) channel = m_instrument->getPresentationNumber() - 1;
+
+            if (lastChannel != channel) {
+                std::cout << "lastChannel: " << (unsigned int)lastChannel << " != channel: " << (unsigned int)channel << std::endl;
+                m_remappedChannels = true;
+            }
+
             m_instrument->setMidiChannel(channel);
         }
 

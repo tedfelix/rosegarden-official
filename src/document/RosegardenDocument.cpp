@@ -364,9 +364,9 @@ bool RosegardenDocument::saveIfModified()
 
             if (!completed) {
                 if (!errMsg.isEmpty()) {
-                    QMessageBox::critical( dynamic_cast<QWidget *>(parent()), "", tr("Could not save document at %1\n(%2)").arg(getAbsFilePath()).arg(errMsg));
+                    QMessageBox::critical( dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), tr("Could not save document at %1\n(%2)").arg(getAbsFilePath()).arg(errMsg));
                 } else {
-                    QMessageBox::critical( dynamic_cast<QWidget *>(parent()), "", tr("Could not save document at %1").arg( getAbsFilePath() ));
+                    QMessageBox::critical( dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), tr("Could not save document at %1").arg( getAbsFilePath() ));
                 }
             }
         }
@@ -536,7 +536,7 @@ RosegardenDocument::deleteOrphanedAudioFiles(bool documentWillNotBeSaved)
         for (size_t i = 0; i < recordedOrphans.size(); ++i) {
             QFile file(recordedOrphans[i]);
             if (!file.remove()) {
-                QMessageBox::critical(dynamic_cast<QWidget *>(parent()), "", tr("File %1 could not be deleted.")
+                QMessageBox::critical(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), tr("File %1 could not be deleted.")
                                     .arg(recordedOrphans[i]));
             }
 
@@ -589,7 +589,7 @@ bool RosegardenDocument::openDocument(const QString& filename,
     if (!fileInfo.isReadable() || fileInfo.isDir()) {
         StartupLogo::hideIfStillThere();
         QString msg(tr("Can't open file '%1'").arg(filename));
-        /* was sorry */ QMessageBox::warning(dynamic_cast<QWidget *>(parent()), "", msg);
+        /* was sorry */ QMessageBox::warning(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), msg);
         return false;
     }
 /*!!!
@@ -623,7 +623,7 @@ bool RosegardenDocument::openDocument(const QString& filename,
                      .arg(errMsg));
 
         CurrentProgressDialog::freeze();
-        /* was sorry */ QMessageBox::warning(dynamic_cast<QWidget *>(parent()), "", msg);
+        /* was sorry */ QMessageBox::warning(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), msg);
         CurrentProgressDialog::thaw();
 
         return false;
@@ -687,7 +687,7 @@ bool RosegardenDocument::openDocument(const QString& filename,
     } catch (Exception e) {
         StartupLogo::hideIfStillThere();
         CurrentProgressDialog::freeze();
-        QMessageBox::critical(dynamic_cast<QWidget *>(parent()), "", strtoqstr(e.getMessage()));
+        QMessageBox::critical(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), strtoqstr(e.getMessage()));
         CurrentProgressDialog::thaw();
     }
 
@@ -1054,7 +1054,7 @@ void RosegardenDocument::initialiseStudio()
                 if (error != "") {
                     StartupLogo::hideIfStillThere();
                     CurrentProgressDialog::freeze();
-                    QMessageBox::warning(dynamic_cast<QWidget *>(parent()), "", error);
+                    QMessageBox::warning(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), error);
                     CurrentProgressDialog::thaw();
                 }
 
@@ -1652,7 +1652,7 @@ RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
         if (handler.isCancelled()) {
             RG_DEBUG << "File load cancelled\n";
             StartupLogo::hideIfStillThere();
-            QMessageBox::information(dynamic_cast<QWidget *>(parent()), "", tr("File load cancelled"));
+            QMessageBox::information(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), tr("File load cancelled"));
             cancelled = true;
             return true;
         } else {
@@ -1672,10 +1672,10 @@ RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
 
 #ifdef HAVE_LIBJACK
                 QMessageBox::information
-                    (dynamic_cast<QWidget *>(parent()), "", tr("<h3>Audio and plugins not available</h3><p>This composition uses audio files or plugins, but Rosegarden is currently running without audio because the JACK audio server was not available on startup.</p><p>Please exit Rosegarden, start the JACK audio server and re-start Rosegarden if you wish to load this complete composition.</p><p><b>WARNING:</b> If you re-save this composition, all audio and plugin data and settings in it will be lost.</p>"));
+                    (dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), tr("<h3>Audio and plugins not available</h3><p>This composition uses audio files or plugins, but Rosegarden is currently running without audio because the JACK audio server was not available on startup.</p><p>Please exit Rosegarden, start the JACK audio server and re-start Rosegarden if you wish to load this complete composition.</p><p><b>WARNING:</b> If you re-save this composition, all audio and plugin data and settings in it will be lost.</p>"));
 #else
                 QMessageBox::information
-                    (dynamic_cast<QWidget *>(parent()), "", tr("<h3>Audio and plugins not available</h3><p>This composition uses audio files or plugins, but you are running a version of Rosegarden that was compiled without audio support.</p><p><b>WARNING:</b> If you re-save this composition from this version of Rosegarden, all audio and plugin data and settings in it will be lost.</p>"));
+                    (dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), tr("<h3>Audio and plugins not available</h3><p>This composition uses audio files or plugins, but you are running a version of Rosegarden that was compiled without audio support.</p><p><b>WARNING:</b> If you re-save this composition from this version of Rosegarden, all audio and plugin data and settings in it will be lost.</p>"));
 #endif
             }
             CurrentProgressDialog::thaw();
@@ -1712,7 +1712,7 @@ RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
                 StartupLogo::hideIfStillThere();
                 CurrentProgressDialog::freeze();
 
-                QMessageBox::information(dynamic_cast<QWidget *>(parent()), "", tr("<h3>Incorrect audio sample rate</h3><p>This composition contains audio files that were recorded or imported with the audio server running at a different sample rate (%1 Hz) from the current JACK server sample rate (%2 Hz).</p><p>Rosegarden will play this composition at the correct speed, but any audio files in it will probably sound awful.</p><p>Please consider re-starting the JACK server at the correct rate (%3 Hz) and re-loading this composition before you do any more work with it.</p>").arg(er).arg(sr).arg(er));
+                QMessageBox::information(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), tr("<h3>Incorrect audio sample rate</h3><p>This composition contains audio files that were recorded or imported with the audio server running at a different sample rate (%1 Hz) from the current JACK server sample rate (%2 Hz).</p><p>Rosegarden will play this composition at the correct speed, but any audio files in it will probably sound awful.</p><p>Please consider re-starting the JACK server at the correct rate (%3 Hz) and re-loading this composition before you do any more work with it.</p>").arg(er).arg(sr).arg(er));
 
                 CurrentProgressDialog::thaw();
                 shownWarning = true;
@@ -1722,7 +1722,7 @@ RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
                 StartupLogo::hideIfStillThere();
                 CurrentProgressDialog::freeze();
                 
-                QMessageBox::information(dynamic_cast<QWidget *>(parent()), "", tr("<h3>Inconsistent audio sample rates</h3><p>This composition contains audio files at more than one sample rate.</p><p>Rosegarden will play them at the correct speed, but any audio files that were recorded or imported at rates different from the current JACK server sample rate (%1 Hz) will probably sound awful.</p><p>Please see the audio file manager dialog for more details, and consider resampling any files that are at the wrong rate.</p>").arg(sr),
+                QMessageBox::information(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), tr("<h3>Inconsistent audio sample rates</h3><p>This composition contains audio files at more than one sample rate.</p><p>Rosegarden will play them at the correct speed, but any audio files that were recorded or imported at rates different from the current JACK server sample rate (%1 Hz) will probably sound awful.</p><p>Please see the audio file manager dialog for more details, and consider resampling any files that are at the wrong rate.</p>").arg(sr),
                                          tr("Inconsistent sample rates"),
                                          "file-load-inconsistent-samplerates");
                     
@@ -1751,7 +1751,7 @@ RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
                 
                 StartupLogo::hideIfStillThere();
                 CurrentProgressDialog::freeze();
-                QMessageBox::information(dynamic_cast<QWidget *>(parent()), "", msg);
+                QMessageBox::information(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), msg);
                 CurrentProgressDialog::thaw();
                 shownWarning = true;
                 
@@ -1764,10 +1764,25 @@ RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
                 
                 StartupLogo::hideIfStillThere();
                 CurrentProgressDialog::freeze();
-                QMessageBox::information(dynamic_cast<QWidget *>(parent()), "", msg);
+                QMessageBox::information(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), msg);
                 CurrentProgressDialog::thaw();
             }
+
         }
+    }
+
+    if (handler.channelsWereRemapped()) {
+        std::cerr << "hoopty" << std::endl;
+
+        StartupLogo::hideIfStillThere();
+        CurrentProgressDialog::freeze();
+
+        QMessageBox::information(
+                dynamic_cast<QWidget *>(parent()),
+                tr("Rosegarden"),
+                tr("<qt><h2>Channels were remapped</h2><p>Beginning with version 10.02, Rosegarden no longer provides controls for changing the channel associated with each MIDI instrument.  Instead, each instrument uses the same channel as its instrument number.  For example, \"MIDI Input System Device #12\" always uses channel 12.</p><p>The file you just loaded contained instruments whose channels differed from the instrument numbers.  These channels have been reassigned so that instrument #1 will always use channel 1, regardless of what channel it might have used previously.  In most cases, you will experience no difference, but you may have to make some small changes to this file in order for it to play as intended.  We recommend that you save this file in order to avoid seeing this warning in the future.</p><p>We apologize for any inconvenience.</p></qt>"));
+
+        CurrentProgressDialog::thaw();
     }
 
     return ok;
@@ -2683,7 +2698,7 @@ RosegardenDocument::finalizeAudioFile(InstrumentId iid)
     } catch (Exception e) {
         StartupLogo::hideIfStillThere();
         CurrentProgressDialog::freeze();
-        QMessageBox::critical(dynamic_cast<QWidget *>(parent()), "", strtoqstr(e.getMessage()));
+        QMessageBox::critical(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), strtoqstr(e.getMessage()));
         CurrentProgressDialog::thaw();
     }
 

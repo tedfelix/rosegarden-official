@@ -32,6 +32,8 @@ ThornStyle::standardIconImplementation(StandardPixmap standardIcon,
                                         const QStyleOption *option,
                                         const QWidget *parent) const
 {
+    // NOTE: see src/gui/styles/qcommonstyle.cpp in the Qt source for examples
+    // of how to extend this whenever more custom icons are called for
     switch (standardIcon) {
 
     // custom icons for QMessageBox

@@ -22,6 +22,7 @@
 
 #include <sstream>
 #include <cstdio>
+#include <iostream>
 
 #include <QString>
 #include <QCoreApplication>
@@ -324,6 +325,20 @@ Instrument::getLocalizedPresentationName() const
     // translate the left piece (we'll leave the #1..#n as an untranslatable
     // Rosegarden-specific concept unless people are really bothered by it)
     return QString("%1 %2").arg(QObject::tr(inameL)).arg(inameR);
+}
+
+unsigned int
+Instrument::getPresentationNumber() const
+{
+    // Again, m_name is always set externally.  Instruments are numbered
+    // sequentially in a way that makes determining the correct channel
+    // association tricky, so we pick it back apart from the string to return
+    // what channel a given instrument should be set to.
+    QString iname = QString::fromStdString(m_name);
+    QString number = iname.mid(iname.indexOf("#") + 1, iname.length());
+    // for "10[D]" take the left 2 chars:
+    if (number.length() > 2) number = number.left(2);
+    return number.toUInt();
 }
 
 std::string

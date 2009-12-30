@@ -129,6 +129,12 @@ public:
     /** Returns a translated QString suitable for presentation to the user */
     virtual QString getLocalizedPresentationName() const;
 
+    /** Returns a number derived from the presentation name of the instrument,
+     * eg. "General MIDI #15" returns 15, which corresponds with the MIDI
+     * channel this Instrument uses if this instrument is a MIDI instrument.
+     */
+    virtual unsigned int getPresentationNumber() const;
+
     virtual std::string getAlias() const;
 
     void setId(InstrumentId id) { m_id = id; }
