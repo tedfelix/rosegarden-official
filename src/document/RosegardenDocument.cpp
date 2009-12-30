@@ -139,8 +139,7 @@ RosegardenDocument::RosegardenDocument(QWidget *parent,
             this, SLOT(slotDocumentRestored()));
 
     // autoload a new document
-    if (!skipAutoload)
-        performAutoload();
+    if (!skipAutoload) performAutoload();
 
     // now set it up as a "new document"
     newDocument();
@@ -1772,9 +1771,6 @@ RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
     }
 
     if (handler.channelsWereRemapped()) {
-        std::cerr << "hoopty" << std::endl;
-
-        StartupLogo::hideIfStillThere();
         CurrentProgressDialog::freeze();
 
         QMessageBox::information(
