@@ -4243,6 +4243,15 @@ NotationView::slotCycleSlashes()
 void
 NotationView::slotAddLayer()
 {
+    // switch to the pencil, as we are about to create an empty segment for
+    // editing
+    //
+    //!!! This also detours around at least three related but distinct crashes
+    // in NotationSelector, although I do not fully fathom why this is so, and am
+    // worried about memory leaks or other obnoxious gotchas waiting in the
+    // wings.
+    slotSetNoteRestInserter();
+
     AddLayerCommand *command = new AddLayerCommand(getCurrentSegment(), getDocument()->getComposition());
     CommandHistory::getInstance()->addCommand(command);
 
@@ -4252,10 +4261,21 @@ NotationView::slotAddLayer()
     // re-invoke setSegments with the ammended m_segments
     m_notationWidget->setSegments(m_doc, m_segments);
 
-    std::cout << "MADE IT" << std::endl;
+    // try to make the new segment active immediately
+    slotCurrentSegmentNext();
 
-    // I bet undoing this goes kaboom somewhere, if doing this doesn't go kaboom
-    // immediately, but let's go for it!
+    // Undoing this goes kaboom bigtime.  What to do about that?  Make the
+    // command's undo emit a signal or something?  The notation widget needs to
+    // pick up the change and reboot itself again on the smaller set of
+    // segments, or at least close gracefully instead of crashing, the way it
+    // does when you undo the creation of a segment that was displayed in this
+    // view.
+    //
+    // I suppose it would be most ideal to have some mechanism in place whereby
+    // undoing segment creation in general triggered successive calls to
+    // setSegments() until there was only one segment left, and then we'd blink
+    // out of existence only after undoing that final one in a multi-segment
+    // context.
 }
 
 void
