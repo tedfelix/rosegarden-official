@@ -205,7 +205,7 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     groupLayout->addWidget(label, row, 0);
     m_recDevice = new QComboBox(m_recordGroup);
     m_recDevice->setFont(m_font);
-    m_recDevice->setToolTip(tr("<qt><p>This track will only record Audio/ MIDI from the selected device, filtering anything else out</p></qt>"));
+    m_recDevice->setToolTip(tr("<qt><p>This track will only record Audio/MIDI from the selected device, filtering anything else out</p></qt>"));
     m_recDevice->setMinimumWidth(width25);
     groupLayout->addWidget(m_recDevice, row, 1, row- row+1, 2);
 
@@ -509,7 +509,6 @@ TrackParameterBox::populatePlaybackDeviceList()
         if (! (*it))
             continue; // sanity check
 
-        //QString iname(strtoqstr((*it)->getPresentationName()));
         QString iname(QObject::tr(QString::fromStdString((*it)->getName())));
         QString pname(QObject::tr(strtoqstr((*it)->getProgramName())));
         Device *device = (*it)->getDevice();
@@ -548,6 +547,10 @@ TrackParameterBox::populatePlaybackDeviceList()
 
         if (pname != "")
             iname += " (" + pname + ")";
+        // cut off the redundant eg. "General MIDI Device" that appears in the
+        // combo right above here anyway
+        iname = iname.mid(iname.indexOf("#"), iname.length());
+        std::cout << "iname: " << iname.toStdString() << std::endl;
         m_instrumentIds[currentDevId].push_back((*it)->getId());
         m_instrumentNames[currentDevId].append(iname);
 
@@ -609,7 +612,6 @@ TrackParameterBox::populateRecordingDeviceList()
                 if (dev) {
                     if (dev->getDirection() == MidiDevice::Record
                         && dev->isRecording()) {
-                        std::cerr << "recording code is tripping" << std::endl;
                         QString connection = RosegardenSequencer::getInstance()
                             ->getConnection(dev->getId());
                         // remove trailing "(duplex)", "(read only)", "(write only)" etc
@@ -691,8 +693,8 @@ void
 TrackParameterBox::slotUpdateControls(int /*dummy*/)
 {
     RG_DEBUG << "TrackParameterBox::slotUpdateControls()\n";
-    slotPlaybackDeviceChanged( -1);
-    slotInstrumentChanged( -1);
+    //slotPlaybackDeviceChanged( -1);
+    //slotInstrumentChanged( -1);
 
     if (m_selectedTrackId == (int)NO_TRACK) return;
     Composition &comp = m_doc->getComposition();
@@ -704,7 +706,6 @@ TrackParameterBox::slotUpdateControls(int /*dummy*/)
     Track *trk = comp.getTrackById(m_selectedTrackId);
 
     m_defClef->setCurrentIndex(trk->getClef());
-//     m_defTranspose->setCurrentIndex(QString("%1").arg(trk->getTranspose()), true);
     m_defTranspose->setCurrentText( QString("%1").arg(trk->getTranspose()) );
     m_defColor->setCurrentIndex(trk->getColor());
     m_highestPlayable = trk->getHighestPlayable();
@@ -782,9 +783,13 @@ TrackParameterBox::slotPlaybackDeviceChanged(int index)
             if ((*it) == devId)
                 break;
         }
+        std::cout << "index: " << index << " pos: " << pos << std::endl;
+
         m_playDevice->setCurrentIndex(pos);
     } else {
         devId = m_playDeviceIds[index];
+        std::cout << "index: " << index << std::endl;
+
     }
 
     m_instrument->clear();
