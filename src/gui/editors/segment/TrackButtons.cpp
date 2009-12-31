@@ -825,10 +825,13 @@ TrackButtons::slotInstrumentPopupActivated(int item)
 
             m_recordLeds[m_popupItem]->setColor(getRecordLedColour(inst));
 
-        } else
+        } else {
             RG_DEBUG << "slotInstrumentPopupActivated() - can't find item!\n";
-    } else
+        }
+
+    } else {
         RG_DEBUG << "slotInstrumentPopupActivated() - can't find item!\n";
+    }
 
 }
 
@@ -947,7 +950,6 @@ void
 TrackButtons::slotTrackInstrumentSelection(TrackId trackId, int item)
 {
     RG_DEBUG << "TrackButtons::slotTrackInstrumentSelection(" << trackId << ")\n";
-    std::cout << "TB received item: " << item << std::endl;
 
     Composition &comp = m_doc->getComposition();
     int position = comp.getTrackById(trackId)->getPosition();

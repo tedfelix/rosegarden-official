@@ -61,7 +61,7 @@ public:
     
     void setDocument( RosegardenDocument *doc );
     void populateDeviceLists();
-    virtual void showAdditionalControls(bool showThem);
+    virtual void showAdditionalControls(bool); // no longer needed; preserved because it's in the base class
 
     virtual QString getPreviousBox(RosegardenParameterArea::Arrangement) const;
 

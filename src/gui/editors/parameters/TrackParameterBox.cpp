@@ -559,7 +559,9 @@ TrackParameterBox::populatePlaybackDeviceList()
         // combo right above here anyway
         iname = iname.mid(iname.indexOf("#"), iname.length());
         m_instrumentIds[currentDevId].push_back((*it)->getId());
+        std::cout << "adding to list of instrument IDs [" << currentDevId << "]: " << (*it)->getId() << std::endl;
         m_instrumentNames[currentDevId].append(iname);
+        std::cout << "adding to list of instrument names: [" << currentDevId << "] " << (*it)->getId() << std::endl;
 
     }
 
@@ -699,7 +701,7 @@ TrackParameterBox::updateHighLow()
 void
 TrackParameterBox::slotUpdateControls(int dummy)
 {
-    std::cout << "received external index (" << dummy << ") but did not use it.  instead used -1 to trigger automatic calculation, which was accurate except for we set the outgoing value to garbage!" << std::endl; 
+    std::cout << "received external index (" << dummy << ") but did not use it.  instead used -1 to trigger automatic (good) calculation" << std::endl; 
     RG_DEBUG << "TrackParameterBox::slotUpdateControls()\n";
     slotPlaybackDeviceChanged(-1);
     slotInstrumentChanged(-1);
@@ -786,10 +788,17 @@ TrackParameterBox::slotPlaybackDeviceChanged(int index)
         devId = inst->getDevice()->getId();
         int pos = -1;
         IdsVector::const_iterator it;
+        // this works because we don't have a usable index, and we're having to
+        // figure out what to set to.  the external change was to 10001, so we
+        // hunt through our mangled data structure to find that.  this jibes
+        // with the notion that our own representation of what's what does not
+        // remotely match the TB menu representation.  Our data is the same, but
+        // in a completely different and utterly nonsensical order, so we can
+        // find it accurately if we know what we're hunting for, otherwise,
+        // we're fucked
         for (it = m_playDeviceIds.begin(); it != m_playDeviceIds.end(); ++it) {
             pos++;
-            if ((*it) == devId)
-                break;
+            if ((*it) == devId) break;
         }
         std::cout << "index: " << index << " pos: " << pos << std::endl;
 
@@ -833,13 +842,27 @@ TrackParameterBox::slotInstrumentChanged(int index)
             if ((*it) == trk->getInstrument()) break;
         }
         m_instrument->setCurrentIndex(pos);
-        std::cout << "receiving external index, calculating pos to: " << pos << std::endl;
+        std::cout << "receiving external index, calculating pos to: " << pos << std::endl;//
     } else {
         devId = m_playDeviceIds[m_playDevice->currentIndex()];
+        std::cout << "device combo current index: " << devId << std::endl;//
         // set the new selected instrument for the track
         int item = -1;
         std::map<DeviceId, IdsVector>::const_iterator it;
+        std::cout << "iterating through std::map: " << std::endl;//
+        int foo = item;
         for (it = m_instrumentIds.begin(); it != m_instrumentIds.end(); ++it) {
+
+            std::cout << "[" << (*it).first << "]: ";//
+
+            for (std::vector<DeviceId>::const_iterator q = (*it).second.begin();
+                 q != (*it).second.end(); ++q) {
+                std::cout << "\t\t\t" << (*q) << " " << std::endl;//
+            }
+
+            foo = item;
+            std::cout << std::endl << "if (" << (*it).first << ") matches (" << devId << ") we are going to add (" << (*it).second.size() << ") to (" << foo << ") to produce a combined index of (" << (foo + (*it).second.size()) << ").  We are targeting Synth #1 which should yield 100000 or so." << std::endl;
+
             if ((*it).first == devId) break;
             item += (*it).second.size();
         }
@@ -847,6 +870,9 @@ TrackParameterBox::slotInstrumentChanged(int index)
         RG_DEBUG << "TrackParameterBox::slotInstrumentChanged() item = " << item << "\n";
         if (m_doc->getComposition().haveTrack(m_selectedTrackId)) {
             std::cout << "emitting item (" << item << ") calculated from index: " << index << std::endl;
+            // item does want to be 0-55 or so in this test.  numbers make
+            // sense, ordering of when we transmit what to track buttons is
+            // utter gibberish.  WHY?
             emit instrumentSelected(m_selectedTrackId, item);
         }
     }
@@ -905,9 +931,10 @@ TrackParameterBox::slotInstrumentLabelChanged(InstrumentId id, QString label)
 }
 
 void
-TrackParameterBox::showAdditionalControls(bool showThem)
+TrackParameterBox::showAdditionalControls(bool)
 {
-    //    m_defaultsGroup->parentWidget()->setShown(showThem);
+    // No longer needed.  Remove when we strip the last of the classic vs.
+    // tabbed garbage out of the other parameter boxes
 }
 
 void
