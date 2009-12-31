@@ -22,18 +22,18 @@
 #ifndef _RG_TRACKPARAMETERBOX_H_
 #define _RG_TRACKPARAMETERBOX_H_
 
-#include "base/MidiProgram.h"
-#include "base/Track.h"
-#include "gui/widgets/ColourTable.h"
 #include "RosegardenParameterArea.h"
 #include "RosegardenParameterBox.h"
-#include <map>
-#include <vector>
+
+#include "base/MidiProgram.h"
+#include "base/Track.h"
 #include "base/Composition.h"
+#include "gui/widgets/ColourTable.h"
 
 #include <QString>
-#include <QCheckBox> // #include <QCheckBox> in QT4, thinking ahead
 
+#include <map>
+#include <vector>
 
 
 class QWidget;
@@ -42,7 +42,6 @@ class QLabel;
 class QFrame;
 class QComboBox;
 class QCheckBox;
-//class SqueezedLabel;
 
 namespace Rosegarden
 {
@@ -140,7 +139,6 @@ private:
     char                m_lastInstrumentType;
 
     // Additional elements that may be hidden in vertical stacked mode
-    //QFrame              *m_separator2;
     QFrame              *m_playbackGroup;
     QFrame              *m_recordGroup;
     QFrame              *m_defaultsGroup;

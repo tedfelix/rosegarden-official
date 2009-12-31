@@ -538,6 +538,7 @@ TrackParameterBox::populatePlaybackDeviceList()
             }
         }
 
+            std::cout << "devId: " << devId << " currentDevId: " << currentDevId << std::endl;
         if (devId != (DeviceId)(currentDevId)) {
             currentDevId = int(devId);
             QString deviceName = QObject::tr(strtoqstr(device->getName()));
@@ -545,19 +546,17 @@ TrackParameterBox::populatePlaybackDeviceList()
             m_playDeviceIds.push_back(currentDevId);
         }
 
-        if (pname != "")
-            iname += " (" + pname + ")";
+        if (pname != "") iname += " (" + pname + ")";
         // cut off the redundant eg. "General MIDI Device" that appears in the
         // combo right above here anyway
         iname = iname.mid(iname.indexOf("#"), iname.length());
-        std::cout << "iname: " << iname.toStdString() << std::endl;
         m_instrumentIds[currentDevId].push_back((*it)->getId());
         m_instrumentNames[currentDevId].append(iname);
 
     }
 
-    m_playDevice->setCurrentIndex(-1);
-    m_instrument->setCurrentIndex(-1);
+//    m_playDevice->setCurrentIndex(-1);
+//    m_instrument->setCurrentIndex(-1);
 }
 
 void
@@ -833,8 +832,9 @@ TrackParameterBox::slotInstrumentChanged(int index)
         int item = 0;
         std::map<DeviceId, IdsVector>::const_iterator it;
         for ( it = m_instrumentIds.begin(); it != m_instrumentIds.end(); ++it) {
-            if ( (*it).first == devId )
-                break;
+            if ( (*it).first == devId ) break;
+            std::cout << "slotInsCh item: " << item << std::endl;
+
             item += (*it).second.size();
         }
         item += index;
