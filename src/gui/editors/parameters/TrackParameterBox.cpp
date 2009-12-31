@@ -115,13 +115,13 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     QSettings settings;
     settings.beginGroup(CollapsingFrameConfigGroup);
 
-    bool expanded = qStrToBool( settings.value("trackparametersplayback", "true" ) ) ;
+    bool expanded = qStrToBool(settings.value("trackparametersplayback", "true")) ;
     settings.setValue("trackparametersplayback", expanded);
-    expanded = qStrToBool( settings.value("trackparametersrecord", "false" ) ) ;
+    expanded = qStrToBool(settings.value("trackparametersrecord", "false")) ;
     settings.setValue("trackparametersrecord", expanded);
-    expanded = qStrToBool( settings.value("trackparametersdefaults", "false" ) ) ;
+    expanded = qStrToBool(settings.value("trackparametersdefaults", "false")) ;
     settings.setValue("trackparametersdefaults", expanded);
-    expanded = qStrToBool( settings.value("trackstaffgroup", "false" ) ) ;
+    expanded = qStrToBool(settings.value("trackstaffgroup", "false")) ;
     settings.setValue("trackstaffgroup", expanded);
 
     settings.endGroup();
@@ -135,7 +135,7 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
 
     // track label
     //
-    m_trackLabel = new SqueezedLabel (tr("<untitled>"), this );
+    m_trackLabel = new SqueezedLabel (tr("<untitled>"), this);
     m_trackLabel->setAlignment(Qt::AlignCenter);
     m_trackLabel->setFont(m_font);
     mainLayout->addWidget(m_trackLabel, 0, 0);
@@ -176,7 +176,7 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     m_instrument = new QComboBox(m_playbackGroup);
     m_instrument->setFont(m_font);
     m_instrument->setToolTip(tr("<qt><p>Choose the instrument this track will use for playback. (Configure the instrument in <b>Instrument Parameters</b>).</p></qt>"));
-    m_instrument->setMaxVisibleItems( 16 );
+    m_instrument->setMaxVisibleItems(16);
     m_instrument->setMinimumWidth(width22);
     groupLayout->addWidget(m_instrument, row, 2);
 
@@ -218,7 +218,7 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     m_recChannel = new QComboBox(m_recordGroup);
     m_recChannel->setFont(m_font);
     m_recChannel->setToolTip(tr("<qt><p>This track will only record Audio/MIDI from the selected channel, filtering anything else out</p></qt>"));
-    m_recChannel->setMaxVisibleItems( 17 );
+    m_recChannel->setMaxVisibleItems(17);
     m_recChannel->setMinimumWidth(width11);
     groupLayout->addWidget(m_recChannel, row, 2);
 
@@ -421,19 +421,19 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
 //    mainLayout->setRowStretch(mainLayout->rowCount() - 1, 1);
 
     // Connections
-    connect( m_playDevice, SIGNAL(activated(int)),
+    connect(m_playDevice, SIGNAL(activated(int)),
              this, SLOT(slotPlaybackDeviceChanged(int)));
 
-    connect( m_instrument, SIGNAL(activated(int)),
+    connect(m_instrument, SIGNAL(activated(int)),
              this, SLOT(slotInstrumentChanged(int)));
 
-    connect( m_recDevice, SIGNAL(activated(int)),
+    connect(m_recDevice, SIGNAL(activated(int)),
              this, SLOT(slotRecordingDeviceChanged(int)));
 
-    connect( m_recChannel, SIGNAL(activated(int)),
+    connect(m_recChannel, SIGNAL(activated(int)),
              this, SLOT(slotRecordingChannelChanged(int)));
 
-    connect( m_defClef, SIGNAL(activated(int)),
+    connect(m_defClef, SIGNAL(activated(int)),
              this, SLOT(slotClefChanged(int)));
 
     // Detect when the document colours are updated
@@ -477,7 +477,7 @@ TrackParameterBox::~TrackParameterBox()
 
 void
 
-TrackParameterBox::setDocument( RosegardenDocument *doc )
+TrackParameterBox::setDocument(RosegardenDocument *doc)
 {
     if (m_doc != doc) {
         RG_DEBUG << "TrackParameterBox::setDocument\n";
@@ -492,7 +492,7 @@ TrackParameterBox::populateDeviceLists()
     RG_DEBUG << "TrackParameterBox::populateDeviceLists()\n";
     populatePlaybackDeviceList();
     populateRecordingDeviceList();
-    slotUpdateControls( -1);
+    slotUpdateControls(-1);
     m_lastInstrumentType = -1;
 }
 
@@ -671,7 +671,7 @@ TrackParameterBox::updateHighLow()
     Pitch lowest(m_lowestPlayable, accidental);
 
     QSettings settings;
-    settings.beginGroup( GeneralOptionsConfigGroup );
+    settings.beginGroup(GeneralOptionsConfigGroup);
 
     int base = settings.value("midipitchoctave", -2).toInt() ;
     settings.endGroup();
@@ -697,11 +697,12 @@ TrackParameterBox::updateHighLow()
 }
 
 void
-TrackParameterBox::slotUpdateControls(int /*dummy*/)
+TrackParameterBox::slotUpdateControls(int dummy)
 {
+    std::cout << "received external index (" << dummy << ") but did not use it.  instead used -1 to trigger automatic calculation, which was accurate except for we set the outgoing value to garbage!" << std::endl; 
     RG_DEBUG << "TrackParameterBox::slotUpdateControls()\n";
-    slotPlaybackDeviceChanged( -1);
-    slotInstrumentChanged( -1);
+    slotPlaybackDeviceChanged(-1);
+    slotInstrumentChanged(-1);
 
     if (m_selectedTrackId == (int)NO_TRACK) return;
     Composition &comp = m_doc->getComposition();
@@ -713,7 +714,7 @@ TrackParameterBox::slotUpdateControls(int /*dummy*/)
     Track *trk = comp.getTrackById(m_selectedTrackId);
 
     m_defClef->setCurrentIndex(trk->getClef());
-    m_defTranspose->setCurrentText( QString("%1").arg(trk->getTranspose()) );
+    m_defTranspose->setCurrentText(QString("%1").arg(trk->getTranspose()));
     m_defColor->setCurrentIndex(trk->getColor());
     m_highestPlayable = trk->getHighestPlayable();
     m_lowestPlayable = trk->getLowestPlayable();
@@ -739,11 +740,11 @@ TrackParameterBox::slotSelectedTrackChanged()
     RG_DEBUG << "TrackParameterBox::slotSelectedTrackChanged()\n";
     Composition &comp = m_doc->getComposition();
     TrackId newTrack = comp.getSelectedTrack();
-    if ( (int)newTrack != m_selectedTrackId ) {
+    if ((int)newTrack != m_selectedTrackId) {
         m_presetLbl->setEnabled(true);
         m_selectedTrackId = newTrack;
         slotSelectedTrackNameChanged();
-        slotUpdateControls( -1);
+        slotUpdateControls(-1);
     }
 }
 
@@ -785,7 +786,7 @@ TrackParameterBox::slotPlaybackDeviceChanged(int index)
         devId = inst->getDevice()->getId();
         int pos = -1;
         IdsVector::const_iterator it;
-        for ( it = m_playDeviceIds.begin(); it != m_playDeviceIds.end(); ++it) {
+        for (it = m_playDeviceIds.begin(); it != m_playDeviceIds.end(); ++it) {
             pos++;
             if ((*it) == devId)
                 break;
@@ -796,7 +797,6 @@ TrackParameterBox::slotPlaybackDeviceChanged(int index)
     } else {
         devId = m_playDeviceIds[index];
         std::cout << "index: " << index << std::endl;
-
     }
 
     m_instrument->clear();
@@ -828,24 +828,25 @@ TrackParameterBox::slotInstrumentChanged(int index)
 
         int pos = -1;
         IdsVector::const_iterator it;
-        for ( it = m_instrumentIds[devId].begin(); it != m_instrumentIds[devId].end(); ++it ) {
+        for (it = m_instrumentIds[devId].begin(); it != m_instrumentIds[devId].end(); ++it) {
             pos++;
-            if ((*it) == trk->getInstrument())
-                break;
+            if ((*it) == trk->getInstrument()) break;
         }
         m_instrument->setCurrentIndex(pos);
+        std::cout << "receiving external index, calculating pos to: " << pos << std::endl;
     } else {
         devId = m_playDeviceIds[m_playDevice->currentIndex()];
         // set the new selected instrument for the track
-        int item = 0;
+        int item = -1;
         std::map<DeviceId, IdsVector>::const_iterator it;
-        for ( it = m_instrumentIds.begin(); it != m_instrumentIds.end(); ++it) {
-            if ( (*it).first == devId ) break;
+        for (it = m_instrumentIds.begin(); it != m_instrumentIds.end(); ++it) {
+            if ((*it).first == devId) break;
             item += (*it).second.size();
         }
         item += index;
         RG_DEBUG << "TrackParameterBox::slotInstrumentChanged() item = " << item << "\n";
         if (m_doc->getComposition().haveTrack(m_selectedTrackId)) {
+            std::cout << "emitting item (" << item << ") calculated from index: " << index << std::endl;
             emit instrumentSelected(m_selectedTrackId, item);
         }
     }
@@ -900,7 +901,7 @@ TrackParameterBox::slotInstrumentLabelChanged(InstrumentId id, QString label)
 {
     RG_DEBUG << "TrackParameterBox::slotInstrumentLabelChanged(" << id << ") = " << label << "\n";
     populatePlaybackDeviceList();
-    slotUpdateControls( -1);
+    slotUpdateControls(-1);
 }
 
 void
@@ -1015,14 +1016,14 @@ TrackParameterBox::slotColorChanged(int index)
                                                tr("New Color Name"),
                                                tr("Enter new name:"),
                                                LineEdit::Normal,
-                                               tr("New"), &ok );
+                                               tr("New"), &ok);
         
         if ((ok == true) && (!newName.isEmpty())) {
 //             QColorDialog box(this, "", true);
 //             int result = box.getColor(newColour);
             
-            //QRgb QColorDialog::getRgba( 0xffffffff, &ok, this );
-            QColor newColor = QColorDialog::getColor( Qt::white, this );
+            //QRgb QColorDialog::getRgba(0xffffffff, &ok, this);
+            QColor newColor = QColorDialog::getColor(Qt::white, this);
 
             if (newColor.isValid()) {
                 Colour newRColour = GUIPalette::convertColour(newColour);
@@ -1110,8 +1111,8 @@ TrackParameterBox::slotPresetPressed()
             m_defClef->setCurrentIndex(dialog.getClef());
 //             m_defTranspose->setCurrentIndex(QString("%1").arg
 //                     (dialog.getTranspose()), true);
-            m_defTranspose->setCurrentText( QString("%1").arg
-                    (dialog.getTranspose()) );
+            m_defTranspose->setCurrentText(QString("%1").arg
+                    (dialog.getTranspose()));
 
             m_highestPlayable = dialog.getHighRange();
             m_lowestPlayable = dialog.getLowRange();
@@ -1130,7 +1131,7 @@ TrackParameterBox::slotPresetPressed()
         // row/column of the corruption, but I can't be bothered to work
         // that out just at the moment.  Hopefully this code will never
         // execute anyway.
-        /* was sorry */ QMessageBox::warning(0, "", tr("The instrument preset database is corrupt.  Check your installation."));
+        QMessageBox::warning(0, tr("Rosegarden"), tr("The instrument preset database is corrupt.  Check your installation."));
     }
 
 }

@@ -69,7 +69,7 @@ TrackButtons::TrackButtons(RosegardenDocument* doc,
                            bool showTrackLabels,
                            int overallHeight,
                            QWidget* parent,
-                           const char* name )
+                           const char* name)
         : QFrame(parent, name), 
         m_doc(doc),
         m_layout(new QVBoxLayout(this)),
@@ -83,7 +83,7 @@ TrackButtons::TrackButtons(RosegardenDocument* doc,
         m_borderGap(1),
         m_trackLabelWidth(trackLabelWidth),
         m_popupItem(0),
-        m_lastSelected( -1)
+        m_lastSelected(-1)
 {
     m_layout->setMargin(0);
     setFrameStyle(Plain);
@@ -227,7 +227,7 @@ TrackButtons::slotToggleMutedTrack(int mutedTrackPos)
 {
     RG_DEBUG << "TrackButtons::slotToggleMutedTrack(" << mutedTrackPos << ")\n";
 
-    if (mutedTrackPos < 0 || mutedTrackPos > (int)m_tracks )
+    if (mutedTrackPos < 0 || mutedTrackPos > (int)m_tracks)
         return ;
 
     Track *track =
@@ -406,7 +406,7 @@ TrackButtons::slotToggleRecordTrack(int position)
                                      tr("Warning"),
                                      tr("The audio file path does not exist or is not writable.\nPlease set the audio file path to a valid directory in Document Properties before recording audio.\nWould you like to set it now?"),
                                      QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel
-               ) == QMessageBox::Yes) {
+              ) == QMessageBox::Yes) {
                 RosegardenMainWindow::self()->slotOpenAudioPathSettings();
             }
         }
@@ -734,7 +734,6 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
             QMenu *subMenu = new QMenu(instrumentPopup);
             QString deviceName = QObject::tr(QString::fromStdString(device->getName()));
 
-//          instrumentPopup->addItem(iconSet, deviceName, subMenu);
             subMenu->setObjectName(deviceName);
             subMenu->setTitle(deviceName);
             subMenu->setIcon(iconSet);
@@ -743,10 +742,7 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
             instrumentSubMenus.push_back(subMenu);
 
             // Connect up the submenu
-            //
-//             connect(subMenu, SIGNAL(activated(int)),
-//                     SLOT(slotInstrumentPopupActivated(int)));
-            connect( subMenu, SIGNAL(triggered(QAction*)), this, SLOT(slotInstrumentPopupActivated(QAction*)) );
+            connect(subMenu, SIGNAL(triggered(QAction*)), this, SLOT(slotInstrumentPopupActivated(QAction*)));
 
         } else if (!instrUsedByMe) {
 
@@ -772,24 +768,18 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
               unconnectedSelectedPixmap :
               unconnectedUsedPixmap : unconnectedPixmap));
 
-        if (pname != "")
-            iname += " (" + pname + ")";
-                
-                
-//                 tempMenu = new QMenu(instrumentPopup);
-                tempMenu = new QAction(instrumentPopup);
-                tempMenu->setIcon( iconSet );
-                tempMenu->setText( iname );    // for QAction
-                tempMenu->setData( QVariant( count ) );
-//                 tempMenu->setTitle( iname );    // for QMenu
-                tempMenu->setObjectName( iname + QString(count) );
-                
-                count++;
-                
-                instrumentSubMenus[instrumentSubMenus.size() - 1]->addAction( tempMenu );
-//                instrumentSubMenus[instrumentSubMenus.size() - 1]->addMenu( tempMenu );
-// qt3-old:       instrumentSubMenus[instrumentSubMenus.size() - 1]->addItem(iconSet, iname, i++);
-        }
+        if (pname != "") iname += " (" + pname + ")";
+            
+        tempMenu = new QAction(instrumentPopup);
+        tempMenu->setIcon(iconSet);
+        tempMenu->setText(iname);    // for QAction
+        tempMenu->setData(QVariant(count));
+        tempMenu->setObjectName(iname + QString(count));
+        
+        count++;
+        
+        instrumentSubMenus[instrumentSubMenus.size() - 1]->addAction(tempMenu);
+    }
 
 }
 
@@ -803,6 +793,7 @@ void
 TrackButtons::slotInstrumentPopupActivated(int item)
 {
     RG_DEBUG << "TrackButtons::slotInstrumentPopupActivated " << item << endl;
+    std::cout << "TB inst pop, item: " << item << std::endl;
 
     Composition &comp = m_doc->getComposition();
     Studio &studio = m_doc->getStudio();
@@ -956,11 +947,12 @@ void
 TrackButtons::slotTrackInstrumentSelection(TrackId trackId, int item)
 {
     RG_DEBUG << "TrackButtons::slotTrackInstrumentSelection(" << trackId << ")\n";
+    std::cout << "TB received item: " << item << std::endl;
 
     Composition &comp = m_doc->getComposition();
     int position = comp.getTrackById(trackId)->getPosition();
     m_popupItem = position;
-    slotInstrumentPopupActivated( item );
+    slotInstrumentPopupActivated(item);
 }
 
 QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
@@ -982,8 +974,8 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
     int multiple = m_doc->getComposition()
         .getMaxContemporaneousSegmentsOnTrack(trackId);
     if (multiple == 0) multiple = 1;
-    int labelWidth = m_trackLabelWidth - ( (m_cellSize - buttonGap) * 2 +
-                                            vuSpacing * 2 + vuWidth );
+    int labelWidth = m_trackLabelWidth - ((m_cellSize - buttonGap) * 2 +
+                                           vuSpacing * 2 + vuWidth);
 
     // Set the label from the Track object on the Composition
     //
@@ -1061,16 +1053,18 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
     hblayout->addSpacing(vuSpacing);
 
     if (track->getLabel() == std::string("")) {
-    Rosegarden::Instrument *ins =
-        m_doc->getStudio().getInstrumentById(track->getInstrument());
-    if (ins && ins->getType() == Rosegarden::Instrument::Audio) {
-        trackLabel->getTrackLabel()->setText(tr("<untitled audio>"));
+
+        Rosegarden::Instrument *ins =
+            m_doc->getStudio().getInstrumentById(track->getInstrument());
+
+        if (ins && ins->getType() == Rosegarden::Instrument::Audio) {
+            trackLabel->getTrackLabel()->setText(tr("<untitled audio>"));
+        } else {
+            trackLabel->getTrackLabel()->setText(tr("<untitled>"));
+        }
     } else {
-        trackLabel->getTrackLabel()->setText(tr("<untitled>"));
-    }
-    }
-    else
         trackLabel->getTrackLabel()->setText(strtoqstr(track->getLabel()));
+    }
 
     trackLabel->setFixedSize(labelWidth, m_cellSize - buttonGap);
     trackLabel->setFixedHeight(m_cellSize - buttonGap);
@@ -1102,8 +1096,9 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
 
     // Set label to program change if it's being sent
     //
-    if (ins != 0 && ins->sendsProgramChange())
+    if (ins != 0 && ins->sendsProgramChange()) {
         trackLabel->setAlternativeLabel(QObject::tr(strtoqstr(ins->getProgramName())));
+    }
 
     trackLabel->showLabel(m_trackInstrumentLabels);
 
@@ -1112,8 +1107,7 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
 
     // set the mute button
     //
-    if (track->isMuted())
-        mute->off();
+    if (track->isMuted()) mute->off();
 
     return trackHBox;
 }
@@ -1124,22 +1118,21 @@ TrackButtons::getRecordLedColour(Instrument *ins)
     if (!ins) return Qt::white;
 
     switch (ins->getType()) {
-        case Instrument::Audio:
-//                std::cerr << "TrackButtons::getRecordLedColour - setting LED to red" << std::endl;
-                return GUIPalette::getColour(GUIPalette::RecordAudioTrackLED);
 
-        case Instrument::SoftSynth:
-//                std::cerr << "TrackButtons::getRecordLedColour - setting LED to orange" << std::endl;
-                return GUIPalette::getColour(GUIPalette::RecordSoftSynthTrackLED);
+    case Instrument::Audio:
+        return GUIPalette::getColour(GUIPalette::RecordAudioTrackLED);
 
-        case Instrument::Midi:
-//                std::cerr << "TrackButtons::getRecordLedColour - setting LED to yellow" << std::endl;
-                return GUIPalette::getColour(GUIPalette::RecordMIDITrackLED);
-                
-        default:
-                std::cerr << "TrackButtons::slotUpdateTracks() - invalid instrument type, this is probably a BUG!" 
-                          << std::endl;
-                return Qt::green;
+    case Instrument::SoftSynth:
+        return GUIPalette::getColour(GUIPalette::RecordSoftSynthTrackLED);
+
+    case Instrument::Midi:
+        return GUIPalette::getColour(GUIPalette::RecordMIDITrackLED);
+            
+    default:
+        std::cerr << "TrackButtons::slotUpdateTracks() - invalid instrument type, this is probably a BUG!" 
+                  << std::endl;
+        return Qt::green;
+
     }
 
 }
