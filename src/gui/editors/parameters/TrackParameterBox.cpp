@@ -522,6 +522,7 @@ TrackParameterBox::populatePlaybackDeviceList()
         QString pname(QObject::tr(strtoqstr((*it)->getProgramName())));
         Device *device = (*it)->getDevice();
         DeviceId devId = device->getId();
+        std::cout << "(grep on combo) got devId " << device->getId() << std::endl;
 
         if ((*it)->getType() == Instrument::SoftSynth) {
             iname.replace(QObject::tr("Synth plugin"), "");
@@ -547,11 +548,13 @@ TrackParameterBox::populatePlaybackDeviceList()
             }
         }
 
+        std::cout << "combo - if " << devId << " != " << currentDevId << "; currentDevId = "<< int(devId) << std::endl;
         if (devId != (DeviceId)(currentDevId)) {
             currentDevId = int(devId);
             QString deviceName = QObject::tr(strtoqstr(device->getName()));
             m_playDevice->addItem(deviceName);
             m_playDeviceIds.push_back(currentDevId);
+            std::cout << "adding name " << deviceName << " to combo, and setting m_playDeviceIds for this index to " << currentDevId << std::endl;
         }
 
         if (pname != "") iname += " (" + pname + ")";
@@ -845,7 +848,28 @@ TrackParameterBox::slotInstrumentChanged(int index)
         std::cout << "receiving external index, calculating pos to: " << pos << std::endl;//
     } else {
         devId = m_playDeviceIds[m_playDevice->currentIndex()];
-        std::cout << "device combo current index: " << devId << std::endl;//
+
+        //
+        // (hard code for test example: will not necessarily apply in real
+        // world)
+        std::string o = "foo 42";
+        switch (m_playDevice->currentIndex()) {
+            case 0: o = "Audio";
+                    break;
+            case 1: o = "Syth";
+                    break;
+            case 2: o = "MIDI"; // This one is wrong!  Returns 0, not 2000.  Actually "device ID" seems to be a misnomer anyway,
+                                // it's really the first instrument in a given device, and all of this is instrument-centric, only
+                                //  changing devices as necessary when the instrument changes, at least based on looking at XML to
+                                //  see eg. device 0 has inst 2000-2015 etc.
+                    break;
+            default:
+                    o = "WTF?!";
+        }
+        std::cout << "device ID " << devId  << " for combo index " << m_playDevice->currentIndex() << " (" << o << ")" << std::endl;
+        //
+
+
         // set the new selected instrument for the track
         int item = -1;
         std::map<DeviceId, IdsVector>::const_iterator it;
@@ -861,7 +885,7 @@ TrackParameterBox::slotInstrumentChanged(int index)
             }
 
             foo = item;
-            std::cout << std::endl << "if (" << (*it).first << ") matches (" << devId << ") we are going to add (" << (*it).second.size() << ") to (" << foo << ") to produce a combined index of (" << (foo + (*it).second.size()) << ").  We are targeting Synth #1 which should yield 100000 or so." << std::endl;
+            std::cout << std::endl << "if (" << (*it).first << ") matches (" << devId << ") we are going to add (" << (*it).second.size() << ") to (" << foo << ") to produce a combined index of (" << (foo + (*it).second.size()) << ").  We are targeting MIDI #5 which should get 2004 back when updateControls() is called externally with the dummy index." << std::endl;
 
             if ((*it).first == devId) break;
             item += (*it).second.size();
