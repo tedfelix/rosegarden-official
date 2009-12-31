@@ -460,6 +460,15 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
             this, SLOT(slotStaffBracketChanged(int)));
 
     m_doc->getComposition().addObserver(this);
+
+#define BLARGH
+#ifdef BLARGH
+    m_instrument->setEnabled(false);
+    m_playDevice->setEnabled(false);
+    QString tip("<qt>These controls are broken.  Please use the right click menu on the track buttons to the right to assign instruments to tracks.</qt>");
+    m_instrument->setToolTip(tip);
+    m_playDevice->setToolTip(tip);
+#endif
 }
 
 TrackParameterBox::~TrackParameterBox()
@@ -482,7 +491,7 @@ TrackParameterBox::populateDeviceLists()
 {
     RG_DEBUG << "TrackParameterBox::populateDeviceLists()\n";
     populatePlaybackDeviceList();
-    //populateRecordingDeviceList();
+    populateRecordingDeviceList();
     slotUpdateControls( -1);
     m_lastInstrumentType = -1;
 }
@@ -538,7 +547,6 @@ TrackParameterBox::populatePlaybackDeviceList()
             }
         }
 
-            std::cout << "devId: " << devId << " currentDevId: " << currentDevId << std::endl;
         if (devId != (DeviceId)(currentDevId)) {
             currentDevId = int(devId);
             QString deviceName = QObject::tr(strtoqstr(device->getName()));
@@ -555,8 +563,8 @@ TrackParameterBox::populatePlaybackDeviceList()
 
     }
 
-//    m_playDevice->setCurrentIndex(-1);
-//    m_instrument->setCurrentIndex(-1);
+    m_playDevice->setCurrentIndex(-1);
+    m_instrument->setCurrentIndex(-1);
 }
 
 void
@@ -692,8 +700,8 @@ void
 TrackParameterBox::slotUpdateControls(int /*dummy*/)
 {
     RG_DEBUG << "TrackParameterBox::slotUpdateControls()\n";
-    //slotPlaybackDeviceChanged( -1);
-    //slotInstrumentChanged( -1);
+    slotPlaybackDeviceChanged( -1);
+    slotInstrumentChanged( -1);
 
     if (m_selectedTrackId == (int)NO_TRACK) return;
     Composition &comp = m_doc->getComposition();
@@ -833,14 +841,12 @@ TrackParameterBox::slotInstrumentChanged(int index)
         std::map<DeviceId, IdsVector>::const_iterator it;
         for ( it = m_instrumentIds.begin(); it != m_instrumentIds.end(); ++it) {
             if ( (*it).first == devId ) break;
-            std::cout << "slotInsCh item: " << item << std::endl;
-
             item += (*it).second.size();
         }
         item += index;
         RG_DEBUG << "TrackParameterBox::slotInstrumentChanged() item = " << item << "\n";
         if (m_doc->getComposition().haveTrack(m_selectedTrackId)) {
-            emit instrumentSelected( m_selectedTrackId, item );
+            emit instrumentSelected(m_selectedTrackId, item);
         }
     }
 }

@@ -7730,9 +7730,7 @@ RosegardenMainWindow::slotImportStudioFromFile(const QString &file)
             m_view->slotSelectTrackSegments(m_doc->getComposition().getSelectedTrack());
         }
     }
-    std::cout << __LINE__ << std::endl;
     delete doc;
-    std::cout << __LINE__ << std::endl;
 }
 
 void
