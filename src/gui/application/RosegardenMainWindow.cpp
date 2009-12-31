@@ -7691,8 +7691,6 @@ RosegardenMainWindow::slotImportStudioFromFile(const QString &file)
                     BankList bl(md->getBanks());
                     ProgramList pl(md->getPrograms());
                     ControlList cl(md->getControlParameters());
-                    // Grab the 16 instruments associated with the studio file.
-                    InstrumentList il(md->getAllInstruments());
 
                     ModifyDeviceCommand* mdCommand = new ModifyDeviceCommand(&oldStudio,
                                                      *di,
@@ -7705,8 +7703,6 @@ RosegardenMainWindow::slotImportStudioFromFile(const QString &file)
                     mdCommand->setControlList(cl);
                     mdCommand->setOverwrite(true);
                     mdCommand->setRename(md->getName() != "");
-                    // Update the "sends" Bank/Program/Volume/Pan
-                    mdCommand->setSendsInstrumentList(il);
 
                     command->addCommand(mdCommand);
                     ++di;
