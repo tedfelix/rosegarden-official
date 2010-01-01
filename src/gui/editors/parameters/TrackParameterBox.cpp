@@ -461,14 +461,7 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
 
     m_doc->getComposition().addObserver(this);
 
-#define BLARGH
-#ifdef BLARGH
-    m_instrument->setEnabled(false);
-    m_playDevice->setEnabled(false);
-    QString tip("<qt>These controls are broken.  Please use the right click menu on the track buttons to the right to assign instruments to tracks.</qt>");
-    m_instrument->setToolTip(tip);
-    m_playDevice->setToolTip(tip);
-#endif
+    slotUpdateControls(-1);
 }
 
 TrackParameterBox::~TrackParameterBox()
@@ -697,10 +690,10 @@ TrackParameterBox::updateHighLow()
 }
 
 void
-TrackParameterBox::slotUpdateControls(int dummy)
+TrackParameterBox::slotUpdateControls(int /*dummy*/)
 {
-    std::cout << "received external index (" << dummy << ") but did not use it.  instead used -1 to trigger automatic (good) calculation" << std::endl; 
     RG_DEBUG << "TrackParameterBox::slotUpdateControls()\n";
+
     slotPlaybackDeviceChanged(-1);
     slotInstrumentChanged(-1);
 
@@ -841,18 +834,44 @@ TrackParameterBox::slotInstrumentChanged(int index)
     } else {
         devId = m_playDeviceIds[m_playDevice->currentIndex()];
 
-        // set the new selected instrument for the track
-        int item = -1;
-        std::map<DeviceId, IdsVector>::const_iterator it;
-        for (it = m_instrumentIds.begin(); it != m_instrumentIds.end(); ++it) {
-            if ((*it).first == devId) break;
-            item += (*it).second.size();
+        // Calculate an index to use in Studio::getInstrumentFromList() which
+        // gets emitted to TrackButtons, and TrackButtons actually does the work
+        // of assigning the track to the instrument, for some bizarre reason.
+        //
+        // This new method for calculating the index works by:
+        //
+        // 1. for every play device combo index between 0 and its current index, 
+        //
+        // 2. get the device that corresponds with that combo box index, and
+        //
+        // 3. figure out how many instruments that device contains, then
+        //
+        // 4. Add it all up.  That's how many slots we have to jump over to get
+        //    to the point where the instrument combo box index we're working
+        //    with here will target the correct instrument in the studio list.
+        //
+        // I'm sure this whole architecture seemed clever once, but it's an
+        // unmaintainable pain in the ass is what it is.  We changed one
+        // assumption somewhere, and the whole thing fell on its head,
+        // swallowing two entire days of my life to put back with the following
+        // magic lines of code:
+        int prepend = 0;
+        for (unsigned int n = 0; n < m_playDevice->currentIndex(); n++) {
+            DeviceId id = m_playDeviceIds[n];
+            Device *dev = m_doc->getStudio().getDevice(id);
+
+            // get the number of instruments belonging to the device (not the
+            // studio)
+            InstrumentList il = dev->getPresentationInstruments();
+            prepend += il.size();
         }
-        item += index;
-        RG_DEBUG << "TrackParameterBox::slotInstrumentChanged() item = " << item << "\n";
+
+        index += prepend;
+
+        // emit the index we've calculated, relative to the studio list
+        RG_DEBUG << "TrackParameterBox::slotInstrumentChanged() index = " << index << "\n";
         if (m_doc->getComposition().haveTrack(m_selectedTrackId)) {
-            std::cout << "emitting item (" << item << ") calculated from index: " << index << std::endl;
-            emit instrumentSelected(m_selectedTrackId, item);
+            emit instrumentSelected(m_selectedTrackId, index);
         }
     }
 }

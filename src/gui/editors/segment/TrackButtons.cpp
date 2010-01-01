@@ -793,12 +793,18 @@ void
 TrackButtons::slotInstrumentPopupActivated(int item)
 {
     RG_DEBUG << "TrackButtons::slotInstrumentPopupActivated " << item << endl;
-    std::cout << "TB inst pop, item: " << item << std::endl;
 
     Composition &comp = m_doc->getComposition();
     Studio &studio = m_doc->getStudio();
 
     Instrument *inst = studio.getInstrumentFromList(item);
+
+    // debug dump
+//    for (int n = 0; n < 100; n++) {
+//        inst = studio.getInstrumentFromList(n);
+//        std::cout << "Studio returned instrument \"" << inst->getPresentationName() << "\" for index " << n << std::endl;
+//    }
+//    inst = studio.getInstrumentFromList(item);
 
     RG_DEBUG << "TrackButtons::slotInstrumentPopupActivated: instrument " << inst << endl;
 
