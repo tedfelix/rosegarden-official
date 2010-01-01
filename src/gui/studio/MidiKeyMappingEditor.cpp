@@ -73,9 +73,12 @@ MidiKeyMappingEditor::clearAll()
 
     setTitle(tr("Key Mapping details"));
 
+    m_librarian->clear();
+    m_librarianEmail->clear();
     setEnabled(false);
 
     blockAllSignals(false);
+    
 }
 
 void
@@ -114,10 +117,12 @@ MidiKeyMappingEditor::reset()
 
     if (!m) {
         RG_DEBUG << "WARNING: MidiKeyMappingEditor::reset: No such mapping as " << m_mappingName << endl;
+        return;
     }
 
     m_mapping = *m;
 
+    
     blockAllSignals(true);
 
     // Librarian details
@@ -125,22 +130,23 @@ MidiKeyMappingEditor::reset()
     m_librarian->setText(strtoqstr(m_device->getLibrarianName()));
     m_librarianEmail->setText(strtoqstr(m_device->getLibrarianEmail()));
 
-    for (MidiKeyMapping::KeyNameMap::const_iterator it =
-                m_mapping.getMap().begin();
-            it != m_mapping.getMap().end(); ++it) {
+    // Clear each QLineEdit and perform a more secure scan of mappings.
+    for (unsigned int i = 0; i < (unsigned int)m_names.size(); i++) {
+        m_names[i]->clear();
 
-        int i = it->first;
-        if (i < 0 || i > 127) {
-            RG_DEBUG << "WARNING: MidiKeyMappingEditor::reset: Key " << i
-            << " out of range in mapping " << m_mapping.getName()
-            << endl;
-            continue;
+        for (MidiKeyMapping::KeyNameMap::const_iterator it =
+                    m_mapping.getMap().begin();
+                it != m_mapping.getMap().end(); ++it) {
+
+            int index = it->first;
+
+            if ( i == index) {
+                QString name = strtoqstr(it->second);
+                m_completions << name;
+                m_names[i]->setText(name);
+                m_names[i]->setCursorPosition(0);
+            }
         }
-
-        QString name = strtoqstr(it->second);
-        m_completions << name;
-        m_names[i]->setText(name);
-        m_names[i]->setCursorPosition(0);
     }
 
     blockAllSignals(false);

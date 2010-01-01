@@ -69,7 +69,7 @@ protected:
     QStringList               m_completions;
     QPushButton              *m_initialLabel;
     std::vector<QLabel*>      m_labels;
-    std::vector<LineEdit*>    m_names;
+    std::vector<QLineEdit*>    m_names;
     QFrame                   *m_mainFrame;
     QLabel                   *m_librarian;
     QLabel                   *m_librarianEmail;

@@ -122,8 +122,10 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
        << tr("LSB");
     m_treeWidget->setHeaderLabels(sl);
     m_treeWidget->setRootIsDecorated(true);
-//     m_treeWidget->setSelectionBehavior( QAbstractItemView::SelectRows );    //qt4
-    m_treeWidget->setSelectionMode( QAbstractItemView::SingleSelection );    //qt4
+    m_treeWidget->setSelectionBehavior(QAbstractItemView::SelectRows);    //qt4
+    m_treeWidget->setSelectionMode(QAbstractItemView::SingleSelection);    //qt4
+    m_treeWidget->setAllColumnsShowFocus(true);
+    m_treeWidget->setSortingEnabled(true);
     
     /*    
     m_treeWidget->setShowSortIndicator(true);        //&&&
@@ -569,7 +571,7 @@ BankEditorDialog::updateDialog()
     for (size_t i = 0; i < itemsToDelete.size(); ++i)
         delete itemsToDelete[i];
 
-    m_treeWidget->sortItems(0, Qt::AscendingOrder);    // column, order  // sort by device (column 0)
+//    m_treeWidget->sortItems(0, Qt::AscendingOrder);    // column, order  // sort by device (column 0)
 //     m_treeWidget->sortChildren();
 
     if (deviceLabelUpdate)
@@ -789,9 +791,8 @@ void BankEditorDialog::populateDeviceEditors(QTreeWidgetItem* item)
 
     if (keyItem) {
 
-//         stateChanged("on_key_item");
-        leaveActionState("on_key_item");
-        leaveActionState("on_bank_item");    //, KXMLGUIClient::StateReverse);
+        enterActionState("on_key_item");
+        leaveActionState("on_bank_item");
 
         m_delete->setEnabled(true);
 
@@ -801,12 +802,12 @@ void BankEditorDialog::populateDeviceEditors(QTreeWidgetItem* item)
 
         setProgramList(device);
 
+        m_lastDevice = keyItem->getDeviceId();
         m_keyMappingEditor->populate(item);
 
         m_programEditor->hide();
         m_keyMappingEditor->show();
 
-        m_lastDevice = keyItem->getDeviceId();
         m_rightSide->setEnabled(true);
 
         return ;
@@ -816,8 +817,8 @@ void BankEditorDialog::populateDeviceEditors(QTreeWidgetItem* item)
 
     if (bankItem) {
 
-        leaveActionState("on_bank_item");
-        leaveActionState("on_key_item");    //, KXMLGUIClient::StateReverse);
+        enterActionState("on_bank_item");
+        leaveActionState("on_key_item");
 
         m_delete->setEnabled(true);
         m_copyPrograms->setEnabled(true);
@@ -879,6 +880,9 @@ void BankEditorDialog::populateDeviceEditors(QTreeWidgetItem* item)
         return ;
     }
 
+    // User must have selected a device (top level Widget)
+    // Fetch The chosen device and info.
+    // Deactivate the rightside panel and clear its contents.
     m_bankList = device->getBanks();
     setProgramList(device);
 
@@ -901,9 +905,9 @@ void BankEditorDialog::populateDeviceEditors(QTreeWidgetItem* item)
 
     leaveActionState("on_bank_item");
     leaveActionState("on_key_item");
-//&&& CAUSING CRASH    
-//    m_programEditor->clearAll();
-//    m_keyMappingEditor->clearAll();
+
+    m_programEditor->clearAll();
+    m_keyMappingEditor->clearAll();
 }
 
 void
