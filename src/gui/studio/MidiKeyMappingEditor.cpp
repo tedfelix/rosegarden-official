@@ -130,7 +130,7 @@ MidiKeyMappingEditor::reset()
     m_librarian->setText(strtoqstr(m_device->getLibrarianName()));
     m_librarianEmail->setText(strtoqstr(m_device->getLibrarianEmail()));
 
-    // Clear each QLineEdit and perform a more secure scan of mappings.
+    // Clear each LineEdit and perform a more secure scan of mappings.
     for (unsigned int i = 0; i < (unsigned int)m_names.size(); i++) {
         m_names[i]->clear();
 
