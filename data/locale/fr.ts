@@ -3793,18 +3793,18 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="1915"/>
         <source>Show La&amp;yer Toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>Barre d&apos;out&amp;ils calques</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1944"/>
         <source>Add &amp;Layer</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajouter &amp;voix (calque)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1951"/>
         <source>Ctrl+Alt+1</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Alt+1</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1989"/>
@@ -4197,7 +4197,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3450"/>
         <source>Layer Toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>Barre d&apos;outils calques</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3452"/>
@@ -4945,12 +4945,12 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
         <location filename="../InstrumentStrings.cpp" line="34"/>
         <location filename="../AutoloadStrings.cpp" line="82"/>
         <source>Viola</source>
-        <translation type="unfinished"></translation>
+        <translation>Alto</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="35"/>
         <source>Baroque viola</source>
-        <translation type="unfinished"></translation>
+        <translation>Alto baroque</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="36"/>
@@ -4996,7 +4996,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="44"/>
         <source>Violone</source>
-        <translation type="unfinished"></translation>
+        <translation>Violone</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="45"/>
@@ -5056,22 +5056,22 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="56"/>
         <source>Electric bass guitar (fretted)</source>
-        <translation type="unfinished"></translation>
+        <translation>Guitare électrique basse (avec frettes)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="57"/>
         <source>Electric bass guitar (fretless)</source>
-        <translation type="unfinished"></translation>
+        <translation>Guitare électrique basse (sans frettes)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="58"/>
         <source>Lute</source>
-        <translation type="unfinished"></translation>
+        <translation>Luth</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="59"/>
         <source>Cittern</source>
-        <translation type="unfinished"></translation>
+        <translation>Cistre</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="60"/>
@@ -5112,13 +5112,13 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="67"/>
         <source>Mandola</source>
-        <translation type="unfinished"></translation>
+        <translation>Mandole</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="68"/>
         <location filename="../AutoloadStrings.cpp" line="178"/>
         <source>Ukulele</source>
-        <translation type="unfinished"></translation>
+        <translation>Ukulélé</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="69"/>
@@ -5144,7 +5144,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
         <location filename="../InstrumentStrings.cpp" line="73"/>
         <location filename="../AutoloadStrings.cpp" line="148"/>
         <source>Koto</source>
-        <translation type="unfinished"></translation>
+        <translation>Koto</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="74"/>
@@ -5191,17 +5191,17 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="82"/>
         <source>Transverse flute (D foot)</source>
-        <translation type="unfinished"></translation>
+        <translation>Flûte traversière (patte de Ré)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="83"/>
         <source>Transverse flute (C foot)</source>
-        <translation type="unfinished"></translation>
+        <translation>Flûte traversière (patte d&apos;Ut)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="84"/>
         <source>Transverse flute (B foot)</source>
-        <translation type="unfinished"></translation>
+        <translation>Flûte traversière (patte de Si)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="85"/>
@@ -5211,7 +5211,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="86"/>
         <source>Garklein recorder</source>
-        <translation type="unfinished"></translation>
+        <translation>Flûte à bec sopraninino</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="87"/>
@@ -5241,12 +5241,12 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="92"/>
         <source>Greatbass recorder</source>
-        <translation type="unfinished"></translation>
+        <translation>Flûte à bec contrebasse</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="93"/>
         <source>Contrabass recorder</source>
-        <translation>Flûte à bec contrebasse</translation>
+        <translation>Flûte à bec soubasse</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="94"/>
@@ -5296,7 +5296,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="103"/>
         <source>Slide whistle</source>
-        <translation type="unfinished"></translation>
+        <translation>Flûte à coulisse</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="104"/>
@@ -5307,7 +5307,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
         <location filename="../InstrumentStrings.cpp" line="105"/>
         <location filename="../AutoloadStrings.cpp" line="118"/>
         <source>Shakuhachi</source>
-        <translation type="unfinished"></translation>
+        <translation>Shakuhachi</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="106"/>
@@ -5348,7 +5348,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="113"/>
         <source>Heckelphone</source>
-        <translation type="unfinished"></translation>
+        <translation>Heckelphone</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="114"/>
@@ -5358,26 +5358,30 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="115"/>
         <source>Oboe da caccia</source>
-        <translation type="unfinished"></translation>
+        <translation>Hautbois da caccia</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="116"/>
         <source>Shawm</source>
+        <translatorcomment>Chalemie? Bombarde? Mais la bombarde bretonne joue en Sib</translatorcomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="117"/>
         <source>Sopranino shawm</source>
+        <translatorcomment>Chalemie? Bombarde? Mais la bombarde bretonne joue en Sib</translatorcomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="118"/>
         <source>Descant pommer</source>
+        <translatorcomment>Chalemie soprano? Bombarde soprano? Différence entre pommer et shawn ?</translatorcomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="119"/>
         <source>Alto pommer</source>
+        <translatorcomment>Chalemie? Bombarde? Différence entre pommer et shawn ?</translatorcomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5403,7 +5407,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="124"/>
         <source>Greatbass crumhorn</source>
-        <translation type="unfinished"></translation>
+        <translation>Cromhorne contrebasse</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="125"/>
@@ -5432,12 +5436,12 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="129"/>
         <source>Sopranino rauschpfeife</source>
-        <translation type="unfinished"></translation>
+        <translation>Rauschpfeife sopranino</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="130"/>
         <source>Soprano rauschpfeife</source>
-        <translation type="unfinished"></translation>
+        <translation>Rauschpfeife soprano</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="131"/>
@@ -5453,22 +5457,22 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="133"/>
         <source>Dulcian</source>
-        <translation type="unfinished"></translation>
+        <translation>Dulcian</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="134"/>
         <source>Rackett</source>
-        <translation type="unfinished"></translation>
+        <translation>Cervelas</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="135"/>
         <source>Sopranino sarrusophone</source>
-        <translation type="unfinished"></translation>
+        <translation>Sarrussophone sopranino</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="136"/>
         <source>Soprano sarrusophone</source>
-        <translation type="unfinished"></translation>
+        <translation>Sarrussophone soprano</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="137"/>
@@ -5699,32 +5703,32 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="182"/>
         <source>Cornet in Eb</source>
-        <translation>Cornet en mi bémol</translation>
+        <translation>Cornet à pistons en mi bémol</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="183"/>
         <source>Cornet in Bb</source>
-        <translation>Cornet en si bémol</translation>
+        <translation>Cornet à pistons en si bémol</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="184"/>
         <source>Flugelhorn</source>
-        <translation type="unfinished"></translation>
+        <translation>Bugle</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="185"/>
         <source>Cornettino</source>
-        <translation type="unfinished"></translation>
+        <translation>Cornet</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="186"/>
         <source>Alto cornetto</source>
-        <translation type="unfinished"></translation>
+        <translation>Cornet alto</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="187"/>
         <source>Tenor cornetto</source>
-        <translation type="unfinished"></translation>
+        <translation>Cornet ténor</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="188"/>
@@ -5829,32 +5833,36 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="208"/>
         <source>Mellophone in F</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Difference between mellophone et mellophonium?</translatorcomment>
+        <translation>Mellophone en Fa</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="209"/>
         <source>Mellophone in Eb</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Difference between mellophone et mellophonium?</translatorcomment>
+        <translation>Mellophone en Mi b</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="210"/>
         <source>Mellophonium in F</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Difference between mellophone et mellophonium?</translatorcomment>
+        <translation>Mellophonium en Fa</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="211"/>
         <source>Mellophonium in Eb</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Difference between mellophone et mellophonium?</translatorcomment>
+        <translation>Mellophonium en Mi b</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="212"/>
         <source>Wagner tuba in Bb</source>
-        <translation type="unfinished"></translation>
+        <translation>Tuba wagner en Si b</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="213"/>
         <source>Wagner tuba in F</source>
-        <translation type="unfinished"></translation>
+        <translation>Tuba wagner en Fa</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="214"/>
@@ -5884,7 +5892,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="219"/>
         <source>Euphonium</source>
-        <translation type="unfinished"></translation>
+        <translation>Euphonium</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="220"/>
@@ -6083,12 +6091,12 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="258"/>
         <source>Dulcimer (treble)</source>
-        <translation type="unfinished"></translation>
+        <translation>Dulcimer (aigus)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="259"/>
         <source>Dulcimer (bass)</source>
-        <translation type="unfinished"></translation>
+        <translation>Dulcimer (graves)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="260"/>
@@ -6476,22 +6484,22 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="327"/>
         <source>Clavichord (treble)</source>
-        <translation type="unfinished"></translation>
+        <translation>Clavicorde (aigus)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="328"/>
         <source>Clavichord (bass)</source>
-        <translation type="unfinished"></translation>
+        <translation>Clavicorde (graves)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="329"/>
         <source>Harpsichord (treble)</source>
-        <translation type="unfinished"></translation>
+        <translation>Clavecin (aigus)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="330"/>
         <source>Harpsichord (bass)</source>
-        <translation type="unfinished"></translation>
+        <translation>Clavecin (graves)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="331"/>
@@ -6571,7 +6579,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="346"/>
         <source>Free reeds</source>
-        <translation type="unfinished"></translation>
+        <translation>Anches libres</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="347"/>
@@ -6602,7 +6610,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="352"/>
         <source>Melodica</source>
-        <translation type="unfinished"></translation>
+        <translation>Mélodica</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="353"/>
@@ -6632,7 +6640,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="360"/>
         <source>Boy soprano</source>
-        <translation type="unfinished"></translation>
+        <translation>Soprano garçon</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="361"/>
@@ -7044,27 +7052,27 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../AutoloadStrings.cpp" line="105"/>
         <source>Soprano Sax</source>
-        <translation type="unfinished"></translation>
+        <translation>Saxophone soprano</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="106"/>
         <source>Alto Sax</source>
-        <translation type="unfinished"></translation>
+        <translation>Saxophone alto</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="107"/>
         <source>Tenor Sax</source>
-        <translation type="unfinished"></translation>
+        <translation>Saxophone ténor</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="108"/>
         <source>Baritone Sax</source>
-        <translation type="unfinished"></translation>
+        <translation>Saxophone baryton</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="110"/>
         <source>English Horn</source>
-        <translation type="unfinished"></translation>
+        <translation>Cor anglais</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="112"/>
@@ -10540,12 +10548,12 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../../src/commands/segment/AddLayerCommand.cpp" line="35"/>
         <source>Add Layer</source>
-        <translation type="unfinished">Ajouter une voix</translation>
+        <translation>Ajouter une voix (segment superposé)</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/AddLayerCommand.cpp" line="67"/>
         <source> - layer</source>
-        <translation type="unfinished"> - voix</translation>
+        <translation> - voix</translation>
     </message>
 </context>
 <context>
@@ -14242,7 +14250,7 @@ Voulez-vous essayer de localiser ce fichier?</translation>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="96"/>
         <source>&lt;qt&gt;&lt;p&gt;Qt offers you the choice of three graphics systems. The normal (raster) graphics system offers the best tradeoff between performance and stability, but may cause problems for some users.  If you experience frequent crashes, or distorted graphics, you should try the safe (native) graphics system instead.  If you wish to experiment, the fast (OpenGL) graphics system delivers excellent performance for some users, but is generally less stable.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Qt vous donne le choix entre trois procédés d&apos;affichage graphique. Le procédé &quot;normal&quot; (raster graphics) donne le meilleur rapport performance/stabilité mais peut poser des problèmes sur certains systèmes.  Si vous constatez des plantages fréquents ou des anomalies de l&apos;affichage, vous choisirez plutôt le procédé &quot;sans risques&quot; (native graphics).  Si vous êtes aventureux, le procécé &quot;rapide&quot; (OpenGL graphics) donne des performances remarquables sur certains systèmes mais est en général moins stable.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="264"/>
@@ -19988,7 +19996,7 @@ Nous vous recommandons de sauver à nouveau ce fichier en utilisant la version c
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="1781"/>
         <source>&lt;qt&gt;&lt;h2&gt;Channels were remapped&lt;/h2&gt;&lt;p&gt;Beginning with version 10.02, Rosegarden no longer provides controls for changing the channel associated with each MIDI instrument.  Instead, each instrument uses the same channel as its instrument number.  For example, &quot;MIDI Input System Device #12&quot; always uses channel 12.&lt;/p&gt;&lt;p&gt;The file you just loaded contained instruments whose channels differed from the instrument numbers.  These channels have been reassigned so that instrument #1 will always use channel 1, regardless of what channel it might have used previously.  In most cases, you will experience no difference, but you may have to make some small changes to this file in order for it to play as intended.  We recommend that you save this file in order to avoid seeing this warning in the future.&lt;/p&gt;&lt;p&gt;We apologize for any inconvenience.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;h2&gt;Les canaux ont été redistribués&lt;/h2&gt;&lt;p&gt;A partir de la version 10.02, Rosegarden ne permet plus de modifier le numéro de canal associé à chaque instrument MIDI.  Maintenant, chaque instrument utilise le canal ayant le même numéro que l&apos;instrument lui-même.  Par exemple, &quot;MIDI Input System Device #12&quot; utilise toujours le canal 12.&lt;/p&gt;&lt;p&gt;Le fichier que vous venez de charger contient des instruments associés à des canaux dont les numéros différent de celui de ces instruments.  Ces canaux doivent être réassignés afin que l&apos;instrument n°1 utilise toujours le canal n°1, quelque soit le canal qui était utilisé auparavant.  La plupart du temps vous ne constaterez aucune différence, il se peut cependant qu&apos;une légère modification du fichier soit nécessaire pour obtenir le résultat attendu.  Nous vous recommandons de sauvegarder ce fichier si vous ne voulez plus revoir cet avertissement.&lt;/p&gt;&lt;p&gt;Nous vous prions de bien vouloir nous excuser si cette évolution vous à occasionné un dérangement.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="2319"/>
