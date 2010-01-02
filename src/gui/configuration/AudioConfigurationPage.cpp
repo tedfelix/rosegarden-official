@@ -34,10 +34,10 @@
 #include "misc/Strings.h"
 #include "misc/Debug.h"
 #include "gui/widgets/LineEdit.h"
+#include "gui/widgets/FileDialog.h"
 
 #include <QComboBox>
 #include <QSettings>
-#include <QFileDialog>
 #include <QCheckBox>
 #include <QComboBox>
 #include <QByteArray>
@@ -179,7 +179,7 @@ AudioConfigurationPage::AudioConfigurationPage(
 void
 AudioConfigurationPage::slotFileDialog()
 {
-    QString path = QFileDialog::getOpenFileName(this, tr("External audio editor path"), QDir::currentPath() );
+    QString path = FileDialog::getOpenFileName(this, tr("External audio editor path"), QDir::currentPath() );
 
     m_externalAudioEditorPath->setText(path);
 }
