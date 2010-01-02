@@ -1183,7 +1183,10 @@ NotationWidget::hideOrShowRulers()
         if (m_tempoRulerIsVisible) m_tempoRuler->show();
         if (m_rawNoteRulerIsVisible) m_rawNoteRuler->show();
         if (m_chordNameRulerIsVisible) m_chordNameRuler->show();
-        if (m_headersAreVisible) m_headersView->show();
+        if (m_headersAreVisible) {
+            m_headersView->show();
+            m_headersButtons->show();
+        }
         if (m_controlsWidget->isAnyRulerVisible()) m_controlsWidget->show();
         m_bottomStandardRuler->show();
         m_topStandardRuler->show();
@@ -1191,7 +1194,10 @@ NotationWidget::hideOrShowRulers()
         if (m_tempoRulerIsVisible) m_tempoRuler->hide();
         if (m_rawNoteRulerIsVisible) m_rawNoteRuler->hide();
         if (m_chordNameRulerIsVisible) m_chordNameRuler->hide();
-        if (m_headersAreVisible) m_headersView->hide();
+        if (m_headersAreVisible) {
+            m_headersView->hide();
+            m_headersButtons->hide();
+        }
         if (m_controlsWidget->isAnyRulerVisible()) m_controlsWidget->hide();
         m_bottomStandardRuler->hide();
         m_topStandardRuler->hide();
