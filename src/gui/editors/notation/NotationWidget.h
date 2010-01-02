@@ -99,6 +99,7 @@ public:
     void setChordNameRulerVisible(bool visible);
     void setRawNoteRulerVisible(bool visible);
     void setHeadersVisible(bool visible);
+    void setHeadersVisibleIfNeeded();
     void toggleHeadersView();
 
     double getViewLeftX();

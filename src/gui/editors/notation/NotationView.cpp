@@ -287,10 +287,21 @@ NotationView::NotationView(RosegardenDocument *doc,
     m_notationWidget->setTempoRulerVisible(visible);
 
     // ... and staff headers.
-    visible = settings.value("shownotationheader").toInt()
-              != HeadersGroup::ShowNever;
-        // ShowWhenNeeded and ShowAlways not used yet ...
-    m_notationWidget->setHeadersVisible(visible);
+    switch (settings.value("shownotationheader").toInt()) {
+      case HeadersGroup::ShowNever :
+          m_notationWidget->setHeadersVisible(false);
+          break;
+      case HeadersGroup::ShowWhenNeeded :
+          m_notationWidget->setHeadersVisibleIfNeeded();
+          break;
+      case HeadersGroup::ShowAlways :
+          m_notationWidget->setHeadersVisible(true);
+          break;
+      default :
+          std::cerr << "NotationView: settings.value(\"shownotationheader\") "
+                    << "returned an unexpected value. This is a bug."
+                    << std::endl;
+    }
 
     settings.endGroup();
 

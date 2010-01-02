@@ -1147,6 +1147,7 @@ NotationWidget::setRawNoteRulerVisible(bool visible)
 void
 NotationWidget::setHeadersVisible(bool visible)
 {
+    // Headers are shown in linear mode only
     if (visible && m_linearMode) {
         m_headersView->show();
         m_headersButtons->show();
@@ -1155,6 +1156,18 @@ NotationWidget::setHeadersVisible(bool visible)
         m_headersButtons->hide();
     }
     m_headersAreVisible = visible;
+}
+
+void
+NotationWidget::setHeadersVisibleIfNeeded()
+{
+    int viewHeight = m_view->height();
+    int headersHeight = m_headersGroup->getUsedHeight();
+    
+    // Headers only have to be visible when all the staves don't vertically
+    // fit inside the view 
+    bool visible = headersHeight > viewHeight;
+    setHeadersVisible(visible);
 }
 
 void
