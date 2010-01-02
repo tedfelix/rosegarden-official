@@ -162,7 +162,7 @@ AudioConfigurationPage::AudioConfigurationPage(
 
     m_createSubmasterOuts = new QCheckBox(tr("for submasters"), frame);
     connect(m_createSubmasterOuts, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
-    m_createSubmasterOuts->setChecked( qStrToBool( settings.value("audiosubmasterouts", "                                      false" ) ) );
+    m_createSubmasterOuts->setChecked( qStrToBool( settings.value("audiosubmasterouts", "false" ) ) );
 
 //    layout->addWidget(label, row, 0, Qt::AlignRight);
     layout->addWidget(m_createSubmasterOuts, row, 1);
