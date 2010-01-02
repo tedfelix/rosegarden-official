@@ -120,24 +120,7 @@ HeadersGroup::setTracks(NotationWidget *widget, NotationScene *scene)
             }
         }
 
-    slotUpdateAllHeaders(m_widget->getViewLeftX(), true);
-
-//             if (    (m_showHeadersGroup == HeadersGroup::ShowAlways)
-//                 || (    (m_showHeadersGroup == HeadersGroup::ShowWhenNeeded)
-//                       && (m_headersGroup->getUsedHeight()
-//                               > getCanvasView()->visibleHeight()))) {
-//                 m_headersGroup->slotUpdateAllHeaders(getCanvasLeftX(), 0, true);
-//                 showHeadersGroup();
-// 
-//                 // Disable menu entry when headers are shown
-//                 findAction("show_track_headers")->setEnabled(false);
-//             } else {
-//                 // Enable menu entry when headers are hidden
-//                 findAction("show_track_headers")->setEnabled(true);
-//             }
-    } else {
-//             // Disable menu entry when not in linear mode
-//             findAction("show_track_headers")->setEnabled(false);
+        slotUpdateAllHeaders(m_widget->getViewLeftX(), true);
     }
 
 }
@@ -209,12 +192,6 @@ HeadersGroup::slotUpdateAllHeaders(int x, bool force)
             m_lastWidth = neededWidth;
 
             emit headersResized(m_lastWidth);
-
-            // Suppress vertical white stripes on canvas when headers
-            // width changes while scrolling
-            /// TODO : Limit "setChanged()" to the useful part of canvas
-  ///          m_notationView->canvas()->setAllChanged();
-  ///          m_notationView->canvas()->update();
         }
     }
 }
