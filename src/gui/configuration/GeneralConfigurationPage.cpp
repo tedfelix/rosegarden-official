@@ -88,7 +88,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
     m_graphicsSystem->addItem(tr("Normal")); // raster
     m_graphicsSystem->addItem(tr("Safe"));   // native
     m_graphicsSystem->addItem(tr("Fast"));   // opengl
-    m_lastGraphicsSystemIndex = settings.value("graphics_system", Raster).toUInt();
+    m_lastGraphicsSystemIndex = settings.value("graphics_system", Native).toUInt();
     m_graphicsSystem->setCurrentIndex(m_lastGraphicsSystemIndex);
     layout->addWidget(m_graphicsSystem, row, 1, 1, 2);
     ++row;

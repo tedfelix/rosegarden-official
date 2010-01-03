@@ -387,13 +387,17 @@ int main(int argc, char *argv[])
         // because it is dramatically faster on X11 than the "native" system.
         // Unfortunately, users have reported a variety of crashes and horrible
         // rendering problems, and it's just such a mixed bag we've got to offer
-        // the option.
+        // the option.  (And after two more users with reports of crashes in Qt
+        // code that have "Raster" written all over them, it's time to make the
+        // only reliable system the default out of the box, and do up a FAQ
+        // about bad graphics performance suggesting to give the less stable
+        // alternatives a shot.)
 
         // we have to set the graphics system before creating theApp, or it
         // won't work, so we have to use an unusual QSettings ctor here.
         QSettings preAppSettings("rosegardenmusic", "Rosegarden");
         preAppSettings.beginGroup(GeneralOptionsConfigGroup);
-        unsigned int graphicsSystem = preAppSettings.value("graphics_system", Raster).toUInt();
+        unsigned int graphicsSystem = preAppSettings.value("graphics_system", Native).toUInt();
         preAppSettings.endGroup();
 
         std::cerr << "Setting graphics system for Qt 4.5+ to: ";
