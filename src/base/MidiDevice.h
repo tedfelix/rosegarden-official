@@ -176,7 +176,15 @@ public:
 protected:
     void createInstruments(InstrumentId);
     void renameInstruments();
+
     void generatePresentationList();
+
+   /**
+      \brief This function pushes the default IPB controllers to the
+      Instrument belonging to this device.  This function must be called after
+      createInstrument() and generateDefaultControllers().
+    */
+    void devicetoInstrControllerPush();
 
     ProgramList    m_programList;
     BankList       m_bankList;

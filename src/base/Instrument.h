@@ -248,6 +248,14 @@ public:
 
     StaticControllers& getStaticControllers() { return m_staticControllers; }
 
+/**
+   \brief This function clears down the instruments controls.  Usually called
+   from a MidiDevice during a push to set the default IPB controls.  This is
+   part of a bug fix that allow default IPB controls to send their values
+   without forst being manually adjusted.
+ */
+    void clearStaticControllers() { m_staticControllers.clear(); };
+
 private:
     InstrumentId    m_id;
     std::string     m_name;

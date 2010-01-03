@@ -14,6 +14,7 @@
 */
 
 #include "MidiDevice.h"
+#include "sound/Midi.h"
 #include "base/MidiTypes.h"
 #include "Instrument.h"
 #include "ControlParameter.h"
@@ -58,6 +59,10 @@ MidiDevice::MidiDevice(DeviceId id,
     createInstruments(ibase);
     generatePresentationList();
     generateDefaultControllers();
+    
+    // fix long standing Rosegarden Bug.  Now IPG controllers send their values
+    // without having to wiggle the controls first.
+    devicetoInstrControllerPush();
 
     // create a default Metronome
     m_metronome = new MidiMetronome(MidiInstrumentBase + 9);
@@ -225,10 +230,10 @@ MidiDevice::generateDefaultControllers()
     static std::string controls[][9] = {
         { "Pan", Rosegarden::Controller::EventType, "<none>", "0", "127", "64", "10", "2", "0" },
         { "Chorus", Rosegarden::Controller::EventType, "<none>", "0", "127", "0", "93", "3", "1" },
-        { "Volume", Rosegarden::Controller::EventType, "<none>", "0", "127", "0", "7", "1", "2" },
+        { "Volume", Rosegarden::Controller::EventType, "<none>", "0", "127", "100", "7", "1", "2" },
         { "Reverb", Rosegarden::Controller::EventType, "<none>", "0", "127", "0", "91", "3", "3" },
-        { "Sustain", Rosegarden::Controller::EventType, "<none>", "0", "127", "0", "64", "4", "-1" },
-        { "Expression", Rosegarden::Controller::EventType, "<none>", "0", "127", "100", "11", "2", "-1" },
+        { "Sustain", Rosegarden::Controller::EventType, "<none>", "0", "127", "0", "64", "4", "4" },
+        { "Expression", Rosegarden::Controller::EventType, "<none>", "0", "127", "100", "11", "2", "5" },
         { "Modulation", Rosegarden::Controller::EventType, "<none>", "0", "127", "0", "1", "4", "-1" },
         { "PitchBend", Rosegarden::PitchBend::EventType, "<none>", "0", "16383", "8192", "1", "4", "-1" }
     };
@@ -248,6 +253,36 @@ MidiDevice::generateDefaultControllers()
     }
 
 
+}
+
+void
+MidiDevice::devicetoInstrControllerPush()
+{
+    // Copy the instruments
+    //
+
+    InstrumentList::iterator iIt = m_instruments.begin();
+    for (; iIt != m_instruments.end(); iIt++)
+    {
+        (*iIt)->clearStaticControllers();
+        ControlList::const_iterator cIt = m_controlList.begin();
+        for (; cIt != m_controlList.end(); cIt++)
+        {
+            // It appears -1 means not to display an IPB controller
+            if (cIt->getIPBPosition() > -1) {
+                // Don't send Pan and Volume controls--they are handled elsewhere
+                MidiByte controllerValue = cIt->getControllerValue();
+                
+                if (controllerValue == MIDI_CONTROLLER_VOLUME || controllerValue == MIDI_CONTROLLER_PAN) {
+                    continue;
+                }
+                
+                // Transfer the Device controller values to the Instrument's list.
+                int defaultValue = cIt->getDefault();
+                (*iIt)->setControllerValue(controllerValue, defaultValue);
+            }
+        }        
+    }
 }
 
 void
