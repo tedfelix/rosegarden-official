@@ -5120,20 +5120,11 @@ RosegardenMainWindow::slotPlay()
         return ;
     }
 
-    // Send the controllers at start of playback if required
-    //
-    QSettings settings;
-    settings.beginGroup(SequencerOptionsConfigGroup);
-
-    bool sendControllers = qStrToBool(settings.value("alwayssendcontrollers", "false")) ;
-
-    if (sendControllers)
-        m_doc->initialiseControllers();
-
     bool pausedPlayback = false;
 
     try {
         pausedPlayback = m_seqManager->play(); // this will stop playback (pause) if it's already running
+
         // Check the new state of the transport and start or stop timer
         // accordingly
         //
@@ -5155,9 +5146,7 @@ RosegardenMainWindow::slotPlay()
         QMessageBox::critical(this, "", strtoqstr(e.getMessage()));
         m_playTimer->stop();
         m_stopTimer->start(100);
-    }
-
-    settings.endGroup();
+    }  
 }
 
 void

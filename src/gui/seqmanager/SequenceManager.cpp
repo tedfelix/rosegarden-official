@@ -1286,9 +1286,13 @@ SequenceManager::preparePlayback(bool forceProgramChanges)
         if (track) activeInstruments.insert(track->getInstrument());
     }
 
-    // Send the MappedInstruments (minimal Instrument information
-    // required for Performance) to the Sequencer
-    //
+    // Determine the sends all controllers configuration state
+    QSettings settings;
+    settings.beginGroup(SequencerOptionsConfigGroup);
+    bool sendControllers = qStrToBool(settings.value("alwayssendcontrollers", "false")) ;
+    settings.endGroup();
+
+    // Send the MappedInstruments full information to the Sequencer 
     InstrumentList::iterator it = list.begin();
     for (; it != list.end(); it++) {
 
@@ -1305,6 +1309,39 @@ SequenceManager::preparePlayback(bool forceProgramChanges)
                 continue;
             }            
 
+            if (sendControllers) {
+                // Controller code taken from from
+                // RosegardenDocument::initialiseControllers()
+                std::vector<MidiControlPair> advancedControls;
+
+                // push all the advanced static controls
+                //
+                StaticControllers &list = (*it)->getStaticControllers();
+                for (StaticControllerConstIterator cIt = list.begin();
+                     cIt != list.end(); ++cIt) {
+                    advancedControls.push_back(MidiControlPair(cIt->first,
+                                                               cIt->second));
+                }
+
+                advancedControls.push_back(MidiControlPair(MIDI_CONTROLLER_PAN,
+                                                           (*it)->getPan()));
+                advancedControls.push_back(MidiControlPair(MIDI_CONTROLLER_VOLUME,
+                                                           (*it)->getVolume()));
+
+                std::vector<MidiControlPair>::iterator iit = advancedControls.begin();
+                for (; iit != advancedControls.end(); iit++) {
+                    try {
+                        mE = new MappedEvent((*it)->getId(),
+                                             MappedEvent::MidiController,
+                                             iit->first,
+                                             iit->second);
+                    } catch (...) {
+                        continue;
+                    }
+
+                    mC.insert(mE);
+                }
+            }
             // send bank select always before program change
             //
             if ((*it)->sendsBankSelect()) {
@@ -1339,8 +1376,6 @@ SequenceManager::preparePlayback(bool forceProgramChanges)
             RG_DEBUG << "SequenceManager::preparePlayback - "
             << "unrecognised instrument type" << endl;
         }
-
-
     }
 
     // Send the MappedEventList if it's got anything in it
