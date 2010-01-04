@@ -1309,39 +1309,6 @@ SequenceManager::preparePlayback(bool forceProgramChanges)
                 continue;
             }            
 
-            if (sendControllers) {
-                // Controller code taken from from
-                // RosegardenDocument::initialiseControllers()
-                std::vector<MidiControlPair> advancedControls;
-
-                // push all the advanced static controls
-                //
-                StaticControllers &list = (*it)->getStaticControllers();
-                for (StaticControllerConstIterator cIt = list.begin();
-                     cIt != list.end(); ++cIt) {
-                    advancedControls.push_back(MidiControlPair(cIt->first,
-                                                               cIt->second));
-                }
-
-                advancedControls.push_back(MidiControlPair(MIDI_CONTROLLER_PAN,
-                                                           (*it)->getPan()));
-                advancedControls.push_back(MidiControlPair(MIDI_CONTROLLER_VOLUME,
-                                                           (*it)->getVolume()));
-
-                std::vector<MidiControlPair>::iterator iit = advancedControls.begin();
-                for (; iit != advancedControls.end(); iit++) {
-                    try {
-                        mE = new MappedEvent((*it)->getId(),
-                                             MappedEvent::MidiController,
-                                             iit->first,
-                                             iit->second);
-                    } catch (...) {
-                        continue;
-                    }
-
-                    mC.insert(mE);
-                }
-            }
             // send bank select always before program change
             //
             if ((*it)->sendsBankSelect()) {
@@ -1369,6 +1336,40 @@ SequenceManager::preparePlayback(bool forceProgramChanges)
                                      (*it)->getProgramChange());
                 mC.insert(mE);
             }
+
+            // Send all the advanced static controls
+            if (sendControllers) {
+                // Controller code taken from from
+                // RosegardenDocument::initialiseControllers()
+                std::vector<MidiControlPair> advancedControls;
+
+                StaticControllers &list = (*it)->getStaticControllers();
+                for (StaticControllerConstIterator cIt = list.begin();
+                     cIt != list.end(); ++cIt) {
+                    advancedControls.push_back(MidiControlPair(cIt->first,
+                                                               cIt->second));
+                }
+
+                advancedControls.push_back(MidiControlPair(MIDI_CONTROLLER_PAN,
+                                                           (*it)->getPan()));
+                advancedControls.push_back(MidiControlPair(MIDI_CONTROLLER_VOLUME,
+                                                           (*it)->getVolume()));
+
+                std::vector<MidiControlPair>::iterator iit = advancedControls.begin();
+                for (; iit != advancedControls.end(); iit++) {
+                    try {
+                        mE = new MappedEvent((*it)->getId(),
+                                             MappedEvent::MidiController,
+                                             iit->first,
+                                             iit->second);
+                    } catch (...) {
+                        continue;
+                    }
+
+                    mC.insert(mE);
+                }
+            }
+
 
         } else if ((*it)->getType() == Instrument::Audio ||
                    (*it)->getType() == Instrument::SoftSynth) {
