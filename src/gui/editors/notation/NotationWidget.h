@@ -33,6 +33,7 @@
 class QGridLayout;
 class QString;
 class QGraphicsScene;
+class QTimer;
 
 namespace Rosegarden
 {
@@ -151,6 +152,8 @@ public slots:
     void slotAddControlRuler(QAction*);
 
     void slotUpdatePointerPosition();
+    
+    void slotRegenerateHeaders();
 
 protected:
     virtual void showEvent(QShowEvent * event);
@@ -260,6 +263,8 @@ private:
     QGraphicsScene *m_headersScene; // I own this
     QWidget *m_headersButtons; // I own this
     double m_headersLastY;
+    bool m_headersNeedRegeneration;
+    QTimer *m_headersTimer; // I own this
 
     QGridLayout *m_layout; // I own this
 

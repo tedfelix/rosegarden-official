@@ -111,7 +111,8 @@ StaffHeader::StaffHeader(HeadersGroup *group,
         m_clefOrKeyIsInconsistent(false),
         m_clefOrKeyWasInconsistent(false),
         m_transposeIsInconsistent(false),
-        m_transposeWasInconsistent(false)
+        m_transposeWasInconsistent(false),
+        m_noSegment(false)
 {
     // localStyle (search key)
     //
@@ -177,7 +178,7 @@ StaffHeader::StaffHeader(HeadersGroup *group,
                             .arg(bracketText);
 
     // Sort segments by position on the track
-    SortedSegments segments;
+    m_segments.clear();
     std::vector<NotationStaff *> *staffs = m_scene->getStaffs();
     for (size_t i = 0; i < staffs->size(); i++) {
 
@@ -186,11 +187,12 @@ StaffHeader::StaffHeader(HeadersGroup *group,
         TrackId trackId = segment.getTrack();
 
         if (trackId  == m_track) {
-            segments.insert(&segment);
+            m_segments.insert(&segment);
         }
     }
 
-    for (SortedSegments::iterator i=segments.begin(); i!=segments.end(); ++i) {
+    for (SortedSegments::iterator i=m_segments.begin();
+                                     i!=m_segments.end(); ++i) {
         timeT segStart = (*i)->getStartTime();
         timeT segEnd = (*i)->getEndMarkerTime();
         int barStart = comp->getBarNumber(segStart) + 1;
@@ -231,7 +233,14 @@ StaffHeader::StaffHeader(HeadersGroup *group,
     // from the headers group. The notation widget displays the tool tip,
     // without clipping nor resizing it, when it receives this signal.
 
-    m_firstSeg = *segments.begin();
+    m_firstSeg = *m_segments.begin();
+    if (m_firstSeg == *m_segments.end()) {
+        std::cerr << "No segments on this track" << std::endl;
+        m_noSegment = true;
+        return;
+    } else {
+        m_noSegment = false;
+    }
     m_firstSegStartTime = m_firstSeg->getStartTime();
 
     /// This may not work if two segments are superimposed
@@ -277,15 +286,18 @@ StaffHeader::StaffHeader(HeadersGroup *group,
     connect(m_scene, SIGNAL(currentStaffChanged()),
             this, SLOT(slotSetCurrent()));
 
+            
     // Create three objects where to find possible inconsistencies
     // when segments overlap
 
-    // Use a vector to pass all the segments of a track to the Overlaps ctors
+    // Create a vector to pass all the segments of a track to the Overlaps ctors
+    // and, in the same time, set the header as observer of these segments.
     std::vector<Segment *> segVec;
-    for (SortedSegments::iterator i=segments.begin();
-          i!=segments.end();
-          ++i) {
+    for (SortedSegments::iterator i=m_segments.begin();
+                                      i!=m_segments.end(); ++i) {
         segVec.push_back(*i);
+    
+        (*i)->addObserver(this);
     }
 
     m_clefOverlaps = new Inconsistencies<Clef>(segVec);
@@ -295,17 +307,27 @@ StaffHeader::StaffHeader(HeadersGroup *group,
 
 StaffHeader::~StaffHeader()
 {
+    if (m_noSegment) return;   /// OK here ?
+
+    delete m_toolTipTimer;
     delete m_clefItem;
     delete m_keyItem;
 
     delete m_clefOverlaps;
     delete m_keyOverlaps;
     delete m_transposeOverlaps;
+    
+    for (SortedSegments::iterator i=m_segments.begin();
+                                      i!=m_segments.end(); ++i) {
+        (*i)->removeObserver(this);
+    }
 }
 
 void
 StaffHeader::paintEvent(QPaintEvent *)
 {
+    if (m_noSegment) return;
+
     // avoid common random crash by brute force
     if (!m_clefItem) {
         std::cerr << "StaffHeader::paintEvent() - m_clefItem was NULL."
@@ -547,6 +569,8 @@ StaffHeader::lookAtStaff(double x, int maxWidth)
     // Read Clef and Key on scene at (x, m_ypos + m_height / 2)
     // then guess the header needed width and return it
 
+    if (m_noSegment) return 0;
+
     // When walking through the segments :
     //    clef, key, label and transpose are current values
     //    clef0, key0, label0 and transpose0 are preceding values used to look
@@ -692,6 +716,8 @@ void
 StaffHeader::updateHeader(int width)
 {
     // Update the header (using given width) if necessary
+
+    if (m_noSegment) return;
 
     // updateHeader() must be executed the first time it is called
     // (ie when m_neverUpdated is true) as it initialized some data
@@ -915,6 +941,55 @@ StaffHeader::slotShowInconsistencies()
     warning->setWindowFlags(Qt::Dialog); // Get a popup in middle of screen
     warning->setMinimumWidth(500);
     warning->show();
+}
+
+void
+StaffHeader::eventAdded(const Segment *seg, Event *ev)
+{
+   if (ev->isa(Key::EventType) || ev->isa(Clef::EventType)) {
+        emit(staffModified());
+    }
+}
+
+void
+StaffHeader::eventRemoved(const Segment *seg, Event *ev)
+{
+    if (ev->isa(Key::EventType) || ev->isa(Clef::EventType)) {
+        emit(staffModified());
+    }
+}
+
+void
+StaffHeader::appearanceChanged(const Segment *seg)
+{
+        emit(staffModified());
+}
+
+void
+StaffHeader::startChanged(const Segment *seg, timeT)
+{
+        emit(staffModified());
+}
+
+void
+StaffHeader::endMarkerTimeChanged(const Segment *seg, bool /*shorten*/)
+{
+        emit(staffModified());
+}
+
+void
+StaffHeader::transposeChanged(const Segment *seg, int)
+{
+        emit(staffModified());
+}
+
+void
+StaffHeader::segmentDeleted(const Segment *seg)
+{
+    Segment *s = const_cast<Segment *>(seg);
+    s->removeObserver(this);
+    m_segments.erase(s);
+    emit(staffModified());
 }
 
 }

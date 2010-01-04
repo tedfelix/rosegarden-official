@@ -696,6 +696,7 @@ private: // stuff to support SegmentObservers
     void notifyAppearanceChange() const;
     void notifyStartChanged(timeT);
     void notifyEndMarkerChange(bool shorten);
+    void notifyTransposeChange();
     void notifySourceDeletion() const;
 
 private: // assignment operator not provided
@@ -758,6 +759,11 @@ public:
      * @param shorten true if the marker change shortens the segment's duration
      */
     virtual void endMarkerTimeChanged(const Segment *, bool /*shorten*/) { }
+
+    /**
+     * Called after a change of the segment transposition
+     */
+    virtual void transposeChanged(const Segment *, int /*transpose*/) { }
 
     /**
      * Called from the segment dtor

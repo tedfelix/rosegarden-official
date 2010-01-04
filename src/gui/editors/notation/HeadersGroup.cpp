@@ -53,7 +53,9 @@ HeadersGroup(RosegardenDocument *document) :
         m_filler(0),
         m_lastX(INT_MIN),
         m_lastWidth(-1),
-        m_layout(0)
+        m_layout(0),
+        m_startOfView(0),
+        m_endOfView(0)
 {
     m_layout = new QVBoxLayout();
     m_layout->setSpacing(0);
@@ -90,6 +92,11 @@ HeadersGroup::addHeader(int trackId, int height, int ypos, double xcur)
 
     connect(sh, SIGNAL(showToolTip(QString)),
             m_widget, SLOT(slotShowHeaderToolTip(QString)));
+
+    connect(sh, SIGNAL(staffModified()),
+            m_widget, SLOT(slotRegenerateHeaders()), Qt::QueuedConnection);
+            // Without Qt::QueuedConnection, headers may be deleted
+            // from themselves leading to crash
 }
 
 void
@@ -154,6 +161,16 @@ HeadersGroup::slotUpdateAllHeaders(int x, bool force)
         TrackHeaderVector::iterator i;
         int neededWidth = 0;
 
+        // Compute times of left and right of view
+        NotationHLayout *nhl = m_scene->getHLayout();
+        m_startOfView = nhl->getTimeForX(x);
+        m_endOfView = nhl->getTimeForX(m_widget->getViewRightX());
+
+// int barStart = m_composition.getBarNumber(m_startOfView) + 1;
+// int barEnd = m_composition.getBarNumber(m_endOfView) + 1;
+// std::cerr << "XXX (" << m_startOfView << ", " << m_endOfView
+//           << "   ["<< barStart << ", " << barEnd << "]\n";
+
         // Pass 1 : get the max width needed
         for (i=m_headers.begin(); i!=m_headers.end(); i++) {
             int w = (*i)->lookAtStaff(x, headerMaxWidth);
@@ -170,17 +187,6 @@ HeadersGroup::slotUpdateAllHeaders(int x, bool force)
             if ((deltaWidth < treshold) && (deltaWidth > -treshold))
                 neededWidth = m_lastWidth;
         }
-
-        // Compute times of left and right of view
-        NotationHLayout *nhl = m_scene->getHLayout();
-        m_startOfView = nhl->getTimeForX(x);
-        m_endOfView = nhl->getTimeForX(m_widget->getViewRightX());
-
-// int barStart = m_composition.getBarNumber(m_startOfView) + 1;
-// int barEnd = m_composition.getBarNumber(m_endOfView) + 1;
-// std::cerr << "XXX (" << m_startOfView << ", " << m_endOfView
-//           << "   ["<< barStart << ", " << barEnd << "]\n";
-
 
         // Pass 2 : redraw the headers when necessary
         for (i=m_headers.begin(); i!=m_headers.end(); i++) {

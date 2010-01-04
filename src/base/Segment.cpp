@@ -936,6 +936,7 @@ void
 Segment::setTranspose(int transpose)
 {
     m_transpose = transpose;
+    notifyTransposeChange();
     if (m_composition) {
         // don't updateRefreshStatuses() - affects playback only
         m_composition->notifySegmentTransposeChanged(this, transpose);
@@ -1250,11 +1251,21 @@ void
 Segment::notifyEndMarkerChange(bool shorten)
 {
     for (ObserverSet::const_iterator i = m_observers.begin();
-	 i != m_observers.end(); ++i) {
-	(*i)->endMarkerTimeChanged(this, shorten);
+     i != m_observers.end(); ++i) {
+    (*i)->endMarkerTimeChanged(this, shorten);
     }
     if (m_composition) {
-	m_composition->notifySegmentEndMarkerChange(this, shorten);
+    m_composition->notifySegmentEndMarkerChange(this, shorten);
+    }
+}
+
+
+void
+Segment::notifyTransposeChange()
+{
+    for (ObserverSet::const_iterator i = m_observers.begin();
+         i != m_observers.end(); ++i) {
+        (*i)->transposeChanged(this, m_transpose);
     }
 }
 

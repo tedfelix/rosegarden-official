@@ -109,6 +109,8 @@ NotationWidget::NotationWidget() :
     m_headersScene(0),
     m_headersButtons(0),
     m_headersLastY(0),
+    m_headersNeedRegeneration(false),
+    m_headersTimer(0),
     m_layout(0),
     m_linearMode(true),
     m_tempoRulerIsVisible(false),
@@ -353,6 +355,17 @@ NotationWidget::NotationWidget() :
     settings.beginGroup(GeneralOptionsConfigGroup);
     m_Thorn = settings.value("use_thorn_style", true).toBool();
     settings.endGroup();
+
+    // When a clef or a key is modified, the same signal "staffModified()" is
+    // emitted three times from the concerned header.
+    // Following timer is here to try limiting CPU usage by executing code
+    // only once when the same signal is emmited several times in less than
+    // 100 ms. See comment and code in slotGenerateHeaders().
+    m_headersTimer = new QTimer(this);
+    connect(m_headersTimer, SIGNAL(timeout()),
+            this, SLOT(slotGenerateHeaders()));
+    m_headersTimer->setSingleShot(true);
+    m_headersTimer->setInterval(100);  // 0.1 s
 }
 
 NotationWidget::~NotationWidget()
@@ -520,6 +533,8 @@ NotationWidget::setSegments(RosegardenDocument *document,
 void
 NotationWidget::slotGenerateHeaders()
 {
+    m_headersNeedRegeneration = false;
+    
     if (m_headersGroup) disconnect(m_headersGroup, SIGNAL(headersResized(int)),
                                    this, SLOT(slotHeadersResized(int)));
     m_headersGroup = new HeadersGroup(m_document);
@@ -1149,6 +1164,7 @@ NotationWidget::setHeadersVisible(bool visible)
 {
     // Headers are shown in linear mode only
     if (visible && m_linearMode) {
+        if (m_headersNeedRegeneration) slotGenerateHeaders();
         m_headersView->show();
         m_headersButtons->show();
     } else {
@@ -1175,6 +1191,7 @@ NotationWidget::toggleHeadersView()
 {
     m_headersAreVisible = !m_headersAreVisible;
     if (m_headersAreVisible && m_linearMode) {
+        if (m_headersNeedRegeneration) slotGenerateHeaders();
         m_headersView->show();
         m_headersButtons->show();
     } else {
@@ -1197,6 +1214,7 @@ NotationWidget::hideOrShowRulers()
         if (m_rawNoteRulerIsVisible) m_rawNoteRuler->show();
         if (m_chordNameRulerIsVisible) m_chordNameRuler->show();
         if (m_headersAreVisible) {
+            if (m_headersNeedRegeneration) slotGenerateHeaders();
             m_headersView->show();
             m_headersButtons->show();
         }
@@ -1636,6 +1654,23 @@ NotationWidget::slotUpdateRawNoteRuler(ViewSegment *vs)
     m_rawNoteRuler->setCurrentSegment(seg);
     m_rawNoteRuler->update();
 }
+
+void
+NotationWidget::slotRegenerateHeaders() {
+    // Don't use CPU time to regenerate headers if they are not visible
+    if (m_linearMode && m_headersAreVisible) {
+        // When a clef or a key is modified, the signal "staffModified()" is
+        // emitted three times. A 100 ms delay, which should not be noticeable
+        // too much, is introduced here to avoid unnecessarily destroying and
+        // recreating the headers.
+        m_headersTimer->start();
+            // slotGenerateHeaders() should be called in 100 ms unless
+            // slotRegenerateHeaders() is called again before.
+    } else {
+        m_headersNeedRegeneration = true;
+    }
+}
+
 
 }
 

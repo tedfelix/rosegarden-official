@@ -107,6 +107,7 @@ public:
     QSize sizeHint() const;
     QSize minimumSizeHint() const;
 
+    // Only return valid values after slotUpdateAllHeaders() has been called
     timeT getStartOfViewTime() { return m_startOfView; }
     timeT getEndOfViewTime() { return m_endOfView; }
 

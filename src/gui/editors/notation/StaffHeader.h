@@ -24,6 +24,7 @@
 #include "base/NotationTypes.h"
 #include "base/Track.h"
 #include "base/Overlaps.h"
+#include "base/Segment.h"
 #include "NotePixmapFactory.h"
 
 #include <QSize>
@@ -58,7 +59,7 @@ template<class T> class Inconsistencies;
 // has been added : Qt disliked to have two different StaffHeader::paintEvent()
 // method.
 
-class StaffHeader : public QWidget
+class StaffHeader : public QWidget, public SegmentObserver
 {
     Q_OBJECT
 public:
@@ -172,8 +173,30 @@ public:
      */
     static QString transposeValueToName(int transpose);
 
+
+
+
+/** SegmentObserver methods **/
+    virtual void eventAdded(const Segment *, Event *);
+
+    virtual void eventRemoved(const Segment *, Event *);
+
+    virtual void appearanceChanged(const Segment *);
+
+    virtual void startChanged(const Segment *, timeT);
+
+    virtual void endMarkerTimeChanged(const Segment *, bool /*shorten*/);
+
+    virtual void transposeChanged(const Segment *, int);
+
+    virtual void segmentDeleted(const Segment *);
+
+
+
+
 signals :
     void showToolTip(QString toolTipText);
+    void staffModified();
 
 protected :
     virtual void paintEvent(QPaintEvent *);
@@ -237,6 +260,8 @@ private :
         bool operator()(const Segment *s1, const Segment *s2) const;
     };
     typedef std::multiset<Segment *, SegmentCmp> SortedSegments;
+    
+    SortedSegments m_segments;
 
     // First segment on the track.
     Segment *m_firstSeg;
@@ -270,6 +295,9 @@ private :
     bool m_clefOrKeyWasInconsistent;
     bool m_transposeIsInconsistent;
     bool m_transposeWasInconsistent;
+
+    bool m_noSegment; // Sometimes, when segments are moved, we can have
+                      // a staff without any segment.
 };
 
 }
