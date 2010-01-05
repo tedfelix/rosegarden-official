@@ -328,7 +328,7 @@ NotationView::NotationView(RosegardenDocument *doc,
     connect(m_notationWidget, SIGNAL(segmentDeleted(Segment *)),
             this, SLOT(slotSegmentDeleted(Segment *)));
     connect(m_notationWidget, SIGNAL(sceneDeleted()),
-            this, SLOT(close()));
+            this, SLOT(slotSceneDeleted()));
 
     // do the auto repeat thingie on the <<< << >> >>> buttons
     setRewFFwdToAutoRepeat();
@@ -3044,6 +3044,31 @@ void
 NotationView::slotToggleTracking()
 {
     if (m_notationWidget) m_notationWidget->slotTogglePlayTracking();
+}
+
+void
+NotationView::slotSegmentDeleted(Segment *s)
+{
+    NOTATION_DEBUG << "NotationView::slotSegmentDeleted: " << s << endl;
+
+    // remove from vector
+    for (std::vector<Segment *>::iterator i = m_segments.begin();
+         i != m_segments.end(); ++i) {
+        if (*i == s) {
+            m_segments.erase(i);
+            NOTATION_DEBUG << "NotationView::slotSegmentDeleted: Erased segment from vector, have " << m_segments.size() << " segment(s) remaining" << endl;
+            return;
+        }
+    }
+}
+
+void
+NotationView::slotSceneDeleted()
+{
+    NOTATION_DEBUG << "NotationView::slotSceneDeleted" << endl;
+
+    m_segments.clear();
+    close();
 }
 
 void

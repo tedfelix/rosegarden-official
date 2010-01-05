@@ -83,6 +83,9 @@ protected slots:
     /// Remove a segment from our list when it is deleted from the composition
     void slotSegmentDeleted(Segment *);
 
+    /// All segments have been deleted (close editor)
+    void slotSceneDeleted();
+
     /// Update the window title during setup, and when document modified status
     /// changes
     void slotUpdateWindowTitle(bool m = false);
