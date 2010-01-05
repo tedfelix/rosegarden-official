@@ -1,8 +1,8 @@
 
-Rosegarden v09.10
-=====================
+Rosegarden v10.02
+=================
 
-Rosegarden is a MIDI and audio sequencer and musical notation editor for Linux
+Rosegarden is a MIDI and audio sequencer and musical notation editor for Linux.
 
   http://www.rosegardenmusic.com/
 
@@ -40,13 +40,7 @@ have been installed, and then run:
     make install
 
 New starting with 09.10, most of the application data files are bundled in the
-rosegarden binary.  The install process will copy
-
-    rosegarden
-    rosegarden-lilypondview
-    rosegarden-audiofile-importer
-    rosegarden-project-package
-
+rosegarden binary.  The install process will copy the rosegarden binary
 to [PREFIX]/bin and will copy a limited number of data files to
 [PREFIX]/share/rosegarden
 
