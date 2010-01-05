@@ -541,8 +541,8 @@ int main(int argc, char *argv[])
 
     settings.beginGroup(GeneralOptionsConfigGroup);
 
-    ProgressDialog *pd = new ProgressDialog("Starting...", 100, 0);
-    QMessageBox::information(0, "", "Progress dialog should be visible");
+//    ProgressDialog *pd = new ProgressDialog("Starting...", 100, 0);
+//    QMessageBox::information(0, "", "Progress dialog should be visible");
 
     QString lastVersion = settings.value("lastversion", "").toString();
     bool newVersion = (lastVersion != VERSION);
