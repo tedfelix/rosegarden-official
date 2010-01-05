@@ -76,8 +76,9 @@ public:
      * set of staffs is preparsed.
      */
     virtual void scanViewSegment(ViewSegment &staff,
-                           timeT startTime = 0,
-                           timeT endTime = 0);
+                                 timeT startTime,
+                                 timeT endTime,
+                                 bool full);
 
     /**
      * Resets internal data stores, notably the BarDataMap that is
@@ -86,18 +87,11 @@ public:
     virtual void reset();
 
     /**
-     * Resets internal data stores, notably the given staff's entry
-     * in the BarDataMap used to retain the data computed by scanViewSegment().
-     */
-    virtual void resetViewSegment(ViewSegment &staff,
-                            timeT startTime = 0,
-                            timeT endTime = 0);
-
-    /**
      * Lays out all staffs that have been scanned
      */
-    virtual void finishLayout(timeT startTime = 0,
-                              timeT endTime = 0);
+    virtual void finishLayout(timeT startTime,
+                              timeT endTime,
+                              bool full);
 
     /**
      * Set page mode
@@ -354,7 +348,8 @@ protected:
 
     void layout(BarDataMap::iterator,
                 timeT startTime,
-                timeT endTime);
+                timeT endTime,
+                bool full);
     
     /// Find earliest element with quantized time of t or greater
     NotationElementList::iterator getStartOfQuantizedSlice 

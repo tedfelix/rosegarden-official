@@ -1229,9 +1229,14 @@ NotationScene::layout(NotationStaff *singleStaff,
     Profiler profiler("NotationScene::layout", true);
     std::cerr << "NotationScene::layout: from " << startTime << " to " << endTime << std::endl;
 
+    bool full = (singleStaff == 0 && startTime == endTime);
+
     m_hlayout->setViewSegmentCount(m_staffs.size());
 
-    if (startTime == endTime) {
+    if (full) {
+
+        m_hlayout->reset();
+        m_vlayout->reset();
 
         bool first = true;
 
@@ -1259,16 +1264,13 @@ NotationScene::layout(NotationStaff *singleStaff,
 
         if (singleStaff && staff != singleStaff) continue;
 
-        m_hlayout->resetViewSegment(*staff, startTime, endTime);
-        m_vlayout->resetViewSegment(*staff, startTime, endTime);
-
-        m_hlayout->scanViewSegment(*staff, startTime, endTime);
-        m_vlayout->scanViewSegment(*staff, startTime, endTime);
+        m_hlayout->scanViewSegment(*staff, startTime, endTime, full);
+        m_vlayout->scanViewSegment(*staff, startTime, endTime, full);
     }
     }
 
-    m_hlayout->finishLayout(startTime, endTime);
-    m_vlayout->finishLayout(startTime, endTime);
+    m_hlayout->finishLayout(startTime, endTime, full);
+    m_vlayout->finishLayout(startTime, endTime, full);
 
     double maxWidth = 0.0;
     int maxHeight = 0;

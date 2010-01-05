@@ -43,27 +43,21 @@ public:
     virtual void reset() = 0;
 
     /**
-     * Resets internal data stores for a specific segment.
-     * 
-     * If startTime == endTime, act on the whole segment; otherwise only
-     * the given section.
-     */
-    virtual void resetViewSegment(ViewSegment &viewSegment,
-				  timeT startTime = 0,
-				  timeT endTime = 0) = 0;
-
-    /**
      * Precomputes layout data for a single segment, updating any
      * internal data stores associated with that segment and updating
      * any layout-related properties in the events on the segment's
      * segment.
      * 
-     * If startTime == endTime, act on the whole segment; otherwise only
-     * the given section.
+     * If full == true, a complete rescan of the entire composition is
+     * in progress and the segment is known to be contained completely
+     * within the start to end time range (which may extend beyond the
+     * segment at either end).  Otherwise, the start to end time
+     * represents the modified range of the segment.
      */
     virtual void scanViewSegment(ViewSegment &viewSegment,
-				 timeT startTime = 0,
-				 timeT endTime = 0) = 0;
+				 timeT startTime,
+				 timeT endTime,
+                                 bool full) = 0;
 
     /**
      * Computes any layout data that may depend on the results of
@@ -71,11 +65,15 @@ public:
      * the layout (likely for horizontal layout) or nothing at all
      * (likely for vertical layout).
      * 
-     * If startTime == endTime, act on the whole segment; otherwise only
-     * the given section.
+     * If full == true, a complete relayout of the entire composition
+     * is in progress and the segment is known to be contained
+     * completely within the start to end time range (which may extend
+     * beyond the segment at either end).  Otherwise, the start to end
+     * time represents the modified range of the segment.
      */
-    virtual void finishLayout(timeT startTime = 0,
-                              timeT endTime = 0) = 0;
+    virtual void finishLayout(timeT startTime,
+                              timeT endTime,
+                              bool full) = 0;
 
     unsigned int getStatus() const { return m_status; }
 

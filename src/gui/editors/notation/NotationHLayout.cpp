@@ -112,7 +112,6 @@ NotationHLayout::getAvailableProportions()
 }
 
 NotationHLayout::BarDataList &
-
 NotationHLayout::getBarData(ViewSegment &staff)
 {
     BarDataMap::iterator i = m_barData.find(&staff);
@@ -124,7 +123,6 @@ NotationHLayout::getBarData(ViewSegment &staff)
 }
 
 const NotationHLayout::BarDataList &
-
 NotationHLayout::getBarData(ViewSegment &staff) const
 {
     return ((NotationHLayout *)this)->getBarData(staff);
@@ -132,8 +130,7 @@ NotationHLayout::getBarData(ViewSegment &staff) const
 
 NotationElementList::iterator
 NotationHLayout::getStartOfQuantizedSlice(NotationElementList *notes,
-        timeT t)
-const
+                                          timeT t) const
 {
     NotationElementList::iterator i = notes->findTime(t);
     NotationElementList::iterator j(i);
@@ -165,16 +162,16 @@ NotationHLayout::getGraceNotePixmapFactory(ViewSegment &staff)
 }
 
 void
-NotationHLayout::scanViewSegment(ViewSegment &staff, timeT startTime, timeT endTime)
+NotationHLayout::scanViewSegment(ViewSegment &staff, timeT startTime,
+                                 timeT endTime, bool full)
 {
     throwIfCancelled();
     Profiler profiler("NotationHLayout::scanViewSegment");
 
     Segment &segment(staff.getSegment());
-    bool isFullScan = (startTime == endTime);
     int startBarOfViewSegment = getComposition()->getBarNumber(segment.getStartTime());
 
-    if (isFullScan) {
+    if (full) {
         clearBarList(staff);
         startTime = segment.getStartTime();
         endTime = segment.getEndMarkerTime();
@@ -203,10 +200,10 @@ NotationHLayout::scanViewSegment(ViewSegment &staff, timeT startTime, timeT endT
         npf->getNoteBodyWidth() * 2 +
         npf->getTextWidth(Text(name, Text::StaffName));
 
-    NOTATION_DEBUG << "NotationHLayout::scanViewSegment: full scan " << isFullScan << ", times " << startTime << "->" << endTime << ", bars " << startBarNo << "->" << endBarNo << ", staff name \"" << segment.getLabel() << "\", width " << m_staffNameWidths[&staff] << endl;
+    NOTATION_DEBUG << "NotationHLayout::scanViewSegment: full scan " << full << ", times " << startTime << "->" << endTime << ", bars " << startBarNo << "->" << endBarNo << ", staff name \"" << segment.getLabel() << "\", width " << m_staffNameWidths[&staff] << endl;
 
     SegmentNotationHelper helper(segment);
-    if (isFullScan) {
+    if (full) {
         helper.setNotationProperties();
     } else {
         helper.setNotationProperties(startTime, endTime);
@@ -221,7 +218,7 @@ NotationHLayout::scanViewSegment(ViewSegment &staff, timeT startTime, timeT endT
     int ottavaShift = 0;
     timeT ottavaEnd = segment.getEndMarkerTime();
 
-    if (isFullScan) {
+    if (full) {
 
         NOTATION_DEBUG << "full scan: setting haveOttava false" << endl;
 
@@ -1193,21 +1190,18 @@ NotationHLayout::reconcileBarsPage()
 }
 
 void
-NotationHLayout::finishLayout(timeT startTime, timeT endTime)
+NotationHLayout::finishLayout(timeT startTime, timeT endTime, bool full)
 {
     Profiler profiler("NotationHLayout::finishLayout");
     m_barPositions.clear();
 
-    bool isFullLayout = (startTime == endTime);
-    if (m_pageMode && (m_pageWidth > 0.1))
-        reconcileBarsPage();
-    else
-        reconcileBarsLinear();
+    if (m_pageMode && (m_pageWidth > 0.1)) reconcileBarsPage();
+    else reconcileBarsLinear();
 
     int staffNo = 0;
 
     for (BarDataMap::iterator i(m_barData.begin());
-            i != m_barData.end(); ++i) {
+         i != m_barData.end(); ++i) {
 
         emit setValue(100 * staffNo / m_barData.size());
         ProgressDialog::processEvents();
@@ -1216,7 +1210,7 @@ NotationHLayout::finishLayout(timeT startTime, timeT endTime)
 
         timeT timeCovered = endTime - startTime;
 
-        if (isFullLayout) {
+        if (full) {
             NotationElementList *notes = i->first->getViewElementList();
             if (notes->begin() != notes->end()) {
                 NotationElementList::iterator j(notes->end());
@@ -1228,13 +1222,14 @@ NotationHLayout::finishLayout(timeT startTime, timeT endTime)
 
         m_timePerProgressIncrement = timeCovered / (100 / m_barData.size());
 
-        layout(i, startTime, endTime);
+        layout(i, startTime, endTime, full);
         ++staffNo;
     }
 }
 
 void
-NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
+NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime,
+                        bool full)
 {
     Profiler profiler("NotationHLayout::layout");
 
@@ -1243,19 +1238,17 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
     BarDataList &barList(getBarData(staff));
     NotationStaff &notationStaff = dynamic_cast<NotationStaff &>(staff);
 
-    bool isFullLayout = (startTime == endTime);
-
     // these two are for partial layouts:
     //    bool haveSimpleOffset = false;
     //    double simpleOffset = 0;
 
-    NOTATION_DEBUG << "NotationHLayout::layout: full layout " << isFullLayout << ", times " << startTime << "->" << endTime << endl;
+    NOTATION_DEBUG << "NotationHLayout::layout: full layout " << full << ", times " << startTime << "->" << endTime << endl;
 
     double x = 0, barX = 0;
     TieMap tieMap;
 
     timeT lastIncrement =
-        (isFullLayout && (notes->begin() != notes->end())) ?
+        (full && (notes->begin() != notes->end())) ?
         (*notes->begin())->getViewAbsoluteTime() : startTime;
 
     ::Rosegarden::Key key = notationStaff.getSegment().getKeyAtTime(lastIncrement);
@@ -1274,7 +1267,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
             bpi != m_barPositions.end(); ++bpi) {
 
         int barNo = bpi->first;
-        if (!isFullLayout && barNo < startBar) continue;
+        if (!full && barNo < startBar) continue;
 
         NOTATION_DEBUG << "NotationHLayout::looking for bar "
                        << bpi->first << endl;
@@ -1880,23 +1873,13 @@ int NotationHLayout::getFixedItemSpacing() const
 void
 NotationHLayout::reset()
 {
-    for (BarDataMap::iterator i = m_barData.begin();
-            i != m_barData.end(); ++i) {
+    for (BarDataMap::iterator i = m_barData.begin(); i != m_barData.end(); ++i) {
         clearBarList(*i->first);
     }
 
     m_barData.clear();
     m_barPositions.clear();
     m_totalWidth = 0;
-}
-
-void
-NotationHLayout::resetViewSegment(ViewSegment &staff, timeT startTime, timeT endTime)
-{
-    if (startTime == endTime) {
-        getBarData(staff).clear();
-        m_totalWidth = 0;
-    }
 }
 
 int

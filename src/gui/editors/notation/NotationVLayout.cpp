@@ -64,7 +64,6 @@ NotationVLayout::~NotationVLayout()
 }
 
 NotationVLayout::SlurList &
-
 NotationVLayout::getSlurList(ViewSegment &staff)
 {
     SlurListMap::iterator i = m_slurs.find(&staff);
@@ -82,18 +81,16 @@ NotationVLayout::reset()
 }
 
 void
-NotationVLayout::resetViewSegment(ViewSegment &staff, timeT, timeT)
+NotationVLayout::scanViewSegment(ViewSegment &staffBase, timeT, timeT, bool)
 {
-    getSlurList(staff).clear();
-}
+    // We actually always perform a full scan, for reasons of sheer laziness
 
-void
-NotationVLayout::scanViewSegment(ViewSegment &staffBase, timeT, timeT)
-{
     START_TIMING;
 
     NotationStaff &staff = dynamic_cast<NotationStaff &>(staffBase);
     NotationElementList *notes = staff.getViewElementList();
+
+    getSlurList(staff).clear();
 
     NotationElementList::iterator from = notes->begin();
     NotationElementList::iterator to = notes->end();
@@ -120,8 +117,7 @@ NotationVLayout::scanViewSegment(ViewSegment &staffBase, timeT, timeT)
             // are aligned with the middle line
 
             long noteType;
-            bool hasNoteType = el->event()->get
-                               <Int>(NOTE_TYPE, noteType);
+            bool hasNoteType = el->event()->get<Int>(NOTE_TYPE, noteType);
             if (hasNoteType && noteType > Note::Minim) {
                 el->setLayoutY(staff.getLayoutYForHeight(6) + displacedY);
             } else {
@@ -226,9 +222,8 @@ NotationVLayout::scanViewSegment(ViewSegment &staffBase, timeT, timeT)
             std::vector<int> h;
             for (unsigned int j = 0; j < chord.size(); ++j) {
                 long height = 0;
-                if (!(*chord[j])->event()->get
-                        <Int>
-                        (m_properties.HEIGHT_ON_STAFF, height)) {
+                if (!(*chord[j])->event()->get<Int>
+                    (m_properties.HEIGHT_ON_STAFF, height)) {
                     std::cerr << QString("ERROR: Event in chord at %1 has no HEIGHT_ON_STAFF property!\nThis is a bug (the program would previously have crashed by now)").arg((*chord[j])->getViewAbsoluteTime()) << std::endl;
                     (*chord[j])->event()->dump(std::cerr);
                 }
@@ -433,15 +428,15 @@ NotationVLayout::scanViewSegment(ViewSegment &staffBase, timeT, timeT)
 }
 
 void
-NotationVLayout::finishLayout(timeT, timeT)
+NotationVLayout::finishLayout(timeT, timeT, bool)
 {
     START_TIMING;
 
     for (SlurListMap::iterator mi = m_slurs.begin();
-            mi != m_slurs.end(); ++mi) {
+         mi != m_slurs.end(); ++mi) {
 
         for (SlurList::iterator si = mi->second.begin();
-                si != mi->second.end(); ++si) {
+             si != mi->second.end(); ++si) {
 
             NotationElementList::iterator i = *si;
             NotationStaff &staff = dynamic_cast<NotationStaff &>(*(mi->first));
@@ -475,9 +470,9 @@ NotationVLayout::positionSlur(NotationStaff &staff,
     bool haveStart = false;
 
     int startTopHeight = 4, endTopHeight = 4,
-                                           startBottomHeight = 4, endBottomHeight = 4,
-                                                               maxTopHeight = 4, minBottomHeight = 4,
-                                                                                                   maxCount = 0, minCount = 0;
+        startBottomHeight = 4, endBottomHeight = 4,
+        maxTopHeight = 4, minBottomHeight = 4,
+        maxCount = 0, minCount = 0;
 
     int startX = (int)(*i)->getLayoutX(), endX = startX + 10;
     bool startStemUp = false, endStemUp = false;
@@ -494,8 +489,7 @@ NotationVLayout::positionSlur(NotationStaff &staff,
 
     while (scooter != staff.getViewElementList()->end()) {
 
-        if ((*scooter)->getViewAbsoluteTime() >= endTime)
-            break;
+        if ((*scooter)->getViewAbsoluteTime() >= endTime) break;
         Event *event = (*scooter)->event();
 
         if (event->isa(Note::EventType)) {
