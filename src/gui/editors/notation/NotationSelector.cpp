@@ -395,11 +395,17 @@ void NotationSelector::drag(int x, int y, bool final)
     if (!m_clickedElement || !m_selectedStaff) return ;
 
     EventSelection *selection = m_scene->getSelection();
+
+    NOTATION_DEBUG << "NotationSelector::drag: scene currently has selection with " << (selection ? selection->getSegmentEvents().size() : 0) << " event(s)" << endl;
+
     if (!selection || !selection->contains(m_clickedElement->event())) {
         selection = new EventSelection(m_selectedStaff->getSegment());
+        NOTATION_DEBUG << "(selection does not contain our event " << m_clickedElement->event() << " of type " << m_clickedElement->event()->getType() << ", adding it)" << endl;
         selection->addEvent(m_clickedElement->event());
     }
     m_scene->setSelection(selection, false);
+
+    NOTATION_DEBUG << "Sorted out selection" << endl;
 
     NotationStaff *targetStaff = m_scene->getStaffForSceneCoords(x, y);
     if (!targetStaff) targetStaff = m_selectedStaff;
@@ -536,6 +542,12 @@ void NotationSelector::drag(int x, int y, bool final)
 
 	    CommandHistory::getInstance()->addCommand(command);
 
+            // Moving the event will cause a new event to be created,
+            // so our clicked element will no longer be valid.  But we
+            // can't always recreate it, so as a precaution clear it
+            // here so at least it isn't set to something bogus
+            m_clickedElement = 0;
+
             if (mc && singleNonNotePreview) {
 
                 lastInsertedEvent = mc->getLastInsertedEvent();
@@ -555,8 +567,6 @@ void NotationSelector::drag(int x, int y, bool final)
                     }
 
                     m_selectionRect->setPos(x, y);
-//                    m_selectionRect->setX(x);
-//                    m_selectionRect->setY(y);
                 }
             }
         } else {
