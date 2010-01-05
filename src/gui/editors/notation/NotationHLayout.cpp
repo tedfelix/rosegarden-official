@@ -1274,14 +1274,12 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
             bpi != m_barPositions.end(); ++bpi) {
 
         int barNo = bpi->first;
-        if (!isFullLayout && barNo < startBar)
-            continue;
+        if (!isFullLayout && barNo < startBar) continue;
 
         NOTATION_DEBUG << "NotationHLayout::looking for bar "
                        << bpi->first << endl;
         BarDataList::iterator bdi = barList.find(barNo);
-        if (bdi == barList.end())
-            continue;
+        if (bdi == barList.end()) continue;
         barX = bpi->second;
 
         NotationElementList::iterator from = bdi->second.basicData.start;
