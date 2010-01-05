@@ -14,6 +14,7 @@
 */
 
 #include <sstream>
+#include <cstdio>
 
 #include "ControlParameter.h"
 #include "base/MidiTypes.h"

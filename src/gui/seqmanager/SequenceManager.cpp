@@ -1349,12 +1349,6 @@ SequenceManager::preparePlayback(bool forceProgramChanges)
                     advancedControls.push_back(MidiControlPair(cIt->first,
                                                                cIt->second));
                 }
-
-                advancedControls.push_back(MidiControlPair(MIDI_CONTROLLER_PAN,
-                                                           (*it)->getPan()));
-                advancedControls.push_back(MidiControlPair(MIDI_CONTROLLER_VOLUME,
-                                                           (*it)->getVolume()));
-
                 std::vector<MidiControlPair>::iterator iit = advancedControls.begin();
                 for (; iit != advancedControls.end(); iit++) {
                     try {

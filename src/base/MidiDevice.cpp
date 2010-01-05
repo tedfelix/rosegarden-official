@@ -41,6 +41,7 @@ MidiDevice::MidiDevice():
     createInstruments(MidiInstrumentBase);
     generatePresentationList();
     generateDefaultControllers();
+    deviceToInstrControllerPush();
 
     // create a default Metronome
     m_metronome = new MidiMetronome(MidiInstrumentBase + 9);
@@ -59,10 +60,7 @@ MidiDevice::MidiDevice(DeviceId id,
     createInstruments(ibase);
     generatePresentationList();
     generateDefaultControllers();
-    
-    // fix long standing Rosegarden Bug.  Now IPG controllers send their values
-    // without having to wiggle the controls first.
-    devicetoInstrControllerPush();
+    deviceToInstrControllerPush();
 
     // create a default Metronome
     m_metronome = new MidiMetronome(MidiInstrumentBase + 9);
@@ -74,7 +72,7 @@ MidiDevice::MidiDevice(DeviceId id,
     Device(id, dev.getName(), Device::Midi),
     m_programList(dev.m_programList),
     m_bankList(dev.m_bankList),
-    m_controlList(dev.m_controlList),
+    m_controlList(0),
     m_metronome(0),
     m_direction(dev.getDirection()),
     m_variationType(dev.getVariationType()),
@@ -82,6 +80,13 @@ MidiDevice::MidiDevice(DeviceId id,
 {
     createInstruments(ibase);
 
+    // Populate device and Instrument with Controllers.
+    ControlList::const_iterator cIt = dev.m_controlList.begin();
+    for(; cIt != dev.m_controlList.end(); ++cIt) {
+        addControlParameter(*cIt);
+    }
+    
+    
     // Create and assign a metronome if required
     //
     if (dev.getMetronome()) {
@@ -89,7 +94,6 @@ MidiDevice::MidiDevice(DeviceId id,
     }
 
     generatePresentationList();
-    generateDefaultControllers();
 }
 
 MidiDevice::MidiDevice(const MidiDevice &dev) :
@@ -225,6 +229,7 @@ MidiDevice::generatePresentationList()
 void
 MidiDevice::generateDefaultControllers()
 {
+    std::cerr << "MidiDevice::generateDefaultControllers(): touched start" << std::endl;
     m_controlList.clear();
 
     static std::string controls[][9] = {
@@ -238,8 +243,10 @@ MidiDevice::generateDefaultControllers()
         { "PitchBend", Rosegarden::PitchBend::EventType, "<none>", "0", "16383", "8192", "1", "4", "-1" }
     };
 
+    std::cerr << "MidiDevice::generateDefaultControllers(): touched 1" << std::endl;
     for (size_t i = 0; i < sizeof(controls) / sizeof(controls[0]); ++i) {
 
+    std::cerr << "MidiDevice::generateDefaultControllers(): touched 2" << std::endl;
         Rosegarden::ControlParameter con(controls[i][0],
                                          controls[i][1],
                                          controls[i][2],
@@ -251,12 +258,10 @@ MidiDevice::generateDefaultControllers()
                                          atoi(controls[i][8].c_str()));
         addControlParameter(con);
     }
-
-
 }
 
 void
-MidiDevice::devicetoInstrControllerPush()
+MidiDevice::deviceToInstrControllerPush()
 {
     // Copy the instruments
     //
@@ -269,15 +274,8 @@ MidiDevice::devicetoInstrControllerPush()
         for (; cIt != m_controlList.end(); cIt++)
         {
             // It appears -1 means not to display an IPB controller
-            if (cIt->getIPBPosition() > -1) {
-                // Don't send Pan and Volume controls--they are handled elsewhere
+            if (isVisibleControlParameter(*cIt)) {
                 MidiByte controllerValue = cIt->getControllerValue();
-                
-                if (controllerValue == MIDI_CONTROLLER_VOLUME || controllerValue == MIDI_CONTROLLER_PAN) {
-                    continue;
-                }
-                
-                // Transfer the Device controller values to the Instrument's list.
                 int defaultValue = cIt->getDefault();
                 (*iIt)->setControllerValue(controllerValue, defaultValue);
             }
@@ -300,6 +298,14 @@ MidiDevice::clearProgramList()
 void
 MidiDevice::clearControlList()
 {
+    // Clear down instrument controllers first.
+    InstrumentList insList = getAllInstruments();
+    InstrumentList::iterator iIt = insList.begin();
+
+    for(; iIt != insList.end(); ++iIt) {
+        (*iIt)->clearStaticControllers();
+    }
+
     m_controlList.clear();
 }
 
@@ -605,14 +611,19 @@ void
 MidiDevice::addInstrument(Instrument *instrument)
 {
     // Check / add controls to this instrument
-    for (ControlList::const_iterator it = m_controlList.begin();
+    // No controls are pushed when called from the contructor since they are
+    // not generated yet!
+    ControlList::const_iterator it = m_controlList.begin();
+    for (;
          it != m_controlList.end(); ++it)
     {
-        int controller = (*it).getControllerValue();
-        try {
-            instrument->getControllerValue(controller);
-        } catch(...) {
-            instrument->setControllerValue(controller, it->getDefault());
+        if (isVisibleControlParameter(*it)) {
+            int controller = (*it).getControllerValue();
+            try {
+                instrument->getControllerValue(controller);
+            } catch(...) {
+                instrument->setControllerValue(controller, it->getDefault());
+            }
         }
     }
     
@@ -733,7 +744,12 @@ MidiDevice::mergeKeyMappingList(const KeyMappingList &keyMappingList)
 void
 MidiDevice::addControlParameter(const ControlParameter &con)
 {
-    m_controlList.push_back(con);
+    if (isUniqueControlParameter(con)) { //Don't allow duplicates
+        m_controlList.push_back(con);
+        if (isVisibleControlParameter(con)) {
+            addControlToInstrument(con);
+        }
+    }
 }
 
 void
@@ -744,14 +760,17 @@ MidiDevice::addControlParameter(const ControlParameter &con, int index)
     // if we're out of range just add the control
     if (index >= (int)m_controlList.size())
     {
-        m_controlList.push_back(con);
+        addControlParameter(con);
         return;
     }
 
     // add new controller in at a position
     for (int i = 0; i < (int)m_controlList.size(); ++i)
     {
-        if (index == i) controls.push_back(con);
+        if (index == i) {
+            controls.push_back(con);
+            addControlParameter(con);
+        }
         controls.push_back(m_controlList[i]);
     }
 
@@ -769,6 +788,7 @@ MidiDevice::removeControlParameter(int index)
     {
         if (index == i)
         {
+            removeControlFromInstrument(*it);   
             m_controlList.erase(it);
             return true;
         }
@@ -782,14 +802,31 @@ bool
 MidiDevice::modifyControlParameter(const ControlParameter &con, int index)
 {
     if (index < 0 || index > (int)m_controlList.size()) return false;
+    removeControlFromInstrument(m_controlList[index]);
     m_controlList[index] = con;
+    addControlToInstrument(con);
     return true;
 }
 
 void
 MidiDevice::replaceControlParameters(const ControlList &con)
 {
-    m_controlList = con;
+    // Clear down instrument controllers in preparation for replace.
+    InstrumentList insList = getAllInstruments();
+    InstrumentList::iterator iIt = insList.begin();
+
+    for(; iIt != insList.end(); ++iIt) {
+        (*iIt)->clearStaticControllers();
+    }
+
+    // Clear the Device control list
+    m_controlList.clear();
+    
+    // Now add the controllers to the device,    
+    ControlList::const_iterator cIt = con.begin();
+    for(; cIt <= con.end(); ++cIt) {
+        addControlParameter(*cIt);
+    }
 }
 
 
@@ -812,7 +849,6 @@ MidiDevice::isUniqueControlParameter(const ControlParameter &con) const
             if (it->getType() == Rosegarden::Controller::EventType &&
                 it->getControllerValue() != con.getControllerValue())
                 continue;
-
             return false;
         }
 
@@ -821,9 +857,42 @@ MidiDevice::isUniqueControlParameter(const ControlParameter &con) const
     return true;
 }
 
-// Cheat a bit here and remove the VOLUME controller here - just
-// so that the MIDIMixer is made a bit easier.
-//
+bool 
+MidiDevice::isVisibleControlParameter(const ControlParameter &con) const
+{
+    return (con.getIPBPosition() > -1);
+}
+
+void
+MidiDevice::addControlToInstrument(const ControlParameter &con)
+{
+    if (!isVisibleControlParameter(con)) {
+        return;
+    }
+
+    // Run through all of this devices instruments and add default controls and
+    // values to them.
+    InstrumentList insList = getAllInstruments();
+    InstrumentList::iterator iIt = insList.begin();
+
+    for(; iIt != insList.end(); ++iIt) {
+        MidiByte conNumber = con.getControllerValue();
+        MidiByte conValue = con.getDefault();
+        (*iIt)->setControllerValue(conNumber, conValue);
+    }    
+}
+
+void
+MidiDevice::removeControlFromInstrument(const ControlParameter &con)
+{
+    InstrumentList insList = getAllInstruments();
+    InstrumentList::iterator iIt = insList.begin();
+
+    for(; iIt != insList.end(); ++iIt) {
+        (*iIt)->removeStaticController(con.getControllerValue());
+    }
+}
+
 ControlList
 MidiDevice::getIPBControlParameters() const
 {
@@ -841,9 +910,6 @@ MidiDevice::getIPBControlParameters() const
 
     return retList;
 }
-
-
-
 
 ControlParameter *
 MidiDevice::getControlParameter(int index)

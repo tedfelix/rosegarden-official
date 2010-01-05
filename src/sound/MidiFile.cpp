@@ -1220,11 +1220,11 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
 
                     if (instrument && (*midiEvent)->getTime() == 0) {
                         if ((*midiEvent)->getData1() == MIDI_CONTROLLER_VOLUME) {
-                            instrument->setVolume((*midiEvent)->getData2());
+                            instrument->setControllerValue(MIDI_CONTROLLER_VOLUME, (*midiEvent)->getData2());
                             break;
                         }
                         if ((*midiEvent)->getData1() == MIDI_CONTROLLER_PAN) {
-                            instrument->setPan((*midiEvent)->getData2());
+                            instrument->setControllerValue(MIDI_CONTROLLER_PAN, (*midiEvent)->getData2());
                             break;
                         }
                         if ((*midiEvent)->getData1() == MIDI_CONTROLLER_ATTACK) {

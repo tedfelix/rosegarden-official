@@ -163,6 +163,10 @@ public:
     // our ControlParameter list.
     //
     bool isUniqueControlParameter(const ControlParameter &con) const;
+    
+    // Check if controller is visible.
+    //
+    bool isVisibleControlParameter(const ControlParameter &con) const;
 
     // Generate some default controllers for the MidiDevice
     //
@@ -179,19 +183,25 @@ protected:
 
     void generatePresentationList();
 
-   /**
-      \brief This function pushes the default IPB controllers to the
-      Instrument belonging to this device.  This function must be called after
-      createInstrument() and generateDefaultControllers().
-    */
-    void devicetoInstrControllerPush();
+    // Push the default IPB controllers to the device's Instruments.
+    //
+    void deviceToInstrControllerPush();
+    
+    // Add a new control to all of the device's Instruments.
+    //
+    void addControlToInstrument(const ControlParameter &con);
+
+    // Remove a control from all of the device's Instruments.
+    //
+    void removeControlFromInstrument(const ControlParameter &con);
+    
 
     ProgramList    m_programList;
     BankList       m_bankList;
     ControlList    m_controlList;
     KeyMappingList m_keyMappingList;
     MidiMetronome *m_metronome;
-
+    
     // used when we're presenting the instruments
     InstrumentList  m_presentationInstrumentList;
 

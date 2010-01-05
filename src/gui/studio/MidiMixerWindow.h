@@ -19,7 +19,7 @@
 #ifndef _RG_MIDIMIXERWINDOW_H_
 #define _RG_MIDIMIXERWINDOW_H_
 
-#include "base/MidiProgram.h"
+#include "base/MidiDevice.h"
 #include "gui/general/ActionFileClient.h"
 #include "MixerWindow.h"
 #include <vector>
@@ -113,6 +113,9 @@ protected:
     QFrame *m_tabFrame;
 
     void  setRewFFwdToAutoRepeat();
+
+    // Grab IPB controls and remove Volume.
+    ControlList getIPBForMidiMixer(MidiDevice *) const;
 
 };
 

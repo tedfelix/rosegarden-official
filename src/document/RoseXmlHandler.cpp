@@ -1597,7 +1597,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         if (m_section == InInstrument) {
             if (m_instrument) {
-                m_instrument->setPan(value);
+                m_instrument->setControllerValue(MIDI_CONTROLLER_PAN, value);
                 m_instrument->setSendPan(true);
             }
         } else if (m_section == InBuss) {
@@ -1635,7 +1635,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                 m_instrument->setLevel
                     (AudioLevel::multiplier_to_dB(float(value) / 100.0));
             } else {
-                m_instrument->setVolume(value);
+                m_instrument->setControllerValue(MIDI_CONTROLLER_VOLUME, value);
                 m_instrument->setSendVolume(true);
             }
         }

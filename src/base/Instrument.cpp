@@ -14,6 +14,7 @@
 */
 
 #include "Instrument.h"
+#include "sound/Midi.h"
 #include "MidiDevice.h"
 #include "base/AudioPluginInstance.h"
 #include "base/AudioLevel.h"
@@ -264,6 +265,11 @@ Instrument::Instrument(const Instrument &ins):
     if (ins.getType() == SoftSynth) {
 	addPlugin(new AudioPluginInstance(SYNTH_PLUGIN_POSITION));
     }
+    
+    StaticControllerConstIterator cIt = ins.m_staticControllers.begin();
+    for (; cIt != ins.m_staticControllers.end(); ++cIt) {
+        m_staticControllers.push_back(*cIt);
+    }
 }
 
 Instrument &
@@ -293,12 +299,18 @@ Instrument::operator=(const Instrument &ins)
     m_audioInputChannel = ins.m_audioInputChannel;
     m_audioOutput = ins.m_audioOutput;
 
+    StaticControllerConstIterator cIt = ins.m_staticControllers.begin();
+    for (; cIt != ins.m_staticControllers.end(); ++cIt) {
+        m_staticControllers.push_back(*cIt);
+    }
+
     return *this;
 }
 
 
 Instrument::~Instrument()
 {
+    clearStaticControllers();
 }
 
 std::string
@@ -558,6 +570,13 @@ Instrument::getProgramName() const
 void
 Instrument::setControllerValue(MidiByte controller, MidiByte value)
 {
+    // two special cases
+    if (controller == MIDI_CONTROLLER_PAN) {
+        setPan(value);
+    } else if (controller == MIDI_CONTROLLER_VOLUME) {
+        setVolume(value);
+    }
+
     for (StaticControllerIterator it = m_staticControllers.begin();
          it != m_staticControllers.end(); ++it)
     {
@@ -569,7 +588,6 @@ Instrument::setControllerValue(MidiByte controller, MidiByte value)
     }
 
     m_staticControllers.push_back(std::pair<MidiByte, MidiByte>(controller, value));
-
 }
 
 MidiByte
@@ -578,12 +596,25 @@ Instrument::getControllerValue(MidiByte controller) const
     for (StaticControllerConstIterator it = m_staticControllers.begin();
          it != m_staticControllers.end(); ++it)
     {
-
-        if (it->first  == controller)
+        if (it->first == controller) {
             return it->second;
+        }
     }
 
     throw std::string("<no controller of that value>");
+}
+
+void
+Instrument::removeStaticController(MidiByte controller)
+{
+    for (StaticControllerIterator it = m_staticControllers.begin();
+         it != m_staticControllers.end(); ++it)
+    {
+        if (it->first == controller) {
+            m_staticControllers.erase(it);
+            return;
+        }
+    }
 }
 
 const MidiKeyMapping *

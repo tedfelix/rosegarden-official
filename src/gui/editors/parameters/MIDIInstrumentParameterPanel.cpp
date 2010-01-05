@@ -318,21 +318,12 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
             it != m_rotaries.end(); ++it) {
         MidiByte value = 0;
 
-        // Special cases
-        //
-        if (it->first == MIDI_CONTROLLER_PAN)
-            value = int(instrument->getPan());
-        else if (it->first == MIDI_CONTROLLER_VOLUME)
-            value = int(instrument->getVolume());
-        else {
-            try {
-                value = instrument->getControllerValue(
-                            MidiByte(it->first));
-            } catch (...) {
-                continue;
-            }
+        try {
+            value = instrument->getControllerValue(
+                        MidiByte(it->first));
+        } catch (...) {
+            continue;
         }
-
         setRotaryToValue(it->first, int(value));
     }
 }
@@ -1241,33 +1232,8 @@ MIDIInstrumentParameterPanel::slotControllerChanged(int controllerNumber)
         return ;
     }
 
-
-    // two special cases
-    if (controllerNumber == int(MIDI_CONTROLLER_PAN)) {
-        float adjValue = value;
-        if (m_selectedInstrument->getType() == Instrument::Audio ||
-                m_selectedInstrument->getType() == Instrument::SoftSynth)
-            value += 100;
-
-        m_selectedInstrument->setPan(MidiByte(adjValue));
-    } else if (controllerNumber == int(MIDI_CONTROLLER_VOLUME)) {
-        m_selectedInstrument->setVolume(MidiByte(value));
-    } else // just set the controller (this will create it on the instrument if
-        // it doesn't exist)
-    {
-        m_selectedInstrument->setControllerValue(MidiByte(controllerNumber),
-                MidiByte(value));
-
-        RG_DEBUG << "SET CONTROLLER VALUE (" << controllerNumber << ") = " << value << endl;
-    }
-    /*
-    else
-    {
-        RG_DEBUG << "MIDIInstrumentParameterPanel::slotControllerChanged - "
-                 << "no controller retrieved\n";
-        return;
-    }
-    */
+    m_selectedInstrument->setControllerValue(MidiByte(controllerNumber),
+            MidiByte(value));
 
     MappedEvent mE(m_selectedInstrument->getId(),
                    MappedEvent::MidiController,

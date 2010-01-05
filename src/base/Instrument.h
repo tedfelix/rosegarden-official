@@ -248,13 +248,13 @@ public:
 
     StaticControllers& getStaticControllers() { return m_staticControllers; }
 
-/**
-   \brief This function clears down the instruments controls.  Usually called
-   from a MidiDevice during a push to set the default IPB controls.  This is
-   part of a bug fix that allow default IPB controls to send their values
-   without forst being manually adjusted.
- */
+    // Clears down the instruments controls.
+    //
     void clearStaticControllers() { m_staticControllers.clear(); };
+
+    // Removes the given controller from the list of Static Controllers.
+    //
+    void removeStaticController(MidiByte controller);
 
 private:
     InstrumentId    m_id;
@@ -307,11 +307,9 @@ private:
     BussId           m_audioOutput;
 
     // A static controller map that can be saved/loaded and queried along with this instrument.
-    // These values are modified from the IPB - if they appear on the IPB then they are sent
-    // at playback start time to the sequencer.
+    // These values are modified from the IPB and MidiMixerWindow.
     //
-    //
-    StaticControllers    m_staticControllers;
+    StaticControllers m_staticControllers;
 };
 
 

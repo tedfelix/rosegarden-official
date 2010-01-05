@@ -1908,44 +1908,20 @@ RosegardenMainViewWidget::slotControllerDeviceEventReceived(MappedEvent *e, cons
     switch (instrument->getType()) {
 
     case Instrument::Midi: {
-            MidiDevice *md = dynamic_cast<MidiDevice *>
-                             (instrument->getDevice());
+            MidiDevice *md = dynamic_cast<MidiDevice *>(instrument->getDevice());
             if (!md) {
                 std::cerr << "WARNING: MIDI instrument has no MIDI device in slotControllerDeviceEventReceived" << std::endl;
                 return ;
             }
 
-            //!!! we need a central clearing house for these changes,
-            // for a proper mvc structure.  reqd for automation post-1.2.
-            // in the mean time this duplicates much of
-            // MIDIInstrumentParameterPanel::slotControllerChanged etc
-
-            switch (controller) {
-
-            case MIDI_CONTROLLER_VOLUME:
-                RG_DEBUG << "Setting volume for instrument " << instrument->getId() << " to " << value << endl;
-                instrument->setVolume(value);
-                break;
-
-            case MIDI_CONTROLLER_PAN:
-                RG_DEBUG << "Setting pan for instrument " << instrument->getId() << " to " << value << endl;
-                instrument->setPan(value);
-                break;
-
-            default: {
-                    ControlList cl = md->getIPBControlParameters();
-                    for (ControlList::const_iterator i = cl.begin();
-                            i != cl.end(); ++i) {
-                        if ((*i).getControllerValue() == controller) {
-                            RG_DEBUG << "Setting controller " << controller << " for instrument " << instrument->getId() << " to " << value << endl;
-                            instrument->setControllerValue(controller, value);
-                            break;
-                        }
-                    }
+            ControlList cl = md->getIPBControlParameters();
+            for (ControlList::const_iterator i = cl.begin(); i != cl.end(); ++i) {
+                if ((*i).getControllerValue() == controller) {
+                    RG_DEBUG << "Setting controller " << controller << " for instrument " << instrument->getId() << " to " << value << endl;
+                    instrument->setControllerValue(controller, value);
                     break;
                 }
             }
-
             break;
         }
 
@@ -1962,13 +1938,14 @@ RosegardenMainViewWidget::slotControllerDeviceEventReceived(MappedEvent *e, cons
 
         case MIDI_CONTROLLER_PAN:
             RG_DEBUG << "Setting pan for instrument " << instrument->getId() << " to " << value << endl;
-            instrument->setPan(MidiByte((value / 64.0) * 100.0 + 0.01));
+            instrument->setControllerValue(MIDI_CONTROLLER_PAN, MidiByte((value / 64.0) * 100.0 + 0.01));
             break;
 
         default:
             break;
         }
 
+    default:
         break;
     }
 

@@ -124,7 +124,7 @@ MidiMixerWindow::setupTabs()
             // Get the control parameters that are on the IPB (and hence can
             // be shown here too).
             //
-            ControlList controls = dev->getIPBControlParameters();
+            ControlList controls = getIPBForMidiMixer(dev);
 
             instruments = dev->getPresentationInstruments();
 
@@ -221,15 +221,6 @@ MidiMixerWindow::setupTabs()
                         (controls[i].getControllerValue(), controller));
                 }
 
-                // Pan rotary
-                //
-                MidiMixerVUMeter *meter =
-                    new MidiMixerVUMeter(m_tabFrame,
-                                         VUMeter::FixedHeightVisiblePeakHold, 6, 30);
-                mainLayout->addWidget(meter, controls.size() + 1,
-                                      posCount, Qt::AlignCenter);
-                m_faders[faderCount]->m_vuMeter = meter;
-
                 // Volume fader
                 //
                 Fader *fader =
@@ -294,7 +285,7 @@ MidiMixerWindow::slotFaderLevelChanged(float value)
 
             if (instr) {
 
-                instr->setVolume(MidiByte(value));
+                instr->setControllerValue(MIDI_CONTROLLER_VOLUME, MidiByte(value));
 
                 MappedEvent mE((*it)->m_id,
                                MappedEvent::MidiController,
@@ -368,14 +359,9 @@ MidiMixerWindow::slotControllerChanged(float value)
         //RG_DEBUG << "MidiMixerWindow::slotControllerChanged - "
         //<< "got instrument to change" << endl;
 
-        if (m_faders[i]->m_controllerRotaries[j].first ==
-                MIDI_CONTROLLER_PAN)
-            instr->setPan(MidiByte(value));
-        else {
-            instr->setControllerValue(m_faders[i]->
-                                      m_controllerRotaries[j].first,
-                                      MidiByte(value));
-        }
+        instr->setControllerValue(m_faders[i]->
+                                  m_controllerRotaries[j].first,
+                                  MidiByte(value));
 
         MappedEvent mE(m_faders[i]->m_id,
                        MappedEvent::MidiController,
@@ -429,7 +415,7 @@ MidiMixerWindow::slotUpdateInstrument(InstrumentId id)
 
         if (dev) {
             instruments = dev->getPresentationInstruments();
-            ControlList controls = dev->getIPBControlParameters();
+            ControlList controls = getIPBForMidiMixer(dev);
 
             for (iIt = instruments.begin(); iIt != instruments.end(); ++iIt) {
                 // Match and set
@@ -438,8 +424,17 @@ MidiMixerWindow::slotUpdateInstrument(InstrumentId id)
                     // Set Volume fader
                     //
                     m_faders[count]->m_volumeFader->blockSignals(true);
-                    m_faders[count]->m_volumeFader->
-                    setFader(float((*iIt)->getVolume()));
+
+                    MidiByte volumeValue;
+                    try {
+                        volumeValue = (*iIt)->
+                                getControllerValue(MIDI_CONTROLLER_VOLUME);
+                    } catch (std::string s) {
+                        // This should never get called.
+                        volumeValue = (*iIt)->getVolume();
+                    }
+                    
+                    m_faders[count]->m_volumeFader->setFader(float(volumeValue));
                     m_faders[count]->m_volumeFader->blockSignals(false);
 
                     /*
@@ -456,42 +451,36 @@ MidiMixerWindow::slotUpdateInstrument(InstrumentId id)
 
                         m_faders[count]->m_controllerRotaries[i].second->blockSignals(true);
 
-                        if (controls[i].getControllerValue() ==
-                                MIDI_CONTROLLER_PAN) {
-                            m_faders[count]->m_controllerRotaries[i].
-                            second->setPosition((*iIt)->getPan());
-                        } else {
-                            // The ControllerValues might not yet be set on
-                            // the actual Instrument so don't always expect
-                            // to find one.  There might be a hole here for
-                            // deleted Controllers to hang around on
-                            // Instruments..
-                            //
-                            try {
-                                value = float((*iIt)->getControllerValue
-                                              (controls[i].getControllerValue()));
-                            } catch (std::string s) {
-                                /*
-                                RG_DEBUG << 
-                                "MidiMixerWindow::slotUpdateInstrument - "
-                                         << "can't match controller " 
-                                         << int(controls[i].
-                                             getControllerValue()) << " - \""
-                                         << s << "\"" << endl;
-                                         */
-                                continue;
-                            }
-
+                        // The ControllerValues might not yet be set on
+                        // the actual Instrument so don't always expect
+                        // to find one.  There might be a hole here for
+                        // deleted Controllers to hang around on
+                        // Instruments..
+                        //
+                        try {
+                            value = float((*iIt)->getControllerValue
+                                          (controls[i].getControllerValue()));
+                        } catch (std::string s) {
                             /*
-                            RG_DEBUG << "MidiMixerWindow::slotUpdateInstrument"
-                                     << " - MATCHED "
-                                     << int(controls[i].getControllerValue())
-                                     << endl;
+                            RG_DEBUG << 
+                            "MidiMixerWindow::slotUpdateInstrument - "
+                                     << "can't match controller " 
+                                     << int(controls[i].
+                                         getControllerValue()) << " - \""
+                                     << s << "\"" << endl;
                                      */
-
-                            m_faders[count]->m_controllerRotaries[i].
-                            second->setPosition(value);
+                            continue;
                         }
+
+                        /*
+                        RG_DEBUG << "MidiMixerWindow::slotUpdateInstrument"
+                                 << " - MATCHED "
+                                 << int(controls[i].getControllerValue())
+                                 << endl;
+                                 */
+
+                        m_faders[count]->m_controllerRotaries[i].
+                        second->setPosition(value);
 
                         m_faders[count]->m_controllerRotaries[i].second->blockSignals(false);
                     }
@@ -569,28 +558,12 @@ MidiMixerWindow::slotControllerDeviceEventReceived(MappedEvent *e,
             if (instrument->getMidiChannel() != channel)
                 continue;
 
-            switch (controller) {
-
-            case MIDI_CONTROLLER_VOLUME:
-                RG_DEBUG << "Setting volume for instrument " << instrument->getId() << " to " << value << endl;
-                instrument->setVolume(value);
-                break;
-
-            case MIDI_CONTROLLER_PAN:
-                RG_DEBUG << "Setting pan for instrument " << instrument->getId() << " to " << value << endl;
-                instrument->setPan(value);
-                break;
-
-            default: {
-                    ControlList cl = dev->getIPBControlParameters();
-                    for (ControlList::const_iterator i = cl.begin();
-                            i != cl.end(); ++i) {
-                        if ((*i).getControllerValue() == controller) {
-                            RG_DEBUG << "Setting controller " << controller << " for instrument " << instrument->getId() << " to " << value << endl;
-                            instrument->setControllerValue(controller, value);
-                            break;
-                        }
-                    }
+            ControlList cl = dev->getIPBControlParameters();
+            for (ControlList::const_iterator i = cl.begin();
+                    i != cl.end(); ++i) {
+                if ((*i).getControllerValue() == controller) {
+                    RG_DEBUG << "Setting controller " << controller << " for instrument " << instrument->getId() << " to " << value << endl;
+                    instrument->setControllerValue(controller, value);
                     break;
                 }
             }
@@ -643,7 +616,7 @@ MidiMixerWindow::sendControllerRefresh()
         }
 
         InstrumentList instruments = dev->getPresentationInstruments();
-        ControlList controls = dev->getIPBControlParameters();
+        ControlList controls = getIPBForMidiMixer(dev);
 
         RG_DEBUG << "device has " << instruments.size() << " presentation instruments, " << dev->getAllInstruments().size() << " instruments " << endl;
 
@@ -660,15 +633,11 @@ MidiMixerWindow::sendControllerRefresh()
 
                 int controller = (*cIt).getControllerValue();
                 int value;
-                if (controller == MIDI_CONTROLLER_PAN) {
-                    value = instrument->getPan();
-                } else {
-                    try {
-                        value = instrument->getControllerValue(controller);
-                    } catch (std::string s) {
-                        std::cerr << "Exception in MidiMixerWindow::currentChanged: " << s << " (controller " << controller << ", instrument " << instrument->getId() << ")" << std::endl;
-                        value = 0;
-                    }
+                try {
+                    value = instrument->getControllerValue(controller);
+                } catch (std::string s) {
+                    std::cerr << "Exception in MidiMixerWindow::currentChanged: " << s << " (controller " << controller << ", instrument " << instrument->getId() << ")" << std::endl;
+                    value = 0;
                 }
 
                 MappedEvent mE(instrument->getId(),
@@ -770,11 +739,28 @@ MidiMixerWindow::setRewFFwdToAutoRepeat()
                         SIGNAL(fastForwardPlayback()));
 
             }
-
         }
+    }
+}
 
+// Code stolen From src/base/MidiDevice
+ControlList
+MidiMixerWindow::getIPBForMidiMixer(MidiDevice *dev) const
+{
+    ControlList controlList = dev->getIPBControlParameters();
+    ControlList retList;
+
+    Rosegarden::MidiByte MIDI_CONTROLLER_VOLUME = 0x07;
+
+    for (ControlList::const_iterator it = controlList.begin();
+         it != controlList.end(); ++it)
+    {
+        if (it->getIPBPosition() != -1 && 
+            it->getControllerValue() != MIDI_CONTROLLER_VOLUME)
+            retList.push_back(*it);
     }
 
+    return retList;
 }
 
 
