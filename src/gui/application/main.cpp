@@ -17,6 +17,7 @@
 #include "misc/Strings.h"
 #include "misc/Debug.h"
 #include "gui/application/RosegardenMainWindow.h"
+#include "gui/widgets/ProgressDialog.h"
 #include "gui/widgets/CurrentProgressDialog.h"
 #include "document/RosegardenDocument.h"
 #include "gui/widgets/StartupLogo.h"
@@ -539,6 +540,9 @@ int main(int argc, char *argv[])
     QObject::connect(&theApp, SIGNAL(lastWindowClosed()), &theApp, SLOT(quit()));
 
     settings.beginGroup(GeneralOptionsConfigGroup);
+
+    ProgressDialog *pd = new ProgressDialog("Starting...", 100, 0);
+    QMessageBox::information(0, "", "Progress dialog should be visible");
 
     QString lastVersion = settings.value("lastversion", "").toString();
     bool newVersion = (lastVersion != VERSION);

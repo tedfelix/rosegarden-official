@@ -895,7 +895,7 @@ RosegardenMainWindow::initStatusBar()
 //    statusBar()->setItemAlignment(TmpStatusMsg::getDefaultId(),
 //              AlignLeft | AlignVCenter);
 
-    m_progressBar = new ProgressBar(100, true, statusBar());
+    m_progressBar = new ProgressBar(100, statusBar());
     m_progressBar->setFixedWidth(60);
     m_progressBar->setFixedHeight(18);
     QFont font = m_progressBar->font();

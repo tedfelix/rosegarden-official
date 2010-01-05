@@ -29,17 +29,18 @@ class QWidget;
 namespace Rosegarden
 {
 
-
-
+/** An odd legacy.  This used to be a subclass of KProgress, but even then it
+ * had a bool useDelay that was a no-op.  It seems the only useful thing we can
+ * do with this is convert it to a subclass of QProgressBar, and do a
+ * setRange(0, totalSteps) in the ctor to mimic the old behavior.
+ */
 class ProgressBar : public QProgressBar
 {
     Q_OBJECT
 
 public:
     ProgressBar(int totalSteps,
-                bool useDelay,
-                QWidget *creator = 0,
-                const char *name = 0);
+                QWidget *parent = 0);
 
 };
 
