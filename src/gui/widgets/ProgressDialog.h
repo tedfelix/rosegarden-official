@@ -18,64 +18,68 @@
 #ifndef _RG_ROSEGARDENPROGRESSDIALOG_H_
 #define _RG_ROSEGARDENPROGRESSDIALOG_H_
 
+#include "ProgressBar.h"
 
 #include <QDateTime>
+#include <QDialog>
+#include <QLabel>
 
-#include <QProgressBar>
-#include <QProgressDialog>
-
-
-class QWidget;
-class QString;
 class QHideEvent;
 
 
 namespace Rosegarden
 {
 
-
-
-class ProgressDialog : public QProgressDialog
+/** A simple dialog for reporting progress.  This implementation is designed to
+ * give all our existing legacy code what it expects in order to function,
+ * rather than going to some considerable lengths to rewrite all of the
+ * dependent code.  This class was originally a subclass of KProgressDialog from
+ * KDE 3.  This implementation does not aim to reproduce KProgressDialog from
+ * KDE 3 so much as it aims to satisfy the minimum requirements of what existing
+ * Rosegarden code actually needed a ProgressDialog and related classes (eg.
+ * ProgressBar) to do in practice.  No more, no less.
+ */
+class ProgressDialog : public QDialog
 {
     Q_OBJECT
 public:
-    ProgressDialog(QWidget * creator = 0,
-                             const char * name = 0,
-                             bool modal = true);
-
     ProgressDialog(const QString &labelText,
-                             int totalSteps,
-                             QWidget *creator = 0,
-                             const char *name = 0,
-                             bool modal = true);
+                   int totalSteps,
+                   QWidget *parent = 0,
+                   bool modal = true);
 
     ~ProgressDialog();
-	
-	/** return the QProgressBar created in constructor */
-	QProgressBar* progressBar();
-	
+
     /**
      * A "safe" way to process events without worrying about user
-     * input during the process.  If there is a modal value() dialog
+     * input during the process.  If there is a modal progress dialog
      * visible, then this will permit user input so as to allow the
      * user to hit Cancel; otherwise it will prevent all user input
      */
     static void processEvents();
 
-    virtual void polish();
+    /**
+     * Return a pointer to the dialog's ProgressBar.  Create a ProgressBar if
+     * one does not already exist.
+     */
+    ProgressBar *progressBar();
+
+    void setAutoClose(bool state);
+    void setAutoReset(bool state);
+    void setValue(int value);
+    void setMinimumDuration(int duration);
+    int minimumDuration();
+    void setLabelText(QString text);
 
 public slots:
     void slotSetOperationName(QString);
     void slotCancel();
 
-    /// Stop and hide (if it's shown) the value() dialog
+    /// Stop and hide (if it's shown) the progress dialog
     void slotFreeze();
 
     /// Restore the dialog to its normal state
     void slotThaw();
-
-    virtual void show();
-    virtual void setVisible(bool);
 
 protected slots:
     void slotCheckShow(int);
@@ -84,15 +88,17 @@ protected:
     virtual void hideEvent(QHideEvent*);
 
     //--------------- Data members ---------------------------------
-	
-	
-	QProgressBar* m_progressBar;
-	
+
     QTime m_chrono;
     bool m_wasVisible;
     bool m_frozen;
     bool m_modal;
     static bool m_modalVisible;
+    bool m_Thorn;
+
+    ProgressBar *m_progressBar;
+    QLabel      *m_label;
+    int         m_minimumDuration;
 };
 
 

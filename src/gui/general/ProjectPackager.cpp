@@ -22,6 +22,7 @@
 #include "base/Track.h"
 #include "gui/general/IconLoader.h"
 #include "gui/widgets/FileDialog.h"
+#include "gui/widgets/ProgressBar.h"
 #include "misc/ConfigGroups.h"
 #include "misc/Strings.h"
 #include "sound/AudioFile.h"
@@ -34,7 +35,6 @@
 #include <QPushButton>
 #include <QSettings>
 #include <QLabel>
-#include <QProgressBar>
 #include <QMessageBox>
 #include <QDir>
 #include <QFile>
@@ -91,9 +91,7 @@ ProjectPackager::ProjectPackager(QWidget *parent, RosegardenDocument *document, 
     m_info->setWordWrap(true);
     layout->addWidget(m_info, 0, 1);
 
-    m_progress = new QProgressBar(this);
-    m_progress->setMinimum(0);
-    m_progress->setMaximum(100);
+    m_progress = new ProgressBar(100, this);
     layout->addWidget(m_progress, 1, 1);
 
     QPushButton *ok = new QPushButton(tr("Cancel"), this);

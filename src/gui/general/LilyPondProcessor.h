@@ -18,8 +18,9 @@
 #ifndef _LILYPOND_PROCESSOR_H_
 #define _LILYPOND_PROCESSOR_H_
 
+#include "gui/widgets/ProgressBar.h"
+
 #include <QDialog>
-#include <QProgressBar>
 #include <QLabel>
 #include <QProcess>
 
@@ -79,7 +80,7 @@ protected:
     int           m_mode;
     QString       m_filename;
     QString       m_dir;
-    QProgressBar *m_progress;
+    ProgressBar  *m_progress;
     QLabel       *m_info;
     QProcess     *m_process;
 

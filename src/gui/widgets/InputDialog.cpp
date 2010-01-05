@@ -17,6 +17,7 @@
 
 #include "InputDialog.h"
 #include "gui/widgets/LineEdit.h"
+#include "misc/ConfigGroups.h"
 
 #include <QDialog>
 #include <QVBoxLayout>
@@ -24,6 +25,7 @@
 #include <QDialogButtonBox>
 #include <QPushButton>
 #include <QGroupBox>
+#include <QSettings>
 
 
 namespace Rosegarden
@@ -33,17 +35,20 @@ InputDialog::InputDialog(const QString &title, const QString &label,
                          QWidget *parent, QWidget *input, Qt::WindowFlags f)
     : QDialog(parent, f)
 {
-    // All of these little ancillary dialogs should have the same background,
-    // regardless of which parent widget they have (for popup proximity
-    // purposes)
-    //
-    // NB: this will BREAK the "no stylesheet" case
-    QString localStyle("QDialog {background-color: #000000} QLabel{background-color: transparent}");
-    setStyleSheet(localStyle);
+    QSettings settings;
+    settings.beginGroup(GeneralOptionsConfigGroup);
+    bool Thorn = settings.value("use_thorn_style", true).toBool();
+    settings.endGroup();
+
+    QString localStyle("QDialog {background-color: #000000} QLabel{background-color: transparent; color: #FFFFFF}");
+    if (Thorn) setStyleSheet(localStyle);
 
     // set the window title
-    setWindowTitle(title);
+    setWindowTitle(tr("Rosegarden"));
     QVBoxLayout *vboxLayout = new QVBoxLayout(this);
+
+    QLabel *t = new QLabel(QString("<qt><h3>%1</h3></qt>").arg(title));
+    vboxLayout->addWidget(t);    
 
     // add the passed label to our layout
 /*    QLabel *lbl = new QLabel(label, this);
@@ -51,11 +56,12 @@ InputDialog::InputDialog(const QString &title, const QString &label,
     vboxLayout->addStretch(1);*/
 
     // make a group box to hold the controls, for visual consistency with other
-    // dialogs; the question asked is the group box title
-    QGroupBox *gbox = new QGroupBox(label, this);
+    // dialogs
+    QGroupBox *gbox = new QGroupBox(this);
     vboxLayout->addWidget(gbox);
     QVBoxLayout *gboxLayout = new QVBoxLayout;
     gbox->setLayout(gboxLayout);
+    gboxLayout->addWidget(new QLabel(label));
 
     // add the passed input widget to our layout, and reparent it
     input->setParent(this);

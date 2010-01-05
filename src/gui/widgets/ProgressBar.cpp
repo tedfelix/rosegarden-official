@@ -17,11 +17,11 @@
 
 
 #include "ProgressBar.h"
+#include "misc/ConfigGroups.h"
 
 #include <QProgressBar>
 #include <QProgressDialog>
-
-#include <QWidget>
+#include <QSettings>
 
 
 namespace Rosegarden
@@ -33,6 +33,14 @@ ProgressBar::ProgressBar(int totalSteps,
          QProgressBar(parent)
 {
     setRange(0, totalSteps);
+
+    QSettings settings;
+    settings.beginGroup(GeneralOptionsConfigGroup);
+    bool Thorn = settings.value("use_thorn_style", true).toBool();
+    settings.endGroup();
+
+    QString localStyle("QProgressBar { background: #FFFFFF; border: 1px solid #AAAAAA; border-radius: 3px; }  QProgressBar::chunk { background-color: #D6E7FA; width: 20px; }");
+    if (Thorn) setStyleSheet(localStyle);
 }
 
 

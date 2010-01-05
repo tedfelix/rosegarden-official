@@ -19,9 +19,9 @@
 #define _PROJECT_PACKAGER_H_
 
 #include "document/RosegardenDocument.h"
+#include "gui/widgets/ProgressBar.h"
 
 #include <QDialog>
-#include <QProgressBar>
 #include <QLabel>
 #include <QProcess>
 #include <QStringList>
@@ -75,7 +75,7 @@ protected:
     RosegardenDocument *m_doc;
     int                 m_mode;
     QString             m_filename;
-    QProgressBar       *m_progress;
+    ProgressBar        *m_progress;
     QLabel             *m_info;
     QProcess           *m_process;
     

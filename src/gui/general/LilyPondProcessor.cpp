@@ -18,6 +18,7 @@
 #include "LilyPondProcessor.h"
 
 #include "gui/general/IconLoader.h"
+#include "gui/widgets/ProgressBar.h"
 #include "misc/ConfigGroups.h"
 
 #include <QDialog>
@@ -26,7 +27,6 @@
 #include <QPushButton>
 #include <QSettings>
 #include <QLabel>
-#include <QProgressBar>
 #include <QMessageBox>
 #include <QDir>
 
@@ -73,9 +73,7 @@ LilyPondProcessor::LilyPondProcessor(QWidget *parent, int mode, QString filename
     m_info->setWordWrap(true);
     layout->addWidget(m_info, 0, 1);
 
-    m_progress = new QProgressBar(this);
-    m_progress->setMinimum(0);
-    m_progress->setMaximum(100);
+    m_progress = new ProgressBar(100, this);
     layout->addWidget(m_progress, 1, 1);
 
     QPushButton *ok = new QPushButton(tr("Cancel"), this);
