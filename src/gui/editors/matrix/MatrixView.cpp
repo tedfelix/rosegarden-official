@@ -176,9 +176,9 @@ MatrixView::MatrixView(RosegardenDocument *doc,
 
     m_matrixWidget->slotSetPlayTracking(m_tracking);
 
-    updateWindowTitle();
+    slotUpdateWindowTitle();
     connect(m_document, SIGNAL(documentModified(bool)),
-            this, SLOT(updateWindowTitle(bool)));
+            this, SLOT(slotUpdateWindowTitle(bool)));
 
     // Set initial visibility ...
     bool view;
@@ -226,7 +226,7 @@ MatrixView::MatrixView(RosegardenDocument *doc,
     connect(m_matrixWidget, SIGNAL(segmentDeleted(Segment *)),
             this, SLOT(slotSegmentDeleted(Segment *)));
     connect(m_matrixWidget, SIGNAL(sceneDeleted()),
-            this, SLOT(close()));
+            this, SLOT(slotSceneDeleted()));
 
 
     // do the auto repeat thingie on the <<< << >> >>> buttons
@@ -254,9 +254,33 @@ MatrixView::closeEvent(QCloseEvent *event)
     QWidget::closeEvent(event);
 }
 
+void
+MatrixView::slotSegmentDeleted(Segment *s)
+{
+    MATRIX_DEBUG << "MatrixView::slotSegmentDeleted: " << s << endl;
+
+    // remove from vector
+    for (std::vector<Segment *>::iterator i = m_segments.begin();
+         i != m_segments.end(); ++i) {
+        if (*i == s) {
+            m_segments.erase(i);
+            NOTATION_DEBUG << "MatrixView::slotSegmentDeleted: Erased segment from vector, have " << m_segments.size() << " segment(s) remaining" << endl;
+            return;
+        }
+    }
+}
 
 void
-MatrixView::updateWindowTitle(bool m)
+MatrixView::slotSceneDeleted()
+{
+    NOTATION_DEBUG << "MatrixView::slotSceneDeleted" << endl;
+
+    m_segments.clear();
+    close();
+}
+
+void
+MatrixView::slotUpdateWindowTitle(bool m)
 {
     QString indicator = (m ? "*" : "");
     // Set client label

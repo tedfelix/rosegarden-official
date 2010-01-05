@@ -93,6 +93,12 @@ signals:
     void stepByStepTargetRequested(QObject *);
 
 protected slots:
+    /// Remove a segment from our list when it is deleted from the composition
+    void slotSegmentDeleted(Segment *);
+
+    /// All segments have been deleted (close editor)
+    void slotSceneDeleted();
+
     void slotQuantize();
     void slotRepeatQuantize();
     void slotCollapseNotes();
@@ -220,7 +226,7 @@ protected slots:
     /** Update the window title.  If m is true (normally comes from a signal)
      * display a * at the extreme left of the title to indicate modified status
      */ 
-    void updateWindowTitle(bool m = false);
+    void slotUpdateWindowTitle(bool m = false);
 
     void slotToggleChordMode();
 
