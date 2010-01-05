@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2009 the Rosegarden development team.
+    Copyright 2000-2010 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_NEW_NOTATION_VIEW_H_
-#define _RG_NEW_NOTATION_VIEW_H_
+#ifndef _RG_NOTATION_VIEW_H_
+#define _RG_NOTATION_VIEW_H_
 
 #include "gui/general/ActionFileClient.h"
 #include "gui/general/SelectionManager.h"
@@ -80,9 +80,12 @@ signals:
     void stepByStepTargetRequested(QObject *);
 
 protected slots:
+    /// Remove a segment from our list when it is deleted from the composition
+    void slotSegmentDeleted(Segment *);
+
     /// Update the window title during setup, and when document modified status
     /// changes
-    void updateWindowTitle(bool m = false);
+    void slotUpdateWindowTitle(bool m = false);
 
     /// Print with LilyPond (and lpr or the like)
     void slotPrintLilyPond();

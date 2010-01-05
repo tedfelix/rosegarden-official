@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2009 the Rosegarden development team.
+    Copyright 2000-2010 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -315,9 +315,9 @@ NotationView::NotationView(RosegardenDocument *doc,
     initRulersToolbar();
     initStatusBar();
 
-    updateWindowTitle();
+    slotUpdateWindowTitle();
     connect(m_document, SIGNAL(documentModified(bool)),
-            this, SLOT(updateWindowTitle(bool)));
+            this, SLOT(slotUpdateWindowTitle(bool)));
 
     // Restore window geometry and toolbar/dock state
     settings.beginGroup(WindowGeometryConfigGroup);
@@ -3047,7 +3047,7 @@ NotationView::slotToggleTracking()
 }
 
 void
-NotationView::updateWindowTitle(bool m)
+NotationView::slotUpdateWindowTitle(bool m)
 {
     QString indicator = (m ? "*" : "");
 
