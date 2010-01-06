@@ -557,7 +557,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="1915"/>
         <source>Show La&amp;yer Toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>Näytä &amp;Tasot -työkalupalkki</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2615"/>
@@ -10287,7 +10287,7 @@
     <message>
         <location filename="../../src/gui/dialogs/AboutDialog.cpp" line="54"/>
         <source>&lt;p&gt;Copyright 2000-2010 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Copyright 2000-2010 Rosegarden-kehitystiimi&lt;/p&gt;&lt;p&gt;Versio: %1 &amp;nbsp; Qt versio:%2&lt;br&gt;Build-avain: %3&lt;/p&gt;&lt;p&gt;Rosegardenin tarjoavat sinulle ryhmä vapaaehtoisia ympäri maailman.  Nähdäksesi listan osallistuneista, katso &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;Jos tarvitset lisätietoja Rosegardenista, katso &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Lisenssi: GNU General Public License Version 2&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;p&gt;Copyright 2000-2009 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2&lt;/p&gt;</source>
@@ -10417,12 +10417,12 @@
     <message>
         <location filename="../../src/commands/segment/AddLayerCommand.cpp" line="35"/>
         <source>Add Layer</source>
-        <translation type="unfinished"></translation>
+        <translation>Lisää taso</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/AddLayerCommand.cpp" line="67"/>
         <source> - layer</source>
-        <translation type="unfinished"></translation>
+        <translation> - taso</translation>
     </message>
 </context>
 <context>
@@ -12552,7 +12552,7 @@ Ole hyvä ja valitse halutessasi niistä joitakin poistaaksesi ne pysyvästi kov
     <message>
         <location filename="../../src/commands/notation/CycleSlashesCommand.h" line="37"/>
         <source>Cycle Slashes</source>
-        <translation type="unfinished"></translation>
+        <translation>Kierrätä vinoviivoja</translation>
     </message>
 </context>
 <context>
@@ -13844,22 +13844,22 @@ Haluatko yrittää paikallistaa tiedostoa vai sivuuttaa sen?</translation>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="83"/>
         <source>Graphics performance</source>
-        <translation type="unfinished"></translation>
+        <translation>Graafinen suorituskyky</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="88"/>
         <source>Normal</source>
-        <translation type="unfinished">Normaali</translation>
+        <translation>Normaali</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="89"/>
         <source>Safe</source>
-        <translation type="unfinished"></translation>
+        <translation>Turvallinen</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="90"/>
         <source>Fast</source>
-        <translation type="unfinished"></translation>
+        <translation>Nopea</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="96"/>
@@ -13980,12 +13980,12 @@ Haluatko yrittää paikallistaa tiedostoa vai sivuuttaa sen?</translation>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="534"/>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="538"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="538"/>
         <source>You must restart Rosegarden for the graphics system change to take effect.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sinun täytyy käynnistää Rosegarden uudestaan jotta grafiikkajärjestelmän muutos voidaan ottaa käyttöön.</translation>
     </message>
 </context>
 <context>
@@ -14466,7 +14466,7 @@ Esimerkkiteksti tiedostosta:</translation>
     <message>
         <location filename="../../src/gui/widgets/InputDialog.cpp" line="47"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
 </context>
 <context>
@@ -16619,17 +16619,17 @@ Tupla-klikkaa avataksesi merkintöjen muokkaimen.</translation>
     <message>
         <location filename="../../src/commands/edit/MoveCommand.cpp" line="52"/>
         <source>&amp;Move Events</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Siirrä tapahtumia</translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/MoveCommand.cpp" line="54"/>
         <source>&amp;Move Events Back</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Siirrä tapahtumia taaksepäin</translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/MoveCommand.cpp" line="56"/>
         <source>&amp;Move Events Forward</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Siirrä tapahtumia eteenpäin</translation>
     </message>
 </context>
 <context>
@@ -18032,12 +18032,12 @@ Ole hyvä ja varmista, että laite on määritetty oikein pääikkunan Hallitse 
     <message>
         <location filename="../../src/gui/widgets/ProgressDialog.cpp" line="53"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/ProgressDialog.cpp" line="60"/>
         <source>&lt;qt&gt;&lt;h3&gt;Processing...&lt;/h3&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;h3&gt;Käsitellään...&lt;/h3&gt;&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -18751,7 +18751,7 @@ Tiedostomuodossa voi olla joitain yhteensopimattomuuksia.</translation>
         <location filename="../../src/document/RosegardenDocument.cpp" line="1780"/>
         <location filename="../../src/document/RosegardenDocument.cpp" line="2699"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="370"/>
@@ -18903,7 +18903,7 @@ Suosittelemme, että talletat tämän tiedoston tällä Rosegarden-versiolla var
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="1781"/>
         <source>&lt;qt&gt;&lt;h2&gt;Channels were remapped&lt;/h2&gt;&lt;p&gt;Beginning with version 10.02, Rosegarden no longer provides controls for changing the channel associated with each MIDI instrument.  Instead, each instrument uses the same channel as its instrument number.  For example, &quot;MIDI Input System Device #12&quot; always uses channel 12.&lt;/p&gt;&lt;p&gt;The file you just loaded contained instruments whose channels differed from the instrument numbers.  These channels have been reassigned so that instrument #1 will always use channel 1, regardless of what channel it might have used previously.  In most cases, you will experience no difference, but you may have to make some small changes to this file in order for it to play as intended.  We recommend that you save this file in order to avoid seeing this warning in the future.&lt;/p&gt;&lt;p&gt;We apologize for any inconvenience.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;h2&gt;Kanavat järjesteltiin uudestaan&lt;/h2&gt;&lt;p&gt;Versiosta 10.02 alkaen Rosegardenissa ei ole mahdollista määritellä kunkin MIDI-instrumentin kanavaa.  Sitävastoin jokainen instrumentti käyttää instumenttinumeron mukaista kanavaa.  Esimerkiksi &quot;MIDI-järjestelmälaite #12&quot; käyttää aina kanavaa 12.&lt;/p&gt;&lt;p&gt;Juuri lataamasi tiedosto sisälsi instrumentteja joiden kanava poikkesi instrumenttinumerosta.  Nämä kanavat on määritelty uudelleen siten että instrumentti #1 käyttää aina kanavaa 1 riippumatta siitä mitä kanavaa se käytti aikaisemmin.  Useimmissa tapauksissa et havaitse eroa, mutta saatat joutua tekemään pieniä muutoksia tähän tiedostoon jotta se soi aiotulla tavalla.  Suosittelemme että tallennat tämän tiedoston välttääksesi näkemästä tätä varoitusta tulevaisuudessa.&lt;/p&gt;&lt;p&gt;Olemme pahoillamme mahdollisesta vaivasta.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="2319"/>
