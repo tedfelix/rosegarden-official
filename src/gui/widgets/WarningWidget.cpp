@@ -25,6 +25,7 @@
 #include <QLabel>
 #include <QHBoxLayout>
 #include <QToolButton>
+#include <QMessageBox>
 
 #include <iostream>
 namespace Rosegarden
@@ -64,12 +65,23 @@ WarningWidget::WarningWidget(QWidget *parent) :
     m_warningButton->setToolTip(tr("<qt><p>Performance problems detected!</p><p>Click to display details</p></qt>"));
     m_warningButton->hide();
 
+    m_graphicsButton = new QToolButton();
+    layout->addWidget(m_graphicsButton);
+    m_graphicsButton->setIconSize(QSize(16, 16));
+    m_graphicsButton->setIcon(IconLoader().loadPixmap("safe-graphics"));
+    connect(m_graphicsButton,
+            SIGNAL(clicked()),
+            this,
+            SLOT(displayGraphicsAdvisory()));
+    m_graphicsButton->hide();
+
     // Set these to false initially, assuming an all clear state.  When some
     // problem crops up, these will be set true as appropriate by
     // RosegardenMainWindow, which manages this widget
     setMidiWarning(false);
     setAudioWarning(false);
     setTimerWarning(false);
+    setGraphicsAdvisory(false);
 }
 
 WarningWidget::~WarningWidget()
@@ -113,6 +125,17 @@ WarningWidget::setTimerWarning(const bool status)
 }
 
 void
+WarningWidget::setGraphicsAdvisory(const bool status)
+{
+    if (status) {
+        m_graphicsButton->show();
+        m_graphicsButton->setToolTip(tr("<qt>Safe graphics mode<br>Click for more information</qt>"));
+    } else {
+        m_graphicsButton->hide();
+    }
+}
+
+void
 WarningWidget::queueMessage(const QString text, const QString informativeText)
 {
     RG_DEBUG << "WarningWidget::queueMessage(" << text
@@ -132,6 +155,14 @@ WarningWidget::displayMessageQueue()
         m_warningDialog->addWarning(m_queue.dequeue());
     }
     m_warningDialog->show();
+}
+
+void
+WarningWidget::displayGraphicsAdvisory()
+{
+    QMessageBox::information(this, 
+                             tr("Rosegarden"),
+                             tr("<qt><p>Rosegarden is using safe graphics mode.  This provides the greatest stability, but graphics performance is very slow.</p><p>You may wish to visit <b>Edit -> Preferences -> Behavior -> Graphics performance</b> and try \"Normal\" or \"Fast\" for better performance.</p></qt>"));
 }
 
 // NOTES:
