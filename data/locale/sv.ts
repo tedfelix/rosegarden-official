@@ -10046,8 +10046,8 @@ Om du ändå vill klistra in, fundera på att använda en av de andra inklistrin
         <translation>[ %1 ]</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="693"/>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="815"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="684"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="806"/>
         <source>%1. %2</source>
         <translation>%1. %2</translation>
     </message>
@@ -10070,35 +10070,35 @@ Om du ändå vill klistra in, fundera på att använda en av de andra inklistrin
         <translation>%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="423"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="447"/>
         <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="892"/>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="739"/>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1540"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1558"/>
         <source>%1 Controller %2 %3</source>
         <translation>%1 effekt %2 %3</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/main.cpp" line="318"/>
+        <location filename="../../src/gui/application/main.cpp" line="319"/>
         <source>Rosegarden - A sequencer and musical notation editor</source>
         <translation>Rosegarden - Ett musikbehandlingsprogram och noteditor</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/main.cpp" line="470"/>
+        <location filename="../../src/gui/application/main.cpp" line="475"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/main.cpp" line="745"/>
+        <location filename="../../src/gui/application/main.cpp" line="756"/>
         <source>Welcome!</source>
         <translation>Välkommen!</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/main.cpp" line="761"/>
+        <location filename="../../src/gui/application/main.cpp" line="772"/>
         <source>http://rosegardenmusic.com/wiki/doc:manual-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:manual-en</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/main.cpp" line="762"/>
+        <location filename="../../src/gui/application/main.cpp" line="773"/>
         <source>&lt;h2&gt;Welcome to Rosegarden!&lt;/h2&gt;&lt;p&gt;Welcome to the Rosegarden audio and MIDI sequencer and musical notation editor.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;If you have not already done so, you may wish to install some DSSI synth plugins, or a separate synth program such as QSynth.  Rosegarden does not synthesize sounds from MIDI on its own, so without these you will hear nothing.&lt;/li&gt;&lt;li&gt;Rosegarden uses the JACK audio server for recording and playback of audio, and for playback from DSSI synth plugins.  These features will only be available if the JACK server is running.&lt;/li&gt;&lt;li&gt;Rosegarden has comprehensive documentation: see the &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&quot;&gt;Rosegarden website&lt;/a&gt; for the &lt;a style=&quot;color:gold&quot; href=&quot;%1&quot;&gt;manual&lt;/a&gt;, &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;tutorials&lt;/a&gt;, and other information!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  To learn more, go to the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;Rosegarden website&lt;/a&gt;.&lt;/p&gt;</source>
         <translation>&lt;h2&gt;Välkommen till Rosegarden!&lt;/h2&gt;&lt;p&gt;Välkommen till Rosegarden ljud- och MIDI-spelare med notskriftsredigering.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Om du inte redan har gjort det, bör du kanske installera några DSSI syntinsticksmoduler, eller ett särskilt syntprogram som QSynth. Rosegarden syntetiserar inte ljud från MIDI själv, så utan dessa kan du inte höra någonting.&lt;/li&gt;&lt;li&gt;Rosegarden använder ljudservern JACK för inspelning och uppspelning av ljud, och för uppspelning med DSSI syntinsticksmoduler. Funktionerna är bara tillgängliga om JACK kör.&lt;/li&gt;&lt;li&gt;Rosegarden har omfattande dokumentation, se &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&quot;&gt;Rosegardens hemsida&lt;/a&gt; för att finna &lt;a style=&quot;color:gold&quot; href=&quot;%1&quot;&gt;handboken&lt;/a&gt;, &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;handledningar&lt;/a&gt;, och annan information.&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegarden har tagits fram av en grupp frivilliga över hela världen. För att ta reda på mer, gå till &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;Rosegardens hemsida&lt;/a&gt;.&lt;/p&gt;</translation>
     </message>
@@ -10362,8 +10362,12 @@ Om du ändå vill klistra in, fundera på att använda en av de andra inklistrin
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AboutDialog.cpp" line="54"/>
+        <source>&lt;p&gt;Copyright 2000-2010 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>&lt;p&gt;Copyright 2000-2009 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Copyright 2000-2009 Rosegardens utvecklingsgrupp&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Byggnyckel: %3&lt;/p&gt;&lt;p&gt;Rosegarden har tagits fram av en grupp frivilliga över hela världen. Besök &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt; för att se en lista med bidragsgivare.&lt;br&gt;För ytterligare information om Rosegarden, besök &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Licens: GNU General Public License Version 2&lt;/p&gt;</translation>
+        <translation type="obsolete">&lt;p&gt;Copyright 2000-2009 Rosegardens utvecklingsgrupp&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Byggnyckel: %3&lt;/p&gt;&lt;p&gt;Rosegarden har tagits fram av en grupp frivilliga över hela världen. Besök &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt; för att se en lista med bidragsgivare.&lt;br&gt;För ytterligare information om Rosegarden, besök &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Licens: GNU General Public License Version 2&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
@@ -14748,6 +14752,14 @@ Exempeltext från filen:</translation>
     </message>
 </context>
 <context>
+    <name>Rosegarden::InputDialog</name>
+    <message>
+        <location filename="../../src/gui/widgets/InputDialog.cpp" line="47"/>
+        <source>Rosegarden</source>
+        <translation type="unfinished">Rosegarden</translation>
+    </message>
+</context>
+<context>
     <name>Rosegarden::InsertRangeCommand</name>
     <message>
         <location filename="../../src/commands/segment/InsertRangeCommand.cpp" line="35"/>
@@ -15560,112 +15572,112 @@ Vill du använda
         <translation>Rosegarden - %1 med Lilypond...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="81"/>
+        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="79"/>
         <source>Cancel</source>
         <translation>Avbryt</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="104"/>
+        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="102"/>
         <source>Fatal error.  Processing aborted.</source>
         <translation>Allvarligt fel. Behandling avbruten.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="105"/>
+        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="103"/>
         <source>Rosegarden - Fatal processing error!</source>
         <translation>Rosegarden: Allvarligt behandlingsfel!</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="120"/>
+        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="118"/>
         <source>Running &lt;b&gt;convert-ly&lt;/b&gt;...</source>
         <translation>Kör &lt;b&gt;convert-ly&lt;/b&gt;...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="129"/>
+        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="127"/>
         <source>&lt;b&gt;convert-ly&lt;/b&gt; started...</source>
         <translation>&lt;b&gt;convert-ly&lt;/b&gt; startat...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="143"/>
+        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="141"/>
         <source>&lt;b&gt;convert-ly&lt;/b&gt; finished...</source>
         <translation>&lt;b&gt;convert-ly&lt;/b&gt; klar...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="146"/>
+        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="144"/>
         <source>&lt;qt&gt;&lt;p&gt;Ran &lt;b&gt;convert-ly&lt;/b&gt; successfully, but it terminated with errors.&lt;/p&gt;&lt;p&gt;Processing terminated due to fatal errors.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Körde &lt;b&gt;convert-ly&lt;/b&gt; med lyckat resultat, men det avslutades med fel.&lt;/p&gt;&lt;p&gt;Behandling avslutad på grund av allvarliga fel.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="153"/>
+        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="151"/>
         <source>Running &lt;b&gt;lilypond&lt;/b&gt;...</source>
         <translation>Kör &lt;b&gt;lilypond&lt;/b&gt;...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="160"/>
+        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="158"/>
         <source>&lt;b&gt;lilypond&lt;/b&gt; started...</source>
         <translation>&lt;b&gt;lilypond&lt;/b&gt; startat...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="277"/>
+        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="275"/>
         <source>&lt;qt&gt;&lt;p&gt;LilyPond processed the file successfully, but &lt;b&gt;%1&lt;/b&gt; did not run!&lt;/p&gt;&lt;p&gt;Please configure a valid %2 under &lt;b&gt;Edit -&gt; Preferences -&gt; General -&gt; External Applications&lt;/b&gt; and try again.&lt;/p&gt;&lt;p&gt;Processing terminated due to fatal errors.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Lilypond behandlade filen med lyckat resultat, men &lt;b&gt;%1&lt;/b&gt; kördes inte.&lt;/p&gt;&lt;p&gt;Ställ in giltig %2 med &lt;b&gt;Redigera -&gt; Inställningar -&gt; Allmänt -&gt; Externa program&lt;/b&gt; och försök igen.&lt;/p&gt;&lt;p&gt;Behandling avslutad på grund av allvarliga fel.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="131"/>
+        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="129"/>
         <source>&lt;qt&gt;&lt;p&gt;Could not run &lt;b&gt;convert-ly&lt;/b&gt;!&lt;/p&gt;&lt;p&gt;Please install LilyPond and ensure that the &quot;convert-ly&quot; and &quot;lilypond&quot; commands are available on your path.  If you perform a &lt;b&gt;Run Command&lt;/b&gt; (typically &lt;b&gt;Alt+F2&lt;/b&gt;) and type &quot;convert-ly&quot; into the box, you should not get a &quot;command not found&quot; error.  If you can do that without getting an error, but still see this error message, please consult &lt;a style=&quot;color:gold&quot; href=&quot;mailto:rosegarden-user@lists.sourceforge.net&quot;&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt; for additional help.&lt;/p&gt;&lt;p&gt;Processing terminated due to fatal errors.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Kunde inte köra &lt;b&gt;convert-ly&lt;/b&gt;!&lt;/p&gt;&lt;p&gt;Installera Lilypond och försäkra dig om att kommandona &quot;convert-ly&quot; och &quot;lilypond&quot; är tillgängliga i sökvägen. Om du startar &lt;b&gt;Kör kommando&lt;/b&gt; (normalt &lt;b&gt;Alt+F2&lt;/b&gt;) och skriver in &quot;convert-ly&quot; i rutan, ska du inte få felet &quot;kommandot hittades inte&quot;. Om du kan göra det utan att få ett fel, men ändå får detta felmeddelande, kontakta &lt;a style=&quot;color:gold&quot; href=&quot;mailto:rosegarden-user@lists.sourceforge.net&quot;&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt; för ytterligare hjälp.&lt;/p&gt;&lt;p&gt;Behandling avslutad på grund av allvarliga fel.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="162"/>
+        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="160"/>
         <source>&lt;qt&gt;&lt;p&gt;Could not run &lt;b&gt;lilypond&lt;/b&gt;!&lt;/p&gt;&lt;p&gt;Please install LilyPond and ensure that the &quot;convert-ly&quot; and &quot;lilypond&quot; commands are available on your path.  If you perform a &lt;b&gt;Run Command&lt;/b&gt; (typically &lt;b&gt;Alt+F2&lt;/b&gt;) and type &quot;lilypond&quot; into the box, you should not get a &quot;command not found&quot; error.  If you can do that without getting an error, but still see this error message, please consult &lt;a style=&quot;color:gold&quot; href=&quot;mailto:rosegarden-user@lists.sourceforge.net&quot;&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt; for additional help.&lt;/p&gt;&lt;p&gt;Processing terminated due to fatal errors.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Kunde inte köra &lt;b&gt;lilypond&lt;/b&gt;!&lt;/p&gt;&lt;p&gt;Installera Lilypond och försäkra dig om att kommandona &quot;convert-ly&quot; och &quot;lilypond&quot; är tillgängliga i sökvägen. Om du startar &lt;b&gt;Kör kommando&lt;/b&gt; (normalt &lt;b&gt;Alt+F2&lt;/b&gt;) och skriver in &quot;lilpond&quot; i rutan, ska du inte få felet &quot;kommandot hittades inte&quot;. Om du kan göra det utan att få ett fel, men ändå får detta felmeddelande, kontakta &lt;a style=&quot;color:gold&quot; href=&quot;mailto:rosegarden-user@lists.sourceforge.net&quot;&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt; för ytterligare hjälp.&lt;/p&gt;&lt;p&gt;Behandling avslutad på grund av allvarliga fel.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="178"/>
+        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="176"/>
         <source>&lt;b&gt;lilypond&lt;/b&gt; finished...</source>
         <translation>&lt;b&gt;lilpond&lt;/b&gt; klar...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="193"/>
+        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="191"/>
         <source>&lt;qt&gt;&lt;p&gt;Ran &lt;b&gt;lilypond&lt;/b&gt; successfully, but it terminated with errors.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Körde &lt;b&gt;lilypond&lt;/b&gt; med lyckat resultat, men det avslutades med fel.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="196"/>
+        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="194"/>
         <source>&lt;qt&gt;&lt;p&gt;You opted to export Rosegarden&apos;s beaming, and LilyPond could not process the file.  It is likely that you performed certain actions in the course of editing your file that resulted in hidden beaming properties being attached to events where they did not belong, and this probably caused LilyPond to fail.  The recommended solution is to either leave beaming to LilyPond (whose automatic beaming is far better than Rosegarden&apos;s) and un-check this option, or to un-beam everything and then re-beam it all manually inside Rosgarden.  Leaving the beaming up to LilyPond is probaby the best solution.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Du valde att exportera Rosegardens balkning, och Lilypond kunde inte behandla filen. Det är troligt att du utförde vissa åtgärder under redigeringsprocessen av filen som orsakade att dolda balkningsegenskaper anslöts till händelser där de inte hör hemma, och att detta troligen gjorde att Lilypond misslyckades. Den rekommenderade lösningen är att antingen lämna balkning till Lilypond (vars automatiska balkning är långt bättre än Rosegardens), eller radera all balkning och därefter åter lägga till balkning för hand inne i Rosegarden. Den bästa lösningen är troligen att lämna över balkningen till Lilypond.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="200"/>
+        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="198"/>
         <source>&lt;qt&gt;&lt;p&gt;You opted to export staff group brackets, and LilyPond could not process the file.  Unfortunately, this useful feature can be very fragile.  Please go back and ensure that all the brackets you&apos;ve selected make logical sense, paying particular attention to nesting.  Also, please check that if you are working with a subset of the total number of tracks, the brackets on that subset make sense together when taken out of the context of the whole.  If you have any doubts, please try turning off the export of staff group brackets to see whether LilyPond can then successfully render the result.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Du valde att exportera notsystemklamrar, och Lilypond kunde inte behandla filen. Tyvärr kan denna användbara funktion vara mycket ömtålig. Gå tillbaka och försäkra dig om att alla klamrar du har valt är logiskt riktiga, och beakta särskilt klamrar i flera nivåer. Om du arbetar med en delmängd av det totala antalet spår, kontrollera också att klamrarna i den delmängden tillsammans är riktiga när de frikopplas från helheten. Om du är tveksam, försök stänga av export av notsystemklamrar för att se om Lilypond då lyckas återge resultatet.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="203"/>
+        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="201"/>
         <source>&lt;qt&gt;&lt;p&gt;Processing terminated due to fatal errors.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Behandling avslutad på grund av allvarliga fel.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="259"/>
+        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="257"/>
         <source>Printing %1...</source>
         <translation>Skriver ut %1...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="268"/>
+        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="266"/>
         <source>Previewing %1...</source>
         <translation>Förhandsgranskar %1...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="275"/>
+        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="273"/>
         <source>&lt;b&gt;%1&lt;/b&gt; started...</source>
         <translation>&lt;b&gt;%1&lt;/b&gt; startat...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="278"/>
+        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="276"/>
         <source>file printer</source>
         <translation>utskrift av fil</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="278"/>
+        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="276"/>
         <source>PDF viewer</source>
         <translation>visningsprogram för PDF</translation>
     </message>
@@ -16586,7 +16598,7 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
         <translation type="obsolete">Tar bort markering...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1646"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1670"/>
         <source>Unknown note insert action %1</source>
         <translation>Okänd notinfogningsåtgärd %1</translation>
     </message>
@@ -16599,22 +16611,22 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
         <translation type="obsolete">Tar bort kvantisering...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="288"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="312"/>
         <source>&lt;untitled&gt;</source>
         <translation>&lt;namnlös&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="294"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="318"/>
         <source>%1%2 - Segment%3Track%4#%5 - %6</source>
         <translation>%1%2 - segment%3 spår %4 nummer %5 - %6</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="304"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="328"/>
         <source>%1%2 - All Segments - %3</source>
         <translation>%1%2 - alla segments - %3</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="311"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="335"/>
         <source>%1%2 - %n Segment(s) - %3</source>
         <translation>
             <numerusform>%1%2 - %n segment - %3</numerusform>
@@ -16634,67 +16646,67 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
         <translation type="obsolete">Händelsetyp som inte stöds</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="556"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="580"/>
         <source> Grid: </source>
         <translation> Rutnät: </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="572"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="596"/>
         <source>None</source>
         <translation>Inget</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="574"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="598"/>
         <source>Unit</source>
         <translation>Enhet</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="576"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="600"/>
         <source>Beat</source>
         <translation>Taktslag</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="578"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="602"/>
         <source>Bar</source>
         <translation>Takt</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="598"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="622"/>
         <source> Velocity: </source>
         <translation> Ljudstyrka: </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="616"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="640"/>
         <source> Quantize: </source>
         <translation> Kvantisera: </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="634"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="658"/>
         <source>Off</source>
         <translation>Av</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1427"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1451"/>
         <source>http://rosegardenmusic.com/wiki/doc:matrix-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:matrix-en</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1434"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1458"/>
         <source>http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</source>
         <translation>http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1441"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1465"/>
         <source>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</source>
         <translation>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1454"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1478"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="2023"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="2047"/>
         <source>Estimated key signature shown</source>
         <translation>Uppskattad tonartssignatur visas</translation>
     </message>
@@ -16707,17 +16719,17 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
         <translation type="obsolete">%1%</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1232"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1256"/>
         <source>Estimated time signature shown</source>
         <translation>Uppskattad taktart visas</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1315"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1339"/>
         <source>Transpose</source>
         <translation>Transponera</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1316"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1340"/>
         <source>By number of semitones: </source>
         <translation>Enligt antal halvtonsteg:</translation>
     </message>
@@ -16730,7 +16742,7 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
         <translation type="obsolete">Minskar ljudstyrkor...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="960"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="984"/>
         <source>Set Event Velocities</source>
         <translation>Ställ in händelseljudstyrkor</translation>
     </message>
@@ -16739,17 +16751,17 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
         <translation type="obsolete">Ställer in ljudstyrkor...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1004"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1028"/>
         <source>Trigger Segment</source>
         <translation>Utlösande segment</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1014"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1038"/>
         <source>Remove Triggers</source>
         <translation>Ta bort utlösare</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="264"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="288"/>
         <source>Matrix</source>
         <translation>Matris</translation>
     </message>
@@ -16766,7 +16778,7 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
         <translation type="obsolete">%1 - alla segment - %2</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1568"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1592"/>
         <source>Can&apos;t insert note: No grid duration selected</source>
         <translation>Kan inte infoga not: Ingen rutnätslängd vald</translation>
     </message>
@@ -16946,7 +16958,7 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
         <translation>Instrument</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/MidiMixerWindow.cpp" line="712"/>
+        <location filename="../../src/gui/studio/MidiMixerWindow.cpp" line="681"/>
         <source>http://rosegardenmusic.com/wiki/doc:midiMixerWindow-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:midiMixerWindow-en</translation>
     </message>
@@ -17917,7 +17929,7 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
 <context>
     <name>Rosegarden::NotationVLayout</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationVLayout.cpp" line="508"/>
+        <location filename="../../src/gui/editors/notation/NotationVLayout.cpp" line="502"/>
         <source>Spanned note at %1 has no HEIGHT_ON_STAFF property!
 This is a bug (the program would previously have crashed by now)</source>
         <translation>Överlappande not vid %1 har ingen HEIGHT_ON_STAFF-egenskap!
@@ -18031,24 +18043,24 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat)</transla
         <translation type="obsolete">%1 - alla segment - notskrift</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3172"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3197"/>
         <source>Triplet</source>
         <translation>Triol</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3173"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3198"/>
         <source>Chord</source>
         <translation>Ackord</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3174"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3199"/>
         <source>Grace</source>
         <translation>Prydnad</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3182"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3186"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3190"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3207"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3211"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3215"/>
         <source>%1 %2</source>
         <translation>%1 %2</translation>
     </message>
@@ -18162,7 +18174,7 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat)</transla
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1516"/>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2261"/>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2837"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3798"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3823"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
@@ -18199,7 +18211,7 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat)</transla
         <translation>Kunde inte klistra in på den här platsen.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3849"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3874"/>
         <source>Move Events to Staff Above</source>
         <translation>Flytta händelser till systemet ovanför</translation>
     </message>
@@ -18224,17 +18236,17 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat)</transla
         <translation>Ställer in ljudstyrkor...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3992"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4017"/>
         <source>Edit Text Event</source>
         <translation>Redigera texthändelse</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4039"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4064"/>
         <source>Normalizing rests...</source>
         <translation>Normaliserar pauser...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4052"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4077"/>
         <source>Collapsing notes...</source>
         <translation>Lägger ihop noter...</translation>
     </message>
@@ -18269,8 +18281,8 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat)</transla
         <translation type="obsolete">Tolkar markering...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4230"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4240"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4255"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4265"/>
         <source>Adding dot...</source>
         <translation>Lägger till punkt...</translation>
     </message>
@@ -18322,17 +18334,17 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
         <translation>Uppskattad taktart visas</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3066"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3091"/>
         <source>%1%2 - Segment Track #%3 - Notation</source>
         <translation>%1%2 - segment spår nummer %3 - notskrift</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3073"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3098"/>
         <source>%1%2 - All Segments - Notation</source>
         <translation>%1%2 - alla segment - notskrift</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3079"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3104"/>
         <source>%1%2 - %n Segment(s) - Notation</source>
         <translation>
             <numerusform>%1%2 - %n segment - notskrift</numerusform>
@@ -18340,47 +18352,47 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
         </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3329"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3354"/>
         <source>Transpose</source>
         <translation>Transponera</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3330"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3355"/>
         <source>By number of semitones: </source>
         <translation>Med antal halvtonsteg: </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3696"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3721"/>
         <source>Time: %1 (%2.%3s)</source>
         <translation>Tid: %1 (%2,%3 s)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3771"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3796"/>
         <source>http://rosegardenmusic.com/wiki/doc:notation-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:notation-en</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3778"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3803"/>
         <source>http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</source>
         <translation>http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3785"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3810"/>
         <source>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</source>
         <translation>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3881"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3906"/>
         <source>Move Events to Staff Below</source>
         <translation>Flytta händelser till systemet under</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4250"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4275"/>
         <source>Cycling slashes...</source>
         <translation>Växlar tvärbalkar...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3532"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3557"/>
         <source>Can&apos;t insert note: No note duration selected</source>
         <translation>Kan inte infoga not: Inget notvärde valt</translation>
     </message>
@@ -18388,38 +18400,38 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
 <context>
     <name>Rosegarden::NotationWidget</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="210"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="212"/>
         <source>Zoom</source>
         <translation>Zooma</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="226"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="228"/>
         <source>Horizontal Zoom</source>
         <translation>Horisontell zoom</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="238"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="240"/>
         <source>Vertical Zoom</source>
         <translation>Vertikal zoom</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="251"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="253"/>
         <source>Reset Zoom</source>
         <translation>Återställ zoom</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="290"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="292"/>
         <source>Close track headers</source>
         <translation>Stäng spårnamn</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1624"/>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1625"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1642"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1643"/>
         <source>&lt;qt&gt;Rotate wheel to change the active segment&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Rotera hjulet för att byta aktivt segment&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1626"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1644"/>
         <source>&lt;qt&gt;Segment: &quot;%1&quot;&lt;br&gt;Track: %2 &quot;%3&quot;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Segment: &quot;%1&quot;&lt;br&gt;Spår: %2 &quot;%3&quot;&lt;/qt&gt;</translation>
     </message>
@@ -18905,10 +18917,18 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
 <context>
     <name>Rosegarden::ProgressDialog</name>
     <message>
-        <location filename="../../src/gui/widgets/ProgressDialog.cpp" line="64"/>
-        <location filename="../../src/gui/widgets/ProgressDialog.cpp" line="136"/>
         <source>Processing...</source>
-        <translation>Behandlar...</translation>
+        <translation type="obsolete">Behandlar...</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/widgets/ProgressDialog.cpp" line="53"/>
+        <source>Rosegarden</source>
+        <translation type="unfinished">Rosegarden</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/widgets/ProgressDialog.cpp" line="60"/>
+        <source>&lt;qt&gt;&lt;h3&gt;Processing...&lt;/h3&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -18929,65 +18949,65 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
         <translation>Rosegarden - %1 projektpaket...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="99"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="97"/>
         <source>Cancel</source>
         <translation>Avbryt</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="132"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="130"/>
         <source>&lt;qt&gt;&lt;p&gt;Fatal error.&lt;/p&gt;%1&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Allvarligt fel.&lt;/p&gt;%1&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="260"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="258"/>
         <source>&lt;qt&gt;&lt;p&gt;Unable to read %1.&lt;/p&gt;%2&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Kunde inte läsa %1.&lt;/p&gt;%2&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="430"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="428"/>
         <source>&lt;qt&gt;&lt;p&gt;Could not write&lt;br&gt;%1.&lt;/p&gt;%2&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Kunde inte skriva&lt;br&gt;%1.&lt;/p&gt;%2&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="436"/>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="815"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="434"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="813"/>
         <source>&lt;qt&gt;Could not remove&lt;br&gt;%1&lt;br&gt;&lt;br&gt;%2&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Kunde inte radera&lt;br&gt;%1&lt;br&gt;&lt;br&gt;%2&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="441"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="439"/>
         <source>&lt;qt&gt;Could not copy&lt;br&gt;%1&lt;br&gt;  to&lt;br&gt;%2&lt;br&gt;&lt;br&gt;%3&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Kunde inte kopiera&lt;br&gt;%1&lt;br&gt;  till&lt;br&gt;%2&lt;br&gt;&lt;br&gt;%3&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="445"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="443"/>
         <source>&lt;qt&gt;&lt;p&gt;Could not remove&lt;br&gt;%1.&lt;/p&gt;%2&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Kunde inte radera&lt;br&gt;%1&lt;/p&gt;%2&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="467"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="465"/>
         <source>Checking for flac...</source>
         <translation>Söker efter flac...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="531"/>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="733"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="529"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="731"/>
         <source>Packing project...</source>
         <translation>Packar ihop projekt...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="566"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="564"/>
         <source>&lt;qt&gt;&lt;p&gt;Could not create temporary working directory.&lt;/p&gt;%1&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Kunde inte skapa tillfällig arbetskatalog.&lt;/p&gt;%1&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="749"/>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="948"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="747"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="946"/>
         <source>&lt;qt&gt;&lt;p&gt;Unable to write to temporary backend processing script %1.&lt;/p&gt;%2&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Kunde inte skriva till tillfälligt bakgrundsbehandlingsskript %1.&lt;/p&gt;%2&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="800"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="798"/>
         <source>&lt;qt&gt;&lt;p&gt;Encoding and compressing files failed with exit status %1. Checking %2 for the line that ends with &quot;exit %1&quot; may be useful for diagnostic purposes.&lt;/p&gt;%3&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Kodning och komprimering av filer misslyckades med avslutningsstatus %1. Att titta i %2 efter raden som slutar med &quot;exit %1&quot; kan vara nyttigt i felsökningssyfte.&lt;/p&gt;%3&lt;/qt&gt;</translation>
     </message>
@@ -18996,24 +19016,24 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
         <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Kunde inte läsa från tillfällig fillista.&lt;/p&gt;%1&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="1044"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="1042"/>
         <source>&lt;qt&gt;&lt;p&gt;Extracting and decoding files failed with exit status %1. Checking %2 for the line that ends with &quot;exit %1&quot; may be useful for diagnostic purposes.&lt;/p&gt;%3&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Uppackning och avkodning av filer misslyckades med avslutningsstatus %1. Att titta i %2 efter raden som slutar med &quot;exit %1&quot; kan vara nyttigt i felsökningssyfte.&lt;/p&gt;%3&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="133"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="131"/>
         <source>Rosegarden - Fatal Processing Error</source>
         <translation>Rosegarden - Allvarligt behandlingsfel</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="605"/>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="650"/>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="717"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="603"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="648"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="715"/>
         <source>&lt;qt&gt;Could not copy&lt;br&gt;%1&lt;br&gt;  to&lt;br&gt;%2&lt;br&gt;&lt;br&gt;Processing aborted.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Kunde inte kopiera&lt;br&gt;%1&lt;br&gt;  till&lt;br&gt;%2&lt;br&gt;&lt;br&gt;Behandling avbruten.&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="485"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="483"/>
         <source>Checking for wavpack...</source>
         <translation>Söker efter wavpack...</translation>
     </message>
@@ -19023,84 +19043,84 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
         <translation>&lt;p&gt;Behandling avbruten&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="469"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="467"/>
         <source>&lt;qt&gt;&lt;p&gt;The &lt;b&gt;flac&lt;/b&gt; command was not found.&lt;/p&gt;&lt;p&gt;FLAC is a lossless audio compression format used to reduce the size of Rosegarden project packages with no loss of audio quality.  Please install FLAC and try again.  This utility is typically available to most distros as a package called &quot;flac&quot;.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Kommandot &lt;b&gt;flac&lt;/b&gt; hittades inte.&lt;/p&gt;&lt;p&gt;FLAC är ett förlustfritt ljudkomprimeringsformat använt för att reducera storleken hos Rosegardens projektpaket utan någon förlust i ljudkvalitet. Installera FLAC och försök igen. Verktyget är normalt tillgängligt i de flesta distributioner som ett paket vid namn &quot;flac&quot;.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="487"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="485"/>
         <source>&lt;qt&gt;&lt;p&gt;The &lt;b&gt;wavpack&lt;/b&gt; command was not found.&lt;/p&gt;&lt;p&gt;WavPack is an audio compression format used to reduce the size of Rosegarden project packages with no loss of audio quality.  Please install WavPack and try again.  This utility is typically available to most distros as part of a package called &quot;wavpack&quot;.&lt;/p&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Kommandot &lt;b&gt;wavpack&lt;/b&gt; hittades inte.&lt;/p&gt;&lt;p&gt;Wavpack är ett ljudkomprimeringsformat använt för att reducera storleken hos Rosegardens projektpaket utan någon förlust i ljudkvalitet. Installera Wavpack och försök igen. Verktyget är normalt tillgängligt i de flesta distributioner som ett paket vid namn &quot;wavpack&quot;.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="496"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="494"/>
         <source>Checking for wvunpack...</source>
         <translation>Söker efter wvunpack...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="498"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="496"/>
         <source>&lt;qt&gt;&lt;p&gt;The &lt;b&gt;wvunpack&lt;/b&gt; command was not found.&lt;/p&gt;&lt;p&gt;WavPack is an audio compression format used to reduce the size of Rosegarden project packages with no loss of audio quality.  Please install WavPack and try again.  This utility is typically available to most distros as part of a package called &quot;wavpack&quot;.&lt;/p&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Kommandot &lt;b&gt;wvunpack&lt;/b&gt; hittades inte.&lt;/p&gt;&lt;p&gt;Wavpack är ett ljudkomprimeringsformat använt för att reducera storleken hos Rosegardens projektpaket utan någon förlust i ljudkvalitet. Installera Wavpack och försök igen. Verktyget är normalt tillgängligt i de flesta distributioner som ett paket vid namn &quot;wavpack&quot;.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="570"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="568"/>
         <source>Copying audio files...</source>
         <translation>Kopierar ljudfiler...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="655"/>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="685"/>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="919"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="653"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="683"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="917"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="656"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="654"/>
         <source>&lt;qt&gt;&lt;p&gt;Rosegarden can add any number of extra files you may desire to a project package.  For example, you may wish to include an explanatory text file, a soundfont, a bank definition for ZynAddSubFX, or perhaps some cover art.&lt;/p&gt;&lt;p&gt;Would you like to include any additional files?&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Rosegarden kan lägga till hur många extra filer som du önskar i ett projektpaket. Exempelvis, vill du kanske inkludera en förklarande textfil, ljudsamplingar, en bankdefinition för ZynAddSubFX, eller några omslagsbilder.&lt;/p&gt;&lt;p&gt;Vill du inkludera några ytterligare filer?&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="677"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="675"/>
         <source>All files</source>
         <translation>Alla filer</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="686"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="684"/>
         <source>&lt;qt&gt;&lt;p&gt;Would you like to include any additional files?&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Vill du inkludera några ytterligare filer?&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="690"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="688"/>
         <source>Copying plugin data and extra files...</source>
         <translation>Kopierar insticksmoduldata och extra filer...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="871"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="869"/>
         <source>&lt;qt&gt;&lt;p&gt;Unable to obtain list of files using tar.&lt;/p&gt;&lt;p&gt;Process exited with status code %1&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Kunde inte hämta fillista med användning av tar.&lt;/p&gt;&lt;p&gt;Processen avslutades med statuskoden %1&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="834"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="832"/>
         <source>Unpacking project...</source>
         <translation>Packar upp projekt...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="878"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="876"/>
         <source>&lt;qt&gt;&lt;p&gt;Unable to create file list.&lt;/p&gt;%1&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Kunde inte skapa fillista.&lt;/p&gt;%1&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="920"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="918"/>
         <source>&lt;qt&gt;&lt;p&gt;It appears that you have already unpacked this project package.&lt;/p&gt;&lt;p&gt;Would you like to load %1 now?&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Det verkar som om du redan har packat upp projektpaketet.&lt;/p&gt;&lt;p&gt;Vill du läsa in %1 nu?&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="1019"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="1017"/>
         <source>Decoding audio files...</source>
         <translation>Avkodar ljudfiler...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="1021"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="1019"/>
         <source>&lt;qt&gt;Could not start backend processing script %1.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Kunde inte starta bakgrundsbehandlingsskript %1.&lt;/qt&gt;</translation>
     </message>
@@ -19917,124 +19937,124 @@ Se Redigera -&gt; Inställningar -&gt; Ljud.</translation>
         <translation>  Zooma:  </translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="981"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1154"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1634"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2099"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="999"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1172"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1652"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2117"/>
         <source>%1 - %2</source>
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1341"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1359"/>
         <source>File &quot;%1&quot; does not exist</source>
         <translation>Filen &quot;%1&quot; finns inte</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1347"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1365"/>
         <source>File &quot;%1&quot; is actually a directory</source>
         <translation>Filen &quot;%1&quot; är i själva verket en katalog</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1356"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1374"/>
         <source>You do not have read permission for &quot;%1&quot;</source>
         <translation>Du har inte läsrättigheter till &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1433"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1451"/>
         <source>An auto-save file for this document has been found
 Do you want to open it instead ?</source>
         <translation>En automatiskt sparad fil för det här dokumentet har hittats.
 Vill du öppna den istället?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1580"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5966"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1598"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5973"/>
         <source>Untitled</source>
         <translation>Namnlös</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1593"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1947"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2088"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1611"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1965"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2106"/>
         <source>Could not save document at %1
 Error was : %2</source>
         <translation>Kunde inte spara dokument i %1
 Felet är: %2</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1595"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1950"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2091"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1613"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1968"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2109"/>
         <source>Could not save document at %1</source>
         <translation>Kunde inte spara dokument i %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1682"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1700"/>
         <source>Opening a new application window...</source>
         <translation>Öppnar ett nytt programfönster...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1693"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1711"/>
         <source>Creating new document...</source>
         <translation>Skapar nytt dokument...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1758"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1776"/>
         <source>Malformed URL
 %1</source>
         <translation>Felaktig webbadress
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1807"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1913"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1825"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1931"/>
         <source>Opening file...</source>
         <translation>Öppnar fil...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1834"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7615"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1852"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7622"/>
         <source>All supported files</source>
         <translation>Alla filer som stöds</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1835"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1869"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2059"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1853"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1887"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2077"/>
         <source>Rosegarden files</source>
         <translation>Rosegardenfiler</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1836"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3517"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3553"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1854"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3535"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3571"/>
         <source>MIDI files</source>
         <translation>MIDI-filer</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1837"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1870"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2065"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3466"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3518"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3554"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3809"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3845"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3934"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3969"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4585"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4624"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4666"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4703"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4739"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4849"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7616"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1855"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1888"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2083"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3484"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3536"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3572"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3827"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3863"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3952"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3987"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4603"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4642"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4684"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4721"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4757"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4867"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7623"/>
         <source>All files</source>
         <translation>Alla filer</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1833"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1868"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1851"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1886"/>
         <source>Open File</source>
         <translation>Öppna fil</translation>
     </message>
@@ -20044,46 +20064,46 @@ Felet är: %2</translation>
         <translation>Ctrl+R</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1723"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1741"/>
         <source>%1%2 - %3</source>
         <translation>%1%2 - %3</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1778"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1888"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3483"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3535"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3571"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3826"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3862"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3951"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3986"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7629"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1796"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1906"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3501"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3553"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3589"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3844"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3880"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3969"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4004"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7636"/>
         <source>Cannot open file %1</source>
         <translation>Kan inte öppna filen %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1930"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1948"/>
         <source>Saving file...</source>
         <translation>Sparar fil...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1990"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2008"/>
         <source>Save File</source>
         <translation>Spara fil</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2020"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2038"/>
         <source>&lt;qt&gt;Sorry.&lt;br&gt;&quot;%1&quot; is not a valid filename.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Tyvärr är inte&lt;br&gt;&quot;%1&quot; ett giltigt filnamn.&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2027"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2045"/>
         <source>You have specified a folder/directory.</source>
         <translation>Du har angivit en katalog.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2033"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2051"/>
         <source>The specified file exists.  Overwrite?</source>
         <translation>Den angivna filen finns. Ska den skrivas över?</translation>
     </message>
@@ -20093,22 +20113,22 @@ Felet är: %2</translation>
         <translation type="obsolete">Spara filen %1 med ett nytt filnamn...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2059"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2077"/>
         <source>Rosegarden templates</source>
         <translation>Rosegarden-mallar</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2061"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2079"/>
         <source>Save as template...</source>
         <translation>Spara som mall...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2061"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2079"/>
         <source>Save as...</source>
         <translation>Spara som...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2115"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2133"/>
         <source>Closing file...</source>
         <translation>Stänger fil...</translation>
     </message>
@@ -20121,68 +20141,68 @@ Felet är: %2</translation>
         <translation type="obsolete">Förhandsgranskar...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2128"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2146"/>
         <source>Exiting...</source>
         <translation>Avslutar...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2140"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2158"/>
         <source>Cutting selection...</source>
         <translation>Klipper ut markering...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2152"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2170"/>
         <source>Copying selection to clipboard...</source>
         <translation>Kopierar markering till klippbord...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2163"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2181"/>
         <source>Clipboard is empty</source>
         <translation>Klippbordet är tomt</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2166"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2184"/>
         <source>Inserting clipboard contents...</source>
         <translation>Infogar klippbordets innehåll...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2240"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2258"/>
         <source>Duration of empty range to insert</source>
         <translation>Längden för det tomma omfånget att infoga</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2321"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2339"/>
         <source>This function needs no more than one segment to be selected.</source>
         <translation>Den här funktionen kräver att bara ett segment är markerat.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2345"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2363"/>
         <source>Can&apos;t join Audio segments</source>
         <translation>Kan inte sammanfoga ljudsegment</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2399"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2417"/>
         <source>rescaling an audio file</source>
         <translation>storleksändrar en ljudfil</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2416"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2434"/>
         <source>Rescaling audio file...</source>
         <translation>Storleksändrar en ljudfil...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2429"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2447"/>
         <source>Generating audio preview...</source>
         <translation>Skapar förhandsgranskning av ljud...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2459"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5000"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2477"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5018"/>
         <source>Warning</source>
         <translation>Varning</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2460"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2478"/>
         <source>The audio file path does not exist or is not writable.
 You must set the audio file path to a valid directory in Document Properties before %1.
 Would you like to set it now?</source>
@@ -20191,12 +20211,12 @@ Du måste ange ljudfilens sökväg till en giltig katalog i Dokumentegenskaper f
 Vill du ange den nu?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2530"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2548"/>
         <source>Jog Selection</source>
         <translation>Knuffa markering</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2672"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2690"/>
         <source>Split %n Segment(s) at Time</source>
         <translation>
             <numerusform>Dela %n segment vid tiden</numerusform>
@@ -20204,84 +20224,84 @@ Vill du ange den nu?</translation>
         </translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2707"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2725"/>
         <source>Segment Start Time</source>
         <translation>Starttid för segment</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2717"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2735"/>
         <source>Set Segment Start Times</source>
         <translation>Ställ in starttider för segment</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2718"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2736"/>
         <source>Set Segment Start Time</source>
         <translation>Ställ in starttid för segment</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2750"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2768"/>
         <source>Segment Duration</source>
         <translation>Segmentlängd</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2762"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2780"/>
         <source>Set Segment Durations</source>
         <translation>Ställ in segmentlängder</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2763"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2781"/>
         <source>Set Segment Duration</source>
         <translation>Ställ in segmentlängd</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2873"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5627"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2891"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5634"/>
         <source>Set Global Tempo</source>
         <translation>Ställ in övergripande tempo</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2940"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2958"/>
         <source>Toggle the toolbar...</source>
         <translation>Växla verktygslist...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2951"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2969"/>
         <source>Toggle the tools toolbar...</source>
         <translation>Växla redigeringsverktygslist...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2962"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2980"/>
         <source>Toggle the tracks toolbar...</source>
         <translation>Växla spårverktygslist...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2973"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2991"/>
         <source>Toggle the editor toolbar...</source>
         <translation>Växla editorverktygslist...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2984"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3002"/>
         <source>Toggle the transport toolbar...</source>
         <translation>Växla spelverktygslist...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2995"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3013"/>
         <source>Toggle the zoom toolbar...</source>
         <translation>Växla zoomverktygslist...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3006"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3025"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3024"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3043"/>
         <source>Toggle the Transport</source>
         <translation>Växla spelkontrollfönster</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3129"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3147"/>
         <source>Toggle the statusbar...</source>
         <translation>Växla statuslisten...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3197"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3215"/>
         <source>The join tool isn&apos;t implemented yet.  Instead please highlight the segments you want to join and then use the menu option:
 
         Segments-&gt;Collapse Segments.
@@ -20292,112 +20312,112 @@ Segment -&gt; Sammanfoga segment.
 </translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3200"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3218"/>
         <source>Join tool not yet implemented</source>
         <translation>Sammanfogningsverktyg ännu inte implementerat</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3445"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3463"/>
         <source>Revert modified document to previous saved version?</source>
         <translation>Återställ ändrat dokument till tidigare sparad version?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3464"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3482"/>
         <source>Import Rosegarden Project File</source>
         <translation>Importera Rosegarden-projektfil</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3465"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4584"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3483"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4602"/>
         <source>Rosegarden Project files</source>
         <translation>Rosegarden projektfiler</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6271"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6278"/>
         <source>Input</source>
         <translation>Indata</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7385"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7392"/>
         <source>http://rosegardenmusic.com/wiki/doc:manual-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:manual-en</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5968"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7412"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5975"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7419"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7874"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7881"/>
         <source>&lt;h3&gt;Newer version available&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;Nyare version tillgänglig&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7875"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7882"/>
         <source>&lt;p&gt;You are using version %1.  Version %2 is now available.&lt;/p&gt;&lt;p&gt;Please consult the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;Rosegarden website&lt;/a&gt; for more information.&lt;/p&gt;</source>
         <translation>&lt;p&gt;Du använder version %1.  Version %2 är nu tillgänglig.&lt;/p&gt;&lt;p&gt;Besök gärna &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;Rosegardens hemsida&lt;/a&gt; för mer information.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3516"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3534"/>
         <source>Open MIDI File</source>
         <translation>Öppna MIDI-fil</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3552"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3570"/>
         <source>Merge MIDI File</source>
         <translation>Sammanfoga MIDI-fil</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3679"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3697"/>
         <source>Importing MIDI file...</source>
         <translation>Importerar MIDI-fil...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3715"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3733"/>
         <source>Calculating notation...</source>
         <translation>Beräknar notskrift...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3763"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3781"/>
         <source>Calculate Notation</source>
         <translation>Beräkna notskrift</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3807"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3843"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3825"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3861"/>
         <source>Open X11 Rosegarden File</source>
         <translation>Öppna X11-Rosegardenfil</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3808"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3844"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3826"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3862"/>
         <source>X11 Rosegarden files</source>
         <translation>X11-Rosegardenfiler</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3877"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3895"/>
         <source>Importing X11 Rosegarden file...</source>
         <translation>Importera X11 Rosegarden-fil...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3905"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3923"/>
         <source>Can&apos;t load X11 Rosegarden file.  It appears to be corrupted.</source>
         <translation>Kan inte läsa in X11 Rosegarden-fil. Den verkar vara skadad.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3933"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3968"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3951"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3986"/>
         <source>Open Hydrogen File</source>
         <translation>Öppna Hydrogen-fil</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4001"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4019"/>
         <source>Importing Hydrogen file...</source>
         <translation>Importerar Hydrogen-fil...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4027"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4045"/>
         <source>Can&apos;t load Hydrogen file.  It appears to be corrupted.</source>
         <translation>Kan inte läsa in Hydrogen-fil. Den verkar vara skadad.</translation>
     </message>
@@ -20458,141 +20478,141 @@ Segment -&gt; Sammanfoga segment.
         <translation type="obsolete">Hjälpprogram ej funna</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4793"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4811"/>
         <source>&lt;qt&gt;&lt;p&gt;Failed to open a temporary file for LilyPond export.&lt;/p&gt;&lt;p&gt;This probably means you have run out of disk space on &lt;pre&gt;%1&lt;/pre&gt;&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Misslyckades öppna en tillfällig fil för export till LilyPond.&lt;/p&gt;&lt;p&gt;Detta betyder troligen att diskutrymmet på &lt;pre&gt;%1&lt;/pre&gt; har tagit slut&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4565"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4583"/>
         <source>The Rosegarden sequencer process has exited unexpectedly.  Sound and recording will no longer be available for this session.
 Please exit and restart Rosegarden to restore sound capability.</source>
         <translation>Rosegardens spelarprocess har oväntat avslutats. Ljud och inspelning är inte längre tillgängliga för den här sessionen.
 Avsluta och starta om Rosegarden för att återställa ljudfunktionen.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2055"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2073"/>
         <source>Saving file%1with a new filename...</source>
         <comment>&apos;file%1with&apos; is correct. %1 will either become &apos; &apos; or &apos; as a template &apos; at runtime</comment>
         <translation>Spara filen%1med ett nytt filnamn...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2057"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2075"/>
         <source> as a template </source>
         <translation>som en mall</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4569"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4587"/>
         <source>The Rosegarden sequencer could not be started, so sound and recording will be unavailable for this session.
 For assistance with correct audio and MIDI configuration, go to http://rosegardenmusic.com.</source>
         <translation>Rosegardens spelare kunde inte startas, alltså är ljud och inspelning inte tillgängliga för den här sessionen.
 För hjälp med riktig inställning av ljud och MIDI, besök http://www.rosegardenmusic.com.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4581"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4599"/>
         <source>Exporting Rosegarden Project file...</source>
         <translation>Exporterar Rosegarden-projektfil...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4586"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4625"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4667"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4704"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4740"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4850"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4604"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4643"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4685"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4722"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4758"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4868"/>
         <source>Export as...</source>
         <translation>Exportera som...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4605"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4623"/>
         <source>Saving Rosegarden file to package failed: %1</source>
         <translation>Misslyckades spara Rosegarden-fil till paket: %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4620"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4636"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4638"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4654"/>
         <source>Exporting MIDI file...</source>
         <translation>Exporterar MIDI-fil...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4623"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4641"/>
         <source>Standard MIDI files</source>
         <translation>Vanliga MIDI-filer</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4655"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4692"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4728"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4835"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4876"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4673"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4710"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4746"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4853"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4894"/>
         <source>Export failed.  The file could not be opened for writing.</source>
         <translation>Export misslyckades. Filen kunde inte öppnas för skrivning.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4662"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4678"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4680"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4696"/>
         <source>Exporting Csound score file...</source>
         <translation>Exporterar Csound-partiturfil...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4665"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4683"/>
         <source>Csound files</source>
         <translation>Csound-filer</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4699"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4714"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4717"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4732"/>
         <source>Exporting Mup file...</source>
         <translation>Exporterar Mup-fil...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4702"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4720"/>
         <source>Mup files</source>
         <translation>Mup-filer</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4735"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4820"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4753"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4838"/>
         <source>Exporting LilyPond file...</source>
         <translation>Exporterar Lilypond-fil...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4738"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4756"/>
         <source>LilyPond files</source>
         <translation>Lilypond-filer</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4752"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4770"/>
         <source>Printing with LilyPond...</source>
         <translation>Utskrift med Lilypond...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4768"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4786"/>
         <source>Previewing LilyPond file...</source>
         <translation>Förhandsgranskar Lilypond-fil...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4811"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4829"/>
         <source>LilyPond Preview Options</source>
         <translation>Förhandsgranskningsalternativ för Lilypond</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4812"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4830"/>
         <source>LilyPond preview options</source>
         <translation>Förhandsgranskningsalternativ för Lilypond</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4845"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4861"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4863"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4879"/>
         <source>Exporting MusicXML file...</source>
         <translation>Exporterar MusicXML-fil...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4848"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4866"/>
         <source>XML files</source>
         <translation>XML-filer</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5001"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5019"/>
         <source>The audio file path does not exist or is not writable.
 Please set the audio file path to a valid directory in Document Properties before recording audio.
 Would you like to set it now?</source>
@@ -20601,12 +20621,12 @@ Ställ in sökvägen till ljudfiler till en giltig katalog i dokumentegenskaper 
 Vill du ställa in den nu?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5051"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5069"/>
         <source>Error</source>
         <translation>Fel</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5052"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5070"/>
         <source>The audio file path does not exist or is not writable.
 Please set the audio file path to a valid directory in Document Properties before you start to record audio.
 Would you like to set it now?</source>
@@ -20615,129 +20635,129 @@ Ställ in sökvägen till ljudfiler till en giltig katalog i dokumentegenskaper 
 Vill du ställa in den nu?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5531"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5538"/>
         <source>Move playback pointer to time</source>
         <translation>Flytta uppspelningsvisaren till tid</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5545"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5552"/>
         <source>%1%</source>
         <translation>%1 %</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5613"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5620"/>
         <source>Replace Tempo Change at %1</source>
         <translation>Ersätt tempoändring vid %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5643"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5650"/>
         <source>Set Global and Default Tempo</source>
         <translation>Ställ in övergripande tempo och standardtempo</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5666"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5673"/>
         <source>Move Tempo Change</source>
         <translation>Flytta tempobyte</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5701"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5708"/>
         <source>new marker</source>
         <translation>ny markering</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5702"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5709"/>
         <source>no description</source>
         <translation>ingen beskrivning</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5972"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5979"/>
         <source>&lt;qt&gt;&lt;p&gt;You must choose a filename for this composition before recording audio.&lt;/p&gt;&lt;p&gt;Audio files will be saved to &lt;b&gt;%1&lt;/b&gt; as &lt;b&gt;rg-[&lt;i&gt;filename&lt;/i&gt;]-[&lt;i&gt;instrument&lt;/i&gt;]-&lt;i&gt;date&lt;/i&gt;_&lt;i&gt;time&lt;/i&gt;-&lt;i&gt;n&lt;/i&gt;.wav&lt;/b&gt;.  You may wish to rename audio instruments before recording as well.  For more information, please see the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/doc:audio-filenames-en&quot;&gt;Rosegarden Wiki&lt;/a&gt;.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Du måste välja ett filnamn för kompositionen innan du spelar in ljud.&lt;/p&gt;&lt;p&gt;Ljudfiler kommer att sparas i &lt;b&gt;%1&lt;/b&gt; som &lt;b&gt;rg-[&lt;i&gt;filnamn&lt;/i&gt;]-[&lt;i&gt;instrument&lt;/i&gt;]-&lt;i&gt;datum&lt;/i&gt;_&lt;i&gt;tid&lt;/i&gt;-&lt;i&gt;n&lt;/i&gt;.wav&lt;/b&gt;.  Du bör dessutom kanske byta namn på ljudinstrument innan du spelar in. För mer information, se &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/doc:audio-filenames-en&quot;&gt;Rosegardens webbjournal&lt;/a&gt;.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6186"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6193"/>
         <source>Sequencer failed to add audio file %1</source>
         <translation>Spelaren misslyckades med att lägga till ljudfilen %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6199"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6206"/>
         <source>Sequencer failed to remove audio file id %1</source>
         <translation>Spelaren misslyckades med att ta bort ljudfilen med id %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6254"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6261"/>
         <source>Modify Segment label</source>
         <translation>Ändra segmentnamn</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6256"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6263"/>
         <source>Modify Segments label</source>
         <translation>Ändra segmentnamn</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6258"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6265"/>
         <source>Relabelling selection...</source>
         <translation>Ändrar namn på markering...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6271"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6278"/>
         <source>Enter new label</source>
         <translation>Skriv nytt namn</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7348"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7355"/>
         <source>Play List</source>
         <translation>Spellista</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7392"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7399"/>
         <source>http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</source>
         <translation>http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7399"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7406"/>
         <source>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</source>
         <translation>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7497"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7504"/>
         <source>Queueing MIDI panic events for tranmission...</source>
         <translation>Köar MIDI-panikhändelser för att skicka...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7556"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7563"/>
         <source>Are you sure you want to save this as your default studio?</source>
         <translation>Är du säker på att du vill spara den här som standardstudio?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7562"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7569"/>
         <source>Saving current document as default studio...</source>
         <translation>Sparar nuvarande dokument som standardstudio...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7574"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7581"/>
         <source>Could not auto-save document at %1
 Error was : %2</source>
         <translation>Kunde inte spara dokument automatiskt i %1
 Felet är: %2</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7577"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7584"/>
         <source>Could not auto-save document at %1</source>
         <translation>Kunde inte spara dokument automatiskt i %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7587"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7594"/>
         <source>Are you sure you want to import your default studio and lose the current one?</source>
         <translation>Är du säker på att du vill importera din standardstudio och låta den nuvarande gå förlorad?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7614"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7621"/>
         <source>Import Studio from File</source>
         <translation>Importera studio från fil</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7663"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7670"/>
         <source>Import Studio</source>
         <translation>Importera studio</translation>
     </message>
@@ -21857,175 +21877,175 @@ Att avsluta andra program som körs kan förbättra Rosegardens prestanda.</tran
 <context>
     <name>Rosegarden::StaffHeader</name>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="132"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="133"/>
         <source>Track %1 : &quot;%2&quot;</source>
         <translation>Spår %1 : &quot;%2&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="138"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="139"/>
         <source>&lt;br&gt;Notate for: %1</source>
         <translation>&lt;br&gt;Nottecken för: %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="140"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="141"/>
         <source>normal</source>
         <translation>normal</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="143"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="144"/>
         <source>small</source>
         <translation>liten</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="146"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="147"/>
         <source>tiny</source>
         <translation>pytteliten</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="175"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="176"/>
         <source>&lt;br&gt;Size: %1,  Bracket: %2 </source>
         <translation>&lt;br&gt;Storlek: %1,  Klammer: %2 </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="202"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="204"/>
         <source>&lt;br&gt;bars [%1-%2] in %3 (tr=%4) : &quot;%5&quot;</source>
         <translation>&lt;br&gt;takter [%1-%2] i %3 (tr=%4) : &quot;%5&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="209"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="211"/>
         <source>&lt;br&gt;bars [%1-%2] (tr=%3) : &quot;%4&quot;</source>
         <translation>&lt;br&gt;takter [%1-%2] (tr=%3) : &quot;%4&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="250"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="259"/>
         <source>&lt;qt&gt;&lt;p&gt;Notation is not consistent&lt;/p&gt;&lt;p&gt;Click to get more information&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Avvikande notskrift&lt;/p&gt;&lt;p&gt;Klicka för att få more information&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="411"/>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="474"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="433"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="496"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="527"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="549"/>
         <source>C</source>
         <comment>note name</comment>
         <translation>C</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="528"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="550"/>
         <source>C#</source>
         <comment>note name</comment>
         <translation>Ciss</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="529"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="551"/>
         <source>D</source>
         <comment>note name</comment>
         <translation>D</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="530"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="552"/>
         <source>Eb</source>
         <comment>note name</comment>
         <translation>Ess</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="531"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="553"/>
         <source>E</source>
         <comment>note name</comment>
         <translation>E</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="532"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="554"/>
         <source>F</source>
         <comment>note name</comment>
         <translation>F</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="533"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="555"/>
         <source>F#</source>
         <comment>note name</comment>
         <translation>Fiss</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="534"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="556"/>
         <source>G</source>
         <comment>note name</comment>
         <translation>G</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="535"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="557"/>
         <source>G#</source>
         <comment>note name</comment>
         <translation>Giss</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="536"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="558"/>
         <source>A</source>
         <comment>note name</comment>
         <translation>A</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="537"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="559"/>
         <source>Bb</source>
         <comment>note name</comment>
         <translation>B</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="538"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="560"/>
         <source>B</source>
         <comment>note name</comment>
         <translation>H</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="882"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="908"/>
         <source>&lt;h2&gt;Notation Inconsistencies&lt;/h2&gt;</source>
         <translation>&lt;h2&gt;Avvikelser i notskrift&lt;/h2&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="884"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="910"/>
         <source>&lt;h3&gt;Filename: %1 &lt;/h3&gt;</source>
         <translation>&lt;h3&gt;Filname: %1 &lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="887"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="913"/>
         <source>&lt;h3&gt;Track %1: &quot;%2&quot;&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;Spår %1: &quot;%2&quot;&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="892"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="918"/>
         <source>Overlapping segments with inconsistent clefs:</source>
         <translation>Överlappande segment med avvikande klaver:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="894"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="920"/>
         <source>Segment &quot;%1&quot;: %2 clef</source>
         <translation>Segment &quot;%1&quot;: klav %2</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="899"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="925"/>
         <source>Overlapping segments with inconsistent keys:</source>
         <translation>Överlappande segment med avvikande tonarter:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="901"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="927"/>
         <source>Segment &quot;%1&quot;: %2 key</source>
         <translation>Segment &quot;%1&quot;: tonart %2</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="906"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="932"/>
         <source>Overlapping segments with inconsistent transpositions:</source>
         <translation>Överlappande segment med avvikande transponeringar:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="908"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="934"/>
         <source>Segment &quot;%1&quot;: %2</source>
         <translation>Segment &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="914"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="940"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
@@ -22078,12 +22098,12 @@ Att avsluta andra program som körs kan förbättra Rosegardens prestanda.</tran
         <translation type="obsolete">H</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="649"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="673"/>
         <source>%1: %2</source>
         <translation>%1: %2</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="652"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="676"/>
         <source> in %1</source>
         <translation>i %1</translation>
     </message>
@@ -23936,24 +23956,39 @@ Vill du ställa in den nu?</translation>
 <context>
     <name>Rosegarden::WarningWidget</name>
     <message>
-        <location filename="../../src/gui/widgets/WarningWidget.cpp" line="64"/>
+        <location filename="../../src/gui/widgets/WarningWidget.cpp" line="65"/>
         <source>&lt;qt&gt;&lt;p&gt;Performance problems detected!&lt;/p&gt;&lt;p&gt;Click to display details&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Prestandaproblems detekterade!&lt;/p&gt;&lt;p&gt;Klicka för att visa detaljinformation&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/widgets/WarningWidget.cpp" line="87"/>
+        <location filename="../../src/gui/widgets/WarningWidget.cpp" line="99"/>
         <source>MIDI OK</source>
         <translation>MIDI ok</translation>
     </message>
     <message>
-        <location filename="../../src/gui/widgets/WarningWidget.cpp" line="99"/>
+        <location filename="../../src/gui/widgets/WarningWidget.cpp" line="111"/>
         <source>audio OK</source>
         <translation>ljud ok</translation>
     </message>
     <message>
-        <location filename="../../src/gui/widgets/WarningWidget.cpp" line="111"/>
+        <location filename="../../src/gui/widgets/WarningWidget.cpp" line="123"/>
         <source>timer OK</source>
         <translation>tid ok</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/widgets/WarningWidget.cpp" line="132"/>
+        <source>&lt;qt&gt;Safe graphics mode&lt;br&gt;Click for more information&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/widgets/WarningWidget.cpp" line="164"/>
+        <source>Rosegarden</source>
+        <translation type="unfinished">Rosegarden</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/widgets/WarningWidget.cpp" line="165"/>
+        <source>&lt;qt&gt;&lt;p&gt;Rosegarden is using safe graphics mode.  This provides the greatest stability, but graphics performance is very slow.&lt;/p&gt;&lt;p&gt;You may wish to visit &lt;b&gt;Edit -&gt; Preferences -&gt; Behavior -&gt; Graphics performance&lt;/b&gt; and try &quot;Normal&quot; or &quot;Fast&quot; for better performance.&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
