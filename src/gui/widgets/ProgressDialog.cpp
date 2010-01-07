@@ -73,28 +73,36 @@ ProgressDialog::ProgressDialog(const QString &labelText,
     boxLayout->addWidget(m_progressBar);
     m_progressBar->setValue(50); // debug
 
-    connect(m_progressBar, SIGNAL(percentageChanged (int)),
+    connect(m_progressBar, SIGNAL(valueChanged (int)),
             this, SLOT(slotCheckShow(int)));
 
     QDialogButtonBox *bb = new QDialogButtonBox(QDialogButtonBox::Cancel);
     layout->addWidget(bb);
     bb->setCenterButtons(true);
 
-    connect(bb, SIGNAL(rejected()), this, SLOT(slotCancel()));
+    connect(bb, SIGNAL(rejected()), this, SLOT(cancel()));
 
-
+    setMinimumDuration(1000);
+    m_timer = new QTimer;
+    m_timer->start(minimumDuration());
+    connect(m_timer, SIGNAL(timeout()), this, SLOT(accept()));
     m_chrono.start();
 
     CurrentProgressDialog::set(this);
+    show();
 }
 
 ProgressDialog::~ProgressDialog()
 {
+    RG_DEBUG << "~ProgressDialog()" << endl;
     m_modalVisible = false;
+    delete m_timer;
 }
 
 void ProgressDialog::hideEvent(QHideEvent* e)
 {
+    std::cerr << "ProgressDialog::hideEvent() from " << std::endl;
+    show();
 /*    
     if (!allowCancel())
         QApplication::restoreOverrideCursor();
@@ -113,8 +121,8 @@ ProgressDialog::progressBar()
 void
 ProgressDialog::slotSetOperationName(QString name)
 {
-    //     RG_DEBUG << "ProgressDialog::slotSetOperationName("
-    //              << name << ") visible : " << isVisible() << endl;
+    RG_DEBUG << "ProgressDialog::slotSetOperationName("
+             << name << ") visible : " << isVisible() << endl;
 
     m_label->setText(name);
     // Little trick stolen from QProgressDialog
@@ -124,29 +132,27 @@ ProgressDialog::slotSetOperationName(QString name)
     resize( w, h );
 }
 
-void ProgressDialog::slotCancel()
+void ProgressDialog::cancel()
 {
-    /*
     RG_DEBUG << "ProgressDialog::slotCancel()\n";
-    KProgressDialog::slotCancel();
+    emit cancel();
     slotFreeze();
-    */
     reject();
 }
 
 void ProgressDialog::slotCheckShow(int)
 {
-    //     RG_DEBUG << "ProgressDialog::slotCheckShow() : "
-    //              << m_chrono.elapsed() << " - " << minimumDuration()
-    //              << endl;
+    RG_DEBUG << "ProgressDialog::slotCheckShow() : "
+             << m_chrono.elapsed() << " - " << minimumDuration()
+             << endl;
 
     if (!isVisible() &&
-            !m_frozen &&
-            m_chrono.elapsed() > minimumDuration()) {
+        !m_frozen &&
+        m_chrono.elapsed() > minimumDuration()) {
+
         RG_DEBUG << "ProgressDialog::slotCheckShow() : showing dialog\n";
         show();
-        if (m_modal)
-            m_modalVisible = true;
+        if (m_modal) m_modalVisible = true;
         processEvents();
     }
 }
@@ -155,37 +161,36 @@ void ProgressDialog::slotFreeze()
 {
     RG_DEBUG << "ProgressDialog::slotFreeze()\n";
 
+    /*
     m_wasVisible = isVisible();
     if (isVisible()) {
         m_modalVisible = false;
         hide();
-    }
+    }*/
 
     // This is also a convenient place to ensure the wait cursor (if
     // currently shown) returns to the original cursor to ensure that
     // the user can respond to whatever's freezing the progress dialog
     QApplication::restoreOverrideCursor();
 
-//    mShowTimer->stop();
+    m_chrono.restart();
+    m_timer->stop();
     m_frozen = true;
 }
 
 void ProgressDialog::slotThaw()
 {
-    /*
     RG_DEBUG << "ProgressDialog::slotThaw()\n";
 
     if (m_wasVisible) {
-        if (m_modal)
-            m_modalVisible = true;
+        if (m_modal) m_modalVisible = true;
         show();
     }
 
     // Restart timer
-    mShowTimer->start(minimumDuration());
+    m_timer->start(minimumDuration());
     m_frozen = false;
     m_chrono.restart();
-    */
 }
 
 void ProgressDialog::processEvents()
@@ -204,11 +209,13 @@ void ProgressDialog::processEvents()
 void
 ProgressDialog::setAutoClose(bool state)
 {
+    if (state) RG_DEBUG << "Something set ProgressDialog::setAutoClose(true)" << endl;
 }
 
 void
 ProgressDialog::setAutoReset(bool state)
 {
+    if (state) RG_DEBUG << "Something set ProgressDialog::setAutoReset(true)" << endl;
 }
 
 void

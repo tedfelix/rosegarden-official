@@ -23,6 +23,7 @@
 #include <QProgressDialog>
 #include <QSettings>
 
+#include <iostream>
 
 namespace Rosegarden
 {
@@ -41,6 +42,15 @@ ProgressBar::ProgressBar(int totalSteps,
 
     QString localStyle("QProgressBar { background: #FFFFFF; border: 1px solid #AAAAAA; border-radius: 3px; }  QProgressBar::chunk { background-color: #D6E7FA; width: 20px; }");
     if (Thorn) setStyleSheet(localStyle);
+}
+
+void
+ProgressBar::advance(int value)
+{
+    std::cerr << "ProgressBar::advance(" << value << ")" << std::endl;
+    show();
+    parentWidget()->show();
+    setValue(value);
 }
 
 

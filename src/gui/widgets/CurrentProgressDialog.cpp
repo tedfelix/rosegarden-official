@@ -48,25 +48,23 @@ CurrentProgressDialog::set(ProgressDialog* d)
 
     m_currentProgressDialog = d;
     
-    if(d){
+    if (d) {
         // this lets the progress dialog deregister itself when it's deleted
         // 
         // SIGNAL(destroyed()) : emitted immediately before the object obj is destroyed
         connect(d, SIGNAL(destroyed()),
-            getInstance(), SLOT(slotCurrentProgressDialogDestroyed()));
+                getInstance(), SLOT(slotCurrentProgressDialogDestroyed()));
     }
 }
 
 void CurrentProgressDialog::freeze()
 {
-    if (m_currentProgressDialog)
-        m_currentProgressDialog->slotFreeze();
+    if (m_currentProgressDialog) m_currentProgressDialog->slotFreeze();
 }
 
 void CurrentProgressDialog::thaw()
 {
-    if (m_currentProgressDialog)
-        m_currentProgressDialog->slotThaw();
+    if (m_currentProgressDialog) m_currentProgressDialog->slotThaw();
 }
 
 void CurrentProgressDialog::slotCurrentProgressDialogDestroyed()

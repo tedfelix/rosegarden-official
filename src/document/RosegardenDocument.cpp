@@ -675,12 +675,8 @@ bool RosegardenDocument::openDocument(const QString& filename,
     progressDlg.setValue(0);
     progressDlg.show();
     
-    // old qt3:
-    //connect(&m_audioFileManager, SIGNAL(setValue(int)),
-    //         progressDlg.progressBar(), SLOT(setValue(int)));
-    // new qt4:
-    connect( &m_audioFileManager, SIGNAL(setValue(int)),
-            &progressDlg, SLOT(setValue(int)) );
+    connect(&m_audioFileManager, SIGNAL(setValue(int)),
+            &progressDlg, SLOT(setValue(int)));
     
     try {
         // generate any audio previews after loading the files
@@ -1362,8 +1358,7 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
         emit documentModified(false);
         setModified(false);
         CommandHistory::getInstance()->documentSaved();
-        if( progressDlg ){
-            //delete progressDlg;   // is deleteOnClose now
+        if (progressDlg){
             progressDlg->close();     // is deleteOnClose
             progressDlg = 0;
         }

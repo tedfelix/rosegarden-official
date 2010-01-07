@@ -2427,7 +2427,7 @@ RosegardenMainWindow::slotRescaleSelection()
     }
     
     
-    ProgressDialog *progressDlg = 0; //@@@ should this be QProgressDialog ??
+    ProgressDialog *progressDlg = 0;
 
     if (!asrcs.empty()) {
         progressDlg = new ProgressDialog

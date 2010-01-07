@@ -23,6 +23,7 @@
 #include <QDateTime>
 #include <QDialog>
 #include <QLabel>
+#include <QTimer>
 
 class QHideEvent;
 
@@ -66,20 +67,24 @@ public:
 
     void setAutoClose(bool state);
     void setAutoReset(bool state);
-    void setValue(int value);
     void setMinimumDuration(int duration);
     int minimumDuration();
     void setLabelText(QString text);
 
+signals:
+    void canceled();
+
 public slots:
     void slotSetOperationName(QString);
-    void slotCancel();
+    void cancel();
 
     /// Stop and hide (if it's shown) the progress dialog
     void slotFreeze();
 
     /// Restore the dialog to its normal state
     void slotThaw();
+
+    void setValue(int value);
 
 protected slots:
     void slotCheckShow(int);
@@ -90,6 +95,7 @@ protected:
     //--------------- Data members ---------------------------------
 
     QTime m_chrono;
+    QTimer *m_timer;
     bool m_wasVisible;
     bool m_frozen;
     bool m_modal;

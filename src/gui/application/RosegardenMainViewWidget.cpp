@@ -1514,10 +1514,10 @@ RosegardenMainViewWidget::slotDroppedNewAudio(QString audioDesc)
     
     
     // warning: pointer &progressDlg becomes invalid, if function quits.
-    //CurrentProgressDialog::set(&progressDlg);
+    CurrentProgressDialog::set(&progressDlg);
     
-    //progressDlg.progressBar()->hide();
-    progressDlg.setValue( 0 );
+    progressDlg.progressBar()->hide();
+    progressDlg.setValue(0);
     progressDlg.progressBar()->show();
     progressDlg.show();
 
