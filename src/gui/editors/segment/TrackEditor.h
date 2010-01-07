@@ -71,18 +71,18 @@ public:
                 bool showTrackLabels,
                 double initialUnitsPerPixel = 0,
                 QWidget* parent = 0, const char* name = 0
-			   );
+               );
                 // removed: WFlags f=0);
 
     ~TrackEditor();
 
-    CompositionView* getCompositionView()       { return m_compositionView; }
-    TempoRuler*    getTempoRuler()          { return m_tempoRuler; }
-    ChordNameRuler*getChordNameRuler()      { return m_chordNameRuler; }
-    StandardRuler*    getTopStandardRuler()       { return m_topStandardRuler; }
-    StandardRuler*    getBottomStandardRuler()    { return m_bottomStandardRuler; }
-    TrackButtons*  getTrackButtons()        { return m_trackButtons; }
-    RulerScale*    getRulerScale() { return m_rulerScale; }
+    CompositionView *getCompositionView()     { return m_compositionView; }
+    TempoRuler      *getTempoRuler()          { return m_tempoRuler; }
+    ChordNameRuler  *getChordNameRuler()      { return m_chordNameRuler; }
+    StandardRuler   *getTopStandardRuler()    { return m_topStandardRuler; }
+    StandardRuler   *getBottomStandardRuler() { return m_bottomStandardRuler; }
+    TrackButtons    *getTrackButtons()        { return m_trackButtons; }
+    RulerScale      *getRulerScale()          { return m_rulerScale; }
 
     int getTrackCellHeight() const;
 
@@ -213,9 +213,9 @@ protected:
     
     //--------------- Data members ---------------------------------
 
-    RosegardenDocument        *m_doc;
+    RosegardenDocument      *m_doc;
     
-    RulerScale  			*m_rulerScale;
+    RulerScale              *m_rulerScale;
     TempoRuler              *m_tempoRuler;
     ChordNameRuler          *m_chordNameRuler;
     StandardRuler           *m_topStandardRuler;
@@ -223,8 +223,7 @@ protected:
     TrackButtons            *m_trackButtons;
     CompositionView         *m_compositionView;
     CompositionModel        *m_compositionModel;
-//    QDeferScrollView        *m_trackButtonScroll;
-    QScrollArea		        *m_trackButtonScroll;
+    QScrollArea             *m_trackButtonScroll;
 
     bool                     m_showTrackLabels;
     unsigned int             m_canvasWidth;

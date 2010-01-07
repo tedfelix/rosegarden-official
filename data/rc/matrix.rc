@@ -25,6 +25,8 @@
     <Action name="clear_selection" text="C&amp;lear Selection" shortcut="Escape" />
     <Action name="filter_selection" text="&amp;Filter Selection" icon="filter" shortcut="Ctrl+F" />
   <Separator/>
+    <Action name="pitch_bend_sequence" text="Insert Pitch &amp;Bend Sequence..." />
+  <Separator/>
     <Action name="options_configure" text="Preferences..." icon="configure" />
   </Menu>
 
@@ -138,7 +140,7 @@
     <Separator/>
       <Action name="general_transpose" text="&amp;Transpose by Semitones..." />
       <!-- JAS this action is called "transpose" in rosegardenui.rc.  Is this a different call? -->
-      <Action name="general_diatonic_transpose" text="Transpose by &amp;Interval..." />
+      <Action name="general_diatonic_transpose" text="Transpose by &amp;Interval..." icon="transpose-interval" />
     </Menu>
     <Menu name="Convert">
       <text>&amp;Convert</text>
@@ -149,8 +151,6 @@
   <Separator/>
     <Action name="trigger_segment" text="Trigger Se&amp;gment..." />
     <Action name="remove_trigger" text="Remove &amp;Triggers" />
-  <Separator/>
-    <Action name="pitch_bend_sequence" text="Pitch &amp;Bend Sequence..." />
   </Menu>
 
   <Menu name="Move">

@@ -95,6 +95,7 @@
       <Action name="show_tools_toolbar" text="Show T&amp;ools Toolbar" checked="true" append="show_merge" />
       <Action name="show_tracks_toolbar" text="Show Trac&amp;ks Toolbar" checked="true" append="show_merge" />
       <Action name="show_editors_toolbar" text="Show &amp;Editors Toolbar" checked="true" append="show_merge" />
+      <Action name="show_segment_toolbar" text="Show &amp;Segment Toolbar" checked="true" append="show_merge" />
       <Action name="show_transport_toolbar" text="Show Trans&amp;port Toolbar" checked="true" append="show_merge" />
       <Action name="show_zoom_toolbar" text="Show &amp;Zoom Toolbar" checked="true" append="show_merge" />
       <!-- JAS "show_status_bar" is "options_show_statusbar" in matrix.rc and notation.rc -->
@@ -175,7 +176,8 @@
     <Action name="relabel_segment" text="R&amp;elabel..." icon="text" />
     <Action name="quantize_selection" text="&amp;Quantize..." icon="quantize" shortcut="=" />
     <Action name="repeat_quantize" text="Repe&amp;at Last Quantize" shortcut="+" />
-    <Action name="transpose" text="Transpose by &amp;Interval..." />
+    <Action name="transpose" text="Transpose by &amp;Interval..." icon="transpose-interval" />
+    <Action name="switch_preset" text="&amp;Convert Notation for..." icon="switch-preset" />
   <Separator/>
     <Action name="rescale" text="Stretch &amp;or Squash..." />
     <Action name="set_segment_start" text="Set Start &amp;Time..." />
@@ -188,7 +190,7 @@
     <Menu name="split">
       <text>&amp;Split</text>
       <Action name="auto_split" text="&amp;Split on Silence" />
-      <Action name="split_by_pitch" text="Split by &amp;Pitch..." />
+      <Action name="split_by_pitch" text="Split by &amp;Pitch..." icon="split-by-pitch" />
       <Action name="split_by_recording" text="Split by &amp;Recording Source..." />
       <Action name="split_at_time" text=" Split &amp;at Time..." />
     </Menu>  
@@ -283,7 +285,6 @@
   <Action name="move" />
   <Action name="resize" />
   <Action name="split" />
-  <!-- <Action name="join"/> -->
 </ToolBar>
 
 <ToolBar name="Tracks Toolbar">
@@ -301,6 +302,16 @@
   <Action name="show_tracklabels"/>  -->
 </ToolBar>
 
+<ToolBar name="Segment Toolbar">
+  <text>Segment Toolbar</text>
+  <Action name="join"/>
+<Separator/>
+  <Action name="split_by_pitch"/>
+  <Action name="transpose"/>
+<Separator/>
+  <Action name="quantize_selection" />
+</ToolBar>
+
 <ToolBar name="Editors Toolbar" newline="true">
   <text>Editors Toolbar</text>
   <Action name="edit_matrix" />
@@ -308,8 +319,6 @@
   <Action name="edit_notation" />
   <Action name="edit_event_list" />
   <Action name="audio_manager" />
-<Separator/>
-  <Action name="quantize_selection" />
 <Separator/>
   <Action name="manage_midi_devices" />
   <Action name="manage_synths" />

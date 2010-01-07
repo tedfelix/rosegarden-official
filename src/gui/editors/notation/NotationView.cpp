@@ -2885,19 +2885,19 @@ NotationView::slotEditSwitchPreset()
         Composition& comp = getDocument()->getComposition();
         TrackId selectedTrack = getCurrentSegment()->getTrack();
 
-    // satisfy #1885251 the way that seems most reasonble to me at the
-    // moment, only changing track parameters when acting on all segments on
-    // this track from the notation view 
-    //
-    //!!! This won't be undoable, and I'm not sure if that's seriously
-    // wrong, or just mildly wrong, but I'm betting somebody will tell me
-    // about it if this was inappropriate
-    Track *track = comp.getTrackById(selectedTrack);
-    track->setPresetLabel( qstrtostr(dialog.getName()) );
-    track->setClef(dialog.getClef());
-    track->setTranspose(dialog.getTranspose());
-    track->setLowestPlayable(dialog.getLowRange());
-    track->setHighestPlayable(dialog.getHighRange());
+        // satisfy #1885251 the way that seems most reasonble to me at the
+        // moment, only changing track parameters when acting on all segments on
+        // this track from the notation view 
+        //
+        //!!! This won't be undoable, and I'm not sure if that's seriously
+        // wrong, or just mildly wrong, but I'm betting somebody will tell me
+        // about it if this was inappropriate
+        Track *track = comp.getTrackById(selectedTrack);
+        track->setPresetLabel( qstrtostr(dialog.getName()) );
+        track->setClef(dialog.getClef());
+        track->setTranspose(dialog.getTranspose());
+        track->setLowestPlayable(dialog.getLowRange());
+        track->setHighestPlayable(dialog.getHighRange());
 
         CommandHistory::getInstance()->addCommand(new SegmentSyncCommand(
                             comp.getSegments(), selectedTrack,

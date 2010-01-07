@@ -135,8 +135,8 @@
     <Action name="set_segment_start" text="Set Start &amp;Time..." />
     <Action name="set_segment_duration" text="Set &amp;Duration..." />
   <Separator/>
-    <Action name="transpose_segment" text="Transpose by &amp;Interval..." />
-    <Action name="switch_preset" text="&amp;Convert Notation for..." />
+    <Action name="transpose_segment" text="Transpose by &amp;Interval..." icon="transpose-interval" />
+    <Action name="switch_preset" text="&amp;Convert Notation for..." icon="switch-preset" />
   <Separator/>
     <Action name="add_layer" text="Add &amp;Layer" icon="add-layer" shortcut="Ctrl+Alt+1" />
   </Menu>

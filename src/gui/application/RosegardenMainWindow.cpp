@@ -75,6 +75,7 @@
 #include "commands/segment/SegmentSplitByRecordingSrcCommand.h"
 #include "commands/segment/SegmentSplitCommand.h"
 #include "commands/segment/SegmentTransposeCommand.h"
+#include "commands/segment/SegmentSyncCommand.h"
 #include "commands/studio/CreateOrDeleteDeviceCommand.h"
 #include "commands/studio/ModifyDeviceCommand.h"
 #include "document/io/CsoundExporter.h"
@@ -137,6 +138,7 @@
 #include "gui/general/AutoSaveFinder.h"
 #include "gui/general/LilyPondProcessor.h"
 #include "gui/general/ProjectPackager.h"
+#include "gui/general/PresetHandlerDialog.h"
 #include "gui/widgets/StartupLogo.h"
 #include "gui/widgets/TmpStatusMsg.h"
 #include "gui/widgets/WarningWidget.h"
@@ -669,6 +671,7 @@ RosegardenMainWindow::setupActions()
     createAction("quantize_selection", SLOT(slotQuantizeSelection()));
     createAction("relabel_segment", SLOT(slotRelabelSegments()));
     createAction("transpose", SLOT(slotTransposeSegments()));
+    createAction("switch_preset", SLOT(slotSwitchPreset()));
     createAction("repeat_quantize", SLOT(slotRepeatQuantizeSelection()));
     createAction("rescale", SLOT(slotRescaleSelection()));
     createAction("auto_split", SLOT(slotAutoSplitSelection()));
@@ -1355,13 +1358,11 @@ RosegardenMainWindow::createDocument(QString filePath, ImportType importType)
 
     if (!info.exists()) {
         // can happen with command-line arg, so...
-//        StartupLogo::hideIfStillThere();  //&&& TODO: use QSplashScreen instead
         QMessageBox::warning(dynamic_cast<QWidget*>(this), filePath, tr("File \"%1\" does not exist").arg(filePath), QMessageBox::Ok, QMessageBox::Ok);
         return 0;
     }
     
     if (info.isDir()) {
-//        StartupLogo::hideIfStillThere();  //&&& TODO: use QSplashScreen instead
         QMessageBox::warning(dynamic_cast<QWidget*>(this), filePath, tr("File \"%1\" is actually a directory").arg(filePath), QMessageBox::Ok, QMessageBox::Ok);
         return 0;
     }
@@ -1369,7 +1370,6 @@ RosegardenMainWindow::createDocument(QString filePath, ImportType importType)
     QFile file(filePath);
 
     if (!file.open(QIODevice::ReadOnly)) {
-//        StartupLogo::hideIfStillThere();  //&&& TODO: use QSplashScreen instead
         QString errStr =
             tr("You do not have read permission for \"%1\"").arg(filePath);
 
@@ -6287,8 +6287,7 @@ RosegardenMainWindow::slotRelabelSegments()
 void
 RosegardenMainWindow::slotTransposeSegments()
 {
-    if (!m_view->haveSelection())
-        return ;
+    if (!m_view->haveSelection()) return ;
 
     IntervalDialog intervalDialog(this, true, true);
     int ok = intervalDialog.exec();
@@ -7930,7 +7929,58 @@ RosegardenMainWindow::slotDisplayWarning(int type,
 
 }
 
+void
+RosegardenMainWindow::slotSwitchPreset()
+{
+    if (!m_view->haveSelection()) return ;
 
+    // Code pasted from NotationView.cpp with very coarse adaptation performed.
+    // Really, I think both places need some more thought about what "selected
+    // segments" and "all segments on this track" mean.  Definitely more work
+    // could be done here.  TODO
+    PresetHandlerDialog dialog(this, true);
+    
+    if (dialog.exec() != QDialog::Accepted) return;
+
+    if (dialog.getConvertAllSegments()) {
+        // get all segments for this track and convert them.
+        Composition& comp = getDocument()->getComposition();
+        TrackId selectedTrack = comp.getSelectedTrack();
+
+        // satisfy #1885251 the way that seems most reasonble to me at the
+        // moment, only changing track parameters when acting on all segments on
+        // this track from the notation view 
+        //
+        //!!! This won't be undoable, and I'm not sure if that's seriously
+        // wrong, or just mildly wrong, but I'm betting somebody will tell me
+        // about it if this was inappropriate
+        Track *track = comp.getTrackById(selectedTrack);
+        track->setPresetLabel( qstrtostr(dialog.getName()) );
+        track->setClef(dialog.getClef());
+        track->setTranspose(dialog.getTranspose());
+        track->setLowestPlayable(dialog.getLowRange());
+        track->setHighestPlayable(dialog.getHighRange());
+
+        CommandHistory::getInstance()->addCommand(new SegmentSyncCommand(
+                            comp.getSegments(), selectedTrack,
+                            dialog.getTranspose(), 
+                            dialog.getLowRange(), 
+                            dialog.getHighRange(),
+                            clefIndexToClef(dialog.getClef())));
+    } else {
+        CommandHistory::getInstance()->addCommand(new SegmentSyncCommand(
+                            m_view->getSelection(), 
+                            dialog.getTranspose(), 
+                            dialog.getLowRange(), 
+                            dialog.getHighRange(),
+                            clefIndexToClef(dialog.getClef())));
+    }
+
+    m_doc->slotDocumentModified();
+
+    // Fix #1885520 (Update track parameter widget when preset changed from notation)
+    getView()->getTrackParameterBox()->slotUpdateControls(-1);
+}
 
 RosegardenMainWindow *RosegardenMainWindow::m_myself = 0;
 
