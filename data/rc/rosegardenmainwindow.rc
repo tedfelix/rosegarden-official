@@ -95,7 +95,6 @@
       <Action name="show_tools_toolbar" text="Show T&amp;ools Toolbar" checked="true" append="show_merge" />
       <Action name="show_tracks_toolbar" text="Show Trac&amp;ks Toolbar" checked="true" append="show_merge" />
       <Action name="show_editors_toolbar" text="Show &amp;Editors Toolbar" checked="true" append="show_merge" />
-      <Action name="show_segment_toolbar" text="Show &amp;Segment Toolbar" checked="true" append="show_merge" />
       <Action name="show_transport_toolbar" text="Show Trans&amp;port Toolbar" checked="true" append="show_merge" />
       <Action name="show_zoom_toolbar" text="Show &amp;Zoom Toolbar" checked="true" append="show_merge" />
       <!-- JAS "show_status_bar" is "options_show_statusbar" in matrix.rc and notation.rc -->
@@ -176,8 +175,8 @@
     <Action name="relabel_segment" text="R&amp;elabel..." icon="text" />
     <Action name="quantize_selection" text="&amp;Quantize..." icon="quantize" shortcut="=" />
     <Action name="repeat_quantize" text="Repe&amp;at Last Quantize" shortcut="+" />
-    <Action name="transpose" text="Transpose by &amp;Interval..." icon="transpose-interval" />
-    <Action name="switch_preset" text="&amp;Convert Notation for..." icon="switch-preset" />
+    <Action name="transpose" text="Transpose by &amp;Interval..." />
+    <Action name="switch_preset" text="&amp;Convert Notation for..." />
   <Separator/>
     <Action name="rescale" text="Stretch &amp;or Squash..." />
     <Action name="set_segment_start" text="Set Start &amp;Time..." />
@@ -285,6 +284,10 @@
   <Action name="move" />
   <Action name="resize" />
   <Action name="split" />
+<Separator/>
+  <Action name="split_by_pitch"/>
+  <Action name="join_segments"/>
+  <Action name="quantize_selection" />
 </ToolBar>
 
 <ToolBar name="Tracks Toolbar">
@@ -300,16 +303,6 @@
   <Action name="show_previews" />
   <Action name="show_segment_labels" />
   <Action name="show_tracklabels"/>  -->
-</ToolBar>
-
-<ToolBar name="Segment Toolbar">
-  <text>Segment Toolbar</text>
-  <Action name="join"/>
-<Separator/>
-  <Action name="split_by_pitch"/>
-  <Action name="transpose"/>
-<Separator/>
-  <Action name="quantize_selection" />
 </ToolBar>
 
 <ToolBar name="Editors Toolbar" newline="true">
@@ -372,7 +365,6 @@
   <Action name="erase" />
   <Action name="resize" />
   <Action name="split" />
-<!-- <Action name="join"/> -->
 </Menu>
 
 <State name="new_file">
@@ -401,7 +393,6 @@
     <Action name="erase"/>
     <Action name="resize"/>
     <Action name="split"/>
-                <!-- <Action name="join"/> -->
     <Action name="file_print_lilypond"/>
     <Action name="file_preview_lilypond"/>
   </enable>

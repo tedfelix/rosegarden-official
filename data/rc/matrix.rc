@@ -140,7 +140,7 @@
     <Separator/>
       <Action name="general_transpose" text="&amp;Transpose by Semitones..." />
       <!-- JAS this action is called "transpose" in rosegardenui.rc.  Is this a different call? -->
-      <Action name="general_diatonic_transpose" text="Transpose by &amp;Interval..." icon="transpose-interval" />
+      <Action name="general_diatonic_transpose" text="Transpose by &amp;Interval..." />
     </Menu>
     <Menu name="Convert">
       <text>&amp;Convert</text>
