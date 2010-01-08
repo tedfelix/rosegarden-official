@@ -242,6 +242,8 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
 //    connect(m_treeWidget, SIGNAL(itemRenamed (QTreeWidgetItem*, const QString&, int)),
 //            this, SLOT(slotModifyDeviceOrBankName(QTreeWidgetItem*, const QString&, int)));
 
+// foo42 void itemDoubleClicked(QTreeWidgetItem* int
+
     connect(m_addBank, SIGNAL(clicked()),
             this, SLOT(slotAddBank()));
 
@@ -424,7 +426,6 @@ BankEditorDialog::initDialog()
             twItemDevice->setExpanded(true);
 //             deviceItem->setForeground(  0, QBrush( Qt::cyan, Qt::SolidPattern ) );  // column, brush(color, pat)
            
-            std::cout << "Spoo spoo?" << std::endl; 
             populateDeviceItem(twItemDevice, midiDevice);
         }
     }
@@ -824,23 +825,21 @@ void BankEditorDialog::populateDeviceEditors(QTreeWidgetItem* item)
         m_delete->setEnabled(true);
         m_copyPrograms->setEnabled(true);
 
-        if (m_Thorn) {
-            m_rightSide->setEnabled(true);
-        } else {
-            m_rightSide->setEnabled(true);
-        }
+        m_rightSide->setEnabled(true);
 
-        if (m_copyBank.first != Device::NO_DEVICE)
-            m_pastePrograms->setEnabled(true);
+        std::cout << "Spoo spoo?" << std::endl; 
+        if (m_copyBank.first != Device::NO_DEVICE) m_pastePrograms->setEnabled(true);
 
         MidiDevice *device = getMidiDevice(bankItem->getDeviceId());
         if (!device)
             return ;
 
-        if (!m_keepBankList || m_bankList.size() == 0)
+        if (!m_keepBankList || m_bankList.size() == 0) {
+            std::cout << "Spuckey spuckey!!!" << std::endl; 
             m_bankList = device->getBanks();
-        else
+        } else {
             m_keepBankList = false;
+        }
 
         setProgramList(device);
 
@@ -867,7 +866,9 @@ void BankEditorDialog::populateDeviceEditors(QTreeWidgetItem* item)
     // Ensure we fill these lists for the new device
     //
     MidiDeviceTreeWidgetItem* deviceItem = getParentDeviceItem(item);
+    std::cout << "Spingleblarth?" << std::endl; 
     if (!deviceItem) {
+        std::cout << "Vociferously!!!" << std::endl; 
         RG_DEBUG << "BankEditorDialog::populateDeviceEditors - got no deviceItem (banks parent item) \n";
         return ;
     }
