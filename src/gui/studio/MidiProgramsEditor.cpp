@@ -237,6 +237,9 @@ MidiProgramsEditor::populate(QTreeWidgetItem* item)
         for (it = programSubset.begin(); it != programSubset.end(); it++) {
             if (it->getProgram() == i) {
 
+                // zero in on "Harpsichord" vs. "Coupled Harpsichord to cut down
+                // on noise (0-based)
+                if (i == 6) std::cout << "it->getName(): " << it->getName() << std::endl;
                 QString programName = strtoqstr(it->getName());
                 m_completions << programName;
                 m_names[i]->setText(programName);
@@ -385,12 +388,14 @@ MidiProgramsEditor::slotNameChanged(const QString& programName)
     }
 
     QString senderName = sender()->objectName();
-    std::cout << "senderName is: " << senderName.toStdString() << std::endl;
+    // "Harpsichord" in default GM bank 1:0, "Coupled Harpsichord" in bank 8:0
+    if (senderName == "7") std::cout << "senderName is: " << senderName.toStdString()
+                                     << " programName is: " << programName.toStdString() << std::endl;
 
     // Adjust value back to zero rated
     //
     unsigned int id = senderName.toUInt() - 1;
-    std::cout << "id is: " << id << std::endl;
+//    std::cout << "id is: " << id << std::endl;
 
     RG_DEBUG << "MidiProgramsEditor::slotNameChanged(" << programName << ") : id = " << id << endl;
     

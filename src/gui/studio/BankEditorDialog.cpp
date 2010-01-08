@@ -423,7 +423,8 @@ BankEditorDialog::initDialog()
             
             twItemDevice->setExpanded(true);
 //             deviceItem->setForeground(  0, QBrush( Qt::cyan, Qt::SolidPattern ) );  // column, brush(color, pat)
-            
+           
+            std::cout << "Spoo spoo?" << std::endl; 
             populateDeviceItem(twItemDevice, midiDevice);
         }
     }
