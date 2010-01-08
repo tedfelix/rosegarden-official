@@ -88,23 +88,27 @@ public slots:
 
 protected slots:
     void slotCheckShow(int);
+    
+    /// Called when the minimum duration timer has counted down
+    void slotMinimumTimeElapsed();
 
 protected:
     virtual void hideEvent(QHideEvent*);
 
     //--------------- Data members ---------------------------------
 
-    QTime m_chrono;
-    QTimer *m_timer;
-    bool m_wasVisible;
-    bool m_frozen;
-    bool m_modal;
-    static bool m_modalVisible;
-    bool m_Thorn;
+    QTime        m_chrono;
+    QTimer      *m_timer;
+    bool         m_wasVisible;
+    bool         m_frozen;
+    bool         m_modal;
+    static bool  m_modalVisible;
+    bool         m_minimumTimeHasExpired;
+    bool         m_Thorn;
 
     ProgressBar *m_progressBar;
     QLabel      *m_label;
-    int         m_minimumDuration;
+    int          m_minimumDuration;
 };
 
 

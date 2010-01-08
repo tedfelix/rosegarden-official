@@ -48,8 +48,6 @@ void
 ProgressBar::advance(int value)
 {
     std::cerr << "ProgressBar::advance(" << value << ")" << std::endl;
-    show();
-    parentWidget()->show();
     setValue(value);
 }
 
