@@ -101,7 +101,7 @@ ProgressDialog::~ProgressDialog()
 
 void ProgressDialog::hideEvent(QHideEvent* e)
 {
-    std::cerr << "ProgressDialog::hideEvent() from " << std::endl;
+    RG_DEBUG << "ProgressDialog::hideEvent() from " << std::endl;
     show();
 /*    
     if (!allowCancel())
