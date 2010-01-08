@@ -1041,23 +1041,27 @@ void RosegardenDocument::initialiseStudio()
                 // go in the main property list.
                 //
                 StudioControl::setStudioObjectProperty
-                (pluginMappedId,
-                 MappedPluginSlot::Identifier,
-                 plugin->getIdentifier().c_str());
+                    (pluginMappedId,
+                     MappedPluginSlot::Identifier,
+                     plugin->getIdentifier().c_str());
 
                 plugin->setConfigurationValue
-                (qstrtostr(PluginIdentifier::RESERVED_PROJECT_DIRECTORY_KEY),
-                 getAudioFileManager().getAudioPath());
+                    (qstrtostr(PluginIdentifier::RESERVED_PROJECT_DIRECTORY_KEY),
+                     getAudioFileManager().getAudioPath());
 
                 // Set opaque string configuration data (e.g. for DSSI plugin)
                 //
                 MappedObjectPropertyList config;
                 for (AudioPluginInstance::ConfigMap::const_iterator
-                        i = plugin->getConfiguration().begin();
-                        i != plugin->getConfiguration().end(); ++i) {
+                         i = plugin->getConfiguration().begin();
+                     i != plugin->getConfiguration().end(); ++i) {
                     config.push_back(strtoqstr(i->first));
                     config.push_back(strtoqstr(i->second));
+                    RG_DEBUG << "plugin configuration: " << i->first << " -> "
+                             << i->second << endl;
                 }
+
+                RG_DEBUG << "plugin configuration: " << config.size() << " values" << endl;
 
                 QString error =
                 StudioControl::setStudioObjectPropertyList

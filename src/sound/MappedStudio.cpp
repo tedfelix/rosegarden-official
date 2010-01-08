@@ -23,7 +23,7 @@
 
 #include <pthread.h> // for mutex
 
-//#define DEBUG_MAPPEDSTUDIO 1
+#define DEBUG_MAPPEDSTUDIO 1
 
 namespace Rosegarden
 {
@@ -1473,20 +1473,20 @@ MappedPluginSlot::setPropertyList(const MappedObjectProperty &property,
             QString value = *++i;
 
 #ifdef DEBUG_MAPPEDSTUDIO
-
             std::cerr << key << " = " << value << std::endl;
 #endif
 
             if (m_configuration.find(key) != m_configuration.end() &&
-                    m_configuration[key] == value)
+                m_configuration[key] == value) {
                 continue;
+            }
 
             if (studio) {
                 QString rv =
                     studio->getSoundDriver()->configurePlugin(m_instrument,
                             m_position,
                             key, value);
-                if ( rv.isEmpty() ) {
+                if (!rv.isEmpty()) {
                     throw(rv);
                 }
             }
@@ -1495,7 +1495,7 @@ MappedPluginSlot::setPropertyList(const MappedObjectProperty &property,
         m_configuration.clear();
 
         for (MappedObjectPropertyList::const_iterator i = values.begin();
-                i != values.end(); ++i) {
+             i != values.end(); ++i) {
 
             QString key = *i;
             QString value = *++i;
