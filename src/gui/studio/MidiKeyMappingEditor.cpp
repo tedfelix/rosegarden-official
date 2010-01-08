@@ -28,12 +28,14 @@
 #include "base/NotationTypes.h"
 #include "gui/widgets/LineEdit.h"
 
+#include <QObject>
 #include <QFrame>
 #include <QLayout>
 #include <QLabel>
-#include <QObject>
+#include <QList>
 #include <QObjectList>
 #include <QPushButton>
+#include <QRegExp>
 #include <QString>
 #include <QWidget>
 #include <QTreeWidget>
@@ -182,13 +184,11 @@ MidiKeyMappingEditor::slotKeyMapButtonPressed()
 
 void MidiKeyMappingEditor::blockAllSignals(bool block)
 {
-    QObjectList allChildren = queryList("LineEdit", "[0-9]+");
-    QObjectList::iterator it;
-    QObject *obj;
+    QList<LineEdit *> allChildren = findChildren<LineEdit*>((QRegExp)"[0-9]+");
+    QList<LineEdit *>::iterator it;
 
-    for (it = allChildren.begin(); it != allChildren.end(); ++it) { //### JAS Check for errors
-        obj = *it;
-        obj->blockSignals(block);
+    for (it = allChildren.begin(); it != allChildren.end(); ++it) {
+        (*it)->blockSignals(block);
     }
 }
 

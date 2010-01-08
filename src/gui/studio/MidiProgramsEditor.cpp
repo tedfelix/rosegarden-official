@@ -644,13 +644,11 @@ MidiProgramsEditor::setBankName(const QString& s)
 
 void MidiProgramsEditor::blockAllSignals(bool block)
 {
-    QObjectList allChildren = queryList("LineEdit", "[0-9]+");
-    QObjectList::iterator it;
-    QObject *obj;
+    QList<LineEdit *> allChildren = findChildren<LineEdit*>((QRegExp)"[0-9]+");
+    QList<LineEdit *>::iterator it;
 
-    for (it = allChildren.begin(); it != allChildren.end(); ++it) { //### JAS Check for errors
-        obj = *it;
-        obj->blockSignals(block);
+    for (it = allChildren.begin(); it != allChildren.end(); ++it) {
+        (*it)->blockSignals(block);
     }
 
     m_msb->blockSignals(block);
