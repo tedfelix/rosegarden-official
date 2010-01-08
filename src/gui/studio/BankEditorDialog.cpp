@@ -827,7 +827,6 @@ void BankEditorDialog::populateDeviceEditors(QTreeWidgetItem* item)
 
         m_rightSide->setEnabled(true);
 
-        std::cout << "Spoo spoo?" << std::endl; 
         if (m_copyBank.first != Device::NO_DEVICE) m_pastePrograms->setEnabled(true);
 
         MidiDevice *device = getMidiDevice(bankItem->getDeviceId());
@@ -835,7 +834,6 @@ void BankEditorDialog::populateDeviceEditors(QTreeWidgetItem* item)
             return ;
 
         if (!m_keepBankList || m_bankList.size() == 0) {
-            std::cout << "Spuckey spuckey!!!" << std::endl; 
             m_bankList = device->getBanks();
         } else {
             m_keepBankList = false;
@@ -866,9 +864,7 @@ void BankEditorDialog::populateDeviceEditors(QTreeWidgetItem* item)
     // Ensure we fill these lists for the new device
     //
     MidiDeviceTreeWidgetItem* deviceItem = getParentDeviceItem(item);
-    std::cout << "Spingleblarth?" << std::endl; 
     if (!deviceItem) {
-        std::cout << "Vociferously!!!" << std::endl; 
         RG_DEBUG << "BankEditorDialog::populateDeviceEditors - got no deviceItem (banks parent item) \n";
         return ;
     }

@@ -239,7 +239,7 @@ MidiProgramsEditor::populate(QTreeWidgetItem* item)
 
                 // zero in on "Harpsichord" vs. "Coupled Harpsichord to cut down
                 // on noise (0-based)
-                if (i == 6) std::cout << "it->getName(): " << it->getName() << std::endl;
+//                if (i == 6) std::cout << "it->getName(): " << it->getName() << std::endl;
                 QString programName = strtoqstr(it->getName());
                 m_completions << programName;
                 m_names[i]->setText(programName);
@@ -389,8 +389,8 @@ MidiProgramsEditor::slotNameChanged(const QString& programName)
 
     QString senderName = sender()->objectName();
     // "Harpsichord" in default GM bank 1:0, "Coupled Harpsichord" in bank 8:0
-    if (senderName == "7") std::cout << "senderName is: " << senderName.toStdString()
-                                     << " programName is: " << programName.toStdString() << std::endl;
+//    if (senderName == "7") std::cout << "senderName is: " << senderName.toStdString()
+//                                     << " programName is: " << programName.toStdString() << std::endl;
 
     // Adjust value back to zero rated
     //
@@ -467,7 +467,7 @@ MidiProgramsEditor::slotKeyMapButtonPressed()
         return ;
     }
 
-    std::cout << "editor button name" << button->objectName().toStdString() << std::endl;
+//    std::cout << "editor button name" << button->objectName().toStdString() << std::endl;
 
     QString senderName = button->objectName();
 
