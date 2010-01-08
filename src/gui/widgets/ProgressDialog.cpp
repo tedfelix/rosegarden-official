@@ -31,6 +31,7 @@
 #include <QVBoxLayout>
 #include <QGroupBox>
 
+#include <iostream>
 
 namespace Rosegarden
 {
