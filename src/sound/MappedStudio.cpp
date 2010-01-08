@@ -23,7 +23,7 @@
 
 #include <pthread.h> // for mutex
 
-#define DEBUG_MAPPEDSTUDIO 1
+// #define DEBUG_MAPPEDSTUDIO 1
 
 namespace Rosegarden
 {

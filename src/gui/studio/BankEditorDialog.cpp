@@ -124,7 +124,7 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     m_treeWidget->setRootIsDecorated(true);
     m_treeWidget->setSelectionBehavior(QAbstractItemView::SelectRows);    //qt4
     m_treeWidget->setSelectionMode(QAbstractItemView::SingleSelection);    //qt4
-    m_treeWidget->setAllColumnsShowFocus(true);
+//    m_treeWidget->setAllColumnsShowFocus(true);
     m_treeWidget->setSortingEnabled(true);
     
     /*    
