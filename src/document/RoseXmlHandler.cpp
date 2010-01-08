@@ -1742,7 +1742,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                     plugin = apm->getPluginByIdentifier(identifier);
             }
 
-//            std::cerr << "Plugin identifier " << identifier << " -> plugin " << plugin << std::endl;
+            std::cerr << "Plugin identifier " << identifier << " -> plugin " << plugin << std::endl;
 
             // If we find the plugin all is well and good but if
             // we don't we just skip it.
@@ -1757,7 +1757,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                     m_plugin->setAssigned(true);
                     m_plugin->setBypass(bypassed);
                     m_plugin->setIdentifier( qstrtostr( plugin->getIdentifier() ) );
-//                    std::cerr << "set identifier to plugin at position " << position << std::endl;
+                    std::cerr << "set identifier to plugin at position " << position << " of container " << container->getId() << std::endl;
                     if (program != "") {
                         m_plugin->setProgram(program);
                     }

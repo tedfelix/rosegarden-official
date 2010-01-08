@@ -294,6 +294,11 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
                          SLOT(slotShowStatusMessage(QString)));
     }
 
+    if (m_useSequencer) {
+        emit startupStatusMessage(tr("Starting sequencer..."));
+        launchSequencer();
+    }
+
     // Plugin manager
     //
     emit startupStatusMessage(tr("Initializing plugin manager..."));
@@ -4552,6 +4557,9 @@ RosegardenMainWindow::launchSequencer()
     connect(m_sequencerThread, SIGNAL(finished()), this, SLOT(slotSequencerExited()));
     m_sequencerThread->start();
 
+    RG_DEBUG << "RosegardenMainWindow::launchSequencer: Sequencer thread is "
+             << m_sequencerThread << endl;
+
     if (m_doc) m_doc->checkSequencerTimer();
 
     if (m_doc && m_doc->getStudio().haveMidiDevices()) {
@@ -5100,6 +5108,21 @@ RosegardenMainWindow::slotSetLoop(timeT lhs, timeT rhs)
     } catch (QString s) {
         QMessageBox::critical(this, "", s);
     }
+}
+
+bool
+RosegardenMainWindow::isUsingSequencer()
+{
+    return m_useSequencer;
+}
+
+bool
+RosegardenMainWindow::isSequencerRunning()
+{
+    RG_DEBUG << "RosegardenMainWindow::isSequencerRunning: m_useSequencer = "
+             << m_useSequencer << ", m_sequencerThread = " << m_sequencerThread
+             << endl;
+    return m_useSequencer && (m_sequencerThread != 0);
 }
 
 void

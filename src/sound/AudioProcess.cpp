@@ -929,13 +929,13 @@ AudioInstrumentMixer::setPlugin(InstrumentId id, int position, QString identifie
                                               channels);
         if (instance && !instance->isOK()) {
             std::cerr << "AudioInstrumentMixer::setPlugin(" << id << ", " << position
-            << ": instance is not OK" << std::endl;
+                      << ": instance is not OK" << std::endl;
             delete instance;
             instance = 0;
         }
     } else {
         std::cerr << "AudioInstrumentMixer::setPlugin: No factory for identifier "
-        << identifier << std::endl;
+                  << identifier << std::endl;
     }
 
     RunnablePluginInstance *oldInstance = 0;

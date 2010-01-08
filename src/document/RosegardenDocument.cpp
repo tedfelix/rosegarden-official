@@ -689,6 +689,9 @@ bool RosegardenDocument::openDocument(const QString& filename,
     }
 
     if (isSequencerRunning()) {
+
+        RG_DEBUG << "RosegardenDocument::openDocument: Sequencer is running, initialising studio" << endl;
+
         // Initialise the whole studio - faders, plugins etc.
         //
         initialiseStudio();
@@ -697,6 +700,9 @@ bool RosegardenDocument::openDocument(const QString& filename,
         // to set them up)
         //
         initialiseControllers();
+
+    } else {
+        RG_DEBUG << "RosegardenDocument::openDocument: Sequencer is not running" << endl;
     }
 
     std::cerr << "RosegardenDocument::openDocument: Successfully opened document \"" << filename << "\"" << std::endl;
@@ -981,6 +987,8 @@ void RosegardenDocument::initialiseStudio()
         }
     }
 
+    RG_DEBUG << "RosegardenDocument::initialiseStudio: Have " << pluginContainers.size() << " plugin container(s)" << endl;
+
     for (std::vector<PluginContainer *>::iterator pci =
              pluginContainers.begin(); pci != pluginContainers.end(); ++pci) {
 
@@ -991,7 +999,16 @@ void RosegardenDocument::initialiseStudio()
 
             AudioPluginInstance *plugin = *pli;
 
+            RG_DEBUG << "Container id " << (*pci)->getId()
+                     << ", plugin position " << plugin->getPosition()
+                     << ", identifier " << plugin->getIdentifier()
+                     << ", assigned " << plugin->isAssigned()
+                     << endl;
+
             if (plugin->isAssigned()) {
+                
+                RG_DEBUG << "Found an assigned plugin" << endl;
+
                 // Create the plugin slot at the sequencer Studio
                 //
                 MappedObjectId pluginMappedId =
@@ -1003,8 +1020,8 @@ void RosegardenDocument::initialiseStudio()
                 //
                 plugin->setMappedId(pluginMappedId);
 
-                //RG_DEBUG << "CREATING PLUGIN ID = "
-                //<< pluginMappedId << endl;
+                RG_DEBUG << "CREATING PLUGIN ID = "
+                         << pluginMappedId << endl;
 
                 // Set the position
                 StudioControl::setStudioObjectProperty
@@ -2810,7 +2827,7 @@ RosegardenDocument::initialiseControllers()
 void
 RosegardenDocument::clearAllPlugins()
 {
-    //RG_DEBUG << "clearAllPlugins" << endl;
+    RG_DEBUG << "clearAllPlugins" << endl;
 
     InstrumentList list = m_studio.getAllInstruments();
     MappedEventList mC;

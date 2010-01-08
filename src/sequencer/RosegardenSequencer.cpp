@@ -880,13 +880,12 @@ RosegardenSequencer::createMappedObject(int type)
     LOCKED;
 
     MappedObject *object =
-        m_studio->createObject(
-            MappedObject::MappedObjectType(type));
+        m_studio->createObject(MappedObject::MappedObjectType(type));
 
     if (object) {
         SEQUENCER_DEBUG << "createMappedObject - type = "
-        << type << ", object id = "
-        << object->getId() << endl;
+                        << type << ", object id = "
+                        << object->getId() << endl;
         return object->getId();
     }
 

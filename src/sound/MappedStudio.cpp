@@ -19,6 +19,7 @@
 #include "SoundDriver.h"
 #include "PluginFactory.h"
 #include "misc/Strings.h"
+#include "misc/Debug.h"
 
 #include <pthread.h> // for mutex
 
@@ -328,15 +329,13 @@ MappedStudio::createObject(MappedObjectType type)
 
     // Ensure we've got an empty slot
     //
-    while (getObjectById(m_runningObjectId))
-        m_runningObjectId++;
+    while (getObjectById(m_runningObjectId)) m_runningObjectId++;
 
     mO = createObject(type, m_runningObjectId);
 
     // If we've got a new object increase the running id
     //
-    if (mO)
-        m_runningObjectId++;
+    if (mO) m_runningObjectId++;
 
     RELEASE_LOCK;
     return mO;
@@ -1378,6 +1377,9 @@ void
 MappedPluginSlot::setStringProperty(const MappedObjectProperty &property,
                                     QString value)
 {
+    RG_DEBUG << "MappedPluginSlot::setStringProperty: "
+             << property << " -> " << value << endl;
+
     if (property == Identifier) {
 
         if (m_identifier == value)

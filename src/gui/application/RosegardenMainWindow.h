@@ -283,14 +283,14 @@ public:
      * This doesn't give the state of the sequencer
      * @see #isSequencerRunning
      */
-    bool isUsingSequencer() { return m_useSequencer; }
+    bool isUsingSequencer();
 
     /**
      * Returns whether there's a sequencer running.
      * The result is dynamically updated depending on the sequencer's
      * status.
      */
-    bool isSequencerRunning() { return m_useSequencer && (m_sequencerThread != 0); }
+    bool isSequencerRunning();
 
     /*
      * The sequencer calls this method when it's running to

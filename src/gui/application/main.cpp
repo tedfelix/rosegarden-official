@@ -666,7 +666,7 @@ int main(int argc, char *argv[])
         if (args[i].startsWith("-")) continue;
         rosegardengui->openFile(args[i], RosegardenMainWindow::ImportCheckType);
         break;
-        }
+    }
 
     //@@@???
     QObject::connect(&theApp, SIGNAL(aboutToSaveState()),
