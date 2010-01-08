@@ -42,6 +42,7 @@ class NotationScene;
 class Composition;
 class StaffHeader;
 class RosegardenDocument;
+class Segment;
 
 
 class HeadersGroup : public QWidget
@@ -111,6 +112,12 @@ public:
     timeT getStartOfViewTime() { return m_startOfView; }
     timeT getEndOfViewTime() { return m_endOfView; }
 
+    bool timeIsInCurrentSegment(timeT t);
+
+    TrackId getCurrentTrackId() { return m_currentTrackId; }
+
+    Segment *getCurrentSegment() { return m_currentSegment; }
+
 
 
 
@@ -123,8 +130,11 @@ public slots :
      */
     void slotUpdateAllHeaders(int x, bool force = false);
 
+    void slotSetCurrentSegment();
+
 signals :
     void headersResized(int newWidth);
+    void currentSegmentChanged();
 
 private :
     Composition &m_composition;
@@ -143,6 +153,11 @@ private :
 
     timeT m_startOfView;
     timeT m_endOfView;
+
+    Segment *m_currentSegment;
+    timeT m_currentSegStartTime;
+    timeT m_currentSegEndTime;
+    TrackId m_currentTrackId;
 };
 
 

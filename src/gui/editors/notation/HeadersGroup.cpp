@@ -24,6 +24,7 @@
 #include "StaffHeader.h"
 #include "NotationWidget.h"
 #include "NotationScene.h"
+#include "NotationStaff.h"
 #include "NotationHLayout.h"
 #include "NotePixmapFactory.h"
 #include "document/RosegardenDocument.h"
@@ -55,7 +56,11 @@ HeadersGroup(RosegardenDocument *document) :
         m_lastWidth(-1),
         m_layout(0),
         m_startOfView(0),
-        m_endOfView(0)
+        m_endOfView(0),
+        m_currentSegment(0),
+        m_currentSegStartTime(0),
+        m_currentSegEndTime(0),
+        m_currentTrackId(0)
 {
     m_layout = new QVBoxLayout();
     m_layout->setSpacing(0);
@@ -102,8 +107,16 @@ HeadersGroup::addHeader(int trackId, int height, int ypos, double xcur)
 void
 HeadersGroup::setTracks(NotationWidget *widget, NotationScene *scene)
 {
+    if (m_scene) disconnect(m_scene, SIGNAL(currentStaffChanged()),
+                            this, SLOT(slotSetCurrentSegment()));
+
     m_scene = scene;
     m_widget = widget;
+
+    connect(m_scene, SIGNAL(currentStaffChanged()),
+            this, SLOT(slotSetCurrentSegment()));
+    slotSetCurrentSegment();
+
 
     // std::vector<NotationStaff *> *staffs = scene->getStaffs();
 
@@ -203,6 +216,24 @@ HeadersGroup::slotUpdateAllHeaders(int x, bool force)
 }
 
 
+void
+HeadersGroup::slotSetCurrentSegment()
+{
+    NotationStaff *notationStaff = m_scene->getCurrentStaff();
+    m_currentSegment = &(notationStaff->getSegment());
+    m_currentSegStartTime = m_currentSegment->getStartTime();
+    m_currentSegEndTime = m_currentSegment->getEndMarkerTime();
+    m_currentTrackId = m_currentSegment->getTrack();
+
+    emit currentSegmentChanged();
+}
+
+
+bool
+HeadersGroup::timeIsInCurrentSegment(timeT t)
+{
+    return (t >= m_currentSegStartTime) && (t < m_currentSegEndTime);
+}
 
 
 NotationScene *

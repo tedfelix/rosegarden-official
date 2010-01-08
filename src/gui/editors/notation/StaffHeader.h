@@ -206,6 +206,13 @@ protected :
     virtual void leaveEvent(QEvent *event);
 //    virtual void mousePressEvent(QMouseEvent *event);
 
+    /**
+     * Look if the current segment should be shown in the header.
+     * If it does, set the related members accordingly and return true,
+     * else do nothing and return false.
+     */
+    bool setCurrentSegmentVisible();
+
 protected slots :
     void slotToolTip();
 
@@ -249,7 +256,8 @@ private :
     QString m_label;
     int m_transpose;
     int m_status;
-    bool m_current;
+    bool m_trackIsCurrent;
+    bool m_segmentIsCurrent;
 
     QString m_upperText;
     QString m_transposeText;
@@ -273,9 +281,9 @@ private :
     int m_maxDelta;
     int m_staffLineThickness;
 
-    QColor m_foreGround;
-    QColor m_backGround;
-    NotePixmapFactory::ColourType m_foreGroundType;
+    QColor m_foreground;
+    QColor m_background;
+    NotePixmapFactory::ColourType m_foregroundType;
 
     QString m_toolTipText;
     QString m_warningToolTipText;

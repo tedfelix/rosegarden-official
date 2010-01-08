@@ -90,15 +90,25 @@ StaffHeader::StaffHeader(HeadersGroup *group,
         m_neverUpdated(true),
         m_lastStatusPart(0),
         m_lastWidth(0),
+        m_clef(Clef()),
         m_key(Rosegarden::Key()),
         m_label(QString("")),
         m_transpose(0),
         m_status(0),
-        m_current(false),
+        m_trackIsCurrent(false),
+        m_segmentIsCurrent(false),
+        m_upperText(QString("")),
+        m_transposeText(QString("")),
+        m_numberOfTextLines(0),
+        m_firstSeg(0),
+        m_firstSegStartTime(0),
         m_clefItem(0),
         m_keyItem(0),
-        m_foreGround(Qt::white),
-        m_backGround(Qt::black),
+        m_lineSpacing(0),
+        m_maxDelta(0),
+        m_staffLineThickness(0),
+        m_foreground(Qt::white),
+        m_background(Qt::black),
         m_toolTipText(QString("")),
         m_warningToolTipText(QString("")),
         m_cursorPos(QPoint()),
@@ -117,7 +127,7 @@ StaffHeader::StaffHeader(HeadersGroup *group,
     // localStyle (search key)
     //
     // If/when we have the option to override the stylesheet, we should tweak
-    // m_foreGround and m_backGround, which are currently hard coded to assume
+    // m_foreground and m_background, which are currently hard coded to assume
     // the stylesheet is in effect.  This may or may not make it into the first
     // release.
 
@@ -283,7 +293,7 @@ StaffHeader::StaffHeader(HeadersGroup *group,
     m_toolTipTimer->setInterval(500);  // 0.5 s
     setMouseTracking(true);
 
-    connect(m_scene, SIGNAL(currentStaffChanged()),
+    connect(m_headersGroup, SIGNAL(currentSegmentChanged()),
             this, SLOT(slotSetCurrent()));
 
             
@@ -303,6 +313,10 @@ StaffHeader::StaffHeader(HeadersGroup *group,
     m_clefOverlaps = new Inconsistencies<Clef>(segVec);
     m_keyOverlaps = new Inconsistencies<Key>(segVec);
     m_transposeOverlaps = new Inconsistencies<int>(segVec);
+
+    // Look for the initial current track
+/// TODO : LOOK FOR CURRENT SEGMENT
+    m_trackIsCurrent = m_headersGroup->getCurrentTrackId() == m_track;
 }
 
 StaffHeader::~StaffHeader()
@@ -341,7 +355,7 @@ StaffHeader::paintEvent(QPaintEvent *)
     }
         
     QPainter paint(this);
-    paint.fillRect(0, 0, width(), height(), m_backGround);  /// ???
+    paint.fillRect(0, 0, width(), height(), m_background);  /// ???
 
     int wHeight = height();
     int wWidth = width();
@@ -359,7 +373,7 @@ wWidth -= 4; /// ???
     int offset = (wHeight - 10 * lw -1) / 2;
 
     // Draw staff lines
-    paint.setPen(QPen(QColor(m_foreGround), m_staffLineThickness));
+    paint.setPen(QPen(QColor(m_foreground), m_staffLineThickness));
     for (h = 0; h <= 8; h += 2) {
         int y = (lw * 3) + ((8 - h) * lw) / 2;
         paint.drawLine(maxDelta/2, y + offset, wWidth - maxDelta/2, y + offset);
@@ -402,23 +416,12 @@ wWidth -= 4; /// ???
 
     int numberOfTextLines = getNumberOfTextLines();
 
-//    if (isTransposeInconsistent()) {
-        int upperTextY = charHeight
-                         + numberOfTextLines * npf->getTrackHeaderTextLineSpacing();
-//        QColor warningBackGround = m_foreGround == Qt::white ?
-//                                                       Qt::black : Qt::white;
-//        paint.fillRect(0, 0, width(), upperTextY, warningBackGround);
 
-        // // an experiment: fill the upper and lower text areas with 80% opaque
-        // // black regardless of other color concerns        
-        // paint.fillRect(0, 1, width(), upperTextY, QColor(0, 0, 0, 200));
-//    }
+    // Limit between upper text and central part
+    // int upperTextY = charHeight
+    //               + numberOfTextLines * npf->getTrackHeaderTextLineSpacing();
 
-//    paint.setPen(QColor(m_foreGround));
-    // // always use white as default foreground for text areas    
-    // QColor textForeground = Qt::white;
-    QColor textForeground = m_foreGround; 
-    paint.setPen(textForeground);
+    paint.setPen(m_foreground);
     text = getUpperText();
 
     for (int l=1; l<=numberOfTextLines; l++) {
@@ -443,11 +446,8 @@ wWidth -= 4; /// ???
     // Write transposition text
 
     // TODO : use colours from GUIPalette
-//    colour = isTransposeInconsistent() ? QColor(Qt::red) : QColor(m_foreGround);
-//    colour = isTransposeInconsistent() ? QColor(Qt::red) : QColor(textForeground);
-    colour = QColor(textForeground);;
+    colour = QColor(m_foreground);;
     paint.setFont(npf->getTrackHeaderBoldFont());
-     // m_p->maskPainter().setFont(m_trackHeaderBoldFont);
     paint.setPen(colour);
 
     paint.drawText(m_lastWidth - transposeWidth - charWidth / 4,
@@ -456,31 +456,21 @@ wWidth -= 4; /// ???
                    transposeText);
 
 
-     // Write lower text (segment label)
+    // Write lower text (segment label)
 
-//    if (isLabelInconsistent()) {
-        int lowerTextY = wHeight - 4            // -4 : adjust
-            - numberOfTextLines * npf->getTrackHeaderTextLineSpacing();
-//        QColor warningBackGround = m_foreGround == Qt::white ? Qt::black : Qt::white;
-//        paint.fillRect(0, lowerTextY, width(), height(), warningBackGround);
-
-        // // experiment        
-        // paint.fillRect(0, lowerTextY, width(), height() - 1, QColor(0, 0, 0, 200));
-//    }
+    // Limit between upper text and central part
+    // int lowerTextY = wHeight - 4            // -4 : adjust
+    //               - numberOfTextLines * npf->getTrackHeaderTextLineSpacing();
 
     // Draw top and bottom separation line
-    paint.setPen(QColor(m_foreGround));
+    paint.setPen(QColor(m_foreground));
     paint.drawLine(0, 0, width(), 0);
     paint.drawLine(0, height(), width(), height());
 
     // TODO : use colours from GUIPalette
-//    colour = isLabelInconsistent() ? QColor(Qt::red) : QColor(m_foreGround);
-//    colour = isLabelInconsistent() ? QColor(Qt::red) : QColor(textForeground);
-    colour = QColor(textForeground);
+    colour = QColor(m_foreground);
     paint.setFont(npf->getTrackHeaderFont());
-
     paint.setPen(colour);
-    // text = getLowerText();
     text = isLabelInconsistent() ? QString("???????") : getLowerText();
 
     for (int l=1; l<=numberOfTextLines; l++) {
@@ -500,12 +490,11 @@ wWidth -= 4; /// ???
     }
 
     // Draw a blue rectangle around the header if staff is the current one
-    if (m_current) {
+    if (m_trackIsCurrent) {
         QPen pen;
 
         // Select a visible color depending of the background intensity
-// //Always use light color while headers always have dark background under text
-        if (m_foreGround == Qt::black) {
+        if (m_foreground == Qt::black) {
             pen.setColor(QColor(0, 0, 255));       // Blue
         } else {
             pen.setColor(QColor(170, 170, 255));   // Lighter blue
@@ -525,15 +514,38 @@ wWidth -= 4; /// ???
 void
 StaffHeader::slotSetCurrent()
 {
-    NotationStaff *notationStaff = m_scene->getCurrentStaff();
-    Segment &segment = notationStaff->getSegment();
-    TrackId trackId = segment.getTrack();
-    bool current = trackId == m_track;
-
-    if (current != m_current) {
-        m_current = current;
-        update();
+    m_trackIsCurrent = m_headersGroup->getCurrentTrackId() == m_track;
+    if (m_trackIsCurrent && setCurrentSegmentVisible()) {
+        m_neverUpdated = true;  /// Hack to force updateHeader() working
+        updateHeader(m_lastWidth);   // Show the selected segment and track
+    } else {
+        update();                    // Show or hide the blue rectangle
     }
+}
+
+bool
+StaffHeader::setCurrentSegmentVisible()
+{
+    if (!m_trackIsCurrent) return false;
+
+    if (m_status & BEFORE_FIRST_SEGMENT) {
+        m_segmentIsCurrent = m_headersGroup
+                             ->timeIsInCurrentSegment(m_firstSegStartTime);
+    } else {
+        m_segmentIsCurrent = m_headersGroup
+                             ->timeIsInCurrentSegment(m_headersGroup
+                                                      ->getStartOfViewTime());
+    }
+
+    if (m_segmentIsCurrent) {
+        Segment *s = m_headersGroup->getCurrentSegment();
+        m_label = strtoqstr(s->getLabel());
+        m_transpose = s->getTranspose();
+        m_colourIndex = s->getColourIndex();
+        return true;
+    }
+
+    return false;
 }
 
 QString
@@ -594,13 +606,11 @@ StaffHeader::lookAtStaff(double x, int maxWidth)
     std::vector<NotationStaff *> *staffs = m_scene->getStaffs();
 
     int status = 0;
-    bool current = false;
     for (size_t i = 0; i < staffs->size(); i++) {
         NotationStaff *notationStaff = (*staffs)[i];
         Segment &segment = notationStaff->getSegment();
         TrackId trackId = segment.getTrack();
         if (trackId  == m_track) {
-
             /// TODO : What if a segment has been moved ???
             timeT xTime = notationStaff->getTimeAtSceneCoords(x, m_ypos);
             if (xTime < m_firstSegStartTime) {
@@ -610,12 +620,10 @@ StaffHeader::lookAtStaff(double x, int maxWidth)
                 label = strtoqstr(m_firstSeg->getLabel());
                 transpose = m_firstSeg->getTranspose();
                 colourIndex = m_firstSeg->getColourIndex();
-                current = current || (m_scene->getCurrentStaffNumber() == (int)i);
                 break;
             }
             timeT segStart = segment.getStartTime();
             timeT segEnd = segment.getEndMarkerTime();
-            current = current || (m_scene->getCurrentStaffNumber() == (int)i);
 
             if ((xTime >= segStart) && (xTime < segEnd)) {
 
@@ -659,15 +667,18 @@ StaffHeader::lookAtStaff(double x, int maxWidth)
     }
 
     // Remember current data (but only visible data if inconsistency)
+    m_status = status;
     m_clef = clef;
     m_key = (status & INCONSISTENT_KEYS) ? key1 : key;
-    m_label = (status & INCONSISTENT_LABELS) ? label1 : label;
-    m_transpose = (status & INCONSISTENT_TRANSPOSITIONS) ? transpose1 : transpose;
-    m_current = current;
-    m_colourIndex = colourIndex;
-    m_status = status;
+    if (!setCurrentSegmentVisible()) {
+        m_label = (status & INCONSISTENT_LABELS) ? label1 : label;
+        m_transpose = (status & INCONSISTENT_TRANSPOSITIONS) ? transpose1 : transpose;
+        m_colourIndex = colourIndex;
+    }
 
-    QString noteName = isTransposeInconsistent() ?
+/// Try to show current segment label rather than ??? when segment is current.
+/// May be not a so good idea...
+    QString noteName = isTransposeInconsistent() && !m_segmentIsCurrent ?
                            QString("???") : transposeValueToName(m_transpose);
 
     m_upperText = QString(tr("%1: %2")
@@ -751,44 +762,29 @@ StaffHeader::updateHeader(int width)
         m_transposeWasInconsistent = m_transposeIsInconsistent;
         
 
-        bool drawClef = true;
-        //QColor clefColour;
-        NotePixmapFactory::ColourType colourType = NotePixmapFactory::PlainColour;
-
-        if (m_status & (SEGMENT_HERE | BEFORE_FIRST_SEGMENT)) {
-
-        } else {
-            drawClef = false;   ///!!! drawClef is never used
-        }
-
         NotePixmapFactory * npf = m_scene->getNotePixmapFactory();
 
         // Get background colour from colour index
-        m_backGround = GUIPalette::convertColour(m_headersGroup->getComposition()
+        m_background = GUIPalette::convertColour(m_headersGroup->getComposition()
                             ->getSegmentColourMap().getColourByIndex(m_colourIndex));
 
         // Select foreground colour (black or white) to get the better
         // visibility
-        int intensity = qGray(m_backGround.rgb());
+        int intensity = qGray(m_background.rgb());
         if (intensity > 127) {
-            m_foreGround = Qt::black;
-            m_foreGroundType = NotePixmapFactory::PlainColour;
+            m_foreground = Qt::black;
+            m_foregroundType = NotePixmapFactory::PlainColour;
         } else {
-            m_foreGround = Qt::white;
-            m_foreGroundType = NotePixmapFactory::PlainColourLight;
+            m_foreground = Qt::white;
+            m_foregroundType = NotePixmapFactory::PlainColourLight;
         }
 
-//         colourType = (m_status & INCONSISTENT_CLEFS) ?
-//                          NotePixmapFactory::ConflictColour : m_foreGroundType;
-        colourType = m_foreGroundType;
         delete m_clefItem;
-        m_clefItem = npf->makeClef(m_clef, colourType);
+        m_clefItem = npf->makeClef(m_clef, m_foregroundType);
 
-//         colourType = (m_status & INCONSISTENT_KEYS) ?
-//                          NotePixmapFactory::ConflictColour : m_foreGroundType;
-        colourType = m_foreGroundType;
         delete m_keyItem;
-        m_keyItem = npf->makeKey(m_key, m_clef, Rosegarden::Key("C major"), colourType); 
+        m_keyItem = npf->makeKey(m_key, m_clef,
+                                 Rosegarden::Key("C major"), m_foregroundType);
 
         m_lineSpacing = npf->getLineSpacing();
         m_maxDelta = npf->getAccidentalWidth(Accidentals::Sharp);
@@ -806,8 +802,6 @@ StaffHeader::updateHeader(int width)
         } else { 
             m_clefOrKeyInconsistency->hide();
         }
-//         if (m_transposeIsInconsistent) m_transposeInconsistency->show();
-//         else m_transposeInconsistency->hide();
     }
 
     update();
