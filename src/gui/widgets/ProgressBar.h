@@ -19,8 +19,6 @@
 #define _RG_ROSEGARDENPROGRESSBAR_H_
 
 #include <QProgressBar>
-#include <QProgressDialog>
-
 
 
 class QWidget;
@@ -41,6 +39,9 @@ class ProgressBar : public QProgressBar
 public:
     ProgressBar(int totalSteps,
                 QWidget *parent = 0);
+
+public slots:
+    void WTF(int);
 
 };
 

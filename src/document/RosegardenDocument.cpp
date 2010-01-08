@@ -612,8 +612,11 @@ bool RosegardenDocument::openDocument(const QString& filename,
     bool okay = GzipFile::readFromFile(filename, fileContents);
     if (!okay) errMsg = tr("Could not open Rosegarden file");
     else {
-        okay = xmlParse(fileContents, errMsg, 0,
+        okay = xmlParse(fileContents, errMsg, &progressDlg,
                         permanent, cancelled);
+// to disable progress dialogs while loading:
+//        okay = xmlParse(fileContents, errMsg, 0,
+//                        permanent, cancelled);
     }
 
     if (!okay) {
@@ -1608,19 +1611,19 @@ RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
     RoseXmlHandler handler(this, elementCount, permanent);
 
     if (progress) {
-        // apparently sets the initial value
+        std::cout << "I am here!" << std::endl;
         connect(&handler, SIGNAL(setProgress(int)),
-                progress, SLOT(setValue(int)));
+                progress, SLOT(setProgress(int)));
 
-        // apparently changes the name "Laying out staffs..."
         connect(&handler, SIGNAL(setOperationName(QString)),
                 progress, SLOT(slotSetOperationName(QString)));
 
-        // increments the value in response to progress
         connect(&handler, SIGNAL(incrementProgress(int)),
+                progress, SLOT(incrementProgress(int)));
+        
+        connect(&handler, SIGNAL(setValue(int)),
                 progress, SLOT(setValue(int)));
-
-        // the dialog's cancel button
+        
         connect(progress, SIGNAL(canceled()),
                 &handler, SLOT(slotCancel()));
     }

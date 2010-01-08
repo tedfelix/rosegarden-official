@@ -51,6 +51,7 @@ ProgressDialog::ProgressDialog(const QString &labelText,
         m_minimumDuration(500)
 {
     RG_DEBUG << "ProgressDialog::ProgressDialog - " << labelText << " - modal : " << modal << endl;
+    setObjectName("My name is Bootney Lee, and I am a ProgressDialog with magnificent hair!");
 
     setWindowTitle(tr("Rosegarden"));
     setModal(modal);
@@ -75,7 +76,7 @@ ProgressDialog::ProgressDialog(const QString &labelText,
     m_progressBar = new ProgressBar(totalSteps);
     boxLayout->addWidget(m_progressBar);
 
-    connect(m_progressBar, SIGNAL(valueChanged (int)),
+    connect(m_progressBar, SIGNAL(valueChanged(int)),
             this, SLOT(slotCheckShow(int)));
 
     QDialogButtonBox *bb = new QDialogButtonBox(QDialogButtonBox::Cancel);
@@ -221,7 +222,21 @@ void
 ProgressDialog::setValue(int value)
 {
     std::cout << "ProgressDialog::setValue(" << value << ")" << std::endl;
+    m_progressBar->hide();
     m_progressBar->setValue(value);
+    m_progressBar->show();
+}
+
+void
+ProgressDialog::setProgress(int value)
+{
+    std::cout << "ProgressDialog::setProgress(" << value << ") calling setValue()" << std::endl;
+}
+
+void
+ProgressDialog::incrementProgress(int value)
+{
+    std::cout << "ProgressDialog::incrementProgress(" << value << ") calling setValue()" << std::endl;
 }
 
 void

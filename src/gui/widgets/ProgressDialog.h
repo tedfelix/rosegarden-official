@@ -85,6 +85,18 @@ public slots:
      */
     void setValue(int value);
 
+    /** To allow parallel connections between ProgressReporter and
+     * ProgressDialog, connect the setProgress() signal to this slot, so this
+     * dialog can report what signal it caught.  Simply calls setValue().
+     */
+    void setProgress(int value);
+
+    /** To allow parallel connections between ProgressReporter and
+     * ProgressDialog, connect the incrementProgress() signal to this slot, so
+     * this dialog can report what signal it caught.  Simply calls setValue().
+     */
+    void incrementProgress(int value);
+
 protected slots:
     void slotCheckShow(int);
     

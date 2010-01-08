@@ -1477,8 +1477,6 @@ RosegardenMainViewWidget::slotAddAudioSegmentDefaultPosition(AudioFileId audioFi
 void
 RosegardenMainViewWidget::slotDroppedNewAudio(QString audioDesc)
 {
-//     QTextIStream s(&audioDesc);  // qt3 - remove
-    
     QTextStream s(&audioDesc, QIODevice::ReadWrite); //### use QIODevice::ReadOnly instead ?
     
     QString url;

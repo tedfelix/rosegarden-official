@@ -20,7 +20,6 @@
 #include "misc/ConfigGroups.h"
 
 #include <QProgressBar>
-#include <QProgressDialog>
 #include <QSettings>
 
 #include <iostream>
@@ -40,8 +39,33 @@ ProgressBar::ProgressBar(int totalSteps,
     bool Thorn = settings.value("use_thorn_style", true).toBool();
     settings.endGroup();
 
-    QString localStyle("QProgressBar { background: #FFFFFF; border: 1px solid #AAAAAA; border-radius: 3px; }  QProgressBar::chunk { background-color: #D6E7FA; width: 20px; }");
+    QString localStyle("QProgressBar { color: #000000; background: #FFFFFF; border: 1px solid #AAAAAA; border-radius: 3px; }  QProgressBar::chunk { background-color: #D6E8FB; width: 20px; }");
     if (Thorn) setStyleSheet(localStyle);
+
+    connect (this, SIGNAL(valueChanged(int)), this, SLOT(WTF(int)));
+}
+
+void
+ProgressBar::WTF(int wtf)
+{
+    /*
+    std::cout << "I am a ProgressBar, and my value changed to " << wtf << "!  Why am I still blank?!" << std::endl;
+
+    std::cout << "my minimum: " << minimum() << " maximum: " << maximum() << " value: " << value() << std::endl;
+
+    std::cout << "My parent is: \"" << parentWidget()->objectName().toStdString() << "\"" << std::endl;
+    */
+
+    // Because the only ProgressBar doing anything is the one in the main window
+    // status bar.  That's interesting.  I guess we used to update both the
+    // status bar in CurrentProgressDialog as well as the CPU meter.  Well why
+    // the bloody hell would we want to change the function of the CPU meter
+    // anyway?  Now that I think back on it, it used to get stuck in odd places
+    // anyway.  So if I disentangle those two things from each other and make
+    // them separate, that's part of the battle won.
+    //
+    // Or so I'm thinking.
+
 }
 
 

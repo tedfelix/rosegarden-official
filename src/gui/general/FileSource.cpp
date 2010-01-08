@@ -19,6 +19,7 @@
 
 #include "TempDirectory.h"
 #include "misc/Strings.h"
+#include "gui/widgets/ProgressDialog.h"
 
 #include <QHttp>
 #include <QFtp>
@@ -26,7 +27,6 @@
 #include <QDir>
 #include <QCoreApplication>
 #include <QHttpResponseHeader>
-#include <QProgressDialog>
 
 #include <iostream>
 #include <cstdlib>
@@ -50,7 +50,7 @@ FileSource::m_remoteLocalMap;
 QMutex
 FileSource::m_mapMutex;
 
-FileSource::FileSource(QString fileOrUrl, QProgressDialog *progress) :
+FileSource::FileSource(QString fileOrUrl, ProgressDialog *progress) :
     m_url(fileOrUrl),
     m_ftp(0),
     m_http(0),
@@ -114,7 +114,7 @@ FileSource::FileSource(QString fileOrUrl, QProgressDialog *progress) :
     }
 }
 
-FileSource::FileSource(QUrl url, QProgressDialog *progress) :
+FileSource::FileSource(QUrl url, ProgressDialog *progress) :
     m_url(url),
     m_ftp(0),
     m_http(0),

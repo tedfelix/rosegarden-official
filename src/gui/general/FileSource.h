@@ -29,9 +29,11 @@ class QFtp;
 class QHttp;
 class QFile;
 class QHttpResponseHeader;
-class QProgressDialog;
 
 namespace Rosegarden {
+
+
+class ProgressDialog;
 
 /**
  * FileSource is a class used to refer to the contents of a file that
@@ -69,22 +71,22 @@ public:
      * Construct a FileSource using the given local file path or URL.
      * The URL may be raw or encoded.
      *
-     * If a QProgressDialog is provided, it will be updated with
+     * If a ProgressDialog is provided, it will be updated with
      * progress status.  Note that the progress() signal will also be
      * emitted regularly during retrieval, even if no progress is
      * supplied here.  Caller retains ownership of the progress object.
      */
-    FileSource(QString fileOrUrl, QProgressDialog *progress = 0);
+    FileSource(QString fileOrUrl, ProgressDialog *progress = 0);
 
     /**
      * Construct a FileSource using the given remote URL.
      *
-     * If a QProgressDialog is provided, it will be updated with
+     * If a ProgressDialog is provided, it will be updated with
      * progress status.  Note that the progress() signal will also be
      * emitted regularly during retrieval, even if no progress is
      * supplied here.  Caller retains ownership of the progress object.
      */
-    FileSource(QUrl url, QProgressDialog *progress = 0);
+    FileSource(QUrl url, ProgressDialog *progress = 0);
 
     FileSource(const FileSource &);
 
@@ -221,7 +223,7 @@ protected:
     bool m_remote;
     bool m_done;
     bool m_leaveLocalFile;
-    QProgressDialog *m_progress;
+    ProgressDialog *m_progress;
 
     typedef std::map<QUrl, int> RemoteRefCountMap;
     typedef std::map<QUrl, QString> RemoteLocalMap;
