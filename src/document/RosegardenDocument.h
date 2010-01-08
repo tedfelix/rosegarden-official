@@ -26,11 +26,10 @@
 #include "base/Segment.h"
 #include "base/Studio.h"
 #include "gui/editors/segment/compositionview/AudioPreviewThread.h"
+#include "gui/widgets/ProgressDialog.h"
 #include "sound/AudioFileManager.h"
 #include "base/Event.h"
 
-#include <QProgressBar>
-#include <QProgressDialog>
 #include <QObject>
 #include <QString>
 #include <QStringList>
@@ -41,7 +40,6 @@
 class QWidget;
 class QTextStream;
 class NoteOnRecSet;
-//class QProgressBar;
 
 
 namespace Rosegarden
@@ -570,7 +568,7 @@ protected:
     /**
      * Save one segment to the given text stream
      */
-    void saveSegment(QTextStream&, Segment*, QProgressBar*,
+    void saveSegment(QTextStream&, Segment*, ProgressDialog*,
                      long totalNbOfEvents, long &count,
                      QString extraAttributes = QString::null);
 

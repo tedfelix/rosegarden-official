@@ -44,13 +44,6 @@ ProgressBar::ProgressBar(int totalSteps,
     if (Thorn) setStyleSheet(localStyle);
 }
 
-void
-ProgressBar::advance(int value)
-{
-    std::cerr << "ProgressBar::advance(" << value << ")" << std::endl;
-    setValue(value);
-}
-
 
 }
 #include "ProgressBar.moc"

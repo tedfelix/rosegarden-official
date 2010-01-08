@@ -42,9 +42,6 @@ public:
     ProgressBar(int totalSteps,
                 QWidget *parent = 0);
 
-public slots:
-    void advance(int value);
-
 };
 
 

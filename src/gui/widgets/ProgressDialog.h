@@ -59,12 +59,6 @@ public:
      */
     static void processEvents();
 
-    /**
-     * Return a pointer to the dialog's ProgressBar.  Create a ProgressBar if
-     * one does not already exist.
-     */
-    ProgressBar *progressBar();
-
     void setAutoClose(bool state);
     void setAutoReset(bool state);
     void setMinimumDuration(int duration);
@@ -84,6 +78,11 @@ public slots:
     /// Restore the dialog to its normal state
     void slotThaw();
 
+    /** Set the value for this dialog's progress bar.  This replaces setValue()
+     * and advance() with the same function, and any calls or connections to
+     * advance() must be switched over to setValue().  All management of the
+     * progress bar is done by this dialog now.
+     */
     void setValue(int value);
 
 protected slots:

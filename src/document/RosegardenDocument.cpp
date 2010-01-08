@@ -67,7 +67,6 @@
 #include "gui/studio/StudioControl.h"
 #include "gui/widgets/CurrentProgressDialog.h"
 #include "gui/widgets/ProgressDialog.h"
-#include "gui/widgets/ProgressBar.h"
 #include "gui/general/AutoSaveFinder.h"
 #include "sequencer/RosegardenSequencer.h"
 #include "sound/AudioFile.h"
@@ -91,8 +90,6 @@
 #include <QSettings>
 #include <QMessageBox>
 #include <QProcess>
-#include <QProgressBar>
-#include <QProgressDialog>
 #include <QTemporaryFile>
 #include <QByteArray>
 #include <QDataStream>
@@ -590,10 +587,10 @@ bool RosegardenDocument::openDocument(const QString& filename,
     if (!fileInfo.isReadable() || fileInfo.isDir()) {
         StartupLogo::hideIfStillThere();
         QString msg(tr("Can't open file '%1'").arg(filename));
-        /* was sorry */ QMessageBox::warning(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), msg);
+        QMessageBox::warning(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), msg);
         return false;
     }
-/*!!!
+
     ProgressDialog progressDlg(tr("Reading file..."),
                                100,
                                (QWidget*)parent());
@@ -601,9 +598,11 @@ bool RosegardenDocument::openDocument(const QString& filename,
     connect(&progressDlg, SIGNAL(canceled()),
             &m_audioFileManager, SLOT(slotStopPreview()));
 
-//    progressDlg.setMinimumDuration(500);
+    CurrentProgressDialog::set(&progressDlg);
+
+    progressDlg.setMinimumDuration(500);
     progressDlg.setAutoReset(true); // we're re-using it for the preview generation
-*/
+
     setAbsFilePath(fileInfo.absFilePath());
 
     QString errMsg;
@@ -624,7 +623,7 @@ bool RosegardenDocument::openDocument(const QString& filename,
                      .arg(errMsg));
 
         CurrentProgressDialog::freeze();
-        /* was sorry */ QMessageBox::warning(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), msg);
+        QMessageBox::warning(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), msg);
         CurrentProgressDialog::thaw();
 
         return false;
@@ -645,30 +644,10 @@ bool RosegardenDocument::openDocument(const QString& filename,
         RG_DEBUG << "First segment starts at " << (*m_composition.begin())->getStartTime() << endl;
     }
 
-    // Ensure a minimum of 64 tracks
-    //
-    //     unsigned int nbTracks = m_composition.getNbTracks();
-    //     TrackId maxTrackId = m_composition.getMaxTrackId();
-    //     InstrumentId instBase = MidiInstrumentBase;
+    // We might need a progress dialog when we generate previews, reuse the
+    // previous one
+    progressDlg.setLabelText(tr("Generating audio previews..."));
 
-    //     for(unsigned int i = nbTracks; i < MinNbOfTracks; ++i) {
-
-    //         Track *track;
-
-    //         track = new Track(maxTrackId + 1,          // id
-    //                                       (i + instBase) % 16,     // instrument
-    //                                       i,                       // position
-    //                                       "untitled",
-    //                                       false);                  // mute
-
-    //         m_composition.addTrack(track);
-    //         ++maxTrackId;
-    //     }
-
-    // We might need a progress dialog when we generate previews
-    ProgressDialog progressDlg(tr("Generating audio previews..."),
-                               100,
-                               (QWidget*)parent());
     connect(&progressDlg, SIGNAL(canceled()),
             &m_audioFileManager, SLOT(slotStopPreview()));
     
@@ -1257,28 +1236,17 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
     << "\" format-version-point=\"" << FILE_FORMAT_VERSION_POINT
     << "\">\n";
 
-    ProgressDialog *progressDlg = 0;
-    QProgressBar *progress = 0;
+    ProgressDialog *progress = 0;
     
     if (!autosave) {
 
-        progressDlg = new ProgressDialog(tr("Saving file..."),
+        progress = new ProgressDialog(tr("Saving file..."),
                                          100,
                                          (QWidget*)parent());
-        //progress = progressDlg->progressBar();
-        //progress = new QProgressBar();    // deallocated by progressDlg, not use stack (qt4)
-        //progressDlg->setBar( progress );
-        
-        // progressBar now assigned in ProgressDialog::Constructor
-        progress = progressDlg->progressBar();
-        progressDlg->show();
-        
-//        progressDlg->setMinimumDuration(500);
-        progressDlg->setAutoReset(true);
 
-    } else {
+        progress->setMinimumDuration(500);
+        progress->setAutoReset(true); // not implemented yet (not understood yet)
 
-        progress = ((RosegardenMainWindow *)parent())->getProgressBar();    //
     }
 
     // First make sure all MIDI devices know their current connections
@@ -1379,9 +1347,9 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
         emit documentModified(false);
         setModified(false);
         CommandHistory::getInstance()->documentSaved();
-        if (progressDlg){
-            progressDlg->close();     // is deleteOnClose
-            progressDlg = 0;
+        if (progress) {
+            progress->close();     // is deleteOnClose
+            progress = 0;
         }
     } else {
         progress->setValue(0);
@@ -1429,7 +1397,7 @@ bool RosegardenDocument::exportStudio(const QString& filename,
 }
 
 void RosegardenDocument::saveSegment(QTextStream& outStream, Segment *segment,
-                                   QProgressBar* progress, long totalEvents, long &count,
+                                   ProgressDialog* progress, long totalEvents, long &count,
                                    QString extraAttributes)
 {
     QString time;
@@ -1640,16 +1608,19 @@ RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
     RoseXmlHandler handler(this, elementCount, permanent);
 
     if (progress) {
-        connect(&handler, SIGNAL(setValue(int)),
-                 progress, SLOT(setValue(int)));
-                //progress->progressBar(), SLOT(setValue(int)));
+        // apparently sets the initial value
+        connect(&handler, SIGNAL(setProgress(int)),
+                progress, SLOT(setValue(int)));
+
+        // apparently changes the name "Laying out staffs..."
         connect(&handler, SIGNAL(setOperationName(QString)),
                 progress, SLOT(slotSetOperationName(QString)));
-//        connect(&handler, SIGNAL(incrementProgress(int)),
-                //progress->progressBar(), SLOT(advance(int)));
-//                 progress, SLOT(advance(int)));
-//                 progress, SLOT(setValue(int)));
-//        connect(progress, SIGNAL(cancelClicked()),
+
+        // increments the value in response to progress
+        connect(&handler, SIGNAL(incrementProgress(int)),
+                progress, SLOT(setValue(int)));
+
+        // the dialog's cancel button
         connect(progress, SIGNAL(canceled()),
                 &handler, SLOT(slotCancel()));
     }

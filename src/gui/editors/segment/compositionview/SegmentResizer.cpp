@@ -145,11 +145,11 @@ void SegmentResizer::handleMouseButtonRelease(QMouseEvent *e)
                     try {
                         m_doc->getAudioFileManager().testAudioPath();
                     } catch (AudioFileManager::BadAudioPathException) {
-						if (QMessageBox::warning( dynamic_cast<QWidget*>(this), tr("Warning"), //tr("Set audio file path"), 
-                            	 tr("The audio file path does not exist or is not writable.\nYou must set the audio file path to a valid directory in Document Properties before rescaling an audio file.\nWould you like to set it now?"),
-								QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel
-								) 
-								== QMessageBox::Yes ) {
+                        if (QMessageBox::warning( dynamic_cast<QWidget*>(this), tr("Warning"), //tr("Set audio file path"), 
+                                 tr("The audio file path does not exist or is not writable.\nYou must set the audio file path to a valid directory in Document Properties before rescaling an audio file.\nWould you like to set it now?"),
+                                QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel
+                                ) 
+                                == QMessageBox::Yes ) {
                             RosegardenMainWindow::self()->slotOpenAudioPathSettings();
                         }
                     }
@@ -170,12 +170,12 @@ void SegmentResizer::handleMouseButtonRelease(QMouseEvent *e)
                     
                     addCommandToHistory(command);
 
-// 					progressDlg.setLabel( new QLabel(tr("Generating audio preview..."), this, Qt::Tool) );
-					progressDlg.setLabelText( tr("Generating audio preview...") );
-					
-					command->disconnectProgressDialog(&progressDlg);
+//                     progressDlg.setLabel( new QLabel(tr("Generating audio preview..."), this, Qt::Tool) );
+                    progressDlg.setLabelText( tr("Generating audio preview...") );
+                    
+                    command->disconnectProgressDialog(&progressDlg);
                     connect(&m_doc->getAudioFileManager(), SIGNAL(setValue(int)),
-                            progressDlg.progressBar(), SLOT(setValue(int)));
+                            &progressDlg, SLOT(setValue(int)));
                     connect(&progressDlg, SIGNAL(cancelClicked()),
                             &m_doc->getAudioFileManager(), SLOT(slotStopPreview()));
 
@@ -228,10 +228,10 @@ void SegmentResizer::handleMouseButtonRelease(QMouseEvent *e)
     }
 
     m_canvas->getModel()->endChange();
-// 	m_canvas->updateContents();
-	m_canvas->update();
-	
-	setChangeMade(false);
+//     m_canvas->updateContents();
+    m_canvas->update();
+    
+    setChangeMade(false);
     m_currentIndex = CompositionItem();
     setBasicContextHelp();
 }

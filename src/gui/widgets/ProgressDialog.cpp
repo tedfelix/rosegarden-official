@@ -54,6 +54,7 @@ ProgressDialog::ProgressDialog(const QString &labelText,
 
     setWindowTitle(tr("Rosegarden"));
     setModal(modal);
+    setAttribute(Qt::WA_DeleteOnClose);
 
     QVBoxLayout *layout = new QVBoxLayout;
     setLayout(layout);
@@ -113,12 +114,6 @@ ProgressDialog::hideEvent(QHideEvent* e)
     }
 }
 
-ProgressBar*
-ProgressDialog::progressBar()
-{
-    return m_progressBar;
-}
-
 void
 ProgressDialog::slotSetOperationName(QString name)
 {
@@ -135,7 +130,7 @@ void
 ProgressDialog::cancel()
 {
     RG_DEBUG << "ProgressDialog::slotCancel()\n";
-    emit cancel();
+    emit canceled();
     slotFreeze();
     reject();
 }
@@ -225,6 +220,7 @@ ProgressDialog::setAutoReset(bool state)
 void
 ProgressDialog::setValue(int value)
 {
+    std::cout << "ProgressDialog::setValue(" << value << ")" << std::endl;
     m_progressBar->setValue(value);
 }
 
@@ -245,6 +241,7 @@ ProgressDialog::setLabelText(QString text)
 {
     slotSetOperationName(text);
 }
+
 
 }
 #include "ProgressDialog.moc"

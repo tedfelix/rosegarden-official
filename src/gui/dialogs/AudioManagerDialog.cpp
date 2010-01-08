@@ -534,7 +534,7 @@ AudioManagerDialog::slotExportAudio()
                                100,
                                this);
 
-    progressDlg.progressBar()->setValue(0);
+    progressDlg.setValue(0);
 
     RealTime clipStartTime = RealTime::zeroTime;
     RealTime clipDuration = sourceFile->getLength();
@@ -566,7 +566,7 @@ AudioManagerDialog::slotExportAudio()
     sourceFile->close();
     delete destFile;
 
-    progressDlg.progressBar()->setValue(100);
+    progressDlg.setValue(100);
 }
 
 void
@@ -1181,14 +1181,13 @@ AudioManagerDialog::addFile(const QUrl& kurl)
                                this);
 
     CurrentProgressDialog::set(&progressDlg);
-    //progressDlg.progressBar()->hide();
-    progressDlg.progressBar()->setValue(0);
+    progressDlg.setValue(0);
     progressDlg.show();
     
     // Connect the progress dialog
     //
     connect(&aFM, SIGNAL(setValue(int)),
-            progressDlg.progressBar(), SLOT(setValue(int)));
+            &progressDlg, SLOT(setValue(int)));
     connect(&aFM, SIGNAL(setOperationName(QString)),
             &progressDlg, SLOT(slotSetOperationName(QString)));
     connect(&progressDlg, SIGNAL(canceled()),
@@ -1199,12 +1198,12 @@ AudioManagerDialog::addFile(const QUrl& kurl)
     } catch (AudioFileManager::BadAudioPathException e) {
         CurrentProgressDialog::freeze();
         QString errorString = tr("Failed to add audio file. ") + strtoqstr(e.getMessage());
-        /* was sorry */ QMessageBox::warning(this, "", errorString);
+         QMessageBox::warning(this, "", errorString);
         return false;
     } catch (SoundFile::BadSoundFileException e) {
         CurrentProgressDialog::freeze();
         QString errorString = tr("Failed to add audio file. ") + strtoqstr(e.getMessage());
-        /* was sorry */ QMessageBox::warning(this, "", errorString);
+         QMessageBox::warning(this, "", errorString);
         return false;
     }
             
@@ -1212,7 +1211,6 @@ AudioManagerDialog::addFile(const QUrl& kurl)
                &aFM, SLOT(slotStopImport()));
     connect(&progressDlg, SIGNAL(canceled()),
             &aFM, SLOT(slotStopPreview()));
-    //progressDlg.progressBar()->show();
     progressDlg.slotSetOperationName(tr("Generating audio preview..."));
 
     try {
