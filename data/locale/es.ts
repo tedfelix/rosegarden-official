@@ -9,7 +9,7 @@
         <location filename="../../src/gui/application/main.cpp" line="806"/>
         <location filename="../../src/gui/application/main.cpp" line="807"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
 </context>
 <context>
@@ -1070,7 +1070,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="583"/>
         <source>Insert Pitch &amp;Bend Sequence...</source>
-        <translation type="unfinished"></translation>
+        <translation>Insertar secuencia de infle&amp;xión de tono...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="586"/>
@@ -10587,7 +10587,7 @@
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="216"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
 </context>
 <context>
@@ -10668,7 +10668,7 @@
     <message>
         <location filename="../../src/sound/AudioFileManager.cpp" line="660"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/sound/AudioFileManager.cpp" line="730"/>
@@ -10803,7 +10803,7 @@
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1206"/>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1223"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="735"/>
@@ -11653,7 +11653,7 @@ Por favor, seleccione cuáles de ellos quiere borrar permanentemente del disco d
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1780"/>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1784"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1821"/>
@@ -12081,7 +12081,7 @@ Por favor, seleccione cuáles de ellos quiere borrar permanentemente del disco d
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/CompositionView.cpp" line="332"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
 </context>
 <context>
@@ -12319,7 +12319,7 @@ Por favor, seleccione cuáles de ellos quiere borrar permanentemente del disco d
     <message>
         <location filename="../../src/gui/rulers/ControlToolBox.cpp" line="59"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
 </context>
 <context>
@@ -13591,7 +13591,7 @@ Would you like to try and locate this file or skip it?</source>
         <location filename="../../src/gui/editors/notation/FontViewFrame.cpp" line="107"/>
         <location filename="../../src/gui/editors/notation/FontViewFrame.cpp" line="114"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/FontViewFrame.cpp" line="107"/>
@@ -13988,7 +13988,7 @@ Would you like to try and locate this file or skip it?</source>
         <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="498"/>
         <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="508"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="508"/>
@@ -16073,7 +16073,7 @@ Doble clic para abrir el editor de marcadores.</translation>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixToolBox.cpp" line="81"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
 </context>
 <context>
@@ -16848,7 +16848,7 @@ Doble clic para abrir el editor de marcadores.</translation>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="554"/>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="632"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="624"/>
@@ -16886,7 +16886,7 @@ Doble clic para abrir el editor de marcadores.</translation>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="900"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="1226"/>
@@ -17099,7 +17099,7 @@ Doble clic para abrir el editor de marcadores.</translation>
     <message>
         <location filename="../../src/gui/editors/notation/NotationToolBox.cpp" line="81"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
 </context>
 <context>
@@ -17493,7 +17493,7 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
         <location filename="../../src/gui/editors/notation/NoteFontFactory.cpp" line="157"/>
         <location filename="../../src/gui/editors/notation/NoteFontFactory.cpp" line="184"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NoteFontFactory.cpp" line="182"/>
@@ -17547,7 +17547,7 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location filename="../../src/gui/editors/notation/NotePixmapFactory.cpp" line="183"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
 </context>
 <context>
@@ -18640,7 +18640,7 @@ Pueden haber incompatibilidades con el formato del archivo.</translation>
     <message>
         <location filename="../../src/document/RoseXmlHandler.cpp" line="450"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/document/RoseXmlHandler.cpp" line="1019"/>
@@ -18756,7 +18756,7 @@ Por favor, decida si quiere borrarlos permanentemente del disco duro.
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="594"/>
         <source>Reading file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Leyendo archivo...</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="613"/>
@@ -18892,7 +18892,7 @@ Rosegarden para garantizar que podrá ser reconocida por futuras versiones.</tra
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1539"/>
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1559"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="400"/>
@@ -19523,7 +19523,7 @@ Por favor, finalice y reinicie Rosegarden para restaurar las funcionalidades de 
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="298"/>
         <source>Starting sequencer...</source>
-        <translation type="unfinished"></translation>
+        <translation>Iniciando secuenciador...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2068"/>
@@ -20373,7 +20373,7 @@ Por favor, configure el directorio de archivos de audio hacia un directorio vál
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentToolBox.cpp" line="79"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
 </context>
 <context>
@@ -22656,7 +22656,7 @@ Por favor, configura el directorio de archivos de audio hacia un directorio vál
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="331"/>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="349"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="283"/>
@@ -22974,7 +22974,7 @@ Por favor, configura el directorio de archivos de audio hacia un directorio vál
     <message>
         <location filename="../../src/gui/widgets/WarningWidget.cpp" line="165"/>
         <source>&lt;qt&gt;&lt;p&gt;Rosegarden is using safe graphics mode.  This provides the greatest stability, but graphics performance is very slow.&lt;/p&gt;&lt;p&gt;You may wish to visit &lt;b&gt;Edit -&gt; Preferences -&gt; Behavior -&gt; Graphics performance&lt;/b&gt; and try &quot;Normal&quot; or &quot;Fast&quot; for better performance.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Rosegarden está utilizando el sistema de gráficos seguro.  Este proporciona la mejor estabilidad, pero el rendimiento gráfico es muy lento.&lt;/p&gt;&lt;p&gt;Véase &lt;b&gt;Editar -&gt; Preferencias -&gt; Comportamiento -&gt; Calidad de rendimiento gráfico&lt;/b&gt; y pruebe «normal» or «rápido» para mejorar la velocidad de rendimiento.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Rosegarden está utilizando el sistema de gráficos seguro.  Este proporciona la mejor estabilidad, pero el rendimiento gráfico es muy lento.&lt;/p&gt;&lt;p&gt;Véase &lt;b&gt;Editar -&gt; Preferencias -&gt; Comportamiento -&gt; Calidad de rendimiento gráfico&lt;/b&gt; y pruebe «normal» or «rápido» para mejorar la velocidad de rendimiento.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
