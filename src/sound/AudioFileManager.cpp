@@ -657,7 +657,7 @@ AudioFileManager::importURL(const QUrl &url, int sampleRate)
 {
     FileSource source(url);
     if (!source.isAvailable()) {
-	QMessageBox::critical(0, "", tr("Cannot download file %1").arg(url.toString()));
+	QMessageBox::critical(0, tr("Rosegarden"), tr("Cannot download file %1").arg(url.toString()));
 	throw SoundFile::BadSoundFileException(qstrtostr(url.toString()));
     }
 

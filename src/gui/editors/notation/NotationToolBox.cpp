@@ -78,7 +78,7 @@ NotationToolBox::createTool(QString toolName)
         tool = new NoteRestInserter(m_widget);
 
     else {
-        QMessageBox::critical(0, "", QString("NotationToolBox::createTool : unrecognised toolname %1 (%2)")
+        QMessageBox::critical(0, tr("Rosegarden"), QString("NotationToolBox::createTool : unrecognised toolname %1 (%2)")
                            .arg(toolName).arg(toolNamelc));
         return 0;
     }

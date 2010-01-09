@@ -56,7 +56,7 @@ ControlToolBox::createTool(QString toolName)
         tool = new ControlMover(m_ruler);
     else
     {
-        QMessageBox::critical(0, "", QString("ControlToolBox::createTool : unrecognised toolname %1 (%2)")
+        QMessageBox::critical(0, tr("Rosegarden"), QString("ControlToolBox::createTool : unrecognised toolname %1 (%2)")
                            .arg(toolName).arg(toolNamelc));
         return 0;
     }

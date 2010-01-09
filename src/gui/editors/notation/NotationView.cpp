@@ -1033,7 +1033,7 @@ NotationView::initLayoutToolbar()
     if (!foundFont) {
         // don't annoy user with stupid internal warning dialog (except while
         // debugging)
-        QMessageBox::warning (this, "", tr("Unknown font \"%1\", using default")
+        QMessageBox::warning (this, tr("Rosegarden"), tr("Unknown font \"%1\", using default")
                              .arg(m_fontName) );
         m_fontName = NoteFontFactory::getDefaultFontName();
     }
@@ -3554,7 +3554,7 @@ NotationView::slotInsertableNoteEventReceived(int pitch, int, bool noteOn)
         if (showingError)
             return ;
         showingError = true;
-        /* was sorry */ QMessageBox::warning(this, "", tr("Can't insert note: No note duration selected"));
+        QMessageBox::warning(this, tr("Rosegarden"), tr("Can't insert note: No note duration selected"));
         showingError = false;
         return ;
     }

@@ -180,7 +180,7 @@ NotePixmapFactory::init(QString fontName, int size)
         m_style = NoteStyleFactory::getStyle(NoteStyleFactory::DefaultStyle);
     } catch (NoteStyleFactory::StyleUnavailable u) {
         StartupLogo::hideIfStillThere();
-        QMessageBox::critical(0, "", tr( u.getMessage().c_str() )  );
+        QMessageBox::critical(0, tr("Rosegarden"), tr( u.getMessage().c_str() )  );
         throw;
     }
 

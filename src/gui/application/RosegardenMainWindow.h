@@ -226,7 +226,7 @@ public:
     /**
      * Get a value() bar
      */
-    ProgressBar *getProgressBar() { return m_progressBar; }
+    ProgressBar *getCPUBar() { return m_cpuBar; }
 
     /**
      * Equivalents of the GUI slots, for DCOP use
@@ -1582,7 +1582,12 @@ private:
     QProcess* m_jackProcess;
 #endif // HAVE_LIBJACK
 
-    ProgressBar *m_progressBar;
+    /** This is the ProgressBar used for the CPU meter in the main window status
+     * bar.  This is NOT a general-purpose progress indicator.  You want to use
+     * ProgressDialog for that, and let it manage its own ProgressBar, which is
+     * now private.
+     */
+    ProgressBar *m_cpuBar;
     
     ZoomSlider<double> *m_zoomSlider;
     QLabel             *m_zoomLabel;

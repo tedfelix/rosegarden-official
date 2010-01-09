@@ -648,7 +648,7 @@ AudioManagerDialog::slotRemove()
                            .arg(QString(audioFile->getFilename().c_str()));
 
         // Ask the question
-        int reply = QMessageBox::warning(this, "", question, QMessageBox::Yes | QMessageBox::Cancel , QMessageBox::Cancel);
+        int reply = QMessageBox::warning(this, tr("Rosegarden"), question, QMessageBox::Yes | QMessageBox::Cancel , QMessageBox::Cancel);
         
         if (reply != QMessageBox::Yes)
             return ;
@@ -840,7 +840,7 @@ AudioManagerDialog::slotRemoveAll()
     QString question =
         tr("This will unload all audio files and remove their associated segments.\nThis action cannot be undone, and associations with these files will be lost.\nFiles will not be removed from your disk.\nAre you sure?");
 
-    int reply = QMessageBox::warning(this, "", question, QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel);
+    int reply = QMessageBox::warning(this, tr("Rosegarden"), question, QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel);
 
     if (reply != QMessageBox::Yes)
         return ;
@@ -877,7 +877,7 @@ AudioManagerDialog::slotRemoveAllUnused()
     QString question =
         tr("This will unload all audio files that are not associated with any segments in this composition.\nThis action cannot be undone, and associations with these files will be lost.\nFiles will not be removed from your disk.\nAre you sure?");
 
-    int reply = QMessageBox::warning(this, "", question,QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel);
+    int reply = QMessageBox::warning(this, tr("Rosegarden"), question,QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel);
 
     if (reply != QMessageBox::Yes)
         return ;
@@ -952,7 +952,7 @@ AudioManagerDialog::slotDeleteUnused()
             QString question =
                 tr("<qt>About to delete %n audio file(s) permanently from the hard disk.<br>This action cannot be undone, and there will be no way to recover the files.<br>Are you sure?</qt>", "", names.size());
 
-            int reply = QMessageBox::warning(this, "", question, QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel);
+            int reply = QMessageBox::warning(this, tr("Rosegarden"), question, QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel);
 
             if (reply != QMessageBox::Yes) {
                 delete dialog;
@@ -963,7 +963,7 @@ AudioManagerDialog::slotDeleteUnused()
                 std::cerr << i << ": " << names[i] << std::endl;
                 QFile file(names[i]);
                 if (!file.remove()) {
-                    QMessageBox::critical(this, "", tr("File %1 could not be deleted.").arg(names[i]));
+                    QMessageBox::critical(this, tr("Rosegarden"), tr("File %1 could not be deleted.").arg(names[i]));
                 } else {
                     if (nameMap.find(names[i]) != nameMap.end()) {
                         m_doc->getAudioFileManager().removeFile(nameMap[names[i]]);
@@ -1198,12 +1198,12 @@ AudioManagerDialog::addFile(const QUrl& kurl)
     } catch (AudioFileManager::BadAudioPathException e) {
         CurrentProgressDialog::freeze();
         QString errorString = tr("Failed to add audio file. ") + strtoqstr(e.getMessage());
-         QMessageBox::warning(this, "", errorString);
+         QMessageBox::warning(this, tr("Rosegarden"), errorString);
         return false;
     } catch (SoundFile::BadSoundFileException e) {
         CurrentProgressDialog::freeze();
         QString errorString = tr("Failed to add audio file. ") + strtoqstr(e.getMessage());
-         QMessageBox::warning(this, "", errorString);
+         QMessageBox::warning(this, tr("Rosegarden"), errorString);
         return false;
     }
             
@@ -1220,7 +1220,7 @@ AudioManagerDialog::addFile(const QUrl& kurl)
 
         QString message = strtoqstr(e.getMessage()) + "\n\n" +
                           tr("Try copying this file to a directory where you have write permission and re-add it");
-        QMessageBox::information(this, "", message);
+        QMessageBox::information(this, tr("Rosegarden"), message);
     }
 
     disconnect(&progressDlg, SIGNAL(canceled()),

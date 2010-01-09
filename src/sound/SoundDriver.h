@@ -292,8 +292,8 @@ public:
     virtual bool canReconnect(Device::DeviceType) { return false; }
 
     virtual bool addDevice(Device::DeviceType,
-                           DeviceId id,
-                           InstrumentId baseInstrumentId,
+                           DeviceId,
+                           InstrumentId,
                            MidiDevice::DeviceDirection) {
         return false;
     }

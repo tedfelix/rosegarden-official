@@ -1040,7 +1040,7 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
                         if (tempo != 0) {
                             double qpm = 60000000.0 / double(tempo);
                             tempoT rgt(Composition::getTempoForQpm(qpm));
-                            std::cout << "MidiFile: converted MIDI tempo " << tempo << " to Rosegarden tempo " << rgt << std::endl;
+//                            std::cout << "MidiFile: converted MIDI tempo " << tempo << " to Rosegarden tempo " << rgt << std::endl;
                             composition.addTempoAtTime(rosegardenTime, rgt);
                         }
                     }

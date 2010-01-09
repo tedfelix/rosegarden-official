@@ -297,7 +297,7 @@ void RosegardenMainViewWidget::slotEditSegment(Segment* segment)
                 Segment::SegmentType myType = (*i)->getType();
                 if (haveType) {
                     if (myType != type) {
-                         QMessageBox::warning(this, "", tr("Selection must contain only audio or non-audio segments"));
+                         QMessageBox::warning(this, tr("Rosegarden"), tr("Selection must contain only audio or non-audio segments"));
                         return ;
                     }
                 } else {
@@ -397,7 +397,7 @@ void RosegardenMainViewWidget::slotEditSegmentNotation(Segment* p)
     }
 
     if (segmentsToEdit.empty()) {
-         QMessageBox::warning(this, "", tr("No non-audio segments selected"));
+         QMessageBox::warning(this, tr("Rosegarden"), tr("No non-audio segments selected"));
         return ;
     }
 
@@ -555,7 +555,7 @@ void RosegardenMainViewWidget::slotEditSegmentMatrix(Segment* p)
     }
 */
     if (segmentsToEdit.empty()) {
-         QMessageBox::warning(this, "", tr("No non-audio segments selected"));
+         QMessageBox::warning(this, tr("Rosegarden"), tr("No non-audio segments selected"));
         return ;
     }
 
@@ -594,7 +594,7 @@ void RosegardenMainViewWidget::slotEditSegmentPercussionMatrix(Segment* p)
     }
 
     if (segmentsToEdit.empty()) {
-         QMessageBox::warning(this, "", tr("No non-audio segments selected"));
+         QMessageBox::warning(this, tr("Rosegarden"), tr("No non-audio segments selected"));
         return ;
     }
 
@@ -733,7 +733,7 @@ void RosegardenMainViewWidget::slotEditSegmentEventList(Segment *p)
     }
 
     if (segmentsToEdit.empty()) {
-         QMessageBox::warning(this, "", tr("No non-audio segments selected"));
+         QMessageBox::warning(this, tr("Rosegarden"), tr("No non-audio segments selected"));
         return ;
     }
 
@@ -810,7 +810,7 @@ void RosegardenMainViewWidget::slotEditSegmentAudio(Segment *segment)
         << "external editor \"" << application.data()
         << "\" not found" << std::endl;
 
-         QMessageBox::warning(this, "", 
+         QMessageBox::warning(this, tr("Rosegarden"), 
                            tr("You've not yet defined an audio editor for Rosegarden to use.\nSee Edit -> Preferences -> Audio."));
 
         return ;
@@ -1531,12 +1531,12 @@ RosegardenMainViewWidget::slotDroppedNewAudio(QString audioDesc)
     } catch (AudioFileManager::BadAudioPathException e) {
         CurrentProgressDialog::freeze();
         QString errorString = tr("Can't add dropped file. ") + strtoqstr(e.getMessage());
-         QMessageBox::warning(this, "", errorString);
+         QMessageBox::warning(this, tr("Rosegarden"), errorString);
         return ;
     } catch (SoundFile::BadSoundFileException e) {
         CurrentProgressDialog::freeze();
         QString errorString = tr("Can't add dropped file. ") + strtoqstr(e.getMessage());
-         QMessageBox::warning(this, "", errorString);
+         QMessageBox::warning(this, tr("Rosegarden"), errorString);
         return ;
     }
              
@@ -1556,7 +1556,7 @@ RosegardenMainViewWidget::slotDroppedNewAudio(QString audioDesc)
         CurrentProgressDialog::freeze();
         QString message = strtoqstr(e.getMessage()) + "\n\n" +
                           tr("Try copying this file to a directory where you have write permission and re-add it");
-        QMessageBox::information(this, "", message);
+        QMessageBox::information(this, tr("Rosegarden"), message);
         //return false;
     }
 

@@ -276,7 +276,7 @@ TriggerSegmentManager::slotUpdate()
 void
 TriggerSegmentManager::slotDeleteAll()
 {
-    if (QMessageBox::warning(this, "", tr("This will remove all triggered segments from the whole composition.  Are you sure?"), QMessageBox::Yes|QMessageBox::Cancel, QMessageBox::Cancel ) != QMessageBox::Yes )
+    if (QMessageBox::warning(this, tr("Rosegarden"), tr("This will remove all triggered segments from the whole composition.  Are you sure?"), QMessageBox::Yes|QMessageBox::Cancel, QMessageBox::Cancel ) != QMessageBox::Yes )
         return ;
 
     RG_DEBUG << "TriggerSegmentManager::slotDeleteAll" << endl;
@@ -328,7 +328,7 @@ TriggerSegmentManager::slotDelete()
         return ;
 
     if (item->getUsage() > 0) {
-        if (QMessageBox::warning(this, "", tr("This triggered segment is used %n time(s) in the current composition.  Are you sure you want to remove it?", "", item->getUsage()),
+        if (QMessageBox::warning(this, tr("Rosegarden"), tr("This triggered segment is used %n time(s) in the current composition.  Are you sure you want to remove it?", "", item->getUsage()),
                                         QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel
                                ) != QMessageBox::Yes )
             return ;
@@ -346,7 +346,7 @@ TriggerSegmentManager::slotPasteAsNew()
     Clipboard *clipboard = m_doc->getClipboard();
 
     if (clipboard->isEmpty()) {
-        QMessageBox::information(this, "", tr("Clipboard is empty"));
+        QMessageBox::information(this, tr("Rosegarden"), tr("Clipboard is empty"));
         return ;
     }
 

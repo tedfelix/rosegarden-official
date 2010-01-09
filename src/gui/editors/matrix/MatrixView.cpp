@@ -1589,7 +1589,7 @@ MatrixView::slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn
         if (showingError)
             return ;
         showingError = true;
-        /* was sorry */ QMessageBox::warning(this, "", tr("Can't insert note: No grid duration selected"));
+        QMessageBox::warning(this, tr("Rosegarden"), tr("Can't insert note: No grid duration selected"));
         showingError = false;
         return ;
     }
@@ -1667,7 +1667,7 @@ MatrixView::slotInsertNoteFromAction()
 
     } catch (...) {
 
-        QMessageBox::warning(this, "", tr("Unknown note insert action %1").arg(name));
+        QMessageBox::warning(this, tr("Rosegarden"), tr("Unknown note insert action %1").arg(name));
         return ;
     }
 

@@ -179,6 +179,7 @@ AudioThread::terminate()
 #endif
 
         int rv = pthread_join(m_thread, 0);
+        rv = rv; // shut up compiler warning when the code below is not compiled
 
 #ifdef DEBUG_THREAD_CREATE_DESTROY
 

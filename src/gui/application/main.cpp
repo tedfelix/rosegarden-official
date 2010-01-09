@@ -801,10 +801,10 @@ int main(int argc, char *argv[])
 
 //#define STYLE_TEST
 #ifdef STYLE_TEST
-    QMessageBox::information(0, "", "Information.", QMessageBox::Ok, QMessageBox::Ok);
-    QMessageBox::critical(0, "", "Critical!", QMessageBox::Ok, QMessageBox::Ok);
-    QMessageBox::question(0, "", "Question?", QMessageBox::Ok, QMessageBox::Ok);
-    QMessageBox::warning(0, "", "Warning!", QMessageBox::Ok, QMessageBox::Ok);
+    QMessageBox::information(0, tr("Rosegarden"), "Information.", QMessageBox::Ok, QMessageBox::Ok);
+    QMessageBox::critical(0, tr("Rosegarden"), "Critical!", QMessageBox::Ok, QMessageBox::Ok);
+    QMessageBox::question(0, tr("Rosegarden"), "Question?", QMessageBox::Ok, QMessageBox::Ok);
+    QMessageBox::warning(0, tr("Rosegarden"), "Warning!", QMessageBox::Ok, QMessageBox::Ok);
 #endif
 
     return theApp.exec();

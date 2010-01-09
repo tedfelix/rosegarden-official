@@ -447,7 +447,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                 CurrentProgressDialog::freeze();
                 StartupLogo::hideIfStillThere();
 
-                QMessageBox::information(0, "", tr("This file was written by Rosegarden %1, which is more recent than this version.\nThere may be some incompatibilities with the file format.").arg(version));
+                QMessageBox::information(0, tr("Rosegarden"), tr("This file was written by Rosegarden %1, which is more recent than this version.\nThere may be some incompatibilities with the file format.").arg(version));
 
                 CurrentProgressDialog::thaw();
             }
