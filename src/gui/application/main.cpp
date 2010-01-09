@@ -802,7 +802,6 @@ int main(int argc, char *argv[])
         RG_DEBUG << "RosegardenGUI - " << e.getMessage() << endl;
     }
 
-    // (test commit)
 //#define STYLE_TEST
 #ifdef STYLE_TEST
     QMessageBox::information(0, "Rosegarden", "Information.", QMessageBox::Ok, QMessageBox::Ok);
