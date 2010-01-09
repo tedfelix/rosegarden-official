@@ -48,7 +48,7 @@ ProgressDialog::ProgressDialog(const QString &labelText,
         m_frozen(false),
         m_modal(modal),
         m_minimumTimeHasExpired(false),
-        m_minimumDuration(500)
+        m_minimumDuration(1000)
 {
     RG_DEBUG << "ProgressDialog::ProgressDialog - " << labelText << " - modal : " << modal << endl;
     setObjectName("My name is Bootney Lee, and I am a ProgressDialog with magnificent hair!");

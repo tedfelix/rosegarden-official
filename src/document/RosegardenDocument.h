@@ -179,10 +179,13 @@ public:
      * if this document is intended to be loaded to the GUI for real
      * editing work: in this case, any necessary device-synchronisation
      * with the sequencer will be carried out.  If permanent is false,
-     * the sequencer's device list will be left alone.
+     * the sequencer's device list will be left alone.  If squelch is
+     * true, no progress dialog will be shown.
      */
-    bool openDocument(const QString &filename, bool permanent = true,
-                      const char *format=0);
+    bool openDocument(const QString &filename,
+                      bool permanent = true,
+                      bool squelch = false,
+                      const char *format = 0);
 
     /**
      * merge another document into this one

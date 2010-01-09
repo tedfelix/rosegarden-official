@@ -566,11 +566,13 @@ void RosegardenDocument::performAutoload()
         return ;
     }
 
-    openDocument(autoloadFile);
+    bool permanent = true, squelch = true;
+    openDocument(autoloadFile, permanent, squelch);
 }
 
 bool RosegardenDocument::openDocument(const QString& filename,
                                     bool permanent,
+                                    bool squelch,
                                     const char* /*format*/ /*=0*/)
 {
     RG_DEBUG << "RosegardenDocument::openDocument(" << filename << ")" << endl;
@@ -591,17 +593,22 @@ bool RosegardenDocument::openDocument(const QString& filename,
         return false;
     }
 
-    ProgressDialog progressDlg(tr("Reading file..."),
-                               100,
-                               (QWidget*)parent());
+    ProgressDialog *progressDlg = 0;
+   
+    if (!squelch) {
+        progressDlg = new ProgressDialog(tr("Reading file..."),
+                                         100,
+                                         (QWidget*)parent());
 
-    connect(&progressDlg, SIGNAL(canceled()),
-            &m_audioFileManager, SLOT(slotStopPreview()));
+        connect(progressDlg, SIGNAL(canceled()),
+                &m_audioFileManager, SLOT(slotStopPreview()));
 
-    CurrentProgressDialog::set(&progressDlg);
+        CurrentProgressDialog::set(progressDlg);
+        progressDlg->show();
 
-    progressDlg.setMinimumDuration(500);
-    progressDlg.setAutoReset(true); // we're re-using it for the preview generation
+        progressDlg->setMinimumDuration(500);
+        progressDlg->setAutoReset(true); // we're re-using it for the preview generation
+    }
 
     setAbsFilePath(fileInfo.absFilePath());
 
@@ -612,11 +619,11 @@ bool RosegardenDocument::openDocument(const QString& filename,
     bool okay = GzipFile::readFromFile(filename, fileContents);
     if (!okay) errMsg = tr("Could not open Rosegarden file");
     else {
-        okay = xmlParse(fileContents, errMsg, &progressDlg,
-                        permanent, cancelled);
-// to disable progress dialogs while loading:
-//        okay = xmlParse(fileContents, errMsg, 0,
-//                        permanent, cancelled);
+        okay = xmlParse(fileContents,
+                        errMsg,
+                        progressDlg,
+                        permanent,
+                        cancelled);
     }
 
     if (!okay) {
@@ -625,9 +632,9 @@ bool RosegardenDocument::openDocument(const QString& filename,
                      .arg(filename)
                      .arg(errMsg));
 
-        CurrentProgressDialog::freeze();
+        if (!squelch) CurrentProgressDialog::freeze();
         QMessageBox::warning(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), msg);
-        CurrentProgressDialog::thaw();
+        if (!squelch) CurrentProgressDialog::thaw();
 
         return false;
 
@@ -649,25 +656,27 @@ bool RosegardenDocument::openDocument(const QString& filename,
 
     // We might need a progress dialog when we generate previews, reuse the
     // previous one
-    progressDlg.setLabelText(tr("Generating audio previews..."));
+    if (!squelch) {
+        progressDlg->setLabelText(tr("Generating audio previews..."));
 
-    connect(&progressDlg, SIGNAL(canceled()),
-            &m_audioFileManager, SLOT(slotStopPreview()));
-    
-    progressDlg.setValue(0);
-    progressDlg.show();
-    
-    connect(&m_audioFileManager, SIGNAL(setValue(int)),
-            &progressDlg, SLOT(setValue(int)));
+        connect(progressDlg, SIGNAL(canceled()),
+                &m_audioFileManager, SLOT(slotStopPreview()));
+        
+        progressDlg->setValue(0);
+        progressDlg->show();
+        
+        connect(&m_audioFileManager, SIGNAL(setValue(int)),
+                progressDlg, SLOT(setValue(int)));
+    }
     
     try {
         // generate any audio previews after loading the files
         m_audioFileManager.generatePreviews();
     } catch (Exception e) {
         StartupLogo::hideIfStillThere();
-        CurrentProgressDialog::freeze();
+        if (!squelch) CurrentProgressDialog::freeze();
         QMessageBox::critical(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), strtoqstr(e.getMessage()));
-        CurrentProgressDialog::thaw();
+        if (!squelch) CurrentProgressDialog::thaw();
     }
 
     if (isSequencerRunning()) {
