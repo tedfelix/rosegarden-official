@@ -74,6 +74,7 @@ ProgressDialog::ProgressDialog(const QString &labelText,
     boxLayout->addWidget(m_label);
 
     m_progressBar = new ProgressBar(totalSteps);
+    m_progressBar->setObjectName("Dingles McGee"); // for debug reporting
     boxLayout->addWidget(m_progressBar);
 
     connect(m_progressBar, SIGNAL(valueChanged(int)),
@@ -222,9 +223,11 @@ void
 ProgressDialog::setValue(int value)
 {
     std::cout << "ProgressDialog::setValue(" << value << ")" << std::endl;
-    m_progressBar->hide();
     m_progressBar->setValue(value);
-    m_progressBar->show();
+
+    // ensure we are visible when this changes, although this probably needs to
+    // be hooked into m_modal nonsense somehow or other
+    show();
 }
 
 void

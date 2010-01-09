@@ -246,11 +246,11 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
 #ifdef HAVE_LIBJACK
     m_jackProcess(0),
 #endif
-    m_progressBar(0),
+    m_cpuBar(0),
     m_zoomSlider(0),
-    m_seqManager(0),
     m_zoomLabel(0),
     m_statusBarLabel1(0),
+    m_seqManager(0),
     m_transport(0),
     m_audioManagerDialog(0),
     m_originatingJump(false),
@@ -891,27 +891,16 @@ void
 RosegardenMainWindow::initStatusBar()
 {
     TmpStatusMsg::setDefaultMsg("");
-    // QStatusBar::addPermanentWidget (QWidget * widget, int stretch = 0)
-//    statusBar()->addPermanentWidget(TmpStatusMsg::getDefaultMsg(),
-//              TmpStatusMsg::getDefaultId(), 1);
-//    statusBar()->setItemAlignment(TmpStatusMsg::getDefaultId(),
-//              AlignLeft | AlignVCenter);
-
-//    m_statusBarLabel1 = new QLabel(tr("status"), this);
-//    statusBar()->addPermanentWidget(m_statusBarLabel1);
-
-//    statusBar()->setItemAlignment(TmpStatusMsg::getDefaultId(),
-//              AlignLeft | AlignVCenter);
-
-    m_progressBar = new ProgressBar(100, statusBar());
-    m_progressBar->setFixedWidth(60);
-    m_progressBar->setFixedHeight(18);
-    QFont font = m_progressBar->font();
+    m_cpuBar = new ProgressBar(100, statusBar());
+    m_cpuBar->setObjectName("Main Window progress bar"); // to help keep ProgressBar objects straight
+    m_cpuBar->setFixedWidth(60);
+    m_cpuBar->setFixedHeight(18);
+    QFont font = m_cpuBar->font();
     font.setPixelSize(10);
-    m_progressBar->setFont(font);
+    m_cpuBar->setFont(font);
                 
-    m_progressBar->setTextVisible(false);
-    statusBar()->addPermanentWidget(m_progressBar);
+    m_cpuBar->setTextVisible(false);
+    statusBar()->addPermanentWidget(m_cpuBar);
 
     // status warning widget replaces a glob of annoying startup dialogs
     m_warningWidget = new WarningWidget(this);
@@ -1069,7 +1058,7 @@ RosegardenMainWindow::initView()
         } catch (QString s) {
             StartupLogo::hideIfStillThere();
             CurrentProgressDialog::freeze();
-            QMessageBox::critical(dynamic_cast<QWidget*>(this), "", s, QMessageBox::Ok, QMessageBox::Ok);
+            QMessageBox::critical(dynamic_cast<QWidget*>(this), tr("Rosegarden"), s, QMessageBox::Ok, QMessageBox::Ok);
             CurrentProgressDialog::thaw();
         }
 
@@ -1378,7 +1367,7 @@ RosegardenMainWindow::createDocument(QString filePath, ImportType importType)
         QString errStr =
             tr("You do not have read permission for \"%1\"").arg(filePath);
 
-        QMessageBox::warning(this, "", errStr, QMessageBox::Ok, QMessageBox::Ok);
+        QMessageBox::warning(this, tr("Rosegarden"), errStr, QMessageBox::Ok, QMessageBox::Ok);
         return 0;
     }
 
@@ -1432,7 +1421,6 @@ RosegardenMainWindow::createDocumentFromRGFile(QString filePath)
 {
     // Check for an autosaved file to recover
     QString effectiveFilePath = filePath;
-    bool canRecover = false;
 
     QString autoSaveFileName = AutoSaveFinder().checkAutoSaveFile(filePath);
     bool recovering = (autoSaveFileName != "");
@@ -1452,7 +1440,7 @@ RosegardenMainWindow::createDocumentFromRGFile(QString filePath)
             StartupLogo::hideIfStillThere();
 
             // It is, so ask the user if he wants to use the autosave file
-            int reply = QMessageBox::question(this, "",
+            int reply = QMessageBox::question(this, tr("Rosegarden"),
                                               tr("An auto-save file for this document has been found\nDo you want to open it instead ?"), QMessageBox::Yes | QMessageBox::No);
 
             if (reply == QMessageBox::Yes)
@@ -1613,9 +1601,9 @@ RosegardenMainWindow::saveGlobalProperties()
             bool res = m_doc->saveDocument(tempname, errMsg);
             if (!res) {
                 if (!errMsg.isEmpty()) {
-                    QMessageBox::critical(this, "", tr("Could not save document at %1\nError was : %2").arg(tempname).arg(errMsg));
+                    QMessageBox::critical(this, tr("Rosegarden"), tr("Could not save document at %1\nError was : %2").arg(tempname).arg(errMsg));
                 } else {
-                    QMessageBox::critical(this, "", tr("Could not save document at %1").arg(tempname));
+                    QMessageBox::critical(this, tr("Rosegarden"), tr("Could not save document at %1").arg(tempname));
                 }
             }
         }
@@ -1632,7 +1620,6 @@ RosegardenMainWindow::readGlobalProperties()
     bool modified = qStrToBool(settings.value("modified", "false")) ;
 
     if (modified) {
-        bool canRecover;
 
         QString tempname = AutoSaveFinder().checkAutoSaveFile(filename);
 
@@ -1658,7 +1645,7 @@ RosegardenMainWindow::readGlobalProperties()
 }
 
 void
-RosegardenMainWindow::showEvent(QShowEvent* e)
+RosegardenMainWindow::showEvent(QShowEvent*)
 {
     RG_DEBUG << "RosegardenMainWindow::showEvent()\n";
 
@@ -1780,7 +1767,7 @@ RosegardenMainWindow::openURL(const QUrl& url)
         QString string;
         string = tr("Malformed URL\n%1").arg(netFile);
 
-        /* was sorry */ QMessageBox::warning(this, "", string);
+        QMessageBox::warning(this, tr("Rosegarden"), string);
         return ;
     }
 
@@ -1798,7 +1785,7 @@ RosegardenMainWindow::openURL(const QUrl& url)
 
     FileSource source(url);
     if (!source.isAvailable()) {
-        QMessageBox::critical(this, "", tr("Cannot open file %1").arg(url.toString()));
+        QMessageBox::critical(this, tr("Rosegarden"), tr("Cannot open file %1").arg(url.toString()));
         return ;
     }
 
@@ -1908,7 +1895,7 @@ RosegardenMainWindow::slotMerge()
 
     FileSource source(url);
     if (!source.isAvailable()) {
-        QMessageBox::critical(this, "", tr("Cannot open file %1").arg(url.toString()));
+        QMessageBox::critical(this, tr("Rosegarden"), tr("Cannot open file %1").arg(url.toString()));
         return;
     }
 
@@ -1967,10 +1954,10 @@ RosegardenMainWindow::slotFileSave()
         bool res = m_doc->saveDocument(docFilePath, errMsg);
         if (!res) {
             if (! errMsg.isEmpty())
-                QMessageBox::critical(this, "", tr("Could not save document at %1\nError was : %2")
+                QMessageBox::critical(this, tr("Rosegarden"), tr("Could not save document at %1\nError was : %2")
                                       .arg(docFilePath).arg(errMsg));
             else
-                QMessageBox::critical(this, "", tr("Could not save document at %1")
+                QMessageBox::critical(this, tr("Rosegarden"), tr("Could not save document at %1")
                                       .arg(docFilePath));
         }
     }
@@ -2010,7 +1997,10 @@ RosegardenMainWindow::getValidWriteFileName(QString descriptiveExtension,
 
     // Confirm the overwrite of the file later.
     //
-    QString name = FileDialog::getSaveFileName(this, tr("Save File"), directory, descriptiveExtension, 0, FileDialog::DontConfirmOverwrite); 
+    // (Hah, all these compiler warnings are useful for something after all.
+    // This used to not do anything with the label parameter, and always said
+    // "Save File" 100% of the time.)
+    QString name = FileDialog::getSaveFileName(this, label, directory, descriptiveExtension, 0, FileDialog::DontConfirmOverwrite); 
     
     RG_DEBUG << "RosegardenMainWindow::getValidWriteFileName() : FileDialog::getSaveFileName returned "
              << name << endl;
@@ -2040,20 +2030,20 @@ RosegardenMainWindow::getValidWriteFileName(QString descriptiveExtension,
     QUrl *u = new QUrl(name);
 
     if (!u->isValid()) {
-        /* was sorry */ QMessageBox::warning(this, "", tr("<qt>Sorry.<br>\"%1\" is not a valid filename.</qt>").arg(name));
+        QMessageBox::warning(this, tr("Rosegarden"), tr("<qt>Sorry.<br>\"%1\" is not a valid filename.</qt>").arg(name));
         return QString("");
     }
 
     QFileInfo info(name);
 
     if (info.isDir()) {
-        /* was sorry */ QMessageBox::warning(this, "", tr("You have specified a folder/directory."));
+        QMessageBox::warning(this, tr("Rosegarden"), tr("You have specified a folder/directory."));
         return "";
     }
 
     if (info.exists()) {
         int overwrite = QMessageBox::question
-                (this, "", tr("The specified file exists.  Overwrite?"), 
+                (this, tr("Rosegarden"), tr("The specified file exists.  Overwrite?"), 
                  QMessageBox::Yes | QMessageBox::No,
                  QMessageBox::No);
 
@@ -2108,10 +2098,10 @@ RosegardenMainWindow::slotFileSaveAs(bool asTemplate)
 
     if (!res) {
         if (!errMsg.isEmpty())
-            QMessageBox::critical(this, "", tr("Could not save document at %1\nError was : %2")
+            QMessageBox::critical(this, tr("Rosegarden"), tr("Could not save document at %1\nError was : %2")
                                   .arg(newName).arg(errMsg));
         else
-            QMessageBox::critical(this, "", tr("Could not save document at %1")
+            QMessageBox::critical(this, tr("Rosegarden"), tr("Could not save document at %1")
                                   .arg(newName));
 
     } else {
@@ -2341,7 +2331,7 @@ RosegardenMainWindow::slotGrooveQuantize()
     SegmentSelection selection = m_view->getSelection();
 
     if (selection.size() != 1) {
-        /* was sorry */ QMessageBox::warning(this, "", tr("This function needs no more than one segment to be selected."));
+        QMessageBox::warning(this, tr("Rosegarden"), tr("This function needs no more than one segment to be selected."));
         return ;
     }
 
@@ -2365,7 +2355,7 @@ RosegardenMainWindow::slotJoinSegments()
     for (SegmentSelection::iterator i = selection.begin();
             i != selection.end(); ++i) {
         if ((*i)->getType() != Segment::Internal) {
-            /* was sorry */ QMessageBox::warning(this, "", tr("Can't join Audio segments"));
+            QMessageBox::warning(this, tr("Rosegarden"), tr("Can't join Audio segments"));
             return ;
         }
     }
@@ -2456,7 +2446,7 @@ RosegardenMainWindow::slotRescaleSelection()
 //        }
 
         connect(&m_doc->getAudioFileManager(), SIGNAL(setValue(int)),
-                 m_progressBar, SLOT(setValue(int)));    // was progressDlg->progressBar()
+                 progressDlg, SLOT(setValue(int)));
         connect(progressDlg, SIGNAL(cancelClicked()),
                 &m_doc->getAudioFileManager(), SLOT(slotStopPreview()));
 
@@ -3314,8 +3304,6 @@ RosegardenMainWindow::slotAddTracks()
     int pos = 0;
     if (track) pos = track->getPosition();
 
-    bool ok = false;
-
     AddTracksDialog dialog(this, pos);
 
     if (dialog.exec() == QDialog::Accepted) {
@@ -3383,8 +3371,9 @@ RosegardenMainWindow::slotDeleteTrack()
 
     comp.setSelectedTrack(trackId);
 
-    Instrument *inst = m_doc->getStudio().
-                       getInstrumentById(comp.getTrackById(trackId)->getInstrument());
+// unused:
+//    Instrument *inst = m_doc->getStudio().
+//                       getInstrumentById(comp.getTrackById(trackId)->getInstrument());
 
     //VLADA
     //    m_view->slotSelectTrackSegments(trackId);
@@ -3464,7 +3453,7 @@ RosegardenMainWindow::slotRevertToSaved()
 
     if (m_doc->isModified()) {
         int revert =
-            QMessageBox::question(this, "", 
+            QMessageBox::question(this, tr("Rosegarden"), 
                                        tr("Revert modified document to previous saved version?"));
 
         if (revert == QMessageBox::No)
@@ -3503,7 +3492,7 @@ RosegardenMainWindow::slotImportProject()
     QString tmpfile;
     FileSource source(url);
     if (!source.isAvailable()) {
-        QMessageBox::critical(this, "", tr("Cannot open file %1").arg(url.toString()));
+        QMessageBox::critical(this, tr("Rosegarden"), tr("Cannot open file %1").arg(url.toString()));
         return ;
     }
     source.waitForData();
@@ -3555,7 +3544,7 @@ RosegardenMainWindow::slotImportMIDI()
     QString tmpfile;
     FileSource source(url);
     if (!source.isAvailable()) {
-        QMessageBox::critical(this, "", tr("Cannot open file %1").arg(url.toString()));
+        QMessageBox::critical(this, tr("Rosegarden"), tr("Cannot open file %1").arg(url.toString()));
         return ;
     }
 
@@ -3591,7 +3580,7 @@ RosegardenMainWindow::slotMergeMIDI()
     QString tmpfile;
     FileSource source(url);
     if (!source.isAvailable()) {
-        QMessageBox::critical(this, "", tr("Cannot open file %1").arg(url.toString()));
+        QMessageBox::critical(this, tr("Rosegarden"), tr("Cannot open file %1").arg(url.toString()));
         return ;
     }
 
@@ -3706,14 +3695,18 @@ RosegardenMainWindow::createDocumentFromMIDIFile(QString file)
     CurrentProgressDialog::set(&progressDlg);
 
     connect(&midiFile, SIGNAL(setValue(int)),
-            m_progressBar, SLOT(setValue(int)));
+            &progressDlg, SLOT(setValue(int)));
 
     connect(&midiFile, SIGNAL(incrementProgress(int)),
-             m_progressBar, SLOT(advance(int)));
+            &progressDlg, SLOT(incrementProgress(int)));
 
     if (!midiFile.open()) {
         CurrentProgressDialog::freeze();
-        QMessageBox::critical(this, "", strtoqstr(midiFile.getError())); //!!! tr
+        // NOTE: Someone flagged midiFile.getError() with a warning about tr().
+        // This stuff either gets translated at the source, if we own it, or it
+        // doesn't get translated at all, if we don't (eg. errors from the
+        // underlying filesystem, a library, etc.)
+        QMessageBox::critical(this, tr("Rosegarden"), strtoqstr(midiFile.getError()));
         delete newDoc;
         return 0;
     }
@@ -3750,8 +3743,7 @@ RosegardenMainWindow::createDocumentFromMIDIFile(QString file)
                        .getAsEvent(segment.getStartTime()));
     }
 
-    //was: progressDlg.progressBar()
-    m_progressBar->setValue(100);
+    progressDlg.setValue(100);
 
     for (Composition::iterator i = comp->begin();
             i != comp->end(); ++i) {
@@ -3799,7 +3791,7 @@ RosegardenMainWindow::createDocumentFromMIDIFile(QString file)
 
         subCommand->setProgressTotal(progressPer + 1);
         QObject::connect(subCommand, SIGNAL(incrementProgress(int)),
-                         m_progressBar, SLOT(advance(int)));
+                         &progressDlg, SLOT(advance(int)));
 
         command->addCommand(subCommand);
     }
@@ -3846,7 +3838,7 @@ RosegardenMainWindow::slotImportRG21()
     QString tmpfile;
     FileSource source(url);
     if (!source.isAvailable()) {
-        QMessageBox::critical(this, "", tr("Cannot open file %1").arg(url.toString()));
+        QMessageBox::critical(this, tr("Rosegarden"), tr("Cannot open file %1").arg(url.toString()));
         return ;
     }
 
@@ -3882,7 +3874,7 @@ RosegardenMainWindow::slotMergeRG21()
     QString tmpfile;
     FileSource source(url);
     if (!source.isAvailable()) {
-        QMessageBox::critical(this, "", tr("Cannot open file %1").arg(url.toString()));
+        QMessageBox::critical(this, tr("Rosegarden"), tr("Cannot open file %1").arg(url.toString()));
         return ;
     }
 
@@ -3911,20 +3903,17 @@ RosegardenMainWindow::createDocumentFromRG21File(QString file)
     // TODO: make RG21Loader to actually emit these signals
     //
     connect(&rg21Loader, SIGNAL(setValue(int)),
-            m_progressBar, SLOT(setValue(int)));
+            &progressDlg, SLOT(setValue(int)));
 
     connect(&rg21Loader, SIGNAL(incrementProgress(int)),
-            m_progressBar, SLOT(advance(int)));
+            &progressDlg, SLOT(advance(int)));
 
     // "your starter for 40%" - helps the "freeze" work
-    //
-    //progressDlg.progressBar()->advance(40);
-    //m_progressBar->advance(40);
-    m_progressBar->setValue(40);
+    progressDlg.setValue(40);
 
     if (!rg21Loader.load(file, newDoc->getComposition())) {
         CurrentProgressDialog::freeze();
-        QMessageBox::critical(this, "", 
+        QMessageBox::critical(this, tr("Rosegarden"), 
                            tr("Can't load X11 Rosegarden file.  It appears to be corrupted."));
         delete newDoc;
         return 0;
@@ -3971,7 +3960,7 @@ RosegardenMainWindow::slotImportHydrogen()
     QString tmpfile;
     FileSource source(url);
     if (!source.isAvailable()) {
-        QMessageBox::critical(this, "", tr("Cannot open file %1").arg(url.toString()));
+        QMessageBox::critical(this, tr("Rosegarden"), tr("Cannot open file %1").arg(url.toString()));
         return ;
     }
 
@@ -4006,7 +3995,7 @@ RosegardenMainWindow::slotMergeHydrogen()
     QString tmpfile;
     FileSource source(url);
     if (!source.isAvailable()) {
-        QMessageBox::critical(this, "", tr("Cannot open file %1").arg(url.toString()));
+        QMessageBox::critical(this, tr("Rosegarden"), tr("Cannot open file %1").arg(url.toString()));
         return ;
     }
 
@@ -4035,18 +4024,17 @@ RosegardenMainWindow::createDocumentFromHydrogenFile(QString file)
     // TODO: make RG21Loader to actually emit these signals
     //
     connect(&hydrogenLoader, SIGNAL(setValue(int)),
-             m_progressBar, SLOT(setValue(int)));
+             &progressDlg, SLOT(setValue(int)));
 
     connect(&hydrogenLoader, SIGNAL(incrementProgress(int)),
-             m_progressBar, SLOT(advance(int)));
+             &progressDlg, SLOT(advance(int)));
 
     // "your starter for 40%" - helps the "freeze" work
-    //
-    m_progressBar->setValue(40);
+    progressDlg.setValue(40);
 
     if (!hydrogenLoader.load(file, newDoc->getComposition())) {
         CurrentProgressDialog::freeze();
-        QMessageBox::critical(this, "",
+        QMessageBox::critical(this, tr("Rosegarden"),
                            tr("Can't load Hydrogen file.  It appears to be corrupted."));
         delete newDoc;
         return 0;
@@ -4262,21 +4250,23 @@ RosegardenMainWindow::slotUpdateCPUMeter(bool playing)
         lastBusy = busy;
         lastIdle = idle;
 
-        if (m_progressBar) {
+        // correct use of m_cpuBar; it's the CPU meter, and from now on,
+        // nothing else (use ProgressDialog for reporting any kind of progress)
+        if (m_cpuBar) {
             if (!modified) {
-                m_progressBar->setTextVisible(true);
-                m_progressBar->setFormat("CPU %p%");
+                m_cpuBar->setTextVisible(true);
+                m_cpuBar->setFormat("CPU %p%");
             }
-            m_progressBar->setValue(count);
+            m_cpuBar->setValue(count);
         }
 
         modified = true;
 
     } else if (modified) {
-        if (m_progressBar) {
-            m_progressBar->setTextVisible(false);
-            m_progressBar->setFormat("%p%");
-            m_progressBar->setValue(0);
+        if (m_cpuBar) {
+            m_cpuBar->setTextVisible(false);
+            m_cpuBar->setFormat("%p%");
+            m_cpuBar->setValue(0);
         }
         modified = false;
     }
@@ -4332,7 +4322,7 @@ RosegardenMainWindow::slotSetPointerPosition(timeT t)
                 m_seqManager->sendSequencerJump(comp.getElapsedRealTime(t));
             }
         } catch (QString s) {
-            QMessageBox::critical(this, "", s);
+            QMessageBox::critical(this, tr("Rosegarden"), s);
         }
     }
 
@@ -4588,11 +4578,11 @@ RosegardenMainWindow::slotSequencerExited()
 
     if (m_sequencerCheckedIn) {
 
-        QMessageBox::critical(this, "", tr("The Rosegarden sequencer process has exited unexpectedly.  Sound and recording will no longer be available for this session.\nPlease exit and restart Rosegarden to restore sound capability."));
+        QMessageBox::critical(this, tr("Rosegarden"), tr("The Rosegarden sequencer process has exited unexpectedly.  Sound and recording will no longer be available for this session.\nPlease exit and restart Rosegarden to restore sound capability."));
 
     } else {
 
-        QMessageBox::critical(this, "", tr("The Rosegarden sequencer could not be started, so sound and recording will be unavailable for this session.\nFor assistance with correct audio and MIDI configuration, go to http://rosegardenmusic.com."));
+        QMessageBox::critical(this, tr("Rosegarden"), tr("The Rosegarden sequencer could not be started, so sound and recording will be unavailable for this session.\nFor assistance with correct audio and MIDI configuration, go to http://rosegardenmusic.com."));
     }
 
     delete m_sequencerThread;
@@ -4628,7 +4618,7 @@ RosegardenMainWindow::slotExportProject()
     QString errMsg;
     if (!m_doc->saveDocument(rgFile, errMsg,
                              true)) { // pretend it's autosave
-        /* was sorry */ QMessageBox::warning(this, "", tr("Saving Rosegarden file to package failed: %1").arg(errMsg));
+        QMessageBox::warning(this, tr("Rosegarden"), tr("Saving Rosegarden file to package failed: %1").arg(errMsg));
         CurrentProgressDialog::thaw();
         return ;
     }
@@ -4669,16 +4659,16 @@ RosegardenMainWindow::exportMIDIFile(QString file)
                       &m_doc->getStudio());
 
     connect(&midiFile, SIGNAL(setValue(int)),
-             m_progressBar, SLOT(setValue(int)));
+            &progressDlg, SLOT(setValue(int)));
 
     connect(&midiFile, SIGNAL(incrementProgress(int)),
-             m_progressBar, SLOT(advance(int)));
+            &progressDlg, SLOT(advance(int)));
 
     midiFile.convertToMidi(m_doc->getComposition());
 
     if (!midiFile.write()) {
         CurrentProgressDialog::freeze();
-        /* was sorry */ QMessageBox::warning(this, "", tr("Export failed.  The file could not be opened for writing."));
+        QMessageBox::warning(this, tr("Rosegarden"), tr("Export failed.  The file could not be opened for writing."));
     }
 }
 
@@ -4708,14 +4698,14 @@ RosegardenMainWindow::exportCsoundFile(QString file)
     CsoundExporter e(this, &m_doc->getComposition(), std::string(QFile::encodeName(file)));
 
     connect(&e, SIGNAL(setValue(int)),
-             m_progressBar, SLOT(setValue(int)));
+            &progressDlg, SLOT(setValue(int)));
 
     connect(&e, SIGNAL(incrementProgress(int)),
-             m_progressBar, SLOT(advance(int)));
+            &progressDlg, SLOT(advance(int)));
 
     if (!e.write()) {
         CurrentProgressDialog::freeze();
-        /* was sorry */ QMessageBox::warning(this, "", tr("Export failed.  The file could not be opened for writing."));
+        QMessageBox::warning(this, tr("Rosegarden"), tr("Export failed.  The file could not be opened for writing."));
     }
 }
 
@@ -4744,14 +4734,14 @@ RosegardenMainWindow::exportMupFile(QString file)
     MupExporter e(this, &m_doc->getComposition(), std::string(QFile::encodeName(file)));
 
     connect(&e, SIGNAL(setValue(int)),
-             m_progressBar, SLOT(setValue(int)));
+            &progressDlg, SLOT(setValue(int)));
 
     connect(&e, SIGNAL(incrementProgress(int)),
-             m_progressBar, SLOT(advance(int)));
+            &progressDlg, SLOT(advance(int)));
 
     if (!e.write()) {
         CurrentProgressDialog::freeze();
-        /* was sorry */ QMessageBox::warning(this, "", tr("Export failed.  The file could not be opened for writing."));
+        QMessageBox::warning(this, tr("Rosegarden"), tr("Export failed.  The file could not be opened for writing."));
     }
 }
 
@@ -4816,7 +4806,7 @@ RosegardenMainWindow::getLilyPondTmpFilename()
         // getLilyPondTmpFilename() in RosegardenMainWindow:: and in NotationView:: are nearly in sync.
         // However, the following line is commented out in NotationView::getLilyPondTmpFilename()
         CurrentProgressDialog::freeze();
-        QMessageBox::warning(this, "", tr("<qt><p>Failed to open a temporary file for LilyPond export.</p>"
+        QMessageBox::warning(this, tr("Rosegarden"), tr("<qt><p>Failed to open a temporary file for LilyPond export.</p>"
                                           "<p>This probably means you have run out of disk space on <pre>%1</pre></p></qt>").
                                        arg(QDir::tempPath()));
         delete file;
@@ -4850,15 +4840,14 @@ RosegardenMainWindow::exportLilyPondFile(QString file, bool forPreview)
     LilyPondExporter e(this, m_doc, std::string(QFile::encodeName(file)));
 
     connect(&e, SIGNAL(setValue(int)),
-             m_progressBar, SLOT(setValue(int)));
-    //progressDlg.progressBar(), SLOT(setValue(int)));
+            &progressDlg, SLOT(setValue(int)));
 
     connect(&e, SIGNAL(incrementProgress(int)),
-            m_progressBar, SLOT(advance(int)));
+            &progressDlg, SLOT(advance(int)));
 
     if (!e.write()) {
         CurrentProgressDialog::freeze();
-        QMessageBox::warning(this, "", tr("Export failed.  The file could not be opened for writing."));
+        QMessageBox::warning(this, tr("Rosegarden"), tr("Export failed.  The file could not be opened for writing."));
         return false;
     }
 
@@ -4891,15 +4880,14 @@ RosegardenMainWindow::exportMusicXmlFile(QString file)
     MusicXmlExporter e(this, m_doc, std::string(QFile::encodeName(file)));
 
     connect(&e, SIGNAL(setValue(int)),
-             m_progressBar, SLOT(setValue(int)));
-//    progressDlg.progressBar(), SLOT(setValue(int)));
+            &progressDlg, SLOT(setValue(int)));
 
     connect(&e, SIGNAL(incrementProgress(int)),
-            m_progressBar, SLOT(advance(int)));
+            &progressDlg, SLOT(advance(int)));
 
     if (!e.write()) {
         CurrentProgressDialog::freeze();
-        /* was sorry */ QMessageBox::warning(this, "", tr("Export failed.  The file could not be opened for writing."));
+        QMessageBox::warning(this, tr("Rosegarden"), tr("Export failed.  The file could not be opened for writing."));
     }
 }
 
@@ -5015,7 +5003,7 @@ RosegardenMainWindow::slotRecord()
         // We should already be stopped by this point so just unset
         // the buttons after clicking the dialog.
         //
-        QMessageBox::critical(this, "", s);
+        QMessageBox::critical(this, tr("Rosegarden"), s);
 
         getTransport()->MetronomeButton()->setOn(false);
         getTransport()->RecordButton()->setOn(false);
@@ -5038,7 +5026,7 @@ RosegardenMainWindow::slotRecord()
         getTransport()->PlayButton()->setOn(false);
         return ;
     } catch (Exception e) {
-        QMessageBox::critical(this, "", strtoqstr(e.getMessage()));
+        QMessageBox::critical(this, tr("Rosegarden"), strtoqstr(e.getMessage()));
 
         getTransport()->MetronomeButton()->setOn(false);
         getTransport()->RecordButton()->setOn(false);
@@ -5071,7 +5059,7 @@ RosegardenMainWindow::slotToggleRecord()
     try {
         m_seqManager->record(true);
     } catch (QString s) {
-        QMessageBox::critical(this, "", s);
+        QMessageBox::critical(this, tr("Rosegarden"), s);
     } catch (AudioFileManager::BadAudioPathException e) {
         if (QMessageBox::warning
             (this, tr("Error"),
@@ -5084,7 +5072,7 @@ RosegardenMainWindow::slotToggleRecord()
         slotOpenAudioPathSettings();
         }
     } catch (Exception e) {
-        QMessageBox::critical(this, "",  strtoqstr(e.getMessage()));
+        QMessageBox::critical(this, tr("Rosegarden"),  strtoqstr(e.getMessage()));
     }
 
 }
@@ -5106,7 +5094,7 @@ RosegardenMainWindow::slotSetLoop(timeT lhs, timeT rhs)
             leaveActionState("have_range"); //@@@ JAS orig. KXMLGUIClient::StateReverse
         }
     } catch (QString s) {
-        QMessageBox::critical(this, "", s);
+        QMessageBox::critical(this, tr("Rosegarden"), s);
     }
 }
 
@@ -5180,11 +5168,11 @@ RosegardenMainWindow::slotPlay()
             m_stopTimer->start(100);
         }
     } catch (QString s) {
-        QMessageBox::critical(this, "", s);
+        QMessageBox::critical(this, tr("Rosegarden"), s);
         m_playTimer->stop();
         m_stopTimer->start(100);
     } catch (Exception e) {
-        QMessageBox::critical(this, "", strtoqstr(e.getMessage()));
+        QMessageBox::critical(this, tr("Rosegarden"), strtoqstr(e.getMessage()));
         m_playTimer->stop();
         m_stopTimer->start(100);
     }  
@@ -5220,7 +5208,7 @@ RosegardenMainWindow::slotStop()
         if (m_seqManager)
             m_seqManager->stopping();
     } catch (Exception e) {
-        QMessageBox::critical(this, "", strtoqstr(e.getMessage()));
+        QMessageBox::critical(this, tr("Rosegarden"), strtoqstr(e.getMessage()));
     }
 
     // stop the playback timer
@@ -6088,10 +6076,10 @@ RosegardenMainWindow::showError(QString error)
     // telling you when everything's OK, as well as error strings, but
     // dssi.h does make it reasonably clear that configure() should
     // only return a string when there is actually a problem, so we're
-    // going to stick with a sorry dialog here rather than an
+    // going to stick with a warning dialog here rather than an
     // information one
 
-    /* was sorry */ QMessageBox::warning(0, "", error);
+    QMessageBox::warning(0, tr("Rosegarden"), error);
 
     CurrentProgressDialog::thaw();
 }
@@ -6213,7 +6201,7 @@ RosegardenMainWindow::slotAddAudioFile(unsigned int id)
         addAudioFile(strtoqstr(aF->getFilename()), aF->getId());
 
     if (!result) {
-        QMessageBox::critical(this, "", tr("Sequencer failed to add audio file %1").arg(aF->getFilename().c_str()));
+        QMessageBox::critical(this, tr("Rosegarden"), tr("Sequencer failed to add audio file %1").arg(aF->getFilename().c_str()));
     }
 }
 
@@ -6226,7 +6214,7 @@ RosegardenMainWindow::slotDeleteAudioFile(unsigned int id)
     int result = RosegardenSequencer::getInstance()->removeAudioFile(id);
 
     if (!result) {
-        QMessageBox::critical(this, "", tr("Sequencer failed to remove audio file id %1").arg(id));
+        QMessageBox::critical(this, tr("Rosegarden"), tr("Sequencer failed to remove audio file id %1").arg(id));
     }
 }
 
@@ -7531,9 +7519,9 @@ RosegardenMainWindow::slotPanic()
         ProgressDialog::processEvents();
 
         connect(m_seqManager, SIGNAL(setValue(int)),
-                m_progressBar, SLOT(setValue(int)));
+                &progressDlg, SLOT(setValue(int)));
         connect(m_seqManager, SIGNAL(incrementProgress(int)),
-                m_progressBar, SLOT(advance(int)));
+                &progressDlg, SLOT(advance(int)));
 
         m_seqManager->panic();
 
@@ -7582,7 +7570,7 @@ RosegardenMainWindow::slotSaveDefaultStudio()
     RG_DEBUG << "RosegardenMainWindow::slotSaveDefaultStudio\n";
 
     int reply = QMessageBox::warning
-                (this, "", tr("Are you sure you want to save this as your default studio?"), 
+                (this, tr("Rosegarden"), tr("Are you sure you want to save this as your default studio?"), 
                  QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
 
     if (reply != QMessageBox::Yes)
@@ -7600,10 +7588,10 @@ RosegardenMainWindow::slotSaveDefaultStudio()
     bool res = m_doc->saveDocument(autoloadFile, errMsg);
     if (!res) {
         if (!errMsg.isEmpty())
-            QMessageBox::critical(this, "", tr("Could not auto-save document at %1\nError was : %2")
+            QMessageBox::critical(this, tr("Rosegarden"), tr("Could not auto-save document at %1\nError was : %2")
                                   .arg(autoloadFile).arg(errMsg));
         else
-            QMessageBox::critical(this, "", tr("Could not auto-save document at %1")
+            QMessageBox::critical(this, tr("Rosegarden"), tr("Could not auto-save document at %1")
                                   .arg(autoloadFile));
 
     }
@@ -7613,7 +7601,7 @@ void
 RosegardenMainWindow::slotImportDefaultStudio()
 {
     int reply = QMessageBox::warning
-            (this, "", tr("Are you sure you want to import your default studio and lose the current one?"), QMessageBox::Yes | QMessageBox::No);
+            (this, tr("Rosegarden"), tr("Are you sure you want to import your default studio and lose the current one?"), QMessageBox::Yes | QMessageBox::No);
 
     if (reply != QMessageBox::Yes)
         return ;
@@ -7655,7 +7643,7 @@ RosegardenMainWindow::slotImportStudio()
     QString target;
     FileSource source(url);
     if (!source.isAvailable()) {
-        QMessageBox::critical(this, "", tr("Cannot open file %1").arg(url.toString()));
+        QMessageBox::critical(this, tr("Rosegarden"), tr("Cannot open file %1").arg(url.toString()));
         return ;
     }
 

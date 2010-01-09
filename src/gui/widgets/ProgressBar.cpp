@@ -65,7 +65,8 @@ ProgressBar::WTF(int wtf)
     // them separate, that's part of the battle won.
     //
     // Or so I'm thinking.
-
+    //
+    std::cout << "Good evening. I am a ProgressBar, and my name is " << objectName().toStdString() << ". I just changed my value to " << wtf << std::endl;
 }
 
 
