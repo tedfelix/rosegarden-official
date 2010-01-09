@@ -370,6 +370,16 @@ int main(int argc, char *argv[])
 
     srandom((unsigned int)time(0) * (unsigned int)getpid());
 
+    // we have to set the graphics system before creating theApp, or it
+    // won't work, so we have to use an unusual QSettings ctor here.
+    //
+    // (this has to be outside the ifdef block below)
+    QSettings preAppSettings("rosegardenmusic", "Rosegarden");
+    preAppSettings.beginGroup(GeneralOptionsConfigGroup);
+    unsigned int graphicsSystem = preAppSettings.value("graphics_system", Native).toUInt();
+    preAppSettings.endGroup();
+
+
 #ifdef Q_WS_X11
 #if QT_VERSION >= 0x040500
     bool systemSpecified = false;
@@ -393,13 +403,6 @@ int main(int argc, char *argv[])
         // only reliable system the default out of the box, and do up a FAQ
         // about bad graphics performance suggesting to give the less stable
         // alternatives a shot.)
-
-        // we have to set the graphics system before creating theApp, or it
-        // won't work, so we have to use an unusual QSettings ctor here.
-        QSettings preAppSettings("rosegardenmusic", "Rosegarden");
-        preAppSettings.beginGroup(GeneralOptionsConfigGroup);
-        unsigned int graphicsSystem = preAppSettings.value("graphics_system", Native).toUInt();
-        preAppSettings.endGroup();
 
         std::cerr << "Setting graphics system for Qt 4.5+ to: ";
         switch (graphicsSystem) {
@@ -426,16 +429,23 @@ int main(int argc, char *argv[])
 #endif
 #endif
 
-    RosegardenApplication theApp(argc, argv);    
-    QSettings settings;
+    preAppSettings.beginGroup(GeneralOptionsConfigGroup);
+    bool Thorn = preAppSettings.value("use_thorn_style", true).toBool();
+    preAppSettings.endGroup();
 
-    settings.beginGroup(GeneralOptionsConfigGroup);
-    bool Thorn = settings.value("use_thorn_style", true).toBool();
-    settings.endGroup();
+    std::cout << "Thorn - " << Thorn << std::endl;
 
     // In order to ensure the Thorn style comes out right, we need to set our
     // custom style, which is based on QPlastiqueStyle
     if (Thorn) QApplication::setStyle(new ThornStyle);
+
+    RosegardenApplication theApp(argc, argv);    
+
+    theApp.setOrganizationName("rosegardenmusic");
+    theApp.setOrganizationDomain("rosegardenmusic.com");
+    theApp.setApplicationName(QObject::tr("Rosegarden"));
+    QStringList args = theApp.arguments();
+    QSettings settings;
 
     // enable to load resources from rcc file (if not compiled in)
 #ifdef RESOURCE_FILE_NOT_COMPILED_IN
@@ -469,11 +479,6 @@ int main(int argc, char *argv[])
     } else {
         std::cerr << "RG Translations not loaded." << std::endl;
     }
-
-    theApp.setOrganizationName("rosegardenmusic");
-    theApp.setOrganizationDomain("rosegardenmusic.com");
-    theApp.setApplicationName(QObject::tr("Rosegarden"));
-    QStringList args = theApp.arguments();
 
     bool nosplash = false;
     bool nosequencer = false;
@@ -509,8 +514,6 @@ int main(int argc, char *argv[])
         if (!file.open(QFile::ReadOnly)) {
             std::cerr << "(Failed to open file)" << std::endl;
         } else {
-            settings.beginGroup(GeneralOptionsConfigGroup);
-            bool Thorn = settings.value("use_thorn_style", true).toBool();
             if (Thorn) {
                 QString styleSheet = QLatin1String(file.readAll());
                 theApp.setStyleSheet(styleSheet);
@@ -801,10 +804,10 @@ int main(int argc, char *argv[])
 
 //#define STYLE_TEST
 #ifdef STYLE_TEST
-    QMessageBox::information(0, tr("Rosegarden"), "Information.", QMessageBox::Ok, QMessageBox::Ok);
-    QMessageBox::critical(0, tr("Rosegarden"), "Critical!", QMessageBox::Ok, QMessageBox::Ok);
-    QMessageBox::question(0, tr("Rosegarden"), "Question?", QMessageBox::Ok, QMessageBox::Ok);
-    QMessageBox::warning(0, tr("Rosegarden"), "Warning!", QMessageBox::Ok, QMessageBox::Ok);
+    QMessageBox::information(0, "Rosegarden", "Information.", QMessageBox::Ok, QMessageBox::Ok);
+    QMessageBox::critical(0, "Rosegarden", "Critical!", QMessageBox::Ok, QMessageBox::Ok);
+    QMessageBox::question(0, "Rosegarden", "Question?", QMessageBox::Ok, QMessageBox::Ok);
+    QMessageBox::warning(0, "Rosegarden", "Warning!", QMessageBox::Ok, QMessageBox::Ok);
 #endif
 
     return theApp.exec();
