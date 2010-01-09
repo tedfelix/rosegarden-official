@@ -1355,7 +1355,7 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
             progress = 0;
         }
     } else {
-        progress->setValue(0);
+        if (progress) progress->setValue(0);
     }
 
     setAutoSaved(true);
