@@ -137,8 +137,24 @@ IconStackedWidget::slotPageSelect()
 void
 IconStackedWidget::setPageByIndex(int index)
 {
-    std::cout << "IconStackedWidget setting index to " << index << std::endl;
-    m_pagePanel->setCurrentIndex(index);
+    std::cerr << "IconStackedWidget setting index to " << index << std::endl;
+
+    // I originally tried just m_pagePanel->setCurrentIndex(index) here, and it
+    // didn't work at all.  Rather than try to deciper that, I came up with this
+    // alternate plan of attack.  Iterate through the icon buttons until we find
+    // the one that matches our index, then check it.  Now call slotPageSelect()
+    // which basically does the same thing I tried to do to start with.  I don't
+    // know why that works.  Oh well.  This is working for me now, and results
+    // are more important than appreciating nuance.
+    iconbuttons::iterator i = m_iconButtons.begin();
+    int c = 0;
+    while (i != m_iconButtons.end()) {
+        if (c == index) (*i)->setChecked(true);
+        i++;
+        c++;
+    }
+
+    slotPageSelect();
 }
 
 #include "IconStackedWidget.moc"

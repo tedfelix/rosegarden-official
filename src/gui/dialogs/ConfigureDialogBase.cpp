@@ -147,14 +147,16 @@ ConfigureDialogBase::slotHelpRequested()
     // version, eg. "http://rosegardenmusic.com/wiki/doc:configureDialogBase-es" for the
     // Spanish version. If your language doesn't yet have a translation, feel
     // free to create one.
-    QString helpURL = tr("http://rosegardenmusic.com/wiki/doc:configureDialogBase-en");
-    QDesktopServices::openUrl(QUrl(helpURL));
+
+// Hrmmm...  What to do with this one?  Anything?  Obviously there's not going
+// to be any specific help for a base class.
+//    QString helpURL = tr("http://rosegardenmusic.com/wiki/doc:configureDialogBase-en");
+//    QDesktopServices::openUrl(QUrl(helpURL));
 }
 
 void
 ConfigureDialogBase::setPageByIndex(int index)
 {
-    std::cout << "ConfigDialogBase setting page to " << index << std::endl;
     m_iconWidget->setPageByIndex(index);
 }
 

@@ -69,8 +69,6 @@ DocumentConfigureDialog::showAudioPage()
             continue;
         }
 
-        std::cout << "Trying to set config page to " << index << std::endl;
-
         setPageByIndex(index);
         return ;
     }
