@@ -2468,12 +2468,13 @@ RosegardenMainWindow::testAudioPath(QString op)
     try {
         m_doc->getAudioFileManager().testAudioPath();
     } catch (AudioFileManager::BadAudioPathException) {
+        // changing the following parent to 0 fixes a nasty style problem cheap:
         if (QMessageBox::warning
-                (this, tr("Warning"),
+                (0, tr("Warning"),
          tr("The audio file path does not exist or is not writable.\nYou must set the audio file path to a valid directory in Document Properties before %1.\nWould you like to set it now?", op),
-                QMessageBox::Ok | QMessageBox::Cancel,
+                QMessageBox::Yes | QMessageBox::Cancel,
                  QMessageBox::Cancel 
-               ) == QMessageBox::Ok 
+               ) == QMessageBox::Yes
           ){
             slotOpenAudioPathSettings();
         }
@@ -5003,7 +5004,7 @@ RosegardenMainWindow::slotRecord()
         // We should already be stopped by this point so just unset
         // the buttons after clicking the dialog.
         //
-        QMessageBox::critical(this, tr("Rosegarden"), s);
+        QMessageBox::critical(0, tr("Rosegarden"), s);
 
         getTransport()->MetronomeButton()->setOn(false);
         getTransport()->RecordButton()->setOn(false);
@@ -5011,11 +5012,10 @@ RosegardenMainWindow::slotRecord()
         return ;
     } catch (AudioFileManager::BadAudioPathException e) {
             if (QMessageBox::warning
-                    (this, tr("Warning"),
+                    (0, tr("Warning"),
                  tr("The audio file path does not exist or is not writable.\nPlease set the audio file path to a valid directory in Document Properties before recording audio.\nWould you like to set it now?"),
                       QMessageBox::Yes | QMessageBox::Cancel, 
                                QMessageBox::Cancel) // default button
-                 //tr("Set audio file path")) == QMessageBox::Continue) {
                 == QMessageBox::Yes)
             {
                 slotOpenAudioPathSettings();
@@ -5026,7 +5026,7 @@ RosegardenMainWindow::slotRecord()
         getTransport()->PlayButton()->setOn(false);
         return ;
     } catch (Exception e) {
-        QMessageBox::critical(this, tr("Rosegarden"), strtoqstr(e.getMessage()));
+        QMessageBox::critical(0, tr("Rosegarden"), strtoqstr(e.getMessage()));
 
         getTransport()->MetronomeButton()->setOn(false);
         getTransport()->RecordButton()->setOn(false);
@@ -5059,20 +5059,20 @@ RosegardenMainWindow::slotToggleRecord()
     try {
         m_seqManager->record(true);
     } catch (QString s) {
-        QMessageBox::critical(this, tr("Rosegarden"), s);
+        QMessageBox::critical(0, tr("Rosegarden"), s);
     } catch (AudioFileManager::BadAudioPathException e) {
         if (QMessageBox::warning
-            (this, tr("Error"),
+            (0, tr("Error"),
                  tr("The audio file path does not exist or is not writable.\nPlease set the audio file path to a valid directory in Document Properties before you start to record audio.\nWould you like to set it now?"),
-                      QMessageBox::Ok | QMessageBox::Cancel, 
+                      QMessageBox::Yes | QMessageBox::Cancel, 
                        QMessageBox::Cancel
-               ) == QMessageBox::Ok 
+               ) == QMessageBox::Yes 
        ){
             //tr("Set audio file path")) == QMessageBox::Continue) {
         slotOpenAudioPathSettings();
         }
     } catch (Exception e) {
-        QMessageBox::critical(this, tr("Rosegarden"),  strtoqstr(e.getMessage()));
+        QMessageBox::critical(0, tr("Rosegarden"),  strtoqstr(e.getMessage()));
     }
 
 }
@@ -5094,7 +5094,7 @@ RosegardenMainWindow::slotSetLoop(timeT lhs, timeT rhs)
             leaveActionState("have_range"); //@@@ JAS orig. KXMLGUIClient::StateReverse
         }
     } catch (QString s) {
-        QMessageBox::critical(this, tr("Rosegarden"), s);
+        QMessageBox::critical(0, tr("Rosegarden"), s);
     }
 }
 
@@ -5168,11 +5168,11 @@ RosegardenMainWindow::slotPlay()
             m_stopTimer->start(100);
         }
     } catch (QString s) {
-        QMessageBox::critical(this, tr("Rosegarden"), s);
+        QMessageBox::critical(0, tr("Rosegarden"), s);
         m_playTimer->stop();
         m_stopTimer->start(100);
     } catch (Exception e) {
-        QMessageBox::critical(this, tr("Rosegarden"), strtoqstr(e.getMessage()));
+        QMessageBox::critical(0, tr("Rosegarden"), strtoqstr(e.getMessage()));
         m_playTimer->stop();
         m_stopTimer->start(100);
     }  
@@ -5208,7 +5208,7 @@ RosegardenMainWindow::slotStop()
         if (m_seqManager)
             m_seqManager->stopping();
     } catch (Exception e) {
-        QMessageBox::critical(this, tr("Rosegarden"), strtoqstr(e.getMessage()));
+        QMessageBox::critical(0, tr("Rosegarden"), strtoqstr(e.getMessage()));
     }
 
     // stop the playback timer
@@ -6201,7 +6201,7 @@ RosegardenMainWindow::slotAddAudioFile(unsigned int id)
         addAudioFile(strtoqstr(aF->getFilename()), aF->getId());
 
     if (!result) {
-        QMessageBox::critical(this, tr("Rosegarden"), tr("Sequencer failed to add audio file %1").arg(aF->getFilename().c_str()));
+        QMessageBox::critical(0, tr("Rosegarden"), tr("Sequencer failed to add audio file %1").arg(aF->getFilename().c_str()));
     }
 }
 
@@ -6214,7 +6214,7 @@ RosegardenMainWindow::slotDeleteAudioFile(unsigned int id)
     int result = RosegardenSequencer::getInstance()->removeAudioFile(id);
 
     if (!result) {
-        QMessageBox::critical(this, tr("Rosegarden"), tr("Sequencer failed to remove audio file id %1").arg(id));
+        QMessageBox::critical(0, tr("Rosegarden"), tr("Sequencer failed to remove audio file id %1").arg(id));
     }
 }
 
@@ -7588,10 +7588,10 @@ RosegardenMainWindow::slotSaveDefaultStudio()
     bool res = m_doc->saveDocument(autoloadFile, errMsg);
     if (!res) {
         if (!errMsg.isEmpty())
-            QMessageBox::critical(this, tr("Rosegarden"), tr("Could not auto-save document at %1\nError was : %2")
+            QMessageBox::critical(0, tr("Rosegarden"), tr("Could not auto-save document at %1\nError was : %2")
                                   .arg(autoloadFile).arg(errMsg));
         else
-            QMessageBox::critical(this, tr("Rosegarden"), tr("Could not auto-save document at %1")
+            QMessageBox::critical(0, tr("Rosegarden"), tr("Could not auto-save document at %1")
                                   .arg(autoloadFile));
 
     }
