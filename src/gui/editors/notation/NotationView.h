@@ -321,6 +321,8 @@ protected slots:
 
     void slotAddLayer();
 
+    virtual void slotConfigure();
+
 private:
     /**
      * export a LilyPond file (used by slotPrintLilyPond and

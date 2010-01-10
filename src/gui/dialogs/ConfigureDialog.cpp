@@ -81,5 +81,32 @@ ConfigureDialog::ConfigureDialog(RosegardenDocument *doc,
     m_configurationPages.push_back((ConfigurationPage*)page);
 }
 
+// I don't remember how this used to work, and I have a feeling there's some
+// other broken, parallel, vestigial mechanism I'm ignoring.  Oh well.  This is
+// lifted from what worked in DocumentConfigurationPage, and this is the
+// implementation that actually works so the notation editor can set Edit ->
+// Preferences to the right page.
+void
+ConfigureDialog::setNotationPage()
+{
+    int index = 0;
+
+    for (configurationpages::iterator i = m_configurationPages.begin();
+            i != m_configurationPages.end(); ++i) {
+
+        NotationConfigurationPage *page =
+            dynamic_cast<NotationConfigurationPage *>(*i);
+
+        if (!page) {
+            ++index;
+            continue;
+        }
+
+        setPageByIndex(index);
+        return ;
+    }
+}
+
+
 }
 #include "ConfigureDialog.moc"

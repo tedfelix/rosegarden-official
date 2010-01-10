@@ -39,13 +39,15 @@ class ConfigureDialog : public ConfigureDialogBase
 public:
     ConfigureDialog(RosegardenDocument *doc,
                     QWidget *parent=0,
-					const char *name=0 );
-//	~ConfigureDialog();
-	
-	
+                    const char *name=0 );
+//    ~ConfigureDialog();
+
+
+    void setNotationPage();    
+    
 signals:
     void updateAutoSaveInterval(unsigned int);
-    void updateSidebarStyle(unsigned int);	
+    void updateSidebarStyle(unsigned int);    
     
 protected:
 };

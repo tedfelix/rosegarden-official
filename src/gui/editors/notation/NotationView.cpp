@@ -115,6 +115,7 @@
 #include "gui/dialogs/EventEditDialog.h"
 #include "gui/dialogs/TextEventDialog.h"
 #include "gui/dialogs/SimpleEventEditDialog.h"
+#include "gui/dialogs/ConfigureDialog.h"
 
 #include "gui/general/IconLoader.h"
 #include "gui/general/LilyPondProcessor.h"
@@ -4387,6 +4388,15 @@ NotationView::setRewFFwdToAutoRepeat()
 
     }
 
+}
+
+void
+NotationView::slotConfigure()
+{
+    ConfigureDialog *configDlg =  new ConfigureDialog(getDocument(), this);
+
+    configDlg->setNotationPage();
+    configDlg->show();
 }
 
 
