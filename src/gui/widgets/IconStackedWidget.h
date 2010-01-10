@@ -35,6 +35,7 @@ public:
     IconStackedWidget(QWidget *parent = 0);
     void addPage(const QString& iconLabel, QWidget *page, const QPixmap& icon);
     typedef std::vector<IconButton *> iconbuttons;
+    void setPageByIndex(int index);
     
 public slots:
     void slotPageSelect();

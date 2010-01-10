@@ -402,7 +402,10 @@ TrackButtons::slotToggleRecordTrack(int position)
         try {
             m_doc->getAudioFileManager().testAudioPath();
         } catch (AudioFileManager::BadAudioPathException e) {
-            if (QMessageBox::warning(this,
+            // ho ho, here was the real culprit: this dialog inherited style
+            // from the track button, hence the weird background and black
+            // foreground!
+            if (QMessageBox::warning(0,
                                      tr("Warning"),
                                      tr("The audio file path does not exist or is not writable.\nPlease set the audio file path to a valid directory in Document Properties before recording audio.\nWould you like to set it now?"),
                                      QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel

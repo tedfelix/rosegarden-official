@@ -47,6 +47,8 @@ public:
     typedef std::vector<ConfigurationPage*> configurationpages;
 
     void addPage( const QString& name, const QString& title, const QPixmap& icon, QWidget *page );
+
+    void setPageByIndex(int index);
     
 protected slots:
     

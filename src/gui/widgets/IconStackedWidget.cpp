@@ -26,6 +26,8 @@
 #include <QHBoxLayout>
 #include <QDebug>
 
+#include <iostream>
+
 IconStackedWidget::IconStackedWidget(QWidget *parent) :
         QWidget(parent),
         m_buttonHeight(0),
@@ -77,7 +79,8 @@ IconStackedWidget::IconStackedWidget(QWidget *parent) :
     setLayout(m_layout);
 }
     
-void IconStackedWidget::addPage(const QString& name, QWidget *page, const QPixmap& icon)
+void
+IconStackedWidget::addPage(const QString& name, QWidget *page, const QPixmap& icon)
 {
     IconButton *iconButton = new IconButton(m_iconPanel,icon, name);    
 
@@ -116,7 +119,8 @@ void IconStackedWidget::addPage(const QString& name, QWidget *page, const QPixma
     connect(iconButton, SIGNAL(clicked()), this, SLOT(slotPageSelect()));
 }
 
-void IconStackedWidget::slotPageSelect()
+void
+IconStackedWidget::slotPageSelect()
 {
     // Cycle through the buttons to find the one that is checked
     iconbuttons::iterator i = m_iconButtons.begin();
@@ -127,6 +131,13 @@ void IconStackedWidget::slotPageSelect()
     }
     
     // Select the new page
+    m_pagePanel->setCurrentIndex(index);
+}
+
+void
+IconStackedWidget::setPageByIndex(int index)
+{
+    std::cout << "IconStackedWidget setting index to " << index << std::endl;
     m_pagePanel->setCurrentIndex(index);
 }
 

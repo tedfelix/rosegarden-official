@@ -139,8 +139,6 @@ ConfigureDialogBase::slotCancelOrClose()
     close();
 }
 
-
-
 void
 ConfigureDialogBase::slotHelpRequested()
 {
@@ -152,5 +150,14 @@ ConfigureDialogBase::slotHelpRequested()
     QString helpURL = tr("http://rosegardenmusic.com/wiki/doc:configureDialogBase-en");
     QDesktopServices::openUrl(QUrl(helpURL));
 }
+
+void
+ConfigureDialogBase::setPageByIndex(int index)
+{
+    std::cout << "ConfigDialogBase setting page to " << index << std::endl;
+    m_iconWidget->setPageByIndex(index);
+}
+
+
 }
 #include "ConfigureDialogBase.moc"
