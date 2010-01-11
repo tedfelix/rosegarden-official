@@ -1715,7 +1715,6 @@ NotationView::slotCurrentStaffUp()
     NotationStaff *staff = scene->getStaffAbove();
     if (!staff) return;
     scene->setCurrentStaff(staff);
-    m_notationWidget->updateSegmentChangerBackground();
 }
 
 void
@@ -1726,7 +1725,6 @@ NotationView::slotCurrentStaffDown()
     NotationStaff *staff = scene->getStaffBelow();
     if (!staff) return;
     scene->setCurrentStaff(staff);
-    m_notationWidget->updateSegmentChangerBackground();
 }
 
 void
@@ -1738,7 +1736,6 @@ NotationView::slotCurrentSegmentPrior()
     if (!staff) return;
     scene->setCurrentStaff(staff);
     slotEditSelectWholeStaff();
-    m_notationWidget->updateSegmentChangerBackground();
 }
 
 void
@@ -1750,7 +1747,6 @@ NotationView::slotCurrentSegmentNext()
     if (!staff) return;
     scene->setCurrentStaff(staff);
     slotEditSelectWholeStaff();
-    m_notationWidget->updateSegmentChangerBackground();
 }
 
 void

@@ -119,8 +119,6 @@ public:
     double getHorizontalZoomFactor() const;
     double getVerticalZoomFactor() const;
 
-    void updateSegmentChangerBackground();
-
 signals:
     void segmentDeleted(Segment *);
     void sceneDeleted();
@@ -210,6 +208,7 @@ protected slots:
     void slotInitialVSliderHack(int);
 
     void slotUpdateRawNoteRuler(ViewSegment *);
+    void slotUpdateSegmentChangerBackground();
 
 signals :
     void adjustNeeded(bool last);

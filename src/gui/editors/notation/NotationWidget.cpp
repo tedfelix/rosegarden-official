@@ -363,7 +363,7 @@ NotationWidget::NotationWidget() :
     // When a clef or a key is modified, the same signal "staffModified()" is
     // emitted three times from the concerned header.
     // Following timer is here to try limiting CPU usage by executing code
-    // only once when the same signal is emmited several times in less than
+    // only once when the same signal is emitted several times in less than
     // 100 ms. See comment and code in slotGenerateHeaders().
     m_headersTimer = new QTimer(this);
     connect(m_headersTimer, SIGNAL(timeout()),
@@ -518,7 +518,7 @@ NotationWidget::setSegments(RosegardenDocument *document,
 
     m_chordNameRuler->setReady();
 
-    updateSegmentChangerBackground();
+    slotUpdateSegmentChangerBackground();
 
     // hide the segment changer if only one segment
     if (segments.size() == 1) m_changerWidget->hide();
@@ -533,6 +533,10 @@ NotationWidget::setSegments(RosegardenDocument *document,
     // Switch raw note ruler to another segment when needed
     connect(m_scene, SIGNAL(currentViewSegmentChanged(ViewSegment *)),
             this, SLOT(slotUpdateRawNoteRuler(ViewSegment *)));
+
+    // Show current segment color on the background of the segment changer
+    connect(m_scene, SIGNAL(currentViewSegmentChanged(ViewSegment *)),
+            this, SLOT(slotUpdateSegmentChangerBackground()));
 
     hideOrShowRulers();
 }
@@ -1630,11 +1634,10 @@ NotationWidget::slotSegmentChangerMoved(int v)
     }
 
     m_lastSegmentChangerValue = v;
-    updateSegmentChangerBackground();
 }
 
 void
-NotationWidget::updateSegmentChangerBackground()
+NotationWidget::slotUpdateSegmentChangerBackground()
 {
     // set the changer widget background to the now current segment's
     // background, and reset the tooltip style to compensate
