@@ -48,14 +48,18 @@ ProgressDialog::ProgressDialog(const QString &labelText,
         m_frozen(false),
         m_modal(modal),
         m_minimumTimeHasExpired(false),
-        m_minimumDuration(1000)
+        m_minimumDuration(1000),
+        m_sleepingBetweenOperations(false),
+        m_operationText(""),
+        m_totalSteps(totalSteps)
+
 {
     RG_DEBUG << "ProgressDialog::ProgressDialog - " << labelText << " - modal : " << modal << endl;
-    setObjectName("My name is Bootney Lee, and I am a ProgressDialog with magnificent hair!");
 
     setWindowTitle(tr("Rosegarden"));
     setModal(modal);
     setAttribute(Qt::WA_DeleteOnClose);
+    setWindowFlags(Qt::Dialog);
 
     QVBoxLayout *layout = new QVBoxLayout;
     setLayout(layout);
@@ -74,7 +78,6 @@ ProgressDialog::ProgressDialog(const QString &labelText,
     boxLayout->addWidget(m_label);
 
     m_progressBar = new ProgressBar(totalSteps);
-    m_progressBar->setObjectName("Dingles McGee"); // for debug reporting
     boxLayout->addWidget(m_progressBar);
 
     connect(m_progressBar, SIGNAL(valueChanged(int)),
@@ -86,14 +89,17 @@ ProgressDialog::ProgressDialog(const QString &labelText,
 
     connect(bb, SIGNAL(rejected()), this, SLOT(cancel()));
 
+    // stay visible at least one second by default
     setMinimumDuration(1000);
+
     m_timer = new QTimer;
+    m_timer->setSingleShot(true);
     m_timer->start(minimumDuration());
     connect(m_timer, SIGNAL(timeout()), this, SLOT(slotMinimumTimeElapsed()));
     m_chrono.start();
 
     CurrentProgressDialog::set(this);
-    show();
+//    show();
 }
 
 ProgressDialog::~ProgressDialog()
@@ -101,6 +107,7 @@ ProgressDialog::~ProgressDialog()
     RG_DEBUG << "~ProgressDialog()" << endl;
     m_modalVisible = false;
     delete m_timer;
+    m_timer = 0;
 }
 
 void
@@ -121,11 +128,43 @@ ProgressDialog::slotSetOperationName(QString name)
 {
     RG_DEBUG << "ProgressDialog::slotSetOperationName(" << name << ") visible : " << isVisible() << endl;
 
-    m_label->setText(name);
+    // save the passed text for the receiving slot
+    m_operationText = name;
+
+    // set a timer to ensure 100% remains visible for long enough to see
+    m_operationTimer = new QTimer;
+    m_operationTimer->start(500);
+    connect(m_operationTimer, SIGNAL(timeout()), this, SLOT(completeOperationChange()));
+    m_progressBar->setValue(m_totalSteps);
+    m_progressBar->show();
+
+    // a hack so external calls to setValue() are ignored during the pause
+    m_sleepingBetweenOperations = true;
+
+}
+
+void
+ProgressDialog::completeOperationChange()
+{
+    std::cout << "complete operation change" << std::endl;
+
+    if (m_operationTimer) delete m_operationTimer;
+    m_operationTimer = 0;
+
+    m_sleepingBetweenOperations = false;
+
+    // set the label to the text saved from slotSetOperationName()
+    m_label->setText(m_operationText);
+
     // increase resize only, never shrink
-    int w = QMAX( isVisible() ? width() : 0, sizeHint().width() );
-    int h = QMAX( isVisible() ? height() : 0, sizeHint().height() );
-    resize( w, h );
+    int w = QMAX(isVisible() ? width() : 0, sizeHint().width());
+    int h = QMAX(isVisible() ? height() : 0, sizeHint().height());
+    resize(w, h);
+
+    // call setValue() with whatever the current value is now that we've paused,
+    // in order to trigger the auto show/close code that may have been blocked
+    // while we were sleeping between operations
+    setValue(m_progressBar->value());
 }
 
 void
@@ -190,6 +229,7 @@ ProgressDialog::slotThaw()
 
     // Restart timer
     m_timer->start(minimumDuration());
+    m_minimumTimeHasExpired = false;
     m_frozen = false;
     m_chrono.restart();
 }
@@ -210,24 +250,52 @@ ProgressDialog::processEvents()
 void
 ProgressDialog::setAutoClose(bool state)
 {
-    if (state) RG_DEBUG << "Something set ProgressDialog::setAutoClose(true)" << endl;
+    m_autoClose = state;
 }
 
 void
 ProgressDialog::setAutoReset(bool state)
 {
-    if (state) RG_DEBUG << "Something set ProgressDialog::setAutoReset(true)" << endl;
+    m_autoReset = state;
 }
 
 void
 ProgressDialog::setValue(int value)
 {
     std::cout << "ProgressDialog::setValue(" << value << ")" << std::endl;
-    m_progressBar->setValue(value);
+
+    // bail out if the value changes (usually to 0) if the value changes during
+    // our little enforced nap beween operation changes (after the nap, the
+    // setValue(0) will be called anyway)
+    if (m_sleepingBetweenOperations) return;
 
     // ensure we are visible when this changes, although this probably needs to
     // be hooked into m_modal nonsense somehow or other
-    show();
+    if (value > 0) show();
+
+    // see if we're 100% complete (ie. the value was just set to the highest
+    // possible value it could have been set to, or higher; as determined by
+    // totalSteps in the ctor)
+    bool complete = (value >= m_totalSteps);
+    
+    // In KProgressDialog, autoClose "sets whether the dialog should close automagically
+    // when all the steps in the QProgressBar have been completed."  We'll
+    // interpret this to mean we should hide ourselves if we're complete, and
+    // m_autoClose is true.
+    //
+    // In KProgressDialog, autoReset "sets whether the dialog should reset the
+    // QProgressBar dialog back to 0 steps compelete when all steps have been
+    // completed."  So we'll reset back to 0 if we've reached 100% complete.
+    if (complete) {
+        if (m_autoReset) std::cout << "Auto resetting..." << std::endl;
+        if (m_autoClose) std::cout << "Auto hiding..." << std::endl;
+
+        if (m_autoClose) close();
+        if (m_autoReset) value = 0;
+
+    }
+
+    m_progressBar->setValue(value);
 }
 
 void

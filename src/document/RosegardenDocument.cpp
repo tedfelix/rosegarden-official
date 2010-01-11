@@ -608,6 +608,7 @@ bool RosegardenDocument::openDocument(const QString& filename,
 
         progressDlg->setMinimumDuration(500);
         progressDlg->setAutoReset(true); // we're re-using it for the preview generation
+        progressDlg->setAutoClose(true);
     }
 
     setAbsFilePath(fileInfo.absFilePath());

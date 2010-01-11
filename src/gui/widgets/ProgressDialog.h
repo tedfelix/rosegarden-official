@@ -31,14 +31,10 @@ class QHideEvent;
 namespace Rosegarden
 {
 
-/** A simple dialog for reporting progress.  This implementation is designed to
- * give all our existing legacy code what it expects in order to function,
- * rather than going to some considerable lengths to rewrite all of the
- * dependent code.  This class was originally a subclass of KProgressDialog from
- * KDE 3.  This implementation does not aim to reproduce KProgressDialog from
- * KDE 3 so much as it aims to satisfy the minimum requirements of what existing
- * Rosegarden code actually needed a ProgressDialog and related classes (eg.
- * ProgressBar) to do in practice.  No more, no less.
+/** A simple dialog for reporting progress.  This was originally a subclass of
+ * KProgressDialog from KDE 3.  It implements the API our existing progress
+ * reporting scheme needed in order to function again, and is simply a subclass
+ * of QDialog now, managing everything from scratch with a new implementation.
  */
 class ProgressDialog : public QDialog
 {
@@ -59,29 +55,68 @@ public:
      */
     static void processEvents();
 
+    /** Sets whether the dialog should hide itself once its value has been set
+     * to be greater than or equal to totalSteps as passed in the ctor.
+     *
+     * The default is false.
+     */
     void setAutoClose(bool state);
+
+    /** Sets whether the dialog should reset its progress bar back to 0% upon
+     * reaching 100% complete.
+     *
+     * The default is false.
+     */
     void setAutoReset(bool state);
+
+    /** The dialog will ignore hideEvent() until this many ms have elapsed, and
+     * thus try to keep itself visible for a minimum amount of time.
+     *
+     * The default is 1000 ms.
+     */
     void setMinimumDuration(int duration);
+
+    /** Returns the minimum duration set with setMinimumDuration()
+     */
     int minimumDuration();
+
+    /** Sets the dialog's operation text, eg. "Calculating notation..."
+     * "Generating audio previews..." &c. by calling slotSetOperationName
+     */
     void setLabelText(QString text);
 
 signals:
+    /** The user pressed the cancel button.  (In practice, I have yet to see
+     * this work usefully either in the current or the Classic codebase, but we
+     * emit the signal on cue.)
+     */
     void canceled();
 
 public slots:
+    /** Sets the dialog to 100% and makes it linger there for 500 ms, after
+     * which completeOperationChange() is called.  This ensures the dialog will
+     * always appear to finish whatever it is chewing on before moving on to the
+     * next step.
+     */
     void slotSetOperationName(QString);
+
+    /** Connected to the cancel button.  Causes canceled() to be emitted.
+     */
     void cancel();
 
-    /// Stop and hide (if it's shown) the progress dialog
+    /** Stop and hide if we're shown
+     */
     void slotFreeze();
 
-    /// Restore the dialog to its normal state
+    /** Restore to our normal state after freezing
+     */
     void slotThaw();
 
     /** Set the value for this dialog's progress bar.  This replaces setValue()
      * and advance() with the same function, and any calls or connections to
      * advance() must be switched over to setValue().  All management of the
-     * progress bar is done by this dialog now.
+     * progress bar is done by this dialog now, and it does not expose its
+     * internally-managed progress bar to the outside.
      */
     void setValue(int value);
 
@@ -98,18 +133,32 @@ public slots:
     void incrementProgress(int value);
 
 protected slots:
+    /** I don't fully understand this slot, or how m_chrono used to be used.
+     * The main thing that actually matters now is m_timer, which is used to
+     * determine whether to honor or ignore hideEvent().
+     */
     void slotCheckShow(int);
     
-    /// Called when the minimum duration timer has counted down
+    /** Called when the minimum duration timer has counted down
+     */
     void slotMinimumTimeElapsed();
 
+    /** Completes the process of changing an operation, after a suitable delay
+     * has been put in motion by slotSetOperationText()
+     */
+    void completeOperationChange();
+
 protected:
+    /** Intercept hideEvent() and determine whether we should honor it yet or
+     * not, in order to remain visible for a minimum specified time.
+     */
     virtual void hideEvent(QHideEvent*);
 
     //--------------- Data members ---------------------------------
 
     QTime        m_chrono;
     QTimer      *m_timer;
+    QTimer      *m_operationTimer;
     bool         m_wasVisible;
     bool         m_frozen;
     bool         m_modal;
@@ -120,6 +169,11 @@ protected:
     ProgressBar *m_progressBar;
     QLabel      *m_label;
     int          m_minimumDuration;
+    bool         m_autoReset;
+    bool         m_autoClose;
+    bool         m_sleepingBetweenOperations;
+    QString      m_operationText;
+    int          m_totalSteps;
 };
 
 

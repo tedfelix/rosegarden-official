@@ -417,7 +417,7 @@ PeakFile::scanToPeak(int peak)
     if (off == 0) {
         return true;
     } else if (off < 0) {
-        //	std::cerr << "PeakFile::scanToPeak: warning: seeking backwards for peak " << peak << " (" << m_inFile->tellg() << " -> " << pos << ")" << std::endl;
+        //    std::cerr << "PeakFile::scanToPeak: warning: seeking backwards for peak " << peak << " (" << m_inFile->tellg() << " -> " << pos << ")" << std::endl;
         m_inFile->seekg(pos);
     } else {
         m_inFile->seekg(off, std::ios::cur);
@@ -529,10 +529,11 @@ PeakFile::writePeaks(unsigned short /*updatePercentage*/,
 
         emit setValue((int)(double(byteCount) /
                                double(apprxTotalBytes) * 100.0));
+        std::cout << "peak file is emitting to file manager is emitting to progress dialog..." << std::endl;
         
-		//qApp->processEvents();
-		qApp->processEvents(QEventLoop::AllEvents);
-		
+        //qApp->processEvents();
+        qApp->processEvents(QEventLoop::AllEvents);
+        
 
         samplePtr = (unsigned char *)samples.c_str();
 

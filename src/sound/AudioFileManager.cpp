@@ -1004,6 +1004,11 @@ AudioFileManager::generatePreviews()
         if (!m_peakManager.hasValidPeaks(*it))
             m_peakManager.generatePeaks(*it, 1);
     }
+
+    // if we didn't do anything, at least emit a 100% to reset the progress
+    // dialog
+    std::cout << "audio file manager emitting fake setValue(100)" << std::endl;
+    emit setValue(100);
 }
 
 // Attempt to stop a preview
