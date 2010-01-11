@@ -264,6 +264,10 @@ ProgressDialog::setValue(int value)
 {
     std::cout << "ProgressDialog::setValue(" << value << ")" << std::endl;
 
+    // Try to get our text and whatnot repainted whenever this is called, to
+    // solve the "progress bar in an empty black box" problem.
+    update();
+
     // bail out if the value changes (usually to 0) if the value changes during
     // our little enforced nap beween operation changes (after the nap, the
     // setValue(0) will be called anyway)
