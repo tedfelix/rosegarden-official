@@ -108,6 +108,9 @@ public:
     int getNotationViewWidth();
     double getNotationSceneHeight();
 
+    void suspendLayoutUpdates();
+    void resumeLayoutUpdates();
+
     void setPointerPosition(timeT);
 
     void setHorizontalZoomFactor(double factor);
@@ -277,6 +280,8 @@ private:
     bool m_chordMode;
     bool m_tripletMode;
     bool m_graceMode;
+
+    bool m_updatesSuspended;
 
     void locatePanner(bool vertical);
 

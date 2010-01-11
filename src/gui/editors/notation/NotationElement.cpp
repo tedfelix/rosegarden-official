@@ -25,6 +25,7 @@
 #include "base/Exception.h"
 #include "base/NotationTypes.h"
 #include "base/ViewElement.h"
+#include "base/Profiler.h"
 
 namespace Rosegarden
 {
@@ -114,6 +115,7 @@ NotationElement::isGrace() const
 void
 NotationElement::setItem(QGraphicsItem *e, double sceneX, double sceneY)
 {
+    Profiler p("NotationElement::setItem");
     removeItem();
     e->setCacheMode(QGraphicsItem::DeviceCoordinateCache);
     e->setData(NotationElementData, QVariant::fromValue((void *)this));
@@ -125,6 +127,8 @@ NotationElement::setItem(QGraphicsItem *e, double sceneX, double sceneY)
 void
 NotationElement::addItem(QGraphicsItem *e, double sceneX, double sceneY)
 {
+    Profiler p("NotationElement::addItem");
+
     if (!m_item) {
         std::cerr << "ERROR: Attempt to add extra scene item to element without main scene item:";
         event()->dump(std::cerr);
@@ -142,7 +146,11 @@ NotationElement::addItem(QGraphicsItem *e, double sceneX, double sceneY)
 void
 NotationElement::removeItem()
 {
+    Profiler p("NotationElement::removeItem");
+
     m_recentlyRegenerated = false;
+
+    NOTATION_DEBUG << "NotationElement::removeItem" << endl;
 
     delete m_item;
     m_item = 0;
@@ -161,6 +169,8 @@ NotationElement::removeItem()
 void
 NotationElement::reposition(double sceneX, double sceneY)
 {
+    Profiler p("NotationElement::reposition");
+
     if (!m_item) return;
     if (sceneX == m_item->x() && sceneY == m_item->y()) return;
 

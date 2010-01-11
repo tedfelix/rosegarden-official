@@ -70,6 +70,7 @@ NotationScene::NotationScene() :
     m_visibleStaffs(0),
     m_compositionRefreshStatusId(0),
     m_timeSignatureChanged(false),
+    m_updatesSuspended(false),
     m_minTrack(0),
     m_maxTrack(0)
 {
@@ -93,6 +94,12 @@ NotationScene::~NotationScene()
     }
     delete m_hlayout;
     delete m_vlayout;
+    delete m_notePixmapFactory;
+    delete m_notePixmapFactorySmall;
+    delete m_title;
+    delete m_subtitle;
+    delete m_composer;
+    delete m_copyright;
     for (unsigned int i = 0; i < m_staffs.size(); ++i) delete m_staffs[i];
 }
 
@@ -138,8 +145,10 @@ NotationScene::setFontName(QString name)
 {
     if (name == getFontName()) return;
     setNotePixmapFactories(name, getFontSize());
-    positionStaffs();
-    layoutAll();
+    if (!m_updatesSuspended) {
+        positionStaffs();
+        layoutAll();
+    }
 }
 
 int
@@ -153,8 +162,10 @@ NotationScene::setFontSize(int size)
 {
     if (size == getFontSize()) return;
     setNotePixmapFactories(getFontName(), size);
-    positionStaffs();
-    layoutAll();
+    if (!m_updatesSuspended) {
+        positionStaffs();
+        layoutAll();
+    }
 }
 
 int
@@ -168,8 +179,10 @@ NotationScene::setHSpacing(int spacing)
 {
     if (spacing == getHSpacing()) return;
     m_hlayout->setSpacing(spacing);
-    positionStaffs();
-    layoutAll();
+    if (!m_updatesSuspended) {
+        positionStaffs();
+        layoutAll();
+    }
 }
 
 int
@@ -279,6 +292,24 @@ NotationScene::setStaffs(RosegardenDocument *document,
         }
     }
 
+    if (!m_updatesSuspended) {
+        positionStaffs();
+        layoutAll();
+    }
+}
+
+void
+NotationScene::suspendLayoutUpdates()
+{
+    m_updatesSuspended = true;
+}
+
+void
+NotationScene::resumeLayoutUpdates()
+{
+    m_updatesSuspended = false;
+    // may be more work than we really want to do, depending on what
+    // happened while updates were suspended
     positionStaffs();
     layoutAll();
 }
@@ -726,8 +757,10 @@ NotationScene::setPageMode(StaffLayout::PageMode mode)
     NOTATION_DEBUG << "NotationScene::setPageMode: set layout's page width to "
                    << (pageWidth - leftMargin * 2) << endl;
 
-    positionStaffs();
-    layoutAll();
+    if (!m_updatesSuspended) {
+        positionStaffs();
+        layoutAll();
+    }
 /*!!!
     if (!m_printMode) {
         // Layout is done : Time related to left of canvas should now
@@ -1219,6 +1252,7 @@ NotationScene::positionStaffs()
 void
 NotationScene::layoutAll()
 {
+    Profiler profiler("NotationScene::layoutAll", true);
     layout(0, 0, 0);
 }
 

@@ -120,6 +120,7 @@ NotationWidget::NotationWidget() :
     m_chordMode(false),
     m_tripletMode(false),
     m_graceMode(false),
+    m_updatesSuspended(false),
     m_hSliderHacked(false),
     m_vSliderHacked(false)
 {
@@ -393,6 +394,9 @@ NotationWidget::setSegments(RosegardenDocument *document,
     delete m_scene;
     m_scene = new NotationScene();
     m_scene->setNotationWidget(this);
+
+    if (m_updatesSuspended) m_scene->suspendLayoutUpdates();
+
     m_scene->setLeftGutter(m_leftGutter);
     m_scene->setStaffs(document, segments);
 
@@ -528,6 +532,20 @@ NotationWidget::setSegments(RosegardenDocument *document,
             this, SLOT(slotUpdateRawNoteRuler(ViewSegment *)));
 
     hideOrShowRulers();
+}
+
+void
+NotationWidget::suspendLayoutUpdates()
+{
+    if (m_scene) m_scene->suspendLayoutUpdates();
+    m_updatesSuspended = true;
+}
+
+void
+NotationWidget::resumeLayoutUpdates()
+{
+    if (m_scene) m_scene->resumeLayoutUpdates();
+    m_updatesSuspended = false;
 }
 
 void

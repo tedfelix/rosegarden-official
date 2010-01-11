@@ -176,6 +176,9 @@ NotationView::NotationView(RosegardenDocument *doc,
 {
     m_notationWidget = new NotationWidget();
     setCentralWidget(m_notationWidget);
+
+    m_notationWidget->suspendLayoutUpdates();
+
     m_notationWidget->setSegments(doc, segments);
 
     // connect the editElement signal from NotationSelector, relayed through
@@ -333,6 +336,8 @@ NotationView::NotationView(RosegardenDocument *doc,
 
     // do the auto repeat thingie on the <<< << >> >>> buttons
     setRewFFwdToAutoRepeat();
+
+    m_notationWidget->resumeLayoutUpdates();
 }
 
 NotationView::~NotationView()

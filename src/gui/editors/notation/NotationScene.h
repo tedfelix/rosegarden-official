@@ -147,6 +147,9 @@ public:
     
     const RulerScale *getRulerScale() const;
 
+    void suspendLayoutUpdates();
+    void resumeLayoutUpdates();
+
     /**
      * Show and sound the given note.  The height is used for display,
      * the pitch for performance, so the two need not correspond (e.g.
@@ -260,6 +263,8 @@ private:
 
     unsigned int m_compositionRefreshStatusId;
     bool m_timeSignatureChanged;
+
+    bool m_updatesSuspended;
 
     /// Returns the page width according to the layout mode (page/linear)
     int getPageWidth();
