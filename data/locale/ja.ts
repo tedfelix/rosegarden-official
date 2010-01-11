@@ -2,13 +2,6 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="ja">
 <context>
-    <name></name>
-    <message>
-        <source>Rosegarden</source>
-        <translation type="obsolete">Rosegarden</translation>
-    </message>
-</context>
-<context>
     <name>DeviceManagerDialogUi</name>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="472"/>
@@ -151,7 +144,7 @@
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="533"/>
         <source>Receives its data from</source>
-        <translation type="unfinished"></translation>
+        <translation>右記からデータを受信</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="534"/>
@@ -352,7 +345,7 @@
         <location filename="../QMenuStrings.cpp" line="4140"/>
         <location filename="../QMenuStrings.cpp" line="4246"/>
         <source>&amp;Nothing to undo</source>
-        <translation type="unfinished"></translation>
+        <translation>アンドゥできません(&amp;N)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="83"/>
@@ -365,7 +358,7 @@
         <location filename="../QMenuStrings.cpp" line="4149"/>
         <location filename="../QMenuStrings.cpp" line="4255"/>
         <source>N&amp;othing to redo</source>
-        <translation type="unfinished"></translation>
+        <translation>リドゥできません(&amp;o)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="92"/>
@@ -1359,32 +1352,6 @@
         <translation>Shift+Right</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="856"/>
-        <location filename="../QMenuStrings.cpp" line="2388"/>
-        <source>Cursor Back &amp;Bar and Select</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="863"/>
-        <location filename="../QMenuStrings.cpp" line="2395"/>
-        <source>Ctrl+Shift+Left</source>
-        <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="865"/>
-        <location filename="../QMenuStrings.cpp" line="2397"/>
-        <source>Cursor For&amp;ward and Select</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="872"/>
-        <location filename="../QMenuStrings.cpp" line="2404"/>
-        <source>Ctrl+Shift+Right</source>
-        <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="881"/>
         <location filename="../QMenuStrings.cpp" line="2413"/>
         <source>Ctrl+;</source>
@@ -2008,17 +1975,6 @@
         <translation>Alt+Shift+V</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1944"/>
-        <source>Add &amp;Layer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="1951"/>
-        <source>Ctrl+Alt+1</source>
-        <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="1989"/>
         <source>Alt+0</source>
         <comment>keyboard shortcut</comment>
@@ -2061,17 +2017,6 @@
         <translation>Alt+9</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2053"/>
-        <source>&amp;Cycle Slashes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="2060"/>
-        <source>/</source>
-        <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="2083"/>
         <source>Ctrl+PgUp</source>
         <comment>keyboard shortcut</comment>
@@ -2088,12 +2033,6 @@
         <source>Ctrl+B</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+B</translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="2113"/>
-        <source>Ctrl+Alt+B</source>
-        <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2122"/>
@@ -2792,16 +2731,6 @@
         <translation>キーチェンジの追加(&amp;K)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="583"/>
-        <source>Insert Pitch &amp;Bend Sequence...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="1915"/>
-        <source>Show La&amp;yer Toolbar</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="1938"/>
         <source>Add Pedal &amp;Press</source>
         <translation>ペダルプレス追加(&amp;P)</translation>
@@ -3295,28 +3224,6 @@
         <location filename="../QMenuStrings.cpp" line="2226"/>
         <source>Split-and-Tie Overlapping &amp;Chords</source>
         <translation>和音上の音符を分割してタイでつなぐ(&amp;C)</translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="2227"/>
-        <source>Cycle &amp;Dots</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="2234"/>
-        <source>Ctrl+.</source>
-        <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="2236"/>
-        <source>Cycle Dots With&amp;out Duration Change</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="2243"/>
-        <source>Ctrl+Alt+.</source>
-        <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2255"/>
@@ -3903,9 +3810,95 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../QMenuStrings.cpp" line="583"/>
+        <source>Insert Pitch &amp;Bend Sequence...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../QMenuStrings.cpp" line="675"/>
         <location filename="../QMenuStrings.cpp" line="1924"/>
         <source>Add &amp;Control Ruler</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="856"/>
+        <location filename="../QMenuStrings.cpp" line="2388"/>
+        <source>Cursor Back &amp;Bar and Select</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="863"/>
+        <location filename="../QMenuStrings.cpp" line="2395"/>
+        <source>Ctrl+Shift+Left</source>
+        <comment>keyboard shortcut</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="865"/>
+        <location filename="../QMenuStrings.cpp" line="2397"/>
+        <source>Cursor For&amp;ward and Select</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="872"/>
+        <location filename="../QMenuStrings.cpp" line="2404"/>
+        <source>Ctrl+Shift+Right</source>
+        <comment>keyboard shortcut</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="1915"/>
+        <source>Show La&amp;yer Toolbar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="1944"/>
+        <source>Add &amp;Layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="1951"/>
+        <source>Ctrl+Alt+1</source>
+        <comment>keyboard shortcut</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="2053"/>
+        <source>&amp;Cycle Slashes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="2060"/>
+        <source>/</source>
+        <comment>keyboard shortcut</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="2113"/>
+        <source>Ctrl+Alt+B</source>
+        <comment>keyboard shortcut</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="2227"/>
+        <source>Cycle &amp;Dots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="2234"/>
+        <source>Ctrl+.</source>
+        <comment>keyboard shortcut</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="2236"/>
+        <source>Cycle Dots With&amp;out Duration Change</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="2243"/>
+        <source>Ctrl+Alt+.</source>
+        <comment>keyboard shortcut</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4316,17 +4309,17 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3533"/>
         <source>Save as &amp;Template...</source>
-        <translation type="unfinished"></translation>
+        <translation>テンプレートとして保存(&amp;T)...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3534"/>
         <source>Re&amp;vert</source>
-        <translation type="unfinished"></translation>
+        <translation>元に戻す(&amp;v)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3535"/>
         <source>Prin&amp;t preview...</source>
-        <translation type="unfinished"></translation>
+        <translation>印刷プレビュー(&amp;t)...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3537"/>
@@ -4669,17 +4662,17 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3491"/>
         <source>Import &amp;X11 Rosegarden file...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;X11 Rosegardenファイルからインポート...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3496"/>
         <source>Merge &amp;X11 Rosegarden file...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;X11 Rosegardenファイルからマージ...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3730"/>
         <source>MIDI Mi&amp;xer</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDIミキサ(&amp;x)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3670"/>
@@ -4689,7 +4682,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3500"/>
         <source>Export &amp;LilyPond file...</source>
-        <translation type="unfinished"></translation>
+        <translation>LikyPondファイルのエクスポート(&amp;L)...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3671"/>
@@ -6470,7 +6463,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../InstrumentStrings.cpp" line="341"/>
         <source>Electronic organ (manual) (treble)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">電子オルガン(manual) (treble)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="342"/>
@@ -9999,12 +9992,12 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../AutoloadStrings.cpp" line="733"/>
         <source>Not Yet Titled</source>
-        <translation type="unfinished"></translation>
+        <translation>タイトルが未設定</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="734"/>
         <source>not yet subtitled</source>
-        <translation type="unfinished"></translation>
+        <translation>サブタイトルが未設定</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="735"/>
@@ -10020,7 +10013,7 @@ If you want to paste anyway, consider using one of the other paste types from th
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="684"/>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="806"/>
         <source>%1. %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1. %2</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="91"/>
@@ -10028,7 +10021,7 @@ If you want to paste anyway, consider using one of the other paste types from th
         <location filename="../../src/gui/general/ActionFileParser.cpp" line="646"/>
         <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="450"/>
         <source>%1</source>
-        <translation type="unfinished">%1</translation>
+        <translation>%1</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/DialogSuppressor.cpp" line="76"/>
@@ -10071,7 +10064,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../../src/gui/application/main.cpp" line="776"/>
         <source>&lt;h2&gt;Welcome to Rosegarden!&lt;/h2&gt;&lt;p&gt;Welcome to the Rosegarden audio and MIDI sequencer and musical notation editor.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;If you have not already done so, you may wish to install some DSSI synth plugins, or a separate synth program such as QSynth.  Rosegarden does not synthesize sounds from MIDI on its own, so without these you will hear nothing.&lt;/li&gt;&lt;li&gt;Rosegarden uses the JACK audio server for recording and playback of audio, and for playback from DSSI synth plugins.  These features will only be available if the JACK server is running.&lt;/li&gt;&lt;li&gt;Rosegarden has comprehensive documentation: see the &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&quot;&gt;Rosegarden website&lt;/a&gt; for the &lt;a style=&quot;color:gold&quot; href=&quot;%1&quot;&gt;manual&lt;/a&gt;, &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;tutorials&lt;/a&gt;, and other information!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  To learn more, go to the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;Rosegarden website&lt;/a&gt;.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;h2&gt;Rosegardenへようこそ!&lt;/h2&gt;&lt;p&gt;RosegardenオーディオとMIDシーケンサと楽譜エディタへようこそ&lt;/p&gt;&lt;ul&gt;&lt;li&gt;もしも、設定がすべて終わっていなければ、いくつかのDSSIシンセサイザーか、QSynthのような、個別のシンセサイザープログラムをインストールしてもよいでしょう。  Rosegarden自身ではMIDIからサウンドへの合成を行いませんので、それらがない場合は、何も聞こえないことになります。&lt;/li&gt;&lt;li&gt;Rosegardenは、オーディオの録音再生のためと、DSSIシンセサイザープラグインからの、再生のために、JACKオーディオサーバを使います。  これらの機能は、JACKサーバが動いているときにのみ有効です。&lt;/li&gt;&lt;li&gt;Rosegardenには総合的なドキュメントがあります。&lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&quot;&gt;Rosegarden webサイト&lt;/a&gt;の&lt;a style=&quot;color:gold&quot; href=&quot;%1&quot;&gt;マニュアル&lt;/a&gt;と、&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;チュートリアル&lt;/a&gt;と、その他の情報を参照してください!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegardenは世界中にいるボランティアのチームによって作られています。  もっと詳しく知りたいのであれば、&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;Rosegarden webサイトを参照してください&lt;/a&gt;。&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="35"/>
@@ -10537,17 +10530,17 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="65"/>
         <source>&amp;Stopped</source>
-        <translation type="unfinished"></translation>
+        <translation>停止した(&amp;S)</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="67"/>
         <source>&amp;Harmonic</source>
-        <translation type="unfinished"></translation>
+        <translation>ハーモニック(&amp;H)</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="69"/>
         <source>&amp;Pause</source>
-        <translation type="unfinished">フェルマータ(&amp;P)</translation>
+        <translation>ポーズ(&amp;P)</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="71"/>
@@ -10637,7 +10630,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../../src/commands/segment/AddTimeSignatureCommand.h" line="47"/>
         <source>Add Time Si&amp;gnature Change...</source>
-        <translation type="unfinished">拍子変更を追加</translation>
+        <translation>拍子変更を追加(&amp;g)...</translation>
     </message>
 </context>
 <context>
@@ -10755,7 +10748,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="155"/>
         <source>for individual audio instruments</source>
-        <translation type="unfinished">オーディオイントゥルメント単位</translation>
+        <translation>個々のオーディオイントゥルメント</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="163"/>
@@ -10803,22 +10796,22 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="168"/>
         <source>Set the audio pan position in the stereo field</source>
-        <translation type="unfinished">ステレオのパンの位置をセット</translation>
+        <translation>ステレオのパンの位置をセット</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="81"/>
         <source>Click to load an audio plugin</source>
-        <translation type="unfinished"></translation>
+        <translation>クリックしてオーディオプラグインをロード</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="92"/>
         <source>Click to load a synth plugin for playing MIDI</source>
-        <translation type="unfinished"></translation>
+        <translation>クリックして、MIDI演奏のための、シンセサイザープラグインをロード</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="169"/>
         <source>Open the synth plugin&apos;s native editor</source>
-        <translation type="unfinished"></translation>
+        <translation>シンセサイザープラグインのネイティブなエディタをオープン</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="170"/>
@@ -10894,7 +10887,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="80"/>
         <source>Click to rename this instrument</source>
-        <translation type="unfinished"></translation>
+        <translation>クリックしてこのインストゥルメントを改名</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="92"/>
@@ -10924,7 +10917,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="133"/>
         <source>&lt;qt&gt;&lt;p&gt;&lt;img src=&quot;:pixmaps/tooltip/warning.png&quot;&gt;&lt;/img&gt; &lt;b&gt;Audio files marked with an asterisk (*) are encoded at a sample rate different from that of the JACK audio server.&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Rosegarden will play them at the correct speed, but they will sound terrible.  Please consider resampling these files externally, or adjusting the sample rate of the JACK server.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;&lt;img src=&quot;:pixmaps/tooltip/warning.png&quot;&gt;&lt;/img&gt; &lt;b&gt;アスタリスク(*)がマークされたオーディオファイルはJACKオーディオサーバからとは異なるサンプリングレートでエンコードされています。&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Rosegardenは正しいスピードで再生しますが、その音質は悪くなります。  それらのファイルを別のシステムで再度エンコードすることか、JACKサーバのサンプルレートを調整することを考えてください。&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="173"/>
@@ -11070,8 +11063,8 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message numerus="yes">
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="953"/>
         <source>&lt;qt&gt;About to delete %n audio file(s) permanently from the hard disk.&lt;br&gt;This action cannot be undone, and there will be no way to recover the files.&lt;br&gt;Are you sure?&lt;/qt&gt;</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>&lt;qt&gt;%n個のオーディオファイルをハードディスクから完全に削除することについて。&lt;br&gt;この操作は元に戻せません。ファイルを復活させる方法もありません。&lt;br&gt;よろしいですか?&lt;/qt&gt;</numerusform>
         </translation>
     </message>
     <message>
@@ -11160,7 +11153,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="310"/>
         <source>Mono or stereo</source>
-        <translation type="unfinished">モノ/ステレオ切替</translation>
+        <translation>モノ/ステレオ切替</translation>
     </message>
     <message>
         <source>Mute</source>
@@ -11188,12 +11181,12 @@ Please select the ones you wish to delete permanently from the hard disk.
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="331"/>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="452"/>
         <source>Click to load an audio plugin</source>
-        <translation type="unfinished"></translation>
+        <translation>オーディオプラグインをロードするためにクリック</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="348"/>
         <source>Click to rename this instrument</source>
-        <translation type="unfinished"></translation>
+        <translation>このインストゥルメントを改名するためにクリック</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="354"/>
@@ -11339,12 +11332,12 @@ Please select the ones you wish to delete permanently from the hard disk.
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="121"/>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="418"/>
         <source>Select a plugin from this list</source>
-        <translation type="unfinished"></translation>
+        <translation>この一覧からプラグインを選択</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="131"/>
         <source>Bypass this plugin</source>
-        <translation type="unfinished"></translation>
+        <translation>このプラグインをバイパス</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="140"/>
@@ -11360,7 +11353,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="144"/>
         <source>Unique ID of plugin</source>
-        <translation type="unfinished"></translation>
+        <translation>プラグインの固有ID</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="171"/>
@@ -11370,17 +11363,17 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="176"/>
         <source>Reset plugin controls to factory defaults</source>
-        <translation type="unfinished"></translation>
+        <translation>工場既定値にプラグインの制御をリセット</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="455"/>
         <source>&lt;qt&gt;&lt;p&gt;This plugin has too many controls to edit here.&lt;/p&gt;&lt;p&gt;Use the external editor, if available.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;このプラグインにはここで編集できる以上のコントロールがあります。&lt;/p&gt;&lt;p&gt;可能であれば、外部のエディタを使ってください。&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="460"/>
         <source>This plugin does not have any controls that can be edited here.</source>
-        <translation type="unfinished"></translation>
+        <translation>このプラグインには、ここで編集できるコントロールが1つもありません。</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="470"/>
@@ -11496,7 +11489,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/gui/configuration/AudioPropertiesPage.cpp" line="165"/>
         <source>Audio Recording Path</source>
-        <translation type="unfinished"></translation>
+        <translation>オーディオ録音パス</translation>
     </message>
 </context>
 <context>
@@ -11554,7 +11547,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/commands/segment/AudioSegmentAutoSplitCommand.h" line="52"/>
         <source>&amp;Split on Silence</source>
-        <translation type="unfinished">無音部分で分割</translation>
+        <translation>無音部分で分割(%S)</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/AudioSegmentAutoSplitCommand.cpp" line="142"/>
@@ -11671,7 +11664,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="119"/>
         <source>Device and Banks</source>
-        <translation type="unfinished"></translation>
+        <translation>デバイスとバンク</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="120"/>
@@ -11833,7 +11826,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1544"/>
         <source>Rosegarden Device files</source>
-        <translation type="unfinished"></translation>
+        <translation>Rosegardenデバイスファイル</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1545"/>
@@ -11843,12 +11836,12 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1546"/>
         <source>Sound fonts</source>
-        <translation type="unfinished">サウンドフォント</translation>
+        <translation>サウンドフォント</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1547"/>
         <source>LinuxSampler configuration files</source>
-        <translation type="unfinished"></translation>
+        <translation>LinuxSampler設定ファイル</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1548"/>
@@ -11858,7 +11851,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1566"/>
         <source>Some internal error: cannot locate selected device</source>
-        <translation type="unfinished"></translation>
+        <translation>何らかの内部エラー:選択されたデバイスを使用できません</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1719"/>
@@ -12010,12 +12003,12 @@ Please select the ones you wish to delete permanently from the hard disk.
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="59"/>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="125"/>
         <source>Clef</source>
-        <translation type="unfinished">音域</translation>
+        <translation>音符記号</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="131"/>
         <source>Existing notes following clef change</source>
-        <translation type="unfinished">既存の音符を音部の変更に従って次のようにする</translation>
+        <translation>既存の音符を音符記号の変更に従って次のようにする</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="85"/>
@@ -12035,7 +12028,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="104"/>
         <source>Higher clef</source>
-        <translation type="unfinished">高音部</translation>
+        <translation>高音部</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="137"/>
@@ -12230,7 +12223,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/document/CommandHistory.cpp" line="53"/>
         <source>Undo the last editing operation</source>
-        <translation type="unfinished"></translation>
+        <translation>最後の編集動作を元に戻す</translation>
     </message>
     <message>
         <location filename="../../src/document/CommandHistory.cpp" line="65"/>
@@ -12247,7 +12240,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/document/CommandHistory.cpp" line="68"/>
         <source>Redo the last operation that was undone</source>
-        <translation type="unfinished"></translation>
+        <translation>最後に戻した編集作業をもう一度行う</translation>
     </message>
     <message>
         <location filename="../../src/document/CommandHistory.cpp" line="495"/>
@@ -12263,7 +12256,7 @@ Please select the ones you wish to delete permanently from the hard disk.
         <location filename="../../src/document/CommandHistory.cpp" line="511"/>
         <location filename="../../src/document/CommandHistory.cpp" line="533"/>
         <source>&amp;Undo %1</source>
-        <translation type="unfinished">&amp;Undo %1</translation>
+        <translation>再実行(&amp;U) %1</translation>
     </message>
     <message>
         <location filename="../../src/document/CommandHistory.cpp" line="511"/>
@@ -12282,7 +12275,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/gui/dialogs/CompositionLengthDialog.cpp" line="59"/>
         <source>Change the start and end markers for the composition:</source>
-        <translation type="unfinished"></translation>
+        <translation>コンポジションからの開始と終了マーカを変更:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/CompositionLengthDialog.cpp" line="76"/>
@@ -12313,7 +12306,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/gui/dialogs/ConfigureDialog.cpp" line="47"/>
         <source>Rosegarden - Preferences</source>
-        <translation type="unfinished"></translation>
+        <translation>Rosegarden...設定</translation>
     </message>
 </context>
 <context>
@@ -12347,7 +12340,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="92"/>
         <source>Manage Controllers</source>
-        <translation type="unfinished"></translation>
+        <translation>コントローラの管理</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="102"/>
@@ -12357,7 +12350,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="108"/>
         <source>Name  </source>
-        <translation type="unfinished"></translation>
+        <translation>名前  </translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="109"/>
@@ -12367,17 +12360,17 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="110"/>
         <source>Number  </source>
-        <translation type="unfinished"></translation>
+        <translation>番号  </translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="112"/>
         <source>Min. value  </source>
-        <translation type="unfinished"></translation>
+        <translation>最小値  </translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="113"/>
         <source>Max. value  </source>
-        <translation type="unfinished"></translation>
+        <translation>最大値  </translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="114"/>
@@ -12466,12 +12459,12 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="60"/>
         <source>Edit Controller</source>
-        <translation type="unfinished"></translation>
+        <translation>コントローラの編集</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="69"/>
         <source>Controller Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>コントローラの設定</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="98"/>
@@ -12514,7 +12507,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/gui/rulers/ControlRulerEventEraseCommand.cpp" line="31"/>
         <source>Erase Controller Event(s)</source>
-        <translation type="unfinished">コントローライベントの消去</translation>
+        <translation>コントローライベントの消去</translation>
     </message>
 </context>
 <context>
@@ -12551,7 +12544,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="291"/>
         <source>Pitch Bend</source>
-        <translation type="unfinished">Pitch Bend</translation>
+        <translation>ピッチベンド</translation>
     </message>
     <message>
         <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="296"/>
@@ -13473,7 +13466,7 @@ This could cause problems if it overrides a different computed value later on.</
     <message>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="84"/>
         <source>Flat - set %1 to value</source>
-        <translation type="unfinished">均一 - %1 を均一に設定</translation>
+        <translation>均一 - %1 を均一に設定</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="88"/>
@@ -13506,7 +13499,7 @@ This could cause problems if it overrides a different computed value later on.</
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="156"/>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="183"/>
         <source>First Value</source>
-        <translation type="unfinished">最初の価</translation>
+        <translation>最初の価</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="157"/>
@@ -13518,13 +13511,13 @@ This could cause problems if it overrides a different computed value later on.</
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="165"/>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="175"/>
         <source>Low Value</source>
-        <translation type="unfinished">下限</translation>
+        <translation>下限</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="166"/>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="174"/>
         <source>High Value</source>
-        <translation type="unfinished">上限</translation>
+        <translation>上限</translation>
     </message>
 </context>
 <context>
@@ -13579,7 +13572,7 @@ This could cause problems if it overrides a different computed value later on.</
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="129"/>
         <source>Controller</source>
-        <translation type="unfinished">Controller</translation>
+        <translation>コントローラ</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="130"/>
@@ -13594,12 +13587,12 @@ This could cause problems if it overrides a different computed value later on.</
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="132"/>
         <source>Key Pressure</source>
-        <translation type="unfinished">Key Pressure</translation>
+        <translation>キーの圧力</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="133"/>
         <source>Channel Pressure</source>
-        <translation type="unfinished">Channel Pressure</translation>
+        <translation>チャンネルの圧力</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="134"/>
@@ -14069,12 +14062,12 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="201"/>
         <source>Sequencer status</source>
-        <translation type="unfinished">シーケンサステータス</translation>
+        <translation>シーケンサステータス</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="203"/>
         <source>Unknown</source>
-        <translation type="unfinished">不明</translation>
+        <translation>不明</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="209"/>
@@ -14109,12 +14102,12 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="249"/>
         <source>Use Thorn style</source>
-        <translation type="unfinished"></translation>
+        <translation>Thornスタイルの使用</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="255"/>
         <source>&lt;qt&gt;When checked, Rosegarden will use the Thorn look and feel, otherwise default system preferences will be used the next time Rosegarden starts.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;チェックすると、次回Rosegardenを起動したとき、RosegardenはThornのルックアンドフィールを使い、それ以外は、既定値のシステム設定を使います。&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="300"/>
@@ -14180,7 +14173,7 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="279"/>
         <source>Show textured background on</source>
-        <translation type="unfinished">キャンバスエリアの背景にテクスチャを使う</translation>
+        <translation>キャンバスエリアの背景にテクスチャを使う</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="281"/>
@@ -14219,12 +14212,12 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="341"/>
         <source>Evince (GNOME)</source>
-        <translation type="unfinished"></translation>
+        <translation>Evince (GNOME)</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="342"/>
         <source>Adobe Acrobat Reader (non-free)</source>
-        <translation type="unfinished"></translation>
+        <translation>Adobe Acrobat Reader (自由ではない)</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="343"/>
@@ -14234,12 +14227,12 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="344"/>
         <source>Used to preview generated LilyPond output</source>
-        <translation type="unfinished"></translation>
+        <translation>生成されたLilyPond出力をプレビューするのに使用</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="349"/>
         <source>Command-line file printing utility</source>
-        <translation type="unfinished"></translation>
+        <translation>コマンドラインファイル印刷ユーティリティ</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="354"/>
@@ -14254,22 +14247,22 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="356"/>
         <source>lpr (no GUI)</source>
-        <translation type="unfinished"></translation>
+        <translation>lpr (非GUI)</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="357"/>
         <source>lp (no GUI)</source>
-        <translation type="unfinished"></translation>
+        <translation>lp (非GUI)</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="359"/>
         <source>Used to print generated LilyPond output without previewing it</source>
-        <translation type="unfinished"></translation>
+        <translation>プレビューなしで生成されたLilyPond出力を印刷するのに使う</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="378"/>
         <source>External Applications</source>
-        <translation type="unfinished"></translation>
+        <translation>外部アプリケーション</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="534"/>
@@ -14465,7 +14458,7 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="196"/>
         <source>Additional headers</source>
-        <translation type="unfinished"></translation>
+        <translation>追加のヘッダ</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="216"/>
@@ -14790,7 +14783,7 @@ Example text from file:</source>
     <message>
         <location filename="../../src/gui/widgets/InstrumentAliasButton.cpp" line="50"/>
         <source>Enter instrument alias:</source>
-        <translation type="unfinished"></translation>
+        <translation>インストゥルメントの別名を入力:</translation>
     </message>
 </context>
 <context>
@@ -15035,8 +15028,8 @@ Example text from file:</source>
     <message numerus="yes">
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="292"/>
         <source>up %n octave(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%nオクターブ上へ</numerusform>
         </translation>
     </message>
     <message>
@@ -15054,8 +15047,8 @@ Example text from file:</source>
     <message numerus="yes">
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="303"/>
         <source>down %n octave(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%nオクターブ下へ</numerusform>
         </translation>
     </message>
     <message>
@@ -15281,12 +15274,12 @@ Would you like to use
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="108"/>
         <source>&lt;qt&gt;Choose which tracks or segments to export&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;エクスポートするトラックかセグメントを選択&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="111"/>
         <source>Selected tracks</source>
-        <translation type="unfinished"></translation>
+        <translation>選択されたトラック</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="117"/>
@@ -15369,7 +15362,7 @@ Would you like to use
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="143"/>
         <source>Landscape</source>
-        <translation type="unfinished"></translation>
+        <translation>横方向</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="219"/>
@@ -15409,22 +15402,22 @@ Would you like to use
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="133"/>
         <source>&lt;qt&gt;Set the paper size&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;用紙サイズを設定&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="144"/>
         <source>&lt;qt&gt;If checked, your score will print in landscape orientation instead of the default portrait orientation&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;チェックすると、楽譜は既定値の縦方向の代わりに、横方向で印刷されます。&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="152"/>
         <source>Staff size</source>
-        <translation type="unfinished"></translation>
+        <translation>五線譜の大きさ</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="155"/>
         <source>&lt;qt&gt;&lt;p&gt;Choose the staff size of the score.  LilyPond will scale staff contents relative to this size.&lt;/p&gt;&lt;p&gt;Sizes marked * may provide the best rendering quality.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;スコア上の五線譜の大きさを選んでください。  LilyPondはこのサイズに、内容を相対的に拡大縮小します。&lt;/p&gt;&lt;p&gt;Sizes marked * 戸マークされたサイズはもっともよい描画品質となるでしょう。&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="169"/>
@@ -15465,12 +15458,12 @@ Would you like to use
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="231"/>
         <source>&lt;qt&gt;&lt;p&gt;Useful for multi-page scores: this may prevent ugly final pages&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;複数ページのスコアに便利です。これは、最終ページが変な形になるのを防ぐでしょう。&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="241"/>
         <source>&lt;qt&gt;Markers are found on the &lt;b&gt;Marker Ruler&lt;/b&gt;.  They may be exported as text, or as rehearsal marks.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;b&gt;マーカルーラ&lt;/b&gt;上にマーカが見つかりました。  これらはテキストか、リハーサルマークとしてエクスポートされます。&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="199"/>
@@ -15495,12 +15488,12 @@ Would you like to use
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="196"/>
         <source>&lt;qt&gt;Choose how often to show tempo marks in your score&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;楽譜上で、どのくらいの頻度でテンポマークを表示するかを選択&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="203"/>
         <source>Center</source>
-        <translation type="unfinished"></translation>
+        <translation>中央</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="204"/>
@@ -15530,7 +15523,7 @@ Would you like to use
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="226"/>
         <source>&lt;qt&gt;&lt;p&gt;There is a tutorial on how to use this feature at http://www.rosegardenmusic.com/tutorials/supplemental/chordnames/index.html&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;http://www.rosegardenmusic.com/tutorials/supplemental/chordnames/index.html&lt;/p&gt;に、この機能をどのように使うかのチュートリアルがあります。&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="234"/>
@@ -15563,7 +15556,7 @@ Would you like to use
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="68"/>
         <source>Print</source>
-        <translation type="unfinished"></translation>
+        <translation>印刷</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="70"/>
@@ -15578,12 +15571,12 @@ Would you like to use
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="102"/>
         <source>Fatal error.  Processing aborted.</source>
-        <translation type="unfinished"></translation>
+        <translation>致命的なエラー。処理を中断。</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="103"/>
         <source>Rosegarden - Fatal processing error!</source>
-        <translation type="unfinished"></translation>
+        <translation>Rosegarden  致命的な処理エラー!</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="118"/>
@@ -15608,12 +15601,12 @@ Would you like to use
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="151"/>
         <source>Running &lt;b&gt;lilypond&lt;/b&gt;...</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;lilypond&lt;/b&gt;が動作中...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="158"/>
         <source>&lt;b&gt;lilypond&lt;/b&gt; started...</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;lilypond&lt;/b&gt;を開始...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="275"/>
@@ -15633,12 +15626,12 @@ Would you like to use
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="176"/>
         <source>&lt;b&gt;lilypond&lt;/b&gt; finished...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;b&gt;lilypond&lt;/b&gt;が終了...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="191"/>
         <source>&lt;qt&gt;&lt;p&gt;Ran &lt;b&gt;lilypond&lt;/b&gt; successfully, but it terminated with errors.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;&lt;b&gt;lilypond&lt;/b&gt;は正常に終了したが、結果にエラーがありました。&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="194"/>
@@ -15653,22 +15646,22 @@ Would you like to use
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="201"/>
         <source>&lt;qt&gt;&lt;p&gt;Processing terminated due to fatal errors.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;致命的なエラーのために、処理が終了しました。&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="257"/>
         <source>Printing %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>%1を印刷中...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="266"/>
         <source>Previewing %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>%1をプレビュー中...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="273"/>
         <source>&lt;b&gt;%1&lt;/b&gt; started...</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;%1&lt;/b&gt;が起動した...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="276"/>
@@ -15678,7 +15671,7 @@ Would you like to use
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="276"/>
         <source>PDF viewer</source>
-        <translation type="unfinished">PDFビューワ</translation>
+        <translation>PDFビューワ</translation>
     </message>
 </context>
 <context>
@@ -15892,7 +15885,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="102"/>
         <source>&lt;qt&gt;Set the MIDI program or &amp;quot;patch&amp;quot;&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;MIDIプログラムか &amp;quot;patch&amp;quot;&lt;/p&gt;を設定&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="104"/>
@@ -16054,7 +16047,8 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="141"/>
         <source>&lt;qt&gt;The metronome can sound bars only, bars and beats, or bars, beats and sub-beats.  The latter mode can be particularly useful for playing in compound time signatures like 12/8.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;qt&gt;メトロノームは、小節のみ、小節と各拍、各拍とさらに細かな拍で音を出すことができます。後者のモードは、12/8拍子のような、compound time signaturesを演奏するために得に便利です。
+The metronome can sound bars only, bars and beats, or bars, beats and sub-beats.  The latter mode can be particularly useful for playing in compound time signatures like 12/8.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="142"/>
@@ -16103,12 +16097,12 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="94"/>
         <source>&lt;qt&gt;Choose the device you want to use to play the metronome&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;メトロノームを演奏するために使いたいデバイスを選択&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="127"/>
         <source>&lt;qt&gt;Choose the instrument you want to use to play the metronome (typically #10)&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;メトロノームを演奏するために使いたいインストゥルメントを選択(通常は#10)&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="151"/>
@@ -16800,12 +16794,12 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="205"/>
         <source>Horizontal Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>水平ズーム</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="217"/>
         <source>Vertical Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>垂直ズーム</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="230"/>
@@ -16884,13 +16878,13 @@ Double-click to open the marker editor.</source>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="67"/>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="120"/>
         <source>Key Pressure</source>
-        <translation type="unfinished">Key Pressure</translation>
+        <translation>キーの圧力</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="68"/>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="121"/>
         <source>Channel Pressure</source>
-        <translation type="unfinished">Channel Pressure</translation>
+        <translation>チャンネルの圧力</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="69"/>
@@ -16902,7 +16896,7 @@ Double-click to open the marker editor.</source>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="70"/>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="123"/>
         <source>Controller</source>
-        <translation type="unfinished">Controller</translation>
+        <translation>コントローラ</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="71"/>
@@ -18194,12 +18188,12 @@ This is a bug (the program would previously have crashed by now)</source>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1191"/>
         <source>Printing with LilyPond...</source>
-        <translation type="unfinished"></translation>
+        <translation>LilyPondで印刷中...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1209"/>
         <source>Previewing with LilyPond...</source>
-        <translation type="unfinished"></translation>
+        <translation>LilyPondでプレビュー中...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1234"/>
@@ -18419,12 +18413,12 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="228"/>
         <source>Horizontal Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>水平ズーム</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="240"/>
         <source>Vertical Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>垂直ズーム</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="253"/>
@@ -18647,7 +18641,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="52"/>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="241"/>
         <source>Pitch Bend Sequence</source>
-        <translation type="unfinished"></translation>
+        <translation>ピッチベンドシーケンス</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="61"/>
@@ -18677,7 +18671,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="73"/>
         <source>Vibrato</source>
-        <translation type="unfinished"></translation>
+        <translation>ビブラート</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="76"/>
@@ -18687,12 +18681,12 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="82"/>
         <source>Value (%):</source>
-        <translation type="unfinished"></translation>
+        <translation>値(%):</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="93"/>
         <source>Duration (%):</source>
-        <translation type="unfinished"></translation>
+        <translation>デュレーション(%):</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="108"/>
@@ -18702,7 +18696,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="116"/>
         <source>End value (%):</source>
-        <translation type="unfinished"></translation>
+        <translation>終了値(%):</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="124"/>
@@ -18722,7 +18716,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="102"/>
         <source>Bend Sequence</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="142"/>
@@ -18732,12 +18726,12 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="152"/>
         <source>Resolution:</source>
-        <translation type="unfinished"></translation>
+        <translation>解像度:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="167"/>
         <source>Invalid end time. Have you selected some events?</source>
-        <translation type="unfinished"></translation>
+        <translation>不正な終了時間。なんらかのイベントを選択していませんか?</translation>
     </message>
 </context>
 <context>
@@ -18793,12 +18787,12 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/editors/segment/PlayList.cpp" line="83"/>
         <source>Remove</source>
-        <translation type="unfinished"></translation>
+        <translation>削除</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/PlayList.cpp" line="84"/>
         <source>Clear whole List</source>
-        <translation type="unfinished"></translation>
+        <translation>すべての一覧を消去</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/PlayList.cpp" line="117"/>
@@ -18882,12 +18876,12 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="96"/>
         <source>Electronic organ (manual) (treble)</source>
-        <translation type="unfinished"></translation>
+        <translation>電子オルガン(manual) (treble)</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="99"/>
         <source>Instrument</source>
-        <translation type="unfinished">楽器</translation>
+        <translation>インストゥルメント</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="104"/>
@@ -18957,12 +18951,12 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="85"/>
         <source>Unpack</source>
-        <translation type="unfinished"></translation>
+        <translation>解凍</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="86"/>
         <source>Pack</source>
-        <translation type="unfinished"></translation>
+        <translation>圧縮</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="88"/>
@@ -18998,12 +18992,12 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="439"/>
         <source>&lt;qt&gt;Could not copy&lt;br&gt;%1&lt;br&gt;  to&lt;br&gt;%2&lt;br&gt;&lt;br&gt;%3&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;br&gt;%1&lt;br&gt; を&lt;br&gt;%2&lt;br&gt;にコピーできません  &lt;br&gt;%3&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="443"/>
         <source>&lt;qt&gt;&lt;p&gt;Could not remove&lt;br&gt;%1.&lt;/p&gt;%2&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;%1&lt;br&gt;を削除できません&lt;/p&gt;%2&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="465"/>
@@ -19019,18 +19013,22 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="564"/>
         <source>&lt;qt&gt;&lt;p&gt;Could not create temporary working directory.&lt;/p&gt;%1&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;一時作業ディレクトリを作成できません&lt;/p&gt;%1&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="747"/>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="946"/>
         <source>&lt;qt&gt;&lt;p&gt;Unable to write to temporary backend processing script %1.&lt;/p&gt;%2&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;バックエンドの処理スクリプト%1に書き込みできません。&lt;/p&gt;%2&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="798"/>
         <source>&lt;qt&gt;&lt;p&gt;Encoding and compressing files failed with exit status %1. Checking %2 for the line that ends with &quot;exit %1&quot; may be useful for diagnostic purposes.&lt;/p&gt;%3&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;qt&gt;&lt;p&gt;Unable to read to temporary file list.&lt;/p&gt;%1&lt;/qt&gt;</source>
+        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;一時ファイル一覧のために読み取りできません。&lt;/p&gt;%1&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="1042"/>
@@ -19047,7 +19045,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="648"/>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="715"/>
         <source>&lt;qt&gt;Could not copy&lt;br&gt;%1&lt;br&gt;  to&lt;br&gt;%2&lt;br&gt;&lt;br&gt;Processing aborted.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;br&gt;%1&lt;br&gt;を&lt;br&gt;%2&lt;br&gt;にコピーできません。&lt;br&gt;処理は異常終了しました。&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="483"/>
@@ -19082,7 +19080,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="568"/>
         <source>Copying audio files...</source>
-        <translation type="unfinished"></translation>
+        <translation>オーディオファイルをコピー中...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="653"/>
@@ -19104,12 +19102,12 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="684"/>
         <source>&lt;qt&gt;&lt;p&gt;Would you like to include any additional files?&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;他の追加ファイルをインクルードしたいですか?&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="688"/>
         <source>Copying plugin data and extra files...</source>
-        <translation type="unfinished"></translation>
+        <translation>プラグインデータと追加ファイルをコピー中...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="869"/>
@@ -19119,7 +19117,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="832"/>
         <source>Unpacking project...</source>
-        <translation type="unfinished"></translation>
+        <translation>プロジェクトを解凍中...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="876"/>
@@ -19134,12 +19132,12 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="1017"/>
         <source>Decoding audio files...</source>
-        <translation type="unfinished"></translation>
+        <translation>オーディオファイルをデコード中...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="1019"/>
         <source>&lt;qt&gt;Could not start backend processing script %1.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;バックエンド処理スクリプト %1 を開始できません。&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -19479,7 +19477,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/dialogs/RescaleDialog.cpp" line="49"/>
         <source>Stretch or Squash</source>
-        <translation type="unfinished"></translation>
+        <translation>ストレッチ/スカッシュ</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RescaleDialog.cpp" line="56"/>
@@ -19627,7 +19625,7 @@ There may be some incompatibilities with the file format.</source>
     <message>
         <location filename="../../src/document/RoseXmlHandler.cpp" line="1019"/>
         <source>Open Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>ディレクトリを開く</translation>
     </message>
     <message>
         <location filename="../../src/document/RoseXmlHandler.cpp" line="1702"/>
@@ -19654,18 +19652,19 @@ Do you want to save it?</source>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="344"/>
         <source>Rosegarden - Warning</source>
-        <translation type="unfinished">Rosegarden - 注意</translation>
+        <translation>Rosegarden - 警告</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="344"/>
         <source>&lt;qt&gt;&lt;p&gt;The current file has been modified.&lt;/p&gt;&lt;p&gt;Do you want to save it?&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;現在のファイルは変更されています。&lt;/p&gt;&lt;p&gt;これをセーブしたいですか?&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="365"/>
         <source>Could not save document at %1
 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>ドキュメントを %1 に保存できません
+(%2)</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="365"/>
@@ -19690,13 +19689,13 @@ Do you want to save it?</source>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="367"/>
         <source>Could not save document at %1</source>
-        <translation type="unfinished"></translation>
+        <translation>ドキュメントを %1 に保存できません。</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/document/RosegardenDocument.cpp" line="491"/>
         <source>Delete the %n audio file(s) recorded during the unsaved session?</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>未保存のセッション中で録音された %n オーディオファイルを削除しますか?</numerusform>
         </translation>
     </message>
     <message>
@@ -19718,8 +19717,8 @@ Please select any you wish to delete permanently from the hard disk.
     <message numerus="yes">
         <location filename="../../src/document/RosegardenDocument.cpp" line="529"/>
         <source>&lt;qt&gt;About to delete %n audio file(s) permanently from the hard disk.&lt;br&gt;There will be no way to recover the file(s).&lt;br&gt;Are you sure?&lt;/qt&gt;</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>&lt;qt&gt;%n オーディオファイルをハードディスクから完全に削除することについて。&lt;br&gt;ファイルを復活させる方法はありません。&lt;br&gt;よろしいですか?&lt;/qt&gt;</numerusform>
         </translation>
     </message>
     <message>
@@ -19765,7 +19764,7 @@ Please select any you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="1191"/>
         <source>Could not create temporary file in directory of &apos;%1&apos;: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>ディレクトリ %1 中に一時ファイル %2 を作成できません</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="1204"/>
@@ -19785,7 +19784,7 @@ Please select any you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="1352"/>
         <source>Error while writing on &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>&apos;%1&apos;に書き込み中にエラー</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="1655"/>
@@ -19899,7 +19898,8 @@ See Settings -&gt; Configure Rosegarden -&gt; Audio.</source>
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="814"/>
         <source>You&apos;ve not yet defined an audio editor for Rosegarden to use.
 See Edit -&gt; Preferences -&gt; Audio.</source>
-        <translation type="unfinished"></translation>
+        <translation>Rosegardenが使うためのオーディオエディタをまだ定義していません。
+編集 -&gt; 設定 -&gt; オーディオを参照してください。</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1503"/>
@@ -20012,14 +20012,15 @@ Do you want to open it instead ?</source>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2101"/>
         <source>Could not save document at %1
 Error was : %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 にドキュメントをセーブできません
+エラーは右記のとおりです : %2</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1606"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1960"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2104"/>
         <source>Could not save document at %1</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 にドキュメントをセーブできません</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1692"/>
@@ -20048,7 +20049,7 @@ Error was : %2</source>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1844"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7632"/>
         <source>All supported files</source>
-        <translation type="unfinished"></translation>
+        <translation>すべてのサポートされているファイル</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1845"/>
@@ -20127,12 +20128,12 @@ Error was : %2</source>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2033"/>
         <source>&lt;qt&gt;Sorry.&lt;br&gt;&quot;%1&quot; is not a valid filename.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;ごめんなさい&lt;br&gt;&quot;%1&quot; は有効なファイル名ではありません。&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2040"/>
         <source>You have specified a folder/directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>フォルダ/ディレクトリを指定しています。</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2046"/>
@@ -20140,14 +20141,18 @@ Error was : %2</source>
         <translation>指定したファイルが存在します。上書きしますか?</translation>
     </message>
     <message>
+        <source>Saving file%1with a new filename...</source>
+        <translation type="obsolete">新しいファイル名%1 でファイルを保存...</translation>
+    </message>
+    <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2072"/>
         <source>Rosegarden templates</source>
-        <translation type="unfinished"></translation>
+        <translation>Rosegardenテンプレート</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2074"/>
         <source>Save as template...</source>
-        <translation type="unfinished"></translation>
+        <translation>テンプレートとして保存...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2074"/>
@@ -20436,7 +20441,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7892"/>
         <source>&lt;p&gt;You are using version %1.  Version %2 is now available.&lt;/p&gt;&lt;p&gt;Please consult the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;Rosegarden website&lt;/a&gt; for more information.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;%1.というバージョンを使用しています  バージョン %2 が新たに公開されています。&lt;/p&gt;&lt;p&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;Rosegarden webサイト&lt;/a&gt;により詳細な情報がありますのでそちらを見てください。&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3529"/>
@@ -20467,7 +20472,7 @@ Would you like to set it now?</source>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3823"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3859"/>
         <source>Open X11 Rosegarden File</source>
-        <translation type="unfinished"></translation>
+        <translation>X11 Rosegardenファイルを開く</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3824"/>
@@ -20478,12 +20483,12 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3893"/>
         <source>Importing X11 Rosegarden file...</source>
-        <translation type="unfinished"></translation>
+        <translation>X11 Rosegardenファイルをインポート中...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3918"/>
         <source>Can&apos;t load X11 Rosegarden file.  It appears to be corrupted.</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイルが壊れているのでX11 Rosegardenファイルはロードできません。</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3946"/>
@@ -20582,7 +20587,7 @@ Rosegardenを再起動してサウンド機能を有効にしてください。<
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2068"/>
         <source>Saving file%1with a new filename...</source>
         <comment>&apos;file%1with&apos; is correct. %1 will either become &apos; &apos; or &apos; as a template &apos; at runtime</comment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">新しいファイル名%1 でファイルを保存...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2070"/>
@@ -20672,7 +20677,7 @@ http://rosegardenmusic.com を参照してオーディオとMIDIの設定を修�
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4769"/>
         <source>Printing with LilyPond...</source>
-        <translation type="unfinished"></translation>
+        <translation>LilyPondで印刷中...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4785"/>
@@ -20736,17 +20741,17 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5631"/>
         <source>Replace Tempo Change at %1</source>
-        <translation type="unfinished">テンポを置き換える</translation>
+        <translation>%1にテンポチェンジを置き換えます</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5661"/>
         <source>Set Global and Default Tempo</source>
-        <translation type="unfinished">デフォルトテンポを設定</translation>
+        <translation>グローバルとデフォルトテンポを設定</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5684"/>
         <source>Move Tempo Change</source>
-        <translation type="unfinished">テンポを移動</translation>
+        <translation>テンポチェンジを移動</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5719"/>
@@ -20827,12 +20832,13 @@ Would you like to set it now?</source>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7591"/>
         <source>Could not auto-save document at %1
 Error was : %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1にドキュメントの自動保存ができない
+エラーは右記のとおり : %2</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7594"/>
         <source>Could not auto-save document at %1</source>
-        <translation type="unfinished"></translation>
+        <translation>%1にドキュメントの自動保存ができない</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7604"/>
@@ -21061,7 +21067,7 @@ Error was : %2</source>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="148"/>
         <source>&lt;qt&gt;Edit the segment label for any selected segments&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;任意の選択されたセグメントのセグメントラベルを編集&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="156"/>
@@ -21081,7 +21087,7 @@ Error was : %2</source>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="227"/>
         <source>&lt;qt&gt;&lt;p&gt;Change the color of any selected segments&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;任意の選択されたセグメントの色を変更&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="295"/>
@@ -21142,12 +21148,12 @@ Error was : %2</source>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="986"/>
         <source>Enter new label:</source>
-        <translation type="unfinished"></translation>
+        <translation>新しいラベルを入力:</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1052"/>
         <source>Instrument</source>
-        <translation type="unfinished">楽器</translation>
+        <translation>インストゥルメント</translation>
     </message>
 </context>
 <context>
@@ -21275,8 +21281,8 @@ Would you like to set it now?</source>
     <message numerus="yes">
         <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="242"/>
         <source>Move Segment(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>セグメントの移動</numerusform>
         </translation>
     </message>
     <message>
@@ -21389,7 +21395,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/commands/segment/SegmentSplitTwiceCommand.cpp" line="44"/>
         <source>Split Twice Segment</source>
-        <translation type="unfinished">セグメント分割</translation>
+        <translation>セグメントを2分割</translation>
     </message>
 </context>
 <context>
@@ -21443,7 +21449,7 @@ Would you like to set it now?</source>
         <location filename="../../src/commands/segment/SegmentTransposeCommand.cpp" line="29"/>
         <location filename="../../src/commands/segment/SegmentTransposeCommand.cpp" line="35"/>
         <source>Change segment transposition</source>
-        <translation type="unfinished">Change segment transposition</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -21479,7 +21485,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="941"/>
         <source>Out of processor power for real-time audio processing.  Cannot continue.</source>
-        <translation type="unfinished"></translation>
+        <translation>リアルタイムオーディオ処理のためのプロセッサパワーが足りません。  継続できません。</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="967"/>
@@ -21494,17 +21500,17 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1011"/>
         <source>Failed to read audio data from disk in time to service the audio subsystem.</source>
-        <translation type="unfinished"></translation>
+        <translation>オーディオサブシステムに提供するために、一定時間内にディスクからオーディオデータの読み取りに失敗しました。</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1015"/>
         <source>Failed to write audio data to disk fast enough to service the audio subsystem.</source>
-        <translation type="unfinished"></translation>
+        <translation>オーディオサブシステムに提供するために、ディスクにオーディオデータを書き込むのに十分なスピードがありませんでした。</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1066"/>
         <source>&lt;h3&gt;System timer resolution is too low!&lt;/h3&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;h3&gt;システム大麻の解像度が小さすぎます!&lt;/h3&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1101"/>
@@ -21519,7 +21525,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1237"/>
         <source>&lt;h3&gt;Sequencer engine unavailable!&lt;/h3&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;h3&gt;シーケンサエンジンが無効!&lt;/h3&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1238"/>
@@ -21529,12 +21535,12 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1240"/>
         <source>&lt;h3&gt;MIDI sequencing unavailable!&lt;/h3&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;h3&gt;MIDIシーケンス処理が無効!&lt;/h3&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1258"/>
         <source>&lt;h3&gt;Audio sequencing and synth plugins unavailable!&lt;/h3&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;h3&gt;オーディオシーケンス処理とシンセサイザープラグインが無効!&lt;/h3&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1259"/>
@@ -21966,7 +21972,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/widgets/SqueezedLabel.cpp" line="170"/>
         <source>&amp;Copy Full Text</source>
-        <translation type="unfinished"></translation>
+        <translation>全部のテキストをコピー(&amp;C)</translation>
     </message>
 </context>
 <context>
@@ -21974,7 +21980,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="143"/>
         <source>Track %1 : &quot;%2&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>トラック %1 : &quot;%2&quot;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="149"/>
@@ -22232,7 +22238,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/commands/notation/SymbolInsertionCommand.cpp" line="62"/>
         <source>Insert &amp;Symbol...</source>
-        <translation type="unfinished"></translation>
+        <translation>シンボルを挿入(&amp;S)...</translation>
     </message>
 </context>
 <context>
@@ -22886,12 +22892,12 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/widgets/Thumbwheel.cpp" line="268"/>
         <source>Enter new value</source>
-        <translation type="unfinished"></translation>
+        <translation>新しい値を入力</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/Thumbwheel.cpp" line="269"/>
         <source>Enter a new value from %1 to %2:</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 から %2の新しい値を入力:</translation>
     </message>
 </context>
 <context>
@@ -23379,7 +23385,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="330"/>
         <source>crotales</source>
-        <translation type="unfinished">アンティークシンバル</translation>
+        <translation>アンティークシンバル</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="331"/>
@@ -23439,7 +23445,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="342"/>
         <source>varbaritone</source>
-        <translation type="unfinished">varbaritone</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="343"/>
@@ -23454,7 +23460,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="356"/>
         <source>&lt;qt&gt;&lt;p&gt;New segments will be created with this transpose property set&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;このトランスポートプロパティを設定して新しいセグメントが作成されます&lt;/p&gt;&lt;qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="372"/>
@@ -23485,7 +23491,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="408"/>
         <source>&lt;qt&gt;&lt;p&gt;New segments will be created using this color&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;新しいセグメントはこの色で作成されます&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="590"/>
@@ -23876,7 +23882,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="72"/>
         <source>[ No port ]</source>
-        <translation type="unfinished"></translation>
+        <translation>[ポートなし]</translation>
     </message>
 </context>
 <context>
@@ -23884,7 +23890,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/commands/notation/UnGraceCommand.h" line="43"/>
         <source>Ung&amp;race</source>
-        <translation type="unfinished">装飾音符解除(&amp;r)</translation>
+        <translation>装飾音符解除(&amp;r)</translation>
     </message>
 </context>
 <context>
@@ -24044,7 +24050,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/widgets/WarningDialog.cpp" line="50"/>
         <source>Performance Problems Detected</source>
-        <translation type="unfinished"></translation>
+        <translation>パフォーマンスの問題が検出されました</translation>
     </message>
 </context>
 <context>
@@ -24052,7 +24058,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/widgets/WarningWidget.cpp" line="65"/>
         <source>&lt;qt&gt;&lt;p&gt;Performance problems detected!&lt;/p&gt;&lt;p&gt;Click to display details&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;パフォーマンスの問題が検出されました!&lt;/p&gt;&lt;p&gt;詳細を表示するためにクリックしてください&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/WarningWidget.cpp" line="99"/>
@@ -24128,7 +24134,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1056"/>
         <source>Resets all MIDI devices if you&apos;ve got stuck notes</source>
-        <translation type="unfinished"></translation>
+        <translation>変な音符を受け取ったときにすべてのMIDIデバイスをリセット</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1060"/>
@@ -24138,7 +24144,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1063"/>
         <source>Provides a metronome click for you to play along with</source>
-        <translation type="unfinished"></translation>
+        <translation>下記とともに演奏するためのメトロノームクリック音を提供</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1067"/>
@@ -24274,7 +24280,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1138"/>
         <source>Stop</source>
-        <translation>Stop</translation>
+        <translation>停止</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1141"/>
