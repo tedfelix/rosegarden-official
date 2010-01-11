@@ -151,7 +151,9 @@ NotationWidget::NotationWidget() :
                 Qt::white);
     m_view->setBackgroundBrush(bg);
     m_layout->addWidget(m_view, PANNED_ROW, MAIN_COL, 1, 1);
-    m_layout->setRowStretch(PANNED_ROW, 100);
+    
+    // Force the main notation scene row to expand when space available.
+    m_layout->setRowStretch(PANNED_ROW, 1);
 
     m_panner = new QWidget;
     m_pannerLayout = new QBoxLayout(QBoxLayout::LeftToRight);
