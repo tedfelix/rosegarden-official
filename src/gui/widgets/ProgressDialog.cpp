@@ -30,6 +30,8 @@
 #include <QDialogButtonBox>
 #include <QVBoxLayout>
 #include <QGroupBox>
+#include <QHideEvent>
+#include <QCloseEvent>
 
 #include <iostream>
 
@@ -51,7 +53,8 @@ ProgressDialog::ProgressDialog(const QString &labelText,
         m_minimumDuration(1000),
         m_sleepingBetweenOperations(false),
         m_operationText(""),
-        m_totalSteps(totalSteps)
+        m_totalSteps(totalSteps),
+        m_deferredClose(false)
 
 {
     RG_DEBUG << "ProgressDialog::ProgressDialog - " << labelText << " - modal : " << modal << endl;
@@ -111,15 +114,31 @@ ProgressDialog::~ProgressDialog()
 }
 
 void
-ProgressDialog::hideEvent(QHideEvent* e)
+ProgressDialog::hideEvent(QHideEvent *e)
 {
     if (m_minimumTimeHasExpired) {
         RG_DEBUG << "ProgressDialog::hideEvent() - minimum time has elapsed.  Hiding..." << endl;
-        QDialog::hideEvent(e);
+        e->accept();
         m_modalVisible = false;
     } else {
         RG_DEBUG << "ProgressDialog::hideEvent() - minimum time has not elapsed.  Ignoring hide event..." << endl;
         m_modalVisible = true;
+        e->ignore();
+    }
+}
+
+void
+ProgressDialog::closeEvent(QCloseEvent *e)
+{
+    if (m_minimumTimeHasExpired) {
+        RG_DEBUG << "ProgressDialog::hideEvent() - minimum time has elapsed.  Closing..." << endl;
+        e->accept();
+        m_modalVisible = false;
+    } else {
+        RG_DEBUG << "ProgressDialog::hideEvent() - minimum time has not elapsed.  Deferring close event..." << endl;
+        m_modalVisible = true;
+        m_deferredClose = true;
+        e->ignore();
     }
 }
 
@@ -199,12 +218,24 @@ ProgressDialog::slotMinimumTimeElapsed()
 {
     RG_DEBUG << "ProgressDialog::slotMinimumTimeElapsed() - the QTimer has reached the minimum duration set in the ctor." << endl;
     m_minimumTimeHasExpired = true;
+
+    // if we intercepted a closeEvent() before it was time, close now
+    if (m_deferredClose) close();
 }
 
 void
 ProgressDialog::slotFreeze()
 {
     RG_DEBUG << "ProgressDialog::slotFreeze()\n";
+
+    // if we're frozen, consider that the minimum time has elapsed, even if it
+    // hasn't, because it is very possible we will never be un-thawed, and will
+    // get stuck in limbo otherwise
+    m_minimumTimeHasExpired = true;
+
+    // if we're in the 100% hang time between operation changes, go ahead and
+    // complete the operation change
+    if (m_sleepingBetweenOperations) completeOperationChange();
 
     m_wasVisible = isVisible();
     if (isVisible()) {
@@ -292,7 +323,7 @@ ProgressDialog::setValue(int value)
     // completed."  So we'll reset back to 0 if we've reached 100% complete.
     if (complete) {
         if (m_autoReset) std::cout << "Auto resetting..." << std::endl;
-        if (m_autoClose) std::cout << "Auto hiding..." << std::endl;
+        if (m_autoClose) std::cout << "Auto closing..." << std::endl;
 
         if (m_autoClose) close();
         if (m_autoReset) value = 0;

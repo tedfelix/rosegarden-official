@@ -154,6 +154,13 @@ protected:
      */
     virtual void hideEvent(QHideEvent*);
 
+    /** Intercept close() and determine whether we should honor it yet or not,
+     * in order to remain visible for a minimum specified time.  If we defer a
+     * close(), set a flag so that slotMinimumTimeElapsed() will call close()
+     * after the timer has expired.
+     */
+    virtual void closeEvent(QCloseEvent*);
+
     //--------------- Data members ---------------------------------
 
     QTime        m_chrono;
@@ -174,6 +181,7 @@ protected:
     bool         m_sleepingBetweenOperations;
     QString      m_operationText;
     int          m_totalSteps;
+    bool         m_deferredClose;
 };
 
 
