@@ -530,7 +530,6 @@ AudioPluginDialog::slotPluginSelected(int i)
         }
     }
 
-    parentWidget()->adjustSize();
     adjustSize();
     
     // tell the sequencer
@@ -665,7 +664,6 @@ AudioPluginDialog::slotPluginSelected(int i)
     // originally.  Compared with never making it available, this is tolerable.
     m_editorButton->setEnabled(true);
 
-    parentWidget()->adjustSize();
     adjustSize();
 }
 
