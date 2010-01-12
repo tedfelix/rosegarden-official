@@ -50,19 +50,14 @@ namespace Rosegarden
 {
 
 ImportDeviceDialog::ImportDeviceDialog(QWidget *parent, QUrl url) :
-        QDialog(parent),
-        m_url(url),
-        m_fileDoc(0),
-        m_device(0)
+    QDialog(parent),
+    m_url(url),
+    m_device(0)
 {}
 
 ImportDeviceDialog::~ImportDeviceDialog()
 {
-    if (m_fileDoc) {
-        delete m_fileDoc;
-    } else {
-        delete m_device;
-    }
+    delete m_device;
     for (int i = 0; i < m_devices.size(); ++i) delete m_devices[i];
 }
 
@@ -245,11 +240,9 @@ ImportDeviceDialog::accept()
 {
     int index = 0;
     if (m_deviceCombo) index = m_deviceCombo->currentIndex();
-    m_device = m_devices[index];
-    for (int i = 0; i < m_devices.size(); ++i) {
-        if (i != index) delete m_devices[i];
+    if (m_devices.size() > index) {
+        m_device = new MidiDevice(*m_devices[index]);
     }
-    m_devices.clear();
 
     int v = m_buttonGroup->checkedId();
     QSettings settings;
@@ -266,6 +259,11 @@ void
 ImportDeviceDialog::slotCancel()
 {
     reject();
+}
+
+bool ImportDeviceDialog::haveDevice() const
+{
+    return m_device;
 }
 
 std::string  ImportDeviceDialog::getDeviceName() const
@@ -343,15 +341,17 @@ bool
 ImportDeviceDialog::importFromRG(QString fileName)
 {
     bool skipAutoload = true, clearCommandHistory = false;
-    m_fileDoc = new RosegardenDocument(RosegardenMainWindow::self(), 0, skipAutoload, clearCommandHistory);
+    RosegardenDocument fileDoc(RosegardenMainWindow::self(), 0, 
+                               skipAutoload, clearCommandHistory);
 
-    if (!m_fileDoc->openDocument(fileName, false)) {
+    if (!fileDoc.openDocument(fileName, false)) {
         return false;
     }
 
+    for (int i = 0; i < m_devices.size(); ++i) delete m_devices[i];
     m_devices.clear();
 
-    DeviceList *list = m_fileDoc->getStudio().getDevices();
+    DeviceList *list = fileDoc.getStudio().getDevices();
     if (list->size() == 0) {
         return true; // true because we successfully read the document
     }
@@ -375,8 +375,9 @@ ImportDeviceDialog::importFromRG(QString fileName)
             //
             if (banks.size() ||
                 controllers.size() ||
-                device->getKeyMappings().size())
-                m_devices.push_back(device);
+                device->getKeyMappings().size()) {
+                m_devices.push_back(new MidiDevice(*device));
+            }
         }
     }
 
@@ -471,7 +472,7 @@ ImportDeviceDialog::importFromLSCP(QString filename)
     // IDs that other devices in the Studio may also be using without
     // expecting any problems
     MidiDevice *device = new MidiDevice
-                         (0, MidiInstrumentBase, "", MidiDevice::Play);
+        (0, MidiInstrumentBase, "", MidiDevice::Play);
     device->replaceBankList(banks);
     device->replaceProgramList(programs);
     m_devices.push_back(device);

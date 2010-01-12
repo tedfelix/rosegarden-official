@@ -1569,6 +1569,16 @@ BankEditorDialog::slotImport()
             return ;
         }
 
+        if (!dialog->haveDevice()) {
+            QMessageBox::critical(
+              dynamic_cast<QWidget*>(this),
+              "", /* no title */
+              tr("Some internal error: no device selected"),
+              QMessageBox::Ok,
+              QMessageBox::Ok);
+            return ;
+        }
+
         ModifyDeviceCommand *command = 0;
 
         BankList banks(dialog->getBanks());
@@ -1614,7 +1624,7 @@ BankEditorDialog::slotImport()
         // No need to redraw the dialog, this is done by
         // slotUpdate, signalled by the CommandHistory
         MidiDevice *device = getMidiDevice(deviceItem);
-        if (device){
+        if (device) {
             selectDeviceItem(device);
         }
     }

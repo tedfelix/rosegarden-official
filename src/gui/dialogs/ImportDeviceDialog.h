@@ -60,6 +60,7 @@ public:
     bool shouldOverwriteBanks() const; 
     bool shouldRename() const;
 
+    bool haveDevice() const;
     std::string getDeviceName() const;
     const BankList &getBanks() const;
     const ProgramList &getPrograms() const;
@@ -92,7 +93,6 @@ protected:
     QRadioButton       *m_mergeBanks;
     QRadioButton       *m_overwriteBanks;
 
-    RosegardenDocument   *m_fileDoc;
     std::vector<MidiDevice *> m_devices;
     MidiDevice *m_device;
 };

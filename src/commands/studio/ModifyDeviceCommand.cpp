@@ -153,8 +153,9 @@ ModifyDeviceCommand::execute()
     }
 
     //!!! merge option?
-    if (m_changeControls)
+    if (m_changeControls) {
         midiDevice->replaceControlParameters(m_controlList);
+    }
 }
 
 void
