@@ -338,6 +338,9 @@ NotationView::NotationView(RosegardenDocument *doc,
     setRewFFwdToAutoRepeat();
 
     m_notationWidget->resumeLayoutUpdates();
+
+    // Show the pointer as soon as notation editor opens
+    m_notationWidget->slotUpdatePointerPosition();
 }
 
 NotationView::~NotationView()
