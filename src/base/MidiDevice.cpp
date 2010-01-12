@@ -824,7 +824,7 @@ MidiDevice::replaceControlParameters(const ControlList &con)
     
     // Now add the controllers to the device,    
     ControlList::const_iterator cIt = con.begin();
-    for(; cIt < con.end(); ++cIt) {
+    for(; cIt != con.end(); ++cIt) {
         addControlParameter(*cIt);
     }
 }
