@@ -45,10 +45,8 @@ WarningDialog::WarningDialog(QWidget *parent) :
     layout->addWidget(buttonBox);
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
 
-    m_warningIcon = IconLoader().load("warning");
-
     setWindowTitle(tr("Performance Problems Detected"));
-    setWindowIcon(m_warningIcon);
+    setWindowIcon(IconLoader().load("warning"));
 }
 
 WarningDialog::~WarningDialog()
@@ -63,17 +61,44 @@ WarningDialog::addWarning(Message message)
     layout->setAlignment(Qt::AlignTop);
     tab->setLayout(layout);
 
-    QLabel *text = new QLabel(message.first);
+    QLabel *text = new QLabel(message.first.first);
     text->setWordWrap(true);
     layout->addWidget(text);
 
-    QLabel *informativeText = new QLabel(message.second);
+    QLabel *informativeText = new QLabel(message.first.second);
     informativeText->setWordWrap(true);
     layout->addWidget(informativeText);
 
     informativeText->setOpenExternalLinks(true);
 
-    m_tabWidget->addTab(tab, m_warningIcon, "");
+    QIcon icon = IconLoader().load("warning");
+    QString headline(tr("Warning"));
+
+    switch (message.second) {
+    case Midi:
+        icon = IconLoader().load("midi-ok");
+        headline = tr("MIDI");
+        break;
+    case Audio:
+        icon = IconLoader().load("audio-ok");
+        headline = tr("Audio");
+        break;
+    case Timer:
+        icon = IconLoader().load("timer-ok");
+        headline = tr("System timer");
+        break;
+    case Info:
+        icon = IconLoader().load("messagebox-information");
+        headline = tr("Information");
+        break;
+    case Other:
+    default:
+        // icon and text were initialized suitable for this case, so there's
+        // nothing to do here
+        break;
+    }
+
+    m_tabWidget->addTab(tab, icon, headline);
 }
 
 

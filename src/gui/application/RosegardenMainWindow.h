@@ -1550,6 +1550,11 @@ private:
      */
     QString getLilyPondTmpFilename();
 
+    /** Checks to see if the audio path exists.  If it does not, attempts to
+     * create it.  If creation fails, sends notification to the user via the
+     * WarningWidget.
+     */
+    void testAudioPath();
 
     //--------------- Data members ---------------------------------
 

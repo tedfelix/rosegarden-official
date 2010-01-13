@@ -468,6 +468,7 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
     settings.endGroup();
 
     connectOutsideCtorHack();
+    testAudioPath();
 }
 
 RosegardenMainWindow::~RosegardenMainWindow()
@@ -7925,8 +7926,8 @@ RosegardenMainWindow::slotDisplayWarning(int type,
     return;
 #endif
 
-    // queue up the message, which trips the warning icon in so doing
-    m_warningWidget->queueMessage(text, informativeText);
+    // queue up the message, which trips the warning or info icon in so doing
+    m_warningWidget->queueMessage(type, text, informativeText);
 
     // set up the error state for the appropriate icon...  this should probably
     // be managed some other way, but that's organic growth for you
@@ -7935,6 +7936,7 @@ RosegardenMainWindow::slotDisplayWarning(int type,
         case WarningWidget::Audio: m_warningWidget->setAudioWarning(true); break;
         case WarningWidget::Timer: m_warningWidget->setTimerWarning(true); break;
         case WarningWidget::Other:
+        case WarningWidget::Info:
         default: break;
     }
 
@@ -7992,6 +7994,40 @@ RosegardenMainWindow::slotSwitchPreset()
     // Fix #1885520 (Update track parameter widget when preset changed from notation)
     getView()->getTrackParameterBox()->slotUpdateControls(-1);
 }
+
+void
+RosegardenMainWindow::testAudioPath()
+{
+    QString  audioPath = strtoqstr(m_doc->getAudioFileManager().getAudioPath());
+    QDir dir(audioPath);
+    if (!dir.exists()) {
+
+        QString text(tr("<h3>Created audio path</h3>"));
+        QString informativeText(tr("<qt><p>Rosegarden created the audio path \"%1\" to use for audio recording, and to receive dropped audio files.</p><p>If you wish to use a different path, change this in <b>View -> Document Properties -> Audio</b>.</p></qt>").arg(audioPath));
+        slotDisplayWarning(WarningWidget::Info, text, informativeText);
+
+        if (!dir.mkpath(audioPath)) {
+            RG_DEBUG << "RosegardenDocument::testAudioPath() - audio path did not exist.  Tried to create it, and failed." << endl;
+
+            QString text(tr("<h3>Invalid audio path</h3>"));
+            QString informativeText(tr("<qt><p>The audio path \"%1\" did not exist, and could not be created.</p><p>You will not be able to record audio or drag and drop audio files onto Rosegarden until you correct this in <b>View -> Document Properties -> Audio</b>.</p></qt>").arg(audioPath));
+            slotDisplayWarning(WarningWidget::Audio, text, informativeText);
+        }
+    }
+
+// This is all more convenient than intentionally breaking things in my system
+// to trigger warning conditions.  It's not a real test of function, but it
+// serves to test form.
+//#define WARNING_WIDGET_WORKOUT
+#ifdef WARNING_WIDGET_WORKOUT
+    slotDisplayWarning(WarningWidget::Audio, "Audio warning!", "Informative audio warning!");
+    slotDisplayWarning(WarningWidget::Midi, "MIDI warning!", "Informative MIDI warning!");
+    slotDisplayWarning(WarningWidget::Timer, "Timer warning!", "Informative timer warning!");
+    slotDisplayWarning(WarningWidget::Other, "Misc. warning!", "Informative misc. warning!");
+    slotDisplayWarning(WarningWidget::Info, "Information", "Informative information!");
+#endif
+}
+
 
 RosegardenMainWindow *RosegardenMainWindow::m_myself = 0;
 

@@ -51,7 +51,7 @@ class WarningWidget : public QWidget
     Q_OBJECT
 public:
 
-    typedef enum { Midi, Audio, Timer, Other } WarningType;
+    typedef enum { Midi, Audio, Timer, Other, Info } WarningType;
 
     /** Constructs a WarningWidget in a default all clear state that assumes
      * MIDI, audio, and the system timer are all functioning correctly.  This
@@ -69,12 +69,13 @@ public:
      * queue.  These will be displayed via displayMessageQueue() when the user
      * clicks the warning icon
      */
-    void queueMessage(const QString text, const QString informativeText);
+    void queueMessage(const int type, const QString text, const QString informativeText);
 
     /** We'll build the message queue out of these for convenience, so both the
-     * text and informative text can be tossed about as one unit
+     * text and informative text can be tossed about as one unit, along with a
+     * flag indicating the type of warning
      */
-    typedef std::pair<QString, QString> Message;
+    typedef std::pair<std::pair<QString, QString>, int> Message;
 
 protected:
     QLabel *m_midiIcon;
@@ -83,6 +84,7 @@ protected:
 
     QToolButton *m_warningButton;
     QToolButton *m_graphicsButton;
+    QToolButton *m_infoButton;
 
     QString m_text;
     QString m_informativeText;

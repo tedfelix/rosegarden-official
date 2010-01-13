@@ -45,15 +45,17 @@ public:
      * figure out whatever was wrong with the way I tried to share it between
      * these classes...)
      */
-    typedef std::pair<QString, QString> Message;
+    typedef std::pair<std::pair<QString, QString>, int> Message;
+
+    // also copied from WarningWidget.h, which is lame, but I can't be bothered
+    // to do anything about that just now
+    typedef enum { Midi, Audio, Timer, Other, Info } WarningType;
 
     void addWarning(Message message);
 
 private:
     QTabWidget *m_tabWidget;
 
-    // We'll just load the icon once, and recycle it throughout
-    QIcon       m_warningIcon;
 };
 
 }

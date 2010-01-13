@@ -75,6 +75,17 @@ WarningWidget::WarningWidget(QWidget *parent) :
             SLOT(displayGraphicsAdvisory()));
     m_graphicsButton->hide();
 
+    m_infoButton = new QToolButton();
+    layout->addWidget(m_infoButton);
+    m_infoButton->setIconSize(QSize(16, 16));
+    m_infoButton->setIcon(IconLoader().loadPixmap("messagebox-information"));
+    connect(m_infoButton,
+            SIGNAL(clicked()),
+            this,
+            SLOT(displayMessageQueue()));
+    m_infoButton->setToolTip(tr("<qt><p>Information available.</p><p>Click to display details</p></qt>"));
+    m_infoButton->hide();
+
     // Set these to false initially, assuming an all clear state.  When some
     // problem crops up, these will be set true as appropriate by
     // RosegardenMainWindow, which manages this widget
@@ -136,13 +147,34 @@ WarningWidget::setGraphicsAdvisory(const bool status)
 }
 
 void
-WarningWidget::queueMessage(const QString text, const QString informativeText)
+WarningWidget::queueMessage(const int type, const QString text, const QString informativeText)
 {
     RG_DEBUG << "WarningWidget::queueMessage(" << text
              << ", " << informativeText << ")" << endl;
-    m_warningButton->show();
 
-    Message message(text, informativeText);
+    // we'll go ahead and splay this out in a big'ol switch in case there are
+    // ever other warning types that have special icons
+    switch (type) {
+    case Info:
+        m_infoButton->show();
+        break;
+    case Midi:
+    case Audio:
+    case Timer:
+    case Other:
+    default:
+        m_warningButton->show();
+    }
+
+    // this is all a bit awkard, but there's no std::triplet and I don't want to
+    // convert this all over to a vector or something, so I just nested a
+    // std::pair in a std::pair, and I can't be bothered to typedef the
+    // sub-component bit here
+    std::pair<QString, QString> m;
+    m.first = text;
+    m.second = informativeText;
+    
+    Message message(m, type);
 
     m_queue.enqueue(message);
 }
