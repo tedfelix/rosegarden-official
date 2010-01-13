@@ -42,6 +42,7 @@ SequencerThread::run()
     RealTime sleepTime = RealTime(0, 10000000);
 
     QTime timer;
+    timer.start();
 
     bool exiting = false;
 
