@@ -8000,20 +8000,40 @@ RosegardenMainWindow::testAudioPath()
 {
     QString  audioPath = strtoqstr(m_doc->getAudioFileManager().getAudioPath());
     QDir dir(audioPath);
+    QString text(tr("<h3>Invalid audio path</h3>"));
+    QString correctThis(tr("<p>You will not be able to record audio or drag and drop audio files onto Rosegarden until you correct this in <b>View -> Document Properties -> Audio</b>.</p>"));
+
     if (!dir.exists()) {
 
-        QString text(tr("<h3>Created audio path</h3>"));
+        text = tr("<h3>Created audio path</h3>");
         QString informativeText(tr("<qt><p>Rosegarden created the audio path \"%1\" to use for audio recording, and to receive dropped audio files.</p><p>If you wish to use a different path, change this in <b>View -> Document Properties -> Audio</b>.</p></qt>").arg(audioPath));
         slotDisplayWarning(WarningWidget::Info, text, informativeText);
 
         if (!dir.mkpath(audioPath)) {
             RG_DEBUG << "RosegardenDocument::testAudioPath() - audio path did not exist.  Tried to create it, and failed." << endl;
 
-            QString text(tr("<h3>Invalid audio path</h3>"));
-            QString informativeText(tr("<qt><p>The audio path \"%1\" did not exist, and could not be created.</p><p>You will not be able to record audio or drag and drop audio files onto Rosegarden until you correct this in <b>View -> Document Properties -> Audio</b>.</p></qt>").arg(audioPath));
+            QString informativeText(tr("<qt><p>The audio path \"%1\" did not exist, and could not be created.</p>%2</qt>").arg(audioPath).arg(correctThis));
             slotDisplayWarning(WarningWidget::Audio, text, informativeText);
         }
-    }
+    } else {
+        QTemporaryFile tmp(audioPath);
+        QString informativeText(tr("<qt><p>The audio path \"%1\" exists, but is not writable.</p>%2").arg(audioPath).arg(correctThis));
+        bool showError = false;
+        if (tmp.open()) {
+            if (tmp.write("0", 1) == -1) {
+                std::cout << "could not write file" << std::endl;
+                showError = true;
+            }
+        } else {
+            showError = true;
+        }
+
+        if (showError) {
+            slotDisplayWarning(WarningWidget::Audio, text, informativeText);
+        }
+
+        if (tmp.isOpen()) tmp.close();
+    } 
 
 // This is all more convenient than intentionally breaking things in my system
 // to trigger warning conditions.  It's not a real test of function, but it
