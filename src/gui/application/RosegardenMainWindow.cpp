@@ -8017,7 +8017,7 @@ RosegardenMainWindow::testAudioPath()
         }
     } else {
         QTemporaryFile tmp(audioPath);
-        QString informativeText(tr("<qt><p>The audio path \"%1\" exists, but is not writable.</p>%2").arg(audioPath).arg(correctThis));
+        QString informativeText(tr("<qt><p>The audio path \"%1\" exists, but is not writable.</p>%2</qt>").arg(audioPath).arg(correctThis));
         bool showError = false;
         if (tmp.open()) {
             if (tmp.write("0", 1) == -1) {
