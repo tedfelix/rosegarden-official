@@ -68,7 +68,7 @@ RawNoteRuler::~RawNoteRuler()
 void
 RawNoteRuler::slotScrollHoriz(int x)
 {
-    int w = width(), h = height();
+//###    int w = width(), h = height();
     int dx = x - ( -m_currentXOffset);
     if (dx == 0)
         return ;
@@ -440,18 +440,18 @@ RawNoteRuler::paintEvent(QPaintEvent* e)
 
     // Tooltips
     {
-	// QToolTip::remove(this);
-	TrackId trackId = m_segment->getTrack();
-	Track *track =
-	    m_segment->getComposition()->getTrackById(trackId);
+        // QToolTip::remove(this);
+        TrackId trackId = m_segment->getTrack();
+        Track *track =
+            m_segment->getComposition()->getTrackById(trackId);
         int trackPosition = -1;
         if (track)
             trackPosition = track->getPosition();
 
-	this->setToolTip(tr("Track #%1, Segment \"%2\" (runtime id %3)")
-		            .arg(trackPosition + 1)
-		            .arg(strtoqstr(m_segment->getLabel()))
-		            .arg(m_segment->getRuntimeId()));
+        this->setToolTip(tr("Track #%1, Segment \"%2\" (runtime id %3)")
+                            .arg(trackPosition + 1)
+                            .arg(strtoqstr(m_segment->getLabel()))
+                            .arg(m_segment->getRuntimeId()));
     }
 
     //    START_TIMING;
@@ -478,9 +478,9 @@ RawNoteRuler::paintEvent(QPaintEvent* e)
     paint.setPen(brushColor);
     paint.setBrush(brushColor);
     int x0 = int(m_rulerScale->getXForTime(m_segment->getStartTime()) + 
-		 m_currentXOffset + m_xorigin);
-    int x1 = int(m_rulerScale->getXForTime(m_segment->getEndTime()) + 
-		 m_currentXOffset + m_xorigin);
+                 m_currentXOffset + m_xorigin);
+    int x1 = int(m_rulerScale->getXForTime(m_segment->getEndMarkerTime()) + 
+                 m_currentXOffset + m_xorigin);
     paint.drawRect(x0, 1, x1-x0+1, height()-1);
 
     // draw the bar divisions

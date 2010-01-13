@@ -340,7 +340,7 @@ NotationScene::getStaffForSceneCoords(double x, int y) const
             (m_staffs[m_currentStaff]->getSegment().getClippedStartTime() + 1);
 
 	timeT t1 = m_document->getComposition().getBarEndForTime
-            (m_staffs[m_currentStaff]->getSegment().getEndTime() - 1);
+            (m_staffs[m_currentStaff]->getSegment().getEndMarkerTime() - 1);
 
         if (t >= t0 && t < t1) {
             return m_staffs[m_currentStaff];
@@ -367,7 +367,7 @@ NotationScene::getStaffForSceneCoords(double x, int y) const
 	    timeT t0 = m_document->getComposition().getBarStartForTime
                 (m_staffs[i]->getSegment().getClippedStartTime() + 1);
 	    timeT t1 = m_document->getComposition().getBarEndForTime
-                (m_staffs[i]->getSegment().getEndTime() - 1);
+                (m_staffs[i]->getSegment().getEndMarkerTime() - 1);
 
 	    if (t >= t0 && t < t1) {
                 return m_staffs[i];
@@ -762,12 +762,6 @@ NotationScene::setPageMode(StaffLayout::PageMode mode)
         layoutAll();
     }
 /*!!!
-    if (!m_printMode) {
-        // Layout is done : Time related to left of canvas should now
-        // correctly be determined and track headers contents be drawn.
-        m_headersGroup->slotUpdateAllHeaders(0, 0, true);
-    }
-
     positionPages();
 
 
