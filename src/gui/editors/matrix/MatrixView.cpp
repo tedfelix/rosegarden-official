@@ -231,6 +231,10 @@ MatrixView::MatrixView(RosegardenDocument *doc,
 
     // do the auto repeat thingie on the <<< << >> >>> buttons
     setRewFFwdToAutoRepeat();
+
+    // Show the pointer as soon as matrix editor opens (update pointer position,
+    // but don't scroll)
+    m_matrixWidget->showInitialPointer();
 }
 
 

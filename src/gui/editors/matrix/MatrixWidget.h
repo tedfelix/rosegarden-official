@@ -145,6 +145,11 @@ public slots:
     void slotHScroll();
     void slotEnsureTimeVisible(timeT);
 
+    /** Show the pointer.  Used by MatrixView upon construction, this ensures
+     * the pointer is visible initially.
+     */
+    void showInitialPointer();
+
 protected slots:
     void slotDispatchMousePress(const MatrixMouseEvent *);
     void slotDispatchMouseRelease(const MatrixMouseEvent *);

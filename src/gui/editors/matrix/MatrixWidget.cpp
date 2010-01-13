@@ -1346,6 +1346,28 @@ void MatrixWidget::slotKeyReleased(unsigned int y, bool repeating)
     Rosegarden::StudioControl::sendMappedEvent(mE);
 }
 
+void
+MatrixWidget::showInitialPointer()
+{
+    if (!m_scene) return;
+
+    timeT t = m_document->getComposition().getPosition();
+
+    double sceneX = m_scene->getRulerScale()->getXForTime(t);
+
+    // Never move the pointer outside the scene (else the scene will grow)
+    double x1 = m_scene->sceneRect().x();
+    double x2 = x1 + m_scene->sceneRect().width();
+
+    if ((sceneX < x1) || (sceneX > x2)) {
+        m_view->slotHidePositionPointer();
+        m_hpanner->slotHidePositionPointer();
+    } else {
+        m_view->slotShowPositionPointer(sceneX);
+        m_hpanner->slotShowPositionPointer(sceneX);
+    }
+}
+
 
 }
 
