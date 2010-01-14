@@ -7891,7 +7891,7 @@ RosegardenMainWindow::slotNewerVersionAvailable(QString v)
 {
     QString text(tr("<h3>Newer version available</h3>"));
     QString informativeText(tr("<p>You are using version %1.  Version %2 is now available.</p><p>Please consult the <a style=\"color:gold\" href=\"http://www.rosegardenmusic.com/getting/\">Rosegarden website</a> for more information.</p>").arg(VERSION).arg(v));
-    slotDisplayWarning(WarningWidget::Other, text, informativeText);
+    slotDisplayWarning(WarningWidget::Info, text, informativeText);
 }
 
 void
@@ -8038,7 +8038,7 @@ RosegardenMainWindow::testAudioPath()
 // This is all more convenient than intentionally breaking things in my system
 // to trigger warning conditions.  It's not a real test of function, but it
 // serves to test form.
-#define WARNING_WIDGET_WORKOUT
+//#define WARNING_WIDGET_WORKOUT
 #ifdef WARNING_WIDGET_WORKOUT
     slotDisplayWarning(WarningWidget::Audio, "Audio warning!", "Informative audio warning!");
     slotDisplayWarning(WarningWidget::Midi, "MIDI warning!", "Informative MIDI warning!");
