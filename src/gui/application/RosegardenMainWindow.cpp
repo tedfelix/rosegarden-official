@@ -468,7 +468,7 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
     settings.endGroup();
 
     connectOutsideCtorHack();
-    testAudioPath();
+    checkAudioPath();
 }
 
 RosegardenMainWindow::~RosegardenMainWindow()
@@ -7996,7 +7996,7 @@ RosegardenMainWindow::slotSwitchPreset()
 }
 
 void
-RosegardenMainWindow::testAudioPath()
+RosegardenMainWindow::checkAudioPath()
 {
     QString  audioPath = strtoqstr(m_doc->getAudioFileManager().getAudioPath());
     QDir dir(audioPath);

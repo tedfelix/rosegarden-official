@@ -334,7 +334,14 @@ public:
 
     bool isTrackEditorPlayTracking() const;
 
+    /** Query the AudioFileManager to see if the audio path exists, is readable,
+     * writable, etc., and offer to dump the user in the document properties
+     * editor if some problem is found.  This is older code that simply tests
+     * the audio path for validity, and does not create anything if the audio
+     * path does not exist.
+     */
     bool testAudioPath(QString op); // and open the dialog to set it if unset
+
     bool haveAudioImporter() const { return m_haveAudioImporter; }
     
     
@@ -1552,9 +1559,14 @@ private:
 
     /** Checks to see if the audio path exists.  If it does not, attempts to
      * create it.  If creation fails, sends notification to the user via the
-     * WarningWidget.
+     * WarningWidget.  This was originally an accidental overload of
+     * testAudioPath(QString op), which does some of, but not all of the same
+     * work.  This method attempts to create a missing audio path before doing
+     * anything else, and then informs the user via the warning widget, instead
+     * of a popup dialog.  If they get through all of this without fixing a
+     * problem, they might wind up dealing with testAudioPath() further on.
      */
-    void testAudioPath();
+    void checkAudioPath();
 
     //--------------- Data members ---------------------------------
 
