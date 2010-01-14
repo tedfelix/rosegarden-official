@@ -8038,7 +8038,7 @@ RosegardenMainWindow::testAudioPath()
 // This is all more convenient than intentionally breaking things in my system
 // to trigger warning conditions.  It's not a real test of function, but it
 // serves to test form.
-//#define WARNING_WIDGET_WORKOUT
+#define WARNING_WIDGET_WORKOUT
 #ifdef WARNING_WIDGET_WORKOUT
     slotDisplayWarning(WarningWidget::Audio, "Audio warning!", "Informative audio warning!");
     slotDisplayWarning(WarningWidget::Midi, "MIDI warning!", "Informative MIDI warning!");

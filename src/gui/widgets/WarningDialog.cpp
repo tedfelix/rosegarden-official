@@ -76,15 +76,15 @@ WarningDialog::addWarning(Message message)
 
     switch (message.second) {
     case Midi:
-        icon = IconLoader().load("midi-ok");
+        icon = IconLoader().load("midi-nok");
         headline = tr("MIDI");
         break;
     case Audio:
-        icon = IconLoader().load("audio-ok");
+        icon = IconLoader().load("audio-nok");
         headline = tr("Audio");
         break;
     case Timer:
-        icon = IconLoader().load("timer-ok");
+        icon = IconLoader().load("timer-nok");
         headline = tr("System timer");
         break;
     case Info:
