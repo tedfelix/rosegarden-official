@@ -31,11 +31,6 @@
 #include <QColor>
 #include <QPoint>
 
-//### QPtrDict becomes Q3PtrDict. We're supposed to rewrite to use QHash or
-// QMultiHash, but I made a quick attempt at that, and much brokenness resulted.
-// I'm switching it over to the Q3 class to keep the old code working for now.
-// 
-#include <Q3PtrDict>
 #include <QRect>
 #include <vector>
 
@@ -203,11 +198,10 @@ protected:
     recordingsegmentset          m_recordingSegments;
 
     typedef std::vector<CompositionItem> itemgc;
-
     AudioPreviewThread*          m_audioPreviewThread;
 
-    typedef Q3PtrDict<rectlist> NotationPreviewDataCache;
-    typedef Q3PtrDict<AudioPreviewData>    AudioPreviewDataCache;
+    typedef std::map<const Segment *, rectlist *> NotationPreviewDataCache;
+    typedef std::map<const Segment *, AudioPreviewData *> AudioPreviewDataCache;
 
     NotationPreviewDataCache     m_notationPreviewDataCache;
     AudioPreviewDataCache        m_audioPreviewDataCache;

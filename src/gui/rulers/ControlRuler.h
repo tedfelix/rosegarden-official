@@ -19,12 +19,8 @@
 #define _RG_CONTROLRULER_H_
 
 #include <QWidget>
-//#include <Q3Canvas>
-//#include <Q3CanvasItemList>
-//#include <Q3CanvasRectangle>
 #include "base/Segment.h"
 #include "base/Selection.h"
-//#include "gui/general/RosegardenCanvasView.h"
 #include "base/ViewSegment.h"
 #include <QColor>
 #include <QPoint>
@@ -39,8 +35,6 @@ class QWheelEvent;
 class QScrollBar;
 class QMouseEvent;
 class QContextMenuEvent;
-//class Q3CanvasRectangle;
-//class Q3Canvas;
 
 
 namespace Rosegarden
@@ -50,22 +44,15 @@ class ControlTool;
 class ControlToolBox;
 class ControlSelector;
 class ControlMouseEvent;
-//class ControlItem;
-//class ControlItemList;
 class Segment;
 class RulerScale;
 class EventSelection;
 class EditViewBase;
 class NotationStaff;
 
-//typedef std::list<ControlItem*> ControlItemList;
-//typedef std::list<ControlItem*>::iterator ControlItemListIterator;
-
 /**
  * ControlRuler : base class for Control Rulers
  */
-//class ControlRuler : public RosegardenCanvasView, public SegmentObserver, public EventSelectionObserver
-//class ControlRuler : public QWidget, public SegmentObserver, public EventSelectionObserver
 class ControlRuler : public QWidget //, public ViewSegmentObserver
 {
     Q_OBJECT
@@ -75,8 +62,6 @@ class ControlRuler : public QWidget //, public ViewSegmentObserver
 public:
     ControlRuler(ViewSegment*,
                  RulerScale*,
-//                 EditViewBase* parentView,
-//                 Q3Canvas*,
                  QWidget* parent=0); //###  const char name is obsolete, and I'm almost sure WFlags is obsolete too
     virtual ~ControlRuler();
 
@@ -99,7 +84,6 @@ public:
     int applyTool(double x, int val);
     ControlItemList *getSelectedItems() { return &m_selectedItems; }
 
-//    Q3CanvasRectangle* getSelectionRectangle() { return m_selectionRect; }
     QRectF* getSelectionRectangle() { return m_selectionRect; }
     void setSelectionRect(QRectF *rect) { m_selectionRect = rect; }
 
@@ -245,7 +229,6 @@ protected:
     ControlItemList m_visibleItems;
 
     ControlItem* m_currentIndex;
-//    Q3CanvasItemList m_selectedItems;
 
     ControlTool *m_currentTool;
     ControlToolBox *m_toolBox;
@@ -269,7 +252,6 @@ protected:
 
     bool m_selecting;
     ControlSelector* m_selector;
-//    Q3CanvasRectangle* m_selectionRect;
     QRectF* m_selectionRect;
 
     QString m_menuName;

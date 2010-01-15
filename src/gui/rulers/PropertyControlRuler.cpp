@@ -17,16 +17,12 @@
 
 
 #include <QMouseEvent>
-//#include <Q3Canvas>
-//#include <Q3CanvasItemList>
-//#include <Q3CanvasLine>
 #include "PropertyControlRuler.h"
 
 #include "ControlRuler.h"
 #include "ControlTool.h"
 #include "ControlToolBox.h"
 #include "PropertyControlItem.h"
-//#include "ViewElementAdapter.h"
 #include "misc/Debug.h"
 #include "base/BaseProperties.h"
 #include "base/NotationTypes.h"
@@ -39,9 +35,6 @@
 #include "document/CommandHistory.h"
 #include "gui/general/EditViewBase.h"
 #include "gui/general/GUIPalette.h"
-//#include "gui/editors/matrix/MatrixScene.h"
-//#include "gui/editors/matrix/MatrixViewSegment.h"
-//#include "gui/editors/matrix/MatrixElement.h"
 #include "gui/widgets/TextFloat.h"
 #include <QColor>
 #include <QPoint>
@@ -61,17 +54,9 @@ PropertyControlRuler::PropertyControlRuler(PropertyName propertyName,
     ControlRuler(segment, rulerScale,
                  parent),
     m_propertyName(propertyName)
-//    m_propertyLine(new Q3CanvasLine(canvas())),
-//    m_propertyLineShowing(false),
-//    m_propertyLineX(0),
-//    m_propertyLineY(0)
 {
-//    m_viewSegment->addObserver(this);
-//    m_propertyLine->setZ(1000); // bring to front
 
     setMenuName("property_ruler_menu");
-//    drawBackground();
-//    init();
     setViewSegment(segment);
 }
 
@@ -433,10 +418,8 @@ void PropertyControlRuler::contextMenuEvent(QContextMenuEvent* e)
     RG_DEBUG << "PropertyControlRuler::contextMenuEvent\n";
 
     // check if we actually have some control items
-//    Q3CanvasItemList list = canvas()->allItems();
     bool haveItems = false;
 
-//    Q3CanvasItemList::Iterator it = list.begin();
     for (ControlItemMap::iterator it = m_controlItemMap.begin(); it != m_controlItemMap.end(); ++it) {
         if (dynamic_cast<ControlItem*>(it->second)) {
             haveItems = true;
@@ -452,85 +435,9 @@ void PropertyControlRuler::contextMenuEvent(QContextMenuEvent* e)
     ControlRuler::contextMenuEvent(e);
 }
 
-//void
-//PropertyControlRuler::drawPropertyLine(timeT startTime,
-                                       //timeT endTime,
-                                       //int startValue,
-                                       //int endValue)
-//{
-    //if (startTime > endTime) {
-        //std::swap(startTime, endTime);
-        //std::swap(startValue, endValue);
-    //}
-
-    //RG_DEBUG << "PropertyControlRuler::drawPropertyLine - set velocity from "
-    //<< startTime
-    //<< " to " << endTime << endl;
-
-    //// Add the "true" to catch Events overlapping this line
-    ////
-    //EventSelection selection(*m_segment, startTime, endTime, true);
-    //PropertyPattern pattern = DecrescendoPattern;
-
-    //bool haveNotes = selection.contains(Note::EventType);
-
-    //if (haveNotes) {
-
-        //SelectionPropertyCommand *command =
-            //new SelectionPropertyCommand(&selection,
-                                         //BaseProperties::VELOCITY,
-                                         //pattern,
-                                         //startValue,
-                                         //endValue);
-
-        //CommandHistory::getInstance()->addCommand(command);
-
-    //} else {
-
-        //RG_DEBUG << "PropertyControlRuler::drawPropertyLine - no notes in selection\n";
-
-    //}
-//}
-
 void
 PropertyControlRuler::selectAllProperties()
 {
-//    RG_DEBUG << "PropertyControlRuler::selectAllProperties" << endl;
-//
-//    /*
-//    for(Segment::iterator i = m_segment.begin();
-//                    i != m_segment.end(); ++i)
-//        if (!m_eventSelection->contains(*i)) m_eventSelection->addEvent(*i);
-//    */
-//
-//    clearSelectedItems();
-//
-////    Q3CanvasItemList l = canvas()->allItems();
-////    for (Q3CanvasItemList::Iterator it = l.begin(); it != l.end(); ++it) {
-//    for (ControlItemList::iterator it = m_controlItemList.begin(); it != m_controlItemList.end(); ++it) {
-//        if (ControlItem *item = dynamic_cast<ControlItem*>(*it)) {
-////            m_selectedItems << item;
-//            m_selectedItems.push_back(item);
-//            (*it)->setSelected(true);
-////            ElementAdapter* adapter = item->getElementAdapter();
-////            m_eventSelection->addEvent(adapter->getEvent());
-//            m_eventSelection->addEvent(item->getEvent());
-//        }
-//    }
-//
-//    /*
-//    m_eventSelection->addFromSelection(&selection);
-//    for (Q3CanvasItemList::Iterator it=m_selectedItems.begin(); it!=m_selectedItems.end(); ++it) {
-//        if (ControlItem *item = dynamic_cast<ControlItem*>(*it)) {
-//
-//            ElementAdapter* adapter = item->getElementAdapter();
-//            m_eventSelection->addEvent(adapter->getEvent());
-//            item->handleMouseButtonRelease(e);
-//        }
-//    }
-//    */
-//
-//    emit stateChange("have_controller_item_selected", true);
 }
 
 }

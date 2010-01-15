@@ -19,7 +19,6 @@
 #define _RG_NOTEPIXMAPPAINTER_H_
 
 #include <QPainter>
-#include <Q3PointArray>
 
 #include "misc/Debug.h"
 
@@ -28,10 +27,8 @@ namespace Rosegarden {
 
 class NotePixmapPainter
 {
-    //!!! update -- no masks, transparency instead
-    // Just a trivial class that instructs two painters to do the
-    // same thing (one for the pixmap, one for the mask).  We only
-    // duplicate those methods we actually use in NotePixmapFactory
+    // Just a trivial wrapper for QPainter.  We only duplicate those
+    // methods we actually use in NotePixmapFactory
 
 public:
     NotePixmapPainter() :
@@ -88,12 +85,12 @@ public:
 	m_painter->drawArc(x, y, w, h, a, alen);
     }
 
-    void drawPolygon(const Q3PointArray &a, bool winding = false,
+    void drawPolygon(const QPolygon &a, bool winding = false,
 		     int index = 0, int n = -1) {
 	m_painter->drawPolygon(a, winding, index, n);
     }
 
-    void drawPolyline(const Q3PointArray &a, int index = 0, int n = -1) {
+    void drawPolyline(const QPolygon &a, int index = 0, int n = -1) {
 	m_painter->drawPolyline(a, index, n);
     }
 
@@ -115,9 +112,7 @@ public:
     }
 
 private:
-    bool m_useMask;
     QPainter  m_myPainter;
-    QPainter  m_maskPainter;
     QPainter *m_externalPainter;
     QPainter *m_painter;
 };

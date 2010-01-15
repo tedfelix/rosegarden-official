@@ -676,8 +676,6 @@ void NotationSelector::dragFine(int x, int y, bool final)
 
 void NotationSelector::ready()
 {
-//!!!    m_selectionRect = new Q3CanvasRectangle(m_nParentView->canvas());
-
 //    if (m_selectionRect) {
 //        m_selectionRect->hide();
 //       m_selectionRect->setPen(GUIPalette::getColour(GUIPalette::SelectionRectangle));

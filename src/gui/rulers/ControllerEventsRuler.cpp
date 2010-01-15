@@ -15,10 +15,6 @@
     COPYING included with this distribution for more information.
 */
 
-//#include <Q3Canvas>
-//#include <Q3CanvasItemList>
-//#include <Q3CanvasLine>
-
 #include "ControllerEventsRuler.h"
 #include "ControlRuler.h"
 #include "EventControlItem.h"
@@ -57,21 +53,13 @@ namespace Rosegarden
 
 ControllerEventsRuler::ControllerEventsRuler(ViewSegment *segment,
         RulerScale* rulerScale,
-//        EditViewBase* parentView,
-//        Q3Canvas* c,
         QWidget* parent,
         const ControlParameter *controller,
         const char* name) //, WFlags f)
-        //: ControlRuler(segment, rulerScale, parentView, c, parent), // name, f),
-        //: ControlRuler(segment, rulerScale, parentView, parent), // name, f),
         : ControlRuler(segment, rulerScale, parent), // name, f),
         m_defaultItemWidth(20),
         m_lastDrawnRect(QRectF(0,0,0,0)),
         m_moddingSegment(false)
-//        m_controlLine(new Q3CanvasLine(canvas())),
-//        m_controlLineShowing(false),
-//        m_controlLineX(0),
-//        m_controlLineY(0)
 {
     // Make a copy of the ControlParameter if we have one
     //

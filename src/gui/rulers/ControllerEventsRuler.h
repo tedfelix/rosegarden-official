@@ -18,8 +18,6 @@
 #ifndef _RG_CONTROLLEREVENTSRULER_H_
 #define _RG_CONTROLLEREVENTSRULER_H_
 
-//#include <Q3Canvas>
-//#include <Q3CanvasLine>
 #include "ControlRuler.h"
 #include "base/Event.h"
 #include "base/Segment.h"
@@ -27,8 +25,6 @@
 
 class QWidget;
 class QMouseEvent;
-//class Q3CanvasLine;
-//class Q3Canvas;
 
 
 namespace Rosegarden
@@ -50,8 +46,6 @@ class ControllerEventsRuler : public ControlRuler, public SegmentObserver
 public:
     ControllerEventsRuler(ViewSegment*,
                           RulerScale*,
-//                          EditViewBase* parentView,
-//                          Q3Canvas*,
                           QWidget* parent=0,
                           const ControlParameter *controller = 0,
                           const char* name=0 );	//, WFlags f=0);
@@ -95,32 +89,12 @@ protected:
     virtual void init();
     virtual bool isOnThisRuler(Event *);
 
-//    virtual void drawBackground(); Implemented in paintEvent
-
-    // Let's override these again here
-    //
-//    virtual void contentsMousePressEvent(QMouseEvent*);
-//    virtual void contentsMouseReleaseEvent(QMouseEvent*);
-//    virtual void contentsMouseMoveEvent(QMouseEvent*);
-
-//    virtual void layoutItem(ControlItem*);
-
-//    void drawControlLine(timeT startTime,
-//                         timeT endTime,
-//                         int startValue,
-//                         int endValue);
-
     //--------------- Data members ---------------------------------
     int  m_defaultItemWidth;
 
     ControlParameter  *m_controller;
     QRectF m_lastDrawnRect;
     bool m_moddingSegment;
-//    Q3CanvasLine                   *m_controlLine;
-
-//    bool                           m_controlLineShowing;
-//    int                            m_controlLineX;
-//    int                            m_controlLineY;
 };
 
 

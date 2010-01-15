@@ -19,8 +19,6 @@
 #ifndef _RG_PROPERTYCONTROLRULER_H_
 #define _RG_PROPERTYCONTROLRULER_H_
 
-//#include <Q3Canvas>
-//#include <Q3CanvasLine>
 #include "base/PropertyName.h"
 #include "ControlRuler.h"
 #include <QString>
@@ -31,19 +29,15 @@
 class QWidget;
 class QMouseEvent;
 class QContextMenuEvent;
-//class Q3CanvasLine;
-//class Q3Canvas;
 
 
 namespace Rosegarden
 {
 
 class ViewElement;
-//class MatrixScene;
 class ViewSegment;
 class Segment;
 class RulerScale;
-//class EditViewBase;
 
 
 /**
@@ -75,13 +69,9 @@ public:
 
     // ViewSegmentObserver interface
     virtual void elementAdded(const ViewSegment *, ViewElement*);
-//    virtual void eventAdded(const Segment *, Event *);
     virtual void elementRemoved(const ViewSegment *, ViewElement*);
-//    virtual void eventRemoved(const Segment *, Event *);
     virtual void viewSegmentDeleted(const ViewSegment *);
-//    virtual void segmentDeleted(const Segment *);
 
-//    virtual void startPropertyLine();
     virtual void selectAllProperties();
 
     /// SegmentObserver interface
@@ -95,7 +85,6 @@ public slots:
     virtual void slotSetTool(const QString &);
 
 protected:
-//    void addControlItem(Event *);
     void addControlItem(ViewElement *);
 
     virtual void mousePressEvent(QMouseEvent*);
@@ -103,25 +92,11 @@ protected:
     virtual void mouseMoveEvent(QMouseEvent*);
     virtual void contextMenuEvent(QContextMenuEvent*);
 
-    //void drawPropertyLine(timeT startTime,
-                          //timeT endTime,
-                          //int startValue,
-                          //int endValue);
-
     virtual void init();
-//    virtual void drawBackground();
-//    virtual void computeSegmentOffset();
 
     //--------------- Data members ---------------------------------
 
     PropertyName m_propertyName;
-//    Segment *m_segment;
-
-//    Q3CanvasLine *m_propertyLine;
-
-//    bool m_propertyLineShowing;
-//    int m_propertyLineX;
-//    int m_propertyLineY;
 };
 
 

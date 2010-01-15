@@ -34,7 +34,7 @@
 #include "document/RosegardenDocument.h"
 #include "misc/ConfigGroups.h"
 #include "gui/general/BaseTool.h"
-#include "gui/general/RosegardenCanvasView.h"
+#include "gui/general/RosegardenScrollView.h"
 #include "SegmentPencil.h"
 #include "SegmentResizer.h"
 #include "SegmentTool.h"
@@ -307,7 +307,7 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 {
     if (!m_buttonPressed) {
         setContextHelpFor(e->pos(), (e->state() & Qt::ControlModifier));
-        return RosegardenCanvasView::NoFollow;
+        return RosegardenScrollView::NoFollow;
     }
 
     if (m_dispatchTool) {
@@ -342,7 +342,7 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
         m_canvas->setSelectionRectSize(w, h);
 
         m_canvas->getModel()->signalSelection();
-        return RosegardenCanvasView::FollowHorizontal | RosegardenCanvasView::FollowVertical;
+        return RosegardenScrollView::FollowHorizontal | RosegardenScrollView::FollowVertical;
     }
 
     m_canvas->viewport()->setCursor(Qt::sizeAllCursor);
@@ -414,7 +414,7 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
             if (!m_passedInertiaEdge &&
                     (dx < inertiaDistance && dx > -inertiaDistance) &&
                     (dy < inertiaDistance && dy > -inertiaDistance)) {
-                return RosegardenCanvasView::NoFollow;
+                return RosegardenScrollView::NoFollow;
             } else {
                 m_passedInertiaEdge = true;
             }
@@ -472,7 +472,7 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
         // 	RG_DEBUG << "SegmentSelector::handleMouseMove: current item not selected\n";
     }
 
-    return RosegardenCanvasView::FollowHorizontal | RosegardenCanvasView::FollowVertical;
+    return RosegardenScrollView::FollowHorizontal | RosegardenScrollView::FollowVertical;
 }
 
 void SegmentSelector::setContextHelpFor(QPoint p, bool ctrlPressed)

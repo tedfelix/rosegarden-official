@@ -22,7 +22,7 @@
 #include "CompositionView.h"
 #include "document/RosegardenDocument.h"
 #include "gui/general/BaseTool.h"
-#include "gui/general/RosegardenCanvasView.h"
+#include "gui/general/RosegardenScrollView.h"
 #include "SegmentTool.h"
 #include "document/Command.h"
 #include <QPoint>
@@ -53,7 +53,7 @@ SegmentJoiner::handleMouseButtonRelease(QMouseEvent*)
 int
 SegmentJoiner::handleMouseMove(QMouseEvent*)
 {
-    return RosegardenCanvasView::NoFollow;
+    return RosegardenScrollView::NoFollow;
 }
 
 void

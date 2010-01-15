@@ -18,8 +18,7 @@
 
 #include "TrackHeader.h"
 
-#include <Q3Header>
-#include <QHeaderView>		// replaces Q3Header
+#include <QHeaderView>
 #include <QPainter>
 #include <QRect>
 #include <QWidget>

@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -20,7 +19,6 @@
 #define _RG_ROSEGARDENSCROLLVIEW_H_
 
 #include <QPoint>
-//#include <Q3ScrollView>
 #include <QAbstractScrollArea>
 #include <QDateTime>
 #include <QTimer>
@@ -42,7 +40,6 @@ namespace Rosegarden
  * and the ability to have a "fixed" (non-scrolling) widget at its bottom,
  * just above the bottom scrollbar.
  */
-//class RosegardenScrollView : public Q3ScrollView
 class RosegardenScrollView : public QAbstractScrollArea
 {
     Q_OBJECT

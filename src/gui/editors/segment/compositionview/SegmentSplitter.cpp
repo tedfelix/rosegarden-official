@@ -27,7 +27,7 @@
 #include "CompositionView.h"
 #include "document/RosegardenDocument.h"
 #include "gui/general/BaseTool.h"
-#include "gui/general/RosegardenCanvasView.h"
+#include "gui/general/RosegardenScrollView.h"
 #include "SegmentTool.h"
 #include "document/Command.h"
 #include <QPoint>
@@ -116,11 +116,11 @@ SegmentSplitter::handleMouseMove(QMouseEvent *e)
 //        m_canvas->viewport()->setCursor(Qt::blankCursor);
         drawSplitLine(e);
         delete item;
-        return RosegardenCanvasView::FollowHorizontal;
+        return RosegardenScrollView::FollowHorizontal;
     } else {
         m_canvas->viewport()->setCursor(Qt::splitHCursor);
         m_canvas->slotHideSplitLine();
-        return RosegardenCanvasView::NoFollow;
+        return RosegardenScrollView::NoFollow;
     }
 }
 

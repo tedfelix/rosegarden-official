@@ -36,7 +36,7 @@
 #include "document/RosegardenDocument.h"
 #include "gui/general/BaseTool.h"
 #include "gui/application/RosegardenMainWindow.h"
-#include "gui/general/RosegardenCanvasView.h"
+#include "gui/general/RosegardenScrollView.h"
 #include "gui/widgets/ProgressDialog.h"
 #include "SegmentTool.h"
 #include "document/Command.h"
@@ -244,7 +244,7 @@ int SegmentResizer::handleMouseMove(QMouseEvent *e)
 
     if (!m_currentIndex) {
         setBasicContextHelp(rescale);
-        return RosegardenCanvasView::NoFollow;
+        return RosegardenScrollView::NoFollow;
     }
 
     if (rescale) {
@@ -271,7 +271,7 @@ int SegmentResizer::handleMouseMove(QMouseEvent *e)
             m_currentIndex = CompositionItem();
             QMessageBox::information(m_canvas,
                     tr("You can't yet resize an audio segment!"));
-            return RosegardenCanvasView::NoFollow;
+            return RosegardenScrollView::NoFollow;
         }
     */
 
@@ -358,7 +358,7 @@ int SegmentResizer::handleMouseMove(QMouseEvent *e)
 
     m_canvas->slotUpdateSegmentsDrawBuffer(m_currentIndex->rect() | oldRect);
 
-    return RosegardenCanvasView::FollowHorizontal;
+    return RosegardenScrollView::FollowHorizontal;
 }
 
 bool SegmentResizer::cursorIsCloseEnoughToEdge(const CompositionItem& p, const QPoint &coord,

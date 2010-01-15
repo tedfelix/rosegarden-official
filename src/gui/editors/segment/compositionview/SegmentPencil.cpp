@@ -31,7 +31,7 @@
 #include "document/RosegardenDocument.h"
 #include "gui/general/BaseTool.h"
 #include "gui/general/GUIPalette.h"
-#include "gui/general/RosegardenCanvasView.h"
+#include "gui/general/RosegardenScrollView.h"
 #include "SegmentTool.h"
 #include "document/Command.h"
 #include <QCursor>
@@ -212,7 +212,7 @@ int SegmentPencil::handleMouseMove(QMouseEvent *e)
 {
     if (!m_newRect) {
         setContextHelpFor(e->pos());
-        return RosegardenCanvasView::NoFollow;
+        return RosegardenScrollView::NoFollow;
     }
 
     if (!m_canvas->isFineGrain()) {
@@ -262,7 +262,7 @@ int SegmentPencil::handleMouseMove(QMouseEvent *e)
     }
 
     m_canvas->setTmpRect(tmpRect);
-    return RosegardenCanvasView::FollowHorizontal;
+    return RosegardenScrollView::FollowHorizontal;
 }
 
 void SegmentPencil::setContextHelpFor(QPoint p)

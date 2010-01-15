@@ -222,27 +222,6 @@ NotationStaff::insertRepeatedClefAndKey(double layoutX, int barNo)
         dx += item->boundingRect().width();
     }
 
-    /* attempt to blot out things like slurs & ties that overrun this area: doesn't work
-     
-        if (m_notationScene->isInPrintMode() && (needClef || needKey)) {
-     
-    	int layoutY = getLayoutYForHeight(14);
-    	int h = getLayoutYForHeight(-8) - layoutY;
-     
-    	StaffLayoutCoords coords =
-    	    getCanvasCoordsForLayoutCoords(layoutX, layoutY);
-        
-    	Q3CanvasRectangle *rect = new Q3CanvasRectangle(coords.first, coords.second,
-    						      dx, h, m_canvas);
-    	rect->setPen(QColor(Qt::black));
-    	rect->setBrush(QColor(Qt::white));
-    	rect->setZ(1);
-    	rect->show();
-     
-    	m_repeatedClefsAndKeys.insert(rect);
-        }
-    */
-
     m_notePixmapFactory->setShaded(false);
 }
 

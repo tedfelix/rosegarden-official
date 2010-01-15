@@ -91,7 +91,7 @@
 namespace Rosegarden
 {
 
-// Use this to define the basic unit of the main Q3Canvas size.
+// Use this to define the basic unit of the main segment canvas size.
 //
 // This apparently arbitrary figure is what we think is an
 // appropriate width in pixels for a 4/4 bar.  Beware of making it

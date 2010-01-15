@@ -15,14 +15,12 @@
     COPYING included with this distribution for more information.
 */
 
-//#include <Q3CanvasItemList>
 #include "ControlChangeCommand.h"
 #include "ControlItem.h"
 #include "misc/Debug.h"
 
 namespace Rosegarden {
 
-//ControlChangeCommand::ControlChangeCommand(Q3CanvasItemList selectedItems,
 ControlChangeCommand::ControlChangeCommand(ControlItemList selectedItems,
                                            Segment &segment,
                                            Rosegarden::timeT start, Rosegarden::timeT end)
@@ -36,7 +34,6 @@ ControlChangeCommand::ControlChangeCommand(ControlItemList selectedItems,
 
 void ControlChangeCommand::modifySegment()
 {
-//    for (Q3CanvasItemList::Iterator it=m_selectedItems.begin(); it!=m_selectedItems.end(); ++it) {
     for (ControlItemList::iterator it = m_selectedItems.begin(); it!=m_selectedItems.end(); ++it) {
         if (ControlItem *item = dynamic_cast<ControlItem*>(*it))
             item->updateSegment();

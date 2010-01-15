@@ -15,8 +15,6 @@
     COPYING included with this distribution for more information.
 */
 
-#include <Q3PointArray>
-
 #include "LoopRuler.h"
 
 #include "misc/Debug.h"
@@ -24,7 +22,7 @@
 #include "base/SnapGrid.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/general/HZoomable.h"
-#include "gui/general/RosegardenCanvasView.h"
+#include "gui/general/RosegardenScrollView.h"
 #include "document/RosegardenDocument.h"
 
 #include <QPainter>
@@ -306,7 +304,7 @@ LoopRuler::mousePressEvent(QMouseEvent *mE)
         }
 
         m_activeMousePress = true;
-        emit startMouseMove(RosegardenCanvasView::FollowHorizontal);
+        emit startMouseMove(RosegardenScrollView::FollowHorizontal);
     }
 }
 

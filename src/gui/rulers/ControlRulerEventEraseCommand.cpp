@@ -15,7 +15,6 @@
     COPYING included with this distribution for more information.
 */
 
-#include <Q3CanvasItemList>
 #include "ControlRulerEventEraseCommand.h"
 #include "ControlItem.h"
 #include "ElementAdapter.h"
@@ -24,7 +23,6 @@
 namespace Rosegarden
 {
 
-//ControlRulerEventEraseCommand::ControlRulerEventEraseCommand(Q3CanvasItemList selectedItems,
 ControlRulerEventEraseCommand::ControlRulerEventEraseCommand(ControlItemList selectedItems,
                                                          Segment &segment,
                                                          Rosegarden::timeT start, Rosegarden::timeT end)

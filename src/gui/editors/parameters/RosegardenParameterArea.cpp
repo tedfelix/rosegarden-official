@@ -28,7 +28,6 @@
 #include <QFont>
 #include <QFrame>
 #include <QPoint>
-//#include <Q3ScrollView>
 #include <QScrollArea>
 #include <QString>
 #include <QLayout>

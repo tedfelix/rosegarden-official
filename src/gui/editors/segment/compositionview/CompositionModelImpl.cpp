@@ -68,8 +68,6 @@ CompositionModelImpl::CompositionModelImpl(Composition& compo,
         m_pointerTimePos(0),
         m_audioPreviewThread(0)
 {
-    m_notationPreviewDataCache.setAutoDelete(true);
-    m_audioPreviewDataCache.setAutoDelete(true);
     m_composition.addObserver(this);
 
     setTrackHeights();
@@ -303,12 +301,22 @@ void CompositionModelImpl::clearPreviewCache()
 {
     RG_DEBUG << "CompositionModelImpl::clearPreviewCache\n";
 
+    for (NotationPreviewDataCache::iterator i = m_notationPreviewDataCache.begin();
+         i != m_notationPreviewDataCache.end(); ++i) {
+        delete i->second;
+    }
+    for (AudioPreviewDataCache::iterator i = m_audioPreviewDataCache.begin();
+         i != m_audioPreviewDataCache.end(); ++i) {
+        delete i->second;
+    }
+
     m_notationPreviewDataCache.clear();
     m_audioPreviewDataCache.clear();
+
     m_audioSegmentPreviewMap.clear();
 
     for (AudioPreviewUpdaterMap::iterator i = m_audioPreviewUpdaterMap.begin();
-            i != m_audioPreviewUpdaterMap.end(); ++i) {
+         i != m_audioPreviewUpdaterMap.end(); ++i) {
         i->second->cancel();
     }
 
@@ -558,9 +566,13 @@ void CompositionModelImpl::makePreviewCache(const Segment *s)
 void CompositionModelImpl::removePreviewCache(const Segment *s)
 {
     if (s->getType() == Segment::Internal) {
-        m_notationPreviewDataCache.remove(const_cast<Segment*>(s));
+        rectlist *rl = m_notationPreviewDataCache[s];
+        delete rl;
+        m_notationPreviewDataCache.erase(s);
     } else {
-        m_audioPreviewDataCache.remove(const_cast<Segment*>(s));
+        AudioPreviewData *apd = m_audioPreviewDataCache[s];
+        delete apd;
+        m_audioPreviewDataCache.erase(s);
         m_audioSegmentPreviewMap.erase(s);
     }
 
@@ -1269,7 +1281,7 @@ CompositionModel::heightlist CompositionModelImpl::getTrackDividersIn(const QRec
 
 CompositionModel::rectlist* CompositionModelImpl::getNotationPreviewData(const Segment* s)
 {
-    rectlist* npData = m_notationPreviewDataCache[const_cast<Segment*>(s)];
+    rectlist* npData = m_notationPreviewDataCache[s];
 
     if (!npData) {
         npData = makeNotationPreviewDataCache(s);
@@ -1283,7 +1295,7 @@ CompositionModel::AudioPreviewData* CompositionModelImpl::getAudioPreviewData(co
     //    Profiler profiler("CompositionModelImpl::getAudioPreviewData", true);
     RG_DEBUG << "CompositionModelImpl::getAudioPreviewData\n";
 
-    AudioPreviewData* apData = m_audioPreviewDataCache[const_cast<Segment*>(s)];
+    AudioPreviewData* apData = m_audioPreviewDataCache[s];
 
     if (!apData) {
         apData = makeAudioPreviewDataCache(s);
@@ -1297,7 +1309,7 @@ CompositionModel::rectlist* CompositionModelImpl::makeNotationPreviewDataCache(c
 {
     rectlist* npData = new rectlist();
     updatePreviewCacheForNotationSegment(s, npData);
-    m_notationPreviewDataCache.insert(const_cast<Segment*>(s), npData);
+    m_notationPreviewDataCache[s] = npData;
     return npData;
 }
 
@@ -1307,7 +1319,7 @@ CompositionModel::AudioPreviewData* CompositionModelImpl::makeAudioPreviewDataCa
 
     AudioPreviewData* apData = new AudioPreviewData(false, 0); // 0 channels -> empty
     updatePreviewCacheForAudioSegment(s, apData);
-    m_audioPreviewDataCache.insert(const_cast<Segment*>(s), apData);
+    m_audioPreviewDataCache[s] = apData;
     return apData;
 }
 

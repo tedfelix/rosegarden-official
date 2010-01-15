@@ -2665,7 +2665,7 @@ NotePixmapFactory::drawSlurAux(int length, int dy, bool above,
         	}
         */
         int ppc = polyPoints->size();
-        Q3PointArray qp(ppc);
+        QPolygon qp(ppc);
 
         for (int j = 0; j < ppc; ++j) {
             qp.setPoint(j, (*polyPoints)[j].x(), (*polyPoints)[j].y());
@@ -2915,7 +2915,7 @@ NotePixmapFactory::drawBracket(int length, bool left, bool curly, int x, int y)
                                         (QPoint(off0, 0), QPoint(off0, length - 1), pl, topLeft, bottomRight);
 
         int ppc = polyPoints->size();
-        Q3PointArray qp(ppc);
+        QPolygon qp(ppc);
         /*
         	NOTATION_DEBUG << "bracket spline polypoints: " << endl;
         	for (int j = 0; j < ppc; ++j) {

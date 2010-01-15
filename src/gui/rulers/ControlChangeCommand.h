@@ -18,17 +18,12 @@
 #ifndef _RG_CONTROLCHANGECOMMAND_H_
 #define _RG_CONTROLCHANGECOMMAND_H_
 
-//#include <Q3CanvasItemList>
 #include "document/BasicCommand.h"
-//#include <Q3Canvas>
 #include "ControlItem.h"
 
 #include <QCoreApplication>
 
 namespace Rosegarden {
-
-//class ControlItem;
-//class ControlItemList;
 
 /**
  * Command defining a change (property change or similar) from the control ruler
@@ -39,7 +34,6 @@ class ControlChangeCommand : public BasicCommand
 
 public:
 
-//    ControlChangeCommand(Q3CanvasItemList selectedItems,
     ControlChangeCommand(ControlItemList selectedItems,
                          Segment &segment,
                          Rosegarden::timeT start, Rosegarden::timeT end);
@@ -50,7 +44,6 @@ protected:
 
     virtual void modifySegment();
 
-//    Q3CanvasItemList m_selectedItems;
     ControlItemList m_selectedItems;
 };
 

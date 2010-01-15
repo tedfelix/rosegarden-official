@@ -36,7 +36,7 @@
 #include "document/RosegardenDocument.h"
 #include "misc/ConfigGroups.h"
 #include "gui/general/GUIPalette.h"
-#include "gui/general/RosegardenCanvasView.h"
+#include "gui/general/RosegardenScrollView.h"
 #include "gui/general/RosegardenScrollView.h"
 #include "SegmentSelector.h"
 #include "SegmentToolBox.h"
@@ -487,7 +487,6 @@ void CompositionView::resizeEvent(QResizeEvent* e)
 
 //    RG_DEBUG << "CompositionView::resizeEvent() : from " << e->oldSize() << " to " << e->size() << endl;
 
-    //Q3ScrollView::resizeEvent(e);
     RosegardenScrollView::resizeEvent(e);
     slotUpdateSize();
 
@@ -1511,10 +1510,10 @@ void CompositionView::contentsMouseMoveEvent(QMouseEvent* e)
     int follow = m_tool->handleMouseMove(e);
     setScrollDirectionConstraint(follow);
 
-    if (follow != RosegardenCanvasView::NoFollow) {
+    if (follow != RosegardenScrollView::NoFollow) {
         doAutoScroll();
 
-        if (follow & RosegardenCanvasView::FollowHorizontal) {
+        if (follow & RosegardenScrollView::FollowHorizontal) {
             slotScrollHorizSmallSteps(e->pos().x());
 
             // enlarge composition if needed
@@ -1526,7 +1525,7 @@ void CompositionView::contentsMouseMoveEvent(QMouseEvent* e)
             }
         }
 
-        if (follow & RosegardenCanvasView::FollowVertical)
+        if (follow & RosegardenScrollView::FollowVertical)
             slotScrollVertSmallSteps(e->pos().y());
     }
 }

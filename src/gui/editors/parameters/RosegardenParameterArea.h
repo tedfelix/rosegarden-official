@@ -29,7 +29,6 @@ class QWidget;
 class QGroupBox;
 class QHBoxLayout;
 class QVBoxLayout;
-// class Q3ScrollView;
 class QScrollArea;
 class QTabWidget;
 
@@ -90,7 +89,6 @@ private:
     void moveWidget(QWidget *old_container, QWidget *new_container,
                     RosegardenParameterBox *box);
 
-//     Q3ScrollView *m_scrollArea; // Holds the m_classic container
     QScrollArea *m_scrollArea;    
     
     QWidget *m_classic;        // The container widget for m_style==CLASSIC_STYLE.

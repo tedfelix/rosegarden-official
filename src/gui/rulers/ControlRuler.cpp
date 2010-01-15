@@ -34,14 +34,13 @@
 #include "DefaultVelocityColour.h"
 //#include "ElementAdapter.h"
 //#include "gui/general/EditViewBase.h"
-//#include "gui/general/RosegardenCanvasView.h"
+//#include "gui/general/RosegardenScrollView.h"
 #include "document/CommandHistory.h"
 //#include "gui/widgets/TextFloat.h"
 #include <algorithm>
 #include <cfloat>
 
 #include <QMainWindow>
-//#include <Q3Canvas>
 #include <QColor>
 #include <QPoint>
 #include <QPolygonF>
@@ -87,8 +86,6 @@ ControlRuler::ControlRuler(ViewSegment *viewsegment,
         m_currentX(0.0),
         m_itemMoved(false),
         m_selecting(false),
-//        m_selector(new ControlSelector(this)),
-//        m_selectionRect(new Q3CanvasRectangle(canvas())),
         m_selectionRect(0),
         m_menu(0),
         m_firstVisibleItem(m_controlItemMap.end()),
@@ -665,34 +662,8 @@ void
 ControlRuler::wheelEvent(QWheelEvent *e)
 {
     // not sure what to do yet
-    ///CJ ?? Q3CanvasView::contentsWheelEvent(e);
-}
 
-//void ControlRuler::updateSelection()
-//{
-//    clearSelectedItems();
-//
-//    bool haveSelectedItems = false;
-//
-//    //Q3CanvasItemList l = getSelectionRectangle()->collisions(true);
-//    ControlItemList l; ///CJ Write collisions code!
-//
-////    for (Q3CanvasItemList::Iterator it = l.begin(); it != l.end(); ++it) {
-//    for (ControlItemList::iterator it = l.begin(); it != l.end(); ++it) {
-//
-//        if (ControlItem *item = dynamic_cast<ControlItem*>(*it)) {
-//            item->setSelected(true);
-//            //m_selectedItems << item;
-//            m_selectedItems.push_back(item);
-//            haveSelectedItems = true;
-//
-////            ElementAdapter* adapter = item->getElementAdapter();
-//            m_eventSelection->addEvent(item->getEvent());
-//        }
-//    }
-//
-//    emit stateChange("have_controller_item_selected", haveSelectedItems);
-//}
+}
 
 void ControlRuler::contextMenuEvent(QContextMenuEvent* e)
 {
@@ -771,8 +742,6 @@ void ControlRuler::removeFromSelection(ControlItem*item)
 
 void ControlRuler::clear()
 {
-//    Q3CanvasItemList allItems = canvas()->allItems();
-//    for (Q3CanvasItemList::Iterator it = allItems.begin(); it != allItems.end(); ++it) {
     RG_DEBUG << "ControlRuler::clear - m_controlItemMap.size(): " << m_controlItemMap.size();
     for (ControlItemMap::iterator it = m_controlItemMap.begin(); it != m_controlItemMap.end(); ++it) {
         if (ControlItem *item = dynamic_cast<ControlItem*>(it->second)) {
@@ -821,22 +790,6 @@ void ControlRuler::flipForwards()
     ///CJ Expect to drop tghis with a better way of ordering bars
     std::pair<int, int> minMax = getZMinMax();
 
-//    Q3CanvasItemList l = canvas()->allItems();
-//    for (Q3CanvasItemList::Iterator it = l.begin(); it != l.end(); ++it) {
-//    for (ControlItemList::iterator it = m_controlItemList.begin(); it != m_controlItemList.end(); ++it) {
-
-        // skip all but rectangles
-        ///CJ ??? if ((*it)->rtti() != Q3CanvasItem::Rtti_Rectangle)
-            //continue;
-
-        // match min
-        //if ((*it)->z() == minMax.second)
-            //(*it)->setZ(minMax.first);
-        //else
-            //(*it)->setZ((*it)->z() + 1);
-//    }
-
-    ///CJ ?? canvas()->update();
 }
 
 void ControlRuler::flipBackwards()
@@ -844,35 +797,11 @@ void ControlRuler::flipBackwards()
     ///CJ Expect to drop tghis with a better way of ordering bars
     std::pair<int, int> minMax = getZMinMax();
 
-//    Q3CanvasItemList l = canvas()->allItems();
-//    for (Q3CanvasItemList::Iterator it = l.begin(); it != l.end(); ++it) {
-    //for (ControlItemList::iterator it = m_controlItemList.begin(); it != m_controlItemList.end(); ++it) {
-
-        // skip all but rectangles
-        ///CJ ??? if ((*it)->rtti() != Q3CanvasItem::Rtti_Rectangle)
-            //continue;
-
-        // match min
-        //if ((*it)->z() == minMax.first)
-            //(*it)->setZ(minMax.second);
-        //else
-            //(*it)->setZ((*it)->z() - 1);
-//    }
-
-    ///CJ ?? canvas()->update();
 }
 
 std::pair<int, int> ControlRuler::getZMinMax()
 {
-    ///CJ Expect to drop tghis with a better way of ordering bars
-//    Q3CanvasItemList l = canvas()->allItems();
     std::vector<int> zList;
-//    for (ControlItemList::iterator it=m_controlItemList.begin(); it!=m_controlItemList.end(); ++it) {
-
-        // skip all but rectangles
-        ///CJ ???? if ((*it)->rtti() != Q3CanvasItem::Rtti_Rectangle) continue;
-//        zList.push_back(int((*it)->z()));
-//    }
 
     std::sort(zList.begin(), zList.end());
 

@@ -24,7 +24,7 @@
 #include "CompositionItemImpl.h"
 #include "document/RosegardenDocument.h"
 #include "gui/general/BaseTool.h"
-#include "gui/general/RosegardenCanvasView.h"
+#include "gui/general/RosegardenScrollView.h"
 #include "SegmentTool.h"
 #include "document/Command.h"
 #include <QPoint>
@@ -67,7 +67,7 @@ void SegmentEraser::handleMouseButtonRelease(QMouseEvent*)
 int SegmentEraser::handleMouseMove(QMouseEvent*)
 {
     setBasicContextHelp();
-    return RosegardenCanvasView::NoFollow;
+    return RosegardenScrollView::NoFollow;
 }
 
 void SegmentEraser::setBasicContextHelp()

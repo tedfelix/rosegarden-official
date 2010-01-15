@@ -46,7 +46,6 @@ const double RosegardenScrollView::ScrollShortcutValue = 1.04;// shortcuteration
 
 RosegardenScrollView::RosegardenScrollView(QWidget* parent,
 					const char* name) //, WFlags f)
-//    : Q3ScrollView(parent, name), //, f),
 	: QAbstractScrollArea(parent),
 		
         m_bottomWidget(0),
@@ -615,7 +614,6 @@ void RosegardenScrollView::slotSetScrollPos(const QPoint &pos)
 
 void RosegardenScrollView::resizeEvent(QResizeEvent* e)
 {
-//    Q3ScrollView::resizeEvent(e);
 	QAbstractScrollArea::resizeEvent(e);
 	updateScrollBars();
 //### What was the purpose of this?

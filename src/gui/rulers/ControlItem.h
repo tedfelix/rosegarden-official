@@ -95,7 +95,6 @@ protected:
     bool m_selected;
 
     ControlRuler* m_controlRuler;
-//    ElementAdapter* m_elementAdapter;
     Event* m_event;
 
     static const unsigned int BorderThickness;
@@ -104,9 +103,6 @@ protected:
 
 class ControlItemMap : public std::multimap<double, ControlItem*> {};
 class ControlItemList : public std::list<ControlItem*> {};
-
-//typedef std::list<ControlItem*> ControlItemList;
-//typedef std::list<ControlItem*>::iterator ControlItemListIterator;
 
 }
 

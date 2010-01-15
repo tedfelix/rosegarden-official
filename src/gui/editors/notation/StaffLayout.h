@@ -541,9 +541,9 @@ protected:
     // Note that even linear-layout staffs have multiple rows; their
     // rows all have the same y coordinate but increasing x
     // coordinates, instead of the other way around.  (The only reason
-    // for this is that it seems to be more efficient from the Q3Scene
+    // for this is that it seems to be more efficient from the canvas
     // perspective to create and manipulate many relatively short
-    // scene lines rather than a smaller number of very long ones.)
+    // lines rather than a smaller number of very long ones.)
     //!!! review that for qgraphicsview
 
     int getTopLineOffset() const {

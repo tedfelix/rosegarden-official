@@ -30,7 +30,7 @@
 #include "CompositionView.h"
 #include "document/RosegardenDocument.h"
 #include "gui/general/BaseTool.h"
-#include "gui/general/RosegardenCanvasView.h"
+#include "gui/general/RosegardenScrollView.h"
 #include "SegmentTool.h"
 #include "SegmentToolBox.h"
 #include "SegmentSelector.h"
@@ -217,7 +217,7 @@ int SegmentMover::handleMouseMove(QMouseEvent *e)
 
     if (!m_currentIndex) {
         setBasicContextHelp();
-        return RosegardenCanvasView::NoFollow;
+        return RosegardenScrollView::NoFollow;
     }
 
     if (!m_canvas->isFineGrain()) {
@@ -248,7 +248,7 @@ int SegmentMover::handleMouseMove(QMouseEvent *e)
         if (!m_passedInertiaEdge &&
             (dx < inertiaDistance && dx > -inertiaDistance) &&
             (dy < inertiaDistance && dy > -inertiaDistance)) {
-            return RosegardenCanvasView::NoFollow;
+            return RosegardenScrollView::NoFollow;
         } else {
             m_passedInertiaEdge = true;
         }
@@ -330,7 +330,7 @@ int SegmentMover::handleMouseMove(QMouseEvent *e)
 // 	m_canvas->updateContents();
 	m_canvas->update();
 
-    return RosegardenCanvasView::FollowHorizontal | RosegardenCanvasView::FollowVertical;
+    return RosegardenScrollView::FollowHorizontal | RosegardenScrollView::FollowVertical;
 }
 
 void SegmentMover::setBasicContextHelp()
