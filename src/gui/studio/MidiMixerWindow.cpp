@@ -221,6 +221,15 @@ MidiMixerWindow::setupTabs()
                         (controls[i].getControllerValue(), controller));
                 }
 
+                // VU meter
+                //
+                MidiMixerVUMeter *meter =
+                    new MidiMixerVUMeter(m_tabFrame,
+                                         VUMeter::FixedHeightVisiblePeakHold, 6, 30);
+                mainLayout->addWidget(meter, controls.size() + 1,
+                                      posCount, Qt::AlignCenter);
+                m_faders[faderCount]->m_vuMeter = meter;
+
                 // Volume fader
                 //
                 Fader *fader =
@@ -502,8 +511,13 @@ MidiMixerWindow::updateMeters()
             getInstrumentLevelForMixer(m_faders[i]->m_id, info)) {
             continue;
         }
-        m_faders[i]->m_vuMeter->setLevel(double(info.level / 127.0));
-        RG_DEBUG << "MidiMixerWindow::updateMeters - level  " << info.level << endl;
+        std::cout << "hoopty!" << std::endl;
+        if (m_faders[i]->m_vuMeter) {
+            m_faders[i]->m_vuMeter->setLevel(double(info.level / 127.0));
+            RG_DEBUG << "MidiMixerWindow::updateMeters - level  " << info.level << endl;
+        } else {
+            RG_DEBUG << "MidiMixerWindow::updateMeters - m_vuMeter for m_faders[" << i << "] is NULL!" << endl;
+        }
     }
 }
 
