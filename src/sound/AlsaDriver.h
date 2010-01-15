@@ -489,6 +489,11 @@ private:
                      std::pair<MappedEvent *, std::string> > DeviceEventMap;
     DeviceEventMap             *m_pendSysExcMap;
     
+    /**
+     * Clear all accumulated incompete System Exclusive messages.
+     */
+    void clearPendSysExcMap();
+    
 #ifdef HAVE_LIBJACK
     JackDriver *m_jackDriver;
 #endif

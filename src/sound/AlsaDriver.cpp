@@ -122,11 +122,8 @@ AlsaDriver::~AlsaDriver()
     }
     
     // Flush incomplete system exclusive events and delete the map.
-    DeviceEventMap::iterator pendIt = m_pendSysExcMap->begin();
-    for(; pendIt != m_pendSysExcMap->end(); pendIt++) {
-        delete pendIt->second.first;
-        m_pendSysExcMap->erase(pendIt->first);
-    }
+    clearPendSysExcMap();
+
     delete m_pendSysExcMap;
 }
 
@@ -1836,16 +1833,7 @@ AlsaDriver::punchOut()
 #endif
 
     // Flush any incomplete System Exclusive recieved from ALSA devices
-    DeviceEventMap::iterator pendIt = m_pendSysExcMap->begin();
-    for (; pendIt != m_pendSysExcMap->end(); pendIt++) {
-        std::cerr << "AlsaDriver::punchout() - erasing "
-        << m_pendSysExcMap->size() << " incomplete system exclusive message(s). "
-        << std::endl;
-
-        delete pendIt->second.first;
-
-        m_pendSysExcMap->erase(pendIt);
-    }
+    clearPendSysExcMap();
     
 #ifdef HAVE_LIBJACK
     // Close any recording file
@@ -2045,6 +2033,21 @@ AlsaDriver::setMIDIClockInterval(RealTime interval)
 
 }
 
+void
+AlsaDriver::clearPendSysExcMap()
+{
+    // Flush incomplete system exclusive events and delete the map.
+    if (!m_pendSysExcMap->empty()) {
+        std::cerr << "AlsaDriver::clearPendSysExcMap - erasing "
+        << m_pendSysExcMap->size() << " incomplete system exclusive message(s). "
+        << std::endl;
+        DeviceEventMap::iterator pendIt = m_pendSysExcMap->begin();
+        for(; pendIt != m_pendSysExcMap->end(); pendIt++) {
+            delete pendIt->second.first;
+            m_pendSysExcMap->erase(pendIt->first);
+        }
+    }
+}
 
 void
 AlsaDriver::pushRecentNoteOffs()
@@ -2564,14 +2567,27 @@ AlsaDriver::getMappedEventList(MappedEventList &composition)
                 // alsa system execlusive messages since they may be broken
                 // across several ALSA mesages.
                 
+                // Unfortunately, pooling these messages get very complicated
+                // since it creates many corner cases during this realtime
+                // activity that may involve possible bad data transmissions.
+                
+                bool beginNewMessage = false;
+                if (data.length() > 0) {
+                    // Check if at start of MIDI message
+                    if (MidiByte(data.at(0)) == MIDI_SYSTEM_EXCLUSIVE) {
+                        data.erase(0,1); // Skip (SYX). RG doesn't use it.
+                        beginNewMessage = true;
+                    }
+                }
+
                 std::string sysExcData; 
                 MappedEvent *sysExcEvent = 0;
+
                 // Check to see if there are any pending System Exclusive Messages
-                DeviceEventMap::iterator pendIt;
                 if (!m_pendSysExcMap->empty()) {
                     // Check our map to see if we have a pending operations for
                     // the current deviceId.
-                    pendIt = m_pendSysExcMap->find(deviceId);
+                    DeviceEventMap::iterator pendIt = m_pendSysExcMap->find(deviceId);
                     
                     if (pendIt != m_pendSysExcMap->end()) {
                         sysExcEvent = pendIt->second.first;
@@ -2583,29 +2599,67 @@ AlsaDriver::getMappedEventList(MappedEventList &composition)
                     }
                 }
                 
+                bool createNewEvent = false;
                 if (!sysExcEvent) {
-                    // Did not find one. Create a new event.
+                    // Did not find a pending (unfinished) System Exclusive message.
+                    // Create a new event.
+                    createNewEvent = true;
+                    
+                    if (!beginNewMessage) {
+                        std::cerr << "AlsaDriver::getMappedEventList - "
+                        << "New ALSA message arrived with incorrect MIDI System "
+                        << "Exclusive start byte" << std::endl
+                        << "This is probably a bad transmission" << std::endl;
+                    }
+                } else {
+                    // We found a pending (unfinished) System Exclusive message.
+
+                    // Check if at start of MIDI message
+                    if (!beginNewMessage) {
+                        // Prepend pooled events to the current message data
+
+                        if (sysExcData.size() > 0) {
+                            data.insert(0, sysExcData);
+                        }
+                    } else {
+                        // This is the start of a new message but have
+                        // pending (incomplete) messages already.
+                        createNewEvent = true;
+                        
+                        // Decide how to handle previous (incomplete) message
+                        if (sysExcData.size() > 0) {
+                            std::cerr << "AlsaDriver::getMappedEventList - "
+                            << "Sending an incomplete ALSA message to the composition"
+                            << std::endl  << "This is probably a bad transmission"
+                            << std::endl;
+
+                            // Push previous (incomplete) message to composition
+                            DataBlockRepository::setDataBlockForEvent(sysExcEvent, sysExcData);
+                            composition.insert(sysExcEvent);
+                        } else {
+                            // Previous message has no meaningful data.
+                            std::cerr << "AlsaDriver::getMappedEventList - "
+                            << "Discarding meaningless incomplete ALSA message"
+                            << std::endl;
+
+                            delete sysExcEvent;
+                        }
+                    }
+                }
+                                
+                if (createNewEvent) {
+                    // Still need a current event to work with.  Create it.
                     sysExcEvent = new MappedEvent();
                     sysExcEvent->setType(MappedEvent::MidiSystemMessage);
                     sysExcEvent->setData1(MIDI_SYSTEM_EXCLUSIVE);
                     sysExcEvent->setRecordedDevice(deviceId);
                     sysExcEvent->setEventTime(eventTime);
-                    
-                    // Add the data minus the first byte (SYX) to data pool
-                    // Just assuming it is there (as we always have!).
-                    if (data.length() > 0) {
-                        data.erase(0,1); // Skip (SYX). RG doesn't use it.
-                    }
-                } else {
-                    // We found a pending (unfinished) System Exclusive message.
-                    // Prepend pooled events to the current data
-                    if (!sysExcData.empty()) {
-                       data.insert(0, sysExcData);
-                    }
                 }
-                
+
                 // We need to check to see if this event completes the
-                // Systemd Exclusive event.
+                // System Exclusive event.
+                
+                bool pushOnMap = false;
                 if (!data.empty()) {
                     int lastChar = data.size() - 1;
                     
@@ -2613,17 +2667,42 @@ AlsaDriver::getMappedEventList(MappedEventList &composition)
                     if (MidiByte(data.at(lastChar)) == MIDI_END_OF_EXCLUSIVE) {
                         // Remove (EOX). RG doesn't use it. 
                         data.erase(lastChar);
+
+                        // Push message to composition
                         DataBlockRepository::setDataBlockForEvent(sysExcEvent, data);
                         composition.insert(sysExcEvent);
                     } else {
-                        // Put the unfinished event back in the pending map.
-                        m_pendSysExcMap->insert(std::make_pair(deviceId,
-                                               std::make_pair(sysExcEvent, data)));
+
+                        pushOnMap = true;
                     }
                 } else {
-                    // Data is empty.  Delete the newly created event.
-                    // If we are here, this is probably and error.
-                    delete sysExcEvent;
+                    // Data is empty.  Anyway we got here we need to put it back
+                    // in the pending map.  This will resolve itself elsewhere.
+                    // But if we are here, this is probably and error.
+
+                    std::cerr << "AlsaDriver::getMappedEventList - "
+                    << " ALSA message arrived with no useful System Exclusive"
+                    << "data bytes" << std::endl
+                    << "This is probably a bad transmission" << std::endl;
+
+                    pushOnMap = true;
+                }
+                
+                if (pushOnMap) {
+                    // Put the unfinished event back in the pending map.
+                    m_pendSysExcMap->insert(std::make_pair(deviceId,
+                                            std::make_pair(sysExcEvent, data)));
+
+                    if (beginNewMessage) { 
+                        // Let user know about pooling on first recieved event.
+
+                        // Yes, standard output.
+                        // It is used elswhere in this file as well.
+                        std::cout << "AlsaDriver::getMappedEventList - "
+                        << "Encountered long System Exclusive Message "
+                        << "(pooling message until transmission complete)"
+                        << std::endl;
+                    }
                 }
             }
             break;
@@ -4313,6 +4392,8 @@ AlsaDriver::record(RecordStatus recordStatus,
                    const std::vector<QString> *audioFileNames)
 {
     m_recordingInstruments.clear();
+
+    clearPendSysExcMap();
 
     if (recordStatus == RECORD_ON) {
         // start recording
