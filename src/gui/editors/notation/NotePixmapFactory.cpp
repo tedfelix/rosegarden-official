@@ -73,6 +73,8 @@ using namespace Accidentals;
 
 static clock_t drawBeamsTime = 0;
 static clock_t makeNotesTime = 0;
+static int makeNotesCount = 0;
+static int makeRestsCount = 0;
 //static int drawBeamsCount = 0;
 static int drawBeamsBeamCount = 0;
 
@@ -264,6 +266,10 @@ NotePixmapFactory::init(QString fontName, int size)
 
 NotePixmapFactory::~NotePixmapFactory()
 {
+    NOTATION_DEBUG << "NotePixmapFactory::~NotePixmapFactory:"
+                   << " makeNotesCount = " << makeNotesCount
+                   << ", makeRestsCount = " << makeRestsCount << endl;
+
     delete m_p;
 }
 
@@ -302,7 +308,8 @@ NotePixmapFactory::dumpStats(std::ostream &s)
 QGraphicsPixmapItem *
 NotePixmapFactory::makeNote(const NotePixmapParameters &params)
 {
-    Profiler profiler("NotePixmapFactory::makeNotePixmap");
+    Profiler profiler("NotePixmapFactory::makeNote");
+    ++makeNotesCount;
     clock_t startTime = clock();
 
     drawNoteAux(params, 0, 0, 0);
@@ -1635,7 +1642,8 @@ NotePixmapFactory::drawTie(bool above, int length, int shift)
 QGraphicsPixmapItem *
 NotePixmapFactory::makeRest(const NotePixmapParameters &params)
 {
-    Profiler profiler("NotePixmapFactory::makeRestPixmap");
+    ++makeRestsCount;
+    Profiler profiler("NotePixmapFactory::makeRest");
 
     CharName charName(m_style->getRestCharName(params.m_noteType,
                       params.m_restOutsideStave));
@@ -1650,7 +1658,7 @@ NotePixmapFactory::makeRest(const NotePixmapParameters &params)
     bool encache = false;
 
     if (params.m_tupletCount == 0 && !m_selected && !m_shaded &&
-            !params.m_restOutsideStave) {
+        !params.m_restOutsideStave) {
 
         if (params.m_dots == 0) {
             return getCharacter(charName, PlainColour, false).makeItem();

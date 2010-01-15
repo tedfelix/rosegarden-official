@@ -69,24 +69,4 @@ public:
 
 }
 
-#ifndef NO_TIMING
-
-#include <iostream>
-#include <ctime>
-
-#define START_TIMING \
-  clock_t dbgStart = clock();
-#define ELAPSED_TIME \
-  ((clock() - dbgStart) * 1000 / CLOCKS_PER_SEC)
-#define PRINT_ELAPSED(n) \
-  RG_DEBUG << n << ": " << ELAPSED_TIME << "ms elapsed" << endl;
-
-#else
-
-#define START_TIMING
-#define ELAPSED_TIME  0
-#define PRINT_ELAPSED(n)
-
-#endif
-
 #endif

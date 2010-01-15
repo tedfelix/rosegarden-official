@@ -1263,6 +1263,8 @@ NotationScene::layout(NotationStaff *singleStaff,
 
     if (full) {
 
+        Profiler profiler("NotationScene::layout: Reset layouts for full scan", true);
+
         m_hlayout->reset();
         m_vlayout->reset();
 
@@ -1285,7 +1287,7 @@ NotationScene::layout(NotationStaff *singleStaff,
     }
 
     {
-        Profiler profiler("NotationScene::layout: Reset & scan layouts", true);
+        Profiler profiler("NotationScene::layout: Scan layouts", true);
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
         
         NotationStaff *staff = m_staffs[i];

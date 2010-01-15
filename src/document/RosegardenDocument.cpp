@@ -1607,6 +1607,8 @@ RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
                            bool permanent,
                            bool &cancelled)
 {
+    Profiler profiler("RosegardenDocument::xmlParse");
+
     cancelled = false;
 
     unsigned int elementCount = 0;
@@ -1644,9 +1646,7 @@ RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
     reader.setContentHandler(&handler);
     reader.setErrorHandler(&handler);
 
-    START_TIMING;
     bool ok = reader.parse(source);
-    PRINT_ELAPSED("RosegardenDocument::xmlParse (reader.parse())");
 
     if (!ok) {
 
