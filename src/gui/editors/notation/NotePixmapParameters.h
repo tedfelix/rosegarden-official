@@ -21,6 +21,7 @@
 
 #include "base/NotationTypes.h"
 #include <vector>
+#include <cmath>
 
 
 
