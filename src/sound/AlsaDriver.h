@@ -483,6 +483,12 @@ private:
 
     bool                         m_haveShutdown;
 
+    // Track System Exclusive Event across several ALSA messages
+    // ALSA mack break long system exclusive messages into chunks.
+    typedef std::map<unsigned int,
+                     std::pair<MappedEvent *, std::string> > DeviceEventMap;
+    DeviceEventMap             *m_pendSysExcMap;
+    
 #ifdef HAVE_LIBJACK
     JackDriver *m_jackDriver;
 #endif

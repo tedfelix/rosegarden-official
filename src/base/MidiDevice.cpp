@@ -229,7 +229,6 @@ MidiDevice::generatePresentationList()
 void
 MidiDevice::generateDefaultControllers()
 {
-    std::cerr << "MidiDevice::generateDefaultControllers(): touched start" << std::endl;
     m_controlList.clear();
 
     static std::string controls[][9] = {
@@ -243,10 +242,8 @@ MidiDevice::generateDefaultControllers()
         { "PitchBend", Rosegarden::PitchBend::EventType, "<none>", "0", "16383", "8192", "1", "4", "-1" }
     };
 
-    std::cerr << "MidiDevice::generateDefaultControllers(): touched 1" << std::endl;
     for (size_t i = 0; i < sizeof(controls) / sizeof(controls[0]); ++i) {
 
-    std::cerr << "MidiDevice::generateDefaultControllers(): touched 2" << std::endl;
         Rosegarden::ControlParameter con(controls[i][0],
                                          controls[i][1],
                                          controls[i][2],
