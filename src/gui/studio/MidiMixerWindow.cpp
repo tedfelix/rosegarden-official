@@ -511,7 +511,6 @@ MidiMixerWindow::updateMeters()
             getInstrumentLevelForMixer(m_faders[i]->m_id, info)) {
             continue;
         }
-        std::cout << "hoopty!" << std::endl;
         if (m_faders[i]->m_vuMeter) {
             m_faders[i]->m_vuMeter->setLevel(double(info.level / 127.0));
             RG_DEBUG << "MidiMixerWindow::updateMeters - level  " << info.level << endl;
