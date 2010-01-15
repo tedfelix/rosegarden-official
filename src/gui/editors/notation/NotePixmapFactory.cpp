@@ -71,12 +71,15 @@ namespace Rosegarden
 
 using namespace Accidentals;
 
-static clock_t drawBeamsTime = 0;
-static clock_t makeNotesTime = 0;
+//static clock_t drawBeamsTime = 0;
+//static clock_t makeNotesTime = 0;
 static int makeNotesCount = 0;
 static int makeRestsCount = 0;
 //static int drawBeamsCount = 0;
 static int drawBeamsBeamCount = 0;
+static int sizeofNoteParams = 0;
+static int sizeofNotePixmaps = 0;
+static std::vector<NotePixmapParameters> uniqueParams;
 
 const char* const NotePixmapFactory::defaultSerifFontFamily = "Bitstream Vera Serif";
 const char* const NotePixmapFactory::defaultSansSerifFontFamily = "Bitstream Vera Sans";
@@ -266,10 +269,15 @@ NotePixmapFactory::init(QString fontName, int size)
 
 NotePixmapFactory::~NotePixmapFactory()
 {
-    NOTATION_DEBUG << "NotePixmapFactory::~NotePixmapFactory:"
-                   << " makeNotesCount = " << makeNotesCount
-                   << ", makeRestsCount = " << makeRestsCount << endl;
+    std::cerr << "NotePixmapFactory::~NotePixmapFactory:"
+              << " makeNotesCount = " << makeNotesCount
+              << ", makeRestsCount = " << makeRestsCount
+              << ", sizeofNoteParams = " << sizeofNoteParams
+              << ", sizeofNotePixmaps = " << sizeofNotePixmaps << std::endl;
 
+    std::cerr << "Number of unique note pixmap parameters for makeNote = "
+              << uniqueParams.size() << std::endl;
+    
     delete m_p;
 }
 
@@ -289,6 +297,7 @@ void
 NotePixmapFactory::dumpStats(std::ostream &s)
 {
 #ifdef DUMP_STATS
+/*
     s << "NotePixmapFactory: total times since last stats dump:\n"
     << "makeNotePixmap: "
     << (makeNotesTime * 1000 / CLOCKS_PER_SEC) << "ms\n"
@@ -300,6 +309,7 @@ NotePixmapFactory::dumpStats(std::ostream &s)
     drawBeamsTime = 0;
     drawBeamsCount = 0;
     drawBeamsBeamCount = 0;
+*/
 #endif
 
     (void)s; // avoid warnings
@@ -310,7 +320,17 @@ NotePixmapFactory::makeNote(const NotePixmapParameters &params)
 {
     Profiler profiler("NotePixmapFactory::makeNote");
     ++makeNotesCount;
-    clock_t startTime = clock();
+    sizeofNoteParams += sizeof(NotePixmapParameters);
+    bool have = false;
+    for (int i = 0; i < uniqueParams.size(); ++i) {
+        if (uniqueParams[i] == params) {
+            have = true;
+            break;
+        }
+    }
+    if (!have) uniqueParams.push_back(params);
+
+//    clock_t startTime = clock();
 
     drawNoteAux(params, 0, 0, 0);
 
@@ -335,9 +355,10 @@ NotePixmapFactory::makeNote(const NotePixmapParameters &params)
     }
 #endif
 
-    clock_t endTime = clock();
-    makeNotesTime += (endTime - startTime);
+//    clock_t endTime = clock();
+//    makeNotesTime += (endTime - startTime);
 
+    sizeofNotePixmaps += sizeof(QPixmap) + m_generatedWidth * m_generatedHeight * 4;
     return makeItem(hotspot);
 }
 
@@ -1353,7 +1374,7 @@ NotePixmapFactory::drawBeams(const QPoint &s1,
                              const NotePixmapParameters &params,
                              int beamCount)
 {
-    clock_t startTime = clock();
+//    clock_t startTime = clock();
 
     // draw beams: first we draw all the beams common to both ends of
     // the section, then we draw beams for those that appear at the
@@ -1418,8 +1439,8 @@ NotePixmapFactory::drawBeams(const QPoint &s1,
         }
     }
 
-    clock_t endTime = clock();
-    drawBeamsTime += (endTime - startTime);
+//    clock_t endTime = clock();
+//    drawBeamsTime += (endTime - startTime);
 }
 
 void

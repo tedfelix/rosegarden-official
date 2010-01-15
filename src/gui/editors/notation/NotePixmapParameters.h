@@ -104,6 +104,50 @@ public:
     // always be drawn *below* the note, and we get it wrong, and/or there are
     // some things we treat as normal marks and shouldn't.  Hrm.
 
+    bool operator==(const NotePixmapParameters &p) {
+	return (m_noteType == p.m_noteType &&
+		m_dots == p.m_dots &&
+		m_accidental == p.m_accidental &&
+		m_cautionary == p.m_cautionary &&
+		m_shifted == p.m_shifted &&
+		m_dotShifted == p.m_dotShifted &&
+		m_accidentalShift == p.m_accidentalShift &&
+		m_accidentalExtra == p.m_accidentalExtra &&
+		m_drawFlag == p.m_drawFlag &&
+		m_drawStem == p.m_drawStem &&
+		m_stemGoesUp == p.m_stemGoesUp &&
+		m_stemLength == p.m_stemLength &&
+		m_legerLines == p.m_legerLines &&
+		m_slashes == p.m_slashes &&
+		m_selected == p.m_selected &&
+		m_highlighted == p.m_highlighted &&
+		m_quantized == p.m_quantized &&
+		m_trigger == p.m_trigger &&
+		m_onLine == p.m_onLine &&
+		m_safeVertDistance == p.m_safeVertDistance &&
+		m_restOutsideStave == p.m_restOutsideStave &&
+
+		m_beamed == p.m_beamed &&
+		m_nextBeamCount == p.m_nextBeamCount &&
+		m_thisPartialBeams == p.m_thisPartialBeams &&
+		m_nextPartialBeams == p.m_nextPartialBeams &&
+		m_width == p.m_width &&
+		fabs(m_gradient - p.m_gradient) < 0.0001 &&
+
+		m_tupletCount == p.m_tupletCount &&
+		m_tuplingLineY == p.m_tuplingLineY &&
+		m_tuplingLineWidth == p.m_tuplingLineWidth &&
+		fabs(m_tuplingLineGradient - p.m_tuplingLineGradient) < 0.0001 &&
+		m_tuplingLineFollowsBeam == p.m_tuplingLineFollowsBeam &&
+
+		m_tied == p.m_tied &&
+		m_tieLength == p.m_tieLength &&
+		m_tiePositionExplicit == p.m_tiePositionExplicit &&
+		m_tieAbove == p.m_tieAbove &&
+
+		m_inRange == p.m_inRange &&
+		m_marks == p.m_marks);
+    }
 
 private:
     friend class NotePixmapFactory;
