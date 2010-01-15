@@ -1100,6 +1100,12 @@ NotationWidget::slotAdjustHeadersVerticalPos(QRectF r)
     r.setHeight(vr.height());
 
     m_headersView->setSceneRect(r);
+
+    // For some reason, in current step, the headers are very often placed a
+    // bit too much on the right. Following call should fix their horizontal
+    // position. Argument "last" is set to tue because experience shows that
+    // a single call is sufficient.
+    slotAdjustHeadersHorizontalPos(true);
 }
 
 double
@@ -1428,7 +1434,7 @@ NotationWidget::slotResetZoomClicked()
     m_view->setMatrix(m);
     m_view->scale(m_hZoomFactor, m_vZoomFactor);
     m_headersView->setMatrix(m);
-    m_headersView->setFixedWidth(m_headersView->sizeHint().width());
+    m_headersView->setFixedWidth(m_headersGroup->sizeHint().width());
     slotHScroll();
 
     // scale factor 1.0 = 100% zoom
@@ -1476,7 +1482,7 @@ NotationWidget::setHorizontalZoomFactor(double factor)
     QMatrix m;
     m.scale(1.0, m_vZoomFactor);
     m_headersView->setMatrix(m);
-    m_headersView->setFixedWidth(m_headersView->sizeHint().width());
+    m_headersView->setFixedWidth(m_headersGroup->sizeHint().width());
     slotHScroll();
 }
 
@@ -1490,7 +1496,7 @@ NotationWidget::setVerticalZoomFactor(double factor)
     QMatrix m;
     m.scale(1.0, m_vZoomFactor);
     m_headersView->setMatrix(m);
-    m_headersView->setFixedWidth(m_headersView->sizeHint().width());
+    m_headersView->setFixedWidth(m_headersGroup->sizeHint().width());
 }
 
 double
