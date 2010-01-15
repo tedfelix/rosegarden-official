@@ -85,8 +85,7 @@ public:
     class AudioPreviewData {
     public:
         AudioPreviewData(bool showMinima, unsigned int channels) : m_showMinima(showMinima), m_channels(channels) {};
-
-        // default copy ctor, operator= are good
+        // ~AudioPreviewData();
 
         bool showsMinima()              { return m_showMinima; }
         void setShowMinima(bool s)      { m_showMinima = s;    }
@@ -105,6 +104,10 @@ public:
         bool               m_showMinima;
         unsigned int       m_channels;
         QRect              m_segmentRect;
+
+    private:
+        // no copy ctor
+        AudioPreviewData(const AudioPreviewData&);
     };
 
 

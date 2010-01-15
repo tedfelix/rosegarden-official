@@ -109,6 +109,15 @@ CompositionModelImpl::~CompositionModelImpl()
             m_audioPreviewUpdaterMap.erase(m_audioPreviewUpdaterMap.begin());
         }
     }
+
+    for (NotationPreviewDataCache::iterator i = m_notationPreviewDataCache.begin();
+         i != m_notationPreviewDataCache.end(); ++i) {
+        delete i->second;
+    }
+    for (AudioPreviewDataCache::iterator i = m_audioPreviewDataCache.begin();
+         i != m_audioPreviewDataCache.end(); ++i) {
+        delete i->second;
+    }
 }
 
 struct RectCompare {
