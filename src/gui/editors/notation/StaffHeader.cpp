@@ -113,6 +113,7 @@ StaffHeader::StaffHeader(HeadersGroup *group,
         m_warningToolTipText(QString("")),
         m_cursorPos(QPoint()),
         m_colourIndex(0),
+        m_lastColourIndex(0),
         m_clefOrKeyInconsistency(0),
         m_toolTipTimer(0),
         m_transposeOverlaps(0),
@@ -748,6 +749,7 @@ StaffHeader::updateHeader(int width)
          || (m_label != m_lastLabel)
          || (m_upperText != m_lastUpperText)
          || (m_transpose != m_lastTranspose)
+         || (m_colourIndex != m_lastColourIndex)
          || (m_clefOrKeyIsInconsistent != m_clefOrKeyWasInconsistent)
          || (m_transposeIsInconsistent != m_transposeWasInconsistent)) {
 
@@ -757,6 +759,7 @@ StaffHeader::updateHeader(int width)
         m_lastClef = m_clef;
         m_lastLabel = m_label;
         m_lastTranspose = m_transpose;
+        m_lastColourIndex = m_colourIndex;
         m_lastUpperText = m_upperText;
         m_clefOrKeyWasInconsistent = m_clefOrKeyIsInconsistent;
         m_transposeWasInconsistent = m_transposeIsInconsistent;
@@ -766,7 +769,8 @@ StaffHeader::updateHeader(int width)
 
         // Get background colour from colour index
         m_background = GUIPalette::convertColour(m_headersGroup->getComposition()
-                            ->getSegmentColourMap().getColourByIndex(m_colourIndex));
+                           ->getSegmentColourMap()
+                               .getColourByIndex(m_colourIndex));
 
         // Select foreground colour (black or white) to get the better
         // visibility

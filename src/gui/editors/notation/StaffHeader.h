@@ -290,6 +290,7 @@ private :
     QPoint m_cursorPos;
 
     unsigned int m_colourIndex;
+    unsigned int m_lastColourIndex;
 
     QToolButton *m_clefOrKeyInconsistency;
 
