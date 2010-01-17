@@ -11633,7 +11633,7 @@ Por favor, seleccione cuáles de ellos quiere borrar permanentemente del disco d
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1576"/>
         <source>Some internal error: no device selected</source>
-        <translation type="unfinished"></translation>
+        <translation>Error: no dispositivo seleccionado</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1729"/>
@@ -13619,7 +13619,7 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="103"/>
         <source>&lt;qt&gt;&lt;p&gt;Qt offers you the choice of three graphics systems. The fast (raster) graphics system offers the best tradeoff between performance and stability, but may cause problems for some users.  If you experience frequent crashes, or distorted graphics, you should try the safe (native) graphics system instead.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Qt ofrece a usted tres sistemas de gráficos distintos.  El rápido (raster) ofrece el mejor compromiso entre rápidez y estabilidad, pero unos usuarios sufren problemas con este.  Si usted sufre cuelgues frequentes o gráficos deformados, pruebe el seguro (native).&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="107"/>
@@ -19798,32 +19798,32 @@ Error fue : %2</translation>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8003"/>
         <source>&lt;h3&gt;Invalid audio path&lt;/h3&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;h3&gt;Ruta de audio errónea&lt;/h3&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8004"/>
         <source>&lt;p&gt;You will not be able to record audio or drag and drop audio files onto Rosegarden until you correct this in &lt;b&gt;View -&gt; Document Properties -&gt; Audio&lt;/b&gt;.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;No es posible ni grabar ni arrastrar audio hasta que elija usted una ruta válida.  Véase &lt;b&gt;Ver -&gt; Propiedades del documento -&gt; Audio&lt;/b&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8008"/>
         <source>&lt;h3&gt;Created audio path&lt;/h3&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;h3&gt;Ruta de audio creada&lt;/h3&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8009"/>
         <source>&lt;qt&gt;&lt;p&gt;Rosegarden created the audio path &quot;%1&quot; to use for audio recording, and to receive dropped audio files.&lt;/p&gt;&lt;p&gt;If you wish to use a different path, change this in &lt;b&gt;View -&gt; Document Properties -&gt; Audio&lt;/b&gt;.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Rosegarden creó la ruta de audio «%1» que se usa para grabar audio y para recibir archivos de audio soltados.&lt;/p&gt;&lt;p&gt;Si desea utilizar otra ruta de audio, véase &lt;b&gt;Ver -&gt; Propiedades del documento -&gt; Audio&lt;/b&gt;.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8015"/>
         <source>&lt;qt&gt;&lt;p&gt;The audio path &quot;%1&quot; did not exist, and could not be created.&lt;/p&gt;%2&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;La ruta de audio «%1» no existe, y no es posible crearla.&lt;/p&gt;%2&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8020"/>
         <source>&lt;qt&gt;&lt;p&gt;The audio path &quot;%1&quot; exists, but is not writable.&lt;/p&gt;%2&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;La ruta de audio «%1» existe, pero no es posible escribir en este directorio.&lt;/p&gt;%2&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -22974,27 +22974,27 @@ Por favor, configura el directorio de archivos de audio hacia un directorio vál
     <message>
         <location filename="../../src/gui/widgets/WarningDialog.cpp" line="75"/>
         <source>Warning</source>
-        <translation type="unfinished">Advertencia</translation>
+        <translation>Advertencia</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/WarningDialog.cpp" line="80"/>
         <source>MIDI</source>
-        <translation type="unfinished">MIDI</translation>
+        <translation>MIDI</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/WarningDialog.cpp" line="84"/>
         <source>Audio</source>
-        <translation type="unfinished"></translation>
+        <translation>Audio</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/WarningDialog.cpp" line="88"/>
         <source>System timer</source>
-        <translation type="unfinished"></translation>
+        <translation>Temporización</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/WarningDialog.cpp" line="92"/>
         <source>Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Información</translation>
     </message>
 </context>
 <context>
@@ -23007,7 +23007,7 @@ Por favor, configura el directorio de archivos de audio hacia un directorio vál
     <message>
         <location filename="../../src/gui/widgets/WarningWidget.cpp" line="86"/>
         <source>&lt;qt&gt;&lt;p&gt;Information available.&lt;/p&gt;&lt;p&gt;Click to display details&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Información esta disponible.&lt;/p&gt;&lt;p&gt;Haga clic para ver detalles&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/WarningWidget.cpp" line="110"/>
