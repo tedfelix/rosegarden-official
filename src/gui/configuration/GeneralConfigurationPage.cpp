@@ -85,15 +85,22 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
 
     m_graphicsSystem = new QComboBox(frame);
     connect(m_graphicsSystem, SIGNAL(activated(int)), this, SLOT(slotModified()));
-    m_graphicsSystem->addItem(tr("Normal")); // raster
+    m_graphicsSystem->addItem(tr("Fast"));   // raster
     m_graphicsSystem->addItem(tr("Safe"));   // native
-    m_graphicsSystem->addItem(tr("Fast"));   // opengl
+    // I decided to give up on this after all.  I only know of one person for
+    // whom OpenGL actively crashes, but dealing with that possibility in terms
+    // of the wording of user-visible warnings and advisories is an annoying
+    // PITA, so I've dumped this for the time being, and limited this to only
+    // two options.  I've also changed "normal" to be the new "fast" to
+    // encourage users to pick that one.  Stupid users, always foiling the
+    // best-intentioned plans with their bumbling.  Alas.
+//    m_graphicsSystem->addItem(tr("Unstable"));   // opengl
     m_lastGraphicsSystemIndex = settings.value("graphics_system", Native).toUInt();
     m_graphicsSystem->setCurrentIndex(m_lastGraphicsSystemIndex);
     layout->addWidget(m_graphicsSystem, row, 1, 1, 2);
     ++row;
 
-    QString graphicsSystemTip(tr("<qt><p>Qt offers you the choice of three graphics systems. The normal (raster) graphics system offers the best tradeoff between performance and stability, but may cause problems for some users.  If you experience frequent crashes, or distorted graphics, you should try the safe (native) graphics system instead.  If you wish to experiment, the fast (OpenGL) graphics system delivers excellent performance for some users, but is generally less stable.</p></qt>"));
+    QString graphicsSystemTip(tr("<qt><p>Qt offers you the choice of three graphics systems. The fast (raster) graphics system offers the best tradeoff between performance and stability, but may cause problems for some users.  If you experience frequent crashes, or distorted graphics, you should try the safe (native) graphics system instead.</p></qt>"));
     gsLabel->setToolTip(graphicsSystemTip);
     m_graphicsSystem->setToolTip(graphicsSystemTip);
 
