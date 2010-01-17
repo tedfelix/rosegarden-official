@@ -85,6 +85,7 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QTextStream>
+#include <QScrollBar>
 
 #include "gui/editors/parameters/MIDIInstrumentParameterPanel.h"
 

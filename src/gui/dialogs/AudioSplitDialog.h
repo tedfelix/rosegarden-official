@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -19,18 +18,15 @@
 #ifndef _RG_AUDIOSPLITDIALOG_H_
 #define _RG_AUDIOSPLITDIALOG_H_
 
-#include <Q3Canvas>
-#include <Q3CanvasRectangle>
-#include <Q3CanvasView>
 #include <QDialog>
 #include <vector>
 #include <QSpinBox>
 
 
 class QWidget;
-class Q3CanvasView;
-class Q3CanvasRectangle;
-class Q3Canvas;
+class QGraphicsScene;
+class QGraphicsView;
+class QGraphicsRectItem;
 
 
 namespace Rosegarden
@@ -61,24 +57,24 @@ public:
 public slots:
     void slotThresholdChanged(int);
 
+    void slotHelpRequested();
+
 protected:
-    RosegardenDocument              *m_doc;
-    Segment           *m_segment;
-    Q3Canvas                       *m_canvas;
-    Q3CanvasView                   *m_canvasView;
-    QSpinBox                      *m_thresholdSpin;
+    RosegardenDocument             *m_doc;
+    Segment                        *m_segment;
+    QGraphicsScene                 *m_scene;
+    QGraphicsView                  *m_view;
+    QSpinBox                       *m_thresholdSpin;
 
-    int                            m_canvasWidth;
-    int                            m_canvasHeight;
-    int                            m_previewWidth;
-    int                            m_previewHeight;
+    int                             m_sceneWidth;
+    int                             m_sceneHeight;
+    int                             m_previewWidth;
+    int                             m_previewHeight;
 
-    std::vector<Q3CanvasRectangle*> m_previewBoxes;
+    std::vector<QGraphicsRectItem*> m_previewBoxes;
 
 };
 
 
-
 }
-
 #endif

@@ -16,14 +16,7 @@
 */
 
 
-#include <Q3Canvas>
-#include <Q3CanvasItemList>
-#include <Q3CanvasLine>
-#include <Q3CanvasRectangle>
-#include <Q3CanvasText>
-#include <Q3CanvasView>
 #include "AudioSplitDialog.h"
-#include <QApplication>
 
 #include "misc/Debug.h"
 #include "misc/Strings.h"
@@ -33,9 +26,11 @@
 #include "document/RosegardenDocument.h"
 #include "gui/application/RosegardenApplication.h"
 #include "sound/AudioFileManager.h"
+
 #include <QDialog>
 #include <QDialogButtonBox>
-#include <Q3Canvas>
+#include <QDesktopServices>
+#include <QGroupBox>
 #include <QLabel>
 #include <QPalette>
 #include <QScrollArea>
@@ -44,10 +39,15 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QApplication>
+#include <QGraphicsScene>
+#include <QGraphicsView>
+#include <QGraphicsRectItem>
 
 
 namespace Rosegarden
 {
+
 
 AudioSplitDialog::AudioSplitDialog(QWidget *parent,
                                    Segment *segment,
@@ -55,8 +55,8 @@ AudioSplitDialog::AudioSplitDialog(QWidget *parent,
         QDialog(parent),
         m_doc(doc),
         m_segment(segment),
-        m_canvasWidth(500),
-        m_canvasHeight(200),
+        m_sceneWidth(500),
+        m_sceneHeight(200),
         m_previewWidth(400),
         m_previewHeight(100)
 {
@@ -64,41 +64,44 @@ AudioSplitDialog::AudioSplitDialog(QWidget *parent,
         reject();
 
     setModal(true);
-    setWindowTitle(tr("Autosplit Audio Segment"));
+    // pre-pend "Rosegarden" to title in a way that preserves existing
+    // translations unchanged:
+    QString title = QString("%1 - %2").arg(tr("Rosegarden")).arg(tr("Autosplit Audio Segment"));
+    setWindowTitle(title);
 
-    QGridLayout *metagrid = new QGridLayout;
-    setLayout(metagrid);
-    QWidget *w = new QWidget(this);
-    QVBoxLayout *wLayout = new QVBoxLayout;
-    metagrid->addWidget(w, 0, 0);
+    QVBoxLayout *layout = new QVBoxLayout;
+    setLayout(layout);
 
+    //!!! Use "Autosplit" or "AutoSplit" but not both.  I'm ignoring this to
+    // avoid string changes, but for 10.04 this should change to "Auto-split"
+    // throughout, I think.
+    QLabel *label = new QLabel(tr("AutoSplit Segment \"") + strtoqstr(m_segment->getLabel()) + QString("\""));
+    layout->addWidget(label);
 
-    new QLabel(tr("AutoSplit Segment \"") +
-               strtoqstr(m_segment->getLabel()) + QString("\""), w);
+    QGroupBox *box = new QGroupBox;
+    QVBoxLayout *boxLayout = new QVBoxLayout;
+    box->setLayout(boxLayout);
+    layout->addWidget(box);
 
-    m_canvas = new Q3Canvas( w );
-    wLayout->addWidget( dynamic_cast<QWidget*>(m_canvas), 0, 0 );
-    m_canvas->resize(m_canvasWidth, m_canvasHeight);
+    m_scene = new QGraphicsScene;
+    m_scene->setBackgroundBrush(Qt::red);
 	
-    m_canvasView = new Q3CanvasView(m_canvas, w );
-    wLayout->addWidget(m_canvasView, 0, 0 );
-    m_canvasView->setFixedWidth(m_canvasWidth);
-    m_canvasView->setFixedHeight(m_canvasHeight);
+    m_view = new QGraphicsView(m_scene);
+//    m_view->setFixedWidth(m_sceneWidth);
+//    m_view->setFixedHeight(m_sceneHeight);
+    boxLayout->addWidget(m_view);
 
-//    m_canvasView->setHScrollBarMode(QScrollArea::AlwaysOff);	//&&&
-//    m_canvasView->setVScrollBarMode(QScrollArea::AlwaysOff);
-	
-    m_canvasView->setDragAutoScroll(false);
+//    m_view->setDragAutoScroll(false);
 
-    QWidget *hbox = new QWidget( w );
-    wLayout->addWidget(hbox);
-    w->setLayout(wLayout);
+    QWidget *hbox = new QWidget;
     QHBoxLayout *hboxLayout = new QHBoxLayout;
-    QLabel *child_3 = new QLabel(tr("Threshold"), hbox );
-    hboxLayout->addWidget(child_3);
-    m_thresholdSpin = new QSpinBox( hbox );
-    hboxLayout->addWidget(m_thresholdSpin);
     hbox->setLayout(hboxLayout);
+    boxLayout->addWidget(hbox);
+
+    label = new QLabel(tr("Threshold"));
+    hboxLayout->addWidget(label);
+    m_thresholdSpin = new QSpinBox;
+    hboxLayout->addWidget(m_thresholdSpin);
     m_thresholdSpin->setSuffix(" %");
     connect(m_thresholdSpin, SIGNAL(valueChanged(int)),
             SLOT(slotThresholdChanged(int)));
@@ -112,19 +115,33 @@ AudioSplitDialog::AudioSplitDialog(QWidget *parent,
     m_thresholdSpin->setValue(threshold);
     drawPreview();
     drawSplits(1);
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-    metagrid->addWidget(buttonBox, 1, 0);
-    metagrid->setRowStretch(0, 10);
+
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help);
+    layout->addWidget(buttonBox);
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(buttonBox, SIGNAL(helpRequested()), this, SLOT(slotHelpRequested()));
+}
+
+void
+AudioSplitDialog::slotHelpRequested()
+{
+    // TRANSLATORS: if the manual is translated into your language, you can
+    // change the two-letter language code in this URL to point to your language
+    // version, eg. "http://rosegardenmusic.com/wiki/doc:audioSplitDialog-es" for the
+    // Spanish version. If your language doesn't yet have a translation, feel
+    // free to create one.
+    QString helpURL = tr("http://rosegardenmusic.com/wiki/doc:audioSplitDialog-en");
+    QDesktopServices::openUrl(QUrl(helpURL));
 }
 
 void
 AudioSplitDialog::drawPreview()
 {
+    /*
     // Delete everything on the canvas
     //
-    Q3CanvasItemList list = m_canvas->allItems();
+    Q3CanvasItemList list = m_scene->allItems();
     for (Q3CanvasItemList::Iterator it = list.begin(); it != list.end(); it++)
         delete *it;
 
@@ -134,8 +151,8 @@ AudioSplitDialog::drawPreview()
     // Draw a bounding box
     //
     int border = 5;
-    Q3CanvasRectangle *rect = new Q3CanvasRectangle(m_canvas);
-    rect->setSize(m_canvasWidth - border * 2, m_canvasHeight - border * 2);
+    QGraphicsRectItem *rect = new QGraphicsRectItem(m_scene);
+    rect->setSize(m_sceneWidth - border * 2, m_sceneHeight - border * 2);
     rect->setX(border);
     rect->setY(border);
     rect->setZ(1);
@@ -157,7 +174,7 @@ AudioSplitDialog::drawPreview()
                                 m_previewWidth,
                                 false);
     } catch (Exception e) {
-        Q3CanvasText *text = new Q3CanvasText(m_canvas);
+        Q3CanvasText *text = new Q3CanvasText(m_scene);
         text->setColor(qApp->palette().
                        color(QPalette::Active, QColorGroup::Shadow));
         text->setText(tr("<no preview generated for this audio file>"));
@@ -165,12 +182,12 @@ AudioSplitDialog::drawPreview()
         text->setY(30);
         text->setZ(4);
         text->setVisible(true);
-        m_canvas->update();
+        m_scene->update();
         return ;
     }
 
-    int startX = (m_canvasWidth - m_previewWidth) / 2;
-    int halfHeight = m_canvasHeight / 2;
+    int startX = (m_sceneWidth - m_previewWidth) / 2;
+    int halfHeight = m_sceneHeight / 2;
     float h1, h2;
     std::vector<float>::iterator it = values.begin();
 
@@ -203,7 +220,7 @@ AudioSplitDialog::drawPreview()
             endY = 0;
         }
 
-        Q3CanvasLine *line = new Q3CanvasLine(m_canvas);
+        Q3CanvasLine *line = new Q3CanvasLine(m_scene);
         line->setPoints(startX + i,
                         startY,
                         startX + i,
@@ -219,7 +236,7 @@ AudioSplitDialog::drawPreview()
 
     // Draw zero dc line
     //
-    rect = new Q3CanvasRectangle(m_canvas);
+    rect = new QGraphicsRectItem(m_scene);
     rect->setX(startX);
     rect->setY(halfHeight - 1);
     rect->setSize(m_previewWidth, 2);
@@ -235,18 +252,18 @@ AudioSplitDialog::drawPreview()
     QString startText = QString("%1.%2s")
                         .arg(m_segment->getAudioStartTime().sec)
                         .arg(msecs);
-    Q3CanvasText *text = new Q3CanvasText(m_canvas);
+    Q3CanvasText *text = new Q3CanvasText(m_scene);
     text->setColor(
         qApp->palette().color(QPalette::Active, QColorGroup::Shadow));
     text->setText(startText);
     text->setX(startX - 20);
-    text->setY(m_canvasHeight / 2 - m_previewHeight / 2 - 35);
+    text->setY(m_sceneHeight / 2 - m_previewHeight / 2 - 35);
     text->setZ(3);
     text->setVisible(true);
 
-    rect = new Q3CanvasRectangle(m_canvas);
+    rect = new QGraphicsRectItem(m_scene);
     rect->setX(startX - 1);
-    rect->setY(m_canvasHeight / 2 - m_previewHeight / 2 - 14);
+    rect->setY(m_sceneHeight / 2 - m_previewHeight / 2 - 14);
     rect->setSize(1, m_previewHeight + 28);
     rect->setPen(qApp->palette().color(QPalette::Active, QColorGroup::Shadow));
     rect->setZ(3);
@@ -258,29 +275,32 @@ AudioSplitDialog::drawPreview()
     QString endText = QString("%1.%2s")
                       .arg(m_segment->getAudioEndTime().sec)
                       .arg(msecs);
-    text = new Q3CanvasText(m_canvas);
+    text = new Q3CanvasText(m_scene);
     text->setColor(
         qApp->palette().color(QPalette::Active, QColorGroup::Shadow));
     text->setText(endText);
     text->setX(startX + m_previewWidth - 20);
-    text->setY(m_canvasHeight / 2 - m_previewHeight / 2 - 35);
+    text->setY(m_sceneHeight / 2 - m_previewHeight / 2 - 35);
     text->setZ(3);
     text->setVisible(true);
 
-    rect = new Q3CanvasRectangle(m_canvas);
+    rect = new QGraphicsRectItem(m_scene);
     rect->setX(startX + m_previewWidth - 1);
-    rect->setY(m_canvasHeight / 2 - m_previewHeight / 2 - 14);
+    rect->setY(m_sceneHeight / 2 - m_previewHeight / 2 - 14);
     rect->setSize(1, m_previewHeight + 28);
     rect->setPen(qApp->palette().color(QPalette::Active, QColorGroup::Shadow));
     rect->setZ(3);
     rect->setVisible(true);
 
-    m_canvas->update();
+    m_scene->update();
+
+    */
 }
 
 void
 AudioSplitDialog::drawSplits(int threshold)
 {
+    /*
     // Now get the current split points and paint them
     //
     RealTime startTime = m_segment->getAudioStartTime();
@@ -294,14 +314,14 @@ AudioSplitDialog::drawSplits(int threshold)
                            threshold);
 
     std::vector<SplitPointPair>::iterator it;
-    std::vector<Q3CanvasRectangle*> tempRects;
+    std::vector<QGraphicsRectItem*> tempRects;
 
     RealTime length = endTime - startTime;
     double ticksPerUsec = double(m_previewWidth) /
                           double((length.sec * 1000000.0) + length.usec());
 
-    int startX = (m_canvasWidth - m_previewWidth) / 2;
-    int halfHeight = m_canvasHeight / 2;
+    int startX = (m_sceneWidth - m_previewWidth) / 2;
+    int halfHeight = m_sceneHeight / 2;
     int x1, x2;
     int overlapHeight = 10;
 
@@ -315,7 +335,7 @@ AudioSplitDialog::drawSplits(int threshold)
         x2 = int(ticksPerUsec * double(double(splitEnd.sec) *
                                        1000000.0 + double(splitEnd.usec())));
 
-        Q3CanvasRectangle *rect = new Q3CanvasRectangle(m_canvas);
+        QGraphicsRectItem *rect = new QGraphicsRectItem(m_scene);
         rect->setX(startX + x1);
         rect->setY(halfHeight - m_previewHeight / 2 - overlapHeight / 2);
         rect->setZ(2);
@@ -328,7 +348,7 @@ AudioSplitDialog::drawSplits(int threshold)
         tempRects.push_back(rect);
     }
 
-    std::vector<Q3CanvasRectangle*>::iterator pIt;
+    std::vector<QGraphicsRectItem*>::iterator pIt;
 
     // We've written the new Rects, now delete the old ones
     //
@@ -340,14 +360,16 @@ AudioSplitDialog::drawSplits(int threshold)
             delete (*pIt);
         }
         m_previewBoxes.erase(m_previewBoxes.begin(), m_previewBoxes.end());
-        m_canvas->update();
+        m_scene->update();
     }
-    m_canvas->update();
+    m_scene->update();
 
     // Now store the new ones
     //
     for (pIt = tempRects.begin(); pIt != tempRects.end(); pIt++)
         m_previewBoxes.push_back(*pIt);
+
+    */
 }
 
 void
