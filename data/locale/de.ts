@@ -6110,12 +6110,12 @@ Wenn Sie trotzdem einfügen wollen, sollten Sie einen der anderen Einfügemodi a
 als den eingeschränkten wählen.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NoteFont.cpp" line="57"/>
+        <location filename="../../src/gui/editors/notation/NoteFont.cpp" line="58"/>
         <source>No sizes listed for font &quot;%1&quot;</source>
         <translation>Keine Größen für Zeichensatz &quot;%1&quot; aufgeführt</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NoteFont.cpp" line="62"/>
+        <location filename="../../src/gui/editors/notation/NoteFont.cpp" line="63"/>
         <source>Font &quot;%1&quot; not available in size %2</source>
         <translation>Font &quot;%1&quot; nicht in Größe %2 verfügbar</translation>
     </message>
@@ -9183,7 +9183,7 @@ als den eingeschränkten wählen.</translation>
     </message>
     <message>
         <location filename="../../src/base/Studio.cpp" line="56"/>
-        <location filename="../../src/sound/AlsaDriver.cpp" line="657"/>
+        <location filename="../../src/sound/AlsaDriver.cpp" line="663"/>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="520"/>
         <location filename="../AutoloadStrings.cpp" line="305"/>
         <source>Synth plugin</source>
@@ -9191,7 +9191,7 @@ als den eingeschränkten wählen.</translation>
     </message>
     <message>
         <location filename="../../src/base/Studio.cpp" line="53"/>
-        <location filename="../../src/sound/AlsaDriver.cpp" line="694"/>
+        <location filename="../../src/sound/AlsaDriver.cpp" line="700"/>
         <location filename="../AutoloadStrings.cpp" line="306"/>
         <source>Audio</source>
         <translation>Audio</translation>
@@ -11369,7 +11369,7 @@ als den eingeschränkten wählen.</translation>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="451"/>
         <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="892"/>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="748"/>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1583"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1589"/>
         <source>%1 Controller %2 %3</source>
         <translation>%1 Regler %2 %3</translation>
     </message>
@@ -13745,7 +13745,7 @@ Möchten Sie die Änderungen vor dem verlassen des Bank-Editors anwenden?</trans
 <context>
     <name>Rosegarden::ControlChangeCommand</name>
     <message>
-        <location filename="../../src/gui/rulers/ControlChangeCommand.cpp" line="29"/>
+        <location filename="../../src/gui/rulers/ControlChangeCommand.cpp" line="27"/>
         <source>Control Change</source>
         <translation>Control Change</translation>
     </message>
@@ -13930,7 +13930,7 @@ Möchten Sie die Änderungen vor dem verlassen des Bank-Editors anwenden?</trans
 <context>
     <name>Rosegarden::ControlRulerEventEraseCommand</name>
     <message>
-        <location filename="../../src/gui/rulers/ControlRulerEventEraseCommand.cpp" line="31"/>
+        <location filename="../../src/gui/rulers/ControlRulerEventEraseCommand.cpp" line="29"/>
         <source>Erase Controller Event(s)</source>
         <translation>Controller Event(s) entfernen</translation>
     </message>
@@ -13962,22 +13962,22 @@ Möchten Sie die Änderungen vor dem verlassen des Bank-Editors anwenden?</trans
 <context>
     <name>Rosegarden::ControllerEventsRuler</name>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="281"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="269"/>
         <source>Unsupported Event Type</source>
         <translation>Nicht unterstützter Eventtyp</translation>
     </message>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="291"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="279"/>
         <source>Pitch Bend</source>
         <translation>Pitch Bend</translation>
     </message>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="296"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="284"/>
         <source>Controller Events</source>
         <translation>Regler Ereignisse</translation>
     </message>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="411"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="399"/>
         <source>Controller Event Number</source>
         <translation>Regler Ereigniss Nummer</translation>
     </message>
@@ -15184,32 +15184,32 @@ Dies könnte Probleme verursachen, wenn so später ein berechneter Wert übersch
         <translation>An dieser Stelle kein Einfügen möglich</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="1748"/>
+        <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="1606"/>
         <source>Open in Event Editor</source>
         <translation>Im Event-Editor öffnen</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="1749"/>
+        <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="1607"/>
         <source>Open in Expert Event Editor</source>
         <translation>Im Experten-Event-Editor öffnen</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="1816"/>
+        <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="1674"/>
         <source>%1%2 - Triggered Segment: %3</source>
         <translation>%1%2 - Getriggertes Segment: %3</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="1832"/>
+        <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="1690"/>
         <source>%1%2 - Segment Track #%3 - Event List</source>
         <translation>%1%2 - Segment Spur #%3 - Ereignis Liste</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="1839"/>
+        <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="1697"/>
         <source>%1%2 - %3 Segments - Event List</source>
         <translation>%1%2 - %3 Segmente - Ereignis Liste</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="1857"/>
+        <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="1715"/>
         <source>http://rosegardenmusic.com/wiki/doc:eventView-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:eventView-en</translation>
     </message>
@@ -15455,9 +15455,8 @@ Would you like to try and locate this file or skip it?</source>
         <translation>Grafikleistung</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="88"/>
         <source>Normal</source>
-        <translation>Normal</translation>
+        <translation type="obsolete">Normal</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="89"/>
@@ -15465,178 +15464,178 @@ Would you like to try and locate this file or skip it?</source>
         <translation>Sicher</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="90"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="88"/>
         <source>Fast</source>
         <translation>Schnell</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="96"/>
-        <source>&lt;qt&gt;&lt;p&gt;Qt offers you the choice of three graphics systems. The normal (raster) graphics system offers the best tradeoff between performance and stability, but may cause problems for some users.  If you experience frequent crashes, or distorted graphics, you should try the safe (native) graphics system instead.  If you wish to experiment, the fast (OpenGL) graphics system delivers excellent performance for some users, but is generally less stable.&lt;/p&gt;&lt;/qt&gt;</source>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="103"/>
+        <source>&lt;qt&gt;&lt;p&gt;Qt offers you the choice of three graphics systems. The fast (raster) graphics system offers the best tradeoff between performance and stability, but may cause problems for some users.  If you experience frequent crashes, or distorted graphics, you should try the safe (native) graphics system instead.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="100"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="107"/>
         <source>Double-click opens segment in</source>
         <translation>Doppelklick öffnet Segment in</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="105"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="112"/>
         <source>Notation editor</source>
         <translation>Im Notationseditor öffnen</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="106"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="113"/>
         <source>Matrix editor</source>
         <translation>Im Matrixeditor öffnen</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="107"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="114"/>
         <source>Event List editor</source>
         <translation>im Eventlisteneditor öffnen</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="113"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="120"/>
         <source>Number of count-in measures when recording</source>
         <translation>Anzahl vorzuzählender Takte bei Aufnahmen</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="124"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="131"/>
         <source>Auto-save interval</source>
         <translation>Abstand für automatisches Speichern (in Sekunden)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="128"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="135"/>
         <source>Every 30 seconds</source>
         <translation>Alle 30 Sekunden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="129"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="136"/>
         <source>Every minute</source>
         <translation>Jede Minute</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="130"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="137"/>
         <source>Every five minutes</source>
         <translation>Alle fünf Minuten</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="131"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="138"/>
         <source>Every half an hour</source>
         <translation>Jede halbe Stunde</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="132"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="139"/>
         <source>Never</source>
         <translation>Niemals</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="151"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="158"/>
         <source>Append suffixes to segment labels</source>
         <translation>Anhängen von Suffixen an die Segment-Beschriftung</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="168"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="175"/>
         <source>Use JACK transport</source>
         <translation>Verwende den JACK Transportmodus</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="201"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="208"/>
         <source>Sequencer status</source>
         <translation>Sequenzerstatus</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="203"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="210"/>
         <source>Unknown</source>
         <translation>Unbekannt</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="209"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="216"/>
         <source>No MIDI, audio OK</source>
         <translation>Kein MIDI, aber Audio</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="212"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="219"/>
         <source>MIDI OK, no audio</source>
         <translation>MIDI, aber kein Audio</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="215"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="222"/>
         <source>MIDI OK, audio OK</source>
         <translation>MIDI und Audio OK</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="218"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="225"/>
         <source>No driver</source>
         <translation>Kein Treiber</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="225"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="232"/>
         <source>Details...</source>
         <translation>Zeige Detailinformationen...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="234"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="241"/>
         <source>Behavior</source>
         <translation>Verhalten</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="249"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="256"/>
         <source>Use Thorn style</source>
         <translation>Benutze Thorn-Stil</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="255"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="262"/>
         <source>&lt;qt&gt;When checked, Rosegarden will use the Thorn look and feel, otherwise default system preferences will be used the next time Rosegarden starts.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Wenn der Haken gesetzt ist, wird Rosegarden den Thorn-Stil benutzen. Anderenfalls werden die normalen System-Einstellungen verwendet, sobald Rosegarden das nächste mal startet.&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="259"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="266"/>
         <source>Note name style</source>
         <translation>Notennamenstil</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="264"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="271"/>
         <source>Always use US names (e.g. quarter, 8th)</source>
         <translation>Immer die US Bezeichnung nutzen (e.g. quarter, 8th)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="265"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="272"/>
         <source>Localized (where available)</source>
         <translation>Lokalisiert (soweit verfügbar, sonst UK)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="279"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="286"/>
         <source>Show textured background on</source>
         <translation>Gemusterte Hintergründe auf freien Flächen</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="281"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="288"/>
         <source>Main window</source>
         <translation>Hauptfenster</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="300"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="307"/>
         <source>Show full path in window titles</source>
         <translation>Kompletten Pfad im Fenster-Titel anzeigen</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="354"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="361"/>
         <source>KPrinter (KDE 3)</source>
         <translation>KPrinter (KDE 3)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="358"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="365"/>
         <source>HPLIP (Qt 4)</source>
         <translation>HPLIP (Qt 4)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="534"/>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="538"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="541"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="545"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="538"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="545"/>
         <source>You must restart Rosegarden for the graphics system change to take effect.</source>
         <translation>Rosegarden muss neu gestartet werden, damit die Änderungen bei der Grafik aktiv werden.</translation>
     </message>
@@ -15645,52 +15644,52 @@ Would you like to try and locate this file or skip it?</source>
         <translation type="obsolete">Matrix</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="285"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="292"/>
         <source>Notation</source>
         <translation>Notation</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="313"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="320"/>
         <source>Presentation</source>
         <translation>Aufbereitung</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="330"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="337"/>
         <source>&lt;qt&gt;Rosegarden relies on external applications to provide certain features.  Each selected application must be installed and available on your path.  When choosing an application to use, please ensure that it can run from a &quot;run command&quot; box (typically &lt;b&gt;Alt+F2&lt;/b&gt;) which should allow Rosegarden to make use of it when necessary.&lt;br&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Rosegarden verlässt sich auf externe Programme, die bestimmte Fähigkeiten bereitstellen.  Jedes ausgewählte Programm muss installiert und im aktuellen Pfad verfügbar sein.  Bei der Auswahl eines Programmes muss sichergestellt sein, dass es aus einer &quot;Start Kommando&quot;-Box (typischerweise &lt;b&gt;Alt+F2&lt;/b&gt;) gestartet werden kann, damit Rosegarden in der Lage ist, es jederzeit zu starten.&lt;br&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="335"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="342"/>
         <source>PDF viewer</source>
         <translation>PDF-Betrachter</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="340"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="347"/>
         <source>Okular (KDE 4.x)</source>
         <translation>Okular (KDE 4.x)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="341"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="348"/>
         <source>Evince (GNOME)</source>
         <translation>Evince (GNOME)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="342"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="349"/>
         <source>Adobe Acrobat Reader (non-free)</source>
         <translation>Adobe Acrobat Reader (kostenpflichtig)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="343"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="350"/>
         <source>KPDF (KDE 3.x)</source>
         <translation>KPDF (KDE 3.x)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="344"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="351"/>
         <source>Used to preview generated LilyPond output</source>
         <translation>Für Vorschau von LilyPond Ausgaben benutzt</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="349"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="356"/>
         <source>Command-line file printing utility</source>
         <translation>Hilfsprogramm zum drucken von der Kommandozeile aus</translation>
     </message>
@@ -15699,17 +15698,17 @@ Would you like to try and locate this file or skip it?</source>
         <translation type="obsolete">KPrinter (KDE3)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="355"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="362"/>
         <source>Gtk-LP (GNOME)</source>
         <translation>Gtk-LP (GNOME)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="356"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="363"/>
         <source>lpr (no GUI)</source>
         <translation>lpr (ohne GUI)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="357"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="364"/>
         <source>lp (no GUI)</source>
         <translation>lp (ohne GUI)</translation>
     </message>
@@ -15718,17 +15717,17 @@ Would you like to try and locate this file or skip it?</source>
         <translation type="obsolete">HPLIP (QT4)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="359"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="366"/>
         <source>Used to print generated LilyPond output without previewing it</source>
         <translation>Zum drucken von LilyPond Ausgaben ohne Vorschau benutzt</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="378"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="385"/>
         <source>External Applications</source>
         <translation>Externe Anwendung</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="534"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="541"/>
         <source>Changes to the textured background in the main window will not take effect until you restart Rosegarden.</source>
         <translation>Änderungen am texturierten Hintergrund im Hauptfenster werden sich erst nach einem Neustart von Rosegarden auswirken.</translation>
     </message>
@@ -17203,7 +17202,7 @@ Wollen Sie stattdessen
         <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Klick und ziehen um den Wiedergabe Zeiger zu verschieben.&lt;/p&gt;&lt;p&gt;Shift-Klick und ziehen um einen Bereich für Schleifen oder Bearbeitung zu definieren.&lt;/p&gt;&lt;p&gt;Shift-Klick um eine Schleife oder Bereich zu löschen.&lt;/p&gt;&lt;p&gt;Doppelklick um die Wiedergabe zu starten.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/rulers/LoopRuler.cpp" line="87"/>
+        <location filename="../../src/gui/rulers/LoopRuler.cpp" line="85"/>
         <source>&lt;qt&gt;&lt;p&gt;Click and drag to move the playback pointer.&lt;/p&gt;&lt;p&gt;Shift-click and drag to set a range for looping or editing.&lt;/p&gt;&lt;p&gt;Shift-click to clear the loop or range.&lt;/p&gt;&lt;p&gt;Double-click to start playback.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Klick und ziehen um den Wiedergabe Zeiger zu verschieben.&lt;/p&gt;&lt;p&gt;Shift-Klick und ziehen um einen Bereich für Schleifen oder Bearbeitung zu definieren.&lt;/p&gt;&lt;p&gt;Shift-Klick um eine Schleife oder Bereich zu löschen.&lt;/p&gt;&lt;p&gt;Doppelklick um die Wiedergabe zu starten.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
@@ -18519,7 +18518,7 @@ Doppel-Klick öffnet den Marker Editor.</translation>
         <translation>Instrument</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/MidiMixerWindow.cpp" line="681"/>
+        <location filename="../../src/gui/studio/MidiMixerWindow.cpp" line="694"/>
         <source>http://rosegardenmusic.com/wiki/doc:midiMixerWindow-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:midiMixerWindow-en</translation>
     </message>
@@ -19355,32 +19354,32 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
 <context>
     <name>Rosegarden::NotationStaff</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="469"/>
+        <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="448"/>
         <source> %1</source>
         <translation> %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="489"/>
+        <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="468"/>
         <source>Rendering staff %1...</source>
         <translation>Notensystem %1 wird dargestellt...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="540"/>
+        <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="519"/>
         <source>Rendering notes on staff %1...</source>
         <translation>Notensystem %1 wird dargestellt...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="669"/>
+        <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="648"/>
         <source>Positioning staff %1...</source>
         <translation>Notensystem %1 wird positioniert...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="900"/>
+        <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="879"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="1226"/>
+        <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="1205"/>
         <source>Sustain</source>
         <translation>Halten</translation>
     </message>
@@ -19596,7 +19595,7 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
 <context>
     <name>Rosegarden::NotationVLayout</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationVLayout.cpp" line="502"/>
+        <location filename="../../src/gui/editors/notation/NotationVLayout.cpp" line="499"/>
         <source>Spanned note at %1 has no HEIGHT_ON_STAFF property!
 This is a bug (the program would previously have crashed by now)</source>
         <translation>Die Note bei %1 hat keine HEIGHT_ON_STAFF-Eigenschaft! 
@@ -20112,13 +20111,13 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
         <translation>Schließe die Spur-Beschriftungen</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1666"/>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1667"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1672"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1673"/>
         <source>&lt;qt&gt;Rotate wheel to change the active segment&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Rad rotieren lassen, um das aktive Segment zu ändern&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1668"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1674"/>
         <source>&lt;qt&gt;Segment: &quot;%1&quot;&lt;br&gt;Track: %2 &quot;%3&quot;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Segment: &quot;%1&quot;&lt;br&gt;Spur: %2 &quot;%3&quot;&lt;/qt&gt;</translation>
     </message>
@@ -20182,7 +20181,7 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
 <context>
     <name>Rosegarden::NotePixmapFactory</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotePixmapFactory.cpp" line="183"/>
+        <location filename="../../src/gui/editors/notation/NotePixmapFactory.cpp" line="188"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
@@ -21206,22 +21205,22 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
 <context>
     <name>Rosegarden::RescaleDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/RescaleDialog.cpp" line="49"/>
+        <location filename="../../src/gui/dialogs/RescaleDialog.cpp" line="50"/>
         <source>Stretch or Squash</source>
         <translation>Strecken oder Stauchen</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RescaleDialog.cpp" line="56"/>
+        <location filename="../../src/gui/dialogs/RescaleDialog.cpp" line="57"/>
         <source>Duration of selection</source>
         <translation>Dauer der Selektion</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RescaleDialog.cpp" line="62"/>
+        <location filename="../../src/gui/dialogs/RescaleDialog.cpp" line="63"/>
         <source>Options</source>
         <translation>Optionen</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RescaleDialog.cpp" line="66"/>
+        <location filename="../../src/gui/dialogs/RescaleDialog.cpp" line="67"/>
         <source>Adjust times of following events accordingly</source>
         <translation>Passe Zeiten der nachfolgenden Events entsprechend an</translation>
     </message>
@@ -23795,175 +23794,175 @@ Das Beenden anderer laufender Anwendung könnte u.U. die Leistung von Rosegarden
 <context>
     <name>Rosegarden::StaffHeader</name>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="151"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="152"/>
         <source>normal</source>
         <translation>Normal</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="154"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="155"/>
         <source>small</source>
         <translation>klein</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="157"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="158"/>
         <source>tiny</source>
         <translation>winzig</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="143"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="144"/>
         <source>Track %1 : &quot;%2&quot;</source>
         <translation>Spur %1 : &quot;%2&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="149"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="150"/>
         <source>&lt;br&gt;Notate for: %1</source>
         <translation>&lt;br&gt;notieren für: %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="186"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="187"/>
         <source>&lt;br&gt;Size: %1,  Bracket: %2 </source>
         <translation>&lt;br&gt;Größe: %1,  Klammer: %2 </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="214"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="215"/>
         <source>&lt;br&gt;bars [%1-%2] in %3 (tr=%4) : &quot;%5&quot;</source>
         <translation>&lt;br&gt;Takte [%1-%2] in %3 (tr=%4) : &quot;%5&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="221"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="222"/>
         <source>&lt;br&gt;bars [%1-%2] (tr=%3) : &quot;%4&quot;</source>
         <translation>&lt;br&gt;Takte [%1-%2] (tr=%3) : &quot;%4&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="269"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="270"/>
         <source>&lt;qt&gt;&lt;p&gt;Notation is not consistent&lt;/p&gt;&lt;p&gt;Click to get more information&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Notation ist nicht konsistent&lt;/p&gt;&lt;p&gt;Für weitere Informationen anklicken&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="436"/>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="486"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="437"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="487"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="561"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="562"/>
         <source>C</source>
         <comment>note name</comment>
         <translation>C</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="562"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="563"/>
         <source>C#</source>
         <comment>note name</comment>
         <translation>C#</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="563"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="564"/>
         <source>D</source>
         <comment>note name</comment>
         <translation>D</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="564"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="565"/>
         <source>Eb</source>
         <comment>note name</comment>
         <translation>Eb</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="565"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="566"/>
         <source>E</source>
         <comment>note name</comment>
         <translation>E</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="566"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="567"/>
         <source>F</source>
         <comment>note name</comment>
         <translation>F</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="567"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="568"/>
         <source>F#</source>
         <comment>note name</comment>
         <translation>F#</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="568"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="569"/>
         <source>G</source>
         <comment>note name</comment>
         <translation>G</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="569"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="570"/>
         <source>G#</source>
         <comment>note name</comment>
         <translation>G#</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="570"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="571"/>
         <source>A</source>
         <comment>note name</comment>
         <translation>A</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="571"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="572"/>
         <source>Bb</source>
         <comment>note name</comment>
         <translation>B</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="572"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="573"/>
         <source>B</source>
         <comment>note name</comment>
         <translation>H</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="902"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="906"/>
         <source>&lt;h2&gt;Notation Inconsistencies&lt;/h2&gt;</source>
         <translation>&lt;h2&gt;Inkonsistente Notation&lt;/j2&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="904"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="908"/>
         <source>&lt;h3&gt;Filename: %1 &lt;/h3&gt;</source>
         <translation>&lt;h3&gt;Dateiname: %1 &lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="907"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="911"/>
         <source>&lt;h3&gt;Track %1: &quot;%2&quot;&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;Spur %1 : &quot;%2&quot;&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="912"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="916"/>
         <source>Overlapping segments with inconsistent clefs:</source>
         <translation>Überlappende Segmente mit inkonsistenten Notenschlüsseln:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="914"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="918"/>
         <source>Segment &quot;%1&quot;: %2 clef</source>
         <translation>Segment &quot;%1&quot;: %2 Notenschlüssel</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="919"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="923"/>
         <source>Overlapping segments with inconsistent keys:</source>
         <translation>Überlappende Segmente mit inkonsistenten Tonarten:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="921"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="925"/>
         <source>Segment &quot;%1&quot;: %2 key</source>
         <translation>Segment &quot;%1&quot;: %2 Tonart</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="926"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="930"/>
         <source>Overlapping segments with inconsistent transpositions:</source>
         <translation>Überlappende Segmente mit inkonsistenten Transpositionen:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="928"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="932"/>
         <source>Segment &quot;%1&quot;: %2</source>
         <translation>Segment &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="934"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="938"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
@@ -24016,12 +24015,12 @@ Das Beenden anderer laufender Anwendung könnte u.U. die Leistung von Rosegarden
         <translation type="obsolete">H</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="684"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="685"/>
         <source>%1: %2</source>
         <translation>%1: %2</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="687"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="688"/>
         <source> in %1</source>
         <translation> in %1</translation>
     </message>

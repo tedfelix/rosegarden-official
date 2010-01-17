@@ -23,7 +23,7 @@
 #include "base/Selection.h"
 #include "document/BasicCommand.h"
 #include <QString>
-
+#include <iostream>
 
 namespace Rosegarden
 {
@@ -40,6 +40,7 @@ RescaleCommand::RescaleCommand(EventSelection &sel,
         m_newDuration(newDuration),
         m_closeGap(closeGap)
 {
+    std::cout << "RescaleCommand: oldDuration: " << sel.getTotalDuration() << " newDuration: " << newDuration << " close gap? " << (closeGap ? "Y" : "N") << std::endl;
     // nothing else
 }
 
