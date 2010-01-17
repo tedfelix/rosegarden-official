@@ -26,6 +26,7 @@
 #include <QString>
 #include <QWidget>
 #include <QVBoxLayout>
+#include <QPushButton>
 
 
 namespace Rosegarden
@@ -49,12 +50,14 @@ TimeDialog::TimeDialog(QWidget *parent, QString title,
                 defaultTime, true, constrainToCompositionDuration);
     vboxLayout->addWidget(m_timeWidget);
 
-    connect(this, SIGNAL(ResetClicked()),
-            m_timeWidget, SLOT(slotResetToDefault()));
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Reset | QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     vboxLayout->addWidget(buttonBox);
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+
+    QPushButton *resetButton = buttonBox->button(QDialogButtonBox::Reset);
+    connect(resetButton, SIGNAL(clicked()),
+            m_timeWidget, SLOT(slotResetToDefault()));
 }
 
 TimeDialog::TimeDialog(QWidget *parent, QString title,

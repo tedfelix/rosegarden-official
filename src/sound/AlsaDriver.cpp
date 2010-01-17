@@ -108,10 +108,9 @@ AlsaDriver::AlsaDriver(MappedStudio *studio):
 
 {
     Audit audit;
-    audit << "Rosegarden " << VERSION << " - AlsaDriver "
-    << m_name << std::endl;
+    audit << "Rosegarden " << VERSION << " - AlsaDriver " << m_name << std::endl;
     m_pendSysExcMap = new DeviceEventMap();
-std::cerr << "AlsaDriver::AlsaDriver [begin]" << std::endl;
+    std::cerr << "AlsaDriver::AlsaDriver [begin]" << std::endl;
 }
 
 AlsaDriver::~AlsaDriver()

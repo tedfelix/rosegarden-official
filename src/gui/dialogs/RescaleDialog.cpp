@@ -32,6 +32,7 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QApplication>
+#include <QPushButton>
 
 
 namespace Rosegarden
@@ -77,12 +78,14 @@ RescaleDialog::RescaleDialog(QWidget *parent,
         m_closeGap = 0;
     }
 
-    connect(this, SIGNAL(ResetClicked()),
-            m_newDuration, SLOT(slotResetToDefault()));
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Reset | QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     vboxLayout->addWidget(buttonBox);
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+
+    QPushButton *resetButton = buttonBox->button(QDialogButtonBox::Reset);
+    connect(resetButton, SIGNAL(clicked()),
+            m_newDuration, SLOT(slotResetToDefault()));
 
     updateGeometry();
 }
