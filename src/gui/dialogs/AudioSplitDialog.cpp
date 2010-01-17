@@ -43,6 +43,8 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QGraphicsRectItem>
+#include <QList>
+#include <QGraphicsSimpleTextItem>
 
 
 namespace Rosegarden
@@ -138,27 +140,25 @@ AudioSplitDialog::slotHelpRequested()
 void
 AudioSplitDialog::drawPreview()
 {
-    /*
-    // Delete everything on the canvas
+    // Delete everything in the scene
     //
-    Q3CanvasItemList list = m_scene->allItems();
-    for (Q3CanvasItemList::Iterator it = list.begin(); it != list.end(); it++)
+    QList<QGraphicsItem *> list = m_scene->items();
+    for (QList<QGraphicsItem *>::Iterator it = list.begin();
+         it != list.end(); it++) {
         delete *it;
+    }
 
     // empty the preview boxes
     m_previewBoxes.erase(m_previewBoxes.begin(), m_previewBoxes.end());
-
+  
     // Draw a bounding box
     //
     int border = 5;
-    QGraphicsRectItem *rect = new QGraphicsRectItem(m_scene);
-    rect->setSize(m_sceneWidth - border * 2, m_sceneHeight - border * 2);
-    rect->setX(border);
-    rect->setY(border);
-    rect->setZ(1);
-    rect->setPen(qApp->palette().color(QPalette::Active, QColorGroup::Dark));
-    rect->setBrush(qApp->palette().color(QPalette::Active, QColorGroup::Base));
-    rect->setVisible(true);
+    m_scene->addRect(0, 0,
+                     m_sceneWidth - border * 2,
+                     m_sceneHeight - border * 2,
+                     QPen(Qt::black, border),
+                     Qt::white);
 
     // Get preview in vector form
     //
@@ -174,20 +174,15 @@ AudioSplitDialog::drawPreview()
                                 m_previewWidth,
                                 false);
     } catch (Exception e) {
-        Q3CanvasText *text = new Q3CanvasText(m_scene);
-        text->setColor(qApp->palette().
-                       color(QPalette::Active, QColorGroup::Shadow));
-        text->setText(tr("<no preview generated for this audio file>"));
-        text->setX(30);
-        text->setY(30);
-        text->setZ(4);
-        text->setVisible(true);
-        m_scene->update();
+        QGraphicsSimpleTextItem *text = new QGraphicsSimpleTextItem(tr("<no preview generated for this audio file>"));
+        text->setBrush(Qt::black);
+        m_scene->addItem(text);
+        text->setPos(30, 30);
         return ;
     }
 
-    int startX = (m_sceneWidth - m_previewWidth) / 2;
-    int halfHeight = m_sceneHeight / 2;
+    qreal startX = (m_sceneWidth - m_previewWidth) / 2;
+    qreal halfHeight = m_sceneHeight / 2;
     float h1, h2;
     std::vector<float>::iterator it = values.begin();
 
@@ -203,48 +198,39 @@ AudioSplitDialog::drawPreview()
         }
 
 
-        int startY = halfHeight + int(h1 * float(m_previewHeight / 2));
-        int endY = halfHeight - int(h2 * float(m_previewHeight / 2));
+        qreal startY = halfHeight + h1 * float(m_previewHeight / 2);
+        qreal endY = halfHeight - h2 * float(m_previewHeight / 2);
 
-        if ( startY < 0 ) {
+        if (startY < 0) {
             RG_DEBUG << "AudioSplitDialog::AudioSplitDialog - "
-            << "startY - out of negative range"
-            << endl;
+                     << "startY - out of negative range"
+                     << endl;
             startY = 0;
         }
 
         if (endY < 0) {
             RG_DEBUG << "AudioSplitDialog::AudioSplitDialog - "
-            << "endY - out of negative range"
-            << endl;
+                     << "endY - out of negative range"
+                     << endl;
             endY = 0;
         }
 
-        Q3CanvasLine *line = new Q3CanvasLine(m_scene);
-        line->setPoints(startX + i,
-                        startY,
-                        startX + i,
-                        endY);
-        line->setZ(3);
-        line->setPen(qApp->
-                     palette().color(QPalette::Active, QColorGroup::Shadow));
-        line->setBrush(qApp->
-                       palette().color(QPalette::Active, QColorGroup::Shadow));
-        line->setVisible(true);
-
+        m_scene->addLine(startX + qreal(i),
+                         startY,
+                         startX + qreal(i),
+                         endY,
+                         QPen(Qt::red));
     }
 
     // Draw zero dc line
     //
-    rect = new QGraphicsRectItem(m_scene);
-    rect->setX(startX);
-    rect->setY(halfHeight - 1);
-    rect->setSize(m_previewWidth, 2);
-    rect->setPen(qApp->palette().color(QPalette::Active, QColorGroup::Shadow));
-    rect->setBrush(qApp->palette().color(QPalette::Active, QColorGroup::Shadow));
-    rect->setZ(4);
-    rect->setVisible(true);
-
+    m_scene->addRect(startX,
+                     halfHeight - qreal(1),
+                     qreal(m_previewWidth),
+                     qreal(2),
+                     QPen(Qt::blue),
+                     QBrush(Qt::green));
+/*
     // Start time
     //
     char msecs[100];
