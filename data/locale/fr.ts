@@ -5957,7 +5957,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="230"/>
         <source>Crotales</source>
-        <translation type="unfinished"></translation>
+        <translation>Crotales</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="231"/>
@@ -6235,7 +6235,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="286"/>
         <source>Cowbells</source>
-        <translation type="unfinished"></translation>
+        <translation>Clarines</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="287"/>
@@ -6352,22 +6352,22 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="312"/>
         <source>Wooden wind chimes</source>
-        <translation type="unfinished"></translation>
+        <translation>Carillon éolien (bois)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="313"/>
         <source>Bamboo wind chimes</source>
-        <translation></translation>
+        <translation>Carillon éolien (bambou)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="314"/>
         <source>Metal wind chimes</source>
-        <translation type="unfinished"></translation>
+        <translation>Carillon éolien (métallique)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="315"/>
         <source>Glass wind chimes</source>
-        <translation type="unfinished"></translation>
+        <translation>Carillon éolien (cristal)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="316"/>
@@ -7100,7 +7100,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../AutoloadStrings.cpp" line="117"/>
         <source>Blown Bottle</source>
-        <translation type="unfinished"></translation>
+        <translation>Bouteille soufflée</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="119"/>
@@ -7480,7 +7480,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../AutoloadStrings.cpp" line="197"/>
         <source>808 Tom</source>
-        <translation type="unfinished"></translation>
+        <translation>Tom 808</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="198"/>
@@ -7640,17 +7640,17 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../AutoloadStrings.cpp" line="230"/>
         <source>Brush</source>
-        <translation type="unfinished"></translation>
+        <translation>Balais</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="231"/>
         <source>Brush 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Balais 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="232"/>
         <source>Brush 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Balais 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="233"/>
@@ -7730,12 +7730,12 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../AutoloadStrings.cpp" line="248"/>
         <source>Acoustic Bass Drum</source>
-        <translation type="unfinished"></translation>
+        <translation>Grosse caisse acoustique</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="249"/>
         <source>Bass Drum 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Grosse caisse 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="250"/>
@@ -7745,7 +7745,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../AutoloadStrings.cpp" line="251"/>
         <source>Acoustic Snare</source>
-        <translation type="unfinished"></translation>
+        <translation>Caisse claire acoustique</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="252"/>
@@ -7755,67 +7755,67 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../AutoloadStrings.cpp" line="253"/>
         <source>Electric Snare</source>
-        <translation type="unfinished"></translation>
+        <translation>Caisse claire électrique</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="254"/>
         <source>Low Floor Tom</source>
-        <translation type="unfinished"></translation>
+        <translation>Tom basse grave</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="255"/>
         <source>Closed Hi-Hat</source>
-        <translation type="unfinished"></translation>
+        <translation>Charleston ouvert</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="256"/>
         <source>High Floor Tom</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tom basse aigüe</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="257"/>
         <source>Pedal Hi-Hat</source>
-        <translation type="unfinished"></translation>
+        <translation>Pédale de charleston</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="258"/>
         <source>Low Tom</source>
-        <translation type="unfinished"></translation>
+        <translation>Tom grave</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="259"/>
         <source>Open Hi-Hat</source>
-        <translation type="unfinished"></translation>
+        <translation>Charleston ouvert</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="260"/>
         <source>Low-Mid Tom</source>
-        <translation type="unfinished"></translation>
+        <translation>Tom medium aigu</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="261"/>
         <source>Hi-Mid Tom</source>
-        <translation type="unfinished"></translation>
+        <translation>Tom médium grave</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="262"/>
         <source>Crash Cymbal 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Cymbale crash 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="263"/>
         <source>High Tom</source>
-        <translation type="unfinished"></translation>
+        <translation>Tom aigu</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="264"/>
         <source>Ride Cymbal 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Cymbale ride 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="265"/>
         <source>Chinese Cymbal</source>
-        <translation type="unfinished"></translation>
+        <translation>Cymbale china</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="266"/>
@@ -7830,7 +7830,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../AutoloadStrings.cpp" line="269"/>
         <source>Cowbell</source>
-        <translation type="unfinished"></translation>
+        <translation>Clarine</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="270"/>
@@ -10450,7 +10450,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../../src/gui/general/ActionCommandRegistry.cpp" line="115"/>
         <source>Rosegarden - Warning</source>
-        <translation>Avertissement</translation>
+        <translation>Rosegarden - Avertissement</translation>
     </message>
 </context>
 <context>
@@ -11897,7 +11897,7 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1576"/>
         <source>Some internal error: no device selected</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur interne: aucun périphérique n&apos;est sélectionné</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1790"/>
@@ -14152,7 +14152,7 @@ Voulez-vous essayer de localiser ce fichier?</translation>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="103"/>
         <source>&lt;qt&gt;&lt;p&gt;Qt offers you the choice of three graphics systems. The fast (raster) graphics system offers the best tradeoff between performance and stability, but may cause problems for some users.  If you experience frequent crashes, or distorted graphics, you should try the safe (native) graphics system instead.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Qt vous donne le choix entre trois procédés d&apos;affichage graphique. Le procédé &quot;rapide&quot; (raster graphics) donne le meilleur rapport performance/stabilité mais peut poser des problèmes sur certains systèmes.  Si vous constatez des plantages fréquents ou des anomalies de l&apos;affichage, vous devriez plutôt choisir le procédé &quot;natif&quot; (native graphics).&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="107"/>
@@ -20537,7 +20537,7 @@ L&apos;erreur était : %2</translation>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2474"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5016"/>
         <source>Warning</source>
-        <translation>Attention</translation>
+        <translation>Avertissement</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2475"/>
@@ -21165,32 +21165,32 @@ Erreur obtenue : %2</translation>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8003"/>
         <source>&lt;h3&gt;Invalid audio path&lt;/h3&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;h3&gt;Répertoire audio invalide&lt;/h3&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8004"/>
         <source>&lt;p&gt;You will not be able to record audio or drag and drop audio files onto Rosegarden until you correct this in &lt;b&gt;View -&gt; Document Properties -&gt; Audio&lt;/b&gt;.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Vous ne pourrez ni effectuer d&apos;enregistrement audio ni glisser/déposer de fichiers audio dans Rosegarden avant d&apos;avoir corrigé ceci dans &lt;b&gt;Visualiser -&gt; Propriétés du document... -&gt; Audio&lt;/b&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8008"/>
         <source>&lt;h3&gt;Created audio path&lt;/h3&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;h3&gt;Répertoire audio créé&lt;/h3&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8009"/>
         <source>&lt;qt&gt;&lt;p&gt;Rosegarden created the audio path &quot;%1&quot; to use for audio recording, and to receive dropped audio files.&lt;/p&gt;&lt;p&gt;If you wish to use a different path, change this in &lt;b&gt;View -&gt; Document Properties -&gt; Audio&lt;/b&gt;.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Rosegarden a créé le répertoire &quot;%1&quot; pour l&apos;enregistrement audio et pour recevoir des fichiers audio glissés/déposés.&lt;/p&gt;&lt;p&gt;Si vous souhaitez utiliser un répertoire différent, indiquez le dans &lt;b&gt;Visualiser -&gt; Propriétés du document... -&gt; Audio&lt;/b&gt;.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8015"/>
         <source>&lt;qt&gt;&lt;p&gt;The audio path &quot;%1&quot; did not exist, and could not be created.&lt;/p&gt;%2&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Le répertoire des fichiers audio &quot;%1&quot; n&apos;existe pas et ne peut pas être créé.&lt;/p&gt;%2&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8020"/>
         <source>&lt;qt&gt;&lt;p&gt;The audio path &quot;%1&quot; exists, but is not writable.&lt;/p&gt;%2&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Le répertoire des fichiers audio &quot;%1&quot; existe mais ne peut pas être écrit.&lt;/p&gt;%2&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -24395,27 +24395,27 @@ Souhaitez vous le faire tout de suite ?</translation>
     <message>
         <location filename="../../src/gui/widgets/WarningDialog.cpp" line="75"/>
         <source>Warning</source>
-        <translation type="unfinished">Attention</translation>
+        <translation>Avertissement</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/WarningDialog.cpp" line="80"/>
         <source>MIDI</source>
-        <translation type="unfinished">MIDI</translation>
+        <translation>MIDI</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/WarningDialog.cpp" line="84"/>
         <source>Audio</source>
-        <translation type="unfinished">Audio</translation>
+        <translation>Audio</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/WarningDialog.cpp" line="88"/>
         <source>System timer</source>
-        <translation type="unfinished"></translation>
+        <translation>Timer système</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/WarningDialog.cpp" line="92"/>
         <source>Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Information</translation>
     </message>
 </context>
 <context>
@@ -24428,7 +24428,7 @@ Souhaitez vous le faire tout de suite ?</translation>
     <message>
         <location filename="../../src/gui/widgets/WarningWidget.cpp" line="86"/>
         <source>&lt;qt&gt;&lt;p&gt;Information available.&lt;/p&gt;&lt;p&gt;Click to display details&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Informations disponibles.&lt;/p&gt;&lt;p&gt;Cliquer pour en savoir plus&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/WarningWidget.cpp" line="110"/>
