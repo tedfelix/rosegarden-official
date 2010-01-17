@@ -114,6 +114,7 @@ public slots:
 
     void slotFileClose();
 
+    void slotEdit(QTreeWidgetItem *item, int);
     void slotEditCopy();
     void slotEditPaste();
 

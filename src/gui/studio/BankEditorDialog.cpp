@@ -237,12 +237,9 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     m_optionBox->setLayout(optionBoxLayout);
 
     // device/bank modification
-//&&& There is no itemRenamed() signal, and no apparent analog.  I'm not even
-// sure how to make these click-to-editable at this stage.  What a mess.
-//    connect(m_treeWidget, SIGNAL(itemRenamed (QTreeWidgetItem*, const QString&, int)),
-//            this, SLOT(slotModifyDeviceOrBankName(QTreeWidgetItem*, const QString&, int)));
 
-// foo42 void itemDoubleClicked(QTreeWidgetItem* int
+    connect(m_treeWidget, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int )),
+            this, SLOT(slotEdit(QTreeWidgetItem*, int)));
 
     connect(m_addBank, SIGNAL(clicked()),
             this, SLOT(slotAddBank()));
@@ -420,11 +417,11 @@ BankEditorDialog::initDialog()
             RG_DEBUG << "BankEditorDialog::initDialog - adding " << itemName << endl;
 
             twItemDevice = new MidiDeviceTreeWidgetItem(midiDevice->getId(), m_treeWidget, itemName);
+            //twItemDevice->setFlags(Qt::ItemIsEditable | Qt::ItemIsSelectable);
             
             m_treeWidget->addTopLevelItem(twItemDevice);  //
             
             twItemDevice->setExpanded(true);
-//             deviceItem->setForeground(  0, QBrush( Qt::cyan, Qt::SolidPattern ) );  // column, brush(color, pat)
            
             populateDeviceItem(twItemDevice, midiDevice);
         }
@@ -1631,6 +1628,13 @@ BankEditorDialog::slotImport()
 
     delete dialog;
     updateDialog();
+}
+
+void
+BankEditorDialog::slotEdit(QTreeWidgetItem * item, int)
+{
+    std::cout << "BankEditorDialog::slotEdit()" << std::endl;
+    m_treeWidget->editItem(item);
 }
 
 void
