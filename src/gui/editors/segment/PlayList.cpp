@@ -34,8 +34,7 @@
 #include <QTreeWidgetItem>
 #include <QVBoxLayout>
 #include <QUrl>
-#include <QMimeData>    // replaces Q3UriDrag and Q3DragObject
-
+#include <QMimeData> 
 
 
 namespace Rosegarden
@@ -58,7 +57,6 @@ PlayList::PlayList
     QVBoxLayout *vLayout = new QVBoxLayout;
     vLayout->addWidget(m_listView);
     vLayout->addWidget(m_buttonBar);
-//     vLayout->addWidget(m_barLayout);
     setLayout(vLayout);
 
     m_openButton = new QPushButton(m_buttonBar);
@@ -330,6 +328,7 @@ void PlayList::restore()
     */
     kc.endGroup();
 }
+
 
 }
 #include "PlayList.moc"

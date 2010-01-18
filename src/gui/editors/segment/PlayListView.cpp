@@ -20,7 +20,7 @@
 #include "misc/Debug.h"
 
 
-#include <QMimeData>	// replaces Q3DragObject and Q3UriDrag
+#include <QMimeData>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QDropEvent>

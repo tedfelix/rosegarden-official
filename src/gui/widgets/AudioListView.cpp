@@ -18,21 +18,20 @@
 
 #include "AudioListView.h"
 
-
 #include "misc/Debug.h"
 #include "gui/widgets/AudioListItem.h"
 
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
-#include <QMimeData>	// qt4: replaces Q3DragObject and Q3UriDrag
+#include <QMimeData>
 #include <QUrl>
 #include <QDrag>
 #include <QDropEvent>
 
 
-
 namespace Rosegarden {
-        
+
+
 AudioListView::AudioListView(QWidget *parent, const char *name)
     : QTreeWidget(parent)
 {
@@ -218,31 +217,6 @@ void AudioListView::dropEvent(QDropEvent* e)
     
     // signal: dropped(QDropEvent*, QTreeWidgetItem*)
 }
-
-
-/*
-
-Q3DragObject* AudioListView::dragObject()
-{
-    AudioListItem* item = dynamic_cast<AudioListItem*>(currentItem());
-
-    QString audioData;
-    QTextOStream ts(&audioData);
-    ts << "AudioFileManager\n"
-       << item->getId() << '\n'
-       << item->getStartTime().sec << '\n'
-       << item->getStartTime().nsec << '\n'
-       << item->getDuration().sec << '\n'
-       << item->getDuration().nsec << '\n';
-
-    RG_DEBUG << "AudioListView::dragObject - "
-             << "file id = " << item->getId()
-             << ", start time = " << item->getStartTime() << endl;
-    
-    return new Q3TextDrag(audioData, this);
-}
-*/
-
 
 
 }
