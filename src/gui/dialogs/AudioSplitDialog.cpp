@@ -86,14 +86,9 @@ AudioSplitDialog::AudioSplitDialog(QWidget *parent,
     layout->addWidget(box);
 
     m_scene = new QGraphicsScene;
-    m_scene->setBackgroundBrush(Qt::red);
 	
     m_view = new QGraphicsView(m_scene);
-//    m_view->setFixedWidth(m_sceneWidth);
-//    m_view->setFixedHeight(m_sceneHeight);
     boxLayout->addWidget(m_view);
-
-//    m_view->setDragAutoScroll(false);
 
     QWidget *hbox = new QWidget;
     QHBoxLayout *hboxLayout = new QHBoxLayout;
@@ -219,18 +214,18 @@ AudioSplitDialog::drawPreview()
                          startY,
                          startX + qreal(i),
                          endY,
-                         QPen(Qt::red));
+                         QPen(Qt::black));
     }
 
     // Draw zero dc line
     //
     m_scene->addRect(startX,
-                     halfHeight - qreal(1),
+                     halfHeight - 1,
                      qreal(m_previewWidth),
-                     qreal(2),
-                     QPen(Qt::blue),
-                     QBrush(Qt::green));
-/*
+                     2,
+                     QPen(Qt::black),
+                     QBrush(Qt::gray));
+
     // Start time
     //
     char msecs[100];
@@ -238,22 +233,18 @@ AudioSplitDialog::drawPreview()
     QString startText = QString("%1.%2s")
                         .arg(m_segment->getAudioStartTime().sec)
                         .arg(msecs);
-    Q3CanvasText *text = new Q3CanvasText(m_scene);
-    text->setColor(
-        qApp->palette().color(QPalette::Active, QColorGroup::Shadow));
-    text->setText(startText);
-    text->setX(startX - 20);
-    text->setY(m_sceneHeight / 2 - m_previewHeight / 2 - 35);
-    text->setZ(3);
-    text->setVisible(true);
+    QGraphicsSimpleTextItem *text = new QGraphicsSimpleTextItem(startText);
+    text->setBrush(Qt::black);
+    m_scene->addItem(text);
+    text->setPos(startX - 20,
+                 qreal(m_sceneHeight) / 2 - qreal(m_previewHeight) / 2 - 35);
 
-    rect = new QGraphicsRectItem(m_scene);
-    rect->setX(startX - 1);
-    rect->setY(m_sceneHeight / 2 - m_previewHeight / 2 - 14);
-    rect->setSize(1, m_previewHeight + 28);
-    rect->setPen(qApp->palette().color(QPalette::Active, QColorGroup::Shadow));
-    rect->setZ(3);
-    rect->setVisible(true);
+    m_scene->addRect(startX - 1,
+                     qreal(m_sceneHeight) / 2 - qreal(m_previewHeight) / 2 - 14,
+                     1,
+                     qreal(m_previewHeight) + 28,
+                     QPen(Qt::black),
+                     QBrush(Qt::gray));
 
     // End time
     //
@@ -261,32 +252,23 @@ AudioSplitDialog::drawPreview()
     QString endText = QString("%1.%2s")
                       .arg(m_segment->getAudioEndTime().sec)
                       .arg(msecs);
-    text = new Q3CanvasText(m_scene);
-    text->setColor(
-        qApp->palette().color(QPalette::Active, QColorGroup::Shadow));
-    text->setText(endText);
-    text->setX(startX + m_previewWidth - 20);
-    text->setY(m_sceneHeight / 2 - m_previewHeight / 2 - 35);
-    text->setZ(3);
-    text->setVisible(true);
+    text = new QGraphicsSimpleTextItem(endText);
+    text->setBrush(Qt::black);
+    m_scene->addItem(text);
+    text->setPos(startX + qreal(m_previewWidth) - 20,
+                 qreal(m_sceneHeight) / 2 - qreal(m_previewHeight) / 2 - 35);
 
-    rect = new QGraphicsRectItem(m_scene);
-    rect->setX(startX + m_previewWidth - 1);
-    rect->setY(m_sceneHeight / 2 - m_previewHeight / 2 - 14);
-    rect->setSize(1, m_previewHeight + 28);
-    rect->setPen(qApp->palette().color(QPalette::Active, QColorGroup::Shadow));
-    rect->setZ(3);
-    rect->setVisible(true);
-
-    m_scene->update();
-
-    */
+    m_scene->addRect(startX + qreal(m_previewWidth) - 1,
+                     qreal(m_sceneHeight) / 2 - qreal(m_previewHeight) / 2 - 14,
+                     1,
+                     qreal(m_previewHeight) + 28,
+                     QPen(Qt::black),
+                     QBrush(Qt::gray));
 }
 
 void
 AudioSplitDialog::drawSplits(int threshold)
 {
-    /*
     // Now get the current split points and paint them
     //
     RealTime startTime = m_segment->getAudioStartTime();
@@ -306,31 +288,25 @@ AudioSplitDialog::drawSplits(int threshold)
     double ticksPerUsec = double(m_previewWidth) /
                           double((length.sec * 1000000.0) + length.usec());
 
-    int startX = (m_sceneWidth - m_previewWidth) / 2;
-    int halfHeight = m_sceneHeight / 2;
-    int x1, x2;
-    int overlapHeight = 10;
+    qreal startX = (m_sceneWidth - m_previewWidth) / 2;
+    qreal halfHeight = m_sceneHeight / 2;
+    qreal x1, x2;
+    qreal overlapHeight = 10;
 
     for (it = splitPoints.begin(); it != splitPoints.end(); it++) {
         RealTime splitStart = it->first - startTime;
         RealTime splitEnd = it->second - startTime;
 
-        x1 = int(ticksPerUsec * double(double(splitStart.sec) *
-                                       1000000.0 + (double)splitStart.usec()));
+        x1 = ticksPerUsec * double(double(splitStart.sec) * 1000000.0 + (double)splitStart.usec());
 
-        x2 = int(ticksPerUsec * double(double(splitEnd.sec) *
-                                       1000000.0 + double(splitEnd.usec())));
+        x2 = ticksPerUsec * double(double(splitEnd.sec) * 1000000.0 + double(splitEnd.usec()));
 
-        QGraphicsRectItem *rect = new QGraphicsRectItem(m_scene);
-        rect->setX(startX + x1);
-        rect->setY(halfHeight - m_previewHeight / 2 - overlapHeight / 2);
-        rect->setZ(2);
-        rect->setSize(x2 - x1, m_previewHeight + overlapHeight);
-        rect->setPen(qApp->
-                     palette().color(QPalette::Active, QColorGroup::Mid));
-        rect->setBrush(qApp->
-                       palette().color(QPalette::Active, QColorGroup::Mid));
-        rect->setVisible(true);
+        QGraphicsRectItem *rect = m_scene->addRect(startX + x1,
+                                                   halfHeight - qreal(m_previewHeight) / 2 - overlapHeight / 2,
+                                                   x2 - x1, 
+                                                   qreal(m_previewHeight) + overlapHeight,
+                                                   QPen(Qt::red),
+                                                   QBrush(Qt::blue));
         tempRects.push_back(rect);
     }
 
@@ -346,16 +322,15 @@ AudioSplitDialog::drawSplits(int threshold)
             delete (*pIt);
         }
         m_previewBoxes.erase(m_previewBoxes.begin(), m_previewBoxes.end());
-        m_scene->update();
+//        m_scene->update();
     }
-    m_scene->update();
+//    m_scene->update();
 
     // Now store the new ones
     //
     for (pIt = tempRects.begin(); pIt != tempRects.end(); pIt++)
         m_previewBoxes.push_back(*pIt);
 
-    */
 }
 
 void
