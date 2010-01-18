@@ -283,29 +283,12 @@ NotationView::NotationView(RosegardenDocument *doc,
     findAction("show_raw_note_ruler")->setChecked(visible);
     m_notationWidget->setRawNoteRulerVisible(visible);
 
-    // ... tempo ruler ...
+    // ... and tempo ruler.
     visible = settings.value("Tempo ruler shown",
                           findAction("show_tempo_ruler")->isChecked()
                          ).toBool();
     findAction("show_tempo_ruler")->setChecked(visible);
     m_notationWidget->setTempoRulerVisible(visible);
-
-    // ... and staff headers.
-    switch (settings.value("shownotationheader").toInt()) {
-      case HeadersGroup::ShowNever :
-          m_notationWidget->setHeadersVisible(false);
-          break;
-      case HeadersGroup::ShowWhenNeeded :
-          m_notationWidget->setHeadersVisibleIfNeeded();
-          break;
-      case HeadersGroup::ShowAlways :
-          m_notationWidget->setHeadersVisible(true);
-          break;
-      default :
-          std::cerr << "NotationView: settings.value(\"shownotationheader\") "
-                    << "returned an unexpected value. This is a bug."
-                    << std::endl;
-    }
 
     settings.endGroup();
 
@@ -338,6 +321,29 @@ NotationView::NotationView(RosegardenDocument *doc,
     setRewFFwdToAutoRepeat();
 
     m_notationWidget->resumeLayoutUpdates();
+
+    // Set initial visibility of staff headers.
+    // (Could not be done earlier because both view size and headers size are
+    //  needed to know what should be done when the "show when needed" option
+    //  is selected).
+    settings.beginGroup(NotationViewConfigGroup);
+    switch (settings.value("shownotationheader",
+                           HeadersGroup::DefaultShowMode).toInt()) {
+      case HeadersGroup::ShowNever :
+          m_notationWidget->setHeadersVisible(false);
+          break;
+      case HeadersGroup::ShowWhenNeeded :
+          m_notationWidget->setHeadersVisibleIfNeeded();
+          break;
+      case HeadersGroup::ShowAlways :
+          m_notationWidget->setHeadersVisible(true);
+          break;
+      default :
+          std::cerr << "NotationView: settings.value(\"shownotationheader\") "
+                    << "returned an unexpected value. This is a bug."
+                    << std::endl;
+    }
+    settings.endGroup();
 
     // Show the pointer as soon as notation editor opens
     m_notationWidget->slotUpdatePointerPosition();

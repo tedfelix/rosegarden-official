@@ -94,7 +94,7 @@ public:
     typedef enum { ShowNever, ShowWhenNeeded, ShowAlways } ShowHeadersModeType;
 
     // Used to ensure to have one default value and only one.
-    static const ShowHeadersModeType DefaultShowMode = ShowAlways;
+    static const ShowHeadersModeType DefaultShowMode = ShowWhenNeeded;
 
     // Useful in configuration dialog.
     static bool isValidShowMode(int mode)
