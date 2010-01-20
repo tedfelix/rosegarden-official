@@ -337,12 +337,21 @@ void
 ProgressDialog::setProgress(int value)
 {
     std::cout << "ProgressDialog::setProgress(" << value << ") calling setValue()" << std::endl;
+    setValue(int);
 }
 
 void
 ProgressDialog::incrementProgress(int value)
 {
     std::cout << "ProgressDialog::incrementProgress(" << value << ") calling setValue()" << std::endl;
+    setValue(int);
+}
+
+void
+ProgressDialog::advance(int value)
+{
+    std::cout << "ProgressDialog::advance(" << value << ") calling setValue()" << std::endl;
+    setValue(int);
 }
 
 void

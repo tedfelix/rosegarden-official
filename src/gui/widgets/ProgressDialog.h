@@ -132,6 +132,10 @@ public slots:
      */
     void incrementProgress(int value);
 
+    /** Convenience legacy support slot.  Simply calls setValue().
+     */
+    void advance(int value);
+
 protected slots:
     /** I don't fully understand this slot, or how m_chrono used to be used.
      * The main thing that actually matters now is m_timer, which is used to
