@@ -184,7 +184,7 @@ protected:
     QTreeWidget *m_eventList;
     int          m_eventFilter;
 
-    static int   m_lastSetEventFilter;
+    int          m_lastSetEventFilter;
 
     QGroupBox   *m_filterGroup;
     QCheckBox   *m_noteCheckBox;

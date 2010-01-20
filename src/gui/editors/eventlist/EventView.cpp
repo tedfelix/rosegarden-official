@@ -86,19 +86,17 @@
 namespace Rosegarden
 {
 
-int
-EventView::m_lastSetEventFilter = -1;
-
-
 EventView::EventView(RosegardenDocument *doc,
                      std::vector<Segment *> segments,
                      QWidget *parent):
         ListEditView(doc, segments, 2, parent, "eventview"),
         m_eventFilter(Note | Text | SystemExclusive | Controller |
                       ProgramChange | PitchBend | Indication | Other),
+        m_lastSetEventFilter(m_eventFilter),
         m_menu(0)
 {
-    std::cout << "ctor m_eventFilter: " << m_eventFilter << std::endl;
+    setAttribute(Qt::WA_DeleteOnClose);
+
     m_isTriggerSegment = false;
     m_triggerName = m_triggerPitch = m_triggerVelocity = 0;
 
@@ -110,9 +108,6 @@ EventView::EventView(RosegardenDocument *doc,
                 m_isTriggerSegment = true;
         }
     }
-
-    if (m_lastSetEventFilter < 0) m_lastSetEventFilter = m_eventFilter;
-    else m_eventFilter = m_lastSetEventFilter;
 
     initStatusBar();
     setupActions();
@@ -306,6 +301,10 @@ EventView::~EventView()
 void
 EventView::closeEvent(QCloseEvent *event)
 {
+    std::cout << "close event" << std::endl;
+    // Save m_eventFilter for next time
+    slotSaveOptions();
+
     // Save window geometry and toolbar/dock state
     QSettings settings;
     settings.beginGroup(WindowGeometryConfigGroup);
@@ -363,11 +362,11 @@ EventView::applyLayout(int /*staffNo*/)
     m_eventList->clear();
 
     QSettings settings;
+    settings.beginGroup(EventViewConfigGroup);
 
-    settings.beginGroup( EventViewConfigGroup );
+    int timeMode = settings.value("timemode", 0).toInt();
+
     settings.endGroup();
-
-    int timeMode = settings.value("timemode", 0).toInt() ;
 
     for (unsigned int i = 0; i < m_segments.size(); i++) {
         SegmentPerformanceHelper helper(*m_segments[i]);
@@ -1217,8 +1216,10 @@ EventView::setupActions()
     createGUI(getRCFileName());
 
     QSettings settings;
-    settings.beginGroup( EventViewConfigGroup );
+    settings.beginGroup(EventViewConfigGroup);
+
     int timeMode = settings.value("timemode", 0).toInt() ;
+
     settings.endGroup();
 
     if (timeMode == 0) musical->setChecked(true);
@@ -1280,7 +1281,7 @@ void
 EventView::readOptions()
 {
     QSettings settings;
-    settings.beginGroup( EventViewConfigGroup );
+    settings.beginGroup(EventViewConfigGroup);
 
     EditViewBase::readOptions();
     m_eventFilter = settings.value("eventfilter", m_eventFilter).toInt();
@@ -1294,11 +1295,12 @@ EventView::readOptions()
 void
 EventView::slotSaveOptions()
 {
+    std::cout << "save options"<< std::endl;
     QSettings settings;
-    settings.beginGroup( EventViewConfigGroup );
+    settings.beginGroup(EventViewConfigGroup);
 
     settings.setValue("eventfilter", m_eventFilter);
-    settings.setValue(EventViewLayoutConfigGroupName, m_eventList->saveGeometry() );
+    settings.setValue(EventViewLayoutConfigGroupName, m_eventList->saveGeometry());
 
     settings.endGroup();
 }
@@ -1315,39 +1317,38 @@ EventView::getCurrentSegment()
 void
 EventView::slotModifyFilter(int)
 {
-    std::cout << "m_eventFilter: " << m_eventFilter << std::endl;
     if (m_noteCheckBox->isChecked()) m_eventFilter |= EventView::Note;
     else m_eventFilter ^= EventView::Note;
 
     if (m_programCheckBox->isChecked()) m_eventFilter |= EventView::ProgramChange;
-    else m_eventFilter ^= EventView::Note;
+    else m_eventFilter ^= EventView::ProgramChange;
 
     if (m_controllerCheckBox->isChecked()) m_eventFilter |= EventView::Controller;
-    else m_eventFilter ^= EventView::Note;
+    else m_eventFilter ^= EventView::Controller;
 
     if (m_pitchBendCheckBox->isChecked()) m_eventFilter |= EventView::PitchBend;
-    else m_eventFilter ^= EventView::Note;
+    else m_eventFilter ^= EventView::PitchBend;
 
     if (m_sysExCheckBox->isChecked()) m_eventFilter |= EventView::SystemExclusive;
-    else m_eventFilter ^= EventView::Note;
+    else m_eventFilter ^= EventView::SystemExclusive;
 
     if (m_keyPressureCheckBox->isChecked()) m_eventFilter |= EventView::KeyPressure;
-    else m_eventFilter ^= EventView::Note;
+    else m_eventFilter ^= EventView::KeyPressure;
 
     if (m_channelPressureCheckBox->isChecked()) m_eventFilter |= EventView::ChannelPressure;
-    else m_eventFilter ^= EventView::Note;
+    else m_eventFilter ^= EventView::ChannelPressure;
 
     if (m_restCheckBox->isChecked()) m_eventFilter |= EventView::Rest;
-    else m_eventFilter ^= EventView::Note;
+    else m_eventFilter ^= EventView::Rest;
 
     if (m_indicationCheckBox->isChecked()) m_eventFilter |= EventView::Indication;
-    else m_eventFilter ^= EventView::Note;
+    else m_eventFilter ^= EventView::Indication;
 
     if (m_textCheckBox->isChecked()) m_eventFilter |= EventView::Text;
-    else m_eventFilter ^= EventView::Note;
+    else m_eventFilter ^= EventView::Text;
 
     if (m_otherCheckBox->isChecked()) m_eventFilter |= EventView::Other;
-    else m_eventFilter ^= EventView::Note;
+    else m_eventFilter ^= EventView::Other;
 
     m_lastSetEventFilter = m_eventFilter;
 
@@ -1374,7 +1375,7 @@ void
 EventView::slotMusicalTime()
 {
     QSettings settings;
-    settings.beginGroup( EventViewConfigGroup );
+    settings.beginGroup(EventViewConfigGroup);
 
     settings.setValue("timemode", 0);
     applyLayout();
@@ -1386,7 +1387,7 @@ void
 EventView::slotRealTime()
 {
     QSettings settings;
-    settings.beginGroup( EventViewConfigGroup );
+    settings.beginGroup(EventViewConfigGroup);
 
     settings.setValue("timemode", 1);
     applyLayout();
@@ -1398,7 +1399,7 @@ void
 EventView::slotRawTime()
 {
     QSettings settings;
-    settings.beginGroup( EventViewConfigGroup );
+    settings.beginGroup(EventViewConfigGroup);
 
     settings.setValue("timemode", 2);
     applyLayout();
