@@ -98,6 +98,7 @@ EventView::EventView(RosegardenDocument *doc,
                       ProgramChange | PitchBend | Indication | Other),
         m_menu(0)
 {
+    std::cout << "ctor m_eventFilter: " << m_eventFilter << std::endl;
     m_isTriggerSegment = false;
     m_triggerName = m_triggerPitch = m_triggerVelocity = 0;
 
@@ -110,10 +111,8 @@ EventView::EventView(RosegardenDocument *doc,
         }
     }
 
-    if (m_lastSetEventFilter < 0)
-        m_lastSetEventFilter = m_eventFilter;
-    else
-        m_eventFilter = m_lastSetEventFilter;
+    if (m_lastSetEventFilter < 0) m_lastSetEventFilter = m_eventFilter;
+    else m_eventFilter = m_lastSetEventFilter;
 
     initStatusBar();
     setupActions();
@@ -153,13 +152,21 @@ EventView::EventView(RosegardenDocument *doc,
 
     // Connect up
     //
-    connect(m_filterGroup, SIGNAL(released(int)),
-            SLOT(slotModifyFilter(int)));
+    connect(m_noteCheckBox, SIGNAL(stateChanged(int)), SLOT(slotModifyFilter(int)));              
+    connect(m_programCheckBox, SIGNAL(stateChanged(int)), SLOT(slotModifyFilter(int)));
+    connect(m_controllerCheckBox, SIGNAL(stateChanged(int)), SLOT(slotModifyFilter(int)));
+    connect(m_pitchBendCheckBox, SIGNAL(stateChanged(int)), SLOT(slotModifyFilter(int)));
+    connect(m_sysExCheckBox, SIGNAL(stateChanged(int)), SLOT(slotModifyFilter(int)));
+    connect(m_keyPressureCheckBox, SIGNAL(stateChanged(int)), SLOT(slotModifyFilter(int)));
+    connect(m_channelPressureCheckBox, SIGNAL(stateChanged(int)), SLOT(slotModifyFilter(int)));
+    connect(m_restCheckBox, SIGNAL(stateChanged(int)), SLOT(slotModifyFilter(int)));
+    connect(m_indicationCheckBox, SIGNAL(stateChanged(int)), SLOT(slotModifyFilter(int)));
+    connect(m_textCheckBox, SIGNAL(stateChanged(int)), SLOT(slotModifyFilter(int)));
+    connect(m_otherCheckBox, SIGNAL(stateChanged(int)), SLOT(slotModifyFilter(int)));
 
     m_eventList = new QTreeWidget(getCentralWidget());
     
     //m_eventList->setItemsRenameable(true); //&&& use item->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEditable );
-    
 
     m_grid->addWidget(m_eventList, 2, 1);
 
@@ -177,8 +184,7 @@ EventView::EventView(RosegardenDocument *doc,
 
         layout->addWidget(new QLabel(tr("Label:  "), frame), 0, 0);
         QString label = strtoqstr(segments[0]->getLabel());
-        if (label == "")
-            label = tr("<no label>");
+        if (label == "") label = tr("<no label>");
         m_triggerName = new QLabel(label, frame);
         layout->addWidget(m_triggerName, 0, 1);
         QPushButton *editButton = new QPushButton(tr("edit"), frame);
@@ -257,15 +263,6 @@ EventView::EventView(RosegardenDocument *doc,
     m_eventList->setAllColumnsShowFocus(true);
     m_eventList->setSelectionMode( QAbstractItemView::ExtendedSelection );
 
-    /*
-    m_eventList->addColumn(tr("Time  "));
-    m_eventList->addColumn(tr("Duration  "));
-    m_eventList->addColumn(tr("Event Type  "));
-    m_eventList->addColumn(tr("Pitch  "));
-    m_eventList->addColumn(tr("Velocity  "));
-    m_eventList->addColumn(tr("Type (Data1)  "));
-    m_eventList->addColumn(tr("Value (Data2)  "));
-    */
     QStringList sl;
     sl << tr("Time  ");
     sl << tr("Duration  ");
@@ -345,23 +342,6 @@ EventView::applyLayout(int /*staffNo*/)
     // already set and try to replicate this after the rebuild
     // of the view.
     //
-    /*
-    old qt3 code:
-    if (m_listSelection.size() == 0) {
-        QPtrList<QTreeWidgetItem> selection = m_eventList->selectedItems();
-
-        if (selection.count()) {
-            QPtrListIterator<QTreeWidgetItem> it(selection);
-            QTreeWidgetItem *listItem;
-
-            while ((listItem = it.current()) != 0) {
-                m_listSelection.push_back(m_eventList->itemIndex(*it));
-                ++it;
-            }
-        }
-    }
-    */
-    // new qt4:
     if (m_listSelection.size() == 0) {
         
         QList<QTreeWidgetItem*> selection = m_eventList->selectedItems();
@@ -369,11 +349,8 @@ EventView::applyLayout(int /*staffNo*/)
         if( selection.count() ){
             QTreeWidgetItem *listItem;
             
-            //while ((listItem = it.current()) != 0) {
-            //for( int i=0; i< m_eventList->topLevelItemCount(); i++ ) {
             for( int i=0; i< selection.count(); i++ ) {
                 
-//                listItem = m_eventList->topLevelItem( int index );
                 listItem = selection.at(i);
                 m_listSelection.push_back( m_eventList->indexOfTopLevelItem(listItem) );
                 
@@ -621,9 +598,7 @@ EventView::applyLayout(int /*staffNo*/)
         while (index > 0 && !m_eventList->topLevelItem(index))        // was itemAtIndex
             index--;
 
-//        m_eventList->setSelected(m_eventList->topLevelItem(index), true);
         m_eventList->setCurrentItem( m_eventList->topLevelItem(index) );
-//        m_eventList->setCurrentIndex(m_eventList->topLevelItem(index));
 
         // ensure visible
         m_eventList->scrollToItem(m_eventList->topLevelItem(index));
@@ -646,9 +621,6 @@ EventView::makeInitialSelection(timeT time)
     int i = 0;
     QTreeWidgetItem *child = 0;
     
-//    for (QTreeWidgetItem *child = m_eventList->firstChild();
-//            child;
-//            child = child->nextSibling()) {
     for( i=0; i< m_eventList->topLevelItemCount(); i++ ){
         child = m_eventList->topLevelItem(i);
 
@@ -678,7 +650,6 @@ EventView::makeInitialSelection(timeT time)
     */
     if (goodItem) {
         m_listSelection.push_back(goodItemNo);
-//        m_eventList->setSelected(goodItem, true);
         m_eventList->setCurrentItem( goodItem );
         m_eventList->scrollToItem(goodItem);
     }
@@ -1315,7 +1286,6 @@ EventView::readOptions()
     m_eventFilter = settings.value("eventfilter", m_eventFilter).toInt();
     
     QByteArray qba = settings.value(EventViewLayoutConfigGroupName).toByteArray();
-//     m_eventList->restoreLayout(EventViewLayoutConfigGroupName);
     m_eventList->restoreGeometry(qba);
 
     settings.endGroup();
@@ -1328,7 +1298,6 @@ EventView::slotSaveOptions()
     settings.beginGroup( EventViewConfigGroup );
 
     settings.setValue("eventfilter", m_eventFilter);
-//    m_eventList->saveLayout(EventViewLayoutConfigGroupName);
     settings.setValue(EventViewLayoutConfigGroupName, m_eventList->saveGeometry() );
 
     settings.endGroup();
@@ -1344,113 +1313,41 @@ EventView::getCurrentSegment()
 }
 
 void
-EventView::slotModifyFilter(int button)
+EventView::slotModifyFilter(int)
 {
-    QCheckBox *checkBox = dynamic_cast<QCheckBox*>(m_filterGroup->find(button));
+    std::cout << "m_eventFilter: " << m_eventFilter << std::endl;
+    if (m_noteCheckBox->isChecked()) m_eventFilter |= EventView::Note;
+    else m_eventFilter ^= EventView::Note;
 
-    if (checkBox == 0)
-        return ;
+    if (m_programCheckBox->isChecked()) m_eventFilter |= EventView::ProgramChange;
+    else m_eventFilter ^= EventView::Note;
 
-    if (checkBox->isChecked()) {
-        switch (button) {
-        case 0:
-            m_eventFilter |= EventView::Note;
-            break;
+    if (m_controllerCheckBox->isChecked()) m_eventFilter |= EventView::Controller;
+    else m_eventFilter ^= EventView::Note;
 
-        case 1:
-            m_eventFilter |= EventView::ProgramChange;
-            break;
+    if (m_pitchBendCheckBox->isChecked()) m_eventFilter |= EventView::PitchBend;
+    else m_eventFilter ^= EventView::Note;
 
-        case 2:
-            m_eventFilter |= EventView::Controller;
-            break;
+    if (m_sysExCheckBox->isChecked()) m_eventFilter |= EventView::SystemExclusive;
+    else m_eventFilter ^= EventView::Note;
 
-        case 3:
-            m_eventFilter |= EventView::PitchBend;
-            break;
+    if (m_keyPressureCheckBox->isChecked()) m_eventFilter |= EventView::KeyPressure;
+    else m_eventFilter ^= EventView::Note;
 
-        case 4:
-            m_eventFilter |= EventView::SystemExclusive;
-            break;
+    if (m_channelPressureCheckBox->isChecked()) m_eventFilter |= EventView::ChannelPressure;
+    else m_eventFilter ^= EventView::Note;
 
-        case 5:
-            m_eventFilter |= EventView::KeyPressure;
-            break;
+    if (m_restCheckBox->isChecked()) m_eventFilter |= EventView::Rest;
+    else m_eventFilter ^= EventView::Note;
 
-        case 6:
-            m_eventFilter |= EventView::ChannelPressure;
-            break;
+    if (m_indicationCheckBox->isChecked()) m_eventFilter |= EventView::Indication;
+    else m_eventFilter ^= EventView::Note;
 
-        case 7:
-            m_eventFilter |= EventView::Rest;
-            break;
+    if (m_textCheckBox->isChecked()) m_eventFilter |= EventView::Text;
+    else m_eventFilter ^= EventView::Note;
 
-        case 8:
-            m_eventFilter |= EventView::Indication;
-            break;
-
-        case 9:
-            m_eventFilter |= EventView::Text;
-            break;
-
-        case 10:
-            m_eventFilter |= EventView::Other;
-            break;
-
-        default:
-            break;
-        }
-
-    } else {
-        switch (button) {
-        case 0:
-            m_eventFilter ^= EventView::Note;
-            break;
-
-        case 1:
-            m_eventFilter ^= EventView::ProgramChange;
-            break;
-
-        case 2:
-            m_eventFilter ^= EventView::Controller;
-            break;
-
-        case 3:
-            m_eventFilter ^= EventView::PitchBend;
-            break;
-
-        case 4:
-            m_eventFilter ^= EventView::SystemExclusive;
-            break;
-
-        case 5:
-            m_eventFilter ^= EventView::KeyPressure;
-            break;
-
-        case 6:
-            m_eventFilter ^= EventView::ChannelPressure;
-            break;
-
-        case 7:
-            m_eventFilter ^= EventView::Rest;
-            break;
-
-        case 8:
-            m_eventFilter ^= EventView::Indication;
-            break;
-
-        case 9:
-            m_eventFilter ^= EventView::Text;
-            break;
-
-        case 10:
-            m_eventFilter ^= EventView::Other;
-            break;
-
-        default:
-            break;
-        }
-    }
+    if (m_otherCheckBox->isChecked()) m_eventFilter |= EventView::Other;
+    else m_eventFilter ^= EventView::Note;
 
     m_lastSetEventFilter = m_eventFilter;
 
@@ -1460,62 +1357,17 @@ EventView::slotModifyFilter(int button)
 void
 EventView::setButtonsToFilter()
 {
-    if (m_eventFilter & Note)
-        m_noteCheckBox->setChecked(true);
-    else
-        m_noteCheckBox->setChecked(false);
-
-    if (m_eventFilter & ProgramChange)
-        m_programCheckBox->setChecked(true);
-    else
-        m_programCheckBox->setChecked(false);
-
-    if (m_eventFilter & Controller)
-        m_controllerCheckBox->setChecked(true);
-    else
-        m_controllerCheckBox->setChecked(false);
-
-    if (m_eventFilter & SystemExclusive)
-        m_sysExCheckBox->setChecked(true);
-    else
-        m_sysExCheckBox->setChecked(false);
-
-    if (m_eventFilter & Text)
-        m_textCheckBox->setChecked(true);
-    else
-        m_textCheckBox->setChecked(false);
-
-    if (m_eventFilter & Rest)
-        m_restCheckBox->setChecked(true);
-    else
-        m_restCheckBox->setChecked(false);
-
-    if (m_eventFilter & PitchBend)
-        m_pitchBendCheckBox->setChecked(true);
-    else
-        m_pitchBendCheckBox->setChecked(false);
-
-    if (m_eventFilter & ChannelPressure)
-        m_channelPressureCheckBox->setChecked(true);
-    else
-        m_channelPressureCheckBox->setChecked(false);
-
-    if (m_eventFilter & KeyPressure)
-        m_keyPressureCheckBox->setChecked(true);
-    else
-        m_keyPressureCheckBox->setChecked(false);
-
-    if (m_eventFilter & Indication) {
-        m_indicationCheckBox->setChecked(true);
-    } else {
-        m_indicationCheckBox->setChecked(false);
-    }
-
-    if (m_eventFilter & Other) {
-        m_otherCheckBox->setChecked(true);
-    } else {
-        m_otherCheckBox->setChecked(false);
-    }
+    m_noteCheckBox->setChecked           (m_eventFilter & Note);
+    m_programCheckBox->setChecked        (m_eventFilter & ProgramChange);
+    m_controllerCheckBox->setChecked     (m_eventFilter & Controller);
+    m_sysExCheckBox->setChecked          (m_eventFilter & SystemExclusive);
+    m_textCheckBox->setChecked           (m_eventFilter & Text);
+    m_restCheckBox->setChecked           (m_eventFilter & Rest);
+    m_pitchBendCheckBox->setChecked      (m_eventFilter & PitchBend);
+    m_channelPressureCheckBox->setChecked(m_eventFilter & ChannelPressure);
+    m_keyPressureCheckBox->setChecked    (m_eventFilter & KeyPressure);
+    m_indicationCheckBox->setChecked     (m_eventFilter & Indication);
+    m_otherCheckBox->setChecked          (m_eventFilter & Other);
 }
 
 void
