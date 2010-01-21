@@ -92,7 +92,6 @@ EventView::EventView(RosegardenDocument *doc,
         ListEditView(doc, segments, 2, parent, "eventview"),
         m_eventFilter(Note | Text | SystemExclusive | Controller |
                       ProgramChange | PitchBend | Indication | Other),
-        m_lastSetEventFilter(m_eventFilter),
         m_menu(0)
 {
     setAttribute(Qt::WA_DeleteOnClose);
@@ -368,6 +367,9 @@ EventView::applyLayout(int /*staffNo*/)
 
     settings.endGroup();
 
+    // DEBUG: only show once for each type
+    bool a = true, b = true;
+
     for (unsigned int i = 0; i < m_segments.size(); i++) {
         SegmentPerformanceHelper helper(*m_segments[i]);
 
@@ -384,6 +386,17 @@ EventView::applyLayout(int /*staffNo*/)
 
             // Event filters
             //
+            //
+
+            if ((*it)->isa(Note::EventType) && a ) {
+                std::cout << "isa Note: event filter: " << m_eventFilter << " & " << Note << " == " << (m_eventFilter & Note) << std::endl;
+                a = false;
+            }
+
+            if ((*it)->isa(Controller::EventType) && b) {
+                std::cout << "isa Controller: event filter: " << m_eventFilter << " & " << Controller << " == " << (m_eventFilter & Note) << std::endl;
+                b = false;
+            }
 
             if ((*it)->isa(Note::EventRestType)) {
                 if (!(m_eventFilter & Rest))
@@ -438,7 +451,7 @@ EventView::applyLayout(int /*staffNo*/)
                 pitchStr = QString("%1 %2  ")
                            .arg(p).arg(MidiPitchLabel(p).getQString());
             } else if ((*it)->isa(Note::EventType)) {
-                pitchStr = "<not set>";
+                pitchStr = tr("<not set>");
             }
 
             if ((*it)->has(BaseProperties::VELOCITY)) {
@@ -446,7 +459,7 @@ EventView::applyLayout(int /*staffNo*/)
                           arg((*it)->get
                               <Int>(BaseProperties::VELOCITY));
             } else if ((*it)->isa(Note::EventType)) {
-                velyStr = "<not set>";
+                velyStr = tr("<not set>");
             }
 
             if ((*it)->has(Controller::NUMBER)) {
@@ -569,9 +582,9 @@ EventView::applyLayout(int /*staffNo*/)
     if ( m_eventList->topLevelItemCount() == 0 ) {
         if (m_segments.size())
             new QTreeWidgetItem(m_eventList,
-                                QStringList( tr("<no events at this filter level>")) );
+                                QStringList() << tr("<no events at this filter level>"));
         else
-            new QTreeWidgetItem(m_eventList, QStringList( tr("<no events>")) );
+            new QTreeWidgetItem(m_eventList, QStringList() << tr("<no events>"));
 
         m_eventList->setSelectionMode(QTreeWidget::NoSelection);
         leaveActionState("have_selection");
@@ -1284,22 +1297,25 @@ EventView::readOptions()
     settings.beginGroup(EventViewConfigGroup);
 
     EditViewBase::readOptions();
-    m_eventFilter = settings.value("eventfilter", m_eventFilter).toInt();
+    m_eventFilter = settings.value("event_list_filter", m_eventFilter).toInt();
     
     QByteArray qba = settings.value(EventViewLayoutConfigGroupName).toByteArray();
     m_eventList->restoreGeometry(qba);
 
     settings.endGroup();
+
+    // DEBUG: start with 0 always
+    std::cout << "event filter from settings: " << m_eventFilter << std::endl;
+    m_eventFilter = 0;
 }
 
 void
 EventView::slotSaveOptions()
 {
-    std::cout << "save options"<< std::endl;
     QSettings settings;
     settings.beginGroup(EventViewConfigGroup);
 
-    settings.setValue("eventfilter", m_eventFilter);
+    settings.setValue("event_list_filter", m_eventFilter);
     settings.setValue(EventViewLayoutConfigGroupName, m_eventList->saveGeometry());
 
     settings.endGroup();
@@ -1350,14 +1366,15 @@ EventView::slotModifyFilter(int)
     if (m_otherCheckBox->isChecked()) m_eventFilter |= EventView::Other;
     else m_eventFilter ^= EventView::Other;
 
-    m_lastSetEventFilter = m_eventFilter;
-
     applyLayout(0);
 }
 
 void
 EventView::setButtonsToFilter()
 {
+    int all = 0 | Note | ProgramChange | Controller | SystemExclusive | Text | Rest | PitchBend | ChannelPressure | KeyPressure | Indication | Other;
+    std::cout << "filter baseline, all filter bits set: " << all << std::endl;
+
     m_noteCheckBox->setChecked           (m_eventFilter & Note);
     m_programCheckBox->setChecked        (m_eventFilter & ProgramChange);
     m_controllerCheckBox->setChecked     (m_eventFilter & Controller);
@@ -1369,6 +1386,8 @@ EventView::setButtonsToFilter()
     m_keyPressureCheckBox->setChecked    (m_eventFilter & KeyPressure);
     m_indicationCheckBox->setChecked     (m_eventFilter & Indication);
     m_otherCheckBox->setChecked          (m_eventFilter & Other);
+
+    std::cout << "filter after processing: " << m_eventFilter << std::endl;
 }
 
 void
