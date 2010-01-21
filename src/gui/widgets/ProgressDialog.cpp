@@ -293,7 +293,7 @@ ProgressDialog::setAutoReset(bool state)
 void
 ProgressDialog::setValue(int value)
 {
-    std::cout << "ProgressDialog::setValue(" << value << ")" << std::endl;
+//    std::cout << "ProgressDialog::setValue(" << value << ")" << std::endl;
 
     // Try to get our text and whatnot repainted whenever this is called, to
     // solve the "progress bar in an empty black box" problem.
@@ -322,8 +322,8 @@ ProgressDialog::setValue(int value)
     // QProgressBar dialog back to 0 steps compelete when all steps have been
     // completed."  So we'll reset back to 0 if we've reached 100% complete.
     if (complete) {
-        if (m_autoReset) std::cout << "Auto resetting..." << std::endl;
-        if (m_autoClose) std::cout << "Auto closing..." << std::endl;
+//        if (m_autoReset) std::cout << "Auto resetting..." << std::endl;
+//        if (m_autoClose) std::cout << "Auto closing..." << std::endl;
 
         if (m_autoClose) close();
         if (m_autoReset) value = 0;

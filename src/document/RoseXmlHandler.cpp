@@ -2139,7 +2139,7 @@ RoseXmlHandler::endElement(const QString& namespaceURI,
     if ((m_totalElements > m_elementsSoFar) &&
         (++m_elementsSoFar % 300 == 0)) {
 
-        std::cout << "emitting setValue(" << int(double(m_elementsSoFar) / double(m_totalElements) * 100.0) << ")" << std::endl;
+//        std::cout << "emitting setValue(" << int(double(m_elementsSoFar) / double(m_totalElements) * 100.0) << ")" << std::endl;
 
         emit setValue(int(double(m_elementsSoFar) / double(m_totalElements) * 100.0));
         ProgressDialog::processEvents();

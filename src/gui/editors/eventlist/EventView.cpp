@@ -144,20 +144,6 @@ EventView::EventView(RosegardenDocument *doc,
 
     m_grid->addWidget(m_filterGroup, 2, 0);
 
-    // Connect up
-    //
-    connect(m_noteCheckBox, SIGNAL(stateChanged(int)), SLOT(slotModifyFilter(int)));              
-    connect(m_programCheckBox, SIGNAL(stateChanged(int)), SLOT(slotModifyFilter(int)));
-    connect(m_controllerCheckBox, SIGNAL(stateChanged(int)), SLOT(slotModifyFilter(int)));
-    connect(m_pitchBendCheckBox, SIGNAL(stateChanged(int)), SLOT(slotModifyFilter(int)));
-    connect(m_sysExCheckBox, SIGNAL(stateChanged(int)), SLOT(slotModifyFilter(int)));
-    connect(m_keyPressureCheckBox, SIGNAL(stateChanged(int)), SLOT(slotModifyFilter(int)));
-    connect(m_channelPressureCheckBox, SIGNAL(stateChanged(int)), SLOT(slotModifyFilter(int)));
-    connect(m_restCheckBox, SIGNAL(stateChanged(int)), SLOT(slotModifyFilter(int)));
-    connect(m_indicationCheckBox, SIGNAL(stateChanged(int)), SLOT(slotModifyFilter(int)));
-    connect(m_textCheckBox, SIGNAL(stateChanged(int)), SLOT(slotModifyFilter(int)));
-    connect(m_otherCheckBox, SIGNAL(stateChanged(int)), SLOT(slotModifyFilter(int)));
-
     m_eventList = new QTreeWidget(getCentralWidget());
     
     //m_eventList->setItemsRenameable(true); //&&& use item->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEditable );
@@ -276,6 +262,25 @@ EventView::EventView(RosegardenDocument *doc,
     setButtonsToFilter();
     applyLayout();
 
+    // Connect the checkboxes AFTER calling setButtonsToFilter() to set up the
+    // initial states.  Otherwise, the first state change triggers
+    // slotModifyFilter() prematurely, and it wrecks the filter.
+    //
+    // That took an astonishing amount of time to work out.
+    //
+    //
+    connect(m_noteCheckBox, SIGNAL(stateChanged(int)), SLOT(slotModifyFilter()));              
+    connect(m_programCheckBox, SIGNAL(stateChanged(int)), SLOT(slotModifyFilter()));
+    connect(m_controllerCheckBox, SIGNAL(stateChanged(int)), SLOT(slotModifyFilter()));
+    connect(m_pitchBendCheckBox, SIGNAL(stateChanged(int)), SLOT(slotModifyFilter()));
+    connect(m_sysExCheckBox, SIGNAL(stateChanged(int)), SLOT(slotModifyFilter()));
+    connect(m_keyPressureCheckBox, SIGNAL(stateChanged(int)), SLOT(slotModifyFilter()));
+    connect(m_channelPressureCheckBox, SIGNAL(stateChanged(int)), SLOT(slotModifyFilter()));
+    connect(m_restCheckBox, SIGNAL(stateChanged(int)), SLOT(slotModifyFilter()));
+    connect(m_indicationCheckBox, SIGNAL(stateChanged(int)), SLOT(slotModifyFilter()));
+    connect(m_textCheckBox, SIGNAL(stateChanged(int)), SLOT(slotModifyFilter()));
+    connect(m_otherCheckBox, SIGNAL(stateChanged(int)), SLOT(slotModifyFilter()));
+
     makeInitialSelection(doc->getComposition().getPosition());
 
     slotCompositionStateUpdate();
@@ -300,7 +305,6 @@ EventView::~EventView()
 void
 EventView::closeEvent(QCloseEvent *event)
 {
-    std::cout << "close event" << std::endl;
     // Save m_eventFilter for next time
     slotSaveOptions();
 
@@ -367,9 +371,6 @@ EventView::applyLayout(int /*staffNo*/)
 
     settings.endGroup();
 
-    // DEBUG: only show once for each type
-    bool a = true, b = true;
-
     for (unsigned int i = 0; i < m_segments.size(); i++) {
         SegmentPerformanceHelper helper(*m_segments[i]);
 
@@ -387,16 +388,6 @@ EventView::applyLayout(int /*staffNo*/)
             // Event filters
             //
             //
-
-            if ((*it)->isa(Note::EventType) && a ) {
-                std::cout << "isa Note: event filter: " << m_eventFilter << " & " << Note << " == " << (m_eventFilter & Note) << std::endl;
-                a = false;
-            }
-
-            if ((*it)->isa(Controller::EventType) && b) {
-                std::cout << "isa Controller: event filter: " << m_eventFilter << " & " << Controller << " == " << (m_eventFilter & Note) << std::endl;
-                b = false;
-            }
 
             if ((*it)->isa(Note::EventRestType)) {
                 if (!(m_eventFilter & Rest))
@@ -1303,10 +1294,6 @@ EventView::readOptions()
     m_eventList->restoreGeometry(qba);
 
     settings.endGroup();
-
-    // DEBUG: start with 0 always
-    std::cout << "event filter from settings: " << m_eventFilter << std::endl;
-    m_eventFilter = 0;
 }
 
 void
@@ -1331,40 +1318,31 @@ EventView::getCurrentSegment()
 }
 
 void
-EventView::slotModifyFilter(int)
+EventView::slotModifyFilter()
 {
+    m_eventFilter = 0;
+
     if (m_noteCheckBox->isChecked()) m_eventFilter |= EventView::Note;
-    else m_eventFilter ^= EventView::Note;
 
     if (m_programCheckBox->isChecked()) m_eventFilter |= EventView::ProgramChange;
-    else m_eventFilter ^= EventView::ProgramChange;
 
     if (m_controllerCheckBox->isChecked()) m_eventFilter |= EventView::Controller;
-    else m_eventFilter ^= EventView::Controller;
 
     if (m_pitchBendCheckBox->isChecked()) m_eventFilter |= EventView::PitchBend;
-    else m_eventFilter ^= EventView::PitchBend;
 
     if (m_sysExCheckBox->isChecked()) m_eventFilter |= EventView::SystemExclusive;
-    else m_eventFilter ^= EventView::SystemExclusive;
 
     if (m_keyPressureCheckBox->isChecked()) m_eventFilter |= EventView::KeyPressure;
-    else m_eventFilter ^= EventView::KeyPressure;
 
     if (m_channelPressureCheckBox->isChecked()) m_eventFilter |= EventView::ChannelPressure;
-    else m_eventFilter ^= EventView::ChannelPressure;
 
     if (m_restCheckBox->isChecked()) m_eventFilter |= EventView::Rest;
-    else m_eventFilter ^= EventView::Rest;
 
     if (m_indicationCheckBox->isChecked()) m_eventFilter |= EventView::Indication;
-    else m_eventFilter ^= EventView::Indication;
 
     if (m_textCheckBox->isChecked()) m_eventFilter |= EventView::Text;
-    else m_eventFilter ^= EventView::Text;
 
     if (m_otherCheckBox->isChecked()) m_eventFilter |= EventView::Other;
-    else m_eventFilter ^= EventView::Other;
 
     applyLayout(0);
 }
@@ -1372,10 +1350,7 @@ EventView::slotModifyFilter(int)
 void
 EventView::setButtonsToFilter()
 {
-    int all = 0 | Note | ProgramChange | Controller | SystemExclusive | Text | Rest | PitchBend | ChannelPressure | KeyPressure | Indication | Other;
-    std::cout << "filter baseline, all filter bits set: " << all << std::endl;
-
-    m_noteCheckBox->setChecked           (m_eventFilter & Note);
+    m_noteCheckBox->setChecked          (m_eventFilter & Note);
     m_programCheckBox->setChecked        (m_eventFilter & ProgramChange);
     m_controllerCheckBox->setChecked     (m_eventFilter & Controller);
     m_sysExCheckBox->setChecked          (m_eventFilter & SystemExclusive);
@@ -1386,8 +1361,6 @@ EventView::setButtonsToFilter()
     m_keyPressureCheckBox->setChecked    (m_eventFilter & KeyPressure);
     m_indicationCheckBox->setChecked     (m_eventFilter & Indication);
     m_otherCheckBox->setChecked          (m_eventFilter & Other);
-
-    std::cout << "filter after processing: " << m_eventFilter << std::endl;
 }
 
 void

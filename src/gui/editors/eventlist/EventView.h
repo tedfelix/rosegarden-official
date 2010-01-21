@@ -135,7 +135,7 @@ public slots:
 
     // Change filter parameters
     //
-    void slotModifyFilter(int);
+    void slotModifyFilter();
 
     virtual void eventAdded(const Segment *, Event *) { }
     virtual void eventRemoved(const Segment *, Event *);
