@@ -48,8 +48,12 @@
 #include <QWidget>
 #include <QPainter>
 
+#include <cassert>
+
+
 namespace Rosegarden
 {
+
 
 ControllerEventsRuler::ControllerEventsRuler(ViewSegment *segment,
         RulerScale* rulerScale,
@@ -338,22 +342,106 @@ ControlItem* ControllerEventsRuler::addControlItem(float x, float y)
     return item;
 }
 
-//void ControllerEventsRuler::removeControlItem(Event *event)
-//{
-//    RG_DEBUG << "ControllerEventsRuler::removeControlItem()";
-//    for (ControlItemMap::iterator it = m_controlItemMap.begin(); it != m_controlItemMap.end(); ++it) {
-//        if (EventControlItem *item = dynamic_cast<EventControlItem*>(it->second)) {
-//            if (item->getEvent() == event) {
-//    //                m_controlItemList.erase(it);
-//    //                m_selectedItems.remove(item);
-//    //                delete item;
-//                removeControlItem(it);
-//                RG_DEBUG << "Control item erased";
-//                break;
-//            }
-//        }
-//    }
-//}
+void
+ControllerEventsRuler::addControlLine(float x1, float y1, float x2, float y2)
+{
+    std::cout << "ControllerEventsRuler::addControlLine()";
+    clearSelectedItems();
+
+    // get a timeT for one end point of our line
+    timeT originTime = m_rulerScale->getTimeForX(x1);
+
+    // get a timeT for the other end point of our line
+    timeT destinationTime = m_rulerScale->getTimeForX(x2);
+
+    // get a value for one end point of our line
+    long originValue = yToValue(y1);
+    
+    // get a value for the other end point
+    long destinationValue = yToValue(y2);
+
+    if (originTime == destinationTime) return;
+
+    // If the "anchor point" was to the right of the newly clicked destination
+    // point, we're drawing a line from right to left.  We simply swap origin
+    // for destination and calculate all lines as drawn from left to right, for
+    // convenience and sanity.
+    if (originTime > destinationTime) {
+        timeT swapTime = originTime;
+        originTime = destinationTime;
+        destinationTime = swapTime;
+
+        long swapValue = originValue;
+        originValue = destinationValue;
+        destinationValue = swapValue;
+    }
+
+    long rise = destinationValue - originValue;
+    timeT run = destinationTime - originTime;
+
+    std::cout << "Drawing a line from origin time: " << originTime << " to " << destinationTime
+              << " rising from: " << originValue << " to " << destinationValue 
+              << " with a rise of: " << rise << " and run of: " << run
+              << std::endl;
+
+    // avoid divide by 0 potential, rise is always at least 1
+    if (rise == 0) rise = 1;
+
+    // are we rising or falling?
+    bool rising = (rise > 0);
+
+    // always calculate step on a positive value for rise
+    long step = run / (rising ? rise : rise * -1);
+    assert (step > 0);
+
+    long intermediateValue = originValue;
+    
+    long controllerNumber = 0;
+    if (m_controller) {
+        controllerNumber = m_controller->getControllerValue();
+    } else {
+        std::cout << "No controller number set.  Time to panic!  Line drawing aborted." << std::endl;
+        return;
+    }
+
+    for (timeT i = originTime + step; i <= destinationTime; i += step) {
+        if (rising) intermediateValue++;
+        else intermediateValue--;
+
+        bool failsafe = false;
+        if (rising && intermediateValue > destinationValue) failsafe = true;
+        else if (!rising && intermediateValue < destinationValue) failsafe = true;
+        if (failsafe) std::cout << "intermediate value: " << intermediateValue << " exceeded target: " << destinationValue << std::endl;
+
+        std::cout << "creating event at time: " << i << " of value: " << intermediateValue << std::endl;
+
+        Event* controllerEvent = new Event(m_controller->getType(), i);
+
+        if (m_controller->getType() == Rosegarden::Controller::EventType) {
+
+            controllerEvent->set<Rosegarden::Int>(Rosegarden::Controller::VALUE, intermediateValue);
+            controllerEvent->set<Rosegarden::Int>(Rosegarden::Controller::NUMBER, controllerNumber);
+
+        } else if (m_controller->getType() == Rosegarden::PitchBend::EventType)   {
+
+            // Convert to PitchBend MSB/LSB
+            //
+            // (Boilerplate code copied from elsewhere, but if we work with
+            // 0..127 for this and then bit shift it around to scale that onto a
+            // pitch bend value, we're probably throwing away most of the
+            // possible resolution.  Oh well, that's what pitch bend sequence is
+            // for, right?  Right.)
+            int lsb = intermediateValue & 0x7f;
+            int msb = (intermediateValue >> 7) & 0x7f;
+            controllerEvent->set<Rosegarden::Int>(Rosegarden::PitchBend::MSB, msb);
+            controllerEvent->set<Rosegarden::Int>(Rosegarden::PitchBend::LSB, lsb);
+        }
+
+        m_moddingSegment = true;
+        m_segment->insert(controllerEvent);
+        m_moddingSegment = false;
+    }
+}
 
 void ControllerEventsRuler::slotSetTool(const QString &matrixtoolname)
 {
@@ -392,6 +480,14 @@ Event *ControllerEventsRuler::insertEvent(float x, float y)
     if (m_controller) {
         number = m_controller->getControllerValue();
     } else {
+
+        //!!!
+        // Weird.  I've never seen this in action in eight years.  I guess this
+        // is some out there failsafe that never gets used in practice.  The
+        // code looks wrong anyway.  0 to 128?
+        //
+        // Noting it with raised eyebrows and moving along for now.
+
         bool ok = false;
         QIntValidator intValidator(0, 128, this);
 //         QString res = KLineEditDlg::getText(tr("Controller Event Number"), "0",

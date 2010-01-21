@@ -71,8 +71,15 @@ public:
 //    virtual void viewSegmentDeleted(const ViewSegment *);
     virtual void segmentDeleted(const Segment *);
 
-    virtual ControlItem* addControlItem(float,float);
+    virtual ControlItem* addControlItem(float, float);
     virtual ControlItem* addControlItem(Event *);
+
+    /** Draw a line of controllers from (x1, y1) to (x2, y2)
+     *
+     * Does not return anything yet, as whether it should or not has yet to be
+     * determined.
+     */
+    virtual void addControlLine(float x1, float y1, float x2, float y2);
 
     virtual Event * insertEvent(float,float);
     virtual void eraseEvent(Event *event);
