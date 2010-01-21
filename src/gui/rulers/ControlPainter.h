@@ -54,6 +54,19 @@ protected slots:
 
 protected:
     ControlPainter(ControlRuler *);
+
+    /** In the GIMP, you have to click a point with the pencil, then hold shift
+     * and click another point to draw a line between the two points.  If you
+     * change tools in between, you have to start over.  Whatever the last thing
+     * you did was, the last point you drew with the pencil while you did not
+     * have shift clicked, that becomes the origin for the line when you do hold
+     * shift on a subsequent click.
+     *
+     * I think we can mimic that behavior by saving the X and Y from the
+     * previous mouse click while this tool was active, to use as the point of
+     * origin of the line.
+     */
+    std::pair<float, float> m_controlLineOrigin;
 };
 
 }

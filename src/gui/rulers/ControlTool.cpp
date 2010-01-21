@@ -23,6 +23,7 @@
 #include "ControlRuler.h"
 #include "ControlItem.h"
 #include "ControlMouseEvent.h"
+#include <iostream>
 
 namespace Rosegarden
 {
