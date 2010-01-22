@@ -22,6 +22,7 @@
 
 #include "base/NotationTypes.h"
 #include "NoteCharacter.h"
+#include "NoteItem.h"
 #include "base/Event.h"
 #include "gui/editors/notation/NoteCharacterNames.h"
 #include <map>
@@ -55,8 +56,8 @@ class StaffHeader;
 
 /**
  * Generates pixmaps and graphics items for various notation items.
+ * This class is not re-entrant.
  */
-
 class NotePixmapFactory 
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::NotePixmapFactory)
@@ -126,10 +127,20 @@ public:
     void setNoteStyle(NoteStyle *style) { m_style = style; }
     const NoteStyle *getNoteStyle() const { return m_style; } 
 
-    // Display methods -- create canvas pixmaps:
+    // Display methods -- create graphics items:
 
-    QGraphicsPixmapItem *makeNote(const NotePixmapParameters &parameters);
-    QGraphicsPixmapItem *makeRest(const NotePixmapParameters &parameters);
+    QGraphicsItem *makeNote(const NotePixmapParameters &parameters);
+    QGraphicsItem *makeRest(const NotePixmapParameters &parameters);
+
+    QGraphicsPixmapItem *makeNotePixmapItem(const NotePixmapParameters &parameters);
+
+    void getNoteDimensions(const NotePixmapParameters &parameters,
+                           NoteItemDimensions &dimensions);
+
+    void drawNoteForItem(const NotePixmapParameters &parameters,
+                         const NoteItemDimensions &dimensions,
+                         NoteItem::DrawMode mode,
+                         QPainter *painter);
 
     /** Make a clef pixmap from Clef &clef.  The optional colourType parameter
      * is used to pass a ColourType through makeClef() into drawCharacter() for
@@ -275,6 +286,10 @@ protected:
     void init(QString fontName, int size);
     void initMaybe() { if (!m_font) init("", -1); }
 
+    void calculateNoteDimensions(const NotePixmapParameters &parameters);
+    void sketchNoteTiny(const NotePixmapParameters &parameters,
+                        const NoteItemDimensions &dimensions,
+                        QPainter *painter);
     void drawNoteAux(const NotePixmapParameters &parameters,
                      QPainter *painter, int x, int y);
     void drawRestAux(const NotePixmapParameters &parameters, QPoint &hotspot,
@@ -328,7 +343,8 @@ protected:
     QFont getTextFont(const Text &text) const;
 
     QGraphicsPixmapItem *makeAnnotation(const Text &text);
-    QGraphicsPixmapItem *makeAnnotation(const Text &text, const bool isLilyPondDirective);
+    QGraphicsPixmapItem *makeAnnotation(const Text &text,
+                                        const bool isLilyPondDirective);
 
     void createPixmap(int width, int height);
     QGraphicsPixmapItem *makeItem(QPoint hotspot);
@@ -352,9 +368,8 @@ protected:
     bool m_haveGrace;
 
     int m_graceSize;
-    int m_noteBodyWidth, m_noteBodyHeight;
-    int m_left, m_right, m_above, m_below;
-    int m_borderX, m_borderY;
+    
+    NoteItemDimensions m_nd;
 
     QFont m_tupletCountFont;
     QFontMetrics m_tupletCountFontMetrics;

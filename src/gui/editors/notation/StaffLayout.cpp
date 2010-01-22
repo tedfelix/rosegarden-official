@@ -698,7 +698,7 @@ StaffLayout::insertBar(double layoutX, double width, bool isCorrect,
                                         (int)inset, style);
 
     m_scene->addItem(line);
-    line->setPos(x, y);
+    line->setPos(int(x), y);
 
     if (isCorrect) {
         line->setColour(GUIPalette::getColour(GUIPalette::BarLine));
@@ -729,7 +729,7 @@ StaffLayout::insertBar(double layoutX, double width, bool isCorrect,
                                              barThickness, getLineSpacing(),
                                              0, style);
         m_scene->addItem(eline);
-        eline->setPos(xe + .5, y + .5);
+        eline->setPos(int(xe) + .5, y + .5);
 
         eline->setColour(GUIPalette::getColour(GUIPalette::BarLine));
 

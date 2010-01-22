@@ -1362,14 +1362,26 @@ NotationStaff::setItem(NotationElement *elt, QGraphicsItem *item, int z,
         int sceneY = coords.second;
 
         QGraphicsPixmapItem *pitem = dynamic_cast<QGraphicsPixmapItem *>(item);
+        NoteItem *nitem = dynamic_cast<NoteItem *>(item);
 
         if (m_pageMode != LinearMode &&
             policy != PretendItFittedAllAlong &&
-            pitem) {
+            (pitem || nitem)) {
+
+            QPixmap pixmap;
+            QPointF offset;
+
+            if (pitem) {
+                pixmap = pitem->pixmap();
+                offset = pitem->offset();
+            } else {
+                pixmap = nitem->makePixmap();
+                offset = nitem->offset();
+            }
 
             int row = getRowForLayoutX(layoutX);
             double rightMargin = getSceneXForRightOfRow(row);
-            double extent = sceneX + pitem->pixmap().width();
+            double extent = sceneX + pixmap.width();
 
             NOTATION_DEBUG << "NotationStaff::setPixmap: row " << row << ", right margin " << rightMargin << ", extent " << extent << endl;
 
@@ -1380,14 +1392,14 @@ NotationStaff::setItem(NotationElement *elt, QGraphicsItem *item, int z,
                     NOTATION_DEBUG << "splitting at " << (rightMargin-sceneX) << endl;
 
                     std::pair<QPixmap, QPixmap> split =
-                        PixmapFunctions::splitPixmap(pitem->pixmap(),
+                        PixmapFunctions::splitPixmap(pixmap,
                                                      int(rightMargin - sceneX));
 
                     QGraphicsPixmapItem *left = new QGraphicsPixmapItem(split.first);
-                    left->setOffset(pitem->offset());
+                    left->setOffset(offset);
 
                     QGraphicsPixmapItem *right = new QGraphicsPixmapItem(split.second);
-                    right->setOffset(QPointF(0, pitem->offset().y()));
+                    right->setOffset(QPointF(0, offset.y()));
                     
                     getScene()->addItem(left);
                     left->setZValue(z);

@@ -150,7 +150,7 @@ NotationElement::removeItem()
 
     m_recentlyRegenerated = false;
 
-    NOTATION_DEBUG << "NotationElement::removeItem" << endl;
+//    NOTATION_DEBUG << "NotationElement::removeItem" << endl;
 
     delete m_item;
     m_item = 0;
