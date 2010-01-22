@@ -72,24 +72,25 @@ ControlPainter::handleLeftButtonPress(const ControlMouseEvent *e)
         ControllerEventsRuler* ruler = dynamic_cast <ControllerEventsRuler*>(m_ruler);
         //if (ruler) ruler->insertControllerEvent(e->x,e->y);
         if (ruler) {
-            ControlItem *item = ruler->addControlItem(e->x,e->y);
-            ControlMouseEvent *newevent = new ControlMouseEvent(e);
-            newevent->itemList.push_back(item);
-            m_overItem = true;
-            ControlMover::handleLeftButtonPress(newevent);
 
             // If shift was pressed, draw a line of controllers between the new
             // control event and the previous one
             if (e->modifiers & (Qt::ShiftModifier)) {
-                std::cout << "shift was pressed...  now we can tell some new command/dialog to draw a line from ("
-                          << m_controlLineOrigin.first << ", " << m_controlLineOrigin.second << ") to ("
-                          << e->x << ", " << e->y << ")" << std::endl;
+//                std::cout << "shift was pressed...  now we can tell some new command/dialog to draw a line from ("
+//                          << m_controlLineOrigin.first << ", " << m_controlLineOrigin.second << ") to ("
+//                          << e->x << ", " << e->y << ")" << std::endl;
 
                 ruler->addControlLine(m_controlLineOrigin.first,
                                       m_controlLineOrigin.second,
                                       e->x,
                                       e->y);
             }
+
+            ControlItem *item = ruler->addControlItem(e->x,e->y);
+            ControlMouseEvent *newevent = new ControlMouseEvent(e);
+            newevent->itemList.push_back(item);
+            m_overItem = true;
+            ControlMover::handleLeftButtonPress(newevent);
 
             // Save these coordinates for next time
             m_controlLineOrigin.first = e->x;

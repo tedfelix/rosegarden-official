@@ -34,10 +34,12 @@
 #include "base/Segment.h"
 #include "base/Selection.h"
 #include "commands/edit/EraseCommand.h"
+#include "commands/edit/EventInsertionCommand.h"
 #include "gui/general/EditViewBase.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/widgets/LineEdit.h"
 #include "gui/widgets/InputDialog.h"
+#include "document/Command.h"
 #include "document/CommandHistory.h"
 
 #include <QMouseEvent>
@@ -47,8 +49,6 @@
 #include <QValidator>
 #include <QWidget>
 #include <QPainter>
-
-#include <cassert>
 
 
 namespace Rosegarden
@@ -390,9 +390,22 @@ ControllerEventsRuler::addControlLine(float x1, float y1, float x2, float y2)
     // are we rising or falling?
     bool rising = (rise > 0);
 
-    // always calculate step on a positive value for rise
+    // always calculate step on a positive value for rise, and make sure it's at
+    // least 1
     long step = run / (rising ? rise : rise * -1);
-    assert (step > 0);
+    if (step == 0) step = 1;
+
+    // Trying this with pitch bend with a rise approaching the maximum over a
+    // span of around four bars generated over 15,000 pitch bend events!  That's
+    // super duper fine resolution, but it's too much for anything to handle.
+    // Let's try to do some sensible thinning:
+    long increment = 1;
+    if (m_controller->getType() == Rosegarden::PitchBend::EventType) {
+        std::cout << run << " / " << (rising ? rise : rise * -1) << " == " << step << std::endl;
+        increment = 100;
+        if (step == 0) step = 1;
+        step *= 100;
+    }
 
     long intermediateValue = originValue;
     
@@ -404,16 +417,22 @@ ControllerEventsRuler::addControlLine(float x1, float y1, float x2, float y2)
         return;
     }
 
-    for (timeT i = originTime + step; i <= destinationTime; i += step) {
-        if (rising) intermediateValue++;
-        else intermediateValue--;
+    MacroCommand *macro = new MacroCommand(tr("Insert Line of Controllers"));
 
-        bool failsafe = false;
+    bool failsafe = false;
+
+    for (timeT i = originTime + step; i <= destinationTime; i += step) {
+
+        if (failsafe) continue;
+
+        if (rising) intermediateValue += increment;
+        else intermediateValue -= increment;
+
         if (rising && intermediateValue > destinationValue) failsafe = true;
         else if (!rising && intermediateValue < destinationValue) failsafe = true;
-        if (failsafe) std::cout << "intermediate value: " << intermediateValue << " exceeded target: " << destinationValue << std::endl;
 
-        std::cout << "creating event at time: " << i << " of value: " << intermediateValue << std::endl;
+//        std::cout << "creating event at time: " << i << " of value: " << intermediateValue << std::endl;
+//        continue;
 
         Event* controllerEvent = new Event(m_controller->getType(), i);
 
@@ -425,22 +444,24 @@ ControllerEventsRuler::addControlLine(float x1, float y1, float x2, float y2)
         } else if (m_controller->getType() == Rosegarden::PitchBend::EventType)   {
 
             // Convert to PitchBend MSB/LSB
-            //
-            // (Boilerplate code copied from elsewhere, but if we work with
-            // 0..127 for this and then bit shift it around to scale that onto a
-            // pitch bend value, we're probably throwing away most of the
-            // possible resolution.  Oh well, that's what pitch bend sequence is
-            // for, right?  Right.)
             int lsb = intermediateValue & 0x7f;
             int msb = (intermediateValue >> 7) & 0x7f;
             controllerEvent->set<Rosegarden::Int>(Rosegarden::PitchBend::MSB, msb);
             controllerEvent->set<Rosegarden::Int>(Rosegarden::PitchBend::LSB, lsb);
         }
 
-        m_moddingSegment = true;
-        m_segment->insert(controllerEvent);
-        m_moddingSegment = false;
+        if (failsafe) std::cout << "intermediate value: " << intermediateValue << " exceeded target: " << destinationValue << std::endl;
+
+        macro->addCommand(new EventInsertionCommand (*m_segment, controllerEvent));
     }
+
+    m_moddingSegment = true;
+    CommandHistory::getInstance()->addCommand(macro);
+    m_moddingSegment = false;
+    
+    // How else to re-initialize and bring things into view?  I'm missing
+    // something, but this works...
+    init();
 }
 
 void ControllerEventsRuler::slotSetTool(const QString &matrixtoolname)
