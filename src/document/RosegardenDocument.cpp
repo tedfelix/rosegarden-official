@@ -699,7 +699,8 @@ bool RosegardenDocument::openDocument(const QString& filename,
 
     std::cerr << "RosegardenDocument::openDocument: Successfully opened document \"" << filename << "\"" << std::endl;
 
-    progressDlg->close(); // delete on close
+    // goes boom.  why is not immediately apparent
+//    progressDlg->hide();
 
     return true;
 }
