@@ -81,6 +81,16 @@ public:
      */
     virtual void addControlLine(float x1, float y1, float x2, float y2);
 
+    /** Draw a rubber band indicating the controller line that will be drawn if
+     * the user clicks another event into existence while moving the pencil
+     * around with the shift key down.
+     */
+    virtual void drawRubberBand(float x1, float y1, float x2, float y2);
+
+    /** Turn off the rubber band (user released shift without drawing a line)
+     */
+    virtual void stopRubberBand();
+
     virtual Event * insertEvent(float,float);
     virtual void eraseEvent(Event *event);
     virtual void eraseControllerEvent();
@@ -102,6 +112,8 @@ protected:
     ControlParameter  *m_controller;
     QRectF m_lastDrawnRect;
     bool m_moddingSegment;
+    QLineF *m_rubberBand;
+    bool m_rubberBandVisible;
 };
 
 

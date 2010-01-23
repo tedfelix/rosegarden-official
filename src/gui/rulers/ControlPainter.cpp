@@ -100,6 +100,28 @@ ControlPainter::handleLeftButtonPress(const ControlMouseEvent *e)
  
 }
 
+ControlTool::FollowMode
+ControlPainter::handleMouseMove(const ControlMouseEvent *e)
+{
+    ControllerEventsRuler* ruler = dynamic_cast <ControllerEventsRuler*>(m_ruler);
+
+    if (ruler) {
+        if (e->modifiers & Qt::ShiftModifier) {
+
+            ruler->drawRubberBand(m_controlLineOrigin.first,
+                                  m_controlLineOrigin.second,
+                                  e->x,
+                                  e->y);
+        } else {
+            ruler->stopRubberBand();
+        }
+    }
+    
+    // not sure what any of this is about; had to match the return type used
+    // elsewhere, and have made no investigation into what any of it means
+    return ControlTool::NoFollow;
+}
+
 const QString ControlPainter::ToolName = "painter";
 }
 

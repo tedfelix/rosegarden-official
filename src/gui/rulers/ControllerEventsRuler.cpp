@@ -63,7 +63,9 @@ ControllerEventsRuler::ControllerEventsRuler(ViewSegment *segment,
         : ControlRuler(segment, rulerScale, parent), // name, f),
         m_defaultItemWidth(20),
         m_lastDrawnRect(QRectF(0,0,0,0)),
-        m_moddingSegment(false)
+        m_moddingSegment(false),
+        m_rubberBand(new QLineF(0,0,0,0)),
+        m_rubberBandVisible(false)
 {
     // Make a copy of the ControlParameter if we have one
     //
@@ -265,6 +267,16 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
         painter.setBrush(brush);
         painter.drawRect(mapItemToWidget(m_selectionRect));
     }
+
+    // draw the rubber band indicating where a line of controllers will go
+    if (m_rubberBand && m_rubberBandVisible) {
+        int x1 = mapXToWidget(m_rubberBand->x1());
+        int y1 = mapYToWidget(m_rubberBand->y1());
+        int x2 = mapXToWidget(m_rubberBand->x2());
+        int y2 = mapYToWidget(m_rubberBand->y2());
+        painter.setPen(Qt::red);
+        painter.drawLine(x1, y1, x2, y2);
+    }
 }
 
 QString ControllerEventsRuler::getName()
@@ -462,6 +474,22 @@ ControllerEventsRuler::addControlLine(float x1, float y1, float x2, float y2)
     // How else to re-initialize and bring things into view?  I'm missing
     // something, but this works...
     init();
+}
+
+void
+ControllerEventsRuler::drawRubberBand(float x1, float y1, float x2, float y2)
+{
+    delete m_rubberBand;
+    m_rubberBand = new QLineF(x1, y1, x2, y2);
+    m_rubberBandVisible = true;
+    repaint();
+}
+
+void
+ControllerEventsRuler::stopRubberBand()
+{
+    m_rubberBandVisible = false;
+    repaint();
 }
 
 void ControllerEventsRuler::slotSetTool(const QString &matrixtoolname)
