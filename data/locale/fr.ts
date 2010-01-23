@@ -508,7 +508,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="293"/>
         <source>Set Se&amp;gment Start Time...</source>
-        <translation>Définir le temps initial du &amp;segment</translation>
+        <translation>Définir le temps initial du &amp;segment...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="294"/>
@@ -613,12 +613,12 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="1960"/>
         <source>Add &amp;Open</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajouter &amp;sans sourdine</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1961"/>
         <source>Add &amp;Stopped</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajouter ave&amp;c sourdine</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2710"/>
@@ -641,7 +641,7 @@
         <location filename="../QMenuStrings.cpp" line="2733"/>
         <location filename="../QMenuStrings.cpp" line="3468"/>
         <source>To&amp;ggle Dot On</source>
-        <translation>Pointer les notes et silences</translation>
+        <translation>&amp;Pointer les notes et silences</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2742"/>
@@ -1028,7 +1028,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="47"/>
         <source>&amp;Action</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Action</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="690"/>
@@ -1542,7 +1542,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="1754"/>
         <source>Show &amp;Unassigned Faders</source>
-        <translation>Voir les potentiomètres non assignés</translation>
+        <translation>Voir les potentiomètres n&amp;on assignés</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1768"/>
@@ -2962,7 +2962,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="583"/>
         <source>Insert Pitch &amp;Bend Sequence...</source>
-        <translation type="unfinished"></translation>
+        <translation>Insérer séquence de Pitch &amp;Bend...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="595"/>
@@ -5024,7 +5024,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="48"/>
         <source>Guitar (prim)</source>
-        <translation type="unfinished"></translation>
+        <translation>Guitare (prim)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="49"/>
@@ -5049,7 +5049,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="53"/>
         <source>Pedal steel guitar</source>
-        <translation type="unfinished"></translation>
+        <translation>Guitare électrique horizontal</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="54"/>
@@ -5371,26 +5371,26 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="116"/>
         <source>Shawm</source>
-        <translatorcomment>Chalemie? Bombarde? Mais la bombarde bretonne joue en Sib</translatorcomment>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Chalemie? Bombarde? Mais la bombarde bretonne joue en Sib  (En espagnol, j&apos;ai dit «Shawm» comme en anglais.  Je ne me souviens pourquoi. -dmm)</translatorcomment>
+        <translation>Shawm</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="117"/>
         <source>Sopranino shawm</source>
         <translatorcomment>Chalemie? Bombarde? Mais la bombarde bretonne joue en Sib</translatorcomment>
-        <translation type="unfinished"></translation>
+        <translation>Shawm sopranino</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="118"/>
         <source>Descant pommer</source>
-        <translatorcomment>Chalemie soprano? Bombarde soprano? Différence entre pommer et shawn ?</translatorcomment>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Chalemie soprano? Bombarde soprano? Différence entre pommer et shawn ?  («Bombarda» en espagnol, alors j&apos;ai choisi «Bombarde» ici -dmm)</translatorcomment>
+        <translation>Bombarde</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="119"/>
         <source>Alto pommer</source>
         <translatorcomment>Chalemie? Bombarde? Différence entre pommer et shawn ?</translatorcomment>
-        <translation type="unfinished"></translation>
+        <translation>Bombarde alto</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="120"/>
@@ -5631,12 +5631,13 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="166"/>
         <source>Wind electrophones</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>(Can&apos;t just use &quot;électrophones&quot; due to possible confusion with a record player in French.  How inconvenient.  Oh well.  This gets the point across, n&apos;est-ce pas?)</translatorcomment>
+        <translation>Instruments électroniques à vent</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="167"/>
         <source>Wind synthesizer</source>
-        <translation type="unfinished"></translation>
+        <translation>Synthétiseur à vent</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="168"/>
@@ -5947,12 +5948,13 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="228"/>
         <source>Orff soprano glockenspiel</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Glockenspiel Orff soprano</translatorcomment>
+        <translation></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="229"/>
         <source>Orff alto glockenspiel</source>
-        <translation type="unfinished"></translation>
+        <translation>Glockenspiel Orff alto </translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="230"/>
@@ -5962,17 +5964,18 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="231"/>
         <source>Tubaphone</source>
-        <translation type="unfinished"></translation>
+        <translation>Tubaphone</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="232"/>
         <source>Almglocken (treble)</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>(mot allemand)</translatorcomment>
+        <translation>Almglocken (aigus)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="233"/>
         <source>Almglocken (bass)</source>
-        <translation type="unfinished"></translation>
+        <translation>Almglocken (graves)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="234"/>
@@ -5983,17 +5986,17 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="235"/>
         <source>Orff soprano metallophone</source>
-        <translation type="unfinished"></translation>
+        <translation>Métallophone Orff soprano</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="236"/>
         <source>Orff alto metallophone</source>
-        <translation type="unfinished"></translation>
+        <translation>Métallophone Orff alto</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="237"/>
         <source>Orff bass metallophone</source>
-        <translation type="unfinished"></translation>
+        <translation>Métallophone Orff basse</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="238"/>
@@ -6003,42 +6006,42 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="239"/>
         <source>Bass steel drums</source>
-        <translation type="unfinished"></translation>
+        <translation>Steelpan basse</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="240"/>
         <source>Cello steel drums</source>
-        <translation type="unfinished"></translation>
+        <translation>Steelpan cello</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="241"/>
         <source>Tenor steel drums</source>
-        <translation type="unfinished"></translation>
+        <translation>Steelpan ténor</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="242"/>
         <source>Guitar steel drums</source>
-        <translation type="unfinished"></translation>
+        <translation>Steelpan guitare</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="243"/>
         <source>Alto steel drums</source>
-        <translation type="unfinished"></translation>
+        <translation>Steelpan alto</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="244"/>
         <source>Soprano steel drums</source>
-        <translation type="unfinished"></translation>
+        <translation>Steelpan soprano</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="245"/>
         <source>Hand bells (treble)</source>
-        <translation type="unfinished"></translation>
+        <translation>Cloches à main (aigus)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="246"/>
         <source>Hand bells (bass)</source>
-        <translation type="unfinished"></translation>
+        <translation>Cloches à main (graves)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="247"/>
@@ -6058,12 +6061,12 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="250"/>
         <source>Musical glasses</source>
-        <translation type="unfinished"></translation>
+        <translation>Verres musicaux</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="251"/>
         <source>Glass harmonica</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Harmonica de </translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="252"/>
@@ -6074,17 +6077,17 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="253"/>
         <source>Orff soprano xylophone</source>
-        <translation type="unfinished"></translation>
+        <translation>Xylophone Orff soprano</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="254"/>
         <source>Orff alto xylophone</source>
-        <translation type="unfinished"></translation>
+        <translation>Xylophone Orff alto</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="255"/>
         <source>Orff bass xylophone</source>
-        <translation type="unfinished"></translation>
+        <translation>Xylophone Orff basse</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="256"/>
@@ -6144,7 +6147,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="267"/>
         <source>Chinese tom-toms</source>
-        <translation type="unfinished">Tom-toms chinois</translation>
+        <translation>Tom-toms chinois</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="268"/>
@@ -6159,7 +6162,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="270"/>
         <source>Timbales</source>
-        <translation type="unfinished"></translation>
+        <translation>Timbales</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="271"/>
@@ -6250,12 +6253,12 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="289"/>
         <source>Sleighbells</source>
-        <translation type="unfinished"></translation>
+        <translation>Clochettes</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="290"/>
         <source>Bell plate</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Cloche de </translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="291"/>
@@ -6265,7 +6268,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="292"/>
         <source>Tubo</source>
-        <translation type="unfinished"></translation>
+        <translation>Tubo</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="293"/>
@@ -6402,7 +6405,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="322"/>
         <source>Drum set</source>
-        <translation type="unfinished"></translation>
+        <translation>Batterie</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="323"/>
@@ -6845,17 +6848,17 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../AutoloadStrings.cpp" line="57"/>
         <source>Drawbar Organ</source>
-        <translation type="unfinished"></translation>
+        <translation>Orgue électromécanique</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="58"/>
         <source>Percussive Organ</source>
-        <translation type="unfinished"></translation>
+        <translation>Orgue de percussion</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="59"/>
         <source>Rock Organ</source>
-        <translation type="unfinished">Orgue rock</translation>
+        <translation>Orgue rock</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="60"/>
@@ -6895,7 +6898,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../AutoloadStrings.cpp" line="68"/>
         <source>Electric Guitar (clean)</source>
-        <translation type="unfinished"></translation>
+        <translation>Guitare électrique (pure)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="69"/>
@@ -6905,57 +6908,57 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../AutoloadStrings.cpp" line="70"/>
         <source>Overdriven Guitar</source>
-        <translation type="unfinished"></translation>
+        <translation>Guitare électrique (overdrive)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="71"/>
         <source>Distortion Guitar</source>
-        <translation type="unfinished"></translation>
+        <translation>Guitare électrique (distortion)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="72"/>
         <source>Guitar harmonics</source>
-        <translation type="unfinished"></translation>
+        <translation>Harmoniques de guitare</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="73"/>
         <source>Acoustic Bass</source>
-        <translation type="unfinished"></translation>
+        <translation>Guitare basse acoustique</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="74"/>
         <source>Fingered Bass</source>
-        <translation type="unfinished"></translation>
+        <translation>Guitare basse (doigts)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="75"/>
         <source>Picked Bass</source>
-        <translation type="unfinished"></translation>
+        <translation>Guitar basse (plectre)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="76"/>
         <source>Fretless Bass</source>
-        <translation type="unfinished"></translation>
+        <translation>Guitare basse sans frettes</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="77"/>
         <source>Slap Bass 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Basse «slap» 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="78"/>
         <source>Slap Bass 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Basse «slap» 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="79"/>
         <source>Synth Bass 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Basse synthétisée 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="80"/>
         <source>Synth Bass 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Basse synthétisée 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="83"/>
@@ -6965,12 +6968,12 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../AutoloadStrings.cpp" line="85"/>
         <source>Tremolo Strings</source>
-        <translation type="unfinished"></translation>
+        <translation>Cordes tremolo</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="86"/>
         <source>Pizzicato Strings</source>
-        <translation type="unfinished"></translation>
+        <translation>Cordes pizzicato</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="87"/>
@@ -7010,12 +7013,12 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../AutoloadStrings.cpp" line="95"/>
         <source>Synth Voice</source>
-        <translation type="unfinished"></translation>
+        <translation>Voix synthétisée</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="96"/>
         <source>Orchestra Hit</source>
-        <translation type="unfinished"></translation>
+        <translation>Coup d&apos;orchestre</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="97"/>
@@ -7115,6 +7118,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../AutoloadStrings.cpp" line="121"/>
         <source>Lead 1 (square)</source>
+        <translatorcomment>Translate &quot;lead&quot; as &quot;Solo&quot; I think will do.  I don&apos;t want to bother looking up square, sawtooth, etc., but &quot;Solo 6 (voix)&quot; and so forth looks reasonable -dmm</translatorcomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -7200,6 +7204,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../AutoloadStrings.cpp" line="138"/>
         <source>FX 2 (soundtrack)</source>
+        <translatorcomment>I just translated &quot;FX&quot; as &quot;effect&quot; in Spanish.  Effect 2 (...)  But I don&apos;t know this word in French, and I am only aiming for low hanging fruit -dmm</translatorcomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -7280,7 +7285,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../AutoloadStrings.cpp" line="155"/>
         <source>Steel Drums</source>
-        <translation type="unfinished"></translation>
+        <translation>Steelpan</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="156"/>
@@ -7405,7 +7410,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../AutoloadStrings.cpp" line="181"/>
         <source>Funk Guitar</source>
-        <translation type="unfinished"></translation>
+        <translation>Guitare funk</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="182"/>
@@ -10628,17 +10633,17 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="63"/>
         <source>&amp;Open</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Sans sourdine</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="65"/>
         <source>&amp;Stopped</source>
-        <translation type="unfinished"></translation>
+        <translation>Avec&amp;c sourdine</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="67"/>
         <source>&amp;Harmonic</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Harmonique</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="69"/>
@@ -11180,8 +11185,8 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="953"/>
         <source>&lt;qt&gt;About to delete %n audio file(s) permanently from the hard disk.&lt;br&gt;This action cannot be undone, and there will be no way to recover the files.&lt;br&gt;Are you sure?&lt;/qt&gt;</source>
         <translation>
-            <numerusform>&lt;qt&gt;%n fichier(s) audio vont être effacés sur le disque dur.&lt;br&gt;Cette action ne pourra pas être annulée et il n&apos;existera aucun moyen de récupérer ce(s) fichier(s).&lt;br&gt;Etes vous sûr(e) de vouloir continuer?&lt;/qt&gt;</numerusform>
-            <numerusform></numerusform>
+            <numerusform>&lt;qt&gt;%n fichier audio va être effacé sur le disque dur.&lt;br&gt;Cette action ne pourra pas être annulée et il n&apos;existera aucun moyen de récupérer ce fichier.&lt;br&gt;Etes vous sûr de vouloir continuer?&lt;/qt&gt;</numerusform>
+            <numerusform>&lt;qt&gt;%n fichiers audio vont être effacés sur le disque dur.&lt;br&gt;Cette action ne pourra pas être annulée et il n&apos;existera aucun moyen de récupérer ces fichiers.&lt;br&gt;Etes vous sûr de vouloir continuer?&lt;/qt&gt;</numerusform>
         </translation>
     </message>
     <message>
@@ -11742,7 +11747,7 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
     <message>
         <location filename="../../src/gui/dialogs/AudioSplitDialog.cpp" line="71"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioSplitDialog.cpp" line="80"/>
@@ -11757,7 +11762,7 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
     <message>
         <location filename="../../src/gui/dialogs/AudioSplitDialog.cpp" line="131"/>
         <source>http://rosegardenmusic.com/wiki/doc:audioSplitDialog-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:audioSplitDialog-fr</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioSplitDialog.cpp" line="172"/>
@@ -12694,7 +12699,7 @@ Souhaitez vous les enregistrer avant de quitter l&apos;éditeur de banques?</tra
     <message>
         <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="283"/>
         <source>Pitch Bend</source>
-        <translation type="unfinished">Modifier la hauteur</translation>
+        <translation>Pitch Bend</translation>
     </message>
     <message>
         <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="288"/>
@@ -12704,7 +12709,7 @@ Souhaitez vous les enregistrer avant de quitter l&apos;éditeur de banques?</tra
     <message>
         <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="420"/>
         <source>Insert Line of Controllers</source>
-        <translation type="unfinished">Insérer une ligne de contrôleurs</translation>
+        <translation>Insérer une ligne de contrôleurs</translation>
     </message>
     <message>
         <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="516"/>
@@ -13856,7 +13861,7 @@ Cela peut causer des problèmes si elle masque une valeur différente devant êt
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="445"/>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="453"/>
         <source>&lt;not set&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;Aucun&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="514"/>
@@ -18948,7 +18953,7 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="52"/>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="241"/>
         <source>Pitch Bend Sequence</source>
-        <translation type="unfinished"></translation>
+        <translation>Séquence de Pitch Bend</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="61"/>
@@ -18963,7 +18968,7 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="70"/>
         <source>User</source>
-        <translation type="unfinished"></translation>
+        <translation>Utilisateur</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="71"/>
@@ -20014,7 +20019,7 @@ Voulez-vous le sauver?</translation>
         <location filename="../../src/document/RosegardenDocument.cpp" line="491"/>
         <source>Delete the %n audio file(s) recorded during the unsaved session?</source>
         <translation>
-            <numerusform>Effacer le fichier audio enregistré au cours de la session abandonnée?</numerusform>
+            <numerusform>Effacer le %n fichier audio enregistré au cours de la session abandonnée?</numerusform>
             <numerusform>Effacer les %n fichiers audio enregistrés au cours de la session abandonnée?</numerusform>
         </translation>
     </message>
@@ -23252,7 +23257,7 @@ Si d&apos;autres applications sont actuellement en fonctionnement, les arrêter 
     <message>
         <location filename="../../src/gui/widgets/Thumbwheel.cpp" line="269"/>
         <source>Enter a new value from %1 to %2:</source>
-        <translation>Entrer une nouvelle valeur entre %1 et %2</translation>
+        <translation>Entrer une nouvelle valeur entre %1 et %2:</translation>
     </message>
 </context>
 <context>
