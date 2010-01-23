@@ -2460,6 +2460,7 @@ RosegardenMainWindow::slotRescaleSelection()
         }
     }
 
+    progressDlg->hide();
     if (progressDlg) delete progressDlg;
 }
 

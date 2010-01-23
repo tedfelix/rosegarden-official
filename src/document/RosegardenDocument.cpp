@@ -699,6 +699,8 @@ bool RosegardenDocument::openDocument(const QString& filename,
 
     std::cerr << "RosegardenDocument::openDocument: Successfully opened document \"" << filename << "\"" << std::endl;
 
+    progressDlg->close(); // delete on close
+
     return true;
 }
 
@@ -1773,6 +1775,7 @@ RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
     }
 
     if (handler.channelsWereRemapped()) {
+        StartupLogo::hideIfStillThere();
         CurrentProgressDialog::freeze();
 
         QMessageBox::information(
@@ -2677,17 +2680,15 @@ RosegardenDocument::finalizeAudioFile(InstrumentId iid)
     // Create a progress dialog
     //
     ProgressDialog *progressDlg = new ProgressDialog ( tr("Generating audio preview..."), 100, (QWidget*)parent() );
-    //ProgressDialog progressDlg( tr("Generating audio preview..."), 100, (QWidget*)parent() );
     progressDlg->setAutoClose(false);
     progressDlg->setAutoReset(false);
     progressDlg->show();
 
-    connect(progressDlg, SIGNAL(cancelClicked()),
+    connect(progressDlg, SIGNAL(canceled()),
             &m_audioFileManager, SLOT(slotStopPreview()));
 
     connect(&m_audioFileManager, SIGNAL(setValue(int)),
              progressDlg, SLOT(setValue(int)));
-//            progressDlg->progressBar(), SLOT(setValue(int)));
 
     try {
         m_audioFileManager.generatePreview(newAudioFile->getId());
@@ -2700,7 +2701,6 @@ RosegardenDocument::finalizeAudioFile(InstrumentId iid)
         CurrentProgressDialog::thaw();
     }
 
-    //delete progressDlg;
     progressDlg->close();    // is deleteOnClose
     progressDlg = 0;
 
