@@ -3912,7 +3912,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="583"/>
         <source>Insert Pitch &amp;Bend Sequence...</source>
-        <translation type="unfinished"></translation>
+        <translation>Infoga tonhöjdsav&amp;vikelse för sekvens...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1915"/>
@@ -10375,7 +10375,7 @@ Om du ändå vill klistra in, fundera på att använda en av de andra inklistrin
     <message>
         <location filename="../../src/gui/dialogs/AboutDialog.cpp" line="54"/>
         <source>&lt;p&gt;Copyright 2000-2010 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Copyright 2000-2010 Rosegardens utvecklingsgrupp&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Byggnyckel: %3&lt;/p&gt;&lt;p&gt;Rosegarden har tagits fram av en grupp frivilliga över hela världen. Besök &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt; för att se en lista med bidragsgivare.&lt;br&gt;För ytterligare information om Rosegarden, besök &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Licens: GNU General Public License Version 2&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;p&gt;Copyright 2000-2009 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2&lt;/p&gt;</source>
@@ -10821,7 +10821,7 @@ Om du ändå vill klistra in, fundera på att använda en av de andra inklistrin
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="216"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
 </context>
 <context>
@@ -10902,7 +10902,7 @@ Om du ändå vill klistra in, fundera på att använda en av de andra inklistrin
     <message>
         <location filename="../../src/sound/AudioFileManager.cpp" line="660"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/sound/AudioFileManager.cpp" line="730"/>
@@ -11037,7 +11037,7 @@ Om du ändå vill klistra in, fundera på att använda en av de andra inklistrin
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1206"/>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1223"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="735"/>
@@ -11675,7 +11675,7 @@ Välj de du vill ta bort permanent från hårddisken.
     <message>
         <location filename="../../src/gui/dialogs/AudioSplitDialog.cpp" line="71"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioSplitDialog.cpp" line="80"/>
@@ -11690,7 +11690,7 @@ Välj de du vill ta bort permanent från hårddisken.
     <message>
         <location filename="../../src/gui/dialogs/AudioSplitDialog.cpp" line="131"/>
         <source>http://rosegardenmusic.com/wiki/doc:audioSplitDialog-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:audioSplitDialog-en</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioSplitDialog.cpp" line="172"/>
@@ -11836,13 +11836,13 @@ Välj de du vill ta bort permanent från hårddisken.
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1573"/>
         <source>Some internal error: no device selected</source>
-        <translation type="unfinished"></translation>
+        <translation>Ett internt fel: ingen enhet vald</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1794"/>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1798"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1835"/>
@@ -12358,7 +12358,7 @@ Välj de du vill ta bort permanent från hårddisken.
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/CompositionView.cpp" line="332"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
 </context>
 <context>
@@ -12600,33 +12600,33 @@ Välj de du vill ta bort permanent från hårddisken.
     <message>
         <location filename="../../src/gui/rulers/ControlToolBox.cpp" line="59"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
 </context>
 <context>
     <name>Rosegarden::ControllerEventsRuler</name>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="273"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="285"/>
         <source>Unsupported Event Type</source>
         <translation>Händelsetyp som inte stöds</translation>
     </message>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="283"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="295"/>
         <source>Pitch Bend</source>
         <translation>Tonhöjdsavvikelse</translation>
     </message>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="288"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="300"/>
         <source>Controller Events</source>
         <translation>Effekthändelser</translation>
     </message>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="420"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="432"/>
         <source>Insert Line of Controllers</source>
-        <translation type="unfinished"></translation>
+        <translation>Infoga effektrad</translation>
     </message>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="516"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="544"/>
         <source>Controller Event Number</source>
         <translation>Nummer på effekthändelse</translation>
     </message>
@@ -13769,7 +13769,7 @@ Det kan orsaka problem om den senare överskrider ett annat beräknat värde.</t
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="445"/>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="453"/>
         <source>&lt;not set&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;inte angiven&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="514"/>
@@ -14065,7 +14065,7 @@ Vill du försöka söka efter filen eller hoppa över den?</translation>
         <location filename="../../src/gui/editors/notation/FontViewFrame.cpp" line="107"/>
         <location filename="../../src/gui/editors/notation/FontViewFrame.cpp" line="114"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/FontViewFrame.cpp" line="107"/>
@@ -14093,7 +14093,7 @@ Vill du försöka söka efter filen eller hoppa över den?</translation>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="103"/>
         <source>&lt;qt&gt;&lt;p&gt;Qt offers you the choice of three graphics systems. The fast (raster) graphics system offers the best tradeoff between performance and stability, but may cause problems for some users.  If you experience frequent crashes, or distorted graphics, you should try the safe (native) graphics system instead.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Qt ger möjlighet att välja tre grafiksystem. Det snabba grafiksystemet (rastrering) erbjuder bäst kompromiss mellan prestanda och stabilitet, men kan orsaka problem för vissa användare. Om du ofta upplever krascher, eller förvrängd grafik, bör du prova det säkra (inbyggda) grafiksystemet istället.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="107"/>
@@ -14469,7 +14469,7 @@ Vill du försöka söka efter filen eller hoppa över den?</translation>
         <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="498"/>
         <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="508"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="508"/>
@@ -14853,7 +14853,7 @@ Exempeltext från filen:</translation>
     <message>
         <location filename="../../src/gui/widgets/InputDialog.cpp" line="47"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
 </context>
 <context>
@@ -16609,7 +16609,7 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixToolBox.cpp" line="81"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
 </context>
 <context>
@@ -17798,7 +17798,7 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="554"/>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="632"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="624"/>
@@ -17836,7 +17836,7 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
     <message>
         <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="879"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="1205"/>
@@ -18049,7 +18049,7 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
     <message>
         <location filename="../../src/gui/editors/notation/NotationToolBox.cpp" line="81"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
 </context>
 <context>
@@ -18571,7 +18571,7 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
         <location filename="../../src/gui/editors/notation/NoteFontFactory.cpp" line="157"/>
         <location filename="../../src/gui/editors/notation/NoteFontFactory.cpp" line="184"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NoteFontFactory.cpp" line="182"/>
@@ -18625,7 +18625,7 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
     <message>
         <location filename="../../src/gui/editors/notation/NotePixmapFactory.cpp" line="185"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
 </context>
 <context>
@@ -19066,12 +19066,12 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
     <message>
         <location filename="../../src/gui/widgets/ProgressDialog.cpp" line="62"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/ProgressDialog.cpp" line="71"/>
         <source>&lt;qt&gt;&lt;h3&gt;Processing...&lt;/h3&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;h3&gt;Behandlar...&lt;/h3&gt;&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -19748,7 +19748,7 @@ här versionen. Det kan finnas vissa problem med filformatet.</translation>
     <message>
         <location filename="../../src/document/RoseXmlHandler.cpp" line="450"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/document/RoseXmlHandler.cpp" line="1019"/>
@@ -19801,16 +19801,16 @@ Vill du spara den?</translation>
         <location filename="../../src/document/RosegardenDocument.cpp" line="592"/>
         <location filename="../../src/document/RosegardenDocument.cpp" line="637"/>
         <location filename="../../src/document/RosegardenDocument.cpp" line="679"/>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1069"/>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1658"/>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1678"/>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1681"/>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1718"/>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1728"/>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1757"/>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1770"/>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1783"/>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="2700"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1070"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1659"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1679"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1682"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1719"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1729"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1758"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1771"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1784"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="2701"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
@@ -19870,7 +19870,7 @@ Välj alla du vill ta bort permanent från hårddisken.
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="599"/>
         <source>Reading file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Läser fil...</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="621"/>
@@ -19888,77 +19888,77 @@ Välj alla du vill ta bort permanent från hårddisken.
         <translation>Skapar förhandsgranskning av ljud...</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="711"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="712"/>
         <source>Merge</source>
         <translation>Sammanfoga</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1194"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1195"/>
         <source>Could not create temporary file in directory of &apos;%1&apos;: %2</source>
         <translation>Kunde inte skapa tillfällig fil i katalogen &apos;%1&apos;: %2</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1207"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1208"/>
         <source>Failure in temporary file handling for file &apos;%1&apos;: %2</source>
         <translation>Misslyckades med hantering av tillfällig fil &apos;%1&apos;: %2</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1225"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1226"/>
         <source>Failed to rename temporary output file &apos;%1&apos; to desired output file &apos;%2&apos;</source>
         <translation>Misslyckades byta namn på tillfällig utdatafil &apos;%1&apos; till den önskade utdatafilen &apos;%2&apos;</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1258"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1259"/>
         <source>Saving file...</source>
         <translation>Sparar fil...</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1355"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1356"/>
         <source>Error while writing on &apos;%1&apos;</source>
         <translation>Fel vid skrivning till &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1658"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1659"/>
         <source>File load cancelled</source>
         <translation>Inläsning av fil avbruten</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1678"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1679"/>
         <source>&lt;h3&gt;Audio and plugins not available&lt;/h3&gt;&lt;p&gt;This composition uses audio files or plugins, but Rosegarden is currently running without audio because the JACK audio server was not available on startup.&lt;/p&gt;&lt;p&gt;Please exit Rosegarden, start the JACK audio server and re-start Rosegarden if you wish to load this complete composition.&lt;/p&gt;&lt;p&gt;&lt;b&gt;WARNING:&lt;/b&gt; If you re-save this composition, all audio and plugin data and settings in it will be lost.&lt;/p&gt;</source>
         <translation>&lt;h3&gt;Ljud och insticksprogram ej tillgängliga&lt;/h3&gt;&lt;p&gt;Denna komposition använder ljudfiler eller insticksprogram, men Rosegarden körs för närvarande utan ljud på grund av att ljudservern JACK inte kördes när Rosegarden startades.&lt;/p&gt;&lt;p&gt;Var vänlig stäng Rosegarden, starta ljudservern JACK och sedan Rosegarden pånytt om du vill öppna den fullständiga kompositionen.&lt;/p&gt;&lt;p&gt;&lt;b&gt;VARNING:&lt;/b&gt;Om du sparar denna komposition igen förloras alla inställningar för ljud och insticksprogram.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1681"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1682"/>
         <source>&lt;h3&gt;Audio and plugins not available&lt;/h3&gt;&lt;p&gt;This composition uses audio files or plugins, but you are running a version of Rosegarden that was compiled without audio support.&lt;/p&gt;&lt;p&gt;&lt;b&gt;WARNING:&lt;/b&gt; If you re-save this composition from this version of Rosegarden, all audio and plugin data and settings in it will be lost.&lt;/p&gt;</source>
         <translation>&lt;h3&gt;Ljud och insticksprogram ej tillgängliga&lt;/h3&gt;&lt;p&gt;Denna komposition använder ljudfiler eller insticksprogram, men du kör en version av Rosegarden som kompilerades utan ljudstöd.&lt;/p&gt;&lt;p&gt;&lt;b&gt;VARNING:&lt;/b&gt; Om du sparar kompositionen med den här versionen av Rosegarden, förloras alla inställningar för ljud och insticksprogram.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1718"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1719"/>
         <source>&lt;h3&gt;Incorrect audio sample rate&lt;/h3&gt;&lt;p&gt;This composition contains audio files that were recorded or imported with the audio server running at a different sample rate (%1 Hz) from the current JACK server sample rate (%2 Hz).&lt;/p&gt;&lt;p&gt;Rosegarden will play this composition at the correct speed, but any audio files in it will probably sound awful.&lt;/p&gt;&lt;p&gt;Please consider re-starting the JACK server at the correct rate (%3 Hz) and re-loading this composition before you do any more work with it.&lt;/p&gt;</source>
         <translation>&lt;h3&gt;Felaktig ljudsamplingsnivå&lt;/h3&gt;&lt;p&gt;Denna komposition innehåller ljudfiler som spelades in eller importerades med ljudservern på en annan samplingsnivå (%1 Hz) än den aktuella nivån för JACK (%2 Hz).&lt;/p&gt;&lt;p&gt;Rosegarden kommer att spela upp kompositionen med rätt hastighet, men ljudfilerna i den kommer troligen att låta hemskt.&lt;/p&gt;&lt;p&gt;Var vänlig överväg att starta om JACK med rätt nivå (%3 Hz) och öppna denna komposition ånyo innan du fortsätter arbete med den.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1728"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1729"/>
         <source>&lt;h3&gt;Inconsistent audio sample rates&lt;/h3&gt;&lt;p&gt;This composition contains audio files at more than one sample rate.&lt;/p&gt;&lt;p&gt;Rosegarden will play them at the correct speed, but any audio files that were recorded or imported at rates different from the current JACK server sample rate (%1 Hz) will probably sound awful.&lt;/p&gt;&lt;p&gt;Please see the audio file manager dialog for more details, and consider resampling any files that are at the wrong rate.&lt;/p&gt;</source>
         <translation>&lt;h3&gt;Avvikande ljudsamplingsnivåer&lt;/h3&gt;&lt;p&gt;Denna komposition innehåller ljudfiler med olika samplingsnivåer.&lt;/p&gt;&lt;p&gt;Rosegarden kommer att spela upp dem med rätt hastighet, men ljudfiler inspelade eller importerade med andra nivåer än den nuvarande i JACK (%1 Hz) kommer troligen att låta hemskt.&lt;/p&gt;&lt;p&gt;Var vänlig se ljudfilshanterarens dialogfönster för mer information, och överväg omsampling av filer med en annan nivå.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1729"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1730"/>
         <source>Inconsistent sample rates</source>
         <translation>Avvikande samplingsnivåer</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1743"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1744"/>
         <source>&lt;h3&gt;Plugins not found&lt;/h3&gt;&lt;p&gt;The following audio plugins could not be loaded:&lt;/p&gt;&lt;ul&gt;</source>
         <translation>&lt;h3&gt;Insticksprogram ej funna&lt;/h3&gt;&lt;p&gt;Följande ljudinsticksprogram kunde inte läsas in:&lt;/p&gt;&lt;ul&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1751"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1752"/>
         <source>&lt;li&gt;%1 (from %2)&lt;/li&gt;</source>
         <translation>&lt;li&gt;%1 (från %2)&lt;/li&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1765"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1766"/>
         <source>This file contains one or more old element types that are now deprecated.
 Support for these elements may disappear in future versions of Rosegarden.
 We recommend you re-save this file from this version of Rosegarden to ensure that it can still be re-loaded in future versions.</source>
@@ -19968,22 +19968,22 @@ Du rekommenderas att spara filen med den här versionen av Rosegarden,
 för att försäkra dig om att den kan läsas in igen i framtida versioner.</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1784"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1785"/>
         <source>&lt;qt&gt;&lt;h2&gt;Channels were remapped&lt;/h2&gt;&lt;p&gt;Beginning with version 10.02, Rosegarden no longer provides controls for changing the channel associated with each MIDI instrument.  Instead, each instrument uses the same channel as its instrument number.  For example, &quot;MIDI Input System Device #12&quot; always uses channel 12.&lt;/p&gt;&lt;p&gt;The file you just loaded contained instruments whose channels differed from the instrument numbers.  These channels have been reassigned so that instrument #1 will always use channel 1, regardless of what channel it might have used previously.  In most cases, you will experience no difference, but you may have to make some small changes to this file in order for it to play as intended.  We recommend that you save this file in order to avoid seeing this warning in the future.&lt;/p&gt;&lt;p&gt;We apologize for any inconvenience.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;h2&gt;Kanalernas avbildning har ändrats&lt;/h2&gt;&lt;p&gt;Från och med version 10.02 tillhandahåller inte Rosegarden längre kontroller för att ändra kanalen som hör ihop med varje MIDI-instrument. Istället använder varje instrument samma kanal som sitt instrumentnummer. Exempelvis använder alltid &quot;MIDI-systemingångsenhet 12&quot; kanal 12.&lt;/p&gt;&lt;p&gt;Filen du just har läst in innehåller instrument vars kanaler skiljer sig från instrumentnumren. Tilldelningen av dessa kanaler har ändrats så att instrument 1 alltid använder kanal 1, oberoende av vilken kanal det tidigare kan ha använt. I de flesta fall kommer du inte att märka någon skillnad, men du kanske måste göra några små ändringar av filen för att den ska spelas upp som avsett. Vi rekommenderar att du sparar filen för att undvika den här varningen i fortsättningen.&lt;/p&gt;&lt;p&gt;Vi ber om ursäkt för alla eventuella olägenheter.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="2322"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="2323"/>
         <source>Insert Recorded MIDI</source>
         <translation>Infoga inspelad MIDI</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="2449"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="2450"/>
         <source>(recorded)</source>
         <translation>(inspelad)</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="2682"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="2683"/>
         <source>Generating audio preview...</source>
         <translation>Skapar förhandsgranskning av ljud...</translation>
     </message>
@@ -20010,7 +20010,7 @@ för att försäkra dig om att den kan läsas in igen i framtida versioner.</tra
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1540"/>
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1560"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="401"/>
@@ -20711,7 +20711,7 @@ Avsluta och starta om Rosegarden för att återställa ljudfunktionen.</translat
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="298"/>
         <source>Starting sequencer...</source>
-        <translation type="unfinished"></translation>
+        <translation>Startar spelarhanteraren...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2069"/>
@@ -20988,32 +20988,32 @@ Felet är: %2</translation>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8004"/>
         <source>&lt;h3&gt;Invalid audio path&lt;/h3&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;h3&gt;Felaktig ljudsökväg&lt;/h3&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8005"/>
         <source>&lt;p&gt;You will not be able to record audio or drag and drop audio files onto Rosegarden until you correct this in &lt;b&gt;View -&gt; Document Properties -&gt; Audio&lt;/b&gt;.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Du kommer inte att kunna spela in ljud eller dra och släppa ljudfiler på Rosegarden innan detta har korrigerats med &lt;b&gt;Visa -&gt; Dokumentegenskaper -&gt; Ljud&lt;/b&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8009"/>
         <source>&lt;h3&gt;Created audio path&lt;/h3&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;h3&gt;Skapad ljudsökväg&lt;/h3&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8010"/>
         <source>&lt;qt&gt;&lt;p&gt;Rosegarden created the audio path &quot;%1&quot; to use for audio recording, and to receive dropped audio files.&lt;/p&gt;&lt;p&gt;If you wish to use a different path, change this in &lt;b&gt;View -&gt; Document Properties -&gt; Audio&lt;/b&gt;.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Rosegarden har skapat ljudsökvägen &quot;%1&quot; att använda för ljudinspelning, och för att ta emot släppta ljudfiler.&lt;/p&gt;&lt;p&gt;Om du vill använda en annan sökväg, ändra den med &lt;b&gt;Visa -&gt; Dokumentegenskaper -&gt; Ljud&lt;/b&gt;.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8016"/>
         <source>&lt;qt&gt;&lt;p&gt;The audio path &quot;%1&quot; did not exist, and could not be created.&lt;/p&gt;%2&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Ljudsökvägen &quot;%1&quot; fanns inte, och kunde inte skapas.&lt;/p&gt;%2&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8021"/>
         <source>&lt;qt&gt;&lt;p&gt;The audio path &quot;%1&quot; exists, but is not writable.&lt;/p&gt;%2&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Ljudsökvägen &quot;%1&quot; finns, men går inte att skriva till.&lt;/p&gt;%2&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -21596,7 +21596,7 @@ Vill du ange den nu?</translation>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentToolBox.cpp" line="79"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
 </context>
 <context>
@@ -23393,7 +23393,7 @@ Vill du ställa in den nu?</translation>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="208"/>
         <source>&lt;qt&gt;&lt;p&gt;This track will only record Audio/MIDI from the selected device, filtering anything else out&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Spåret spelar bara in ljud eller MIDI från vald enhet, och filtrerar bort allt annat&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="215"/>
@@ -23726,7 +23726,7 @@ Vill du ställa in den nu?</translation>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1159"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1203"/>
@@ -23939,7 +23939,7 @@ Vill du ställa in den nu?</translation>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="331"/>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="349"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="283"/>
@@ -24224,27 +24224,27 @@ Vill du ställa in den nu?</translation>
     <message>
         <location filename="../../src/gui/widgets/WarningDialog.cpp" line="75"/>
         <source>Warning</source>
-        <translation type="unfinished">Varning</translation>
+        <translation>Varning</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/WarningDialog.cpp" line="80"/>
         <source>MIDI</source>
-        <translation type="unfinished">MIDI</translation>
+        <translation>MIDI</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/WarningDialog.cpp" line="84"/>
         <source>Audio</source>
-        <translation type="unfinished">Ljud</translation>
+        <translation>Ljud</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/WarningDialog.cpp" line="88"/>
         <source>System timer</source>
-        <translation type="unfinished"></translation>
+        <translation>Systemtid</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/WarningDialog.cpp" line="92"/>
         <source>Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Information</translation>
     </message>
 </context>
 <context>
@@ -24257,7 +24257,7 @@ Vill du ställa in den nu?</translation>
     <message>
         <location filename="../../src/gui/widgets/WarningWidget.cpp" line="86"/>
         <source>&lt;qt&gt;&lt;p&gt;Information available.&lt;/p&gt;&lt;p&gt;Click to display details&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Information tillgänglig.&lt;/p&gt;&lt;p&gt;Klicka för att visa den&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/WarningWidget.cpp" line="110"/>
@@ -24277,17 +24277,17 @@ Vill du ställa in den nu?</translation>
     <message>
         <location filename="../../src/gui/widgets/WarningWidget.cpp" line="143"/>
         <source>&lt;qt&gt;Safe graphics mode&lt;br&gt;Click for more information&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Säkert grafikläge&lt;br&gt;Klicka för mer information&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/WarningWidget.cpp" line="196"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/WarningWidget.cpp" line="197"/>
         <source>&lt;qt&gt;&lt;p&gt;Rosegarden is using safe graphics mode.  This provides the greatest stability, but graphics performance is very slow.&lt;/p&gt;&lt;p&gt;You may wish to visit &lt;b&gt;Edit -&gt; Preferences -&gt; Behavior -&gt; Graphics performance&lt;/b&gt; and try &quot;Normal&quot; or &quot;Fast&quot; for better performance.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Rosegarden använder säkert grafikläge. Det ger bäst stabilitet, med grafikprestanda är mycket låg.&lt;/p&gt;&lt;p&gt;Du bör gå till &lt;b&gt;Redigera -&gt; Inställningar -&gt; Beteende -&gt; Grafikprestanda&lt;/b&gt; och prova &quot;Normal&quot; eller &quot;Snabb&quot; för att få bättre prestanda.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -24308,7 +24308,7 @@ Vill du ställa in den nu?</translation>
 <context>
     <name>RosegardenDocument</name>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="2533"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="2534"/>
         <source>(recorded)</source>
         <translation>(inspelad)</translation>
     </message>
