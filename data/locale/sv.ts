@@ -12606,27 +12606,27 @@ Välj de du vill ta bort permanent från hårddisken.
 <context>
     <name>Rosegarden::ControllerEventsRuler</name>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="285"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="286"/>
         <source>Unsupported Event Type</source>
         <translation>Händelsetyp som inte stöds</translation>
     </message>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="295"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="296"/>
         <source>Pitch Bend</source>
         <translation>Tonhöjdsavvikelse</translation>
     </message>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="300"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="301"/>
         <source>Controller Events</source>
         <translation>Effekthändelser</translation>
     </message>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="432"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="449"/>
         <source>Insert Line of Controllers</source>
         <translation>Infoga effektrad</translation>
     </message>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="544"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="576"/>
         <source>Controller Event Number</source>
         <translation>Nummer på effekthändelse</translation>
     </message>

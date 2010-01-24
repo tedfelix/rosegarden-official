@@ -12814,27 +12814,27 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
 <context>
     <name>Rosegarden::ControllerEventsRuler</name>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="273"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="286"/>
         <source>Unsupported Event Type</source>
         <translation>Tipo di evento non supportato</translation>
     </message>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="283"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="296"/>
         <source>Pitch Bend</source>
         <translation>Curva dell&apos;altezza</translation>
     </message>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="288"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="301"/>
         <source>Controller Events</source>
         <translation>Eventi del controller</translation>
     </message>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="420"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="449"/>
         <source>Insert Line of Controllers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="516"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="576"/>
         <source>Controller Event Number</source>
         <translation>Numero eventi del controller</translation>
     </message>
@@ -19991,16 +19991,16 @@ Vuoi salvarlo?</translation>
         <location filename="../../src/document/RosegardenDocument.cpp" line="592"/>
         <location filename="../../src/document/RosegardenDocument.cpp" line="637"/>
         <location filename="../../src/document/RosegardenDocument.cpp" line="679"/>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1069"/>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1658"/>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1678"/>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1681"/>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1718"/>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1728"/>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1757"/>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1770"/>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1783"/>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="2700"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1070"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1659"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1679"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1682"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1719"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1729"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1758"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1771"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1784"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="2701"/>
         <source>Rosegarden</source>
         <translation type="unfinished">Rosegarden</translation>
     </message>
@@ -20078,77 +20078,77 @@ Scegli quelli che vuoi cancellare definitivamente dal disco fisso.
         <translation>Generazione anteprima audio...</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="711"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="712"/>
         <source>Merge</source>
         <translation>Inserisci</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1194"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1195"/>
         <source>Could not create temporary file in directory of &apos;%1&apos;: %2</source>
         <translation>Non riesco a creare un file temporaneo nella directory di.&apos;%1&apos;: %2</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1207"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1208"/>
         <source>Failure in temporary file handling for file &apos;%1&apos;: %2</source>
         <translation>Errore nel manipolare il file temporaneo per il file &apos;%1&apos;: %2</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1225"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1226"/>
         <source>Failed to rename temporary output file &apos;%1&apos; to desired output file &apos;%2&apos;</source>
         <translation>Non riesco a rinominare il file temporaneo di uscita &apos;%1&apos; nel file desiderato &apos;%2&apos;</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1258"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1259"/>
         <source>Saving file...</source>
         <translation>Salvataggio file in corso...</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1355"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1356"/>
         <source>Error while writing on &apos;%1&apos;</source>
         <translation>Errore durante la scrittura su &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1658"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1659"/>
         <source>File load cancelled</source>
         <translation>Annullato caricamento file</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1678"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1679"/>
         <source>&lt;h3&gt;Audio and plugins not available&lt;/h3&gt;&lt;p&gt;This composition uses audio files or plugins, but Rosegarden is currently running without audio because the JACK audio server was not available on startup.&lt;/p&gt;&lt;p&gt;Please exit Rosegarden, start the JACK audio server and re-start Rosegarden if you wish to load this complete composition.&lt;/p&gt;&lt;p&gt;&lt;b&gt;WARNING:&lt;/b&gt; If you re-save this composition, all audio and plugin data and settings in it will be lost.&lt;/p&gt;</source>
         <translation>&lt;h3&gt;Audio e moduli non disponibili&lt;/h3&gt;&lt;p&gt;Questa composizione usa file audio o moduli, ma Rosegarden sta attualmente funzionando senza audio poiché il server audio JACK non era disponibile all&apos;avvio.&lt;/p&gt;&lt;p&gt;Si prega di chiudere Rosegarden, avviare il server JACK e riavviare Rosegarden se si desidera caricare questa composizione completa.&lt;/p&gt;&lt;p&gt;&lt;b&gt;ATTENZIONE:&lt;/b&gt; se salvate questa composizione, tutti i dati audio e dei moduli andranno perduti.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1681"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1682"/>
         <source>&lt;h3&gt;Audio and plugins not available&lt;/h3&gt;&lt;p&gt;This composition uses audio files or plugins, but you are running a version of Rosegarden that was compiled without audio support.&lt;/p&gt;&lt;p&gt;&lt;b&gt;WARNING:&lt;/b&gt; If you re-save this composition from this version of Rosegarden, all audio and plugin data and settings in it will be lost.&lt;/p&gt;</source>
         <translation>&lt;h3&gt;Audio e moduli non disponibili&lt;/h3&gt;&lt;p&gt;Questa composizione usa file audio o moduli, ma si sta usando una versione di Rosegarden compilata senza il supporto audio.&lt;/p&gt;&lt;p&gt;&lt;b&gt;ATTENZIONE:&lt;/b&gt; se salvate questa composizione da questa versione di Rosegarden, tutti i dati audio e dei moduli in essa contenuti andranno perduti.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1718"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1719"/>
         <source>&lt;h3&gt;Incorrect audio sample rate&lt;/h3&gt;&lt;p&gt;This composition contains audio files that were recorded or imported with the audio server running at a different sample rate (%1 Hz) from the current JACK server sample rate (%2 Hz).&lt;/p&gt;&lt;p&gt;Rosegarden will play this composition at the correct speed, but any audio files in it will probably sound awful.&lt;/p&gt;&lt;p&gt;Please consider re-starting the JACK server at the correct rate (%3 Hz) and re-loading this composition before you do any more work with it.&lt;/p&gt;</source>
         <translation>&lt;h3&gt;Campionamento audio non corretto&lt;/h3&gt;&lt;p&gt; La composizione contiene file audio registrati o importati a una frequenza di campionamento (%1 Hz) diversa da quella corrente in JACK (%2 Hz).&lt;/p&gt;&lt;p&gt;Rosegarden suonerà la composizione alla velocità corretta, ma i file audio in essa contenuti suoneranno probabilmente in modo orribile.&lt;/p&gt;&lt;p&gt; Prova a riavviare il server JACK alla velocità corretta (%3 Hz) e a ricaricare la composizione prima di continuare a lavorarci.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1728"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1729"/>
         <source>&lt;h3&gt;Inconsistent audio sample rates&lt;/h3&gt;&lt;p&gt;This composition contains audio files at more than one sample rate.&lt;/p&gt;&lt;p&gt;Rosegarden will play them at the correct speed, but any audio files that were recorded or imported at rates different from the current JACK server sample rate (%1 Hz) will probably sound awful.&lt;/p&gt;&lt;p&gt;Please see the audio file manager dialog for more details, and consider resampling any files that are at the wrong rate.&lt;/p&gt;</source>
         <translation>&lt;h3&gt;Campionamenti audio incompatibili&lt;/h3&gt;&lt;p&gt; La composizione contiene file audio registrati con diverse frequenze di campionamento.&lt;/p&gt;&lt;p&gt;Rosegarden li riprodurrà alla velocità corretta, ma i file audio registrati o importati a frequenze diverse da quella attualmente usata dal server JACK (%1 Hz) suoneranno probabilmente in modo orribile.&lt;/p&gt;&lt;p&gt; Prova guardare il menu del gestore file audio per avere più dettagli, e valuta la possibilità di ricampionare i file che hanno le frequenze errate.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1729"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1730"/>
         <source>Inconsistent sample rates</source>
         <translation>Valori di campionamento inconsistenti</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1743"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1744"/>
         <source>&lt;h3&gt;Plugins not found&lt;/h3&gt;&lt;p&gt;The following audio plugins could not be loaded:&lt;/p&gt;&lt;ul&gt;</source>
         <translation>&lt;h3&gt;Moduli non trovati&lt;/h3&gt;&lt;p&gt;I seguenti moduli audio non possono essere caricati:&lt;/p&gt;&lt;ul&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1751"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1752"/>
         <source>&lt;li&gt;%1 (from %2)&lt;/li&gt;</source>
         <translation>&lt;li&gt;%1 (da %2)&lt;/li&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1765"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1766"/>
         <source>This file contains one or more old element types that are now deprecated.
 Support for these elements may disappear in future versions of Rosegarden.
 We recommend you re-save this file from this version of Rosegarden to ensure that it can still be re-loaded in future versions.</source>
@@ -20158,22 +20158,22 @@ Raccomandiamo di risalvare questo file in questa versione di Rosegarden,
 affinché sia ancora leggibile nelle prossime versioni.</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="1784"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="1785"/>
         <source>&lt;qt&gt;&lt;h2&gt;Channels were remapped&lt;/h2&gt;&lt;p&gt;Beginning with version 10.02, Rosegarden no longer provides controls for changing the channel associated with each MIDI instrument.  Instead, each instrument uses the same channel as its instrument number.  For example, &quot;MIDI Input System Device #12&quot; always uses channel 12.&lt;/p&gt;&lt;p&gt;The file you just loaded contained instruments whose channels differed from the instrument numbers.  These channels have been reassigned so that instrument #1 will always use channel 1, regardless of what channel it might have used previously.  In most cases, you will experience no difference, but you may have to make some small changes to this file in order for it to play as intended.  We recommend that you save this file in order to avoid seeing this warning in the future.&lt;/p&gt;&lt;p&gt;We apologize for any inconvenience.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="2322"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="2323"/>
         <source>Insert Recorded MIDI</source>
         <translation>Inserisci un file MIDI registrato</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="2449"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="2450"/>
         <source>(recorded)</source>
         <translation>(registrato)</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="2682"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="2683"/>
         <source>Generating audio preview...</source>
         <translation>Generazione anteprima audio...</translation>
     </message>
@@ -24498,7 +24498,7 @@ Vuoi impostarlo adesso?</translation>
 <context>
     <name>RosegardenDocument</name>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="2533"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="2534"/>
         <source>(recorded)</source>
         <translation>(registrato)</translation>
     </message>
