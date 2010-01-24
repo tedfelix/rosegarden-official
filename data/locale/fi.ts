@@ -3784,18 +3784,18 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="52"/>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Apua</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1944"/>
         <source>Add &amp;Layer</source>
-        <translation type="unfinished"></translation>
+        <translation>Lisää &amp;Taso</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1951"/>
         <source>Ctrl+Alt+1</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2472"/>
@@ -4019,7 +4019,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3450"/>
         <source>Layer Toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>Tasot -työkalupalkki</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3452"/>
@@ -4615,7 +4615,7 @@
         <location filename="../QMenuStrings.cpp" line="3256"/>
         <location filename="../QMenuStrings.cpp" line="4082"/>
         <source>&amp;Support Rosegarden</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Tue Rosegardenia</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="4112"/>
@@ -11591,7 +11591,7 @@ Ole hyvä ja valitse halutessasi niistä joitakin poistaaksesi ne pysyvästi kov
     <message>
         <location filename="../../src/gui/dialogs/AudioSplitDialog.cpp" line="71"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioSplitDialog.cpp" line="80"/>
@@ -15652,7 +15652,7 @@ toiston alussa siirrettävän tiedon määrän takia.</translation>
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="102"/>
         <source>&lt;qt&gt;Set the MIDI program or &amp;quot;patch&amp;quot;&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;Aseta MIDI-instrumentti&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;Aseta MIDI-instrumentti tai &amp;quot;pätsi&amp;quot;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="104"/>
@@ -20063,12 +20063,12 @@ Virhe oli: %2</translation>
     <message>
         <location filename="../../src/commands/segment/SegmentChangeQuantizationCommand.h" line="49"/>
         <source>Unquantize</source>
-        <translation type="unfinished"></translation>
+        <translation>Poista yksiköinti</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/SegmentChangeQuantizationCommand.h" line="53"/>
         <source>Quantize to %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Yksiköi %1</translation>
     </message>
 </context>
 <context>
@@ -20076,12 +20076,12 @@ Virhe oli: %2</translation>
     <message>
         <location filename="../../src/commands/segment/SegmentChangeTransposeCommand.h" line="47"/>
         <source>Undo change transposition</source>
-        <translation type="unfinished"></translation>
+        <translation>Peru muuta transponointia</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/SegmentChangeTransposeCommand.h" line="49"/>
         <source>Change transposition to %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Muuta transponointia %1</translation>
     </message>
 </context>
 <context>
@@ -21192,7 +21192,7 @@ Toisten ohjelmien lopettaminen saattaa parantaa Rosegardenin suorituskykyä.</tr
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="270"/>
         <source>&lt;qt&gt;&lt;p&gt;Notation is not consistent&lt;/p&gt;&lt;p&gt;Click to get more information&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Nuotinnoksessa on epäjohdonmukaisuuksia&lt;/p&gt;&lt;p&gt;Klikkaa saadaksesi lisätietoja&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="437"/>
@@ -21286,47 +21286,47 @@ Toisten ohjelmien lopettaminen saattaa parantaa Rosegardenin suorituskykyä.</tr
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="906"/>
         <source>&lt;h2&gt;Notation Inconsistencies&lt;/h2&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;h2&gt;Nuotinnosristiriidat&lt;/h2&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="908"/>
         <source>&lt;h3&gt;Filename: %1 &lt;/h3&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;h3&gt;Tiedostonimi: %1 &lt;/h3&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="911"/>
         <source>&lt;h3&gt;Track %1: &quot;%2&quot;&lt;/h3&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;h3&gt;Raita %1: &quot;%2&quot;&lt;/h3&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="916"/>
         <source>Overlapping segments with inconsistent clefs:</source>
-        <translation type="unfinished"></translation>
+        <translation>Limittäiset osat joilla on epäjohdonmukaiset avaimet:</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="918"/>
         <source>Segment &quot;%1&quot;: %2 clef</source>
-        <translation type="unfinished"></translation>
+        <translation>Osa &quot;%1&quot;: %2 avain</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="923"/>
         <source>Overlapping segments with inconsistent keys:</source>
-        <translation type="unfinished"></translation>
+        <translation>Limittäiset osat joilla on epäjohdonmukaiset sävellajit:</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="925"/>
         <source>Segment &quot;%1&quot;: %2 key</source>
-        <translation type="unfinished"></translation>
+        <translation>Osa &quot;%1&quot;: %2 sävellaji</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="930"/>
         <source>Overlapping segments with inconsistent transpositions:</source>
-        <translation type="unfinished"></translation>
+        <translation>Limittäiset osat joilla on epäjohdonmukaiset transpositiot:</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="932"/>
         <source>Segment &quot;%1&quot;: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Osa &quot;%1&quot;: %2</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="938"/>
@@ -22285,7 +22285,7 @@ Haluatko asettaa sen nyt?</translation>
     <message>
         <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="933"/>
         <source>Rosegarden cannot accept dropped files of this type.</source>
-        <translation type="unfinished"></translation>
+        <translation>Rosegarden ei kelpuuta tämän tyyppisiä pudotettuja tiedostoja.</translation>
     </message>
     <message>
         <source>You can&apos;t drop files into Rosegarden from this client.  Try using Konqueror instead.</source>
@@ -23188,27 +23188,27 @@ Haluatko asettaa sen nyt?</translation>
     <message>
         <location filename="../../src/gui/widgets/WarningDialog.cpp" line="75"/>
         <source>Warning</source>
-        <translation type="unfinished">Varoitus</translation>
+        <translation>Varoitus</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/WarningDialog.cpp" line="80"/>
         <source>MIDI</source>
-        <translation type="unfinished">MIDI</translation>
+        <translation>MIDI</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/WarningDialog.cpp" line="84"/>
         <source>Audio</source>
-        <translation type="unfinished">Ääni</translation>
+        <translation>Ääni</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/WarningDialog.cpp" line="88"/>
         <source>System timer</source>
-        <translation type="unfinished"></translation>
+        <translation>Järjestelmäajastin</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/WarningDialog.cpp" line="92"/>
         <source>Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Tietoja</translation>
     </message>
 </context>
 <context>
@@ -23221,7 +23221,7 @@ Haluatko asettaa sen nyt?</translation>
     <message>
         <location filename="../../src/gui/widgets/WarningWidget.cpp" line="86"/>
         <source>&lt;qt&gt;&lt;p&gt;Information available.&lt;/p&gt;&lt;p&gt;Click to display details&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Tietoja saatavilla.&lt;/p&gt;&lt;p&gt;Klikkaa nähdäksesi yksityiskohdat&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/WarningWidget.cpp" line="110"/>
@@ -23241,7 +23241,7 @@ Haluatko asettaa sen nyt?</translation>
     <message>
         <location filename="../../src/gui/widgets/WarningWidget.cpp" line="143"/>
         <source>&lt;qt&gt;Safe graphics mode&lt;br&gt;Click for more information&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Turvallinen grafiikkatila&lt;br&gt;Klikkaa saadaksesi lisätietoja&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/WarningWidget.cpp" line="196"/>
@@ -23251,7 +23251,7 @@ Haluatko asettaa sen nyt?</translation>
     <message>
         <location filename="../../src/gui/widgets/WarningWidget.cpp" line="197"/>
         <source>&lt;qt&gt;&lt;p&gt;Rosegarden is using safe graphics mode.  This provides the greatest stability, but graphics performance is very slow.&lt;/p&gt;&lt;p&gt;You may wish to visit &lt;b&gt;Edit -&gt; Preferences -&gt; Behavior -&gt; Graphics performance&lt;/b&gt; and try &quot;Normal&quot; or &quot;Fast&quot; for better performance.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Rosegarden käyttää turvallista grafiikkatilaa.  Tämä on vaikain, mutta grafiikan piirtonopeus on hidas.&lt;/p&gt;&lt;p&gt;Saatat haluta kokeilla normaalia tai nopeata tilaa &lt;b&gt;Muokkaa -&gt; Asetukset... -&gt; Käytös -&gt; Graafinen suorituskyky&lt;/b&gt; -valikosta.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
