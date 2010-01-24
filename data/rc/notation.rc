@@ -37,6 +37,8 @@
     <Action name="clear_selection" text="Clear Select&amp;ion" shortcut="Escape" />
     <Action name="filter_selection" text="&amp;Filter Selection" icon="filter" shortcut="Ctrl+F" />
   <Separator/>
+    <Action name="pitch_bend_sequence" text="Insert Pitch &amp;Bend Sequence..." />
+  <Separator/>
     <Action name="options_configure" text="&amp;Preferences..." icon="configure" />
   </Menu>
 
@@ -893,6 +895,7 @@
     <Action name="velocity_up"/>
     <Action name="velocity_down"/>
     <Action name="set_velocities"/>
+    <Action name="pitch_bend_sequence"/>
     <Menu name="Stems"/>
     <Menu name="Slashes"/>
     <Menu name="Transpose"/>
@@ -947,6 +950,9 @@
     <Action name="toggle_pitchbend_ruler"/>
     <Action name="add_control_ruler"/>
   </enable>
+  <visible>
+    <Action name="pitch_bend_sequence"/>
+  </visible>
 </State>
 
 <State name="have_note_events_in_segment">

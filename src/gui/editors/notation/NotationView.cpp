@@ -103,6 +103,7 @@
 #include "gui/dialogs/LilyPondOptionsDialog.h"
 #include "gui/dialogs/EventFilterDialog.h"
 #include "gui/dialogs/EventParameterDialog.h"
+#include "gui/dialogs/PitchBendSequenceDialog.h"
 #include "gui/dialogs/KeySignatureDialog.h"
 #include "gui/dialogs/IntervalDialog.h"
 #include "gui/dialogs/TupletDialog.h"
@@ -402,6 +403,8 @@ NotationView::setupActions()
     createAction("select_whole_staff", SLOT(slotEditSelectWholeStaff()));
     createAction("clear_selection", SLOT(slotClearSelection()));
     createAction("filter_selection", SLOT(slotFilterSelection()));
+    createAction("pitch_bend_sequence", SLOT(slotPitchBendSequence()));    
+
     
     //"view" MenuBar menu
     // "note_font_actionmenu" subMenu
@@ -2222,6 +2225,24 @@ NotationView::getPitchFromNoteInsertAction(QString name,
         throw Exception("Not an insert action",
                         __FILE__, __LINE__);
     }
+}
+
+void
+NotationView::slotPitchBendSequence()
+{
+    timeT startTime=0;
+    timeT endTime=0;
+
+    if (getSelection()) {
+        startTime=getSelection()->getStartTime();
+        endTime=getSelection()->getEndTime();
+    } else {
+        startTime = getInsertionTime();
+    }
+
+    PitchBendSequenceDialog dialog(this, getCurrentSegment(), startTime,
+                                   endTime);
+    dialog.exec();
 }
 
 void

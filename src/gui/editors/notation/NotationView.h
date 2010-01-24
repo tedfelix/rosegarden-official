@@ -323,6 +323,9 @@ protected slots:
 
     virtual void slotConfigure();
 
+    // Open insert pitch bends sequence dialog
+    void slotPitchBendSequence();
+
 private:
     /**
      * export a LilyPond file (used by slotPrintLilyPond and
