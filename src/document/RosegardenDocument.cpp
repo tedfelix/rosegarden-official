@@ -2777,39 +2777,52 @@ RosegardenDocument::initialiseControllers()
     MappedEventList mC;
     MappedEvent *mE;
 
+    // This is updated code for Thorn that only sends visible IPB controllers for
+    // Instruments assigned to tracks.
+
+    // Deterime the active instruments
+    std::set<InstrumentId> activeInstruments;
+
+    for (Composition::trackcontainer::const_iterator i =
+             m_composition.getTracks().begin();
+         i != m_composition.getTracks().end(); ++i) {
+
+        Track *track = i->second;
+        if (track) activeInstruments.insert(track->getInstrument());
+    }
+
+    // Send controllers for active MIDI instruments
     InstrumentList::iterator it = list.begin();
+
     for (; it != list.end(); it++) {
         if ((*it)->getType() == Instrument::Midi) {
-            std::vector<MidiControlPair> advancedControls;
 
-            // push all the advanced static controls
-            //
-            StaticControllers &list = (*it)->getStaticControllers();
-            for (StaticControllerConstIterator cIt = list.begin(); cIt != list.end(); ++cIt) {
-                advancedControls.push_back(MidiControlPair(cIt->first, cIt->second));
-            }
-
-            advancedControls.push_back
-                (MidiControlPair(MIDI_CONTROLLER_PAN, (*it)->getPan()));
-            advancedControls.push_back
-                (MidiControlPair(MIDI_CONTROLLER_VOLUME, (*it)->getVolume()));
-
-            std::vector<MidiControlPair>::iterator iit = advancedControls.begin();
-            for (; iit != advancedControls.end(); iit++) {
-                try {
-                    mE = new MappedEvent((*it)->getId(),
-                                         MappedEvent::MidiController,
-                                         iit->first,
-                                         iit->second);
-                } catch (...) {
-                    continue;
+            if (activeInstruments.find((*it)->getId()) !=
+                activeInstruments.end()) {
+                std::vector<MidiControlPair> advancedControls;
+            
+                StaticControllers &list = (*it)->getStaticControllers();
+                for (StaticControllerConstIterator cIt = list.begin();
+                     cIt != list.end(); ++cIt) {
+                    advancedControls.push_back(MidiControlPair(cIt->first,
+                                                               cIt->second));
                 }
+                std::vector<MidiControlPair>::iterator iit = advancedControls.begin();
+                for (; iit != advancedControls.end(); iit++) {
+                    try {
+                        mE = new MappedEvent((*it)->getId(),
+                                             MappedEvent::MidiController,
+                                             iit->first,
+                                             iit->second);
+                    } catch (...) {
+                        continue;
+                    }
 
-                mC.insert(mE);
+                    mC.insert(mE);
+                }
             }
         }
     }
-
     StudioControl::sendMappedEventList(mC);
 }
 

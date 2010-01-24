@@ -1286,12 +1286,6 @@ SequenceManager::preparePlayback(bool forceProgramChanges)
         if (track) activeInstruments.insert(track->getInstrument());
     }
 
-    // Determine the sends all controllers configuration state
-    QSettings settings;
-    settings.beginGroup(SequencerOptionsConfigGroup);
-    bool sendControllers = qStrToBool(settings.value("alwayssendcontrollers", "false")) ;
-    settings.endGroup();
-
     // Send the MappedInstruments full information to the Sequencer 
     InstrumentList::iterator it = list.begin();
     for (; it != list.end(); it++) {
@@ -1337,34 +1331,6 @@ SequenceManager::preparePlayback(bool forceProgramChanges)
                 mC.insert(mE);
             }
 
-            // Send all the advanced static controls
-            if (sendControllers) {
-                // Controller code taken from from
-                // RosegardenDocument::initialiseControllers()
-                std::vector<MidiControlPair> advancedControls;
-
-                StaticControllers &list = (*it)->getStaticControllers();
-                for (StaticControllerConstIterator cIt = list.begin();
-                     cIt != list.end(); ++cIt) {
-                    advancedControls.push_back(MidiControlPair(cIt->first,
-                                                               cIt->second));
-                }
-                std::vector<MidiControlPair>::iterator iit = advancedControls.begin();
-                for (; iit != advancedControls.end(); iit++) {
-                    try {
-                        mE = new MappedEvent((*it)->getId(),
-                                             MappedEvent::MidiController,
-                                             iit->first,
-                                             iit->second);
-                    } catch (...) {
-                        continue;
-                    }
-
-                    mC.insert(mE);
-                }
-            }
-
-
         } else if ((*it)->getType() == Instrument::Audio ||
                    (*it)->getType() == Instrument::SoftSynth) {
         } else {
@@ -1376,6 +1342,18 @@ SequenceManager::preparePlayback(bool forceProgramChanges)
     // Send the MappedEventList if it's got anything in it
     showVisuals(mC);
     StudioControl::sendMappedEventList(mC);
+
+    // Sends all controllers configuration state
+    QSettings settings;
+    settings.beginGroup(SequencerOptionsConfigGroup);
+    bool sendControllers = qStrToBool(settings.value("alwayssendcontrollers", "false")) ;
+    settings.endGroup();
+
+    // Send the controllers
+    if (sendControllers) {
+        m_doc->initialiseControllers();
+    }
+
 }
 
 void
