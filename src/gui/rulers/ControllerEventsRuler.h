@@ -74,12 +74,14 @@ public:
     virtual ControlItem* addControlItem(float, float);
     virtual ControlItem* addControlItem(Event *);
 
-    /** Draw a line of controllers from (x1, y1) to (x2, y2)
+    /** Draw a line of controllers from (x1, y1) to (x2, y2).  If
+     * eraseExistingControllers is true, any existing controllers falling within
+     * this line's span of time will be cleared away before the line is drawn
      *
      * Does not return anything yet, as whether it should or not has yet to be
      * determined.
      */
-    virtual void addControlLine(float x1, float y1, float x2, float y2);
+    virtual void addControlLine(float x1, float y1, float x2, float y2, bool eraseExistingContollers);
 
     /** Draw a rubber band indicating the controller line that will be drawn if
      * the user clicks another event into existence while moving the pencil

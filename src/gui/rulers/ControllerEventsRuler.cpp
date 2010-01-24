@@ -35,6 +35,7 @@
 #include "base/Selection.h"
 #include "commands/edit/EraseCommand.h"
 #include "commands/edit/EventInsertionCommand.h"
+#include "commands/notation/EraseEventCommand.h"
 #include "gui/general/EditViewBase.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/widgets/LineEdit.h"
@@ -355,7 +356,7 @@ ControlItem* ControllerEventsRuler::addControlItem(float x, float y)
 }
 
 void
-ControllerEventsRuler::addControlLine(float x1, float y1, float x2, float y2)
+ControllerEventsRuler::addControlLine(float x1, float y1, float x2, float y2, bool eraseExistingControllers)
 {
     std::cout << "ControllerEventsRuler::addControlLine()";
     clearSelectedItems();
@@ -388,6 +389,22 @@ ControllerEventsRuler::addControlLine(float x1, float y1, float x2, float y2)
         destinationValue = swapValue;
     }
 
+    // save a list of existing events that occur within the span of the new line
+    // for later deletion, if desired
+    std::vector<Event*> eventsToClear;
+
+    if (eraseExistingControllers) {
+        for (Segment::iterator si = m_segment->begin();
+             si != m_segment->end(); ++si) {
+
+            timeT t = (*si)->getNotationAbsoluteTime();
+            if (t >= originTime && t <= destinationTime) {
+                eventsToClear.push_back(*si);
+            }
+        }
+    }
+
+    // rise and run
     long rise = destinationValue - originValue;
     timeT run = destinationTime - originTime;
 
@@ -433,6 +450,21 @@ ControllerEventsRuler::addControlLine(float x1, float y1, float x2, float y2)
 
     bool failsafe = false;
 
+    // if we're clearing existing events, add that to the macro command
+    for (std::vector<Event*>::iterator ei = eventsToClear.begin();
+         ei != eventsToClear.end(); ++ei) {
+
+        // if the event was a controller or pitch bend, add it to the list
+        // (NOTE: it's important NOT to add anything ELSE to the list!)
+        if ((*ei)->isa(Controller::EventType) || (*ei)->isa(PitchBend::EventType)) {
+            bool collapseRests = false;
+            macro->addCommand(new EraseEventCommand(*m_segment,
+                                                    *ei,
+                                                    collapseRests));
+       }
+
+    }
+
     for (timeT i = originTime + step; i <= destinationTime; i += step) {
 
         if (failsafe) continue;
@@ -446,7 +478,7 @@ ControllerEventsRuler::addControlLine(float x1, float y1, float x2, float y2)
 //        std::cout << "creating event at time: " << i << " of value: " << intermediateValue << std::endl;
 //        continue;
 
-        Event* controllerEvent = new Event(m_controller->getType(), i);
+        Event *controllerEvent = new Event(m_controller->getType(), i);
 
         if (m_controller->getType() == Rosegarden::Controller::EventType) {
 
