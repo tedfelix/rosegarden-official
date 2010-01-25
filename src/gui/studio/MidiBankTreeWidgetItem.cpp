@@ -41,7 +41,8 @@ MidiBankTreeWidgetItem::MidiBankTreeWidgetItem(DeviceId deviceId,
     setText(2, QString().setNum(msb));
     setText(3, QString().setNum(lsb));
     
-//     setFlags( Qt::ItemIsEditable );  //qt4
+    setFlags(flags() | Qt::ItemIsEditable);  //qt4
+
 }
 
 void MidiBankTreeWidgetItem::setPercussion(bool percussion)

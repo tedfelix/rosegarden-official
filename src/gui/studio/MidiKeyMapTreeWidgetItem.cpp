@@ -40,6 +40,7 @@ MidiKeyMapTreeWidgetItem::MidiKeyMapTreeWidgetItem(DeviceId deviceId,
 {
     setText( 0, name );
     setText( 1, tr("Key Mapping") );
+    setFlags(flags() | Qt::ItemIsEditable);  //qt4
 }
 
 int MidiKeyMapTreeWidgetItem::compare(QTreeWidgetItem *i, int col, bool ascending) const
