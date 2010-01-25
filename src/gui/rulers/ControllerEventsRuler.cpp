@@ -427,18 +427,13 @@ ControllerEventsRuler::addControlLine(float x1, float y1, float x2, float y2, bo
     // Trying this with pitch bend with a rise approaching the maximum over a
     // span of around four bars generated over 15,000 pitch bend events!  That's
     // super duper fine resolution, but it's too much for anything to handle.
-    // Let's try to do some sensible thinning:
-    long increment = 1;
-    if (m_controller->getType() == Rosegarden::PitchBend::EventType) {
-        std::cout << run << " / " << (rising ? rise : rise * -1) << " == " << step << std::endl;
-        increment = 100;
-        if (step == 0) step = 1;
-        step *= 100;
-    }
-
-    long intermediateValue = originValue;
+    // Let's try to do some sensible thinning without getting too complicated...
+    bool isPitchBend = (m_controller->getType() == Rosegarden::PitchBend::EventType);
+    int thinningHackCounter = 1;
     
+    long intermediateValue = originValue;    
     long controllerNumber = 0;
+
     if (m_controller) {
         controllerNumber = m_controller->getControllerValue();
     } else {
@@ -471,8 +466,8 @@ ControllerEventsRuler::addControlLine(float x1, float y1, float x2, float y2, bo
 
         if (failsafe) continue;
 
-        if (rising) intermediateValue += increment;
-        else intermediateValue -= increment;
+        if (rising) intermediateValue++;
+        else intermediateValue--;
 
         if (rising && intermediateValue > destinationValue) failsafe = true;
         else if (!rising && intermediateValue < destinationValue) failsafe = true;
@@ -488,6 +483,17 @@ ControllerEventsRuler::addControlLine(float x1, float y1, float x2, float y2, bo
             controllerEvent->set<Rosegarden::Int>(Rosegarden::Controller::NUMBER, controllerNumber);
 
         } else if (m_controller->getType() == Rosegarden::PitchBend::EventType)   {
+
+            // always set the first and last events, then only set every 25th,
+            // 50th, and 75th event for pitch bend
+            if (thinningHackCounter++ > 100) thinningHackCounter = 1;
+            if (thinningHackCounter != 25 &&
+                thinningHackCounter != 50 &&
+                thinningHackCounter != 75 &&
+                i != originTime           &&
+                i != destinationTime) continue;
+
+            std::cout << "intermediate value: " << intermediateValue << std::endl;
 
             // Convert to PitchBend MSB/LSB
             int lsb = intermediateValue & 0x7f;
