@@ -465,7 +465,7 @@ ControllerEventsRuler::addControlLine(float x1, float y1, float x2, float y2, bo
 
     }
 
-    for (timeT i = originTime + step; i <= destinationTime; i += step) {
+    for (timeT i = originTime; i <= destinationTime; i += step) {
 
         if (failsafe) continue;
 
