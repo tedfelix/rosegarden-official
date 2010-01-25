@@ -110,7 +110,7 @@ public slots:
     void slotImport();
     void slotExport();
 
-    void slotModifyDeviceOrBankName(QTreeWidgetItem*, const QString&,int);
+    void slotModifyDeviceOrBankName(QTreeWidgetItem*, int);
 
     void slotFileClose();
 

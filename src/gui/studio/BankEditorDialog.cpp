@@ -358,7 +358,8 @@ BankEditorDialog::setupActions()
     connect( m_treeWidget, SIGNAL(currentItemChanged( QTreeWidgetItem*, QTreeWidgetItem*)),  //twItemCurr, teItemPrev
              this, SLOT(slotPopulateDeviceEditors(QTreeWidgetItem*, QTreeWidgetItem*))  );
     
-    
+    connect(m_treeWidget, SIGNAL(itemChanged(QTreeWidgetItem*, int)), this, 
+            SLOT(slotModifyDeviceOrBankName(QTreeWidgetItem*, int)));
     
     // some adjustments
 
@@ -1357,7 +1358,7 @@ BankEditorDialog::getFirstFreeBank(QTreeWidgetItem* item)
 }
 
 void
-BankEditorDialog::slotModifyDeviceOrBankName(QTreeWidgetItem* item, const QString &label, int)
+BankEditorDialog::slotModifyDeviceOrBankName(QTreeWidgetItem* item, int)
 {
     RG_DEBUG << "BankEditorDialog::slotModifyDeviceOrBankName" << endl;
 
@@ -1368,6 +1369,7 @@ BankEditorDialog::slotModifyDeviceOrBankName(QTreeWidgetItem* item, const QStrin
     MidiKeyMapTreeWidgetItem *keyItem =
         dynamic_cast<MidiKeyMapTreeWidgetItem*>(item);
 
+    QString label = item->text(0);
     if (bankItem) {
 
         // renaming a bank item
