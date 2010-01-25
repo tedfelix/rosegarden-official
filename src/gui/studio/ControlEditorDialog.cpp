@@ -117,6 +117,7 @@ ControlEditorDialog::ControlEditorDialog
     
     m_treeWidget = new QTreeWidget(mainFrame);
     m_treeWidget->setHeaderLabels(sl);
+    m_treeWidget->setSortingEnabled(true);
     
     mainFrameLayout->addWidget(m_treeWidget);
     
