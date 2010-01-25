@@ -102,12 +102,12 @@ bool ControllerEventsRuler::isOnThisRuler(Event *event)
     if (event->getType() == m_controller->getType()) {
         if (event->getType() == Controller::EventType) {
             try {
-                if (event->get<Int>(Controller::NUMBER) ==
-                        m_controller->getControllerValue())
-                    result = true;
+                if (event->get<Int>(Controller::NUMBER) == m_controller->getControllerValue()) result = true;
             } catch (...) {
+                //
             }
         } else {
+            // covers pitch bend, but isn't there a better test?
             result = true;
         }
     }
@@ -454,10 +454,12 @@ ControllerEventsRuler::addControlLine(float x1, float y1, float x2, float y2, bo
     for (std::vector<Event*>::iterator ei = eventsToClear.begin();
          ei != eventsToClear.end(); ++ei) {
 
-        // if the event was a controller or pitch bend, add it to the list
-        // (NOTE: it's important NOT to add anything ELSE to the list!)
-        if ((*ei)->isa(Controller::EventType) || (*ei)->isa(PitchBend::EventType)) {
-            bool collapseRests = false;
+        // if the event was a controller or pitch bend, and it is on this ruler,
+        // add it to the list
+        if (((*ei)->isa(Controller::EventType) || (*ei)->isa(PitchBend::EventType))
+            && isOnThisRuler(*ei)) {
+
+            bool collapseRests = true;
             macro->addCommand(new EraseEventCommand(*m_segment,
                                                     *ei,
                                                     collapseRests));
@@ -629,203 +631,5 @@ void ControllerEventsRuler::eraseControllerEvent()
     updateSelection();
 }
 
-//void ControllerEventsRuler::clearControllerEvents()
-//{
-//    EventSelection *es = new EventSelection(*m_segment);
-//
-//    for (Segment::iterator it = m_segment->begin(); it != m_segment->end(); ++it) {
-//        if (isOnThisRuler(*it)) {
-//            es->addEvent(*it);
-//        }
-////        if (!(*it)->isa(Controller::EventType))
-////            continue;
-////        {
-////            if (m_controller) // ensure we have only the controller events we want for this ruler
-////            {
-////                try
-////                {
-////                    if ((*it)->get
-////                            <Int>(Controller::NUMBER)
-////                            != m_controller->getControllerValue())
-////                        continue;
-////                } catch (...)
-////                {
-////                    continue;
-////                }
-////
-////                es->addEvent(*it);
-////            }
-////        }
-//    }
-//
-//    EraseCommand *command = new EraseCommand(*es);
-//    CommandHistory::getInstance()->addCommand(command);
-//}
-
-//void ControllerEventsRuler::startControlLine()
-//{
-//    m_controlLineShowing = true;
-//    this->setCursor(Qt::pointingHandCursor);
-//}
-//
-//void ControllerEventsRuler::contentsMousePressEvent(QMouseEvent *e)
-//{
-////    if (!m_controlLineShowing) {
-//        if (e->button() == Qt::MidButton)
-////            m_lastEventPos = inverseMapPoint(e->pos());
-//            m_lastEventPos = e->pos();
-//
-//        ControlRuler::mousePressEvent(e); // send super
-//
-////        return ;
-////    }
-//
-//    // cancel control line mode
-////    if (e->button() == Qt::RightButton) {
-////        m_controlLineShowing = false;
-////        m_controlLine->hide();
-//
-////        this->setCursor(Qt::arrowCursor);
-////        return ;
-////    }
-//
-////    if (e->button() == Qt::LeftButton) {
-////        QPoint p = inverseMapPoint(e->pos());
-//
-////        m_controlLine->show();
-////        m_controlLineX = p.x();
-////        m_controlLineY = p.y();
-////        m_controlLine->setPoints(m_controlLineX, m_controlLineY, m_controlLineX, m_controlLineY);
-////        canvas()->update();
-////    }
-//}
-//
-//void ControllerEventsRuler::contentsMouseReleaseEvent(QMouseEvent *e)
-//{
-////    if (!m_controlLineShowing) {
-////        if (e->button() == Qt::MidButton)
-////            insertControllerEvent();
-//
-//        ControlRuler::mouseReleaseEvent(e); // send super
-//
-////        return ;
-////    } else {
-//        //QPoint p = inverseMapPoint(e->pos());
-//
-//        //timeT startTime = m_rulerScale->getTimeForX(m_controlLineX);
-//        //timeT endTime = m_rulerScale->getTimeForX(p.x());
-//
-//        //long startValue = heightToValue(m_controlLineY - canvas()->height());
-//        //long endValue = heightToValue(p.y() - canvas()->height());
-//
-//        //RG_DEBUG << "ControllerEventsRuler::contentsMouseReleaseEvent - "
-//        //<< "starttime = " << startTime
-//        //<< ", endtime = " << endTime
-//        //<< ", startValue = " << startValue
-//        //<< ", endValue = " << endValue
-//        //<< endl;
-//
-//        //drawControlLine(startTime, endTime, startValue, endValue);
-//
-//        //m_controlLineShowing = false;
-//        //m_controlLine->hide();
-//        //this->setCursor(Qt::arrowCursor);
-//        //canvas()->update();
-//    //}
-//}
-//
-//void ControllerEventsRuler::contentsMouseMoveEvent(QMouseEvent *e)
-//{
-////    if (!m_controlLineShowing) {
-//        // Don't send super if we're using the middle button
-//        //
-//        if (e->button() == Qt::MidButton) {
-////            m_lastEventPos = inverseMapPoint(e->pos());
-//            m_lastEventPos = e->pos();
-//            return ;
-//        }
-//
-//        ControlRuler::mouseMoveEvent(e); // send super
-////        return ;
-////    }
-//
-////    QPoint p = inverseMapPoint(e->pos());
-//
-////    m_controlLine->setPoints(m_controlLineX, m_controlLineY, p.x(), p.y());
-////    canvas()->update();
-//
-//}
-
-//void ControllerEventsRuler::layoutItem(ControlItem* item)
-//{
-////    timeT itemTime = item->getElementAdapter()->getTime();
-//    timeT itemTime = 0;
-//
-//    double x = m_rulerScale->getXForTime(itemTime) + m_viewSegmentOffset;
-//
-//    item->setX(x);
-//
-//    int width = getDefaultItemWidth(); // TODO: how to scale that ??
-//
-//    if (m_controller->getType() == PitchBend::EventType)
-//        width /= 4;
-//
-//    item->setWidth(width);
-//
-//    //RG_DEBUG << "ControllerEventsRuler::layoutItem ControlItem x = " << x
-//    //<< " - width = " << width << endl;
-//}
-
-//void
-//ControllerEventsRuler::drawControlLine(timeT startTime,
-                                       //timeT endTime,
-                                       //int startValue,
-                                       //int endValue)
-//{
-    //if (m_controller == 0)
-        //return ;
-    //if (startTime > endTime) {
-        //std::swap(startTime, endTime);
-        //std::swap(startValue, endValue);
-    //}
-
-    //timeT quantDur = Note(Note::Quaver).getDuration();
-
-    //// If inserting a line of PitchBends then we want a smoother curve
-    ////
-    //if (m_controller->getType() == PitchBend::EventType)
-        //quantDur = Note(Note::Demisemiquaver).getDuration();
-
-    //// for the moment enter a quantized set of events
-    //timeT time = startTime, newTime = 0;
-    //double step = double(endValue - startValue) / double(endTime - startTime);
-
-    //MacroCommand *macro = new MacroCommand(tr("Add line of controllers"));
-
-    //while (time < endTime) {
-        //int value = startValue + int(step * double(time - startTime));
-
-        //// hit the buffers
-        //if (value < m_controller->getMin())
-            //value = m_controller->getMin();
-        //else if (value > m_controller->getMax())
-            //value = m_controller->getMax();
-
-        //ControlRulerEventInsertCommand* command =
-            //new ControlRulerEventInsertCommand(m_controller->getType(),
-                                               //time, m_controller->getControllerValue(), value, *m_segment);
-
-        //macro->addCommand(command);
-
-        //// get new time - do it by quantized distances
-        //newTime = (time / quantDur) * quantDur;
-        //if (newTime > time)
-            //time = newTime;
-        //else
-            //time += quantDur;
-    //}
-
-    //CommandHistory::getInstance()->addCommand(macro);
-//}
 
 }
