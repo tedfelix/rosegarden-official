@@ -1358,6 +1358,8 @@ NotationScene::layout(NotationStaff *singleStaff,
         // risky to "fix" it in a dead-end branch; at least here it
         // will necessarily get some testing.
 
+        startTime = staff->getSegment().getBarStartForTime(startTime);
+        endTime = staff->getSegment().getBarEndForTime(endTime);
         bool secondary = (singleStaff && (singleStaff != staff));
         staff->regenerate(startTime, endTime, secondary);
     }
