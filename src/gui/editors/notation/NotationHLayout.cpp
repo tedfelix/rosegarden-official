@@ -446,11 +446,17 @@ NotationHLayout::scanViewSegment(ViewSegment &staff, timeT startTime,
                                        getLayoutWidth(*el, npf, key)));
             }
 
-            actualBarEnd = el->getViewAbsoluteTime() + el->getViewDuration();
+            // If the last event in the bar is a controller or pitch bend,
+            // ignore it when calculating actualBarEnd.  This fixes a very old
+            // bug whereby inserting a controller into an empty bar would turn
+            // the barline red.
+            if (!(el->event()->isa(Controller::EventType)) && !(el->event()->isa(PitchBend::EventType))) {
+                actualBarEnd = el->getViewAbsoluteTime() + el->getViewDuration();
+            }
         }
 
-        if (actualBarEnd == barTimes.first)
-            actualBarEnd = barTimes.second;
+//        std::cout << "barTimes.first: " << barTimes.first << " .second: " << barTimes.second << " actualBarEnd: " << actualBarEnd << std::endl;
+        if (actualBarEnd == barTimes.first) actualBarEnd = barTimes.second;
         barCorrect = (actualBarEnd == barTimes.second);
 
         setBarSizeData(staff, barNo, fixedWidth,
