@@ -1427,6 +1427,8 @@ SegmentNotationHelper::autoBeam(iterator from, iterator to, string type)
 
     if (!segment().isBeforeEndMarker(from)) return;
 
+    unbeam(from, to);
+
     Composition *comp = segment().getComposition();
 
     int fromBar = comp->getBarNumber((*from)->getAbsoluteTime());
