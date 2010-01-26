@@ -513,6 +513,8 @@ void CompositionView::viewportPaintEvent(QPaintEvent* e)
 
 void CompositionView::viewportPaintRect(QRect r)
 {
+    Profiler profiler("CompositionView::viewportPaintRect");
+
     QRect updateRect = r;
 
     r &= viewport()->rect();
@@ -537,9 +539,9 @@ void CompositionView::viewportPaintRect(QRect r)
         QPainter ap;
         ap.begin(&m_artifactsDrawBuffer);
         ap.drawPixmap(copyRect.x(), copyRect.y(),
-                     m_segmentsDrawBuffer,
-                     copyRect.x(), copyRect.y(),
-                     copyRect.width(), copyRect.height());
+                      m_segmentsDrawBuffer,
+                      copyRect.x(), copyRect.y(),
+                      copyRect.width(), copyRect.height());
         ap.end();
 
         m_artifactsDrawBufferRefresh |= r;
@@ -577,6 +579,8 @@ void CompositionView::viewportPaintRect(QRect r)
 
 bool CompositionView::checkScrollAndRefreshDrawBuffer(QRect &rect, bool& scroll)
 {
+    Profiler profiler("CompositionView::checkScrollAndRefreshDrawBuffer");
+
     bool all = false;
     QRect refreshRect = m_segmentsDrawBufferRefresh;
 
@@ -689,7 +693,8 @@ bool CompositionView::checkScrollAndRefreshDrawBuffer(QRect &rect, bool& scroll)
 
 void CompositionView::refreshSegmentsDrawBuffer(const QRect& rect)
 {
-    //    Profiler profiler("CompositionView::refreshDrawBuffer", true);
+    Profiler profiler("CompositionView::refreshSegmentsDrawBuffer");
+
     //      RG_DEBUG << "CompositionView::refreshSegmentsDrawBuffer() r = "
     //           << rect << endl;
 
@@ -721,6 +726,8 @@ void CompositionView::refreshSegmentsDrawBuffer(const QRect& rect)
 
 void CompositionView::refreshArtifactsDrawBuffer(const QRect& rect)
 {
+    Profiler profiler("CompositionView::refreshArtifactsDrawBuffer");
+
     //      RG_DEBUG << "CompositionView::refreshArtifactsDrawBuffer() r = "
     //               << rect << endl;
 
@@ -739,7 +746,7 @@ void CompositionView::refreshArtifactsDrawBuffer(const QRect& rect)
 
 void CompositionView::drawArea(QPainter *p, const QRect& clipRect)
 {
-    //     Profiler profiler("CompositionView::drawArea", true);
+    Profiler profiler("CompositionView::drawArea");
 
     //     RG_DEBUG << "CompositionView::drawArea() clipRect = " << clipRect << endl;
     //
@@ -748,6 +755,8 @@ void CompositionView::drawArea(QPainter *p, const QRect& clipRect)
     CompositionModel::heightlist lineHeights = getModel()->getTrackDividersIn(clipRect);
 
     if (!lineHeights.empty()) {
+
+        Profiler profiler("CompositionModel::drawArea: dividing lines");
 
         p->save();
         QColor light = m_trackDividerColor.light();
@@ -806,6 +815,9 @@ void CompositionView::drawArea(QPainter *p, const QRect& clipRect)
     CompositionModel::rectcontainer::const_iterator i = rects.begin();
     CompositionModel::rectcontainer::const_iterator end = rects.end();
 
+    {
+    Profiler profiler("CompositionView::drawArea: segment rectangles");
+
     //
     // Draw Segment Rectangles
     //
@@ -820,9 +832,15 @@ void CompositionView::drawArea(QPainter *p, const QRect& clipRect)
 
     p->restore();
 
+    }
+
+    {
+    Profiler profiler("CompositionView::drawArea: intersections");
+
     if (rects.size() > 1) {
         //         RG_DEBUG << "CompositionView::drawArea : drawing intersections\n";
         drawIntersections(rects, p, clipRect);
+    }
     }
 
     //
@@ -831,9 +849,15 @@ void CompositionView::drawArea(QPainter *p, const QRect& clipRect)
     if (m_showPreviews) {
         p->save();
 
-        // draw audio previews
-        //
-        drawAreaAudioPreviews(p, clipRect);
+        {
+            Profiler profiler("CompositionView::drawArea: audio previews");
+
+            // draw audio previews
+            //
+            drawAreaAudioPreviews(p, clipRect);
+        }
+
+        Profiler profiler("CompositionView::drawArea: note previews");
 
         // draw notation previews
         //
@@ -864,6 +888,7 @@ void CompositionView::drawArea(QPainter *p, const QRect& clipRect)
     // Draw segment labels (they must be drawn over the preview rects)
     //
     if (m_showSegmentLabels) {
+        Profiler profiler("CompositionView::drawArea: labels");
         for (i = rects.begin(); i != end; ++i) {
             drawCompRectLabel(*i, p, clipRect);
         }
@@ -875,6 +900,8 @@ void CompositionView::drawArea(QPainter *p, const QRect& clipRect)
 
 void CompositionView::drawAreaAudioPreviews(QPainter * p, const QRect& clipRect)
 {
+    Profiler profiler("CompositionView::drawAreaAudioPreviews");
+
     CompositionModel::AudioPreviewDrawData::const_iterator api = m_audioPreviewRects.begin();
     CompositionModel::AudioPreviewDrawData::const_iterator apEnd = m_audioPreviewRects.end();
     QRect rectToFill,  // rect to fill on canvas

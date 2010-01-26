@@ -18,6 +18,7 @@
 #include "base/Segment.h"
 #include "FastVector.h"
 #include "base/BaseProperties.h"
+#include "base/Profiler.h"
 #include "BasicQuantizer.h"
 #include "NotationQuantizer.h"
 
@@ -221,6 +222,7 @@ Composition::addSegment(Segment *segment)
     iterator res = weakAddSegment(segment);
 
     if (res != end()) {
+        clearVoiceCaches();
         updateRefreshStatuses();
 	notifySegmentAdded(segment);
     }
@@ -248,6 +250,7 @@ Composition::deleteSegment(Composition::iterator i)
     p->setComposition(0);
 
     m_segments.erase(i);
+    clearVoiceCaches();
     notifySegmentRemoved(p);
     delete p;
 
@@ -270,6 +273,7 @@ Composition::detachSegment(Segment *segment)
     bool res = weakDetachSegment(segment);
 
     if (res) {
+        clearVoiceCaches();
         notifySegmentRemoved(segment);
         updateRefreshStatuses();
     }
@@ -321,74 +325,81 @@ void Composition::setSegmentStartTime(Segment *segment, timeT startTime)
     segment->setStartTimeDataMember(startTime);
 
     // re-add it
-    m_segments.insert(segment);    
+    m_segments.insert(segment);
+
+    clearVoiceCaches();
+}
+
+void
+Composition::clearVoiceCaches()
+{
+    m_trackVoiceCountCache.clear();
+    m_segmentVoiceIndexCache.clear();
+}
+
+void
+Composition::rebuildVoiceCaches() const
+{
+    Profiler profiler("Composition::rebuildVoiceCaches");
+
+    // slow
+    
+    m_trackVoiceCountCache.clear();
+    m_segmentVoiceIndexCache.clear();
+
+    for (trackcontainer::const_iterator tci = m_tracks.begin();
+         tci != m_tracks.end(); ++tci) {
+
+        TrackId tid = tci->first;
+        
+        std::multimap<timeT, Segment *> ends;
+        
+        for (const_iterator i = begin(); i != end(); ++i) {
+            if ((*i)->getTrack() != tid) continue;
+            timeT t0 = (*i)->getStartTime();
+            timeT t1 = (*i)->getRepeatEndTime();
+            int index = 0;
+            std::multimap<timeT, Segment *>::iterator ei = ends.end();
+            std::set<int> used;
+            while (ei != ends.begin()) {
+                --ei;
+                if (ei->first <= t0) break;
+                used.insert(m_segmentVoiceIndexCache[ei->second]);
+            }
+            if (!used.empty()) {
+                for (index = 0; ; ++index) {
+                    if (used.find(index) == used.end()) break;
+                }
+            }
+            m_segmentVoiceIndexCache[*i] = index;
+            if (index >= m_trackVoiceCountCache[tid]) {
+                m_trackVoiceCountCache[tid] = index + 1;
+            }
+            ends.insert(std::multimap<timeT, Segment *>::value_type(t1, *i));
+        }
+    }
 }
 
 int
 Composition::getMaxContemporaneousSegmentsOnTrack(TrackId track) const
 {
-    // Could be made faster, but only if it needs to be.
+    Profiler profiler("Composition::getMaxContemporaneousSegmentsOnTrack");
 
-    // This is similar to the polyphony calculation in
-    // DocumentMetaConfigurationPage ctor.
-
-    std::set<Segment *> simultaneous;
-    std::multimap<timeT, Segment *> ends;
-
-    int maximum = 0;
-
-    for (const_iterator i = begin(); i != end(); ++i) {
-	if ((*i)->getTrack() != track) continue;
-	timeT t0 = (*i)->getStartTime();
-	timeT t1 = (*i)->getRepeatEndTime();
-//	std::cerr << "getMaxContemporaneousSegmentsOnTrack(" << track << "): segment " << *i << " from " << t0 << " to " << t1 << std::endl;
-	while (!ends.empty() && t0 >= ends.begin()->first) {
-	    simultaneous.erase(ends.begin()->second);
-	    ends.erase(ends.begin());
-	}
-	simultaneous.insert(*i);
-	ends.insert(std::multimap<timeT, Segment *>::value_type(t1, *i));
-	int current = int(simultaneous.size());
-	if (current > maximum) maximum = current;
+    if (m_trackVoiceCountCache.empty()) {
+        rebuildVoiceCaches();
     }
 
-    return maximum;
+    return m_trackVoiceCountCache[track];
 }
 
 int
 Composition::getSegmentVoiceIndex(const Segment *segment) const
 {
-    TrackId track = segment->getTrack();
-
-    // See function above
-
-    std::map<Segment *, int> indices;
-    std::set<int> used;
-    std::multimap<timeT, Segment *> ends;
-
-    for (const_iterator i = begin(); i != end(); ++i) {
-	if ((*i)->getTrack() != track) continue;
-	timeT t0 = (*i)->getStartTime();
-	timeT t1 = (*i)->getRepeatEndTime();
-	int index;
-	while (!ends.empty() && t0 >= ends.begin()->first) {
-	    index = indices[ends.begin()->second];
-	    used.erase(index);
-	    indices.erase(ends.begin()->second);
-	    ends.erase(ends.begin());
-	}
-	for (index = 0; ; ++index) {
-	    if (used.find(index) == used.end()) break;
-	}
-	if (*i == segment) return index;
-	indices[*i] = index;
-	used.insert(index);
-	ends.insert(std::multimap<timeT, Segment *>::value_type(t1, *i));
+    if (m_segmentVoiceIndexCache.empty()) {
+        rebuildVoiceCaches();
     }
 
-    std::cerr << "WARNING: Composition::getSegmentVoiceIndex: segment "
-	      << segment << " not found in composition" << std::endl;
-    return 0;
+    return m_segmentVoiceIndexCache[segment];
 }
 
 TriggerSegmentRec *
@@ -538,6 +549,7 @@ Composition::setEndMarker(const timeT &eM)
     bool shorten = (eM < m_endMarker);
     m_endMarker = eM;
     updateRefreshStatuses();
+    clearVoiceCaches();
     notifyEndMarkerChange(shorten);
 }
 

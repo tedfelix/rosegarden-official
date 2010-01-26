@@ -852,17 +852,17 @@ protected:
 
     //--------------- Data members ---------------------------------
     //
-    trackcontainer                    m_tracks;
-    segmentcontainer                  m_segments;
+    trackcontainer m_tracks;
+    segmentcontainer m_segments;
 
     // The tracks we are armed for record on
     //
-    recordtrackcontainer              m_recordTracks;
+    recordtrackcontainer m_recordTracks;
 
     // Are we soloing and if so which Track?
     //
-    bool                              m_solo;
-    TrackId               m_selectedTrack;
+    bool m_solo;
+    TrackId m_selectedTrack;
 
     /**
      * This is a bit like a segment, but can only contain one sort of
@@ -907,14 +907,14 @@ protected:
     };
 
     /// Contains time signature events
-    mutable ReferenceSegment          m_timeSigSegment;
+    mutable ReferenceSegment m_timeSigSegment;
 
     /// Contains tempo events
-    mutable ReferenceSegment          m_tempoSegment;
+    mutable ReferenceSegment m_tempoSegment;
 
     /// affects m_timeSigSegment
     void calculateBarPositions() const;
-    mutable bool                      m_barPositionsNeedCalculating;
+    mutable bool m_barPositionsNeedCalculating;
     ReferenceSegment::iterator getTimeSignatureAtAux(timeT t) const;
 
     /// affects m_tempoSegment
@@ -954,6 +954,9 @@ protected:
     void notifySoloChanged() const;
     void notifyTempoChanged() const;
     void notifySourceDeletion() const;
+
+    void clearVoiceCaches();
+    void rebuildVoiceCaches() const;
 
     void updateExtremeTempos();
 
@@ -998,6 +1001,11 @@ protected:
  
     ColourMap                         m_segmentColourMap;
     ColourMap                         m_generalColourMap;
+
+    // Caches of segment voice indices and track voice counts
+    //
+    mutable std::map<TrackId, int>    m_trackVoiceCountCache;
+    mutable std::map<const Segment *, int>  m_segmentVoiceIndexCache;
 };
 
 

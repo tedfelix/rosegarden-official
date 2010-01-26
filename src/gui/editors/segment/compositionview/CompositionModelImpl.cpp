@@ -129,6 +129,7 @@ struct RectCompare {
 void CompositionModelImpl::makeNotationPreviewRects(RectRanges* npRects, QPoint basePoint,
         const Segment* segment, const QRect& clipRect)
 {
+    Profiler profiler("CompositionModelImpl::makeNotationPreviewRects");
 
     rectlist* cachedNPData = getNotationPreviewData(segment);
 
@@ -225,7 +226,8 @@ void CompositionModelImpl::makeNotationPreviewRectsMovingSegment(RectRanges* npR
 void CompositionModelImpl::makeAudioPreviewRects(AudioPreviewDrawData* apRects, const Segment* segment,
         const CompositionRect& segRect, const QRect& clipRect)
 {
-    Profiler profiler("CompositionModelImpl::makeAudioPreviewRects", true);
+    Profiler profiler("CompositionModelImpl::makeAudioPreviewRects");
+
     RG_DEBUG << "CompositionModelImpl::makeAudioPreviewRects - segRect = " << segRect << endl;
 
     PixmapArray previewImage = getAudioPreviewPixmap(segment);
@@ -1017,7 +1019,7 @@ bool CompositionModelImpl::setTrackHeights(Segment *s)
 
 QPoint CompositionModelImpl::computeSegmentOrigin(const Segment& s)
 {
-    //    Profiler profiler("CompositionModelImpl::computeSegmentOrigin", true);
+    Profiler profiler("CompositionModelImpl::computeSegmentOrigin");
 
     int trackPosition = m_composition.getTrackPositionById(s.getTrack());
     timeT startTime = s.getStartTime();
@@ -1063,7 +1065,7 @@ void CompositionModelImpl::putInCache(const Segment*s, const CompositionRect& cr
 
 CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s, bool computeZ)
 {
-    //    Profiler profiler("CompositionModelImpl::computeSegmentRect", true);
+    Profiler profiler("CompositionModelImpl::computeSegmentRect");
 
     QPoint origin = computeSegmentOrigin(s);
 
@@ -1166,7 +1168,7 @@ const CompositionModel::rectcontainer& CompositionModelImpl::getRectanglesIn(con
         RectRanges* npData,
         AudioPreviewDrawData* apData)
 {
-    //    Profiler profiler("CompositionModelImpl::getRectanglesIn", true);
+    Profiler profiler("CompositionModelImpl::getRectanglesIn");
 
     m_res.clear();
 
@@ -1301,7 +1303,7 @@ CompositionModel::rectlist* CompositionModelImpl::getNotationPreviewData(const S
 
 CompositionModel::AudioPreviewData* CompositionModelImpl::getAudioPreviewData(const Segment* s)
 {
-    //    Profiler profiler("CompositionModelImpl::getAudioPreviewData", true);
+    Profiler profiler("CompositionModelImpl::getAudioPreviewData");
     RG_DEBUG << "CompositionModelImpl::getAudioPreviewData\n";
 
     AudioPreviewData* apData = m_audioPreviewDataCache[s];

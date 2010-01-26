@@ -41,6 +41,7 @@
 #include "base/Studio.h"
 #include "base/Track.h"
 #include "base/TriggerSegment.h"
+#include "base/Profiler.h"
 #include "gui/application/RosegardenMainWindow.h"
 #include "sequencer/RosegardenSequencer.h"
 #include "gui/dialogs/FileLocateDialog.h"
@@ -2138,6 +2139,8 @@ RoseXmlHandler::endElement(const QString& namespaceURI,
     //
     if ((m_totalElements > m_elementsSoFar) &&
         (++m_elementsSoFar % 300 == 0)) {
+
+        Profiler profiler("RoseXmlHandler::endElement: emit progress");
 
 //        std::cout << "emitting setValue(" << int(double(m_elementsSoFar) / double(m_totalElements) * 100.0) << ")" << std::endl;
 
