@@ -256,7 +256,6 @@ TrackEditor::init(QWidget* rosegardenguiview)
             rosegardenguiview, SLOT(slotSetMuteButton(TrackId, bool)));
 
     // connect loop rulers' follow-scroll signals
-    // connect loop rulers' follow-scroll signals
     connect(m_topStandardRuler->getLoopRuler(), SIGNAL(startMouseMove(int)),
             m_compositionView, SLOT(startAutoScroll(int)));
     connect(m_topStandardRuler->getLoopRuler(), SIGNAL(stopMouseMove()),
@@ -766,6 +765,9 @@ void TrackEditor::dropEvent(QDropEvent* e)
         return;
     }
 
+    RG_DEBUG << "TrackEditor::dropEvent: uri list is " << uriList
+             << ", text is " << text << endl;
+
     int heightAdjust = 0;
     //int widthAdjust = 0;
 
@@ -780,81 +782,76 @@ void TrackEditor::dropEvent(QDropEvent* e)
     if (m_chordNameRuler && m_chordNameRuler->isVisible())
         heightAdjust += m_chordNameRuler->height();
 
-//     QPoint posInCompositionView =
-//         m_compositionView->viewportToContents(m_compositionView->
-//                                          viewport()->mapFrom(this, event->pos()));    
-    // 
-    QPoint posInCompositionView;
-    QPoint pt;
-    
-    pt = this->mapToGlobal( e->pos() );            //@@@
-    pt = m_compositionView->mapFromGlobal( pt );
-    posInCompositionView = pt;
-    // note: Base of m_compositionView is CompositionView, RosegardenScrollView, [[QScrollArea]]
-    
-    
-    //### FIXME !! trackPos doesn't tacke into account the tracks y-scroll-position !!
-    // (try to drop an audiofile on the scrolled canvas...)
-    int trackPos = m_compositionView->grid().getYBin( posInCompositionView.y() );
-    
-    
-    
-    timeT time =
-//        m_compositionView->grid().getRulerScale()->
-//        getTimeForX(posInCompositionView.x());
-        m_compositionView->grid().snapX(posInCompositionView.x());
+    int trackPos = m_compositionView->grid().getYBin
+        (e->pos().y() + m_compositionView->contentsY());
 
-    
-    // 
-    if ( uriList.count() && (text.isEmpty()) ) {
-        // more than one entry in the list
+    timeT time = m_compositionView->grid().snapX
+        (e->pos().x() + m_compositionView->contentsX());
+
+    RG_DEBUG << "trackPos = " << trackPos << ", time = " << time << endl;
+
+    Track *track = m_doc->getComposition().getTrackByPosition(trackPos);
+
+    bool internal = (e->source() != 0); // have a source widget
+
+    if (!internal && !uriList.empty()) {
+
+        // We have a URI, and it didn't come from within RG
 
         RG_DEBUG << "TrackEditor::dropEvent() : got URI :" << uriList.first() << endl;
         QString uri = uriList.first();
+        QString tester = uri.toLower();
 
-        if (uri.endsWith(".rg")) {
-            // is a rosegarden document
+        if (tester.endsWith(".rg") || tester.endsWith(".rgp") ||
+            tester.endsWith(".mid") || tester.endsWith(".midi")) {
+
+            // is a rosegarden document or project
+
             emit droppedDocument(uri);
+            return;
+            //
+            // WARNING
+            //
+            // DO NOT PERFORM ANY OPERATIONS AFTER THAT
+            // EMITTING THIS SIGNAL TRIGGERS THE LOADING OF A NEW DOCUMENT
+            // AND AS A CONSEQUENCE THE DELETION OF THIS TrackEditor OBJECT
+            //
+
         } else {
             
-            //RG_DEBUG << "TrackEditor::dropEvent() : got URI: " << uri << endl;
+            if (!track) return;
 
             RG_DEBUG << "TrackEditor::dropEvent() : dropping at track pos = "
-            << trackPos
-            << ", time = "
-            << time
-            << ", x = "
-            << e->pos().x()
-            << ", mapped x = "
-            << posInCompositionView.x()
-            << endl;
+                     << trackPos
+                     << ", time = " << time
+                     << ", x = " << e->pos().x()
+                     << endl;
 
-            Track* track = m_doc->getComposition().getTrackByPosition(trackPos);
-            if (track) {
-                //QTextOStream t(&audioText); // qt3
-                QTextStream t(&audioText, QIODevice::ReadWrite);
-
-                t << uri << "\n";
-                t << track->getId() << "\n";
-                t << time << "\n";
-                t.flush();
-                
-                RG_DEBUG << "TrackEditor::dropEvent() audioText = \n " << audioText << "\n";
-                
-                emit droppedNewAudio(QString(audioText));
-                // connected to RosegardenMainViewWidget::droppedNewAudio()
-            }
-
+            QTextStream t(&audioText, QIODevice::ReadWrite);
+            t << uri << "\n";
+            t << track->getId() << "\n";
+            t << time << "\n";
+            t.flush();
+            RG_DEBUG << "TrackEditor::dropEvent() audioText = \n " << audioText << "\n";
+            emit droppedNewAudio(QString(audioText));
+            // connected to RosegardenMainViewWidget::droppedNewAudio()
         }
 
-    //} else if ( uriList.count() == 1 ){ //(text != "") {
-    } else if ( ! text.isEmpty() ){
+    } else if (internal && !text.isEmpty()) {
+
+        // We have some text and a source widget: this is an internal
+        // drop, which will hopefully turn out to be from the audio
+        // file manager
 
         RG_DEBUG << "TrackEditor::dropEvent() : got text info " << endl;
-        //<< text << endl;
         
-        
-        if (text.endsWith(".rg")) {
+        QString tester = text.toLower();
+
+        if (tester.endsWith(".rg") || tester.endsWith(".rgp") ||
+            tester.endsWith(".mid") || tester.endsWith(".midi")) {
+
+            // presumably unlikely for an internal drop, but we can
+            // handle it so no reason not to
             emit droppedDocument(text);
             return;
             //
@@ -864,11 +861,13 @@ void TrackEditor::dropEvent(QDropEvent* e)
             // EMITTING THIS SIGNAL TRIGGERS THE LOADING OF A NEW DOCUMENT
             // AND AS A CONSEQUENCE THE DELETION OF THIS TrackEditor OBJECT
             //
+
         } else {
+
+            if (!track) return;
+
             // if it's a RG-internal drag-drop, use the text data provided
-            
-            
-            //QTextIStream s(&text);    //qt3
+
             QTextStream s(&text);  //qt4
 
             QString id;
@@ -883,62 +882,41 @@ void TrackEditor::dropEvent(QDropEvent* e)
             s >> endTime.sec;
             s >> endTime.nsec;
 
-            // QDragEvent::source() will only return non-zero if the drag was
-            // from another Rosegarden widget.  We can't call objectName() on a
-            // null QWidget, or it will go boom, and drags from external sources
-            // (eg. dragging an image or other unsupported file type) were
-            // winding up in this code for some reason.
+            // We know e->source() is non-NULL, tested it above when
+            // setting internal, but no harm in leaving this check in
             QString sourceName = "NULL";
             if (e->source()) sourceName = e->source()->objectName();
             
             RG_DEBUG << "TrackEditor::dropEvent() - event source : " << sourceName << endl;
             
-            //if (id == "AudioFileManager") { // only create something if this is data from the right client
-            if (sourceName == "AudioListView") {
+            if (sourceName == "AudioListView") { // only create something if this is data from the right client
                 
+                RG_DEBUG << "TrackEditor::dropEvent() : dropping at track pos = "
+                         << trackPos
+                         << ", time = " << time
+                         << ", x = " << e->pos().x()
+                         << endl;
+
+                QString audioText;
+                QTextStream t(&audioText);
+                t << audioFileId << "\n";
+                t << track->getId() << "\n";
+                t << time << "\n"; // time on canvas
+                t << startTime.sec << "\n";
+                t << startTime.nsec << "\n";
+                t << endTime.sec << "\n";
+                t << endTime.nsec << "\n";
                 
-                
-                // Drop this audio segment if we have a valid track number
-                // (could also check for time limits too)
-                //
-                Track* track = m_doc->getComposition().getTrackByPosition(trackPos);
-                if (track) {
-
-                    RG_DEBUG << "TrackEditor::dropEvent() : dropping at track pos = "
-                    << trackPos
-                    << ", time = "
-                    << time
-                    << ", x = "
-                    << e->pos().x()
-                    << ", map = "
-                    << posInCompositionView.x()
-                    << endl;
-
-                    QString audioText;
-                    QTextStream t(&audioText);
-                    t << audioFileId << "\n";
-                    t << track->getId() << "\n";
-                    t << time << "\n"; // time on canvas
-                    t << startTime.sec << "\n";
-                    t << startTime.nsec << "\n";
-                    t << endTime.sec << "\n";
-                    t << endTime.nsec << "\n";
-
-                    emit droppedAudio(audioText);
-                }
+                emit droppedAudio(audioText);
 
             } else {
                 // data is not from AudioFileManager
 
-                QMessageBox::warning(this, tr("Rosegarden"), tr("Rosegarden cannot accept dropped files of this type."));
-
+                QMessageBox::warning
+                    (this, tr("Rosegarden"),
+                     tr("Rosegarden cannot accept dropped files of this type."));
             }
-
-        } // end if(text) .. else
-
-        // SEE WARNING ABOVE - DON'T DO ANYTHING, THIS OBJECT MAY NOT
-        // EXIST AT THIS POINT.
-
+        }
     }
 }
 
