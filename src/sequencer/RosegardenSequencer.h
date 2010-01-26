@@ -239,7 +239,7 @@ public:
     virtual void segmentModified(MappedSegment *);
     virtual void segmentAdded(MappedSegment *);
     virtual void segmentAboutToBeDeleted(MappedSegment *);
-    virtual void closeAllSegments();
+    virtual void compositionAboutToBeDeleted();
     virtual void remapTracks();
 
     // Set Quarter note length

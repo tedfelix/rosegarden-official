@@ -45,9 +45,6 @@ public:
      */
     bool refresh();
 
-//    QString getFileName() { return m_fileName; }
-//    size_t getFileSize() const { return m_mmappedSize; }
-
     virtual int getSegmentRepeatCount();
 
     MappedSegment *getMappedSegment() { return m_mapped; }
@@ -58,20 +55,8 @@ protected:
     virtual int calculateSize(); // in MappedEvents
     virtual int addSize(int size, Segment *);
 
-//    virtual size_t computeMappedSize();
-//    virtual size_t addMappedSize(Segment *);
-
     /// actual setup, must be called after ctor, calls virtual methods
     virtual void init();
-
-    /// set the size of the mmapped file
-//    void setFileSize(size_t);
-
-    /// perform the mmap() of the file
-//    void doMap();
-
-    /// mremap() the file after a size change
-//    void remap(size_t newsize);
 
     /// dump all segment data in the file
     virtual void dump();

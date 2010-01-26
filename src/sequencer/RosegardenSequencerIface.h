@@ -318,7 +318,7 @@ public:
     virtual void segmentAboutToBeDeleted(MappedSegment *) = 0;
 
     /// Close all mapped segments
-    virtual void closeAllSegments() = 0;
+    virtual void compositionAboutToBeDeleted() = 0;
 
     /** Update mute (etc) statuses while playing. The sequencer handles
         this automatically (with no need for this call) for MIDI events,

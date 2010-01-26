@@ -1060,11 +1060,11 @@ RosegardenSequencer::segmentAboutToBeDeleted(MappedSegment *segment)
 }
 
 void
-RosegardenSequencer::closeAllSegments()
+RosegardenSequencer::compositionAboutToBeDeleted()
 {
     LOCKED;
 
-    SEQUENCER_DEBUG << "MmappedSegment::closeAllSegments()\n";
+    SEQUENCER_DEBUG << "MmappedSegment::compositionAboutToBeDeleted()\n";
 
     m_metaIterator.clear();
 }

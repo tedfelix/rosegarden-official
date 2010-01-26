@@ -126,8 +126,6 @@ SequenceManager::setDocument(RosegardenDocument *doc)
 
     DataBlockRepository::clear();
 
-    RosegardenSequencer::getInstance()->closeAllSegments();
-
     if (m_doc) m_doc->getComposition().removeObserver(this);
     disconnect(CommandHistory::getInstance(), SIGNAL(commandExecuted()));
 
@@ -1550,6 +1548,9 @@ SequenceManager::applyFiltering(const MappedEventList &mC,
 void SequenceManager::resetCompositionMapper()
 {
     SEQMAN_DEBUG << "SequenceManager::resetCompositionMapper()" << endl;
+
+    RosegardenSequencer::getInstance()->compositionAboutToBeDeleted();
+
     delete m_compositionMapper;
     m_compositionMapper = new CompositionMapper(m_doc);
 

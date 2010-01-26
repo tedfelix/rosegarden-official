@@ -44,9 +44,9 @@ SegmentMapper::SegmentMapper(RosegardenDocument *doc,
                              MappedSegment *mapped) :
     m_doc(doc),
     m_segment(segment),
-    m_mapped(mapped) //!!! who will own this? me?
+    m_mapped(mapped) // I own this
 {
-    SEQMAN_DEBUG << "SegmentMapper : " << this << endl;
+    SEQMAN_DEBUG << "SegmentMapper : " << this << " m_mapped = " << m_mapped << endl;
 }
 
 void SegmentMapper::init()
@@ -67,7 +67,7 @@ void SegmentMapper::init()
 
 SegmentMapper::~SegmentMapper()
 {
-    SEQMAN_DEBUG << "~SegmentMapper : " << this << endl;
+    SEQMAN_DEBUG << "~SegmentMapper : " << this << " m_mapped = " << m_mapped << endl;
     delete m_mapped;
 }
 
