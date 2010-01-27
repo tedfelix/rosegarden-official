@@ -99,20 +99,21 @@ DeviceManagerDialog::show()
     slotRefreshOutputPorts();
     slotRefreshInputPorts();
 
-      // The commented out code doesn't function as expected.
-      // It correctly selects first record an paly devices but fails
-      // to properly update the port setting.
-      // Better to just have user select a device then make them think
-      // One is selected and have the wrong port information showing.
-      
-//    // select the top level item by default, if one exists, just as the bank
-//    // editor does
-//    if (m_treeWidget_playbackDevices->topLevelItem(0)) {
-//        m_treeWidget_playbackDevices->topLevelItem(0)->setSelected(true);
-//    }
-//    if (m_treeWidget_recordDevices->topLevelItem(0)) {
-//        m_treeWidget_recordDevices->topLevelItem(0)->setSelected(true);
-//    }
+    // select the top level item by default, if one exists, just as the bank
+    // editor does
+    if (m_treeWidget_playbackDevices->topLevelItem(0)) {
+        // Hack Alert: Force a proper selection by reinserting itself
+        // This ensures ports are updated correctly to reflect selection.
+        QTreeWidgetItem * topItem = m_treeWidget_playbackDevices->topLevelItem(0);
+        m_treeWidget_playbackDevices->setCurrentItem(topItem);
+
+    }
+    if (m_treeWidget_recordDevices->topLevelItem(0)) {
+        // Hack Alert: Force a proper selection by reinserting itself
+        // This ensures ports are updated correctly to reflect selection.       
+        QTreeWidgetItem * topItem = m_treeWidget_recordDevices->topLevelItem(0);
+        m_treeWidget_recordDevices->setCurrentItem(topItem);
+    }
 
     QMainWindow::show();
 }
