@@ -10,7 +10,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>786</width>
+    <width>802</width>
     <height>625</height>
    </rect>
   </property>
@@ -27,7 +27,7 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>774</width>
+      <width>782</width>
       <height>613</height>
      </rect>
     </property>
@@ -106,7 +106,7 @@ QLineEdit
             <string>Default playback device</string>
            </property>
            <property name="text">
-            <string>Internal Synth</string>
+            <string/>
            </property>
           </item>
          </widget>
@@ -339,8 +339,9 @@ QTreeView::branch {
             <string>No port</string>
            </property>
            <property name="icon">
-            <iconset>
-             <normaloff>:/default/icon-plugged-out.png</normaloff>:/default/icon-plugged-out.png</iconset>
+            <iconset resource="../../../data/data.qrc">
+             <normaloff>:/pixmaps/misc/icon-plugged-out.png</normaloff>
+             <normalon>:/pixmaps/misc/icon-plugged-in.png</normalon>:/pixmaps/misc/icon-plugged-out.png</iconset>
            </property>
           </item>
           <item>
@@ -348,8 +349,9 @@ QTreeView::branch {
             <string>Internal Synth</string>
            </property>
            <property name="icon">
-            <iconset>
-             <normaloff>:/default/icon-plugged-out.png</normaloff>:/default/icon-plugged-out.png</iconset>
+            <iconset resource="../../../data/data.qrc">
+             <normaloff>:/pixmaps/misc/icon-plugged-out.png</normaloff>
+             <normalon>:/pixmaps/misc/icon-plugged-in.png</normalon>:/pixmaps/misc/icon-plugged-out.png</iconset>
            </property>
           </item>
          </widget>
@@ -581,7 +583,7 @@ QLineEdit
             <string>Default record device</string>
            </property>
            <property name="text">
-            <string>No port</string>
+            <string/>
            </property>
           </item>
          </widget>
@@ -679,6 +681,11 @@ QTreeView::branch {
           <item>
            <property name="text">
             <string>No port</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../../../data/data.qrc">
+             <normaloff>:/pixmaps/misc/icon-plugged-out.png</normaloff>
+             <normalon>:/pixmaps/misc/icon-plugged-in.png</normalon>:/pixmaps/misc/icon-plugged-out.png</iconset>
            </property>
           </item>
          </widget>

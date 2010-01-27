@@ -81,7 +81,7 @@ public:
     *    adds/removes list entries in the visible devices-list (treeWid),
     *    if the (invisible) device-list of the sequencer has changed
     */
-    void updateDevicesList(DeviceList* devices, QTreeWidget* treeWid, 
+    void updateDevicesList(QTreeWidget* treeWid, 
                             MidiDevice::DeviceDirection in_out_direction);
     
     /**
@@ -115,7 +115,6 @@ public slots:
     
     void slotInputPortClicked(QTreeWidgetItem * item, int column);
     void slotRecordDeviceSelected();
-    void slotRecordDevicesListItemClicked(QTreeWidgetItem* item, int col);
     
     void slotDeviceItemChanged (QTreeWidgetItem * item, int column);
     

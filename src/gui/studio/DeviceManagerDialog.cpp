@@ -99,14 +99,20 @@ DeviceManagerDialog::show()
     slotRefreshOutputPorts();
     slotRefreshInputPorts();
 
-    // select the top level item by default, if one exists, just as the bank
-    // editor does
-    if (m_treeWidget_playbackDevices->topLevelItem(0)) {
-        m_treeWidget_playbackDevices->topLevelItem(0)->setSelected(true);
-    }
-    if (m_treeWidget_recordDevices->topLevelItem(0)) {
-        m_treeWidget_recordDevices->topLevelItem(0)->setSelected(true);
-    }
+      // The commented out code doesn't function as expected.
+      // It correctly selects first record an paly devices but fails
+      // to properly update the port setting.
+      // Better to just have user select a device then make them think
+      // One is selected and have the wrong port information showing.
+      
+//    // select the top level item by default, if one exists, just as the bank
+//    // editor does
+//    if (m_treeWidget_playbackDevices->topLevelItem(0)) {
+//        m_treeWidget_playbackDevices->topLevelItem(0)->setSelected(true);
+//    }
+//    if (m_treeWidget_recordDevices->topLevelItem(0)) {
+//        m_treeWidget_recordDevices->topLevelItem(0)->setSelected(true);
+//    }
 
     QMainWindow::show();
 }
@@ -140,7 +146,7 @@ DeviceManagerDialog::slotRefreshOutputPorts()
 
     updatePortsList(m_treeWidget_outputPorts, MidiDevice::Play);
 
-    updateDevicesList(0, m_treeWidget_playbackDevices,
+    updateDevicesList(m_treeWidget_playbackDevices,
                       MidiDevice::Play);
 
     updateCheckStatesOfPortsList(m_treeWidget_outputPorts,
@@ -155,7 +161,7 @@ DeviceManagerDialog::slotRefreshInputPorts()
 
     updatePortsList(m_treeWidget_inputPorts, MidiDevice::Record);
 
-    updateDevicesList(0, m_treeWidget_recordDevices,
+    updateDevicesList(m_treeWidget_recordDevices,
                       MidiDevice::Record);
 
     updateCheckStatesOfPortsList(m_treeWidget_inputPorts,
@@ -247,7 +253,7 @@ DeviceManagerDialog::slotOutputPortClicked(QTreeWidgetItem *twItem, int column)
     */
     
     // update the playback-devices-list 
-    updateDevicesList(0, m_treeWidget_playbackDevices,
+    updateDevicesList(m_treeWidget_playbackDevices,
                       MidiDevice::Play);
 
     updateCheckStatesOfPortsList(m_treeWidget_outputPorts,
@@ -272,6 +278,7 @@ DeviceManagerDialog::slotInputPortClicked(QTreeWidgetItem *
     }
     connectMidiDeviceToPort(mdev, portName);
 
+    /*
     // center selected item
     QTreeWidgetItem *twItemS;
     twItemS = searchItemWithPort(m_treeWidget_inputPorts, portName);
@@ -280,10 +287,12 @@ DeviceManagerDialog::slotInputPortClicked(QTreeWidgetItem *
                                               QAbstractItemView::
                                               PositionAtCenter);
     }
-
+    */
+    
     // update the record-devices-list
-    updateDevicesList(0, m_treeWidget_recordDevices,
+    updateDevicesList(m_treeWidget_recordDevices,
                       MidiDevice::Record);
+    
     updateCheckStatesOfPortsList(m_treeWidget_inputPorts,
                                  m_treeWidget_recordDevices);
 }
@@ -346,8 +355,7 @@ QTreeWidgetItem
 
 
 void
-DeviceManagerDialog::updateDevicesList(DeviceList * devices,
-                                     QTreeWidget * treeWid,
+DeviceManagerDialog::updateDevicesList(QTreeWidget * treeWid,
                                      MidiDevice::DeviceDirection in_out_direction)
 {
     RG_DEBUG << "DeviceManagerDialog::updateDevicesList(...)" << endl;
@@ -366,6 +374,7 @@ DeviceManagerDialog::updateDevicesList(DeviceList * devices,
     QTreeWidgetItem *twItem;
     DeviceId devId = Device::NO_DEVICE;
     Device *device;
+    DeviceList * devices;
     MidiDevice *mdev;
     QString outPort;
     QList < MidiDevice * >midiDevices;
@@ -404,16 +413,17 @@ DeviceManagerDialog::updateDevicesList(DeviceList * devices,
     }
 
     
-    // fill the midiDevices list
+    // fill the midiDevices list with in_out_direction matches
     cnt = int(devices->size());
-    //
+
     for (i = 0; i < cnt; i++) {
         device = devices->at(i);
 
         if (device->getType() == Device::Midi) {
             mdev = dynamic_cast < MidiDevice * >(device);
-            if (mdev) {
+            if (mdev && mdev->getDirection() == in_out_direction) {
                 midiDevices << mdev; // append
+                RG_DEBUG << "DeviceManagerDialog: direction matches in_out_direction" << endl;
             } else {
                 //RG_DEBUG << "ERROR: mdev is NULL in updateDevicesList() " << endl;
                 //continue;
@@ -430,70 +440,56 @@ DeviceManagerDialog::updateDevicesList(DeviceList * devices,
 
         RG_DEBUG << "DeviceManagerDialog: mdev = midiDevices.at(" << i << ") == id: " << mdev->getId() << endl;
 
-        if (mdev->getDirection() == in_out_direction) {
+        //m_playDevices.push_back ( mdev );
+        devId = mdev->getId();
+        outPort = RosegardenSequencer::getInstance()->getConnection(devId);
 
-            RG_DEBUG << "DeviceManagerDialog: direction matches in_out_direction" << endl;
+        if (!listEntries.contains(devId)) {
+            // device is not listed
+            // create new entry
+            RG_DEBUG << "DeviceManagerDialog: listEntries does not contain devId " 
+                     << devId << endl;
 
-            //m_playDevices.push_back ( mdev );
-            devId = mdev->getId();
-            outPort = RosegardenSequencer::getInstance()->getConnection(devId);
+            // translate the name string, if translation is available (ie.
+            // "General MIDI Device")
+            std::string name = mdev->getName();
+            QString nameStr = QObject::tr("%1").arg(strtoqstr(name));
+            nameStr = QObject::tr(nameStr);
+            twItem =  new QTreeWidgetItem(treeWid, QStringList() << nameStr);
+            // set port text
+            twItem->setText(1, outPort);
 
-            if (!listEntries.contains(devId)) {
-                // device is not listed
-                // create new entry
-                RG_DEBUG << "DeviceManagerDialog: listEntries does not contain devId " 
-                         << devId << endl;
+            // save deviceId in data field
+            twItem->setData(0, m_UserRole_DeviceId,
+                            QVariant((int) mdev->getId()));
+            twItem->setFlags(twItem->flags() | Qt::ItemIsEditable);
+            twItem->setSizeHint(0, QSize(24, 24));
+            treeWid->addTopLevelItem(twItem);
+        } else {  // list contains mdev (midi-device)
+            RG_DEBUG << "DeviceManagerDialog: device is already listed" << endl;
 
-                // translate the name string, if translation is available (ie.
-                // "General MIDI Device")
-                std::string name = mdev->getName();
-                QString nameStr = QObject::tr("%1").arg(strtoqstr(name));
-                nameStr = QObject::tr(nameStr);
+            // device is already listed
+            twItem = searchItemWithDeviceId(treeWid, devId);
+            if (twItem) {
+                RG_DEBUG << "DeviceManagerDialog: twItem is non-zero" << endl;
 
-                twItem =  new QTreeWidgetItem(treeWid, QStringList() << nameStr);
+                devName = strtoqstr(mdev->getName());
 
-                // set port text
-                twItem->setText(1, outPort);
+                RG_DEBUG << "DeviceManagerDialog: devName: " << devName << endl;
 
-                // save deviceId in data field
-                twItem->setData(0, m_UserRole_DeviceId,
-                                QVariant((int) mdev->getId()));
-                twItem->setFlags(twItem->flags() | Qt::ItemIsEditable);
-                twItem->setSizeHint(0, QSize(24, 24));
-                treeWid->addTopLevelItem(twItem);
+                if (devName != twItem->text(0)) {
+                    RG_DEBUG << "DeviceManagerDialog: devName != twItem->text(0)" << endl;
 
-            } else {  // list contains mdev (midi-device)
-                RG_DEBUG << "DeviceManagerDialog: device is already listed" << endl;
-
-                // device is already listed
-                twItem = searchItemWithDeviceId(treeWid, devId);
-                if (twItem) {
-                    RG_DEBUG << "DeviceManagerDialog: twItem is non-zero" << endl;
-
-                    devName = strtoqstr(mdev->getName());
-
-                    RG_DEBUG << "DeviceManagerDialog: devName: " << devName << endl;
-
-                    if (devName != twItem->text(0)) {
-                        RG_DEBUG << "DeviceManagerDialog: devName != twItem->text(0)" << endl;
-
-                        twItem->setText(0, devName);
-                    }
-                    // update connection-name (port)
-                    twItem->setText(1, outPort);
-                } else {
-                    RG_DEBUG <<
-                    "Warning: twItem is NULL in DeviceManagerDialog::updateDevicesList() "
-                             << endl;
+                    twItem->setText(0, devName);
                 }
-            }           // if contains
-
-
-        } else          // other connection-direction, ignore
-        {
-            // skip
+                // update connection-name (port)
+                twItem->setText(1, outPort);
+            } else {
+                RG_DEBUG <<
+                "Warning: twItem is NULL in DeviceManagerDialog::updateDevicesList() "
+                         << endl;
+            }
         }
-
     }                   // end for device
 
 }                       // end function updateDevicesList()
@@ -546,19 +542,14 @@ MidiDevice
 {
     RG_DEBUG << "DeviceManagerDialog::getCurrentlySelectedDevice(...)" << endl;
 
-    // return the device user-selected in the m_treeWidget_playbackDevices
+    // return the device user-selected in the treeWid
     //
     QTreeWidgetItem *twItem;
     MidiDevice *mdev;
     DeviceId devId;
-    QList <QTreeWidgetItem *> twItemsSelected;
 
-    //twItem = m_treeWidget_playbackDevices->currentItem();
+    twItem = treeWid->currentItem();
 
-    twItemsSelected = treeWid->selectedItems();
-    twItem = 0;
-    if (twItemsSelected.count() >= 1)
-        twItem = twItemsSelected.at(0);
 
     if (!twItem)
         return 0;
@@ -598,35 +589,44 @@ DeviceManagerDialog::updateCheckStatesOfPortsList(QTreeWidget *treeWid_ports,
 
     QTreeWidgetItem *twItem;
     QFont font;
-
+    QString outPort;
     MidiDevice *mdev = getCurrentlySelectedDevice(treeWid_devices);
-    if (!mdev) return;
-
+    
+    // Let the popualtion of the ports happen even if we don't have a device.
+    if (!mdev) {
+        outPort = m_noPortName; // nullPort
+    } else {
+        outPort = RosegardenSequencer::getInstance()->getConnection(mdev->getId());
+        if (outPort.isEmpty()) {
+            outPort = m_noPortName; // nullPort
+        }
+    }
+    
     IconLoader il;
 
-    QString outPort = RosegardenSequencer::getInstance()->getConnection(mdev->getId());
-    if (outPort.isEmpty()) {
-        outPort = m_noPortName; // nullPort
-    }
-
-    RG_DEBUG << "DeviceManagerDialog: outPort: " << outPort
-             << " id: " << mdev->getId() << endl;
+//    RG_DEBUG << "DeviceManagerDialog: outPort: " << outPort
+//             << " id: " << mdev->getId() << endl;
 
     int cnt = treeWid_ports->topLevelItemCount();
 
     for (int i = 0; i < cnt; i++) {
         twItem = treeWid_ports->topLevelItem(i);
 
-        twItem->setIcon(0, il.load("icon-plugged-out.png"));
         twItem->setSizeHint(0, QSize(24, 24));
-        font = twItem->font(0);
-        font.setWeight(QFont::Normal);
-        twItem->setFont(0, font); // 0=column
 
-        if (outPort == twItem->text(0)) {
+        if (outPort == twItem->text(0) && mdev) {
+            // Make it appear selected
             font.setWeight(QFont::Bold);
             twItem->setFont(0, font); // 0=column
             twItem->setIcon(0, il.load("icon-plugged-in.png"));
+            twItem->setSelected(true);
+        } else {
+            // Make it appear not selected
+            twItem->setIcon(0, il.load("icon-plugged-out.png"));
+            font = twItem->font(0);
+            font.setWeight(QFont::Normal);
+            twItem->setFont(0, font); // 0=column
+            twItem->setSelected(false);
         }
 
 
@@ -949,21 +949,6 @@ DeviceManagerDialog::slotDeviceItemChanged(QTreeWidgetItem * twItem,
     }
 }
 
-
-void
-DeviceManagerDialog::slotRecordDevicesListItemClicked(QTreeWidgetItem * twItem,
-                                                    int col)
-{
-    RG_DEBUG << "DeviceManagerDialog::slotRecordDevicesListItemClicked(...)" << endl;
-    
-    MidiDevice *mdev;
-    mdev = getMidiDeviceOfItem(twItem);
-    if (!mdev)
-        return;
-}
-
-
-
 //!DEVPUSH Need to do this when a new document is loaded
 void DeviceManagerDialog::slotResyncDevicesReceived(){
     /**
@@ -1011,6 +996,7 @@ DeviceManagerDialog::connectSignalsToSlots()
     connect(m_treeWidget_outputPorts,
             SIGNAL(itemClicked(QTreeWidgetItem *, int)), this,
             SLOT(slotOutputPortClicked(QTreeWidgetItem *, int)));
+
     connect(m_treeWidget_playbackDevices,
             SIGNAL(itemSelectionChanged()), this,
             SLOT(slotPlaybackDeviceSelected()));
@@ -1024,13 +1010,10 @@ DeviceManagerDialog::connectSignalsToSlots()
     connect(m_treeWidget_inputPorts,
             SIGNAL(itemClicked(QTreeWidgetItem *, int)), this,
             SLOT(slotInputPortClicked(QTreeWidgetItem *, int)));
+
     connect(m_treeWidget_recordDevices, SIGNAL(itemSelectionChanged()),
             this, SLOT(slotRecordDeviceSelected()));
 
-    connect(m_treeWidget_recordDevices,
-            SIGNAL(itemClicked(QTreeWidgetItem *, int)), this,
-            SLOT(slotRecordDevicesListItemClicked
-                                   (QTreeWidgetItem *, int)));
     connect(m_treeWidget_recordDevices,
             SIGNAL(itemChanged(QTreeWidgetItem *, int)), this,
             SLOT(slotDeviceItemChanged(QTreeWidgetItem *, int)));
