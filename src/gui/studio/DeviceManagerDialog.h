@@ -118,6 +118,12 @@ public slots:
     
     void slotDeviceItemChanged (QTreeWidgetItem * item, int column);
     
+    /**
+       Force all double clicks from playback and record device to edit only
+       device column.
+     */
+    void slotEdit(QTreeWidgetItem *item, int);
+
     void slotRefreshOutputPorts();
     void slotRefreshInputPorts();
     

@@ -921,6 +921,12 @@ DeviceManagerDialog::slotHelpRequested()
 
 }
 
+void
+DeviceManagerDialog::slotEdit(QTreeWidgetItem * item, int)
+{
+    item->treeWidget()->editItem(item);
+    std::cout << "DeviceManagerDialog::slotEdit()" << std::endl;
+}
 
 void
 DeviceManagerDialog::slotDeviceItemChanged(QTreeWidgetItem * twItem,
@@ -1008,6 +1014,9 @@ DeviceManagerDialog::connectSignalsToSlots()
             SIGNAL(itemChanged(QTreeWidgetItem *, int)), this,
             SLOT(slotDeviceItemChanged(QTreeWidgetItem *, int)));
 
+    connect(m_treeWidget_playbackDevices,
+            SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int )),
+            this, SLOT(slotEdit(QTreeWidgetItem*, int)));
 
     // record devices
     connect(m_treeWidget_inputPorts,
@@ -1021,6 +1030,9 @@ DeviceManagerDialog::connectSignalsToSlots()
             SIGNAL(itemChanged(QTreeWidgetItem *, int)), this,
             SLOT(slotDeviceItemChanged(QTreeWidgetItem *, int)));
 
+    connect(m_treeWidget_recordDevices,
+            SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int )),
+            this, SLOT(slotEdit(QTreeWidgetItem*, int)));
 
     // refresh buttons
     connect(pushButton_refreshOutputPorts, SIGNAL(clicked()),
