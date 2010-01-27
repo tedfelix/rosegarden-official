@@ -389,6 +389,7 @@ DeviceManagerDialog::updateDevicesList(QTreeWidget * treeWid,
 
 //         cnt = m_treeWidget_playbackDevices->topLevelItemCount();
     cnt = treeWid->topLevelItemCount();
+    treeWid->blockSignals(true);
     // create a list of IDs of all listed devices
     //
     //for( i=0; i < cnt; i++ ){
@@ -491,6 +492,7 @@ DeviceManagerDialog::updateDevicesList(QTreeWidget * treeWid,
             }
         }
     }                   // end for device
+    treeWid->blockSignals(false);
 
 }                       // end function updateDevicesList()
 
@@ -730,6 +732,7 @@ DeviceManagerDialog::updatePortsList(QTreeWidget * treeWid,
     RosegardenSequencer *seq;
     seq = RosegardenSequencer::getInstance();
 
+    treeWid->blockSignals(true);
     portsCount = seq->getConnections(Device::Midi, PlayRecDir);     // MidiDevice::Play or MidiDevice::Record
     for (i = 0; i < portsCount; ++i) {
         portName = seq->getConnection(Device::Midi, PlayRecDir, i); // last: int connectionNr
@@ -780,7 +783,7 @@ DeviceManagerDialog::updatePortsList(QTreeWidget * treeWid,
         }
 
     }                       // end for i
-
+    treeWid->blockSignals(false);
 }                               // end updatePortsList()
 
 
