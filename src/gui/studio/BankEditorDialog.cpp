@@ -1556,14 +1556,11 @@ BankEditorDialog::slotImport()
     ImportDeviceDialog *dialog = new ImportDeviceDialog(this, url);
     if (dialog->doImport() && dialog->exec() == QDialog::Accepted) {
 
-        RG_DEBUG << "BankEditorDialog::slotImport - 1" << endl;
         MidiDeviceTreeWidgetItem* deviceItem =
             dynamic_cast<MidiDeviceTreeWidgetItem*>
             (m_treeWidget->currentItem());    //### was ->selectedItem()
 
-        RG_DEBUG << "BankEditorDialog::slotImport - 2" << endl;
         if (!deviceItem) {
-        RG_DEBUG << "BankEditorDialog::slotImport - 2b" << endl;
             QMessageBox::critical(
               dynamic_cast<QWidget*>(this),
               "", /* no title */
@@ -1573,9 +1570,7 @@ BankEditorDialog::slotImport()
             return ;
         }
 
-        RG_DEBUG << "BankEditorDialog::slotImport - 3" << endl;
         if (!dialog->haveDevice()) {
-        RG_DEBUG << "BankEditorDialog::slotImport - 3b" << endl;
             QMessageBox::critical(
               dynamic_cast<QWidget*>(this),
               "", /* no title */
@@ -1587,7 +1582,6 @@ BankEditorDialog::slotImport()
 
         ModifyDeviceCommand *command = 0;
 
-        RG_DEBUG << "BankEditorDialog::slotImport - 4" << endl;
         BankList banks(dialog->getBanks());
         ProgramList programs(dialog->getPrograms());
         ControlList controls(dialog->getControllers());
@@ -1599,55 +1593,44 @@ BankEditorDialog::slotImport()
         // don't record the librarian when
         // merging banks -- it's misleading.
         // (also don't use variation type)
-        RG_DEBUG << "BankEditorDialog::slotImport - 5" << endl;
         if (!dialog->shouldOverwriteBanks()) {
             librarianName = "";
             librarianEmail = "";
         }
 
-        RG_DEBUG << "BankEditorDialog::slotImport - 6" << endl;
         command = new ModifyDeviceCommand(m_studio,
                                           deviceItem->getDeviceId(),
                                           dialog->getDeviceName(),
                                           librarianName,
                                           librarianEmail);
 
-        RG_DEBUG << "BankEditorDialog::slotImport - 7" << endl;
         if (dialog->shouldOverwriteBanks()) {
             command->setVariation(variation);
         }
-        RG_DEBUG << "BankEditorDialog::slotImport - 8 banks" << banks.size()<< endl;
         if (dialog->shouldImportBanks()) {
             command->setBankList(banks);
             command->setProgramList(programs);
         }
-        RG_DEBUG << "BankEditorDialog::slotImport - 9 control" << controls.size()<< endl;
         if (dialog->shouldImportControllers()) {
             command->setControlList(controls);
         }
-        RG_DEBUG << "BankEditorDialog::slotImport - 10 key" << keyMappings.size()<< endl;
         if (dialog->shouldImportKeyMappings()) {
             command->setKeyMappingList(keyMappings);
         }
         command->setOverwrite(dialog->shouldOverwriteBanks());
         command->setRename(dialog->shouldRename());
 
-        RG_DEBUG << "BankEditorDialog::slotImport - 11" << endl;
         addCommandToHistory(command);
 
         // No need to redraw the dialog, this is done by
         // slotUpdate, signalled by the CommandHistory
-        RG_DEBUG << "BankEditorDialog::slotImport - 12" << endl;
         MidiDevice *device = getMidiDevice(deviceItem);
         if (device) {
-        RG_DEBUG << "BankEditorDialog::slotImport - 13" << endl;
             selectDeviceItem(device);
         }
     }
 
-        RG_DEBUG << "BankEditorDialog::slotImport - 14" << endl;
     delete dialog;
-        RG_DEBUG << "BankEditorDialog::slotImport - 15" << endl;
     updateDialog();
 }
 
