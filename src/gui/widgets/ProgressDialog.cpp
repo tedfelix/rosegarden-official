@@ -43,6 +43,7 @@ bool ProgressDialog::m_modalVisible = false;
 
 ProgressDialog::ProgressDialog(const QString &labelText,
                                int totalSteps,
+                               int showAfter,
                                QWidget *parent,
                                bool modal) :
         QDialog(parent),
@@ -92,17 +93,15 @@ ProgressDialog::ProgressDialog(const QString &labelText,
 
     connect(bb, SIGNAL(rejected()), this, SLOT(cancel()));
 
-    // stay visible at least one second by default
-    setMinimumDuration(1000);
+    // don't show before this timer has elapsed
+    m_showAfterTimer = new QTimer;
+    m_showAfterTimer->setSingleShot(true);
+    m_showAfterTimer->start(showAfter);
+    connect(m_showAfterTimer, SIGNAL(timeout()), this, SLOT(slotShowNow()));
 
     m_timer = new QTimer;
     m_timer->setSingleShot(true);
-    m_timer->start(minimumDuration());
-    connect(m_timer, SIGNAL(timeout()), this, SLOT(slotMinimumTimeElapsed()));
-    m_chrono.start();
-
-    CurrentProgressDialog::set(this);
-//    show();
+    QWidget::hide();
 }
 
 ProgressDialog::~ProgressDialog()
@@ -111,6 +110,20 @@ ProgressDialog::~ProgressDialog()
     m_modalVisible = false;
     delete m_timer;
     m_timer = 0;
+}
+
+void
+ProgressDialog::slotShowNow()
+{
+    // the "don't show until" time has elapsed, so carry on with ensuring the
+    // progress dialog remains visible for a reasonable amount of time (this is
+    // meant to cure the flickery progress dialogs we used to have that would
+    // often appear and then wink out almost instantly)
+    m_timer->start(1000);
+    connect(m_timer, SIGNAL(timeout()), this, SLOT(slotMinimumTimeElapsed()));
+
+    CurrentProgressDialog::set(this);
+    show();
 }
 
 void
@@ -196,24 +209,6 @@ ProgressDialog::cancel()
 }
 
 void
-ProgressDialog::slotCheckShow(int)
-{
-    RG_DEBUG << "ProgressDialog::slotCheckShow() : "
-             << m_chrono.elapsed() << " - " << minimumDuration()
-             << endl;
-
-    if (!isVisible() &&
-        !m_frozen &&
-        m_chrono.elapsed() > minimumDuration()) {
-
-        RG_DEBUG << "ProgressDialog::slotCheckShow() : showing dialog\n";
-        show();
-        if (m_modal) m_modalVisible = true;
-        processEvents();
-    }
-}
-
-void
 ProgressDialog::slotMinimumTimeElapsed()
 {
     RG_DEBUG << "ProgressDialog::slotMinimumTimeElapsed() - the QTimer has reached the minimum duration set in the ctor." << endl;
@@ -243,7 +238,6 @@ ProgressDialog::slotFreeze()
         hide();
     }
 
-    m_chrono.restart();
     m_timer->stop();
     m_frozen = true;
 }
@@ -259,10 +253,9 @@ ProgressDialog::slotThaw()
     }
 
     // Restart timer
-    m_timer->start(minimumDuration());
+    m_timer->start(1000);
     m_minimumTimeHasExpired = false;
     m_frozen = false;
-    m_chrono.restart();
 }
 
 void
@@ -352,18 +345,6 @@ ProgressDialog::advance(int value)
 {
     std::cout << "ProgressDialog::advance(" << value << ") calling setValue()" << std::endl;
     setValue(value);
-}
-
-void
-ProgressDialog::setMinimumDuration(int duration)
-{
-    m_minimumDuration = duration;
-}
-
-int
-ProgressDialog::minimumDuration()
-{
-    return m_minimumDuration;
 }
 
 void

@@ -2427,7 +2427,7 @@ RosegardenMainWindow::slotRescaleSelection()
 
     if (!asrcs.empty()) {
         progressDlg = new ProgressDialog
-            (tr("Rescaling audio file..."), 100, this);
+            (tr("Rescaling audio file..."), 100, 500, this);
         progressDlg->setAutoClose(false);
         progressDlg->setAutoReset(false);
         progressDlg->show();
@@ -3693,6 +3693,7 @@ RosegardenMainWindow::createDocumentFromMIDIFile(QString file)
     StartupLogo::hideIfStillThere();
     ProgressDialog progressDlg(tr("Importing MIDI file..."),
                                200,
+                               500,
                                this);
 
     CurrentProgressDialog::set(&progressDlg);
@@ -3892,7 +3893,7 @@ RosegardenMainWindow::createDocumentFromRG21File(QString file)
 {
     StartupLogo::hideIfStillThere();
     ProgressDialog progressDlg(
-        tr("Importing X11 Rosegarden file..."), 100, this);
+        tr("Importing X11 Rosegarden file..."), 100, 500, this);
 
     CurrentProgressDialog::set
         (&progressDlg);
@@ -4013,7 +4014,7 @@ RosegardenMainWindow::createDocumentFromHydrogenFile(QString file)
 {
     StartupLogo::hideIfStillThere();
     ProgressDialog progressDlg(
-        tr("Importing Hydrogen file..."), 100, this);
+        tr("Importing Hydrogen file..."), 100, 500, this);
 
     CurrentProgressDialog::set
         (&progressDlg);
@@ -4654,6 +4655,7 @@ RosegardenMainWindow::exportMIDIFile(QString file)
 {
     ProgressDialog progressDlg(tr("Exporting MIDI file..."),
                                100,
+                               500,
                                this);
 
     std::string fname(QFile::encodeName(file));
@@ -4696,6 +4698,7 @@ RosegardenMainWindow::exportCsoundFile(QString file)
 {
     ProgressDialog progressDlg(tr("Exporting Csound score file..."),
                                100,
+                               500,
                                this);
 
     CsoundExporter e(this, &m_doc->getComposition(), std::string(QFile::encodeName(file)));
@@ -4732,6 +4735,7 @@ RosegardenMainWindow::exportMupFile(QString file)
 {
     ProgressDialog progressDlg(tr("Exporting Mup file..."),
                                100,
+                               500,
                                this);
 
     MupExporter e(this, &m_doc->getComposition(), std::string(QFile::encodeName(file)));
@@ -4838,6 +4842,7 @@ RosegardenMainWindow::exportLilyPondFile(QString file, bool forPreview)
 
     ProgressDialog progressDlg(tr("Exporting LilyPond file..."),
                                100,
+                               500,
                                this);
 
     LilyPondExporter e(this, m_doc, std::string(QFile::encodeName(file)));
@@ -4878,6 +4883,7 @@ RosegardenMainWindow::exportMusicXmlFile(QString file)
 {
     ProgressDialog progressDlg(tr("Exporting MusicXML file..."),
                                100,
+                               500,
                                this);
 
     MusicXmlExporter e(this, m_doc, std::string(QFile::encodeName(file)));
@@ -7515,6 +7521,7 @@ RosegardenMainWindow::slotPanic()
 
         ProgressDialog progressDlg(tr("Queueing MIDI panic events for tranmission..."),
                                    100,
+                                   500,
                                    this);
         CurrentProgressDialog::set
             (&progressDlg);

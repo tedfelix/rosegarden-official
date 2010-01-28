@@ -532,6 +532,7 @@ AudioManagerDialog::slotExportAudio()
 
     ProgressDialog progressDlg(tr("Exporting audio file..."),
                                100,
+                               500,
                                this);
 
     progressDlg.setValue(0);
@@ -1178,6 +1179,7 @@ AudioManagerDialog::addFile(const QUrl& kurl)
     
     ProgressDialog progressDlg(tr("Adding audio file..."),
                                100,
+                               500,
                                this);
 
     CurrentProgressDialog::set(&progressDlg);

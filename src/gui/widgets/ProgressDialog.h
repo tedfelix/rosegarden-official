@@ -42,6 +42,7 @@ class ProgressDialog : public QDialog
 public:
     ProgressDialog(const QString &labelText,
                    int totalSteps,
+                   int showAfter = 500,
                    QWidget *parent = 0,
                    bool modal = true);
 
@@ -68,17 +69,6 @@ public:
      * The default is false.
      */
     void setAutoReset(bool state);
-
-    /** The dialog will ignore hideEvent() until this many ms have elapsed, and
-     * thus try to keep itself visible for a minimum amount of time.
-     *
-     * The default is 1000 ms.
-     */
-    void setMinimumDuration(int duration);
-
-    /** Returns the minimum duration set with setMinimumDuration()
-     */
-    int minimumDuration();
 
     /** Sets the dialog's operation text, eg. "Calculating notation..."
      * "Generating audio previews..." &c. by calling slotSetOperationName
@@ -137,11 +127,10 @@ public slots:
     void advance(int value);
 
 protected slots:
-    /** I don't fully understand this slot, or how m_chrono used to be used.
-     * The main thing that actually matters now is m_timer, which is used to
-     * determine whether to honor or ignore hideEvent().
+    /** Called when the showAfter time has elapsed.  The dialog will not be
+     * visible until then.
      */
-    void slotCheckShow(int);
+    void slotShowNow();
     
     /** Called when the minimum duration timer has counted down
      */
@@ -167,7 +156,7 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    QTime        m_chrono;
+    QTimer      *m_showAfterTimer;
     QTimer      *m_timer;
     QTimer      *m_operationTimer;
     bool         m_wasVisible;

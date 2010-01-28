@@ -598,6 +598,7 @@ bool RosegardenDocument::openDocument(const QString& filename,
     if (!squelch) {
         progressDlg = new ProgressDialog(tr("Reading file..."),
                                          100,
+                                         500,
                                          (QWidget*)parent());
 
         connect(progressDlg, SIGNAL(canceled()),
@@ -606,7 +607,6 @@ bool RosegardenDocument::openDocument(const QString& filename,
         CurrentProgressDialog::set(progressDlg);
         progressDlg->show();
 
-        progressDlg->setMinimumDuration(500);
         progressDlg->setAutoReset(true); // we're re-using it for the preview generation
         progressDlg->setAutoClose(true);
     }
@@ -1258,9 +1258,9 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
 
         progress = new ProgressDialog(tr("Saving file..."),
                                          100,
+                                         500,
                                          (QWidget*)parent());
 
-        progress->setMinimumDuration(500);
         progress->setAutoReset(true); // not implemented yet (not understood yet)
 
     }
@@ -2680,7 +2680,7 @@ RosegardenDocument::finalizeAudioFile(InstrumentId iid)
 
     // Create a progress dialog
     //
-    ProgressDialog *progressDlg = new ProgressDialog ( tr("Generating audio preview..."), 100, (QWidget*)parent() );
+    ProgressDialog *progressDlg = new ProgressDialog ( tr("Generating audio preview..."), 100, 500, (QWidget*)parent() );
     progressDlg->setAutoClose(false);
     progressDlg->setAutoReset(false);
     progressDlg->show();

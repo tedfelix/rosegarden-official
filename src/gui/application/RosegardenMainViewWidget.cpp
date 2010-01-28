@@ -1509,6 +1509,7 @@ RosegardenMainViewWidget::slotDroppedNewAudio(QString audioDesc)
     // from qt4-doc : " don't use a (modal) QProgressDialog inside a paintEvent() !"
     ProgressDialog progressDlg(tr("Adding audio file..."),
                                100,
+                               500,
                                this);
     
     
