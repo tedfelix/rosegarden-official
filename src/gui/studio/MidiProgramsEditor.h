@@ -64,8 +64,6 @@ public slots:
     void slotKeyMapMenuItemSelected(QAction *);
     void slotKeyMapMenuItemSelected(int);
 
-signals:
-    void percussionChanged(bool newState);;
 protected:
 
     MidiBank* getCurrentBank();
