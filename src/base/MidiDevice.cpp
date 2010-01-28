@@ -33,7 +33,6 @@ namespace Rosegarden
 
 MidiDevice::MidiDevice():
     Device(0, "Default Midi Device", Device::Midi),
-    m_keyMappingList(0),
     m_metronome(0),
     m_direction(Play),
     m_variationType(NoVariations),
@@ -53,7 +52,6 @@ MidiDevice::MidiDevice(DeviceId id,
                        const std::string &name,
                        DeviceDirection dir):
     Device(id, name, Device::Midi),
-    m_keyMappingList(0),
     m_metronome(0),
     m_direction(dir),
     m_variationType(NoVariations),
