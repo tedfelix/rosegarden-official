@@ -64,6 +64,8 @@ public slots:
     void slotKeyMapMenuItemSelected(QAction *);
     void slotKeyMapMenuItemSelected(int);
 
+signals:
+    void percussionChanged(bool newState);;
 protected:
 
     MidiBank* getCurrentBank();
@@ -72,6 +74,8 @@ protected:
     int ensureUniqueLSB(int lsb, bool ascending);
 
     // Does the banklist contain this combination already?
+    // Disregard percussion bool, we care only about msb / lsb
+    // in these situations.
     //
     bool banklistContains(const MidiBank &);
 

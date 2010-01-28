@@ -287,20 +287,32 @@ void
 MidiProgramsEditor::slotNewPercussion()
 {
     RG_DEBUG << "MidiProgramsEditor::slotNewPercussion" << endl;
-    bool percussion = m_percussion->isChecked();
-    m_percussion->blockSignals(true);
+    bool percussion = false; // Doesn't matter
+    MidiBank *newBank;
     if (banklistContains(MidiBank(percussion, m_msb->value(), m_lsb->value()))) {
         RG_DEBUG << "MidiProgramsEditor::slotNewPercussion: calling setChecked(" << !percussion << ")" << endl;
-        m_percussion->setChecked(!percussion);
+        newBank = new MidiBank(m_percussion->isChecked(),
+                         m_msb->value(),
+                         m_lsb->value(), getCurrentBank()->getName());
     } else {
-        MidiBank newBank(percussion,
+        newBank = new MidiBank(true,
                          m_msb->value(),
                          m_lsb->value());
-        modifyCurrentPrograms(*getCurrentBank(), newBank);
-        *getCurrentBank() = newBank;
     }
-    m_percussion->blockSignals(false);
+    modifyCurrentPrograms(*getCurrentBank(), *newBank);
+    *getCurrentBank() = *newBank;
     m_bankEditor->slotApply();
+    
+    // Hack to force the percussion icons to switch state if needed.
+    // code stole from populate.
+    if (m_device) {
+        bool haveKeyMappings = m_currentBank->isPercussion()
+                               && (m_device->getKeyMappings().size() > 0);
+
+        for (unsigned int i = 0; i < (unsigned int)m_names.size(); i++) {
+            getKeyMapButton(i)->setEnabled(haveKeyMappings);
+        }
+    }
 }
 
 void
@@ -320,7 +332,7 @@ MidiProgramsEditor::slotNewMSB(int value)
 
     MidiBank newBank(m_percussion->isChecked(),
                      msb,
-                     m_lsb->value());
+                     m_lsb->value(), getCurrentBank()->getName());
 
     modifyCurrentPrograms(*getCurrentBank(), newBank);
 
@@ -349,7 +361,7 @@ MidiProgramsEditor::slotNewLSB(int value)
 
     MidiBank newBank(m_percussion->isChecked(),
                      m_msb->value(),
-                     lsb);
+                     lsb, getCurrentBank()->getName());
 
     modifyCurrentPrograms(*getCurrentBank(), newBank);
 
@@ -573,8 +585,9 @@ MidiProgramsEditor::slotKeyMapMenuItemSelected(int i)
 int
 MidiProgramsEditor::ensureUniqueMSB(int msb, bool ascending)
 {
+    bool percussion = false; // Doesn't matter
     int newMSB = msb;
-    while (banklistContains(MidiBank(m_percussion->isChecked(),
+    while (banklistContains(MidiBank(percussion,
                                      newMSB, m_lsb->value()))
             && newMSB < 128
             && newMSB > -1)
@@ -592,8 +605,9 @@ MidiProgramsEditor::ensureUniqueMSB(int msb, bool ascending)
 int
 MidiProgramsEditor::ensureUniqueLSB(int lsb, bool ascending)
 {
+    bool percussion = false; // Doesn't matter
     int newLSB = lsb;
-    while (banklistContains(MidiBank(m_percussion->isChecked(),
+    while (banklistContains(MidiBank(percussion,
                                      m_msb->value(), newLSB))
             && newLSB < 128
             && newLSB > -1)
@@ -613,8 +627,11 @@ MidiProgramsEditor::banklistContains(const MidiBank &bank)
 {
     BankList::iterator it;
 
+    MidiBank bankNotPercussion = MidiBank(!bank.isPercussion(),
+                                          bank.getMSB(), bank.getLSB());
+    
     for (it = m_bankList.begin(); it != m_bankList.end(); it++)
-        if (*it == bank)
+        if (*it == bank || *it == bankNotPercussion)
             return true;
 
     return false;
