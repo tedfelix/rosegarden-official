@@ -33,6 +33,7 @@ namespace Rosegarden
 
 MidiDevice::MidiDevice():
     Device(0, "Default Midi Device", Device::Midi),
+    m_keyMappingList(0),
     m_metronome(0),
     m_direction(Play),
     m_variationType(NoVariations),
@@ -52,6 +53,7 @@ MidiDevice::MidiDevice(DeviceId id,
                        const std::string &name,
                        DeviceDirection dir):
     Device(id, name, Device::Midi),
+    m_keyMappingList(0),
     m_metronome(0),
     m_direction(dir),
     m_variationType(NoVariations),
@@ -70,6 +72,7 @@ MidiDevice::MidiDevice(DeviceId id,
                        InstrumentId ibase,
 		       const MidiDevice &dev) :
     Device(id, dev.getName(), Device::Midi),
+    m_keyMappingList(dev.m_keyMappingList),
     m_programList(dev.m_programList),
     m_bankList(dev.m_bankList),
     m_controlList(0),
@@ -99,6 +102,7 @@ MidiDevice::MidiDevice(DeviceId id,
 MidiDevice::MidiDevice(const MidiDevice &dev) :
     Device(dev.getId(), dev.getName(), dev.getType()),
     Controllable(),
+    m_keyMappingList(dev.m_keyMappingList),
     m_programList(dev.m_programList),
     m_bankList(dev.m_bankList),
     m_controlList(dev.m_controlList),
@@ -140,6 +144,7 @@ MidiDevice::operator=(const MidiDevice &dev)
     m_type = dev.getType();
     m_librarian = dev.getLibrarian();
 
+    m_keyMappingList = dev.getKeyMappings(),
     m_programList = dev.getPrograms();
     m_bankList = dev.getBanks();
     m_controlList = dev.getControlParameters();
@@ -422,6 +427,7 @@ MidiDevice::getPrograms(const MidiBank &bank) const
 
     return programs;
 }
+
 
 std::string
 MidiDevice::getBankName(const MidiBank &bank) const

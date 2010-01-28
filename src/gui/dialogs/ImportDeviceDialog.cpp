@@ -376,6 +376,7 @@ ImportDeviceDialog::importFromRG(QString fileName)
             if (banks.size() ||
                 controllers.size() ||
                 device->getKeyMappings().size()) {
+                MidiDevice *check = new MidiDevice(*device);
                 m_devices.push_back(new MidiDevice(*device));
             }
         }
