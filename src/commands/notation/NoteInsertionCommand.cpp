@@ -295,9 +295,9 @@ NoteInsertionCommand::modifySegment()
         }
 
         helper.autoBeam(m_insertionTime, m_insertionTime, GROUP_TYPE_BEAMED);
-        if (m_autoTieBarlines) {
-            helper.makeNotesViable(segment.getStartTime(),segment.getEndTime());
-        }
+    }
+    if (m_autoTieBarlines) {
+        helper.makeNotesViable(segment.getStartTime(),segment.getEndTime());
     }
 }
 
