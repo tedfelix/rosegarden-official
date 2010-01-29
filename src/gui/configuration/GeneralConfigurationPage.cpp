@@ -95,7 +95,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
     // encourage users to pick that one.  Stupid users, always foiling the
     // best-intentioned plans with their bumbling.  Alas.
 //    m_graphicsSystem->addItem(tr("Unstable"));   // opengl
-    m_lastGraphicsSystemIndex = settings.value("graphics_system", Native).toUInt();
+    m_lastGraphicsSystemIndex = settings.value("graphics_system", Raster).toUInt();
     m_graphicsSystem->setCurrentIndex(m_lastGraphicsSystemIndex);
     layout->addWidget(m_graphicsSystem, row, 1, 1, 2);
     ++row;
