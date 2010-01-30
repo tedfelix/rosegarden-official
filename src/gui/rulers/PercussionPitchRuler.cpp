@@ -85,55 +85,47 @@ void PercussionPitchRuler::paintEvent(QPaintEvent*)
     }
 
     int lw = m_fontMetrics->width("A#2");
+    int offset = m_fontMetrics->ascent() + 1;
 
     for (int i = 0; i < extent; ++i) {
 
         MidiPitchLabel label(minPitch + i);
         std::string key = m_mapping->getMapForKeyName(minPitch + i);
-
         RG_DEBUG << i << ": " << label.getQString() << ": " << key << endl;
 
-        paint.drawText
-        (2, (extent - i - 1) * (m_lineSpacing + 1) +
-         m_fontMetrics->ascent() + 1,
-         label.getQString());
+        int yi = (extent - i - 1) * (m_lineSpacing + 1) + offset;
+        paint.drawText(2, yi, label.getQString());
 
-        paint.drawText
-        (9 + lw, (extent - i - 1) * (m_lineSpacing + 1) +
-         m_fontMetrics->ascent() + 1,
-         strtoqstr(key));
+        if (i != m_hoverNotePitch) {
+            // Draw an unhighlighted note
+            paint.drawText(9 + lw, yi, strtoqstr(key));
+        } else {
+            // Highlight the hover note
+            int iHover = m_hoverNotePitch - minPitch;
+            int y = (extent - iHover - 1) * (m_lineSpacing + 1);
+            paint.save();
+            paint.setBrush(paint.pen().color());
+            paint.drawRect(lw + 7, y, m_width - lw, m_lineSpacing + 1);
+            paint.setPen(QColor(Qt::black));
+            std::string key = m_mapping->getMapForKeyName(m_hoverNotePitch);
+            paint.drawText(9 + lw, y + offset, strtoqstr(key));
+            paint.restore();
+        }
     }
 
-    // Draw hover note
     if (m_lastHoverHighlight != m_hoverNotePitch) {
+        m_lastHoverHighlight = m_hoverNotePitch;
 
         // Unhighlight the last hover note
         if (m_lastHoverHighlight >= 0) {
-
-            int y = (extent - (m_lastHoverHighlight - minPitch) - 1) * (m_lineSpacing + 1);
-            paint.setBrush(QColor(238, 238, 224));
-            paint.setPen(QColor(238, 238, 224));
+            int iLastHover = m_lastHoverHighlight - minPitch;
+            int y = (extent - iLastHover - 1) * (m_lineSpacing + 1);
             paint.drawRect(lw + 7, y + 1, m_width - lw, m_lineSpacing);
             std::string key = m_mapping->getMapForKeyName(m_lastHoverHighlight);
             paint.setPen(QColor(Qt::black));
-            paint.drawText
-            (9 + lw, y + m_fontMetrics->ascent() + 1,
-             strtoqstr(key));
+            paint.drawText(9 + lw, y + offset, strtoqstr(key));
         }
-
-        // Highlight the new hover note
-        int y = (extent - (m_hoverNotePitch - minPitch) - 1) * (m_lineSpacing + 1);
-        m_lastHoverHighlight = m_hoverNotePitch;
-        paint.setBrush(paint.pen().color());
-        paint.drawRect(lw + 7, y, m_width - lw, m_lineSpacing + 1);
-        paint.setPen(QColor(238, 238, 224));
-
-        std::string key = m_mapping->getMapForKeyName(m_hoverNotePitch);
-        paint.drawText
-        (9 + lw, y + m_fontMetrics->ascent() + 1,
-         strtoqstr(key));
     }
-
 }
 
 void PercussionPitchRuler::enterEvent(QEvent *)
