@@ -99,6 +99,7 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     m_toolBox(0),
     m_currentTool(0),
     m_drumMode(drumMode),
+    m_keyMapping(false),
     m_playTracking(true),
     m_hZoomFactor(1.0),
     m_vZoomFactor(1.0),
@@ -331,6 +332,31 @@ MatrixWidget::setSegments(RosegardenDocument *document,
 
     m_document = document;
 
+    Composition &comp = document->getComposition();
+
+    Track *track =
+        comp.getTrackById(segments[0]->getTrack());
+
+    Instrument *instr = document->getStudio().
+                        getInstrumentById(track->getInstrument());
+
+    const MidiKeyMapping *mapping = 0;
+
+    // m_keyMapping must be set before calling m_scene->setSegments()
+    if (instr) {
+        mapping = instr->getKeyMapping();
+        if (mapping) {
+            RG_DEBUG << "MatrixView: Instrument has key mapping: "
+                     << mapping->getName() << endl;
+            m_localMapping = new MidiKeyMapping(*mapping);
+            m_localMapping->extend();
+            m_keyMapping = true;
+        } else {
+            RG_DEBUG << "MatrixView: Instrument has no key mapping\n";
+            m_keyMapping = false;
+        }
+    }
+
     delete m_scene;
     m_scene = new MatrixScene();
     m_scene->setMatrixWidget(this);
@@ -361,28 +387,6 @@ MatrixWidget::setSegments(RosegardenDocument *document,
     m_toolBox->setScene(m_scene);
 
     m_hpanner->setScene(m_scene);
-
-    Composition &comp = document->getComposition();
-
-    Track *track =
-        comp.getTrackById(segments[0]->getTrack());
-
-    Instrument *instr = document->getStudio().
-                        getInstrumentById(track->getInstrument());
-
-    const MidiKeyMapping *mapping = 0;
-
-    if (instr) {
-        mapping = instr->getKeyMapping();
-        if (mapping) {
-            RG_DEBUG << "MatrixView: Instrument has key mapping: "
-                     << mapping->getName() << endl;
-            m_localMapping = new MidiKeyMapping(*mapping);
-            m_localMapping->extend();
-        } else {
-            RG_DEBUG << "MatrixView: Instrument has no key mapping\n";
-        }
-    }
 
     if (mapping && !m_localMapping->getMap().empty()) {
         m_pitchRuler = new PercussionPitchRuler(0, m_localMapping,

@@ -85,6 +85,8 @@ public:
 
     bool isDrumMode() const { return m_drumMode; }
 
+    bool hasKeyMapping() const { return m_keyMapping; }
+
     bool getPlayTracking() const { return m_playTracking; }
 
     MatrixToolBox *getToolBox() { return m_toolBox; }
@@ -200,6 +202,7 @@ private:
     MatrixToolBox *m_toolBox; // I own this
     MatrixTool *m_currentTool; // Toolbox owns this
     bool m_drumMode;
+    bool m_keyMapping;
     bool m_playTracking;
     double m_hZoomFactor;
     double m_vZoomFactor;

@@ -133,11 +133,18 @@ MatrixScene::setSegments(RosegardenDocument *document,
     // instrument (it is independent of whether this is a percussion
     // matrix or not).
 
-    bool drumMode = false;
-    if (m_widget) drumMode = m_widget->isDrumMode();
+    // Nevertheless, if the key names are shown, we need a little more space
+    // between horizontal lines. That's why m_resolution depends from 
+    // keyMapping.
 
+    bool drumMode = false;
+    bool keyMapping = false;
+    if (m_widget) {
+        drumMode = m_widget->isDrumMode();
+        keyMapping = m_widget->hasKeyMapping();
+    }
     m_resolution = 8;
-    if (drumMode) m_resolution = 11;
+    if (keyMapping) m_resolution = 11;
 
     bool haveSetSnap = false;
 
