@@ -10721,7 +10721,6 @@
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="51"/>
         <source>Trill &amp;with Line</source>
-        <translatorcomment>XXX</translatorcomment>
         <translation>Triller &amp;folgt der Linie</translation>
     </message>
     <message>
@@ -10732,7 +10731,6 @@
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="55"/>
         <source>&amp;Turn</source>
-        <translatorcomment>XXX</translatorcomment>
         <translation>&amp;Doppelschlag</translation>
     </message>
     <message>
@@ -10759,7 +10757,6 @@
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="65"/>
         <source>&amp;Stopped</source>
-        <translatorcomment>XXX</translatorcomment>
         <translation>&amp;Angehalten</translation>
     </message>
     <message>
@@ -10780,7 +10777,6 @@
     <message>
         <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="73"/>
         <source>&amp;Down-Bow</source>
-        <translatorcomment>XXX</translatorcomment>
         <translation>A&amp;bstrich</translation>
     </message>
     <message>
@@ -12142,7 +12138,6 @@ Bitte wählen Sie diejenigen aus, die permanent von der Festplatte gelöscht wer
     <message>
         <location filename="../../src/commands/notation/BreakCommand.h" line="45"/>
         <source>&amp;Unbeam</source>
-        <translatorcomment>XXX</translatorcomment>
         <translation>Balken e&amp;ntfernen</translation>
     </message>
 </context>
@@ -12151,7 +12146,6 @@ Bitte wählen Sie diejenigen aus, die permanent von der Festplatte gelöscht wer
     <message>
         <location filename="../../src/commands/segment/ChangeCompositionLengthCommand.h" line="48"/>
         <source>Change &amp;Composition Start and End...</source>
-        <translatorcomment>XXX</translatorcomment>
         <translation>Anfang und Ende der &amp;Komposition ändern...</translation>
     </message>
 </context>
@@ -12181,7 +12175,6 @@ Bitte wählen Sie diejenigen aus, die permanent von der Festplatte gelöscht wer
     <message>
         <location filename="../../src/commands/notation/ChangeStemsCommand.h" line="47"/>
         <source>Stems &amp;Down</source>
-        <translatorcomment>XXX</translatorcomment>
         <translation>&amp;Notenhälse abwärts</translation>
     </message>
 </context>
@@ -12229,8 +12222,7 @@ Bitte wählen Sie diejenigen aus, die permanent von der Festplatte gelöscht wer
     <message>
         <location filename="../../src/gui/rulers/ChordNameRuler.cpp" line="90"/>
         <source>&lt;qt&gt;&lt;p&gt;Chord name ruler.  This ruler analyzes your harmonies and attempts to guess what chords your composition contains.  These chords cannot be printed or manipulated, and this is only a reference for your information.&lt;/p&gt;&lt;p&gt;Turn it on and off with the &lt;b&gt;View -&gt; Rulers&lt;/b&gt; menu.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translatorcomment>XXX menue</translatorcomment>
-        <translation>&lt;qt&gt;&lt;p&gt;Akkord-Namen Lineal.   Dieses Lineal analysiert die Harmonien und versucht zu ermitteln, welche Akkorde in der Komposition enthalten sind. Diese Akkorde können nicht gedruckt oder verändert werden und dies ist nur zur Information.&lt;/p&gt;&lt;p&gt;Es kann über das Einstellungen-&gt;Lineal Menue ein und ausgeschaltet werden.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Akkord-Namen Lineal.   Dieses Lineal analysiert die Harmonien und versucht zu ermitteln, welche Akkorde in der Komposition enthalten sind. Diese Akkorde können nicht gedruckt oder verändert werden und dies ist nur zur Information.&lt;/p&gt;&lt;p&gt;Es kann über das &lt;b&gt;Anzeige-&gt;Lineale&lt;/b&gt; Menue ein und ausgeschaltet werden.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -12380,7 +12372,6 @@ Bitte wählen Sie diejenigen aus, die permanent von der Festplatte gelöscht wer
     <message>
         <location filename="../../src/commands/notation/CollapseRestsCommand.h" line="50"/>
         <source>&amp;Collapse Rests</source>
-        <translatorcomment>XXX</translatorcomment>
         <translation>Pausen &amp;zusammenfassen</translation>
     </message>
 </context>
@@ -12897,7 +12888,6 @@ Bitte wählen Sie diejenigen aus, die permanent von der Festplatte gelöscht wer
     <message>
         <location filename="../../src/commands/edit/CutCommand.h" line="50"/>
         <source>Cu&amp;t</source>
-        <translatorcomment>XXX</translatorcomment>
         <translation>A&amp;usschneiden</translation>
     </message>
 </context>
@@ -12922,7 +12912,6 @@ Bitte wählen Sie diejenigen aus, die permanent von der Festplatte gelöscht wer
     <message>
         <location filename="../../src/commands/notation/DeCounterpointCommand.h" line="51"/>
         <source>Split-and-Tie Overlapping &amp;Chords</source>
-        <translatorcomment>XXX</translatorcomment>
         <translation>Überlappende A&amp;kkorde aufteilen und verbinden</translation>
     </message>
 </context>
@@ -13420,7 +13409,6 @@ Das Löschen benötigter Eigenschaften kann unerwartetes Verhalten hervorrufen.<
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="523"/>
         <source>&amp;Delete</source>
-        <translatorcomment>XXX</translatorcomment>
         <translation>&amp;Löschen</translation>
     </message>
     <message>
@@ -13435,7 +13423,6 @@ Dies könnte Probleme verursachen, wenn so später ein berechneter Wert übersch
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="556"/>
         <source>Make &amp;Persistent</source>
-        <translatorcomment>XXX</translatorcomment>
         <translation>&amp;Dauerhaft machen</translation>
     </message>
 </context>
@@ -13932,7 +13919,6 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location filename="../../src/gui/dialogs/FileLocateDialog.cpp" line="72"/>
         <source>&amp;Locate</source>
-        <translatorcomment>XXX</translatorcomment>
         <translation>&amp;Finden</translation>
     </message>
     <message>
@@ -14362,7 +14348,7 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="385"/>
         <source>External Applications</source>
-        <translation>Externe Anwendung</translation>
+        <translation>Externe Anwendungen</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="541"/>
@@ -15157,13 +15143,11 @@ Beispieltext aus Datei:</translation>
     <message>
         <location filename="../../src/commands/notation/KeyInsertionCommand.h" line="65"/>
         <source>Change to &amp;Key %1...</source>
-        <translatorcomment>XXX</translatorcomment>
         <translation>Wechsel zu &amp;Tonart %1...</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/KeyInsertionCommand.h" line="67"/>
         <source>Add &amp;Key Change...</source>
-        <translatorcomment>XXX</translatorcomment>
         <translation>&amp;Tonartveränderung hinzufügen...</translation>
     </message>
 </context>
@@ -15658,8 +15642,7 @@ Wollen Sie stattdessen
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="275"/>
         <source>&lt;qt&gt;&lt;p&gt;LilyPond processed the file successfully, but &lt;b&gt;%1&lt;/b&gt; did not run!&lt;/p&gt;&lt;p&gt;Please configure a valid %2 under &lt;b&gt;Edit -&gt; Preferences -&gt; General -&gt; External Applications&lt;/b&gt; and try again.&lt;/p&gt;&lt;p&gt;Processing terminated due to fatal errors.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translatorcomment>XXX link uebersetzen</translatorcomment>
-        <translation>&lt;qt&gt;&lt;p&gt;LilyPond konnte die Datei erfolgreich bearbeiten, aber &lt;b&gt;%1&lt;/b&gt; hat nicht funktioniert!&lt;/p&gt;&lt;p&gt;Bitte unter &lt;b&gt;Edit -&gt; Preferences -&gt; General -&gt; External Applications&lt;/b&gt; eingültiges %2 konfigurieren und noch einmal probieren.&lt;/p&gt;&lt;p&gt;Verarbeitung auf Grund von fatalen Fehlern abgebrochen.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;LilyPond konnte die Datei erfolgreich bearbeiten, aber &lt;b&gt;%1&lt;/b&gt; hat nicht funktioniert!&lt;/p&gt;&lt;p&gt;Bitte unter &lt;b&gt;Editieren -&gt; Einstellungen -&gt; Allgemein -&gt; Externe Anwendungen&lt;/b&gt; ein gültiges %2 konfigurieren und noch einmal probieren.&lt;/p&gt;&lt;p&gt;Verarbeitung auf Grund von fatalen Fehlern abgebrochen.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="129"/>
@@ -16924,12 +16907,12 @@ Doppel-Klick öffnet den Marker Editor.</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/MidiProgramsEditor.cpp" line="250"/>
-        <location filename="../../src/gui/studio/MidiProgramsEditor.cpp" line="568"/>
+        <location filename="../../src/gui/studio/MidiProgramsEditor.cpp" line="580"/>
         <source>Key Mapping: %1</source>
         <translation>Tasten-Übersetzungstabelle: %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/MidiProgramsEditor.cpp" line="496"/>
+        <location filename="../../src/gui/studio/MidiProgramsEditor.cpp" line="508"/>
         <source>&lt;no key mapping&gt;</source>
         <translation>&lt;keine Tasten-Übersetzungstabelle&gt;</translation>
     </message>
@@ -16966,7 +16949,6 @@ Doppel-Klick öffnet den Marker Editor.</translation>
     <message>
         <location filename="../../src/commands/studio/ModifyDeviceMappingCommand.h" line="50"/>
         <source>Modify &amp;Device Mapping</source>
-        <translatorcomment>XXX</translatorcomment>
         <translation>&amp;Gerätezuordnung ändern</translation>
     </message>
 </context>
@@ -17030,13 +17012,11 @@ Doppel-Klick öffnet den Marker Editor.</translation>
     <message>
         <location filename="../../src/commands/notation/MultiKeyInsertionCommand.h" line="58"/>
         <source>Change all to &amp;Key %1...</source>
-        <translatorcomment>XXX</translatorcomment>
         <translation>Alles ändern auf &amp;Tonart %1...</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/MultiKeyInsertionCommand.h" line="60"/>
         <source>Add &amp;Key Change...</source>
-        <translatorcomment>XXX</translatorcomment>
         <translation>&amp;Tonartveränderung hinzufügen...</translation>
     </message>
 </context>
@@ -18079,7 +18059,6 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location filename="../../src/commands/edit/PasteEventsCommand.h" line="85"/>
         <source>&amp;Paste</source>
-        <translatorcomment>XXX</translatorcomment>
         <translation>&amp;Einfügen</translation>
     </message>
     <message>
@@ -18149,7 +18128,6 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location filename="../../src/commands/edit/PasteSegmentsCommand.h" line="55"/>
         <source>&amp;Paste</source>
-        <translatorcomment>XXX</translatorcomment>
         <translation>&amp;Einfügen</translation>
     </message>
 </context>
@@ -18974,7 +18952,6 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location filename="../../src/commands/edit/RescaleCommand.h" line="45"/>
         <source>Stretch or S&amp;quash...</source>
-        <translatorcomment>XXX</translatorcomment>
         <translation>&amp;Strecken oder Stauchen...</translation>
     </message>
 </context>
@@ -19025,13 +19002,11 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location filename="../../src/commands/notation/RespellCommand.cpp" line="45"/>
         <source>&amp;Sharp</source>
-        <translatorcomment>XXX</translatorcomment>
         <translation>&amp;Kreuz</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/RespellCommand.cpp" line="47"/>
         <source>&amp;Flat</source>
-        <translatorcomment>XXX</translatorcomment>
         <translation>&amp;b</translation>
     </message>
     <message>
@@ -19042,31 +19017,26 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location filename="../../src/commands/notation/RespellCommand.cpp" line="51"/>
         <source>&amp;Natural</source>
-        <translatorcomment>XXX</translatorcomment>
         <translation>Auf&amp;lösungszeichen</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/RespellCommand.cpp" line="53"/>
         <source>N&amp;one</source>
-        <translatorcomment>XXX</translatorcomment>
         <translation>&amp;Kein</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/RespellCommand.cpp" line="59"/>
         <source>Respell Accidentals &amp;Upward</source>
-        <translatorcomment>XXX</translatorcomment>
         <translation>Enharmonisch nach &amp;oben</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/RespellCommand.cpp" line="62"/>
         <source>Respell Accidentals &amp;Downward</source>
-        <translatorcomment>XXX</translatorcomment>
         <translation>Enharmonisch nach &amp;unten</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/RespellCommand.cpp" line="65"/>
         <source>&amp;Restore Accidentals</source>
-        <translatorcomment>XXX</translatorcomment>
         <translation>&amp;Wiederherstellen der Enharmonie (Accidentals)</translation>
     </message>
     <message>
@@ -19107,7 +19077,6 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location filename="../../src/commands/edit/RetrogradeCommand.h" line="46"/>
         <source>&amp;Retrograde</source>
-        <translatorcomment>XXX</translatorcomment>
         <translation>&amp;Zeitlich spiegeln (retro)</translation>
     </message>
 </context>
@@ -20445,7 +20414,6 @@ Fehler: %2</translation>
     <message>
         <location filename="../../src/commands/segment/SegmentJoinCommand.h" line="48"/>
         <source>&amp;Join</source>
-        <translatorcomment>XXX</translatorcomment>
         <translation>&amp;Verbinden</translation>
     </message>
 </context>
@@ -20454,7 +20422,6 @@ Fehler: %2</translation>
     <message>
         <location filename="../../src/commands/segment/SegmentLabelCommand.h" line="47"/>
         <source>Re&amp;label...</source>
-        <translatorcomment>XXX</translatorcomment>
         <translation>Um&amp;benennen...</translation>
     </message>
     <message>
@@ -20546,8 +20513,7 @@ Fehler: %2</translation>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="187"/>
         <source>&lt;qt&gt;&lt;p&gt;Raise or lower playback of any selected segments by this number of semitones&lt;/p&gt;&lt;p&gt;&lt;i&gt;NOTE: This control changes segments that already exist.&lt;/i&gt;&lt;/p&gt;&lt;p&gt;&lt;i&gt;Use the transpose control in &lt;b&gt;Track Parameters&lt;/b&gt; under &lt;b&gt;Create segments with&lt;/b&gt; to pre-select this   setting before drawing or recording new segments.&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</source>
-        <translatorcomment>XXX Menue prüfen</translatorcomment>
-        <translation>&lt;qt&gt;&lt;p&gt;Anheben oder senken der Wiedergabe von allen ausgewählten Segmenten um diese Anzahl von Halbtönen&lt;/p&gt;&lt;p&gt;&lt;i&gt;Achtung: Dieses Kontrollfeld ändert schon existierende Segmente.&lt;/i&gt;&lt;/p&gt;&lt;p&gt;&lt;i&gt;Benutze das Transponier-Kontrollfeld in &lt;b&gt;Spur Parameter&lt;/b&gt; unter &lt;b&gt;Segment erzeugen mit&lt;/b&gt; um diesen Wert als Voreinstellung für neu komponierte oder neu aufgenommene Segmente zu wählen.&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Anheben oder senken der Wiedergabe von allen ausgewählten Segmenten um diese Anzahl von Halbtönen&lt;/p&gt;&lt;p&gt;&lt;i&gt;Achtung: Dieses Kontrollfeld ändert schon existierende Segmente.&lt;/i&gt;&lt;/p&gt;&lt;p&gt;&lt;i&gt;Benutze das Transponier-Kontrollfeld in &lt;b&gt;Spurparameter&lt;/b&gt; unter &lt;b&gt;Segmente erzeugen mit&lt;/b&gt; um diesen Wert als Voreinstellung für neu komponierte oder neu aufgenommene Segmente zu wählen.&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="204"/>
@@ -20678,7 +20644,6 @@ Fehler: %2</translation>
     <message>
         <location filename="../../src/commands/segment/SegmentRescaleCommand.h" line="53"/>
         <source>Stretch or S&amp;quash...</source>
-        <translatorcomment>XXX</translatorcomment>
         <translation>&amp;Strecken oder Stauchen...</translation>
     </message>
     <message>
@@ -20811,7 +20776,6 @@ Möchten Sie den Pfad jetzt setzen?</translation>
     <message>
         <location filename="../../src/commands/segment/SegmentSplitByPitchCommand.h" line="56"/>
         <source>Split by &amp;Pitch...</source>
-        <translatorcomment>XXX</translatorcomment>
         <translation>Nach &amp;Tonhöhe aufteilen...</translation>
     </message>
     <message>
@@ -20835,7 +20799,6 @@ Möchten Sie den Pfad jetzt setzen?</translation>
     <message>
         <location filename="../../src/commands/segment/SegmentSplitByRecordingSrcCommand.h" line="44"/>
         <source>Split by &amp;Recording Source...</source>
-        <translatorcomment>XXX</translatorcomment>
         <translation>Nach &amp;Aufnahmequelle aufteilen...</translation>
     </message>
     <message>
@@ -20932,7 +20895,6 @@ Möchten Sie den Pfad jetzt setzen?</translation>
     <message>
         <location filename="../../src/commands/edit/SelectionPropertyCommand.h" line="61"/>
         <source>Set &amp;Property</source>
-        <translatorcomment>XXX</translatorcomment>
         <translation>&amp;Eigenschaft setzen</translation>
     </message>
 </context>
@@ -21452,7 +21414,6 @@ Das Beenden anderer laufender Anwendung könnte u.U. die Leistung von Rosegarden
     <message>
         <location filename="../../src/gui/widgets/SqueezedLabel.cpp" line="170"/>
         <source>&amp;Copy Full Text</source>
-        <translatorcomment>XXX</translatorcomment>
         <translation>Gesamten Text &amp;kopieren</translation>
     </message>
 </context>
@@ -21714,7 +21675,6 @@ Das Beenden anderer laufender Anwendung könnte u.U. die Leistung von Rosegarden
     <message>
         <location filename="../../src/gui/dialogs/TempoDialog.cpp" line="83"/>
         <source>Tap</source>
-        <translatorcomment>XXX</translatorcomment>
         <translation>Schlag</translation>
     </message>
     <message>
@@ -22331,7 +22291,6 @@ Das Beenden anderer laufender Anwendung könnte u.U. die Leistung von Rosegarden
     <message>
         <location filename="../../src/commands/notation/TieNotesCommand.h" line="45"/>
         <source>&amp;Tie</source>
-        <translatorcomment>XXX</translatorcomment>
         <translation>&amp;Verbinden</translation>
     </message>
 </context>
@@ -22794,8 +22753,7 @@ Möchten Sie den Pfad jetzt setzen?</translation>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="315"/>
         <source>&lt;qt&gt;&lt;p&gt;Load a segment parameters preset from our comprehensive database of real-world instruments.&lt;/p&gt;&lt;p&gt;When you create new segments, they will have these parameters at the moment of creation.  To use these parameters on existing segments (eg. to convert an existing part in concert pitch for playback on a Bb trumpet) use &lt;b&gt;Segments -&gt; Convert notation for&lt;/b&gt; in the notation editor.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translatorcomment>XXX menuepunkt prüfen</translatorcomment>
-        <translation>&lt;qt&gt;&lt;p&gt;Lade die Voreinstellungen für die Parameter eines Segmentes aus unserer umfassenden Datenbank mit reellen Instrumenten.&lt;/p&gt;&lt;p&gt;Wenn neue Segmente angelegt werden, bekommen diese Segmente bei der Erzeugung diese Parameter zugeordnet. Um diese Parameter bei vorhandenen Segmente zu benutzem (z.B. um einen vorhandenen Teil für die Wiedergabe auf einer B-Trompete zu konvertieren), kann der Menuepunkt &lt;b&gt;Segmente -&gt; Konvertiere Notation für&lt;/b&gt; benutzt werden.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Lade die Voreinstellungen für die Parameter eines Segmentes aus unserer umfassenden Datenbank mit reellen Instrumenten.&lt;/p&gt;&lt;p&gt;Wenn neue Segmente angelegt werden, bekommen diese Segmente bei der Erzeugung diese Parameter zugeordnet. Um diese Parameter bei vorhandenen Segmente zu benutzem (z.B. um einen vorhandenen Teil für die Wiedergabe auf einer B-Trompete zu konvertieren), kann der Menuepunkt &lt;b&gt;Segmente -&gt; Umwandeln der Notation für&lt;/b&gt; im Notations-Editor benutzt werden.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="328"/>
@@ -23053,7 +23011,6 @@ Möchten Sie den Pfad jetzt setzen?</translation>
     <message>
         <location filename="../../src/commands/edit/TransposeCommand.h" line="54"/>
         <source>&amp;Down a Semitone</source>
-        <translatorcomment>XXX</translatorcomment>
         <translation>Halbton a&amp;bwärts</translation>
     </message>
     <message>
@@ -23245,7 +23202,6 @@ Möchten Sie den Pfad jetzt setzen?</translation>
     <message>
         <location filename="../../src/commands/notation/TupletCommand.h" line="49"/>
         <source>Tu&amp;plet...</source>
-        <translatorcomment>XXX</translatorcomment>
         <translation>T&amp;uole...</translation>
     </message>
 </context>
