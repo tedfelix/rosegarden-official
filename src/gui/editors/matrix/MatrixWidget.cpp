@@ -423,6 +423,9 @@ MatrixWidget::setSegments(RosegardenDocument *document,
     (m_pitchRuler, SIGNAL(keyReleased(unsigned int, bool)),
      this, SLOT (slotKeyReleased(unsigned int, bool)));
 
+    connect(m_view, SIGNAL(mouseLeaves()),
+            this, SLOT(slotMouseLeavesView()));
+
     // If piano scene and matrix scene don't have the same height
     // one may shift from the other when scrolling vertically
     QRectF viewRect = m_scene->sceneRect();
@@ -1201,17 +1204,18 @@ MatrixWidget::slotHoveredOverKeyChanged(unsigned int y)
     m_pitchRuler->drawHoverNote(evPitch);
     m_pianoView->update();   // Needed to remove black trailers left by
                              // hover note at hight zoom levels
-/*    MatrixStaff& staff = *(m_staffs[0]);
-
-    int evPitch = staff.getHeightAtCanvasCoords( -1, y);
-
-    if (evPitch != m_previousEvPitch) {
-        MidiPitchLabel label(evPitch);
-        m_hoveredOverNoteName->setText(QString("%1 (%2)").
-                                       arg(label.getQString()).arg(evPitch));
-        m_previousEvPitch = evPitch;
-    }*/
 }
+
+void
+MatrixWidget::slotMouseLeavesView()
+{
+    // The mouse leaves the view, so the hover note in pitch ruler
+    // have to be unhilighted
+    m_pitchRuler->hideHoverNote();
+    m_pianoView->update();   // Needed to remove black trailers left by
+                             // hover note at hight zoom levels
+}
+
 
 void MatrixWidget::slotKeyPressed(unsigned int y, bool repeating)
 {

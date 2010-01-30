@@ -255,6 +255,12 @@ Panned::slotEmulateWheelEvent(QWheelEvent *ev)
     QGraphicsView::wheelEvent(ev);
 }
 
+void
+Panned::leaveEvent(QEvent *)
+{
+    emit mouseLeaves();
+}
+
 }
 
 #include "Panned.moc"

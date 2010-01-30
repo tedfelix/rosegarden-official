@@ -191,6 +191,9 @@ protected slots:
 
     void slotInitialHSliderHack(int);
 
+    /// The mouse has left the view
+    void slotMouseLeavesView();
+
 protected :
     virtual void showEvent(QShowEvent * event);
 

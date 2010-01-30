@@ -39,6 +39,7 @@ public:
     virtual QSize minimumSizeHint() const;
 
     virtual void drawHoverNote(int evPitch) = 0;
+    virtual void hideHoverNote() = 0;
 
 signals:
 

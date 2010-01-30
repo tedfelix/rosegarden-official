@@ -239,8 +239,11 @@ void PianoKeyboard::drawHoverNote(int evPitch)
             }
         }
     }
+}
 
-
+void PianoKeyboard::hideHoverNote()
+{
+    m_hoverHighlight->hide();
 }
 
 void PianoKeyboard::mouseMoveEvent(QMouseEvent* e)

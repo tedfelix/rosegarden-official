@@ -49,6 +49,8 @@ public:
      */
     void drawHoverNote(int evPitch);
 
+    void hideHoverNote();
+
 signals:
 
     /**

@@ -116,7 +116,7 @@ void PercussionPitchRuler::paintEvent(QPaintEvent*)
     if (m_lastHoverHighlight != m_hoverNotePitch) {
         m_lastHoverHighlight = m_hoverNotePitch;
 
-        // Unhighlight the last hover note
+        // Unhilight the last hover note
         if (m_lastHoverHighlight >= 0) {
             int iLastHover = m_lastHoverHighlight - minPitch;
             int y = (extent - iLastHover - 1) * (m_lineSpacing + 1);
@@ -133,12 +133,21 @@ void PercussionPitchRuler::enterEvent(QEvent *)
 
 void PercussionPitchRuler::leaveEvent(QEvent*)
 {
-    //    m_hoverHighlight->hide();
+    // Force current hover note to be unhilighted
+    m_hoverNotePitch = -1;
+    update();
 }
 
 void PercussionPitchRuler::drawHoverNote(int evPitch)
 {
     m_hoverNotePitch = evPitch;
+    update();
+}
+
+void PercussionPitchRuler::hideHoverNote()
+{
+    // Force current hover note to be unhilighted
+    m_hoverNotePitch = -1;
     update();
 }
 
