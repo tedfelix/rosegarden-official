@@ -46,7 +46,7 @@ PianoKeyboard::PianoKeyboard(QWidget *parent, int keys)
         m_nbKeys(keys),
         m_mouseDown(false),
         m_hoverHighlight(new QWidget(this)),
-        m_lastHoverHighlight(0),
+        m_lastHoverHighlight(-1),
         m_lastKeyPressed(0)
 {
     m_hoverHighlight->hide();
@@ -170,7 +170,7 @@ void PianoKeyboard::enterEvent(QEvent *)
 
 void PianoKeyboard::leaveEvent(QEvent*)
 {
-    m_hoverHighlight->hide();
+    hideHoverNote();
 
     int pos = mapFromGlobal( cursor().pos() ).x();
     if ( pos > m_keySize.width() - 5 || pos < 0 ) { // bit of a hack
@@ -244,6 +244,7 @@ void PianoKeyboard::drawHoverNote(int evPitch)
 void PianoKeyboard::hideHoverNote()
 {
     m_hoverHighlight->hide();
+    m_lastHoverHighlight = -1;
 }
 
 void PianoKeyboard::mouseMoveEvent(QMouseEvent* e)
