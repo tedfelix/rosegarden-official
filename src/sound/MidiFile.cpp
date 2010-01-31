@@ -1111,7 +1111,9 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
 
                     endOfLastNote = rosegardenTime + rosegardenDuration;
 
+#ifdef MIDI_DEBUG
                     std::cerr << "MidiFile::convertToRosegarden: note at " << rosegardenTime << ", duration " << rosegardenDuration << ", midi time " << (*midiEvent)->getTime() << " and duration " << (*midiEvent)->getDuration() << std::endl;
+#endif
 
                     // create and populate event
                     rosegardenEvent = new Event(Note::EventType,
@@ -1286,8 +1288,8 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
                     break;
 
                 default:
-#ifdef MIDI_DEBUG
 
+#ifdef MIDI_DEBUG
                     std::cerr << "MidiFile::convertToRosegarden - "
                     << "Unsupported event code = "
                     << (int)(*midiEvent)->getMessageType() << std::endl;

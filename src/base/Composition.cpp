@@ -222,7 +222,6 @@ Composition::addSegment(Segment *segment)
     iterator res = weakAddSegment(segment);
 
     if (res != end()) {
-        clearVoiceCaches();
         updateRefreshStatuses();
 	notifySegmentAdded(segment);
     }
@@ -238,6 +237,7 @@ Composition::weakAddSegment(Segment *segment)
     iterator res = m_segments.insert(segment);
     segment->setComposition(this);
 
+    clearVoiceCaches();
     return res;
 }
 
@@ -250,10 +250,10 @@ Composition::deleteSegment(Composition::iterator i)
     p->setComposition(0);
 
     m_segments.erase(i);
-    clearVoiceCaches();
     notifySegmentRemoved(p);
     delete p;
 
+    clearVoiceCaches();
     updateRefreshStatuses();
 }
 
@@ -273,7 +273,6 @@ Composition::detachSegment(Segment *segment)
     bool res = weakDetachSegment(segment);
 
     if (res) {
-        clearVoiceCaches();
         notifySegmentRemoved(segment);
         updateRefreshStatuses();
     }
@@ -289,6 +288,7 @@ Composition::weakDetachSegment(Segment *segment)
     
     segment->setComposition(0);
     m_segments.erase(i);
+    clearVoiceCaches();
 
     return true;
 }
