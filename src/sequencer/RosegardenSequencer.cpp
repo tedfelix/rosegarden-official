@@ -583,7 +583,8 @@ RosegardenSequencer::setPlausibleConnection(unsigned int deviceId,
 {
     LOCKED;
 
-    m_driver->setPlausibleConnection(deviceId, connection);
+    bool recordDevice = false; // we only want this from connectSomething()
+    m_driver->setPlausibleConnection(deviceId, connection, recordDevice);
 }
 
 void

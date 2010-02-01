@@ -1121,7 +1121,7 @@ AlsaDriver::setConnection(DeviceId id, QString connection)
 }
 
 void
-AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection)
+AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection, bool recordDevice)
 {
     Audit audit;
 
@@ -1162,7 +1162,7 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection)
     // If the idealConnection string is empty, then we should pick the
     // first available connection that looks "nice and safe"; in
     // practice this means the first software device (don't
-    // auto-connect to hardware).
+    // auto-connect to hardware unless there's utterly nothing else).
 
     int client = -1;
     int portNo = -1;
@@ -1191,13 +1191,20 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection)
         }
     }
 
+    AlsaPortDescription *viableHardwarePort = 0, *viableSoftwarePort = 0;
+    int fitness = 0;
+
+    // Try to find one viable hardware and one viable software port, if
+    // possible.  Use software preferentially.  Iterate through everything until
+    // we've exausted all possibilities for colleting one of each, then sort it
+    // out afterwards.
     for (int testUsed = 1; testUsed >= 0; --testUsed) {
 
         for (int testNumbers = 1; testNumbers >= 0; --testNumbers) {
 
             for (int testName = 1; testName >= 0; --testName) {
 
-                int fitness =
+                fitness =
                     (testName << 3) +
                     (testNumbers << 2) +
                     (testUsed << 1) + 1;
@@ -1205,6 +1212,19 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection)
                 for (size_t i = 0; i < m_alsaPorts.size(); ++i) {
 
                     AlsaPortDescription *port = m_alsaPorts[i];
+
+                    if (!port->isReadable() && recordDevice) {
+                        // We're looking for a record device, so if this isn't
+                        // readable, skip it.  This logic is tacked onto a
+                        // function originally written only to consider playback
+                        // devices, but I think this will work.  If we skip
+                        // play-only devices here, the rest of the logic should
+                        // net us a software record device preferentially,
+                        // falling back on hardware.  That should catch, eg.
+                        // VMPK first.  The user wouldn't need VMPK if they had
+                        // a working hardware keyboard, so this seems sound.
+                        continue;
+                    }
 
                     if (port->m_client < 16) {
                         // system port: never use
@@ -1246,17 +1266,17 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection)
                              dpmi != m_devicePortMap.end(); ++dpmi) {
                             if (dpmi->second.first == port->m_client &&
                                 dpmi->second.second == port->m_port) {
-                                used = true;
+                                // a little hack here...  if this is a record
+                                // device, we don't really care if it's already
+                                // used or not (it might be used by a play
+                                // device, and if more than one record device
+                                // uses the same port, it doesn't have any
+                                // particularly dire consequences)
+                                if (!recordDevice) used = true;
                                 break;
                             }
                         }
                         if (used) continue;
-                    }
-
-                    if (idealConnection == "" &&
-                        port->m_client < 128) {
-                        // don't connect hardware as the default, only connection
-                        continue;
                     }
                     if (idealConnection == "" &&
                         strtoqstr(port->m_name).contains("osegarden")) {
@@ -1271,24 +1291,16 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection)
                     }
 
                     // OK, this one will do
-
-                    audit << "AlsaDriver::setPlausibleConnection: fuzzy match "
-                          << port->m_name << " available with fitness "
-                          << fitness << std::endl;
-
-                    for (size_t j = 0; j < m_devices.size(); ++j) {
-
-                        if (m_devices[j]->getId() == id) {
-                            setConnectionToDevice(*m_devices[j],
-                                                  strtoqstr(port->m_name),
-                                                  ClientPortPair(port->m_client, port->m_port));
-
-                            // in this case we don't request a device resync,
-                            // because this is only invoked at times such as
-                            // file load when the GUI is well aware that the
-                            // whole situation is in upheaval anyway
-
-                            return ;
+                    if (port->m_client < 128) {
+                        if (!viableHardwarePort) {
+                            // we already filter out all play-only ports if
+                            // recordDevice is true, so we only need special
+                            // handling if it's false
+                            if ((!recordDevice && port->isWriteable()) || recordDevice) viableHardwarePort = port;
+                        }
+                    } else {
+                        if (!viableSoftwarePort) {
+                            if ((!recordDevice && port->isWriteable()) || recordDevice) viableSoftwarePort = port;
                         }
                     }
                 }
@@ -1296,37 +1308,77 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection)
         }
     }
 
-    audit << "AlsaDriver::setPlausibleConnection: nothing suitable available"
-          << std::endl;
+    // If we found a viable software port, use it.  If we didn't find a viable
+    // software port, but did find a viable hardware port, use it. 
+    AlsaPortDescription *port = 0;
+    if (viableSoftwarePort) port = viableSoftwarePort;
+    else if (viableHardwarePort) port = viableHardwarePort;
+
+    if (port) {
+
+        audit << "AlsaDriver::setPlausibleConnection: fuzzy match "
+              << port->m_name << " available with fitness "
+              << fitness << std::endl;
+
+        for (size_t j = 0; j < m_devices.size(); ++j) {
+
+            if (m_devices[j]->getId() == id) {
+                setConnectionToDevice(*m_devices[j],
+                                      strtoqstr(port->m_name),
+                                      ClientPortPair(port->m_client, port->m_port));
+
+                // in this case we don't request a device resync,
+                // because this is only invoked at times such as
+                // file load when the GUI is well aware that the
+                // whole situation is in upheaval anyway
+
+                return ;
+            }
+        }
+    } else {
+        audit << "AlsaDriver::setPlausibleConnection: nothing suitable available"
+              << std::endl;
+    }
 }
 
 
 void
 AlsaDriver::connectSomething()
 {
-    // Called after document load, if there are devices in the
-    // document but none of them has managed to get itself connected
-    // to anything.  Tries to find something suitable to connect one
-    // device to, and connects it.  If nothing very appropriate
-    // beckons, leaves unconnected.
+    // Called after document load, if there are devices in the document but none
+    // of them has managed to get itself connected to anything.  Tries to find
+    // something suitable to connect one play, and one record device to, and
+    // connects it.  If nothing very appropriate beckons, leaves unconnected.
 
-    MappedDevice *toConnect = 0;
+    MappedDevice *toConnect = 0, *toConnectRecord = 0;
 
     // First check whether anything is connected.
     for (size_t i = 0; i < m_devices.size(); ++i) {
         MappedDevice *device = m_devices[i];
-        if (device->getDirection() != MidiDevice::Play) continue;
-        if (m_devicePortMap.find(device->getId()) != m_devicePortMap.end() &&
-            m_devicePortMap[device->getId()] != ClientPortPair()) {
-            return; // something is connected already
-        } else if (!toConnect) {
-            toConnect = device;
-        }
+        if (device->getDirection() == MidiDevice::Play) {
+            if (m_devicePortMap.find(device->getId()) != m_devicePortMap.end() &&
+                m_devicePortMap[device->getId()] != ClientPortPair()) {
+                return; // something is connected already
+            } else if (!toConnect) {
+                toConnect = device;
+            }
+       } else if (device->getDirection() == MidiDevice::Record) {
+            if (m_devicePortMap.find(device->getId()) != m_devicePortMap.end() &&
+                m_devicePortMap[device->getId()] != ClientPortPair()) {
+                return; // something is connected already
+            } else if (!toConnectRecord) {
+                toConnectRecord = device;
+            }
+       }
     }            
 
-    // If the studio was absolutely empty, we'll make it to here with this still
+    // If the studio was absolutely empty, we'll make it to here with these still
     // null, so in that case we'll simply move along without doing anything.
     if (toConnect) setPlausibleConnection(toConnect->getId(), "");
+    if (toConnectRecord) {
+        bool recordDevice = true;
+        setPlausibleConnection(toConnectRecord->getId(), "", recordDevice);
+    }
 }
 
 void
