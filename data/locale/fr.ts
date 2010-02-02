@@ -6066,7 +6066,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="251"/>
         <source>Glass harmonica</source>
-        <translation type="unfinished">Harmonica de </translation>
+        <translation>Armonica de verre</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="252"/>
@@ -6112,12 +6112,12 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="260"/>
         <source>Mallet synthesizer (treble)</source>
-        <translation type="unfinished"></translation>
+        <translation>Percussions synthétiques (aigus)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="261"/>
         <source>Mallet synthesizer (bass)</source>
-        <translation type="unfinished"></translation>
+        <translation>Percussions synthétiques (graves)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="262"/>
@@ -6193,7 +6193,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="276"/>
         <source>Finger cymbals</source>
-        <translation type="unfinished"></translation>
+        <translation>Cymbales à doigts</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="277"/>
@@ -6208,7 +6208,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="279"/>
         <source>Suspended cymbal</source>
-        <translation type="unfinished"></translation>
+        <translation>Cymbale suspendue</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="280"/>
@@ -6218,7 +6218,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="281"/>
         <source>Sizzle cymbal</source>
-        <translation type="unfinished"></translation>
+        <translation>Cymbale cloutée</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="282"/>
@@ -6228,7 +6228,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="283"/>
         <source>Splash cymbal</source>
-        <translation>ymbale splash</translation>
+        <translation>Cymbale splash</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="284"/>
@@ -6238,12 +6238,12 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="286"/>
         <source>Cowbells</source>
-        <translation>Clarines</translation>
+        <translation>Sonnailles</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="287"/>
         <source>Tam-tam</source>
-        <translation type="unfinished"></translation>
+        <translation>Tam-tam</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="288"/>
@@ -6258,12 +6258,12 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="290"/>
         <source>Bell plate</source>
-        <translation type="unfinished">Cloche de </translation>
+        <translation>Cloche plaque</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="291"/>
         <source>Bowl gongs</source>
-        <translation type="unfinished"></translation>
+        <translation>Gongs bols</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="292"/>
@@ -6273,7 +6273,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="293"/>
         <source>Metal castanets</source>
-        <translation type="unfinished"></translation>
+        <translation>Castagnettes métalliques</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="294"/>
@@ -6293,17 +6293,17 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="297"/>
         <source>Anvil</source>
-        <translation type="unfinished"></translation>
+        <translation>Enclume</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="298"/>
         <source>Woodblocks</source>
-        <translation type="unfinished"></translation>
+        <translation>Wood-block</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="299"/>
         <source>Temple blocks</source>
-        <translation type="unfinished"></translation>
+        <translation>Blocs chinois</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="300"/>
@@ -6325,22 +6325,22 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="306"/>
         <source>Vibra slap</source>
-        <translation type="unfinished"></translation>
+        <translation>Vibraslap</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="307"/>
         <source>Slit drum</source>
-        <translation type="unfinished"></translation>
+        <translation>Tambour à fente</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="308"/>
         <source>Whip</source>
-        <translation type="unfinished"></translation>
+        <translation>Fouet</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="309"/>
         <source>Ratchet</source>
-        <translation type="unfinished"></translation>
+        <translation>Crécelle</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="310"/>
@@ -6350,7 +6350,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="311"/>
         <source>Sandpaper blocks</source>
-        <translation type="unfinished"></translation>
+        <translation>Blocs à papier de verre</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="312"/>
@@ -6375,12 +6375,12 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="316"/>
         <source>Shell wind chimes</source>
-        <translation type="unfinished"></translation>
+        <translation>Carillon éolien (coquillage)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="317"/>
         <source>Stones</source>
-        <translation type="unfinished"></translation>
+        <translation>Lithophone</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="318"/>
@@ -6395,7 +6395,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="320"/>
         <source>Slap</source>
-        <translation type="unfinished"></translation>
+        <translation>Slap</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="321"/>
@@ -6410,7 +6410,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="323"/>
         <source>Percussion synthesizer</source>
-        <translation type="unfinished"></translation>
+        <translation>Synthétiseur de percussions</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="374"/>
@@ -6671,22 +6671,22 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="364"/>
         <source>Police whistle</source>
-        <translation>Sifflet de policier</translation>
+        <translation>Sifflet à roulette</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="365"/>
         <source>Bird whistle</source>
-        <translation>Gazouillis d&apos;oiseaux</translation>
+        <translation>Sifflet d&apos;oiseau</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="366"/>
         <source>Duck call</source>
-        <translation type="unfinished"></translation>
+        <translation>Appeau à canard</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="367"/>
         <source>Mouth siren</source>
-        <translation type="unfinished"></translation>
+        <translation>Sirène à bouche</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="368"/>
@@ -6696,12 +6696,13 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="369"/>
         <source>Auto horn</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Trompette avertisseur ?</translatorcomment>
+        <translation>Klaxon à poire</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="370"/>
         <source>Klaxon horn</source>
-        <translation type="unfinished"></translation>
+        <translation>Klaxon</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="371"/>
@@ -6818,7 +6819,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../AutoloadStrings.cpp" line="48"/>
         <source>Clavi</source>
-        <translation type="unfinished"></translation>
+        <translation>Clavicorde</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="49"/>
@@ -7275,7 +7276,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../AutoloadStrings.cpp" line="153"/>
         <source>Tinkle Bell</source>
-        <translation type="unfinished"></translation>
+        <translation>Clochette</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="154"/>
@@ -7290,32 +7291,32 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../AutoloadStrings.cpp" line="156"/>
         <source>Woodblock</source>
-        <translation type="unfinished"></translation>
+        <translation>Woodblock</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="157"/>
         <source>Taiko Drum</source>
-        <translation type="unfinished"></translation>
+        <translation>Tambour japonais</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="158"/>
         <source>Melodic Tom</source>
-        <translation type="unfinished"></translation>
+        <translation>Tom mélodique</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="159"/>
         <source>Synth Drum</source>
-        <translation type="unfinished"></translation>
+        <translation>Synthétiseur de batterie</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="160"/>
         <source>Reverse Cymbal</source>
-        <translation type="unfinished"></translation>
+        <translation>Cymbale inversée</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="161"/>
         <source>Guitar Fret Noise</source>
-        <translation type="unfinished"></translation>
+        <translation>Bruit de frette (guitare)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="162"/>
@@ -7330,7 +7331,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../AutoloadStrings.cpp" line="164"/>
         <source>Bird Tweet</source>
-        <translation type="unfinished"></translation>
+        <translation>Gazouillis d&apos;oiseau</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="165"/>
@@ -7370,7 +7371,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../AutoloadStrings.cpp" line="172"/>
         <source>Coupled Harpsichord</source>
-        <translation type="unfinished"></translation>
+        <translation>Clavecin accouplé</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="173"/>
@@ -7380,12 +7381,12 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../AutoloadStrings.cpp" line="174"/>
         <source>Detuned Organ 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Orgue désaccordé 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="175"/>
         <source>Detuned Organ 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Orgue désaccordé 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="176"/>
@@ -7415,22 +7416,22 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../AutoloadStrings.cpp" line="182"/>
         <source>Feedback Guitar</source>
-        <translation type="unfinished"></translation>
+        <translation>Guitare avec effet feedback</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="183"/>
         <source>Guitar Feedback</source>
-        <translation type="unfinished"></translation>
+        <translation>Feedback de guitare</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="184"/>
         <source>Synth Bass 3</source>
-        <translation type="unfinished"></translation>
+        <translation>Basse synthétisée 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="185"/>
         <source>Synth Bass 4</source>
-        <translation type="unfinished"></translation>
+        <translation>Basse synthétisée 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="186"/>
@@ -7475,12 +7476,12 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../AutoloadStrings.cpp" line="195"/>
         <source>Concert Bass Drum</source>
-        <translation type="unfinished"></translation>
+        <translation>Grosse caisse de concert</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="196"/>
         <source>Melo Tom 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Tom mélodique 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="197"/>
@@ -7510,42 +7511,42 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../AutoloadStrings.cpp" line="203"/>
         <source>Standard</source>
-        <translation type="unfinished"></translation>
+        <translation>Standard</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="204"/>
         <source>Standard 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Standard 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="205"/>
         <source>Standard 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Standard 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="206"/>
         <source>Standard 3</source>
-        <translation type="unfinished"></translation>
+        <translation>Standard 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="207"/>
         <source>Standard 4</source>
-        <translation type="unfinished"></translation>
+        <translation>Standard 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="208"/>
         <source>Standard 5</source>
-        <translation type="unfinished"></translation>
+        <translation>Standard 5</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="209"/>
         <source>Standard 6</source>
-        <translation type="unfinished"></translation>
+        <translation>Standard 6</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="210"/>
         <source>Standard 7</source>
-        <translation type="unfinished"></translation>
+        <translation>Standard 7</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="211"/>
@@ -7610,7 +7611,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../AutoloadStrings.cpp" line="223"/>
         <source>Electronic</source>
-        <translation type="unfinished"></translation>
+        <translation>Electronique</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="224"/>
@@ -7830,7 +7831,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../AutoloadStrings.cpp" line="268"/>
         <source>Splash Cymbal</source>
-        <translation type="unfinished"></translation>
+        <translation>Cymbale splash</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="269"/>
@@ -7840,12 +7841,12 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../AutoloadStrings.cpp" line="270"/>
         <source>Crash Cymbal 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Cymbale crash 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="271"/>
         <source>Vibraslap</source>
-        <translation type="unfinished"></translation>
+        <translation>Vibraslap</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="272"/>
@@ -7855,27 +7856,27 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../AutoloadStrings.cpp" line="273"/>
         <source>Hi Bongo</source>
-        <translation type="unfinished"></translation>
+        <translation>Bongo aigu</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="274"/>
         <source>Low Bongo</source>
-        <translation type="unfinished"></translation>
+        <translation>Bongo grave</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="275"/>
         <source>Mute Hi Conga</source>
-        <translation type="unfinished"></translation>
+        <translation>Conga aiguë sourd</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="276"/>
         <source>Open Hi Conga</source>
-        <translation type="unfinished"></translation>
+        <translation>Conga aiguë ouvert</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="277"/>
         <source>Low Conga</source>
-        <translation type="unfinished"></translation>
+        <translation>Conga grave</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="278"/>
@@ -7890,42 +7891,42 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../AutoloadStrings.cpp" line="280"/>
         <source>High Agogo</source>
-        <translation type="unfinished"></translation>
+        <translation>Agogo aigu</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="281"/>
         <source>Low Agogo</source>
-        <translation type="unfinished"></translation>
+        <translation>Agogo grave</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="284"/>
         <source>Short Whistle</source>
-        <translation type="unfinished"></translation>
+        <translation>Sifflet court</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="285"/>
         <source>Long Whistle</source>
-        <translation type="unfinished"></translation>
+        <translation>Sifflet long</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="286"/>
         <source>Short Guiro</source>
-        <translation type="unfinished"></translation>
+        <translation>Güiro court</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="287"/>
         <source>Long Guiro</source>
-        <translation type="unfinished"></translation>
+        <translation>Güiro long</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="289"/>
         <source>Hi Wood Block</source>
-        <translation type="unfinished"></translation>
+        <translation>Wood-block aigu</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="290"/>
         <source>Low Wood Block</source>
-        <translation type="unfinished"></translation>
+        <translation>Wood-block grave</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="291"/>
@@ -7940,12 +7941,12 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../AutoloadStrings.cpp" line="293"/>
         <source>Mute Triangle</source>
-        <translation type="unfinished"></translation>
+        <translation>Triangle tenu</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="294"/>
         <source>Open Triangle</source>
-        <translation type="unfinished"></translation>
+        <translation>Triangle libre</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="295"/>
