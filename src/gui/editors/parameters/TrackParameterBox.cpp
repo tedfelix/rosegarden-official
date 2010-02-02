@@ -93,6 +93,7 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
                                  m_doc(doc),
                                  m_highestPlayable(127),
                                  m_lowestPlayable(0),
+                                 m_lastInstrumentType(-1),
                                  m_selectedTrackId((int)NO_TRACK)
 {
     setObjectName("Track Parameter Box");
