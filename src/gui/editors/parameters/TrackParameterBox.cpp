@@ -475,14 +475,14 @@ TrackParameterBox::setDocument(RosegardenDocument *doc)
     if (m_doc != doc) {
         RG_DEBUG << "TrackParameterBox::setDocument\n";
         m_doc = doc;
-        populateDeviceLists();
+        slotPopulateDeviceLists();
     }
 }
 
 void
-TrackParameterBox::populateDeviceLists()
+TrackParameterBox::slotPopulateDeviceLists()
 {
-    RG_DEBUG << "TrackParameterBox::populateDeviceLists()\n";
+    RG_DEBUG << "TrackParameterBox::slotPopulateDeviceLists()\n";
     populatePlaybackDeviceList();
     populateRecordingDeviceList();
     slotUpdateControls(-1);
@@ -612,11 +612,8 @@ TrackParameterBox::populateRecordingDeviceList()
                 if (dev) {
                     if (dev->getDirection() == MidiDevice::Record
                         && dev->isRecording()) {
-                        QString connection = RosegardenSequencer::getInstance()
-                            ->getConnection(dev->getId());
-                        // remove trailing "(duplex)", "(read only)", "(write only)" etc
-                        connection.replace(QRegExp("\\s*\\([^)0-9]+\\)\\s*$"), "");
-                        m_recDevice->addItem(connection);
+                        QString deviceName = QObject::tr(strtoqstr(dev->getName()));
+                        m_recDevice->addItem(deviceName);
                         m_recDeviceIds.push_back(dev->getId());
                     }
                 }

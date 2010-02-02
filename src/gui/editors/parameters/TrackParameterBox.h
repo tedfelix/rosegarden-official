@@ -60,7 +60,6 @@ public:
     ~TrackParameterBox();
     
     void setDocument( RosegardenDocument *doc );
-    void populateDeviceLists();
     virtual void showAdditionalControls(bool); // no longer needed; preserved because it's in the base class
 
     virtual QString getPreviousBox(RosegardenParameterArea::Arrangement) const;
@@ -91,6 +90,7 @@ public slots:
 
     void slotStaffSizeChanged(int index);
     void slotStaffBracketChanged(int index);
+    void slotPopulateDeviceLists();
 
 signals:
     void instrumentSelected(TrackId, int);

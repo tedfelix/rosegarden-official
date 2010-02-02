@@ -169,9 +169,6 @@ DeviceManagerDialog::slotRefreshInputPorts()
                                  m_treeWidget_recordDevices);
 }
 
-
-
-
 void
 DeviceManagerDialog::slotPlaybackDeviceSelected()
 {
@@ -955,6 +952,7 @@ DeviceManagerDialog::slotDeviceItemChanged(QTreeWidgetItem * twItem,
             (new RenameDeviceCommand(m_studio, mdev->getId(),
                                      qstrtostr(devName)));
         emit deviceNameChanged(mdev->getId());
+    RG_DEBUG << "DeviceManagerDialog::slotDeviceItemChanged emitting deviceNamesChanged()" << endl;
         emit deviceNamesChanged();
     }
 }
