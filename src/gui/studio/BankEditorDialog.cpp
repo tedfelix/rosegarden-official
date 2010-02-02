@@ -593,7 +593,7 @@ BankEditorDialog::setCurrentDevice(DeviceId device)
         deviceItem = dynamic_cast<MidiDeviceTreeWidgetItem *>(twItem);
         if (deviceItem && deviceItem->getDeviceId() == device) {
 //             m_treeWidget->setSelected(item, true);
-            twItem->setSelected(true);
+            m_treeWidget->setCurrentItem(twItem);
             break;
         }
     }

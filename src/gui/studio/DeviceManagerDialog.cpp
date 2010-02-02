@@ -84,6 +84,10 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget * parent,
     m_treeWidget_recordDevices->setColumnWidth(1, 50);
     m_treeWidget_recordDevices->setColumnWidth(3, 150);
 
+    // enable sorting
+    m_treeWidget_playbackDevices->setSortingEnabled(true);
+    m_treeWidget_recordDevices->setSortingEnabled(true);
+
     connectSignalsToSlots();
 
     clearAllPortsLists();
@@ -102,14 +106,12 @@ DeviceManagerDialog::show()
     // select the top level item by default, if one exists, just as the bank
     // editor does
     if (m_treeWidget_playbackDevices->topLevelItem(0)) {
-        // Hack Alert: Force a proper selection by reinserting itself
         // This ensures ports are updated correctly to reflect selection.
         QTreeWidgetItem * topItem = m_treeWidget_playbackDevices->topLevelItem(0);
         m_treeWidget_playbackDevices->setCurrentItem(topItem);
 
     }
     if (m_treeWidget_recordDevices->topLevelItem(0)) {
-        // Hack Alert: Force a proper selection by reinserting itself
         // This ensures ports are updated correctly to reflect selection.       
         QTreeWidgetItem * topItem = m_treeWidget_recordDevices->topLevelItem(0);
         m_treeWidget_recordDevices->setCurrentItem(topItem);
@@ -616,10 +618,10 @@ DeviceManagerDialog::updateCheckStatesOfPortsList(QTreeWidget *treeWid_ports,
 
         if (outPort == twItem->text(0) && mdev) {
             // Make it appear selected
+            treeWid_ports->setCurrentItem(twItem);
             font.setWeight(QFont::Bold);
             twItem->setFont(0, font); // 0=column
             twItem->setIcon(0, il.load("icon-plugged-in.png"));
-            twItem->setSelected(true);
         } else {
             // Make it appear not selected
             twItem->setIcon(0, il.load("icon-plugged-out.png"));
