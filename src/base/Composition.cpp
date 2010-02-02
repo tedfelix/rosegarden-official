@@ -233,11 +233,11 @@ Composition::iterator
 Composition::weakAddSegment(Segment *segment)
 {
     if (!segment) return end();
+    clearVoiceCaches();
     
     iterator res = m_segments.insert(segment);
     segment->setComposition(this);
 
-    clearVoiceCaches();
     return res;
 }
 
@@ -245,6 +245,7 @@ void
 Composition::deleteSegment(Composition::iterator i)
 {
     if (i == end()) return;
+    clearVoiceCaches();
 
     Segment *p = (*i);
     p->setComposition(0);
@@ -253,7 +254,6 @@ Composition::deleteSegment(Composition::iterator i)
     notifySegmentRemoved(p);
     delete p;
 
-    clearVoiceCaches();
     updateRefreshStatuses();
 }
 
@@ -285,10 +285,10 @@ Composition::weakDetachSegment(Segment *segment)
 {
     iterator i = findSegment(segment);
     if (i == end()) return false;
+    clearVoiceCaches();
     
     segment->setComposition(0);
     m_segments.erase(i);
-    clearVoiceCaches();
 
     return true;
 }
@@ -319,6 +319,8 @@ void Composition::setSegmentStartTime(Segment *segment, timeT startTime)
     // remove the segment from the multiset
     iterator i = findSegment(segment);
     if (i == end()) return;
+
+    clearVoiceCaches();
     
     m_segments.erase(i);
 
@@ -326,13 +328,12 @@ void Composition::setSegmentStartTime(Segment *segment, timeT startTime)
 
     // re-add it
     m_segments.insert(segment);
-
-    clearVoiceCaches();
 }
 
 void
 Composition::clearVoiceCaches()
 {
+//    std::cerr << "Composition::clearVoiceCaches" << std::endl;
     m_trackVoiceCountCache.clear();
     m_segmentVoiceIndexCache.clear();
 }
@@ -340,6 +341,7 @@ Composition::clearVoiceCaches()
 void
 Composition::rebuildVoiceCaches() const
 {
+//    std::cerr << "Composition::rebuildVoiceCaches" << std::endl;
     Profiler profiler("Composition::rebuildVoiceCaches");
 
     // slow
@@ -358,6 +360,8 @@ Composition::rebuildVoiceCaches() const
             if ((*i)->getTrack() != tid) continue;
             timeT t0 = (*i)->getStartTime();
             timeT t1 = (*i)->getRepeatEndTime();
+//            std::cerr << "track " << tid << " segment " << *i
+//                      << " " << t0 << " to " << t1 << std::endl;
             int index = 0;
             std::multimap<timeT, Segment *>::iterator ei = ends.end();
             std::set<int> used;
@@ -373,6 +377,7 @@ Composition::rebuildVoiceCaches() const
             }
             m_segmentVoiceIndexCache[*i] = index;
             if (index >= m_trackVoiceCountCache[tid]) {
+//                std::cerr << "count to " << index + 1 << std::endl;
                 m_trackVoiceCountCache[tid] = index + 1;
             }
             ends.insert(std::multimap<timeT, Segment *>::value_type(t1, *i));
@@ -389,7 +394,9 @@ Composition::getMaxContemporaneousSegmentsOnTrack(TrackId track) const
         rebuildVoiceCaches();
     }
 
-    return m_trackVoiceCountCache[track];
+    int count = m_trackVoiceCountCache[track];
+//    std::cerr << "max contemporaneous on track " << track << " = " << count << std::endl;
+    return count;
 }
 
 int
@@ -548,8 +555,8 @@ Composition::setEndMarker(const timeT &eM)
 {
     bool shorten = (eM < m_endMarker);
     m_endMarker = eM;
-    updateRefreshStatuses();
     clearVoiceCaches();
+    updateRefreshStatuses();
     notifyEndMarkerChange(shorten);
 }
 
@@ -1951,6 +1958,8 @@ Composition::getNewTrackId() const
 void
 Composition::notifySegmentAdded(Segment *s) const
 {
+    std::cerr << "Composition::notifySegmentAdded" << std::endl;
+
     // If there is an earlier repeating segment on the same track, we
     // need to notify the change of its repeat end time
 
@@ -2055,7 +2064,9 @@ Composition::notifySegmentTrackChanged(Segment *s, TrackId oldId, TrackId newId)
 void
 Composition::notifySegmentStartChanged(Segment *s, timeT t)
 {
-    updateRefreshStatuses(); // not ideal, but best way to ensure track heights are recomputed
+    // not ideal, but best way to ensure track heights are recomputed:
+    clearVoiceCaches();
+    updateRefreshStatuses();
     for (ObserverSet::const_iterator i = m_observers.begin();
 	 i != m_observers.end(); ++i) {
 	(*i)->segmentStartChanged(this, s, t);
@@ -2065,6 +2076,9 @@ Composition::notifySegmentStartChanged(Segment *s, timeT t)
 void
 Composition::notifySegmentEndMarkerChange(Segment *s, bool shorten)
 {
+    // not ideal, but best way to ensure track heights are recomputed:
+    clearVoiceCaches();
+    updateRefreshStatuses();
     for (ObserverSet::const_iterator i = m_observers.begin();
 	 i != m_observers.end(); ++i) {
 	(*i)->segmentEndMarkerChanged(this, s, shorten);
