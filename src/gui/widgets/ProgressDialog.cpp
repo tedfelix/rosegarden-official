@@ -62,7 +62,7 @@ ProgressDialog::ProgressDialog(const QString &labelText,
 
     setWindowTitle(tr("Rosegarden"));
     setModal(modal);
-    setAttribute(Qt::WA_DeleteOnClose);
+//    setAttribute(Qt::WA_DeleteOnClose);
     setWindowFlags(Qt::Dialog);
 
     QVBoxLayout *layout = new QVBoxLayout;
@@ -237,6 +237,7 @@ ProgressDialog::slotFreeze()
         m_modalVisible = false;
         hide();
     }
+    setModal(false);
 
     m_timer->stop();
     m_frozen = true;
