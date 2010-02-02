@@ -484,7 +484,7 @@ TrackParameterBox::slotPopulateDeviceLists()
 {
     RG_DEBUG << "TrackParameterBox::slotPopulateDeviceLists()\n";
     populatePlaybackDeviceList();
-    m_lastInstrumentType = -1;  // Attempt to force inital record device populate
+    m_lastInstrumentType = -1;  // Attempt to force initial record device populate
     populateRecordingDeviceList();
     slotUpdateControls(-1);
 }
