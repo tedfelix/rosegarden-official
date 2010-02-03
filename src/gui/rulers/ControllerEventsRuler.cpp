@@ -373,7 +373,7 @@ ControllerEventsRuler::addControlLine(float x1, float y1, float x2, float y2, bo
     // get a value for the other end point
     long destinationValue = yToValue(y2);
 
-    if (originTime == destinationTime) return;
+    if (originTime == destinationTime || originValue == destinationValue) return;
 
     // If the "anchor point" was to the right of the newly clicked destination
     // point, we're drawing a line from right to left.  We simply swap origin
@@ -421,8 +421,7 @@ ControllerEventsRuler::addControlLine(float x1, float y1, float x2, float y2, bo
 
     // always calculate step on a positive value for rise, and make sure it's at
     // least 1
-    long step = run / (rising ? rise : rise * -1);
-    if (step == 0) step = 1;
+    float step = run / (float)(rising ? rise : rise * -1);
 
     // Trying this with pitch bend with a rise approaching the maximum over a
     // span of around four bars generated over 15,000 pitch bend events!  That's
@@ -462,7 +461,7 @@ ControllerEventsRuler::addControlLine(float x1, float y1, float x2, float y2, bo
 
     }
 
-    for (timeT i = originTime; i <= destinationTime; i += step) {
+    for (float i = originTime; i <= destinationTime; i += step) {
 
         if (failsafe) continue;
 
@@ -475,7 +474,7 @@ ControllerEventsRuler::addControlLine(float x1, float y1, float x2, float y2, bo
 //        std::cout << "creating event at time: " << i << " of value: " << intermediateValue << std::endl;
 //        continue;
 
-        Event *controllerEvent = new Event(m_controller->getType(), i);
+        Event *controllerEvent = new Event(m_controller->getType(), (timeT) i);
 
         if (m_controller->getType() == Rosegarden::Controller::EventType) {
 
