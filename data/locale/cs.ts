@@ -2981,7 +2981,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2047"/>
         <source>S&amp;lashes</source>
-        <translation>&amp;Značky pro opakování</translation>
+        <translation>Šik&amp;mé čáry</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2048"/>
@@ -3016,7 +3016,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2054"/>
         <source>&amp;Cycle Slashes</source>
-        <translation>&amp;Značky pro opakování</translation>
+        <translation>&amp;Oběh šikmých čar</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2061"/>
@@ -3352,7 +3352,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2228"/>
         <source>Cycle &amp;Dots</source>
-        <translation type="unfinished"></translation>
+        <translation>Oběh &amp;teček</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2235"/>
@@ -3363,7 +3363,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2237"/>
         <source>Cycle Dots With&amp;out Duration Change</source>
-        <translation type="unfinished"></translation>
+        <translation>Oběh teček be&amp;ze změny doby trvání</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2244"/>
@@ -10752,7 +10752,7 @@ Chcete-li i přesto provést vložení, zvažte použití jednoho z dalších ty
     <message>
         <location filename="../../src/commands/notation/AddSlashesCommand.h" line="38"/>
         <source>Slashes</source>
-        <translation>Značky pro opakování</translation>
+        <translation>Oběh šikmých čar</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddSlashesCommand.cpp" line="34"/>
@@ -12853,7 +12853,7 @@ Vyberte ty, které chcete z pevného disku trvale odstranit.
     <message>
         <location filename="../../src/commands/notation/CycleSlashesCommand.h" line="37"/>
         <source>Cycle Slashes</source>
-        <translation>Značky pro opakování</translation>
+        <translation>Oběh šikmých čar</translation>
     </message>
 </context>
 <context>
@@ -18709,7 +18709,7 @@ Ujistěte se, že je zařízení správně nastaveno v dialogu Správa zařízen
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4307"/>
         <source>Cycling slashes...</source>
-        <translation>Značky pro opakování...</translation>
+        <translation>Koloběh šikmých čar...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3589"/>
