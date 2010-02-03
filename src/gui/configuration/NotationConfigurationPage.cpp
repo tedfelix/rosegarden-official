@@ -250,7 +250,7 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
 
         QString styleQName(*i);
         m_untranslatedNoteStyle.append(styleQName);
-        m_noteStyle->addItem(tr(styleQName.toUtf8()));
+        m_noteStyle->addItem(QObject::tr(styleQName.toUtf8()));
         if (styleQName == defaultStyle) {
             m_noteStyle->setCurrentIndex(m_noteStyle->count() - 1);
         }
