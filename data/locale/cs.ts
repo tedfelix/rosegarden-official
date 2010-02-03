@@ -3030,24 +3030,20 @@
         <translation>&amp;Styl not</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2064"/>
         <source>&amp;Classical</source>
-        <translation>Klasi&amp;cký</translation>
+        <translation type="obsolete">Klasi&amp;cký</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2065"/>
         <source>C&amp;ross</source>
-        <translation>&amp;Kříž</translation>
+        <translation type="obsolete">&amp;Kříž</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2066"/>
         <source>&amp;Mensural</source>
-        <translation>&amp;Menzurální</translation>
+        <translation type="obsolete">&amp;Menzurální</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2067"/>
         <source>&amp;Triangle</source>
-        <translation>&amp;Trojúhelník</translation>
+        <translation type="obsolete">&amp;Trojúhelník</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2068"/>
@@ -3932,6 +3928,21 @@
         <location filename="../QMenuStrings.cpp" line="1917"/>
         <source>Show &amp;Rulers Toolbar</source>
         <translation>Ukázat nástrojovou lištu s &amp;pravítky</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="2064"/>
+        <source>Classical</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="2065"/>
+        <source>Cross</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="2066"/>
+        <source>Mensural</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3266"/>
@@ -4950,6 +4961,7 @@ Chcete-li i přesto provést vložení, zvažte použití jednoho z dalších ty
         <translation>Basový</translation>
     </message>
     <message>
+        <location filename="../QMenuStrings.cpp" line="2067"/>
         <location filename="../InstrumentStrings.cpp" line="285"/>
         <source>Triangle</source>
         <translation>Trojúhelníkový</translation>
@@ -7992,7 +8004,7 @@ Chcete-li i přesto provést vložení, zvažte použití jednoho z dalších ty
     <message>
         <location filename="../../src/base/Studio.cpp" line="56"/>
         <location filename="../../src/sound/AlsaDriver.cpp" line="663"/>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="520"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="521"/>
         <location filename="../AutoloadStrings.cpp" line="305"/>
         <source>Synth plugin</source>
         <translation>Syntetizátorový přídavný modul</translation>
@@ -10159,7 +10171,7 @@ Chcete-li i přesto provést vložení, zvažte použití jednoho z dalších ty
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="91"/>
         <location filename="../../src/gui/general/ActionFileParser.cpp" line="639"/>
         <location filename="../../src/gui/general/ActionFileParser.cpp" line="646"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="458"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="457"/>
         <source>%1</source>
         <translation>%1</translation>
     </message>
@@ -10175,7 +10187,7 @@ Chcete-li i přesto provést vložení, zvažte použití jednoho z dalších ty
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="451"/>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="892"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="899"/>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="757"/>
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1589"/>
         <source>%1 Controller %2 %3</source>
@@ -12884,13 +12896,13 @@ Vyberte ty, které chcete z pevného disku trvale odstranit.
 <context>
     <name>Rosegarden::DeviceManagerDialog</name>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="802"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="823"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="801"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="822"/>
         <source>New Device</source>
         <translation>Nové zařízení</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="920"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="919"/>
         <source>http://rosegardenmusic.com/wiki/doc:device-manager-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:device-manager-en</translation>
     </message>
@@ -17074,32 +17086,32 @@ Poklepáním otevřete editor značek.</translation>
 <context>
     <name>Rosegarden::MatrixWidget</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="189"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="190"/>
         <source>Zoom</source>
         <translation>Zvětšení</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="205"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="206"/>
         <source>Horizontal Zoom</source>
         <translation>Vodorovné zvětšení</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="217"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="218"/>
         <source>Vertical Zoom</source>
         <translation>Svislé zvětšení</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="230"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="231"/>
         <source>Reset Zoom</source>
         <translation>Nastavit znovu zvětšení</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="1186"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="1193"/>
         <source>&lt;qt&gt;Rotate wheel to change the active segment&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Otáčet kolečkem kvůli změně činné části&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="1187"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="1194"/>
         <source>&lt;qt&gt;Segment: &quot;%1&quot;&lt;br&gt;Track: %2 &quot;%3&quot;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Část: &quot;%1&quot;&lt;br&gt;Stopa: %2 &quot;%3&quot;&lt;/qt&gt;</translation>
     </message>
@@ -20395,7 +20407,7 @@ Chyba byla: %2</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1845"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7641"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7651"/>
         <source>All supported files</source>
         <translation>Všechny podporované soubory</translation>
     </message>
@@ -20430,7 +20442,7 @@ Chyba byla: %2</translation>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4725"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4762"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4872"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7642"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7652"/>
         <source>All files</source>
         <translation>Všechny soubory</translation>
     </message>
@@ -20460,7 +20472,7 @@ Chyba byla: %2</translation>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3881"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3967"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4002"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7655"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7665"/>
         <source>Cannot open file %1</source>
         <translation>Nelze otevřít soubor %1</translation>
     </message>
@@ -20724,7 +20736,7 @@ Chcete cestu nastavit nyní?</translation>
         <translation>Vstup</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7410"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7420"/>
         <source>http://rosegardenmusic.com/wiki/doc:manual-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:manual-en</translation>
     </message>
@@ -20779,22 +20791,22 @@ Chcete cestu nastavit nyní?</translation>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6090"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6212"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6225"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7437"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7582"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7600"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7603"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7447"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7592"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7610"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7613"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7655"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7623"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7665"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7900"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7910"/>
         <source>&lt;h3&gt;Newer version available&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;Je dostupná novější verze&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7901"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7911"/>
         <source>&lt;p&gt;You are using version %1.  Version %2 is now available.&lt;/p&gt;&lt;p&gt;Please consult the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;Rosegarden website&lt;/a&gt; for more information.&lt;/p&gt;</source>
         <translation>&lt;p&gt;Používáte verzi %1.  Verze %2 je nyní dostupná.&lt;/p&gt;&lt;p&gt;Poraďte se, prosím, s &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;stránkami aplikace Rosegarden &lt;/a&gt; kvůli dalším informacím.&lt;/p&gt;</translation>
     </message>
@@ -21145,89 +21157,89 @@ Chcete cestu nastavit nyní?</translation>
         <translation>Zadat nové označení</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7373"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7383"/>
         <source>Play List</source>
         <translation>Seznam přehrávání</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7417"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7427"/>
         <source>http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</source>
         <translation>http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7424"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7434"/>
         <source>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</source>
         <translation>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7522"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7532"/>
         <source>Queueing MIDI panic events for tranmission...</source>
         <translation>Probíhá řazení nouzových událostí MIDI do řady pro přenos...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7582"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7592"/>
         <source>Are you sure you want to save this as your default studio?</source>
         <translation>Skutečně chcete toto uložit jako svoje výchozí studio?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7588"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7598"/>
         <source>Saving current document as default studio...</source>
         <translation>Probíhá ukládání současného dokumentu jako výchozího studia...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7600"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7610"/>
         <source>Could not auto-save document at %1
 Error was : %2</source>
         <translation>Nepodařilo se automaticky uložit dokument v %1
 Chyba byla: %2</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7603"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7613"/>
         <source>Could not auto-save document at %1</source>
         <translation>Nepodařilo se automaticky uložit dokument pod %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7613"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7623"/>
         <source>Are you sure you want to import your default studio and lose the current one?</source>
         <translation>Skutečně chcete zavést svoje výchozí studio a ztratit to nynější?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7640"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7650"/>
         <source>Import Studio from File</source>
         <translation>Zavést studio ze souboru</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7689"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7699"/>
         <source>Import Studio</source>
         <translation>Zavést studio</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8011"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8021"/>
         <source>&lt;h3&gt;Invalid audio path&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;Neplatná cesta ke zvuku&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8012"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8022"/>
         <source>&lt;p&gt;You will not be able to record audio or drag and drop audio files onto Rosegarden until you correct this in &lt;b&gt;View -&gt; Document Properties -&gt; Audio&lt;/b&gt;.&lt;/p&gt;</source>
         <translation>&lt;p&gt;Nebudete moci nahrávat zvuk nebo táhnout a upouštět zvukové soubory na Rosegarden, dokud to neopravíte v &lt;b&gt;Pohled -&gt; Vlastnosti dokumentu -&gt; Zvuk&lt;/b&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8016"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8026"/>
         <source>&lt;h3&gt;Created audio path&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;Vytvořena cesta ke zvuku&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8017"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8027"/>
         <source>&lt;qt&gt;&lt;p&gt;Rosegarden created the audio path &quot;%1&quot; to use for audio recording, and to receive dropped audio files.&lt;/p&gt;&lt;p&gt;If you wish to use a different path, change this in &lt;b&gt;View -&gt; Document Properties -&gt; Audio&lt;/b&gt;.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Rosegarden vytvořil cestu ke zvuku &quot;%1&quot; k použití pro nahrávání zvuku, a pro přijímání upuštěných zvukových souborů.&lt;/p&gt;&lt;p&gt;Pokud byste si přál používat jinou cestu, změnu proveďte v &lt;b&gt;Pohled -&gt; Vlastnosti dokumentu -&gt; Zvuk&lt;/b&gt;.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8023"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8033"/>
         <source>&lt;qt&gt;&lt;p&gt;The audio path &quot;%1&quot; did not exist, and could not be created.&lt;/p&gt;%2&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Cesta ke zvuku &quot;%1&quot; neexistovala, a nepodařilo se ji vytvořit.&lt;/p&gt;%2&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8028"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8038"/>
         <source>&lt;qt&gt;&lt;p&gt;The audio path &quot;%1&quot; exists, but is not writable.&lt;/p&gt;%2&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Cesta ke zvuku &quot;%1&quot; existuje, ale není zapisovatelná.&lt;/p&gt;%2&lt;/qt&gt;</translation>
     </message>
@@ -23586,149 +23598,149 @@ Chcete cestu nastavit nyní?</translation>
         <translation>Parametry stopy</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="138"/>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="758"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="139"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="756"/>
         <source>&lt;untitled&gt;</source>
         <translation>&lt;bez názvu&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="145"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="146"/>
         <source>Playback parameters</source>
         <translation>Parametry přehrávání</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="161"/>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="203"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="162"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="204"/>
         <source>Device</source>
         <translation>Zařízení</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="173"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="174"/>
         <source>Instrument</source>
         <translation>Nástroj</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="178"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="179"/>
         <source>&lt;qt&gt;&lt;p&gt;Choose the instrument this track will use for playback. (Configure the instrument in &lt;b&gt;Instrument Parameters&lt;/b&gt;).&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Vyberte nástroj, který se bude používat při přehrávání této stopy. (Nástroj lze nastavit v &lt;b&gt;Parametry nástroje&lt;/b&gt;).&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="189"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="190"/>
         <source>Recording filters</source>
         <translation>Záznamové filtry</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="208"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="209"/>
         <source>&lt;qt&gt;&lt;p&gt;This track will only record Audio/MIDI from the selected device, filtering anything else out&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Tato stopa bude nahrávat pouze Audio/MIDI z vybraného zařízení, cokoli jiného se odfiltrovává pryč&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="215"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="216"/>
         <source>Channel</source>
         <translation>Kanál</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="231"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="232"/>
         <source>Staff export options</source>
         <translation>Možnosti vyvedení osnovy</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="250"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="251"/>
         <source>Notation size:</source>
         <translation>Velikost notace:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="257"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="258"/>
         <source>Normal</source>
         <translation>Normální</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="258"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="259"/>
         <source>Small</source>
         <translation>Malá</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="259"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="260"/>
         <source>Tiny</source>
         <translation>Drobná</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="266"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="267"/>
         <source>Bracket type:</source>
         <translation>Typ závorky:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="271"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="272"/>
         <source>&lt;qt&gt;&lt;p&gt;Bracket staffs in LilyPond&lt;br&gt;(fragile, use with caution)&lt;/p&gt;&lt;qt&gt;</source>
         <translation>&lt;qt&gt;Osnovy závorek v LilyPondu&lt;br&gt;(křehké, opatrně při použití)&lt;/p&gt;&lt;qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="273"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="274"/>
         <source>-----</source>
         <translation>-----</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="274"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="275"/>
         <source>[----</source>
         <translation>[----</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="275"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="276"/>
         <source>----]</source>
         <translation>----]</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="276"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="277"/>
         <source>[---]</source>
         <translation>[---]</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="277"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="278"/>
         <source>{----</source>
         <translation>{----</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="278"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="279"/>
         <source>----}</source>
         <translation>----}</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="279"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="280"/>
         <source>{[---</source>
         <translation>{[---</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="280"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="281"/>
         <source>---]}</source>
         <translation>---]}</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="289"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="290"/>
         <source>Create segments with</source>
         <translation>Vytvořit části s</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="302"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="303"/>
         <source>Preset</source>
         <translation>Přednastavení</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="306"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="307"/>
         <source>&lt;none&gt;</source>
         <translation>&lt;žádný&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="313"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="314"/>
         <source>Load</source>
         <translation>Načíst</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="321"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="322"/>
         <source>Clef</source>
         <translation>Klíč</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="326"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="327"/>
         <source>&lt;qt&gt;&lt;p&gt;New segments will be created with this clef inserted at the beginning&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Nové části budou vytvořeny s tímto klíčem, který byl vložen na začátku&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
@@ -23737,17 +23749,17 @@ Chcete cestu nastavit nyní?</translation>
         <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Nové části budou vytvořeny s těmito vlastnostmi převedení&lt;p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="382"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="383"/>
         <source>&lt;qt&gt;&lt;p&gt;Choose the lowest suggested playable note, using a staff&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;S pomocí osnovy vyberte nejnižší navrženou hratelnou notu&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="392"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="393"/>
         <source>&lt;qt&gt;&lt;p&gt;Choose the highest suggested playable note, using a staff&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;S pomocí osnovy vyberte nejvyšší navrženou hratelnou notu&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="165"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="166"/>
         <source>&lt;qt&gt;&lt;p&gt;Choose the device this track will use for playback.&lt;/p&gt;&lt;p&gt;Click &lt;img src=&quot;:pixmaps/toolbar/manage-midi-devices.xpm&quot;&gt; to connect this device to a useful output if you do not hear sound&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Vyberte zařízení, které tato stopa bude používat pro přehrávání.&lt;/p&gt;&lt;p&gt;Klepněte na &lt;img src=&quot;:pixmaps/toolbar/manage-midi-devices.xpm&quot;&gt; pro připojení tohoto zařízení k platnému výstupu, pokud neslyšíte zvuk&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
@@ -23756,12 +23768,12 @@ Chcete cestu nastavit nyní?</translation>
         <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Do této stopy se budou nahrávat pouze Audio/ MIDI data z vybraného zařízení. Vše ostatní bude odfiltrováno&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="220"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="221"/>
         <source>&lt;qt&gt;&lt;p&gt;This track will only record Audio/MIDI from the selected channel, filtering anything else out&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Do této stopy se budou nahrávat pouze Audio/ MIDI data z vybraného kanálu. Vše ostatní bude odfiltrováno&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="255"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="256"/>
         <source>&lt;qt&gt;&lt;p&gt;Choose normal, \small or \tiny font size for notation elements on this (normal-sized) staff when exporting to LilyPond.&lt;/p&gt;&lt;p&gt;This is as close as we get to enabling you to print parts in cue size&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Vybrat obvyklou, malou nebo drobnou velikost písma pro prvky not v tomto notovém zápisu (o obvyklé velikosti) při vyvedení do LilyPondu.&lt;/p&gt;&lt;p&gt;Toto je nejlepší možná volba pro tisk ve správné velikosti&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
@@ -23770,201 +23782,201 @@ Chcete cestu nastavit nyní?</translation>
         <translation type="obsolete">&lt;qt&gt;Osnovy závorek v LilyPondu&lt;br&gt;(křehké, opatrně při použití)&lt;/p&gt;&lt;qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="315"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="316"/>
         <source>&lt;qt&gt;&lt;p&gt;Load a segment parameters preset from our comprehensive database of real-world instruments.&lt;/p&gt;&lt;p&gt;When you create new segments, they will have these parameters at the moment of creation.  To use these parameters on existing segments (eg. to convert an existing part in concert pitch for playback on a Bb trumpet) use &lt;b&gt;Segments -&gt; Convert notation for&lt;/b&gt; in the notation editor.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Nahrát přednastavení pro parametr části z naší obsáhlé databáze skutečných nástrojů.&lt;/p&gt;&lt;p&gt;Když vytvoříte nové části, budou jim tyto parametry při vytvoření přiřazeny. Pro použití těchto parametrů na stávajících částech (např. pro převedení stávající části v koncertní výšce tónu pro přehrávání na B trubku) použijte &lt;b&gt;Části -&gt; Převést notový zápis pro&lt;/b&gt; v editoru notového zápisu.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="328"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="329"/>
         <source>treble</source>
         <translation>houslový</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="329"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="330"/>
         <source>bass</source>
         <translation>basový</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="330"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="331"/>
         <source>crotales</source>
         <translation>chrastítka</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="331"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="332"/>
         <source>xylophone</source>
         <translation>xylofon</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="332"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="333"/>
         <source>guitar</source>
         <translation>kytara</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="333"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="334"/>
         <source>contrabass</source>
         <translation>kontrabas</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="334"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="335"/>
         <source>celesta</source>
         <translation>celesta</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="335"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="336"/>
         <source>old celesta</source>
         <translation>stará celesta</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="336"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="337"/>
         <source>french</source>
         <translation>francouzský</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="337"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="338"/>
         <source>soprano</source>
         <translation>sopránový</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="338"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="339"/>
         <source>mezzosoprano</source>
         <translation>mezosopránový</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="339"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="340"/>
         <source>alto</source>
         <translation>violový</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="340"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="341"/>
         <source>tenor</source>
         <translation>tenorový</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="341"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="342"/>
         <source>baritone</source>
         <translation>barytonový</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="342"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="343"/>
         <source>varbaritone</source>
         <translation>varbarytonový</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="343"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="344"/>
         <source>subbass</source>
         <translation>subbasový</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="351"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="352"/>
         <source>Transpose</source>
         <translation>Převést</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="356"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="357"/>
         <source>&lt;qt&gt;&lt;p&gt;New segments will be created with this transpose property set&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Nové části budou vytvořeny s tímto souborem vlastností převedení&lt;p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="372"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="373"/>
         <source>Pitch</source>
         <translation>Výška tónu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="376"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="377"/>
         <source>Lowest</source>
         <translation>Nejnižší</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="380"/>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="390"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="381"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="391"/>
         <source>---</source>
         <translation>---</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="386"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="387"/>
         <source>Highest</source>
         <translation>Nejvyšší</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="403"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="404"/>
         <source>Color</source>
         <translation>Barva</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="408"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="409"/>
         <source>&lt;qt&gt;&lt;p&gt;New segments will be created using this color&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Nové části budou vytvořeny s touto barvou&lt;p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="590"/>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="591"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="592"/>
         <source>Audio</source>
         <translation>Zvuk</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="605"/>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="625"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="606"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="623"/>
         <source>All</source>
         <translation>Vše</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="682"/>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="686"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="680"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="684"/>
         <source> %1</source>
         <translation> %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="762"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="760"/>
         <source>[ Track %1 - %2 ]</source>
         <translation>[ Stopa %1 - %2 ]</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="999"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="997"/>
         <source>Default</source>
         <translation>Výchozí</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1015"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1013"/>
         <source>Add New Color</source>
         <translation>Přidat novou barvu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1041"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1039"/>
         <source>New Color Name</source>
         <translation>Název nové barvy</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1042"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1040"/>
         <source>Enter new name:</source>
         <translation>Zadejte nový název</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1044"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1042"/>
         <source>New</source>
         <translation>Nový</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1076"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1074"/>
         <source>Highest playable note</source>
         <translation>Nejvyšší hratelná nota</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1098"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1096"/>
         <source>Lowest playable note</source>
         <translation>Nejnižší hratelná nota</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1159"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1157"/>
         <source>The instrument preset database is corrupt.  Check your installation.</source>
         <translation>Databáze přednastavených nástrojů je porušená.  Zkontrolujte instalaci.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1159"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1157"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1203"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1201"/>
         <source>Segment</source>
         <translation>Část</translation>
     </message>

@@ -212,10 +212,10 @@
       <text>Note &amp;Style</text>
       <!-- Should be Custom Coded, but deal with it later -->
       <!-- JAS See src/commands/notation/ChangeStyleCommand.cpp -->
-      <Action name="style_classical" text="&amp;Classical" />
-      <Action name="style_cross" text="C&amp;ross" />
-      <Action name="style_mensural" text="&amp;Mensural" />
-      <Action name="style_triangle" text="&amp;Triangle" />
+      <Action name="style_classical" text="Classical" />
+      <Action name="style_cross" text="Cross" />
+      <Action name="style_mensural" text="Mensural" />
+      <Action name="style_triangle" text="Triangle" />
   <Separator/>
     </Menu>
     <Menu name="Respell">

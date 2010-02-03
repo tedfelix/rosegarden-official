@@ -11,103 +11,101 @@
 <context>
     <name>DeviceManagerDialogUi</name>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="472"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="474"/>
         <source>Manage MIDI Devices</source>
         <translation>Hantera MIDI-enheter</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="473"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="475"/>
         <source>MIDI Playback</source>
         <translation>MIDI-uppspelning</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="475"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="477"/>
         <source>Sends its data through</source>
         <translation>Skickar data genom</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="476"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="478"/>
         <source>Rosegarden playback device</source>
         <translation>Rosegarden uppspelningsenhet</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="481"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="513"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="514"/>
         <source>Internal Synth</source>
         <translation>Intern synt</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="482"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="483"/>
         <source>Default playback device</source>
         <translation>Standarduppspelningsenhet</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="486"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="487"/>
         <source>&lt;qt&gt;&lt;p&gt;Create new playback devices here. Click the device name to change it. Select a device here and connect it to a MIDI output port by clicking on a port to the right.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Skapa nya uppspelningsenheter här. Klicka på enhetsnamnet för att ändra det. Välj en enhet här och anslut den till en MIDI-utgång genom att klicka på en port till höger.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="489"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="490"/>
         <source>&lt;qt&gt;&lt;p&gt;Bank definitions allow you to tell Rosegarden about the programs or patches available for use on the equipment (hardware or software synth) connected to this device.&lt;/p&gt;&lt;p&gt;You must have something defined for any program or bank changes you wish to transmit, as Rosegarden hides all bank and program numbers that are undefined.&lt;/p&gt;&lt;/qt&gt;</source>
         <translatorcomment>How should &quot;patch&quot; be translated?</translatorcomment>
         <translation>&lt;qt&gt;&lt;p&gt;Bankdefinitioner gör det möjligt att tala om för Rosegarden vilka program eller patcher som är tillgängliga att använda i utrustningen (verklig synt eller programvarusynt) ansluten till enheten.&lt;/p&gt;&lt;p&gt;Någonting måste vara definierat för alla program- eller bankändringar du vill sända, eftersom Rosegarden döljer alla program- och banknummer som är odefinierade.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="491"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="492"/>
         <source>Banks...</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
         <translation>Banker...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="493"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="494"/>
         <source>&lt;qt&gt;&lt;p&gt;Edit the controllers associated with this device.&lt;/p&gt;&lt;p&gt;You must define controllers here in order to use them anywhere in Rosegarden, such as on control rulers or in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box,  You can change which controllers are displayed in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box, and rearrange their layout&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Redigera effekter kopplade till enheten.&lt;p&gt;&lt;p&gt;Du måste definiera effekter här för att kunna använda dem var som helst i Rosegarden, såsom på styrlinjaler eller i rutan &lt;b&gt;Instrumentparametrar&lt;/b&gt;. Du kan ändra vilka effekter som visas i rutan &lt;b&gt;Instrumentparametrar&lt;/b&gt;, och arrangera om deras utläggning&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="495"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="496"/>
         <source>Controllers...</source>
         <translation>Effekter...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="497"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="498"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new playback device&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Skapa en ny uppspelningsenhet&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="499"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="527"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="500"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="528"/>
         <source>New</source>
         <translation>Ny</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="501"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="502"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected playback device.  Any tracks using this device will need to be reassigned, and any program or bank changes on those tracks will be lost permanently&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Radera den markerade uppspelningsenheten. Alla spår som använder enheten måste tilldelas på nytt, och alla program- eller bankändringar för dessa spår kommer att förloras permanent&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="503"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="504"/>
         <source>Delete</source>
         <translation>Radera</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="504"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="505"/>
         <source>MIDI outputs</source>
         <translation>MIDI-utgångar</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="506"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="507"/>
         <source>Available outputs</source>
         <translation>Tillgängliga utgångar</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="511"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="539"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="512"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="553"/>
         <source>No port</source>
         <translation>Ingen utgång</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="517"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="518"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI outputs (hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Tillgängliga MIDI-utgångar (maskinvara eller programvara)&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
@@ -117,45 +115,45 @@
         <translation>&lt;qt&gt;&lt;p&gt;Tillgängliga MIDI-ingångar (från maskinvara eller programvara)&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="520"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="521"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="560"/>
         <source>&lt;qt&gt;&lt;p&gt;Click to refresh the port list after connecting a new piece of equipment or starting a new soft synth&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Klicka för att uppdatera portlistan efter att ha anslutit ny utrustning eller startat en ny programsynt&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="522"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="523"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="562"/>
         <source>Refresh</source>
         <translation>Uppdatera</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="523"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="524"/>
         <source>MIDI Recording</source>
         <translation>MIDI-inspelning</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="525"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="526"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new recording device&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Skapa en ny inspelningsenhet&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="529"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="530"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected recording device&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Radera den markerade inspelningsenheten&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="531"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="532"/>
         <source>Delete</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
         <translation>Radera</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="533"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="534"/>
         <source>Receives its data from</source>
         <translation>Tar emot sin data från</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="534"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="535"/>
         <source>Rosegarden recording device</source>
         <translation>Rosegarden inspelningsenhet</translation>
     </message>
@@ -202,9 +200,9 @@
         <location filename="../QMenuStrings.cpp" line="1654"/>
         <location filename="../QMenuStrings.cpp" line="1702"/>
         <location filename="../QMenuStrings.cpp" line="1770"/>
-        <location filename="../QMenuStrings.cpp" line="3478"/>
-        <location filename="../QMenuStrings.cpp" line="4120"/>
-        <location filename="../QMenuStrings.cpp" line="4235"/>
+        <location filename="../QMenuStrings.cpp" line="3479"/>
+        <location filename="../QMenuStrings.cpp" line="4121"/>
+        <location filename="../QMenuStrings.cpp" line="4236"/>
         <source>&amp;File</source>
         <translation>&amp;Arkiv</translation>
     </message>
@@ -228,9 +226,9 @@
         <location filename="../QMenuStrings.cpp" line="1664"/>
         <location filename="../QMenuStrings.cpp" line="1712"/>
         <location filename="../QMenuStrings.cpp" line="1782"/>
-        <location filename="../QMenuStrings.cpp" line="3539"/>
-        <location filename="../QMenuStrings.cpp" line="4130"/>
-        <location filename="../QMenuStrings.cpp" line="4236"/>
+        <location filename="../QMenuStrings.cpp" line="3540"/>
+        <location filename="../QMenuStrings.cpp" line="4131"/>
+        <location filename="../QMenuStrings.cpp" line="4237"/>
         <source>&amp;Close</source>
         <translation>Stä&amp;ng</translation>
     </message>
@@ -244,9 +242,9 @@
         <location filename="../QMenuStrings.cpp" line="1671"/>
         <location filename="../QMenuStrings.cpp" line="1719"/>
         <location filename="../QMenuStrings.cpp" line="1789"/>
-        <location filename="../QMenuStrings.cpp" line="3546"/>
-        <location filename="../QMenuStrings.cpp" line="4137"/>
-        <location filename="../QMenuStrings.cpp" line="4243"/>
+        <location filename="../QMenuStrings.cpp" line="3547"/>
+        <location filename="../QMenuStrings.cpp" line="4138"/>
+        <location filename="../QMenuStrings.cpp" line="4244"/>
         <source>Ctrl+W</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+W</translation>
@@ -259,9 +257,9 @@
         <location filename="../QMenuStrings.cpp" line="335"/>
         <location filename="../QMenuStrings.cpp" line="501"/>
         <location filename="../QMenuStrings.cpp" line="1791"/>
-        <location filename="../QMenuStrings.cpp" line="3557"/>
-        <location filename="../QMenuStrings.cpp" line="4139"/>
-        <location filename="../QMenuStrings.cpp" line="4245"/>
+        <location filename="../QMenuStrings.cpp" line="3558"/>
+        <location filename="../QMenuStrings.cpp" line="4140"/>
+        <location filename="../QMenuStrings.cpp" line="4246"/>
         <source>&amp;Edit</source>
         <translation>&amp;Redigera</translation>
     </message>
@@ -313,12 +311,12 @@
         <location filename="../QMenuStrings.cpp" line="1691"/>
         <location filename="../QMenuStrings.cpp" line="1755"/>
         <location filename="../QMenuStrings.cpp" line="1756"/>
-        <location filename="../QMenuStrings.cpp" line="3242"/>
-        <location filename="../QMenuStrings.cpp" line="4068"/>
-        <location filename="../QMenuStrings.cpp" line="4219"/>
+        <location filename="../QMenuStrings.cpp" line="3243"/>
+        <location filename="../QMenuStrings.cpp" line="4069"/>
         <location filename="../QMenuStrings.cpp" line="4220"/>
-        <location filename="../QMenuStrings.cpp" line="4277"/>
+        <location filename="../QMenuStrings.cpp" line="4221"/>
         <location filename="../QMenuStrings.cpp" line="4278"/>
+        <location filename="../QMenuStrings.cpp" line="4279"/>
         <source>&amp;Help</source>
         <translation>&amp;Hjälp</translation>
     </message>
@@ -331,25 +329,25 @@
         <location filename="../QMenuStrings.cpp" line="1525"/>
         <location filename="../QMenuStrings.cpp" line="1698"/>
         <location filename="../QMenuStrings.cpp" line="1763"/>
-        <location filename="../QMenuStrings.cpp" line="3250"/>
-        <location filename="../QMenuStrings.cpp" line="4076"/>
-        <location filename="../QMenuStrings.cpp" line="4227"/>
-        <location filename="../QMenuStrings.cpp" line="4285"/>
+        <location filename="../QMenuStrings.cpp" line="3251"/>
+        <location filename="../QMenuStrings.cpp" line="4077"/>
+        <location filename="../QMenuStrings.cpp" line="4228"/>
+        <location filename="../QMenuStrings.cpp" line="4286"/>
         <source>F1</source>
         <comment>keyboard shortcut</comment>
         <translation>F1</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1527"/>
-        <location filename="../QMenuStrings.cpp" line="3252"/>
-        <location filename="../QMenuStrings.cpp" line="4078"/>
+        <location filename="../QMenuStrings.cpp" line="3253"/>
+        <location filename="../QMenuStrings.cpp" line="4079"/>
         <source>&amp;Rosegarden tutorial</source>
         <translation>Rosegarden &amp;handledning</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1528"/>
-        <location filename="../QMenuStrings.cpp" line="3253"/>
-        <location filename="../QMenuStrings.cpp" line="4079"/>
+        <location filename="../QMenuStrings.cpp" line="3254"/>
+        <location filename="../QMenuStrings.cpp" line="4080"/>
         <source>&amp;Bug Reporting Guidelines</source>
         <translation>Riktlinjer för &amp;felrapportering</translation>
     </message>
@@ -362,17 +360,17 @@
         <location filename="../QMenuStrings.cpp" line="1529"/>
         <location filename="../QMenuStrings.cpp" line="1700"/>
         <location filename="../QMenuStrings.cpp" line="1765"/>
-        <location filename="../QMenuStrings.cpp" line="3254"/>
-        <location filename="../QMenuStrings.cpp" line="4080"/>
-        <location filename="../QMenuStrings.cpp" line="4229"/>
-        <location filename="../QMenuStrings.cpp" line="4287"/>
+        <location filename="../QMenuStrings.cpp" line="3255"/>
+        <location filename="../QMenuStrings.cpp" line="4081"/>
+        <location filename="../QMenuStrings.cpp" line="4230"/>
+        <location filename="../QMenuStrings.cpp" line="4288"/>
         <source>&amp;About Rosegarden</source>
         <translation>Om &amp;Rosegarden</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="62"/>
         <location filename="../QMenuStrings.cpp" line="1532"/>
-        <location filename="../QMenuStrings.cpp" line="3257"/>
+        <location filename="../QMenuStrings.cpp" line="3258"/>
         <source>General Toolbar</source>
         <translation>Redigeringsverktygslist</translation>
     </message>
@@ -382,10 +380,10 @@
         <location filename="../QMenuStrings.cpp" line="193"/>
         <location filename="../QMenuStrings.cpp" line="336"/>
         <location filename="../QMenuStrings.cpp" line="1792"/>
-        <location filename="../QMenuStrings.cpp" line="3558"/>
-        <location filename="../QMenuStrings.cpp" line="4084"/>
-        <location filename="../QMenuStrings.cpp" line="4140"/>
-        <location filename="../QMenuStrings.cpp" line="4246"/>
+        <location filename="../QMenuStrings.cpp" line="3559"/>
+        <location filename="../QMenuStrings.cpp" line="4085"/>
+        <location filename="../QMenuStrings.cpp" line="4141"/>
+        <location filename="../QMenuStrings.cpp" line="4247"/>
         <source>&amp;Nothing to undo</source>
         <translation>Ingenting att å&amp;ngra</translation>
     </message>
@@ -396,9 +394,9 @@
         <location filename="../QMenuStrings.cpp" line="343"/>
         <location filename="../QMenuStrings.cpp" line="509"/>
         <location filename="../QMenuStrings.cpp" line="1799"/>
-        <location filename="../QMenuStrings.cpp" line="3565"/>
-        <location filename="../QMenuStrings.cpp" line="4147"/>
-        <location filename="../QMenuStrings.cpp" line="4253"/>
+        <location filename="../QMenuStrings.cpp" line="3566"/>
+        <location filename="../QMenuStrings.cpp" line="4148"/>
+        <location filename="../QMenuStrings.cpp" line="4254"/>
         <source>Ctrl+Z</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Z</translation>
@@ -409,10 +407,10 @@
         <location filename="../QMenuStrings.cpp" line="202"/>
         <location filename="../QMenuStrings.cpp" line="345"/>
         <location filename="../QMenuStrings.cpp" line="1801"/>
-        <location filename="../QMenuStrings.cpp" line="3567"/>
-        <location filename="../QMenuStrings.cpp" line="4085"/>
-        <location filename="../QMenuStrings.cpp" line="4149"/>
-        <location filename="../QMenuStrings.cpp" line="4255"/>
+        <location filename="../QMenuStrings.cpp" line="3568"/>
+        <location filename="../QMenuStrings.cpp" line="4086"/>
+        <location filename="../QMenuStrings.cpp" line="4150"/>
+        <location filename="../QMenuStrings.cpp" line="4256"/>
         <source>N&amp;othing to redo</source>
         <translation>Ingenting att &amp;göra om</translation>
     </message>
@@ -423,9 +421,9 @@
         <location filename="../QMenuStrings.cpp" line="352"/>
         <location filename="../QMenuStrings.cpp" line="518"/>
         <location filename="../QMenuStrings.cpp" line="1808"/>
-        <location filename="../QMenuStrings.cpp" line="3574"/>
-        <location filename="../QMenuStrings.cpp" line="4156"/>
-        <location filename="../QMenuStrings.cpp" line="4262"/>
+        <location filename="../QMenuStrings.cpp" line="3575"/>
+        <location filename="../QMenuStrings.cpp" line="4157"/>
+        <location filename="../QMenuStrings.cpp" line="4263"/>
         <source>Ctrl+Shift+Z</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+Z</translation>
@@ -435,7 +433,7 @@
         <location filename="../QMenuStrings.cpp" line="248"/>
         <location filename="../QMenuStrings.cpp" line="529"/>
         <location filename="../QMenuStrings.cpp" line="1819"/>
-        <location filename="../QMenuStrings.cpp" line="3585"/>
+        <location filename="../QMenuStrings.cpp" line="3586"/>
         <source>&amp;Copy</source>
         <translation>K&amp;opiera</translation>
     </message>
@@ -444,7 +442,7 @@
         <location filename="../QMenuStrings.cpp" line="255"/>
         <location filename="../QMenuStrings.cpp" line="536"/>
         <location filename="../QMenuStrings.cpp" line="1826"/>
-        <location filename="../QMenuStrings.cpp" line="3592"/>
+        <location filename="../QMenuStrings.cpp" line="3593"/>
         <source>Ctrl+C, F16, Ctrl+Ins</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+C, F16, Ctrl+Ins</translation>
@@ -454,7 +452,7 @@
         <location filename="../QMenuStrings.cpp" line="257"/>
         <location filename="../QMenuStrings.cpp" line="538"/>
         <location filename="../QMenuStrings.cpp" line="1828"/>
-        <location filename="../QMenuStrings.cpp" line="3594"/>
+        <location filename="../QMenuStrings.cpp" line="3595"/>
         <source>&amp;Paste</source>
         <translation>K&amp;listra in</translation>
     </message>
@@ -463,7 +461,7 @@
         <location filename="../QMenuStrings.cpp" line="264"/>
         <location filename="../QMenuStrings.cpp" line="545"/>
         <location filename="../QMenuStrings.cpp" line="1835"/>
-        <location filename="../QMenuStrings.cpp" line="3601"/>
+        <location filename="../QMenuStrings.cpp" line="3602"/>
         <source>Ctrl+V, F18, Shift+Ins</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+V, F18, Shift+Ins</translation>
@@ -477,17 +475,17 @@
         <location filename="../QMenuStrings.cpp" line="1537"/>
         <location filename="../QMenuStrings.cpp" line="1609"/>
         <location filename="../QMenuStrings.cpp" line="1767"/>
-        <location filename="../QMenuStrings.cpp" line="3464"/>
-        <location filename="../QMenuStrings.cpp" line="4109"/>
-        <location filename="../QMenuStrings.cpp" line="4232"/>
+        <location filename="../QMenuStrings.cpp" line="3465"/>
+        <location filename="../QMenuStrings.cpp" line="4110"/>
+        <location filename="../QMenuStrings.cpp" line="4233"/>
         <source>Switch to Select Tool</source>
         <translation>Byt till markeringsverktyg</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="122"/>
         <location filename="../QMenuStrings.cpp" line="323"/>
-        <location filename="../QMenuStrings.cpp" line="4110"/>
-        <location filename="../QMenuStrings.cpp" line="4233"/>
+        <location filename="../QMenuStrings.cpp" line="4111"/>
+        <location filename="../QMenuStrings.cpp" line="4234"/>
         <source>Switch to Inserting Notes</source>
         <translation>Byt till att infoga noter</translation>
     </message>
@@ -499,10 +497,10 @@
         <location filename="../QMenuStrings.cpp" line="1564"/>
         <location filename="../QMenuStrings.cpp" line="1591"/>
         <location filename="../QMenuStrings.cpp" line="1627"/>
-        <location filename="../QMenuStrings.cpp" line="3453"/>
-        <location filename="../QMenuStrings.cpp" line="3465"/>
-        <location filename="../QMenuStrings.cpp" line="4111"/>
-        <location filename="../QMenuStrings.cpp" line="4234"/>
+        <location filename="../QMenuStrings.cpp" line="3454"/>
+        <location filename="../QMenuStrings.cpp" line="3466"/>
+        <location filename="../QMenuStrings.cpp" line="4112"/>
+        <location filename="../QMenuStrings.cpp" line="4235"/>
         <source>Switch to Erase Tool</source>
         <translation>Byt till raderingsverktyg</translation>
     </message>
@@ -513,8 +511,8 @@
         <location filename="../QMenuStrings.cpp" line="1655"/>
         <location filename="../QMenuStrings.cpp" line="1703"/>
         <location filename="../QMenuStrings.cpp" line="1771"/>
-        <location filename="../QMenuStrings.cpp" line="3515"/>
-        <location filename="../QMenuStrings.cpp" line="4121"/>
+        <location filename="../QMenuStrings.cpp" line="3516"/>
+        <location filename="../QMenuStrings.cpp" line="4122"/>
         <source>&amp;Save</source>
         <translation>&amp;Spara</translation>
     </message>
@@ -525,8 +523,8 @@
         <location filename="../QMenuStrings.cpp" line="1662"/>
         <location filename="../QMenuStrings.cpp" line="1710"/>
         <location filename="../QMenuStrings.cpp" line="1778"/>
-        <location filename="../QMenuStrings.cpp" line="3522"/>
-        <location filename="../QMenuStrings.cpp" line="4128"/>
+        <location filename="../QMenuStrings.cpp" line="3523"/>
+        <location filename="../QMenuStrings.cpp" line="4129"/>
         <source>Ctrl+S</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+S</translation>
@@ -539,8 +537,8 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="218"/>
         <location filename="../QMenuStrings.cpp" line="1324"/>
-        <location filename="../QMenuStrings.cpp" line="3030"/>
-        <location filename="../QMenuStrings.cpp" line="4165"/>
+        <location filename="../QMenuStrings.cpp" line="3031"/>
+        <location filename="../QMenuStrings.cpp" line="4166"/>
         <source>I</source>
         <comment>keyboard shortcut</comment>
         <translation>I</translation>
@@ -553,7 +551,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="227"/>
         <location filename="../QMenuStrings.cpp" line="1862"/>
-        <location filename="../QMenuStrings.cpp" line="3610"/>
+        <location filename="../QMenuStrings.cpp" line="3611"/>
         <source>Delete</source>
         <comment>keyboard shortcut</comment>
         <translation>Delete</translation>
@@ -566,9 +564,9 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="236"/>
         <location filename="../QMenuStrings.cpp" line="1261"/>
-        <location filename="../QMenuStrings.cpp" line="2967"/>
-        <location filename="../QMenuStrings.cpp" line="3794"/>
-        <location filename="../QMenuStrings.cpp" line="4192"/>
+        <location filename="../QMenuStrings.cpp" line="2968"/>
+        <location filename="../QMenuStrings.cpp" line="3795"/>
+        <location filename="../QMenuStrings.cpp" line="4193"/>
         <source>E</source>
         <comment>keyboard shortcut</comment>
         <translation>E</translation>
@@ -582,7 +580,7 @@
         <location filename="../QMenuStrings.cpp" line="239"/>
         <location filename="../QMenuStrings.cpp" line="520"/>
         <location filename="../QMenuStrings.cpp" line="1810"/>
-        <location filename="../QMenuStrings.cpp" line="3576"/>
+        <location filename="../QMenuStrings.cpp" line="3577"/>
         <source>Cu&amp;t</source>
         <translation>Klipp u&amp;t</translation>
     </message>
@@ -590,7 +588,7 @@
         <location filename="../QMenuStrings.cpp" line="246"/>
         <location filename="../QMenuStrings.cpp" line="527"/>
         <location filename="../QMenuStrings.cpp" line="1817"/>
-        <location filename="../QMenuStrings.cpp" line="3583"/>
+        <location filename="../QMenuStrings.cpp" line="3584"/>
         <source>Ctrl+X, F20, Shift+Del</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+X, F20, Shift+Del</translation>
@@ -604,8 +602,8 @@
         <location filename="../QMenuStrings.cpp" line="273"/>
         <location filename="../QMenuStrings.cpp" line="563"/>
         <location filename="../QMenuStrings.cpp" line="1875"/>
-        <location filename="../QMenuStrings.cpp" line="3655"/>
-        <location filename="../QMenuStrings.cpp" line="4201"/>
+        <location filename="../QMenuStrings.cpp" line="3656"/>
+        <location filename="../QMenuStrings.cpp" line="4202"/>
         <source>Ctrl+A</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+A</translation>
@@ -620,7 +618,7 @@
         <location filename="../QMenuStrings.cpp" line="282"/>
         <location filename="../QMenuStrings.cpp" line="572"/>
         <location filename="../QMenuStrings.cpp" line="1884"/>
-        <location filename="../QMenuStrings.cpp" line="4210"/>
+        <location filename="../QMenuStrings.cpp" line="4211"/>
         <source>Escape</source>
         <comment>keyboard shortcut</comment>
         <translation>Escape</translation>
@@ -654,247 +652,247 @@
         <location filename="../QMenuStrings.cpp" line="296"/>
         <location filename="../QMenuStrings.cpp" line="354"/>
         <location filename="../QMenuStrings.cpp" line="585"/>
-        <location filename="../QMenuStrings.cpp" line="1896"/>
-        <location filename="../QMenuStrings.cpp" line="3658"/>
-        <location filename="../QMenuStrings.cpp" line="4213"/>
-        <location filename="../QMenuStrings.cpp" line="4273"/>
+        <location filename="../QMenuStrings.cpp" line="1897"/>
+        <location filename="../QMenuStrings.cpp" line="3659"/>
+        <location filename="../QMenuStrings.cpp" line="4214"/>
+        <location filename="../QMenuStrings.cpp" line="4274"/>
         <source>&amp;View</source>
         <translation>&amp;Visa</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="297"/>
         <location filename="../QMenuStrings.cpp" line="355"/>
-        <location filename="../QMenuStrings.cpp" line="4214"/>
-        <location filename="../QMenuStrings.cpp" line="4274"/>
+        <location filename="../QMenuStrings.cpp" line="4215"/>
+        <location filename="../QMenuStrings.cpp" line="4275"/>
         <source>&amp;Musical Times</source>
         <translation>&amp;Metronomtider</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="298"/>
         <location filename="../QMenuStrings.cpp" line="356"/>
-        <location filename="../QMenuStrings.cpp" line="4215"/>
-        <location filename="../QMenuStrings.cpp" line="4275"/>
+        <location filename="../QMenuStrings.cpp" line="4216"/>
+        <location filename="../QMenuStrings.cpp" line="4276"/>
         <source>&amp;Real Times</source>
         <translation>&amp;Klocktider</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="299"/>
         <location filename="../QMenuStrings.cpp" line="357"/>
-        <location filename="../QMenuStrings.cpp" line="4216"/>
-        <location filename="../QMenuStrings.cpp" line="4276"/>
+        <location filename="../QMenuStrings.cpp" line="4217"/>
+        <location filename="../QMenuStrings.cpp" line="4277"/>
         <source>Ra&amp;w Times</source>
         <translation>&amp;Obehandlade tider</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="302"/>
         <location filename="../QMenuStrings.cpp" line="679"/>
-        <location filename="../QMenuStrings.cpp" line="1931"/>
-        <location filename="../QMenuStrings.cpp" line="3740"/>
+        <location filename="../QMenuStrings.cpp" line="1932"/>
+        <location filename="../QMenuStrings.cpp" line="3741"/>
         <source>Se&amp;gment</source>
         <translation>Seg&amp;ment</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="303"/>
         <location filename="../QMenuStrings.cpp" line="680"/>
-        <location filename="../QMenuStrings.cpp" line="1932"/>
-        <location filename="../QMenuStrings.cpp" line="3750"/>
+        <location filename="../QMenuStrings.cpp" line="1933"/>
+        <location filename="../QMenuStrings.cpp" line="3751"/>
         <source>Edit &amp;With</source>
         <translation>Redigera &amp;med</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="304"/>
         <location filename="../QMenuStrings.cpp" line="683"/>
-        <location filename="../QMenuStrings.cpp" line="1934"/>
-        <location filename="../QMenuStrings.cpp" line="3760"/>
+        <location filename="../QMenuStrings.cpp" line="1935"/>
+        <location filename="../QMenuStrings.cpp" line="3761"/>
         <source>Open in Matri&amp;x Editor</source>
         <translation>Öppna i &amp;matriseditor</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="305"/>
         <location filename="../QMenuStrings.cpp" line="682"/>
-        <location filename="../QMenuStrings.cpp" line="3778"/>
+        <location filename="../QMenuStrings.cpp" line="3779"/>
         <source>Open in &amp;Notation Editor</source>
         <translation>Öppna i &amp;noteditor</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1530"/>
-        <location filename="../QMenuStrings.cpp" line="3255"/>
-        <location filename="../QMenuStrings.cpp" line="4081"/>
+        <location filename="../QMenuStrings.cpp" line="3256"/>
+        <location filename="../QMenuStrings.cpp" line="4082"/>
         <source>About &amp;Qt</source>
         <translation>Om &amp;Qt</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2615"/>
-        <location filename="../QMenuStrings.cpp" line="3444"/>
+        <location filename="../QMenuStrings.cpp" line="2616"/>
+        <location filename="../QMenuStrings.cpp" line="3445"/>
         <source>Add &amp;Segno</source>
         <translation>Lägg till &amp;Segno</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2616"/>
-        <location filename="../QMenuStrings.cpp" line="3445"/>
+        <location filename="../QMenuStrings.cpp" line="2617"/>
+        <location filename="../QMenuStrings.cpp" line="3446"/>
         <source>Add &amp;Coda</source>
         <translation>Lägg till &amp;Coda</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2617"/>
-        <location filename="../QMenuStrings.cpp" line="3446"/>
+        <location filename="../QMenuStrings.cpp" line="2618"/>
+        <location filename="../QMenuStrings.cpp" line="3447"/>
         <source>Add &amp;Breath mark</source>
         <translation>Lägg till &amp;andningstecken</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1960"/>
+        <location filename="../QMenuStrings.cpp" line="1961"/>
         <source>Add &amp;Open</source>
         <translatorcomment>Needs checking</translatorcomment>
         <translation>Lägg till ö&amp;ppen</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1961"/>
+        <location filename="../QMenuStrings.cpp" line="1962"/>
         <source>Add &amp;Stopped</source>
         <translatorcomment>Needs checking</translatorcomment>
         <translation>Lägg till &amp;sluten</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2710"/>
+        <location filename="../QMenuStrings.cpp" line="2711"/>
         <source>Dotted Ha&amp;lf Note</source>
         <translation>Punkterad ha&amp;lvnot</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2715"/>
-        <location filename="../QMenuStrings.cpp" line="3466"/>
+        <location filename="../QMenuStrings.cpp" line="2716"/>
+        <location filename="../QMenuStrings.cpp" line="3467"/>
         <source>Switch To &amp;Notes</source>
         <translation>B&amp;yt till noter</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2724"/>
-        <location filename="../QMenuStrings.cpp" line="3467"/>
+        <location filename="../QMenuStrings.cpp" line="2725"/>
+        <location filename="../QMenuStrings.cpp" line="3468"/>
         <source>Switch To &amp;Rests</source>
         <translation>B&amp;yt till pauser</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2733"/>
-        <location filename="../QMenuStrings.cpp" line="3468"/>
+        <location filename="../QMenuStrings.cpp" line="2734"/>
+        <location filename="../QMenuStrings.cpp" line="3469"/>
         <source>To&amp;ggle Dot On</source>
         <translation>Visa &amp;punkt</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2742"/>
-        <location filename="../QMenuStrings.cpp" line="3469"/>
+        <location filename="../QMenuStrings.cpp" line="2743"/>
+        <location filename="../QMenuStrings.cpp" line="3470"/>
         <source>To&amp;ggle Dot Off</source>
         <translation>Dölj &amp;punkt</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1912"/>
+        <location filename="../QMenuStrings.cpp" line="1913"/>
         <source>Show &amp;Symbols Toolbar</source>
         <translation>Visa &amp;symbolverktygslist</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3260"/>
+        <location filename="../QMenuStrings.cpp" line="3261"/>
         <source>Duration Toolbar</source>
         <translation>Längdverktygslist</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3443"/>
+        <location filename="../QMenuStrings.cpp" line="3444"/>
         <source>Symbols Toolbar</source>
         <translation>Symbolverktygslist</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3707"/>
+        <location filename="../QMenuStrings.cpp" line="3708"/>
         <source>Ctrl+K</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+K</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3726"/>
+        <location filename="../QMenuStrings.cpp" line="3727"/>
         <source>Ctrl+M</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+M</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3748"/>
+        <location filename="../QMenuStrings.cpp" line="3749"/>
         <source>Ctrl+Shift+R</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+R</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3758"/>
+        <location filename="../QMenuStrings.cpp" line="3759"/>
         <source>Return</source>
         <comment>keyboard shortcut</comment>
         <translation>Return</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3845"/>
+        <location filename="../QMenuStrings.cpp" line="3846"/>
         <source>Ctrl+J</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+J</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3871"/>
+        <location filename="../QMenuStrings.cpp" line="3872"/>
         <source>Ctrl+Shift+T</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+T</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3880"/>
+        <location filename="../QMenuStrings.cpp" line="3881"/>
         <source>Ctrl+D</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+D</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4003"/>
+        <location filename="../QMenuStrings.cpp" line="4004"/>
         <source>Enter, Media Play, Ctrl+Return</source>
         <comment>keyboard shortcut</comment>
         <translation>Enter, Media Play, Ctrl+Return</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4012"/>
+        <location filename="../QMenuStrings.cpp" line="4013"/>
         <source>Insert, Media Stop</source>
         <comment>keyboard shortcut</comment>
         <translation>Insert, Media Stop</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4021"/>
+        <location filename="../QMenuStrings.cpp" line="4022"/>
         <source>PgUp, Media Previous</source>
         <comment>keyboard shortcut</comment>
         <translation>PgUp, Media Previous</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4030"/>
+        <location filename="../QMenuStrings.cpp" line="4031"/>
         <source>PgDown, Media Next</source>
         <comment>keyboard shortcut</comment>
         <translation>PgDown, Media Next</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4039"/>
+        <location filename="../QMenuStrings.cpp" line="4040"/>
         <source>Media Record</source>
         <comment>keyboard shortcut</comment>
         <translation>Media Record</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4048"/>
+        <location filename="../QMenuStrings.cpp" line="4049"/>
         <source>Space</source>
         <comment>keyboard shortcut</comment>
         <translation>Space</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4097"/>
+        <location filename="../QMenuStrings.cpp" line="4098"/>
         <source>Home</source>
         <comment>keyboard shortcut</comment>
         <translation>Home</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4106"/>
+        <location filename="../QMenuStrings.cpp" line="4107"/>
         <source>End</source>
         <comment>keyboard shortcut</comment>
         <translation>End</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4217"/>
+        <location filename="../QMenuStrings.cpp" line="4218"/>
         <source>Show &amp;Toolbar</source>
         <translation>Visa verk&amp;tygslist</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1917"/>
-        <location filename="../QMenuStrings.cpp" line="4218"/>
+        <location filename="../QMenuStrings.cpp" line="1918"/>
+        <location filename="../QMenuStrings.cpp" line="4219"/>
         <source>Hide St&amp;atusbar</source>
         <translation>Dölj st&amp;atusrad</translation>
     </message>
@@ -917,15 +915,15 @@
         <location filename="../QMenuStrings.cpp" line="317"/>
         <location filename="../QMenuStrings.cpp" line="320"/>
         <location filename="../QMenuStrings.cpp" line="1535"/>
-        <location filename="../QMenuStrings.cpp" line="4230"/>
+        <location filename="../QMenuStrings.cpp" line="4231"/>
         <source>Actions Toolbar</source>
         <translation>Åtgärdsverktygslist</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="318"/>
         <location filename="../QMenuStrings.cpp" line="369"/>
-        <location filename="../QMenuStrings.cpp" line="4231"/>
-        <location filename="../QMenuStrings.cpp" line="4288"/>
+        <location filename="../QMenuStrings.cpp" line="4232"/>
+        <location filename="../QMenuStrings.cpp" line="4289"/>
         <source>Time Toolbar</source>
         <translation>Tidsverktygslist</translation>
     </message>
@@ -934,14 +932,14 @@
         <location filename="../QMenuStrings.cpp" line="1534"/>
         <location filename="../QMenuStrings.cpp" line="1701"/>
         <location filename="../QMenuStrings.cpp" line="1766"/>
-        <location filename="../QMenuStrings.cpp" line="3259"/>
-        <location filename="../QMenuStrings.cpp" line="4089"/>
+        <location filename="../QMenuStrings.cpp" line="3260"/>
+        <location filename="../QMenuStrings.cpp" line="4090"/>
         <source>Transport Toolbar</source>
         <translation>Spelarverktygslist</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="321"/>
-        <location filename="../QMenuStrings.cpp" line="4108"/>
+        <location filename="../QMenuStrings.cpp" line="4109"/>
         <source>Zoom Toolbar</source>
         <translation>Zoomverktygslist</translation>
     </message>
@@ -972,8 +970,8 @@
         <location filename="../QMenuStrings.cpp" line="989"/>
         <location filename="../QMenuStrings.cpp" line="1544"/>
         <location filename="../QMenuStrings.cpp" line="1616"/>
-        <location filename="../QMenuStrings.cpp" line="2581"/>
-        <location filename="../QMenuStrings.cpp" line="3948"/>
+        <location filename="../QMenuStrings.cpp" line="2582"/>
+        <location filename="../QMenuStrings.cpp" line="3949"/>
         <source>F2</source>
         <comment>keyboard shortcut</comment>
         <translation>F2</translation>
@@ -994,7 +992,7 @@
         <location filename="../QMenuStrings.cpp" line="1553"/>
         <location filename="../QMenuStrings.cpp" line="1589"/>
         <location filename="../QMenuStrings.cpp" line="1643"/>
-        <location filename="../QMenuStrings.cpp" line="3975"/>
+        <location filename="../QMenuStrings.cpp" line="3976"/>
         <source>F5</source>
         <comment>keyboard shortcut</comment>
         <translation>F5</translation>
@@ -1015,8 +1013,8 @@
         <location filename="../QMenuStrings.cpp" line="1562"/>
         <location filename="../QMenuStrings.cpp" line="1580"/>
         <location filename="../QMenuStrings.cpp" line="1625"/>
-        <location filename="../QMenuStrings.cpp" line="2590"/>
-        <location filename="../QMenuStrings.cpp" line="3957"/>
+        <location filename="../QMenuStrings.cpp" line="2591"/>
+        <location filename="../QMenuStrings.cpp" line="3958"/>
         <source>F3</source>
         <comment>keyboard shortcut</comment>
         <translation>F3</translation>
@@ -1037,7 +1035,7 @@
         <location filename="../QMenuStrings.cpp" line="1025"/>
         <location filename="../QMenuStrings.cpp" line="1607"/>
         <location filename="../QMenuStrings.cpp" line="1652"/>
-        <location filename="../QMenuStrings.cpp" line="3984"/>
+        <location filename="../QMenuStrings.cpp" line="3985"/>
         <source>F6</source>
         <comment>keyboard shortcut</comment>
         <translation>F6</translation>
@@ -1049,8 +1047,8 @@
         <location filename="../QMenuStrings.cpp" line="1571"/>
         <location filename="../QMenuStrings.cpp" line="1598"/>
         <location filename="../QMenuStrings.cpp" line="1634"/>
-        <location filename="../QMenuStrings.cpp" line="2599"/>
-        <location filename="../QMenuStrings.cpp" line="3966"/>
+        <location filename="../QMenuStrings.cpp" line="2600"/>
+        <location filename="../QMenuStrings.cpp" line="3967"/>
         <source>F4</source>
         <comment>keyboard shortcut</comment>
         <translation>F4</translation>
@@ -1077,14 +1075,14 @@
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="547"/>
-        <location filename="../QMenuStrings.cpp" line="3603"/>
-        <location filename="../QMenuStrings.cpp" line="4176"/>
+        <location filename="../QMenuStrings.cpp" line="3604"/>
+        <location filename="../QMenuStrings.cpp" line="4177"/>
         <source>&amp;Delete</source>
         <translation>Ta &amp;bort</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="554"/>
-        <location filename="../QMenuStrings.cpp" line="4183"/>
+        <location filename="../QMenuStrings.cpp" line="4184"/>
         <source>Delete, Ctrl+D</source>
         <comment>keyboard shortcut</comment>
         <translation>Delete, Ctrl+D</translation>
@@ -1106,7 +1104,7 @@
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="595"/>
-        <location filename="../QMenuStrings.cpp" line="2707"/>
+        <location filename="../QMenuStrings.cpp" line="2708"/>
         <source>0</source>
         <comment>keyboard shortcut</comment>
         <translation>0</translation>
@@ -1123,7 +1121,7 @@
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="605"/>
-        <location filename="../QMenuStrings.cpp" line="2698"/>
+        <location filename="../QMenuStrings.cpp" line="2699"/>
         <source>3</source>
         <comment>keyboard shortcut</comment>
         <translation>3</translation>
@@ -1140,7 +1138,7 @@
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="615"/>
-        <location filename="../QMenuStrings.cpp" line="2689"/>
+        <location filename="../QMenuStrings.cpp" line="2690"/>
         <source>6</source>
         <comment>keyboard shortcut</comment>
         <translation>6</translation>
@@ -1157,7 +1155,7 @@
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="625"/>
-        <location filename="../QMenuStrings.cpp" line="2680"/>
+        <location filename="../QMenuStrings.cpp" line="2681"/>
         <source>8</source>
         <comment>keyboard shortcut</comment>
         <translation>8</translation>
@@ -1174,7 +1172,7 @@
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="635"/>
-        <location filename="../QMenuStrings.cpp" line="2671"/>
+        <location filename="../QMenuStrings.cpp" line="2672"/>
         <source>4</source>
         <comment>keyboard shortcut</comment>
         <translation>4</translation>
@@ -1191,7 +1189,7 @@
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="645"/>
-        <location filename="../QMenuStrings.cpp" line="2662"/>
+        <location filename="../QMenuStrings.cpp" line="2663"/>
         <source>2</source>
         <comment>keyboard shortcut</comment>
         <translation>2</translation>
@@ -1203,7 +1201,7 @@
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="654"/>
-        <location filename="../QMenuStrings.cpp" line="2653"/>
+        <location filename="../QMenuStrings.cpp" line="2654"/>
         <source>1</source>
         <comment>keyboard shortcut</comment>
         <translation>1</translation>
@@ -1215,37 +1213,37 @@
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="663"/>
-        <location filename="../QMenuStrings.cpp" line="2644"/>
+        <location filename="../QMenuStrings.cpp" line="2645"/>
         <source>5</source>
         <comment>keyboard shortcut</comment>
         <translation>5</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="675"/>
-        <location filename="../QMenuStrings.cpp" line="1924"/>
+        <location filename="../QMenuStrings.cpp" line="1925"/>
         <source>Add &amp;Control Ruler</source>
         <translation>Lägg till &amp;styrlinjal</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="676"/>
-        <location filename="../QMenuStrings.cpp" line="1928"/>
-        <location filename="../QMenuStrings.cpp" line="3693"/>
+        <location filename="../QMenuStrings.cpp" line="1929"/>
+        <location filename="../QMenuStrings.cpp" line="3694"/>
         <source>&amp;Composition</source>
         <translation>&amp;Komposition</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="677"/>
-        <location filename="../QMenuStrings.cpp" line="1929"/>
-        <location filename="../QMenuStrings.cpp" line="3694"/>
-        <location filename="../QMenuStrings.cpp" line="4158"/>
+        <location filename="../QMenuStrings.cpp" line="1930"/>
+        <location filename="../QMenuStrings.cpp" line="3695"/>
+        <location filename="../QMenuStrings.cpp" line="4159"/>
         <source>Add Te&amp;mpo Change...</source>
         <translation>Lägg till te&amp;mpobyte...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="678"/>
-        <location filename="../QMenuStrings.cpp" line="1930"/>
-        <location filename="../QMenuStrings.cpp" line="3695"/>
-        <location filename="../QMenuStrings.cpp" line="4167"/>
+        <location filename="../QMenuStrings.cpp" line="1931"/>
+        <location filename="../QMenuStrings.cpp" line="3696"/>
+        <location filename="../QMenuStrings.cpp" line="4168"/>
         <source>Add Time Si&amp;gnature Change...</source>
         <translation>Lägg till ta&amp;ktartsändring...</translation>
     </message>
@@ -1255,8 +1253,8 @@
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="681"/>
-        <location filename="../QMenuStrings.cpp" line="1933"/>
-        <location filename="../QMenuStrings.cpp" line="3787"/>
+        <location filename="../QMenuStrings.cpp" line="1934"/>
+        <location filename="../QMenuStrings.cpp" line="3788"/>
         <source>Open in &amp;Event List Editor</source>
         <translation>Öppna i &amp;editor av händelselista</translation>
     </message>
@@ -1270,15 +1268,15 @@
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="697"/>
-        <location filename="../QMenuStrings.cpp" line="2253"/>
-        <location filename="../QMenuStrings.cpp" line="3804"/>
+        <location filename="../QMenuStrings.cpp" line="2254"/>
+        <location filename="../QMenuStrings.cpp" line="3805"/>
         <source>=</source>
         <comment>keyboard shortcut</comment>
         <translation>=</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="706"/>
-        <location filename="../QMenuStrings.cpp" line="3813"/>
+        <location filename="../QMenuStrings.cpp" line="3814"/>
         <source>+</source>
         <comment>keyboard shortcut</comment>
         <translation>+</translation>
@@ -1291,76 +1289,76 @@
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="725"/>
-        <location filename="../QMenuStrings.cpp" line="2355"/>
-        <location filename="../QMenuStrings.cpp" line="3827"/>
+        <location filename="../QMenuStrings.cpp" line="2356"/>
+        <location filename="../QMenuStrings.cpp" line="3828"/>
         <source>Alt+Left</source>
         <comment>keyboard shortcut</comment>
         <translation>Alt+Left</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="734"/>
-        <location filename="../QMenuStrings.cpp" line="2364"/>
-        <location filename="../QMenuStrings.cpp" line="3836"/>
+        <location filename="../QMenuStrings.cpp" line="2365"/>
+        <location filename="../QMenuStrings.cpp" line="3837"/>
         <source>Alt+Right</source>
         <comment>keyboard shortcut</comment>
         <translation>Alt+Right</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="743"/>
-        <location filename="../QMenuStrings.cpp" line="2329"/>
-        <location filename="../QMenuStrings.cpp" line="3898"/>
+        <location filename="../QMenuStrings.cpp" line="2330"/>
+        <location filename="../QMenuStrings.cpp" line="3899"/>
         <source>Shift+Up</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+Up</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="752"/>
-        <location filename="../QMenuStrings.cpp" line="2338"/>
-        <location filename="../QMenuStrings.cpp" line="3889"/>
+        <location filename="../QMenuStrings.cpp" line="2339"/>
+        <location filename="../QMenuStrings.cpp" line="3890"/>
         <source>Shift+Down</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+Down</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="764"/>
-        <location filename="../QMenuStrings.cpp" line="2266"/>
+        <location filename="../QMenuStrings.cpp" line="2267"/>
         <source>Ctrl+H</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+H</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="773"/>
-        <location filename="../QMenuStrings.cpp" line="2275"/>
+        <location filename="../QMenuStrings.cpp" line="2276"/>
         <source>Ctrl+Shift+H</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+H</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="784"/>
-        <location filename="../QMenuStrings.cpp" line="2286"/>
-        <location filename="../QMenuStrings.cpp" line="3916"/>
+        <location filename="../QMenuStrings.cpp" line="2287"/>
+        <location filename="../QMenuStrings.cpp" line="3917"/>
         <source>Up</source>
         <comment>keyboard shortcut</comment>
         <translation>Up</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="793"/>
-        <location filename="../QMenuStrings.cpp" line="2295"/>
-        <location filename="../QMenuStrings.cpp" line="3907"/>
+        <location filename="../QMenuStrings.cpp" line="2296"/>
+        <location filename="../QMenuStrings.cpp" line="3908"/>
         <source>Down</source>
         <comment>keyboard shortcut</comment>
         <translation>Down</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="802"/>
-        <location filename="../QMenuStrings.cpp" line="2304"/>
+        <location filename="../QMenuStrings.cpp" line="2305"/>
         <source>Ctrl+Up</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Up</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="811"/>
-        <location filename="../QMenuStrings.cpp" line="2313"/>
+        <location filename="../QMenuStrings.cpp" line="2314"/>
         <source>Ctrl+Down</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Down</translation>
@@ -1379,104 +1377,104 @@
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="845"/>
-        <location filename="../QMenuStrings.cpp" line="2377"/>
+        <location filename="../QMenuStrings.cpp" line="2378"/>
         <source>Shift+Left</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+Left</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="854"/>
-        <location filename="../QMenuStrings.cpp" line="2386"/>
+        <location filename="../QMenuStrings.cpp" line="2387"/>
         <source>Shift+Right</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+Right</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="856"/>
-        <location filename="../QMenuStrings.cpp" line="2388"/>
+        <location filename="../QMenuStrings.cpp" line="2389"/>
         <source>Cursor Back &amp;Bar and Select</source>
         <translation>Markör bakåt &amp;takt och markera</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="863"/>
-        <location filename="../QMenuStrings.cpp" line="2395"/>
+        <location filename="../QMenuStrings.cpp" line="2396"/>
         <source>Ctrl+Shift+Left</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+Left</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="865"/>
-        <location filename="../QMenuStrings.cpp" line="2397"/>
+        <location filename="../QMenuStrings.cpp" line="2398"/>
         <source>Cursor For&amp;ward and Select</source>
         <translation>Markör fram&amp;åt och markera</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="872"/>
-        <location filename="../QMenuStrings.cpp" line="2404"/>
+        <location filename="../QMenuStrings.cpp" line="2405"/>
         <source>Ctrl+Shift+Right</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+Right</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="881"/>
-        <location filename="../QMenuStrings.cpp" line="2413"/>
+        <location filename="../QMenuStrings.cpp" line="2414"/>
         <source>Ctrl+;</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+;</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="890"/>
-        <location filename="../QMenuStrings.cpp" line="2422"/>
+        <location filename="../QMenuStrings.cpp" line="2423"/>
         <source>Ctrl+:</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+:</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="899"/>
-        <location filename="../QMenuStrings.cpp" line="2449"/>
+        <location filename="../QMenuStrings.cpp" line="2450"/>
         <source>Alt+PgUp</source>
         <comment>keyboard shortcut</comment>
         <translation>Alt+PgUp</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="908"/>
-        <location filename="../QMenuStrings.cpp" line="2458"/>
+        <location filename="../QMenuStrings.cpp" line="2459"/>
         <source>Alt+PgDown</source>
         <comment>keyboard shortcut</comment>
         <translation>Alt+PgDown</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="919"/>
-        <location filename="../QMenuStrings.cpp" line="2481"/>
+        <location filename="../QMenuStrings.cpp" line="2482"/>
         <source>Left</source>
         <comment>keyboard shortcut</comment>
         <translation>Left</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="934"/>
-        <location filename="../QMenuStrings.cpp" line="2496"/>
+        <location filename="../QMenuStrings.cpp" line="2497"/>
         <source>Right</source>
         <comment>keyboard shortcut</comment>
         <translation>Right</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="949"/>
-        <location filename="../QMenuStrings.cpp" line="2511"/>
+        <location filename="../QMenuStrings.cpp" line="2512"/>
         <source>Ctrl+Left</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Left</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="958"/>
-        <location filename="../QMenuStrings.cpp" line="2520"/>
+        <location filename="../QMenuStrings.cpp" line="2521"/>
         <source>Ctrl+Right</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Right</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="970"/>
-        <location filename="../QMenuStrings.cpp" line="2550"/>
-        <location filename="../QMenuStrings.cpp" line="4057"/>
+        <location filename="../QMenuStrings.cpp" line="2551"/>
+        <location filename="../QMenuStrings.cpp" line="4058"/>
         <source>Pause</source>
         <comment>keyboard shortcut</comment>
         <translation>Pause</translation>
@@ -1485,8 +1483,8 @@
         <location filename="../QMenuStrings.cpp" line="979"/>
         <location filename="../QMenuStrings.cpp" line="1688"/>
         <location filename="../QMenuStrings.cpp" line="1736"/>
-        <location filename="../QMenuStrings.cpp" line="2565"/>
-        <location filename="../QMenuStrings.cpp" line="4066"/>
+        <location filename="../QMenuStrings.cpp" line="2566"/>
+        <location filename="../QMenuStrings.cpp" line="4067"/>
         <source>Alt+Ctrl+P</source>
         <comment>keyboard shortcut</comment>
         <translation>Alt+Ctrl+P</translation>
@@ -1494,7 +1492,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="1034"/>
         <location filename="../QMenuStrings.cpp" line="1043"/>
-        <location filename="../QMenuStrings.cpp" line="3993"/>
+        <location filename="../QMenuStrings.cpp" line="3994"/>
         <source>F7</source>
         <comment>keyboard shortcut</comment>
         <translation>F7</translation>
@@ -1503,15 +1501,15 @@
         <location filename="../QMenuStrings.cpp" line="1046"/>
         <location filename="../QMenuStrings.cpp" line="1200"/>
         <location filename="../QMenuStrings.cpp" line="1354"/>
-        <location filename="../QMenuStrings.cpp" line="2752"/>
-        <location filename="../QMenuStrings.cpp" line="2906"/>
-        <location filename="../QMenuStrings.cpp" line="3060"/>
+        <location filename="../QMenuStrings.cpp" line="2753"/>
+        <location filename="../QMenuStrings.cpp" line="2907"/>
+        <location filename="../QMenuStrings.cpp" line="3061"/>
         <source>I/do</source>
         <translation>C</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1053"/>
-        <location filename="../QMenuStrings.cpp" line="2759"/>
+        <location filename="../QMenuStrings.cpp" line="2760"/>
         <source>A</source>
         <comment>keyboard shortcut</comment>
         <translation>A</translation>
@@ -1520,15 +1518,15 @@
         <location filename="../QMenuStrings.cpp" line="1055"/>
         <location filename="../QMenuStrings.cpp" line="1209"/>
         <location filename="../QMenuStrings.cpp" line="1363"/>
-        <location filename="../QMenuStrings.cpp" line="2761"/>
-        <location filename="../QMenuStrings.cpp" line="2915"/>
-        <location filename="../QMenuStrings.cpp" line="3069"/>
+        <location filename="../QMenuStrings.cpp" line="2762"/>
+        <location filename="../QMenuStrings.cpp" line="2916"/>
+        <location filename="../QMenuStrings.cpp" line="3070"/>
         <source>I/do sharp</source>
         <translation>Ciss</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1062"/>
-        <location filename="../QMenuStrings.cpp" line="2768"/>
+        <location filename="../QMenuStrings.cpp" line="2769"/>
         <source>Shift+A</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+A</translation>
@@ -1537,16 +1535,16 @@
         <location filename="../QMenuStrings.cpp" line="1064"/>
         <location filename="../QMenuStrings.cpp" line="1218"/>
         <location filename="../QMenuStrings.cpp" line="1372"/>
-        <location filename="../QMenuStrings.cpp" line="2770"/>
-        <location filename="../QMenuStrings.cpp" line="2924"/>
-        <location filename="../QMenuStrings.cpp" line="3078"/>
+        <location filename="../QMenuStrings.cpp" line="2771"/>
+        <location filename="../QMenuStrings.cpp" line="2925"/>
+        <location filename="../QMenuStrings.cpp" line="3079"/>
         <source>II/re flat</source>
         <translation>Dess</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1071"/>
-        <location filename="../QMenuStrings.cpp" line="2777"/>
-        <location filename="../QMenuStrings.cpp" line="3531"/>
+        <location filename="../QMenuStrings.cpp" line="2778"/>
+        <location filename="../QMenuStrings.cpp" line="3532"/>
         <source>Ctrl+Shift+S</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+S</translation>
@@ -1555,15 +1553,15 @@
         <location filename="../QMenuStrings.cpp" line="1073"/>
         <location filename="../QMenuStrings.cpp" line="1227"/>
         <location filename="../QMenuStrings.cpp" line="1381"/>
-        <location filename="../QMenuStrings.cpp" line="2779"/>
-        <location filename="../QMenuStrings.cpp" line="2933"/>
-        <location filename="../QMenuStrings.cpp" line="3087"/>
+        <location filename="../QMenuStrings.cpp" line="2780"/>
+        <location filename="../QMenuStrings.cpp" line="2934"/>
+        <location filename="../QMenuStrings.cpp" line="3088"/>
         <source>II/re</source>
         <translation>D</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1080"/>
-        <location filename="../QMenuStrings.cpp" line="2786"/>
+        <location filename="../QMenuStrings.cpp" line="2787"/>
         <source>S</source>
         <comment>keyboard shortcut</comment>
         <translation>S</translation>
@@ -1572,15 +1570,15 @@
         <location filename="../QMenuStrings.cpp" line="1082"/>
         <location filename="../QMenuStrings.cpp" line="1236"/>
         <location filename="../QMenuStrings.cpp" line="1390"/>
-        <location filename="../QMenuStrings.cpp" line="2788"/>
-        <location filename="../QMenuStrings.cpp" line="2942"/>
-        <location filename="../QMenuStrings.cpp" line="3096"/>
+        <location filename="../QMenuStrings.cpp" line="2789"/>
+        <location filename="../QMenuStrings.cpp" line="2943"/>
+        <location filename="../QMenuStrings.cpp" line="3097"/>
         <source>II/re sharp</source>
         <translation>Diss</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1089"/>
-        <location filename="../QMenuStrings.cpp" line="2795"/>
+        <location filename="../QMenuStrings.cpp" line="2796"/>
         <source>Shift+S</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+S</translation>
@@ -1589,15 +1587,15 @@
         <location filename="../QMenuStrings.cpp" line="1091"/>
         <location filename="../QMenuStrings.cpp" line="1245"/>
         <location filename="../QMenuStrings.cpp" line="1399"/>
-        <location filename="../QMenuStrings.cpp" line="2797"/>
-        <location filename="../QMenuStrings.cpp" line="2951"/>
-        <location filename="../QMenuStrings.cpp" line="3105"/>
+        <location filename="../QMenuStrings.cpp" line="2798"/>
+        <location filename="../QMenuStrings.cpp" line="2952"/>
+        <location filename="../QMenuStrings.cpp" line="3106"/>
         <source>III/mi flat</source>
         <translation>Ess</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1098"/>
-        <location filename="../QMenuStrings.cpp" line="2804"/>
+        <location filename="../QMenuStrings.cpp" line="2805"/>
         <source>Ctrl+Shift+D</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+D</translation>
@@ -1606,16 +1604,16 @@
         <location filename="../QMenuStrings.cpp" line="1100"/>
         <location filename="../QMenuStrings.cpp" line="1254"/>
         <location filename="../QMenuStrings.cpp" line="1408"/>
-        <location filename="../QMenuStrings.cpp" line="2806"/>
-        <location filename="../QMenuStrings.cpp" line="2960"/>
-        <location filename="../QMenuStrings.cpp" line="3114"/>
+        <location filename="../QMenuStrings.cpp" line="2807"/>
+        <location filename="../QMenuStrings.cpp" line="2961"/>
+        <location filename="../QMenuStrings.cpp" line="3115"/>
         <source>III/mi</source>
         <translation>E</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1107"/>
-        <location filename="../QMenuStrings.cpp" line="2813"/>
-        <location filename="../QMenuStrings.cpp" line="3776"/>
+        <location filename="../QMenuStrings.cpp" line="2814"/>
+        <location filename="../QMenuStrings.cpp" line="3777"/>
         <source>D</source>
         <comment>keyboard shortcut</comment>
         <translation>D</translation>
@@ -1624,15 +1622,15 @@
         <location filename="../QMenuStrings.cpp" line="1109"/>
         <location filename="../QMenuStrings.cpp" line="1263"/>
         <location filename="../QMenuStrings.cpp" line="1417"/>
-        <location filename="../QMenuStrings.cpp" line="2815"/>
-        <location filename="../QMenuStrings.cpp" line="2969"/>
-        <location filename="../QMenuStrings.cpp" line="3123"/>
+        <location filename="../QMenuStrings.cpp" line="2816"/>
+        <location filename="../QMenuStrings.cpp" line="2970"/>
+        <location filename="../QMenuStrings.cpp" line="3124"/>
         <source>IV/fa</source>
         <translation>F</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1116"/>
-        <location filename="../QMenuStrings.cpp" line="2822"/>
+        <location filename="../QMenuStrings.cpp" line="2823"/>
         <source>F</source>
         <comment>keyboard shortcut</comment>
         <translation>F</translation>
@@ -1641,15 +1639,15 @@
         <location filename="../QMenuStrings.cpp" line="1118"/>
         <location filename="../QMenuStrings.cpp" line="1272"/>
         <location filename="../QMenuStrings.cpp" line="1426"/>
-        <location filename="../QMenuStrings.cpp" line="2824"/>
-        <location filename="../QMenuStrings.cpp" line="2978"/>
-        <location filename="../QMenuStrings.cpp" line="3132"/>
+        <location filename="../QMenuStrings.cpp" line="2825"/>
+        <location filename="../QMenuStrings.cpp" line="2979"/>
+        <location filename="../QMenuStrings.cpp" line="3133"/>
         <source>IV/fa sharp</source>
         <translation>Fiss</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1125"/>
-        <location filename="../QMenuStrings.cpp" line="2831"/>
+        <location filename="../QMenuStrings.cpp" line="2832"/>
         <source>Shift+F</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+F</translation>
@@ -1658,15 +1656,15 @@
         <location filename="../QMenuStrings.cpp" line="1127"/>
         <location filename="../QMenuStrings.cpp" line="1281"/>
         <location filename="../QMenuStrings.cpp" line="1435"/>
-        <location filename="../QMenuStrings.cpp" line="2833"/>
-        <location filename="../QMenuStrings.cpp" line="2987"/>
-        <location filename="../QMenuStrings.cpp" line="3141"/>
+        <location filename="../QMenuStrings.cpp" line="2834"/>
+        <location filename="../QMenuStrings.cpp" line="2988"/>
+        <location filename="../QMenuStrings.cpp" line="3142"/>
         <source>V/sol flat</source>
         <translation>Gess</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1134"/>
-        <location filename="../QMenuStrings.cpp" line="2840"/>
+        <location filename="../QMenuStrings.cpp" line="2841"/>
         <source>Ctrl+Shift+J</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+J</translation>
@@ -1675,15 +1673,15 @@
         <location filename="../QMenuStrings.cpp" line="1136"/>
         <location filename="../QMenuStrings.cpp" line="1290"/>
         <location filename="../QMenuStrings.cpp" line="1444"/>
-        <location filename="../QMenuStrings.cpp" line="2842"/>
-        <location filename="../QMenuStrings.cpp" line="2996"/>
-        <location filename="../QMenuStrings.cpp" line="3150"/>
+        <location filename="../QMenuStrings.cpp" line="2843"/>
+        <location filename="../QMenuStrings.cpp" line="2997"/>
+        <location filename="../QMenuStrings.cpp" line="3151"/>
         <source>V/sol</source>
         <translation>G</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1143"/>
-        <location filename="../QMenuStrings.cpp" line="2849"/>
+        <location filename="../QMenuStrings.cpp" line="2850"/>
         <source>J</source>
         <comment>keyboard shortcut</comment>
         <translation>J</translation>
@@ -1692,15 +1690,15 @@
         <location filename="../QMenuStrings.cpp" line="1145"/>
         <location filename="../QMenuStrings.cpp" line="1299"/>
         <location filename="../QMenuStrings.cpp" line="1453"/>
-        <location filename="../QMenuStrings.cpp" line="2851"/>
-        <location filename="../QMenuStrings.cpp" line="3005"/>
-        <location filename="../QMenuStrings.cpp" line="3159"/>
+        <location filename="../QMenuStrings.cpp" line="2852"/>
+        <location filename="../QMenuStrings.cpp" line="3006"/>
+        <location filename="../QMenuStrings.cpp" line="3160"/>
         <source>V/sol sharp</source>
         <translation>Giss</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1152"/>
-        <location filename="../QMenuStrings.cpp" line="2858"/>
+        <location filename="../QMenuStrings.cpp" line="2859"/>
         <source>Shift+J</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+J</translation>
@@ -1709,15 +1707,15 @@
         <location filename="../QMenuStrings.cpp" line="1154"/>
         <location filename="../QMenuStrings.cpp" line="1308"/>
         <location filename="../QMenuStrings.cpp" line="1462"/>
-        <location filename="../QMenuStrings.cpp" line="2860"/>
-        <location filename="../QMenuStrings.cpp" line="3014"/>
-        <location filename="../QMenuStrings.cpp" line="3168"/>
+        <location filename="../QMenuStrings.cpp" line="2861"/>
+        <location filename="../QMenuStrings.cpp" line="3015"/>
+        <location filename="../QMenuStrings.cpp" line="3169"/>
         <source>VI/la flat</source>
         <translation>Ass</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1161"/>
-        <location filename="../QMenuStrings.cpp" line="2867"/>
+        <location filename="../QMenuStrings.cpp" line="2868"/>
         <source>Ctrl+Shift+K</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+K</translation>
@@ -1726,15 +1724,15 @@
         <location filename="../QMenuStrings.cpp" line="1163"/>
         <location filename="../QMenuStrings.cpp" line="1317"/>
         <location filename="../QMenuStrings.cpp" line="1471"/>
-        <location filename="../QMenuStrings.cpp" line="2869"/>
-        <location filename="../QMenuStrings.cpp" line="3023"/>
-        <location filename="../QMenuStrings.cpp" line="3177"/>
+        <location filename="../QMenuStrings.cpp" line="2870"/>
+        <location filename="../QMenuStrings.cpp" line="3024"/>
+        <location filename="../QMenuStrings.cpp" line="3178"/>
         <source>VI/la</source>
         <translation>A</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1170"/>
-        <location filename="../QMenuStrings.cpp" line="2876"/>
+        <location filename="../QMenuStrings.cpp" line="2877"/>
         <source>K</source>
         <comment>keyboard shortcut</comment>
         <translation>K</translation>
@@ -1743,15 +1741,15 @@
         <location filename="../QMenuStrings.cpp" line="1172"/>
         <location filename="../QMenuStrings.cpp" line="1326"/>
         <location filename="../QMenuStrings.cpp" line="1480"/>
-        <location filename="../QMenuStrings.cpp" line="2878"/>
-        <location filename="../QMenuStrings.cpp" line="3032"/>
-        <location filename="../QMenuStrings.cpp" line="3186"/>
+        <location filename="../QMenuStrings.cpp" line="2879"/>
+        <location filename="../QMenuStrings.cpp" line="3033"/>
+        <location filename="../QMenuStrings.cpp" line="3187"/>
         <source>VI/la sharp</source>
         <translation>Aiss</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1179"/>
-        <location filename="../QMenuStrings.cpp" line="2885"/>
+        <location filename="../QMenuStrings.cpp" line="2886"/>
         <source>Shift+K</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+K</translation>
@@ -1760,15 +1758,15 @@
         <location filename="../QMenuStrings.cpp" line="1181"/>
         <location filename="../QMenuStrings.cpp" line="1335"/>
         <location filename="../QMenuStrings.cpp" line="1489"/>
-        <location filename="../QMenuStrings.cpp" line="2887"/>
-        <location filename="../QMenuStrings.cpp" line="3041"/>
-        <location filename="../QMenuStrings.cpp" line="3195"/>
+        <location filename="../QMenuStrings.cpp" line="2888"/>
+        <location filename="../QMenuStrings.cpp" line="3042"/>
+        <location filename="../QMenuStrings.cpp" line="3196"/>
         <source>VII/ti flat</source>
         <translation>B</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1188"/>
-        <location filename="../QMenuStrings.cpp" line="2894"/>
+        <location filename="../QMenuStrings.cpp" line="2895"/>
         <source>Ctrl+Shift+L</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+L</translation>
@@ -1777,253 +1775,253 @@
         <location filename="../QMenuStrings.cpp" line="1190"/>
         <location filename="../QMenuStrings.cpp" line="1344"/>
         <location filename="../QMenuStrings.cpp" line="1498"/>
-        <location filename="../QMenuStrings.cpp" line="2896"/>
-        <location filename="../QMenuStrings.cpp" line="3050"/>
-        <location filename="../QMenuStrings.cpp" line="3204"/>
+        <location filename="../QMenuStrings.cpp" line="2897"/>
+        <location filename="../QMenuStrings.cpp" line="3051"/>
+        <location filename="../QMenuStrings.cpp" line="3205"/>
         <source>VII/ti</source>
         <translation>H</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1197"/>
-        <location filename="../QMenuStrings.cpp" line="2903"/>
+        <location filename="../QMenuStrings.cpp" line="2904"/>
         <source>L</source>
         <comment>keyboard shortcut</comment>
         <translation>L</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1207"/>
-        <location filename="../QMenuStrings.cpp" line="2913"/>
+        <location filename="../QMenuStrings.cpp" line="2914"/>
         <source>Q</source>
         <comment>keyboard shortcut</comment>
         <translation>Q</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1216"/>
-        <location filename="../QMenuStrings.cpp" line="2922"/>
+        <location filename="../QMenuStrings.cpp" line="2923"/>
         <source>Shift+Q</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+Q</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1225"/>
-        <location filename="../QMenuStrings.cpp" line="2931"/>
+        <location filename="../QMenuStrings.cpp" line="2932"/>
         <source>Ctrl+Shift+W</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+W</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1234"/>
-        <location filename="../QMenuStrings.cpp" line="2940"/>
+        <location filename="../QMenuStrings.cpp" line="2941"/>
         <source>W</source>
         <comment>keyboard shortcut</comment>
         <translation>W</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1243"/>
-        <location filename="../QMenuStrings.cpp" line="2949"/>
+        <location filename="../QMenuStrings.cpp" line="2950"/>
         <source>Shift+W</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+W</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1252"/>
-        <location filename="../QMenuStrings.cpp" line="2958"/>
+        <location filename="../QMenuStrings.cpp" line="2959"/>
         <source>Ctrl+Shift+E</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+E</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1270"/>
-        <location filename="../QMenuStrings.cpp" line="2976"/>
-        <location filename="../QMenuStrings.cpp" line="3934"/>
+        <location filename="../QMenuStrings.cpp" line="2977"/>
+        <location filename="../QMenuStrings.cpp" line="3935"/>
         <source>R</source>
         <comment>keyboard shortcut</comment>
         <translation>R</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1279"/>
-        <location filename="../QMenuStrings.cpp" line="2985"/>
+        <location filename="../QMenuStrings.cpp" line="2986"/>
         <source>Shift+R</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+R</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1288"/>
-        <location filename="../QMenuStrings.cpp" line="2994"/>
+        <location filename="../QMenuStrings.cpp" line="2995"/>
         <source>Ctrl+Shift+U</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+U</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1297"/>
-        <location filename="../QMenuStrings.cpp" line="3003"/>
-        <location filename="../QMenuStrings.cpp" line="3925"/>
+        <location filename="../QMenuStrings.cpp" line="3004"/>
+        <location filename="../QMenuStrings.cpp" line="3926"/>
         <source>U</source>
         <comment>keyboard shortcut</comment>
         <translation>U</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1306"/>
-        <location filename="../QMenuStrings.cpp" line="3012"/>
+        <location filename="../QMenuStrings.cpp" line="3013"/>
         <source>Shift+U</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+U</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1315"/>
-        <location filename="../QMenuStrings.cpp" line="3021"/>
+        <location filename="../QMenuStrings.cpp" line="3022"/>
         <source>Ctrl+Shift+I</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+I</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1333"/>
-        <location filename="../QMenuStrings.cpp" line="3039"/>
+        <location filename="../QMenuStrings.cpp" line="3040"/>
         <source>Shift+I</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+I</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1342"/>
-        <location filename="../QMenuStrings.cpp" line="3048"/>
+        <location filename="../QMenuStrings.cpp" line="3049"/>
         <source>Ctrl+Shift+O</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+O</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1351"/>
-        <location filename="../QMenuStrings.cpp" line="3057"/>
+        <location filename="../QMenuStrings.cpp" line="3058"/>
         <source>O</source>
         <comment>keyboard shortcut</comment>
         <translation>O</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1361"/>
-        <location filename="../QMenuStrings.cpp" line="3067"/>
+        <location filename="../QMenuStrings.cpp" line="3068"/>
         <source>Z</source>
         <comment>keyboard shortcut</comment>
         <translation>Z</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1370"/>
-        <location filename="../QMenuStrings.cpp" line="3076"/>
+        <location filename="../QMenuStrings.cpp" line="3077"/>
         <source>Shift+Z</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+Z</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1379"/>
-        <location filename="../QMenuStrings.cpp" line="3085"/>
-        <location filename="../QMenuStrings.cpp" line="3619"/>
+        <location filename="../QMenuStrings.cpp" line="3086"/>
+        <location filename="../QMenuStrings.cpp" line="3620"/>
         <source>Ctrl+Shift+X</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+X</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1388"/>
-        <location filename="../QMenuStrings.cpp" line="3094"/>
+        <location filename="../QMenuStrings.cpp" line="3095"/>
         <source>X</source>
         <comment>keyboard shortcut</comment>
         <translation>X</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1397"/>
-        <location filename="../QMenuStrings.cpp" line="3103"/>
+        <location filename="../QMenuStrings.cpp" line="3104"/>
         <source>Shift+X</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+X</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1406"/>
-        <location filename="../QMenuStrings.cpp" line="3112"/>
-        <location filename="../QMenuStrings.cpp" line="3628"/>
+        <location filename="../QMenuStrings.cpp" line="3113"/>
+        <location filename="../QMenuStrings.cpp" line="3629"/>
         <source>Ctrl+Shift+C</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+C</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1415"/>
-        <location filename="../QMenuStrings.cpp" line="3121"/>
+        <location filename="../QMenuStrings.cpp" line="3122"/>
         <source>C</source>
         <comment>keyboard shortcut</comment>
         <translation>C</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1424"/>
-        <location filename="../QMenuStrings.cpp" line="3130"/>
+        <location filename="../QMenuStrings.cpp" line="3131"/>
         <source>V</source>
         <comment>keyboard shortcut</comment>
         <translation>V</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1433"/>
-        <location filename="../QMenuStrings.cpp" line="3139"/>
+        <location filename="../QMenuStrings.cpp" line="3140"/>
         <source>Shift+V</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+V</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1442"/>
-        <location filename="../QMenuStrings.cpp" line="3148"/>
+        <location filename="../QMenuStrings.cpp" line="3149"/>
         <source>Ctrl+Shift+B</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+B</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1451"/>
-        <location filename="../QMenuStrings.cpp" line="3157"/>
+        <location filename="../QMenuStrings.cpp" line="3158"/>
         <source>B</source>
         <comment>keyboard shortcut</comment>
         <translation>B</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1460"/>
-        <location filename="../QMenuStrings.cpp" line="3166"/>
+        <location filename="../QMenuStrings.cpp" line="3167"/>
         <source>Shift+B</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+B</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1469"/>
-        <location filename="../QMenuStrings.cpp" line="3175"/>
+        <location filename="../QMenuStrings.cpp" line="3176"/>
         <source>Ctrl+Shift+N</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+N</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1478"/>
-        <location filename="../QMenuStrings.cpp" line="3184"/>
-        <location filename="../QMenuStrings.cpp" line="3785"/>
+        <location filename="../QMenuStrings.cpp" line="3185"/>
+        <location filename="../QMenuStrings.cpp" line="3786"/>
         <source>N</source>
         <comment>keyboard shortcut</comment>
         <translation>N</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1487"/>
-        <location filename="../QMenuStrings.cpp" line="3193"/>
+        <location filename="../QMenuStrings.cpp" line="3194"/>
         <source>Shift+N</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+N</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1496"/>
-        <location filename="../QMenuStrings.cpp" line="3202"/>
-        <location filename="../QMenuStrings.cpp" line="3717"/>
+        <location filename="../QMenuStrings.cpp" line="3203"/>
+        <location filename="../QMenuStrings.cpp" line="3718"/>
         <source>Ctrl+Shift+M</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+M</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1505"/>
-        <location filename="../QMenuStrings.cpp" line="3211"/>
-        <location filename="../QMenuStrings.cpp" line="3767"/>
+        <location filename="../QMenuStrings.cpp" line="3212"/>
+        <location filename="../QMenuStrings.cpp" line="3768"/>
         <source>M</source>
         <comment>keyboard shortcut</comment>
         <translation>M</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1514"/>
-        <location filename="../QMenuStrings.cpp" line="3229"/>
+        <location filename="../QMenuStrings.cpp" line="3230"/>
         <source>H</source>
         <comment>keyboard shortcut</comment>
         <translation>H</translation>
@@ -2041,158 +2039,173 @@
         <translation>Alt+Shift+V</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1944"/>
+        <location filename="../QMenuStrings.cpp" line="1945"/>
         <source>Add &amp;Layer</source>
         <translation>Lägg till &amp;lager</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1951"/>
+        <location filename="../QMenuStrings.cpp" line="1952"/>
         <source>Ctrl+Alt+1</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Alt+1</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1989"/>
+        <location filename="../QMenuStrings.cpp" line="1990"/>
         <source>Alt+0</source>
         <comment>keyboard shortcut</comment>
         <translation>Alt+0</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1998"/>
+        <location filename="../QMenuStrings.cpp" line="1999"/>
         <source>Alt+1</source>
         <comment>keyboard shortcut</comment>
         <translation>Alt+1</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2007"/>
+        <location filename="../QMenuStrings.cpp" line="2008"/>
         <source>Alt+2</source>
         <comment>keyboard shortcut</comment>
         <translation>Alt+2</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2016"/>
+        <location filename="../QMenuStrings.cpp" line="2017"/>
         <source>Alt+3</source>
         <comment>keyboard shortcut</comment>
         <translation>Alt+3</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2025"/>
+        <location filename="../QMenuStrings.cpp" line="2026"/>
         <source>Alt+4</source>
         <comment>keyboard shortcut</comment>
         <translation>Alt+4</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2034"/>
+        <location filename="../QMenuStrings.cpp" line="2035"/>
         <source>Alt+5</source>
         <comment>keyboard shortcut</comment>
         <translation>Alt+5</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2043"/>
+        <location filename="../QMenuStrings.cpp" line="2044"/>
         <source>Alt+9</source>
         <comment>keyboard shortcut</comment>
         <translation>Alt+9</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2053"/>
+        <location filename="../QMenuStrings.cpp" line="2054"/>
         <source>&amp;Cycle Slashes</source>
         <translation>&amp;Växla tvärbalkar</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2060"/>
+        <location filename="../QMenuStrings.cpp" line="2061"/>
         <source>/</source>
         <comment>keyboard shortcut</comment>
         <translation>/</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2083"/>
+        <location filename="../QMenuStrings.cpp" line="2064"/>
+        <source>Classical</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="2065"/>
+        <source>Cross</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="2066"/>
+        <source>Mensural</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="2084"/>
         <source>Ctrl+PgUp</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+PgUp</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2092"/>
+        <location filename="../QMenuStrings.cpp" line="2093"/>
         <source>Ctrl+PgDown</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+PgDown</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2104"/>
+        <location filename="../QMenuStrings.cpp" line="2105"/>
         <source>Ctrl+B</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+B</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2113"/>
+        <location filename="../QMenuStrings.cpp" line="2114"/>
         <source>Ctrl+Alt+B</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Alt+B</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2122"/>
+        <location filename="../QMenuStrings.cpp" line="2123"/>
         <source>Ctrl+U</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+U</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2131"/>
-        <location filename="../QMenuStrings.cpp" line="3862"/>
+        <location filename="../QMenuStrings.cpp" line="2132"/>
+        <location filename="../QMenuStrings.cpp" line="3863"/>
         <source>Ctrl+T</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+T</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2140"/>
+        <location filename="../QMenuStrings.cpp" line="2141"/>
         <source>Ctrl+R</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+R</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2150"/>
+        <location filename="../QMenuStrings.cpp" line="2151"/>
         <source>)</source>
         <comment>keyboard shortcut</comment>
         <translation>)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2159"/>
+        <location filename="../QMenuStrings.cpp" line="2160"/>
         <source>Ctrl+)</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2172"/>
+        <location filename="../QMenuStrings.cpp" line="2173"/>
         <source>~</source>
         <comment>keyboard shortcut</comment>
         <translation>~</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2186"/>
+        <location filename="../QMenuStrings.cpp" line="2187"/>
         <source>&amp;lt;</source>
         <comment>keyboard shortcut</comment>
         <translation>&amp;lt;</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2195"/>
+        <location filename="../QMenuStrings.cpp" line="2196"/>
         <source>&amp;gt;</source>
         <comment>keyboard shortcut</comment>
         <translation>&amp;gt;</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="688"/>
-        <location filename="../QMenuStrings.cpp" line="2203"/>
+        <location filename="../QMenuStrings.cpp" line="2204"/>
         <source>Ad&amp;just</source>
         <translation>&amp;Justera</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="689"/>
-        <location filename="../QMenuStrings.cpp" line="2245"/>
+        <location filename="../QMenuStrings.cpp" line="2246"/>
         <source>&amp;Quantize</source>
         <translation>&amp;Kvantisera</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="690"/>
-        <location filename="../QMenuStrings.cpp" line="2246"/>
-        <location filename="../QMenuStrings.cpp" line="3797"/>
+        <location filename="../QMenuStrings.cpp" line="2247"/>
+        <location filename="../QMenuStrings.cpp" line="3798"/>
         <source>&amp;Quantize...</source>
         <translation>&amp;Kvantisera...</translation>
     </message>
@@ -2208,14 +2221,14 @@
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="717"/>
-        <location filename="../QMenuStrings.cpp" line="2216"/>
+        <location filename="../QMenuStrings.cpp" line="2217"/>
         <source>Collapse &amp;Equal-Pitch Notes</source>
         <translation>&amp;Lägg ihop noter med samma tonhöjd</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="718"/>
-        <location filename="../QMenuStrings.cpp" line="2348"/>
-        <location filename="../QMenuStrings.cpp" line="3820"/>
+        <location filename="../QMenuStrings.cpp" line="2349"/>
+        <location filename="../QMenuStrings.cpp" line="3821"/>
         <source>Jog &amp;Left</source>
         <translation>Knuffa åt &amp;vänster</translation>
     </message>
@@ -2226,13 +2239,13 @@
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="736"/>
-        <location filename="../QMenuStrings.cpp" line="2322"/>
+        <location filename="../QMenuStrings.cpp" line="2323"/>
         <source>&amp;Increase Velocity</source>
         <translation>&amp;Öka ljudstyrka</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="745"/>
-        <location filename="../QMenuStrings.cpp" line="2331"/>
+        <location filename="../QMenuStrings.cpp" line="2332"/>
         <source>&amp;Reduce Velocity</source>
         <translation>&amp;Reducera ljudstyrka</translation>
     </message>
@@ -2253,63 +2266,63 @@
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="757"/>
-        <location filename="../QMenuStrings.cpp" line="2259"/>
+        <location filename="../QMenuStrings.cpp" line="2260"/>
         <source>&amp;Halve Durations</source>
         <translation>&amp;Halvera notvärden</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="766"/>
-        <location filename="../QMenuStrings.cpp" line="2268"/>
+        <location filename="../QMenuStrings.cpp" line="2269"/>
         <source>&amp;Double Durations</source>
         <translation>&amp;Dubblera notvärden</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="775"/>
-        <location filename="../QMenuStrings.cpp" line="2277"/>
+        <location filename="../QMenuStrings.cpp" line="2278"/>
         <source>Stretch or S&amp;quash...</source>
         <translation>Sträck eller tr&amp;yck ihop...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="776"/>
-        <location filename="../QMenuStrings.cpp" line="2278"/>
+        <location filename="../QMenuStrings.cpp" line="2279"/>
         <source>Trans&amp;pose</source>
         <translation>&amp;Transponera</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="777"/>
-        <location filename="../QMenuStrings.cpp" line="2279"/>
+        <location filename="../QMenuStrings.cpp" line="2280"/>
         <source>&amp;Up a Semitone</source>
         <translation>&amp;Upp ett halvtonsteg</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="786"/>
-        <location filename="../QMenuStrings.cpp" line="2288"/>
+        <location filename="../QMenuStrings.cpp" line="2289"/>
         <source>&amp;Down a Semitone</source>
         <translation>&amp;Ner ett halvtonsteg</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="795"/>
-        <location filename="../QMenuStrings.cpp" line="2297"/>
+        <location filename="../QMenuStrings.cpp" line="2298"/>
         <source>Up an &amp;Octave</source>
         <translation>Upp en &amp;oktav</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="804"/>
-        <location filename="../QMenuStrings.cpp" line="2306"/>
+        <location filename="../QMenuStrings.cpp" line="2307"/>
         <source>Down an Octa&amp;ve</source>
         <translation>Ner en okta&amp;v</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="813"/>
-        <location filename="../QMenuStrings.cpp" line="2315"/>
+        <location filename="../QMenuStrings.cpp" line="2316"/>
         <source>&amp;Transpose by Semitones...</source>
         <translation>Transponera med &amp;halvtonsteg...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="814"/>
-        <location filename="../QMenuStrings.cpp" line="1942"/>
-        <location filename="../QMenuStrings.cpp" line="2316"/>
-        <location filename="../QMenuStrings.cpp" line="3815"/>
+        <location filename="../QMenuStrings.cpp" line="1943"/>
+        <location filename="../QMenuStrings.cpp" line="2317"/>
+        <location filename="../QMenuStrings.cpp" line="3816"/>
         <source>Transpose by &amp;Interval...</source>
         <translation>Transponera med &amp;intervall...</translation>
     </message>
@@ -2320,19 +2333,19 @@
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="816"/>
-        <location filename="../QMenuStrings.cpp" line="2318"/>
+        <location filename="../QMenuStrings.cpp" line="2319"/>
         <source>&amp;Invert</source>
         <translation>&amp;Invertera</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="825"/>
-        <location filename="../QMenuStrings.cpp" line="2319"/>
+        <location filename="../QMenuStrings.cpp" line="2320"/>
         <source>&amp;Retrograde</source>
         <translation>&amp;Retrograd</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="834"/>
-        <location filename="../QMenuStrings.cpp" line="2320"/>
+        <location filename="../QMenuStrings.cpp" line="2321"/>
         <source>Re&amp;trograde Invert</source>
         <translation>Re&amp;trograd inversion</translation>
     </message>
@@ -2343,36 +2356,36 @@
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="981"/>
-        <location filename="../QMenuStrings.cpp" line="2573"/>
-        <location filename="../QMenuStrings.cpp" line="3940"/>
+        <location filename="../QMenuStrings.cpp" line="2574"/>
+        <location filename="../QMenuStrings.cpp" line="3941"/>
         <source>&amp;Tools</source>
         <translation>Verk&amp;tyg</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="982"/>
-        <location filename="../QMenuStrings.cpp" line="2574"/>
-        <location filename="../QMenuStrings.cpp" line="3941"/>
+        <location filename="../QMenuStrings.cpp" line="2575"/>
+        <location filename="../QMenuStrings.cpp" line="3942"/>
         <source>&amp;Select and Edit</source>
         <translation>&amp;Markera och redigera</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="991"/>
-        <location filename="../QMenuStrings.cpp" line="3950"/>
+        <location filename="../QMenuStrings.cpp" line="3951"/>
         <source>&amp;Draw</source>
         <translation>&amp;Rita</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1000"/>
-        <location filename="../QMenuStrings.cpp" line="2592"/>
-        <location filename="../QMenuStrings.cpp" line="3959"/>
+        <location filename="../QMenuStrings.cpp" line="2593"/>
+        <location filename="../QMenuStrings.cpp" line="3960"/>
         <source>&amp;Erase</source>
         <translation>Rad&amp;era</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="837"/>
         <location filename="../QMenuStrings.cpp" line="1009"/>
-        <location filename="../QMenuStrings.cpp" line="2369"/>
-        <location filename="../QMenuStrings.cpp" line="3968"/>
+        <location filename="../QMenuStrings.cpp" line="2370"/>
+        <location filename="../QMenuStrings.cpp" line="3969"/>
         <source>&amp;Move</source>
         <translation>&amp;Flytta</translation>
     </message>
@@ -2383,7 +2396,7 @@
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1027"/>
-        <location filename="../QMenuStrings.cpp" line="3986"/>
+        <location filename="../QMenuStrings.cpp" line="3987"/>
         <source>S&amp;plit</source>
         <translation>&amp;Dela</translation>
     </message>
@@ -2417,32 +2430,32 @@
         <translation type="obsolete">Markör till &amp;slutet</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2370"/>
+        <location filename="../QMenuStrings.cpp" line="2371"/>
         <source>Cursor back and Se&amp;lect</source>
         <translation>Markör bakåt och mar&amp;kera</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="847"/>
-        <location filename="../QMenuStrings.cpp" line="2379"/>
+        <location filename="../QMenuStrings.cpp" line="2380"/>
         <source>Cursor Forward and &amp;Select</source>
         <translation>Markör framåt och &amp;markera</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="874"/>
-        <location filename="../QMenuStrings.cpp" line="2406"/>
+        <location filename="../QMenuStrings.cpp" line="2407"/>
         <source>Set Loop &amp;to Selection</source>
         <translation>Ställ in upprepning &amp;till markering</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="883"/>
-        <location filename="../QMenuStrings.cpp" line="2415"/>
+        <location filename="../QMenuStrings.cpp" line="2416"/>
         <source>Clear L&amp;oop</source>
         <translation>R&amp;ensa upprepning</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1673"/>
         <location filename="../QMenuStrings.cpp" line="1721"/>
-        <location filename="../QMenuStrings.cpp" line="3995"/>
+        <location filename="../QMenuStrings.cpp" line="3996"/>
         <source>T&amp;ransport</source>
         <translation>Spel&amp;kontroller</translation>
     </message>
@@ -2450,8 +2463,8 @@
         <location filename="../QMenuStrings.cpp" line="910"/>
         <location filename="../QMenuStrings.cpp" line="1674"/>
         <location filename="../QMenuStrings.cpp" line="1722"/>
-        <location filename="../QMenuStrings.cpp" line="2460"/>
-        <location filename="../QMenuStrings.cpp" line="3996"/>
+        <location filename="../QMenuStrings.cpp" line="2461"/>
+        <location filename="../QMenuStrings.cpp" line="3997"/>
         <source>&amp;Play</source>
         <translation>S&amp;pela</translation>
     </message>
@@ -2459,8 +2472,8 @@
         <location filename="../QMenuStrings.cpp" line="911"/>
         <location filename="../QMenuStrings.cpp" line="1675"/>
         <location filename="../QMenuStrings.cpp" line="1723"/>
-        <location filename="../QMenuStrings.cpp" line="2467"/>
-        <location filename="../QMenuStrings.cpp" line="4005"/>
+        <location filename="../QMenuStrings.cpp" line="2468"/>
+        <location filename="../QMenuStrings.cpp" line="4006"/>
         <source>&amp;Stop</source>
         <translation>&amp;Stoppa</translation>
     </message>
@@ -2468,8 +2481,8 @@
         <location filename="../QMenuStrings.cpp" line="942"/>
         <location filename="../QMenuStrings.cpp" line="1676"/>
         <location filename="../QMenuStrings.cpp" line="1724"/>
-        <location filename="../QMenuStrings.cpp" line="2504"/>
-        <location filename="../QMenuStrings.cpp" line="4014"/>
+        <location filename="../QMenuStrings.cpp" line="2505"/>
+        <location filename="../QMenuStrings.cpp" line="4015"/>
         <source>Re&amp;wind</source>
         <translation>Spola &amp;tillbaka</translation>
     </message>
@@ -2477,8 +2490,8 @@
         <location filename="../QMenuStrings.cpp" line="951"/>
         <location filename="../QMenuStrings.cpp" line="1677"/>
         <location filename="../QMenuStrings.cpp" line="1725"/>
-        <location filename="../QMenuStrings.cpp" line="2513"/>
-        <location filename="../QMenuStrings.cpp" line="4023"/>
+        <location filename="../QMenuStrings.cpp" line="2514"/>
+        <location filename="../QMenuStrings.cpp" line="4024"/>
         <source>&amp;Fast Forward</source>
         <translation>Spola f&amp;ram</translation>
     </message>
@@ -2486,7 +2499,7 @@
         <location filename="../QMenuStrings.cpp" line="960"/>
         <location filename="../QMenuStrings.cpp" line="1678"/>
         <location filename="../QMenuStrings.cpp" line="1726"/>
-        <location filename="../QMenuStrings.cpp" line="2522"/>
+        <location filename="../QMenuStrings.cpp" line="2523"/>
         <source>Rewind to &amp;Beginning</source>
         <translation>Spola tillbaka till bör&amp;jan</translation>
     </message>
@@ -2494,20 +2507,20 @@
         <location filename="../QMenuStrings.cpp" line="961"/>
         <location filename="../QMenuStrings.cpp" line="1679"/>
         <location filename="../QMenuStrings.cpp" line="1727"/>
-        <location filename="../QMenuStrings.cpp" line="2529"/>
+        <location filename="../QMenuStrings.cpp" line="2530"/>
         <source>Fast Forward to &amp;End</source>
         <translation>Spola fram till s&amp;lutet</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="962"/>
-        <location filename="../QMenuStrings.cpp" line="2536"/>
+        <location filename="../QMenuStrings.cpp" line="2537"/>
         <source>S&amp;olo</source>
         <translation>S&amp;olo</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="963"/>
-        <location filename="../QMenuStrings.cpp" line="2543"/>
-        <location filename="../QMenuStrings.cpp" line="4050"/>
+        <location filename="../QMenuStrings.cpp" line="2544"/>
+        <location filename="../QMenuStrings.cpp" line="4051"/>
         <source>Scro&amp;ll to Follow Playback</source>
         <translation>&amp;Rulla för att följa uppspelning</translation>
     </message>
@@ -2515,8 +2528,8 @@
         <location filename="../QMenuStrings.cpp" line="972"/>
         <location filename="../QMenuStrings.cpp" line="1681"/>
         <location filename="../QMenuStrings.cpp" line="1729"/>
-        <location filename="../QMenuStrings.cpp" line="2558"/>
-        <location filename="../QMenuStrings.cpp" line="4059"/>
+        <location filename="../QMenuStrings.cpp" line="2559"/>
+        <location filename="../QMenuStrings.cpp" line="4060"/>
         <source>P&amp;anic</source>
         <translation>&amp;Panik</translation>
     </message>
@@ -2546,59 +2559,59 @@
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1199"/>
-        <location filename="../QMenuStrings.cpp" line="2905"/>
+        <location filename="../QMenuStrings.cpp" line="2906"/>
         <source>&amp;Upper Octave</source>
         <translation>&amp;Övre oktav</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1507"/>
-        <location filename="../QMenuStrings.cpp" line="3222"/>
+        <location filename="../QMenuStrings.cpp" line="3223"/>
         <source>C&amp;hord Insert Mode</source>
         <translation>Infogningsläge för &amp;ackord</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1516"/>
-        <location filename="../QMenuStrings.cpp" line="3241"/>
+        <location filename="../QMenuStrings.cpp" line="3242"/>
         <source>Ste&amp;p Recording</source>
         <translation>&amp;Stegvis inspelning</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="665"/>
-        <location filename="../QMenuStrings.cpp" line="1905"/>
-        <location filename="../QMenuStrings.cpp" line="3660"/>
+        <location filename="../QMenuStrings.cpp" line="1906"/>
+        <location filename="../QMenuStrings.cpp" line="3661"/>
         <source>&amp;Toolbars</source>
         <translation>&amp;Verktygslister</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="670"/>
-        <location filename="../QMenuStrings.cpp" line="1918"/>
-        <location filename="../QMenuStrings.cpp" line="3667"/>
+        <location filename="../QMenuStrings.cpp" line="1919"/>
+        <location filename="../QMenuStrings.cpp" line="3668"/>
         <source>&amp;Rulers</source>
         <translation>&amp;Linjaler</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="671"/>
-        <location filename="../QMenuStrings.cpp" line="1919"/>
+        <location filename="../QMenuStrings.cpp" line="1920"/>
         <source>Show Ch&amp;ord Name Ruler</source>
         <translation>Visa &amp;ackordnamnslinjal</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="672"/>
-        <location filename="../QMenuStrings.cpp" line="1921"/>
+        <location filename="../QMenuStrings.cpp" line="1922"/>
         <source>Show &amp;Tempo Ruler</source>
         <translation>Visa &amp;tempolinjal</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1533"/>
-        <location filename="../QMenuStrings.cpp" line="3258"/>
-        <location filename="../QMenuStrings.cpp" line="4086"/>
+        <location filename="../QMenuStrings.cpp" line="3259"/>
+        <location filename="../QMenuStrings.cpp" line="4087"/>
         <source>Tools Toolbar</source>
         <translation>Redigeringsverktygslist</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1680"/>
         <location filename="../QMenuStrings.cpp" line="1728"/>
-        <location filename="../QMenuStrings.cpp" line="4032"/>
+        <location filename="../QMenuStrings.cpp" line="4033"/>
         <source>&amp;Record</source>
         <translation>Spela &amp;in</translation>
     </message>
@@ -2699,7 +2712,7 @@
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1781"/>
-        <location filename="../QMenuStrings.cpp" line="3536"/>
+        <location filename="../QMenuStrings.cpp" line="3537"/>
         <source>&amp;Print...</source>
         <translation>Skriv &amp;ut...</translation>
     </message>
@@ -2754,17 +2767,17 @@
         <translation>Rensa marker&amp;ing</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1897"/>
+        <location filename="../QMenuStrings.cpp" line="1898"/>
         <source>Note &amp;Font</source>
         <translation>Not&amp;teckensnitt</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1898"/>
+        <location filename="../QMenuStrings.cpp" line="1899"/>
         <source>Si&amp;ze</source>
         <translation>St&amp;orlek</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1899"/>
+        <location filename="../QMenuStrings.cpp" line="1900"/>
         <source>S&amp;pacing</source>
         <translation>&amp;Avstånd</translation>
     </message>
@@ -2773,27 +2786,27 @@
         <translation type="obsolete">&amp;Längdfaktor</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1900"/>
+        <location filename="../QMenuStrings.cpp" line="1901"/>
         <source>&amp;Layout Mode</source>
         <translation>&amp;Utläggning</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1901"/>
+        <location filename="../QMenuStrings.cpp" line="1902"/>
         <source>&amp;Linear Layout</source>
         <translation>&amp;Horisontell utläggning</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1902"/>
+        <location filename="../QMenuStrings.cpp" line="1903"/>
         <source>&amp;Continuous Page Layout</source>
         <translation>&amp;Vertikal utläggning</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1903"/>
+        <location filename="../QMenuStrings.cpp" line="1904"/>
         <source>&amp;Multiple Page Layout</source>
         <translation>&amp;Sidutläggning</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1904"/>
+        <location filename="../QMenuStrings.cpp" line="1905"/>
         <source>Open L&amp;yric Editor</source>
         <translation>Öppna &amp;sångtexteditor</translation>
     </message>
@@ -2802,35 +2815,35 @@
         <translation type="obsolete">Lägg till effektlinjal</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1925"/>
+        <location filename="../QMenuStrings.cpp" line="1926"/>
         <source>Show &amp;Track Headers</source>
         <translation>Visa spår&amp;namn</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="684"/>
-        <location filename="../QMenuStrings.cpp" line="1935"/>
-        <location filename="../QMenuStrings.cpp" line="3769"/>
+        <location filename="../QMenuStrings.cpp" line="1936"/>
+        <location filename="../QMenuStrings.cpp" line="3770"/>
         <source>Open in &amp;Percussion Matrix Editor</source>
         <translation>Öppna i slagverksmatrise&amp;ditor</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1936"/>
+        <location filename="../QMenuStrings.cpp" line="1937"/>
         <source>Add Cle&amp;f Change...</source>
         <translation>Lägg till &amp;klavbyte...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="685"/>
-        <location filename="../QMenuStrings.cpp" line="1937"/>
+        <location filename="../QMenuStrings.cpp" line="1938"/>
         <source>Add &amp;Key Change...</source>
         <translation>Lägg till &amp;tonartsbyte...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1938"/>
+        <location filename="../QMenuStrings.cpp" line="1939"/>
         <source>Add Pedal &amp;Press</source>
         <translation>Lägg till pedalt&amp;ryck</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1939"/>
+        <location filename="../QMenuStrings.cpp" line="1940"/>
         <source>Add Pedal &amp;Release</source>
         <translation>Lägg till pedals&amp;läpp</translation>
     </message>
@@ -2844,774 +2857,770 @@
         <translation type="obsolete">Transponera med &amp;intervall...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1943"/>
-        <location filename="../QMenuStrings.cpp" line="3816"/>
+        <location filename="../QMenuStrings.cpp" line="1944"/>
+        <location filename="../QMenuStrings.cpp" line="3817"/>
         <source>&amp;Convert Notation for...</source>
         <translation>K&amp;onvertera notskrift för...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1953"/>
+        <location filename="../QMenuStrings.cpp" line="1954"/>
         <source>N&amp;ote</source>
         <translation>&amp;Not</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1954"/>
+        <location filename="../QMenuStrings.cpp" line="1955"/>
         <source>Mar&amp;ks</source>
         <translation>Orna&amp;ment och föredragsbeteckningar</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1955"/>
+        <location filename="../QMenuStrings.cpp" line="1956"/>
         <source>Add &amp;Accent</source>
         <translation>Lägg till &amp;accent</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1956"/>
+        <location filename="../QMenuStrings.cpp" line="1957"/>
         <source>Add T&amp;enuto</source>
         <translation>Lägg till t&amp;enuto</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1957"/>
+        <location filename="../QMenuStrings.cpp" line="1958"/>
         <source>Add Sta&amp;ccato</source>
         <translation>Lägg till &amp;staccato</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1958"/>
+        <location filename="../QMenuStrings.cpp" line="1959"/>
         <source>Add &amp;Staccatissimo</source>
         <translation>Lägg till sta&amp;ccatissimo</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1959"/>
+        <location filename="../QMenuStrings.cpp" line="1960"/>
         <source>Add &amp;Marcato</source>
         <translation>Lägg till &amp;marcato</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1962"/>
+        <location filename="../QMenuStrings.cpp" line="1963"/>
         <source>Add S&amp;forzando</source>
         <translation>Lägg till s&amp;forzando</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1963"/>
+        <location filename="../QMenuStrings.cpp" line="1964"/>
         <source>Add R&amp;inforzando</source>
         <translation>Lägg till &amp;rinforzando</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1964"/>
+        <location filename="../QMenuStrings.cpp" line="1965"/>
         <source>Add Tri&amp;ll</source>
         <translation>Lägg till dri&amp;ll</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1965"/>
+        <location filename="../QMenuStrings.cpp" line="1966"/>
         <source>Add &amp;Turn</source>
         <translation>Lägg till du&amp;bbelslag</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1966"/>
+        <location filename="../QMenuStrings.cpp" line="1967"/>
         <source>Add M&amp;ordent</source>
         <translation>Lägg till m&amp;ordent</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1967"/>
+        <location filename="../QMenuStrings.cpp" line="1968"/>
         <source>Add I&amp;nverted Mordent</source>
         <translation>Lägg till &amp;pralldrill</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1968"/>
+        <location filename="../QMenuStrings.cpp" line="1969"/>
         <source>Add Long Mordent</source>
         <translation>Lägg till lång mordent</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1969"/>
+        <location filename="../QMenuStrings.cpp" line="1970"/>
         <source>Add Lon&amp;g Inverted Mordent</source>
         <translation>Lägg till lån&amp;g pralldrill</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1970"/>
+        <location filename="../QMenuStrings.cpp" line="1971"/>
         <source>Add &amp;Up-Bow</source>
         <translation>Lägg till &amp;uppstråk</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1971"/>
+        <location filename="../QMenuStrings.cpp" line="1972"/>
         <source>Add &amp;Down-Bow</source>
         <translation>Lägg till &amp;nedstråk</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1972"/>
+        <location filename="../QMenuStrings.cpp" line="1973"/>
         <source>Add &amp;Harmonic</source>
         <translation>Lägg till &amp;harmoni</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1973"/>
+        <location filename="../QMenuStrings.cpp" line="1974"/>
         <source>Add &amp;Pause</source>
         <translation>Lägg till &amp;paus</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1974"/>
+        <location filename="../QMenuStrings.cpp" line="1975"/>
         <source>Add Te&amp;xt Mark...</source>
         <translation>Lägg till föredragsbeteckning som te&amp;xt...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1975"/>
+        <location filename="../QMenuStrings.cpp" line="1976"/>
         <source>&amp;Remove All Marks</source>
         <translation>Ta &amp;bort alla ornament och föredragsbeteckningar</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1976"/>
+        <location filename="../QMenuStrings.cpp" line="1977"/>
         <source>&amp;Ornaments</source>
         <translation>&amp;Ornament</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1977"/>
+        <location filename="../QMenuStrings.cpp" line="1978"/>
         <source>Trigger &amp;Ornament...</source>
         <translation>Använd &amp;ornament...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1978"/>
+        <location filename="../QMenuStrings.cpp" line="1979"/>
         <source>&amp;Remove Ornament...</source>
         <translation>&amp;Radera ornament...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1979"/>
+        <location filename="../QMenuStrings.cpp" line="1980"/>
         <source>Ma&amp;ke Ornament...</source>
         <translation>S&amp;kapa ornament...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1980"/>
+        <location filename="../QMenuStrings.cpp" line="1981"/>
         <source>&amp;Fingerings</source>
         <translation>&amp;Fingersättningar</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1981"/>
+        <location filename="../QMenuStrings.cpp" line="1982"/>
         <source>&amp;Remove Fingerings</source>
         <translation>Ta &amp;bort fingersättning</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1982"/>
+        <location filename="../QMenuStrings.cpp" line="1983"/>
         <source>Add Fingering &amp;0 (Thumb)</source>
         <translation>Lägg till finger &amp;0 (tumme)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1991"/>
+        <location filename="../QMenuStrings.cpp" line="1992"/>
         <source>Add Fingering &amp;1</source>
         <translation>Lägg till finger &amp;1</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2000"/>
+        <location filename="../QMenuStrings.cpp" line="2001"/>
         <source>Add Fingering &amp;2</source>
         <translation>Lägg till finger &amp;2</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2009"/>
+        <location filename="../QMenuStrings.cpp" line="2010"/>
         <source>Add Fingering &amp;3</source>
         <translation>Lägg till finger &amp;3</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2018"/>
+        <location filename="../QMenuStrings.cpp" line="2019"/>
         <source>Add Fingering &amp;4</source>
         <translation>Lägg till finger &amp;4</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2027"/>
+        <location filename="../QMenuStrings.cpp" line="2028"/>
         <source>Add Fingering &amp;5</source>
         <translation>Lägg till finger &amp;5</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2036"/>
+        <location filename="../QMenuStrings.cpp" line="2037"/>
         <source>&amp;Add Fingering +</source>
         <translation>Lägg till finger &amp;+</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2045"/>
+        <location filename="../QMenuStrings.cpp" line="2046"/>
         <source>Add Other &amp;Fingering...</source>
         <translation>Lägg till annan &amp;fingersättning...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2046"/>
+        <location filename="../QMenuStrings.cpp" line="2047"/>
         <source>S&amp;lashes</source>
         <translation>&amp;Tvärbalkar</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2047"/>
+        <location filename="../QMenuStrings.cpp" line="2048"/>
         <source>&amp;None</source>
         <translation>I&amp;ngen</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2048"/>
+        <location filename="../QMenuStrings.cpp" line="2049"/>
         <source>&amp;1</source>
         <translation>&amp;1</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2049"/>
+        <location filename="../QMenuStrings.cpp" line="2050"/>
         <source>&amp;2</source>
         <translation>&amp;2</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2050"/>
+        <location filename="../QMenuStrings.cpp" line="2051"/>
         <source>&amp;3</source>
         <translation>&amp;3</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2051"/>
+        <location filename="../QMenuStrings.cpp" line="2052"/>
         <source>&amp;4</source>
         <translation>&amp;4</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2052"/>
+        <location filename="../QMenuStrings.cpp" line="2053"/>
         <source>&amp;5</source>
         <translation>&amp;5</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2062"/>
+        <location filename="../QMenuStrings.cpp" line="2063"/>
         <source>Note &amp;Style</source>
         <translation>Not&amp;huvudstil</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2063"/>
         <source>&amp;Classical</source>
-        <translation>&amp;Klassisk</translation>
+        <translation type="obsolete">&amp;Klassisk</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2064"/>
         <source>C&amp;ross</source>
-        <translation>Ko&amp;rs</translation>
+        <translation type="obsolete">Ko&amp;rs</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2065"/>
         <source>&amp;Mensural</source>
-        <translation>&amp;Mensural</translation>
+        <translation type="obsolete">&amp;Mensural</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2066"/>
         <source>&amp;Triangle</source>
-        <translation>&amp;Triangel</translation>
+        <translation type="obsolete">&amp;Triangel</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2067"/>
-        <location filename="../QMenuStrings.cpp" line="2601"/>
+        <location filename="../QMenuStrings.cpp" line="2068"/>
+        <location filename="../QMenuStrings.cpp" line="2602"/>
         <source>&amp;Accidentals</source>
         <translation>T&amp;illfälliga förtecken</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2068"/>
+        <location filename="../QMenuStrings.cpp" line="2069"/>
         <source>&amp;Restore Accidentals</source>
         <translation>&amp;Återställ förtecken</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2069"/>
+        <location filename="../QMenuStrings.cpp" line="2070"/>
         <source>Respell with Dou&amp;ble Flat</source>
         <translation>Stava om med dubbel-&amp;b-förtecken</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2070"/>
+        <location filename="../QMenuStrings.cpp" line="2071"/>
         <source>Respell with &amp;Flat</source>
         <translation>Stava om med b-&amp;förtecken</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2071"/>
+        <location filename="../QMenuStrings.cpp" line="2072"/>
         <source>Respell with &amp;Natural</source>
         <translation>Stava om med återställ&amp;ningstecken</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2072"/>
+        <location filename="../QMenuStrings.cpp" line="2073"/>
         <source>Respell with &amp;Sharp</source>
         <translation>Stava om med kor&amp;sförtecken</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2073"/>
+        <location filename="../QMenuStrings.cpp" line="2074"/>
         <source>Respell with Do&amp;uble Sharp</source>
         <translation>Stava om med d&amp;ubbel-korsförtecken</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2074"/>
+        <location filename="../QMenuStrings.cpp" line="2075"/>
         <source>Use &amp;Cautionary Accidentals</source>
         <translation>Använd fört&amp;ydligande förtecken</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2075"/>
+        <location filename="../QMenuStrings.cpp" line="2076"/>
         <source>Cancel C&amp;autionary Accidentals</source>
         <translation>Ta bort förtydlig&amp;ande förtecken</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2076"/>
+        <location filename="../QMenuStrings.cpp" line="2077"/>
         <source>Stem &amp;Up</source>
         <translation>Skaft &amp;uppåt</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2085"/>
+        <location filename="../QMenuStrings.cpp" line="2086"/>
         <source>Stem &amp;Down</source>
         <translation>Skaft &amp;neråt</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2094"/>
+        <location filename="../QMenuStrings.cpp" line="2095"/>
         <source>&amp;Restore Stems</source>
         <translation>Åte&amp;rställ skaft</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2095"/>
+        <location filename="../QMenuStrings.cpp" line="2096"/>
         <source>&amp;Phrase</source>
         <translation>&amp;Fras</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2096"/>
+        <location filename="../QMenuStrings.cpp" line="2097"/>
         <source>&amp;Make Chord</source>
         <translation>&amp;Skriv ackord</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2097"/>
+        <location filename="../QMenuStrings.cpp" line="2098"/>
         <source>&amp;Beam Group</source>
         <translation>Balk&amp;grupp</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2106"/>
+        <location filename="../QMenuStrings.cpp" line="2107"/>
         <source>&amp;Auto-Beam</source>
         <translation>&amp;Automatiska balkar</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2115"/>
+        <location filename="../QMenuStrings.cpp" line="2116"/>
         <source>&amp;Unbeam</source>
         <translation>Ta &amp;bort balkar</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2124"/>
+        <location filename="../QMenuStrings.cpp" line="2125"/>
         <source>Tupl&amp;et...</source>
         <translation>Annan&amp;delning...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2133"/>
+        <location filename="../QMenuStrings.cpp" line="2134"/>
         <source>&amp;Triplet</source>
         <translation>&amp;Triol</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2142"/>
+        <location filename="../QMenuStrings.cpp" line="2143"/>
         <source>U&amp;ntuplet</source>
         <translation>Ta b&amp;ort annandelning</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2143"/>
+        <location filename="../QMenuStrings.cpp" line="2144"/>
         <source>Add S&amp;lur</source>
         <translation>&amp;Lägg till legatobåge</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2152"/>
+        <location filename="../QMenuStrings.cpp" line="2153"/>
         <source>Add P&amp;hrasing Slur</source>
         <translation>Lägg till &amp;frasbåge</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2161"/>
+        <location filename="../QMenuStrings.cpp" line="2162"/>
         <source>Slur &amp;Position</source>
         <translation>&amp;Position för legatobåge</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2162"/>
+        <location filename="../QMenuStrings.cpp" line="2163"/>
         <source>&amp;Restore Slur Positions</source>
         <translation>Åte&amp;rställ position för legatobåge</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2163"/>
+        <location filename="../QMenuStrings.cpp" line="2164"/>
         <source>Slur &amp;Above</source>
         <translation>Legatobåge &amp;ovanför</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2164"/>
+        <location filename="../QMenuStrings.cpp" line="2165"/>
         <source>Slur &amp;Below</source>
         <translation>Legatobåge &amp;nedanför</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2165"/>
+        <location filename="../QMenuStrings.cpp" line="2166"/>
         <source>T&amp;ie</source>
         <translation>B&amp;indebåge</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2174"/>
+        <location filename="../QMenuStrings.cpp" line="2175"/>
         <source>&amp;Untie</source>
         <translation>Ta bo&amp;rt bindebåge</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2175"/>
+        <location filename="../QMenuStrings.cpp" line="2176"/>
         <source>Tie &amp;Position</source>
         <translation>&amp;Position för bindebåge</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2176"/>
+        <location filename="../QMenuStrings.cpp" line="2177"/>
         <source>&amp;Restore Tie Position</source>
         <translation>Åte&amp;rställ bindebågspositioner</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2177"/>
+        <location filename="../QMenuStrings.cpp" line="2178"/>
         <source>Tie &amp;Above</source>
         <translation>Bindebåge &amp;ovanför</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2178"/>
+        <location filename="../QMenuStrings.cpp" line="2179"/>
         <source>Tie &amp;Below</source>
         <translation>Bindebåge &amp;nedanför</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2179"/>
+        <location filename="../QMenuStrings.cpp" line="2180"/>
         <source>Add &amp;Crescendo</source>
         <translation>Lägg till &amp;crescendo</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2188"/>
+        <location filename="../QMenuStrings.cpp" line="2189"/>
         <source>Add &amp;Decescendo</source>
         <translation>Lägg till &amp;diminuendo</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2197"/>
+        <location filename="../QMenuStrings.cpp" line="2198"/>
         <source>Add Trill With &amp;Line</source>
         <translation>Lägg till dri&amp;ll med våglinje</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2198"/>
+        <location filename="../QMenuStrings.cpp" line="2199"/>
         <source>&amp;Octaves</source>
         <translation>O&amp;ktavering</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2199"/>
+        <location filename="../QMenuStrings.cpp" line="2200"/>
         <source>&amp;Add Double-Octave Up</source>
         <translation>Lägg till quindicesima u&amp;ppåt</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2200"/>
+        <location filename="../QMenuStrings.cpp" line="2201"/>
         <source>Add Octave &amp;Up</source>
         <translation>Ottava &amp;uppåt</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2201"/>
+        <location filename="../QMenuStrings.cpp" line="2202"/>
         <source>Add Octave &amp;Down</source>
         <translation>Ottava &amp;neråt</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2202"/>
+        <location filename="../QMenuStrings.cpp" line="2203"/>
         <source>Add Double &amp;Octave Down</source>
         <translation>Lägg till quindicesima n&amp;eråt</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2204"/>
+        <location filename="../QMenuStrings.cpp" line="2205"/>
         <source>R&amp;ests</source>
         <translation>&amp;Pauser</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2205"/>
+        <location filename="../QMenuStrings.cpp" line="2206"/>
         <source>&amp;Normalize Rests</source>
         <translation>&amp;Normalisera pauser</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2212"/>
-        <location filename="../QMenuStrings.cpp" line="3486"/>
+        <location filename="../QMenuStrings.cpp" line="2213"/>
+        <location filename="../QMenuStrings.cpp" line="3487"/>
         <source>Ctrl+N</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+N</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2214"/>
+        <location filename="../QMenuStrings.cpp" line="2215"/>
         <source>&amp;Collapse Rests</source>
         <translation>Lägg ihop pau&amp;ser</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2215"/>
+        <location filename="../QMenuStrings.cpp" line="2216"/>
         <source>&amp;Notes</source>
         <translation>&amp;Noter</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2223"/>
+        <location filename="../QMenuStrings.cpp" line="2224"/>
         <source>Ctrl+=</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+=</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2225"/>
+        <location filename="../QMenuStrings.cpp" line="2226"/>
         <source>Tie Notes at &amp;Barlines</source>
         <translation>B&amp;ind noter vid taktstreck</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2226"/>
+        <location filename="../QMenuStrings.cpp" line="2227"/>
         <source>Split-and-Tie Overlapping &amp;Chords</source>
         <translation>Dela och bind &amp;ackord med för stora notvärden</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2255"/>
+        <location filename="../QMenuStrings.cpp" line="2256"/>
         <source>Fi&amp;x Notation Quantization</source>
         <translation>B&amp;estäm kvantisering av notskrift</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2256"/>
+        <location filename="../QMenuStrings.cpp" line="2257"/>
         <source>Remo&amp;ve Notation Quantization</source>
         <translation>Ta &amp;bort kvantisering av notskrift</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2257"/>
+        <location filename="../QMenuStrings.cpp" line="2258"/>
         <source>&amp;Interpret...</source>
         <translation>&amp;Tolka...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2258"/>
+        <location filename="../QMenuStrings.cpp" line="2259"/>
         <source>Rescale</source>
         <translation>Skala om</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2317"/>
+        <location filename="../QMenuStrings.cpp" line="2318"/>
         <source>Convert</source>
         <translation>Konvertera</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2321"/>
+        <location filename="../QMenuStrings.cpp" line="2322"/>
         <source>Ve&amp;locities</source>
         <translation>&amp;Ljudstyrkor</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2340"/>
+        <location filename="../QMenuStrings.cpp" line="2341"/>
         <source>Set Event &amp;Velocities</source>
         <translation>Ställ in &amp;händelseljudstyrkor</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2341"/>
+        <location filename="../QMenuStrings.cpp" line="2342"/>
         <source>&amp;Fine Positioning</source>
         <translation>&amp;Finpositionering</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2342"/>
+        <location filename="../QMenuStrings.cpp" line="2343"/>
         <source>&amp;Restore Positions</source>
         <translation>&amp;Återställ positioner</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2343"/>
+        <location filename="../QMenuStrings.cpp" line="2344"/>
         <source>Push &amp;Left</source>
         <translation>Skjut åt &amp;vänster</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2344"/>
+        <location filename="../QMenuStrings.cpp" line="2345"/>
         <source>&amp;Push Right</source>
         <translation>Skjut åt &amp;höger</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2345"/>
+        <location filename="../QMenuStrings.cpp" line="2346"/>
         <source>Push &amp;Up</source>
         <translation>Skjut &amp;uppåt</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2346"/>
+        <location filename="../QMenuStrings.cpp" line="2347"/>
         <source>Push &amp;Down</source>
         <translation>Skjut &amp;neråt</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2347"/>
+        <location filename="../QMenuStrings.cpp" line="2348"/>
         <source>Fine Ti&amp;ming</source>
         <translation>Fin t&amp;idsjustering</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2357"/>
-        <location filename="../QMenuStrings.cpp" line="3829"/>
+        <location filename="../QMenuStrings.cpp" line="2358"/>
+        <location filename="../QMenuStrings.cpp" line="3830"/>
         <source>Jog &amp;Right</source>
         <translation>Knuffa åt &amp;höger</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2366"/>
+        <location filename="../QMenuStrings.cpp" line="2367"/>
         <source>&amp;Visibility</source>
         <translation>S&amp;ynlighet</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2367"/>
+        <location filename="../QMenuStrings.cpp" line="2368"/>
         <source>Make &amp;Invisible</source>
         <translation>Gör &amp;osynlig</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2368"/>
+        <location filename="../QMenuStrings.cpp" line="2369"/>
         <source>Make &amp;Visible</source>
         <translation>Gör &amp;synlig</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2431"/>
+        <location filename="../QMenuStrings.cpp" line="2432"/>
         <source>Alt+Up</source>
         <comment>keyboard shortcut</comment>
         <translation>Alt+Up</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2440"/>
+        <location filename="../QMenuStrings.cpp" line="2441"/>
         <source>Alt+Down</source>
         <comment>keyboard shortcut</comment>
         <translation>Alt+Down</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2583"/>
+        <location filename="../QMenuStrings.cpp" line="2584"/>
         <source>Draw &amp;Notes and Rests</source>
         <translation>Rita &amp;noter och pauser</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2614"/>
+        <location filename="../QMenuStrings.cpp" line="2615"/>
         <source>S&amp;ymbols</source>
         <translation>S&amp;ymboler</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2424"/>
+        <location filename="../QMenuStrings.cpp" line="2425"/>
         <source>Next Staff &amp;Up</source>
         <translation>Nästa notsystem &amp;uppåt</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2433"/>
+        <location filename="../QMenuStrings.cpp" line="2434"/>
         <source>Next Staff &amp;Down</source>
         <translation>Nästa notsystem &amp;neråt</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="892"/>
-        <location filename="../QMenuStrings.cpp" line="2442"/>
+        <location filename="../QMenuStrings.cpp" line="2443"/>
         <source>Pre&amp;vious Segment</source>
         <translation>Före&amp;gående segment</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="901"/>
-        <location filename="../QMenuStrings.cpp" line="2451"/>
+        <location filename="../QMenuStrings.cpp" line="2452"/>
         <source>Ne&amp;xt Segment</source>
         <translation>&amp;Nästa segment</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="912"/>
-        <location filename="../QMenuStrings.cpp" line="2474"/>
+        <location filename="../QMenuStrings.cpp" line="2475"/>
         <source>Step &amp;Back</source>
         <translation>Stega &amp;bakåt</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="927"/>
-        <location filename="../QMenuStrings.cpp" line="2489"/>
+        <location filename="../QMenuStrings.cpp" line="2490"/>
         <source>Step &amp;Forward</source>
         <translation>Stega &amp;framåt</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2636"/>
+        <location filename="../QMenuStrings.cpp" line="2637"/>
         <source>&amp;Durations</source>
         <translation>Not&amp;värden</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2637"/>
+        <location filename="../QMenuStrings.cpp" line="2638"/>
         <source>&amp;Double Whole Note</source>
         <translation>&amp;Brevis</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2646"/>
+        <location filename="../QMenuStrings.cpp" line="2647"/>
         <source>&amp;Whole Note</source>
         <translation>H&amp;elnot</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2655"/>
+        <location filename="../QMenuStrings.cpp" line="2656"/>
         <source>&amp;Half Note</source>
         <translation>&amp;Halvnot</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2664"/>
+        <location filename="../QMenuStrings.cpp" line="2665"/>
         <source>&amp;Quarter Note</source>
         <translation>&amp;Fjärdedelsnot</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2673"/>
+        <location filename="../QMenuStrings.cpp" line="2674"/>
         <source>&amp;Eighth Note</source>
         <translation>&amp;Åttondedelsnot</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2682"/>
+        <location filename="../QMenuStrings.cpp" line="2683"/>
         <source>&amp;Sixteenth note</source>
         <translation>&amp;Sextondedelsnot</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2691"/>
+        <location filename="../QMenuStrings.cpp" line="2692"/>
         <source>&amp;Thirty-Second Note</source>
         <translation>&amp;Trettioandradelsnot</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2700"/>
+        <location filename="../QMenuStrings.cpp" line="2701"/>
         <source>Sixty-&amp;Fourth Note</source>
         <translation>Sextiof&amp;järdedelsnot</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2709"/>
+        <location filename="../QMenuStrings.cpp" line="2710"/>
         <source>D&amp;otted Whole Note</source>
         <translation>Punkterad heln&amp;ot</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2711"/>
+        <location filename="../QMenuStrings.cpp" line="2712"/>
         <source>Dotted Q&amp;uarter Note</source>
         <translation>P&amp;unkterad fjärdedelsnot</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2712"/>
+        <location filename="../QMenuStrings.cpp" line="2713"/>
         <source>Dotted E&amp;ighth Note</source>
         <translation>Pun&amp;kterad åttondedelsnot</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2713"/>
+        <location filename="../QMenuStrings.cpp" line="2714"/>
         <source>Dotted Si&amp;xteenth Note</source>
         <translation>Punkterad se&amp;xtondedelsnot</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2714"/>
+        <location filename="../QMenuStrings.cpp" line="2715"/>
         <source>Dotted Thirt&amp;y-Second Note</source>
         <translation>Punkterad t&amp;rettioandradelsnot</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2602"/>
+        <location filename="../QMenuStrings.cpp" line="2603"/>
         <source>&amp;No Accidental</source>
         <translation>I&amp;nga tillfälliga förtecken</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2603"/>
+        <location filename="../QMenuStrings.cpp" line="2604"/>
         <source>&amp;Follow Previous Accidental</source>
         <translation>&amp;Följ föregående förtecken</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2604"/>
+        <location filename="../QMenuStrings.cpp" line="2605"/>
         <source>&amp;Sharp</source>
         <translation>&amp;Korsförtecken</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2605"/>
+        <location filename="../QMenuStrings.cpp" line="2606"/>
         <source>F&amp;lat</source>
         <translation>&amp;B-förtecken</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2606"/>
+        <location filename="../QMenuStrings.cpp" line="2607"/>
         <source>N&amp;atural</source>
         <translation>&amp;Återställningstecken</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2607"/>
+        <location filename="../QMenuStrings.cpp" line="2608"/>
         <source>&amp;Double Sharp</source>
         <translation>&amp;Dubbelkorsförtecken</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2608"/>
+        <location filename="../QMenuStrings.cpp" line="2609"/>
         <source>D&amp;ouble Flat</source>
         <translation>D&amp;ubbel-b-förtecken</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2609"/>
+        <location filename="../QMenuStrings.cpp" line="2610"/>
         <source>&amp;Clefs</source>
         <translation>&amp;Klaver</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2610"/>
+        <location filename="../QMenuStrings.cpp" line="2611"/>
         <source>&amp;Treble Clef</source>
         <translation>&amp;Diskantklav</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2611"/>
+        <location filename="../QMenuStrings.cpp" line="2612"/>
         <source>&amp;Alto Clef</source>
         <translation>&amp;Altklav</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2612"/>
+        <location filename="../QMenuStrings.cpp" line="2613"/>
         <source>Te&amp;nor Clef</source>
         <translation>Te&amp;norklav</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2613"/>
+        <location filename="../QMenuStrings.cpp" line="2614"/>
         <source>&amp;Bass Clef</source>
         <translation>&amp;Basklav</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2618"/>
+        <location filename="../QMenuStrings.cpp" line="2619"/>
         <source>&amp;Text</source>
         <translation>Te&amp;xt</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2627"/>
+        <location filename="../QMenuStrings.cpp" line="2628"/>
         <source>&amp;Guitar Chord</source>
         <translation>&amp;Gitarrackord</translation>
     </message>
@@ -3633,130 +3642,130 @@
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1045"/>
-        <location filename="../QMenuStrings.cpp" line="2751"/>
+        <location filename="../QMenuStrings.cpp" line="2752"/>
         <source>&amp;Insert Note</source>
         <translation>&amp;Infoga not</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1353"/>
-        <location filename="../QMenuStrings.cpp" line="3059"/>
+        <location filename="../QMenuStrings.cpp" line="3060"/>
         <source>&amp;Lower Octave</source>
         <translation>&amp;Undre oktav</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3213"/>
+        <location filename="../QMenuStrings.cpp" line="3214"/>
         <source>Insert rest</source>
         <translation>Infoga paus</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3231"/>
+        <location filename="../QMenuStrings.cpp" line="3232"/>
         <source>Triplet Insert Mo&amp;de</source>
         <translation>Infogningsläge för t&amp;rioler</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3240"/>
+        <location filename="../QMenuStrings.cpp" line="3241"/>
         <source>Grace Insert &amp;Mode</source>
         <translation>Infogningsläge för &amp;prydnadsnoter</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1907"/>
-        <location filename="../QMenuStrings.cpp" line="3662"/>
+        <location filename="../QMenuStrings.cpp" line="1908"/>
+        <location filename="../QMenuStrings.cpp" line="3663"/>
         <source>Show T&amp;ools Toolbar</source>
         <translation>Visa verktygslist med &amp;verktyg</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1908"/>
+        <location filename="../QMenuStrings.cpp" line="1909"/>
         <source>Show &amp;Accidentals Toolbar</source>
         <translation>Visa verktygslist med tillfälliga &amp;förtecken</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1909"/>
+        <location filename="../QMenuStrings.cpp" line="1910"/>
         <source>Show Cle&amp;fs Toolbar</source>
         <translation>V&amp;isa klavverktygslist</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1910"/>
+        <location filename="../QMenuStrings.cpp" line="1911"/>
         <source>Show &amp;Marks Toolbar</source>
         <translation>Visa verktygslist med orna&amp;ment och föredragsbeteckningar</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1911"/>
+        <location filename="../QMenuStrings.cpp" line="1912"/>
         <source>Show &amp;Group Toolbar</source>
         <translation>Visa &amp;gruppverktygslist</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1913"/>
-        <location filename="../QMenuStrings.cpp" line="3665"/>
+        <location filename="../QMenuStrings.cpp" line="1914"/>
+        <location filename="../QMenuStrings.cpp" line="3666"/>
         <source>Show Trans&amp;port Toolbar</source>
         <translation>Visa verktygslist med s&amp;pelkontroller</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1914"/>
+        <location filename="../QMenuStrings.cpp" line="1915"/>
         <source>Show &amp;Layout Toolbar</source>
         <translation>Visa &amp;utläggningsverktygslist</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3512"/>
+        <location filename="../QMenuStrings.cpp" line="3513"/>
         <source>Ctrl+O</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+O</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3555"/>
+        <location filename="../QMenuStrings.cpp" line="3556"/>
         <source>Ctrl+Q</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Q</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3637"/>
-        <location filename="../QMenuStrings.cpp" line="4271"/>
+        <location filename="../QMenuStrings.cpp" line="3638"/>
+        <location filename="../QMenuStrings.cpp" line="4272"/>
         <source>Ctrl+Shift+V</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+V</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3646"/>
+        <location filename="../QMenuStrings.cpp" line="3647"/>
         <source>Ctrl+Shift+Ins</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+Ins</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3669"/>
+        <location filename="../QMenuStrings.cpp" line="3670"/>
         <source>Show Cho&amp;rd Name Ruler</source>
         <translation>Visa &amp;ackordnamnslinjal</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1920"/>
+        <location filename="../QMenuStrings.cpp" line="1921"/>
         <source>Show Ra&amp;w Note Ruler</source>
         <translation>Visa linjal med &amp;obehandlade noter</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1926"/>
+        <location filename="../QMenuStrings.cpp" line="1927"/>
         <source>Show &amp;Annotations</source>
         <translation>Visa ant&amp;eckningar</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1927"/>
+        <location filename="../QMenuStrings.cpp" line="1928"/>
         <source>Show Lily&amp;Pond Directives</source>
         <translation>Visa Lily&amp;pond-direktiv</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3441"/>
+        <location filename="../QMenuStrings.cpp" line="3442"/>
         <source>Clefs Toolbar</source>
         <translation>Klavverktygslist</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3442"/>
+        <location filename="../QMenuStrings.cpp" line="3443"/>
         <source>Accidentals Toolbar</source>
         <translation>Verktyglist med tillfälliga förtecken</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3448"/>
+        <location filename="../QMenuStrings.cpp" line="3449"/>
         <source>Group Toolbar</source>
         <translation>Gruppverktygslist</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3447"/>
+        <location filename="../QMenuStrings.cpp" line="3448"/>
         <source>Marks Toolbar</source>
         <translation>Verktygslist med föredragsbeteckningar och ornament</translation>
     </message>
@@ -3790,8 +3799,8 @@
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1518"/>
-        <location filename="../QMenuStrings.cpp" line="3243"/>
-        <location filename="../QMenuStrings.cpp" line="4069"/>
+        <location filename="../QMenuStrings.cpp" line="3244"/>
+        <location filename="../QMenuStrings.cpp" line="4070"/>
         <source>Rosegarden &amp;Manual</source>
         <translation>Rosegarden hand&amp;bok</translation>
     </message>
@@ -3839,13 +3848,13 @@
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="673"/>
-        <location filename="../QMenuStrings.cpp" line="1922"/>
+        <location filename="../QMenuStrings.cpp" line="1923"/>
         <source>Show &amp;Velocity Ruler</source>
         <translation>&amp;Visa ljudstyrkelinjal</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="674"/>
-        <location filename="../QMenuStrings.cpp" line="1923"/>
+        <location filename="../QMenuStrings.cpp" line="1924"/>
         <source>Show Pitch &amp;Bend Ruler</source>
         <translation>Visa ton&amp;höjdsavvikelselinjal</translation>
     </message>
@@ -3868,18 +3877,18 @@
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1536"/>
-        <location filename="../QMenuStrings.cpp" line="3451"/>
+        <location filename="../QMenuStrings.cpp" line="3452"/>
         <source>Rulers Toolbar</source>
         <translation>Linjalverktygslist</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1895"/>
-        <location filename="../QMenuStrings.cpp" line="3657"/>
+        <location filename="../QMenuStrings.cpp" line="1896"/>
+        <location filename="../QMenuStrings.cpp" line="3658"/>
         <source>&amp;Preferences...</source>
         <translation>In&amp;ställningar...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1916"/>
+        <location filename="../QMenuStrings.cpp" line="1917"/>
         <source>Show &amp;Rulers Toolbar</source>
         <translation>Visa lin&amp;jalverktygslist</translation>
     </message>
@@ -3889,18 +3898,18 @@
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="925"/>
-        <location filename="../QMenuStrings.cpp" line="2487"/>
+        <location filename="../QMenuStrings.cpp" line="2488"/>
         <source>Step Back (Left)</source>
         <translation>Stega bakåt (vänster)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2465"/>
+        <location filename="../QMenuStrings.cpp" line="2466"/>
         <source>Play</source>
         <translation>Spela</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="940"/>
-        <location filename="../QMenuStrings.cpp" line="2502"/>
+        <location filename="../QMenuStrings.cpp" line="2503"/>
         <source>Step Forward (Right)</source>
         <translation>Stega framåt (höger)</translation>
     </message>
@@ -3911,593 +3920,594 @@
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="583"/>
+        <location filename="../QMenuStrings.cpp" line="1895"/>
         <source>Insert Pitch &amp;Bend Sequence...</source>
         <translation>Infoga tonhöjdsav&amp;vikelse för sekvens...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1915"/>
+        <location filename="../QMenuStrings.cpp" line="1916"/>
         <source>Show La&amp;yer Toolbar</source>
         <translation>Visa &amp;lagerverktygslist</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2227"/>
+        <location filename="../QMenuStrings.cpp" line="2228"/>
         <source>Cycle &amp;Dots</source>
         <translation>Vä&amp;xla punkter</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2234"/>
+        <location filename="../QMenuStrings.cpp" line="2235"/>
         <source>Ctrl+.</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+.</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2236"/>
+        <location filename="../QMenuStrings.cpp" line="2237"/>
         <source>Cycle Dots With&amp;out Duration Change</source>
         <translation>Växla punkter &amp;utan längdändring</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2243"/>
+        <location filename="../QMenuStrings.cpp" line="2244"/>
         <source>Ctrl+Alt+.</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Alt+.</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2472"/>
+        <location filename="../QMenuStrings.cpp" line="2473"/>
         <source>Stop</source>
         <translation>Stoppa</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2541"/>
+        <location filename="../QMenuStrings.cpp" line="2542"/>
         <source>Solo the Active Track</source>
         <translation>Spela aktivt spår solo</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2556"/>
+        <location filename="../QMenuStrings.cpp" line="2557"/>
         <source>Scroll to Follow Playback</source>
         <translation>Rulla för att följa uppspelning</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2571"/>
+        <location filename="../QMenuStrings.cpp" line="2572"/>
         <source>Panic! (Ctrl+Alt+P)</source>
         <translation>Panik! (Ctrl+Alt+P)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2625"/>
+        <location filename="../QMenuStrings.cpp" line="2626"/>
         <source>F8</source>
         <comment>keyboard shortcut</comment>
         <translation>F8</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2634"/>
+        <location filename="../QMenuStrings.cpp" line="2635"/>
         <source>F9</source>
         <comment>keyboard shortcut</comment>
         <translation>F9</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2722"/>
-        <location filename="../QMenuStrings.cpp" line="2731"/>
+        <location filename="../QMenuStrings.cpp" line="2723"/>
+        <location filename="../QMenuStrings.cpp" line="2732"/>
         <source>Y</source>
         <comment>keyboard shortcut</comment>
         <translation>Y</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2740"/>
-        <location filename="../QMenuStrings.cpp" line="2749"/>
+        <location filename="../QMenuStrings.cpp" line="2741"/>
+        <location filename="../QMenuStrings.cpp" line="2750"/>
         <source>.</source>
         <comment>keyboard shortcut</comment>
         <translation>.</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3220"/>
-        <location filename="../QMenuStrings.cpp" line="3687"/>
+        <location filename="../QMenuStrings.cpp" line="3221"/>
+        <location filename="../QMenuStrings.cpp" line="3688"/>
         <source>P</source>
         <comment>keyboard shortcut</comment>
         <translation>P</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3238"/>
-        <location filename="../QMenuStrings.cpp" line="4174"/>
+        <location filename="../QMenuStrings.cpp" line="3239"/>
+        <location filename="../QMenuStrings.cpp" line="4175"/>
         <source>G</source>
         <comment>keyboard shortcut</comment>
         <translation>G</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3265"/>
+        <location filename="../QMenuStrings.cpp" line="3266"/>
         <source>Double Whole Note (5)</source>
         <translation>Brevisnot (5)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3271"/>
+        <location filename="../QMenuStrings.cpp" line="3272"/>
         <source>Whole Note (1)</source>
         <translation>Helnot (1)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3277"/>
+        <location filename="../QMenuStrings.cpp" line="3278"/>
         <source>Half Note (2)</source>
         <translation>Halvnot (2)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3283"/>
+        <location filename="../QMenuStrings.cpp" line="3284"/>
         <source>Quarter Note (4)</source>
         <translation>Fjärdedelsnot (4)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3289"/>
+        <location filename="../QMenuStrings.cpp" line="3290"/>
         <source>Eighth Note (8)</source>
         <translation>Åttondedelsnot (8)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3295"/>
+        <location filename="../QMenuStrings.cpp" line="3296"/>
         <source>Sixteenth Note (6)</source>
         <translation>Sextondedelsnot (6)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3301"/>
+        <location filename="../QMenuStrings.cpp" line="3302"/>
         <source>Thirty-Second Note (3)</source>
         <translation>Trettioandradelsnot (3)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3307"/>
+        <location filename="../QMenuStrings.cpp" line="3308"/>
         <source>Sixty-Fourth Note (0)</source>
         <translation>Sextiofjärdedelsnot (0)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3313"/>
+        <location filename="../QMenuStrings.cpp" line="3314"/>
         <source>Dotted Double Whole Note</source>
         <translation>Punkterad brevisnot</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3319"/>
+        <location filename="../QMenuStrings.cpp" line="3320"/>
         <source>Dotted Whole Note</source>
         <translation>Punkterad helnot</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3325"/>
+        <location filename="../QMenuStrings.cpp" line="3326"/>
         <source>Dotted Half Note</source>
         <translation>Punkterad halvnot</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3331"/>
+        <location filename="../QMenuStrings.cpp" line="3332"/>
         <source>Dotted Quarter Note</source>
         <translation>Punkterad fjärdedelsnot</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3337"/>
+        <location filename="../QMenuStrings.cpp" line="3338"/>
         <source>Dotted Eighth Note</source>
         <translation>Punkterad åttondedelsnot</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3343"/>
+        <location filename="../QMenuStrings.cpp" line="3344"/>
         <source>Dotted Sixteenth Note</source>
         <translation>Punkterad sextondedelsnot</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3349"/>
+        <location filename="../QMenuStrings.cpp" line="3350"/>
         <source>Dotted Thirty-Second Note</source>
         <translation>Punkterad trettioandradelsnot</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3355"/>
+        <location filename="../QMenuStrings.cpp" line="3356"/>
         <source>Double Whole Rest (5)</source>
         <translation>Brevispaus (5)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3361"/>
+        <location filename="../QMenuStrings.cpp" line="3362"/>
         <source>Whole Rest (1)</source>
         <translation>Helpaus (1)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3367"/>
+        <location filename="../QMenuStrings.cpp" line="3368"/>
         <source>Half Rest (2)</source>
         <translation>Halvpaus (2)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3373"/>
+        <location filename="../QMenuStrings.cpp" line="3374"/>
         <source>Quarter Rest (4)</source>
         <translation>Fjärdedelspaus (4)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3379"/>
+        <location filename="../QMenuStrings.cpp" line="3380"/>
         <source>Eighth Rest (8)</source>
         <translation>Åttondedelspaus (8)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3385"/>
+        <location filename="../QMenuStrings.cpp" line="3386"/>
         <source>Sixteenth Rest (6)</source>
         <translation>Sextondedelspaus (6)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3391"/>
+        <location filename="../QMenuStrings.cpp" line="3392"/>
         <source>Thirty-Second Rest (3)</source>
         <translation>Trettioandradelspaus (3)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3397"/>
+        <location filename="../QMenuStrings.cpp" line="3398"/>
         <source>Sixty-Fourth Rest (0)</source>
         <translation>Sextiofjärdedelspaus (0)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3403"/>
+        <location filename="../QMenuStrings.cpp" line="3404"/>
         <source>Dotted Double Whole Rest</source>
         <translation>Punkterad brevispaus</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3409"/>
+        <location filename="../QMenuStrings.cpp" line="3410"/>
         <source>Dotted Whole Rest</source>
         <translation>Punkterad helpaus</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3415"/>
+        <location filename="../QMenuStrings.cpp" line="3416"/>
         <source>Dotted Half Rest</source>
         <translation>Punkterad halvpaus</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3421"/>
+        <location filename="../QMenuStrings.cpp" line="3422"/>
         <source>Dotted Quarter Rest</source>
         <translation>Punkterad fjärdedelspaus</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3427"/>
+        <location filename="../QMenuStrings.cpp" line="3428"/>
         <source>Dotted Eighth Rest</source>
         <translation>Punkterad åttondedelspaus</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3433"/>
+        <location filename="../QMenuStrings.cpp" line="3434"/>
         <source>Dotted Sixteenth Rest</source>
         <translation>Punkterad sextondedelspaus</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3439"/>
+        <location filename="../QMenuStrings.cpp" line="3440"/>
         <source>Dotted Thirty-Second Rest</source>
         <translation>Punkterad trettioandradelspaus</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3449"/>
+        <location filename="../QMenuStrings.cpp" line="3450"/>
         <source>Layout Toolbar</source>
         <translation>Utläggningsverktygslist</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3450"/>
+        <location filename="../QMenuStrings.cpp" line="3451"/>
         <source>Layer Toolbar</source>
         <translation>Lagerverktygslist</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3452"/>
+        <location filename="../QMenuStrings.cpp" line="3453"/>
         <source>Switch to Insert Tool</source>
         <translation>Byt till infogningsverktyg</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3454"/>
+        <location filename="../QMenuStrings.cpp" line="3455"/>
         <source>Collapse Rests</source>
         <translation>Lägg ihop pauser</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3455"/>
+        <location filename="../QMenuStrings.cpp" line="3456"/>
         <source>Respell as Flat</source>
         <translation>B-förtecken</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3456"/>
+        <location filename="../QMenuStrings.cpp" line="3457"/>
         <source>Respell as Sharp</source>
         <translation>Korsförtecken</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3457"/>
+        <location filename="../QMenuStrings.cpp" line="3458"/>
         <source>Respell as Natural</source>
         <translation>Återställningstecken</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3458"/>
+        <location filename="../QMenuStrings.cpp" line="3459"/>
         <source>Collapse Notes</source>
         <translation>Lägg ihop noter</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3459"/>
+        <location filename="../QMenuStrings.cpp" line="3460"/>
         <source>Interpret</source>
         <translation>Tolka</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3460"/>
+        <location filename="../QMenuStrings.cpp" line="3461"/>
         <source>Move to Staff Above</source>
         <translation>Flytta till systemet ovanför</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3461"/>
+        <location filename="../QMenuStrings.cpp" line="3462"/>
         <source>Move to Staff Below</source>
         <translation>Flytta till systemet nedanför</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3462"/>
+        <location filename="../QMenuStrings.cpp" line="3463"/>
         <source>Make Invisible</source>
         <translation>Gör osynlig</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3463"/>
+        <location filename="../QMenuStrings.cpp" line="3464"/>
         <source>Make Visible</source>
         <translation>Gör synlig</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3470"/>
+        <location filename="../QMenuStrings.cpp" line="3471"/>
         <source>Auto-Beam when appropriate</source>
         <translation>Lägg automatiskt till balkar om lämpligt</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3471"/>
+        <location filename="../QMenuStrings.cpp" line="3472"/>
         <source>No Accidental</source>
         <translation>Inga tillfälliga förtecken</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3472"/>
+        <location filename="../QMenuStrings.cpp" line="3473"/>
         <source>Follow Previous Accidental</source>
         <translation>Följ föregående förtecken</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3473"/>
+        <location filename="../QMenuStrings.cpp" line="3474"/>
         <source>Sharp</source>
         <translation>Korsförtecken</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3474"/>
+        <location filename="../QMenuStrings.cpp" line="3475"/>
         <source>Flat</source>
         <translation>B-förtecken</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3475"/>
+        <location filename="../QMenuStrings.cpp" line="3476"/>
         <source>Natural</source>
         <translation>Återställningstecken</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3476"/>
+        <location filename="../QMenuStrings.cpp" line="3477"/>
         <source>Double Sharp</source>
         <translation>Dubbelkorsförtecken</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3477"/>
+        <location filename="../QMenuStrings.cpp" line="3478"/>
         <source>Double Flat</source>
         <translation>Dubbel-b-förtecken</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3479"/>
+        <location filename="../QMenuStrings.cpp" line="3480"/>
         <source>&amp;New</source>
         <translation>N&amp;ytt</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3488"/>
+        <location filename="../QMenuStrings.cpp" line="3489"/>
         <source>&amp;Import</source>
         <translation>&amp;Importera</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3489"/>
+        <location filename="../QMenuStrings.cpp" line="3490"/>
         <source>Import Rosegarden &amp;Project file...</source>
         <translation>Importera Rosegarden-&amp;projektfil...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3490"/>
+        <location filename="../QMenuStrings.cpp" line="3491"/>
         <source>Import &amp;MIDI file...</source>
         <translation>Importera &amp;MIDI-fil...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3492"/>
+        <location filename="../QMenuStrings.cpp" line="3493"/>
         <source>Import &amp;Hydrogen file...</source>
         <translation>Importera &amp;Hydrogen-fil...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3493"/>
+        <location filename="../QMenuStrings.cpp" line="3494"/>
         <source>&amp;Merge</source>
         <translation>Samman&amp;foga</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3494"/>
+        <location filename="../QMenuStrings.cpp" line="3495"/>
         <source>Merge &amp;File...</source>
         <translation>Sammanfoga &amp;fil...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3495"/>
+        <location filename="../QMenuStrings.cpp" line="3496"/>
         <source>Merge &amp;MIDI file...</source>
         <translation>Sammanfoga &amp;MIDI-fil...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3497"/>
+        <location filename="../QMenuStrings.cpp" line="3498"/>
         <source>Merge &amp;Hydrogen file...</source>
         <translation>Sammanfoga &amp;Hydrogen-fil...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3498"/>
+        <location filename="../QMenuStrings.cpp" line="3499"/>
         <source>&amp;Export</source>
         <translation>E&amp;xportera</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3499"/>
+        <location filename="../QMenuStrings.cpp" line="3500"/>
         <source>Export Rosegarden &amp;Project file...</source>
         <translation>Exportera Rosegarden-&amp;projektfil...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3501"/>
+        <location filename="../QMenuStrings.cpp" line="3502"/>
         <source>Export &amp;MIDI file...</source>
         <translation>Exportera &amp;MIDI-fil...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3502"/>
+        <location filename="../QMenuStrings.cpp" line="3503"/>
         <source>Export &amp;Csound score file...</source>
         <translation>Exportera &amp;Csound-partiturfil...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3503"/>
+        <location filename="../QMenuStrings.cpp" line="3504"/>
         <source>Export M&amp;up file...</source>
         <translation>Exportera M&amp;up-fil...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3504"/>
+        <location filename="../QMenuStrings.cpp" line="3505"/>
         <source>Export Music&amp;XML file...</source>
         <translation>Exportera Music&amp;XML-fil...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3505"/>
+        <location filename="../QMenuStrings.cpp" line="3506"/>
         <source>&amp;Open...</source>
         <translation>Ö&amp;ppna...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3514"/>
+        <location filename="../QMenuStrings.cpp" line="3515"/>
         <source>Open &amp;Recent</source>
         <translation>Öppna s&amp;enaste</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3524"/>
+        <location filename="../QMenuStrings.cpp" line="3525"/>
         <source>Save &amp;As...</source>
         <translation>Spara s&amp;om...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3533"/>
+        <location filename="../QMenuStrings.cpp" line="3534"/>
         <source>Save as &amp;Template...</source>
         <translation>Spara som &amp;mall...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3534"/>
+        <location filename="../QMenuStrings.cpp" line="3535"/>
         <source>Re&amp;vert</source>
         <translation>Å&amp;terställ</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3535"/>
+        <location filename="../QMenuStrings.cpp" line="3536"/>
         <source>Prin&amp;t preview...</source>
         <translation>Förhands&amp;granska utskrift...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3537"/>
+        <location filename="../QMenuStrings.cpp" line="3538"/>
         <source>Manage A&amp;udio Files</source>
         <translation>Hantera l&amp;judfiler</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3538"/>
+        <location filename="../QMenuStrings.cpp" line="3539"/>
         <source>Play&amp;list</source>
         <translation>Spel&amp;lista</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3548"/>
+        <location filename="../QMenuStrings.cpp" line="3549"/>
         <source>&amp;Quit</source>
         <translation>&amp;Avsluta</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3612"/>
+        <location filename="../QMenuStrings.cpp" line="3613"/>
         <source>Cut &amp;Range</source>
         <translation>Klipp &amp;ut omfång</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3621"/>
+        <location filename="../QMenuStrings.cpp" line="3622"/>
         <source>Cop&amp;y Range</source>
         <translation>&amp;Kopiera omfång</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3630"/>
+        <location filename="../QMenuStrings.cpp" line="3631"/>
         <source>Pa&amp;ste Range</source>
         <translation>Klistra &amp;in omfång</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3639"/>
+        <location filename="../QMenuStrings.cpp" line="3640"/>
         <source>&amp;Insert Range...</source>
         <translation>In&amp;foga omfång...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3648"/>
+        <location filename="../QMenuStrings.cpp" line="3649"/>
         <source>Select &amp;All Segments</source>
         <translation>Markera &amp;alla segment</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3659"/>
+        <location filename="../QMenuStrings.cpp" line="3660"/>
         <source>Document P&amp;roperties...</source>
         <translation>Dokument&amp;egenskaper...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3696"/>
+        <location filename="../QMenuStrings.cpp" line="3697"/>
         <source>&amp;Open Tempo and Time Signature Editor</source>
         <translation>Ö&amp;ppna tempo- och taktartsverktyget</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3697"/>
+        <location filename="../QMenuStrings.cpp" line="3698"/>
         <source>Set &amp;Tempo to Audio Segment Duration</source>
         <translation>Ställ in &amp;tempo till ljudsegmentets längd</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3698"/>
+        <location filename="../QMenuStrings.cpp" line="3699"/>
         <source>Set Tempos from &amp;Beat Segment</source>
         <translation>Ställ in tempon från takt&amp;segment</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3699"/>
+        <location filename="../QMenuStrings.cpp" line="3700"/>
         <source>Change &amp;Composition Start and End...</source>
         <translation>Ändra kompositionens &amp;början och slut...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3700"/>
+        <location filename="../QMenuStrings.cpp" line="3701"/>
         <source>Edit Mar&amp;kers...</source>
         <translation>&amp;Redigera markeringar...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3709"/>
+        <location filename="../QMenuStrings.cpp" line="3710"/>
         <source>Edit Document P&amp;roperties...</source>
         <translation>Redigera dokument&amp;egenskaper...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3710"/>
+        <location filename="../QMenuStrings.cpp" line="3711"/>
         <source>&amp;Set Quick Marker at Playback Position</source>
         <translation>Placera snabbmarkering vid &amp;uppspelningsposition</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3719"/>
+        <location filename="../QMenuStrings.cpp" line="3720"/>
         <source>&amp;Jump to Quick Marker</source>
         <translation>&amp;Gå till snabbmarkering</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3728"/>
+        <location filename="../QMenuStrings.cpp" line="3729"/>
         <source>&amp;Studio</source>
         <translation>St&amp;udio</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3729"/>
+        <location filename="../QMenuStrings.cpp" line="3730"/>
         <source>&amp;Audio Mixer</source>
         <translation>L&amp;judmixer</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3731"/>
+        <location filename="../QMenuStrings.cpp" line="3732"/>
         <source>Manage MIDI &amp;Devices</source>
         <translation>Hantera MIDI-en&amp;heter</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3732"/>
+        <location filename="../QMenuStrings.cpp" line="3733"/>
         <source>Manage S&amp;ynth Plugins</source>
         <translation>Hantera s&amp;yntinsticksmoduler</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3733"/>
+        <location filename="../QMenuStrings.cpp" line="3734"/>
         <source>Manage &amp;Metronome</source>
         <translation>Hantera &amp;metronom</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3734"/>
+        <location filename="../QMenuStrings.cpp" line="3735"/>
         <source>Modify MIDI &amp;Filters</source>
         <translation>Ändra MIDI-&amp;filter</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3735"/>
+        <location filename="../QMenuStrings.cpp" line="3736"/>
         <source>MIDI &amp;Thru Routing</source>
         <translation>MIDI-&amp;genomgång</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3736"/>
+        <location filename="../QMenuStrings.cpp" line="3737"/>
         <source>&amp;Reset MIDI Network</source>
         <translation>Återställ MIDI-&amp;nätverk</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3737"/>
+        <location filename="../QMenuStrings.cpp" line="3738"/>
         <source>Im&amp;port Studio from File...</source>
         <translation>Im&amp;portera studio från fil...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3738"/>
+        <location filename="../QMenuStrings.cpp" line="3739"/>
         <source>&amp;Import Default Studio</source>
         <translation>&amp;Importera standardstudio</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3739"/>
+        <location filename="../QMenuStrings.cpp" line="3740"/>
         <source>&amp;Save Current Document as Default Studio</source>
         <translation>&amp;Spara nuvarande dokument som standardstudio</translation>
     </message>
@@ -4506,351 +4516,351 @@
         <translation type="obsolete">Seg&amp;ment</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3741"/>
+        <location filename="../QMenuStrings.cpp" line="3742"/>
         <source>Toggle Repeat</source>
         <translation>Ändra upprepning</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3751"/>
+        <location filename="../QMenuStrings.cpp" line="3752"/>
         <source>Open in &amp;Default editor</source>
         <translation>Öppna i &amp;standardeditor</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3796"/>
+        <location filename="../QMenuStrings.cpp" line="3797"/>
         <source>R&amp;elabel...</source>
         <translation>Ändra &amp;namn...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3806"/>
+        <location filename="../QMenuStrings.cpp" line="3807"/>
         <source>Repe&amp;at Last Quantize</source>
         <translation>Upp&amp;repa senaste kvantisering</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3817"/>
+        <location filename="../QMenuStrings.cpp" line="3818"/>
         <source>Stretch &amp;or Squash...</source>
         <translation>Sträck eller tr&amp;yck ihop...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="686"/>
-        <location filename="../QMenuStrings.cpp" line="1940"/>
-        <location filename="../QMenuStrings.cpp" line="3818"/>
+        <location filename="../QMenuStrings.cpp" line="1941"/>
+        <location filename="../QMenuStrings.cpp" line="3819"/>
         <source>Set Start &amp;Time...</source>
         <translation>Ställ in start&amp;tid...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="687"/>
-        <location filename="../QMenuStrings.cpp" line="1941"/>
-        <location filename="../QMenuStrings.cpp" line="3819"/>
+        <location filename="../QMenuStrings.cpp" line="1942"/>
+        <location filename="../QMenuStrings.cpp" line="3820"/>
         <source>Set &amp;Duration...</source>
         <translation>Ställ in n&amp;otvärde...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3838"/>
+        <location filename="../QMenuStrings.cpp" line="3839"/>
         <source>Join</source>
         <translation>Sammanfoga</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3847"/>
+        <location filename="../QMenuStrings.cpp" line="3848"/>
         <source>&amp;Split</source>
         <translation>&amp;Dela</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3848"/>
+        <location filename="../QMenuStrings.cpp" line="3849"/>
         <source>&amp;Split on Silence</source>
         <translation>&amp;Dela vid paus</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3849"/>
+        <location filename="../QMenuStrings.cpp" line="3850"/>
         <source>Split by &amp;Pitch...</source>
         <translation>Dela &amp;efter tonhöjd...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3850"/>
+        <location filename="../QMenuStrings.cpp" line="3851"/>
         <source>Split by &amp;Recording Source...</source>
         <translation>Dela efter &amp;inspelningskälla...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3851"/>
+        <location filename="../QMenuStrings.cpp" line="3852"/>
         <source> Split &amp;at Time...</source>
         <translation>Dela &amp;vid tid...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3852"/>
+        <location filename="../QMenuStrings.cpp" line="3853"/>
         <source>Turn Re&amp;peats into Copies</source>
         <translation>Omvandla u&amp;pprepningar till kopior</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3853"/>
+        <location filename="../QMenuStrings.cpp" line="3854"/>
         <source>Manage Tri&amp;ggered Segments</source>
         <translation>Hantera &amp;utlösande segment</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3854"/>
+        <location filename="../QMenuStrings.cpp" line="3855"/>
         <source>Trac&amp;ks</source>
         <translation>S&amp;pår</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3855"/>
+        <location filename="../QMenuStrings.cpp" line="3856"/>
         <source>Add &amp;Track</source>
         <translation>Lägg till &amp;ett spår</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3864"/>
+        <location filename="../QMenuStrings.cpp" line="3865"/>
         <source>&amp;Add Tracks...</source>
         <translation>Lägg till &amp;flera spår...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3873"/>
+        <location filename="../QMenuStrings.cpp" line="3874"/>
         <source>D&amp;elete Track</source>
         <translation>Ta &amp;bort spår</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3882"/>
+        <location filename="../QMenuStrings.cpp" line="3883"/>
         <source>Move Track &amp;Down</source>
         <translation>Flytta &amp;ner spår</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3891"/>
+        <location filename="../QMenuStrings.cpp" line="3892"/>
         <source>Mo&amp;ve Track Up</source>
         <translation>Flytta &amp;upp spår</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3900"/>
+        <location filename="../QMenuStrings.cpp" line="3901"/>
         <source>Select &amp;Next Track</source>
         <translation>&amp;Markera nästa spår</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3909"/>
+        <location filename="../QMenuStrings.cpp" line="3910"/>
         <source>Select &amp;Previous Track</source>
         <translation>Markera &amp;föregående spår</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3918"/>
+        <location filename="../QMenuStrings.cpp" line="3919"/>
         <source>Mute or Unmute Tra&amp;ck</source>
         <translation>&amp;Gör spår stumt eller ljudande</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3927"/>
+        <location filename="../QMenuStrings.cpp" line="3928"/>
         <source>Arm &amp;or Un-arm Track for Record</source>
         <translation>Ma&amp;rkera eller avmarkera spår för inspelning</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3936"/>
+        <location filename="../QMenuStrings.cpp" line="3937"/>
         <source>&amp;Unmute all Tracks</source>
         <translation>Gör alla spår &amp;ljudande</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3937"/>
+        <location filename="../QMenuStrings.cpp" line="3938"/>
         <source>&amp;Mute all Tracks</source>
         <translation>Gör alla spår &amp;stumma</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3938"/>
+        <location filename="../QMenuStrings.cpp" line="3939"/>
         <source>Set &amp;Instrument</source>
         <translation>Ange &amp;instrument</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3939"/>
+        <location filename="../QMenuStrings.cpp" line="3940"/>
         <source>&amp;Remap Instruments...</source>
         <translation>Ändra instrumentav&amp;bildningar...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3977"/>
+        <location filename="../QMenuStrings.cpp" line="3978"/>
         <source>&amp;Resize</source>
         <translation>Ändra &amp;storlek</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4041"/>
+        <location filename="../QMenuStrings.cpp" line="4042"/>
         <source>P&amp;unch in Record</source>
         <translation>Pu&amp;nch-in-inspelning</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="300"/>
         <location filename="../QMenuStrings.cpp" line="666"/>
-        <location filename="../QMenuStrings.cpp" line="1906"/>
-        <location filename="../QMenuStrings.cpp" line="3661"/>
+        <location filename="../QMenuStrings.cpp" line="1907"/>
+        <location filename="../QMenuStrings.cpp" line="3662"/>
         <source>Show Main &amp;Toolbar</source>
         <translation>Visa &amp;huvudverktygslist</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3663"/>
+        <location filename="../QMenuStrings.cpp" line="3664"/>
         <source>Show Trac&amp;ks Toolbar</source>
         <translation>Visa &amp;spårverktygslist</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3664"/>
+        <location filename="../QMenuStrings.cpp" line="3665"/>
         <source>Show &amp;Editors Toolbar</source>
         <translation>Visa &amp;editorverktygslist</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3666"/>
+        <location filename="../QMenuStrings.cpp" line="3667"/>
         <source>Show &amp;Zoom Toolbar</source>
         <translation>Visa &amp;zoomverktygslist</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="301"/>
         <location filename="../QMenuStrings.cpp" line="669"/>
-        <location filename="../QMenuStrings.cpp" line="3692"/>
+        <location filename="../QMenuStrings.cpp" line="3693"/>
         <source>Show St&amp;atusbar</source>
         <translation>Visa &amp;statusrad</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3668"/>
+        <location filename="../QMenuStrings.cpp" line="3669"/>
         <source>Show Playback Position R&amp;uler</source>
         <translation>Visa &amp;uppspelningslinjal</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3491"/>
+        <location filename="../QMenuStrings.cpp" line="3492"/>
         <source>Import &amp;X11 Rosegarden file...</source>
         <translation>Importera &amp;X11 Rosegarden-fil...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3496"/>
+        <location filename="../QMenuStrings.cpp" line="3497"/>
         <source>Merge &amp;X11 Rosegarden file...</source>
         <translation>Sammanfoga &amp;X11 Rosegarden-fil...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3730"/>
+        <location filename="../QMenuStrings.cpp" line="3731"/>
         <source>MIDI Mi&amp;xer</source>
         <translation>MIDI-mi&amp;xer</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3670"/>
+        <location filename="../QMenuStrings.cpp" line="3671"/>
         <source>Show Te&amp;mpo Ruler</source>
         <translation>Visa &amp;tempolinjal</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3500"/>
+        <location filename="../QMenuStrings.cpp" line="3501"/>
         <source>Export &amp;LilyPond file...</source>
         <translation>Exportera &amp;Lilypond-fil...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3671"/>
+        <location filename="../QMenuStrings.cpp" line="3672"/>
         <source>Show Tra&amp;nsport</source>
         <translation>Visa spelkon&amp;trollfönster</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3678"/>
+        <location filename="../QMenuStrings.cpp" line="3679"/>
         <source>T</source>
         <comment>keyboard shortcut</comment>
         <translation>T</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3680"/>
+        <location filename="../QMenuStrings.cpp" line="3681"/>
         <source>Show Special &amp;Parameters</source>
         <translation>Visa speciella &amp;parametrar</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3689"/>
+        <location filename="../QMenuStrings.cpp" line="3690"/>
         <source>Show Segment Pre&amp;views</source>
         <translation>Visa &amp;förhandsgranskningar av segment</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3690"/>
+        <location filename="../QMenuStrings.cpp" line="3691"/>
         <source>Sh&amp;ow Segment Labels</source>
         <translation>Visa se&amp;gmentnamn</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3691"/>
+        <location filename="../QMenuStrings.cpp" line="3692"/>
         <source>Show Track &amp;Labels</source>
         <translation>Visa spår&amp;namn</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4083"/>
+        <location filename="../QMenuStrings.cpp" line="4084"/>
         <source>Main Toolbar</source>
         <translation>Huvudverktygslist</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4087"/>
+        <location filename="../QMenuStrings.cpp" line="4088"/>
         <source>Tracks Toolbar</source>
         <translation>Spårverktygslist</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4088"/>
+        <location filename="../QMenuStrings.cpp" line="4089"/>
         <source>Editors Toolbar</source>
         <translation>Editorverktygslist</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2527"/>
-        <location filename="../QMenuStrings.cpp" line="4090"/>
+        <location filename="../QMenuStrings.cpp" line="2528"/>
+        <location filename="../QMenuStrings.cpp" line="4091"/>
         <source>Rewind to Beginning</source>
         <translation>Spola tillbaka till början</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2534"/>
-        <location filename="../QMenuStrings.cpp" line="4099"/>
+        <location filename="../QMenuStrings.cpp" line="2535"/>
+        <location filename="../QMenuStrings.cpp" line="4100"/>
         <source>Fast Forward to End</source>
         <translation>Spola fram till slutet</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1531"/>
-        <location filename="../QMenuStrings.cpp" line="3256"/>
-        <location filename="../QMenuStrings.cpp" line="4082"/>
+        <location filename="../QMenuStrings.cpp" line="3257"/>
+        <location filename="../QMenuStrings.cpp" line="4083"/>
         <source>&amp;Support Rosegarden</source>
         <translation>&amp;Stöd Rosegarden</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4112"/>
+        <location filename="../QMenuStrings.cpp" line="4113"/>
         <source>Insert Tempo Change</source>
         <translation>Infoga tempobyte</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4113"/>
+        <location filename="../QMenuStrings.cpp" line="4114"/>
         <source>Insert Tempo Change at Playback Position</source>
         <translation>Infoga tempobyte vid uppspelningsposition</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4114"/>
+        <location filename="../QMenuStrings.cpp" line="4115"/>
         <source>Delete Tempo Change</source>
         <translation>Radera tempobyte</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4115"/>
+        <location filename="../QMenuStrings.cpp" line="4116"/>
         <source>Ramp Tempo to Next Tempo</source>
         <translation>Tempoövergång till nästa tempo</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4116"/>
+        <location filename="../QMenuStrings.cpp" line="4117"/>
         <source>Un-Ramp Tempo</source>
         <translation>Ta bort tempoövergång</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4117"/>
+        <location filename="../QMenuStrings.cpp" line="4118"/>
         <source>Edit Tempo...</source>
         <translation>Redigera tempo...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4118"/>
+        <location filename="../QMenuStrings.cpp" line="4119"/>
         <source>Edit Time Signature...</source>
         <translation>Redigera taktartssignatur...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4119"/>
+        <location filename="../QMenuStrings.cpp" line="4120"/>
         <source>Open Tempo and Time Signature Editor</source>
         <translation>Öppna tempo- och taktartsverktyget</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4185"/>
+        <location filename="../QMenuStrings.cpp" line="4186"/>
         <source>&amp;Edit Item</source>
         <translation>&amp;Redigera objekt</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4194"/>
+        <location filename="../QMenuStrings.cpp" line="4195"/>
         <source>Select &amp;All</source>
         <translation>&amp;Markera alla</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4203"/>
+        <location filename="../QMenuStrings.cpp" line="4204"/>
         <source>&amp;Clear Selection</source>
         <translation>&amp;Rensa markering</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4212"/>
+        <location filename="../QMenuStrings.cpp" line="4213"/>
         <source>&amp;Preferences</source>
         <translation>In&amp;ställningar</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4264"/>
+        <location filename="../QMenuStrings.cpp" line="4265"/>
         <source>Pa&amp;ste as New Triggered Segment</source>
         <translation>Kli&amp;stra in som nytt utlösande segment</translation>
     </message>
@@ -4888,6 +4898,7 @@ Om du ändå vill klistra in, fundera på att använda en av de andra inklistrin
         <translation>Bas</translation>
     </message>
     <message>
+        <location filename="../QMenuStrings.cpp" line="2067"/>
         <location filename="../InstrumentStrings.cpp" line="285"/>
         <source>Triangle</source>
         <translation>Triangel</translation>
@@ -7899,7 +7910,7 @@ Om du ändå vill klistra in, fundera på att använda en av de andra inklistrin
     <message>
         <location filename="../../src/base/Studio.cpp" line="56"/>
         <location filename="../../src/sound/AlsaDriver.cpp" line="663"/>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="520"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="521"/>
         <location filename="../AutoloadStrings.cpp" line="305"/>
         <source>Synth plugin</source>
         <translation>Syntinsticksmodul</translation>
@@ -10067,7 +10078,7 @@ Om du ändå vill klistra in, fundera på att använda en av de andra inklistrin
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="91"/>
         <location filename="../../src/gui/general/ActionFileParser.cpp" line="639"/>
         <location filename="../../src/gui/general/ActionFileParser.cpp" line="646"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="450"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="457"/>
         <source>%1</source>
         <translation>%1</translation>
     </message>
@@ -10083,8 +10094,8 @@ Om du ändå vill klistra in, fundera på att använda en av de andra inklistrin
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="451"/>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="892"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="754"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="899"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="757"/>
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1589"/>
         <source>%1 Controller %2 %3</source>
         <translation>%1 effekt %2 %3</translation>
@@ -10198,17 +10209,17 @@ Om du ändå vill klistra in, fundera på att använda en av de andra inklistrin
         <translation>H</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="524"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="522"/>
         <source>Audio subsystem is not available - can&apos;t record audio</source>
         <translation>Ljud-undersystemet är inte tillgängligt - kan inte spela in ljud</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="624"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="622"/>
         <source>&lt;qt&gt;&lt;p&gt;No tracks were armed for recording.&lt;/p&gt;&lt;p&gt;Please arm at least one of the recording LEDs &lt;img src=&quot;:pixmaps/tooltip/record-leds.png&quot;&gt; and try again&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Inga spår är förberedda för inspelning.&lt;/p&gt;&lt;p&gt;Markera minst en av lysdioderna för inspelning &lt;img src=&quot;:pixmaps/tooltip/record-leds.png&quot;&gt; och försök igen&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="790"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="788"/>
         <source>&lt;qt&gt;&lt;p&gt;Couldn&apos;t start recording audio.&lt;/p&gt;&lt;p&gt;Please set a valid recording path in &lt;b&gt;Composition -&gt; Edit Document Properties... -&gt; Audio&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Kunde inte starta inspelning av ljud.&lt;/p&gt;&lt;p&gt;Ställ in en giltig sökväg för inspelningar med &lt;b&gt;Komposition -&gt; Redgera dokumentegenskaper... -&gt; Ljud&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
@@ -11023,61 +11034,61 @@ Om du ändå vill klistra in, fundera på att använda en av de andra inklistrin
         <translation>Exporterar ljudfil...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="647"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="648"/>
         <source>This will unload audio file &quot;%1&quot; and remove all associated segments.  Are you sure?</source>
         <translation>Det här stänger ljudfilen &quot;%1&quot; och tar bort alla tillhörande ljudsegment. Är du säker?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="651"/>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="843"/>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="880"/>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="955"/>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="966"/>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1201"/>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1206"/>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1223"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="652"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="844"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="881"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="956"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="967"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1203"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1208"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1225"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="735"/>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="743"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="736"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="744"/>
         <source>WAV files</source>
         <translation>WAV-filer</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="736"/>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="747"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="737"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="748"/>
         <source>All files</source>
         <translation>Alla filer</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="742"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="743"/>
         <source>Audio files</source>
         <translation>Ljudfiler</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="744"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="745"/>
         <source>FLAC files</source>
         <translation>FLAC-filer</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="745"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="746"/>
         <source>Ogg files</source>
         <translation>Ogg-filer</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="746"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="747"/>
         <source>MP3 files</source>
         <translation>MP3-filer</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="759"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="760"/>
         <source>Select one or more audio files</source>
         <translation>Markera en eller flera ljudfiler</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="841"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="842"/>
         <source>This will unload all audio files and remove their associated segments.
 This action cannot be undone, and associations with these files will be lost.
 Files will not be removed from your disk.
@@ -11088,7 +11099,7 @@ Filerna tas inte bort från disken.
 Är du säker?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="878"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="879"/>
         <source>This will unload all audio files that are not associated with any segments in this composition.
 This action cannot be undone, and associations with these files will be lost.
 Files will not be removed from your disk.
@@ -11099,7 +11110,7 @@ Filerna tas inte bort från disken.
 Är du säker?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="943"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="944"/>
         <source>The following audio files are not used in the current composition.
 
 Please select the ones you wish to delete permanently from the hard disk.
@@ -11110,7 +11121,7 @@ Välj de du vill ta bort permanent från hårddisken.
 </translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="953"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="954"/>
         <source>&lt;qt&gt;About to delete %n audio file(s) permanently from the hard disk.&lt;br&gt;This action cannot be undone, and there will be no way to recover the files.&lt;br&gt;Are you sure?&lt;/qt&gt;</source>
         <translation>
             <numerusform>&lt;qt&gt;Står i begrepp att ta bort %n ljudfil permanent från hårddisken.&lt;br&gt;Åtgärden kan inte ångras, och det kommer inte att finnas något sätt att återställa filen.&lt;br&gt;Är du säker?&lt;/qt&gt;</numerusform>
@@ -11118,53 +11129,53 @@ Välj de du vill ta bort permanent från hårddisken.
         </translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="966"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="967"/>
         <source>File %1 could not be deleted.</source>
         <translation>Filen %1 kunde inte tas bort.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="999"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1000"/>
         <source>Change Audio File label</source>
         <translation>Ändra ljudfilsnamn</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1000"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1001"/>
         <source>Enter new label</source>
         <translation>Skriv nytt namn</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1174"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1175"/>
         <source>importing a remote audio file</source>
         <translation>importerar ljudfil från annan dator</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1176"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1177"/>
         <source>importing an audio file that needs to be converted or resampled</source>
         <translation>importerar en ljudfil som måste konverteras eller samplas om</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1179"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1180"/>
         <source>Adding audio file...</source>
         <translation>Lägger till ljudfil...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1200"/>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1205"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1202"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1207"/>
         <source>Failed to add audio file. </source>
         <translation>Misslyckades med att lägga till ljudfil.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1214"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1216"/>
         <source>Generating audio preview...</source>
         <translation>Skapar förhandsgranskning av ljud...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1222"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1224"/>
         <source>Try copying this file to a directory where you have write permission and re-add it</source>
         <translation>Försök att kopiera filen till en katalog där du har skrivrättighet och lägga till den igen</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1384"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1386"/>
         <source>http://rosegardenmusic.com/wiki/doc:audioManager-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:audioManager-en</translation>
     </message>
@@ -11834,18 +11845,18 @@ Välj de du vill ta bort permanent från hårddisken.
         <translation>Visa variantlista baserad på </translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1573"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1577"/>
         <source>Some internal error: no device selected</source>
         <translation>Ett internt fel: ingen enhet vald</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1794"/>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1798"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1802"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1835"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1839"/>
         <source>http://rosegardenmusic.com/wiki/doc:bankEditorDialog-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:bankEditorDialog-en</translation>
     </message>
@@ -11854,82 +11865,82 @@ Välj de du vill ta bort permanent från hårddisken.
         <translation type="obsolete">Stäng</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1075"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1078"/>
         <source>&lt;new bank&gt;</source>
         <translation>&lt;ny bank&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1111"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1114"/>
         <source>&lt;new mapping&gt;</source>
         <translation>&lt;ny tonartsändring&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1113"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1116"/>
         <source>&lt;new mapping %1&gt;</source>
         <translation>&lt;ny tonartsändring %1&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1157"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1160"/>
         <source>Really delete this bank?</source>
         <translation>Ska banken verkligen tas bort?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1210"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1213"/>
         <source>Really delete this key mapping?</source>
         <translation>Ska tonartsändringen verkligen tas bort?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1262"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1265"/>
         <source>Really delete all banks for </source>
         <translation>Ska alla banker tas bort för </translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1540"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1544"/>
         <source>Import Banks from Device in File</source>
         <translation>Importera banker från enhet i fil</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1541"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1545"/>
         <source>Rosegarden Device files</source>
         <translation>Rosegarden enhetsfiler</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1542"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1546"/>
         <source>Rosegarden files</source>
         <translation>Rosegardenfiler</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1543"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1547"/>
         <source>Sound fonts</source>
         <translation>Ljudsamplingar</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1544"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1548"/>
         <source>LinuxSampler configuration files</source>
         <translation>Inställningsfiler för Linuxsampler</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1545"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1549"/>
         <source>All files</source>
         <translation>Alla filer</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1563"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1567"/>
         <source>Some internal error: cannot locate selected device</source>
         <translation>Ett internt fel: kan inte hitta vald enhet</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1733"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1737"/>
         <source>Export Device as...</source>
         <translation>Exportera enhet som...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1755"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1759"/>
         <source>You have specified a directory</source>
         <translation>Du har angivit en katalog</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1765"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1769"/>
         <source>The specified file exists.  Overwrite?</source>
         <translation>Den angivna filen finns. Ska den skrivas över?</translation>
     </message>
@@ -12457,53 +12468,53 @@ Välj de du vill ta bort permanent från hårddisken.
         <translation>Plats på instrumentpanelen</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="132"/>
+        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="133"/>
         <source>Add</source>
         <translation>Lägg till</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="133"/>
+        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="134"/>
         <source>Delete</source>
         <translation>Radera</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="135"/>
-        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="375"/>
+        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="136"/>
+        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="376"/>
         <source>Close</source>
         <translation>Stäng</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="137"/>
+        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="138"/>
         <source>Add a Control Parameter to the Studio</source>
         <translation>Lägg till en styrparameter i studion</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="139"/>
+        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="140"/>
         <source>Delete a Control Parameter from the Studio</source>
         <translation>Ta bort en styrparameter från studion</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="141"/>
+        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="142"/>
         <source>Close the Control Parameter editor</source>
         <translation>Stäng styrparametereditor</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="225"/>
+        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="226"/>
         <source>&lt;default&gt;</source>
         <translation>&lt;förval&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="229"/>
+        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="230"/>
         <source>&lt;not showing&gt;</source>
         <translation>&lt;visas inte&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="280"/>
+        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="281"/>
         <source>&lt;none&gt;</source>
         <translation>&lt;ingen&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="464"/>
+        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="465"/>
         <source>http://rosegardenmusic.com/wiki/doc:controlEditorDialog-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:controlEditorDialog-en</translation>
     </message>
@@ -12621,12 +12632,12 @@ Välj de du vill ta bort permanent från hårddisken.
         <translation>Effekthändelser</translation>
     </message>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="449"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="444"/>
         <source>Insert Line of Controllers</source>
         <translation>Infoga effektrad</translation>
     </message>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="576"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="584"/>
         <source>Controller Event Number</source>
         <translation>Nummer på effekthändelse</translation>
     </message>
@@ -12779,13 +12790,13 @@ Välj de du vill ta bort permanent från hårddisken.
         <translation type="obsolete">[ Ingen port ]</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="798"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="819"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="801"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="822"/>
         <source>New Device</source>
         <translation>Ny enhet</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="916"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="919"/>
         <source>http://rosegardenmusic.com/wiki/doc:device-manager-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:device-manager-en</translation>
     </message>
@@ -16897,32 +16908,32 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
 <context>
     <name>Rosegarden::MatrixWidget</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="189"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="190"/>
         <source>Zoom</source>
         <translation>Zooma</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="205"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="206"/>
         <source>Horizontal Zoom</source>
         <translation>Horisontell zoom</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="217"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="218"/>
         <source>Vertical Zoom</source>
         <translation>Vertikal zoom</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="230"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="231"/>
         <source>Reset Zoom</source>
         <translation>Återställ zoom</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="1186"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="1193"/>
         <source>&lt;qt&gt;Rotate wheel to change the active segment&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Rotera hjulet för att byta aktivt segment&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="1187"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="1194"/>
         <source>&lt;qt&gt;Segment: &quot;%1&quot;&lt;br&gt;Track: %2 &quot;%3&quot;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Segment: &quot;%1&quot;&lt;br&gt;Spår: %2 &quot;%3&quot;&lt;/qt&gt;</translation>
     </message>
@@ -16931,13 +16942,13 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
     <name>Rosegarden::MidiBankTreeWidgetItem</name>
     <message>
         <location filename="../../src/gui/studio/MidiBankTreeWidgetItem.cpp" line="40"/>
-        <location filename="../../src/gui/studio/MidiBankTreeWidgetItem.cpp" line="50"/>
+        <location filename="../../src/gui/studio/MidiBankTreeWidgetItem.cpp" line="51"/>
         <source>Percussion Bank</source>
         <translation>Slagverksbank</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/MidiBankTreeWidgetItem.cpp" line="40"/>
-        <location filename="../../src/gui/studio/MidiBankTreeWidgetItem.cpp" line="50"/>
+        <location filename="../../src/gui/studio/MidiBankTreeWidgetItem.cpp" line="51"/>
         <source>Bank</source>
         <translation>Bank</translation>
     </message>
@@ -17110,12 +17121,12 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/MidiProgramsEditor.cpp" line="250"/>
-        <location filename="../../src/gui/studio/MidiProgramsEditor.cpp" line="568"/>
+        <location filename="../../src/gui/studio/MidiProgramsEditor.cpp" line="580"/>
         <source>Key Mapping: %1</source>
         <translation>Tonartsändring: %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/MidiProgramsEditor.cpp" line="496"/>
+        <location filename="../../src/gui/studio/MidiProgramsEditor.cpp" line="508"/>
         <source>&lt;no key mapping&gt;</source>
         <translation>&lt;ingen tonartsändring&gt;</translation>
     </message>
@@ -18077,17 +18088,17 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat)</transla
         <translation type="obsolete">Förbereder utskrift...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="855"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="858"/>
         <source>Note &amp;Font</source>
         <translation>Not&amp;teckensnitt</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="883"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="886"/>
         <source>Si&amp;ze</source>
         <translation>St&amp;orlek</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="903"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="906"/>
         <source>S&amp;pacing</source>
         <translation>&amp;Avstånd</translation>
     </message>
@@ -18100,7 +18111,7 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat)</transla
         <translation type="obsolete">Ingen</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="895"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="898"/>
         <source>%n pixel(s)</source>
         <translation>
             <numerusform>%n bildpunkt</numerusform>
@@ -18108,22 +18119,22 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat)</transla
         </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1016"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1019"/>
         <source>  Font:  </source>
         <translation>  Teckensnitt:  </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1051"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1054"/>
         <source>Unknown font &quot;%1&quot;, using default</source>
         <translation>Okänt teckensnitt &quot;%1&quot;, använder förval</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1059"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1062"/>
         <source>  Size:  </source>
         <translation>  Storlek:  </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1083"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1086"/>
         <source>  Spacing:  </source>
         <translation>  Avstånd:  </translation>
     </message>
@@ -18144,7 +18155,7 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat)</transla
         <translation type="obsolete">Gör notsystem förenliga...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="996"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="999"/>
         <source>  No selection </source>
         <translation>  Ingen markering </translation>
     </message>
@@ -18169,24 +18180,24 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat)</transla
         <translation type="obsolete">%1 - alla segment - notskrift</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3208"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3229"/>
         <source>Triplet</source>
         <translation>Triol</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3209"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3230"/>
         <source>Chord</source>
         <translation>Ackord</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3210"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3231"/>
         <source>Grace</source>
         <translation>Prydnad</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3218"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3222"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3226"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3239"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3243"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3247"/>
         <source>%1 %2</source>
         <translation>%1 %2</translation>
     </message>
@@ -18199,7 +18210,7 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat)</transla
         <translation type="obsolete">Dolda Lilypond-direktiv</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1355"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1358"/>
         <source>Unknown spacing action %1</source>
         <translation>Okänd avståndsåtgärd %1</translation>
     </message>
@@ -18208,7 +18219,7 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat)</transla
         <translation type="obsolete">Okänd förhållandeåtgärd %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1304"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1307"/>
         <source>Unknown font action %1</source>
         <translation>Okänd teckenåtgärd %1</translation>
     </message>
@@ -18217,7 +18228,7 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat)</transla
         <translation type="obsolete">Okänd teckenstorlek %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1330"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1333"/>
         <source>Unknown font size action %1</source>
         <translation>Okänd teckenstorleksåtgärd %1</translation>
     </message>
@@ -18242,12 +18253,12 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat)</transla
         <translation type="obsolete">Förhandsgranskar Lilypond-fil...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1183"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1186"/>
         <source>LilyPond Preview Options</source>
         <translation>Förhandsgranskningsalternativ för Lilypond</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1184"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1187"/>
         <source>LilyPond preview options</source>
         <translation>Förhandsgranskningsalternativ för Lilypond</translation>
     </message>
@@ -18256,7 +18267,7 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat)</transla
         <translation type="obsolete">Exporterar Lilypond-fil...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1195"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1198"/>
         <source>Export failed.  The file could not be opened for writing.</source>
         <translation>Export misslyckades. Filen kunde inte öppnas för skrivning.</translation>
     </message>
@@ -18273,17 +18284,17 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat)</transla
         <translation type="obsolete">Kopierar markering till klippbord...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1486"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1489"/>
         <source>Clipboard is empty</source>
         <translation>Klippbordet är tomt</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1427"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1430"/>
         <source>Can&apos;t paste multiple Segments into one</source>
         <translation>Kan inte klistra in flera segment i ett</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="993"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="996"/>
         <source>  %n event(s) selected </source>
         <translation>
             <numerusform>%n händelse markerad </numerusform>
@@ -18291,90 +18302,90 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat)</transla
         </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1051"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1195"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1247"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1304"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1330"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1355"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1462"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1531"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2272"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2848"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3568"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3834"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1054"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1198"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1250"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1307"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1333"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1358"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1465"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1534"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2293"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2869"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3589"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3855"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1205"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1208"/>
         <source>Printing with LilyPond...</source>
         <translation>Skriver ut med Lilypond...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1223"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1226"/>
         <source>Previewing with LilyPond...</source>
         <translation>Förhandsgranskar med Lilypond...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1248"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1251"/>
         <source>&lt;qt&gt;&lt;p&gt;Failed to open a temporary file for LilyPond export.&lt;/p&gt;&lt;p&gt;This probably means you have run out of disk space on &lt;pre&gt;%1&lt;/pre&gt;&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Misslyckades öppna en tillfällig fil för export till Lilypond.&lt;/p&gt;&lt;p&gt;Detta betyder troligen att diskutrymmet på &lt;pre&gt;%1&lt;/pre&gt; har tagit slut&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1465"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1534"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1468"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1537"/>
         <source>&lt;qt&gt;&lt;p&gt;The Restricted paste type requires enough empty space (containing only rests) at the paste position to hold all of the events to be pasted.&lt;/p&gt;&lt;p&gt;Not enough space was found.&lt;/p&gt;&lt;p&gt;If you want to paste anyway, consider using one of the other paste types from the &lt;b&gt;Paste...&lt;/b&gt; option on the Edit menu.  You can also change the default paste type to something other than Restricted if you wish.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Den begränsade typen av inklistring kräver tillräckligt med tomt utrymme (som bara innehåller pauser) på stället för inklistringen för att få plats med alla händelser som ska klistras in.&lt;/p&gt;&lt;p&gt;Tillräckligt utrymme fanns inte.&lt;/p&gt;&lt;p&gt;Om du vill klistra in ändå, fundera på att använda någon av de andra inklistringstyperna i alternativet &lt;b&gt;Klistra in...&lt;/b&gt; på menyn Redigera. Du kan också ändra standardtypen för inklistring till något annat än begränsat om du önskar.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1490"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1493"/>
         <source>Inserting clipboard contents...</source>
         <translation>Infogar klippbordets innehåll...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1464"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1533"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1467"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1536"/>
         <source>Couldn&apos;t paste at this point.</source>
         <translation>Kunde inte klistra in på den här platsen.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3885"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3906"/>
         <source>Move Events to Staff Above</source>
         <translation>Flytta händelser till systemet ovanför</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1649"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1652"/>
         <source>Raising velocities...</source>
         <translation>Ökar ljudstyrkor...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1660"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1663"/>
         <source>Lowering velocities...</source>
         <translation>Minskar ljudstyrkor...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1697"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1700"/>
         <source>Set Event Velocities</source>
         <translation>Ställ in händelseljudstyrkor</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1702"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1705"/>
         <source>Setting Velocities...</source>
         <translation>Ställer in ljudstyrkor...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4028"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4049"/>
         <source>Edit Text Event</source>
         <translation>Redigera texthändelse</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4075"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4096"/>
         <source>Normalizing rests...</source>
         <translation>Normaliserar pauser...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4088"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4109"/>
         <source>Collapsing notes...</source>
         <translation>Lägger ihop noter...</translation>
     </message>
@@ -18383,12 +18394,12 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat)</transla
         <translation type="obsolete">Inget notvärde valt</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2272"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2293"/>
         <source>Unknown note insert action %1</source>
         <translation>Okänd notinfogningsåtgärd %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2276"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2297"/>
         <source>Inserting note</source>
         <translation>Infogar not</translation>
     </message>
@@ -18409,70 +18420,70 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat)</transla
         <translation type="obsolete">Tolkar markering...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4266"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4276"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4287"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4297"/>
         <source>Adding dot...</source>
         <translation>Lägger till punkt...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2649"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2670"/>
         <source>Ornament track %1 bar %2</source>
         <translation>Ornament spår %1 takt %2</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2651"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2672"/>
         <source>Ornament bar %1</source>
         <translation>Ornament takt %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2661"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2682"/>
         <source>Make Ornament</source>
         <translation>Skapa ornament</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2706"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2727"/>
         <source>Use Ornament</source>
         <translation>Använd ornament</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2717"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2738"/>
         <source>Remove Ornaments</source>
         <translation>Ta bort ornament</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2775"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2796"/>
         <source>Estimated key signature shown</source>
         <translation>Uppskattad tonartssignatur visas</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2832"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2853"/>
         <source>Sustain</source>
         <translation>Förlängning</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2848"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2869"/>
         <source>There is no sustain controller defined for this device.
 Please ensure the device is configured correctly in the Manage MIDI Devices dialog in the main window.</source>
         <translation>Det finns igen förlängningseffekt definierad för enheten.
 Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-enheter i huvudfönstret.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3017"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3038"/>
         <source>Estimated time signature shown</source>
         <translation>Uppskattad taktart visas</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3102"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3123"/>
         <source>%1%2 - Segment Track #%3 - Notation</source>
         <translation>%1%2 - segment spår nummer %3 - notskrift</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3109"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3130"/>
         <source>%1%2 - All Segments - Notation</source>
         <translation>%1%2 - alla segment - notskrift</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3115"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3136"/>
         <source>%1%2 - %n Segment(s) - Notation</source>
         <translation>
             <numerusform>%1%2 - %n segment - notskrift</numerusform>
@@ -18480,47 +18491,47 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
         </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3365"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3386"/>
         <source>Transpose</source>
         <translation>Transponera</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3366"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3387"/>
         <source>By number of semitones: </source>
         <translation>Med antal halvtonsteg: </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3732"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3753"/>
         <source>Time: %1 (%2.%3s)</source>
         <translation>Tid: %1 (%2,%3 s)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3807"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3828"/>
         <source>http://rosegardenmusic.com/wiki/doc:notation-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:notation-en</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3814"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3835"/>
         <source>http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</source>
         <translation>http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3821"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3842"/>
         <source>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</source>
         <translation>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3917"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3938"/>
         <source>Move Events to Staff Below</source>
         <translation>Flytta händelser till systemet under</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4286"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4307"/>
         <source>Cycling slashes...</source>
         <translation>Växlar tvärbalkar...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3568"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3589"/>
         <source>Can&apos;t insert note: No note duration selected</source>
         <translation>Kan inte infoga not: Inget notvärde valt</translation>
     </message>
@@ -19064,12 +19075,12 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
         <translation type="obsolete">Behandlar...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/widgets/ProgressDialog.cpp" line="62"/>
+        <location filename="../../src/gui/widgets/ProgressDialog.cpp" line="63"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/widgets/ProgressDialog.cpp" line="71"/>
+        <location filename="../../src/gui/widgets/ProgressDialog.cpp" line="72"/>
         <source>&lt;qt&gt;&lt;h3&gt;Processing...&lt;/h3&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;h3&gt;Behandlar...&lt;/h3&gt;&lt;/qt&gt;</translation>
     </message>
@@ -19732,31 +19743,31 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
 <context>
     <name>Rosegarden::RoseXmlHandler</name>
     <message>
-        <location filename="../../src/document/RoseXmlHandler.cpp" line="440"/>
+        <location filename="../../src/document/RoseXmlHandler.cpp" line="441"/>
         <source>This file was written by Rosegarden %1, and it uses
 a different file format that cannot be read by this version.</source>
         <translation>Den här filen är skriven av Rosegarden %1, och använder
 ett annat filformat som inte kan läsas av den här versionen.</translation>
     </message>
     <message>
-        <location filename="../../src/document/RoseXmlHandler.cpp" line="450"/>
+        <location filename="../../src/document/RoseXmlHandler.cpp" line="451"/>
         <source>This file was written by Rosegarden %1, which is more recent than this version.
 There may be some incompatibilities with the file format.</source>
         <translation>Den här filen är skriven av Rosegarden %1, som är nyare än den
 här versionen. Det kan finnas vissa problem med filformatet.</translation>
     </message>
     <message>
-        <location filename="../../src/document/RoseXmlHandler.cpp" line="450"/>
+        <location filename="../../src/document/RoseXmlHandler.cpp" line="451"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/document/RoseXmlHandler.cpp" line="1019"/>
+        <location filename="../../src/document/RoseXmlHandler.cpp" line="1020"/>
         <source>Open Directory</source>
         <translation>Öppna katalog</translation>
     </message>
     <message>
-        <location filename="../../src/document/RoseXmlHandler.cpp" line="1702"/>
+        <location filename="../../src/document/RoseXmlHandler.cpp" line="1703"/>
         <source>Loading plugins...</source>
         <translation>Läser in insticksmoduler...</translation>
     </message>
@@ -20006,9 +20017,9 @@ för att försäkra dig om att den kan läsas in igen i framtida versioner.</tra
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="598"/>
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="737"/>
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="814"/>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1535"/>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1540"/>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1560"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1536"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1541"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1561"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
@@ -20049,18 +20060,18 @@ Se Redigera -&gt; Inställningar -&gt; Ljud.</translation>
         <translation>Lägger till ljudfil...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1534"/>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1539"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1535"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1540"/>
         <source>Can&apos;t add dropped file. </source>
         <translation>Kan inte lägga till släppt fil. </translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1550"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1551"/>
         <source>Generating audio preview...</source>
         <translation>Skapar förhandsgranskning av ljud...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1559"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1560"/>
         <source>Try copying this file to a directory where you have write permission and re-add it</source>
         <translation>Försök att kopiera filen till en katalog där du har skrivrättighet och lägga till den igen</translation>
     </message>
@@ -20134,7 +20145,7 @@ Vill du öppna den istället?</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1592"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5986"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5992"/>
         <source>Untitled</source>
         <translation>Namnlös</translation>
     </message>
@@ -20179,7 +20190,7 @@ Felet är: %2</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1845"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7634"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7651"/>
         <source>All supported files</source>
         <translation>Alla filer som stöds</translation>
     </message>
@@ -20204,17 +20215,17 @@ Felet är: %2</translation>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3481"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3533"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3569"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3827"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3863"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3949"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3984"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4604"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4643"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4685"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4722"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4758"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4867"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7635"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3828"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3864"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3950"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3985"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4605"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4644"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4687"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4725"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4762"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4872"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7652"/>
         <source>All files</source>
         <translation>Alla filer</translation>
     </message>
@@ -20240,11 +20251,11 @@ Felet är: %2</translation>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3498"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3550"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3586"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3844"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3880"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3966"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4001"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7648"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3845"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3881"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3967"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4002"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7665"/>
         <source>Cannot open file %1</source>
         <translation>Kan inte öppna filen %1</translation>
     </message>
@@ -20362,7 +20373,7 @@ Felet är: %2</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2475"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5017"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5023"/>
         <source>Warning</source>
         <translation>Varning</translation>
     </message>
@@ -20420,7 +20431,7 @@ Vill du ange den nu?</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2889"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5647"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5653"/>
         <source>Set Global Tempo</source>
         <translation>Ställ in övergripande tempo</translation>
     </message>
@@ -20493,17 +20504,17 @@ Segment -&gt; Sammanfoga segment.
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3480"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4603"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4604"/>
         <source>Rosegarden Project files</source>
         <translation>Rosegarden projektfiler</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6291"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6297"/>
         <source>Input</source>
         <translation>Indata</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7404"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7420"/>
         <source>http://rosegardenmusic.com/wiki/doc:manual-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:manual-en</translation>
     </message>
@@ -20529,51 +20540,51 @@ Segment -&gt; Sammanfoga segment.
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3498"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3550"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3586"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3712"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3844"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3880"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3919"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3966"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4001"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4040"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4328"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4584"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4588"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4624"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4674"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4711"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4747"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4812"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4853"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4893"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5009"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5031"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5064"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5077"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5099"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5173"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5177"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5213"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5988"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6084"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6206"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6219"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7431"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7575"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7593"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7596"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7606"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7648"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3713"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3845"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3881"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3920"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3967"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4002"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4041"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4329"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4585"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4589"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4625"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4676"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4714"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4751"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4816"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4858"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4899"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5015"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5037"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5070"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5083"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5105"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5179"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5183"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5219"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5994"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6090"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6212"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6225"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7447"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7592"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7610"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7613"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7623"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7665"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7893"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7910"/>
         <source>&lt;h3&gt;Newer version available&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;Nyare version tillgänglig&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7894"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7911"/>
         <source>&lt;p&gt;You are using version %1.  Version %2 is now available.&lt;/p&gt;&lt;p&gt;Please consult the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;Rosegarden website&lt;/a&gt; for more information.&lt;/p&gt;</source>
         <translation>&lt;p&gt;Du använder version %1.  Version %2 är nu tillgänglig.&lt;/p&gt;&lt;p&gt;Besök gärna &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;Rosegardens hemsida&lt;/a&gt; för mer information.&lt;/p&gt;</translation>
     </message>
@@ -20593,50 +20604,50 @@ Segment -&gt; Sammanfoga segment.
         <translation>Importerar MIDI-fil...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3734"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3735"/>
         <source>Calculating notation...</source>
         <translation>Beräknar notskrift...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3781"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3782"/>
         <source>Calculate Notation</source>
         <translation>Beräkna notskrift</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3825"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3861"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3826"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3862"/>
         <source>Open X11 Rosegarden File</source>
         <translation>Öppna X11-Rosegardenfil</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3826"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3862"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3827"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3863"/>
         <source>X11 Rosegarden files</source>
         <translation>X11-Rosegardenfiler</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3895"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3896"/>
         <source>Importing X11 Rosegarden file...</source>
         <translation>Importera X11 Rosegarden-fil...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3920"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3921"/>
         <source>Can&apos;t load X11 Rosegarden file.  It appears to be corrupted.</source>
         <translation>Kan inte läsa in X11 Rosegarden-fil. Den verkar vara skadad.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3948"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3983"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3949"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3984"/>
         <source>Open Hydrogen File</source>
         <translation>Öppna Hydrogen-fil</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4016"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4017"/>
         <source>Importing Hydrogen file...</source>
         <translation>Importerar Hydrogen-fil...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4041"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4042"/>
         <source>Can&apos;t load Hydrogen file.  It appears to be corrupted.</source>
         <translation>Kan inte läsa in Hydrogen-fil. Den verkar vara skadad.</translation>
     </message>
@@ -20697,12 +20708,12 @@ Segment -&gt; Sammanfoga segment.
         <translation type="obsolete">Hjälpprogram ej funna</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4812"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4816"/>
         <source>&lt;qt&gt;&lt;p&gt;Failed to open a temporary file for LilyPond export.&lt;/p&gt;&lt;p&gt;This probably means you have run out of disk space on &lt;pre&gt;%1&lt;/pre&gt;&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Misslyckades öppna en tillfällig fil för export till LilyPond.&lt;/p&gt;&lt;p&gt;Detta betyder troligen att diskutrymmet på &lt;pre&gt;%1&lt;/pre&gt; har tagit slut&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4584"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4585"/>
         <source>The Rosegarden sequencer process has exited unexpectedly.  Sound and recording will no longer be available for this session.
 Please exit and restart Rosegarden to restore sound capability.</source>
         <translation>Rosegardens spelarprocess har oväntat avslutats. Ljud och inspelning är inte längre tillgängliga för den här sessionen.
@@ -20725,118 +20736,118 @@ Avsluta och starta om Rosegarden för att återställa ljudfunktionen.</translat
         <translation>som en mall</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4588"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4589"/>
         <source>The Rosegarden sequencer could not be started, so sound and recording will be unavailable for this session.
 For assistance with correct audio and MIDI configuration, go to http://rosegardenmusic.com.</source>
         <translation>Rosegardens spelare kunde inte startas, alltså är ljud och inspelning inte tillgängliga för den här sessionen.
 För hjälp med riktig inställning av ljud och MIDI, besök http://www.rosegardenmusic.com.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4600"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4601"/>
         <source>Exporting Rosegarden Project file...</source>
         <translation>Exporterar Rosegarden-projektfil...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4605"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4644"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4686"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4723"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4759"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4868"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4606"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4645"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4688"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4726"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4763"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4873"/>
         <source>Export as...</source>
         <translation>Exportera som...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4624"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4625"/>
         <source>Saving Rosegarden file to package failed: %1</source>
         <translation>Misslyckades spara Rosegarden-fil till paket: %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4639"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4655"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4640"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4656"/>
         <source>Exporting MIDI file...</source>
         <translation>Exporterar MIDI-fil...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4642"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4643"/>
         <source>Standard MIDI files</source>
         <translation>Vanliga MIDI-filer</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4674"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4711"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4747"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4853"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4893"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4676"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4714"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4751"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4858"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4899"/>
         <source>Export failed.  The file could not be opened for writing.</source>
         <translation>Export misslyckades. Filen kunde inte öppnas för skrivning.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4681"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4697"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4683"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4699"/>
         <source>Exporting Csound score file...</source>
         <translation>Exporterar Csound-partiturfil...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4684"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4686"/>
         <source>Csound files</source>
         <translation>Csound-filer</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4718"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4733"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4721"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4736"/>
         <source>Exporting Mup file...</source>
         <translation>Exporterar Mup-fil...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4721"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4724"/>
         <source>Mup files</source>
         <translation>Mup-filer</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4754"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4839"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4758"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4843"/>
         <source>Exporting LilyPond file...</source>
         <translation>Exporterar Lilypond-fil...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4757"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4761"/>
         <source>LilyPond files</source>
         <translation>Lilypond-filer</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4771"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4775"/>
         <source>Printing with LilyPond...</source>
         <translation>Utskrift med Lilypond...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4787"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4791"/>
         <source>Previewing LilyPond file...</source>
         <translation>Förhandsgranskar Lilypond-fil...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4830"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4834"/>
         <source>LilyPond Preview Options</source>
         <translation>Förhandsgranskningsalternativ för Lilypond</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4831"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4835"/>
         <source>LilyPond preview options</source>
         <translation>Förhandsgranskningsalternativ för Lilypond</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4863"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4879"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4868"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4884"/>
         <source>Exporting MusicXML file...</source>
         <translation>Exporterar MusicXML-fil...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4866"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4871"/>
         <source>XML files</source>
         <translation>XML-filer</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5018"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5024"/>
         <source>The audio file path does not exist or is not writable.
 Please set the audio file path to a valid directory in Document Properties before recording audio.
 Would you like to set it now?</source>
@@ -20845,12 +20856,12 @@ Ställ in sökvägen till ljudfiler till en giltig katalog i dokumentegenskaper 
 Vill du ställa in den nu?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5067"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5073"/>
         <source>Error</source>
         <translation>Fel</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5068"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5074"/>
         <source>The audio file path does not exist or is not writable.
 Please set the audio file path to a valid directory in Document Properties before you start to record audio.
 Would you like to set it now?</source>
@@ -20859,159 +20870,159 @@ Ställ in sökvägen till ljudfiler till en giltig katalog i dokumentegenskaper 
 Vill du ställa in den nu?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5551"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5557"/>
         <source>Move playback pointer to time</source>
         <translation>Flytta uppspelningsvisaren till tid</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5565"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5571"/>
         <source>%1%</source>
         <translation>%1 %</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5633"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5639"/>
         <source>Replace Tempo Change at %1</source>
         <translation>Ersätt tempoändring vid %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5663"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5669"/>
         <source>Set Global and Default Tempo</source>
         <translation>Ställ in övergripande tempo och standardtempo</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5686"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5692"/>
         <source>Move Tempo Change</source>
         <translation>Flytta tempobyte</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5721"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5727"/>
         <source>new marker</source>
         <translation>ny markering</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5722"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5728"/>
         <source>no description</source>
         <translation>ingen beskrivning</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5992"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5998"/>
         <source>&lt;qt&gt;&lt;p&gt;You must choose a filename for this composition before recording audio.&lt;/p&gt;&lt;p&gt;Audio files will be saved to &lt;b&gt;%1&lt;/b&gt; as &lt;b&gt;rg-[&lt;i&gt;filename&lt;/i&gt;]-[&lt;i&gt;instrument&lt;/i&gt;]-&lt;i&gt;date&lt;/i&gt;_&lt;i&gt;time&lt;/i&gt;-&lt;i&gt;n&lt;/i&gt;.wav&lt;/b&gt;.  You may wish to rename audio instruments before recording as well.  For more information, please see the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/doc:audio-filenames-en&quot;&gt;Rosegarden Wiki&lt;/a&gt;.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Du måste välja ett filnamn för kompositionen innan du spelar in ljud.&lt;/p&gt;&lt;p&gt;Ljudfiler kommer att sparas i &lt;b&gt;%1&lt;/b&gt; som &lt;b&gt;rg-[&lt;i&gt;filnamn&lt;/i&gt;]-[&lt;i&gt;instrument&lt;/i&gt;]-&lt;i&gt;datum&lt;/i&gt;_&lt;i&gt;tid&lt;/i&gt;-&lt;i&gt;n&lt;/i&gt;.wav&lt;/b&gt;.  Du bör dessutom kanske byta namn på ljudinstrument innan du spelar in. För mer information, se &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/doc:audio-filenames-en&quot;&gt;Rosegardens webbjournal&lt;/a&gt;.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6206"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6212"/>
         <source>Sequencer failed to add audio file %1</source>
         <translation>Spelaren misslyckades med att lägga till ljudfilen %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6219"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6225"/>
         <source>Sequencer failed to remove audio file id %1</source>
         <translation>Spelaren misslyckades med att ta bort ljudfilen med id %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6274"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6280"/>
         <source>Modify Segment label</source>
         <translation>Ändra segmentnamn</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6276"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6282"/>
         <source>Modify Segments label</source>
         <translation>Ändra segmentnamn</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6278"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6284"/>
         <source>Relabelling selection...</source>
         <translation>Ändrar namn på markering...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6291"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6297"/>
         <source>Enter new label</source>
         <translation>Skriv nytt namn</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7367"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7383"/>
         <source>Play List</source>
         <translation>Spellista</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7411"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7427"/>
         <source>http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</source>
         <translation>http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7418"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7434"/>
         <source>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</source>
         <translation>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7516"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7532"/>
         <source>Queueing MIDI panic events for tranmission...</source>
         <translation>Köar MIDI-panikhändelser för att skicka...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7575"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7592"/>
         <source>Are you sure you want to save this as your default studio?</source>
         <translation>Är du säker på att du vill spara den här som standardstudio?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7581"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7598"/>
         <source>Saving current document as default studio...</source>
         <translation>Sparar nuvarande dokument som standardstudio...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7593"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7610"/>
         <source>Could not auto-save document at %1
 Error was : %2</source>
         <translation>Kunde inte spara dokument automatiskt i %1
 Felet är: %2</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7596"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7613"/>
         <source>Could not auto-save document at %1</source>
         <translation>Kunde inte spara dokument automatiskt i %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7606"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7623"/>
         <source>Are you sure you want to import your default studio and lose the current one?</source>
         <translation>Är du säker på att du vill importera din standardstudio och låta den nuvarande gå förlorad?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7633"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7650"/>
         <source>Import Studio from File</source>
         <translation>Importera studio från fil</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7682"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7699"/>
         <source>Import Studio</source>
         <translation>Importera studio</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8004"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8021"/>
         <source>&lt;h3&gt;Invalid audio path&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;Felaktig ljudsökväg&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8005"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8022"/>
         <source>&lt;p&gt;You will not be able to record audio or drag and drop audio files onto Rosegarden until you correct this in &lt;b&gt;View -&gt; Document Properties -&gt; Audio&lt;/b&gt;.&lt;/p&gt;</source>
         <translation>&lt;p&gt;Du kommer inte att kunna spela in ljud eller dra och släppa ljudfiler på Rosegarden innan detta har korrigerats med &lt;b&gt;Visa -&gt; Dokumentegenskaper -&gt; Ljud&lt;/b&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8009"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8026"/>
         <source>&lt;h3&gt;Created audio path&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;Skapad ljudsökväg&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8010"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8027"/>
         <source>&lt;qt&gt;&lt;p&gt;Rosegarden created the audio path &quot;%1&quot; to use for audio recording, and to receive dropped audio files.&lt;/p&gt;&lt;p&gt;If you wish to use a different path, change this in &lt;b&gt;View -&gt; Document Properties -&gt; Audio&lt;/b&gt;.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Rosegarden har skapat ljudsökvägen &quot;%1&quot; att använda för ljudinspelning, och för att ta emot släppta ljudfiler.&lt;/p&gt;&lt;p&gt;Om du vill använda en annan sökväg, ändra den med &lt;b&gt;Visa -&gt; Dokumentegenskaper -&gt; Ljud&lt;/b&gt;.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8016"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8033"/>
         <source>&lt;qt&gt;&lt;p&gt;The audio path &quot;%1&quot; did not exist, and could not be created.&lt;/p&gt;%2&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Ljudsökvägen &quot;%1&quot; fanns inte, och kunde inte skapas.&lt;/p&gt;%2&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8021"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8038"/>
         <source>&lt;qt&gt;&lt;p&gt;The audio path &quot;%1&quot; exists, but is not writable.&lt;/p&gt;%2&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Ljudsökvägen &quot;%1&quot; finns, men går inte att skriva till.&lt;/p&gt;%2&lt;/qt&gt;</translation>
     </message>
@@ -21624,8 +21635,8 @@ Vill du ange den nu?</translation>
 <context>
     <name>Rosegarden::SequenceManager</name>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="924"/>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1073"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="922"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1071"/>
         <source>The JACK Audio subsystem has failed or it has stopped Rosegarden from processing audio.
 Please restart Rosegarden to continue working with audio.
 Quitting other running applications may improve Rosegarden&apos;s performance.</source>
@@ -21634,8 +21645,8 @@ Starta om Rosegarden för att fortsätta arbeta med ljud.
 Att avsluta andra program som körs kan förbättra Rosegardens prestanda.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="930"/>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1082"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="928"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1080"/>
         <source>The JACK Audio subsystem has stopped Rosegarden from processing audio, probably because of a processing overload.
 An attempt to restart the audio service has been made, but some problems may remain.
 Quitting other running applications may improve Rosegarden&apos;s performance.</source>
@@ -21644,87 +21655,87 @@ Ett försök att starta om ljudtjänsten har gjorts, men vissa problem kan vara 
 Att avsluta andra program som körs kan förbättra Rosegardens prestanda.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="941"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="939"/>
         <source>Out of processor power for real-time audio processing.  Cannot continue.</source>
         <translation>Slut på processorkraft för realtidsbehandling av ljud. Kan inte fortsätta.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="967"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="965"/>
         <source>A serious error has occurred in the ALSA MIDI subsystem.  It may not be possible to continue sequencing.  Please check console output for more information.</source>
         <translation>Ett allvarligt fel har inträffat i ALSA-MIDI-delsystemet. Det kanske inte är möjligt att fortsätta köra spelaren. Kontrollera terminalutmatningen för mer information.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="993"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="991"/>
         <source>JACK Audio subsystem is losing sample frames.</source>
         <translation>JACK-ljudsystemet förlorar samplade ramar.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1011"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1009"/>
         <source>Failed to read audio data from disk in time to service the audio subsystem.</source>
         <translation>Misslyckades läsa ljuddata från disk i tid för att underhålla ljud-undersystemet.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1015"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1013"/>
         <source>Failed to write audio data to disk fast enough to service the audio subsystem.</source>
         <translation>Misslyckades skriva ljuddata till disk i tid för att underhålla ljud-undersystemet.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1066"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1064"/>
         <source>&lt;h3&gt;System timer resolution is too low!&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;Systemtidtagningens upplösning är för låg!&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1101"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1099"/>
         <source>&lt;p&gt;Rosegarden was unable to find a high-resolution timing source for MIDI performance.&lt;/p&gt;&lt;p&gt;This may mean you are using a Linux system with the kernel timer resolution set too low.  Please contact your Linux distributor for more information.&lt;/p&gt;&lt;p&gt;Some Linux distributors already provide low latency kernels, see the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;Rosegarden website&lt;/a&gt; for instructions.&lt;/p&gt;</source>
         <translation>&lt;p&gt;Rosegarden kunde inte hitta en tidkälla med hög upplösning för MIDI-återgivning.&lt;/p&gt;&lt;p&gt;Det kan betyda att du använder ett Linux-system där kärnans tidupplösning är för lågt inställd. Kontakta Linux-distributören för mer information.&lt;/p&gt;&lt;p&gt;Vissa Linux-distributioner tillhandahåller redan kärnor med låg latens, se &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;Rosegardens hemsida&lt;/a&gt; för instructioner.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1126"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1124"/>
         <source>&lt;p&gt;Rosegarden was unable to find a high-resolution timing source for MIDI performance.&lt;/p&gt;&lt;p&gt;You may be able to solve this problem by loading the RTC timer kernel module.  To do this, try running &lt;b&gt;sudo modprobe snd-rtctimer&lt;/b&gt; in a terminal window and then restarting Rosegarden.&lt;/p&gt;&lt;p&gt;Alternatively, check whether your Linux distributor provides a multimedia-optimized kernel.  See the &lt;a style=&quot;color:gold&quot;  href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;Rosegarden website&lt;/a&gt; for notes about this.&lt;/p&gt;</source>
         <translation>&lt;p&gt;Rosegarden kunde inte hitta en tidkälla med hög upplösning för MIDI-återgivning.&lt;/p&gt;&lt;p&gt;Det kanske går att lösa problemet genom att ladda kärnans RTC-tidmodul. För att göra det, försök köra &lt;b&gt;sudo modprobe snd-rtctimer&lt;/b&gt; i ett terminalfönster, och därefter starta om Rosegarden.&lt;/p&gt;&lt;p&gt;Som alternativ kan du kontrollera om Linux-distributören tillhandahåller en kärna optimerad för multimedia. Se &lt;a style=&quot;color:gold&quot;  href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;Rosegardens hemsida&lt;/a&gt; för anmärkningar om detta.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1237"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1235"/>
         <source>&lt;h3&gt;Sequencer engine unavailable!&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;Spelare ej tillgänglig!&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1238"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1236"/>
         <source>&lt;p&gt;Both MIDI and Audio subsystems have failed to initialize.&lt;/p&gt;&lt;p&gt;If you wish to run with no sequencer by design, then use &quot;rosegarden --nosequencer&quot; to avoid seeing this error in the future.  Otherwise, we recommend that you repair your system configuration and start Rosegarden again.&lt;/p&gt;</source>
         <translation>&lt;p&gt;Varken MIDI- eller ljud-undersystemet kunde initialiseras.&lt;/p&gt;&lt;p&gt;Om du önskar köra utan spelare, använd &quot;rosegarden --nosequencer&quot; för att slippa se detta i fel fortsättningen. Annars rekommenderar vi att du reparerar systeminställningen och ånyo starta Rosegarden.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1240"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1238"/>
         <source>&lt;h3&gt;MIDI sequencing unavailable!&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;MIDI-spelare ej tillgänglig!&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1258"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1256"/>
         <source>&lt;h3&gt;Audio sequencing and synth plugins unavailable!&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;Ljudspelare och syntinsticksmoduler ej tillgängliga!&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1259"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1257"/>
         <source>&lt;p&gt;Rosegarden could not connect to the JACK audio server.  This probably means that Rosegarden was unable to start the audio server due to a problem with your configuration, your system installation, or both.&lt;/p&gt;&lt;p&gt;If you want to be able to play or record audio files or use plugins, we suggest that you exit Rosegarden and use the JACK Control utility (qjackctl) to try different settings until you arrive at a configuration that permits JACK to start.  You may also need to install a realtime kernel, edit your system security configuration, and so on.  Unfortunately, this is an extremely complex subject.&lt;/p&gt;&lt;p&gt; Once you establish a working JACK configuration, Rosegarden will be able to start the audio server automatically in the future.&lt;/p&gt;</source>
         <translation>&lt;p&gt;Rosegarden kunde inte ansluta till ljudservern JACK. Det betyder troligen att Rosegarden inte kunde starta ljudserver på grund av ett problem med dina inställningar, din systeminstallation, eller båda.&lt;/p&gt;&lt;p&gt;Om du vill kunna spela upp eller spela in ljudfiler, eller använda insticksmoduler, föreslår vi att du avslutar Rosegarden och använder JACK:s styrverktyg (qjackctl) för att prova olika inställningar till du uppnår en inställning som tillåter att JACK startas. Du kanske också behöver installera en realtidskärna, redigera systemets säkerhetsinställningar, med mera. Tyvärr är detta ett ytterst komplext ämne.&lt;/p&gt;&lt;p&gt;När du väl har upprättat en fungerade inställning av JACK, kommer Rosegarden att kunna starta ljudservern automatiskt i fortsättningen.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1019"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1017"/>
         <source>The audio mixing subsystem is failing to keep up.</source>
         <translation>Ljudmixersystemet klarar inte av att hänga med.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1023"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1021"/>
         <source>The audio subsystem is failing to keep up.</source>
         <translation>Ljudsystemet klarar inte av att hänga med.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1027"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1025"/>
         <source>Unknown sequencer failure mode!</source>
         <translation>Okänt fel i spelaren!</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1241"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1239"/>
         <source>&lt;p&gt;The MIDI subsystem has failed to initialize.&lt;/p&gt;&lt;p&gt;You may continue without the sequencer, but we suggest closing Rosegarden, running &quot;modprobe snd-seq-midi&quot; as root, and starting Rosegarden again.  If you wish to run with no sequencer by design, then use &quot;rosegarden --nosequencer&quot; to avoid seeing this error in the future.&lt;/p&gt;</source>
         <translation>&lt;p&gt;MIDI-undersystemet kunde inte initialiseras.&lt;/p&gt;&lt;p&gt;Du kan fortsätta utan spelaren men vi föreslår att du stänger Rosegarden, kör &quot;modprobe snd-seq-midi&quot; som rotanvändare, och startar Rosegarden ånyo. Om du önskar köra utan spelare, använd &quot;rosegarden --nosequencer&quot; för att slippa se detta i fel fortsättningen.&lt;/p&gt;</translation>
     </message>
@@ -23304,22 +23315,22 @@ Vill du ställa in den nu?</translation>
 <context>
     <name>Rosegarden::TrackEditor</name>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="681"/>
+        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="680"/>
         <source>Turn Repeating Segment into Real Copies</source>
         <translation>Omvandla upprepat segment till riktiga kopior</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="683"/>
+        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="682"/>
         <source>Turn Repeating Segments into Real Copies</source>
         <translation>Omvandla upprepade segment till riktiga kopior</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="933"/>
+        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="916"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="933"/>
+        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="917"/>
         <source>Rosegarden cannot accept dropped files of this type.</source>
         <translation>Rosegarden kan inte hantera släppta filer av den här typen.</translation>
     </message>
@@ -23359,164 +23370,164 @@ Vill du ställa in den nu?</translation>
         <translation>Spårparametrar</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="138"/>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="758"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="139"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="756"/>
         <source>&lt;untitled&gt;</source>
         <translation>&lt;namnlös&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="145"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="146"/>
         <source>Playback parameters</source>
         <translation>Uppspelningsparametrar</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="161"/>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="203"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="162"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="204"/>
         <source>Device</source>
         <translation>Enhet</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="173"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="174"/>
         <source>Instrument</source>
         <translation>Instrument</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="178"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="179"/>
         <source>&lt;qt&gt;&lt;p&gt;Choose the instrument this track will use for playback. (Configure the instrument in &lt;b&gt;Instrument Parameters&lt;/b&gt;).&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Välj instrument som spåret kommer att använda vid uppspelning. (Ställ in instrumentet under &lt;b&gt;Instrumentparametrar&lt;/b&gt;).&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="189"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="190"/>
         <source>Recording filters</source>
         <translation>Inspelningsfilter</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="208"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="209"/>
         <source>&lt;qt&gt;&lt;p&gt;This track will only record Audio/MIDI from the selected device, filtering anything else out&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Spåret spelar bara in ljud eller MIDI från vald enhet, och filtrerar bort allt annat&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="215"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="216"/>
         <source>Channel</source>
         <translation>Kanal</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="231"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="232"/>
         <source>Staff export options</source>
         <translation>Systemexportalternativ</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="250"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="251"/>
         <source>Notation size:</source>
         <translation>Notskriftsstorlek:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="257"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="258"/>
         <source>Normal</source>
         <translation>Normal</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="258"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="259"/>
         <source>Small</source>
         <translation>Liten</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="259"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="260"/>
         <source>Tiny</source>
         <translation>Pytteliten</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="266"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="267"/>
         <source>Bracket type:</source>
         <translation>Klammertyp:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="271"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="272"/>
         <source>&lt;qt&gt;&lt;p&gt;Bracket staffs in LilyPond&lt;br&gt;(fragile, use with caution)&lt;/p&gt;&lt;qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Lägg till klamrar för notsystem i LilyPond&lt;br&gt;(ömtåligt, använd med försiktighet)&lt;/p&gt;&lt;qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="273"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="274"/>
         <source>-----</source>
         <translation>----</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="274"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="275"/>
         <source>[----</source>
         <translation>[----</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="275"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="276"/>
         <source>----]</source>
         <translation>----]</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="276"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="277"/>
         <source>[---]</source>
         <translation>[----]</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="277"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="278"/>
         <source>{----</source>
         <translation>{----</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="278"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="279"/>
         <source>----}</source>
         <translation>----}</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="279"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="280"/>
         <source>{[---</source>
         <translation>{[---</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="280"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="281"/>
         <source>---]}</source>
         <translation>---]}</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="289"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="290"/>
         <source>Create segments with</source>
         <translation>Skapa segment med</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="302"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="303"/>
         <source>Preset</source>
         <translation>Förinställning</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="306"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="307"/>
         <source>&lt;none&gt;</source>
         <translation>&lt;ingen&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="313"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="314"/>
         <source>Load</source>
         <translation>Läs in</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="321"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="322"/>
         <source>Clef</source>
         <translation>Klav</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="326"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="327"/>
         <source>&lt;qt&gt;&lt;p&gt;New segments will be created with this clef inserted at the beginning&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Nya segment kommer att skapas med den här klaven infogad i början&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="382"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="383"/>
         <source>&lt;qt&gt;&lt;p&gt;Choose the lowest suggested playable note, using a staff&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Välj den lägsta föreslagna spelbara tonen, med användning av ett notsystem&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="392"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="393"/>
         <source>&lt;qt&gt;&lt;p&gt;Choose the highest suggested playable note, using a staff&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Välj den högsta föreslagna spelbara tonen, med användning av ett notsystem&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="165"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="166"/>
         <source>&lt;qt&gt;&lt;p&gt;Choose the device this track will use for playback.&lt;/p&gt;&lt;p&gt;Click &lt;img src=&quot;:pixmaps/toolbar/manage-midi-devices.xpm&quot;&gt; to connect this device to a useful output if you do not hear sound&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Välj enhet som spåret ska använda för uppspelning.&lt;/p&gt;&lt;p&gt;Klicka på &lt;img src=&quot;:pixmaps/toolbar/manage-midi-devices.xpm&quot;&gt; för att ansluta enheten till en användbar utgång om du inte hör något ljud&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
@@ -23525,211 +23536,211 @@ Vill du ställa in den nu?</translation>
         <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Detta spår spelar bara in ljud eller MIDI från vald enhet, och filtrerar bort allting annat&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="220"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="221"/>
         <source>&lt;qt&gt;&lt;p&gt;This track will only record Audio/MIDI from the selected channel, filtering anything else out&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Detta spår spelar bara in ljud eller MIDI från vald kanal, och filtrerar bort allting annat&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="255"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="256"/>
         <source>&lt;qt&gt;&lt;p&gt;Choose normal, \small or \tiny font size for notation elements on this (normal-sized) staff when exporting to LilyPond.&lt;/p&gt;&lt;p&gt;This is as close as we get to enabling you to print parts in cue size&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Välj normal, \small (liten) eller \tiny (pytteliten) teckenstorlek för notskrift för detta notsystem (med normal storlek) vid export till LilyPond.&lt;/p&gt;&lt;p&gt;Detta är det närmaste vi kommer att göra det möjligt att skriva ut delar som antydningar&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="315"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="316"/>
         <source>&lt;qt&gt;&lt;p&gt;Load a segment parameters preset from our comprehensive database of real-world instruments.&lt;/p&gt;&lt;p&gt;When you create new segments, they will have these parameters at the moment of creation.  To use these parameters on existing segments (eg. to convert an existing part in concert pitch for playback on a Bb trumpet) use &lt;b&gt;Segments -&gt; Convert notation for&lt;/b&gt; in the notation editor.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Läs in förinställning av segmentparametrar från den omfattande databasen av verkliga instrument.&lt;/p&gt;&lt;p&gt;När du skapar nya segment, har de dessa parametrar från det ögonblick de skapas. För att använda parametrarna i befintliga segment (t.ex. för att konvertera en befintlig stämma till konserttonhöjd för uppspelning med en B-trumpet), använd &lt;b&gt;Segment -&gt; Konvertera notskrift för&lt;/b&gt; i noteditorn.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="328"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="329"/>
         <source>treble</source>
         <translation>diskant</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="329"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="330"/>
         <source>bass</source>
         <translation>bas</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="330"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="331"/>
         <source>crotales</source>
         <translation>krotal</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="331"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="332"/>
         <source>xylophone</source>
         <translation>xylofon</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="332"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="333"/>
         <source>guitar</source>
         <translation>gitarr</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="333"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="334"/>
         <source>contrabass</source>
         <translation>kontrabas</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="334"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="335"/>
         <source>celesta</source>
         <translation>celesta</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="335"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="336"/>
         <source>old celesta</source>
         <translation>äldre celesta</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="336"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="337"/>
         <source>french</source>
         <translation>fransk</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="337"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="338"/>
         <source>soprano</source>
         <translation>sopran</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="338"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="339"/>
         <source>mezzosoprano</source>
         <translation>mezzosopran</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="339"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="340"/>
         <source>alto</source>
         <translation>alt</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="340"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="341"/>
         <source>tenor</source>
         <translation>tenor</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="341"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="342"/>
         <source>baritone</source>
         <translation>baryton</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="342"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="343"/>
         <source>varbaritone</source>
         <translation>baryton (F)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="343"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="344"/>
         <source>subbass</source>
         <translation>subbas</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="351"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="352"/>
         <source>Transpose</source>
         <translation>Transponera</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="356"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="357"/>
         <source>&lt;qt&gt;&lt;p&gt;New segments will be created with this transpose property set&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Nya segment skapas med den här transponeringsinställningen&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="372"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="373"/>
         <source>Pitch</source>
         <translation>Tonhöjd</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="376"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="377"/>
         <source>Lowest</source>
         <translation>Lägsta</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="380"/>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="390"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="381"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="391"/>
         <source>---</source>
         <translation>---</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="386"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="387"/>
         <source>Highest</source>
         <translation>Högsta</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="403"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="404"/>
         <source>Color</source>
         <translation>Färg</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="408"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="409"/>
         <source>&lt;qt&gt;&lt;p&gt;New segments will be created using this color&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Nya segment skapas med den här färgen&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="590"/>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="591"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="592"/>
         <source>Audio</source>
         <translation>Ljud</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="605"/>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="625"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="606"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="623"/>
         <source>All</source>
         <translation>Alla</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="682"/>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="686"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="680"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="684"/>
         <source> %1</source>
         <translation> %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="762"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="760"/>
         <source>[ Track %1 - %2 ]</source>
         <translation>[ Spår %1 - %2 ]</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="999"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="997"/>
         <source>Default</source>
         <translation>Förval</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1015"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1013"/>
         <source>Add New Color</source>
         <translation>Lägg till ny färg</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1041"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1039"/>
         <source>New Color Name</source>
         <translation>Nytt färgnamn</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1042"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1040"/>
         <source>Enter new name:</source>
         <translation>Ange nytt namn:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1044"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1042"/>
         <source>New</source>
         <translation>Ny</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1076"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1074"/>
         <source>Highest playable note</source>
         <translation>Högsta spelbara ton</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1098"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1096"/>
         <source>Lowest playable note</source>
         <translation>Lägsta spelbara ton</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1159"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1157"/>
         <source>The instrument preset database is corrupt.  Check your installation.</source>
         <translation>Instrumentdatabasen är korrupt. Kontrollera din installation.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1159"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1157"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1203"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1201"/>
         <source>Segment</source>
         <translation>Segment</translation>
     </message>
