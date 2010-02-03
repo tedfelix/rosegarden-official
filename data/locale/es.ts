@@ -5989,7 +5989,7 @@
     <message>
         <location filename="../InstrumentStrings.cpp" line="285"/>
         <source>Triangle</source>
-        <translation>Triágulo</translation>
+        <translation>Triángulo</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="286"/>
