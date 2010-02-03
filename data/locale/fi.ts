@@ -2911,18 +2911,23 @@
         <translation>Nuotin t&amp;yyli</translation>
     </message>
     <message>
+        <location filename="../QMenuStrings.cpp" line="2064"/>
         <source>Classical</source>
         <translation>Klassinen</translation>
     </message>
     <message>
+        <location filename="../QMenuStrings.cpp" line="2065"/>
         <source>Cross</source>
         <translation>Risti</translation>
     </message>
     <message>
+        <location filename="../QMenuStrings.cpp" line="2066"/>
         <source>Mensural</source>
         <translation>Mensuurinen</translation>
     </message>
     <message>
+        <location filename="../QMenuStrings.cpp" line="2067"/>
+        <location filename="../InstrumentStrings.cpp" line="285"/>
         <source>Triangle</source>
         <translation>Kolmio</translation>
     </message>
@@ -6118,12 +6123,6 @@
         <location filename="../InstrumentStrings.cpp" line="284"/>
         <source>Chinese cymbal</source>
         <translation>Kiinalainen lautanen</translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="2067"/>
-        <location filename="../InstrumentStrings.cpp" line="285"/>
-        <source>Triangle</source>
-        <translation>Triangeli</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="286"/>
@@ -12508,12 +12507,12 @@ Ole hyvä ja valitse halutessasi niistä joitakin poistaaksesi ne pysyvästi kov
         <translation>Ohjaintapahtumia</translation>
     </message>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="444"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="443"/>
         <source>Insert Line of Controllers</source>
         <translation>Syötä ohjainjono</translation>
     </message>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="584"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="583"/>
         <source>Controller Event Number</source>
         <translation>Ohjaintapahtumien määrä</translation>
     </message>

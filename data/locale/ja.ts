@@ -2976,14 +2976,18 @@
         <translation>音符の表現形式(&amp;S)</translation>
     </message>
     <message>
+        <location filename="../QMenuStrings.cpp" line="2064"/>
         <source>Classical</source>
         <translation>通常</translation>
     </message>
     <message>
+        <location filename="../QMenuStrings.cpp" line="2065"/>
         <source>Cross</source>
         <translation>クロス</translation>
     </message>
     <message>
+        <location filename="../QMenuStrings.cpp" line="2067"/>
+        <location filename="../InstrumentStrings.cpp" line="285"/>
         <source>Triangle</source>
         <translation>トライアングル</translation>
     </message>
@@ -4861,12 +4865,6 @@ If you want to paste anyway, consider using one of the other paste types from th
         <location filename="../InstrumentStrings.cpp" line="359"/>
         <source>Bass</source>
         <translation>ヘ音記号</translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="2067"/>
-        <location filename="../InstrumentStrings.cpp" line="285"/>
-        <source>Triangle</source>
-        <translation>トライアングル</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="31"/>
@@ -12592,12 +12590,12 @@ Please select the ones you wish to delete permanently from the hard disk.
         <translation>コントローライベント</translation>
     </message>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="444"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="443"/>
         <source>Insert Line of Controllers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="584"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="583"/>
         <source>Controller Event Number</source>
         <translation>コントローライベント番号</translation>
     </message>

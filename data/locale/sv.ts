@@ -2,13 +2,6 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="sv">
 <context>
-    <name></name>
-    <message>
-        <source>Rosegarden</source>
-        <translation type="obsolete">Rosegarden</translation>
-    </message>
-</context>
-<context>
     <name>DeviceManagerDialogUi</name>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="474"/>
@@ -287,14 +280,6 @@
         <location filename="../QMenuStrings.cpp" line="48"/>
         <source>Play Preview</source>
         <translation>Spela förhandsgranskning</translation>
-    </message>
-    <message>
-        <source>Insert Into Selected Audio track</source>
-        <translation type="obsolete">Infoga i markerat ljudspår</translation>
-    </message>
-    <message>
-        <source>Distribute Audio on Midi Segment</source>
-        <translation type="obsolete">Fördela ljud på MIDI-segment</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="51"/>
@@ -1054,10 +1039,6 @@
         <translation>F4</translation>
     </message>
     <message>
-        <source>E&amp;dit</source>
-        <translation type="obsolete">&amp;Redigera</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="502"/>
         <source>Nothing to &amp;undo</source>
         <translation>Ingenting att å&amp;ngra</translation>
@@ -1066,12 +1047,6 @@
         <location filename="../QMenuStrings.cpp" line="511"/>
         <source>Nothing to &amp;redo</source>
         <translation>Ingenting att &amp;göra om</translation>
-    </message>
-    <message>
-        <source>Ctrl+V, F18, Shift+Insert</source>
-        <comment>keyboard shortcut</comment>
-        <translatorcomment>English: Should it be Shift+Ins?</translatorcomment>
-        <translation type="obsolete">Ctrl+V, F18, Shift+Ins</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="547"/>
@@ -1248,23 +1223,11 @@
         <translation>Lägg till ta&amp;ktartsändring...</translation>
     </message>
     <message>
-        <source>&amp;Segment</source>
-        <translation type="obsolete">Seg&amp;ment</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="681"/>
         <location filename="../QMenuStrings.cpp" line="1934"/>
         <location filename="../QMenuStrings.cpp" line="3788"/>
         <source>Open in &amp;Event List Editor</source>
         <translation>Öppna i &amp;editor av händelselista</translation>
-    </message>
-    <message>
-        <source>Set Segment Start &amp;Time...</source>
-        <translation type="obsolete">Ställ in start&amp;tid för segment...</translation>
-    </message>
-    <message>
-        <source>Set Segment &amp;Duration...</source>
-        <translation type="obsolete">Ställ in segmentläng&amp;d...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="697"/>
@@ -2391,30 +2354,6 @@
         <translation>L&amp;judstyrka</translation>
     </message>
     <message>
-        <source>Local &amp;Cursor</source>
-        <translation type="obsolete">&amp;Markör</translation>
-    </message>
-    <message>
-        <source>Cursor &amp;Back</source>
-        <translation type="obsolete">Markör &amp;bakåt</translation>
-    </message>
-    <message>
-        <source>Cursor &amp;Forward</source>
-        <translation type="obsolete">Markör &amp;framåt</translation>
-    </message>
-    <message>
-        <source>Cursor For&amp;ward Bar</source>
-        <translation type="obsolete">Mar&amp;kör framåt en takt</translation>
-    </message>
-    <message>
-        <source>Cursor to St&amp;art</source>
-        <translation type="obsolete">Markör &amp;till början</translation>
-    </message>
-    <message>
-        <source>Cursor to &amp;End</source>
-        <translation type="obsolete">Markör till &amp;slutet</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="2371"/>
         <source>Cursor back and Se&amp;lect</source>
         <translation>Markör bakåt och mar&amp;kera</translation>
@@ -2517,30 +2456,6 @@
         <location filename="../QMenuStrings.cpp" line="4060"/>
         <source>P&amp;anic</source>
         <translation>&amp;Panik</translation>
-    </message>
-    <message>
-        <source>II</source>
-        <translation type="obsolete">II</translation>
-    </message>
-    <message>
-        <source>III</source>
-        <translation type="obsolete">III</translation>
-    </message>
-    <message>
-        <source>IV</source>
-        <translation type="obsolete">IV</translation>
-    </message>
-    <message>
-        <source>V</source>
-        <translation type="obsolete">V</translation>
-    </message>
-    <message>
-        <source>VI</source>
-        <translation type="obsolete">VI</translation>
-    </message>
-    <message>
-        <source>VII</source>
-        <translation type="obsolete">VII</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1199"/>
@@ -2767,10 +2682,6 @@
         <translation>&amp;Avstånd</translation>
     </message>
     <message>
-        <source>Du&amp;ration Factor</source>
-        <translation type="obsolete">&amp;Längdfaktor</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="1901"/>
         <source>&amp;Layout Mode</source>
         <translation>&amp;Utläggning</translation>
@@ -2794,10 +2705,6 @@
         <location filename="../QMenuStrings.cpp" line="1905"/>
         <source>Open L&amp;yric Editor</source>
         <translation>Öppna &amp;sångtexteditor</translation>
-    </message>
-    <message>
-        <source>Add Event Ruler</source>
-        <translation type="obsolete">Lägg till effektlinjal</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1926"/>
@@ -2831,15 +2738,6 @@
         <location filename="../QMenuStrings.cpp" line="1940"/>
         <source>Add Pedal &amp;Release</source>
         <translation>Lägg till pedals&amp;läpp</translation>
-    </message>
-    <message>
-        <source>&amp;Set Segment Start Time...</source>
-        <translation type="obsolete">&amp;Ställ in starttid för segment...</translation>
-    </message>
-    <message>
-        <source>Transpose by &amp;Inverval...</source>
-        <translatorcomment>English: Interval misspelled</translatorcomment>
-        <translation type="obsolete">Transponera med &amp;intervall...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1944"/>
@@ -3063,18 +2961,23 @@
         <translation>Not&amp;huvudstil</translation>
     </message>
     <message>
+        <location filename="../QMenuStrings.cpp" line="2064"/>
         <source>Classical</source>
         <translation>Klassisk</translation>
     </message>
     <message>
+        <location filename="../QMenuStrings.cpp" line="2065"/>
         <source>Cross</source>
         <translation>Kors</translation>
     </message>
     <message>
+        <location filename="../QMenuStrings.cpp" line="2066"/>
         <source>Mensural</source>
         <translation>Mensural</translation>
     </message>
     <message>
+        <location filename="../QMenuStrings.cpp" line="2067"/>
+        <location filename="../InstrumentStrings.cpp" line="285"/>
         <source>Triangle</source>
         <translation>Triangel</translation>
     </message>
@@ -3610,22 +3513,6 @@
         <translation>&amp;Gitarrackord</translation>
     </message>
     <message>
-        <source>Cursor &amp;Up Staff</source>
-        <translation type="obsolete">Markör upp ett n&amp;otsystem</translation>
-    </message>
-    <message>
-        <source>Cursor &amp;Down Staff</source>
-        <translation type="obsolete">Markör &amp;ner ett notsystem</translation>
-    </message>
-    <message>
-        <source>Cursor Pre&amp;vious Segment</source>
-        <translation type="obsolete">Markör Före&amp;gående segment</translation>
-    </message>
-    <message>
-        <source>Cursor Ne&amp;xt Segment</source>
-        <translation type="obsolete">Markör Nä&amp;sta segment</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="1045"/>
         <location filename="../QMenuStrings.cpp" line="2752"/>
         <source>&amp;Insert Note</source>
@@ -3765,17 +3652,9 @@
         <translation>Visa verkt&amp;yg</translation>
     </message>
     <message>
-        <source>&amp;Events</source>
-        <translation type="obsolete">Händ&amp;elser</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="836"/>
         <source>Remove &amp;Triggers</source>
         <translation>Ta &amp;bort utlösare</translation>
-    </message>
-    <message>
-        <source>Pitch &amp;Bend Sequence...</source>
-        <translation type="obsolete">Tonhöjdsav&amp;vikelse för sekvens...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="668"/>
@@ -3790,46 +3669,10 @@
         <translation>Rosegarden hand&amp;bok</translation>
     </message>
     <message>
-        <source>I</source>
-        <translation type="obsolete">I</translation>
-    </message>
-    <message>
-        <source>Delete</source>
-        <translation type="obsolete">Radera</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="295"/>
         <location filename="../QMenuStrings.cpp" line="584"/>
         <source>Preferences...</source>
         <translation>Inställningar...</translation>
-    </message>
-    <message>
-        <source>0</source>
-        <translation type="obsolete">0</translation>
-    </message>
-    <message>
-        <source>3</source>
-        <translation type="obsolete">3</translation>
-    </message>
-    <message>
-        <source>6</source>
-        <translation type="obsolete">6</translation>
-    </message>
-    <message>
-        <source>4</source>
-        <translation type="obsolete">4</translation>
-    </message>
-    <message>
-        <source>2</source>
-        <translation type="obsolete">2</translation>
-    </message>
-    <message>
-        <source>1</source>
-        <translation type="obsolete">1</translation>
-    </message>
-    <message>
-        <source>5</source>
-        <translation type="obsolete">5</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="673"/>
@@ -3842,18 +3685,6 @@
         <location filename="../QMenuStrings.cpp" line="1924"/>
         <source>Show Pitch &amp;Bend Ruler</source>
         <translation>Visa ton&amp;höjdsavvikelselinjal</translation>
-    </message>
-    <message>
-        <source>Add &amp;Control Ruler...</source>
-        <translation type="obsolete">Lägg till &amp;styrlinjal...</translation>
-    </message>
-    <message>
-        <source>Left</source>
-        <translation type="obsolete">Vänster</translation>
-    </message>
-    <message>
-        <source>Right</source>
-        <translation type="obsolete">Höger</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="838"/>
@@ -3876,10 +3707,6 @@
         <location filename="../QMenuStrings.cpp" line="1917"/>
         <source>Show &amp;Rulers Toolbar</source>
         <translation>Visa lin&amp;jalverktygslist</translation>
-    </message>
-    <message>
-        <source>Rewind</source>
-        <translation type="obsolete">Spola tillbaka</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="925"/>
@@ -4497,10 +4324,6 @@
         <translation>&amp;Spara nuvarande dokument som standardstudio</translation>
     </message>
     <message>
-        <source>Se&amp;gments</source>
-        <translation type="obsolete">Seg&amp;ment</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="3742"/>
         <source>Toggle Repeat</source>
         <translation>Ändra upprepning</translation>
@@ -4850,14 +4673,6 @@
         <translation>Kli&amp;stra in som nytt utlösande segment</translation>
     </message>
     <message>
-        <source>The Restricted paste type requires enough empty space (containing only rests) at the paste position to hold all of the events to be pasted.
-Not enough space was found.
-If you want to paste anyway, consider using one of the other paste types from the &quot;Paste...&quot; option on the Edit menu.  You can also change the default paste type to something other than Restricted if you wish.</source>
-        <translation type="obsolete">Den begränsade typen av inklistring kräver tillräckligt med tomt utrymme (som bara innehåller pauser) på inklistringsplatsen för att få plats med alla händelser som ska klistras in.
-Tillräckligt med utrymme hittades inte.
-Om du ändå vill klistra in, fundera på att använda en av de andra inklistringstyperna under alternativet &quot;Klistra in...&quot; i menyn Redigera. Du kan också ändra förvald inklistringstyp till något annat än Begränsad om du vill.</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/notation/NoteFont.cpp" line="58"/>
         <source>No sizes listed for font &quot;%1&quot;</source>
         <translation>Inga storlekar angivna för teckensnittet &quot;%1&quot;</translation>
@@ -4881,12 +4696,6 @@ Om du ändå vill klistra in, fundera på att använda en av de andra inklistrin
         <location filename="../InstrumentStrings.cpp" line="359"/>
         <source>Bass</source>
         <translation>Bas</translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="2067"/>
-        <location filename="../InstrumentStrings.cpp" line="285"/>
-        <source>Triangle</source>
-        <translation>Triangel</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="31"/>
@@ -6657,54 +6466,6 @@ Om du ändå vill klistra in, fundera på att använda en av de andra inklistrin
         <source>B#</source>
         <comment>note name</comment>
         <translation>Hiss</translation>
-    </message>
-    <message>
-        <source>C</source>
-        <translation type="obsolete">C</translation>
-    </message>
-    <message>
-        <source>C#</source>
-        <translation type="obsolete">Ciss</translation>
-    </message>
-    <message>
-        <source>D</source>
-        <translation type="obsolete">D</translation>
-    </message>
-    <message>
-        <source>Eb</source>
-        <translation type="obsolete">Ess</translation>
-    </message>
-    <message>
-        <source>E</source>
-        <translation type="obsolete">E</translation>
-    </message>
-    <message>
-        <source>F</source>
-        <translation type="obsolete">F</translation>
-    </message>
-    <message>
-        <source>F#</source>
-        <translation type="obsolete">Fiss</translation>
-    </message>
-    <message>
-        <source>G</source>
-        <translation type="obsolete">G</translation>
-    </message>
-    <message>
-        <source>G#</source>
-        <translation type="obsolete">Giss</translation>
-    </message>
-    <message>
-        <source>A</source>
-        <translation type="obsolete">A</translation>
-    </message>
-    <message>
-        <source>Bb</source>
-        <translation type="obsolete">B</translation>
-    </message>
-    <message>
-        <source>B</source>
-        <translation type="obsolete">H</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="39"/>
@@ -10373,10 +10134,6 @@ Om du ändå vill klistra in, fundera på att använda en av de andra inklistrin
         <source>&lt;p&gt;Copyright 2000-2010 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2&lt;/p&gt;</source>
         <translation>&lt;p&gt;Copyright 2000-2010 Rosegardens utvecklingsgrupp&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Byggnyckel: %3&lt;/p&gt;&lt;p&gt;Rosegarden har tagits fram av en grupp frivilliga över hela världen. Besök &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt; för att se en lista med bidragsgivare.&lt;br&gt;För ytterligare information om Rosegarden, besök &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Licens: GNU General Public License Version 2&lt;/p&gt;</translation>
     </message>
-    <message>
-        <source>&lt;p&gt;Copyright 2000-2009 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;p&gt;Copyright 2000-2009 Rosegardens utvecklingsgrupp&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Byggnyckel: %3&lt;/p&gt;&lt;p&gt;Rosegarden har tagits fram av en grupp frivilliga över hela världen. Besök &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt; för att se en lista med bidragsgivare.&lt;br&gt;För ytterligare information om Rosegarden, besök &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Licens: GNU General Public License Version 2&lt;/p&gt;</translation>
-    </message>
 </context>
 <context>
     <name>Rosegarden::ActionCommandArgumentQuerier</name>
@@ -11202,14 +10959,6 @@ Välj de du vill ta bort permanent från hårddisken.
         <translation>Mono eller stereo</translation>
     </message>
     <message>
-        <source>Mute</source>
-        <translation type="obsolete">Tyst</translation>
-    </message>
-    <message>
-        <source>Solo</source>
-        <translation type="obsolete">Solo</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="318"/>
         <source>Arm recording</source>
         <translation>Förbered inspelning</translation>
@@ -11710,14 +11459,6 @@ Välj de du vill ta bort permanent från hårddisken.
         <translation>Hantera MIDI-banker och program</translation>
     </message>
     <message>
-        <source>Apply</source>
-        <translation type="obsolete">Verkställ</translation>
-    </message>
-    <message>
-        <source>Reset</source>
-        <translation type="obsolete">Återställ</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="119"/>
         <source>Device and Banks</source>
         <translation>Enhet och banker</translation>
@@ -11846,10 +11587,6 @@ Välj de du vill ta bort permanent från hårddisken.
         <translation>http://rosegardenmusic.com/wiki/doc:bankEditorDialog-en</translation>
     </message>
     <message>
-        <source>Close</source>
-        <translation type="obsolete">Stäng</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1078"/>
         <source>&lt;new bank&gt;</source>
         <translation>&lt;ny bank&gt;</translation>
@@ -11928,10 +11665,6 @@ Välj de du vill ta bort permanent från hårddisken.
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1769"/>
         <source>The specified file exists.  Overwrite?</source>
         <translation>Den angivna filen finns. Ska den skrivas över?</translation>
-    </message>
-    <message>
-        <source>Unsaved Changes</source>
-        <translation type="obsolete">Osparade ändringar</translation>
     </message>
 </context>
 <context>
@@ -12360,11 +12093,6 @@ Välj de du vill ta bort permanent från hårddisken.
 <context>
     <name>Rosegarden::ConfigureDialog</name>
     <message>
-        <source>Configure Rosegarden</source>
-        <extracomment>QDialog(parent) //, tr(&quot;Configure Rosegarden&quot;), name)</extracomment>
-        <translation type="obsolete">Anpassa Rosegarden</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/dialogs/ConfigureDialog.cpp" line="47"/>
         <source>Rosegarden - Preferences</source>
         <translation>Rosegarden - Inställningar</translation>
@@ -12376,10 +12104,6 @@ Välj de du vill ta bort permanent från hårddisken.
         <location filename="../../src/gui/dialogs/ConfigureDialogBase.cpp" line="47"/>
         <source>Configure Rosegarden</source>
         <translation>Anpassa Rosegarden</translation>
-    </message>
-    <message>
-        <source>http://rosegardenmusic.com/wiki/doc:configureDialogBase-en</source>
-        <translation type="obsolete">http://rosegardenmusic.com/wiki/doc:configureDialogBase-en</translation>
     </message>
 </context>
 <context>
@@ -12617,12 +12341,12 @@ Välj de du vill ta bort permanent från hårddisken.
         <translation>Effekthändelser</translation>
     </message>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="444"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="443"/>
         <source>Insert Line of Controllers</source>
         <translation>Infoga effektrad</translation>
     </message>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="584"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="583"/>
         <source>Controller Event Number</source>
         <translation>Nummer på effekthändelse</translation>
     </message>
@@ -12771,10 +12495,6 @@ Välj de du vill ta bort permanent från hårddisken.
 <context>
     <name>Rosegarden::DeviceManagerDialog</name>
     <message>
-        <source>[ No port ]</source>
-        <translation type="obsolete">[ Ingen port ]</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="801"/>
         <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="822"/>
         <source>New Device</source>
@@ -12788,34 +12508,6 @@ Välj de du vill ta bort permanent från hårddisken.
 </context>
 <context>
     <name>Rosegarden::DiatonicPitchChooser</name>
-    <message>
-        <source>C</source>
-        <translation type="obsolete">C</translation>
-    </message>
-    <message>
-        <source>D</source>
-        <translation type="obsolete">D</translation>
-    </message>
-    <message>
-        <source>E</source>
-        <translation type="obsolete">E</translation>
-    </message>
-    <message>
-        <source>F</source>
-        <translation type="obsolete">F</translation>
-    </message>
-    <message>
-        <source>G</source>
-        <translation type="obsolete">G</translation>
-    </message>
-    <message>
-        <source>A</source>
-        <translation type="obsolete">A</translation>
-    </message>
-    <message>
-        <source>B</source>
-        <translation type="obsolete">H</translation>
-    </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="59"/>
         <source>C</source>
@@ -13089,137 +12781,6 @@ Välj de du vill ta bort permanent från hårddisken.
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="306"/>
         <source>Segment Summary</source>
         <translation>Segmentöversikt</translation>
-    </message>
-</context>
-<context>
-    <name>Rosegarden::EditView</name>
-    <message>
-        <source>%1 Controller %2 %3</source>
-        <translation type="obsolete">%1 effekt %2 %3</translation>
-    </message>
-    <message>
-        <source>Pitch Bend</source>
-        <translation type="obsolete">Tonhöjdsavvikelse</translation>
-    </message>
-    <message>
-        <source>Unsupported Event Type</source>
-        <translation type="obsolete">Händelsetyp som inte stöds</translation>
-    </message>
-    <message>
-        <source>I</source>
-        <translation type="obsolete">I</translation>
-    </message>
-    <message>
-        <source>II</source>
-        <translation type="obsolete">II</translation>
-    </message>
-    <message>
-        <source>III</source>
-        <translation type="obsolete">III</translation>
-    </message>
-    <message>
-        <source>IV</source>
-        <translation type="obsolete">IV</translation>
-    </message>
-    <message>
-        <source>V</source>
-        <translation type="obsolete">V</translation>
-    </message>
-    <message>
-        <source>VI</source>
-        <translation type="obsolete">VI</translation>
-    </message>
-    <message>
-        <source>VII</source>
-        <translation type="obsolete">VII</translation>
-    </message>
-    <message>
-        <source>VIII</source>
-        <translation type="obsolete">VIII</translation>
-    </message>
-    <message>
-        <source>%1 flat</source>
-        <translation type="obsolete">%1 b-förtecken</translation>
-    </message>
-    <message>
-        <source>%1 sharp</source>
-        <translation type="obsolete">%1 korsförtecken</translation>
-    </message>
-    <message>
-        <source>&amp;Insert Note</source>
-        <translation type="obsolete">&amp;Infoga not</translation>
-    </message>
-    <message>
-        <source>&amp;Upper Octave</source>
-        <translation type="obsolete">&amp;Övre oktav</translation>
-    </message>
-    <message>
-        <source>&amp;Lower Octave</source>
-        <translation type="obsolete">&amp;Undre oktav</translation>
-    </message>
-    <message>
-        <source>Estimated time signature shown</source>
-        <translation type="obsolete">Uppskattad taktart visas</translation>
-    </message>
-    <message>
-        <source>Halving durations...</source>
-        <translation type="obsolete">Halverar notvärden...</translation>
-    </message>
-    <message>
-        <source>Doubling durations...</source>
-        <translation type="obsolete">Dubblerar notvärden...</translation>
-    </message>
-    <message>
-        <source>Rescaling...</source>
-        <translation type="obsolete">Ändrar skala...</translation>
-    </message>
-    <message>
-        <source>Transpose</source>
-        <translation type="obsolete">Transponera</translation>
-    </message>
-    <message>
-        <source>By number of semitones: </source>
-        <translation type="obsolete">Skriv in antal halvtonsteg att transponera:</translation>
-    </message>
-    <message>
-        <source>Transposing...</source>
-        <translation type="obsolete">Transponerar...</translation>
-    </message>
-    <message>
-        <source>Transposing up one semitone...</source>
-        <translation type="obsolete">Transponerar ner ett halvtonsteg...</translation>
-    </message>
-    <message>
-        <source>Transposing up one octave...</source>
-        <translation type="obsolete">Transponerar upp en oktav...</translation>
-    </message>
-    <message>
-        <source>Transposing down one semitone...</source>
-        <translation type="obsolete">Transponerar ner ett halvtonsteg...</translation>
-    </message>
-    <message>
-        <source>Transposing down one octave...</source>
-        <translation type="obsolete">Transponerar ner en oktav...</translation>
-    </message>
-    <message>
-        <source>Inverting...</source>
-        <translation type="obsolete">Vänder upp och ner...</translation>
-    </message>
-    <message>
-        <source>Retrograding...</source>
-        <translation type="obsolete">Vänder bak och fram...</translation>
-    </message>
-    <message>
-        <source>Retrograde inverting...</source>
-        <translation type="obsolete">Vänder bak och fram och upp och ner...</translation>
-    </message>
-    <message>
-        <source>Jogging left...</source>
-        <translation type="obsolete">Knuffar åt vänster...</translation>
-    </message>
-    <message>
-        <source>Jogging right...</source>
-        <translation type="obsolete">Knuffar åt höger...</translation>
     </message>
 </context>
 <context>
@@ -13847,18 +13408,6 @@ Det kan orsaka problem om den senare överskrider ett annat beräknat värde.</t
         <source>http://rosegardenmusic.com/wiki/doc:eventView-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:eventView-en</translation>
     </message>
-    <message>
-        <source>%1 - Triggered Segment: %2</source>
-        <translation type="obsolete">%1 - utlösande segment: %2</translation>
-    </message>
-    <message>
-        <source>%1 - Segment Track #%2 - Event List</source>
-        <translation type="obsolete">%1 - segment spår nummer %2 - händelselista</translation>
-    </message>
-    <message>
-        <source>%1 - %2 Segments - Event List</source>
-        <translation type="obsolete">%1 - %2 segment - händelselista</translation>
-    </message>
 </context>
 <context>
     <name>Rosegarden::ExportDeviceDialog</name>
@@ -14019,13 +13568,6 @@ Vill du försöka söka efter filen eller hoppa över den?</translation>
         <location filename="../../src/gui/general/FileSource.cpp" line="642"/>
         <source>File contains no data!</source>
         <translation>Filen innehåller ingen data!</translation>
-    </message>
-</context>
-<context>
-    <name>Rosegarden::Fingering</name>
-    <message>
-        <source>couldn&apos;t parse fingering &apos;%1&apos; in &apos;%2&apos;</source>
-        <translation type="obsolete">kunde inte tolka fingersättning &apos;%1&apos; i &apos;%2&apos;</translation>
     </message>
 </context>
 <context>
@@ -14238,10 +13780,6 @@ Vill du försöka söka efter filen eller hoppa över den?</translation>
         <translation>Grafikprestanda</translation>
     </message>
     <message>
-        <source>Normal</source>
-        <translation type="obsolete">Normal</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="89"/>
         <source>Safe</source>
         <translation>Säker</translation>
@@ -14250,10 +13788,6 @@ Vill du försöka söka efter filen eller hoppa över den?</translation>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="88"/>
         <source>Fast</source>
         <translation>Snabb</translation>
-    </message>
-    <message>
-        <source>&lt;qt&gt;&lt;p&gt;Qt offers you the choice of three graphics systems. The normal (raster) graphics system offers the best tradeoff between performance and stability, but may cause problems for some users.  If you experience frequent crashes, or distorted graphics, you should try the safe (native) graphics system instead.  If you wish to experiment, the fast (OpenGL) graphics system delivers excellent performance for some users, but is generally less stable.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Qt erbjuder val av tre grafiksystem. Det normala grafiksystemet (rastreringssystemet) ger bäst avvägning mellan prestanda och stabilitet, men kan orsaka problem för vissa användare. Om du ofta upplever krascher, eller förvrängd grafik, bör du försöka med det säkra (inbyggda) grafiksystemet istället. Om du vill experimentera, levererar det snabba (OpenGL) grafiksystemet utmärkt prestanda för vissa användare, men är i allmänhet mindre stabilt.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="271"/>
@@ -14274,10 +13808,6 @@ Vill du försöka söka efter filen eller hoppa över den?</translation>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="288"/>
         <source>Main window</source>
         <translation>Huvudfönster</translation>
-    </message>
-    <message>
-        <source>Matrix</source>
-        <translation type="obsolete">Matris</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="292"/>
@@ -14596,24 +14126,6 @@ Vill du försöka söka efter filen eller hoppa över den?</translation>
 </context>
 <context>
     <name>Rosegarden::IdentifyTextCodecDialog</name>
-    <message>
-        <source>Choose Text Encoding</source>
-        <translation type="obsolete">Välj textkodning</translation>
-    </message>
-    <message>
-        <source>
-This file contains text in an unknown language encoding.
-
-Please select one of the following estimated text encodings
-for use with the text in this file:
-</source>
-        <translation type="obsolete">
-Filen innehåller text med en okänd språkkodning.
-
-Välj en av följande antagna textkodningar
-att använda för texten i filen:
-</translation>
-    </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="68"/>
         <source>Rosegarden</source>
@@ -15277,50 +14789,6 @@ Exempeltext från filen:</translation>
     </message>
 </context>
 <context>
-    <name>Rosegarden::LatencyConfigurationPage</name>
-    <message>
-        <source>Latency</source>
-        <translation type="obsolete">Latenstid</translation>
-    </message>
-    <message>
-        <source>Sequencer Latency</source>
-        <translation type="obsolete">Spelarens latenstid</translation>
-    </message>
-    <message>
-        <source>JACK latency</source>
-        <translation type="obsolete">JACK-latenstid</translation>
-    </message>
-    <message>
-        <source>Use the &quot;Fetch JACK latencies&quot; button to discover the latency values set at
-the sequencer.  It&apos;s recommended that you use the returned values but it&apos;s also
-possible to override them manually using the sliders.  Note that if you change
-your JACK server parameters you should always fetch the latency values again.
-The latency values will be stored by Rosegarden for use next time.</source>
-        <translation type="obsolete">Använd knappen &quot;Hämta latenstider från JACK&quot; för att se vilka
-latenstider som är inställda för spelaren. Det rekommenderas att du
-använder returnerade värden, men det är också möjligt att överskrida dem
-manuellt med skjutreglagen. Observera att om du ändrar dina
-serverparametrar för JACK, ska du alltid hämta latenstidsvärden igen.
-Latenstidsvärden lagras av Rosegarden för användning nästa gång.</translation>
-    </message>
-    <message>
-        <source>JACK playback latency (in ms)</source>
-        <translation type="obsolete">Latenstid vid uppspelning med JACK (i ms)</translation>
-    </message>
-    <message>
-        <source>JACK record latency (in ms)</source>
-        <translation type="obsolete">Latenstid vid inspelning med JACK (i ms)</translation>
-    </message>
-    <message>
-        <source>Fetch JACK latencies</source>
-        <translation type="obsolete">Hämta latenstider från JACK</translation>
-    </message>
-    <message>
-        <source>JACK Latency</source>
-        <translation type="obsolete">JACK-latenstid</translation>
-    </message>
-</context>
-<context>
     <name>Rosegarden::LilyPondExporter</name>
     <message>
         <location filename="../../src/document/io/LilyPondExporter.cpp" line="585"/>
@@ -15974,10 +15442,6 @@ fördröjning vid uppspelningens start, på grund av mängden data som skickas.<
 <context>
     <name>Rosegarden::MIDIInstrumentParameterPanel</name>
     <message>
-        <source>&lt;qt&gt;&lt;p&gt;Set the MIDI channel number.&lt;/p&gt;&lt;p&gt;Before changing this, consider switching to a different instrument instead.  Instruments #1 through #16 match MIDI channels 1 through 16 by default.  You may change this relationship using this control if you wish, but this can lead to confusion&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Ställ in MIDI-kanalens nummer.&lt;/p&gt;&lt;p&gt;Innan du ändrar detta, fundera på att byta till ett annat instrument istället. Instrument nummer 1 till 16 motsvarar normalt MIDI-kanalerna 1 till 16. Du kan ändra förhållandet med den här inställningen om du vill, men det kan orsaka förvirring.&lt;/p&gt;&lt;/qt&gt;</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="103"/>
         <source>&lt;qt&gt;Set variations on the program above, if available in the studio&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Ställ in variationer av programmet ovan, om tillgängliga i studion&lt;/qt&gt;</translation>
@@ -16012,10 +15476,6 @@ fördröjning vid uppspelningens start, på grund av mängden data som skickas.<
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="112"/>
         <source>Program</source>
         <translation>Program</translation>
-    </message>
-    <message>
-        <source>Channel out</source>
-        <translation type="obsolete">Kanal ut</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="113"/>
@@ -16176,10 +15636,6 @@ fördröjning vid uppspelningens start, på grund av mängden data som skickas.<
         <translation>Alla taktslag och deltaktslag</translation>
     </message>
     <message>
-        <source>Bars, beats, and divisions</source>
-        <translation type="obsolete">Alla taktslag och underdelningar</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="149"/>
         <source>Bar velocity</source>
         <translation>Taktettans styrka</translation>
@@ -16258,10 +15714,6 @@ fördröjning vid uppspelningens start, på grund av mängden data som skickas.<
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="200"/>
         <source>Recording</source>
         <translation>vid inspelning</translation>
-    </message>
-    <message>
-        <source>Synth plugin </source>
-        <translation type="obsolete">Syntinsticksmodul </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="326"/>
@@ -16639,77 +16091,9 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
 <context>
     <name>Rosegarden::MatrixView</name>
     <message>
-        <source>Instrument Parameters</source>
-        <translation type="obsolete">Instrumentparametrar</translation>
-    </message>
-    <message>
-        <source>Couldn&apos;t apply piano roll layout</source>
-        <translation type="obsolete">Kunde inte verkställa pianorulleutläggning</translation>
-    </message>
-    <message>
-        <source>  No selection </source>
-        <translation type="obsolete">  Ingen markering </translation>
-    </message>
-    <message>
-        <source>Quantizing...</source>
-        <translation type="obsolete">Kvantiserar...</translation>
-    </message>
-    <message>
-        <source>Collapsing notes...</source>
-        <translation type="obsolete">Lägger ihop noter...</translation>
-    </message>
-    <message>
-        <source>Making legato...</source>
-        <translation type="obsolete">Gör legato...</translation>
-    </message>
-    <message>
-        <source>Note: %1 (%2.%3s)</source>
-        <translation type="obsolete">Not: %1 (%2,%3 s)</translation>
-    </message>
-    <message>
-        <source>%1 (%2)</source>
-        <translation type="obsolete">%1 (%2)</translation>
-    </message>
-    <message>
-        <source>Time: %1 (%2.%3s)</source>
-        <translation type="obsolete">Tid: %1 (%2,%3 s)</translation>
-    </message>
-    <message>
-        <source>Cutting selection to clipboard...</source>
-        <translation type="obsolete">Klipper ut markering till klippbordet...</translation>
-    </message>
-    <message>
-        <source>Copying selection to clipboard...</source>
-        <translation type="obsolete">Kopierar markering till klippbord...</translation>
-    </message>
-    <message>
-        <source>Clipboard is empty</source>
-        <translation type="obsolete">Klippbordet är tomt</translation>
-    </message>
-    <message>
-        <source>Inserting clipboard contents...</source>
-        <translation type="obsolete">Infogar klippbordets innehåll...</translation>
-    </message>
-    <message>
-        <source>Couldn&apos;t paste at this point</source>
-        <translation type="obsolete">Kunde inte klistra in på den här platsen</translation>
-    </message>
-    <message>
-        <source>Deleting selection...</source>
-        <translation type="obsolete">Tar bort markering...</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1674"/>
         <source>Unknown note insert action %1</source>
         <translation>Okänd notinfogningsåtgärd %1</translation>
-    </message>
-    <message>
-        <source>Inserting note</source>
-        <translation type="obsolete">Infogar not</translation>
-    </message>
-    <message>
-        <source>Unquantizing...</source>
-        <translation type="obsolete">Tar bort kvantisering...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="316"/>
@@ -16733,18 +16117,6 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
             <numerusform>%1%2 - %n segment - %3</numerusform>
             <numerusform>%1%2 - %n segment - %3</numerusform>
         </translation>
-    </message>
-    <message>
-        <source>%1 Controller %2 %3</source>
-        <translation type="obsolete">%1 effekt %2 %3</translation>
-    </message>
-    <message>
-        <source>Pitch Bend</source>
-        <translation type="obsolete">Tonhöjdsavvikelse</translation>
-    </message>
-    <message>
-        <source>Unsupported Event Type</source>
-        <translation type="obsolete">Händelsetyp som inte stöds</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="584"/>
@@ -16814,14 +16186,6 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
         <translation>Uppskattad tonartssignatur visas</translation>
     </message>
     <message>
-        <source>  Zoom:  </source>
-        <translation type="obsolete">  Zooma:  </translation>
-    </message>
-    <message>
-        <source>%1%</source>
-        <translation type="obsolete">%1%</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1260"/>
         <source>Estimated time signature shown</source>
         <translation>Uppskattad taktart visas</translation>
@@ -16837,21 +16201,9 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
         <translation>Enligt antal halvtonsteg:</translation>
     </message>
     <message>
-        <source>Raising velocities...</source>
-        <translation type="obsolete">Ökar ljudstyrkor...</translation>
-    </message>
-    <message>
-        <source>Lowering velocities...</source>
-        <translation type="obsolete">Minskar ljudstyrkor...</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="988"/>
         <source>Set Event Velocities</source>
         <translation>Ställ in händelseljudstyrkor</translation>
-    </message>
-    <message>
-        <source>Setting Velocities...</source>
-        <translation type="obsolete">Ställer in ljudstyrkor...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1032"/>
@@ -16869,25 +16221,9 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
         <translation>Matris</translation>
     </message>
     <message>
-        <source>Percussion</source>
-        <translation type="obsolete">Slagverk</translation>
-    </message>
-    <message>
-        <source>%1 - Segment Track #%2 - %3</source>
-        <translation type="obsolete">%1 - segment spår nummer %2 - %3</translation>
-    </message>
-    <message>
-        <source>%1 - All Segments - %2</source>
-        <translation type="obsolete">%1 - alla segment - %2</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1596"/>
         <source>Can&apos;t insert note: No grid duration selected</source>
         <translation>Kan inte infoga not: Ingen rutnätslängd vald</translation>
-    </message>
-    <message>
-        <source> Chord </source>
-        <translation type="obsolete">Ackord</translation>
     </message>
 </context>
 <context>
@@ -17214,291 +16550,9 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
 <context>
     <name>Rosegarden::NameSetEditor</name>
     <message>
-        <source>Librarian</source>
-        <translation type="obsolete">Bibliotekarie</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">Namn</translation>
-    </message>
-    <message>
-        <source>Email</source>
-        <translation type="obsolete">E-post</translation>
-    </message>
-    <message>
-        <source>The librarian maintains the Rosegarden device data for this device.
-If you&apos;ve made modifications to suit your own device, it might be worth
-liaising with the librarian in order to publish your information for the benefit
-of others.</source>
-        <translation type="obsolete">Bibliotekarien underhåller Rosegardens enhetsdata för enheten.
-Om du har gjort ändringar för att passa din egen enhet kan det vara
-värt att samråda med bibliotekarien för att publicera din information,
-så att andra kan dra nytta av den.</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/studio/NameSetEditor.cpp" line="66"/>
         <source>Provided by</source>
         <translation>Tillhandahålls av</translation>
-    </message>
-</context>
-<context>
-    <name>Rosegarden::NewMatrixView</name>
-    <message>
-        <source>Matrix</source>
-        <translation type="obsolete">Matris</translation>
-    </message>
-    <message>
-        <source>&lt;untitled&gt;</source>
-        <translation type="obsolete">&lt;namnlös&gt;</translation>
-    </message>
-    <message>
-        <source>%1 - All Segments - %2</source>
-        <translation type="obsolete">%1 - alla segment - %2</translation>
-    </message>
-    <message>
-        <source> Grid: </source>
-        <translation type="obsolete"> Rutnät: </translation>
-    </message>
-    <message>
-        <source>None</source>
-        <translation type="obsolete">Ingen</translation>
-    </message>
-    <message>
-        <source>Unit</source>
-        <translation type="obsolete">Enhet</translation>
-    </message>
-    <message>
-        <source>Beat</source>
-        <translation type="obsolete">Taktslag</translation>
-    </message>
-    <message>
-        <source>Bar</source>
-        <translation type="obsolete">Takt</translation>
-    </message>
-    <message>
-        <source> Velocity: </source>
-        <translation type="obsolete">Ljudstyrka:</translation>
-    </message>
-    <message>
-        <source> Quantize: </source>
-        <translation type="obsolete"> Kvantisera: </translation>
-    </message>
-    <message>
-        <source>  Zoom:  </source>
-        <translation type="obsolete">  Zooma:  </translation>
-    </message>
-    <message>
-        <source>%1%</source>
-        <translation type="obsolete">%1%</translation>
-    </message>
-    <message>
-        <source>Set Event Velocities</source>
-        <translation type="obsolete">Ställ in händelseljudstyrkor</translation>
-    </message>
-    <message>
-        <source>Trigger Segment</source>
-        <translation type="obsolete">Utlösande segment</translation>
-    </message>
-    <message>
-        <source>Remove Triggers</source>
-        <translation type="obsolete">Ta bort utlösare</translation>
-    </message>
-    <message>
-        <source>Estimated time signature shown</source>
-        <translation type="obsolete">Uppskattad taktart visas</translation>
-    </message>
-    <message>
-        <source>Transpose</source>
-        <translation type="obsolete">Transponera</translation>
-    </message>
-    <message>
-        <source>By number of semitones: </source>
-        <translation type="obsolete">Skriv in antal halvtonsteg att transponera:</translation>
-    </message>
-    <message>
-        <source>Can&apos;t insert note: No grid duration selected</source>
-        <translation type="obsolete">Kan inte infoga not: Ingen rutnätslängd vald</translation>
-    </message>
-</context>
-<context>
-    <name>Rosegarden::NewNotationView</name>
-    <message>
-        <source>Note &amp;Font</source>
-        <translation type="obsolete">Not&amp;teckensnitt</translation>
-    </message>
-    <message>
-        <source>Si&amp;ze</source>
-        <translation type="obsolete">St&amp;orlek</translation>
-    </message>
-    <message>
-        <source>S&amp;pacing</source>
-        <translation type="obsolete">&amp;Avstånd</translation>
-    </message>
-    <message>
-        <source>  Font:  </source>
-        <translation type="obsolete">  Teckensnitt:  </translation>
-    </message>
-    <message>
-        <source>Unknown font &quot;%1&quot;, using default</source>
-        <translation type="obsolete">Okänt teckensnitt &quot;%1&quot;, använder förval</translation>
-    </message>
-    <message>
-        <source>  Size:  </source>
-        <translation type="obsolete">  Storlek:  </translation>
-    </message>
-    <message>
-        <source>  Spacing:  </source>
-        <translation type="obsolete">  Avstånd:  </translation>
-    </message>
-    <message>
-        <source>LilyPond Preview Options</source>
-        <translation type="obsolete">Förhandsgranskningsalternativ för Lilypond</translation>
-    </message>
-    <message>
-        <source>LilyPond preview options</source>
-        <translation type="obsolete">Förhandsgranskningsalternativ för Lilypond</translation>
-    </message>
-    <message>
-        <source>Export failed.  The file could not be opened for writing.</source>
-        <translation type="obsolete">Export misslyckades. Filen kunde inte öppnas för skrivning.</translation>
-    </message>
-    <message>
-        <source>Unknown font action %1</source>
-        <translation type="obsolete">Okänd teckenåtgärd %1</translation>
-    </message>
-    <message>
-        <source>Unknown font size action %1</source>
-        <translation type="obsolete">Okänd teckenstorleksåtgärd %1</translation>
-    </message>
-    <message>
-        <source>Unknown spacing action %1</source>
-        <translation type="obsolete">Okänd avståndsåtgärd %1</translation>
-    </message>
-    <message>
-        <source>Can&apos;t paste multiple Segments into one</source>
-        <translation type="obsolete">Kan inte klistra in flera segment i ett</translation>
-    </message>
-    <message>
-        <source>Rosegarden</source>
-        <translation type="obsolete">Rosegarden</translation>
-    </message>
-    <message>
-        <source>Couldn&apos;t paste at this point.</source>
-        <translation type="obsolete">Kunde inte klistra in på den här platsen.</translation>
-    </message>
-    <message>
-        <source>The Restricted paste type requires enough empty space (containing only rests) at the paste position to hold all of the events to be pasted.
-Not enough space was found.
-If you want to paste anyway, consider using one of the other paste types from the &quot;Paste...&quot; option on the Edit menu.  You can also change the default paste type to something other than Restricted if you wish.</source>
-        <translation type="obsolete">Den begränsade typen av inklistring kräver tillräckligt med tomt utrymme (som bara innehåller pauser) på inklistringsplatsen för att få plats med alla händelser som ska klistras in.
-Tillräckligt med utrymme hittades inte.
-Om du ändå vill klistra in, fundera på att använda en av de andra inklistringstyperna under alternativet &quot;Klistra in...&quot; i menyn Redigera. Du kan också ändra förvald inklistringstyp till något annat än Begränsad om du vill.</translation>
-    </message>
-    <message>
-        <source>Clipboard is empty</source>
-        <translation type="obsolete">Klippbordet är tomt</translation>
-    </message>
-    <message>
-        <source>Inserting clipboard contents...</source>
-        <translation type="obsolete">Infogar klippbordets innehåll...</translation>
-    </message>
-    <message>
-        <source>Raising velocities...</source>
-        <translation type="obsolete">Ökar ljudstyrkor...</translation>
-    </message>
-    <message>
-        <source>Lowering velocities...</source>
-        <translation type="obsolete">Minskar ljudstyrkor...</translation>
-    </message>
-    <message>
-        <source>Set Event Velocities</source>
-        <translation type="obsolete">Ställ in händelseljudstyrkor</translation>
-    </message>
-    <message>
-        <source>Setting Velocities...</source>
-        <translation type="obsolete">Ställer in ljudstyrkor...</translation>
-    </message>
-    <message>
-        <source>Unknown note insert action %1</source>
-        <translation type="obsolete">Okänd notinfogningsåtgärd %1</translation>
-    </message>
-    <message>
-        <source>Inserting note</source>
-        <translation type="obsolete">Infogar not</translation>
-    </message>
-    <message>
-        <source>Ornament track %1 bar %2</source>
-        <translation type="obsolete">Ornament spår %1 takt %2</translation>
-    </message>
-    <message>
-        <source>Ornament bar %1</source>
-        <translation type="obsolete">Ornament takt %1</translation>
-    </message>
-    <message>
-        <source>Make Ornament</source>
-        <translation type="obsolete">Skapa ornament</translation>
-    </message>
-    <message>
-        <source>Use Ornament</source>
-        <translation type="obsolete">Använd ornament</translation>
-    </message>
-    <message>
-        <source>Remove Ornaments</source>
-        <translation type="obsolete">Ta bort ornament</translation>
-    </message>
-    <message>
-        <source>Estimated key signature shown</source>
-        <translation type="obsolete">Uppskattad tonartssignatur visas</translation>
-    </message>
-    <message>
-        <source>Sustain</source>
-        <translation type="obsolete">Förlängning</translation>
-    </message>
-    <message>
-        <source>There is no sustain controller defined for this device.
-Please ensure the device is configured correctly in the Manage MIDI Devices dialog in the main window.</source>
-        <translation type="obsolete">Det finns igen förlängningseffekt definierad för enheten.
-Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-enheter i huvudfönstret.</translation>
-    </message>
-    <message>
-        <source>Estimated time signature shown</source>
-        <translation type="obsolete">Uppskattad taktart visas</translation>
-    </message>
-    <message>
-        <source>Can&apos;t insert note: No note duration selected</source>
-        <translation type="obsolete">Kan inte infoga not: Inget notvärde valt</translation>
-    </message>
-    <message>
-        <source>Time: %1 (%2.%3s)</source>
-        <translation type="obsolete">Tid: %1 (%2,%3 s)</translation>
-    </message>
-    <message>
-        <source>%1 - Segment Track #%2 - Notation</source>
-        <translation type="obsolete">%1 - segment spår nummer %2 - notskrift</translation>
-    </message>
-    <message>
-        <source>%1 - All Segments - Notation</source>
-        <translation type="obsolete">%1 - alla segment - notskrift</translation>
-    </message>
-    <message>
-        <source>Triplet</source>
-        <translation type="obsolete">Triol</translation>
-    </message>
-    <message>
-        <source>Chord</source>
-        <translation type="obsolete">Ackord</translation>
-    </message>
-    <message>
-        <source>Grace</source>
-        <translation type="obsolete">Prydnad</translation>
-    </message>
-    <message>
-        <source>Transpose</source>
-        <translation type="obsolete">Transponera</translation>
-    </message>
-    <message>
-        <source>By number of semitones: </source>
-        <translation type="obsolete">Skriv in antal halvtonsteg att transponera:</translation>
     </message>
 </context>
 <context>
@@ -17546,18 +16600,6 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="109"/>
         <source>%1 % (normal)</source>
         <translation>%1 % (normal)</translation>
-    </message>
-    <message>
-        <source>Default duration factor</source>
-        <translation type="obsolete">Förvald notvärdesfaktor</translation>
-    </message>
-    <message>
-        <source>None</source>
-        <translation type="obsolete">Ingen</translation>
-    </message>
-    <message>
-        <source>Full</source>
-        <translation type="obsolete">Fullt</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="121"/>
@@ -17770,10 +16812,6 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="487"/>
         <source>Font size for multi-staff views</source>
         <translation>Teckenstorlek för vyer med flera notlinjesystemräckor</translation>
-    </message>
-    <message>
-        <source>Font size for printing (pt)</source>
-        <translation type="obsolete">Teckenstorlek för utskrift (punkter)</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="505"/>
@@ -18061,18 +17099,6 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat)</transla
 <context>
     <name>Rosegarden::NotationView</name>
     <message>
-        <source>Close track headers</source>
-        <translation type="obsolete">Stäng spårnamn</translation>
-    </message>
-    <message>
-        <source>Starting...</source>
-        <translation type="obsolete">Startar...</translation>
-    </message>
-    <message>
-        <source>Preparing to print...</source>
-        <translation type="obsolete">Förbereder utskrift...</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="858"/>
         <source>Note &amp;Font</source>
         <translation>Not&amp;teckensnitt</translation>
@@ -18086,14 +17112,6 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat)</transla
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="906"/>
         <source>S&amp;pacing</source>
         <translation>&amp;Avstånd</translation>
-    </message>
-    <message>
-        <source>Du&amp;ration Factor</source>
-        <translation type="obsolete">&amp;Längdfaktor</translation>
-    </message>
-    <message>
-        <source>None</source>
-        <translation type="obsolete">Ingen</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="898"/>
@@ -18124,45 +17142,9 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat)</transla
         <translation>  Avstånd:  </translation>
     </message>
     <message>
-        <source>  Ready.</source>
-        <translation type="obsolete">  Klar.</translation>
-    </message>
-    <message>
-        <source>Laying out score...</source>
-        <translation type="obsolete">Lägger ut partitur...</translation>
-    </message>
-    <message>
-        <source>Laying out staff %1...</source>
-        <translation type="obsolete">Lägger ut notsystem %1...</translation>
-    </message>
-    <message>
-        <source>Reconciling staffs...</source>
-        <translation type="obsolete">Gör notsystem förenliga...</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="999"/>
         <source>  No selection </source>
         <translation>  Ingen markering </translation>
-    </message>
-    <message>
-        <source>Sizing and allocating canvas...</source>
-        <translation type="obsolete">Ställer in storlek och allokerar duk...</translation>
-    </message>
-    <message>
-        <source>note</source>
-        <translation type="obsolete">not</translation>
-    </message>
-    <message>
-        <source>rest</source>
-        <translation type="obsolete">paus</translation>
-    </message>
-    <message>
-        <source>%1 - Segment Track #%2 - Notation</source>
-        <translation type="obsolete">%1 - segment spår nummer %2 - notskrift</translation>
-    </message>
-    <message>
-        <source>%1 - All Segments - Notation</source>
-        <translation type="obsolete">%1 - alla segment - notskrift</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3229"/>
@@ -18187,21 +17169,9 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat)</transla
         <translation>%1 %2</translation>
     </message>
     <message>
-        <source>Hidden annotations</source>
-        <translation type="obsolete">Dolda anteckningar</translation>
-    </message>
-    <message>
-        <source>Hidden LilyPond directives</source>
-        <translation type="obsolete">Dolda Lilypond-direktiv</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1358"/>
         <source>Unknown spacing action %1</source>
         <translation>Okänd avståndsåtgärd %1</translation>
-    </message>
-    <message>
-        <source>Unknown proportion action %1</source>
-        <translation type="obsolete">Okänd förhållandeåtgärd %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1307"/>
@@ -18209,33 +17179,9 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat)</transla
         <translation>Okänd teckenåtgärd %1</translation>
     </message>
     <message>
-        <source>Unknown font size %1</source>
-        <translation type="obsolete">Okänd teckenstorlek %1</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1333"/>
         <source>Unknown font size action %1</source>
         <translation>Okänd teckenstorleksåtgärd %1</translation>
-    </message>
-    <message>
-        <source>Printing...</source>
-        <translation type="obsolete">Skriver ut...</translation>
-    </message>
-    <message>
-        <source>Previewing...</source>
-        <translation type="obsolete">Förhandsgranskar...</translation>
-    </message>
-    <message>
-        <source>Printing LilyPond file...</source>
-        <translation type="obsolete">Skriver ut Lilypond-fil...</translation>
-    </message>
-    <message>
-        <source>Failed to open a temporary file for LilyPond export.</source>
-        <translation type="obsolete">Misslyckades att öppna en tillfällig fil för export till Lilypond.</translation>
-    </message>
-    <message>
-        <source>Previewing LilyPond file...</source>
-        <translation type="obsolete">Förhandsgranskar Lilypond-fil...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1186"/>
@@ -18248,25 +17194,9 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat)</transla
         <translation>Förhandsgranskningsalternativ för Lilypond</translation>
     </message>
     <message>
-        <source>Exporting LilyPond file...</source>
-        <translation type="obsolete">Exporterar Lilypond-fil...</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1198"/>
         <source>Export failed.  The file could not be opened for writing.</source>
         <translation>Export misslyckades. Filen kunde inte öppnas för skrivning.</translation>
-    </message>
-    <message>
-        <source>Cutting selection to clipboard...</source>
-        <translation type="obsolete">Klipper ut markering till klippbordet...</translation>
-    </message>
-    <message>
-        <source>Deleting selection...</source>
-        <translation type="obsolete">Tar bort markering...</translation>
-    </message>
-    <message>
-        <source>Copying selection to clipboard...</source>
-        <translation type="obsolete">Kopierar markering till klippbord...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1489"/>
@@ -18375,10 +17305,6 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat)</transla
         <translation>Lägger ihop noter...</translation>
     </message>
     <message>
-        <source>No note duration selected</source>
-        <translation type="obsolete">Inget notvärde valt</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2293"/>
         <source>Unknown note insert action %1</source>
         <translation>Okänd notinfogningsåtgärd %1</translation>
@@ -18387,22 +17313,6 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat)</transla
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2297"/>
         <source>Inserting note</source>
         <translation>Infogar not</translation>
-    </message>
-    <message>
-        <source>No rest duration selected</source>
-        <translation type="obsolete">Inget pausvärde valt</translation>
-    </message>
-    <message>
-        <source>No note or rest duration selected</source>
-        <translation type="obsolete">Inget not- eller pausvärde valt</translation>
-    </message>
-    <message>
-        <source>Quantizing...</source>
-        <translation type="obsolete">Kvantiserar...</translation>
-    </message>
-    <message>
-        <source>Interpreting selection...</source>
-        <translation type="obsolete">Tolkar markering...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4287"/>
@@ -18900,14 +17810,6 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
         <translation>Flytta ner</translation>
     </message>
     <message>
-        <source>Delete</source>
-        <translation type="obsolete">Radera</translation>
-    </message>
-    <message>
-        <source>Clear</source>
-        <translation type="obsolete">Töm</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/segment/PlayList.cpp" line="81"/>
         <source>Remove</source>
         <translation>Ta bort</translation>
@@ -19056,10 +17958,6 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
 <context>
     <name>Rosegarden::ProgressDialog</name>
     <message>
-        <source>Processing...</source>
-        <translation type="obsolete">Behandlar...</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/widgets/ProgressDialog.cpp" line="63"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
@@ -19149,10 +18047,6 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="798"/>
         <source>&lt;qt&gt;&lt;p&gt;Encoding and compressing files failed with exit status %1. Checking %2 for the line that ends with &quot;exit %1&quot; may be useful for diagnostic purposes.&lt;/p&gt;%3&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Kodning och komprimering av filer misslyckades med avslutningsstatus %1. Att titta i %2 efter raden som slutar med &quot;exit %1&quot; kan vara nyttigt i felsökningssyfte.&lt;/p&gt;%3&lt;/qt&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;qt&gt;&lt;p&gt;Unable to read to temporary file list.&lt;/p&gt;%1&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Kunde inte läsa från tillfällig fillista.&lt;/p&gt;%1&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="1042"/>
@@ -19278,10 +18172,6 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
         <location filename="../../src/gui/dialogs/QuantizeDialog.cpp" line="36"/>
         <source>Quantize</source>
         <translation>Kvantisering</translation>
-    </message>
-    <message>
-        <source>Advanced</source>
-        <translation type="obsolete">Avancerat</translation>
     </message>
 </context>
 <context>
@@ -19414,10 +18304,6 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
         <translation>Efter kvantisering</translation>
     </message>
     <message>
-        <source>Show advanced options</source>
-        <translation type="obsolete">Visa avancerade alternativ</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="152"/>
         <source>Re-beam</source>
         <translation>Lägg till balkar igen</translation>
@@ -19441,14 +18327,6 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="255"/>
         <source>Full quantize</source>
         <translation>Fullständig kvantisering</translation>
-    </message>
-    <message>
-        <source>Show Advanced Options</source>
-        <translation type="obsolete">Visa avancerade alternativ</translation>
-    </message>
-    <message>
-        <source>Hide Advanced Options</source>
-        <translation type="obsolete">Dölj avancerade alternativ</translation>
     </message>
 </context>
 <context>
@@ -19768,12 +18646,6 @@ här versionen. Det kan finnas vissa problem med filformatet.</translation>
 <context>
     <name>Rosegarden::RosegardenDocument</name>
     <message>
-        <source>The current file has been modified.
-Do you want to save it?</source>
-        <translation type="obsolete">Den aktuella filen har ändrats.
-Vill du spara den?</translation>
-    </message>
-    <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="344"/>
         <source>Rosegarden - Warning</source>
         <translation>Rosegarden - Varning</translation>
@@ -19987,10 +18859,6 @@ för att försäkra dig om att den kan läsas in igen i framtida versioner.</tra
 <context>
     <name>Rosegarden::RosegardenMainViewWidget</name>
     <message>
-        <source>No non-audio segments in composition</source>
-        <translation type="obsolete">Inga segment utan ljud i kompositionen</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="301"/>
         <source>Selection must contain only audio or non-audio segments</source>
         <translation>Markering får bara innehålla segment med eller utan ljud</translation>
@@ -20015,12 +18883,6 @@ för att försäkra dig om att den kan läsas in igen i framtida versioner.</tra
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="737"/>
         <source>No non-audio segments selected</source>
         <translation>Inga segment utan ljud markerade</translation>
-    </message>
-    <message>
-        <source>You&apos;ve not yet defined an audio editor for Rosegarden to use.
-See Settings -&gt; Configure Rosegarden -&gt; Audio.</source>
-        <translation type="obsolete">Du har ännu inte definierat en ljudeditor som Rosegarden ska använda.
-Se Inställningar -&gt; Anpassa Rosegarden -&gt; Audio.</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="815"/>
@@ -20250,10 +19112,6 @@ Felet är: %2</translation>
         <translation>Sparar fil...</translation>
     </message>
     <message>
-        <source>Save File</source>
-        <translation type="obsolete">Spara fil</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2034"/>
         <source>&lt;qt&gt;Sorry.&lt;br&gt;&quot;%1&quot; is not a valid filename.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Tyvärr är inte&lt;br&gt;&quot;%1&quot; ett giltigt filnamn.&lt;/qt&gt;</translation>
@@ -20267,11 +19125,6 @@ Felet är: %2</translation>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2047"/>
         <source>The specified file exists.  Overwrite?</source>
         <translation>Den angivna filen finns. Ska den skrivas över?</translation>
-    </message>
-    <message>
-        <source>Saving file%1with a new filename...</source>
-        <translatorcomment>English: Missing spaces around %1?</translatorcomment>
-        <translation type="obsolete">Spara filen %1 med ett nytt filnamn...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2073"/>
@@ -20292,14 +19145,6 @@ Felet är: %2</translation>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2129"/>
         <source>Closing file...</source>
         <translation>Stänger fil...</translation>
-    </message>
-    <message>
-        <source>Printing...</source>
-        <translation type="obsolete">Skriver ut...</translation>
-    </message>
-    <message>
-        <source>Previewing...</source>
-        <translation type="obsolete">Förhandsgranskar...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2142"/>
@@ -20635,62 +19480,6 @@ Segment -&gt; Sammanfoga segment.
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4042"/>
         <source>Can&apos;t load Hydrogen file.  It appears to be corrupted.</source>
         <translation>Kan inte läsa in Hydrogen-fil. Den verkar vara skadad.</translation>
-    </message>
-    <message>
-        <source>Export and import of Rosegarden Project files</source>
-        <translation type="obsolete">Export och import av Rosegarden-projektfiler</translation>
-    </message>
-    <message>
-        <source>The Rosegarden Project Packager helper script</source>
-        <translation type="obsolete">Hjälpskript för Rosegardens projektpaketerare</translation>
-    </message>
-    <message>
-        <source>%1 - for project file support</source>
-        <translation type="obsolete">%1 - för projektfilstöd</translation>
-    </message>
-    <message>
-        <source>Notation previews through LilyPond</source>
-        <translation type="obsolete">Förhandsgranskning med Lil&amp;ypond...</translation>
-    </message>
-    <message>
-        <source>The Rosegarden LilyPondView helper script</source>
-        <translation type="obsolete">Rosegardens hjälpskript för LilyPondvy</translation>
-    </message>
-    <message>
-        <source>%1 - for LilyPond preview support</source>
-        <translation type="obsolete">%1 - för stöd till förhandsgranskning med LilyPond</translation>
-    </message>
-    <message>
-        <source>The Rosegarden Audio File Importer helper script</source>
-        <translation type="obsolete">Hjälpskriptet för Rosegardens ljudfilimport</translation>
-    </message>
-    <message>
-        <source>%1 - for audio file import</source>
-        <translation type="obsolete">%1 - för ljudfilsimport</translation>
-    </message>
-    <message>
-        <source>&lt;h3&gt;Helper programs not found&lt;/h3&gt;&lt;p&gt;Rosegarden could not find one or more helper programs which it needs to provide some features.  The following features will not be available:&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;h3&gt;Hjälpprogram ej funna&lt;/h3&gt;&lt;p&gt;Rosegarden kunde inte finna ett eller flera hjälpprogram som det behöver för att tillhandahålla vissa funktioner. Följande funktioner kommer inte att erbjudas:&lt;/p&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;ul&gt;</source>
-        <translation type="obsolete">&lt;ul&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;li&gt;%1&lt;/li&gt;</source>
-        <translation type="obsolete">&lt;li&gt;%1&lt;/li&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;/ul&gt;</source>
-        <translation type="obsolete">&lt;/ul&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;p&gt;To fix this, you should install the following additional programs:&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;p&gt;För att fixa detta bör du installera följande program:&lt;/p&gt;</translation>
-    </message>
-    <message>
-        <source>Helper programs not found</source>
-        <translation type="obsolete">Hjälpprogram ej funna</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4816"/>
@@ -22308,54 +21097,6 @@ Att avsluta andra program som körs kan förbättra Rosegardens prestanda.</tran
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <source>C</source>
-        <translation type="obsolete">C</translation>
-    </message>
-    <message>
-        <source>C#</source>
-        <translation type="obsolete">Ciss</translation>
-    </message>
-    <message>
-        <source>D</source>
-        <translation type="obsolete">D</translation>
-    </message>
-    <message>
-        <source>Eb</source>
-        <translation type="obsolete">Ess</translation>
-    </message>
-    <message>
-        <source>E</source>
-        <translation type="obsolete">E</translation>
-    </message>
-    <message>
-        <source>F</source>
-        <translation type="obsolete">F</translation>
-    </message>
-    <message>
-        <source>F#</source>
-        <translation type="obsolete">Fiss</translation>
-    </message>
-    <message>
-        <source>G</source>
-        <translation type="obsolete">G</translation>
-    </message>
-    <message>
-        <source>G#</source>
-        <translation type="obsolete">Giss</translation>
-    </message>
-    <message>
-        <source>A</source>
-        <translation type="obsolete">A</translation>
-    </message>
-    <message>
-        <source>Bb</source>
-        <translation type="obsolete">B</translation>
-    </message>
-    <message>
-        <source>B</source>
-        <translation type="obsolete">H</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="685"/>
         <source>%1: %2</source>
         <translation>%1: %2</translation>
@@ -22364,17 +21105,6 @@ Att avsluta andra program som körs kan förbättra Rosegardens prestanda.</tran
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="688"/>
         <source> in %1</source>
         <translation>i %1</translation>
-    </message>
-</context>
-<context>
-    <name>Rosegarden::Studio</name>
-    <message>
-        <source>Audio</source>
-        <translation type="obsolete">Ljud</translation>
-    </message>
-    <message>
-        <source>Synth plugin</source>
-        <translation type="obsolete">Syntinsticksmodul</translation>
     </message>
 </context>
 <context>
@@ -23319,10 +22049,6 @@ Vill du ställa in den nu?</translation>
         <source>Rosegarden cannot accept dropped files of this type.</source>
         <translation>Rosegarden kan inte hantera släppta filer av den här typen.</translation>
     </message>
-    <message>
-        <source>You can&apos;t drop files into Rosegarden from this client.  Try using Konqueror instead.</source>
-        <translation type="obsolete">Du kan inte släppa filer till Rosegarden från det här programmet. Försök att använda Konqueror istället.</translation>
-    </message>
 </context>
 <context>
     <name>Rosegarden::TrackLabel</name>
@@ -23515,10 +22241,6 @@ Vill du ställa in den nu?</translation>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="166"/>
         <source>&lt;qt&gt;&lt;p&gt;Choose the device this track will use for playback.&lt;/p&gt;&lt;p&gt;Click &lt;img src=&quot;:pixmaps/toolbar/manage-midi-devices.xpm&quot;&gt; to connect this device to a useful output if you do not hear sound&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Välj enhet som spåret ska använda för uppspelning.&lt;/p&gt;&lt;p&gt;Klicka på &lt;img src=&quot;:pixmaps/toolbar/manage-midi-devices.xpm&quot;&gt; för att ansluta enheten till en användbar utgång om du inte hör något ljud&lt;/p&gt;&lt;/qt&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;qt&gt;&lt;p&gt;This track will only record Audio/ MIDI from the selected device, filtering anything else out&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Detta spår spelar bara in ljud eller MIDI från vald enhet, och filtrerar bort allting annat&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="221"/>
@@ -24287,21 +23009,6 @@ Vill du ställa in den nu?</translation>
     </message>
 </context>
 <context>
-    <name>RosegardenApplication</name>
-    <message>
-        <source>Rosegarden - A sequencer and musical notation editor</source>
-        <translation type="obsolete">Rosegarden - Ett musikbehandlingsprogram med spår-, matris- och noteditorer</translation>
-    </message>
-    <message>
-        <source>Rosegarden</source>
-        <translation type="obsolete">Rosegarden</translation>
-    </message>
-    <message>
-        <source>Welcome!</source>
-        <translation type="obsolete">Välkommen!</translation>
-    </message>
-</context>
-<context>
     <name>RosegardenDocument</name>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="2534"/>
@@ -24506,17 +23213,6 @@ Vill du ställa in den nu?</translation>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1159"/>
         <source>Display time to end</source>
         <translation>Visa tid till slutet</translation>
-    </message>
-</context>
-<context>
-    <name>Studio</name>
-    <message>
-        <source>Audio</source>
-        <translation type="obsolete">Ljud</translation>
-    </message>
-    <message>
-        <source>Synth plugin</source>
-        <translation type="obsolete">Syntinsticksmodul</translation>
     </message>
 </context>
 </TS>

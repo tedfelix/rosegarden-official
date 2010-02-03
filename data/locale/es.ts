@@ -2,13 +2,6 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="es" sourcelanguage="en_US">
 <context>
-    <name></name>
-    <message>
-        <source>Rosegarden</source>
-        <translation type="obsolete">Rosegarden</translation>
-    </message>
-</context>
-<context>
     <name>DeviceManagerDialogUi</name>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="474"/>
@@ -2971,18 +2964,23 @@
         <translation>&amp;Estilo de nota</translation>
     </message>
     <message>
+        <location filename="../QMenuStrings.cpp" line="2064"/>
         <source>Classical</source>
         <translation>Clásico</translation>
     </message>
     <message>
+        <location filename="../QMenuStrings.cpp" line="2065"/>
         <source>Cross</source>
         <translation>Cruz</translation>
     </message>
     <message>
+        <location filename="../QMenuStrings.cpp" line="2066"/>
         <source>Mensural</source>
         <translation>Mensural</translation>
     </message>
     <message>
+        <location filename="../QMenuStrings.cpp" line="2067"/>
+        <location filename="../InstrumentStrings.cpp" line="285"/>
         <source>Triangle</source>
         <translation>Triángulo</translation>
     </message>
@@ -3682,10 +3680,6 @@
         <location filename="../QMenuStrings.cpp" line="836"/>
         <source>Remove &amp;Triggers</source>
         <translation>Eliminar &amp;Activadores</translation>
-    </message>
-    <message>
-        <source>Pitch &amp;Bend Sequence...</source>
-        <translation type="obsolete">Secuencia de infle&amp;xión de tono...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="668"/>
@@ -5980,12 +5974,6 @@
         <location filename="../InstrumentStrings.cpp" line="284"/>
         <source>Chinese cymbal</source>
         <translation>Platillo chino</translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="2067"/>
-        <location filename="../InstrumentStrings.cpp" line="285"/>
-        <source>Triangle</source>
-        <translation>Triángulo</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="286"/>
@@ -10135,10 +10123,6 @@
         <source>&lt;p&gt;Copyright 2000-2010 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2&lt;/p&gt;</source>
         <translation>&lt;p&gt;Copyright 2000-2010 el equipo de Rosegarden&lt;/p&gt;&lt;p&gt;Versión: %1 &amp;nbsp; Versión de Qt: %2&lt;br&gt;Clave: %3&lt;/p&gt;&lt;p&gt;Rosegarden se realizó por un equipo de voluntarios ubicado por todas partes del mundo.  Para aprender quíen desarolló Rosegarden, consulte el &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;sitio Rosegarden&lt;/a&gt;&lt;br&gt;Para más información acerda de Rosegarden, consulte &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Licencia: GNU General Public License Version 2&lt;/p&gt;</translation>
     </message>
-    <message>
-        <source>&lt;p&gt;Copyright 2000-2009 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;p&gt;Copyright 2000-2009 el equipo de Rosegarden&lt;/p&gt;&lt;p&gt;Versión: %1 &amp;nbsp; Versión de Qt: %2&lt;br&gt;Clave: %3&lt;/p&gt;&lt;p&gt;Rosegarden se realizó por un equipo de voluntarios ubicado por todas partes del mundo.  Para aprender quíen desarolló Rosegarden, consulte el &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;sitio Rosegarden&lt;/a&gt;&lt;br&gt;Para más información acerda de Rosegarden, consulte &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Licencia: GNU General Public License Version 2&lt;/p&gt;</translation>
-    </message>
 </context>
 <context>
     <name>Rosegarden::ActionCommandArgumentQuerier</name>
@@ -12106,10 +12090,6 @@ Por favor, seleccione cuáles de ellos quiere borrar permanentemente del disco d
         <source>Configure Rosegarden</source>
         <translation>Configurar Rosegarden</translation>
     </message>
-    <message>
-        <source>http://rosegardenmusic.com/wiki/doc:configureDialogBase-en</source>
-        <translation type="obsolete">http://rosegardenmusic.com/wiki/doc:configureDialogBase-es</translation>
-    </message>
 </context>
 <context>
     <name>Rosegarden::ControlChangeCommand</name>
@@ -12346,12 +12326,12 @@ Por favor, seleccione cuáles de ellos quiere borrar permanentemente del disco d
         <translation>Eventos de controlador</translation>
     </message>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="444"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="443"/>
         <source>Insert Line of Controllers</source>
         <translation>Insertar línea de controladores</translation>
     </message>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="584"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="583"/>
         <source>Controller Event Number</source>
         <translation>Numero de evento de controlador</translation>
     </message>
@@ -13769,10 +13749,6 @@ Would you like to try and locate this file or skip it?</source>
         <translation>Calidad de rendimiento gráfico</translation>
     </message>
     <message>
-        <source>Normal</source>
-        <translation type="obsolete">Normal</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="89"/>
         <source>Safe</source>
         <translation>Seguro</translation>
@@ -13781,10 +13757,6 @@ Would you like to try and locate this file or skip it?</source>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="88"/>
         <source>Fast</source>
         <translation>Rápido</translation>
-    </message>
-    <message>
-        <source>&lt;qt&gt;&lt;p&gt;Qt offers you the choice of three graphics systems. The normal (raster) graphics system offers the best tradeoff between performance and stability, but may cause problems for some users.  If you experience frequent crashes, or distorted graphics, you should try the safe (native) graphics system instead.  If you wish to experiment, the fast (OpenGL) graphics system delivers excellent performance for some users, but is generally less stable.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Qt ofrece usted tres sistemas de gráficos distintos.  El normal (raster) ofrece el mejor compromiso entre rápidez y estabilidad, pero unos usuarios sufren problemas con este.  Si usted sufre cuelgues frequentes o gráficos deformados, pruebe el seguro (native). El rápido (OpenGL) ofrece el mejor rápidez, pero suele ser muy inestable.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="271"/>
@@ -14139,24 +14111,6 @@ Would you like to try and locate this file or skip it?</source>
 </context>
 <context>
     <name>Rosegarden::IdentifyTextCodecDialog</name>
-    <message>
-        <source>Choose Text Encoding</source>
-        <translation type="obsolete">Seleccione un tipo de codificación de texto</translation>
-    </message>
-    <message>
-        <source>
-This file contains text in an unknown language encoding.
-
-Please select one of the following estimated text encodings
-for use with the text in this file:
-</source>
-        <translation type="obsolete">
-Este archivo contiene texto en un lenguaje de condificación desconocido.
-
-Por favor, seleccione una de las siguientes codificaciones de texto estimadas
-para usar con el texto en este archivo:
-</translation>
-    </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="68"/>
         <source>Rosegarden</source>
@@ -15471,10 +15425,6 @@ delay at the start of playback due to the amount of data being transmitted.</sou
 <context>
     <name>Rosegarden::MIDIInstrumentParameterPanel</name>
     <message>
-        <source>&lt;qt&gt;&lt;p&gt;Set the MIDI channel number.&lt;/p&gt;&lt;p&gt;Before changing this, consider switching to a different instrument instead.  Instruments #1 through #16 match MIDI channels 1 through 16 by default.  You may change this relationship using this control if you wish, but this can lead to confusion&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Cambiar el canal de MIDI.&lt;/p&gt;&lt;p&gt;Antes de cambiar este parámetro, considere un cambio de instrumento en su lugar.  Los instrumentos #1 a #16 corresponden a los canales de MIDI 1 a 16 en el estudio predeterminado.  Es posible cambiar esta relación, pero esto resulta frecuentemente en confusión del usuario.&lt;/p&gt;&lt;/qt&gt;</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="103"/>
         <source>&lt;qt&gt;Set variations on the program above, if available in the studio&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Establecer las variación del programa arriba, si disponible en el estudio&lt;/qt&gt;</translation>
@@ -15508,10 +15458,6 @@ delay at the start of playback due to the amount of data being transmitted.</sou
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="112"/>
         <source>Program</source>
         <translation>Programa</translation>
-    </message>
-    <message>
-        <source>Channel out</source>
-        <translation type="obsolete">Canal de salida</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="113"/>
@@ -17992,10 +17938,6 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
 <context>
     <name>Rosegarden::ProgressDialog</name>
     <message>
-        <source>Processing...</source>
-        <translation type="obsolete">Procesando...</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/widgets/ProgressDialog.cpp" line="63"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
@@ -19148,10 +19090,6 @@ Error fue: %2</translation>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1941"/>
         <source>Saving file...</source>
         <translation>Guardando archivo...</translation>
-    </message>
-    <message>
-        <source>Save File</source>
-        <translation type="obsolete">Guardar archivo</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2034"/>
@@ -22090,10 +22028,6 @@ Por favor, configura el directorio de archivos de audio hacia un directorio vál
         <source>Rosegarden cannot accept dropped files of this type.</source>
         <translation>Rosegarden no entiende archivos soltados de este tipo.</translation>
     </message>
-    <message>
-        <source>You can&apos;t drop files into Rosegarden from this client.  Try using Konqueror instead.</source>
-        <translation type="obsolete">No es posible arrastrar y soltar archivos en Rosegarden desde este cliente. Utilice un administrador de archivos como Konqueror.</translation>
-    </message>
 </context>
 <context>
     <name>Rosegarden::TrackLabel</name>
@@ -22286,10 +22220,6 @@ Por favor, configura el directorio de archivos de audio hacia un directorio vál
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="166"/>
         <source>&lt;qt&gt;&lt;p&gt;Choose the device this track will use for playback.&lt;/p&gt;&lt;p&gt;Click &lt;img src=&quot;:pixmaps/toolbar/manage-midi-devices.xpm&quot;&gt; to connect this device to a useful output if you do not hear sound&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Establecer el dispositivo que utiliza esta pista para reproducción.&lt;/p&gt;&lt;p&gt;Haga clic en  &lt;img src=&quot;:pixmaps/toolbar/manage-midi-devices.xpm&quot;&gt; para conectar este dispositivo a una salida que funcione si no oye nada&lt;/p&gt;&lt;/qt&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;qt&gt;&lt;p&gt;This track will only record Audio/ MIDI from the selected device, filtering anything else out&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Esta pista graba solamente audio o MIDI del único disposivo seleccionado, y no de los demás&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="221"/>

@@ -1919,14 +1919,18 @@
         <translation>&amp;Style des notes</translation>
     </message>
     <message>
+        <location filename="../QMenuStrings.cpp" line="2064"/>
         <source>Classical</source>
         <translation>Classique</translation>
     </message>
     <message>
+        <location filename="../QMenuStrings.cpp" line="2065"/>
         <source>Cross</source>
         <translation>Croix</translation>
     </message>
     <message>
+        <location filename="../QMenuStrings.cpp" line="2067"/>
+        <location filename="../InstrumentStrings.cpp" line="285"/>
         <source>Triangle</source>
         <translation>Triangle</translation>
     </message>
@@ -4923,12 +4927,6 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
         <location filename="../InstrumentStrings.cpp" line="359"/>
         <source>Bass</source>
         <translation>Fa</translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="2067"/>
-        <location filename="../InstrumentStrings.cpp" line="285"/>
-        <source>Triangle</source>
-        <translation>Triangle</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="31"/>
@@ -12705,12 +12703,12 @@ Souhaitez vous les enregistrer avant de quitter l&apos;éditeur de banques?</tra
         <translation>Événements contrôleurs</translation>
     </message>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="444"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="443"/>
         <source>Insert Line of Controllers</source>
         <translation>Insérer une ligne de contrôleurs</translation>
     </message>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="584"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="583"/>
         <source>Controller Event Number</source>
         <translation>Numéro de l&apos;événement contrôleur</translation>
     </message>
