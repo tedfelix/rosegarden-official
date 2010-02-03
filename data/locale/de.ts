@@ -1985,24 +1985,20 @@
         <translation>Noten&amp;stil</translation>
     </message>
     <message>
-        <source>&amp;Classical</source>
-        <translatorcomment>amp ok</translatorcomment>
-        <translation type="obsolete">Klassis&amp;ch</translation>
+        <source>Classical</source>
+        <translation>Klassisch</translation>
     </message>
     <message>
-        <source>C&amp;ross</source>
-        <translatorcomment>amp ok</translatorcomment>
-        <translation type="obsolete">K&amp;reuz</translation>
+        <source>Cross</source>
+        <translation>Kreuz</translation>
     </message>
     <message>
-        <source>&amp;Mensural</source>
-        <translatorcomment>amp ok</translatorcomment>
-        <translation type="obsolete">&amp;Messbar</translation>
+        <source>Mensural</source>
+        <translation>Messbar</translation>
     </message>
     <message>
-        <source>&amp;Triangle</source>
-        <translatorcomment>amp ok</translatorcomment>
-        <translation type="obsolete">&amp;Triangel</translation>
+        <source>Triangle</source>
+        <translation>Triangel</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2068"/>
@@ -3958,21 +3954,6 @@
         <source>/</source>
         <comment>keyboard shortcut</comment>
         <translation>/</translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="2064"/>
-        <source>Classical</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="2065"/>
-        <source>Cross</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="2066"/>
-        <source>Mensural</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2084"/>
