@@ -79,11 +79,15 @@ ControlPainter::handleLeftButtonPress(const ControlMouseEvent *e)
 
                 // if Ctrl was pressed, do not erase existing controllers
                 bool eraseExistingControllers = !(e->modifiers & Qt::ControlModifier);
-                ruler->addControlLine(m_controlLineOrigin.first,
-                                      m_controlLineOrigin.second,
-                                      e->x,
-                                      e->y,
-                                      eraseExistingControllers);
+
+                // if no origin point was set, do not draw a line
+                if (m_controlLineOrigin.first != -1 && m_controlLineOrigin.second != -1) {
+                    ruler->addControlLine(m_controlLineOrigin.first,
+                                          m_controlLineOrigin.second,
+                                          e->x,
+                                          e->y,
+                                          eraseExistingControllers);
+                }
             } else {
 
                 ControlItem *item = ruler->addControlItem(e->x,e->y);
@@ -109,10 +113,12 @@ ControlPainter::handleMouseMove(const ControlMouseEvent *e)
     if (ruler) {
         if (e->modifiers & Qt::ShiftModifier) {
 
-            ruler->drawRubberBand(m_controlLineOrigin.first,
-                                  m_controlLineOrigin.second,
-                                  e->x,
-                                  e->y);
+            if (m_controlLineOrigin.first != -1 && m_controlLineOrigin.second != -1) {
+                ruler->drawRubberBand(m_controlLineOrigin.first,
+                                      m_controlLineOrigin.second,
+                                      e->x,
+                                      e->y);
+            }
         } else {
             ruler->stopRubberBand();
         }
