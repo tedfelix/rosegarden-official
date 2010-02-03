@@ -1919,16 +1919,16 @@
         <translation>&amp;Style des notes</translation>
     </message>
     <message>
-        <source>&amp;Classical</source>
-        <translation type="obsolete">&amp;Classique</translation>
+        <source>Classical</source>
+        <translation>Classique</translation>
     </message>
     <message>
-        <source>C&amp;ross</source>
-        <translation type="obsolete">C&amp;roix</translation>
+        <source>Cross</source>
+        <translation>Croix</translation>
     </message>
     <message>
-        <source>&amp;Triangle</source>
-        <translation type="obsolete">&amp;Triangle</translation>
+        <source>Triangle</source>
+        <translation>Triangle</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2068"/>
@@ -3857,16 +3857,6 @@
         <source>/</source>
         <comment>keyboard shortcut</comment>
         <translation>/</translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="2064"/>
-        <source>Classical</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="2065"/>
-        <source>Cross</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2066"/>

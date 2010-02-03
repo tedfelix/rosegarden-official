@@ -2976,16 +2976,16 @@
         <translation>音符の表現形式(&amp;S)</translation>
     </message>
     <message>
-        <source>&amp;Classical</source>
-        <translation type="obsolete">通常(&amp;C)</translation>
+        <source>Classical</source>
+        <translation>通常</translation>
     </message>
     <message>
-        <source>C&amp;ross</source>
-        <translation type="obsolete">クロス(&amp;r)</translation>
+        <source>Cross</source>
+        <translation>クロス</translation>
     </message>
     <message>
-        <source>&amp;Triangle</source>
-        <translation type="obsolete">トライアングル(&amp;T)</translation>
+        <source>Triangle</source>
+        <translation>トライアングル</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2068"/>
@@ -3887,16 +3887,6 @@
         <source>/</source>
         <comment>keyboard shortcut</comment>
         <translation>/</translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="2064"/>
-        <source>Classical</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="2065"/>
-        <source>Cross</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2066"/>

@@ -2911,20 +2911,20 @@
         <translation>Nuotin t&amp;yyli</translation>
     </message>
     <message>
-        <source>&amp;Classical</source>
-        <translation type="obsolete">&amp;Klassinen</translation>
+        <source>Classical</source>
+        <translation>Klassinen</translation>
     </message>
     <message>
-        <source>C&amp;ross</source>
-        <translation type="obsolete">&amp;Risti</translation>
+        <source>Cross</source>
+        <translation>Risti</translation>
     </message>
     <message>
-        <source>&amp;Mensural</source>
-        <translation type="obsolete">&amp;Mensuurinen</translation>
+        <source>Mensural</source>
+        <translation>Mensuurinen</translation>
     </message>
     <message>
-        <source>&amp;Triangle</source>
-        <translation type="obsolete">K&amp;olmio</translation>
+        <source>Triangle</source>
+        <translation>Kolmio</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2068"/>
@@ -3791,21 +3791,6 @@
         <source>Ctrl+Alt+1</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="2064"/>
-        <source>Classical</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="2065"/>
-        <source>Cross</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="2066"/>
-        <source>Mensural</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2473"/>

@@ -2059,21 +2059,6 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2064"/>
-        <source>Classical</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="2065"/>
-        <source>Cross</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="2066"/>
-        <source>Mensural</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="2084"/>
         <source>Ctrl+PgUp</source>
         <comment>keyboard shortcut</comment>
@@ -3095,20 +3080,20 @@
         <translation>&amp;Stile della nota</translation>
     </message>
     <message>
-        <source>&amp;Classical</source>
-        <translation type="obsolete">&amp;Classico</translation>
+        <source>Classical</source>
+        <translation>Classico</translation>
     </message>
     <message>
-        <source>C&amp;ross</source>
-        <translation type="obsolete">C&amp;ross</translation>
+        <source>Cross</source>
+        <translation>Cross</translation>
     </message>
     <message>
-        <source>&amp;Mensural</source>
-        <translation type="obsolete">&amp;Mensurale</translation>
+        <source>Mensural</source>
+        <translation>Mensurale</translation>
     </message>
     <message>
-        <source>&amp;Triangle</source>
-        <translation type="obsolete">&amp;Triangolo</translation>
+        <source>Triangle</source>
+        <translation>Triangolo</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2068"/>

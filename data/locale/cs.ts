@@ -3030,20 +3030,20 @@
         <translation>&amp;Styl not</translation>
     </message>
     <message>
-        <source>&amp;Classical</source>
-        <translation type="obsolete">Klasi&amp;cký</translation>
+        <source>Classical</source>
+        <translation>Klasický</translation>
     </message>
     <message>
-        <source>C&amp;ross</source>
-        <translation type="obsolete">&amp;Kříž</translation>
+        <source>Cross</source>
+        <translation>Kříž</translation>
     </message>
     <message>
-        <source>&amp;Mensural</source>
-        <translation type="obsolete">&amp;Menzurální</translation>
+        <source>Mensural</source>
+        <translation>Menzurální</translation>
     </message>
     <message>
-        <source>&amp;Triangle</source>
-        <translation type="obsolete">&amp;Trojúhelník</translation>
+        <source>Triangle</source>
+        <translation>Trojúhelník</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2068"/>
@@ -3928,21 +3928,6 @@
         <location filename="../QMenuStrings.cpp" line="1917"/>
         <source>Show &amp;Rulers Toolbar</source>
         <translation>Ukázat nástrojovou lištu s &amp;pravítky</translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="2064"/>
-        <source>Classical</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="2065"/>
-        <source>Cross</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="2066"/>
-        <source>Mensural</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3266"/>
