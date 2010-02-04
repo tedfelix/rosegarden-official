@@ -2,174 +2,167 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="id">
 <context>
-    <name></name>
-    <message>
-        <source>Rosegarden</source>
-        <translation type="obsolete">Rosegarden</translation>
-    </message>
-</context>
-<context>
     <name>DeviceManagerDialogUi</name>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="474"/>
         <source>Manage MIDI Devices</source>
-        <translation>Kelola Perangkat MIDi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="475"/>
         <source>MIDI Playback</source>
-        <translation>Pemutar MIDI</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="477"/>
         <source>Sends its data through</source>
-        <translation>Mengirim data melalui</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="478"/>
         <source>Rosegarden playback device</source>
-        <translation>Perangkat pemutar Rosegarden</translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="514"/>
-        <source>Internal Synth</source>
-        <translation>Sintetiser Internal</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="483"/>
         <source>Default playback device</source>
-        <translation>Perangkat pemutar utama</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="487"/>
         <source>&lt;qt&gt;&lt;p&gt;Create new playback devices here. Click the device name to change it. Select a device here and connect it to a MIDI output port by clicking on a port to the right.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Membuat perangkat pemutar yang baru di sini. Klik nama perangkat untuk mengubahnya. Pilih salah satu perangkat di sini dan hubungkan ke port keluaran MIDI dengan menklik pada port ke kanan.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="490"/>
         <source>&lt;qt&gt;&lt;p&gt;Bank definitions allow you to tell Rosegarden about the programs or patches available for use on the equipment (hardware or software synth) connected to this device.&lt;/p&gt;&lt;p&gt;You must have something defined for any program or bank changes you wish to transmit, as Rosegarden hides all bank and program numbers that are undefined.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Dengan definisi bank, Anda bisa memberi tahu Rosegarden mengenai program yang akan dipakai pada perlengkapan (sintetiser peranti keras maupun lunak) yang terhubung ke perangkat ini.&lt;/p&gt;&lt;p&gt;Anda harus sudah memiliki sesuatu yang terdefinisi untuk setiap program atau perubahan bank yang hendak Anda transmisikan, atau Rosegarden akan menyembunyikan semua bank dan program yang tidak terdefinisi.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="492"/>
         <source>Banks...</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
-        <translation>Bank...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="494"/>
         <source>&lt;qt&gt;&lt;p&gt;Edit the controllers associated with this device.&lt;/p&gt;&lt;p&gt;You must define controllers here in order to use them anywhere in Rosegarden, such as on control rulers or in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box,  You can change which controllers are displayed in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box, and rearrange their layout&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Menyunting kontroler yang diasosiasikan dengan perangkat ini.&lt;/p&gt;&lt;p&gt;Anda harus mendefinisikan kontroler di sini untuk bisa memakainya di segala tempat di Rosegarden, seperti pada penggaris kontrol atau di kotak &lt;b&gt;Parameter Instrumen&lt;/b&gt;.  Anda bisa menentukan kontroler mana yang ditampilkan pada kotak &lt;b&gt;Parameter Instrumen&lt;/b&gt;, anda menyusun ulang tataletak mereka&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="496"/>
         <source>Controllers...</source>
-        <translation>Kontroler...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="498"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new playback device&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Membuat perangkat putar yang baru&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="500"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="528"/>
         <source>New</source>
-        <translation>Baru</translation>
+        <translation type="unfinished">Baru</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="502"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected playback device.  Any tracks using this device will need to be reassigned, and any program or bank changes on those tracks will be lost permanently&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Menghapus perangkat putar yang dipilih.  Semua jalur yang menggunakan perangkat ini nantinya perlu diatur ulang, dan semua perubahan program atau bank pada jalur tersebut akan hilang selamanya&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="504"/>
         <source>Delete</source>
-        <translation>Hapus</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="505"/>
         <source>MIDI outputs</source>
-        <translation>Keluaran MIDI</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="507"/>
         <source>Available outputs</source>
-        <translation>Keluaran yang tersedia</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="512"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="553"/>
         <source>No port</source>
-        <translation>Tiada port</translation>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="514"/>
+        <source>Internal Synth</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="518"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI outputs (hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Keluaran MIDI yang tersedia (perangkat keras maupun lunak)&lt;/p&gt;&lt;/qt&gt;</translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="557"/>
-        <source>&lt;qt&gt;&lt;p&gt;Available MIDI inputs (from hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Masukan MIDI yang tersedia (dari perangkat keras maupun lunak)&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="521"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="560"/>
         <source>&lt;qt&gt;&lt;p&gt;Click to refresh the port list after connecting a new piece of equipment or starting a new soft synth&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Klik untuk menyegarkan daftar port usai membuat hubungan perangkat keras atau sintetiser perangkat lunak baru&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="523"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="562"/>
         <source>Refresh</source>
-        <translation>Segarkan</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="524"/>
         <source>MIDI Recording</source>
-        <translation>Perekaman MIDI</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="526"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new recording device&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Membuat perangkat rekam yang baru&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="530"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected recording device&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Menghapus perangkat rekam yang dipilih&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="532"/>
         <source>Delete</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
-        <translation>Hapus</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="534"/>
         <source>Receives its data from</source>
-        <translation>Menerima data dari</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="535"/>
         <source>Rosegarden recording device</source>
-        <translation>Perangkat rekam Rosegarden</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="540"/>
         <source>Default record device</source>
-        <translation>Perangkat baku untuk merekam</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="546"/>
         <source>MIDI inputs</source>
-        <translation>Masukan MIDI</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="548"/>
         <source>Available inputs</source>
-        <translation>Masukan yang tersedia</translation>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="557"/>
+        <source>&lt;qt&gt;&lt;p&gt;Available MIDI inputs (from hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -182,12 +175,12 @@
     <message>
         <location filename="../../src/gui/editors/notation/NoteFontMap.cpp" line="70"/>
         <source>Can&apos;t open font mapping file %1 or %2</source>
-        <translation>Tidak bisa membuka berkas pemetaan huruf %1 atau %2</translation>
+        <translation>Tidak dapat membuka berkas pemetaan huruf %1 atau %2</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NoteFontMap.cpp" line="74"/>
         <source>Can&apos;t open font mapping file %1</source>
-        <translation>Tidak bisa membuka berkas pemetaan huruf %1</translation>
+        <translation>Tidak dapat membuka berkas pemetaan huruf %1</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="30"/>
@@ -286,14 +279,6 @@
         <location filename="../QMenuStrings.cpp" line="48"/>
         <source>Play Preview</source>
         <translation>Putar Pratampil</translation>
-    </message>
-    <message>
-        <source>Insert Into Selected Audio track</source>
-        <translation type="obsolete">Sisip ke Jalur Suara Terpilih</translation>
-    </message>
-    <message>
-        <source>Distribute Audio on Midi Segment</source>
-        <translation type="obsolete">Distribusikan Suara pada Segmen MIDI</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="51"/>
@@ -1036,10 +1021,6 @@
         <translation>F4</translation>
     </message>
     <message>
-        <source>E&amp;dit</source>
-        <translation type="obsolete">Sun&amp;ting</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="502"/>
         <source>Nothing to &amp;undo</source>
         <translation>Tidak ada yang bisa dibatalka&amp;n</translation>
@@ -1048,11 +1029,6 @@
         <location filename="../QMenuStrings.cpp" line="511"/>
         <source>Nothing to &amp;redo</source>
         <translation>Tidak ada &amp;yang bisa diulang</translation>
-    </message>
-    <message>
-        <source>Ctrl+V, F18, Shift+Insert</source>
-        <comment>keyboard shortcut</comment>
-        <translation type="obsolete">Ctrl+V, F18, Shift+Insert</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="547"/>
@@ -1071,7 +1047,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="586"/>
         <source>&amp;Grid</source>
-        <translation>&amp;Kisi-kisi</translation>
+        <translation>Jejarin&amp;g</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="587"/>
@@ -1223,23 +1199,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&amp;Segment</source>
-        <translation type="obsolete">&amp;Segmen</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="681"/>
         <location filename="../QMenuStrings.cpp" line="1934"/>
         <location filename="../QMenuStrings.cpp" line="3788"/>
         <source>Open in &amp;Event List Editor</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Set Segment Start &amp;Time...</source>
-        <translation type="obsolete">Atur Wak&amp;tu Mulai Segmen...</translation>
-    </message>
-    <message>
-        <source>Set Segment &amp;Duration...</source>
-        <translation type="obsolete">Atur &amp;Durasi Segmen...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="697"/>
@@ -1375,7 +1339,7 @@
         <location filename="../QMenuStrings.cpp" line="2396"/>
         <source>Ctrl+Shift+Left</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+Kiri</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="865"/>
@@ -1388,7 +1352,7 @@
         <location filename="../QMenuStrings.cpp" line="2405"/>
         <source>Ctrl+Shift+Right</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+Kanan</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="881"/>
@@ -2064,12 +2028,12 @@
         <location filename="../QMenuStrings.cpp" line="2061"/>
         <source>/</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>/</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2064"/>
         <source>Classical</source>
-        <translation type="unfinished"></translation>
+        <translation>Klasikal</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2065"/>
@@ -2079,7 +2043,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2066"/>
         <source>Mensural</source>
-        <translation type="unfinished"></translation>
+        <translation>Mensural</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2084"/>
@@ -2274,7 +2238,7 @@
         <location filename="../QMenuStrings.cpp" line="813"/>
         <location filename="../QMenuStrings.cpp" line="2316"/>
         <source>&amp;Transpose by Semitones...</source>
-        <translation>&amp;Transpose oleh Setengah Nada...</translation>
+        <translation>&amp;Transposisi oleh Setengah Nada...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="814"/>
@@ -2282,7 +2246,7 @@
         <location filename="../QMenuStrings.cpp" line="2317"/>
         <location filename="../QMenuStrings.cpp" line="3816"/>
         <source>Transpose by &amp;Interval...</source>
-        <translation>Transpose oleh &amp;Interval...</translation>
+        <translation>Transposisi oleh &amp;Interval...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="815"/>
@@ -2293,7 +2257,7 @@
         <location filename="../QMenuStrings.cpp" line="816"/>
         <location filename="../QMenuStrings.cpp" line="2319"/>
         <source>&amp;Invert</source>
-        <translation type="unfinished"></translation>
+        <translation>Kebal&amp;ikan</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="825"/>
@@ -2362,26 +2326,6 @@
         <location filename="../QMenuStrings.cpp" line="1036"/>
         <source>&amp;Velocity</source>
         <translation>&amp;Velositas</translation>
-    </message>
-    <message>
-        <source>Local &amp;Cursor</source>
-        <translation type="obsolete">&amp;Kursor Lokal</translation>
-    </message>
-    <message>
-        <source>Cursor &amp;Back</source>
-        <translation type="obsolete">Kursor &amp;Balik</translation>
-    </message>
-    <message>
-        <source>Cursor &amp;Forward</source>
-        <translation type="obsolete">Kursor &amp;Maju</translation>
-    </message>
-    <message>
-        <source>Cursor to St&amp;art</source>
-        <translation type="obsolete">Kursor ke &amp;Awal</translation>
-    </message>
-    <message>
-        <source>Cursor to &amp;End</source>
-        <translation type="obsolete">Kursor k&amp;e Akhir</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2371"/>
@@ -2486,30 +2430,6 @@
         <location filename="../QMenuStrings.cpp" line="4060"/>
         <source>P&amp;anic</source>
         <translation>P&amp;anic</translation>
-    </message>
-    <message>
-        <source>II</source>
-        <translation type="obsolete">II</translation>
-    </message>
-    <message>
-        <source>III</source>
-        <translation type="obsolete">III</translation>
-    </message>
-    <message>
-        <source>IV</source>
-        <translation type="obsolete">IV</translation>
-    </message>
-    <message>
-        <source>V</source>
-        <translation type="obsolete">V</translation>
-    </message>
-    <message>
-        <source>VI</source>
-        <translation type="obsolete">VI</translation>
-    </message>
-    <message>
-        <source>VII</source>
-        <translation type="obsolete">VII</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1199"/>
@@ -2733,7 +2653,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="1900"/>
         <source>S&amp;pacing</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">S&amp;pasi</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1901"/>
@@ -2761,10 +2681,6 @@
         <translation>Buka Pen&amp;yunting Lirik</translation>
     </message>
     <message>
-        <source>Add Event Ruler</source>
-        <translation type="obsolete">Tambah Penggaris Peristiwa</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="1926"/>
         <source>Show &amp;Track Headers</source>
         <translation>Tampilkan &amp;Tajuk Jalur</translation>
@@ -2785,7 +2701,7 @@
         <location filename="../QMenuStrings.cpp" line="685"/>
         <location filename="../QMenuStrings.cpp" line="1938"/>
         <source>Add &amp;Key Change...</source>
-        <translation type="unfinished"></translation>
+        <translation>Tambah Perubahan &amp;Kunci...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1939"/>
@@ -2798,10 +2714,6 @@
         <translation>Tambah Pelepasan Peda&amp;l</translation>
     </message>
     <message>
-        <source>Transpose by &amp;Inverval...</source>
-        <translation type="obsolete">Transpos oleh &amp;Interval...</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="1944"/>
         <location filename="../QMenuStrings.cpp" line="3817"/>
         <source>&amp;Convert Notation for...</source>
@@ -2810,13 +2722,13 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="1945"/>
         <source>Add &amp;Layer</source>
-        <translation type="unfinished"></translation>
+        <translation>Tambah &amp;Lapis</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1952"/>
         <source>Ctrl+Alt+1</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Alt+1</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1954"/>
@@ -3034,10 +2946,6 @@
         <translation>Ga&amp;ya Not</translation>
     </message>
     <message>
-        <source>&amp;Classical</source>
-        <translation type="obsolete">&amp;Klasikal</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="2068"/>
         <location filename="../QMenuStrings.cpp" line="2602"/>
         <source>&amp;Accidentals</source>
@@ -3122,7 +3030,7 @@
         <location filename="../QMenuStrings.cpp" line="2114"/>
         <source>Ctrl+Alt+B</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Alt+B</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2116"/>
@@ -3296,7 +3204,7 @@
         <location filename="../QMenuStrings.cpp" line="2235"/>
         <source>Ctrl+.</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+.</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2237"/>
@@ -3307,7 +3215,7 @@
         <location filename="../QMenuStrings.cpp" line="2244"/>
         <source>Ctrl+Alt+.</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Alt+.</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2256"/>
@@ -3327,7 +3235,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2259"/>
         <source>Rescale</source>
-        <translation type="unfinished"></translation>
+        <translation>Skala Ulang</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2318"/>
@@ -3600,7 +3508,7 @@
         <location filename="../QMenuStrings.cpp" line="1045"/>
         <location filename="../QMenuStrings.cpp" line="2752"/>
         <source>&amp;Insert Note</source>
-        <translation type="unfinished">S&amp;isip Not</translation>
+        <translation>S&amp;isip Not</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1353"/>
@@ -3748,42 +3656,10 @@
         <translation>&amp;Manual Rosegarden</translation>
     </message>
     <message>
-        <source>I</source>
-        <translation type="obsolete">I</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="295"/>
         <location filename="../QMenuStrings.cpp" line="584"/>
         <source>Preferences...</source>
         <translation>Preferensi...</translation>
-    </message>
-    <message>
-        <source>0</source>
-        <translation type="obsolete">0</translation>
-    </message>
-    <message>
-        <source>3</source>
-        <translation type="obsolete">3</translation>
-    </message>
-    <message>
-        <source>6</source>
-        <translation type="obsolete">6</translation>
-    </message>
-    <message>
-        <source>4</source>
-        <translation type="obsolete">4</translation>
-    </message>
-    <message>
-        <source>2</source>
-        <translation type="obsolete">2</translation>
-    </message>
-    <message>
-        <source>1</source>
-        <translation type="obsolete">1</translation>
-    </message>
-    <message>
-        <source>5</source>
-        <translation type="obsolete">5</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="673"/>
@@ -3844,22 +3720,22 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="47"/>
         <source>&amp;Action</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Aksi</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="49"/>
         <source>Insert into Selected Audio Track</source>
-        <translation type="unfinished"></translation>
+        <translation>Sisip ke Jalur Suara Terpilih</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="50"/>
         <source>Distribute Audio on MIDI Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Sebarkan Suara pada Segmen MIDI</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="52"/>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Bantuan</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="583"/>
@@ -4096,12 +3972,12 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3451"/>
         <source>Layer Toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>Baris Alat Lapis</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3453"/>
         <source>Switch to Insert Tool</source>
-        <translation type="unfinished"></translation>
+        <translation>Pindah ke Perkakas Sisip</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3455"/>
@@ -4366,7 +4242,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3701"/>
         <source>Edit Mar&amp;kers...</source>
-        <translation type="unfinished"></translation>
+        <translation>Sunting &amp;Penanda...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3710"/>
@@ -4401,7 +4277,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3733"/>
         <source>Manage S&amp;ynth Plugins</source>
-        <translation type="unfinished"></translation>
+        <translation>Kelola Pengaya Sin&amp;tese</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3734"/>
@@ -4439,10 +4315,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Se&amp;gments</source>
-        <translation type="obsolete">Se&amp;gment</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="3742"/>
         <source>Toggle Repeat</source>
         <translation type="unfinished"></translation>
@@ -4450,12 +4322,12 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3752"/>
         <source>Open in &amp;Default editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Buka &amp;di Penyunting Baku</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3797"/>
         <source>R&amp;elabel...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ganti Lab&amp;el...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3807"/>
@@ -4574,7 +4446,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3937"/>
         <source>&amp;Unmute all Tracks</source>
-        <translation type="unfinished"></translation>
+        <translation>S&amp;uarakan semua Jalur</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3938"/>
@@ -6587,67 +6459,341 @@
         <translation>Tembakan pistol</translation>
     </message>
     <message>
+        <location filename="../../src/base/Studio.cpp" line="56"/>
+        <location filename="../../src/sound/AlsaDriver.cpp" line="663"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="521"/>
+        <location filename="../AutoloadStrings.cpp" line="305"/>
+        <source>Synth plugin</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/base/Studio.cpp" line="53"/>
+        <location filename="../../src/sound/AlsaDriver.cpp" line="700"/>
+        <location filename="../AutoloadStrings.cpp" line="306"/>
+        <source>Audio</source>
+        <translation>Suara</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="269"/>
+        <source>[ %1 ]</source>
+        <translation>[ %1 ]</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="684"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="806"/>
+        <source>%1. %2</source>
+        <translation>%1 %2</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="91"/>
+        <location filename="../../src/gui/general/ActionFileParser.cpp" line="639"/>
+        <location filename="../../src/gui/general/ActionFileParser.cpp" line="646"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="457"/>
+        <source>%1</source>
+        <translation>%1</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/dialogs/DialogSuppressor.cpp" line="76"/>
+        <source>Do not show this warning again</source>
+        <translation>Jangan tampilkan peringatan ini lagi</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/ActionFileParser.cpp" line="655"/>
+        <source>%1 (%2)</source>
+        <translation>%1 (%2)</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="451"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="899"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="757"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1589"/>
+        <source>%1 Controller %2 %3</source>
+        <translation>%1 Kontroler %2 %3</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/application/main.cpp" line="319"/>
+        <source>Rosegarden - A sequencer and musical notation editor</source>
+        <translation>Rosegarden - Sekuenser dan penyunting notasi musikal</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/application/main.cpp" line="446"/>
+        <source>Rosegarden</source>
+        <translation>Rosegarden</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/application/main.cpp" line="759"/>
+        <source>Welcome!</source>
+        <translation>Selamat Datang!</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/application/main.cpp" line="775"/>
+        <source>http://rosegardenmusic.com/wiki/doc:manual-en</source>
+        <translation>http://rosegardenmusic.com/wiki/doc:manual-en</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/application/main.cpp" line="776"/>
+        <source>&lt;h2&gt;Welcome to Rosegarden!&lt;/h2&gt;&lt;p&gt;Welcome to the Rosegarden audio and MIDI sequencer and musical notation editor.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;If you have not already done so, you may wish to install some DSSI synth plugins, or a separate synth program such as QSynth.  Rosegarden does not synthesize sounds from MIDI on its own, so without these you will hear nothing.&lt;/li&gt;&lt;li&gt;Rosegarden uses the JACK audio server for recording and playback of audio, and for playback from DSSI synth plugins.  These features will only be available if the JACK server is running.&lt;/li&gt;&lt;li&gt;Rosegarden has comprehensive documentation: see the &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&quot;&gt;Rosegarden website&lt;/a&gt; for the &lt;a style=&quot;color:gold&quot; href=&quot;%1&quot;&gt;manual&lt;/a&gt;, &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;tutorials&lt;/a&gt;, and other information!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  To learn more, go to the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;Rosegarden website&lt;/a&gt;.&lt;/p&gt;</source>
+        <translation>&lt;h2&gt;Selamat Datang di Rosegarden!&lt;/h2&gt;&lt;p&gt;Selamat datang di Rosegarden, aplikasi sekuenser MIDi dan suara serta penyunting notasi musikal.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Anda mungkin ingin memasang beberapa pengaya sintese DSSI, atau program sintese terpisah seperti QSynth.  Rosegarden tidak mensintesis suara dari MIDI begitu saja, jadi tanpa sintese terebut Anda tidak akan bisa mendengar apa pun.&lt;/li&gt;&lt;li&gt;Rosegarden memanfaatkan server suara JACK untuk merekam dan memutar suara, dan untuk memutar media dari pengaya sintese DSSI.  Fitur ini hanya tersedia bila server JACK sudah berjalan.&lt;/li&gt;&lt;li&gt;Rosegarden memiliki dokumentasi yang cukup lengkap: lihatlah &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&quot;&gt;situs Rosegarden&lt;/a&gt; untuk &lt;a style=&quot;color:gold&quot; href=&quot;%1&quot;&gt;manual&lt;/a&gt;, &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;tutorials&lt;/a&gt;, dan informasi lainnya!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegarden dipersembahkan kepada Anda oleh tim dari para relawan di penjuru dunia dunia.  Untuk mempelajarinya lebih lanjut, kunjungi &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;situs Rosegarden&lt;/a&gt;.&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="35"/>
+        <location filename="../InstrumentStrings.cpp" line="375"/>
         <source>C</source>
-        <translation type="obsolete">C</translation>
+        <comment>note name</comment>
+        <translation>C</translation>
     </message>
     <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="35"/>
+        <location filename="../InstrumentStrings.cpp" line="376"/>
         <source>C#</source>
-        <translation type="obsolete">C#%1</translation>
+        <comment>note name</comment>
+        <translation>C#</translation>
     </message>
     <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="36"/>
+        <location filename="../InstrumentStrings.cpp" line="378"/>
         <source>D</source>
-        <translation type="obsolete">D</translation>
+        <comment>note name</comment>
+        <translation>D</translation>
     </message>
     <message>
-        <source>Eb</source>
-        <translation type="obsolete">E</translation>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="36"/>
+        <source>D#</source>
+        <comment>note name</comment>
+        <translation>D#</translation>
     </message>
     <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="37"/>
+        <location filename="../InstrumentStrings.cpp" line="380"/>
         <source>E</source>
-        <translation type="obsolete">E</translation>
+        <comment>note name</comment>
+        <translation>E</translation>
     </message>
     <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="37"/>
+        <location filename="../InstrumentStrings.cpp" line="383"/>
         <source>F</source>
-        <translation type="obsolete">F</translation>
+        <comment>note name</comment>
+        <translation>F</translation>
     </message>
     <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="38"/>
+        <location filename="../InstrumentStrings.cpp" line="384"/>
         <source>F#</source>
-        <translation type="obsolete">F#%1</translation>
+        <comment>note name</comment>
+        <translation>F#</translation>
     </message>
     <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="38"/>
+        <location filename="../InstrumentStrings.cpp" line="385"/>
         <source>G</source>
-        <translation type="obsolete">G</translation>
+        <comment>note name</comment>
+        <translation>G</translation>
     </message>
     <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="39"/>
+        <location filename="../InstrumentStrings.cpp" line="386"/>
         <source>G#</source>
-        <translation type="obsolete">G#%1</translation>
+        <comment>note name</comment>
+        <translation>G#</translation>
     </message>
     <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="39"/>
+        <location filename="../InstrumentStrings.cpp" line="389"/>
         <source>A</source>
-        <translation type="obsolete">A</translation>
+        <comment>note name</comment>
+        <translation>A</translation>
     </message>
     <message>
-        <source>Bb</source>
-        <translation type="obsolete">B</translation>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="40"/>
+        <location filename="../InstrumentStrings.cpp" line="388"/>
+        <source>A#</source>
+        <comment>note name</comment>
+        <translation>A#</translation>
     </message>
     <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="40"/>
+        <location filename="../InstrumentStrings.cpp" line="391"/>
         <source>B</source>
-        <translation type="obsolete">B</translation>
+        <comment>note name</comment>
+        <translation>B</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="522"/>
+        <source>Audio subsystem is not available - can&apos;t record audio</source>
+        <translation>Subsistem suara tidak tersedia - tidak dapat merekam suara</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="622"/>
+        <source>&lt;qt&gt;&lt;p&gt;No tracks were armed for recording.&lt;/p&gt;&lt;p&gt;Please arm at least one of the recording LEDs &lt;img src=&quot;:pixmaps/tooltip/record-leds.png&quot;&gt; and try again&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="788"/>
+        <source>&lt;qt&gt;&lt;p&gt;Couldn&apos;t start recording audio.&lt;/p&gt;&lt;p&gt;Please set a valid recording path in &lt;b&gt;Composition -&gt; Edit Document Properties... -&gt; Audio&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/sound/SoundFile.h" line="67"/>
+        <location filename="../../src/sound/SoundFile.h" line="69"/>
+        <location filename="../../src/sound/SoundFile.h" line="71"/>
+        <source>Bad sound file </source>
+        <translation>Berkas suara jelek</translation>
+    </message>
+    <message>
+        <location filename="../../src/sound/MidiFile.cpp" line="105"/>
+        <source>Wrong length for long data in MIDI stream</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/sound/MidiFile.cpp" line="128"/>
+        <source>Wrong length for int data in MIDI stream</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/sound/MidiFile.cpp" line="148"/>
+        <location filename="../../src/sound/MidiFile.cpp" line="195"/>
+        <source>End of MIDI file encountered while reading</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/sound/MidiFile.cpp" line="152"/>
+        <location filename="../../src/sound/MidiFile.cpp" line="211"/>
+        <source>Attempt to get more bytes than expected on Track</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/sound/MidiFile.cpp" line="173"/>
+        <location filename="../../src/sound/MidiFile.cpp" line="231"/>
+        <source>Attempt to read past MIDI file end</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/sound/MidiFile.cpp" line="515"/>
+        <source>Invalid event code found</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/sound/MidiFile.cpp" line="529"/>
+        <source>Running status used for first event in track</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/sound/RIFFAudioFile.cpp" line="59"/>
+        <source>Rosegarden currently only supports 16 or 32-bit PCM or IEEE floating-point RIFF files for writing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/sound/RIFFAudioFile.cpp" line="376"/>
+        <source>Can&apos;t find RIFF identifier</source>
+        <translation>Tidak dapat menemukan pengenal RIFF</translation>
+    </message>
+    <message>
+        <location filename="../../src/sound/RIFFAudioFile.cpp" line="386"/>
+        <source>Can&apos;t find WAV identifier</source>
+        <translation>Tidak dapat menemukan pengenal WAV</translation>
+    </message>
+    <message>
+        <location filename="../../src/sound/RIFFAudioFile.cpp" line="399"/>
+        <source>Can&apos;t find FORMAT identifier</source>
+        <translation>Tidak dapat menemukan pengenal FORMAT</translation>
+    </message>
+    <message>
+        <location filename="../../src/sound/RIFFAudioFile.cpp" line="452"/>
+        <source>Rosegarden currently only supports PCM or IEEE floating-point RIFF files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/sound/RIFFAudioFile.cpp" line="467"/>
+        <source>Unsupported number of channels</source>
+        <translation>Jumlah kanal tak didukung</translation>
+    </message>
+    <message>
+        <location filename="../../src/sound/RIFFAudioFile.cpp" line="481"/>
+        <source>Rosegarden currently only supports 8-, 16- or 24-bit PCM in RIFF files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/sound/RIFFAudioFile.cpp" line="485"/>
+        <source>Rosegarden currently only supports 32-bit floating-point in RIFF files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/application/TranzportClient.cpp" line="59"/>
+        <source>Failed to open tranzport device /dev/tranzport0</source>
+        <translation>Gagal membuka perangkat tranzport /dev/tranzport0</translation>
+    </message>
+    <message>
+        <location filename="../../src/sound/AudioFileManager.h" line="71"/>
+        <location filename="../../src/sound/AudioFileManager.h" line="73"/>
+        <source>Bad audio file path </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/sound/AudioFileManager.h" line="75"/>
+        <source>Bad audio file path (malformed file?) </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/sound/AudioFileTimeStretcher.h" line="49"/>
+        <source>Cancelled</source>
+        <translation>Dibatalkan</translation>
+    </message>
+    <message>
+        <location filename="../../src/sound/PeakFileManager.h" line="61"/>
+        <location filename="../../src/sound/PeakFileManager.h" line="63"/>
+        <source>Bad peak file </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/sound/PeakFileManager.h" line="65"/>
+        <source>Bad peak file (malformed audio?) </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="297"/>
+        <source>Synth plugin </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="64"/>
+        <source>Bar %1:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="66"/>
+        <source>Bars %1 to %2:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="120"/>
+        <source>%1 %2</source>
+        <translation type="unfinished">%1 %2</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="121"/>
+        <source>minor</source>
+        <translation>minor</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="122"/>
+        <source>major</source>
+        <translation>mayor</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="39"/>
         <source>General MIDI Device</source>
-        <translation>Perangkat MIDI Umum</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="40"/>
         <source>General MIDI</source>
-        <translation>MIDI Umum</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="41"/>
         <source>Acoustic Grand Piano</source>
-        <translation>Grand Piano Akustik</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="42"/>
@@ -6667,12 +6813,12 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="45"/>
         <source>Electric Piano 1</source>
-        <translation>Piano Listrik 1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="46"/>
         <source>Electric Piano 2</source>
-        <translation>Piano Listrik 2</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="47"/>
@@ -6697,7 +6843,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="53"/>
         <source>Marimba</source>
-        <translation>Marimba</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="55"/>
@@ -6727,7 +6873,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="60"/>
         <source>Church Organ</source>
-        <translation>Organ Gereja</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="61"/>
@@ -6737,7 +6883,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="62"/>
         <source>Accordion</source>
-        <translation>Akordion</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="64"/>
@@ -6747,22 +6893,22 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="65"/>
         <source>Acoustic Guitar (nylon)</source>
-        <translation>Gitar Akustik (nilon)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="66"/>
         <source>Acoustic Guitar (steel)</source>
-        <translation>Gitar Akustik (baja)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="67"/>
         <source>Electric Guitar (jazz)</source>
-        <translation>Gitar Listrik (jaz)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="68"/>
         <source>Electric Guitar (clean)</source>
-        <translation>Gitar Listrik (bersih)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="69"/>
@@ -6787,7 +6933,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="73"/>
         <source>Acoustic Bass</source>
-        <translation>Bas Akustik</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="74"/>
@@ -6827,7 +6973,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="83"/>
         <source>Cello</source>
-        <translation>Selo</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="85"/>
@@ -6867,12 +7013,12 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="93"/>
         <source>Choir Aahs</source>
-        <translation>Paduan Suara Aahs</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="94"/>
         <source>Voice Oohs</source>
-        <translation>Suara Oohs</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="95"/>
@@ -6887,7 +7033,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="97"/>
         <source>Trumpet</source>
-        <translation>Terompet</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="98"/>
@@ -6897,7 +7043,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="99"/>
         <source>Tuba</source>
-        <translation>Tuba</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="100"/>
@@ -6907,7 +7053,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="101"/>
         <source>French Horn</source>
-        <translation>Terompet Perancis</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="102"/>
@@ -6947,17 +7093,17 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="110"/>
         <source>English Horn</source>
-        <translation>Terompet Inggris</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="112"/>
         <source>Clarinet</source>
-        <translation>Klarinet</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="115"/>
         <source>Recorder</source>
-        <translation>Rekorder</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="116"/>
@@ -6977,7 +7123,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="120"/>
         <source>Ocarina</source>
-        <translation>Okarina</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="121"/>
@@ -7062,22 +7208,22 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="137"/>
         <source>FX 1 (rain)</source>
-        <translation>FX 1 (hujan)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="138"/>
         <source>FX 2 (soundtrack)</source>
-        <translation>FX 2 (jalur suara)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="139"/>
         <source>FX 3 (crystal)</source>
-        <translation>FX 3 (kristal)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="140"/>
         <source>FX 4 (atmosphere)</source>
-        <translation>FX 4 (atmosfer)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="141"/>
@@ -7092,7 +7238,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="143"/>
         <source>FX 7 (echoes)</source>
-        <translation>FX 7 (gema)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="144"/>
@@ -7102,12 +7248,12 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="145"/>
         <source>Sitar</source>
-        <translation>Sitar</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="146"/>
         <source>Banjo</source>
-        <translation>Banjo</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="147"/>
@@ -7117,7 +7263,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="149"/>
         <source>Kalimba</source>
-        <translation>Kalimba</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="150"/>
@@ -7142,7 +7288,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="154"/>
         <source>Agogo</source>
-        <translation>Agogo</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="155"/>
@@ -7197,27 +7343,27 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="165"/>
         <source>Telephone Ring</source>
-        <translation>Dering Telepon</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="166"/>
         <source>Helicopter</source>
-        <translation>Helikopter</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="167"/>
         <source>Applause</source>
-        <translation>Tepuk tangan</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="168"/>
         <source>Gunshot</source>
-        <translation>Tembakan Pistol</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="169"/>
         <source>Bank 0:8</source>
-        <translation>Bank 0:8</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="170"/>
@@ -7237,7 +7383,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="173"/>
         <source>Church Bell</source>
-        <translation>Lonceng Gereja</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="174"/>
@@ -7252,22 +7398,22 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="176"/>
         <source>Church Organ 2</source>
-        <translation>Organ Gereja 2</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="177"/>
         <source>Italian Accordion</source>
-        <translation>Akordion Italia</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="179"/>
         <source>12 String Guitar</source>
-        <translation>12 Senar Gitar</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="180"/>
         <source>Hawaiian Guitar</source>
-        <translation>Gitar Hawai</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="181"/>
@@ -7347,12 +7493,12 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="197"/>
         <source>808 Tom</source>
-        <translation>808 Tom</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="198"/>
         <source>Bank 0:9</source>
-        <translation>Bank 0:9</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="199"/>
@@ -7362,52 +7508,52 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="200"/>
         <source>Bank 0:16</source>
-        <translation>Bank 0:16</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="202"/>
         <source>Bank 1:0</source>
-        <translation>Bank 1:0</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="203"/>
         <source>Standard</source>
-        <translation>Standar</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="204"/>
         <source>Standard 1</source>
-        <translation>Standar 1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="205"/>
         <source>Standard 2</source>
-        <translation>Standar 2</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="206"/>
         <source>Standard 3</source>
-        <translation>Standar 3</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="207"/>
         <source>Standard 4</source>
-        <translation>Standar 4</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="208"/>
         <source>Standard 5</source>
-        <translation>Standar 5</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="209"/>
         <source>Standard 6</source>
-        <translation>Standar 6</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="210"/>
         <source>Standard 7</source>
-        <translation>Standar 7</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="211"/>
@@ -7472,37 +7618,37 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="223"/>
         <source>Electronic</source>
-        <translation>Elektronik</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="224"/>
         <source>TR-808</source>
-        <translation>TR-808</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="225"/>
         <source>Jazz</source>
-        <translation>Jaz</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="226"/>
         <source>Jazz 1</source>
-        <translation>Jaz 1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="227"/>
         <source>Jazz 2</source>
-        <translation>Jaz 2</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="228"/>
         <source>Jazz 3</source>
-        <translation>Jaz 3</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="229"/>
         <source>Jazz 4</source>
-        <translation>Jaz 4</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="230"/>
@@ -7543,7 +7689,7 @@
         <location filename="../AutoloadStrings.cpp" line="299"/>
         <location filename="../AutoloadStrings.cpp" line="738"/>
         <source>Volume</source>
-        <translation>Volume</translation>
+        <translation type="unfinished">Volume</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="237"/>
@@ -7564,14 +7710,14 @@
         <location filename="../AutoloadStrings.cpp" line="302"/>
         <location filename="../AutoloadStrings.cpp" line="741"/>
         <source>Expression</source>
-        <translation>Ekspresi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="240"/>
         <location filename="../AutoloadStrings.cpp" line="303"/>
         <location filename="../AutoloadStrings.cpp" line="742"/>
         <source>Modulation</source>
-        <translation>Modulasi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="241"/>
@@ -7583,7 +7729,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="242"/>
         <source>General MIDI Percussion</source>
-        <translation>Perkusi MIDI Umum</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="243"/>
@@ -7592,17 +7738,17 @@
         <location filename="../AutoloadStrings.cpp" line="246"/>
         <location filename="../AutoloadStrings.cpp" line="247"/>
         <source> </source>
-        <translation> </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="248"/>
         <source>Acoustic Bass Drum</source>
-        <translation>Drum Bas Akustik</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="249"/>
         <source>Bass Drum 1</source>
-        <translation>Drum Bas 1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="250"/>
@@ -7612,7 +7758,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="251"/>
         <source>Acoustic Snare</source>
-        <translation>Senar Akustik</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="252"/>
@@ -7682,7 +7828,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="265"/>
         <source>Chinese Cymbal</source>
-        <translation>Simbal Cina</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="266"/>
@@ -7697,7 +7843,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="269"/>
         <source>Cowbell</source>
-        <translation>Lonceng sapi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="270"/>
@@ -7817,22 +7963,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="296"/>
         <source>&amp;lt;none&amp;gt;</source>
-        <translation>&amp;lt;nihil&amp;gt;</translation>
-    </message>
-    <message>
-        <location filename="../../src/base/Studio.cpp" line="56"/>
-        <location filename="../../src/sound/AlsaDriver.cpp" line="663"/>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="521"/>
-        <location filename="../AutoloadStrings.cpp" line="305"/>
-        <source>Synth plugin</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/base/Studio.cpp" line="53"/>
-        <location filename="../../src/sound/AlsaDriver.cpp" line="700"/>
-        <location filename="../AutoloadStrings.cpp" line="306"/>
-        <source>Audio</source>
-        <translation>Suara</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="308"/>
@@ -7887,7 +8018,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="318"/>
         <source>blue</source>
-        <translation>biru</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="319"/>
@@ -7902,7 +8033,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="321"/>
         <source>SkyBlue</source>
-        <translation>BiruLangit</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="322"/>
@@ -7922,7 +8053,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="325"/>
         <source>LightBlue</source>
-        <translation>BiruMuda</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="326"/>
@@ -7952,7 +8083,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="331"/>
         <source>cyan</source>
-        <translation>sian</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="332"/>
@@ -7977,7 +8108,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="336"/>
         <source>DarkGreen</source>
-        <translation>HijauTua</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="337"/>
@@ -7992,7 +8123,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="339"/>
         <source>SeaGreen</source>
-        <translation>HijauLaut</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="340"/>
@@ -8022,7 +8153,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="345"/>
         <source>green</source>
-        <translation>hijau</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="346"/>
@@ -8037,7 +8168,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="348"/>
         <source>GreenYellow</source>
-        <translation>HijauKuning</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="349"/>
@@ -8047,12 +8178,12 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="350"/>
         <source>YellowGreen</source>
-        <translation>KuningHijau</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="351"/>
         <source>ForestGreen</source>
-        <translation>HijauHutan</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="352"/>
@@ -8082,17 +8213,17 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="357"/>
         <source>LightYellow</source>
-        <translation>KuningMuda</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="358"/>
         <source>yellow</source>
-        <translation>kuning</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="359"/>
         <source>gold</source>
-        <translation>emas</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="360"/>
@@ -8117,7 +8248,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="364"/>
         <source>IndianRed</source>
-        <translation>MerahIndian</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="365"/>
@@ -8162,7 +8293,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="373"/>
         <source>chocolate</source>
-        <translation>cokelat</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="374"/>
@@ -8172,7 +8303,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="375"/>
         <source>brown</source>
-        <translation>coklat</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="376"/>
@@ -8182,7 +8313,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="377"/>
         <source>salmon</source>
-        <translation>salmon</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="378"/>
@@ -8192,17 +8323,17 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="379"/>
         <source>orange</source>
-        <translation>oranye</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="380"/>
         <source>DarkOrange</source>
-        <translation>OranyeTua</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="381"/>
         <source>coral</source>
-        <translation>koral</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="382"/>
@@ -8212,17 +8343,17 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="383"/>
         <source>tomato</source>
-        <translation>tomat</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="384"/>
         <source>OrangeRed</source>
-        <translation>OranyeMerah</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="385"/>
         <source>red</source>
-        <translation>merah</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="386"/>
@@ -8237,7 +8368,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="388"/>
         <source>pink</source>
-        <translation>merahmuda</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="389"/>
@@ -8252,7 +8383,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="391"/>
         <source>maroon</source>
-        <translation>marun</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="392"/>
@@ -8262,17 +8393,17 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="393"/>
         <source>VioletRed</source>
-        <translation>MerahViolet</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="394"/>
         <source>magenta</source>
-        <translation>magenta</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="395"/>
         <source>violet</source>
-        <translation>violet</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="396"/>
@@ -8302,12 +8433,12 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="401"/>
         <source>BlueViolet</source>
-        <translation>BiruViolet</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="402"/>
         <source>purple</source>
-        <translation>ungu</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="403"/>
@@ -8322,22 +8453,22 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="405"/>
         <source>snow1</source>
-        <translation>salju1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="406"/>
         <source>snow2</source>
-        <translation>salju2</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="407"/>
         <source>snow3</source>
-        <translation>salju3</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="408"/>
         <source>snow4</source>
-        <translation>salju4</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="409"/>
@@ -8362,22 +8493,22 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="413"/>
         <source>AntiqueWhite1</source>
-        <translation>PutihAntik1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="414"/>
         <source>AntiqueWhite2</source>
-        <translation>PutihAntik2</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="415"/>
         <source>AntiqueWhite3</source>
-        <translation>PutihAntik3</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="416"/>
         <source>AntiqueWhite4</source>
-        <translation>PutihAntik4</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="417"/>
@@ -8562,22 +8693,22 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="453"/>
         <source>azure1</source>
-        <translation>birulangit1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="454"/>
         <source>azure2</source>
-        <translation>birulangit2</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="455"/>
         <source>azure3</source>
-        <translation>birulangit3</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="456"/>
         <source>azure4</source>
-        <translation>birulangit4</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="457"/>
@@ -8622,22 +8753,22 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="465"/>
         <source>blue1</source>
-        <translation>biru1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="466"/>
         <source>blue2</source>
-        <translation>biru2</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="467"/>
         <source>blue3</source>
-        <translation>biru3</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="468"/>
         <source>blue4</source>
-        <translation>biru4</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="469"/>
@@ -8702,22 +8833,22 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="481"/>
         <source>SkyBlue1</source>
-        <translation>BiruLangit1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="482"/>
         <source>SkyBlue2</source>
-        <translation>BiruLangit2</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="483"/>
         <source>SkyBlue3</source>
-        <translation>BiruLangit3</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="484"/>
         <source>SkyBlue4</source>
-        <translation>BiruLangit4</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="485"/>
@@ -8782,22 +8913,22 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="497"/>
         <source>LightBlue1</source>
-        <translation>BiruMuda1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="498"/>
         <source>LightBlue2</source>
-        <translation>BiruMuda2</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="499"/>
         <source>LightBlue3</source>
-        <translation>BiruMuda3</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="500"/>
         <source>LightBlue4</source>
-        <translation>BiruMuda4</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="501"/>
@@ -8882,22 +9013,22 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="517"/>
         <source>cyan1</source>
-        <translation>sian1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="518"/>
         <source>cyan2</source>
-        <translation>sian2</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="519"/>
         <source>cyan3</source>
-        <translation>sian3</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="520"/>
         <source>cyan4</source>
-        <translation>sian4</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="521"/>
@@ -8962,22 +9093,22 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="533"/>
         <source>SeaGreen1</source>
-        <translation>HijauLaut1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="534"/>
         <source>SeaGreen2</source>
-        <translation>HijauLaut2</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="535"/>
         <source>SeaGreen3</source>
-        <translation>HijauLaut3</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="536"/>
         <source>SeaGreen4</source>
-        <translation>HijauLaut4</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="537"/>
@@ -9022,22 +9153,22 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="545"/>
         <source>green1</source>
-        <translation>hijau1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="546"/>
         <source>green2</source>
-        <translation>hijau2</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="547"/>
         <source>green3</source>
-        <translation>hijau3</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="548"/>
         <source>green4</source>
-        <translation>hijau4</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="549"/>
@@ -9142,62 +9273,62 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="569"/>
         <source>LightYellow1</source>
-        <translation>KuningMuda1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="570"/>
         <source>LightYellow2</source>
-        <translation>KuningMuda2</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="571"/>
         <source>LightYellow3</source>
-        <translation>KuningMuda3</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="572"/>
         <source>LightYellow4</source>
-        <translation>KuningMuda4</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="573"/>
         <source>yellow1</source>
-        <translation>kuning1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="574"/>
         <source>yellow2</source>
-        <translation>kuning2</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="575"/>
         <source>yellow3</source>
-        <translation>kuning3</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="576"/>
         <source>yellow4</source>
-        <translation>kuning4</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="577"/>
         <source>gold1</source>
-        <translation>emas1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="578"/>
         <source>gold2</source>
-        <translation>emas2</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="579"/>
         <source>gold3</source>
-        <translation>emas3</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="580"/>
         <source>gold4</source>
-        <translation>emas4</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="581"/>
@@ -9262,22 +9393,22 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="593"/>
         <source>IndianRed1</source>
-        <translation>MerahIndian1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="594"/>
         <source>IndianRed2</source>
-        <translation>MerahIndian2</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="595"/>
         <source>IndianRed3</source>
-        <translation>MerahIndian3</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="596"/>
         <source>IndianRed4</source>
-        <translation>MerahIndian4</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="597"/>
@@ -9362,22 +9493,22 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="613"/>
         <source>chocolate1</source>
-        <translation>cokelat1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="614"/>
         <source>chocolate2</source>
-        <translation>cokelat2</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="615"/>
         <source>chocolate3</source>
-        <translation>cokelat3</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="616"/>
         <source>chocolate4</source>
-        <translation>cokelat4</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="617"/>
@@ -9402,42 +9533,42 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="621"/>
         <source>brown1</source>
-        <translation>coklat1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="622"/>
         <source>brown2</source>
-        <translation>coklat2</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="623"/>
         <source>brown3</source>
-        <translation>coklat3</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="624"/>
         <source>brown4</source>
-        <translation>coklat4</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="625"/>
         <source>salmon1</source>
-        <translation>salmon1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="626"/>
         <source>salmon2</source>
-        <translation>salmon2</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="627"/>
         <source>salmon3</source>
-        <translation>salmon3</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="628"/>
         <source>salmon4</source>
-        <translation>salmon4</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="629"/>
@@ -9462,122 +9593,122 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="633"/>
         <source>orange1</source>
-        <translation>oranye1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="634"/>
         <source>orange2</source>
-        <translation>oranye2</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="635"/>
         <source>orange3</source>
-        <translation>oranye3</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="636"/>
         <source>orange4</source>
-        <translation>oranye4</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="637"/>
         <source>DarkOrange1</source>
-        <translation>OranyeTua1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="638"/>
         <source>DarkOrange2</source>
-        <translation>OranyeTua2</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="639"/>
         <source>DarkOrange3</source>
-        <translation>OranyeTua3</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="640"/>
         <source>DarkOrange4</source>
-        <translation>OranyeTua4</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="641"/>
         <source>coral1</source>
-        <translation>koral1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="642"/>
         <source>coral2</source>
-        <translation>koral2</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="643"/>
         <source>coral3</source>
-        <translation>koral3</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="644"/>
         <source>coral4</source>
-        <translation>koral4</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="645"/>
         <source>tomato1</source>
-        <translation>tomat1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="646"/>
         <source>tomato2</source>
-        <translation>tomat2</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="647"/>
         <source>tomato3</source>
-        <translation>tomat3</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="648"/>
         <source>tomato4</source>
-        <translation>tomat4</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="649"/>
         <source>OrangeRed1</source>
-        <translation>OranyeMerah1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="650"/>
         <source>OrangeRed2</source>
-        <translation>OranyeMerah2</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="651"/>
         <source>OrangeRed3</source>
-        <translation>OranyeMerah3</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="652"/>
         <source>OrangeRed4</source>
-        <translation>OranyeMerah4</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="653"/>
         <source>red1</source>
-        <translation>merah1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="654"/>
         <source>red2</source>
-        <translation>merah2</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="655"/>
         <source>red3</source>
-        <translation>merah3</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="656"/>
         <source>red4</source>
-        <translation>merah4</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="657"/>
@@ -9622,22 +9753,22 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="665"/>
         <source>pink1</source>
-        <translation>merahmuda1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="666"/>
         <source>pink2</source>
-        <translation>merahmuda2</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="667"/>
         <source>pink3</source>
-        <translation>merahmuda3</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="668"/>
         <source>pink4</source>
-        <translation>merahmuda4</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="669"/>
@@ -9682,62 +9813,62 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="677"/>
         <source>maroon1</source>
-        <translation>marun1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="678"/>
         <source>maroon2</source>
-        <translation>marun2</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="679"/>
         <source>maroon3</source>
-        <translation>marun3</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="680"/>
         <source>maroon4</source>
-        <translation>marun4</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="681"/>
         <source>VioletRed1</source>
-        <translation>MerahViolet1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="682"/>
         <source>VioletRed2</source>
-        <translation>MerahViolet2</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="683"/>
         <source>VioletRed3</source>
-        <translation>MerahViolet3</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="684"/>
         <source>VioletRed4</source>
-        <translation>MerahViolet4</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="685"/>
         <source>magenta1</source>
-        <translation>magenta1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="686"/>
         <source>magenta2</source>
-        <translation>magenta2</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="687"/>
         <source>magenta3</source>
-        <translation>magenta3</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="688"/>
         <source>magenta4</source>
-        <translation>magenta4</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="689"/>
@@ -9822,22 +9953,22 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="705"/>
         <source>purple1</source>
-        <translation>ungu1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="706"/>
         <source>purple2</source>
-        <translation>ungu2</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="707"/>
         <source>purple3</source>
-        <translation>ungu3</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="708"/>
         <source>purple4</source>
-        <translation>ungu4</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="709"/>
@@ -9882,7 +10013,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="717"/>
         <source>black</source>
-        <translation>hitam</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="718"/>
@@ -9917,7 +10048,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="724"/>
         <source>white</source>
-        <translation>putih</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="725"/>
@@ -9927,359 +10058,52 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="726"/>
         <source>Blue pastel</source>
-        <translation>Biru pastel</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="727"/>
         <source>Red pastel</source>
-        <translation>Merah pastel</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="728"/>
         <source>Green pastel</source>
-        <translation>Hijau pastel</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="729"/>
         <source>Orange pastel</source>
-        <translation>Oranye pastel</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="730"/>
         <source>Yellow pastel</source>
-        <translation>Kuning pastel</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="731"/>
         <source>default</source>
-        <translation>baku</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="732"/>
         <source>Copyright (c) xxxx Copyright Holder</source>
-        <translation>Hak Cipta (c) xxxx Pemegang Hak Cipta</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="733"/>
         <source>Not Yet Titled</source>
-        <translation>Belum Berjudul</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="734"/>
         <source>not yet subtitled</source>
-        <translation>belum bersubjudul</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="735"/>
         <source>Unknown</source>
-        <translation>Tak Dikenal</translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="269"/>
-        <source>[ %1 ]</source>
-        <translation>[ %1 ]</translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="684"/>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="806"/>
-        <source>%1. %2</source>
-        <translation>%1 %2</translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="91"/>
-        <location filename="../../src/gui/general/ActionFileParser.cpp" line="639"/>
-        <location filename="../../src/gui/general/ActionFileParser.cpp" line="646"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="457"/>
-        <source>%1</source>
-        <translation>%1</translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/dialogs/DialogSuppressor.cpp" line="76"/>
-        <source>Do not show this warning again</source>
-        <translation>Jangan tampilkan peringatan ini lagi</translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/general/ActionFileParser.cpp" line="655"/>
-        <source>%1 (%2)</source>
-        <translation>%1 (%2)</translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="451"/>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="899"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="757"/>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1589"/>
-        <source>%1 Controller %2 %3</source>
-        <translation>%1 Kontroler %2 %3</translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/application/main.cpp" line="319"/>
-        <source>Rosegarden - A sequencer and musical notation editor</source>
-        <translation>Rosegarden - Sekuenser dan penyunting notasi musikal</translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/application/main.cpp" line="446"/>
-        <source>Rosegarden</source>
-        <translation>Rosegarden</translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/application/main.cpp" line="759"/>
-        <source>Welcome!</source>
-        <translation>Selamat Datang!</translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/application/main.cpp" line="775"/>
-        <source>http://rosegardenmusic.com/wiki/doc:manual-en</source>
-        <translation>http://rosegardenmusic.com/wiki/doc:manual-en</translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/application/main.cpp" line="776"/>
-        <source>&lt;h2&gt;Welcome to Rosegarden!&lt;/h2&gt;&lt;p&gt;Welcome to the Rosegarden audio and MIDI sequencer and musical notation editor.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;If you have not already done so, you may wish to install some DSSI synth plugins, or a separate synth program such as QSynth.  Rosegarden does not synthesize sounds from MIDI on its own, so without these you will hear nothing.&lt;/li&gt;&lt;li&gt;Rosegarden uses the JACK audio server for recording and playback of audio, and for playback from DSSI synth plugins.  These features will only be available if the JACK server is running.&lt;/li&gt;&lt;li&gt;Rosegarden has comprehensive documentation: see the &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&quot;&gt;Rosegarden website&lt;/a&gt; for the &lt;a style=&quot;color:gold&quot; href=&quot;%1&quot;&gt;manual&lt;/a&gt;, &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;tutorials&lt;/a&gt;, and other information!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  To learn more, go to the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;Rosegarden website&lt;/a&gt;.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="35"/>
-        <location filename="../InstrumentStrings.cpp" line="375"/>
-        <source>C</source>
-        <comment>note name</comment>
-        <translation>C</translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="35"/>
-        <location filename="../InstrumentStrings.cpp" line="376"/>
-        <source>C#</source>
-        <comment>note name</comment>
-        <translation>C#</translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="36"/>
-        <location filename="../InstrumentStrings.cpp" line="378"/>
-        <source>D</source>
-        <comment>note name</comment>
-        <translation>D</translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="36"/>
-        <source>D#</source>
-        <comment>note name</comment>
-        <translation>D#</translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="37"/>
-        <location filename="../InstrumentStrings.cpp" line="380"/>
-        <source>E</source>
-        <comment>note name</comment>
-        <translation>E</translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="37"/>
-        <location filename="../InstrumentStrings.cpp" line="383"/>
-        <source>F</source>
-        <comment>note name</comment>
-        <translation>F</translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="38"/>
-        <location filename="../InstrumentStrings.cpp" line="384"/>
-        <source>F#</source>
-        <comment>note name</comment>
-        <translation>F#</translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="38"/>
-        <location filename="../InstrumentStrings.cpp" line="385"/>
-        <source>G</source>
-        <comment>note name</comment>
-        <translation>G</translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="39"/>
-        <location filename="../InstrumentStrings.cpp" line="386"/>
-        <source>G#</source>
-        <comment>note name</comment>
-        <translation>G#</translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="39"/>
-        <location filename="../InstrumentStrings.cpp" line="389"/>
-        <source>A</source>
-        <comment>note name</comment>
-        <translation>A</translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="40"/>
-        <location filename="../InstrumentStrings.cpp" line="388"/>
-        <source>A#</source>
-        <comment>note name</comment>
-        <translation>A#</translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="40"/>
-        <location filename="../InstrumentStrings.cpp" line="391"/>
-        <source>B</source>
-        <comment>note name</comment>
-        <translation>B</translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="522"/>
-        <source>Audio subsystem is not available - can&apos;t record audio</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="622"/>
-        <source>&lt;qt&gt;&lt;p&gt;No tracks were armed for recording.&lt;/p&gt;&lt;p&gt;Please arm at least one of the recording LEDs &lt;img src=&quot;:pixmaps/tooltip/record-leds.png&quot;&gt; and try again&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="788"/>
-        <source>&lt;qt&gt;&lt;p&gt;Couldn&apos;t start recording audio.&lt;/p&gt;&lt;p&gt;Please set a valid recording path in &lt;b&gt;Composition -&gt; Edit Document Properties... -&gt; Audio&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/sound/SoundFile.h" line="67"/>
-        <location filename="../../src/sound/SoundFile.h" line="69"/>
-        <location filename="../../src/sound/SoundFile.h" line="71"/>
-        <source>Bad sound file </source>
-        <translation>Berkas suara jelek</translation>
-    </message>
-    <message>
-        <location filename="../../src/sound/MidiFile.cpp" line="105"/>
-        <source>Wrong length for long data in MIDI stream</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/sound/MidiFile.cpp" line="128"/>
-        <source>Wrong length for int data in MIDI stream</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/sound/MidiFile.cpp" line="148"/>
-        <location filename="../../src/sound/MidiFile.cpp" line="195"/>
-        <source>End of MIDI file encountered while reading</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/sound/MidiFile.cpp" line="152"/>
-        <location filename="../../src/sound/MidiFile.cpp" line="211"/>
-        <source>Attempt to get more bytes than expected on Track</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/sound/MidiFile.cpp" line="173"/>
-        <location filename="../../src/sound/MidiFile.cpp" line="231"/>
-        <source>Attempt to read past MIDI file end</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/sound/MidiFile.cpp" line="515"/>
-        <source>Invalid event code found</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/sound/MidiFile.cpp" line="529"/>
-        <source>Running status used for first event in track</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/sound/RIFFAudioFile.cpp" line="59"/>
-        <source>Rosegarden currently only supports 16 or 32-bit PCM or IEEE floating-point RIFF files for writing</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/sound/RIFFAudioFile.cpp" line="376"/>
-        <source>Can&apos;t find RIFF identifier</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/sound/RIFFAudioFile.cpp" line="386"/>
-        <source>Can&apos;t find WAV identifier</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/sound/RIFFAudioFile.cpp" line="399"/>
-        <source>Can&apos;t find FORMAT identifier</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/sound/RIFFAudioFile.cpp" line="452"/>
-        <source>Rosegarden currently only supports PCM or IEEE floating-point RIFF files</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/sound/RIFFAudioFile.cpp" line="467"/>
-        <source>Unsupported number of channels</source>
-        <translation>Jumlah kanal tak didukung</translation>
-    </message>
-    <message>
-        <location filename="../../src/sound/RIFFAudioFile.cpp" line="481"/>
-        <source>Rosegarden currently only supports 8-, 16- or 24-bit PCM in RIFF files</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/sound/RIFFAudioFile.cpp" line="485"/>
-        <source>Rosegarden currently only supports 32-bit floating-point in RIFF files</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/application/TranzportClient.cpp" line="59"/>
-        <source>Failed to open tranzport device /dev/tranzport0</source>
-        <translation>Gagal membuka perangkat tranzport /dev/tranzport0</translation>
-    </message>
-    <message>
-        <location filename="../../src/sound/AudioFileManager.h" line="71"/>
-        <location filename="../../src/sound/AudioFileManager.h" line="73"/>
-        <source>Bad audio file path </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/sound/AudioFileManager.h" line="75"/>
-        <source>Bad audio file path (malformed file?) </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/sound/AudioFileTimeStretcher.h" line="49"/>
-        <source>Cancelled</source>
-        <translation>Dibatalkan</translation>
-    </message>
-    <message>
-        <location filename="../../src/sound/PeakFileManager.h" line="61"/>
-        <location filename="../../src/sound/PeakFileManager.h" line="63"/>
-        <source>Bad peak file </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/sound/PeakFileManager.h" line="65"/>
-        <source>Bad peak file (malformed audio?) </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="297"/>
-        <source>Synth plugin </source>
-        <translation type="unfinished">Pengaya sintetiser </translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="64"/>
-        <source>Bar %1:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="66"/>
-        <source>Bars %1 to %2:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="120"/>
-        <source>%1 %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="121"/>
-        <source>minor</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="122"/>
-        <source>major</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tak dikenal</translation>
     </message>
 </context>
 <context>
@@ -10297,11 +10121,7 @@
     <message>
         <location filename="../../src/gui/dialogs/AboutDialog.cpp" line="54"/>
         <source>&lt;p&gt;Copyright 2000-2010 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&lt;p&gt;Copyright 2000-2009 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;p&gt;Hak cipta 2000-2009 pada tim pengembang Rosegarden&lt;/p&gt;&lt;p&gt;Versi %1 &amp;nbsp; versi Qt %2&lt;br&gt;Kunci bangun: %3&lt;/p&gt;&lt;p&gt;Rosegarden dipersembahkan untuk Anda oleh sebuah tim dari para relawan di penjuru dunia.  Untuk daftar kontributor, kunjungi &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;Untuk informasi lebih lanjut mengenai Rosegarden, kunjungi &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Lisensi: Lisensi Publik Umum GNU Versi 2&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;Hak cipta 2000-2010 pada tim pengembang Rosegarden&lt;/p&gt;&lt;p&gt;Versi %1 &amp;nbsp; versi Qt %2&lt;br&gt;Kunci bangun: %3&lt;/p&gt;&lt;p&gt;Rosegarden dipersembahkan untuk Anda oleh tim dari para relawan di penjuru dunia.  Untuk daftar kontributor, kunjungi &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;Untuk informasi lebih lanjut mengenai Rosegarden, kunjungi &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Lisensi: Lisensi Publik Umum GNU Versi 2&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
@@ -10427,12 +10247,12 @@
     <message>
         <location filename="../../src/commands/segment/AddLayerCommand.cpp" line="35"/>
         <source>Add Layer</source>
-        <translation type="unfinished"></translation>
+        <translation>Tambah Lapis</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/AddLayerCommand.cpp" line="67"/>
         <source> - layer</source>
-        <translation type="unfinished"></translation>
+        <translation> - lapis</translation>
     </message>
 </context>
 <context>
@@ -10743,7 +10563,7 @@
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="216"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
 </context>
 <context>
@@ -10756,7 +10576,7 @@
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="91"/>
         <source>&lt;no synth&gt;</source>
-        <translation type="unfinished">&lt;tidak ada sintetiser&gt;</translation>
+        <translation>&lt;tidak ada sintese&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="151"/>
@@ -10819,12 +10639,12 @@
     <message>
         <location filename="../../src/sound/AudioFileManager.cpp" line="660"/>
         <source>Cannot download file %1</source>
-        <translation>Tak dapat mengunduh berkas %1</translation>
+        <translation>Tidak dapat mengunduh berkas %1</translation>
     </message>
     <message>
         <location filename="../../src/sound/AudioFileManager.cpp" line="660"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/sound/AudioFileManager.cpp" line="730"/>
@@ -10907,7 +10727,7 @@
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="176"/>
         <source>Sample rate</source>
-        <translation type="unfinished"></translation>
+        <translation>Rerata sampel</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="177"/>
@@ -10947,7 +10767,7 @@
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="648"/>
         <source>This will unload audio file &quot;%1&quot; and remove all associated segments.  Are you sure?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ini akan membuang berkas suara &quot;%1&quot; beserta seluruh segmen yang berhubungan dengannya.  Anda yakin?</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="652"/>
@@ -10959,7 +10779,7 @@
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1208"/>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1225"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="736"/>
@@ -11004,7 +10824,10 @@
 This action cannot be undone, and associations with these files will be lost.
 Files will not be removed from your disk.
 Are you sure?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ini akan membuang semua berkas suara beserta segmen yang berhubungan dengan berkas suara ini.
+Aksi ini tidak bisa dibatalkan, dan semua yang berhubungan dengan berkas ini akan hilang.
+Namun, berkas aslinya tidak akan dibuang dari disk.
+Anda yakin?</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="879"/>
@@ -11012,7 +10835,10 @@ Are you sure?</source>
 This action cannot be undone, and associations with these files will be lost.
 Files will not be removed from your disk.
 Are you sure?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ini akan membuang semua berkas suara yang tidak berhubungan dengan segmen manapun dalam komposisi ini.
+Aksi ini tidak bisa dibatalkan, dan semua yang berhubungan dengan berkas ini akan hilang.
+Namun, berkas aslinya tidak akan dibuang dari disk.
+Anda yakin?</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="944"/>
@@ -11050,12 +10876,12 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1175"/>
         <source>importing a remote audio file</source>
-        <translation type="unfinished"></translation>
+        <translation>mengimpor berkas suara jarak jauh</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1177"/>
         <source>importing an audio file that needs to be converted or resampled</source>
-        <translation type="unfinished"></translation>
+        <translation>mengimpor berkas suara yang perlu dikonversi atau disampel ulang</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1180"/>
@@ -11076,12 +10902,12 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1224"/>
         <source>Try copying this file to a directory where you have write permission and re-add it</source>
-        <translation type="unfinished"></translation>
+        <translation>Cobalah salin berkas ini pada direktori yang bisa Anda tulis</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1386"/>
         <source>http://rosegardenmusic.com/wiki/doc:audioManager-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:audioManager-en</translation>
     </message>
 </context>
 <context>
@@ -11094,12 +10920,12 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="271"/>
         <source>Record input source</source>
-        <translation type="unfinished"></translation>
+        <translation>Sumber rekaman</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="281"/>
         <source>Output destination</source>
-        <translation type="unfinished"></translation>
+        <translation>Target keluaran</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="294"/>
@@ -11119,14 +10945,6 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="310"/>
         <source>Mono or stereo</source>
         <translation>Mono atau stereo</translation>
-    </message>
-    <message>
-        <source>Mute</source>
-        <translation type="obsolete">Bisu</translation>
-    </message>
-    <message>
-        <source>Solo</source>
-        <translation type="obsolete">Solo</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="318"/>
@@ -11177,7 +10995,7 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="499"/>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="500"/>
         <source>Audio master output level</source>
-        <translation type="unfinished"></translation>
+        <translation>Tingkat keluaran master suara</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="502"/>
@@ -11194,7 +11012,7 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="1652"/>
         <source>http://rosegardenmusic.com/wiki/doc:audioMixerWindow-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:audioMixerWindow-en</translation>
     </message>
 </context>
 <context>
@@ -11318,7 +11136,7 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="144"/>
         <source>Unique ID of plugin</source>
-        <translation type="unfinished"></translation>
+        <translation>ID unik pengaya</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="171"/>
@@ -11338,7 +11156,7 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="460"/>
         <source>This plugin does not have any controls that can be edited here.</source>
-        <translation type="unfinished"></translation>
+        <translation>Pengaya ini tidak memiliki kontrol yang bisa disunting di sini.</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="470"/>
@@ -11378,7 +11196,7 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="1013"/>
         <source>http://rosegardenmusic.com/wiki/doc:audioPluginDialog-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:audioPluginDialog-en</translation>
     </message>
 </context>
 <context>
@@ -11525,7 +11343,7 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/commands/segment/AudioSegmentDistributeCommand.h" line="61"/>
         <source>Distribute Audio Segments over MIDI</source>
-        <translation type="unfinished"></translation>
+        <translation>Distribusikan Suara pada Segmen MIDI</translation>
     </message>
 </context>
 <context>
@@ -11590,7 +11408,7 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/dialogs/AudioSplitDialog.cpp" line="71"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioSplitDialog.cpp" line="80"/>
@@ -11605,12 +11423,12 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/dialogs/AudioSplitDialog.cpp" line="131"/>
         <source>http://rosegardenmusic.com/wiki/doc:audioSplitDialog-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:audioSplitDialog-en</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioSplitDialog.cpp" line="172"/>
         <source>&lt;no preview generated for this audio file&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;tidak ada pratampil untuk berkas suara ini&gt;</translation>
     </message>
 </context>
 <context>
@@ -11627,10 +11445,6 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="96"/>
         <source>Manage MIDI Banks and Programs</source>
         <translation>Kelola Bank MIDI dan Program</translation>
-    </message>
-    <message>
-        <source>Reset</source>
-        <translation type="obsolete">Reset</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="119"/>
@@ -11807,12 +11621,12 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1567"/>
         <source>Some internal error: cannot locate selected device</source>
-        <translation type="unfinished"></translation>
+        <translation>Kesalahan internal: tidak bisa menemukan perangkat yang dipilih</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1577"/>
         <source>Some internal error: no device selected</source>
-        <translation type="unfinished"></translation>
+        <translation>Kesalahan internal: tidak ada perangkat yang dipilih</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1737"/>
@@ -11833,16 +11647,12 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1798"/>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1802"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1839"/>
         <source>http://rosegardenmusic.com/wiki/doc:bankEditorDialog-en</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Unsaved Changes</source>
-        <translation type="obsolete">Perubahan Belum Disimpan</translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:bankEditorDialog-en</translation>
     </message>
 </context>
 <context>
@@ -12265,16 +12075,11 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/CompositionView.cpp" line="332"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
 </context>
 <context>
     <name>Rosegarden::ConfigureDialog</name>
-    <message>
-        <source>Configure Rosegarden</source>
-        <extracomment>QDialog(parent) //, tr(&quot;Configure Rosegarden&quot;), name)</extracomment>
-        <translation type="obsolete">Konfigurasi Rosegarden</translation>
-    </message>
     <message>
         <location filename="../../src/gui/dialogs/ConfigureDialog.cpp" line="47"/>
         <source>Rosegarden - Preferences</source>
@@ -12302,7 +12107,7 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="94"/>
         <source>&lt;no device&gt;</source>
-        <translation>&lt;tiada perangkat&gt;</translation>
+        <translation>&lt;tidak ada perangkat&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="111"/>
@@ -12383,7 +12188,7 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="140"/>
         <source>Delete a Control Parameter from the Studio</source>
-        <translation type="unfinished"></translation>
+        <translation>Hapus Parameter Kontrol dari Studio</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="142"/>
@@ -12408,7 +12213,7 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="465"/>
         <source>http://rosegardenmusic.com/wiki/doc:controlEditorDialog-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:controlEditorDialog-en</translation>
     </message>
 </context>
 <context>
@@ -12503,7 +12308,7 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/rulers/ControlToolBox.cpp" line="59"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
 </context>
 <context>
@@ -12692,34 +12497,6 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
 <context>
     <name>Rosegarden::DiatonicPitchChooser</name>
     <message>
-        <source>C</source>
-        <translation type="obsolete">C</translation>
-    </message>
-    <message>
-        <source>D</source>
-        <translation type="obsolete">D</translation>
-    </message>
-    <message>
-        <source>E</source>
-        <translation type="obsolete">E</translation>
-    </message>
-    <message>
-        <source>F</source>
-        <translation type="obsolete">F</translation>
-    </message>
-    <message>
-        <source>G</source>
-        <translation type="obsolete">G</translation>
-    </message>
-    <message>
-        <source>A</source>
-        <translation type="obsolete">A</translation>
-    </message>
-    <message>
-        <source>B</source>
-        <translation type="obsolete">B</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="59"/>
         <source>C</source>
         <comment>note name</comment>
@@ -12891,7 +12668,7 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="131"/>
         <source>Segments:</source>
-        <translation>Segment:</translation>
+        <translation>Segmen:</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="132"/>
@@ -12992,101 +12769,6 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="306"/>
         <source>Segment Summary</source>
         <translation>Ikhtisar Segmen</translation>
-    </message>
-</context>
-<context>
-    <name>Rosegarden::EditView</name>
-    <message>
-        <source>%1 Controller %2 %3</source>
-        <translation type="obsolete">%1 Kontroler %2 %3</translation>
-    </message>
-    <message>
-        <source>Unsupported Event Type</source>
-        <translation type="obsolete">Jenis Peristiwa Tak Didukung</translation>
-    </message>
-    <message>
-        <source>I</source>
-        <translation type="obsolete">I</translation>
-    </message>
-    <message>
-        <source>II</source>
-        <translation type="obsolete">II</translation>
-    </message>
-    <message>
-        <source>III</source>
-        <translation type="obsolete">III</translation>
-    </message>
-    <message>
-        <source>IV</source>
-        <translation type="obsolete">IV</translation>
-    </message>
-    <message>
-        <source>V</source>
-        <translation type="obsolete">V</translation>
-    </message>
-    <message>
-        <source>VI</source>
-        <translation type="obsolete">VI</translation>
-    </message>
-    <message>
-        <source>VII</source>
-        <translation type="obsolete">VII</translation>
-    </message>
-    <message>
-        <source>VIII</source>
-        <translation type="obsolete">VIII</translation>
-    </message>
-    <message>
-        <source>&amp;Insert Note</source>
-        <translation type="obsolete">S&amp;isip Not</translation>
-    </message>
-    <message>
-        <source>&amp;Upper Octave</source>
-        <translation type="obsolete">Oktaf Ting&amp;gi</translation>
-    </message>
-    <message>
-        <source>&amp;Lower Octave</source>
-        <translation type="obsolete">Oktaf Ren&amp;dah</translation>
-    </message>
-    <message>
-        <source>Halving durations...</source>
-        <translation type="obsolete">Durasi permainan:</translation>
-    </message>
-    <message>
-        <source>Doubling durations...</source>
-        <translation type="obsolete">Menggandakan kecepatan....</translation>
-    </message>
-    <message>
-        <source>Rescaling...</source>
-        <translation type="obsolete">Menskala ulang...</translation>
-    </message>
-    <message>
-        <source>Transpose</source>
-        <translation type="obsolete">Transposisi</translation>
-    </message>
-    <message>
-        <source>Transposing...</source>
-        <translation type="obsolete">Mentransposisikan...</translation>
-    </message>
-    <message>
-        <source>Transposing up one semitone...</source>
-        <translation type="obsolete">Mentransposisikan naik satu setengah nada...</translation>
-    </message>
-    <message>
-        <source>Transposing up one octave...</source>
-        <translation type="obsolete">Mentransposisikan naik satu oktaf...</translation>
-    </message>
-    <message>
-        <source>Transposing down one semitone...</source>
-        <translation type="obsolete">Mentransposisikan turun satu setengah nada...</translation>
-    </message>
-    <message>
-        <source>Transposing down one octave...</source>
-        <translation type="obsolete">Mentransposisikan turun satu oktaf...</translation>
-    </message>
-    <message>
-        <source>Inverting...</source>
-        <translation type="obsolete">Membalikkan...</translation>
     </message>
 </context>
 <context>
@@ -13708,11 +13390,7 @@ This could cause problems if it overrides a different computed value later on.</
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="1560"/>
         <source>http://rosegardenmusic.com/wiki/doc:eventView-en</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>%1 - Triggered Segment: %2</source>
-        <translation type="obsolete">%1 - Segmen Berpicu: %2</translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:eventView-en</translation>
     </message>
 </context>
 <context>
@@ -13823,7 +13501,7 @@ Apakah Anda ingin tetap mencari berkas ini atau melewatinya saja?</translation>
     <message>
         <location filename="../../src/gui/dialogs/FileMergeDialog.cpp" line="115"/>
         <source>http://rosegardenmusic.com/wiki/doc:fileMergeDialog-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:fileMergeDialog-en</translation>
     </message>
 </context>
 <context>
@@ -13848,7 +13526,7 @@ Apakah Anda ingin tetap mencari berkas ini atau melewatinya saja?</translation>
     <message>
         <location filename="../../src/gui/general/FileSource.cpp" line="584"/>
         <source>Login failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Gagal masuk</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/FileSource.cpp" line="586"/>
@@ -13909,7 +13587,7 @@ Apakah Anda ingin tetap mencari berkas ini atau melewatinya saja?</translation>
         <location filename="../../src/gui/editors/notation/FontViewFrame.cpp" line="107"/>
         <location filename="../../src/gui/editors/notation/FontViewFrame.cpp" line="114"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/FontViewFrame.cpp" line="107"/>
@@ -13942,7 +13620,7 @@ Apakah Anda ingin tetap mencari berkas ini atau melewatinya saja?</translation>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="107"/>
         <source>Double-click opens segment in</source>
-        <translation type="unfinished"></translation>
+        <translation>Klik ganda membuka segmen pada</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="112"/>
@@ -13967,7 +13645,7 @@ Apakah Anda ingin tetap mencari berkas ini atau melewatinya saja?</translation>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="131"/>
         <source>Auto-save interval</source>
-        <translation type="unfinished"></translation>
+        <translation>Interval simpan otomatis</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="135"/>
@@ -13997,12 +13675,12 @@ Apakah Anda ingin tetap mencari berkas ini atau melewatinya saja?</translation>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="158"/>
         <source>Append suffixes to segment labels</source>
-        <translation type="unfinished"></translation>
+        <translation>Tambah awalan pada label segmen</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="175"/>
         <source>Use JACK transport</source>
-        <translation type="unfinished"></translation>
+        <translation>Gunakan transpor JACK</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="208"/>
@@ -14047,7 +13725,7 @@ Apakah Anda ingin tetap mencari berkas ini atau melewatinya saja?</translation>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="256"/>
         <source>Use Thorn style</source>
-        <translation></translation>
+        <translation>Gunakan gaya Thorn</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="262"/>
@@ -14057,7 +13735,7 @@ Apakah Anda ingin tetap mencari berkas ini atau melewatinya saja?</translation>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="307"/>
         <source>Show full path in window titles</source>
-        <translation type="unfinished"></translation>
+        <translation>Tampilkan jalur penuh pada baris judul</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="365"/>
@@ -14068,60 +13746,52 @@ Apakah Anda ingin tetap mencari berkas ini atau melewatinya saja?</translation>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="541"/>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="545"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="545"/>
         <source>You must restart Rosegarden for the graphics system change to take effect.</source>
-        <translation type="unfinished"></translation>
+        <translation>Anda harus menjalankan ulang Rosegarden sehingga perubahan pada sistem grafik bisa dirasakan.</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="266"/>
         <source>Note name style</source>
-        <translation type="unfinished"></translation>
+        <translation>Nama not</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="83"/>
         <source>Graphics performance</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Normal</source>
-        <translation type="obsolete">Normal</translation>
+        <translation>Performa grafik</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="89"/>
         <source>Safe</source>
-        <translation type="unfinished"></translation>
+        <translation>Aman</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="88"/>
         <source>Fast</source>
-        <translation type="unfinished"></translation>
+        <translation>Cepat</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="271"/>
         <source>Always use US names (e.g. quarter, 8th)</source>
-        <translation type="unfinished"></translation>
+        <translation>Selalu pakai nama AS (cth. quarter, 8th)</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="272"/>
         <source>Localized (where available)</source>
-        <translation type="unfinished"></translation>
+        <translation>Dilokalkan (bila tersedia)</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="286"/>
         <source>Show textured background on</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktifkan latar bertekstur</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="288"/>
         <source>Main window</source>
         <translation>Jendela utama</translation>
-    </message>
-    <message>
-        <source>Matrix</source>
-        <translation type="obsolete">Metriks</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="292"/>
@@ -14136,7 +13806,7 @@ Apakah Anda ingin tetap mencari berkas ini atau melewatinya saja?</translation>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="337"/>
         <source>&lt;qt&gt;Rosegarden relies on external applications to provide certain features.  Each selected application must be installed and available on your path.  When choosing an application to use, please ensure that it can run from a &quot;run command&quot; box (typically &lt;b&gt;Alt+F2&lt;/b&gt;) which should allow Rosegarden to make use of it when necessary.&lt;br&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Rosegarden bergantung pada sejumlah aplikasi luar untuk menyediakan sejumlah fitur.  Tiap aplikasi harus dipasang.  Saat memilih aplikasi untuk dipakai, pastikan bahwa aplikasi tersebut bisa dijalankan dari kotak &quot;jalankan aplikasi&quot; (dengan &lt;b&gt;Alt+F2&lt;/b&gt;), dengan begitu Rosegarden dapat menggunakan mereka apabila diperlukan.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="342"/>
@@ -14156,7 +13826,7 @@ Apakah Anda ingin tetap mencari berkas ini atau melewatinya saja?</translation>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="349"/>
         <source>Adobe Acrobat Reader (non-free)</source>
-        <translation type="unfinished"></translation>
+        <translation>Adobe Acrobat Reader (tidak bebas)</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="350"/>
@@ -14166,12 +13836,12 @@ Apakah Anda ingin tetap mencari berkas ini atau melewatinya saja?</translation>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="351"/>
         <source>Used to preview generated LilyPond output</source>
-        <translation type="unfinished"></translation>
+        <translation>Dipakai untuk melihat hasil LilyPond</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="356"/>
         <source>Command-line file printing utility</source>
-        <translation type="unfinished"></translation>
+        <translation>Utilitas cetak berkas dari baris perintah</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="361"/>
@@ -14309,7 +13979,7 @@ Apakah Anda ingin tetap mencari berkas ini atau melewatinya saja?</translation>
         <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="498"/>
         <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="508"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="508"/>
@@ -14441,27 +14111,9 @@ Apakah Anda ingin tetap mencari berkas ini atau melewatinya saja?</translation>
 <context>
     <name>Rosegarden::IdentifyTextCodecDialog</name>
     <message>
-        <source>Choose Text Encoding</source>
-        <translation type="obsolete">Pilih Enkode Teks</translation>
-    </message>
-    <message>
-        <source>
-This file contains text in an unknown language encoding.
-
-Please select one of the following estimated text encodings
-for use with the text in this file:
-</source>
-        <translation type="obsolete">
-Berkas ini memiliki teks dengan bahasa enkode yang tidak diketahui.
-
-Silakan pilih satu dari beberapa enkode teks berikut
-untuk digunakan dengan teks di dalam berkas ini:
-</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="68"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="73"/>
@@ -14607,12 +14259,12 @@ Teks contoh dari berkas:</translation>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="86"/>
         <source>Cannot download file %1</source>
-        <translation>Tak dapat mengunduh berkas %1</translation>
+        <translation>Tidak dapat mengunduh berkas %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="108"/>
         <source>Cannot open file %1</source>
-        <translation>Tak dapat membuka berkas %1</translation>
+        <translation>Tidak dapat membuka berkas %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="119"/>
@@ -14693,7 +14345,7 @@ Teks contoh dari berkas:</translation>
     <message>
         <location filename="../../src/gui/widgets/InputDialog.cpp" line="47"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
 </context>
 <context>
@@ -14791,7 +14443,7 @@ Teks contoh dari berkas:</translation>
     <message>
         <location filename="../../src/gui/dialogs/InterpretDialog.cpp" line="149"/>
         <source>http://rosegardenmusic.com/wiki/doc:interpretDialog-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:interpretDialog-en</translation>
     </message>
 </context>
 <context>
@@ -15001,7 +14653,7 @@ Teks contoh dari berkas:</translation>
     <message>
         <location filename="../../src/commands/edit/InvertCommand.h" line="46"/>
         <source>&amp;Invert</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kebal&amp;ikan</translation>
     </message>
 </context>
 <context>
@@ -15014,7 +14666,7 @@ Teks contoh dari berkas:</translation>
     <message>
         <location filename="../../src/commands/notation/KeyInsertionCommand.h" line="67"/>
         <source>Add &amp;Key Change...</source>
-        <translation type="unfinished"></translation>
+        <translation>Tambah Perubahan &amp;Kunci...</translation>
     </message>
 </context>
 <context>
@@ -15022,7 +14674,7 @@ Teks contoh dari berkas:</translation>
     <message>
         <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="70"/>
         <source>Key Change</source>
-        <translation type="unfinished"></translation>
+        <translation>Perubahan Kunci</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="82"/>
@@ -15037,7 +14689,7 @@ Teks contoh dari berkas:</translation>
     <message>
         <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="90"/>
         <source>Scope</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lingkup</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="94"/>
@@ -15113,30 +14765,7 @@ Teks contoh dari berkas:</translation>
     <message>
         <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="470"/>
         <source>http://rosegardenmusic.com/wiki/doc:keySignatureDialog-en</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Rosegarden::LatencyConfigurationPage</name>
-    <message>
-        <source>Latency</source>
-        <translation type="obsolete">Latensi</translation>
-    </message>
-    <message>
-        <source>Sequencer Latency</source>
-        <translation type="obsolete">Latensi Sekuenser</translation>
-    </message>
-    <message>
-        <source>JACK latency</source>
-        <translation type="obsolete">Latensi JACK</translation>
-    </message>
-    <message>
-        <source>JACK record latency (in ms)</source>
-        <translation type="obsolete">Latensi perekaman JACK (dalam mdet)</translation>
-    </message>
-    <message>
-        <source>JACK Latency</source>
-        <translation type="obsolete">Latensi JACK</translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:keySignatureDialog-en</translation>
     </message>
 </context>
 <context>
@@ -15481,7 +15110,7 @@ Apakah Anda ingin menggunakan
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="70"/>
         <source>Rosegarden - %1 with LilyPond...</source>
-        <translation type="unfinished"></translation>
+        <translation>Rosegarden - %1 dengan LilyPond...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="79"/>
@@ -15491,7 +15120,7 @@ Apakah Anda ingin menggunakan
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="102"/>
         <source>Fatal error.  Processing aborted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kesalahn fatal.  Batal memproses.</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="103"/>
@@ -15501,17 +15130,17 @@ Apakah Anda ingin menggunakan
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="118"/>
         <source>Running &lt;b&gt;convert-ly&lt;/b&gt;...</source>
-        <translation type="unfinished"></translation>
+        <translation>Menjalankan &lt;b&gt;convert-ly&lt;/b&gt;...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="127"/>
         <source>&lt;b&gt;convert-ly&lt;/b&gt; started...</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;convert-ly&lt;/b&gt; dimulai...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="141"/>
         <source>&lt;b&gt;convert-ly&lt;/b&gt; finished...</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;convert-ly&lt;/b&gt; selesai...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="144"/>
@@ -15526,7 +15155,7 @@ Apakah Anda ingin menggunakan
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="158"/>
         <source>&lt;b&gt;lilypond&lt;/b&gt; started...</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;lilypond&lt;/b&gt; dimulai...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="275"/>
@@ -15546,7 +15175,7 @@ Apakah Anda ingin menggunakan
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="176"/>
         <source>&lt;b&gt;lilypond&lt;/b&gt; finished...</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;lilypond&lt;/b&gt; selesai...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="191"/>
@@ -15632,7 +15261,7 @@ Apakah Anda ingin menggunakan
     <message>
         <location filename="../../src/gui/dialogs/LyricEditDialog.cpp" line="351"/>
         <source>http://rosegardenmusic.com/wiki/doc:lyricEditDialog-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:lyricEditDialog-en</translation>
     </message>
 </context>
 <context>
@@ -15693,7 +15322,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="176"/>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="183"/>
         <source>Choose...</source>
-        <translation type="unfinished">Pilih...</translation>
+        <translation>Pilih...</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="180"/>
@@ -15735,12 +15364,12 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="252"/>
         <source>MMC Master</source>
-        <translation type="unfinished"></translation>
+        <translation>Master MMC</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="253"/>
         <source>MMC Slave</source>
-        <translation type="unfinished"></translation>
+        <translation>Pembantu MMC</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="264"/>
@@ -15750,12 +15379,12 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="272"/>
         <source>MTC Master</source>
-        <translation type="unfinished"></translation>
+        <translation>Master MTC</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="273"/>
         <source>MTC Slave</source>
-        <translation type="unfinished"></translation>
+        <translation>Pembantu MTC</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="287"/>
@@ -15770,7 +15399,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="320"/>
         <source>sfxload path</source>
-        <translation type="unfinished"></translation>
+        <translation>Jalur sfxload</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="328"/>
@@ -15824,10 +15453,6 @@ delay at the start of playback due to the amount of data being transmitted.</sou
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="112"/>
         <source>Program</source>
         <translation>Program</translation>
-    </message>
-    <message>
-        <source>Channel out</source>
-        <translation type="obsolete">Kanal keluar</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="113"/>
@@ -15988,10 +15613,6 @@ delay at the start of playback due to the amount of data being transmitted.</sou
         <translation>Bar, ketukan, dan subketukan</translation>
     </message>
     <message>
-        <source>Bars, beats, and divisions</source>
-        <translation type="obsolete">Bar, ketukan, dan divisi</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="149"/>
         <source>Bar velocity</source>
         <translation>Velositas bar</translation>
@@ -16070,10 +15691,6 @@ delay at the start of playback due to the amount of data being transmitted.</sou
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="200"/>
         <source>Recording</source>
         <translation>Merekam</translation>
-    </message>
-    <message>
-        <source>Synth plugin </source>
-        <translation type="obsolete">Pengaya sintetiser </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="326"/>
@@ -16177,7 +15794,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="621"/>
         <source>http://rosegardenmusic.com/wiki/doc:markerEditor-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:markerEditor-en</translation>
     </message>
 </context>
 <context>
@@ -16415,7 +16032,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixToolBox.cpp" line="81"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
 </context>
 <context>
@@ -16449,22 +16066,6 @@ Double-click to open the marker editor.</source>
 <context>
     <name>Rosegarden::MatrixView</name>
     <message>
-        <source>Instrument Parameters</source>
-        <translation type="obsolete">Parameter Instrumen</translation>
-    </message>
-    <message>
-        <source>%1 (%2)</source>
-        <translation type="obsolete">%1 (%2)</translation>
-    </message>
-    <message>
-        <source>Clipboard is empty</source>
-        <translation type="obsolete">Papan klip kosong</translation>
-    </message>
-    <message>
-        <source>Inserting clipboard contents...</source>
-        <translation type="obsolete">Menyisipkan isi papan klip...</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="316"/>
         <source>&lt;untitled&gt;</source>
         <translation>&lt;tanpa judul&gt;</translation>
@@ -16487,17 +16088,9 @@ Double-click to open the marker editor.</source>
         </translation>
     </message>
     <message>
-        <source>%1 Controller %2 %3</source>
-        <translation type="obsolete">%1 Kontroler %2 %3</translation>
-    </message>
-    <message>
-        <source>Unsupported Event Type</source>
-        <translation type="obsolete">Jenis Peristiwa Tak Didukung</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="584"/>
         <source> Grid: </source>
-        <translation type="unfinished"> Jejaring: </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="600"/>
@@ -16522,7 +16115,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="626"/>
         <source> Velocity: </source>
-        <translation type="unfinished"></translation>
+        <translation> Velositas: </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="644"/>
@@ -16537,24 +16130,24 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1455"/>
         <source>http://rosegardenmusic.com/wiki/doc:matrix-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:matrix-en</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1462"/>
         <source>http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</source>
-        <translation type="unfinished">http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</translation>
+        <translation>http://www.rosegardenmusic.com/tutorials/en/chapter-0..html</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1469"/>
         <source>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</source>
-        <translation type="unfinished">http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</translation>
+        <translation>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1482"/>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1596"/>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1674"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1674"/>
@@ -16565,14 +16158,6 @@ Double-click to open the marker editor.</source>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="2051"/>
         <source>Estimated key signature shown</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>  Zoom:  </source>
-        <translation type="obsolete">  Zum:  </translation>
-    </message>
-    <message>
-        <source>%1%</source>
-        <translation type="obsolete">%1%</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1260"/>
@@ -16610,21 +16195,9 @@ Double-click to open the marker editor.</source>
         <translation>Matriks</translation>
     </message>
     <message>
-        <source>Percussion</source>
-        <translation type="obsolete">Perkusi</translation>
-    </message>
-    <message>
-        <source>%1 - All Segments - %2</source>
-        <translation type="obsolete">%1 - Semua Segmen - %2</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1596"/>
         <source>Can&apos;t insert note: No grid duration selected</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source> Chord </source>
-        <translation type="obsolete"> Padu Nada </translation>
     </message>
 </context>
 <context>
@@ -16632,22 +16205,22 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="190"/>
         <source>Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zum</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="206"/>
         <source>Horizontal Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zum Horisontal</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="218"/>
         <source>Vertical Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zum Vertikal</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="231"/>
         <source>Reset Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Atur Ulang Zum</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="1193"/>
@@ -16657,7 +16230,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="1194"/>
         <source>&lt;qt&gt;Segment: &quot;%1&quot;&lt;br&gt;Track: %2 &quot;%3&quot;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Segmen: &quot;%1&quot;&lt;br&gt;Jalur: %2 &quot;%3&quot;&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -16800,7 +16373,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/studio/MidiMixerWindow.cpp" line="694"/>
         <source>http://rosegardenmusic.com/wiki/doc:midiMixerWindow-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:midiMixerWindow-en</translation>
     </message>
 </context>
 <context>
@@ -16945,121 +16518,15 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/commands/notation/MultiKeyInsertionCommand.h" line="60"/>
         <source>Add &amp;Key Change...</source>
-        <translation type="unfinished"></translation>
+        <translation>Tambah Perubahan &amp;Kunci...</translation>
     </message>
 </context>
 <context>
     <name>Rosegarden::NameSetEditor</name>
     <message>
-        <source>Librarian</source>
-        <translation type="obsolete">Pustakawan</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">Nama</translation>
-    </message>
-    <message>
-        <source>Email</source>
-        <translation type="obsolete">E-mail</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/studio/NameSetEditor.cpp" line="66"/>
         <source>Provided by</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Rosegarden::NewMatrixView</name>
-    <message>
-        <source>Matrix</source>
-        <translation type="obsolete">Metriks</translation>
-    </message>
-    <message>
-        <source>&lt;untitled&gt;</source>
-        <translation type="obsolete">&lt;tak berjudul&gt;</translation>
-    </message>
-    <message>
-        <source>%1 - All Segments - %2</source>
-        <translation type="obsolete">%1 - Semua Segmen - %2</translation>
-    </message>
-    <message>
-        <source> Grid: </source>
-        <translation type="obsolete"> Jejaring: </translation>
-    </message>
-    <message>
-        <source>None</source>
-        <translation type="obsolete">Nihil</translation>
-    </message>
-    <message>
-        <source>Unit</source>
-        <translation type="obsolete">Unit</translation>
-    </message>
-    <message>
-        <source>  Zoom:  </source>
-        <translation type="obsolete">  Zum:  </translation>
-    </message>
-    <message>
-        <source>%1%</source>
-        <translation type="obsolete">%1%</translation>
-    </message>
-    <message>
-        <source>Transpose</source>
-        <translation type="obsolete">Transposisi</translation>
-    </message>
-</context>
-<context>
-    <name>Rosegarden::NewNotationView</name>
-    <message>
-        <source>  Size:  </source>
-        <translation type="obsolete">  Ukuran:  </translation>
-    </message>
-    <message>
-        <source>  Spacing:  </source>
-        <translation type="obsolete">  Spasi:  </translation>
-    </message>
-    <message>
-        <source>LilyPond Preview Options</source>
-        <translation type="obsolete">Ekspor/Pratampil LilyPond</translation>
-    </message>
-    <message>
-        <source>LilyPond preview options</source>
-        <translation type="obsolete">Pratampil LilyPond tidak tersedia</translation>
-    </message>
-    <message>
-        <source>Rosegarden</source>
-        <translation type="obsolete">Rosegarden</translation>
-    </message>
-    <message>
-        <source>Clipboard is empty</source>
-        <translation type="obsolete">Papan klip kosong</translation>
-    </message>
-    <message>
-        <source>Inserting clipboard contents...</source>
-        <translation type="obsolete">Menyisipkan isi papan klip...</translation>
-    </message>
-    <message>
-        <source>Make Ornament</source>
-        <translation type="obsolete">Buat Ornamen</translation>
-    </message>
-    <message>
-        <source>Use Ornament</source>
-        <translation type="obsolete">Pakai Ornamen</translation>
-    </message>
-    <message>
-        <source>Remove Ornaments</source>
-        <translation type="obsolete">Buang Ornamen</translation>
-    </message>
-    <message>
-        <source>Chord</source>
-        <translation type="obsolete">Padu Nada</translation>
-    </message>
-    <message>
-        <source>Grace</source>
-        <translation type="obsolete">Grave</translation>
-    </message>
-    <message>
-        <source>Transpose</source>
-        <translation type="obsolete">Transposisi</translation>
     </message>
 </context>
 <context>
@@ -17101,7 +16568,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="96"/>
         <source>Default spacing</source>
-        <translation type="unfinished"></translation>
+        <translation>Spasi baku</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="109"/>
@@ -17109,31 +16576,19 @@ Double-click to open the marker editor.</source>
         <translation>%1 % (normal)</translation>
     </message>
     <message>
-        <source>Default duration factor</source>
-        <translation type="obsolete">Faktor durasi standar</translation>
-    </message>
-    <message>
-        <source>None</source>
-        <translation type="obsolete">Nihil</translation>
-    </message>
-    <message>
-        <source>Full</source>
-        <translation type="obsolete">Penuh</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="121"/>
         <source>Show track headers (linear layout only)</source>
-        <translation type="unfinished"></translation>
+        <translation>Tampilkan tajuk jalur (hanya tampilan linear)</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="128"/>
         <source>Never</source>
-        <translation type="unfinished">Tidak pernah</translation>
+        <translation>Tidak pernah</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="129"/>
         <source>When needed</source>
-        <translation type="unfinished"></translation>
+        <translation>Bila diperlukan</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="130"/>
@@ -17332,10 +16787,6 @@ Double-click to open the marker editor.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Font size for printing (pt)</source>
-        <translation type="obsolete">Ukuran huruf untuk cetak (pt)</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="505"/>
         <source>Text font</source>
         <translation>Huruf teks</translation>
@@ -17343,18 +16794,18 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="517"/>
         <source>Sans-serif font</source>
-        <translation type="unfinished"></translation>
+        <translation>Huruf sans-serif</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="530"/>
         <source>Font</source>
-        <translation type="unfinished"></translation>
+        <translation>Huruf</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="554"/>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="632"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="624"/>
@@ -17364,7 +16815,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="626"/>
         <source>%1 (jaggy)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 (bergerigi)</translation>
     </message>
 </context>
 <context>
@@ -17372,7 +16823,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="448"/>
         <source> %1</source>
-        <translation type="unfinished"> %1</translation>
+        <translation> %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="468"/>
@@ -17392,7 +16843,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="879"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="1205"/>
@@ -17605,7 +17056,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/editors/notation/NotationToolBox.cpp" line="81"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
 </context>
 <context>
@@ -17620,13 +17071,9 @@ This is a bug (the program would previously have crashed by now)</source>
 <context>
     <name>Rosegarden::NotationView</name>
     <message>
-        <source>Close track headers</source>
-        <translation type="obsolete">Ubah nama jalur</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="858"/>
         <source>Note &amp;Font</source>
-        <translation type="unfinished">Huru&amp;f Not</translation>
+        <translation>Huruf&amp; Not</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="886"/>
@@ -17636,17 +17083,13 @@ This is a bug (the program would previously have crashed by now)</source>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="906"/>
         <source>S&amp;pacing</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>None</source>
-        <translation type="obsolete">Nihil</translation>
+        <translation>S&amp;pasi</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="898"/>
         <source>%n pixel(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n piksel</numerusform>
         </translation>
     </message>
     <message>
@@ -17657,7 +17100,7 @@ This is a bug (the program would previously have crashed by now)</source>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1054"/>
         <source>Unknown font &quot;%1&quot;, using default</source>
-        <translation type="unfinished"></translation>
+        <translation>Huruf &quot;%1&quot; tak dikenal, menggunakan baku</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1062"/>
@@ -17667,15 +17110,7 @@ This is a bug (the program would previously have crashed by now)</source>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1086"/>
         <source>  Spacing:  </source>
-        <translation type="unfinished">  Spasi:  </translation>
-    </message>
-    <message>
-        <source>  Ready.</source>
-        <translation type="obsolete">  Siap.</translation>
-    </message>
-    <message>
-        <source>note</source>
-        <translation type="obsolete">not</translation>
+        <translation>  Spasi:  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3229"/>
@@ -17690,14 +17125,14 @@ This is a bug (the program would previously have crashed by now)</source>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3231"/>
         <source>Grace</source>
-        <translation type="unfinished">Grave</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3239"/>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3243"/>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3247"/>
         <source>%1 %2</source>
-        <translation type="unfinished">%1 (%2)</translation>
+        <translation>%1 %2</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1358"/>
@@ -17715,30 +17150,14 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Printing LilyPond file...</source>
-        <translation type="obsolete">Mengekspor berkas &amp;Lilypond...</translation>
-    </message>
-    <message>
-        <source>Failed to open a temporary file for LilyPond export.</source>
-        <translation type="obsolete">Gagal mengonversi dan mensampel ulang berkas suara saat mengimpor</translation>
-    </message>
-    <message>
-        <source>Previewing LilyPond file...</source>
-        <translation type="obsolete">Mengekspor berkas &amp;Lilypond...</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1186"/>
         <source>LilyPond Preview Options</source>
-        <translation type="unfinished">Ekspor/Pratampil LilyPond</translation>
+        <translation>Opsi Pratampil LilyPond</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1187"/>
         <source>LilyPond preview options</source>
-        <translation type="unfinished">Pratampil LilyPond tidak tersedia</translation>
-    </message>
-    <message>
-        <source>Exporting LilyPond file...</source>
-        <translation type="obsolete">Mengekspor berkas &amp;Lilypond...</translation>
+        <translation>Opsi pratampil LilyPond</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1198"/>
@@ -17796,7 +17215,7 @@ This is a bug (the program would previously have crashed by now)</source>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1251"/>
         <source>&lt;qt&gt;&lt;p&gt;Failed to open a temporary file for LilyPond export.&lt;/p&gt;&lt;p&gt;This probably means you have run out of disk space on &lt;pre&gt;%1&lt;/pre&gt;&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Gagal membuka berkas temporer untuk ekspor LilyPond.&lt;/p&gt;&lt;p&gt;Mungkin saja ini diakibatkan Anda kekurangan ruang kosong pada &lt;pre&gt;%1&lt;/pre&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1468"/>
@@ -17807,7 +17226,7 @@ This is a bug (the program would previously have crashed by now)</source>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1493"/>
         <source>Inserting clipboard contents...</source>
-        <translation type="unfinished">Menyisipkan isi papan klip...</translation>
+        <translation>Memasukkan isi papan klip...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1467"/>
@@ -17823,12 +17242,12 @@ This is a bug (the program would previously have crashed by now)</source>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1652"/>
         <source>Raising velocities...</source>
-        <translation type="unfinished"></translation>
+        <translation>Menaikkan velositas...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1663"/>
         <source>Lowering velocities...</source>
-        <translation type="unfinished"></translation>
+        <translation>Menurunkan velositas...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1700"/>
@@ -17838,7 +17257,7 @@ This is a bug (the program would previously have crashed by now)</source>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1705"/>
         <source>Setting Velocities...</source>
-        <translation type="unfinished"></translation>
+        <translation>Mengatur Velositas...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2293"/>
@@ -17985,27 +17404,27 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="216"/>
         <source>Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Zum</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="232"/>
         <source>Horizontal Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Zum Horisontal</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="244"/>
         <source>Vertical Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Zum Vertikal</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="257"/>
         <source>Reset Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Atur Ulang Zum</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="296"/>
         <source>Close track headers</source>
-        <translation type="unfinished">Ubah nama jalur</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1672"/>
@@ -18016,7 +17435,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1674"/>
         <source>&lt;qt&gt;Segment: &quot;%1&quot;&lt;br&gt;Track: %2 &quot;%3&quot;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Segmen: &quot;%1&quot;&lt;br&gt;Jalur: %2 &quot;%3&quot;&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -18026,7 +17445,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <location filename="../../src/gui/editors/notation/NoteFontFactory.cpp" line="157"/>
         <location filename="../../src/gui/editors/notation/NoteFontFactory.cpp" line="184"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NoteFontFactory.cpp" line="182"/>
@@ -18080,7 +17499,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/editors/notation/NotePixmapFactory.cpp" line="185"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
 </context>
 <context>
@@ -18116,7 +17535,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/segment/OpenOrCloseRangeCommand.cpp" line="35"/>
         <source>Open or Close Range</source>
-        <translation type="unfinished"></translation>
+        <translation>Buka atau Tutup Jangkauan</translation>
     </message>
 </context>
 <context>
@@ -18185,7 +17604,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/dialogs/PasteNotationDialog.cpp" line="127"/>
         <source>http://rosegardenmusic.com/wiki/doc:pasteNotationDialog-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:pasteNotationDialog-en</translation>
     </message>
 </context>
 <context>
@@ -18223,17 +17642,17 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="61"/>
         <source>Preset</source>
-        <translation type="unfinished"></translation>
+        <translation>Preset</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="67"/>
         <source>Preset:</source>
-        <translation type="unfinished"></translation>
+        <translation>Preset:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="70"/>
         <source>User</source>
-        <translation type="unfinished"></translation>
+        <translation>Pengguna</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="71"/>
@@ -18288,7 +17707,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="308"/>
         <source>http://rosegardenmusic.com/wiki/doc:pitchBendSequenceDialog-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:pitchBendSequenceDialog-en</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="102"/>
@@ -18416,7 +17835,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/general/PresetGroup.cpp" line="77"/>
         <source>Can&apos;t open preset file %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak dapat membuka berkas preset %1</translation>
     </message>
 </context>
 <context>
@@ -18429,12 +17848,12 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="74"/>
         <source>Load track parameters preset</source>
-        <translation type="unfinished"></translation>
+        <translation>Memuat preset parameter jalur</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="78"/>
         <source>Select preset track parameters for:</source>
-        <translation type="unfinished"></translation>
+        <translation>Pilih preset parameter jalur untuk:</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="79"/>
@@ -18459,7 +17878,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="104"/>
         <source>Player Ability</source>
-        <translation type="unfinished"></translation>
+        <translation>Kemampuan Pemutar</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="106"/>
@@ -18474,7 +17893,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="111"/>
         <source>Scope</source>
-        <translation type="unfinished"></translation>
+        <translation>Lingkup</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="119"/>
@@ -18505,18 +17924,14 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::ProgressDialog</name>
     <message>
-        <source>Processing...</source>
-        <translation type="obsolete">Memproses...</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/widgets/ProgressDialog.cpp" line="63"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/ProgressDialog.cpp" line="72"/>
         <source>&lt;qt&gt;&lt;h3&gt;Processing...&lt;/h3&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;h3&gt;Memproses...&lt;/h3&gt;&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -18524,12 +17939,12 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="85"/>
         <source>Unpack</source>
-        <translation type="unfinished"></translation>
+        <translation>Bongkar</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="86"/>
         <source>Pack</source>
-        <translation type="unfinished"></translation>
+        <translation>Paketkan</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="88"/>
@@ -18724,10 +18139,6 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <source>Quantize</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Advanced</source>
-        <translation type="obsolete">Lanjutan</translation>
-    </message>
 </context>
 <context>
     <name>Rosegarden::QuantizeParameters</name>
@@ -18770,7 +18181,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="93"/>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="126"/>
         <source>Base grid unit:</source>
-        <translation type="unfinished"></translation>
+        <translation>Unit jejaring dasar:</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="97"/>
@@ -18826,7 +18237,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="112"/>
         <source>Any</source>
-        <translation type="unfinished"></translation>
+        <translation>Mana Saja</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="115"/>
@@ -18859,10 +18270,6 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Show advanced options</source>
-        <translation type="obsolete">Menampilkan opsi lanjutan</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="152"/>
         <source>Re-beam</source>
         <translation type="unfinished"></translation>
@@ -18886,14 +18293,6 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="255"/>
         <source>Full quantize</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Show Advanced Options</source>
-        <translation type="obsolete">Tampilkan Opsi Lanjutan</translation>
-    </message>
-    <message>
-        <source>Hide Advanced Options</source>
-        <translation type="obsolete">Sembunyikan Opsi Lanjutan</translation>
     </message>
 </context>
 <context>
@@ -18982,7 +18381,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/edit/RemoveMarkerCommand.h" line="50"/>
         <source>&amp;Remove Marker</source>
-        <translation type="unfinished"></translation>
+        <translation>Buang Penan&amp;da</translation>
     </message>
 </context>
 <context>
@@ -18990,7 +18389,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/notation/RemoveMarksCommand.h" line="45"/>
         <source>&amp;Remove All Marks</source>
-        <translation type="unfinished">Buang &amp;Semua Penanda</translation>
+        <translation>Buang Semua Penan&amp;da</translation>
     </message>
 </context>
 <context>
@@ -19189,17 +18588,17 @@ Mungkin saja ada beberapa ketidakcocokan dengan format berkasnya.</translation>
     <message>
         <location filename="../../src/document/RoseXmlHandler.cpp" line="451"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/document/RoseXmlHandler.cpp" line="1020"/>
         <source>Open Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Buka Direktori</translation>
     </message>
     <message>
         <location filename="../../src/document/RoseXmlHandler.cpp" line="1703"/>
         <source>Loading plugins...</source>
-        <translation type="unfinished"></translation>
+        <translation>Memuat pengaya...</translation>
     </message>
 </context>
 <context>
@@ -19212,12 +18611,6 @@ Mungkin saja ada beberapa ketidakcocokan dengan format berkasnya.</translation>
 </context>
 <context>
     <name>Rosegarden::RosegardenDocument</name>
-    <message>
-        <source>The current file has been modified.
-Do you want to save it?</source>
-        <translation type="obsolete">Berkas bersangkutan telah diubah.
-Anda ingin menyimpannya?</translation>
-    </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="344"/>
         <source>Rosegarden - Warning</source>
@@ -19252,12 +18645,12 @@ Anda ingin menyimpannya?</translation>
         <location filename="../../src/document/RosegardenDocument.cpp" line="1784"/>
         <location filename="../../src/document/RosegardenDocument.cpp" line="2701"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="367"/>
         <source>Could not save document at %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tidak dapat menyimpan dokumen pada %1</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/document/RosegardenDocument.cpp" line="491"/>
@@ -19292,7 +18685,7 @@ Please select any you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="553"/>
         <source>Untitled</source>
-        <translation type="unfinished"></translation>
+        <translation>Tanpa Judul</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="591"/>
@@ -19302,12 +18695,12 @@ Please select any you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="599"/>
         <source>Reading file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Membaca berkas...</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="621"/>
         <source>Could not open Rosegarden file</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak dapat membuka berkas Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="632"/>
@@ -19422,10 +18815,6 @@ Kami menyarankan supaya Anda menyimpan ulang berkas ini dari versi Rosegarden ya
 <context>
     <name>Rosegarden::RosegardenMainViewWidget</name>
     <message>
-        <source>No non-audio segments in composition</source>
-        <translation type="obsolete">Tak ada segmen nonsuara dalam komposisi</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="301"/>
         <source>Selection must contain only audio or non-audio segments</source>
         <translation type="unfinished"></translation>
@@ -19441,7 +18830,7 @@ Kami menyarankan supaya Anda menyimpan ulang berkas ini dari versi Rosegarden ya
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1541"/>
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1561"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="401"/>
@@ -19460,12 +18849,12 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
     <message>
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1504"/>
         <source>importing a remote audio file</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">mengimpor berkas suara jarak jauh</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1506"/>
         <source>importing an audio file that needs to be converted or resampled</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">mengimpor berkas suara yang perlu dikonversi atau disampel ulang</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1510"/>
@@ -19486,7 +18875,7 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
     <message>
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1560"/>
         <source>Try copying this file to a directory where you have write permission and re-add it</source>
-        <translation type="unfinished"></translation>
+        <translation>Cobalah salin berkas ini pada direktori yang bisa Anda tulis</translation>
     </message>
 </context>
 <context>
@@ -19494,27 +18883,27 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="304"/>
         <source>Initializing plugin manager...</source>
-        <translation type="unfinished"></translation>
+        <translation>Menginisiasi manajer pengaya...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="346"/>
         <source>Initializing view...</source>
-        <translation type="unfinished"></translation>
+        <translation>Menginisiasi tampilan...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="316"/>
         <source>Special Parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Parameter Khusus</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="362"/>
         <source>Starting sequence manager...</source>
-        <translation type="unfinished"></translation>
+        <translation>Memulai manajer sekuenser...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="405"/>
         <source>Clearing studio data...</source>
-        <translation type="unfinished"></translation>
+        <translation>Membersihkan data studio...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="424"/>
@@ -19547,7 +18936,7 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1369"/>
         <source>You do not have read permission for &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>Anda tidak memiliki hak baca untuk &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1445"/>
@@ -19559,7 +18948,7 @@ Do you want to open it instead ?</source>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1592"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5992"/>
         <source>Untitled</source>
-        <translation type="unfinished"></translation>
+        <translation>Tanpa Judul</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1605"/>
@@ -19567,19 +18956,20 @@ Do you want to open it instead ?</source>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2102"/>
         <source>Could not save document at %1
 Error was : %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak dapat menyimpan dokumen pada %1
+Kesalahan adalah: %2</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1607"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1961"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2105"/>
         <source>Could not save document at %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak dapat menyimpan dokumen pada %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1693"/>
         <source>Opening a new application window...</source>
-        <translation type="unfinished"></translation>
+        <translation>Membuka jendela baru aplikasi...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1704"/>
@@ -19590,7 +18980,8 @@ Error was : %2</source>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1769"/>
         <source>Malformed URL
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Format URL salah
+%1</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1818"/>
@@ -19609,14 +19000,14 @@ Error was : %2</source>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1880"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2073"/>
         <source>Rosegarden files</source>
-        <translation type="unfinished">Berkas Rosegarden</translation>
+        <translation>Berkas Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1847"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3532"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3568"/>
         <source>MIDI files</source>
-        <translation type="unfinished">Berkas MIDI</translation>
+        <translation>Berkas MIDI</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1848"/>
@@ -19667,37 +19058,37 @@ Error was : %2</source>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4002"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7665"/>
         <source>Cannot open file %1</source>
-        <translation type="unfinished">Tak dapat membuka berkas %1</translation>
+        <translation>Tidak dapat membuka berkas %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1941"/>
         <source>Saving file...</source>
-        <translation type="unfinished">Menyimpan berkas...</translation>
+        <translation>Menyimpan berkas...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2034"/>
         <source>&lt;qt&gt;Sorry.&lt;br&gt;&quot;%1&quot; is not a valid filename.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Maaf.&lt;br&gt;&quot;%1&quot; bukan nama berkas yang benar.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2041"/>
         <source>You have specified a folder/directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>Anda telah menentukan folder/direktori.</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2047"/>
         <source>The specified file exists.  Overwrite?</source>
-        <translation type="unfinished">Berkas yang ditentukan sudah ada.  Ditimpa?</translation>
+        <translation>Berkas yang ditentukan sudah ada.  Timpa?</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2073"/>
         <source>Rosegarden templates</source>
-        <translation type="unfinished"></translation>
+        <translation>Palet Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2075"/>
         <source>Save as template...</source>
-        <translation type="unfinished"></translation>
+        <translation>Simpan sebagai palet...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2075"/>
@@ -19707,11 +19098,7 @@ Error was : %2</source>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2129"/>
         <source>Closing file...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Printing...</source>
-        <translation type="obsolete">Mencetak...</translation>
+        <translation>Menutup berkas...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2142"/>
@@ -19721,58 +19108,58 @@ Error was : %2</source>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2154"/>
         <source>Cutting selection...</source>
-        <translation type="unfinished"></translation>
+        <translation>Memotong seleksi...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2166"/>
         <source>Copying selection to clipboard...</source>
-        <translation type="unfinished"></translation>
+        <translation>Menyalin seleksi ke papan klip...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2177"/>
         <source>Clipboard is empty</source>
-        <translation type="unfinished">Papan klip kosong</translation>
+        <translation>Papan klip kosong</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2180"/>
         <source>Inserting clipboard contents...</source>
-        <translation type="unfinished">Menyisipkan isi papan klip...</translation>
+        <translation>Memasukkan isi papan klip...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2254"/>
         <source>Duration of empty range to insert</source>
-        <translation type="unfinished"></translation>
+        <translation>Durasi jangkauan kosong untuk disisipkan</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2335"/>
         <source>This function needs no more than one segment to be selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>Fungsi ini memerlukan tidak lebih dari satu segmen yang terpilih.</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2359"/>
         <source>Can&apos;t join Audio segments</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak dapat menggabungkan segmen suara</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2413"/>
         <source>rescaling an audio file</source>
-        <translation type="unfinished"></translation>
+        <translation>menskala ulang berkas suara</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2430"/>
         <source>Rescaling audio file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Menskala ulang berkas suara...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2443"/>
         <source>Generating audio preview...</source>
-        <translation type="unfinished">Membuat pratampil suara...</translation>
+        <translation>Membuat pratampil suara...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2475"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5023"/>
         <source>Warning</source>
-        <translation type="unfinished">Peringatan</translation>
+        <translation>Peringatan</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2476"/>
@@ -19816,18 +19203,18 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2778"/>
         <source>Set Segment Durations</source>
-        <translation type="unfinished"></translation>
+        <translation>Atur Durasi Segmen</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2779"/>
         <source>Set Segment Duration</source>
-        <translation type="unfinished">Atur Durasi Segmen</translation>
+        <translation>Atur Durasi Segmen</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2889"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5653"/>
         <source>Set Global Tempo</source>
-        <translation type="unfinished"></translation>
+        <translation>Atur Tempo Global</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2956"/>
@@ -19891,23 +19278,23 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3479"/>
         <source>Import Rosegarden Project File</source>
-        <translation type="unfinished"></translation>
+        <translation>Impor Berkas Proyek Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3480"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4604"/>
         <source>Rosegarden Project files</source>
-        <translation type="unfinished"></translation>
+        <translation>Berkas Proyek Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6297"/>
         <source>Input</source>
-        <translation type="unfinished"></translation>
+        <translation>Masukan</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7420"/>
         <source>http://rosegardenmusic.com/wiki/doc:manual-en</source>
-        <translation type="unfinished">http://rosegardenmusic.com/wiki/doc:manual-en</translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:manual-en</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1062"/>
@@ -19972,22 +19359,22 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7910"/>
         <source>&lt;h3&gt;Newer version available&lt;/h3&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;h3&gt;Tersedia versi lebih baru&lt;/h3&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7911"/>
         <source>&lt;p&gt;You are using version %1.  Version %2 is now available.&lt;/p&gt;&lt;p&gt;Please consult the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;Rosegarden website&lt;/a&gt; for more information.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Anda memakai versi %1.  Versi %2 sudah tersedia.&lt;/p&gt;&lt;p&gt;Silakan kunjungi &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;situs Rosegarden&lt;/a&gt; untuk informasi lebih lanjut.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3531"/>
         <source>Open MIDI File</source>
-        <translation type="unfinished"></translation>
+        <translation>Buka Berkas MIDI</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3567"/>
         <source>Merge MIDI File</source>
-        <translation type="unfinished"></translation>
+        <translation>Gabung Berkas MIDI</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3694"/>
@@ -19997,34 +19384,34 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3735"/>
         <source>Calculating notation...</source>
-        <translation type="unfinished"></translation>
+        <translation>Menkalkulasi notasi...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3782"/>
         <source>Calculate Notation</source>
-        <translation type="unfinished"></translation>
+        <translation>Kalkulasi Notasi</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3826"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3862"/>
         <source>Open X11 Rosegarden File</source>
-        <translation type="unfinished"></translation>
+        <translation>Buka Berkas X11 Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3827"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3863"/>
         <source>X11 Rosegarden files</source>
-        <translation type="unfinished"></translation>
+        <translation>Berkas X11 Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3896"/>
         <source>Importing X11 Rosegarden file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Mengimpor berkas X11 Rosegarden...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3921"/>
         <source>Can&apos;t load X11 Rosegarden file.  It appears to be corrupted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak dapat memuat berkas X11 Rosegarden.  Sepertinya rusak.</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3949"/>
@@ -20040,28 +19427,12 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4042"/>
         <source>Can&apos;t load Hydrogen file.  It appears to be corrupted.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Export and import of Rosegarden Project files</source>
-        <translation type="obsolete">Mengekspor berkas Proyek Rosegarden...</translation>
-    </message>
-    <message>
-        <source>The Rosegarden Project Packager helper script</source>
-        <translation type="obsolete">Pemaket Proyek Rosegarden tidak tersedia</translation>
-    </message>
-    <message>
-        <source>&lt;ul&gt;</source>
-        <translation type="obsolete">&lt;seting dasar&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;li&gt;%1&lt;/li&gt;</source>
-        <translation type="obsolete">&lt;li&gt;%1 (dari %2)&lt;/li&gt;</translation>
+        <translation>Tidak dapat memuat berkas Hydrogen.  Sepertinya rusak..</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4816"/>
         <source>&lt;qt&gt;&lt;p&gt;Failed to open a temporary file for LilyPond export.&lt;/p&gt;&lt;p&gt;This probably means you have run out of disk space on &lt;pre&gt;%1&lt;/pre&gt;&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Gagal membuka berkas temporer untuk ekspor LilyPond.&lt;/p&gt;&lt;p&gt;Mungkin saja ini diakibatkan Anda kekurangan ruang kosong pada &lt;pre&gt;%1&lt;/pre&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4585"/>
@@ -20072,18 +19443,18 @@ Please exit and restart Rosegarden to restore sound capability.</source>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="298"/>
         <source>Starting sequencer...</source>
-        <translation type="unfinished"></translation>
+        <translation>Memulai sekuenser...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2069"/>
         <source>Saving file%1with a new filename...</source>
         <comment>&apos;file%1with&apos; is correct. %1 will either become &apos; &apos; or &apos; as a template &apos; at runtime</comment>
-        <translation type="unfinished"></translation>
+        <translation>Menyimpan berkas%1dengan nama baru...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2071"/>
         <source> as a template </source>
-        <translation type="unfinished"></translation>
+        <translation> sebagai palet </translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4589"/>
@@ -20094,7 +19465,7 @@ For assistance with correct audio and MIDI configuration, go to http://rosegarde
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4601"/>
         <source>Exporting Rosegarden Project file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Mengekspor berkas Proyek Rosegarden...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4606"/>
@@ -20115,12 +19486,12 @@ For assistance with correct audio and MIDI configuration, go to http://rosegarde
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4640"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4656"/>
         <source>Exporting MIDI file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Mengekspor berkas MIDI...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4643"/>
         <source>Standard MIDI files</source>
-        <translation type="unfinished"></translation>
+        <translation>Berkas MIDI standar</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4676"/>
@@ -20135,29 +19506,29 @@ For assistance with correct audio and MIDI configuration, go to http://rosegarde
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4683"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4699"/>
         <source>Exporting Csound score file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Mengekspor berkas skor Csound...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4686"/>
         <source>Csound files</source>
-        <translation type="unfinished"></translation>
+        <translation>Berkas Csound</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4721"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4736"/>
         <source>Exporting Mup file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Mengekspor berkas Mup...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4724"/>
         <source>Mup files</source>
-        <translation type="unfinished"></translation>
+        <translation>Berkas Mup</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4758"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4843"/>
         <source>Exporting LilyPond file...</source>
-        <translation type="unfinished">Mengekspor berkas &amp;Lilypond...</translation>
+        <translation>Mengekspor berkas Lilypond...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4761"/>
@@ -20167,33 +19538,33 @@ For assistance with correct audio and MIDI configuration, go to http://rosegarde
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4775"/>
         <source>Printing with LilyPond...</source>
-        <translation type="unfinished">Mencetak dengan LilyPond...</translation>
+        <translation>Mencetak dengan LilyPond...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4791"/>
         <source>Previewing LilyPond file...</source>
-        <translation type="unfinished">Mengekspor berkas &amp;Lilypond...</translation>
+        <translation>Mempratampilkan berkas LilyPond...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4834"/>
         <source>LilyPond Preview Options</source>
-        <translation type="unfinished">Ekspor/Pratampil LilyPond</translation>
+        <translation>Opsi Pratampil LilyPond</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4835"/>
         <source>LilyPond preview options</source>
-        <translation type="unfinished">Pratampil LilyPond tidak tersedia</translation>
+        <translation>Opsi pratampil LilyPond</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4868"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4884"/>
         <source>Exporting MusicXML file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Mengekspor berkas MusicXML...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4871"/>
         <source>XML files</source>
-        <translation type="unfinished"></translation>
+        <translation>Berkas XML</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5024"/>
@@ -20205,7 +19576,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5073"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Kesalahan</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5074"/>
@@ -20247,7 +19618,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5728"/>
         <source>no description</source>
-        <translation type="unfinished"></translation>
+        <translation>tanpa deskripsi</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5998"/>
@@ -20744,7 +20115,7 @@ Error was : %2</source>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="148"/>
         <source>Warning</source>
-        <translation type="unfinished">Peringatan</translation>
+        <translation>Peringatan</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="149"/>
@@ -20756,7 +20127,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="165"/>
         <source>Rescaling audio file...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Menskala ulang berkas suara...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="174"/>
@@ -20948,7 +20319,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentToolBox.cpp" line="79"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
 </context>
 <context>
@@ -20956,7 +20327,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/commands/segment/SegmentTransposeCommand.h" line="49"/>
         <source>Transpose by &amp;Interval...</source>
-        <translation type="unfinished">Transpose oleh &amp;Interval...</translation>
+        <translation type="unfinished">Transposisi oleh &amp;Interval...</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/SegmentTransposeCommand.cpp" line="29"/>
@@ -21189,7 +20560,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="218"/>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="233"/>
         <source>edit</source>
-        <translation type="unfinished">sunting</translation>
+        <translation>sunting</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="131"/>
@@ -21200,7 +20571,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="146"/>
         <source>Pitch:</source>
-        <translation type="unfinished">Titi nada:</translation>
+        <translation>Titi nada:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="161"/>
@@ -21221,7 +20592,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="168"/>
         <source>Velocity:</source>
-        <translation type="unfinished">Velositas:</translation>
+        <translation>Velositas:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="179"/>
@@ -21251,22 +20622,22 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="212"/>
         <source>Notation time:</source>
-        <translation type="unfinished"></translation>
+        <translation>Waktu notasi:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="227"/>
         <source>Notation duration:</source>
-        <translation type="unfinished"></translation>
+        <translation>Durasi notasi:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="316"/>
         <source>Note pitch:</source>
-        <translation type="unfinished"></translation>
+        <translation>Titi nada not:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="324"/>
         <source>Note velocity:</source>
-        <translation type="unfinished"></translation>
+        <translation>Velositas not:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="352"/>
@@ -21291,7 +20662,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="429"/>
         <source>Channel pressure:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tekanan kanal:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="462"/>
@@ -21326,7 +20697,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="605"/>
         <source>Text type:</source>
-        <translation type="unfinished"></translation>
+        <translation>Jenis teks:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="606"/>
@@ -21336,12 +20707,12 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="652"/>
         <source>Clef type:</source>
-        <translation type="unfinished"></translation>
+        <translation>Jenis kunci musik:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="683"/>
         <source>Key name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nama kunci:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="736"/>
@@ -21366,12 +20737,12 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="1030"/>
         <source>Edit Notation Duration</source>
-        <translation type="unfinished"></translation>
+        <translation>Sunting Durasi Notasi</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="1043"/>
         <source>Edit Pitch</source>
-        <translation type="unfinished"></translation>
+        <translation>Sunting Titi Nada</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="1052"/>
@@ -21381,7 +20752,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="1053"/>
         <source>System exclusive files</source>
-        <translation type="unfinished"></translation>
+        <translation>Berkas eksklusif sistem</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="1054"/>
@@ -21391,12 +20762,12 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="1083"/>
         <source>*.syx|System exclusive files (*.syx)</source>
-        <translation type="unfinished"></translation>
+        <translation>*.syx|Berkas ekslusif sistem (*.syx)</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="1082"/>
         <source>Save System Exclusive data to...</source>
-        <translation type="unfinished"></translation>
+        <translation>Simpan data Eksklusif Sistem ke...</translation>
     </message>
 </context>
 <context>
@@ -21447,7 +20818,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/SplitByRecordingSrcDialog.cpp" line="46"/>
         <source>Split by Recording Source</source>
-        <translation type="unfinished">Pisah oleh Sumber Rekaman</translation>
+        <translation>Pisah oleh Sumber Rekaman</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SplitByRecordingSrcDialog.cpp" line="55"/>
@@ -21463,7 +20834,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <location filename="../../src/gui/dialogs/SplitByRecordingSrcDialog.cpp" line="69"/>
         <location filename="../../src/gui/dialogs/SplitByRecordingSrcDialog.cpp" line="80"/>
         <source>any</source>
-        <translation type="unfinished"></translation>
+        <translation>mana saja</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SplitByRecordingSrcDialog.cpp" line="74"/>
@@ -21481,7 +20852,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/widgets/SqueezedLabel.cpp" line="170"/>
         <source>&amp;Copy Full Text</source>
-        <translation type="unfinished"></translation>
+        <translation>Salin Teks Penu&amp;h</translation>
     </message>
 </context>
 <context>
@@ -21617,12 +20988,12 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="908"/>
         <source>&lt;h3&gt;Filename: %1 &lt;/h3&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;h3&gt;Nama berkas: %1 &lt;/h3&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="911"/>
         <source>&lt;h3&gt;Track %1: &quot;%2&quot;&lt;/h3&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;h3&gt;Jalur %1: &quot;%2&quot;&lt;/h3&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="916"/>
@@ -21652,60 +21023,12 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="932"/>
         <source>Segment &quot;%1&quot;: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Segmen &quot;%1&quot;: %2</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="938"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
-    </message>
-    <message>
-        <source>C</source>
-        <translation type="obsolete">C</translation>
-    </message>
-    <message>
-        <source>C#</source>
-        <translation type="obsolete">C#%1</translation>
-    </message>
-    <message>
-        <source>D</source>
-        <translation type="obsolete">D</translation>
-    </message>
-    <message>
-        <source>Eb</source>
-        <translation type="obsolete">E</translation>
-    </message>
-    <message>
-        <source>E</source>
-        <translation type="obsolete">E</translation>
-    </message>
-    <message>
-        <source>F</source>
-        <translation type="obsolete">F</translation>
-    </message>
-    <message>
-        <source>F#</source>
-        <translation type="obsolete">F#%1</translation>
-    </message>
-    <message>
-        <source>G</source>
-        <translation type="obsolete">G</translation>
-    </message>
-    <message>
-        <source>G#</source>
-        <translation type="obsolete">G#%1</translation>
-    </message>
-    <message>
-        <source>A</source>
-        <translation type="obsolete">A</translation>
-    </message>
-    <message>
-        <source>Bb</source>
-        <translation type="obsolete">B</translation>
-    </message>
-    <message>
-        <source>B</source>
-        <translation type="obsolete">B</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="685"/>
@@ -21719,23 +21042,16 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     </message>
 </context>
 <context>
-    <name>Rosegarden::Studio</name>
-    <message>
-        <source>Audio</source>
-        <translation type="obsolete">Suara</translation>
-    </message>
-</context>
-<context>
     <name>Rosegarden::SustainInsertionCommand</name>
     <message>
         <location filename="../../src/commands/notation/SustainInsertionCommand.h" line="51"/>
         <source>Add Pedal &amp;Press</source>
-        <translation type="unfinished">Tambah Tekanan &amp;Pedal</translation>
+        <translation>Tambah Tekanan &amp;Pedal</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/SustainInsertionCommand.h" line="53"/>
         <source>Add Pedal &amp;Release</source>
-        <translation type="unfinished">Tambah Pelepasan Peda&amp;l</translation>
+        <translation>Tambah Pelepasan Peda&amp;l</translation>
     </message>
 </context>
 <context>
@@ -21751,7 +21067,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/studio/SynthPluginManagerDialog.cpp" line="69"/>
         <source>Manage Synth Plugins</source>
-        <translation type="unfinished"></translation>
+        <translation>Kelola Pengaya Sintese</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/SynthPluginManagerDialog.cpp" line="195"/>
@@ -21779,7 +21095,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/TempoDialog.cpp" line="56"/>
         <source>Insert Tempo Change</source>
-        <translation type="unfinished">Sisip Perubahan Tempo</translation>
+        <translation>Sisip Perubahan Tempo</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TempoDialog.cpp" line="64"/>
@@ -21794,7 +21110,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/TempoDialog.cpp" line="83"/>
         <source>Tap</source>
-        <translation type="unfinished"></translation>
+        <translation>Ketukan</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TempoDialog.cpp" line="88"/>
@@ -21819,7 +21135,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/TempoDialog.cpp" line="142"/>
         <source>Scope</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lingkup</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TempoDialog.cpp" line="152"/>
@@ -21854,7 +21170,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/TempoDialog.cpp" line="293"/>
         <source>%1.%2 s,</source>
-        <translation>%1.%2 s,</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TempoDialog.cpp" line="299"/>
@@ -21889,7 +21205,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/TempoDialog.cpp" line="516"/>
         <source>http://rosegardenmusic.com/wiki/doc:tempoDialog-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:tempoDialog-en</translation>
     </message>
 </context>
 <context>
@@ -21950,12 +21266,12 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/editors/tempo/TempoView.cpp" line="199"/>
         <source>Common, hidden</source>
-        <translation type="unfinished"></translation>
+        <translation>Umum, tersembunyi</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/tempo/TempoView.cpp" line="201"/>
         <source>Hidden</source>
-        <translation type="unfinished"></translation>
+        <translation>Tersembunyi</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/tempo/TempoView.cpp" line="204"/>
@@ -22000,7 +21316,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/editors/tempo/TempoView.cpp" line="786"/>
         <source>http://rosegardenmusic.com/wiki/doc:tempoView-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:tempoView-en</translation>
     </message>
 </context>
 <context>
@@ -22046,12 +21362,12 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="119"/>
         <source>Direction</source>
-        <translation type="unfinished"></translation>
+        <translation>Arah</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="122"/>
         <source>Local Direction</source>
-        <translation type="unfinished"></translation>
+        <translation>Arah Lokal</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="125"/>
@@ -22081,12 +21397,12 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="140"/>
         <source>LilyPond Directive</source>
-        <translation type="unfinished"></translation>
+        <translation>Direktif LilyPond</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="164"/>
         <source>Verse:  </source>
-        <translation type="unfinished"></translation>
+        <translation>Syari:  </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="174"/>
@@ -22146,7 +21462,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="191"/>
         <source>Direction:  </source>
-        <translation type="unfinished"></translation>
+        <translation>Arah:  </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="198"/>
@@ -22181,7 +21497,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="206"/>
         <source>Local Direction:  </source>
-        <translation type="unfinished"></translation>
+        <translation>Arah Lokal:  </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="211"/>
@@ -22366,12 +21682,12 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="256"/>
         <source>Local Tempo:  </source>
-        <translation type="unfinished"></translation>
+        <translation>Tempo Lokal:  </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="277"/>
         <source>Directive:  </source>
-        <translation type="unfinished"></translation>
+        <translation>Direktif:  </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="333"/>
@@ -22381,7 +21697,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="641"/>
         <source>http://rosegardenmusic.com/wiki/doc:textEventDialog-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:textEventDialog-en</translation>
     </message>
 </context>
 <context>
@@ -22433,7 +21749,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="147"/>
         <source>Scope</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lingkup</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="161"/>
@@ -22468,7 +21784,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="194"/>
         <source>Options</source>
-        <translation type="unfinished">Opsi</translation>
+        <translation>Opsi</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="200"/>
@@ -22503,7 +21819,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="366"/>
         <source>http://rosegardenmusic.com/wiki/doc:timeSignatureDialog-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:timeSignatureDialog-en</translation>
     </message>
 </context>
 <context>
@@ -22656,7 +21972,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="916"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="917"/>
@@ -22814,12 +22130,12 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="290"/>
         <source>Create segments with</source>
-        <translation type="unfinished"></translation>
+        <translation>Buat segmen dengan</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="303"/>
         <source>Preset</source>
-        <translation type="unfinished"></translation>
+        <translation>Preset</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="307"/>
@@ -22829,7 +22145,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="314"/>
         <source>Load</source>
-        <translation type="unfinished"></translation>
+        <translation>Muatkan</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="322"/>
@@ -23058,7 +22374,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1157"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1201"/>
@@ -23115,7 +22431,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/commands/edit/TransposeCommand.h" line="47"/>
         <source>Transpose by &amp;Interval...</source>
-        <translation type="unfinished">Transpose oleh &amp;Interval...</translation>
+        <translation type="unfinished">Transposisi oleh &amp;Interval...</translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/TransposeCommand.h" line="53"/>
@@ -23140,7 +22456,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/commands/edit/TransposeCommand.h" line="57"/>
         <source>&amp;Transpose by Semitones...</source>
-        <translation type="unfinished">&amp;Transpose oleh Setengah Nada...</translation>
+        <translation type="unfinished">&amp;Transposisi oleh Setengah Nada...</translation>
     </message>
 </context>
 <context>
@@ -23216,7 +22532,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="94"/>
         <source>Base velocity</source>
-        <translation type="unfinished">Velositas dasar</translation>
+        <translation>Velositas dasar</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="95"/>
@@ -23226,12 +22542,12 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="111"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Hapus</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="114"/>
         <source>Delete All</source>
-        <translation type="unfinished">Hapus Semua</translation>
+        <translation>Hapus Semua</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="112"/>
@@ -23246,7 +22562,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="233"/>
         <source>&lt;no label&gt;</source>
-        <translation type="unfinished">&lt;tidak ada label&gt;</translation>
+        <translation>&lt;tanpa label&gt;</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="235"/>
@@ -23270,7 +22586,7 @@ Would you like to set it now?</source>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="331"/>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="349"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="283"/>
@@ -23297,7 +22613,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="548"/>
         <source>http://rosegardenmusic.com/wiki/doc:triggerSegmentManager-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:triggerSegmentManager-en</translation>
     </message>
 </context>
 <context>
@@ -23373,7 +22689,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/dialogs/TupletDialog.cpp" line="409"/>
         <source>http://rosegardenmusic.com/wiki/doc:tupletDialog-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:tupletDialog-en</translation>
     </message>
 </context>
 <context>
@@ -23554,27 +22870,27 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/widgets/WarningDialog.cpp" line="75"/>
         <source>Warning</source>
-        <translation type="unfinished">Peringatan</translation>
+        <translation>Peringatan</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/WarningDialog.cpp" line="80"/>
         <source>MIDI</source>
-        <translation type="unfinished">MIDI</translation>
+        <translation>MIDI</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/WarningDialog.cpp" line="84"/>
         <source>Audio</source>
-        <translation type="unfinished"></translation>
+        <translation>Suara</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/WarningDialog.cpp" line="88"/>
         <source>System timer</source>
-        <translation type="unfinished"></translation>
+        <translation>Times sistem</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/WarningDialog.cpp" line="92"/>
         <source>Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Informasi</translation>
     </message>
 </context>
 <context>
@@ -23612,23 +22928,12 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/widgets/WarningWidget.cpp" line="196"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/WarningWidget.cpp" line="197"/>
         <source>&lt;qt&gt;&lt;p&gt;Rosegarden is using safe graphics mode.  This provides the greatest stability, but graphics performance is very slow.&lt;/p&gt;&lt;p&gt;You may wish to visit &lt;b&gt;Edit -&gt; Preferences -&gt; Behavior -&gt; Graphics performance&lt;/b&gt; and try &quot;Normal&quot; or &quot;Fast&quot; for better performance.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>RosegardenApplication</name>
-    <message>
-        <source>Rosegarden - A sequencer and musical notation editor</source>
-        <translation type="obsolete">Rosegarden - Editor sekuenser dan notasi musik</translation>
-    </message>
-    <message>
-        <source>Rosegarden</source>
-        <translation type="obsolete">Rosegarden</translation>
     </message>
 </context>
 <context>
