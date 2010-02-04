@@ -2,13 +2,6 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="it_IT" sourcelanguage="en_US">
 <context>
-    <name></name>
-    <message>
-        <source>Rosegarden</source>
-        <translation type="obsolete">Rosegarden</translation>
-    </message>
-</context>
-<context>
     <name>DeviceManagerDialogUi</name>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="474"/>
@@ -1028,10 +1021,6 @@
         <translation>F4</translation>
     </message>
     <message>
-        <source>E&amp;dit</source>
-        <translation type="obsolete">Mo&amp;difica</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="502"/>
         <source>Nothing to &amp;undo</source>
         <translation>N&amp;ulla da ripristinare</translation>
@@ -1040,11 +1029,6 @@
         <location filename="../QMenuStrings.cpp" line="511"/>
         <source>Nothing to &amp;redo</source>
         <translation>Nulla da &amp;rifare</translation>
-    </message>
-    <message>
-        <source>Ctrl+V, F18, Shift+Insert</source>
-        <comment>keyboard shortcut</comment>
-        <translation type="obsolete">Ctrl+V, F18, Shift+Insert</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="547"/>
@@ -1221,23 +1205,11 @@
         <translation>A&amp;ggiungi Cambio di misura...</translation>
     </message>
     <message>
-        <source>&amp;Segment</source>
-        <translation type="obsolete">&amp;Segmento</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="681"/>
         <location filename="../QMenuStrings.cpp" line="1934"/>
         <location filename="../QMenuStrings.cpp" line="3788"/>
         <source>Open in &amp;Event List Editor</source>
         <translation>Apri nell&apos;editor della lista degli &amp;eventi</translation>
-    </message>
-    <message>
-        <source>Set Segment Start &amp;Time...</source>
-        <translation type="obsolete">Imposta il &amp;tempo d&apos;inizio del segmento...</translation>
-    </message>
-    <message>
-        <source>Set Segment &amp;Duration...</source>
-        <translation type="obsolete">Imposta la &amp;durata del segmento...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="697"/>
@@ -2182,7 +2154,7 @@
         <location filename="../QMenuStrings.cpp" line="745"/>
         <location filename="../QMenuStrings.cpp" line="2332"/>
         <source>&amp;Reduce Velocity</source>
-        <translation>&amp;Riduci la velocità</translation>
+        <translation>&amp;Riduci la velocity</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="754"/>
@@ -2314,7 +2286,7 @@
         <location filename="../QMenuStrings.cpp" line="2593"/>
         <location filename="../QMenuStrings.cpp" line="3960"/>
         <source>&amp;Erase</source>
-        <translation>jCanc&amp;ella</translation>
+        <translation>Canc&amp;ella</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="837"/>
@@ -2339,30 +2311,6 @@
         <location filename="../QMenuStrings.cpp" line="1036"/>
         <source>&amp;Velocity</source>
         <translation>&amp;Velocity</translation>
-    </message>
-    <message>
-        <source>Local &amp;Cursor</source>
-        <translation type="obsolete">&amp;Cursore locale</translation>
-    </message>
-    <message>
-        <source>Cursor &amp;Back</source>
-        <translation type="obsolete">Cursore indietro</translation>
-    </message>
-    <message>
-        <source>Cursor &amp;Forward</source>
-        <translation type="obsolete">Cursore avanti</translation>
-    </message>
-    <message>
-        <source>Cursor For&amp;ward Bar</source>
-        <translation type="obsolete">Cursore avanti per battute</translation>
-    </message>
-    <message>
-        <source>Cursor to St&amp;art</source>
-        <translation type="obsolete">Cursore all&apos;inizio</translation>
-    </message>
-    <message>
-        <source>Cursor to &amp;End</source>
-        <translation type="obsolete">Cursore alla fine</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2371"/>
@@ -2467,78 +2415,6 @@
         <location filename="../QMenuStrings.cpp" line="4060"/>
         <source>P&amp;anic</source>
         <translation>P&amp;anico</translation>
-    </message>
-    <message>
-        <source>I&amp;nsert Note</source>
-        <translation type="obsolete">I&amp;nserisci nota</translation>
-    </message>
-    <message>
-        <source>&amp;I</source>
-        <translation type="obsolete">&amp;I</translation>
-    </message>
-    <message>
-        <source>I &amp;sharp</source>
-        <translation type="obsolete">I &amp;diesis</translation>
-    </message>
-    <message>
-        <source>II &amp;flat</source>
-        <translation type="obsolete">II &amp;bemolle</translation>
-    </message>
-    <message>
-        <source>II</source>
-        <translation type="obsolete">II</translation>
-    </message>
-    <message>
-        <source>II sh&amp;arp</source>
-        <translation type="obsolete">II &amp;diesis</translation>
-    </message>
-    <message>
-        <source>III flat</source>
-        <translation type="obsolete">III bemolle</translation>
-    </message>
-    <message>
-        <source>III</source>
-        <translation type="obsolete">III</translation>
-    </message>
-    <message>
-        <source>IV</source>
-        <translation type="obsolete">IV</translation>
-    </message>
-    <message>
-        <source>IV sha&amp;rp</source>
-        <translation type="obsolete">IV &amp;diesis</translation>
-    </message>
-    <message>
-        <source>&amp;V flat</source>
-        <translation type="obsolete">&amp;V bemolle</translation>
-    </message>
-    <message>
-        <source>V</source>
-        <translation type="obsolete">V</translation>
-    </message>
-    <message>
-        <source>V s&amp;harp</source>
-        <translation type="obsolete">V &amp;diesis</translation>
-    </message>
-    <message>
-        <source>VI fla&amp;t</source>
-        <translation type="obsolete">VI &amp;bemolle</translation>
-    </message>
-    <message>
-        <source>VI</source>
-        <translation type="obsolete">VI</translation>
-    </message>
-    <message>
-        <source>VI shar&amp;p</source>
-        <translation type="obsolete">VI &amp;diesis</translation>
-    </message>
-    <message>
-        <source>VII flat</source>
-        <translation type="obsolete">VII bemolle</translation>
-    </message>
-    <message>
-        <source>VII</source>
-        <translation type="obsolete">VII</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1199"/>
@@ -2765,10 +2641,6 @@
         <translation>S&amp;paziatura</translation>
     </message>
     <message>
-        <source>Du&amp;ration Factor</source>
-        <translation type="obsolete">Fattore di du&amp;rata</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="1901"/>
         <source>&amp;Layout Mode</source>
         <translation>Modo di &amp;visualizzazione</translation>
@@ -2792,10 +2664,6 @@
         <location filename="../QMenuStrings.cpp" line="1905"/>
         <source>Open L&amp;yric Editor</source>
         <translation>Apri editor &amp;testi</translation>
-    </message>
-    <message>
-        <source>Add Event Ruler</source>
-        <translation type="obsolete">Aggiungi barra eventi</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1926"/>
@@ -3082,12 +2950,12 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2064"/>
         <source>Classical</source>
-        <translation>Classico</translation>
+        <translation>Classica</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2065"/>
         <source>Cross</source>
-        <translation>Cross</translation>
+        <translation>Croce</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2066"/>
@@ -3424,7 +3292,7 @@
         <location filename="../QMenuStrings.cpp" line="2358"/>
         <location filename="../QMenuStrings.cpp" line="3830"/>
         <source>Jog &amp;Right</source>
-        <translation>Avanza a &amp;destra</translation>
+        <translation>&amp;Piccolo avanzamento a destra</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2367"/>
@@ -3638,22 +3506,6 @@
         <translation>Accordi &amp;chitarra</translation>
     </message>
     <message>
-        <source>Cursor &amp;Up Staff</source>
-        <translation type="obsolete">Cursore sul rigo s&amp;uperiore</translation>
-    </message>
-    <message>
-        <source>Cursor &amp;Down Staff</source>
-        <translation type="obsolete">Cursore sul rigo inferiore</translation>
-    </message>
-    <message>
-        <source>Cursor Pre&amp;vious Segment</source>
-        <translation type="obsolete">Cursore al segmento precedente</translation>
-    </message>
-    <message>
-        <source>Cursor Ne&amp;xt Segment</source>
-        <translation type="obsolete">Cursore al segmento successivo</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="1045"/>
         <location filename="../QMenuStrings.cpp" line="2752"/>
         <source>&amp;Insert Note</source>
@@ -3793,10 +3645,6 @@
         <translation>Mostra gli s&amp;trumenti</translation>
     </message>
     <message>
-        <source>&amp;Events</source>
-        <translation type="obsolete">&amp;Eventi</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="836"/>
         <source>Remove &amp;Triggers</source>
         <translation>Rimuovi &amp;attivatori</translation>
@@ -3807,10 +3655,6 @@
         <translation>Mostra lo strumento t&amp;rasporto</translation>
     </message>
     <message>
-        <source>Ctrl+W</source>
-        <translation type="obsolete">Ctrl+W</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="1518"/>
         <location filename="../QMenuStrings.cpp" line="3244"/>
         <location filename="../QMenuStrings.cpp" line="4070"/>
@@ -3818,118 +3662,10 @@
         <translation>&amp;Manuale di Rosegarden</translation>
     </message>
     <message>
-        <source>F1</source>
-        <translation type="obsolete">F1</translation>
-    </message>
-    <message>
-        <source>Ctrl+Z</source>
-        <translation type="obsolete">Ctrl+Z</translation>
-    </message>
-    <message>
-        <source>Ctrl+Shift+Z</source>
-        <translation type="obsolete">Ctrl+Shift+Z</translation>
-    </message>
-    <message>
-        <source>Ctrl+C, F16, Ctrl+Ins</source>
-        <translation type="obsolete">Ctrl+C, F16, Ctrl+Ins</translation>
-    </message>
-    <message>
-        <source>Ctrl+V, F18, Shift+Ins</source>
-        <translation type="obsolete">Ctrl+V, F18, Shift+Ins</translation>
-    </message>
-    <message>
-        <source>Ctrl+S</source>
-        <translation type="obsolete">Ctrl+S</translation>
-    </message>
-    <message>
-        <source>I</source>
-        <translation type="obsolete">I</translation>
-    </message>
-    <message>
-        <source>Delete</source>
-        <translation type="obsolete">Cancella</translation>
-    </message>
-    <message>
-        <source>Ctrl+X, F20, Shift+Del</source>
-        <translation type="obsolete">Ctrl+X, F20, Shift+Del</translation>
-    </message>
-    <message>
-        <source>Ctrl+A</source>
-        <translation type="obsolete">Ctrl+A</translation>
-    </message>
-    <message>
-        <source>Escape</source>
-        <translation type="obsolete">Escape</translation>
-    </message>
-    <message>
-        <source>Ctrl+F</source>
-        <translation type="obsolete">Ctrl+F</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="295"/>
         <location filename="../QMenuStrings.cpp" line="584"/>
         <source>Preferences...</source>
         <translation>Preferenze...</translation>
-    </message>
-    <message>
-        <source>F2</source>
-        <translation type="obsolete">F2</translation>
-    </message>
-    <message>
-        <source>F5</source>
-        <translation type="obsolete">F5</translation>
-    </message>
-    <message>
-        <source>F3</source>
-        <translation type="obsolete">F3</translation>
-    </message>
-    <message>
-        <source>F6</source>
-        <translation type="obsolete">F6</translation>
-    </message>
-    <message>
-        <source>F4</source>
-        <translation type="obsolete">F4</translation>
-    </message>
-    <message>
-        <source>Ctrl+V, F18, Shift+Insert</source>
-        <translation type="obsolete">Ctrl+V, F18, Shift+Insert</translation>
-    </message>
-    <message>
-        <source>Delete, Ctrl+D</source>
-        <translation type="obsolete">Delete, Ctrl+D</translation>
-    </message>
-    <message>
-        <source>0</source>
-        <translation type="obsolete">0</translation>
-    </message>
-    <message>
-        <source>3</source>
-        <translation type="obsolete">3</translation>
-    </message>
-    <message>
-        <source>6</source>
-        <translation type="obsolete">6</translation>
-    </message>
-    <message>
-        <source>8</source>
-        <translation type="obsolete">8</translation>
-    </message>
-    <message>
-        <source>4</source>
-        <translation type="obsolete">4</translation>
-    </message>
-    <message>
-        <source>2</source>
-        <translation type="obsolete">2</translation>
-    </message>
-    <message>
-        <source>1</source>
-        <translation type="obsolete">1</translation>
-    </message>
-    <message>
-        <source>5</source>
-        <translation type="obsolete">5</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="673"/>
@@ -3944,133 +3680,9 @@
         <translation>Mostra il righello del &amp;portamento</translation>
     </message>
     <message>
-        <source>=</source>
-        <translation type="obsolete">=</translation>
-    </message>
-    <message>
-        <source>+</source>
-        <translation type="obsolete">+</translation>
-    </message>
-    <message>
-        <source>-</source>
-        <translation type="obsolete">-</translation>
-    </message>
-    <message>
-        <source>Ctrl+H</source>
-        <translation type="obsolete">Ctrl+H</translation>
-    </message>
-    <message>
-        <source>Ctrl+Shift+H</source>
-        <translation type="obsolete">Ctrl+Shift+H</translation>
-    </message>
-    <message>
-        <source>Shift+Alt+I</source>
-        <translation type="obsolete">Shift+Alt+I</translation>
-    </message>
-    <message>
-        <source>Shift+Alt+R</source>
-        <translation type="obsolete">Shift+Alt+R</translation>
-    </message>
-    <message>
-        <source>Left</source>
-        <translation type="obsolete">A Sinistra</translation>
-    </message>
-    <message>
-        <source>Right</source>
-        <translation type="obsolete">A Destra</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="838"/>
         <source>Cursor Back and Se&amp;lect</source>
         <translation>Cursore indietro e se&amp;leziona</translation>
-    </message>
-    <message>
-        <source>Ctrl+:</source>
-        <translation type="obsolete">Ctrl+:</translation>
-    </message>
-    <message>
-        <source>Alt+Ctrl+P</source>
-        <translation type="obsolete">Alt+Ctrl+P</translation>
-    </message>
-    <message>
-        <source>F7</source>
-        <translation type="obsolete">F7</translation>
-    </message>
-    <message>
-        <source>Shift+A</source>
-        <translation type="obsolete">Shift+A</translation>
-    </message>
-    <message>
-        <source>Ctrl+Shift+S</source>
-        <translation type="obsolete">Ctrl+Shift+S</translation>
-    </message>
-    <message>
-        <source>S</source>
-        <translation type="obsolete">S</translation>
-    </message>
-    <message>
-        <source>Shift+S</source>
-        <translation type="obsolete">Shift+S</translation>
-    </message>
-    <message>
-        <source>Ctrl+Shift+D</source>
-        <translation type="obsolete">Ctrl+Shift+D</translation>
-    </message>
-    <message>
-        <source>Shift+F</source>
-        <translation type="obsolete">Shift+F</translation>
-    </message>
-    <message>
-        <source>Ctrl+Shift+J</source>
-        <translation type="obsolete">Ctrl+Shift+J</translation>
-    </message>
-    <message>
-        <source>J</source>
-        <translation type="obsolete">J</translation>
-    </message>
-    <message>
-        <source>Shift+J</source>
-        <translation type="obsolete">Shift+J</translation>
-    </message>
-    <message>
-        <source>Ctrl+Shift+K</source>
-        <translation type="obsolete">Ctrl+Shift+K</translation>
-    </message>
-    <message>
-        <source>K</source>
-        <translation type="obsolete">K</translation>
-    </message>
-    <message>
-        <source>Shift+K</source>
-        <translation type="obsolete">Shift+K</translation>
-    </message>
-    <message>
-        <source>Ctrl+Shift+L</source>
-        <translation type="obsolete">Ctrl+Shift+L</translation>
-    </message>
-    <message>
-        <source>L</source>
-        <translation type="obsolete">L</translation>
-    </message>
-    <message>
-        <source>Q</source>
-        <translation type="obsolete">Q</translation>
-    </message>
-    <message>
-        <source>Shift+Q</source>
-        <translation type="obsolete">Shift+Q</translation>
-    </message>
-    <message>
-        <source>Ctrl+Shift+W</source>
-        <translation type="obsolete">Ctrl+Shift+W</translation>
-    </message>
-    <message>
-        <source>W</source>
-        <translation type="obsolete">W</translation>
-    </message>
-    <message>
-        <source>Shift+W</source>
-        <translation type="obsolete">Shift+W</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1536"/>
@@ -4088,14 +3700,6 @@
         <location filename="../QMenuStrings.cpp" line="1917"/>
         <source>Show &amp;Rulers Toolbar</source>
         <translation>Mostra la barra dei &amp;righelli</translation>
-    </message>
-    <message>
-        <source>Ctrl+R</source>
-        <translation type="obsolete">Ctrl+R</translation>
-    </message>
-    <message>
-        <source>Rewind</source>
-        <translation type="obsolete">Riavvolgi</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="925"/>
@@ -4544,7 +4148,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3505"/>
         <source>Export Music&amp;XML file...</source>
-        <translation type="unfinished">Esporta come file Music&amp;XML...</translation>
+        <translation>Esporta come file Music&amp;XML...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3506"/>
@@ -4717,13 +4321,9 @@
         <translation>&amp;Salva il documento corrente come studio predefinito</translation>
     </message>
     <message>
-        <source>Se&amp;gments</source>
-        <translation type="obsolete">Se&amp;gmenti</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="3742"/>
         <source>Toggle Repeat</source>
-        <translation type="unfinished">Ripeti Toggle</translation>
+        <translation>Ripeti Toggle</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3752"/>
@@ -5070,14 +4670,6 @@
         <translation>Incoll&amp;a come nuovo segmento attivo</translation>
     </message>
     <message>
-        <source>The Restricted paste type requires enough empty space (containing only rests) at the paste position to hold all of the events to be pasted.
-Not enough space was found.
-If you want to paste anyway, consider using one of the other paste types from the &quot;Paste...&quot; option on the Edit menu.  You can also change the default paste type to something other than Restricted if you wish.</source>
-        <translation type="obsolete">Il modo di incollare Ristretto richiede uno spazio vuoto sufficiente (contenente solo pause) nella posizione di incollaggio, per poter contenere tutti gli eventi da incollare.
-Non è stato trovato spazio sufficiente.
-Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apos;opzione &quot;Incolla...&quot; nel menù &quot;Modifica&quot;.  Puoi anche cambiare l&apos;azione di incollaggio predefinita, se vuoi.</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/notation/NoteFont.cpp" line="58"/>
         <source>No sizes listed for font &quot;%1&quot;</source>
         <translation>Nessuna dimensione elencata per il carattere &quot;%1&quot;</translation>
@@ -5248,32 +4840,32 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location filename="../InstrumentStrings.cpp" line="60"/>
         <source>Piccolo balalaika</source>
-        <translation type="unfinished"></translation>
+        <translation>Balalaika piccola</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="61"/>
         <source>Prima balalaika</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="62"/>
         <source>Secunda balalaika</source>
-        <translation type="unfinished"></translation>
+        <translation>Seconda balalaika</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="63"/>
         <source>Alto balalaika</source>
-        <translation type="unfinished"></translation>
+        <translation>Balalaika alto</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="64"/>
         <source>Bass balalaika</source>
-        <translation type="unfinished"></translation>
+        <translation>Balalaika basso</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="65"/>
         <source>Contrabass balalaika</source>
-        <translation type="unfinished"></translation>
+        <translation>Balalaika contrabasso</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="66"/>
@@ -5290,17 +4882,17 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
         <location filename="../InstrumentStrings.cpp" line="68"/>
         <location filename="../AutoloadStrings.cpp" line="178"/>
         <source>Ukulele</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="69"/>
         <source>Banjo (5-string)</source>
-        <translation type="unfinished"></translation>
+        <translation>Banjo (5-corde)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="70"/>
         <source>Tenor banjo</source>
-        <translation type="unfinished"></translation>
+        <translation>Banjo tenore</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="71"/>
@@ -5321,44 +4913,44 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location filename="../InstrumentStrings.cpp" line="74"/>
         <source>Flutes</source>
-        <translation type="unfinished"></translation>
+        <translation>Flauti</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="75"/>
         <location filename="../AutoloadStrings.cpp" line="113"/>
         <source>Piccolo</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="76"/>
         <source>Eb flute</source>
-        <translation type="unfinished"></translation>
+        <translation>Flauto in mi bemolle</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="77"/>
         <location filename="../AutoloadStrings.cpp" line="114"/>
         <source>Flute</source>
-        <translation type="unfinished"></translation>
+        <translation>Flauto</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="78"/>
         <source>Alto flute</source>
-        <translation type="unfinished"></translation>
+        <translation>Flauto alto</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="79"/>
         <source>Bass flute</source>
-        <translation type="unfinished"></translation>
+        <translation>Flauto basso</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="80"/>
         <source>Contra-alto flute</source>
-        <translation type="unfinished"></translation>
+        <translation>Flauto contralto</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="81"/>
         <source>Contrabass flute</source>
-        <translation type="unfinished"></translation>
+        <translation>Flauto contrabbasso</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="82"/>
@@ -6865,54 +6457,6 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
         <location filename="../InstrumentStrings.cpp" line="373"/>
         <source>Pistol shot</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>C</source>
-        <translation type="obsolete">Do</translation>
-    </message>
-    <message>
-        <source>C#</source>
-        <translation type="obsolete">Do#</translation>
-    </message>
-    <message>
-        <source>D</source>
-        <translation type="obsolete">Re</translation>
-    </message>
-    <message>
-        <source>Eb</source>
-        <translation type="obsolete">Mib</translation>
-    </message>
-    <message>
-        <source>E</source>
-        <translation type="obsolete">Mi</translation>
-    </message>
-    <message>
-        <source>F</source>
-        <translation type="obsolete">Fa</translation>
-    </message>
-    <message>
-        <source>F#</source>
-        <translation type="obsolete">Fa#</translation>
-    </message>
-    <message>
-        <source>G</source>
-        <translation type="obsolete">Sol</translation>
-    </message>
-    <message>
-        <source>G#</source>
-        <translation type="obsolete">Sol#</translation>
-    </message>
-    <message>
-        <source>A</source>
-        <translation type="obsolete">La</translation>
-    </message>
-    <message>
-        <source>Bb</source>
-        <translation type="obsolete">Sib</translation>
-    </message>
-    <message>
-        <source>B</source>
-        <translation type="obsolete">Si</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="39"/>
@@ -10581,10 +10125,6 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
         <source>&lt;p&gt;Copyright 2000-2010 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2&lt;/p&gt;</source>
         <translation>&lt;p&gt;Copyright 2000-2010 il team di sviluppo di Rosegarden &lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden è stato fatto da una squadra di volontari sparsi per il mondo. Per una lista dei contributi, visita &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;Per maggiori informazini su Rosegarden, visita&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Licenza: Licenza Pubblica Generica GNU Versione 2&lt;/p&gt;</translation>
     </message>
-    <message>
-        <source>&lt;p&gt;Copyright 2000-2009 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;p&gt;Copyright 2000-2009 il team di sviluppo di Rosegarden&lt;/p&gt;&lt;p&gt;Versione: %1 &amp;nbsp; Versione Qt: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt; Rosegarden è stato fatto da una squadra di volontari sparsi per il mondo. Per una lista dei contributi, visita &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;Per maggiori informazini su Rosegarden, visita &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Licenza: Licenza Pubblica Generica GNU Versione 2&lt;/p&gt;</translation>
-    </message>
 </context>
 <context>
     <name>Rosegarden::ActionCommandArgumentQuerier</name>
@@ -10882,7 +10422,7 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location filename="../../src/commands/segment/AddTimeSignatureCommand.h" line="47"/>
         <source>Add Time Si&amp;gnature Change...</source>
-        <translation>A&amp;ggiungi Cambio di misura...</translation>
+        <translation>A&amp;ggiungi cambio di misura...</translation>
     </message>
 </context>
 <context>
@@ -11410,14 +10950,6 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
         <translation>Mono o stereo</translation>
     </message>
     <message>
-        <source>Mute</source>
-        <translation type="obsolete">Muto</translation>
-    </message>
-    <message>
-        <source>Solo</source>
-        <translation type="obsolete">Solo</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="318"/>
         <source>Arm recording</source>
         <translation>Arm recording</translation>
@@ -11918,14 +11450,6 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
         <translation>Gestisci banchi MIDI e programmi</translation>
     </message>
     <message>
-        <source>Apply</source>
-        <translation type="obsolete">Apllica</translation>
-    </message>
-    <message>
-        <source>Reset</source>
-        <translation type="obsolete">Ripristina</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="119"/>
         <source>Device and Banks</source>
         <translation>Dispositivi e Banchi</translation>
@@ -12055,10 +11579,6 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
         <translation>http://rosegardenmusic.com/wiki/doc:bankEditorDialog-en</translation>
     </message>
     <message>
-        <source>Close</source>
-        <translation type="obsolete">Chiudi</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1078"/>
         <source>&lt;new bank&gt;</source>
         <translation>&lt;nuovo banco&gt;</translation>
@@ -12137,10 +11657,6 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1769"/>
         <source>The specified file exists.  Overwrite?</source>
         <translation>Il file specificato esiste.  Sovrascrivere?</translation>
-    </message>
-    <message>
-        <source>Unsaved Changes</source>
-        <translation type="obsolete">Cambiamenti non salvati</translation>
     </message>
 </context>
 <context>
@@ -12242,12 +11758,12 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/commands/edit/ChangeVelocityCommand.h" line="45"/>
         <source>&amp;Increase Velocity</source>
-        <translation>&amp;Aumenta la velocità</translation>
+        <translation>&amp;Aumenta la velocity</translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/ChangeVelocityCommand.h" line="46"/>
         <source>&amp;Reduce Velocity</source>
-        <translation>&amp;Riduci la velocità</translation>
+        <translation>&amp;Riduci la velocity</translation>
     </message>
 </context>
 <context>
@@ -12569,11 +12085,6 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
 <context>
     <name>Rosegarden::ConfigureDialog</name>
     <message>
-        <source>Configure Rosegarden</source>
-        <extracomment>QDialog(parent) //, tr(&quot;Configure Rosegarden&quot;), name)</extracomment>
-        <translation type="obsolete">Configura Rosegarden</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/dialogs/ConfigureDialog.cpp" line="47"/>
         <source>Rosegarden - Preferences</source>
         <translation>Rosegarden - Preferenze</translation>
@@ -12585,10 +12096,6 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
         <location filename="../../src/gui/dialogs/ConfigureDialogBase.cpp" line="47"/>
         <source>Configure Rosegarden</source>
         <translation>Configura Rosegarden</translation>
-    </message>
-    <message>
-        <source>http://rosegardenmusic.com/wiki/doc:configureDialogBase-en</source>
-        <translation type="obsolete">http://rosegardenmusic.com/wiki/doc:configureDialogBase-en</translation>
     </message>
 </context>
 <context>
@@ -12797,7 +12304,7 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/gui/rulers/ControlRulerWidget.cpp" line="307"/>
         <source>Velocity</source>
-        <translation>Velocità</translation>
+        <translation type="unfinished">Velocity</translation>
     </message>
 </context>
 <context>
@@ -12994,34 +12501,6 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
 </context>
 <context>
     <name>Rosegarden::DiatonicPitchChooser</name>
-    <message>
-        <source>C</source>
-        <translation type="obsolete">Do</translation>
-    </message>
-    <message>
-        <source>D</source>
-        <translation type="obsolete">Re</translation>
-    </message>
-    <message>
-        <source>E</source>
-        <translation type="obsolete">Mi</translation>
-    </message>
-    <message>
-        <source>F</source>
-        <translation type="obsolete">Fa</translation>
-    </message>
-    <message>
-        <source>G</source>
-        <translation type="obsolete">Sol</translation>
-    </message>
-    <message>
-        <source>A</source>
-        <translation type="obsolete">La</translation>
-    </message>
-    <message>
-        <source>B</source>
-        <translation type="obsolete">Si</translation>
-    </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="59"/>
         <source>C</source>
@@ -13298,137 +12777,6 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     </message>
 </context>
 <context>
-    <name>Rosegarden::EditView</name>
-    <message>
-        <source>%1 Controller %2 %3</source>
-        <translation type="obsolete">%1 Controller %2 %3</translation>
-    </message>
-    <message>
-        <source>Pitch Bend</source>
-        <translation type="obsolete">Curva dell&apos;altezza</translation>
-    </message>
-    <message>
-        <source>Unsupported Event Type</source>
-        <translation type="obsolete">Tipo di evento non supportato</translation>
-    </message>
-    <message>
-        <source>I</source>
-        <translation type="obsolete">I</translation>
-    </message>
-    <message>
-        <source>II</source>
-        <translation type="obsolete">II</translation>
-    </message>
-    <message>
-        <source>III</source>
-        <translation type="obsolete">III</translation>
-    </message>
-    <message>
-        <source>IV</source>
-        <translation type="obsolete">IV</translation>
-    </message>
-    <message>
-        <source>V</source>
-        <translation type="obsolete">V</translation>
-    </message>
-    <message>
-        <source>VI</source>
-        <translation type="obsolete">VI</translation>
-    </message>
-    <message>
-        <source>VII</source>
-        <translation type="obsolete">VII</translation>
-    </message>
-    <message>
-        <source>VIII</source>
-        <translation type="obsolete">VIII</translation>
-    </message>
-    <message>
-        <source>%1 flat</source>
-        <translation type="obsolete">%1 bemolle</translation>
-    </message>
-    <message>
-        <source>%1 sharp</source>
-        <translation type="obsolete">%1 diesis</translation>
-    </message>
-    <message>
-        <source>&amp;Insert Note</source>
-        <translation type="obsolete">&amp;Inserisci nota</translation>
-    </message>
-    <message>
-        <source>&amp;Upper Octave</source>
-        <translation type="obsolete">Ottava più &amp;alta</translation>
-    </message>
-    <message>
-        <source>&amp;Lower Octave</source>
-        <translation type="obsolete">Ottava più &amp;bassa</translation>
-    </message>
-    <message>
-        <source>Estimated time signature shown</source>
-        <translation type="obsolete">Stima della misura del tempo mostrata</translation>
-    </message>
-    <message>
-        <source>Halving durations...</source>
-        <translation type="obsolete">Dimezzando le durate...</translation>
-    </message>
-    <message>
-        <source>Doubling durations...</source>
-        <translation type="obsolete">Raddoppiando le durate...</translation>
-    </message>
-    <message>
-        <source>Rescaling...</source>
-        <translation type="obsolete">Riscalamento in corso...</translation>
-    </message>
-    <message>
-        <source>Transpose</source>
-        <translation type="obsolete">Trasporto</translation>
-    </message>
-    <message>
-        <source>By number of semitones: </source>
-        <translation type="obsolete">Per numero di semitoni: </translation>
-    </message>
-    <message>
-        <source>Transposing...</source>
-        <translation type="obsolete">Trasposizione in corso...</translation>
-    </message>
-    <message>
-        <source>Transposing up one semitone...</source>
-        <translation type="obsolete">Trasposizione in alto di un semitono...</translation>
-    </message>
-    <message>
-        <source>Transposing up one octave...</source>
-        <translation type="obsolete">Trasposizione in alto di un&apos;ottava...</translation>
-    </message>
-    <message>
-        <source>Transposing down one semitone...</source>
-        <translation type="obsolete">Trasposizione in basso di un semitono...</translation>
-    </message>
-    <message>
-        <source>Transposing down one octave...</source>
-        <translation type="obsolete">Trasposizione in basso di un&apos;ottava...</translation>
-    </message>
-    <message>
-        <source>Inverting...</source>
-        <translation type="obsolete">Invertendo...</translation>
-    </message>
-    <message>
-        <source>Retrograding...</source>
-        <translation type="obsolete">Retrocedendo...</translation>
-    </message>
-    <message>
-        <source>Retrograde inverting...</source>
-        <translation type="obsolete">Invertendo e retrocedendo...</translation>
-    </message>
-    <message>
-        <source>Jogging left...</source>
-        <translation type="obsolete">Andando a sinistra...</translation>
-    </message>
-    <message>
-        <source>Jogging right...</source>
-        <translation type="obsolete">Andando a destra...</translation>
-    </message>
-</context>
-<context>
     <name>Rosegarden::EditViewBase</name>
     <message>
         <location filename="../../src/gui/general/EditViewBase.cpp" line="203"/>
@@ -13647,7 +12995,7 @@ Questo può causare problemi se si sovrappone a un valore differente più avanti
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="104"/>
         <source>Velocity:</source>
-        <translation>Velocità:</translation>
+        <translation type="unfinished">Velocity:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="107"/>
@@ -13929,7 +13277,7 @@ Questo può causare problemi se si sovrappone a un valore differente più avanti
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="181"/>
         <source>Base velocity:  </source>
-        <translation>Velocità di base:  </translation>
+        <translation>Velocity di base:  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="247"/>
@@ -13954,7 +13302,7 @@ Questo può causare problemi se si sovrappone a un valore differente più avanti
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="251"/>
         <source>Velocity  </source>
-        <translation>Velocità  </translation>
+        <translation>Velocity  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="252"/>
@@ -14006,7 +13354,7 @@ Questo può causare problemi se si sovrappone a un valore differente più avanti
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="795"/>
         <source>Base velocity</source>
-        <translation>Velocità di base</translation>
+        <translation>Velocity di base</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="948"/>
@@ -14052,18 +13400,6 @@ Questo può causare problemi se si sovrappone a un valore differente più avanti
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="1560"/>
         <source>http://rosegardenmusic.com/wiki/doc:eventView-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:eventView-en</translation>
-    </message>
-    <message>
-        <source>%1 - Triggered Segment: %2</source>
-        <translation type="obsolete">%1 - Segmento attivato: %2</translation>
-    </message>
-    <message>
-        <source>%1 - Segment Track #%2 - Event List</source>
-        <translation type="obsolete">%1 - Traccia del segmento #%2 - Lista eventi</translation>
-    </message>
-    <message>
-        <source>%1 - %2 Segments - Event List</source>
-        <translation type="obsolete">%1 - %2 Segmenti - Lista eventi</translation>
     </message>
 </context>
 <context>
@@ -14438,10 +13774,6 @@ Vuoi provare a cercarlo o saltarlo?</translation>
         <translation>Prestazioni grafiche</translation>
     </message>
     <message>
-        <source>Normal</source>
-        <translation type="obsolete">Normale</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="89"/>
         <source>Safe</source>
         <translation>Sicuro</translation>
@@ -14450,10 +13782,6 @@ Vuoi provare a cercarlo o saltarlo?</translation>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="88"/>
         <source>Fast</source>
         <translation>Veloce</translation>
-    </message>
-    <message>
-        <source>&lt;qt&gt;&lt;p&gt;Qt offers you the choice of three graphics systems. The normal (raster) graphics system offers the best tradeoff between performance and stability, but may cause problems for some users.  If you experience frequent crashes, or distorted graphics, you should try the safe (native) graphics system instead.  If you wish to experiment, the fast (OpenGL) graphics system delivers excellent performance for some users, but is generally less stable.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Qt presenta la scelta di tre sistemi grafici. Quello normale offre il miglior compromesso tra prestazioni e stabilità, ma può provocare dei problemi per alcuni utenti.  Se vi capita spesso che il sistema si interrompa o la grafica sia distorta, dovreste provare il sistema grafico sicuro (nativo).  Se volete fare esperimenti, il sistema grafico veloce (OpenGL) offre prestazioni eccellenti per alcuni utenti, ma è generalmente meno stabile.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="271"/>
@@ -14474,10 +13802,6 @@ Vuoi provare a cercarlo o saltarlo?</translation>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="288"/>
         <source>Main window</source>
         <translation>Finestra principale</translation>
-    </message>
-    <message>
-        <source>Matrix</source>
-        <translation type="obsolete">Matrice</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="292"/>
@@ -14796,23 +14120,6 @@ Vuoi provare a cercarlo o saltarlo?</translation>
 </context>
 <context>
     <name>Rosegarden::IdentifyTextCodecDialog</name>
-    <message>
-        <source>Choose Text Encoding</source>
-        <translation type="obsolete">Scegli la codifica del testo</translation>
-    </message>
-    <message>
-        <source>
-This file contains text in an unknown language encoding.
-
-Please select one of the following estimated text encodings
-for use with the text in this file:
-</source>
-        <translation type="obsolete">
-Questo file contiene del testo in una codifica sconosciuta.
-
-Scegli tra le seguenti codifiche la più indicata da usare per il testo di questo file:
-</translation>
-    </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="68"/>
         <source>Rosegarden</source>
@@ -15476,45 +14783,6 @@ Testo di esempio dal file:</translation>
     </message>
 </context>
 <context>
-    <name>Rosegarden::LatencyConfigurationPage</name>
-    <message>
-        <source>Latency</source>
-        <translation type="obsolete">Latenza</translation>
-    </message>
-    <message>
-        <source>Sequencer Latency</source>
-        <translation type="obsolete">Latenza del sequencer</translation>
-    </message>
-    <message>
-        <source>JACK latency</source>
-        <translation type="obsolete">Latenza di JACK</translation>
-    </message>
-    <message>
-        <source>Use the &quot;Fetch JACK latencies&quot; button to discover the latency values set at
-the sequencer.  It&apos;s recommended that you use the returned values but it&apos;s also
-possible to override them manually using the sliders.  Note that if you change
-your JACK server parameters you should always fetch the latency values again.
-The latency values will be stored by Rosegarden for use next time.</source>
-        <translation type="obsolete">Usa il pulsante &quot;Trova le latenze di JACK&quot; per scoprire i valori di latenza del sequencer. È bene usare i valori trovati, anche se è possibile impostarli manualmente muovendo gli slider. Se i parametri del server JACK vengono cambiati, devi sempre ritrovare i valori di latenza di nuovo. I valori di latenza verranno memorizzati da Rosegarden per gli utilizzi successivi.</translation>
-    </message>
-    <message>
-        <source>JACK playback latency (in ms)</source>
-        <translation type="obsolete">Latenza di riproduzione di JACK (in millisecondi)</translation>
-    </message>
-    <message>
-        <source>JACK record latency (in ms)</source>
-        <translation type="obsolete">Latenza di registrazione di JACK (in millisecondi)</translation>
-    </message>
-    <message>
-        <source>Fetch JACK latencies</source>
-        <translation type="obsolete">Rileva latenze di JACK</translation>
-    </message>
-    <message>
-        <source>JACK Latency</source>
-        <translation type="obsolete">Latenza di JACK</translation>
-    </message>
-</context>
-<context>
     <name>Rosegarden::LilyPondExporter</name>
     <message>
         <location filename="../../src/document/io/LilyPondExporter.cpp" line="585"/>
@@ -16166,10 +15434,6 @@ delay at the start of playback due to the amount of data being transmitted.</sou
 <context>
     <name>Rosegarden::MIDIInstrumentParameterPanel</name>
     <message>
-        <source>&lt;qt&gt;&lt;p&gt;Set the MIDI channel number.&lt;/p&gt;&lt;p&gt;Before changing this, consider switching to a different instrument instead.  Instruments #1 through #16 match MIDI channels 1 through 16 by default.  You may change this relationship using this control if you wish, but this can lead to confusion&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Seleziona il numero di canale MIDI.&lt;/p&gt;&lt;p&gt;Prima di cambiarlo, puoi provare a passare a un altro strumento.  Gli strumenti da #1 a #16 sono per definizione collegati ai canali MIDI da 1 a 16.  Puoi anche cambiare questa impostazione usando questo controllo, ma questo potrebbe generare confusione&lt;/p&gt;&lt;/qt&gt;</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="103"/>
         <source>&lt;qt&gt;Set variations on the program above, if available in the studio&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Seleziona le variazioni sul programma, se è possibile farlo nello studio&lt;/qt&gt;</translation>
@@ -16203,10 +15467,6 @@ delay at the start of playback due to the amount of data being transmitted.</sou
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="112"/>
         <source>Program</source>
         <translation>Programma</translation>
-    </message>
-    <message>
-        <source>Channel out</source>
-        <translation type="obsolete">Channel out</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="113"/>
@@ -16367,10 +15627,6 @@ delay at the start of playback due to the amount of data being transmitted.</sou
         <translation>Barre, battiti e sotti-battiti</translation>
     </message>
     <message>
-        <source>Bars, beats, and divisions</source>
-        <translation type="obsolete">Barre, battiti e divisioni</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="149"/>
         <source>Bar velocity</source>
         <translation>Velocità della barra</translation>
@@ -16449,10 +15705,6 @@ delay at the start of playback due to the amount of data being transmitted.</sou
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="200"/>
         <source>Recording</source>
         <translation>In registrazione</translation>
-    </message>
-    <message>
-        <source>Synth plugin </source>
-        <translation type="obsolete">Modulo del sintetizzatore</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="326"/>
@@ -16819,88 +16071,20 @@ Doppio click per aprire l&apos;editor dei marcatori.</translation>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixVelocity.cpp" line="257"/>
         <source>Click and drag to scale velocity of selected notes</source>
-        <translation>Clicca e trascina per cambiare la velocità delle note selezionate</translation>
+        <translation>Clicca e trascina per cambiare la velocity delle note selezionate</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixVelocity.cpp" line="259"/>
         <source>Click and drag to scale velocity of note</source>
-        <translation>Clicca e trascina per cambiare la velocità della nota</translation>
+        <translation>Clicca e trascina per cambiare la velocity della nota</translation>
     </message>
 </context>
 <context>
     <name>Rosegarden::MatrixView</name>
     <message>
-        <source>Instrument Parameters</source>
-        <translation type="obsolete">Parametri dello strumento</translation>
-    </message>
-    <message>
-        <source>Couldn&apos;t apply piano roll layout</source>
-        <translation type="obsolete">Non posso applicare la visualizzazione piano</translation>
-    </message>
-    <message>
-        <source>  No selection </source>
-        <translation type="obsolete">  Nessuna selezione</translation>
-    </message>
-    <message>
-        <source>Quantizing...</source>
-        <translation type="obsolete">Quantizzazione in corso...</translation>
-    </message>
-    <message>
-        <source>Collapsing notes...</source>
-        <translation type="obsolete">Unione delle note in corso...</translation>
-    </message>
-    <message>
-        <source>Making legato...</source>
-        <translation type="obsolete">Costruzione del legato in corso...</translation>
-    </message>
-    <message>
-        <source>Note: %1 (%2.%3s)</source>
-        <translation type="obsolete">Nota: %1 (%2.%3s)</translation>
-    </message>
-    <message>
-        <source>%1 (%2)</source>
-        <translation type="obsolete">%1 (%2)</translation>
-    </message>
-    <message>
-        <source>Time: %1 (%2.%3s)</source>
-        <translation type="obsolete">Tempo: %1 (%2.%3s)</translation>
-    </message>
-    <message>
-        <source>Cutting selection to clipboard...</source>
-        <translation type="obsolete">Incolla la selezione negli appunti...</translation>
-    </message>
-    <message>
-        <source>Copying selection to clipboard...</source>
-        <translation type="obsolete">Copia in corso della selezione negli appunti...</translation>
-    </message>
-    <message>
-        <source>Clipboard is empty</source>
-        <translation type="obsolete">Gli appunti sono vuoti</translation>
-    </message>
-    <message>
-        <source>Inserting clipboard contents...</source>
-        <translation type="obsolete">Inserimento del contenuto degli appunti in corso...</translation>
-    </message>
-    <message>
-        <source>Couldn&apos;t paste at this point</source>
-        <translation type="obsolete">Non è possibile incollare in questo punto</translation>
-    </message>
-    <message>
-        <source>Deleting selection...</source>
-        <translation type="obsolete">Eliminazione della selezione in corso...</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1674"/>
         <source>Unknown note insert action %1</source>
         <translation>Azione %1 di inserimento nota sconosciuta</translation>
-    </message>
-    <message>
-        <source>Inserting note</source>
-        <translation type="obsolete">Inserimento nota</translation>
-    </message>
-    <message>
-        <source>Unquantizing...</source>
-        <translation type="obsolete">Dequantizzazione in corso...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="316"/>
@@ -16924,18 +16108,6 @@ Doppio click per aprire l&apos;editor dei marcatori.</translation>
             <numerusform>%1%2 - %n Segmento - %3</numerusform>
             <numerusform>%1%2 - %n Segmenti - %3</numerusform>
         </translation>
-    </message>
-    <message>
-        <source>%1 Controller %2 %3</source>
-        <translation type="obsolete">%1 Controller %2 %3</translation>
-    </message>
-    <message>
-        <source>Pitch Bend</source>
-        <translation type="obsolete">Curva dell&apos;altezza</translation>
-    </message>
-    <message>
-        <source>Unsupported Event Type</source>
-        <translation type="obsolete">Tipo di evento non supportato</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="584"/>
@@ -17005,14 +16177,6 @@ Doppio click per aprire l&apos;editor dei marcatori.</translation>
         <translation>Tonalità stimata mostrata</translation>
     </message>
     <message>
-        <source>  Zoom:  </source>
-        <translation type="obsolete">  Ingrandimento:  </translation>
-    </message>
-    <message>
-        <source>%1%</source>
-        <translation type="obsolete">%1%</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1260"/>
         <source>Estimated time signature shown</source>
         <translation>Stima della misura del tempo mostrata</translation>
@@ -17028,21 +16192,9 @@ Doppio click per aprire l&apos;editor dei marcatori.</translation>
         <translation>Per numero di semitoni: </translation>
     </message>
     <message>
-        <source>Raising velocities...</source>
-        <translation type="obsolete">Aumento delle velocità...</translation>
-    </message>
-    <message>
-        <source>Lowering velocities...</source>
-        <translation type="obsolete">Diminuzione delle velocità...</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="988"/>
         <source>Set Event Velocities</source>
-        <translation>Imposta velocità dell&apos;evento</translation>
-    </message>
-    <message>
-        <source>Setting Velocities...</source>
-        <translation type="obsolete">Impostazione velocità...</translation>
+        <translation>Imposta velocity dell&apos;evento</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1032"/>
@@ -17060,25 +16212,9 @@ Doppio click per aprire l&apos;editor dei marcatori.</translation>
         <translation>Matrice</translation>
     </message>
     <message>
-        <source>Percussion</source>
-        <translation type="obsolete">Percussioni</translation>
-    </message>
-    <message>
-        <source>%1 - Segment Track #%2 - %3</source>
-        <translation type="obsolete">%1 - Traccia del segmento #%2 - %3</translation>
-    </message>
-    <message>
-        <source>%1 - All Segments - %2</source>
-        <translation type="obsolete">%1 - Tutti i segmenti - %2</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1596"/>
         <source>Can&apos;t insert note: No grid duration selected</source>
         <translation>Non posso inserire la nota. Nessuna durata di griglia selezionata</translation>
-    </message>
-    <message>
-        <source> Chord </source>
-        <translation type="obsolete"> Accordo</translation>
     </message>
 </context>
 <context>
@@ -17405,292 +16541,9 @@ Doppio click per aprire l&apos;editor dei marcatori.</translation>
 <context>
     <name>Rosegarden::NameSetEditor</name>
     <message>
-        <source>Librarian</source>
-        <translation type="obsolete">Bibliotecario</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">Nome</translation>
-    </message>
-    <message>
-        <source>Email</source>
-        <translation type="obsolete">Posta elettronica</translation>
-    </message>
-    <message>
-        <source>The librarian maintains the Rosegarden device data for this device.
-If you&apos;ve made modifications to suit your own device, it might be worth
-liaising with the librarian in order to publish your information for the benefit
-of others.</source>
-        <translation type="obsolete">Il bibliotecario mantiene i dati di questo dispositivo.
-Se hai fatto delle modifiche per adeguarli al tuo dispositivo,
- potrebbe essere utile contattare il bibliotecario per condividerle,
-a beneficio di altri.</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/studio/NameSetEditor.cpp" line="66"/>
         <source>Provided by</source>
         <translation>Fornito da</translation>
-    </message>
-</context>
-<context>
-    <name>Rosegarden::NewMatrixView</name>
-    <message>
-        <source>Matrix</source>
-        <translation type="obsolete">Matrice</translation>
-    </message>
-    <message>
-        <source>&lt;untitled&gt;</source>
-        <translation type="obsolete">&lt;senza titolo&gt;</translation>
-    </message>
-    <message>
-        <source>%1 - All Segments - %2</source>
-        <translation type="obsolete">%1 - Tutti i segmenti - %2</translation>
-    </message>
-    <message>
-        <source> Grid: </source>
-        <translation type="obsolete"> Griglia: </translation>
-    </message>
-    <message>
-        <source>None</source>
-        <translation type="obsolete">Nessuno</translation>
-    </message>
-    <message>
-        <source>Unit</source>
-        <translation type="obsolete">Unità</translation>
-    </message>
-    <message>
-        <source>Beat</source>
-        <translation type="obsolete">Ritmo</translation>
-    </message>
-    <message>
-        <source>Bar</source>
-        <translation type="obsolete">Battuta</translation>
-    </message>
-    <message>
-        <source> Velocity: </source>
-        <translation type="obsolete"> Velocità:</translation>
-    </message>
-    <message>
-        <source> Quantize: </source>
-        <translation type="obsolete"> Quantizza:</translation>
-    </message>
-    <message>
-        <source>  Zoom:  </source>
-        <translation type="obsolete">  Ingrandimento:  </translation>
-    </message>
-    <message>
-        <source>%1%</source>
-        <translation type="obsolete">%1%</translation>
-    </message>
-    <message>
-        <source>Set Event Velocities</source>
-        <translation type="obsolete">Imposta velocità dell&apos;evento</translation>
-    </message>
-    <message>
-        <source>Trigger Segment</source>
-        <translation type="obsolete">Attiva il segmento</translation>
-    </message>
-    <message>
-        <source>Remove Triggers</source>
-        <translation type="obsolete">Rimuovi attivatori</translation>
-    </message>
-    <message>
-        <source>Estimated time signature shown</source>
-        <translation type="obsolete">Stima della misura del tempo mostrata</translation>
-    </message>
-    <message>
-        <source>Transpose</source>
-        <translation type="obsolete">Trasporto</translation>
-    </message>
-    <message>
-        <source>By number of semitones: </source>
-        <translation type="obsolete">Per numero di semitoni: </translation>
-    </message>
-    <message>
-        <source>Can&apos;t insert note: No grid duration selected</source>
-        <translation type="obsolete">Non posso inserire la nota. Nessuna durata di griglia selezionata</translation>
-    </message>
-</context>
-<context>
-    <name>Rosegarden::NewNotationView</name>
-    <message>
-        <source>Note &amp;Font</source>
-        <translation type="obsolete">&amp;Font delle note</translation>
-    </message>
-    <message>
-        <source>Si&amp;ze</source>
-        <translation type="obsolete">Dimen&amp;sione</translation>
-    </message>
-    <message>
-        <source>S&amp;pacing</source>
-        <translation type="obsolete">S&amp;paziatura</translation>
-    </message>
-    <message>
-        <source>  Font:  </source>
-        <translation type="obsolete">  Font:  </translation>
-    </message>
-    <message>
-        <source>Unknown font &quot;%1&quot;, using default</source>
-        <translation type="obsolete">Font &quot;%1&quot; sconosciuto, uso quello predefinito</translation>
-    </message>
-    <message>
-        <source>  Size:  </source>
-        <translation type="obsolete">  Dimensione:  </translation>
-    </message>
-    <message>
-        <source>  Spacing:  </source>
-        <translation type="obsolete">  Spaziatura:  </translation>
-    </message>
-    <message>
-        <source>LilyPond Preview Options</source>
-        <translation type="obsolete">Opzioni dell&apos;Anteprima Lilypond</translation>
-    </message>
-    <message>
-        <source>LilyPond preview options</source>
-        <translation type="obsolete">Opzioni dell&apos;anteprima Lilypond</translation>
-    </message>
-    <message>
-        <source>Export failed.  The file could not be opened for writing.</source>
-        <translation type="obsolete">Esportazione fallita. Il file non può essere aperto per la scrittura.</translation>
-    </message>
-    <message>
-        <source>Unknown font action %1</source>
-        <translation type="obsolete">Azione %1 sul carattere sconosciuta</translation>
-    </message>
-    <message>
-        <source>Unknown font size action %1</source>
-        <translation type="obsolete">Azione %1 sulla dimensione dei caratteri sconosciuta</translation>
-    </message>
-    <message>
-        <source>Unknown spacing action %1</source>
-        <translation type="obsolete">Azione %1 sulla spaziatura sconosciuta</translation>
-    </message>
-    <message>
-        <source>Can&apos;t paste multiple Segments into one</source>
-        <translation type="obsolete">Non è possibile incollare segmenti multipli in uno solo</translation>
-    </message>
-    <message>
-        <source>Rosegarden</source>
-        <translation type="obsolete">Rosegarden</translation>
-    </message>
-    <message>
-        <source>Couldn&apos;t paste at this point.</source>
-        <translation type="obsolete">Non è possibile incollare in questo punto.</translation>
-    </message>
-    <message>
-        <source>The Restricted paste type requires enough empty space (containing only rests) at the paste position to hold all of the events to be pasted.
-Not enough space was found.
-If you want to paste anyway, consider using one of the other paste types from the &quot;Paste...&quot; option on the Edit menu.  You can also change the default paste type to something other than Restricted if you wish.</source>
-        <translation type="obsolete">Il modo di incollare Ristretto richiede uno spazio vuoto sufficiente (contenente solo pause) nella posizione di incollaggio, per poter contenere tutti gli eventi da incollare.
-Non è stato trovato spazio sufficiente.
-Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apos;opzione &quot;Incolla...&quot; nel menù &quot;Modifica&quot;.  Puoi anche cambiare l&apos;azione di incollaggio predefinita, se vuoi.</translation>
-    </message>
-    <message>
-        <source>Clipboard is empty</source>
-        <translation type="obsolete">Gli appunti sono vuoti</translation>
-    </message>
-    <message>
-        <source>Inserting clipboard contents...</source>
-        <translation type="obsolete">Inserimento del contenuto degli appunti in corso...</translation>
-    </message>
-    <message>
-        <source>Raising velocities...</source>
-        <translation type="obsolete">Aumento delle velocità...</translation>
-    </message>
-    <message>
-        <source>Lowering velocities...</source>
-        <translation type="obsolete">Diminuzione delle velocità...</translation>
-    </message>
-    <message>
-        <source>Set Event Velocities</source>
-        <translation type="obsolete">Imposta velocità dell&apos;evento</translation>
-    </message>
-    <message>
-        <source>Setting Velocities...</source>
-        <translation type="obsolete">Impostazione velocità...</translation>
-    </message>
-    <message>
-        <source>Unknown note insert action %1</source>
-        <translation type="obsolete">Azione %1 di inserimento nota sconosciuta</translation>
-    </message>
-    <message>
-        <source>Inserting note</source>
-        <translation type="obsolete">Inserimento nota</translation>
-    </message>
-    <message>
-        <source>Ornament track %1 bar %2</source>
-        <translation type="obsolete">Ornamento traccia %1 battuta %2</translation>
-    </message>
-    <message>
-        <source>Ornament bar %1</source>
-        <translation type="obsolete">Ornamento battuta %1</translation>
-    </message>
-    <message>
-        <source>Make Ornament</source>
-        <translation type="obsolete">Fai ornamento</translation>
-    </message>
-    <message>
-        <source>Use Ornament</source>
-        <translation type="obsolete">Usa ornamento</translation>
-    </message>
-    <message>
-        <source>Remove Ornaments</source>
-        <translation type="obsolete">Rimuovi gli ornamenti</translation>
-    </message>
-    <message>
-        <source>Estimated key signature shown</source>
-        <translation type="obsolete">Tonalità stimata</translation>
-    </message>
-    <message>
-        <source>Sustain</source>
-        <translation type="obsolete">Sustain</translation>
-    </message>
-    <message>
-        <source>There is no sustain controller defined for this device.
-Please ensure the device is configured correctly in the Manage MIDI Devices dialog in the main window.</source>
-        <translation type="obsolete">Non c&apos;è un controllo del sustain per questo dispositivo.
-Accertati che il dispositivo sia correttamente configurato alla voce
-&apos;Gestisci dispositivi MIDI&apos; nella finestra principale.</translation>
-    </message>
-    <message>
-        <source>Estimated time signature shown</source>
-        <translation type="obsolete">Stima della misura del tempo mostrata</translation>
-    </message>
-    <message>
-        <source>Can&apos;t insert note: No note duration selected</source>
-        <translation type="obsolete">Non posso inserire la nota. Nessuna durata di nota selezionata</translation>
-    </message>
-    <message>
-        <source>Time: %1 (%2.%3s)</source>
-        <translation type="obsolete">Tempo: %1 (%2.%3s)</translation>
-    </message>
-    <message>
-        <source>%1 - Segment Track #%2 - Notation</source>
-        <translation type="obsolete">%1 - Traccia segmento #%2 - Notazione</translation>
-    </message>
-    <message>
-        <source>%1 - All Segments - Notation</source>
-        <translation type="obsolete">%1 - Tutti i segmenti - Notazione</translation>
-    </message>
-    <message>
-        <source>Triplet</source>
-        <translation type="obsolete">Terzina</translation>
-    </message>
-    <message>
-        <source>Chord</source>
-        <translation type="obsolete">Accordo</translation>
-    </message>
-    <message>
-        <source>Grace</source>
-        <translation type="obsolete">Abbellimento</translation>
-    </message>
-    <message>
-        <source>Transpose</source>
-        <translation type="obsolete">Trasporto</translation>
-    </message>
-    <message>
-        <source>By number of semitones: </source>
-        <translation type="obsolete">Per numero di semitoni: </translation>
     </message>
 </context>
 <context>
@@ -17738,18 +16591,6 @@ Accertati che il dispositivo sia correttamente configurato alla voce
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="109"/>
         <source>%1 % (normal)</source>
         <translation>%1 % (normale)</translation>
-    </message>
-    <message>
-        <source>Default duration factor</source>
-        <translation type="obsolete">Fattore predefinito di durata</translation>
-    </message>
-    <message>
-        <source>None</source>
-        <translation type="obsolete">Nessuno</translation>
-    </message>
-    <message>
-        <source>Full</source>
-        <translation type="obsolete">Pieno</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="121"/>
@@ -17962,10 +16803,6 @@ Accertati che il dispositivo sia correttamente configurato alla voce
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="487"/>
         <source>Font size for multi-staff views</source>
         <translation>Dimensione dei caratteri per la vista a più pentagrammi</translation>
-    </message>
-    <message>
-        <source>Font size for printing (pt)</source>
-        <translation type="obsolete">Dimensione dei caratteri per la stampa (punti)</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="505"/>
@@ -18253,18 +17090,6 @@ Questo è un baco (il programma avrebbe dovuto interrompersi...)</translation>
 <context>
     <name>Rosegarden::NotationView</name>
     <message>
-        <source>Close track headers</source>
-        <translation type="obsolete">Chiudi le intestazioni di traccia</translation>
-    </message>
-    <message>
-        <source>Starting...</source>
-        <translation type="obsolete">Avvio in corso...</translation>
-    </message>
-    <message>
-        <source>Preparing to print...</source>
-        <translation type="obsolete">Preparazione alla stampa...</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="858"/>
         <source>Note &amp;Font</source>
         <translation>&amp;Font delle note</translation>
@@ -18278,14 +17103,6 @@ Questo è un baco (il programma avrebbe dovuto interrompersi...)</translation>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="906"/>
         <source>S&amp;pacing</source>
         <translation>S&amp;paziatura</translation>
-    </message>
-    <message>
-        <source>Du&amp;ration Factor</source>
-        <translation type="obsolete">Fattore di du&amp;rata</translation>
-    </message>
-    <message>
-        <source>None</source>
-        <translation type="obsolete">Nessuno</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="898"/>
@@ -18316,45 +17133,9 @@ Questo è un baco (il programma avrebbe dovuto interrompersi...)</translation>
         <translation>  Spaziatura:  </translation>
     </message>
     <message>
-        <source>  Ready.</source>
-        <translation type="obsolete">  Pronto.</translation>
-    </message>
-    <message>
-        <source>Laying out score...</source>
-        <translation type="obsolete">Impaginazione della partitura in corso...</translation>
-    </message>
-    <message>
-        <source>Laying out staff %1...</source>
-        <translation type="obsolete">Impaginazione del rigo %1...</translation>
-    </message>
-    <message>
-        <source>Reconciling staffs...</source>
-        <translation type="obsolete">Riallineando i pentagrammi...</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="999"/>
         <source>  No selection </source>
         <translation>  Nessuna selezione</translation>
-    </message>
-    <message>
-        <source>Sizing and allocating canvas...</source>
-        <translation type="obsolete">Dimensionando e posizionando i tracciati...</translation>
-    </message>
-    <message>
-        <source>note</source>
-        <translation type="obsolete">nota</translation>
-    </message>
-    <message>
-        <source>rest</source>
-        <translation type="obsolete">pausa</translation>
-    </message>
-    <message>
-        <source>%1 - Segment Track #%2 - Notation</source>
-        <translation type="obsolete">%1 - Traccia segmento #%2 - Notazione</translation>
-    </message>
-    <message>
-        <source>%1 - All Segments - Notation</source>
-        <translation type="obsolete">%1 - Tutti i segmenti - Notazione</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3229"/>
@@ -18379,21 +17160,9 @@ Questo è un baco (il programma avrebbe dovuto interrompersi...)</translation>
         <translation>%1 %2</translation>
     </message>
     <message>
-        <source>Hidden annotations</source>
-        <translation type="obsolete">Annotazioni nascoste</translation>
-    </message>
-    <message>
-        <source>Hidden LilyPond directives</source>
-        <translation type="obsolete">LilyPond nascosto</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1358"/>
         <source>Unknown spacing action %1</source>
         <translation>Azione %1 sulla spaziatura sconosciuta</translation>
-    </message>
-    <message>
-        <source>Unknown proportion action %1</source>
-        <translation type="obsolete">Azione %1 di proporzione sconosciuta</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1307"/>
@@ -18401,33 +17170,9 @@ Questo è un baco (il programma avrebbe dovuto interrompersi...)</translation>
         <translation>Azione %1 sul carattere sconosciuta</translation>
     </message>
     <message>
-        <source>Unknown font size %1</source>
-        <translation type="obsolete">Dimensione %1 del carattere sconosciuta</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1333"/>
         <source>Unknown font size action %1</source>
         <translation>Azione %1 sulla dimensione dei caratteri sconosciuta</translation>
-    </message>
-    <message>
-        <source>Printing...</source>
-        <translation type="obsolete">Stampa in corso...</translation>
-    </message>
-    <message>
-        <source>Previewing...</source>
-        <translation type="obsolete">Anteprime in corso...</translation>
-    </message>
-    <message>
-        <source>Printing LilyPond file...</source>
-        <translation type="obsolete">Stampa del file Lilypond...</translation>
-    </message>
-    <message>
-        <source>Failed to open a temporary file for LilyPond export.</source>
-        <translation type="obsolete">Apertura non riuscita di un file temporaneo per l&apos;esportazione Lilypond.</translation>
-    </message>
-    <message>
-        <source>Previewing LilyPond file...</source>
-        <translation type="obsolete">Anteprima del file Lilypond...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1186"/>
@@ -18440,25 +17185,9 @@ Questo è un baco (il programma avrebbe dovuto interrompersi...)</translation>
         <translation>Opzioni dell&apos;anteprima Lilypond</translation>
     </message>
     <message>
-        <source>Exporting LilyPond file...</source>
-        <translation type="obsolete">Esportazione del file Lilypond...</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1198"/>
         <source>Export failed.  The file could not be opened for writing.</source>
         <translation>Esportazione fallita. Il file non può essere aperto per la scrittura.</translation>
-    </message>
-    <message>
-        <source>Cutting selection to clipboard...</source>
-        <translation type="obsolete">Incolla la selezione negli appunti...</translation>
-    </message>
-    <message>
-        <source>Deleting selection...</source>
-        <translation type="obsolete">Eliminazione della selezione in corso...</translation>
-    </message>
-    <message>
-        <source>Copying selection to clipboard...</source>
-        <translation type="obsolete">Copia in corso della selezione negli appunti...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1489"/>
@@ -18567,10 +17296,6 @@ Questo è un baco (il programma avrebbe dovuto interrompersi...)</translation>
         <translation>Unendo le note...</translation>
     </message>
     <message>
-        <source>No note duration selected</source>
-        <translation type="obsolete">Nessuna durata nota selezionata</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2293"/>
         <source>Unknown note insert action %1</source>
         <translation>Azione %1 di inserimento nota sconosciuta</translation>
@@ -18579,22 +17304,6 @@ Questo è un baco (il programma avrebbe dovuto interrompersi...)</translation>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2297"/>
         <source>Inserting note</source>
         <translation>Inserimento nota</translation>
-    </message>
-    <message>
-        <source>No rest duration selected</source>
-        <translation type="obsolete">Nessuna durata di pausa selezionata</translation>
-    </message>
-    <message>
-        <source>No note or rest duration selected</source>
-        <translation type="obsolete">Nessuna durata di nota o di pausa selezionata</translation>
-    </message>
-    <message>
-        <source>Quantizing...</source>
-        <translation type="obsolete">Quantizzazione in corso...</translation>
-    </message>
-    <message>
-        <source>Interpreting selection...</source>
-        <translation type="obsolete">Interpretazione della selezione...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4287"/>
@@ -19096,14 +17805,6 @@ Accertati che il dispositivo sia correttamente configurato alla voce
         <translation>Sposta in basso</translation>
     </message>
     <message>
-        <source>Delete</source>
-        <translation type="obsolete">Cancella</translation>
-    </message>
-    <message>
-        <source>Clear</source>
-        <translation type="obsolete">Azzera</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/segment/PlayList.cpp" line="81"/>
         <source>Remove</source>
         <translation>Rimuovi</translation>
@@ -19250,10 +17951,6 @@ Accertati che il dispositivo sia correttamente configurato alla voce
 </context>
 <context>
     <name>Rosegarden::ProgressDialog</name>
-    <message>
-        <source>Processing...</source>
-        <translation type="obsolete">Elaborazione in corso...</translation>
-    </message>
     <message>
         <location filename="../../src/gui/widgets/ProgressDialog.cpp" line="63"/>
         <source>Rosegarden</source>
@@ -19470,10 +18167,6 @@ Accertati che il dispositivo sia correttamente configurato alla voce
         <source>Quantize</source>
         <translation>Quantizza</translation>
     </message>
-    <message>
-        <source>Advanced</source>
-        <translation type="obsolete">Avanzato</translation>
-    </message>
 </context>
 <context>
     <name>Rosegarden::QuantizeParameters</name>
@@ -19605,10 +18298,6 @@ Accertati che il dispositivo sia correttamente configurato alla voce
         <translation>Dopo la quantizzazione</translation>
     </message>
     <message>
-        <source>Show advanced options</source>
-        <translation type="obsolete">Mostra le opzioni avanzate</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="152"/>
         <source>Re-beam</source>
         <translation>Ri-collega</translation>
@@ -19632,14 +18321,6 @@ Accertati che il dispositivo sia correttamente configurato alla voce
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="255"/>
         <source>Full quantize</source>
         <translation>Quantizzazione piena</translation>
-    </message>
-    <message>
-        <source>Show Advanced Options</source>
-        <translation type="obsolete">Mostra le Opzioni Avanzate</translation>
-    </message>
-    <message>
-        <source>Hide Advanced Options</source>
-        <translation type="obsolete">Nascondi le Opzioni Avanzate</translation>
     </message>
 </context>
 <context>
@@ -19959,12 +18640,6 @@ Potrebbero esserci alcune incompatibilità di formato.</translation>
 <context>
     <name>Rosegarden::RosegardenDocument</name>
     <message>
-        <source>The current file has been modified.
-Do you want to save it?</source>
-        <translation type="obsolete">Il file corrente è stato modificato.
-Vuoi salvarlo?</translation>
-    </message>
-    <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="344"/>
         <source>Rosegarden - Warning</source>
         <translation>Rosegarden - Attenzione</translation>
@@ -20178,10 +18853,6 @@ affinché sia ancora leggibile nelle prossime versioni.</translation>
 <context>
     <name>Rosegarden::RosegardenMainViewWidget</name>
     <message>
-        <source>No non-audio segments in composition</source>
-        <translation type="obsolete">Non ci sono segmenti non-audio nella composizione</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="301"/>
         <source>Selection must contain only audio or non-audio segments</source>
         <translation>La selezione deve contenere solo segmenti audio o non-audio</translation>
@@ -20206,12 +18877,6 @@ affinché sia ancora leggibile nelle prossime versioni.</translation>
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="737"/>
         <source>No non-audio segments selected</source>
         <translation>Nessun segmento non-audio selezionato</translation>
-    </message>
-    <message>
-        <source>You&apos;ve not yet defined an audio editor for Rosegarden to use.
-See Settings -&gt; Configure Rosegarden -&gt; Audio.</source>
-        <translation type="obsolete">Non hai ancora definito un editor audio per Rosegarden.
-Guarda Impostazioni -&gt; Configura Rosegarden -&gt; Audio.</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="815"/>
@@ -20441,10 +19106,6 @@ L&apos;errore è: %2</translation>
         <translation>Salvataggio file in corso...</translation>
     </message>
     <message>
-        <source>Save File</source>
-        <translation type="obsolete">Salva File</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2034"/>
         <source>&lt;qt&gt;Sorry.&lt;br&gt;&quot;%1&quot; is not a valid filename.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Mi spiace.&lt;br&gt;&quot;%1&quot; non è un nome di file valido.&lt;/qt&gt;</translation>
@@ -20478,14 +19139,6 @@ L&apos;errore è: %2</translation>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2129"/>
         <source>Closing file...</source>
         <translation>Chiusura file in corso...</translation>
-    </message>
-    <message>
-        <source>Printing...</source>
-        <translation type="obsolete">Stampa in corso...</translation>
-    </message>
-    <message>
-        <source>Previewing...</source>
-        <translation type="obsolete">Anteprime in corso...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2142"/>
@@ -20827,66 +19480,6 @@ Vuoi impostarlo adesso?</translation>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4042"/>
         <source>Can&apos;t load Hydrogen file.  It appears to be corrupted.</source>
         <translation>Non posso caricare il file di Hydrogen. Sembra danneggiato.</translation>
-    </message>
-    <message>
-        <source>Export and import of Rosegarden Project files</source>
-        <translation type="obsolete">Esporta e importa i file di progetto di Rosegarden</translation>
-    </message>
-    <message>
-        <source>The Rosegarden Project Packager helper script</source>
-        <translation type="obsolete">Script di aiuto per il Rosegarden Project Packager</translation>
-    </message>
-    <message>
-        <source>%1 - for project file support</source>
-        <translation type="obsolete">%1 - per supporto ai file di progetto</translation>
-    </message>
-    <message>
-        <source>Notation previews through LilyPond</source>
-        <translation type="obsolete">Anteprima di notazione con Lilypond</translation>
-    </message>
-    <message>
-        <source>The Rosegarden LilyPondView helper script</source>
-        <translation type="obsolete">Script di aiuto per il visualizzatore LilyPond di Rosegarden</translation>
-    </message>
-    <message>
-        <source>%1 - for LilyPond preview support</source>
-        <translation type="obsolete">%1 - per il supporto all&apos;anteprima di LilyPond</translation>
-    </message>
-    <message>
-        <source>General audio file import and conversion</source>
-        <translation type="obsolete">Importazione e conversione di file audio generali</translation>
-    </message>
-    <message>
-        <source>The Rosegarden Audio File Importer helper script</source>
-        <translation type="obsolete">Script di aiuto per l&apos;importazione di file audio in Rosegarden</translation>
-    </message>
-    <message>
-        <source>%1 - for audio file import</source>
-        <translation type="obsolete">%1 - per l&apos;importazione di file audio</translation>
-    </message>
-    <message>
-        <source>&lt;h3&gt;Helper programs not found&lt;/h3&gt;&lt;p&gt;Rosegarden could not find one or more helper programs which it needs to provide some features.  The following features will not be available:&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;h3&gt;Programmi di aiuto non trovati&lt;/h3&gt;&lt;p&gt;Rosegarden non trova uno o più programmi di aiuto di cui ha bisogno. Le seguenti caratteristiche non saranno disponibili:&lt;p&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;ul&gt;</source>
-        <translation type="obsolete">&lt;ul&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;li&gt;%1&lt;/li&gt;</source>
-        <translation type="obsolete">&lt;li&gt;%1&lt;/li&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;/ul&gt;</source>
-        <translation type="obsolete">&lt;/ul&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;p&gt;To fix this, you should install the following additional programs:&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;p&gt;Per sistemare questo, dovresti installare i seguenti programmi:&lt;/p&gt;</translation>
-    </message>
-    <message>
-        <source>Helper programs not found</source>
-        <translation type="obsolete">Programmi di aiuto non trovati</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4816"/>
@@ -22110,7 +20703,7 @@ Fermare altre applicazioni attive può migliorare le prestazioni di Rosegarden.<
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="324"/>
         <source>Note velocity:</source>
-        <translation>Velocità della nota:</translation>
+        <translation>Velocity della nota:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="352"/>
@@ -22504,54 +21097,6 @@ Fermare altre applicazioni attive può migliorare le prestazioni di Rosegarden.<
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <source>C</source>
-        <translation type="obsolete">Do</translation>
-    </message>
-    <message>
-        <source>C#</source>
-        <translation type="obsolete">Do#</translation>
-    </message>
-    <message>
-        <source>D</source>
-        <translation type="obsolete">Re</translation>
-    </message>
-    <message>
-        <source>Eb</source>
-        <translation type="obsolete">Mib</translation>
-    </message>
-    <message>
-        <source>E</source>
-        <translation type="obsolete">Mi</translation>
-    </message>
-    <message>
-        <source>F</source>
-        <translation type="obsolete">Fa</translation>
-    </message>
-    <message>
-        <source>F#</source>
-        <translation type="obsolete">Fa#</translation>
-    </message>
-    <message>
-        <source>G</source>
-        <translation type="obsolete">Sol</translation>
-    </message>
-    <message>
-        <source>G#</source>
-        <translation type="obsolete">Sol#</translation>
-    </message>
-    <message>
-        <source>A</source>
-        <translation type="obsolete">La</translation>
-    </message>
-    <message>
-        <source>Bb</source>
-        <translation type="obsolete">Sib</translation>
-    </message>
-    <message>
-        <source>B</source>
-        <translation type="obsolete">Si</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="685"/>
         <source>%1: %2</source>
         <translation>%1: %2</translation>
@@ -22560,17 +21105,6 @@ Fermare altre applicazioni attive può migliorare le prestazioni di Rosegarden.<
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="688"/>
         <source> in %1</source>
         <translation> in %1</translation>
-    </message>
-</context>
-<context>
-    <name>Rosegarden::Studio</name>
-    <message>
-        <source>Audio</source>
-        <translation type="obsolete">Audio</translation>
-    </message>
-    <message>
-        <source>Synth plugin</source>
-        <translation type="obsolete">Modulo del sintetizzatore</translation>
     </message>
 </context>
 <context>
@@ -23514,10 +22048,6 @@ Vuoi impostarlo adesso?</translation>
         <source>Rosegarden cannot accept dropped files of this type.</source>
         <translation>Rosegarden non può accettare i files caduti di questo tipo.</translation>
     </message>
-    <message>
-        <source>You can&apos;t drop files into Rosegarden from this client.  Try using Konqueror instead.</source>
-        <translation type="obsolete">Non puoi aprire i file in Rosegarden con questo client. Prova ad usare Konqueror piuttosto.</translation>
-    </message>
 </context>
 <context>
     <name>Rosegarden::TrackLabel</name>
@@ -23913,7 +22443,7 @@ Vuoi impostarlo adesso?</translation>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1157"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1201"/>
@@ -24106,9 +22636,9 @@ Vuoi impostarlo adesso?</translation>
     <message numerus="yes">
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="235"/>
         <source>%1 on %n track(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1 in %n traccia</numerusform>
+            <numerusform>%1 in %n tracce</numerusform>
         </translation>
     </message>
     <message>
@@ -24475,21 +23005,6 @@ Vuoi impostarlo adesso?</translation>
         <location filename="../../src/gui/widgets/WarningWidget.cpp" line="197"/>
         <source>&lt;qt&gt;&lt;p&gt;Rosegarden is using safe graphics mode.  This provides the greatest stability, but graphics performance is very slow.&lt;/p&gt;&lt;p&gt;You may wish to visit &lt;b&gt;Edit -&gt; Preferences -&gt; Behavior -&gt; Graphics performance&lt;/b&gt; and try &quot;Normal&quot; or &quot;Fast&quot; for better performance.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Rosegarden sta usando modalità grafica e sicura.  Questo offre la più alta stabilità, ma la performance grafica è molto lenta.&lt;/p&gt;&lt;p&gt;Se vuoi puoi provare &lt;b&gt;Modifica -&gt; Preferenze -&gt; Generale -&gt; Prestazioni graphicse&lt;/b&gt; e tenta &quot;Normale&quot; o &quot;Veloce&quot; per una migliore prestazione.&lt;/p&gt;&lt;/qt&gt;</translation>
-    </message>
-</context>
-<context>
-    <name>RosegardenApplication</name>
-    <message>
-        <source>Rosegarden - A sequencer and musical notation editor</source>
-        <translation type="obsolete">Rosegarden - Un sequencer e editor di partiture musicali</translation>
-    </message>
-    <message>
-        <source>Rosegarden</source>
-        <translation type="obsolete">Rosegarden</translation>
-    </message>
-    <message>
-        <source>Welcome!</source>
-        <translation type="obsolete">Benvenuti!</translation>
     </message>
 </context>
 <context>
