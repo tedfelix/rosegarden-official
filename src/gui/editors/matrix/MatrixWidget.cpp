@@ -98,8 +98,10 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     m_scene(0),
     m_toolBox(0),
     m_currentTool(0),
+    m_instrument(0),
     m_drumMode(drumMode),
     m_keyMapping(false),
+    m_onlyKeyMapping(false),
     m_playTracking(true),
     m_hZoomFactor(1.0),
     m_vZoomFactor(1.0),
@@ -236,7 +238,7 @@ MatrixWidget::MatrixWidget(bool drumMode) :
 
     pannerLayout->addWidget(controls);
 
-    m_layout->addWidget(panner, PANNER_ROW, MAIN_COL, 1, 1);
+    m_layout->addWidget(panner, PANNER_ROW, HEADER_COL, 1, 2);
 
     // Rulers being not defined still, they can't be added to m_layout.
     // This will be done in setSegments().
@@ -334,28 +336,24 @@ MatrixWidget::setSegments(RosegardenDocument *document,
 
     Composition &comp = document->getComposition();
 
-    Track *track =
-        comp.getTrackById(segments[0]->getTrack());
+    Track *track;
+    Instrument *instr;
 
-    Instrument *instr = document->getStudio().
-                        getInstrumentById(track->getInstrument());
-
-    const MidiKeyMapping *mapping = 0;
-
-    // m_keyMapping must be set before calling m_scene->setSegments()
-    if (instr) {
-        mapping = instr->getKeyMapping();
-        if (mapping) {
-            RG_DEBUG << "MatrixView: Instrument has key mapping: "
-                     << mapping->getName() << endl;
-            m_localMapping = new MidiKeyMapping(*mapping);
-            m_localMapping->extend();
-            m_keyMapping = true;
-        } else {
-            RG_DEBUG << "MatrixView: Instrument has no key mapping\n";
-            m_keyMapping = false;
+    // Look at segments to see if we need piano keyboard or key mapping ruler
+    // (cf comment in MatrixScene::setSegments())
+    m_onlyKeyMapping = true;
+    std::vector<Segment *>::iterator si;
+    for (si=segments.begin(); si!=segments.end(); ++si) {
+        track = comp.getTrackById((*si)->getTrack());
+        instr = document->getStudio().getInstrumentById(track->getInstrument());
+        if (instr) {
+            if (!instr->getKeyMapping()) {
+                m_onlyKeyMapping = false;
+            }
         }
     }
+    // Note : m_onlyKeyMapping, whose value is defined above,
+    // must be set before calling m_scene->setSegments()
 
     delete m_scene;
     m_scene = new MatrixScene();
@@ -388,50 +386,14 @@ MatrixWidget::setSegments(RosegardenDocument *document,
 
     m_hpanner->setScene(m_scene);
 
-    if (mapping && !m_localMapping->getMap().empty()) {
-        m_pitchRuler = new PercussionPitchRuler(0, m_localMapping,
-                                                m_scene->getYResolution());
-    } else {
-        m_pitchRuler = new PianoKeyboard(0);
-    }
-
-    m_pitchRuler->setFixedSize(m_pitchRuler->sizeHint());
-    m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width() + 4);
-    //@@@ The 4 pixels have been added empirically in line above to
-    //    show the pitch ruler completely. (The pitch ruler contents was
-    //    horizontally moving with Alt + wheel)
-
-    delete m_pianoScene;
-    m_pianoScene = new QGraphicsScene();
-    QGraphicsProxyWidget *pianoKbd = m_pianoScene->addWidget(m_pitchRuler);
-    m_pianoView->setScene(m_pianoScene);
-    m_pianoView->centerOn(pianoKbd);
-
-    QObject::connect
-    (m_pitchRuler, SIGNAL(hoveredOverKeyChanged(unsigned int)),
-     this, SLOT (slotHoveredOverKeyChanged(unsigned int)));
-
-    QObject::connect
-    (m_pitchRuler, SIGNAL(keyPressed(unsigned int, bool)),
-     this, SLOT (slotKeyPressed(unsigned int, bool)));
-
-    QObject::connect
-    (m_pitchRuler, SIGNAL(keySelected(unsigned int, bool)),
-     this, SLOT (slotKeySelected(unsigned int, bool)));
-
-    QObject::connect
-    (m_pitchRuler, SIGNAL(keyReleased(unsigned int, bool)),
-     this, SLOT (slotKeyReleased(unsigned int, bool)));
-
     connect(m_view, SIGNAL(mouseLeaves()),
             this, SLOT(slotMouseLeavesView()));
 
-    // If piano scene and matrix scene don't have the same height
-    // one may shift from the other when scrolling vertically
-    QRectF viewRect = m_scene->sceneRect();
-    QRectF pianoRect = m_pianoScene->sceneRect();
-    pianoRect.setHeight(viewRect.height());
-    m_pianoScene->setSceneRect(pianoRect);
+    generatePitchRuler();
+
+    connect(RosegardenMainWindow::self(),
+            SIGNAL(instrumentPercussionSetChanged(Instrument *)),
+            this, SLOT(slotPercussionSetChanged(Instrument *)));
 
     m_controlsWidget->setSegments(document, segments);
     m_controlsWidget->setViewSegment((ViewSegment *)m_scene->getCurrentViewSegment());
@@ -500,6 +462,126 @@ MatrixWidget::setSegments(RosegardenDocument *document,
 
     // hide the changer widget if only one segment
     if (segments.size() == 1) m_changerWidget->hide();
+}
+
+void
+MatrixWidget::generatePitchRuler()
+{
+    delete m_pianoScene;   // Delete the old m_pitchRuler if any
+    delete m_localMapping;
+    m_localMapping = 0;    // To avoid a double delete
+
+    Composition &comp = m_document->getComposition();
+    const MidiKeyMapping *mapping = 0;
+    Track *track = comp.getTrackById(m_scene->getCurrentSegment()->getTrack());
+    m_instrument = m_document->getStudio().
+                            getInstrumentById(track->getInstrument());
+    if (m_instrument) {
+        mapping = m_instrument->getKeyMapping();
+        if (mapping) {
+            RG_DEBUG << "MatrixView: Instrument has key mapping: "
+                    << mapping->getName() << endl;
+            m_localMapping = new MidiKeyMapping(*mapping);
+            m_localMapping->extend();
+            m_keyMapping = true;
+        } else {
+            RG_DEBUG << "MatrixView: Instrument has no key mapping\n";
+            m_keyMapping = false;
+        }
+    }
+    if (mapping && !m_localMapping->getMap().empty()) {
+        m_pitchRuler = new PercussionPitchRuler(0, m_localMapping,
+                                                m_scene->getYResolution());
+    } else {
+        if (m_onlyKeyMapping) {
+            //!!! In such a case, a matrix resolution of 11 is used.
+            // (See comments in MatrixScene::setSegments())
+            // As the piano keyboard works only with a resolution of 7, an
+            // empty key mapping will be used in place of the keyboard.
+            m_localMapping = new MidiKeyMapping();
+            m_localMapping->getMap()[0] = "";  //!!! extent() doesn't work ???
+            m_localMapping->getMap()[127] = "";
+            m_keyMapping = true;
+            m_pitchRuler = new PercussionPitchRuler(0, m_localMapping,
+                                                    m_scene->getYResolution());
+        } else {
+            m_pitchRuler = new PianoKeyboard(0);
+        }
+    }
+
+    m_pitchRuler->setFixedSize(m_pitchRuler->sizeHint());
+    m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width() + 4);
+    //@@@ The 4 pixels have been added empirically in line above to
+    //    show the pitch ruler completely. (The pitch ruler contents was
+    //    horizontally moving with Alt + wheel)
+
+    m_pianoScene = new QGraphicsScene();
+    QGraphicsProxyWidget *pianoKbd = m_pianoScene->addWidget(m_pitchRuler);
+    m_pianoView->setScene(m_pianoScene);
+    m_pianoView->centerOn(pianoKbd);
+
+    QObject::connect
+    (m_pitchRuler, SIGNAL(hoveredOverKeyChanged(unsigned int)),
+     this, SLOT (slotHoveredOverKeyChanged(unsigned int)));
+
+    QObject::connect
+    (m_pitchRuler, SIGNAL(keyPressed(unsigned int, bool)),
+     this, SLOT (slotKeyPressed(unsigned int, bool)));
+
+    QObject::connect
+    (m_pitchRuler, SIGNAL(keySelected(unsigned int, bool)),
+     this, SLOT (slotKeySelected(unsigned int, bool)));
+
+    ///!!! TODO : signal not found 
+    QObject::connect
+    (m_pitchRuler, SIGNAL(keyReleased(unsigned int, bool)),
+     this, SLOT (slotKeyReleased(unsigned int, bool)));
+
+    // If piano scene and matrix scene don't have the same height
+    // one may shift from the other when scrolling vertically
+    QRectF viewRect = m_scene->sceneRect();
+    QRectF pianoRect = m_pianoScene->sceneRect();
+    pianoRect.setHeight(viewRect.height() + 18);
+    m_pianoScene->setSceneRect(pianoRect);
+    //@@@ The 18 pixels have been added empirically in line above to
+    //    avoid any offset between matrix and pitchruler at the end of
+    //    vertical scroll. I have no idea from where they come from.
+
+
+    // Apply current zoom to the new pitch ruler
+    if (m_lastZoomWasHV) {
+        // Both horizontal and vertical zoom factors are applied to pitch ruler
+        QMatrix m;
+        m.scale(m_hZoomFactor, m_vZoomFactor);
+        m_view->setMatrix(m);
+        m_pianoView->setMatrix(m);
+        m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width()
+                                                       * m_vZoomFactor);        
+    } else {
+        // Only vertical zoom factor is applied to pitch ruler
+        QMatrix m;
+        m.scale(1.0, m_vZoomFactor);
+        m_pianoView->setMatrix(m);
+        m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width());
+    }
+
+    // Move vertically the pianoView scene to fit the matrix scene.
+    QRect mr = m_view->rect();
+    QRect pr = m_pianoView->rect();
+    QRectF smr = m_view->mapToScene(mr).boundingRect();
+    QRectF spr = m_pianoView->mapToScene(pr).boundingRect();
+    m_pianoView->centerOn(spr.center().x(), smr.center().y());
+
+    m_pianoView->update();
+}
+
+void
+MatrixWidget::slotPercussionSetChanged(Instrument *instr)
+{
+    // Regenerate the pitchruler if the instrument which changed
+    // is the current one.
+    if (instr == m_instrument) generatePitchRuler();
+
 }
 
 bool
@@ -1161,6 +1243,12 @@ MatrixWidget::slotSegmentChangerMoved(int v)
 
     m_lastSegmentChangerValue = v;
     updateSegmentChangerBackground();
+
+    // If we are switching between a pitched instrument segment and a pecussion
+    // segment or betwween two percussion segments with different percussion
+    // sets, the pitch ruler may need to be regenerated.
+    //!!! TODO : test if regeneration is really needed before doing it
+    generatePitchRuler();
 }
 
 void

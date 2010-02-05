@@ -54,6 +54,7 @@ class StandardRuler;
 class TempoRuler;
 class ChordNameRuler;
 class Device;
+class Instrument;
 
 /**
  * Container widget for the matrix editor (which is a QGraphicsView)
@@ -85,7 +86,7 @@ public:
 
     bool isDrumMode() const { return m_drumMode; }
 
-    bool hasKeyMapping() const { return m_keyMapping; }
+    bool hasOnlyKeyMapping() const { return m_onlyKeyMapping; }
 
     bool getPlayTracking() const { return m_playTracking; }
 
@@ -194,8 +195,14 @@ protected slots:
     /// The mouse has left the view
     void slotMouseLeavesView();
 
+    /// Pitch ruler may need regeneration
+    void slotPercussionSetChanged(Instrument *instr);
+
 protected :
     virtual void showEvent(QShowEvent * event);
+
+    /// (Re)generate the pitch ruler (useful when key mapping changed)
+    void generatePitchRuler();
 
 private:
     RosegardenDocument *m_document; // I do not own this
@@ -204,8 +211,10 @@ private:
     MatrixScene *m_scene; // I own this
     MatrixToolBox *m_toolBox; // I own this
     MatrixTool *m_currentTool; // Toolbox owns this
+    Instrument *m_instrument; // Studio owns this (TBC)
     bool m_drumMode;
     bool m_keyMapping;
+    bool m_onlyKeyMapping;
     bool m_playTracking;
     double m_hZoomFactor;
     double m_vZoomFactor;

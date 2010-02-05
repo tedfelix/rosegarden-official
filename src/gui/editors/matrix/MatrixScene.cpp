@@ -137,11 +137,19 @@ MatrixScene::setSegments(RosegardenDocument *document,
     // between horizontal lines. That's why m_resolution depends from 
     // keyMapping.
 
+    // But since several segments may be edited in the same matrix, we 
+    // have to deal with simultaneous display of segments using piano keyboard
+    // and segments using key mapping.
+    // Key mapping may be displayed with piano keyboard resolution (even if
+    // space is a bit short for the text) but the opposite is not possible.
+    // So the only (easy) way I found is to use the resolution fitting with 
+    // piano keyboard when at least one segment needs it.
+
     bool drumMode = false;
     bool keyMapping = false;
     if (m_widget) {
         drumMode = m_widget->isDrumMode();
-        keyMapping = m_widget->hasKeyMapping();
+        keyMapping = m_widget->hasOnlyKeyMapping();
     }
     m_resolution = 8;
     if (keyMapping) m_resolution = 11;

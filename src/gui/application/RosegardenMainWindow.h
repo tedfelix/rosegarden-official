@@ -521,6 +521,9 @@ signals:
     /// emitted when instrument parameters change (relayed from InstrumentParameterBox)
     void instrumentParametersChanged(InstrumentId);
 
+    /// emitted when instrument percussion set changes (relayed from InstrumentParameterBox)
+    void instrumentPercussionSetChanged(Instrument *);
+
     /// emitted when a plugin dialog selects a plugin
     void pluginSelected(InstrumentId, int, int);
 
