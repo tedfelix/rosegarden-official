@@ -51,7 +51,8 @@ PluginControl::PluginControl(QWidget *parent,
         m_index(index)
 {
     setObjectName("PluginControl");
-    QHBoxLayout *hbox = new QHBoxLayout(this);
+    QGridLayout *hbox = new QGridLayout(this);
+    hbox->setMargin(0);
 
     QFont plainFont;
     plainFont.setPointSize((plainFont.pointSize() * 9 ) / 10);
@@ -59,6 +60,8 @@ PluginControl::PluginControl(QWidget *parent,
     QLabel *controlTitle =
         new QLabel(QString("%1    ").arg(strtoqstr(port->getName())), this);
     controlTitle->setFont(plainFont);
+    controlTitle->setMinimumWidth
+        (QFontMetrics(controlTitle->font()).width("Bandwidth 1"));
 
     if (type == Rotary) {
         float lowerBound = port->getLowerBound();
@@ -120,6 +123,8 @@ PluginControl::PluginControl(QWidget *parent,
             low = new QLabel(QString("%1").arg(displayLower), this);
         }
         low->setFont(plainFont);
+        low->setMinimumWidth(QFontMetrics(plainFont).width("0.001"));
+        low->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
 //        std::cerr << "port " << port->getName() << ": lower bound "
 //                  << displayLower << ", upper bound " << displayUpper
@@ -153,26 +158,30 @@ PluginControl::PluginControl(QWidget *parent,
             upp = new QLabel(QString("%1").arg(displayUpper), this);
         }
         upp->setFont(plainFont);
+        upp->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+        upp->setMinimumWidth(QFontMetrics(plainFont).width("99999"));
 
-        hbox->addWidget(controlTitle, Qt::AlignLeft | Qt::AlignBottom);
+        int col = 0;
+        hbox->setColumnStretch(col++, 10);
+        hbox->addWidget(controlTitle, 0, col++);
 
         if (showBounds) {
             low->show();
-            hbox->addStretch(20);
-            hbox->addWidget(low, Qt::AlignRight | Qt::AlignBottom);
+            hbox->addWidget(low, 0, col++);
         } else {
             low->hide();
         }
 
-        hbox->addWidget(m_dial, Qt::AlignCenter | Qt::AlignBottom);
+        hbox->addWidget(m_dial, 0, col++);
 
         if (showBounds) {
             upp->show();
-            hbox->addWidget(upp, Qt::AlignLeft | Qt::AlignBottom);
-            hbox->addStretch(20);
+            hbox->addWidget(upp, 0, col++);
         } else {
             upp->hide();
         }
+
+        hbox->setColumnStretch(col++, 10);
     }
 }
 

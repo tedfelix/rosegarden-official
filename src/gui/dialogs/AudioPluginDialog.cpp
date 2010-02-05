@@ -80,13 +80,16 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     setWindowTitle(tr("Audio Plugin"));
 
     QGridLayout *metagrid = new QGridLayout(this);
+//    metagrid->setMargin(0);
 
     QWidget *vbox = new QWidget(this);
     QVBoxLayout *vboxLayout = new QVBoxLayout(vbox);
+    vboxLayout->setMargin(0);
     metagrid->addWidget(vbox, 0, 0);
   
     QGroupBox *pluginSelectionBox = new QGroupBox(tr("Plugin"), vbox);
     QVBoxLayout *pluginSelectionBoxLayout = new QVBoxLayout(pluginSelectionBox);
+//    pluginSelectionBoxLayout->setMargin(0);
     vboxLayout->addWidget(pluginSelectionBox);
 
     makePluginParamsBox(vbox); // creates a GroupBox
@@ -95,6 +98,7 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     // the Category label/combo
     m_pluginCategoryBox = new QWidget(pluginSelectionBox);
     QHBoxLayout *pluginCategoryBoxLayout = new QHBoxLayout(m_pluginCategoryBox);
+    pluginCategoryBoxLayout->setMargin(0);
     pluginSelectionBoxLayout->addWidget(m_pluginCategoryBox);
 
     pluginCategoryBoxLayout->addWidget(new QLabel(tr("Category:"), m_pluginCategoryBox));
@@ -106,6 +110,7 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     // the Plugin label/combo 
     QWidget *pluginPluginBox = new QWidget(pluginSelectionBox);
     QHBoxLayout *pluginPluginBoxLayout = new QHBoxLayout(pluginPluginBox);
+    pluginPluginBoxLayout->setMargin(0);
     pluginSelectionBoxLayout->addWidget(pluginPluginBox);
 
     pluginPluginBoxLayout->addWidget(new QLabel(tr("Plugin:"), pluginPluginBox));
@@ -123,6 +128,7 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     // the Bypass <ports> <id>
     QWidget *pluginDonglesBox = new QWidget(pluginSelectionBox);
     QHBoxLayout *pluginDonglesBoxLayout = new QHBoxLayout(pluginDonglesBox);
+    pluginDonglesBoxLayout->setMargin(0);
     pluginSelectionBoxLayout->addWidget(pluginDonglesBox);
 
     m_bypass = new QCheckBox(tr("Bypass"), pluginDonglesBox);
@@ -152,6 +158,7 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     // the Copy/Paste/Default buttons
     QWidget *pluginButtonsBox = new QWidget(pluginSelectionBox);
     QHBoxLayout *pluginButtonsBoxLayout = new QHBoxLayout(pluginButtonsBox);
+    pluginButtonsBoxLayout->setMargin(0);
     pluginSelectionBoxLayout->addWidget(pluginButtonsBox);
 
     m_copyButton = new QPushButton(tr("Copy"), pluginButtonsBox);
