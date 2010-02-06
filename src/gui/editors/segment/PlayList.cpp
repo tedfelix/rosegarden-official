@@ -115,6 +115,7 @@ void PlayList::slotOpenFiles()
     QStringList files = QFileDialog::getOpenFileNames( this, tr("Select one or more Rosegarden files"), QDir::currentPath(),
                         tr("Rosegarden files") + " (*.rg *.RG)" + ";;" +
                         tr("MIDI files") + " (*.mid *.midi *.MID *.MIDI)" + ";;" +
+//$$$ Typo here: Rosegaden --> Rosegarden
                         tr("X11 Rosegaden files") + " (*.rose)" + ";;" +
                         tr("All files") + " (*)", 0, 0 );
     
