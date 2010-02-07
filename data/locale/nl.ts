@@ -10234,7 +10234,7 @@
     <message>
         <location filename="../../src/commands/notation/AddIndicationCommand.cpp" line="248"/>
         <source>Add Tri&amp;ll With Line</source>
-        <translation type="unfinished"></translation>
+        <translation>Toevoegen tri&amp;ller met lijn</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddIndicationCommand.cpp" line="251"/>
@@ -10752,7 +10752,7 @@
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="521"/>
         <source>Save File As</source>
-        <translation type="unfinished"></translation>
+        <translation>Opslaan bestand als</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="523"/>
@@ -11551,7 +11551,7 @@ Selecteer welke u permanent van de harde schijf wilt verwijderen.
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="219"/>
         <source>Options</source>
-        <translation type="unfinished"></translation>
+        <translation>Opties</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="229"/>
@@ -11612,7 +11612,7 @@ Selecteer welke u permanent van de harde schijf wilt verwijderen.
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1545"/>
         <source>Rosegarden Device files</source>
-        <translation type="unfinished"></translation>
+        <translation>Rosegarden apparaat-bestanden</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1546"/>
@@ -12127,7 +12127,7 @@ Selecteer welke u permanent van de harde schijf wilt verwijderen.
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="108"/>
         <source>Name  </source>
-        <translation type="unfinished"></translation>
+        <translation>Naam  </translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="109"/>
@@ -12142,17 +12142,17 @@ Selecteer welke u permanent van de harde schijf wilt verwijderen.
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="112"/>
         <source>Min. value  </source>
-        <translation type="unfinished"></translation>
+        <translation>Min. waarde  </translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="113"/>
         <source>Max. value  </source>
-        <translation type="unfinished"></translation>
+        <translation>Max. waarde  </translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="114"/>
         <source>Default value  </source>
-        <translation type="unfinished"></translation>
+        <translation>Standaard waarde  </translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="115"/>
@@ -12241,7 +12241,7 @@ Selecteer welke u permanent van de harde schijf wilt verwijderen.
     <message>
         <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="69"/>
         <source>Controller Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Controller eigenschappen</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="98"/>
@@ -12377,7 +12377,7 @@ Selecteer welke u permanent van de harde schijf wilt verwijderen.
     <message>
         <location filename="../../src/gui/dialogs/CountdownDialog.cpp" line="68"/>
         <source>Stop</source>
-        <translation type="unfinished"></translation>
+        <translation>Stoppen</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/CountdownDialog.cpp" line="121"/>
@@ -12408,7 +12408,7 @@ Selecteer welke u permanent van de harde schijf wilt verwijderen.
     <message>
         <location filename="../../src/commands/segment/CreateTempoMapFromSegmentCommand.cpp" line="32"/>
         <source>Set Tempos from Beat Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Stel tempo in via beat-segment</translation>
     </message>
 </context>
 <context>
@@ -12748,17 +12748,17 @@ Selecteer welke u permanent van de harde schijf wilt verwijderen.
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="254"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>Ja</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="254"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>Nee</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="267"/>
         <source>Off</source>
-        <translation type="unfinished"></translation>
+        <translation>Van</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="298"/>
