@@ -121,7 +121,7 @@
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="524"/>
         <source>MIDI Recording</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI opnemen</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="526"/>
@@ -222,7 +222,7 @@
         <location filename="../QMenuStrings.cpp" line="4131"/>
         <location filename="../QMenuStrings.cpp" line="4237"/>
         <source>&amp;Close</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Sluiten</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="40"/>
@@ -239,7 +239,7 @@
         <location filename="../QMenuStrings.cpp" line="4244"/>
         <source>Ctrl+W</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="42"/>
@@ -369,7 +369,7 @@
         <location filename="../QMenuStrings.cpp" line="4141"/>
         <location filename="../QMenuStrings.cpp" line="4247"/>
         <source>&amp;Nothing to undo</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Niets om ongedaan te maken</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="81"/>
@@ -396,7 +396,7 @@
         <location filename="../QMenuStrings.cpp" line="4150"/>
         <location filename="../QMenuStrings.cpp" line="4256"/>
         <source>N&amp;othing to redo</source>
-        <translation type="unfinished"></translation>
+        <translation>Niets &amp;om te herhalen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="90"/>
@@ -419,7 +419,7 @@
         <location filename="../QMenuStrings.cpp" line="1819"/>
         <location filename="../QMenuStrings.cpp" line="3586"/>
         <source>&amp;Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Kopieer</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="99"/>
@@ -438,7 +438,7 @@
         <location filename="../QMenuStrings.cpp" line="1828"/>
         <location filename="../QMenuStrings.cpp" line="3595"/>
         <source>&amp;Paste</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Plakken</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="108"/>
@@ -580,7 +580,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="266"/>
         <source>&amp;Select All</source>
-        <translation type="unfinished"></translation>
+        <translation>Alles &amp;Selecteren</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="273"/>
@@ -625,12 +625,12 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="293"/>
         <source>Set Se&amp;gment Start Time...</source>
-        <translation type="unfinished"></translation>
+        <translation>Starttijd se&amp;gment instellen...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="294"/>
         <source>Set Seg&amp;ment Duration...</source>
-        <translation type="unfinished"></translation>
+        <translation>Se&amp;gmentduur instellen...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="296"/>
@@ -736,19 +736,19 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2711"/>
         <source>Dotted Ha&amp;lf Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Ha&amp;lve noot met punt</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2716"/>
         <location filename="../QMenuStrings.cpp" line="3467"/>
         <source>Switch To &amp;Notes</source>
-        <translation type="unfinished"></translation>
+        <translation>Wissel naar &amp;noten</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2725"/>
         <location filename="../QMenuStrings.cpp" line="3468"/>
         <source>Switch To &amp;Rests</source>
-        <translation type="unfinished"></translation>
+        <translation>Wissel naar &amp;rusten</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2734"/>
@@ -870,7 +870,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="4218"/>
         <source>Show &amp;Toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Toon werkbalk</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1918"/>
@@ -1023,12 +1023,12 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="502"/>
         <source>Nothing to &amp;undo</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Niets om ongedaan te maken</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="511"/>
         <source>Nothing to &amp;redo</source>
-        <translation type="unfinished"></translation>
+        <translation>Niets om te he&amp;rhalen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="547"/>
@@ -1057,7 +1057,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="588"/>
         <source>&amp;Snap to 1/64</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Spring naar 1/64</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="595"/>
@@ -1069,12 +1069,12 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="597"/>
         <source>Snap to &amp;1/48</source>
-        <translation type="unfinished"></translation>
+        <translation>Spring naar &amp;1/48</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="598"/>
         <source>Sn&amp;ap to 1/32</source>
-        <translation type="unfinished"></translation>
+        <translation>Spring n&amp;aar 1/32</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="605"/>
@@ -1086,12 +1086,12 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="607"/>
         <source>Snap to 1/&amp;24</source>
-        <translation type="unfinished"></translation>
+        <translation>Spring naar 1/&amp;24</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="608"/>
         <source>Sna&amp;p to 1/16</source>
-        <translation type="unfinished"></translation>
+        <translation>Sprin&amp;g naar 1/16</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="615"/>
@@ -1103,12 +1103,12 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="617"/>
         <source>Snap t&amp;o 1/12</source>
-        <translation type="unfinished"></translation>
+        <translation>Spring n&amp;aar 1/12</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="618"/>
         <source>Snap to 1/&amp;8</source>
-        <translation type="unfinished"></translation>
+        <translation>Spring naar 1/&amp;8</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="625"/>
@@ -1120,12 +1120,12 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="627"/>
         <source>Snap to &amp;3/16</source>
-        <translation type="unfinished"></translation>
+        <translation>Spring naar &amp;3/16</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="628"/>
         <source>Snap to 1/4</source>
-        <translation type="unfinished"></translation>
+        <translation>Spring naar 1/4</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="635"/>
@@ -1137,12 +1137,12 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="637"/>
         <source>Snap to 3/8</source>
-        <translation type="unfinished"></translation>
+        <translation>Spring naar 3/8</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="638"/>
         <source>Snap to 1/2</source>
-        <translation type="unfinished"></translation>
+        <translation>Spring naar 1/2</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="645"/>
@@ -1351,7 +1351,7 @@
         <location filename="../QMenuStrings.cpp" line="865"/>
         <location filename="../QMenuStrings.cpp" line="2398"/>
         <source>Cursor For&amp;ward and Select</source>
-        <translation type="unfinished"></translation>
+        <translation>Cursor &amp;Vooruit en Selecteren</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="872"/>
@@ -1450,7 +1450,7 @@
         <location filename="../QMenuStrings.cpp" line="2907"/>
         <location filename="../QMenuStrings.cpp" line="3061"/>
         <source>I/do</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1053"/>
@@ -1467,7 +1467,7 @@
         <location filename="../QMenuStrings.cpp" line="2916"/>
         <location filename="../QMenuStrings.cpp" line="3070"/>
         <source>I/do sharp</source>
-        <translation type="unfinished"></translation>
+        <translation>I/do kruis</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1062"/>
@@ -1484,7 +1484,7 @@
         <location filename="../QMenuStrings.cpp" line="2925"/>
         <location filename="../QMenuStrings.cpp" line="3079"/>
         <source>II/re flat</source>
-        <translation type="unfinished"></translation>
+        <translation>II/re mol</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1071"/>
@@ -1502,7 +1502,7 @@
         <location filename="../QMenuStrings.cpp" line="2934"/>
         <location filename="../QMenuStrings.cpp" line="3088"/>
         <source>II/re</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1080"/>
@@ -1519,7 +1519,7 @@
         <location filename="../QMenuStrings.cpp" line="2943"/>
         <location filename="../QMenuStrings.cpp" line="3097"/>
         <source>II/re sharp</source>
-        <translation type="unfinished"></translation>
+        <translation>II/re kruis</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1089"/>
@@ -1536,7 +1536,7 @@
         <location filename="../QMenuStrings.cpp" line="2952"/>
         <location filename="../QMenuStrings.cpp" line="3106"/>
         <source>III/mi flat</source>
-        <translation type="unfinished"></translation>
+        <translation>III/mi mol</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1098"/>
@@ -1553,7 +1553,7 @@
         <location filename="../QMenuStrings.cpp" line="2961"/>
         <location filename="../QMenuStrings.cpp" line="3115"/>
         <source>III/mi</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1107"/>
@@ -1571,7 +1571,7 @@
         <location filename="../QMenuStrings.cpp" line="2970"/>
         <location filename="../QMenuStrings.cpp" line="3124"/>
         <source>IV/fa</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1116"/>
@@ -1588,7 +1588,7 @@
         <location filename="../QMenuStrings.cpp" line="2979"/>
         <location filename="../QMenuStrings.cpp" line="3133"/>
         <source>IV/fa sharp</source>
-        <translation type="unfinished"></translation>
+        <translation>IV/fa kruis</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1125"/>
@@ -1605,7 +1605,7 @@
         <location filename="../QMenuStrings.cpp" line="2988"/>
         <location filename="../QMenuStrings.cpp" line="3142"/>
         <source>V/sol flat</source>
-        <translation type="unfinished"></translation>
+        <translation>V/sol mol</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1134"/>
@@ -1622,7 +1622,7 @@
         <location filename="../QMenuStrings.cpp" line="2997"/>
         <location filename="../QMenuStrings.cpp" line="3151"/>
         <source>V/sol</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1143"/>
@@ -1639,7 +1639,7 @@
         <location filename="../QMenuStrings.cpp" line="3006"/>
         <location filename="../QMenuStrings.cpp" line="3160"/>
         <source>V/sol sharp</source>
-        <translation type="unfinished"></translation>
+        <translation>V/sol kruis</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1152"/>
@@ -1656,7 +1656,7 @@
         <location filename="../QMenuStrings.cpp" line="3015"/>
         <location filename="../QMenuStrings.cpp" line="3169"/>
         <source>VI/la flat</source>
-        <translation type="unfinished"></translation>
+        <translation>VI/la mol</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1161"/>
@@ -1673,7 +1673,7 @@
         <location filename="../QMenuStrings.cpp" line="3024"/>
         <location filename="../QMenuStrings.cpp" line="3178"/>
         <source>VI/la</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1170"/>
@@ -1690,7 +1690,7 @@
         <location filename="../QMenuStrings.cpp" line="3033"/>
         <location filename="../QMenuStrings.cpp" line="3187"/>
         <source>VI/la sharp</source>
-        <translation type="unfinished"></translation>
+        <translation>VI/la kruis</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1179"/>
@@ -1707,7 +1707,7 @@
         <location filename="../QMenuStrings.cpp" line="3042"/>
         <location filename="../QMenuStrings.cpp" line="3196"/>
         <source>VII/ti flat</source>
-        <translation type="unfinished"></translation>
+        <translation>VII/ti mol</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1188"/>
@@ -1724,7 +1724,7 @@
         <location filename="../QMenuStrings.cpp" line="3051"/>
         <location filename="../QMenuStrings.cpp" line="3205"/>
         <source>VII/ti</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1197"/>
@@ -2104,13 +2104,13 @@
         <location filename="../QMenuStrings.cpp" line="2187"/>
         <source>&amp;lt;</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2196"/>
         <source>&amp;gt;</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="688"/>
@@ -2157,7 +2157,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="727"/>
         <source>&amp;Jog Right</source>
-        <translation type="unfinished"></translation>
+        <translation>Tik&amp;je naar rechts</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="736"/>
@@ -2184,7 +2184,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="756"/>
         <source>Resc&amp;ale</source>
-        <translation type="unfinished"></translation>
+        <translation>Hersch&amp;alen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="757"/>
@@ -2251,7 +2251,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="815"/>
         <source>&amp;Convert</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Converteren</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="816"/>
@@ -2320,7 +2320,7 @@
         <location filename="../QMenuStrings.cpp" line="1027"/>
         <location filename="../QMenuStrings.cpp" line="3987"/>
         <source>S&amp;plit</source>
-        <translation type="unfinished"></translation>
+        <translation>O&amp;psplitsen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1036"/>
@@ -2413,7 +2413,7 @@
         <location filename="../QMenuStrings.cpp" line="962"/>
         <location filename="../QMenuStrings.cpp" line="2537"/>
         <source>S&amp;olo</source>
-        <translation type="unfinished"></translation>
+        <translation>S&amp;olo</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="963"/>
@@ -2502,27 +2502,27 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="1740"/>
         <source>&amp;1 Input</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1741"/>
         <source>&amp;2 Inputs</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1742"/>
         <source>&amp;4 Inputs</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1743"/>
         <source>&amp;8 Inputs</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1744"/>
         <source>1&amp;6 Inputs</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1745"/>
@@ -2537,32 +2537,32 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="1747"/>
         <source>&amp;2 Submasters</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1748"/>
         <source>&amp;4 Submasters</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1749"/>
         <source>&amp;8 Submasters</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1750"/>
         <source>Show &amp;Audio Faders</source>
-        <translation type="unfinished"></translation>
+        <translation>Toon niet-&amp;Audio faders</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1751"/>
         <source>Show &amp;Synth Faders</source>
-        <translation type="unfinished"></translation>
+        <translation>Toon niet-&amp;Synth faders</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1752"/>
         <source>Show Audio Su&amp;bmasters</source>
-        <translation type="unfinished"></translation>
+        <translation>Toon niet Audio Su&amp;bmasters</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1753"/>
@@ -2577,18 +2577,18 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="1768"/>
         <source>Switch to Inserting Tool</source>
-        <translation type="unfinished"></translation>
+        <translation>Wissel naar Invoegen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1769"/>
         <source>Collapse Rests After Erase</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwijder rusten na wissen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1781"/>
         <location filename="../QMenuStrings.cpp" line="3537"/>
         <source>&amp;Print...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Afdrukken...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1780"/>
@@ -2613,12 +2613,12 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="1864"/>
         <source>&amp;Move to Staff Above</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Naar bovenliggende notenbalk verplaatsen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1865"/>
         <source>Move to Staff &amp;Below</source>
-        <translation type="unfinished"></translation>
+        <translation>Naar &amp;onderliggende notenbalk verplaatsen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1866"/>
@@ -2723,7 +2723,7 @@
         <location filename="../QMenuStrings.cpp" line="1944"/>
         <location filename="../QMenuStrings.cpp" line="3817"/>
         <source>&amp;Convert Notation for...</source>
-        <translation type="unfinished"></translation>
+        <translation>Notatie &amp;converteren voor...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1945"/>
@@ -2734,7 +2734,7 @@
         <location filename="../QMenuStrings.cpp" line="1952"/>
         <source>Ctrl+Alt+1</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1954"/>
@@ -2749,37 +2749,37 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="1956"/>
         <source>Add &amp;Accent</source>
-        <translation type="unfinished"></translation>
+        <translation>Voeg &amp;Accent toe</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1957"/>
         <source>Add T&amp;enuto</source>
-        <translation type="unfinished"></translation>
+        <translation>Voeg &amp;Tenuto toe</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1958"/>
         <source>Add Sta&amp;ccato</source>
-        <translation type="unfinished"></translation>
+        <translation>Voeg &amp;Sta&amp;ccato toe</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1959"/>
         <source>Add &amp;Staccatissimo</source>
-        <translation type="unfinished"></translation>
+        <translation>Voeg &amp;Staccatissimo toe</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1960"/>
         <source>Add &amp;Marcato</source>
-        <translation type="unfinished"></translation>
+        <translation>Voeg &amp;Marcato toe</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1963"/>
         <source>Add S&amp;forzando</source>
-        <translation type="unfinished"></translation>
+        <translation>Voeg S&amp;forzando toe</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1964"/>
         <source>Add R&amp;inforzando</source>
-        <translation type="unfinished"></translation>
+        <translation>Voeg R&amp;inforzando toe</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1965"/>
@@ -2794,32 +2794,32 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="1967"/>
         <source>Add M&amp;ordent</source>
-        <translation type="unfinished"></translation>
+        <translation>Voeg m&amp;ordent toe</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1968"/>
         <source>Add I&amp;nverted Mordent</source>
-        <translation type="unfinished"></translation>
+        <translation>Voeg omgekeerd morde&amp;nt toe</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1969"/>
         <source>Add Long Mordent</source>
-        <translation type="unfinished"></translation>
+        <translation>Voeg lang mordent toe</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1970"/>
         <source>Add Lon&amp;g Inverted Mordent</source>
-        <translation type="unfinished"></translation>
+        <translation>Add lan&amp;ge pralltriller toe</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1971"/>
         <source>Add &amp;Up-Bow</source>
-        <translation type="unfinished"></translation>
+        <translation>Add &amp;Opstreek toe</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1972"/>
         <source>Add &amp;Down-Bow</source>
-        <translation type="unfinished"></translation>
+        <translation>Add &amp;Afstreek toe</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1973"/>
@@ -2829,7 +2829,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="1974"/>
         <source>Add &amp;Pause</source>
-        <translation type="unfinished"></translation>
+        <translation>Add &amp;Pauze toe</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1975"/>
@@ -2854,7 +2854,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="1979"/>
         <source>&amp;Remove Ornament...</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwijde&amp;r versiering...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1980"/>
@@ -2924,27 +2924,27 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2049"/>
         <source>&amp;1</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2050"/>
         <source>&amp;2</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2051"/>
         <source>&amp;3</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2052"/>
         <source>&amp;4</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2053"/>
         <source>&amp;5</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2054"/>
@@ -2955,7 +2955,7 @@
         <location filename="../QMenuStrings.cpp" line="2061"/>
         <source>/</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2063"/>
@@ -2976,22 +2976,22 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2070"/>
         <source>Respell with Dou&amp;ble Flat</source>
-        <translation type="unfinished"></translation>
+        <translation>Forceer du&amp;bbelmol</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2071"/>
         <source>Respell with &amp;Flat</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Forceer mol</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2072"/>
         <source>Respell with &amp;Natural</source>
-        <translation type="unfinished"></translation>
+        <translation>Forceer herstelli&amp;ngsteken</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2073"/>
         <source>Respell with &amp;Sharp</source>
-        <translation type="unfinished"></translation>
+        <translation>Forceer krui&amp;s</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2074"/>
@@ -3011,12 +3011,12 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2077"/>
         <source>Stem &amp;Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Stok om&amp;hoog</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2086"/>
         <source>Stem &amp;Down</source>
-        <translation type="unfinished"></translation>
+        <translation>Stok om&amp;laag</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2095"/>
@@ -3031,7 +3031,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2097"/>
         <source>&amp;Make Chord</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Maak Akkoord</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2098"/>
@@ -3047,7 +3047,7 @@
         <location filename="../QMenuStrings.cpp" line="2114"/>
         <source>Ctrl+Alt+B</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2116"/>
@@ -3057,7 +3057,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2125"/>
         <source>Tupl&amp;et...</source>
-        <translation type="unfinished"></translation>
+        <translation>Multipl&amp;et...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2134"/>
@@ -3067,7 +3067,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2143"/>
         <source>U&amp;ntuplet</source>
-        <translation type="unfinished"></translation>
+        <translation>O&amp;nt-multiplet</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2144"/>
@@ -3077,7 +3077,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2153"/>
         <source>Add P&amp;hrasing Slur</source>
-        <translation type="unfinished"></translation>
+        <translation>Voeg &amp;fraseringsboog toe</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2162"/>
@@ -3117,7 +3117,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2177"/>
         <source>&amp;Restore Tie Position</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Herstel boogpositie</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2178"/>
@@ -3137,12 +3137,12 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2189"/>
         <source>Add &amp;Decescendo</source>
-        <translation type="unfinished"></translation>
+        <translation>Toevoegen &amp;descrescendo</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2198"/>
         <source>Add Trill With &amp;Line</source>
-        <translation type="unfinished"></translation>
+        <translation>Toevoegen triller met &amp;lijn</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2199"/>
@@ -3152,7 +3152,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2200"/>
         <source>&amp;Add Double-Octave Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Dubbel oct&amp;aaf omhoog (15ma) toevoegen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2201"/>
@@ -3167,7 +3167,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2203"/>
         <source>Add Double &amp;Octave Down</source>
-        <translation type="unfinished"></translation>
+        <translation>Dubbel &amp;octaaf omlaag (15mb) toevoegen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2205"/>
@@ -3184,7 +3184,7 @@
         <location filename="../QMenuStrings.cpp" line="3487"/>
         <source>Ctrl+N</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2215"/>
@@ -3240,12 +3240,12 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2322"/>
         <source>Ve&amp;locities</source>
-        <translation type="unfinished"></translation>
+        <translation>Sne&amp;lheden</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2341"/>
         <source>Set Event &amp;Velocities</source>
-        <translation type="unfinished"></translation>
+        <translation>Stel gebeurtenis-&amp;velocities in</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2342"/>
@@ -3339,7 +3339,7 @@
         <location filename="../QMenuStrings.cpp" line="892"/>
         <location filename="../QMenuStrings.cpp" line="2443"/>
         <source>Pre&amp;vious Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Vorig segment</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="901"/>
@@ -3367,42 +3367,42 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2638"/>
         <source>&amp;Double Whole Note</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Brevis</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2647"/>
         <source>&amp;Whole Note</source>
-        <translation type="unfinished"></translation>
+        <translation>H&amp;ele noot</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2656"/>
         <source>&amp;Half Note</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Halve noot</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2665"/>
         <source>&amp;Quarter Note</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Kwartnoot</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2674"/>
         <source>&amp;Eighth Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Achtst&amp;e noot</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2683"/>
         <source>&amp;Sixteenth note</source>
-        <translation type="unfinished"></translation>
+        <translation>Ze&amp;stiende noot</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2692"/>
         <source>&amp;Thirty-Second Note</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Tweeendertigste noot</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2701"/>
         <source>Sixty-&amp;Fourth Note</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Vierenzestigste noot</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2710"/>
@@ -3447,7 +3447,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2606"/>
         <source>F&amp;lat</source>
-        <translation type="unfinished"></translation>
+        <translation>Mo&amp;l</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2607"/>
@@ -3817,42 +3817,42 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3266"/>
         <source>Double Whole Note (5)</source>
-        <translation type="unfinished"></translation>
+        <translation>Brevis (5)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3272"/>
         <source>Whole Note (1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Hele noot (1)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3278"/>
         <source>Half Note (2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Halve noot (2)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3284"/>
         <source>Quarter Note (4)</source>
-        <translation type="unfinished"></translation>
+        <translation>Kwartnoot (4)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3290"/>
         <source>Eighth Note (8)</source>
-        <translation type="unfinished"></translation>
+        <translation>Achtste noot (8)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3296"/>
         <source>Sixteenth Note (6)</source>
-        <translation type="unfinished"></translation>
+        <translation>Zestiende noot (6)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3302"/>
         <source>Thirty-Second Note (3)</source>
-        <translation type="unfinished"></translation>
+        <translation>Tweeendertigste noot (3)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3308"/>
         <source>Sixty-Fourth Note (0)</source>
-        <translation type="unfinished"></translation>
+        <translation>Vierenzestigste noot (0)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3314"/>
@@ -3867,7 +3867,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3326"/>
         <source>Dotted Half Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Halve noot met punt</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3332"/>
@@ -4057,17 +4057,17 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3476"/>
         <source>Natural</source>
-        <translation type="unfinished"></translation>
+        <translation>Herstellingsteken</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3477"/>
         <source>Double Sharp</source>
-        <translation type="unfinished"></translation>
+        <translation>Dubbelkruis</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3478"/>
         <source>Double Flat</source>
-        <translation type="unfinished"></translation>
+        <translation>Dubbelmol</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3480"/>
@@ -4157,7 +4157,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3525"/>
         <source>Save &amp;As...</source>
-        <translation type="unfinished"></translation>
+        <translation>Opslaan &amp;als...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3534"/>
@@ -4192,22 +4192,22 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3613"/>
         <source>Cut &amp;Range</source>
-        <translation type="unfinished"></translation>
+        <translation>Be&amp;reik knippen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3622"/>
         <source>Cop&amp;y Range</source>
-        <translation type="unfinished"></translation>
+        <translation>Bereik kopi&amp;ëren</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3631"/>
         <source>Pa&amp;ste Range</source>
-        <translation type="unfinished"></translation>
+        <translation>Berei&amp;k plakken</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3640"/>
         <source>&amp;Insert Range...</source>
-        <translation type="unfinished"></translation>
+        <translation>Voeg bereik &amp;in...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3649"/>
@@ -4217,12 +4217,12 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3660"/>
         <source>Document P&amp;roperties...</source>
-        <translation type="unfinished"></translation>
+        <translation>Document ei&amp;genschappen...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3697"/>
         <source>&amp;Open Tempo and Time Signature Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Open tempo- en maatsoort-editor</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3698"/>
@@ -4327,7 +4327,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3797"/>
         <source>R&amp;elabel...</source>
-        <translation type="unfinished"></translation>
+        <translation>H&amp;erbenoem...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3807"/>
@@ -4337,7 +4337,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3818"/>
         <source>Stretch &amp;or Squash...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Oprekken of samenpersen...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="686"/>
@@ -4356,7 +4356,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3839"/>
         <source>Join</source>
-        <translation type="unfinished"></translation>
+        <translation>Samenvoegen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3848"/>
@@ -4511,7 +4511,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3492"/>
         <source>Import &amp;X11 Rosegarden file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Importeer &amp;X11 Rosegarden bestand...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3497"/>
@@ -4521,7 +4521,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3731"/>
         <source>MIDI Mi&amp;xer</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI-mi&amp;xer</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3671"/>
@@ -4531,7 +4531,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3501"/>
         <source>Export &amp;LilyPond file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Exporteren &amp;LilyPond-bestand...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3672"/>
@@ -4542,7 +4542,7 @@
         <location filename="../QMenuStrings.cpp" line="3679"/>
         <source>T</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3681"/>
@@ -4583,13 +4583,13 @@
         <location filename="../QMenuStrings.cpp" line="2528"/>
         <location filename="../QMenuStrings.cpp" line="4091"/>
         <source>Rewind to Beginning</source>
-        <translation type="unfinished"></translation>
+        <translation>Terugspoelen naar begin</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2535"/>
         <location filename="../QMenuStrings.cpp" line="4100"/>
         <source>Fast Forward to End</source>
-        <translation type="unfinished"></translation>
+        <translation>Doorspoelen naar het einde</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1531"/>
@@ -6156,13 +6156,13 @@
         <location filename="../InstrumentStrings.cpp" line="374"/>
         <source>Cb</source>
         <comment>note name</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="377"/>
         <source>Db</source>
         <comment>note name</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="379"/>
@@ -6174,19 +6174,19 @@
         <location filename="../InstrumentStrings.cpp" line="381"/>
         <source>E#</source>
         <comment>note name</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="382"/>
         <source>Fb</source>
         <comment>note name</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="387"/>
         <source>Ab</source>
         <comment>note name</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="390"/>
@@ -6198,7 +6198,7 @@
         <location filename="../InstrumentStrings.cpp" line="392"/>
         <source>B#</source>
         <comment>note name</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="303"/>
@@ -6376,7 +6376,7 @@
     <message>
         <location filename="../InstrumentStrings.cpp" line="355"/>
         <source>Mezzosoprano</source>
-        <translation type="unfinished"></translation>
+        <translation>Mezzosopraansleutel</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="356"/>
@@ -6386,7 +6386,7 @@
     <message>
         <location filename="../InstrumentStrings.cpp" line="358"/>
         <source>Baritone</source>
-        <translation type="unfinished"></translation>
+        <translation>Baritonsleutel</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="360"/>
@@ -6466,7 +6466,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="40"/>
         <source>General MIDI</source>
-        <translation type="unfinished"></translation>
+        <translation>Algemeen MIDI</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="41"/>
@@ -7416,7 +7416,7 @@
         <location filename="../AutoloadStrings.cpp" line="246"/>
         <location filename="../AutoloadStrings.cpp" line="247"/>
         <source> </source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="248"/>
@@ -7649,7 +7649,7 @@
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="521"/>
         <location filename="../AutoloadStrings.cpp" line="305"/>
         <source>Synth plugin</source>
-        <translation type="unfinished"></translation>
+        <translation>Synth-plugin</translation>
     </message>
     <message>
         <location filename="../../src/base/Studio.cpp" line="53"/>
@@ -9807,7 +9807,7 @@
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="684"/>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="806"/>
         <source>%1. %2</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="91"/>
@@ -9885,7 +9885,7 @@
         <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="36"/>
         <source>D#</source>
         <comment>note name</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="37"/>
@@ -9934,7 +9934,7 @@
         <location filename="../InstrumentStrings.cpp" line="388"/>
         <source>A#</source>
         <comment>note name</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="40"/>
@@ -10078,7 +10078,7 @@
     <message>
         <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="64"/>
         <source>Bar %1:</source>
-        <translation type="unfinished"></translation>
+        <translation>Maat %1:</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="66"/>
@@ -10093,12 +10093,12 @@
     <message>
         <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="121"/>
         <source>minor</source>
-        <translation type="unfinished"></translation>
+        <translation>mineur</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="122"/>
         <source>major</source>
-        <translation type="unfinished"></translation>
+        <translation>majeur</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="297"/>
@@ -15198,12 +15198,12 @@ Would you like to use
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="257"/>
         <source>Printing %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Afdrukken %1...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="266"/>
         <source>Previewing %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Voorbeeld afspelen %1...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="273"/>
@@ -23168,6 +23168,926 @@ Wilt u het pad nu instellen?</translation>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1159"/>
         <source>Display time to end</source>
         <translation>Toon resterende tijd</translation>
+    </message>
+    <message>
+        <source>Rosegarden</source>
+        <translation type="obsolete">Rosegarden</translation>
+    </message>
+    <message>
+        <source>&amp;Segment</source>
+        <translation type="obsolete">&amp;Segment</translation>
+    </message>
+    <message>
+        <source>Local &amp;Cursor</source>
+        <translation type="obsolete">Lokale &amp;cursor</translation>
+    </message>
+    <message>
+        <source>Cursor &amp;Back</source>
+        <translation type="obsolete">Cursor &amp;Terug</translation>
+    </message>
+    <message>
+        <source>Cursor &amp;Forward</source>
+        <translation type="obsolete">Cursor &amp;Vooruit</translation>
+    </message>
+    <message>
+        <source>Cursor For&amp;ward Bar</source>
+        <translation type="obsolete">Cursor Voor&amp;uit Balk</translation>
+    </message>
+    <message>
+        <source>Cursor to St&amp;art</source>
+        <translation type="obsolete">Cursor naar &amp;begin</translation>
+    </message>
+    <message>
+        <source>Cursor to &amp;End</source>
+        <translation type="obsolete">Cursor naar &amp;eind</translation>
+    </message>
+    <message>
+        <source>II</source>
+        <translation type="obsolete">II</translation>
+    </message>
+    <message>
+        <source>III</source>
+        <translation type="obsolete">III</translation>
+    </message>
+    <message>
+        <source>IV</source>
+        <translation type="obsolete">IV</translation>
+    </message>
+    <message>
+        <source>V</source>
+        <translation type="obsolete">V</translation>
+    </message>
+    <message>
+        <source>VI</source>
+        <translation type="obsolete">VI</translation>
+    </message>
+    <message>
+        <source>VII</source>
+        <translation type="obsolete">VII</translation>
+    </message>
+    <message>
+        <source>Du&amp;ration Factor</source>
+        <translation type="obsolete">Duu&amp;rfactor</translation>
+    </message>
+    <message>
+        <source>Add Event Ruler</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Cursor &amp;Up Staff</source>
+        <translation type="obsolete">Cursor balk om&amp;hoog</translation>
+    </message>
+    <message>
+        <source>Cursor &amp;Down Staff</source>
+        <translation type="obsolete">Cursor balk om&amp;laag</translation>
+    </message>
+    <message>
+        <source>Cursor Pre&amp;vious Segment</source>
+        <translation type="obsolete">Cursor v&amp;orig segment</translation>
+    </message>
+    <message>
+        <source>Cursor Ne&amp;xt Segment</source>
+        <translation type="obsolete">Cursor &amp;volgend segment</translation>
+    </message>
+    <message>
+        <source>I</source>
+        <translation type="obsolete">I</translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation type="obsolete">Verwijder</translation>
+    </message>
+    <message>
+        <source>0</source>
+        <translation type="obsolete">0</translation>
+    </message>
+    <message>
+        <source>3</source>
+        <translation type="obsolete">3</translation>
+    </message>
+    <message>
+        <source>6</source>
+        <translation type="obsolete">6</translation>
+    </message>
+    <message>
+        <source>4</source>
+        <translation type="obsolete">4</translation>
+    </message>
+    <message>
+        <source>2</source>
+        <translation type="obsolete">2</translation>
+    </message>
+    <message>
+        <source>1</source>
+        <translation type="obsolete">1</translation>
+    </message>
+    <message>
+        <source>5</source>
+        <translation type="obsolete">5</translation>
+    </message>
+    <message>
+        <source>Left</source>
+        <translation type="obsolete">Links</translation>
+    </message>
+    <message>
+        <source>Right</source>
+        <translation type="obsolete">Rechts</translation>
+    </message>
+    <message>
+        <source>Se&amp;gments</source>
+        <translation type="obsolete">&amp;Segmenten</translation>
+    </message>
+    <message>
+        <source>C</source>
+        <translation type="obsolete">C</translation>
+    </message>
+    <message>
+        <source>C#</source>
+        <translation type="obsolete">C#</translation>
+    </message>
+    <message>
+        <source>D</source>
+        <translation type="obsolete">D</translation>
+    </message>
+    <message>
+        <source>Eb</source>
+        <translation type="obsolete">Eb</translation>
+    </message>
+    <message>
+        <source>E</source>
+        <translation type="obsolete">E</translation>
+    </message>
+    <message>
+        <source>F</source>
+        <translation type="obsolete">F</translation>
+    </message>
+    <message>
+        <source>F#</source>
+        <translation type="obsolete">F#</translation>
+    </message>
+    <message>
+        <source>G</source>
+        <translation type="obsolete">G</translation>
+    </message>
+    <message>
+        <source>G#</source>
+        <translation type="obsolete">G#</translation>
+    </message>
+    <message>
+        <source>A</source>
+        <translation type="obsolete">A</translation>
+    </message>
+    <message>
+        <source>Bb</source>
+        <translation type="obsolete">Bb</translation>
+    </message>
+    <message>
+        <source>B</source>
+        <translation type="obsolete">B</translation>
+    </message>
+    <message>
+        <source>Mute</source>
+        <translation type="obsolete">Dempen</translation>
+    </message>
+    <message>
+        <source>Apply</source>
+        <translation type="obsolete">Toepassen</translation>
+    </message>
+    <message>
+        <source>Reset</source>
+        <translation type="obsolete">Reset</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation type="obsolete">Sluiten</translation>
+    </message>
+    <message>
+        <source>Unsaved Changes</source>
+        <translation type="obsolete">Onopgeslagen wijzigingen</translation>
+    </message>
+    <message>
+        <source>Configure Rosegarden</source>
+        <extracomment>QDialog(parent) //, tr(&quot;Configure Rosegarden&quot;), name)</extracomment>
+        <translation type="obsolete">Rosegarden instellen</translation>
+    </message>
+    <message>
+        <source>%1 Controller %2 %3</source>
+        <translation type="obsolete">%1 Controller %2 %3</translation>
+    </message>
+    <message>
+        <source>Pitch Bend</source>
+        <translation type="obsolete">Toonhoogtebuiging</translation>
+    </message>
+    <message>
+        <source>Unsupported Event Type</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>VIII</source>
+        <translation type="obsolete">VIII</translation>
+    </message>
+    <message>
+        <source>%1 flat</source>
+        <translation type="obsolete">%1 mol</translation>
+    </message>
+    <message>
+        <source>%1 sharp</source>
+        <translation type="obsolete">%1 kruis</translation>
+    </message>
+    <message>
+        <source>&amp;Insert Note</source>
+        <translation type="obsolete">&amp;Voeg Noot In</translation>
+    </message>
+    <message>
+        <source>&amp;Upper Octave</source>
+        <translation type="obsolete">Octaaf Om&amp;hoog</translation>
+    </message>
+    <message>
+        <source>&amp;Lower Octave</source>
+        <translation type="obsolete">Octaaf Om&amp;laag</translation>
+    </message>
+    <message>
+        <source>Estimated time signature shown</source>
+        <translation type="obsolete">Geschatte maatsoort getoond</translation>
+    </message>
+    <message>
+        <source>Halving durations...</source>
+        <translation type="obsolete">Lengtes halveren...</translation>
+    </message>
+    <message>
+        <source>Doubling durations...</source>
+        <translation type="obsolete">Lengtes verdubbelen</translation>
+    </message>
+    <message>
+        <source>Rescaling...</source>
+        <translation type="obsolete">&amp;Herschalen...</translation>
+    </message>
+    <message>
+        <source>Transpose</source>
+        <translation type="obsolete">Transponeren</translation>
+    </message>
+    <message>
+        <source>By number of semitones: </source>
+        <translation type="obsolete">Per aantal halve toonsafstanden:</translation>
+    </message>
+    <message>
+        <source>Transposing...</source>
+        <translation type="obsolete">Transponeren...</translation>
+    </message>
+    <message>
+        <source>Transposing up one semitone...</source>
+        <translation type="obsolete">Een semitoon omhoog transponeren...</translation>
+    </message>
+    <message>
+        <source>Transposing up one octave...</source>
+        <translation type="obsolete">Een octaaf omhoog transponeren...</translation>
+    </message>
+    <message>
+        <source>Transposing down one semitone...</source>
+        <translation type="obsolete">Een semitoon omlaag transponeren...</translation>
+    </message>
+    <message>
+        <source>Transposing down one octave...</source>
+        <translation type="obsolete">Een octaaf omlaag transponeren...</translation>
+    </message>
+    <message>
+        <source>Inverting...</source>
+        <translation type="obsolete">Inverteren...</translation>
+    </message>
+    <message>
+        <source>Retrograding...</source>
+        <translation type="obsolete">Retrograderen...</translation>
+    </message>
+    <message>
+        <source>Retrograde inverting...</source>
+        <translation type="obsolete">Retrograde inverteren...</translation>
+    </message>
+    <message>
+        <source>Jogging left...</source>
+        <translation type="obsolete">Naar links schuiven...</translation>
+    </message>
+    <message>
+        <source>Jogging right...</source>
+        <translation type="obsolete">Naar rechts schuiven...</translation>
+    </message>
+    <message>
+        <source>Normal</source>
+        <translation type="obsolete">Normaal</translation>
+    </message>
+    <message>
+        <source>Matrix</source>
+        <translation type="obsolete">Matrix</translation>
+    </message>
+    <message>
+        <source>Choose Text Encoding</source>
+        <translation type="obsolete">Kies tekstcodering</translation>
+    </message>
+    <message>
+        <source>Latency</source>
+        <translation type="obsolete">Vertraging</translation>
+    </message>
+    <message>
+        <source>JACK latency</source>
+        <translation type="obsolete">JACK vertraging</translation>
+    </message>
+    <message>
+        <source>JACK playback latency (in ms)</source>
+        <translation type="obsolete">JACK afspeel vertraging (in ms)</translation>
+    </message>
+    <message>
+        <source>JACK record latency (in ms)</source>
+        <translation type="obsolete">JACK opneem vertraging (in ms)</translation>
+    </message>
+    <message>
+        <source>Fetch JACK latencies</source>
+        <translation type="obsolete">JACK vertragingen bepalen</translation>
+    </message>
+    <message>
+        <source>JACK Latency</source>
+        <translation type="obsolete">JACK Vertraging</translation>
+    </message>
+    <message>
+        <source>Channel out</source>
+        <translation type="obsolete">Uitvoerkanaal</translation>
+    </message>
+    <message>
+        <source>Bars, beats, and divisions</source>
+        <translation type="obsolete">Maten, tikken en divisies</translation>
+    </message>
+    <message>
+        <source>Synth plugin </source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Instrument Parameters</source>
+        <translation type="obsolete">Instrumentparameters</translation>
+    </message>
+    <message>
+        <source>Couldn&apos;t apply piano roll layout</source>
+        <translation type="obsolete">Kan piano klavier layout niet toepassen</translation>
+    </message>
+    <message>
+        <source>  No selection </source>
+        <translation type="obsolete">Geen selectie</translation>
+    </message>
+    <message>
+        <source>Quantizing...</source>
+        <translation type="obsolete">Quantiseren...</translation>
+    </message>
+    <message>
+        <source>Collapsing notes...</source>
+        <translation type="obsolete">Inklappen noten...</translation>
+    </message>
+    <message>
+        <source>Making legato...</source>
+        <translation type="obsolete">Legato maken...</translation>
+    </message>
+    <message>
+        <source>Note: %1 (%2.%3s)</source>
+        <translation type="obsolete">Noot: %1 (%2.%3s)</translation>
+    </message>
+    <message>
+        <source>%1 (%2)</source>
+        <translation type="obsolete">%1 (%2)</translation>
+    </message>
+    <message>
+        <source>Time: %1 (%2.%3s)</source>
+        <translation type="obsolete">Tijd: %1 (%2.%3s)</translation>
+    </message>
+    <message>
+        <source>Cutting selection to clipboard...</source>
+        <translation type="obsolete">Selectie knippen en naar klembord brengen</translation>
+    </message>
+    <message>
+        <source>Copying selection to clipboard...</source>
+        <translation type="obsolete">Selectie naar klembord kopiëren...</translation>
+    </message>
+    <message>
+        <source>Clipboard is empty</source>
+        <translation type="obsolete">Klembord is leeg</translation>
+    </message>
+    <message>
+        <source>Inserting clipboard contents...</source>
+        <translation type="obsolete">Invoegen van klembord inhoud...</translation>
+    </message>
+    <message>
+        <source>Couldn&apos;t paste at this point</source>
+        <translation type="obsolete">Kan niet plakken op dit punt</translation>
+    </message>
+    <message>
+        <source>Deleting selection...</source>
+        <translation type="obsolete">Selectie verwijderen...</translation>
+    </message>
+    <message>
+        <source>Inserting note</source>
+        <translation type="obsolete">Noot invoegen...</translation>
+    </message>
+    <message>
+        <source>Unquantizing...</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>  Zoom:  </source>
+        <translation type="obsolete">  Detail:  </translation>
+    </message>
+    <message>
+        <source>%1%</source>
+        <translation type="obsolete">%1%</translation>
+    </message>
+    <message>
+        <source>Raising velocities...</source>
+        <translation type="obsolete">Verhogen snelheden...</translation>
+    </message>
+    <message>
+        <source>Lowering velocities...</source>
+        <translation type="obsolete">Verlagen snelheden...</translation>
+    </message>
+    <message>
+        <source>Setting Velocities...</source>
+        <translation type="obsolete">Instellen Snelheden...</translation>
+    </message>
+    <message>
+        <source>Percussion</source>
+        <translation type="obsolete">Slagwerk</translation>
+    </message>
+    <message>
+        <source> Chord </source>
+        <translation type="obsolete"> Akkoord</translation>
+    </message>
+    <message>
+        <source>Librarian</source>
+        <translation type="obsolete">Bibliothecaris</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="obsolete">Naam</translation>
+    </message>
+    <message>
+        <source>Email</source>
+        <translation type="obsolete">Email</translation>
+    </message>
+    <message>
+        <source>&lt;untitled&gt;</source>
+        <translation type="obsolete">&lt;naamloos&gt;</translation>
+    </message>
+    <message>
+        <source> Grid: </source>
+        <translation type="obsolete">Rooster:</translation>
+    </message>
+    <message>
+        <source>None</source>
+        <translation type="obsolete">Geen</translation>
+    </message>
+    <message>
+        <source>Unit</source>
+        <translation type="obsolete">Eenheid</translation>
+    </message>
+    <message>
+        <source>Beat</source>
+        <translation type="obsolete">Beat</translation>
+    </message>
+    <message>
+        <source>Bar</source>
+        <translation type="obsolete">Maat</translation>
+    </message>
+    <message>
+        <source> Velocity: </source>
+        <translation type="obsolete"> Velocity: </translation>
+    </message>
+    <message>
+        <source> Quantize: </source>
+        <translation type="obsolete">Quantiseer:</translation>
+    </message>
+    <message>
+        <source>Set Event Velocities</source>
+        <translation type="obsolete">Stel Gebeurtenis Snelheden In</translation>
+    </message>
+    <message>
+        <source>Trigger Segment</source>
+        <translation type="obsolete">Trigger segment</translation>
+    </message>
+    <message>
+        <source>Remove Triggers</source>
+        <translation type="obsolete">Verwijder triggers</translation>
+    </message>
+    <message>
+        <source>Can&apos;t insert note: No grid duration selected</source>
+        <translation type="obsolete">Kan noot niet invoegen: Geen roosterlengte geselecteerd</translation>
+    </message>
+</context>
+<context>
+    <name>Rosegarden::NewNotationView</name>
+    <message>
+        <source>Note &amp;Font</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Si&amp;ze</source>
+        <translation type="obsolete">Gro&amp;otte</translation>
+    </message>
+    <message>
+        <source>S&amp;pacing</source>
+        <translation type="obsolete">S&amp;patiëring</translation>
+    </message>
+    <message>
+        <source>  Font:  </source>
+        <translation type="obsolete">  Lettertype:   </translation>
+    </message>
+    <message>
+        <source>Unknown font &quot;%1&quot;, using default</source>
+        <translation type="obsolete">Onbekend lettertype &quot;%1&quot;, standaard wordt gebruikt</translation>
+    </message>
+    <message>
+        <source>  Size:  </source>
+        <translation type="obsolete">  Grootte:   </translation>
+    </message>
+    <message>
+        <source>  Spacing:  </source>
+        <translation type="obsolete">Spatiëring:</translation>
+    </message>
+    <message>
+        <source>LilyPond Preview Options</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>LilyPond preview options</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Export failed.  The file could not be opened for writing.</source>
+        <translation type="obsolete">Exporteren mislukt. Het bestand kon niet geopend worden voor schrijven.</translation>
+    </message>
+    <message>
+        <source>Unknown font action %1</source>
+        <translation type="obsolete">Onbekende lettertype actie %1</translation>
+    </message>
+    <message>
+        <source>Unknown font size action %1</source>
+        <translation type="obsolete">Onbekende lettertype grootte actie %1</translation>
+    </message>
+    <message>
+        <source>Unknown spacing action %1</source>
+        <translation type="obsolete">Onbekende spatiëring actie %1</translation>
+    </message>
+    <message>
+        <source>Can&apos;t paste multiple Segments into one</source>
+        <translation type="obsolete">Kan niet meerdere Segmenten in elkaar plakken</translation>
+    </message>
+    <message>
+        <source>Rosegarden</source>
+        <translation type="obsolete">Rosegarden</translation>
+    </message>
+    <message>
+        <source>Couldn&apos;t paste at this point.</source>
+        <translation type="obsolete">Kan niet plakken op dit punt.</translation>
+    </message>
+    <message>
+        <source>Clipboard is empty</source>
+        <translation type="obsolete">Klembord is leeg</translation>
+    </message>
+    <message>
+        <source>Inserting clipboard contents...</source>
+        <translation type="obsolete">Invoegen van klembord inhoud...</translation>
+    </message>
+    <message>
+        <source>Raising velocities...</source>
+        <translation type="obsolete">Verhogen snelheden...</translation>
+    </message>
+    <message>
+        <source>Lowering velocities...</source>
+        <translation type="obsolete">Verlagen snelheden...</translation>
+    </message>
+    <message>
+        <source>Set Event Velocities</source>
+        <translation type="obsolete">Stel Gebeurtenis Snelheden In</translation>
+    </message>
+    <message>
+        <source>Setting Velocities...</source>
+        <translation type="obsolete">Instellen Snelheden...</translation>
+    </message>
+    <message>
+        <source>Unknown note insert action %1</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Inserting note</source>
+        <translation type="obsolete">Noot invoegen...</translation>
+    </message>
+    <message>
+        <source>Ornament track %1 bar %2</source>
+        <translation type="obsolete">Versiering spoor %1 maat %2</translation>
+    </message>
+    <message>
+        <source>Ornament bar %1</source>
+        <translation type="obsolete">Versiering maat %1  </translation>
+    </message>
+    <message>
+        <source>Make Ornament</source>
+        <translation type="obsolete">Maak versiering</translation>
+    </message>
+    <message>
+        <source>Use Ornament</source>
+        <translation type="obsolete">Gebruik versiering</translation>
+    </message>
+    <message>
+        <source>Remove Ornaments</source>
+        <translation type="obsolete">Verwijder versieringen</translation>
+    </message>
+    <message>
+        <source>Estimated key signature shown</source>
+        <translation type="obsolete">Geschatte maatsoort wordt getoond</translation>
+    </message>
+    <message>
+        <source>Sustain</source>
+        <translation type="obsolete">Sustain</translation>
+    </message>
+    <message>
+        <source>Estimated time signature shown</source>
+        <translation type="obsolete">Geschatte maatsoort getoond</translation>
+    </message>
+    <message>
+        <source>Can&apos;t insert note: No note duration selected</source>
+        <translation type="obsolete">Kan noot niet invoegen: Geen noot lengte geselecteerd</translation>
+    </message>
+    <message>
+        <source>Time: %1 (%2.%3s)</source>
+        <translation type="obsolete">Tijd: %1 (%2.%3s)</translation>
+    </message>
+    <message>
+        <source>Triplet</source>
+        <translation type="obsolete">Triool</translation>
+    </message>
+    <message>
+        <source>Chord</source>
+        <translation type="obsolete">Akkoord</translation>
+    </message>
+    <message>
+        <source>Grace</source>
+        <translation type="obsolete">Voorslag</translation>
+    </message>
+    <message>
+        <source>Transpose</source>
+        <translation type="obsolete">Transponeren</translation>
+    </message>
+    <message>
+        <source>By number of semitones: </source>
+        <translation type="obsolete">Per aantal halve toonsafstanden:</translation>
+    </message>
+    <message>
+        <source>Default duration factor</source>
+        <translation type="obsolete">Standaard duu&amp;rfactor</translation>
+    </message>
+    <message>
+        <source>None</source>
+        <translation type="obsolete">Geen</translation>
+    </message>
+    <message>
+        <source>Full</source>
+        <translation type="obsolete">Volledig</translation>
+    </message>
+    <message>
+        <source>Font size for printing (pt)</source>
+        <translation type="obsolete">Lettergrootte voor afdrukken (pt)</translation>
+    </message>
+    <message>
+        <source>Close track headers</source>
+        <translation type="obsolete">Sluit spoorheaders</translation>
+    </message>
+    <message>
+        <source>Starting...</source>
+        <translation type="obsolete">Starten...</translation>
+    </message>
+    <message>
+        <source>Preparing to print...</source>
+        <translation type="obsolete">Voorbereiden op afdrukken...</translation>
+    </message>
+    <message>
+        <source>Du&amp;ration Factor</source>
+        <translation type="obsolete">Duu&amp;rfactor</translation>
+    </message>
+    <message>
+        <source>  Ready.</source>
+        <translation type="obsolete">  Klaar.</translation>
+    </message>
+    <message>
+        <source>Laying out score...</source>
+        <translation type="obsolete">Partituur opmaken...</translation>
+    </message>
+    <message>
+        <source>Laying out staff %1...</source>
+        <translation type="obsolete">Balk %1 opmaken...</translation>
+    </message>
+    <message>
+        <source>Reconciling staffs...</source>
+        <translation type="obsolete">Balken verenigen...</translation>
+    </message>
+    <message>
+        <source>Sizing and allocating canvas...</source>
+        <translation type="obsolete">Canvas uitmeten en toewijzen...</translation>
+    </message>
+    <message>
+        <source>note</source>
+        <translation type="obsolete">noot</translation>
+    </message>
+    <message>
+        <source>rest</source>
+        <translation type="obsolete">rust</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Hidden annotations</source>
+        <translation type="obsolete">Verborgen annotaties</translation>
+    </message>
+    <message>
+        <source>Hidden LilyPond directives</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Unknown proportion action %1</source>
+        <translation type="obsolete">Onbekende proportie actie %1</translation>
+    </message>
+    <message>
+        <source>Unknown font size %1</source>
+        <translation type="obsolete">Onbekende lettertype grootte %1</translation>
+    </message>
+    <message>
+        <source>Printing...</source>
+        <translation type="obsolete">Afdrukken...</translation>
+    </message>
+    <message>
+        <source>Previewing...</source>
+        <translation type="obsolete">Voorbeeld afspelen...</translation>
+    </message>
+    <message>
+        <source>Printing LilyPond file...</source>
+        <translation>Afdrukken LilyPond-bestand...</translation>
+    </message>
+    <message>
+        <source>Failed to open a temporary file for LilyPond export.</source>
+        <translation type="obsolete">Tijdelijk bestand openen voor Lilypond export mislukt.</translation>
+    </message>
+    <message>
+        <source>Previewing LilyPond file...</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Exporting LilyPond file...</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Cutting selection to clipboard...</source>
+        <translation type="obsolete">Selectie knippen en naar klembord brengen</translation>
+    </message>
+    <message>
+        <source>Deleting selection...</source>
+        <translation type="obsolete">Selectie verwijderen...</translation>
+    </message>
+    <message>
+        <source>Copying selection to clipboard...</source>
+        <translation type="obsolete">Selectie naar klembord kopiëren...</translation>
+    </message>
+    <message>
+        <source>No note duration selected</source>
+        <translation type="obsolete">Geen nootduur geselecteerd</translation>
+    </message>
+    <message>
+        <source>No rest duration selected</source>
+        <translation type="obsolete">Geen rustduur geselecteerd</translation>
+    </message>
+    <message>
+        <source>No note or rest duration selected</source>
+        <translation type="obsolete">Geen noot of rustduur geselecteerd</translation>
+    </message>
+    <message>
+        <source>Quantizing...</source>
+        <translation type="obsolete">Quantiseren...</translation>
+    </message>
+    <message>
+        <source>Interpreting selection...</source>
+        <translation type="obsolete">Selectie interpreteren...</translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation type="obsolete">Verwijder</translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation type="obsolete">Wissen</translation>
+    </message>
+    <message>
+        <source>Processing...</source>
+        <translation type="obsolete">Verwerken...</translation>
+    </message>
+    <message>
+        <source>Advanced</source>
+        <translation type="obsolete">Geavanceerd</translation>
+    </message>
+    <message>
+        <source>Show advanced options</source>
+        <translation type="obsolete">Toon geavanceerde opties</translation>
+    </message>
+    <message>
+        <source>Show Advanced Options</source>
+        <translation type="obsolete">Toon geavanceerde opties</translation>
+    </message>
+    <message>
+        <source>Hide Advanced Options</source>
+        <translation type="obsolete">Verberg geavanceerde opties</translation>
+    </message>
+    <message>
+        <source>status</source>
+        <translation type="obsolete">status</translation>
+    </message>
+    <message>
+        <source>Export and import of Rosegarden Project files</source>
+        <translation type="obsolete">Export en import van Rosegarden projectbestanden</translation>
+    </message>
+    <message>
+        <source>&lt;h3&gt;Helper programs not found&lt;/h3&gt;&lt;p&gt;Rosegarden could not find one or more helper programs which it needs to provide some features.  The following features will not be available:&lt;/p&gt;</source>
+        <translation type="obsolete">&lt;h3&gt;Hulpprogramma&apos;s niet gevonden&lt;/h3&gt;&lt;p&gt;Rosegarden kon een of meer hulpprogramma&apos;s niet vinden die nodig zijn om bepaalde functionaliteit te verschaffen. De volgende functionaliteiten zullen niet beschikbaar zijn:&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;ul&gt;</source>
+        <translation type="obsolete">&lt;ul&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;li&gt;%1&lt;/li&gt;</source>
+        <translation type="obsolete">&lt;li&gt;%1&lt;/li&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;/ul&gt;</source>
+        <translation type="obsolete">&lt;/ul&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;To fix this, you should install the following additional programs:&lt;/p&gt;</source>
+        <translation type="obsolete">&lt;p&gt;Om dit te verhelpen installeert u de volgende programma&apos;s&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <source>Helper programs not found</source>
+        <translation type="obsolete">Hulpprogramma&apos;s niet gevonden</translation>
+    </message>
+    <message>
+        <source>C</source>
+        <translation type="obsolete">C</translation>
+    </message>
+    <message>
+        <source>C#</source>
+        <translation type="obsolete">C#</translation>
+    </message>
+    <message>
+        <source>D</source>
+        <translation type="obsolete">D</translation>
+    </message>
+    <message>
+        <source>Eb</source>
+        <translation type="obsolete">Eb</translation>
+    </message>
+    <message>
+        <source>E</source>
+        <translation type="obsolete">E</translation>
+    </message>
+    <message>
+        <source>F</source>
+        <translation type="obsolete">F</translation>
+    </message>
+    <message>
+        <source>F#</source>
+        <translation type="obsolete">F#</translation>
+    </message>
+    <message>
+        <source>G</source>
+        <translation type="obsolete">G</translation>
+    </message>
+    <message>
+        <source>G#</source>
+        <translation type="obsolete">G#</translation>
+    </message>
+    <message>
+        <source>A</source>
+        <translation type="obsolete">A</translation>
+    </message>
+    <message>
+        <source>Bb</source>
+        <translation type="obsolete">Bb</translation>
+    </message>
+    <message>
+        <source>B</source>
+        <translation type="obsolete">B</translation>
+    </message>
+    <message>
+        <source>Audio</source>
+        <translation type="obsolete">Audio</translation>
+    </message>
+    <message>
+        <source>You can&apos;t drop files into Rosegarden from this client.  Try using Konqueror instead.</source>
+        <translation type="obsolete">U kunt vanaf deze cliënt geen bestanden in Rosegarden droppen. Probeer het eens met Konqueror.</translation>
+    </message>
+    <message>
+        <source>Welcome!</source>
+        <translation type="obsolete">Welkom!</translation>
     </message>
 </context>
 </TS>
