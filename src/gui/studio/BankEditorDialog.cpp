@@ -1089,7 +1089,6 @@ BankEditorDialog::slotAddBank()
         m_treeWidget->setCurrentItem(newBankItem);
 
         slotApply();
-        selectDeviceItem(device);
     }
 }
 
@@ -1460,7 +1459,7 @@ BankEditorDialog::selectDeviceItem(MidiDevice *device)
 
             if (midiDevice == device) {
 //                 m_treeWidget->setSelected(child, true);
-                child->setSelected(true);
+                m_treeWidget->setCurrentItem(child);
                 return ;
             }
         }
