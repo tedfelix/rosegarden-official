@@ -507,6 +507,8 @@ PeakFile::writePeaks(unsigned short /*updatePercentage*/,
     m_bodyBytes = 0;
     m_positionPeakOfPeaks = 0;
 
+    int ct = 0;
+
     while (m_keepProcessing) {
         try {
             samples = m_audioFile->
@@ -521,19 +523,20 @@ PeakFile::writePeaks(unsigned short /*updatePercentage*/,
         // then break out
         //
         if (samples.length() == 0 ||
-                samples.length() < (m_blockSize * m_audioFile->getChannels()
-                                    * bytes))
+            samples.length() < (m_blockSize * m_audioFile->getChannels()
+                                * bytes))
             break;
 
         byteCount += samples.length();
 
-        emit setValue((int)(double(byteCount) /
-                               double(apprxTotalBytes) * 100.0));
-        std::cout << "peak file is emitting to file manager is emitting to progress dialog..." << std::endl;
+        if (ct % 100 == 0) {
+            emit setValue((int)(double(byteCount) /
+                                double(apprxTotalBytes) * 100.0));
+//        std::cout << "peak file is emitting to file manager is emitting to progress dialog..." << std::endl;
         
-        //qApp->processEvents();
-        qApp->processEvents(QEventLoop::AllEvents);
-        
+            qApp->processEvents(QEventLoop::AllEvents);
+        }
+        ++ct;
 
         samplePtr = (unsigned char *)samples.c_str();
 

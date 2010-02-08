@@ -1170,11 +1170,8 @@ AudioManagerDialog::addFile(const QUrl& kurl)
 
     AudioFileManager &aFM = m_doc->getAudioFileManager();
 
-    if (! QFile::exists(kurl.toLocalFile())) {
-        
-        if (!RosegardenMainWindow::self()->testAudioPath(tr("importing a remote audio file"))) return false;
-    } else if (aFM.fileNeedsConversion(qstrtostr(kurl.path()), m_sampleRate)) {
-        if (!RosegardenMainWindow::self()->testAudioPath(tr("importing an audio file that needs to be converted or resampled"))) return false;
+    if (!RosegardenMainWindow::self()->testAudioPath(tr("importing an audio file that needs to be converted or resampled"))) {
+        return false;
     }
     
     ProgressDialog progressDlg(tr("Adding audio file..."),
@@ -1184,6 +1181,7 @@ AudioManagerDialog::addFile(const QUrl& kurl)
 
     CurrentProgressDialog::set(&progressDlg);
     progressDlg.setValue(0);
+    progressDlg.setIndeterminate(true);
     progressDlg.show();
     
     // Connect the progress dialog
@@ -1200,12 +1198,12 @@ AudioManagerDialog::addFile(const QUrl& kurl)
     } catch (AudioFileManager::BadAudioPathException e) {
         CurrentProgressDialog::freeze();
         QString errorString = tr("Failed to add audio file. ") + strtoqstr(e.getMessage());
-         QMessageBox::warning(this, tr("Rosegarden"), errorString);
+        QMessageBox::warning(this, tr("Rosegarden"), errorString);
         return false;
     } catch (SoundFile::BadSoundFileException e) {
         CurrentProgressDialog::freeze();
         QString errorString = tr("Failed to add audio file. ") + strtoqstr(e.getMessage());
-         QMessageBox::warning(this, tr("Rosegarden"), errorString);
+        QMessageBox::warning(this, tr("Rosegarden"), errorString);
         return false;
     }
             
@@ -1213,6 +1211,7 @@ AudioManagerDialog::addFile(const QUrl& kurl)
                &aFM, SLOT(slotStopImport()));
     connect(&progressDlg, SIGNAL(canceled()),
             &aFM, SLOT(slotStopPreview()));
+    progressDlg.setIndeterminate(false);
     progressDlg.slotSetOperationName(tr("Generating audio preview..."));
 
     try {

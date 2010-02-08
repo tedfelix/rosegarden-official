@@ -75,6 +75,10 @@ public:
      */
     void setLabelText(QString text);
 
+    /** Sets indeterminate state (Knight Rider mode) on the progress bar.
+     */
+    void setIndeterminate(bool ind);
+
 signals:
     /** The user pressed the cancel button.  (In practice, I have yet to see
      * this work usefully either in the current or the Classic codebase, but we
@@ -174,6 +178,7 @@ protected:
     bool         m_sleepingBetweenOperations;
     QString      m_operationText;
     int          m_totalSteps;
+    bool         m_indeterminate;
     bool         m_deferredClose;
 };
 

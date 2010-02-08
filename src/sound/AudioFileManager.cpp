@@ -70,7 +70,6 @@ private:
 };
 
 AudioFileManager::AudioFileManager() :
-    m_importProcess(0),
     m_expectedSampleRate(0)
 {
     pthread_mutexattr_t attr;
@@ -111,8 +110,7 @@ AudioFileManager::~AudioFileManager()
 AudioFileId
 AudioFileManager::addFile(const std::string &filePath)
 {
-    MutexLock lock (&_audioFileManagerLock)
-        ;
+    MutexLock lock (&_audioFileManagerLock);
 
     QString ext;
 
@@ -667,35 +665,6 @@ AudioFileManager::importURL(const QUrl &url, int sampleRate)
                       sampleRate);
 }
 
-bool
-AudioFileManager::fileNeedsConversion(const std::string &fileName,
-                                      int sampleRate)
-{
-    return false;   // short circuit this test
-    //setup "rosegarden-audiofile-importer" process
-    QProcess *proc = new QProcess();
-    QStringList procArgs;
-
-    if (sampleRate > 0) {
-        procArgs << "-r";
-        procArgs << QString("%1").arg(sampleRate);
-    }
-    procArgs << "-w";
-    procArgs << fileName.c_str();
-
-    proc->execute("rosegarden-audiofile-importer", procArgs);
-    
-    //### FIXME Without a valid importer, RG crashes anywhere here
-
-    int ec = proc->exitCode();
-    delete proc;
-
-    if (ec == 0 || ec == 1) { // 1 == "other error" -- wouldn't be able to convert
-        return false;
-    }
-    return true;
-}
-
 AudioFileId
 AudioFileManager::importFile(const std::string &fileName, int sampleRate)
 {
@@ -703,38 +672,7 @@ AudioFileManager::importFile(const std::string &fileName, int sampleRate)
 
     std::cerr << "AudioFileManager::importFile("<< fileName << ", " << sampleRate << ")" << std::endl;
 
-    //setup "rosegarden-audiofile-importer" process
-    QProcess *proc = new QProcess();
-    QStringList procArgs;
-
-    if (sampleRate > 0) {
-	procArgs << "-r";
-	procArgs << QString("%1").arg(sampleRate);
-    }
-    procArgs << "-w";
-    procArgs << fileName.c_str();
-
-//    proc->execute("rosegarden-audiofile-importer", procArgs);
-
-//    int ec = proc->exitCode();
-    int ec = 1;
-    delete proc;
-
-    if (ec == 0) {
-	AudioFileId id = addFile(fileName);
-	m_expectedSampleRate = sampleRate;
-	return id;
-    }
-
-    if (ec == 2) {
-	emit setOperationName(tr("Converting audio file..."));
-    } else if (ec == 3) {
-	emit setOperationName(tr("Resampling audio file..."));
-    } else if (ec == 4) {
-	emit setOperationName(tr("Converting and resampling audio file..."));
-    } else {
-	emit setOperationName(tr("Importing audio file..."));
-    }
+    emit setOperationName(tr("Importing audio file..."));
 
     AudioFileId newId = getFirstUnusedID();
     QString targetName = "";
@@ -758,54 +696,21 @@ AudioFileManager::importFile(const std::string &fileName, int sampleRate)
         }
     }
 
-    //setup "rosegarden-audiofile-importer" process
-    m_importProcess = new QProcess;
-    QStringList importProcessArgs;
-	//@@@ FIX: free *m_importProcessArgs !!!
-	//@@@ Fixed:  Created importProcess on the Stack
-        //@@@ FIX: free *m_importProcess when execption thrown
-
-/*    importProcessArgs << "rosegarden-audiofile-importer";
-    if (sampleRate > 0) {
-	importProcessArgs << "-r";
-	importProcessArgs << QString("%1").arg(sampleRate);
-    }
-    importProcessArgs << "-c";
-    importProcessArgs << fileName.c_str();
-    importProcessArgs << (m_audioPath.c_str() + targetName);
-    
-    m_importProcess->start("rosegarden-audiofile-importer", importProcessArgs);
-
-    while ((m_importProcess->state() == QProcess::Running) || (m_importProcess->state() == QProcess::Starting)) { //@@@JAS If problems, check here first
-		//@@@ what to do with kapp ????
-//        qApp->processEvents(100); //!!! not safe to do from seq thread
-    }
-
-    if (m_importProcess->exitStatus() != QProcess::NormalExit) {
-	// interrupted
-	throw SoundFile::BadSoundFileException(fileName, "Import cancelled");
-    }
-
-    ec = m_importProcess->exitCode();*/
     std::string outFileName = m_audioPath + targetName.toStdString();
-    ec = convertAudioFile(fileName,  outFileName);
-
-    delete m_importProcess;
-    m_importProcess = 0;
+    int ec = convertAudioFile(fileName, outFileName);
 
     if (ec) {
-	std::cerr << "audio file importer failed" << std::endl;
-	throw SoundFile::BadSoundFileException(fileName, qstrtostr( tr("Failed to convert or resample audio file on import")) );
-    } else {
-	std::cerr << "audio file importer succeeded" << std::endl;
+	throw SoundFile::BadSoundFileException
+            (fileName, qstrtostr
+             (tr("Failed to convert or resample audio file on import")) );
     }
 
     // insert file into vector
     WAVAudioFile *aF = 0;
 
     aF = new WAVAudioFile(newId,
-			  qstrtostr( targetName ),
-			  m_audioPath + qstrtostr(targetName) );
+			  qstrtostr(targetName),
+			  m_audioPath + qstrtostr(targetName));
     m_audioFiles.push_back(aF);
     m_derivedAudioFiles.insert(aF);
     // Don't catch SoundFile::BadSoundFileException
@@ -815,7 +720,8 @@ AudioFileManager::importFile(const std::string &fileName, int sampleRate)
     return aF->getId();
 }
 
-int AudioFileManager::convertAudioFile(std::string inFile, std::string outFile) {
+int AudioFileManager::convertAudioFile(std::string inFile, std::string outFile)
+{
     std::cerr << "AudioFileManager::convertAudioFile: inFile = "
               << inFile << ", outFile = " << outFile << std::endl;
 
@@ -829,7 +735,7 @@ int AudioFileManager::convertAudioFile(std::string inFile, std::string outFile) 
 
     int channels = rs->getChannelCount();
     int rate = RosegardenSequencer::getInstance()->getSampleRate();
-    int blockSize = 2048; // or anything
+    int blockSize = 20480; // or anything
 
     rs->setRetrievalSampleRate(rate);
 
@@ -845,10 +751,14 @@ int AudioFileManager::convertAudioFile(std::string inFile, std::string outFile) 
 
     float *block = new float[blockSize * channels];
 
+    int i = 0;
     while (1) {
         int got = rs->getInterleavedFrames(blockSize, block);
         ws->putInterleavedFrames(got, block);
         if (got < blockSize) break;
+        emit setValue(i % 10);
+        qApp->processEvents(QEventLoop::AllEvents);
+        ++i;
     }
 
     delete[] block;
@@ -860,11 +770,7 @@ int AudioFileManager::convertAudioFile(std::string inFile, std::string outFile) 
 void
 AudioFileManager::slotStopImport()
 {
-    if (m_importProcess) {
-	m_importProcess->terminate(); //    SIGTERM
-	sleep(1);
-	m_importProcess->kill(); // SIGKILL
-    }
+    //!!!
 }
 
 AudioFile*

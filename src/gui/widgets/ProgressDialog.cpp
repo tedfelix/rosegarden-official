@@ -46,16 +46,17 @@ ProgressDialog::ProgressDialog(const QString &labelText,
                                int showAfter,
                                QWidget *parent,
                                bool modal) :
-        QDialog(parent),
-        m_wasVisible(false),
-        m_frozen(false),
-        m_modal(modal),
-        m_minimumTimeHasExpired(false),
-        m_minimumDuration(1000),
-        m_sleepingBetweenOperations(false),
-        m_operationText(""),
-        m_totalSteps(totalSteps),
-        m_deferredClose(false)
+    QDialog(parent),
+    m_wasVisible(false),
+    m_frozen(false),
+    m_modal(modal),
+    m_minimumTimeHasExpired(false),
+    m_minimumDuration(1000),
+    m_sleepingBetweenOperations(false),
+    m_operationText(""),
+    m_totalSteps(totalSteps),
+    m_deferredClose(false),
+    m_indeterminate(false)
 
 {
     RG_DEBUG << "ProgressDialog::ProgressDialog - " << labelText << " - modal : " << modal << endl;
@@ -110,6 +111,18 @@ ProgressDialog::~ProgressDialog()
     m_modalVisible = false;
     delete m_timer;
     m_timer = 0;
+}
+
+void
+ProgressDialog::setIndeterminate(bool ind)
+{
+    if (m_indeterminate == ind) return;
+    if (ind) {
+        m_progressBar->setRange(0, 0);
+    } else {
+        m_progressBar->setRange(0, m_totalSteps);
+    }
+    m_indeterminate = ind;
 }
 
 void
@@ -262,7 +275,6 @@ ProgressDialog::slotThaw()
 void
 ProgressDialog::processEvents()
 {
-
     RG_DEBUG << "ProgressDialog::processEvents: modalVisible is "
              << m_modalVisible << endl;
     if (m_modalVisible) {

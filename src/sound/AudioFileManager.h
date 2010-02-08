@@ -88,22 +88,18 @@ private:
 
 public:
 
-    // Create an audio file from an absolute path - we use this interface
-    // to add an actual file.
+    // Create an audio file from an absolute path - we use this
+    // interface to add an actual file.  This only works with files
+    // that are already in a format RG understands natively.  If you
+    // are not sure about that, use importFile or importURL instead.
     //
     AudioFileId addFile(const std::string &filePath);
     // throw BadAudioPathException
 
-    // Return true if a file would require importFile to import it, rather
-    // than a simple addFile.  You can use importFile even when a file
-    // doesn't need conversion, but this tells you whether it's necessary
-    //
-    bool fileNeedsConversion(const std::string &filePath,
-                             int targetSampleRate = 0);
-
     // Create an audio file by importing (i.e. converting and/or
-    // resampling) an existing file using the external conversion
-    // utility
+    // resampling) an existing file using the conversion library.  If
+    // you are not sure whether to use addFile or importFile, go for
+    // importFile.
     //
     AudioFileId importFile(const std::string &filePath,
 			   int targetSampleRate = 0);
@@ -123,10 +119,12 @@ public:
                            const std::string &fileName);
     // throw BadAudioPathException
 
-    // And insert an AudioFile and specify an id
-    //
-    // Convert an audio file using packages in Rosegarden.
-    // This replaces the Perl script previously used. It returns 0 for OK
+    // Convert an audio file from arbitrary external format to an
+    // internal format suitable for use by addFile, using packages in
+    // Rosegarden.  This replaces the Perl script previously used. It
+    // returns 0 for OK.  This is used by importFile and importURL
+    // which normally provide the more suitable interface for import.
+    // 
     int convertAudioFile(const std::string inFile, const std::string outFile);
 
     bool insertFile(const std::string &name, const std::string &fileName,
@@ -316,8 +314,6 @@ private:
     // the document is not saved.
     std::set<AudioFile *> m_recordedAudioFiles;
     std::set<AudioFile *> m_derivedAudioFiles;
-
-    QProcess *m_importProcess;
 
     int m_expectedSampleRate;
 };

@@ -1500,10 +1500,8 @@ RosegardenMainViewWidget::slotDroppedNewAudio(QString audioDesc)
     }
 
     QUrl qurl(url);
-    if (! QFile::exists(qurl.toLocalFile()) ) {
-        if (!RosegardenMainWindow::self()->testAudioPath(tr("importing a remote audio file"))) return;
-    }else if (aFM.fileNeedsConversion(qstrtostr(qurl.path()), sampleRate)) {
-        if (!RosegardenMainWindow::self()->testAudioPath(tr("importing an audio file that needs to be converted or resampled"))) return;
+    if (!RosegardenMainWindow::self()->testAudioPath(tr("importing an audio file that needs to be converted or resampled"))) {
+        return;
     }
 
     // from qt4-doc : " don't use a (modal) QProgressDialog inside a paintEvent() !"
@@ -1511,7 +1509,7 @@ RosegardenMainViewWidget::slotDroppedNewAudio(QString audioDesc)
                                100,
                                500,
                                this);
-    
+    progressDlg.setIndeterminate(true);
     
     // warning: pointer &progressDlg becomes invalid, if function quits.
     CurrentProgressDialog::set(&progressDlg);
@@ -1550,6 +1548,7 @@ RosegardenMainViewWidget::slotDroppedNewAudio(QString audioDesc)
     
     progressDlg.slotSetOperationName(tr("Generating audio preview..."));
     progressDlg.setValue(0);
+    progressDlg.setIndeterminate(false);
     progressDlg.show();
     
     try {
