@@ -921,7 +921,7 @@ BankEditorDialog::slotApply()
     // if we've not populated them here yet.
     //
     if (m_bankList.size() == 0 && m_programList.size() == 0 &&
-            m_deleteAllReally == false) {
+            m_deleteAllReally == true) {
         RG_DEBUG << "BankEditorDialog::slotApply() : m_bankList size = 0\n";
 
         command = new ModifyDeviceCommand(m_studio,
@@ -1049,6 +1049,13 @@ BankEditorDialog::getParentDeviceItem(QTreeWidgetItem* item)
     }
 
     return dynamic_cast<MidiDeviceTreeWidgetItem*>(item);
+//    QTreeWidgetItem *parent = item->parent();
+//    if (!parent) {
+//        // item must have been a top level widget
+//        parent = item;
+//    }
+//
+//    return dynamic_cast<MidiDeviceTreeWidgetItem*>(parent);
 }
 
 void
@@ -1071,13 +1078,23 @@ BankEditorDialog::slotAddBank()
             setProgramList(device);
         }
 
+        QString name = "";
+        int n = 0;
+        while (name == "" || device->getBankByName(qstrtostr(name)) != 0) {
+            ++n;
+            if (n == 1)
+                name = tr("<new bank>");
+            else
+                name = tr("<new bank %1>").arg(n);
+        }
         std::pair<int, int> bank = getFirstFreeBank(m_treeWidget->currentItem());
 
         MidiBank newBank(false,
                          bank.first, bank.second,
-                         qstrtostr(tr("<new bank>")));
+                         qstrtostr(name));
         m_bankList.push_back(newBank);
 
+RG_DEBUG << "BankEditorDialog::slotAddBank() : deviceItem->getDeviceId() = " << deviceItem->getDeviceId() << endl;
         QTreeWidgetItem* newBankItem =
             new MidiBankTreeWidgetItem(deviceItem->getDeviceId(),
                                      m_bankList.size() - 1,
@@ -1099,8 +1116,7 @@ BankEditorDialog::slotAddKeyMapping()
         return ;
 
     QTreeWidgetItem* currentIndex = m_treeWidget->currentItem();
-
-//     MidiDeviceTreeWidgetItem* deviceItem = getParentDeviceItem(currentIndex);
+//    MidiDeviceTreeWidgetItem* deviceItem = getParentDeviceItem(currentIndex);
     MidiDevice *device = getMidiDevice(currentIndex);
 
     if (device) {

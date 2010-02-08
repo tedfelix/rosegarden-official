@@ -39,10 +39,10 @@ class MidiBankTreeWidgetItem : public MidiDeviceTreeWidgetItem
 
 public:
     MidiBankTreeWidgetItem(DeviceId deviceId,
-                         int bankNb,
-						 QTreeWidgetItem* parent, QString name,
-						bool percussion,
-                         int msb, int lsb);
+                           int bankNb,
+                           QTreeWidgetItem* parent, QString name,
+                           bool percussion,
+                           int msb, int lsb);
 
     int getBank()     { return m_bankNb; }
 

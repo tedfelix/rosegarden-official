@@ -70,10 +70,10 @@ MidiDevice::MidiDevice(DeviceId id,
                        InstrumentId ibase,
 		       const MidiDevice &dev) :
     Device(id, dev.getName(), Device::Midi),
-    m_keyMappingList(dev.m_keyMappingList),
     m_programList(dev.m_programList),
     m_bankList(dev.m_bankList),
     m_controlList(0),
+    m_keyMappingList(dev.m_keyMappingList),
     m_metronome(0),
     m_direction(dev.getDirection()),
     m_variationType(dev.getVariationType()),
@@ -100,10 +100,10 @@ MidiDevice::MidiDevice(DeviceId id,
 MidiDevice::MidiDevice(const MidiDevice &dev) :
     Device(dev.getId(), dev.getName(), dev.getType()),
     Controllable(),
-    m_keyMappingList(dev.m_keyMappingList),
     m_programList(dev.m_programList),
     m_bankList(dev.m_bankList),
     m_controlList(dev.m_controlList),
+    m_keyMappingList(dev.m_keyMappingList),
     m_metronome(0),
     m_direction(dev.getDirection()),
     m_variationType(dev.getVariationType()),
@@ -296,6 +296,12 @@ MidiDevice::clearProgramList()
 }
 
 void
+MidiDevice::clearKeyMappingList()
+{
+    m_keyMappingList.clear();
+}
+
+void
 MidiDevice::clearControlList()
 {
     // Clear down instrument controllers first.
@@ -373,6 +379,16 @@ MidiDevice::getBanksByLSB(bool percussion, MidiByte lsb) const
     }
 
     return banks;
+}
+
+const MidiBank *
+MidiDevice::getBankByName(const std::string &name) const
+{
+    for (BankList::const_iterator i = m_bankList.begin();
+	 i != m_bankList.end(); ++i) {
+	if (i->getName() == name) return &(*i);
+    }
+    return 0;
 }
 
 MidiByteList

@@ -36,13 +36,7 @@ MidiBankTreeWidgetItem::MidiBankTreeWidgetItem(DeviceId deviceId,
         m_percussion(percussion),
         m_bankNb(bankNb)
 {
-    setText( 0, name );
-    setText(1, QString(percussion ? tr("Percussion Bank") : tr("Bank")));
-    setText(2, QString().setNum(msb));
-    setText(3, QString().setNum(lsb));
-    
     setFlags(flags() | Qt::ItemIsEditable);  //qt4
-
 }
 
 void MidiBankTreeWidgetItem::setPercussion(bool percussion)

@@ -77,13 +77,15 @@ public:
 
     void clearBankList();
     void clearProgramList();
+    void clearKeyMappingList();
     void clearControlList();
 
     const BankList &getBanks() const { return m_bankList; }
     BankList getBanks(bool percussion) const;
     BankList getBanksByMSB(bool percussion, MidiByte msb) const; 
     BankList getBanksByLSB(bool percussion, MidiByte lsb) const;
-
+    const MidiBank *getBankByName(const std::string &) const;
+    
     MidiByteList getDistinctMSBs(bool percussion, int lsb = -1) const;
     MidiByteList getDistinctLSBs(bool percussion, int msb = -1) const;
 

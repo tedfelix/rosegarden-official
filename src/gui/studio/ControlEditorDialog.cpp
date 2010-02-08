@@ -170,6 +170,11 @@ ControlEditorDialog::ControlEditorDialog
     m_treeWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
     initDialog();
+    
+    // Set the top item in the list, if able.
+    if (m_treeWidget->topLevelItemCount()) {
+        m_treeWidget->setCurrentItem(m_treeWidget->topLevelItem(0));
+    }
 }
 
 ControlEditorDialog::~ControlEditorDialog()
@@ -211,9 +216,16 @@ ControlEditorDialog::slotUpdate(bool added)
         return ;
 
     ControlList::const_iterator it = md->beginControllers();
-    QTreeWidgetItem *item;
+    ControlParameterItem *item;
     int i = 0;
 
+    // Attempt to track last controller selected so we can reselect it
+    int lastControllerId = -1;
+    ControlParameterItem *lastItem = dynamic_cast<ControlParameterItem *>(m_treeWidget->currentItem());
+    if (lastItem) {
+        lastControllerId = lastItem->getId();
+    }
+    
     m_treeWidget->clear();
 
     for (; it != md->endControllers(); ++it) {
@@ -265,6 +277,10 @@ ControlEditorDialog::slotUpdate(bool added)
                            );
         }
 
+        if (item->getId() == lastControllerId) {
+            m_treeWidget->setCurrentItem(item);
+        }
+
 
         // create and set a colour pixmap
         //
@@ -309,6 +325,7 @@ ControlEditorDialog::slotUpdate(bool added)
     //
     if (added) {
         RG_DEBUG << "ControlEditorDialog: detected new item entered; launching editor" << endl;
+        m_treeWidget->setCurrentItem(item);
         slotEdit(item, 0);
     }
 }

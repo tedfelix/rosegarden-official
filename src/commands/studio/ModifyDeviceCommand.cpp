@@ -116,6 +116,7 @@ ModifyDeviceCommand::execute()
         if (m_clearBankAndProgramList) {
             midiDevice->clearBankList();
             midiDevice->clearProgramList();
+            midiDevice->clearKeyMappingList();
         } else {
             if (m_changeBanks)
                 midiDevice->replaceBankList(m_bankList);
