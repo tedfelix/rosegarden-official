@@ -3865,7 +3865,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2066"/>
         <source>Mensural</source>
-        <translation type="unfinished"></translation>
+        <translation>Carrée</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2084"/>
@@ -6278,7 +6278,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="295"/>
         <source>Iron pipes</source>
-        <translation type="unfinished"></translation>
+        <translation>Tubes de métal</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="296"/>
@@ -6395,7 +6395,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="321"/>
         <source>Stamp</source>
-        <translation type="unfinished"></translation>
+        <translation>Tapement de pieds</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="322"/>
@@ -7115,37 +7115,37 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
         <location filename="../AutoloadStrings.cpp" line="121"/>
         <source>Lead 1 (square)</source>
         <translatorcomment>Translate &quot;lead&quot; as &quot;Solo&quot; I think will do.  I don&apos;t want to bother looking up square, sawtooth, etc., but &quot;Solo 6 (voix)&quot; and so forth looks reasonable -dmm</translatorcomment>
-        <translation type="unfinished"></translation>
+        <translation>Solo 1 (signal carré)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="122"/>
         <source>Lead 2 (sawtooth)</source>
-        <translation type="unfinished"></translation>
+        <translation>Solo 2 (signal en dent de scie)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="123"/>
         <source>Lead 3 (calliope)</source>
-        <translation type="unfinished"></translation>
+        <translation>Solo 3 (calliope)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="124"/>
         <source>Lead 4 (chiff)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Solo 4 (</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="125"/>
         <source>Lead 5 (charang)</source>
-        <translation type="unfinished"></translation>
+        <translation>Solo 5 (charango)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="126"/>
         <source>Lead 6 (voice)</source>
-        <translation type="unfinished"></translation>
+        <translation>Solo 6 (voix)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="127"/>
         <source>Lead 7 (fifths)</source>
-        <translation type="unfinished"></translation>
+        <translation>Solo 7 (quintes)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="128"/>
@@ -7155,32 +7155,32 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../AutoloadStrings.cpp" line="129"/>
         <source>Pad 1 (new age)</source>
-        <translation type="unfinished"></translation>
+        <translation>Bloc 1 (new age)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="130"/>
         <source>Pad 2 (warm)</source>
-        <translation type="unfinished"></translation>
+        <translation>Bloc 2 (chaud)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="131"/>
         <source>Pad 3 (polysynth)</source>
-        <translation type="unfinished"></translation>
+        <translation>Pad 3 (polysynth)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="132"/>
         <source>Pad 4 (choir)</source>
-        <translation type="unfinished"></translation>
+        <translation>Bloc 4 (chœur)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="133"/>
         <source>Pad 5 (bowed)</source>
-        <translation type="unfinished"></translation>
+        <translation>Bloc 5 (archets)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="134"/>
         <source>Pad 6 (metallic)</source>
-        <translation type="unfinished"></translation>
+        <translation>Bloc 6 (métal)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="135"/>
@@ -7190,7 +7190,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../AutoloadStrings.cpp" line="136"/>
         <source>Pad 8 (sweep)</source>
-        <translation type="unfinished"></translation>
+        <translation>Bloc 8 (glissé)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="137"/>
@@ -7206,17 +7206,17 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../AutoloadStrings.cpp" line="139"/>
         <source>FX 3 (crystal)</source>
-        <translation type="unfinished"></translation>
+        <translation>FX 3 (cristal)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="140"/>
         <source>FX 4 (atmosphere)</source>
-        <translation type="unfinished"></translation>
+        <translation>FX 4 (athmosphère)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="141"/>
         <source>FX 5 (brightness)</source>
-        <translation type="unfinished"></translation>
+        <translation>FX 5 (brillance)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="142"/>
@@ -7226,12 +7226,12 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../AutoloadStrings.cpp" line="143"/>
         <source>FX 7 (echoes)</source>
-        <translation type="unfinished"></translation>
+        <translation>FX 7 (echos)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="144"/>
         <source>FX 8 (sci-fi)</source>
-        <translation type="unfinished"></translation>
+        <translation>FX 8 (SF)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="145"/>
@@ -7356,12 +7356,12 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../AutoloadStrings.cpp" line="170"/>
         <source>Detuned EP 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Piano élec. désaccordé 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="171"/>
         <source>Detuned EP 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Piano élec. désaccordé 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="172"/>
@@ -7436,7 +7436,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../AutoloadStrings.cpp" line="187"/>
         <source>Orchestral Pad</source>
-        <translation type="unfinished"></translation>
+        <translation>Bloc orchestral</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="188"/>
@@ -7546,62 +7546,62 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../AutoloadStrings.cpp" line="211"/>
         <source>Room</source>
-        <translation type="unfinished"></translation>
+        <translation>Room</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="212"/>
         <source>Room 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Room 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="213"/>
         <source>Room 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Room 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="214"/>
         <source>Room 3</source>
-        <translation type="unfinished"></translation>
+        <translation>Room 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="215"/>
         <source>Room 4</source>
-        <translation type="unfinished"></translation>
+        <translation>Room 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="216"/>
         <source>Room 5</source>
-        <translation type="unfinished"></translation>
+        <translation>Room 5</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="217"/>
         <source>Room 6</source>
-        <translation type="unfinished"></translation>
+        <translation>Room 6</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="218"/>
         <source>Room 7</source>
-        <translation type="unfinished"></translation>
+        <translation>Room 7</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="219"/>
         <source>Power</source>
-        <translation type="unfinished"></translation>
+        <translation>Power</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="220"/>
         <source>Power 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Power 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="221"/>
         <source>Power 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Power 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="222"/>
         <source>Power 3</source>
-        <translation type="unfinished"></translation>
+        <translation>Power 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="223"/>
@@ -7656,7 +7656,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../AutoloadStrings.cpp" line="233"/>
         <source>Orchestra Kit</source>
-        <translation type="unfinished"></translation>
+        <translation>Ensemble orchestre</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="234"/>
@@ -7712,7 +7712,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
         <location filename="../AutoloadStrings.cpp" line="304"/>
         <location filename="../AutoloadStrings.cpp" line="743"/>
         <source>PitchBend</source>
-        <translation type="unfinished"></translation>
+        <translation>PitchBend</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="242"/>
@@ -7821,7 +7821,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../AutoloadStrings.cpp" line="266"/>
         <source>Ride Bell</source>
-        <translation type="unfinished"></translation>
+        <translation>Cloche ride</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="268"/>
@@ -7846,7 +7846,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../AutoloadStrings.cpp" line="272"/>
         <source>Ride Cymbal 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Cymbale ride 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="273"/>
@@ -7926,12 +7926,12 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../AutoloadStrings.cpp" line="291"/>
         <source>Mute Cuica</source>
-        <translation type="unfinished"></translation>
+        <translation>Cuica assourdi</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="292"/>
         <source>Open Cuica</source>
-        <translation type="unfinished"></translation>
+        <translation>Cuica ouvert</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="293"/>
@@ -10056,7 +10056,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../AutoloadStrings.cpp" line="725"/>
         <source>generalmap</source>
-        <translation type="unfinished"></translation>
+        <translation>liste générale</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="726"/>
@@ -10163,7 +10163,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../../src/gui/application/main.cpp" line="775"/>
         <source>http://rosegardenmusic.com/wiki/doc:manual-en</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/application/main.cpp" line="776"/>
@@ -18959,7 +18959,7 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="67"/>
         <source>Preset:</source>
-        <translation>Préselection:</translation>
+        <translation>Type:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="70"/>
@@ -18974,7 +18974,7 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="72"/>
         <source>Fast vibrato arm release</source>
-        <translation type="unfinished"></translation>
+        <translation>Relâche rapide du bras de vibrato</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="73"/>
@@ -18984,7 +18984,7 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="76"/>
         <source>Pre Bend</source>
-        <translation type="unfinished"></translation>
+        <translation>Valeur initiale</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="82"/>
@@ -19024,17 +19024,17 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="102"/>
         <source>Bend Sequence</source>
-        <translation type="unfinished"></translation>
+        <translation>Paramètres de la variation</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="142"/>
         <source>Vibrato wavelength:</source>
-        <translation type="unfinished"></translation>
+        <translation>Période du vibrato:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="152"/>
         <source>Resolution:</source>
-        <translation type="unfinished"></translation>
+        <translation>Résolution:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="167"/>
