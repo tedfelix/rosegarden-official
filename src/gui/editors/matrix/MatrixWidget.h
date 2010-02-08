@@ -213,7 +213,6 @@ private:
     MatrixTool *m_currentTool; // Toolbox owns this
     Instrument *m_instrument; // Studio owns this (TBC)
     bool m_drumMode;
-    bool m_keyMapping;
     bool m_onlyKeyMapping;
     bool m_playTracking;
     double m_hZoomFactor;

@@ -100,7 +100,6 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     m_currentTool(0),
     m_instrument(0),
     m_drumMode(drumMode),
-    m_keyMapping(false),
     m_onlyKeyMapping(false),
     m_playTracking(true),
     m_hZoomFactor(1.0),
@@ -470,6 +469,7 @@ MatrixWidget::generatePitchRuler()
     delete m_pianoScene;   // Delete the old m_pitchRuler if any
     delete m_localMapping;
     m_localMapping = 0;    // To avoid a double delete
+    bool isPercussion = false;
 
     Composition &comp = m_document->getComposition();
     const MidiKeyMapping *mapping = 0;
@@ -483,10 +483,10 @@ MatrixWidget::generatePitchRuler()
                     << mapping->getName() << endl;
             m_localMapping = new MidiKeyMapping(*mapping);
             m_localMapping->extend();
-            m_keyMapping = true;
+            isPercussion = true;
         } else {
             RG_DEBUG << "MatrixView: Instrument has no key mapping\n";
-            m_keyMapping = false;
+            isPercussion = false;
         }
     }
     if (mapping && !m_localMapping->getMap().empty()) {
@@ -501,7 +501,6 @@ MatrixWidget::generatePitchRuler()
             m_localMapping = new MidiKeyMapping();
             m_localMapping->getMap()[0] = "";  //!!! extent() doesn't work ???
             m_localMapping->getMap()[127] = "";
-            m_keyMapping = true;
             m_pitchRuler = new PercussionPitchRuler(0, m_localMapping,
                                                     m_scene->getYResolution());
         } else {
@@ -532,10 +531,12 @@ MatrixWidget::generatePitchRuler()
     (m_pitchRuler, SIGNAL(keySelected(unsigned int, bool)),
      this, SLOT (slotKeySelected(unsigned int, bool)));
 
-    ///!!! TODO : signal not found 
-    QObject::connect
-    (m_pitchRuler, SIGNAL(keyReleased(unsigned int, bool)),
-     this, SLOT (slotKeyReleased(unsigned int, bool)));
+    // Don't send the "note off" midi message to a percussion instrument
+    // when clicking on the pitch ruler
+    if (!isPercussion || !m_drumMode) {
+        connect(m_pitchRuler, SIGNAL(keyReleased(unsigned int, bool)),
+                this, SLOT (slotKeyReleased(unsigned int, bool)));
+    }
 
     // If piano scene and matrix scene don't have the same height
     // one may shift from the other when scrolling vertically
@@ -578,10 +579,25 @@ MatrixWidget::generatePitchRuler()
 void
 MatrixWidget::slotPercussionSetChanged(Instrument *instr)
 {
-    // Regenerate the pitchruler if the instrument which changed
-    // is the current one.
-    if (instr == m_instrument) generatePitchRuler();
+    //@@@ In spite of its name (and of the name of the signal which trigs it),
+    //    this slot is called each time some change happens in any instrument
+    //    and not only when a percussion set changes [true in rev. 11782].
 
+    // Regenerate the pitchruler if the instrument which changed
+    // is the current one...
+    if (instr == m_instrument) { 
+        generatePitchRuler();
+    } else {
+        Composition &comp = m_document->getComposition();
+        Track *track = comp.getTrackById(m_scene->getCurrentSegment()->
+                                                                getTrack());
+        Instrument *currInstr = m_document->getStudio().
+                                     getInstrumentById(track->getInstrument());
+        // ...or if the new current instrument appears to be one which changes.
+        if (currInstr == instr) {
+            generatePitchRuler();
+        }
+    }
 }
 
 bool

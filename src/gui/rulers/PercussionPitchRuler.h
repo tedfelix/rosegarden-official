@@ -54,6 +54,7 @@ public:
 signals:
     void keyPressed(unsigned int y, bool repeating);
     void keySelected(unsigned int y, bool repeating);
+    void keyReleased(unsigned int y, bool repeating);
     void hoveredOverKeyChanged(unsigned int y);
 
 protected:

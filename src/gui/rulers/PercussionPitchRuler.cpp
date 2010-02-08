@@ -183,6 +183,7 @@ void PercussionPitchRuler::mouseReleaseEvent(QMouseEvent *e)
 	if (e->button() == Qt::LeftButton) {
         m_mouseDown = false;
         m_selecting = false;
+        emit keyReleased(e->y(), false);
     }
 }
 
