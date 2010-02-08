@@ -731,7 +731,7 @@ void TrackEditor::dragMoveEvent(QDragMoveEvent *){
 
 
 
-void TrackEditor::dropEvent(QDropEvent* e)
+void TrackEditor::dropEvent(QDropEvent *e)
 {
     QStringList uriList;
     QString text;
@@ -768,25 +768,13 @@ void TrackEditor::dropEvent(QDropEvent* e)
     RG_DEBUG << "TrackEditor::dropEvent: uri list is " << uriList
              << ", text is " << text << endl;
 
-    int heightAdjust = 0;
-    //int widthAdjust = 0;
-
-    // Adjust any drop event height position by visible rulers
-    //
-    if (m_topStandardRuler && m_topStandardRuler->isVisible())
-        heightAdjust += m_topStandardRuler->height();
-
-    if (m_tempoRuler && m_tempoRuler->isVisible())
-        heightAdjust += m_tempoRuler->height();
-
-    if (m_chordNameRuler && m_chordNameRuler->isVisible())
-        heightAdjust += m_chordNameRuler->height();
+    QPoint cpoint = m_compositionView->mapFrom(this, e->pos());
 
     int trackPos = m_compositionView->grid().getYBin
-        (e->pos().y() + m_compositionView->contentsY());
+        (cpoint.y() + m_compositionView->contentsY());
 
     timeT time = m_compositionView->grid().snapX
-        (e->pos().x() + m_compositionView->contentsX());
+        (cpoint.x() + m_compositionView->contentsX());
 
     RG_DEBUG << "trackPos = " << trackPos << ", time = " << time << endl;
 
