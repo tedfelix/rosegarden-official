@@ -12828,7 +12828,7 @@ Selecteer welke u permanent van de harde schijf wilt verwijderen.
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="75"/>
         <source>Advanced Event Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Geavanceerde gebeurtenis-editor</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="75"/>
@@ -12913,12 +12913,12 @@ Selecteer welke u permanent van de harde schijf wilt verwijderen.
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="321"/>
         <source>sec</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="335"/>
         <source>nsec</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="375"/>
@@ -13379,7 +13379,7 @@ Dit zou problemen kunnen veroorzaken als het later een andere berekende waarde o
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="1519"/>
         <source>%1%2 - Triggered Segment: %3</source>
-        <translation type="unfinished"></translation>
+        <translation>%1%2 - getriggerde segmenten: %3</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="1535"/>
@@ -13744,7 +13744,7 @@ Wilt u proberen het bestand op het zoeken of het overslaan?</translation>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="365"/>
         <source>HPLIP (Qt 4)</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="541"/>
@@ -13820,22 +13820,22 @@ Wilt u proberen het bestand op het zoeken of het overslaan?</translation>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="347"/>
         <source>Okular (KDE 4.x)</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="348"/>
         <source>Evince (GNOME)</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="349"/>
         <source>Adobe Acrobat Reader (non-free)</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="350"/>
         <source>KPDF (KDE 3.x)</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="351"/>
@@ -13850,22 +13850,22 @@ Wilt u proberen het bestand op het zoeken of het overslaan?</translation>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="361"/>
         <source>KPrinter (KDE 3)</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="362"/>
         <source>Gtk-LP (GNOME)</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="363"/>
         <source>lpr (no GUI)</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="364"/>
         <source>lp (no GUI)</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="366"/>
@@ -14122,7 +14122,7 @@ Wilt u proberen het bestand op het zoeken of het overslaan?</translation>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="73"/>
         <source>&lt;qt&gt;&lt;h3&gt;Choose Text Encoding&lt;/h3&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;h3&gt;Kies tekstcodering&lt;/h3&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="80"/>
@@ -14293,7 +14293,7 @@ Voorbeeldtekst uit het bestand:</translation>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="171"/>
         <source>Options</source>
-        <translation type="unfinished"></translation>
+        <translation>Opties</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="175"/>
@@ -14969,7 +14969,7 @@ Would you like to use
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="169"/>
         <source>%1 pt %2</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="169"/>
@@ -14979,7 +14979,7 @@ Would you like to use
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="178"/>
         <source>Advanced options</source>
-        <translation type="unfinished"></translation>
+        <translation>Geavanceerde opties</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="189"/>
@@ -15103,7 +15103,7 @@ Would you like to use
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="68"/>
         <source>Print</source>
-        <translation type="unfinished"></translation>
+        <translation>Afdrukken</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="70"/>
@@ -15342,7 +15342,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="251"/>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="271"/>
         <source>Off</source>
-        <translation type="unfinished"></translation>
+        <translation>Van</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="232"/>
@@ -15608,7 +15608,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="145"/>
         <source>Bars, beats, and sub-beats</source>
-        <translation type="unfinished"></translation>
+        <translation>Maten, tikken en sub-tikken</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="149"/>
@@ -15711,12 +15711,12 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="86"/>
         <source>Text  </source>
-        <translation type="unfinished"></translation>
+        <translation>Tekst  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="87"/>
         <source>Comment </source>
-        <translation type="unfinished"></translation>
+        <translation>Commentaar </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="91"/>
@@ -15820,7 +15820,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location filename="../../src/gui/dialogs/MarkerModifyDialog.cpp" line="111"/>
         <source>Comment:</source>
-        <translation type="unfinished"></translation>
+        <translation>Commentaar:</translation>
     </message>
 </context>
 <context>
@@ -16130,7 +16130,7 @@ Dubbelklik om de marker-editor te openen.</translation>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="662"/>
         <source>Off</source>
-        <translation type="unfinished"></translation>
+        <translation>Van</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1455"/>
@@ -16205,7 +16205,7 @@ Dubbelklik om de marker-editor te openen.</translation>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="190"/>
         <source>Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Detail</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="206"/>
@@ -16664,7 +16664,7 @@ Dubbelklik om de marker-editor te openen.</translation>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="298"/>
         <source>Tie notes at barlines automatically</source>
-        <translation type="unfinished"></translation>
+        <translation>Bind noten over maatstrepen automatisch</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="312"/>
@@ -16799,7 +16799,7 @@ Dubbelklik om de marker-editor te openen.</translation>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="530"/>
         <source>Font</source>
-        <translation type="unfinished"></translation>
+        <translation>Lettertype</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="554"/>
@@ -17388,7 +17388,7 @@ Controleer of het apparaat juist is geconfigureerd in het dialoog &apos;Beheer M
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3938"/>
         <source>Move Events to Staff Below</source>
-        <translation type="unfinished"></translation>
+        <translation>Verplaats gebeurtenissen naar onderliggende notenbalk</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4307"/>
@@ -17406,7 +17406,7 @@ Controleer of het apparaat juist is geconfigureerd in het dialoog &apos;Beheer M
     <message>
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="216"/>
         <source>Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Detail</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="232"/>
@@ -17596,7 +17596,7 @@ Controleer of het apparaat juist is geconfigureerd in het dialoog &apos;Beheer M
     <message>
         <location filename="../../src/gui/dialogs/PasteNotationDialog.cpp" line="75"/>
         <source>Options</source>
-        <translation type="unfinished"></translation>
+        <translation>Opties</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PasteNotationDialog.cpp" line="81"/>
@@ -17649,7 +17649,7 @@ Controleer of het apparaat juist is geconfigureerd in het dialoog &apos;Beheer M
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="67"/>
         <source>Preset:</source>
-        <translation type="unfinished"></translation>
+        <translation>Preset:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="70"/>
@@ -17679,12 +17679,12 @@ Controleer of het apparaat juist is geconfigureerd in het dialoog &apos;Beheer M
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="82"/>
         <source>Value (%):</source>
-        <translation type="unfinished"></translation>
+        <translation>Waarde (%):</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="93"/>
         <source>Duration (%):</source>
-        <translation type="unfinished"></translation>
+        <translation>Duur (%):</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="108"/>
@@ -17709,7 +17709,7 @@ Controleer of het apparaat juist is geconfigureerd in het dialoog &apos;Beheer M
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="308"/>
         <source>http://rosegardenmusic.com/wiki/doc:pitchBendSequenceDialog-en</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="102"/>
@@ -17724,7 +17724,7 @@ Controleer of het apparaat juist is geconfigureerd in het dialoog &apos;Beheer M
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="152"/>
         <source>Resolution:</source>
-        <translation type="unfinished"></translation>
+        <translation>Resolutie:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="167"/>
@@ -17801,12 +17801,12 @@ Controleer of het apparaat juist is geconfigureerd in het dialoog &apos;Beheer M
     <message>
         <location filename="../../src/gui/editors/segment/PlayList.cpp" line="117"/>
         <source>MIDI files</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI-bestanden</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/PlayList.cpp" line="118"/>
         <source>X11 Rosegaden files</source>
-        <translation type="unfinished"></translation>
+        <translation>X11 Rosegarden-bestanden</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/PlayList.cpp" line="119"/>
