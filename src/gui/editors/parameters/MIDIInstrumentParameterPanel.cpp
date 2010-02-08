@@ -397,6 +397,12 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
                 rotary->setMaximum(it->getMax());
                 redraw = 1;
             }
+            
+            bool isCentered = it->getDefault() == 64;
+            if (rotary->getCentered() != isCentered) {
+                rotary->setCentered(isCentered);
+                redraw = 1;
+            }
             if (rotary->getKnobColour() != knobColour) {
                 rotary->setKnobColour(knobColour);
                 redraw = 2;

@@ -82,6 +82,11 @@ public:
     //
     void setKnobColour(const QColor &colour);
     QColor getKnobColour() const { return m_knobColour; }
+    
+    // Centered status
+    //
+    bool getCentered() const { return m_centred; }
+    void setCentered(bool centred) { m_centred = centred; }
 
 signals:
     void valueChanged(float);
