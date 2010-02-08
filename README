@@ -19,7 +19,7 @@ has been released yet; if not, please continue on to:
 Build requirements
 ------------------
 
-Please see:
+For a complete list of build requirements, please see:
 
 http://www.rosegardenmusic.com/wiki/dev:contributing
 
@@ -39,10 +39,15 @@ have been installed, and then run:
     make
     make install
 
-New starting with 09.10, most of the application data files are bundled in the
-rosegarden binary.  The install process will copy the rosegarden binary
-to [PREFIX]/bin and will copy a limited number of data files to
-[PREFIX]/share/rosegarden
+New starting with 10.02, most of the application data files are bundled in the
+rosegarden binary.  The install process will only copy a few files to various
+directories under [PREFIX]:
+
+    [PREFIX]/bin                                   application binary
+    [PREFIX]/share/icons/hicolor/.../mimetypes     MIME type icons
+    [PREFIX]/share/mime/packages                   MIME type configuration
+    [PREFIX]/share/applications                    .desktop file
+    [PREFIX]/share/icons/hicolor/32x32/apps        application icon
 
 You may need to specify [QTDIR] on the configure line, so that the build can
 find the Qt4 libraries.
@@ -57,31 +62,17 @@ Runtime requirements
 --------------------
 
 In order to be fully functional and provide the optimal user experience,
-Rosegarden requires the following external applications.  We suggest listing
-them as your distro's equivalent of "recommends" level dependencies.  (Yes, this
-is a long list, and yes, we really do use all of these for something.)
+Rosegarden requires the following external applications.
 
-  - perl
-  - bash
-  - qsynth AND fluid-soundfont-gm* OR timidity AND freepats*
-  - lilypond
-  - ocular OR acroread OR kpdf OR evince
-  - kprinter OR gtklp OR lpr OR lp
-  - jackd
-  - sox
-  - sndfile-resample
-  - flac
-  - oggdec
-  - mpg321
-  - libxml-twig-perl
-  - qjackctl
+  - General MIDI soft synth (TiMidity + Freepats or better)
+  - LilyPond
+  - Okular, Evince, or Acroread
+  - lpr or lp
+  - QjackCtl (JACK Audio Connection Kit - Qt GUI Interface)
+  - FLAC
+  - WavPack
   - DSSI plugins (any your distro carries)
   - LADSPA plugins (any your distro carries)
-
-  * the key here being that either softsynth should come with an installed
-    soundfont or patchset in order that it can play General MIDI as configured
-    "out of the box"
-
 
 User documentation
 ------------------
@@ -92,7 +83,7 @@ Please see rosegardenmusic.com
 SPECIAL NOTES FOR PACKAGE MAINTAINERS
 -------------------------------------
 
-As of 09.10 all formerly optional dependencies are now mandatory dependencies.
+As of 10.02 all formerly optional dependencies are now mandatory dependencies.
 We've taken this step because it is a real support hassle working through a set
 of problems to finally uncover the reason something has broken is due to the
 user's distro package being built without a particular feature turned on.
@@ -100,13 +91,6 @@ user's distro package being built without a particular feature turned on.
 Most major distros already carry everything we depend on, so we don't anticipate
 that the build requirements will be a serious irritation for package
 maintainers.
-
-New in this release, we have also included a formal list of "recommends"
-dependencies.  We make use of a large number of supporting applications to
-provide audio playback and file conversion, music notation typesetting, and so
-on.  Many of these applications are already installed by default on
-studio-oriented distros in particular, so we hope this new and shockingly long
-list will not be too much of a burden.
 
 Thank you for your cooperation, and thank you for making Rosegarden available to
 our users!  If you need to patch Rosegarden for one reason or another in the
