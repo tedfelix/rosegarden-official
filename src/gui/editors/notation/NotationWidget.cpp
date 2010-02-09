@@ -1203,6 +1203,7 @@ NotationWidget::setHeadersVisible(bool visible)
         m_headersButtons->hide();
     }
     m_headersAreVisible = visible;
+    emit headersVisibilityChanged(visible);
 }
 
 void
@@ -1221,6 +1222,7 @@ void
 NotationWidget::toggleHeadersView()
 {
     m_headersAreVisible = !m_headersAreVisible;
+    emit headersVisibilityChanged(m_headersAreVisible);
     if (m_headersAreVisible && m_linearMode) {
         if (m_headersNeedRegeneration) slotGenerateHeaders();
         m_headersView->show();

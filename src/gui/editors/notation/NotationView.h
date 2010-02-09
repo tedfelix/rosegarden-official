@@ -326,6 +326,9 @@ protected slots:
     // Open insert pitch bends sequence dialog
     void slotPitchBendSequence();
 
+    // Update the "Show staff headers" check box in the menu
+    void slotCheckShowHeadersMenu(bool checked);
+
 private:
     /**
      * export a LilyPond file (used by slotPrintLilyPond and

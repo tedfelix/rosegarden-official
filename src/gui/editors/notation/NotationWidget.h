@@ -124,6 +124,7 @@ signals:
     void sceneDeleted();
     void toolChanged(QString);
     void hoveredOverNoteChanged(QString);
+    void headersVisibilityChanged(bool);
 
 public slots:
     void slotSetTool(QString name);

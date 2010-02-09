@@ -323,6 +323,11 @@ NotationView::NotationView(RosegardenDocument *doc,
 
     m_notationWidget->resumeLayoutUpdates();
 
+    // Connection to update the "Show staff headers" check box in the menu
+    // (Must be done before setting the initial visibility of the headers)
+    connect(m_notationWidget, SIGNAL(headersVisibilityChanged(bool)),
+            this,  SLOT(slotCheckShowHeadersMenu(bool)));
+
     // Set initial visibility of staff headers.
     // (Could not be done earlier because both view size and headers size are
     //  needed to know what should be done when the "show when needed" option
@@ -4430,6 +4435,11 @@ NotationView::slotConfigure()
     configDlg->show();
 }
 
+void
+NotationView::slotCheckShowHeadersMenu(bool checked)
+{
+    findAction("show_track_headers")->setChecked(checked);
+}
 
 } // end namespace Rosegarden
 
