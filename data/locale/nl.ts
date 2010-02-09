@@ -4696,7 +4696,7 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="32"/>
-        <location filename="../AutoloadStrings.cpp" line="81"/>
+        <location filename="../AutoloadStrings.cpp" line="83"/>
         <source>Violin</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4707,7 +4707,7 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="34"/>
-        <location filename="../AutoloadStrings.cpp" line="82"/>
+        <location filename="../AutoloadStrings.cpp" line="84"/>
         <source>Viola</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4728,7 +4728,7 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="38"/>
-        <location filename="../AutoloadStrings.cpp" line="84"/>
+        <location filename="../AutoloadStrings.cpp" line="86"/>
         <source>Contrabass</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4869,7 +4869,7 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="66"/>
-        <location filename="../AutoloadStrings.cpp" line="201"/>
+        <location filename="../AutoloadStrings.cpp" line="203"/>
         <source>Mandolin</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4880,7 +4880,7 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="68"/>
-        <location filename="../AutoloadStrings.cpp" line="178"/>
+        <location filename="../AutoloadStrings.cpp" line="180"/>
         <source>Ukulele</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4906,7 +4906,7 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="73"/>
-        <location filename="../AutoloadStrings.cpp" line="148"/>
+        <location filename="../AutoloadStrings.cpp" line="150"/>
         <source>Koto</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4917,7 +4917,7 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="75"/>
-        <location filename="../AutoloadStrings.cpp" line="113"/>
+        <location filename="../AutoloadStrings.cpp" line="115"/>
         <source>Piccolo</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4928,7 +4928,7 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="77"/>
-        <location filename="../AutoloadStrings.cpp" line="114"/>
+        <location filename="../AutoloadStrings.cpp" line="116"/>
         <source>Flute</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5069,7 +5069,7 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="105"/>
-        <location filename="../AutoloadStrings.cpp" line="118"/>
+        <location filename="../AutoloadStrings.cpp" line="120"/>
         <source>Shakuhachi</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5090,7 +5090,7 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="109"/>
-        <location filename="../AutoloadStrings.cpp" line="109"/>
+        <location filename="../AutoloadStrings.cpp" line="111"/>
         <source>Oboe</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5201,7 +5201,7 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="131"/>
-        <location filename="../AutoloadStrings.cpp" line="111"/>
+        <location filename="../AutoloadStrings.cpp" line="113"/>
         <source>Bassoon</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5667,7 +5667,7 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="224"/>
-        <location filename="../AutoloadStrings.cpp" line="88"/>
+        <location filename="../AutoloadStrings.cpp" line="90"/>
         <source>Timpani</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5683,7 +5683,7 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="227"/>
-        <location filename="../AutoloadStrings.cpp" line="50"/>
+        <location filename="../AutoloadStrings.cpp" line="52"/>
         <source>Glockenspiel</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5719,7 +5719,7 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="234"/>
-        <location filename="../AutoloadStrings.cpp" line="52"/>
+        <location filename="../AutoloadStrings.cpp" line="54"/>
         <source>Vibraphone</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5810,7 +5810,7 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="252"/>
-        <location filename="../AutoloadStrings.cpp" line="54"/>
+        <location filename="../AutoloadStrings.cpp" line="56"/>
         <source>Xylophone</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5911,7 +5911,7 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="272"/>
-        <location filename="../AutoloadStrings.cpp" line="267"/>
+        <location filename="../AutoloadStrings.cpp" line="269"/>
         <source>Tambourine</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6047,13 +6047,13 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="300"/>
-        <location filename="../AutoloadStrings.cpp" line="288"/>
+        <location filename="../AutoloadStrings.cpp" line="290"/>
         <source>Claves</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="301"/>
-        <location filename="../AutoloadStrings.cpp" line="194"/>
+        <location filename="../AutoloadStrings.cpp" line="196"/>
         <source>Castanets</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6202,13 +6202,13 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="303"/>
-        <location filename="../AutoloadStrings.cpp" line="283"/>
+        <location filename="../AutoloadStrings.cpp" line="285"/>
         <source>Maracas</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="304"/>
-        <location filename="../AutoloadStrings.cpp" line="282"/>
+        <location filename="../AutoloadStrings.cpp" line="284"/>
         <source>Cabasa</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6354,7 +6354,7 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="351"/>
-        <location filename="../AutoloadStrings.cpp" line="63"/>
+        <location filename="../AutoloadStrings.cpp" line="65"/>
         <source>Harmonica</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6459,1187 +6459,1187 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="39"/>
+        <location filename="../AutoloadStrings.cpp" line="41"/>
         <source>General MIDI Device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="40"/>
+        <location filename="../AutoloadStrings.cpp" line="42"/>
         <source>General MIDI</source>
         <translation>Algemeen MIDI</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="41"/>
+        <location filename="../AutoloadStrings.cpp" line="43"/>
         <source>Acoustic Grand Piano</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="42"/>
+        <location filename="../AutoloadStrings.cpp" line="44"/>
         <source>Bright Acoustic Piano</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="43"/>
+        <location filename="../AutoloadStrings.cpp" line="45"/>
         <source>Electric Grand Piano</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="44"/>
+        <location filename="../AutoloadStrings.cpp" line="46"/>
         <source>Honky-tonk Piano</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="45"/>
+        <location filename="../AutoloadStrings.cpp" line="47"/>
         <source>Electric Piano 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="46"/>
+        <location filename="../AutoloadStrings.cpp" line="48"/>
         <source>Electric Piano 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="47"/>
+        <location filename="../AutoloadStrings.cpp" line="49"/>
         <source>Harpsichord</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="48"/>
+        <location filename="../AutoloadStrings.cpp" line="50"/>
         <source>Clavi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="49"/>
+        <location filename="../AutoloadStrings.cpp" line="51"/>
         <source>Celesta</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="51"/>
+        <location filename="../AutoloadStrings.cpp" line="53"/>
         <source>Music Box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="53"/>
+        <location filename="../AutoloadStrings.cpp" line="55"/>
         <source>Marimba</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="55"/>
+        <location filename="../AutoloadStrings.cpp" line="57"/>
         <source>Tubular Bells</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="56"/>
+        <location filename="../AutoloadStrings.cpp" line="58"/>
         <source>Dulcimer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="57"/>
+        <location filename="../AutoloadStrings.cpp" line="59"/>
         <source>Drawbar Organ</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="58"/>
+        <location filename="../AutoloadStrings.cpp" line="60"/>
         <source>Percussive Organ</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="59"/>
+        <location filename="../AutoloadStrings.cpp" line="61"/>
         <source>Rock Organ</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="60"/>
+        <location filename="../AutoloadStrings.cpp" line="62"/>
         <source>Church Organ</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="61"/>
+        <location filename="../AutoloadStrings.cpp" line="63"/>
         <source>Reed Organ</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="62"/>
+        <location filename="../AutoloadStrings.cpp" line="64"/>
         <source>Accordion</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="64"/>
+        <location filename="../AutoloadStrings.cpp" line="66"/>
         <source>Tango Accordion</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="65"/>
+        <location filename="../AutoloadStrings.cpp" line="67"/>
         <source>Acoustic Guitar (nylon)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="66"/>
+        <location filename="../AutoloadStrings.cpp" line="68"/>
         <source>Acoustic Guitar (steel)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="67"/>
+        <location filename="../AutoloadStrings.cpp" line="69"/>
         <source>Electric Guitar (jazz)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="68"/>
+        <location filename="../AutoloadStrings.cpp" line="70"/>
         <source>Electric Guitar (clean)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="69"/>
+        <location filename="../AutoloadStrings.cpp" line="71"/>
         <source>Electric Guitar (muted)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="70"/>
+        <location filename="../AutoloadStrings.cpp" line="72"/>
         <source>Overdriven Guitar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="71"/>
+        <location filename="../AutoloadStrings.cpp" line="73"/>
         <source>Distortion Guitar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="72"/>
+        <location filename="../AutoloadStrings.cpp" line="74"/>
         <source>Guitar harmonics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="73"/>
+        <location filename="../AutoloadStrings.cpp" line="75"/>
         <source>Acoustic Bass</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="74"/>
+        <location filename="../AutoloadStrings.cpp" line="76"/>
         <source>Fingered Bass</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="75"/>
+        <location filename="../AutoloadStrings.cpp" line="77"/>
         <source>Picked Bass</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="76"/>
+        <location filename="../AutoloadStrings.cpp" line="78"/>
         <source>Fretless Bass</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="77"/>
+        <location filename="../AutoloadStrings.cpp" line="79"/>
         <source>Slap Bass 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="78"/>
+        <location filename="../AutoloadStrings.cpp" line="80"/>
         <source>Slap Bass 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="79"/>
+        <location filename="../AutoloadStrings.cpp" line="81"/>
         <source>Synth Bass 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="80"/>
+        <location filename="../AutoloadStrings.cpp" line="82"/>
         <source>Synth Bass 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="83"/>
+        <location filename="../AutoloadStrings.cpp" line="85"/>
         <source>Cello</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="85"/>
+        <location filename="../AutoloadStrings.cpp" line="87"/>
         <source>Tremolo Strings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="86"/>
+        <location filename="../AutoloadStrings.cpp" line="88"/>
         <source>Pizzicato Strings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="87"/>
+        <location filename="../AutoloadStrings.cpp" line="89"/>
         <source>Orchestral Harp</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="89"/>
+        <location filename="../AutoloadStrings.cpp" line="91"/>
         <source>String Ensemble 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="90"/>
+        <location filename="../AutoloadStrings.cpp" line="92"/>
         <source>String Ensemble 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="91"/>
+        <location filename="../AutoloadStrings.cpp" line="93"/>
         <source>SynthStrings 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="92"/>
+        <location filename="../AutoloadStrings.cpp" line="94"/>
         <source>SynthStrings 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="93"/>
+        <location filename="../AutoloadStrings.cpp" line="95"/>
         <source>Choir Aahs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="94"/>
+        <location filename="../AutoloadStrings.cpp" line="96"/>
         <source>Voice Oohs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="95"/>
+        <location filename="../AutoloadStrings.cpp" line="97"/>
         <source>Synth Voice</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="96"/>
+        <location filename="../AutoloadStrings.cpp" line="98"/>
         <source>Orchestra Hit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="97"/>
+        <location filename="../AutoloadStrings.cpp" line="99"/>
         <source>Trumpet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="98"/>
+        <location filename="../AutoloadStrings.cpp" line="100"/>
         <source>Trombone</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="99"/>
+        <location filename="../AutoloadStrings.cpp" line="101"/>
         <source>Tuba</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="100"/>
+        <location filename="../AutoloadStrings.cpp" line="102"/>
         <source>Muted Trumpet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="101"/>
+        <location filename="../AutoloadStrings.cpp" line="103"/>
         <source>French Horn</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="102"/>
+        <location filename="../AutoloadStrings.cpp" line="104"/>
         <source>Brass Section</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="103"/>
+        <location filename="../AutoloadStrings.cpp" line="105"/>
         <source>SynthBrass 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="104"/>
+        <location filename="../AutoloadStrings.cpp" line="106"/>
         <source>SynthBrass 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="105"/>
+        <location filename="../AutoloadStrings.cpp" line="107"/>
         <source>Soprano Sax</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="106"/>
+        <location filename="../AutoloadStrings.cpp" line="108"/>
         <source>Alto Sax</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="107"/>
+        <location filename="../AutoloadStrings.cpp" line="109"/>
         <source>Tenor Sax</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="108"/>
+        <location filename="../AutoloadStrings.cpp" line="110"/>
         <source>Baritone Sax</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="110"/>
+        <location filename="../AutoloadStrings.cpp" line="112"/>
         <source>English Horn</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="112"/>
+        <location filename="../AutoloadStrings.cpp" line="114"/>
         <source>Clarinet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="115"/>
+        <location filename="../AutoloadStrings.cpp" line="117"/>
         <source>Recorder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="116"/>
+        <location filename="../AutoloadStrings.cpp" line="118"/>
         <source>Pan Flute</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="117"/>
+        <location filename="../AutoloadStrings.cpp" line="119"/>
         <source>Blown Bottle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="119"/>
+        <location filename="../AutoloadStrings.cpp" line="121"/>
         <source>Whistle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="120"/>
+        <location filename="../AutoloadStrings.cpp" line="122"/>
         <source>Ocarina</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="121"/>
+        <location filename="../AutoloadStrings.cpp" line="123"/>
         <source>Lead 1 (square)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="122"/>
+        <location filename="../AutoloadStrings.cpp" line="124"/>
         <source>Lead 2 (sawtooth)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="123"/>
+        <location filename="../AutoloadStrings.cpp" line="125"/>
         <source>Lead 3 (calliope)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="124"/>
+        <location filename="../AutoloadStrings.cpp" line="126"/>
         <source>Lead 4 (chiff)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="125"/>
+        <location filename="../AutoloadStrings.cpp" line="127"/>
         <source>Lead 5 (charang)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="126"/>
+        <location filename="../AutoloadStrings.cpp" line="128"/>
         <source>Lead 6 (voice)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="127"/>
+        <location filename="../AutoloadStrings.cpp" line="129"/>
         <source>Lead 7 (fifths)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="128"/>
+        <location filename="../AutoloadStrings.cpp" line="130"/>
         <source>Lead 8 (bass + lead)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="129"/>
+        <location filename="../AutoloadStrings.cpp" line="131"/>
         <source>Pad 1 (new age)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="130"/>
+        <location filename="../AutoloadStrings.cpp" line="132"/>
         <source>Pad 2 (warm)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="131"/>
+        <location filename="../AutoloadStrings.cpp" line="133"/>
         <source>Pad 3 (polysynth)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="132"/>
+        <location filename="../AutoloadStrings.cpp" line="134"/>
         <source>Pad 4 (choir)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="133"/>
+        <location filename="../AutoloadStrings.cpp" line="135"/>
         <source>Pad 5 (bowed)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="134"/>
+        <location filename="../AutoloadStrings.cpp" line="136"/>
         <source>Pad 6 (metallic)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="135"/>
+        <location filename="../AutoloadStrings.cpp" line="137"/>
         <source>Pad 7 (halo)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="136"/>
+        <location filename="../AutoloadStrings.cpp" line="138"/>
         <source>Pad 8 (sweep)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="137"/>
+        <location filename="../AutoloadStrings.cpp" line="139"/>
         <source>FX 1 (rain)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="138"/>
+        <location filename="../AutoloadStrings.cpp" line="140"/>
         <source>FX 2 (soundtrack)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="139"/>
+        <location filename="../AutoloadStrings.cpp" line="141"/>
         <source>FX 3 (crystal)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="140"/>
+        <location filename="../AutoloadStrings.cpp" line="142"/>
         <source>FX 4 (atmosphere)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="141"/>
+        <location filename="../AutoloadStrings.cpp" line="143"/>
         <source>FX 5 (brightness)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="142"/>
+        <location filename="../AutoloadStrings.cpp" line="144"/>
         <source>FX 6 (goblins)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="143"/>
+        <location filename="../AutoloadStrings.cpp" line="145"/>
         <source>FX 7 (echoes)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="144"/>
+        <location filename="../AutoloadStrings.cpp" line="146"/>
         <source>FX 8 (sci-fi)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="145"/>
+        <location filename="../AutoloadStrings.cpp" line="147"/>
         <source>Sitar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="146"/>
+        <location filename="../AutoloadStrings.cpp" line="148"/>
         <source>Banjo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="147"/>
+        <location filename="../AutoloadStrings.cpp" line="149"/>
         <source>Shamisen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="149"/>
+        <location filename="../AutoloadStrings.cpp" line="151"/>
         <source>Kalimba</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="150"/>
+        <location filename="../AutoloadStrings.cpp" line="152"/>
         <source>Bag pipe</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="151"/>
+        <location filename="../AutoloadStrings.cpp" line="153"/>
         <source>Fiddle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="152"/>
+        <location filename="../AutoloadStrings.cpp" line="154"/>
         <source>Shanai</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="153"/>
+        <location filename="../AutoloadStrings.cpp" line="155"/>
         <source>Tinkle Bell</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="154"/>
+        <location filename="../AutoloadStrings.cpp" line="156"/>
         <source>Agogo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="155"/>
+        <location filename="../AutoloadStrings.cpp" line="157"/>
         <source>Steel Drums</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="156"/>
+        <location filename="../AutoloadStrings.cpp" line="158"/>
         <source>Woodblock</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="157"/>
+        <location filename="../AutoloadStrings.cpp" line="159"/>
         <source>Taiko Drum</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="158"/>
+        <location filename="../AutoloadStrings.cpp" line="160"/>
         <source>Melodic Tom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="159"/>
+        <location filename="../AutoloadStrings.cpp" line="161"/>
         <source>Synth Drum</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="160"/>
+        <location filename="../AutoloadStrings.cpp" line="162"/>
         <source>Reverse Cymbal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="161"/>
+        <location filename="../AutoloadStrings.cpp" line="163"/>
         <source>Guitar Fret Noise</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="162"/>
+        <location filename="../AutoloadStrings.cpp" line="164"/>
         <source>Breath Noise</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="163"/>
+        <location filename="../AutoloadStrings.cpp" line="165"/>
         <source>Seashore</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="164"/>
+        <location filename="../AutoloadStrings.cpp" line="166"/>
         <source>Bird Tweet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="165"/>
+        <location filename="../AutoloadStrings.cpp" line="167"/>
         <source>Telephone Ring</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="166"/>
+        <location filename="../AutoloadStrings.cpp" line="168"/>
         <source>Helicopter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="167"/>
+        <location filename="../AutoloadStrings.cpp" line="169"/>
         <source>Applause</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="168"/>
+        <location filename="../AutoloadStrings.cpp" line="170"/>
         <source>Gunshot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="169"/>
+        <location filename="../AutoloadStrings.cpp" line="171"/>
         <source>Bank 0:8</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="170"/>
+        <location filename="../AutoloadStrings.cpp" line="172"/>
         <source>Detuned EP 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="171"/>
+        <location filename="../AutoloadStrings.cpp" line="173"/>
         <source>Detuned EP 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="172"/>
+        <location filename="../AutoloadStrings.cpp" line="174"/>
         <source>Coupled Harpsichord</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="173"/>
+        <location filename="../AutoloadStrings.cpp" line="175"/>
         <source>Church Bell</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="174"/>
+        <location filename="../AutoloadStrings.cpp" line="176"/>
         <source>Detuned Organ 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="175"/>
+        <location filename="../AutoloadStrings.cpp" line="177"/>
         <source>Detuned Organ 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="176"/>
+        <location filename="../AutoloadStrings.cpp" line="178"/>
         <source>Church Organ 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="177"/>
+        <location filename="../AutoloadStrings.cpp" line="179"/>
         <source>Italian Accordion</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="179"/>
+        <location filename="../AutoloadStrings.cpp" line="181"/>
         <source>12 String Guitar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="180"/>
+        <location filename="../AutoloadStrings.cpp" line="182"/>
         <source>Hawaiian Guitar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="181"/>
+        <location filename="../AutoloadStrings.cpp" line="183"/>
         <source>Funk Guitar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="182"/>
+        <location filename="../AutoloadStrings.cpp" line="184"/>
         <source>Feedback Guitar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="183"/>
+        <location filename="../AutoloadStrings.cpp" line="185"/>
         <source>Guitar Feedback</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="184"/>
+        <location filename="../AutoloadStrings.cpp" line="186"/>
         <source>Synth Bass 3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="185"/>
+        <location filename="../AutoloadStrings.cpp" line="187"/>
         <source>Synth Bass 4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="186"/>
+        <location filename="../AutoloadStrings.cpp" line="188"/>
         <source>Slow Violin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="187"/>
+        <location filename="../AutoloadStrings.cpp" line="189"/>
         <source>Orchestral Pad</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="188"/>
+        <location filename="../AutoloadStrings.cpp" line="190"/>
         <source>Synth Strings 3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="189"/>
+        <location filename="../AutoloadStrings.cpp" line="191"/>
         <source>Brass 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="190"/>
+        <location filename="../AutoloadStrings.cpp" line="192"/>
         <source>Synth Brass 3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="191"/>
+        <location filename="../AutoloadStrings.cpp" line="193"/>
         <source>Synth Brass 4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="192"/>
+        <location filename="../AutoloadStrings.cpp" line="194"/>
         <source>Sine Wave</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="193"/>
+        <location filename="../AutoloadStrings.cpp" line="195"/>
         <source>Taisho Koto</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="195"/>
+        <location filename="../AutoloadStrings.cpp" line="197"/>
         <source>Concert Bass Drum</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="196"/>
+        <location filename="../AutoloadStrings.cpp" line="198"/>
         <source>Melo Tom 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="197"/>
+        <location filename="../AutoloadStrings.cpp" line="199"/>
         <source>808 Tom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="198"/>
+        <location filename="../AutoloadStrings.cpp" line="200"/>
         <source>Bank 0:9</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="199"/>
+        <location filename="../AutoloadStrings.cpp" line="201"/>
         <source>Burst Noise</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="200"/>
+        <location filename="../AutoloadStrings.cpp" line="202"/>
         <source>Bank 0:16</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="202"/>
+        <location filename="../AutoloadStrings.cpp" line="204"/>
         <source>Bank 1:0</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="203"/>
+        <location filename="../AutoloadStrings.cpp" line="205"/>
         <source>Standard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="204"/>
+        <location filename="../AutoloadStrings.cpp" line="206"/>
         <source>Standard 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="205"/>
+        <location filename="../AutoloadStrings.cpp" line="207"/>
         <source>Standard 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="206"/>
+        <location filename="../AutoloadStrings.cpp" line="208"/>
         <source>Standard 3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="207"/>
+        <location filename="../AutoloadStrings.cpp" line="209"/>
         <source>Standard 4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="208"/>
+        <location filename="../AutoloadStrings.cpp" line="210"/>
         <source>Standard 5</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="209"/>
+        <location filename="../AutoloadStrings.cpp" line="211"/>
         <source>Standard 6</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="210"/>
+        <location filename="../AutoloadStrings.cpp" line="212"/>
         <source>Standard 7</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="211"/>
+        <location filename="../AutoloadStrings.cpp" line="213"/>
         <source>Room</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="212"/>
+        <location filename="../AutoloadStrings.cpp" line="214"/>
         <source>Room 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="213"/>
+        <location filename="../AutoloadStrings.cpp" line="215"/>
         <source>Room 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="214"/>
+        <location filename="../AutoloadStrings.cpp" line="216"/>
         <source>Room 3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="215"/>
+        <location filename="../AutoloadStrings.cpp" line="217"/>
         <source>Room 4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="216"/>
+        <location filename="../AutoloadStrings.cpp" line="218"/>
         <source>Room 5</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="217"/>
+        <location filename="../AutoloadStrings.cpp" line="219"/>
         <source>Room 6</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="218"/>
+        <location filename="../AutoloadStrings.cpp" line="220"/>
         <source>Room 7</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="219"/>
+        <location filename="../AutoloadStrings.cpp" line="221"/>
         <source>Power</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="220"/>
+        <location filename="../AutoloadStrings.cpp" line="222"/>
         <source>Power 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="221"/>
+        <location filename="../AutoloadStrings.cpp" line="223"/>
         <source>Power 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="222"/>
+        <location filename="../AutoloadStrings.cpp" line="224"/>
         <source>Power 3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="223"/>
+        <location filename="../AutoloadStrings.cpp" line="225"/>
         <source>Electronic</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="224"/>
+        <location filename="../AutoloadStrings.cpp" line="226"/>
         <source>TR-808</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="225"/>
+        <location filename="../AutoloadStrings.cpp" line="227"/>
         <source>Jazz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="226"/>
+        <location filename="../AutoloadStrings.cpp" line="228"/>
         <source>Jazz 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="227"/>
+        <location filename="../AutoloadStrings.cpp" line="229"/>
         <source>Jazz 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="228"/>
+        <location filename="../AutoloadStrings.cpp" line="230"/>
         <source>Jazz 3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="229"/>
+        <location filename="../AutoloadStrings.cpp" line="231"/>
         <source>Jazz 4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="230"/>
+        <location filename="../AutoloadStrings.cpp" line="232"/>
         <source>Brush</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="231"/>
+        <location filename="../AutoloadStrings.cpp" line="233"/>
         <source>Brush 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="232"/>
+        <location filename="../AutoloadStrings.cpp" line="234"/>
         <source>Brush 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="233"/>
+        <location filename="../AutoloadStrings.cpp" line="235"/>
         <source>Orchestra Kit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="234"/>
-        <location filename="../AutoloadStrings.cpp" line="297"/>
-        <location filename="../AutoloadStrings.cpp" line="736"/>
+        <location filename="../AutoloadStrings.cpp" line="236"/>
+        <location filename="../AutoloadStrings.cpp" line="299"/>
+        <location filename="../AutoloadStrings.cpp" line="735"/>
         <source>Pan</source>
         <translation>Pan</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="235"/>
-        <location filename="../AutoloadStrings.cpp" line="298"/>
-        <location filename="../AutoloadStrings.cpp" line="737"/>
+        <location filename="../AutoloadStrings.cpp" line="237"/>
+        <location filename="../AutoloadStrings.cpp" line="300"/>
+        <location filename="../AutoloadStrings.cpp" line="736"/>
         <source>Chorus</source>
         <translation>Chorus (breder of dieper geluid)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="236"/>
-        <location filename="../AutoloadStrings.cpp" line="299"/>
-        <location filename="../AutoloadStrings.cpp" line="738"/>
+        <location filename="../AutoloadStrings.cpp" line="238"/>
+        <location filename="../AutoloadStrings.cpp" line="301"/>
+        <location filename="../AutoloadStrings.cpp" line="737"/>
         <source>Volume</source>
         <translation>Volume</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="237"/>
-        <location filename="../AutoloadStrings.cpp" line="300"/>
-        <location filename="../AutoloadStrings.cpp" line="739"/>
+        <location filename="../AutoloadStrings.cpp" line="239"/>
+        <location filename="../AutoloadStrings.cpp" line="302"/>
+        <location filename="../AutoloadStrings.cpp" line="738"/>
         <source>Reverb</source>
         <translation>Galm</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="238"/>
-        <location filename="../AutoloadStrings.cpp" line="301"/>
-        <location filename="../AutoloadStrings.cpp" line="740"/>
+        <location filename="../AutoloadStrings.cpp" line="240"/>
+        <location filename="../AutoloadStrings.cpp" line="303"/>
+        <location filename="../AutoloadStrings.cpp" line="739"/>
         <source>Sustain</source>
         <translation>Sustain</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="239"/>
-        <location filename="../AutoloadStrings.cpp" line="302"/>
-        <location filename="../AutoloadStrings.cpp" line="741"/>
+        <location filename="../AutoloadStrings.cpp" line="241"/>
+        <location filename="../AutoloadStrings.cpp" line="304"/>
+        <location filename="../AutoloadStrings.cpp" line="740"/>
         <source>Expression</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="240"/>
-        <location filename="../AutoloadStrings.cpp" line="303"/>
-        <location filename="../AutoloadStrings.cpp" line="742"/>
+        <location filename="../AutoloadStrings.cpp" line="242"/>
+        <location filename="../AutoloadStrings.cpp" line="305"/>
+        <location filename="../AutoloadStrings.cpp" line="741"/>
         <source>Modulation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="241"/>
-        <location filename="../AutoloadStrings.cpp" line="304"/>
-        <location filename="../AutoloadStrings.cpp" line="743"/>
+        <location filename="../AutoloadStrings.cpp" line="243"/>
+        <location filename="../AutoloadStrings.cpp" line="306"/>
+        <location filename="../AutoloadStrings.cpp" line="742"/>
         <source>PitchBend</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="242"/>
+        <location filename="../AutoloadStrings.cpp" line="244"/>
         <source>General MIDI Percussion</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="243"/>
-        <location filename="../AutoloadStrings.cpp" line="244"/>
         <location filename="../AutoloadStrings.cpp" line="245"/>
         <location filename="../AutoloadStrings.cpp" line="246"/>
         <location filename="../AutoloadStrings.cpp" line="247"/>
+        <location filename="../AutoloadStrings.cpp" line="248"/>
+        <location filename="../AutoloadStrings.cpp" line="249"/>
         <source> </source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="248"/>
+        <location filename="../AutoloadStrings.cpp" line="250"/>
         <source>Acoustic Bass Drum</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="249"/>
+        <location filename="../AutoloadStrings.cpp" line="251"/>
         <source>Bass Drum 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="250"/>
+        <location filename="../AutoloadStrings.cpp" line="252"/>
         <source>Side Stick</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="251"/>
+        <location filename="../AutoloadStrings.cpp" line="253"/>
         <source>Acoustic Snare</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="252"/>
+        <location filename="../AutoloadStrings.cpp" line="254"/>
         <source>Hand Clap</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="253"/>
+        <location filename="../AutoloadStrings.cpp" line="255"/>
         <source>Electric Snare</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="254"/>
+        <location filename="../AutoloadStrings.cpp" line="256"/>
         <source>Low Floor Tom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="255"/>
+        <location filename="../AutoloadStrings.cpp" line="257"/>
         <source>Closed Hi-Hat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="256"/>
+        <location filename="../AutoloadStrings.cpp" line="258"/>
         <source>High Floor Tom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="257"/>
+        <location filename="../AutoloadStrings.cpp" line="259"/>
         <source>Pedal Hi-Hat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="258"/>
+        <location filename="../AutoloadStrings.cpp" line="260"/>
         <source>Low Tom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="259"/>
+        <location filename="../AutoloadStrings.cpp" line="261"/>
         <source>Open Hi-Hat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="260"/>
+        <location filename="../AutoloadStrings.cpp" line="262"/>
         <source>Low-Mid Tom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="261"/>
+        <location filename="../AutoloadStrings.cpp" line="263"/>
         <source>Hi-Mid Tom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="262"/>
+        <location filename="../AutoloadStrings.cpp" line="264"/>
         <source>Crash Cymbal 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="263"/>
+        <location filename="../AutoloadStrings.cpp" line="265"/>
         <source>High Tom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="264"/>
+        <location filename="../AutoloadStrings.cpp" line="266"/>
         <source>Ride Cymbal 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="265"/>
+        <location filename="../AutoloadStrings.cpp" line="267"/>
         <source>Chinese Cymbal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="266"/>
+        <location filename="../AutoloadStrings.cpp" line="268"/>
         <source>Ride Bell</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="268"/>
+        <location filename="../AutoloadStrings.cpp" line="270"/>
         <source>Splash Cymbal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="269"/>
+        <location filename="../AutoloadStrings.cpp" line="271"/>
         <source>Cowbell</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="270"/>
+        <location filename="../AutoloadStrings.cpp" line="272"/>
         <source>Crash Cymbal 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="271"/>
+        <location filename="../AutoloadStrings.cpp" line="273"/>
         <source>Vibraslap</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="272"/>
+        <location filename="../AutoloadStrings.cpp" line="274"/>
         <source>Ride Cymbal 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="273"/>
+        <location filename="../AutoloadStrings.cpp" line="275"/>
         <source>Hi Bongo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="274"/>
+        <location filename="../AutoloadStrings.cpp" line="276"/>
         <source>Low Bongo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="275"/>
+        <location filename="../AutoloadStrings.cpp" line="277"/>
         <source>Mute Hi Conga</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="276"/>
+        <location filename="../AutoloadStrings.cpp" line="278"/>
         <source>Open Hi Conga</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="277"/>
+        <location filename="../AutoloadStrings.cpp" line="279"/>
         <source>Low Conga</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="278"/>
+        <location filename="../AutoloadStrings.cpp" line="280"/>
         <source>High Timbale</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="279"/>
+        <location filename="../AutoloadStrings.cpp" line="281"/>
         <source>Low Timbale</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="280"/>
+        <location filename="../AutoloadStrings.cpp" line="282"/>
         <source>High Agogo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="281"/>
+        <location filename="../AutoloadStrings.cpp" line="283"/>
         <source>Low Agogo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="284"/>
+        <location filename="../AutoloadStrings.cpp" line="286"/>
         <source>Short Whistle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="285"/>
+        <location filename="../AutoloadStrings.cpp" line="287"/>
         <source>Long Whistle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="286"/>
+        <location filename="../AutoloadStrings.cpp" line="288"/>
         <source>Short Guiro</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="287"/>
+        <location filename="../AutoloadStrings.cpp" line="289"/>
         <source>Long Guiro</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="289"/>
+        <location filename="../AutoloadStrings.cpp" line="291"/>
         <source>Hi Wood Block</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="290"/>
+        <location filename="../AutoloadStrings.cpp" line="292"/>
         <source>Low Wood Block</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="291"/>
+        <location filename="../AutoloadStrings.cpp" line="293"/>
         <source>Mute Cuica</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="292"/>
+        <location filename="../AutoloadStrings.cpp" line="294"/>
         <source>Open Cuica</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="293"/>
+        <location filename="../AutoloadStrings.cpp" line="295"/>
         <source>Mute Triangle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="294"/>
+        <location filename="../AutoloadStrings.cpp" line="296"/>
         <source>Open Triangle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="295"/>
+        <location filename="../AutoloadStrings.cpp" line="297"/>
         <source>MIDI input system device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="296"/>
+        <location filename="../AutoloadStrings.cpp" line="298"/>
         <source>&amp;lt;none&amp;gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7647,14 +7647,14 @@
         <location filename="../../src/base/Studio.cpp" line="56"/>
         <location filename="../../src/sound/AlsaDriver.cpp" line="663"/>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="521"/>
-        <location filename="../AutoloadStrings.cpp" line="305"/>
+        <location filename="../AutoloadStrings.cpp" line="40"/>
         <source>Synth plugin</source>
         <translation>Synth-plugin</translation>
     </message>
     <message>
         <location filename="../../src/base/Studio.cpp" line="53"/>
         <location filename="../../src/sound/AlsaDriver.cpp" line="700"/>
-        <location filename="../AutoloadStrings.cpp" line="306"/>
+        <location filename="../AutoloadStrings.cpp" line="39"/>
         <source>Audio</source>
         <translation>Audio</translation>
     </message>
@@ -9749,11 +9749,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="726"/>
-        <source>Blue pastel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../AutoloadStrings.cpp" line="727"/>
         <source>Red pastel</source>
         <translation type="unfinished"></translation>
@@ -9774,27 +9769,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="731"/>
+        <location filename="../AutoloadStrings.cpp" line="726"/>
         <source>default</source>
         <translation>standaard</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="732"/>
+        <location filename="../AutoloadStrings.cpp" line="731"/>
         <source>Copyright (c) xxxx Copyright Holder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="733"/>
+        <location filename="../AutoloadStrings.cpp" line="732"/>
         <source>Not Yet Titled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="734"/>
+        <location filename="../AutoloadStrings.cpp" line="733"/>
         <source>not yet subtitled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="735"/>
+        <location filename="../AutoloadStrings.cpp" line="734"/>
         <source>Unknown</source>
         <translation>Onbekend</translation>
     </message>
@@ -9804,8 +9799,8 @@
         <translation>[ %1 ]</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="684"/>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="806"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="690"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="812"/>
         <source>%1. %2</source>
         <translation></translation>
     </message>
@@ -9829,7 +9824,7 @@
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="451"/>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="981"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="997"/>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="757"/>
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1589"/>
         <source>%1 Controller %2 %3</source>
@@ -10137,7 +10132,7 @@
     <message>
         <location filename="../../src/gui/general/ActionCommandRegistry.cpp" line="115"/>
         <source>Rosegarden - Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Rosegarden - waarschuwing</translation>
     </message>
 </context>
 <context>
@@ -10637,37 +10632,34 @@
 <context>
     <name>Rosegarden::AudioFileManager</name>
     <message>
-        <location filename="../../src/sound/AudioFileManager.cpp" line="660"/>
+        <location filename="../../src/sound/AudioFileManager.cpp" line="658"/>
         <source>Cannot download file %1</source>
         <translation>Kan bestand %1 niet downloaden</translation>
     </message>
     <message>
-        <location filename="../../src/sound/AudioFileManager.cpp" line="660"/>
+        <location filename="../../src/sound/AudioFileManager.cpp" line="658"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/sound/AudioFileManager.cpp" line="730"/>
         <source>Converting audio file...</source>
-        <translation>Audiobestand converteren...</translation>
+        <translation type="obsolete">Audiobestand converteren...</translation>
     </message>
     <message>
-        <location filename="../../src/sound/AudioFileManager.cpp" line="732"/>
         <source>Resampling audio file...</source>
-        <translation>Audiobestand her-samplen...</translation>
+        <translation type="obsolete">Audiobestand her-samplen...</translation>
     </message>
     <message>
-        <location filename="../../src/sound/AudioFileManager.cpp" line="734"/>
         <source>Converting and resampling audio file...</source>
-        <translation>Audiobestand converteren en hersamplen...</translation>
+        <translation type="obsolete">Audiobestand converteren en hersamplen...</translation>
     </message>
     <message>
-        <location filename="../../src/sound/AudioFileManager.cpp" line="736"/>
+        <location filename="../../src/sound/AudioFileManager.cpp" line="675"/>
         <source>Importing audio file...</source>
         <translation>Audiobestand importeren...</translation>
     </message>
     <message>
-        <location filename="../../src/sound/AudioFileManager.cpp" line="798"/>
+        <location filename="../../src/sound/AudioFileManager.cpp" line="705"/>
         <source>Failed to convert or resample audio file on import</source>
         <translation>Converteren of her-samplen mislukt bij importeren van audiobestand</translation>
     </message>
@@ -10775,9 +10767,9 @@
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="881"/>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="956"/>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="967"/>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1203"/>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1208"/>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1225"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1201"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1206"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1224"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
@@ -10856,7 +10848,6 @@ Selecteer welke u permanent van de harde schijf wilt verwijderen.
         <source>&lt;qt&gt;About to delete %n audio file(s) permanently from the hard disk.&lt;br&gt;This action cannot be undone, and there will be no way to recover the files.&lt;br&gt;Are you sure?&lt;/qt&gt;</source>
         <translation type="unfinished">
             <numerusform></numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -10875,38 +10866,37 @@ Selecteer welke u permanent van de harde schijf wilt verwijderen.
         <translation>Voer nieuw label in</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1175"/>
         <source>importing a remote audio file</source>
-        <translation>Remote audiobestand importeren</translation>
+        <translation type="obsolete">Remote audiobestand importeren</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1177"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1173"/>
         <source>importing an audio file that needs to be converted or resampled</source>
         <translation>Audiobestand importeren dat geconverteerd of geresampled moet worden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1180"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1177"/>
         <source>Adding audio file...</source>
         <translation>Bezig audiobestand toe te voegen...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1202"/>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1207"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1200"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1205"/>
         <source>Failed to add audio file. </source>
         <translation>Audiobestand toevoegen mislukt.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1216"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1215"/>
         <source>Generating audio preview...</source>
         <translation>Bezig met genereren van audio voorbeeld...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1224"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1223"/>
         <source>Try copying this file to a directory where you have write permission and re-add it</source>
         <translation>Probeer dit bestand te verplaatsen naar een map waar u schrijfrechten heeft en probeer het opnieuw toe te voegen</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1386"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1385"/>
         <source>http://rosegardenmusic.com/wiki/doc:audioManager-en</source>
         <translation></translation>
     </message>
@@ -11560,98 +11550,103 @@ Selecteer welke u permanent van de harde schijf wilt verwijderen.
         <translation>Toon Variatie lijst gebaseerd op</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1576"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1088"/>
+        <source>&lt;new bank %1&gt;</source>
+        <translation>&lt;nieuwe bank %1&gt;</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1592"/>
         <source>Some internal error: no device selected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1797"/>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1801"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1813"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1817"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1838"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1854"/>
         <source>http://rosegardenmusic.com/wiki/doc:bankEditorDialog-en</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1078"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1086"/>
         <source>&lt;new bank&gt;</source>
         <translation>&lt;nieuwe bank&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1113"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1129"/>
         <source>&lt;new mapping&gt;</source>
         <translation>&lt;nieuwe mapping&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1115"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1131"/>
         <source>&lt;new mapping %1&gt;</source>
         <translation>&lt;nieuwe mapping %1&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1159"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1175"/>
         <source>Really delete this bank?</source>
         <translation>Deze bank echt verwijderen?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1212"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1228"/>
         <source>Really delete this key mapping?</source>
         <translation>Deze toetsen-mapping echt verwijderen?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1264"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1280"/>
         <source>Really delete all banks for </source>
         <translation>Weet u zeker dat u al deze banken wilt verwijderen voor </translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1543"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1559"/>
         <source>Import Banks from Device in File</source>
         <translation>Importeer banken uit apparaat in bestand</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1544"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1560"/>
         <source>Rosegarden Device files</source>
         <translation>Rosegarden apparaat-bestanden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1545"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1561"/>
         <source>Rosegarden files</source>
         <translation>Rosegarden-bestanden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1546"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1562"/>
         <source>Sound fonts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1547"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1563"/>
         <source>LinuxSampler configuration files</source>
-        <translation type="unfinished"></translation>
+        <translation>LinuxSampler configuratie-bestanden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1548"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1564"/>
         <source>All files</source>
         <translation>Alle bestanden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1566"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1582"/>
         <source>Some internal error: cannot locate selected device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1736"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1752"/>
         <source>Export Device as...</source>
         <translation>Exporteer apparaat als...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1758"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1774"/>
         <source>You have specified a directory</source>
         <translation>U heeft een map opgegeven</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1768"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1784"/>
         <source>The specified file exists.  Overwrite?</source>
         <translation>Het opgegeven bestand bestaat.  Overschrijven?</translation>
     </message>
@@ -11996,7 +11991,7 @@ Selecteer welke u permanent van de harde schijf wilt verwijderen.
         <location filename="../../src/document/CommandHistory.cpp" line="56"/>
         <location filename="../../src/document/CommandHistory.cpp" line="60"/>
         <source>&amp;Undo</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Ongedaan</translation>
     </message>
     <message>
         <location filename="../../src/document/CommandHistory.cpp" line="52"/>
@@ -12039,7 +12034,7 @@ Selecteer welke u permanent van de harde schijf wilt verwijderen.
         <location filename="../../src/document/CommandHistory.cpp" line="511"/>
         <location filename="../../src/document/CommandHistory.cpp" line="533"/>
         <source>&amp;Undo %1</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Ongedaan %1</translation>
     </message>
     <message>
         <location filename="../../src/document/CommandHistory.cpp" line="511"/>
@@ -12177,7 +12172,7 @@ Selecteer welke u permanent van de harde schijf wilt verwijderen.
     </message>
     <message>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="136"/>
-        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="376"/>
+        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="393"/>
         <source>Close</source>
         <translation>Sluiten</translation>
     </message>
@@ -12197,22 +12192,22 @@ Selecteer welke u permanent van de harde schijf wilt verwijderen.
         <translation>Sluit de Controle Parameter Bewerker</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="226"/>
+        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="238"/>
         <source>&lt;default&gt;</source>
         <translation>&lt;standaard&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="230"/>
+        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="242"/>
         <source>&lt;not showing&gt;</source>
         <translation>&lt;niet getoond&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="281"/>
+        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="297"/>
         <source>&lt;none&gt;</source>
         <translation>&lt;geen&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="465"/>
+        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="482"/>
         <source>http://rosegardenmusic.com/wiki/doc:controlEditorDialog-en</source>
         <translation></translation>
     </message>
@@ -14619,14 +14614,12 @@ Voorbeeldtekst uit het bestand:</translation>
         <source>up %n octave(s) and %1</source>
         <translation type="unfinished">
             <numerusform></numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="292"/>
         <source>up %n octave(s)</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
@@ -14640,14 +14633,12 @@ Voorbeeldtekst uit het bestand:</translation>
         <source>down %n octave(s) and %1</source>
         <translation type="unfinished">
             <numerusform></numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="303"/>
         <source>down %n octave(s)</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
@@ -16095,7 +16086,6 @@ Dubbelklik om de marker-editor te openen.</translation>
         <source>%1%2 - %n Segment(s) - %3</source>
         <translation type="unfinished">
             <numerusform></numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -16209,32 +16199,32 @@ Dubbelklik om de marker-editor te openen.</translation>
 <context>
     <name>Rosegarden::MatrixWidget</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="192"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="191"/>
         <source>Zoom</source>
         <translation>Detail</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="208"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="207"/>
         <source>Horizontal Zoom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="220"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="219"/>
         <source>Vertical Zoom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="233"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="232"/>
         <source>Reset Zoom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="1281"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="1297"/>
         <source>&lt;qt&gt;Rotate wheel to change the active segment&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="1282"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="1298"/>
         <source>&lt;qt&gt;Segment: &quot;%1&quot;&lt;br&gt;Track: %2 &quot;%3&quot;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -16242,14 +16232,12 @@ Dubbelklik om de marker-editor te openen.</translation>
 <context>
     <name>Rosegarden::MidiBankTreeWidgetItem</name>
     <message>
-        <location filename="../../src/gui/studio/MidiBankTreeWidgetItem.cpp" line="40"/>
-        <location filename="../../src/gui/studio/MidiBankTreeWidgetItem.cpp" line="51"/>
+        <location filename="../../src/gui/studio/MidiBankTreeWidgetItem.cpp" line="45"/>
         <source>Percussion Bank</source>
         <translation>Percussie-bank</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/MidiBankTreeWidgetItem.cpp" line="40"/>
-        <location filename="../../src/gui/studio/MidiBankTreeWidgetItem.cpp" line="51"/>
+        <location filename="../../src/gui/studio/MidiBankTreeWidgetItem.cpp" line="45"/>
         <source>Bank</source>
         <translation>Bank</translation>
     </message>
@@ -16267,7 +16255,7 @@ Dubbelklik om de marker-editor te openen.</translation>
         <translation>Bank</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/MidiDeviceTreeWidgetItem.cpp" line="55"/>
+        <location filename="../../src/gui/studio/MidiDeviceTreeWidgetItem.cpp" line="54"/>
         <source>Key Mapping</source>
         <translation>Toetsen-mapping</translation>
     </message>
@@ -16340,9 +16328,8 @@ Dubbelklik om de marker-editor te openen.</translation>
 <context>
     <name>Rosegarden::MidiKeyMapTreeWidgetItem</name>
     <message>
-        <location filename="../../src/gui/studio/MidiKeyMapTreeWidgetItem.cpp" line="42"/>
         <source>Key Mapping</source>
-        <translation>Toetsen-mapping</translation>
+        <translation type="obsolete">Toetsen-mapping</translation>
     </message>
 </context>
 <context>
@@ -16538,388 +16525,8 @@ Dubbelklik om de marker-editor te openen.</translation>
 <context>
     <name>Rosegarden::NewNotationView</name>
     <message>
-        <source>Si&amp;ze</source>
-        <translation type="obsolete">Gro&amp;otte</translation>
-    </message>
-    <message>
-        <source>S&amp;pacing</source>
-        <translation type="obsolete">S&amp;patiëring</translation>
-    </message>
-    <message>
-        <source>  Font:  </source>
-        <translation type="obsolete">  Lettertype:   </translation>
-    </message>
-    <message>
-        <source>Unknown font &quot;%1&quot;, using default</source>
-        <translation type="obsolete">Onbekend lettertype &quot;%1&quot;, standaard wordt gebruikt</translation>
-    </message>
-    <message>
-        <source>  Size:  </source>
-        <translation type="obsolete">  Grootte:   </translation>
-    </message>
-    <message>
-        <source>  Spacing:  </source>
-        <translation type="obsolete">Spatiëring:</translation>
-    </message>
-    <message>
-        <source>Export failed.  The file could not be opened for writing.</source>
-        <translation type="obsolete">Exporteren mislukt. Het bestand kon niet geopend worden voor schrijven.</translation>
-    </message>
-    <message>
-        <source>Unknown font action %1</source>
-        <translation type="obsolete">Onbekende lettertype actie %1</translation>
-    </message>
-    <message>
-        <source>Unknown font size action %1</source>
-        <translation type="obsolete">Onbekende lettertype grootte actie %1</translation>
-    </message>
-    <message>
-        <source>Unknown spacing action %1</source>
-        <translation type="obsolete">Onbekende spatiëring actie %1</translation>
-    </message>
-    <message>
-        <source>Can&apos;t paste multiple Segments into one</source>
-        <translation type="obsolete">Kan niet meerdere Segmenten in elkaar plakken</translation>
-    </message>
-    <message>
-        <source>Rosegarden</source>
-        <translation type="obsolete">Rosegarden</translation>
-    </message>
-    <message>
-        <source>Couldn&apos;t paste at this point.</source>
-        <translation type="obsolete">Kan niet plakken op dit punt.</translation>
-    </message>
-    <message>
-        <source>Clipboard is empty</source>
-        <translation type="obsolete">Klembord is leeg</translation>
-    </message>
-    <message>
-        <source>Inserting clipboard contents...</source>
-        <translation type="obsolete">Invoegen van klembord inhoud...</translation>
-    </message>
-    <message>
-        <source>Raising velocities...</source>
-        <translation type="obsolete">Verhogen snelheden...</translation>
-    </message>
-    <message>
-        <source>Lowering velocities...</source>
-        <translation type="obsolete">Verlagen snelheden...</translation>
-    </message>
-    <message>
-        <source>Set Event Velocities</source>
-        <translation type="obsolete">Stel Gebeurtenis Snelheden In</translation>
-    </message>
-    <message>
-        <source>Setting Velocities...</source>
-        <translation type="obsolete">Instellen Snelheden...</translation>
-    </message>
-    <message>
-        <source>Inserting note</source>
-        <translation type="obsolete">Noot invoegen...</translation>
-    </message>
-    <message>
-        <source>Ornament track %1 bar %2</source>
-        <translation type="obsolete">Versiering spoor %1 maat %2</translation>
-    </message>
-    <message>
-        <source>Ornament bar %1</source>
-        <translation type="obsolete">Versiering maat %1  </translation>
-    </message>
-    <message>
-        <source>Make Ornament</source>
-        <translation type="obsolete">Maak versiering</translation>
-    </message>
-    <message>
-        <source>Use Ornament</source>
-        <translation type="obsolete">Gebruik versiering</translation>
-    </message>
-    <message>
-        <source>Remove Ornaments</source>
-        <translation type="obsolete">Verwijder versieringen</translation>
-    </message>
-    <message>
-        <source>Estimated key signature shown</source>
-        <translation type="obsolete">Geschatte maatsoort wordt getoond</translation>
-    </message>
-    <message>
-        <source>Sustain</source>
-        <translation type="obsolete">Sustain</translation>
-    </message>
-    <message>
-        <source>Estimated time signature shown</source>
-        <translation type="obsolete">Geschatte maatsoort getoond</translation>
-    </message>
-    <message>
-        <source>Can&apos;t insert note: No note duration selected</source>
-        <translation type="obsolete">Kan noot niet invoegen: Geen noot lengte geselecteerd</translation>
-    </message>
-    <message>
-        <source>Time: %1 (%2.%3s)</source>
-        <translation type="obsolete">Tijd: %1 (%2.%3s)</translation>
-    </message>
-    <message>
-        <source>Triplet</source>
-        <translation type="obsolete">Triool</translation>
-    </message>
-    <message>
-        <source>Chord</source>
-        <translation type="obsolete">Akkoord</translation>
-    </message>
-    <message>
-        <source>Grace</source>
-        <translation type="obsolete">Voorslag</translation>
-    </message>
-    <message>
-        <source>Transpose</source>
-        <translation type="obsolete">Transponeren</translation>
-    </message>
-    <message>
-        <source>By number of semitones: </source>
-        <translation type="obsolete">Per aantal halve toonsafstanden:</translation>
-    </message>
-    <message>
-        <source>Default duration factor</source>
-        <translation type="obsolete">Standaard duu&amp;rfactor</translation>
-    </message>
-    <message>
-        <source>None</source>
-        <translation type="obsolete">Geen</translation>
-    </message>
-    <message>
-        <source>Full</source>
-        <translation type="obsolete">Volledig</translation>
-    </message>
-    <message>
-        <source>Font size for printing (pt)</source>
-        <translation type="obsolete">Lettergrootte voor afdrukken (pt)</translation>
-    </message>
-    <message>
-        <source>Close track headers</source>
-        <translation type="obsolete">Sluit spoorheaders</translation>
-    </message>
-    <message>
-        <source>Starting...</source>
-        <translation type="obsolete">Starten...</translation>
-    </message>
-    <message>
-        <source>Preparing to print...</source>
-        <translation type="obsolete">Voorbereiden op afdrukken...</translation>
-    </message>
-    <message>
-        <source>Du&amp;ration Factor</source>
-        <translation type="obsolete">Duu&amp;rfactor</translation>
-    </message>
-    <message>
-        <source>  Ready.</source>
-        <translation type="obsolete">  Klaar.</translation>
-    </message>
-    <message>
-        <source>Laying out score...</source>
-        <translation type="obsolete">Partituur opmaken...</translation>
-    </message>
-    <message>
-        <source>Laying out staff %1...</source>
-        <translation type="obsolete">Balk %1 opmaken...</translation>
-    </message>
-    <message>
-        <source>Reconciling staffs...</source>
-        <translation type="obsolete">Balken verenigen...</translation>
-    </message>
-    <message>
-        <source>Sizing and allocating canvas...</source>
-        <translation type="obsolete">Canvas uitmeten en toewijzen...</translation>
-    </message>
-    <message>
-        <source>note</source>
-        <translation type="obsolete">noot</translation>
-    </message>
-    <message>
-        <source>rest</source>
-        <translation type="obsolete">rust</translation>
-    </message>
-    <message>
         <source></source>
         <translation></translation>
-    </message>
-    <message>
-        <source>Hidden annotations</source>
-        <translation type="obsolete">Verborgen annotaties</translation>
-    </message>
-    <message>
-        <source>Unknown proportion action %1</source>
-        <translation type="obsolete">Onbekende proportie actie %1</translation>
-    </message>
-    <message>
-        <source>Unknown font size %1</source>
-        <translation type="obsolete">Onbekende lettertype grootte %1</translation>
-    </message>
-    <message>
-        <source>Printing...</source>
-        <translation type="obsolete">Afdrukken...</translation>
-    </message>
-    <message>
-        <source>Previewing...</source>
-        <translation type="obsolete">Voorbeeld afspelen...</translation>
-    </message>
-    <message>
-        <source>Printing LilyPond file...</source>
-        <translation type="obsolete">Afdrukken LilyPond-bestand...</translation>
-    </message>
-    <message>
-        <source>Failed to open a temporary file for LilyPond export.</source>
-        <translation type="obsolete">Tijdelijk bestand openen voor Lilypond export mislukt.</translation>
-    </message>
-    <message>
-        <source>Cutting selection to clipboard...</source>
-        <translation type="obsolete">Selectie knippen en naar klembord brengen</translation>
-    </message>
-    <message>
-        <source>Deleting selection...</source>
-        <translation type="obsolete">Selectie verwijderen...</translation>
-    </message>
-    <message>
-        <source>Copying selection to clipboard...</source>
-        <translation type="obsolete">Selectie naar klembord kopiëren...</translation>
-    </message>
-    <message>
-        <source>No note duration selected</source>
-        <translation type="obsolete">Geen nootduur geselecteerd</translation>
-    </message>
-    <message>
-        <source>No rest duration selected</source>
-        <translation type="obsolete">Geen rustduur geselecteerd</translation>
-    </message>
-    <message>
-        <source>No note or rest duration selected</source>
-        <translation type="obsolete">Geen noot of rustduur geselecteerd</translation>
-    </message>
-    <message>
-        <source>Quantizing...</source>
-        <translation type="obsolete">Quantiseren...</translation>
-    </message>
-    <message>
-        <source>Interpreting selection...</source>
-        <translation type="obsolete">Selectie interpreteren...</translation>
-    </message>
-    <message>
-        <source>Delete</source>
-        <translation type="obsolete">Verwijder</translation>
-    </message>
-    <message>
-        <source>Clear</source>
-        <translation type="obsolete">Wissen</translation>
-    </message>
-    <message>
-        <source>Processing...</source>
-        <translation type="obsolete">Verwerken...</translation>
-    </message>
-    <message>
-        <source>Advanced</source>
-        <translation type="obsolete">Geavanceerd</translation>
-    </message>
-    <message>
-        <source>Show advanced options</source>
-        <translation type="obsolete">Toon geavanceerde opties</translation>
-    </message>
-    <message>
-        <source>Show Advanced Options</source>
-        <translation type="obsolete">Toon geavanceerde opties</translation>
-    </message>
-    <message>
-        <source>Hide Advanced Options</source>
-        <translation type="obsolete">Verberg geavanceerde opties</translation>
-    </message>
-    <message>
-        <source>status</source>
-        <translation type="obsolete">status</translation>
-    </message>
-    <message>
-        <source>Export and import of Rosegarden Project files</source>
-        <translation type="obsolete">Export en import van Rosegarden projectbestanden</translation>
-    </message>
-    <message>
-        <source>&lt;h3&gt;Helper programs not found&lt;/h3&gt;&lt;p&gt;Rosegarden could not find one or more helper programs which it needs to provide some features.  The following features will not be available:&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;h3&gt;Hulpprogramma&apos;s niet gevonden&lt;/h3&gt;&lt;p&gt;Rosegarden kon een of meer hulpprogramma&apos;s niet vinden die nodig zijn om bepaalde functionaliteit te verschaffen. De volgende functionaliteiten zullen niet beschikbaar zijn:&lt;/p&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;ul&gt;</source>
-        <translation type="obsolete">&lt;ul&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;li&gt;%1&lt;/li&gt;</source>
-        <translation type="obsolete">&lt;li&gt;%1&lt;/li&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;/ul&gt;</source>
-        <translation type="obsolete">&lt;/ul&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;p&gt;To fix this, you should install the following additional programs:&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;p&gt;Om dit te verhelpen installeert u de volgende programma&apos;s&lt;/p&gt;</translation>
-    </message>
-    <message>
-        <source>Helper programs not found</source>
-        <translation type="obsolete">Hulpprogramma&apos;s niet gevonden</translation>
-    </message>
-    <message>
-        <source>C</source>
-        <translation type="obsolete">C</translation>
-    </message>
-    <message>
-        <source>C#</source>
-        <translation type="obsolete">C#</translation>
-    </message>
-    <message>
-        <source>D</source>
-        <translation type="obsolete">D</translation>
-    </message>
-    <message>
-        <source>Eb</source>
-        <translation type="obsolete">Eb</translation>
-    </message>
-    <message>
-        <source>E</source>
-        <translation type="obsolete">E</translation>
-    </message>
-    <message>
-        <source>F</source>
-        <translation type="obsolete">F</translation>
-    </message>
-    <message>
-        <source>F#</source>
-        <translation type="obsolete">F#</translation>
-    </message>
-    <message>
-        <source>G</source>
-        <translation type="obsolete">G</translation>
-    </message>
-    <message>
-        <source>G#</source>
-        <translation type="obsolete">G#</translation>
-    </message>
-    <message>
-        <source>A</source>
-        <translation type="obsolete">A</translation>
-    </message>
-    <message>
-        <source>Bb</source>
-        <translation type="obsolete">Bb</translation>
-    </message>
-    <message>
-        <source>B</source>
-        <translation type="obsolete">B</translation>
-    </message>
-    <message>
-        <source>Audio</source>
-        <translation type="obsolete">Audio</translation>
-    </message>
-    <message>
-        <source>You can&apos;t drop files into Rosegarden from this client.  Try using Konqueror instead.</source>
-        <translation type="obsolete">U kunt vanaf deze cliënt geen bestanden in Rosegarden droppen. Probeer het eens met Konqueror.</translation>
-    </message>
-    <message>
-        <source>Welcome!</source>
-        <translation type="obsolete">Welkom!</translation>
     </message>
 </context>
 <context>
@@ -17484,7 +17091,6 @@ Dit is een bug (het programma zou anders nu gecrashed zijn)</translation>
         <source>%n pixel(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -17578,7 +17184,6 @@ Dit is een bug (het programma zou anders nu gecrashed zijn)</translation>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="996"/>
         <source>  %n event(s) selected </source>
         <translation type="unfinished">
-            <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
@@ -17747,7 +17352,6 @@ Controleer of het apparaat juist is geconfigureerd in het dialoog &apos;Beheer M
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3136"/>
         <source>%1%2 - %n Segment(s) - Notation</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
@@ -18322,12 +17926,12 @@ Controleer of het apparaat juist is geconfigureerd in het dialoog &apos;Beheer M
 <context>
     <name>Rosegarden::ProgressDialog</name>
     <message>
-        <location filename="../../src/gui/widgets/ProgressDialog.cpp" line="63"/>
+        <location filename="../../src/gui/widgets/ProgressDialog.cpp" line="64"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/widgets/ProgressDialog.cpp" line="72"/>
+        <location filename="../../src/gui/widgets/ProgressDialog.cpp" line="73"/>
         <source>&lt;qt&gt;&lt;h3&gt;Processing...&lt;/h3&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;h3&gt;Verwerken...&lt;/h3&gt;&lt;/qt&gt;</translation>
     </message>
@@ -19012,7 +18616,7 @@ There may be some incompatibilities with the file format.</source>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="344"/>
         <source>Rosegarden - Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Rosegarden - waarschuwing</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="344"/>
@@ -19055,7 +18659,6 @@ There may be some incompatibilities with the file format.</source>
         <source>Delete the %n audio file(s) recorded during the unsaved session?</source>
         <translation type="unfinished">
             <numerusform></numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -19078,7 +18681,6 @@ Selecteer de bestanden die u permanent van de harde schijf wilt wissen.
         <location filename="../../src/document/RosegardenDocument.cpp" line="529"/>
         <source>&lt;qt&gt;About to delete %n audio file(s) permanently from the hard disk.&lt;br&gt;There will be no way to recover the file(s).&lt;br&gt;Are you sure?&lt;/qt&gt;</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
@@ -19231,9 +18833,9 @@ Wij bevelen aan om dit bestand vanuit deze Rosegarden-versie opnieuw op te slaan
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="598"/>
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="737"/>
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="814"/>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1536"/>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1541"/>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1561"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1534"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1539"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1560"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
@@ -19252,33 +18854,32 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1504"/>
         <source>importing a remote audio file</source>
-        <translation>Remote audiobestand importeren</translation>
+        <translation type="obsolete">Remote audiobestand importeren</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1506"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1503"/>
         <source>importing an audio file that needs to be converted or resampled</source>
         <translation>Audiobestand importeren dat geconverteerd of geresampled moet worden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1510"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1508"/>
         <source>Adding audio file...</source>
         <translation>Bezig audiobestand toe te voegen...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1535"/>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1540"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1533"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1538"/>
         <source>Can&apos;t add dropped file. </source>
         <translation>Kan gedropt bestand niet toevoegen.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1551"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1549"/>
         <source>Generating audio preview...</source>
         <translation>Bezig met genereren van audio voorbeeld...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1560"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1559"/>
         <source>Try copying this file to a directory where you have write permission and re-add it</source>
         <translation>Probeer dit bestand te verplaatsen naar een map waar u schrijfrechten heeft en probeer het opnieuw toe te voegen</translation>
     </message>
@@ -19564,7 +19165,7 @@ Error was : %2</source>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2481"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5029"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Waarschuwing</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2482"/>
@@ -19584,7 +19185,6 @@ Wilt u het nu instellen?</translation>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2694"/>
         <source>Split %n Segment(s) at Time</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
@@ -20208,12 +19808,12 @@ Error was : %2</source>
     <message>
         <location filename="../../src/commands/segment/SegmentChangeTransposeCommand.h" line="47"/>
         <source>Undo change transposition</source>
-        <translation type="unfinished"></translation>
+        <translation>Ongedann verander transpositie</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/SegmentChangeTransposeCommand.h" line="49"/>
         <source>Change transposition to %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Verander transpositie in %1</translation>
     </message>
 </context>
 <context>
@@ -20532,7 +20132,7 @@ Error was : %2</source>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="148"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Waarschuwing</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="149"/>
@@ -22361,7 +21961,7 @@ Andere lopende applicaties afsluiten kan de werking van Rosegarden verbeteren.</
     <message>
         <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="409"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Waarschuwing</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="410"/>
@@ -22396,12 +21996,12 @@ Wilt u het pad nu instellen?</translation>
         <translation>Zet de herhalende segmenten om in echte kopieën</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="916"/>
+        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="904"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="917"/>
+        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="905"/>
         <source>Rosegarden cannot accept dropped files of this type.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -22995,7 +22595,6 @@ Wilt u het pad nu instellen?</translation>
         <source>%1 on %n track(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -23029,7 +22628,6 @@ Wilt u het pad nu instellen?</translation>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="331"/>
         <source>This triggered segment is used %n time(s) in the current composition.  Are you sure you want to remove it?</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
@@ -23298,7 +22896,7 @@ Wilt u het pad nu instellen?</translation>
     <message>
         <location filename="../../src/gui/widgets/WarningDialog.cpp" line="75"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Waarschuwing</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/WarningDialog.cpp" line="80"/>
@@ -23569,495 +23167,6 @@ Wilt u het pad nu instellen?</translation>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1159"/>
         <source>Display time to end</source>
         <translation>Toon resterende tijd</translation>
-    </message>
-    <message>
-        <source>Rosegarden</source>
-        <translation type="obsolete">Rosegarden</translation>
-    </message>
-    <message>
-        <source>&amp;Segment</source>
-        <translation type="obsolete">&amp;Segment</translation>
-    </message>
-    <message>
-        <source>Local &amp;Cursor</source>
-        <translation type="obsolete">Lokale &amp;cursor</translation>
-    </message>
-    <message>
-        <source>Cursor &amp;Back</source>
-        <translation type="obsolete">Cursor &amp;Terug</translation>
-    </message>
-    <message>
-        <source>Cursor &amp;Forward</source>
-        <translation type="obsolete">Cursor &amp;Vooruit</translation>
-    </message>
-    <message>
-        <source>Cursor For&amp;ward Bar</source>
-        <translation type="obsolete">Cursor Voor&amp;uit Balk</translation>
-    </message>
-    <message>
-        <source>Cursor to St&amp;art</source>
-        <translation type="obsolete">Cursor naar &amp;begin</translation>
-    </message>
-    <message>
-        <source>Cursor to &amp;End</source>
-        <translation type="obsolete">Cursor naar &amp;eind</translation>
-    </message>
-    <message>
-        <source>II</source>
-        <translation type="obsolete">II</translation>
-    </message>
-    <message>
-        <source>III</source>
-        <translation type="obsolete">III</translation>
-    </message>
-    <message>
-        <source>IV</source>
-        <translation type="obsolete">IV</translation>
-    </message>
-    <message>
-        <source>V</source>
-        <translation type="obsolete">V</translation>
-    </message>
-    <message>
-        <source>VI</source>
-        <translation type="obsolete">VI</translation>
-    </message>
-    <message>
-        <source>VII</source>
-        <translation type="obsolete">VII</translation>
-    </message>
-    <message>
-        <source>Du&amp;ration Factor</source>
-        <translation type="obsolete">Duu&amp;rfactor</translation>
-    </message>
-    <message>
-        <source>Cursor &amp;Up Staff</source>
-        <translation type="obsolete">Cursor balk om&amp;hoog</translation>
-    </message>
-    <message>
-        <source>Cursor &amp;Down Staff</source>
-        <translation type="obsolete">Cursor balk om&amp;laag</translation>
-    </message>
-    <message>
-        <source>Cursor Pre&amp;vious Segment</source>
-        <translation type="obsolete">Cursor v&amp;orig segment</translation>
-    </message>
-    <message>
-        <source>Cursor Ne&amp;xt Segment</source>
-        <translation type="obsolete">Cursor &amp;volgend segment</translation>
-    </message>
-    <message>
-        <source>I</source>
-        <translation type="obsolete">I</translation>
-    </message>
-    <message>
-        <source>Delete</source>
-        <translation type="obsolete">Verwijder</translation>
-    </message>
-    <message>
-        <source>0</source>
-        <translation type="obsolete">0</translation>
-    </message>
-    <message>
-        <source>3</source>
-        <translation type="obsolete">3</translation>
-    </message>
-    <message>
-        <source>6</source>
-        <translation type="obsolete">6</translation>
-    </message>
-    <message>
-        <source>4</source>
-        <translation type="obsolete">4</translation>
-    </message>
-    <message>
-        <source>2</source>
-        <translation type="obsolete">2</translation>
-    </message>
-    <message>
-        <source>1</source>
-        <translation type="obsolete">1</translation>
-    </message>
-    <message>
-        <source>5</source>
-        <translation type="obsolete">5</translation>
-    </message>
-    <message>
-        <source>Left</source>
-        <translation type="obsolete">Links</translation>
-    </message>
-    <message>
-        <source>Right</source>
-        <translation type="obsolete">Rechts</translation>
-    </message>
-    <message>
-        <source>Se&amp;gments</source>
-        <translation type="obsolete">&amp;Segmenten</translation>
-    </message>
-    <message>
-        <source>C</source>
-        <translation type="obsolete">C</translation>
-    </message>
-    <message>
-        <source>C#</source>
-        <translation type="obsolete">C#</translation>
-    </message>
-    <message>
-        <source>D</source>
-        <translation type="obsolete">D</translation>
-    </message>
-    <message>
-        <source>Eb</source>
-        <translation type="obsolete">Eb</translation>
-    </message>
-    <message>
-        <source>E</source>
-        <translation type="obsolete">E</translation>
-    </message>
-    <message>
-        <source>F</source>
-        <translation type="obsolete">F</translation>
-    </message>
-    <message>
-        <source>F#</source>
-        <translation type="obsolete">F#</translation>
-    </message>
-    <message>
-        <source>G</source>
-        <translation type="obsolete">G</translation>
-    </message>
-    <message>
-        <source>G#</source>
-        <translation type="obsolete">G#</translation>
-    </message>
-    <message>
-        <source>A</source>
-        <translation type="obsolete">A</translation>
-    </message>
-    <message>
-        <source>Bb</source>
-        <translation type="obsolete">Bb</translation>
-    </message>
-    <message>
-        <source>B</source>
-        <translation type="obsolete">B</translation>
-    </message>
-    <message>
-        <source>Mute</source>
-        <translation type="obsolete">Dempen</translation>
-    </message>
-    <message>
-        <source>Apply</source>
-        <translation type="obsolete">Toepassen</translation>
-    </message>
-    <message>
-        <source>Reset</source>
-        <translation type="obsolete">Reset</translation>
-    </message>
-    <message>
-        <source>Close</source>
-        <translation type="obsolete">Sluiten</translation>
-    </message>
-    <message>
-        <source>Unsaved Changes</source>
-        <translation type="obsolete">Onopgeslagen wijzigingen</translation>
-    </message>
-    <message>
-        <source>Configure Rosegarden</source>
-        <extracomment>QDialog(parent) //, tr(&quot;Configure Rosegarden&quot;), name)</extracomment>
-        <translation type="obsolete">Rosegarden instellen</translation>
-    </message>
-    <message>
-        <source>%1 Controller %2 %3</source>
-        <translation type="obsolete">%1 Controller %2 %3</translation>
-    </message>
-    <message>
-        <source>Pitch Bend</source>
-        <translation type="obsolete">Toonhoogtebuiging</translation>
-    </message>
-    <message>
-        <source>VIII</source>
-        <translation type="obsolete">VIII</translation>
-    </message>
-    <message>
-        <source>%1 flat</source>
-        <translation type="obsolete">%1 mol</translation>
-    </message>
-    <message>
-        <source>%1 sharp</source>
-        <translation type="obsolete">%1 kruis</translation>
-    </message>
-    <message>
-        <source>&amp;Insert Note</source>
-        <translation type="obsolete">&amp;Voeg Noot In</translation>
-    </message>
-    <message>
-        <source>&amp;Upper Octave</source>
-        <translation type="obsolete">Octaaf Om&amp;hoog</translation>
-    </message>
-    <message>
-        <source>&amp;Lower Octave</source>
-        <translation type="obsolete">Octaaf Om&amp;laag</translation>
-    </message>
-    <message>
-        <source>Estimated time signature shown</source>
-        <translation type="obsolete">Geschatte maatsoort getoond</translation>
-    </message>
-    <message>
-        <source>Halving durations...</source>
-        <translation type="obsolete">Lengtes halveren...</translation>
-    </message>
-    <message>
-        <source>Doubling durations...</source>
-        <translation type="obsolete">Lengtes verdubbelen</translation>
-    </message>
-    <message>
-        <source>Rescaling...</source>
-        <translation type="obsolete">&amp;Herschalen...</translation>
-    </message>
-    <message>
-        <source>Transpose</source>
-        <translation type="obsolete">Transponeren</translation>
-    </message>
-    <message>
-        <source>By number of semitones: </source>
-        <translation type="obsolete">Per aantal halve toonsafstanden:</translation>
-    </message>
-    <message>
-        <source>Transposing...</source>
-        <translation type="obsolete">Transponeren...</translation>
-    </message>
-    <message>
-        <source>Transposing up one semitone...</source>
-        <translation type="obsolete">Een semitoon omhoog transponeren...</translation>
-    </message>
-    <message>
-        <source>Transposing up one octave...</source>
-        <translation type="obsolete">Een octaaf omhoog transponeren...</translation>
-    </message>
-    <message>
-        <source>Transposing down one semitone...</source>
-        <translation type="obsolete">Een semitoon omlaag transponeren...</translation>
-    </message>
-    <message>
-        <source>Transposing down one octave...</source>
-        <translation type="obsolete">Een octaaf omlaag transponeren...</translation>
-    </message>
-    <message>
-        <source>Inverting...</source>
-        <translation type="obsolete">Inverteren...</translation>
-    </message>
-    <message>
-        <source>Retrograding...</source>
-        <translation type="obsolete">Retrograderen...</translation>
-    </message>
-    <message>
-        <source>Retrograde inverting...</source>
-        <translation type="obsolete">Retrograde inverteren...</translation>
-    </message>
-    <message>
-        <source>Jogging left...</source>
-        <translation type="obsolete">Naar links schuiven...</translation>
-    </message>
-    <message>
-        <source>Jogging right...</source>
-        <translation type="obsolete">Naar rechts schuiven...</translation>
-    </message>
-    <message>
-        <source>Normal</source>
-        <translation type="obsolete">Normaal</translation>
-    </message>
-    <message>
-        <source>Matrix</source>
-        <translation type="obsolete">Matrix</translation>
-    </message>
-    <message>
-        <source>Choose Text Encoding</source>
-        <translation type="obsolete">Kies tekstcodering</translation>
-    </message>
-    <message>
-        <source>Latency</source>
-        <translation type="obsolete">Vertraging</translation>
-    </message>
-    <message>
-        <source>JACK latency</source>
-        <translation type="obsolete">JACK vertraging</translation>
-    </message>
-    <message>
-        <source>JACK playback latency (in ms)</source>
-        <translation type="obsolete">JACK afspeel vertraging (in ms)</translation>
-    </message>
-    <message>
-        <source>JACK record latency (in ms)</source>
-        <translation type="obsolete">JACK opneem vertraging (in ms)</translation>
-    </message>
-    <message>
-        <source>Fetch JACK latencies</source>
-        <translation type="obsolete">JACK vertragingen bepalen</translation>
-    </message>
-    <message>
-        <source>JACK Latency</source>
-        <translation type="obsolete">JACK Vertraging</translation>
-    </message>
-    <message>
-        <source>Channel out</source>
-        <translation type="obsolete">Uitvoerkanaal</translation>
-    </message>
-    <message>
-        <source>Bars, beats, and divisions</source>
-        <translation type="obsolete">Maten, tikken en divisies</translation>
-    </message>
-    <message>
-        <source>Instrument Parameters</source>
-        <translation type="obsolete">Instrumentparameters</translation>
-    </message>
-    <message>
-        <source>Couldn&apos;t apply piano roll layout</source>
-        <translation type="obsolete">Kan piano klavier layout niet toepassen</translation>
-    </message>
-    <message>
-        <source>  No selection </source>
-        <translation type="obsolete">Geen selectie</translation>
-    </message>
-    <message>
-        <source>Quantizing...</source>
-        <translation type="obsolete">Quantiseren...</translation>
-    </message>
-    <message>
-        <source>Collapsing notes...</source>
-        <translation type="obsolete">Inklappen noten...</translation>
-    </message>
-    <message>
-        <source>Making legato...</source>
-        <translation type="obsolete">Legato maken...</translation>
-    </message>
-    <message>
-        <source>Note: %1 (%2.%3s)</source>
-        <translation type="obsolete">Noot: %1 (%2.%3s)</translation>
-    </message>
-    <message>
-        <source>%1 (%2)</source>
-        <translation type="obsolete">%1 (%2)</translation>
-    </message>
-    <message>
-        <source>Time: %1 (%2.%3s)</source>
-        <translation type="obsolete">Tijd: %1 (%2.%3s)</translation>
-    </message>
-    <message>
-        <source>Cutting selection to clipboard...</source>
-        <translation type="obsolete">Selectie knippen en naar klembord brengen</translation>
-    </message>
-    <message>
-        <source>Copying selection to clipboard...</source>
-        <translation type="obsolete">Selectie naar klembord kopiëren...</translation>
-    </message>
-    <message>
-        <source>Clipboard is empty</source>
-        <translation type="obsolete">Klembord is leeg</translation>
-    </message>
-    <message>
-        <source>Inserting clipboard contents...</source>
-        <translation type="obsolete">Invoegen van klembord inhoud...</translation>
-    </message>
-    <message>
-        <source>Couldn&apos;t paste at this point</source>
-        <translation type="obsolete">Kan niet plakken op dit punt</translation>
-    </message>
-    <message>
-        <source>Deleting selection...</source>
-        <translation type="obsolete">Selectie verwijderen...</translation>
-    </message>
-    <message>
-        <source>Inserting note</source>
-        <translation type="obsolete">Noot invoegen...</translation>
-    </message>
-    <message>
-        <source>  Zoom:  </source>
-        <translation type="obsolete">  Detail:  </translation>
-    </message>
-    <message>
-        <source>%1%</source>
-        <translation type="obsolete">%1%</translation>
-    </message>
-    <message>
-        <source>Raising velocities...</source>
-        <translation type="obsolete">Verhogen snelheden...</translation>
-    </message>
-    <message>
-        <source>Lowering velocities...</source>
-        <translation type="obsolete">Verlagen snelheden...</translation>
-    </message>
-    <message>
-        <source>Setting Velocities...</source>
-        <translation type="obsolete">Instellen Snelheden...</translation>
-    </message>
-    <message>
-        <source>Percussion</source>
-        <translation type="obsolete">Slagwerk</translation>
-    </message>
-    <message>
-        <source> Chord </source>
-        <translation type="obsolete"> Akkoord</translation>
-    </message>
-    <message>
-        <source>Librarian</source>
-        <translation type="obsolete">Bibliothecaris</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">Naam</translation>
-    </message>
-    <message>
-        <source>Email</source>
-        <translation type="obsolete">Email</translation>
-    </message>
-    <message>
-        <source>&lt;untitled&gt;</source>
-        <translation type="obsolete">&lt;naamloos&gt;</translation>
-    </message>
-    <message>
-        <source> Grid: </source>
-        <translation type="obsolete">Rooster:</translation>
-    </message>
-    <message>
-        <source>None</source>
-        <translation type="obsolete">Geen</translation>
-    </message>
-    <message>
-        <source>Unit</source>
-        <translation type="obsolete">Eenheid</translation>
-    </message>
-    <message>
-        <source>Beat</source>
-        <translation type="obsolete">Beat</translation>
-    </message>
-    <message>
-        <source>Bar</source>
-        <translation type="obsolete">Maat</translation>
-    </message>
-    <message>
-        <source> Velocity: </source>
-        <translation type="obsolete"> Velocity: </translation>
-    </message>
-    <message>
-        <source> Quantize: </source>
-        <translation type="obsolete">Quantiseer:</translation>
-    </message>
-    <message>
-        <source>Set Event Velocities</source>
-        <translation type="obsolete">Stel Gebeurtenis Snelheden In</translation>
-    </message>
-    <message>
-        <source>Trigger Segment</source>
-        <translation type="obsolete">Trigger segment</translation>
-    </message>
-    <message>
-        <source>Remove Triggers</source>
-        <translation type="obsolete">Verwijder triggers</translation>
-    </message>
-    <message>
-        <source>Can&apos;t insert note: No grid duration selected</source>
-        <translation type="obsolete">Kan noot niet invoegen: Geen roosterlengte geselecteerd</translation>
     </message>
 </context>
 </TS>
