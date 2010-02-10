@@ -416,7 +416,6 @@ void SynthPluginManagerDialog::slotPluginChanged ( int index ){
     emit pluginSelected ( id, Instrument::SYNTH_PLUGIN_POSITION,
                           m_synthPlugins[index] );
 
-    parentWidget()->adjustSize();
     adjustSize();
 }
 
