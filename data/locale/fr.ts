@@ -6283,7 +6283,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../InstrumentStrings.cpp" line="296"/>
         <source>Chaines</source>
-        <translation type="unfinished"></translation>
+        <translation>Chaînes</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="297"/>
@@ -7150,7 +7150,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../AutoloadStrings.cpp" line="128"/>
         <source>Lead 8 (bass + lead)</source>
-        <translation type="unfinished"></translation>
+        <translation>Solo 8 (basse + solo)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="129"/>
@@ -7185,7 +7185,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../AutoloadStrings.cpp" line="135"/>
         <source>Pad 7 (halo)</source>
-        <translation type="unfinished"></translation>
+        <translation>Bloc 7 (halo)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="136"/>
@@ -7201,7 +7201,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
         <location filename="../AutoloadStrings.cpp" line="138"/>
         <source>FX 2 (soundtrack)</source>
         <translatorcomment>I just translated &quot;FX&quot; as &quot;effect&quot; in Spanish.  Effect 2 (...)  But I don&apos;t know this word in French, and I am only aiming for low hanging fruit -dmm</translatorcomment>
-        <translation type="unfinished"></translation>
+        <translation>FX 2 (pleurage)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="139"/>
@@ -7221,7 +7221,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../AutoloadStrings.cpp" line="142"/>
         <source>FX 6 (goblins)</source>
-        <translation type="unfinished"></translation>
+        <translation>FX 6 (goblins)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="143"/>
@@ -7698,14 +7698,14 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
         <location filename="../AutoloadStrings.cpp" line="302"/>
         <location filename="../AutoloadStrings.cpp" line="741"/>
         <source>Expression</source>
-        <translation type="unfinished"></translation>
+        <translation>Expression</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="240"/>
         <location filename="../AutoloadStrings.cpp" line="303"/>
         <location filename="../AutoloadStrings.cpp" line="742"/>
         <source>Modulation</source>
-        <translation type="unfinished"></translation>
+        <translation>Modulation</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="241"/>
@@ -7771,7 +7771,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../AutoloadStrings.cpp" line="256"/>
         <source>High Floor Tom</source>
-        <translation type="unfinished">Tom basse aigüe</translation>
+        <translation>Tom basse aigu</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="257"/>
@@ -7791,12 +7791,12 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../AutoloadStrings.cpp" line="260"/>
         <source>Low-Mid Tom</source>
-        <translation>Tom medium aigu</translation>
+        <translation>Tom médium grave</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="261"/>
         <source>Hi-Mid Tom</source>
-        <translation>Tom médium grave</translation>
+        <translation>Tom médium aigu</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="262"/>
@@ -7806,7 +7806,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../AutoloadStrings.cpp" line="263"/>
         <source>High Tom</source>
-        <translation>Tom aigu</translation>
+        <translation>Tom alto</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="264"/>
@@ -7876,12 +7876,12 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../AutoloadStrings.cpp" line="278"/>
         <source>High Timbale</source>
-        <translation type="unfinished"></translation>
+        <translation>Timbale latine aiguë</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="279"/>
         <source>Low Timbale</source>
-        <translation type="unfinished"></translation>
+        <translation>Timbale latine grave</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="280"/>
