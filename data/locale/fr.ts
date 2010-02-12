@@ -7130,7 +7130,8 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../AutoloadStrings.cpp" line="124"/>
         <source>Lead 4 (chiff)</source>
-        <translation type="unfinished">Solo 4 (</translation>
+        <translatorcomment>Seams to be some quality of the sound of a pipe. I don&apos;t know how to translate it.</translatorcomment>
+        <translation>Solo 4 (chiff)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="125"/>
@@ -7431,7 +7432,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../AutoloadStrings.cpp" line="186"/>
         <source>Slow Violin</source>
-        <translation type="unfinished"></translation>
+        <translation>Violon lent</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="187"/>
@@ -7691,7 +7692,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
         <location filename="../AutoloadStrings.cpp" line="301"/>
         <location filename="../AutoloadStrings.cpp" line="740"/>
         <source>Sustain</source>
-        <translation type="unfinished"></translation>
+        <translation>Sustain</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="239"/>
@@ -7741,7 +7742,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../AutoloadStrings.cpp" line="250"/>
         <source>Side Stick</source>
-        <translation type="unfinished"></translation>
+        <translation>Side Stick</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="251"/>
@@ -10311,7 +10312,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../../src/sound/MidiFile.cpp" line="529"/>
         <source>Running status used for first event in track</source>
-        <translation type="unfinished"></translation>
+        <translation>Le premier événement de la piste utilise le &quot;Running status&quot;</translation>
     </message>
     <message>
         <location filename="../../src/sound/RIFFAudioFile.cpp" line="59"/>
