@@ -74,7 +74,8 @@ TriggerSegmentManager::TriggerSegmentManager(QWidget *parent,
 {
     
     this->setObjectName( "triggereditordialog" );
-    
+    setAttribute(Qt::WA_DeleteOnClose);
+
     QWidget *mainFrame = new QWidget(this);
     QVBoxLayout *mainFrameLayout = new QVBoxLayout;
     mainFrame->setLayout(mainFrameLayout);
