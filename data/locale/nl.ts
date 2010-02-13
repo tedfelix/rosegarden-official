@@ -26,12 +26,12 @@
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="514"/>
         <source>Internal Synth</source>
-        <translation type="unfinished"></translation>
+        <translation>Interne Synth</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="483"/>
         <source>Default playback device</source>
-        <translation type="unfinished"></translation>
+        <translation>Standaard Afspeelapparaten</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="487"/>
@@ -57,7 +57,7 @@
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="496"/>
         <source>Controllers...</source>
-        <translation type="unfinished"></translation>
+        <translation>Controllers...</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="498"/>
@@ -83,7 +83,7 @@
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="505"/>
         <source>MIDI outputs</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI uitvoers</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="507"/>
@@ -94,7 +94,7 @@
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="512"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="553"/>
         <source>No port</source>
-        <translation type="unfinished"></translation>
+        <translation>Geen poort</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="518"/>
@@ -116,7 +116,7 @@
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="523"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="562"/>
         <source>Refresh</source>
-        <translation type="unfinished"></translation>
+        <translation>Noveren</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="524"/>
@@ -147,12 +147,12 @@
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="535"/>
         <source>Rosegarden recording device</source>
-        <translation type="unfinished"></translation>
+        <translation>Rosegarden opname apparaten</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="540"/>
         <source>Default record device</source>
-        <translation type="unfinished"></translation>
+        <translation>Standaard opname apparaten</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="546"/>
@@ -263,12 +263,12 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="44"/>
         <source>Unload &amp;All Audio Files</source>
-        <translation type="unfinished"></translation>
+        <translation>Vergeet &amp;alle audiobestand</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="45"/>
         <source>Unload All Unused Audio &amp;Files</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Vergeet alle ongebruikte audiobestanden</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="46"/>
@@ -278,7 +278,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="48"/>
         <source>Play Preview</source>
-        <translation type="unfinished"></translation>
+        <translation>Afspelen voorbeeld</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="51"/>
@@ -326,7 +326,7 @@
         <location filename="../QMenuStrings.cpp" line="3253"/>
         <location filename="../QMenuStrings.cpp" line="4079"/>
         <source>&amp;Rosegarden tutorial</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Rosegarden handboek</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1528"/>
@@ -349,7 +349,7 @@
         <location filename="../QMenuStrings.cpp" line="4230"/>
         <location filename="../QMenuStrings.cpp" line="4288"/>
         <source>&amp;About Rosegarden</source>
-        <translation type="unfinished"></translation>
+        <translation>Over Roseg&amp;arden</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="62"/>
@@ -596,7 +596,7 @@
         <location filename="../QMenuStrings.cpp" line="275"/>
         <location filename="../QMenuStrings.cpp" line="565"/>
         <source>C&amp;lear Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwijderen se&amp;lectie</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="282"/>
@@ -641,7 +641,7 @@
         <location filename="../QMenuStrings.cpp" line="4214"/>
         <location filename="../QMenuStrings.cpp" line="4274"/>
         <source>&amp;View</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Bekijk</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="297"/>
@@ -703,7 +703,7 @@
         <location filename="../QMenuStrings.cpp" line="3256"/>
         <location filename="../QMenuStrings.cpp" line="4082"/>
         <source>About &amp;Qt</source>
-        <translation type="unfinished"></translation>
+        <translation>Over &amp;Qt</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2616"/>
