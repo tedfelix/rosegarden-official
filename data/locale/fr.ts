@@ -570,14 +570,14 @@
         <location filename="../QMenuStrings.cpp" line="1935"/>
         <location filename="../QMenuStrings.cpp" line="3761"/>
         <source>Open in Matri&amp;x Editor</source>
-        <translation>Ouvrir l&apos;éditeur &amp;matriciel</translation>
+        <translation>Ouvrir dans l&apos;éditeur &amp;matriciel</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="305"/>
         <location filename="../QMenuStrings.cpp" line="682"/>
         <location filename="../QMenuStrings.cpp" line="3779"/>
         <source>Open in &amp;Notation Editor</source>
-        <translation>Ouvrir l&apos;éditeur de &amp;partition</translation>
+        <translation>Ouvrir dans l&apos;éditeur de partitio&amp;n</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1530"/>
@@ -2697,7 +2697,7 @@
         <location filename="../QMenuStrings.cpp" line="1896"/>
         <location filename="../QMenuStrings.cpp" line="3658"/>
         <source>&amp;Preferences...</source>
-        <translation>Confi&amp;guration...</translation>
+        <translation>Config&amp;uration...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1917"/>
@@ -4330,7 +4330,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3494"/>
         <source>&amp;Merge</source>
-        <translation>&amp;Fusionner</translation>
+        <translation>F&amp;usionner</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3495"/>
@@ -4410,7 +4410,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3538"/>
         <source>Manage A&amp;udio Files</source>
-        <translation>Gérer les fichier a&amp;udio</translation>
+        <translation>Gérer les fichiers &amp;audio</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3539"/>
@@ -4435,7 +4435,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3631"/>
         <source>Pa&amp;ste Range</source>
-        <translation>Co&amp;ller une plage</translation>
+        <translation>Coller une pl&amp;age</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3640"/>
@@ -4445,7 +4445,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3649"/>
         <source>Select &amp;All Segments</source>
-        <translation>Sélectionner &amp;tout les segments</translation>
+        <translation>Sélectionner &amp;tous les segments</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3660"/>
@@ -4510,7 +4510,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3733"/>
         <source>Manage S&amp;ynth Plugins</source>
-        <translation>&amp;Gérer les greffons synthétiseurs</translation>
+        <translation>Gérer les greffons &amp;synthétiseurs</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3734"/>
@@ -4540,7 +4540,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3739"/>
         <source>&amp;Import Default Studio</source>
-        <translation>&amp;Importer le studio par défaut</translation>
+        <translation>Importer le studio par &amp;défaut</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3740"/>
@@ -4583,7 +4583,7 @@
         <location filename="../QMenuStrings.cpp" line="1942"/>
         <location filename="../QMenuStrings.cpp" line="3820"/>
         <source>Set &amp;Duration...</source>
-        <translation>Définir la &amp;durée...</translation>
+        <translation>Définir la d&amp;urée...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3839"/>
@@ -4716,7 +4716,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3664"/>
         <source>Show Trac&amp;ks Toolbar</source>
-        <translation>Afficher la barre d&apos;outils &amp;pistes</translation>
+        <translation>Afficher la barre d&apos;outils p&amp;istes</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3665"/>
@@ -4799,7 +4799,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3692"/>
         <source>Show Track &amp;Labels</source>
-        <translation>Afficher les &amp;étiquettes des pistes</translation>
+        <translation>Afficher les étiqu&amp;ettes des pistes</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="4084"/>
