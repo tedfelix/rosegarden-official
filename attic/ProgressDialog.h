@@ -36,7 +36,7 @@ namespace Rosegarden
  * reporting scheme needed in order to function again, and is simply a subclass
  * of QDialog now, managing everything from scratch with a new implementation.
  */
-class ProgressDialog : public QWidget /* QDialog */
+class ProgressDialog : public QDialog
 {
     Q_OBJECT
 public:
