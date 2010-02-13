@@ -354,7 +354,7 @@
         <location filename="../QMenuStrings.cpp" line="4230"/>
         <location filename="../QMenuStrings.cpp" line="4288"/>
         <source>&amp;About Rosegarden</source>
-        <translation>&amp;A propos de Rosegarden</translation>
+        <translation>A propos de &amp;Rosegarden</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="62"/>
@@ -530,7 +530,7 @@
         <location filename="../QMenuStrings.cpp" line="4215"/>
         <location filename="../QMenuStrings.cpp" line="4275"/>
         <source>&amp;Musical Times</source>
-        <translation>&amp;Temps musicaux</translation>
+        <translation>Temps &amp;musicaux</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="298"/>
@@ -1150,12 +1150,12 @@
         <location filename="../QMenuStrings.cpp" line="2317"/>
         <location filename="../QMenuStrings.cpp" line="3816"/>
         <source>Transpose by &amp;Interval...</source>
-        <translation>Transposer par &amp;intervalle...</translation>
+        <translation>Transposer par i&amp;ntervalle...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="815"/>
         <source>&amp;Convert</source>
-        <translation>&amp;-Convertir</translation>
+        <translation>&amp;Convertir</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="816"/>
@@ -1178,7 +1178,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="835"/>
         <source>Trigger Se&amp;gment...</source>
-        <translation>Se&amp;gment déclenché...</translation>
+        <translation>&amp;Segment déclenché...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="981"/>
@@ -1268,7 +1268,7 @@
         <location filename="../QMenuStrings.cpp" line="847"/>
         <location filename="../QMenuStrings.cpp" line="2380"/>
         <source>Cursor Forward and &amp;Select</source>
-        <translation>Avancer le curseur et &amp;sélectionner</translation>
+        <translation>Avancer le &amp;curseur et sélectionner</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="874"/>
@@ -1287,7 +1287,7 @@
         <location filename="../QMenuStrings.cpp" line="1721"/>
         <location filename="../QMenuStrings.cpp" line="3996"/>
         <source>T&amp;ransport</source>
-        <translation>&amp;Bloc de commande</translation>
+        <translation>Bloc de &amp;commande</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="910"/>
@@ -1323,7 +1323,7 @@
         <location filename="../QMenuStrings.cpp" line="2514"/>
         <location filename="../QMenuStrings.cpp" line="4024"/>
         <source>&amp;Fast Forward</source>
-        <translation>&amp;Avance rapide</translation>
+        <translation>A&amp;vance rapide</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="960"/>
@@ -1352,7 +1352,7 @@
         <location filename="../QMenuStrings.cpp" line="2544"/>
         <location filename="../QMenuStrings.cpp" line="4051"/>
         <source>Scro&amp;ll to Follow Playback</source>
-        <translation>Faire défi&amp;ler en suivant l&apos;exécution</translation>
+        <translation>Faire dé&amp;filer en suivant l&apos;exécution</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="972"/>
@@ -1361,7 +1361,7 @@
         <location filename="../QMenuStrings.cpp" line="2559"/>
         <location filename="../QMenuStrings.cpp" line="4060"/>
         <source>P&amp;anic</source>
-        <translation>P&amp;anique</translation>
+        <translation>Pani&amp;que</translation>
     </message>
     <message>
         <source>I&amp;nsert Note</source>
@@ -1630,7 +1630,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="1901"/>
         <source>&amp;Layout Mode</source>
-        <translation>Mode de mise en &amp;page</translation>
+        <translation>Mode de &amp;mise en page</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1902"/>
@@ -1650,7 +1650,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="1905"/>
         <source>Open L&amp;yric Editor</source>
-        <translation>Ouvrir l&apos;éditeur de &amp;paroles</translation>
+        <translation>Ouvrir l&apos;éditeur de p&amp;aroles</translation>
     </message>
     <message>
         <source>Add Event Ruler</source>
@@ -1659,7 +1659,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="1926"/>
         <source>Show &amp;Track Headers</source>
-        <translation>Afficher les en-&amp;têtes de portées</translation>
+        <translation>Afficher les &amp;en-têtes de portées</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="684"/>
@@ -1711,7 +1711,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="1955"/>
         <source>Mar&amp;ks</source>
-        <translation>M&amp;arque</translation>
+        <translation>&amp;Marque</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1956"/>
@@ -2466,7 +2466,7 @@
         <location filename="../QMenuStrings.cpp" line="1353"/>
         <location filename="../QMenuStrings.cpp" line="3060"/>
         <source>&amp;Lower Octave</source>
-        <translation>Octave &amp;inférieur</translation>
+        <translation>Octave &amp;inférieure</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3214"/>
@@ -2563,7 +2563,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="1928"/>
         <source>Show Lily&amp;Pond Directives</source>
-        <translation>Afficher les directives Lily&amp;Pond</translation>
+        <translation>Afficher les directives Lil&amp;yPond</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3442"/>
@@ -2598,7 +2598,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="836"/>
         <source>Remove &amp;Triggers</source>
-        <translation>Supprimer les &amp;déclencheurs</translation>
+        <translation>S&amp;upprimer les déclencheurs</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="668"/>
@@ -3161,7 +3161,7 @@
         <location filename="../QMenuStrings.cpp" line="865"/>
         <location filename="../QMenuStrings.cpp" line="2398"/>
         <source>Cursor For&amp;ward and Select</source>
-        <translation>Avancer le curseur et &amp;sélectionner</translation>
+        <translation>Avancer le curseur d&apos;une mes&amp;ure et sélectionner</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="872"/>
@@ -4576,7 +4576,7 @@
         <location filename="../QMenuStrings.cpp" line="1941"/>
         <location filename="../QMenuStrings.cpp" line="3819"/>
         <source>Set Start &amp;Time...</source>
-        <translation>Définir l&apos;ins&amp;tant du début...</translation>
+        <translation>Définir l&apos;&amp;instant du début...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="687"/>
@@ -4668,7 +4668,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3919"/>
         <source>Mute or Unmute Tra&amp;ck</source>
-        <translation>(Dés)A&amp;ssourdir la piste</translation>
+        <translation>(Dés)Assour&amp;dir la piste</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3928"/>
@@ -4678,12 +4678,12 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3937"/>
         <source>&amp;Unmute all Tracks</source>
-        <translation>&amp;Rendre sonore toutes les pistes</translation>
+        <translation>Rendre so&amp;nores toutes les pistes</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3938"/>
         <source>&amp;Mute all Tracks</source>
-        <translation>&amp;Assourdir toutes les pistes</translation>
+        <translation>Asso&amp;urdir toutes les pistes</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3939"/>
@@ -21804,7 +21804,7 @@ Souhaitez vous le faire tout de suite ?</translation>
     <message>
         <location filename="../../src/commands/segment/SegmentTransposeCommand.h" line="49"/>
         <source>Transpose by &amp;Interval...</source>
-        <translation>Transposer par &amp;intervalle...</translation>
+        <translation>Transposer par i&amp;ntervalle...</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/SegmentTransposeCommand.cpp" line="29"/>
@@ -23977,7 +23977,7 @@ Souhaitez vous le faire tout de suite ?</translation>
     <message>
         <location filename="../../src/commands/edit/TransposeCommand.h" line="47"/>
         <source>Transpose by &amp;Interval...</source>
-        <translation>Transposer par &amp;intervalle...</translation>
+        <translation>Transposer par i&amp;ntervalle...</translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/TransposeCommand.h" line="53"/>
