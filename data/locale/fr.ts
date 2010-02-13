@@ -470,7 +470,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="229"/>
         <source>&amp;Edit Event</source>
-        <translation>Édit&amp;er événement</translation>
+        <translation>Éditer é&amp;vénement</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="238"/>
@@ -494,14 +494,14 @@
         <location filename="../QMenuStrings.cpp" line="275"/>
         <location filename="../QMenuStrings.cpp" line="565"/>
         <source>C&amp;lear Selection</source>
-        <translation>A&amp;nnuler la sélection</translation>
+        <translation>Ann&amp;uler la sélection</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="284"/>
         <location filename="../QMenuStrings.cpp" line="574"/>
         <location filename="../QMenuStrings.cpp" line="1886"/>
         <source>&amp;Filter Selection</source>
-        <translation>&amp;Filtrer la sélection</translation>
+        <translation>F&amp;iltrer la sélection</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="293"/>
@@ -611,12 +611,12 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="1961"/>
         <source>Add &amp;Open</source>
-        <translation>Ajouter &amp;sans sourdine</translation>
+        <translation>Ajouter sans sou&amp;rdine</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1962"/>
         <source>Add &amp;Stopped</source>
-        <translation>Ajouter ave&amp;c sourdine</translation>
+        <translation>Ajouter avec sour&amp;dine</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2711"/>
@@ -1073,7 +1073,7 @@
         <location filename="../QMenuStrings.cpp" line="745"/>
         <location filename="../QMenuStrings.cpp" line="2332"/>
         <source>&amp;Reduce Velocity</source>
-        <translation>&amp;Diminuer Vélocité</translation>
+        <translation>D&amp;iminuer Vélocité</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="754"/>
@@ -1112,7 +1112,7 @@
         <location filename="../QMenuStrings.cpp" line="776"/>
         <location filename="../QMenuStrings.cpp" line="2279"/>
         <source>Trans&amp;pose</source>
-        <translation>Trans&amp;poser</translation>
+        <translation>&amp;Transposer</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="777"/>
@@ -1218,13 +1218,13 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="1018"/>
         <source>Resi&amp;ze</source>
-        <translation>Re&amp;dimensionner</translation>
+        <translation>&amp;Redimensionner</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1027"/>
         <location filename="../QMenuStrings.cpp" line="3987"/>
         <source>S&amp;plit</source>
-        <translation>Divi&amp;ser</translation>
+        <translation>Di&amp;viser</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1036"/>
@@ -1262,7 +1262,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2371"/>
         <source>Cursor back and Se&amp;lect</source>
-        <translation>Recu&amp;ler le curseur et sélectionner</translation>
+        <translation>Reculer le curseur et s&amp;électionner</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="847"/>
@@ -1323,7 +1323,7 @@
         <location filename="../QMenuStrings.cpp" line="2514"/>
         <location filename="../QMenuStrings.cpp" line="4024"/>
         <source>&amp;Fast Forward</source>
-        <translation>A&amp;vance rapide</translation>
+        <translation>Avance rap&amp;ide</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="960"/>
@@ -1401,7 +1401,7 @@
         <location filename="../QMenuStrings.cpp" line="1507"/>
         <location filename="../QMenuStrings.cpp" line="3223"/>
         <source>C&amp;hord Insert Mode</source>
-        <translation>Mode insertion d&apos;&amp;accords</translation>
+        <translation>Mode insertion d&apos;acc&amp;ords</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1516"/>
@@ -1421,7 +1421,7 @@
         <location filename="../QMenuStrings.cpp" line="1919"/>
         <location filename="../QMenuStrings.cpp" line="3668"/>
         <source>&amp;Rulers</source>
-        <translation>&amp;Règlettes</translation>
+        <translation>Rè&amp;glettes</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="671"/>
@@ -1455,7 +1455,7 @@
         <location filename="../QMenuStrings.cpp" line="1728"/>
         <location filename="../QMenuStrings.cpp" line="4033"/>
         <source>&amp;Record</source>
-        <translation>En&amp;registrer</translation>
+        <translation>Enre&amp;gistrer</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1738"/>
@@ -1591,7 +1591,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="1866"/>
         <source>Select from Sta&amp;rt</source>
-        <translation>Sélectionner depuis le &amp;début</translation>
+        <translation>Sélectio&amp;nner depuis le début</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1867"/>
@@ -1746,7 +1746,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="1964"/>
         <source>Add R&amp;inforzando</source>
-        <translation>Ajouter r&amp;inforzando</translation>
+        <translation>Ajouter rinfor&amp;zando</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1965"/>
@@ -1786,7 +1786,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="1972"/>
         <source>Add &amp;Down-Bow</source>
-        <translation>Ajouter &amp;poussé</translation>
+        <translation>Ajouter pouss&amp;é</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1973"/>
@@ -1806,7 +1806,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="1976"/>
         <source>&amp;Remove All Marks</source>
-        <translation>&amp;Enlever toutes les marques</translation>
+        <translation>Enlever toutes les mar&amp;ques</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1977"/>
@@ -1816,7 +1816,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="1978"/>
         <source>Trigger &amp;Ornament...</source>
-        <translation>&amp;Ornement déclencheur...</translation>
+        <translation>Ornement &amp;déclencheur...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1979"/>
@@ -1881,7 +1881,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2047"/>
         <source>S&amp;lashes</source>
-        <translation>B&amp;arres</translation>
+        <translation>Barr&amp;es</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2048"/>
@@ -1963,12 +1963,12 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2073"/>
         <source>Respell with &amp;Sharp</source>
-        <translation>Récrire avec un &amp;dièze</translation>
+        <translation>Récrire avec un &amp;dièse</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2074"/>
         <source>Respell with Do&amp;uble Sharp</source>
-        <translation>Récrire avec un double diè&amp;ze</translation>
+        <translation>Récrire avec un double di&amp;èse</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2075"/>
@@ -1978,7 +1978,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2076"/>
         <source>Cancel C&amp;autionary Accidentals</source>
-        <translation>Annuler les altérations &amp;prudentes</translation>
+        <translation>Annuler les &amp;altérations prudentes</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2077"/>
@@ -2048,7 +2048,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2162"/>
         <source>Slur &amp;Position</source>
-        <translation>&amp;Position du lié</translation>
+        <translation>Position du li&amp;é</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2163"/>
@@ -2098,22 +2098,22 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2180"/>
         <source>Add &amp;Crescendo</source>
-        <translation>Ajouter un &amp;Crescendo</translation>
+        <translation>Ajouter un Cre&amp;scendo</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2189"/>
         <source>Add &amp;Decescendo</source>
-        <translation>Ajouter un &amp;Decrescendo</translation>
+        <translation>Ajouter un Decrescend&amp;o</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2198"/>
         <source>Add Trill With &amp;Line</source>
-        <translation>Ajouter une tri&amp;lle avec ligne</translation>
+        <translation>Ajouter une trille avec li&amp;gne</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2199"/>
         <source>&amp;Octaves</source>
-        <translation>&amp;Octaves</translation>
+        <translation>Octa&amp;ves</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2200"/>
@@ -2233,7 +2233,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2348"/>
         <source>Fine Ti&amp;ming</source>
-        <translation>Timing &amp;précis</translation>
+        <translation>Timin&amp;g précis</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2358"/>
@@ -2363,12 +2363,12 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2714"/>
         <source>Dotted Si&amp;xteenth Note</source>
-        <translation>D&amp;ouble Croche Pointée</translation>
+        <translation>Double Croc&amp;he Pointée</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2715"/>
         <source>Dotted Thirt&amp;y-Second Note</source>
-        <translation>Tr&amp;iple Croche Pointée</translation>
+        <translation>Triple Croche Point&amp;ée</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2603"/>
@@ -2398,12 +2398,12 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2608"/>
         <source>&amp;Double Sharp</source>
-        <translation>&amp;Double Dièze</translation>
+        <translation>Do&amp;uble Dièse</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2609"/>
         <source>D&amp;ouble Flat</source>
-        <translation>&amp;D&amp;ouble Bémol</translation>
+        <translation>Double &amp;Bémol</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2610"/>
@@ -2476,7 +2476,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3232"/>
         <source>Triplet Insert Mo&amp;de</source>
-        <translation>Mo&amp;de insertion de triolets</translation>
+        <translation>Mode insertion de trio&amp;lets</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3241"/>
@@ -3161,7 +3161,7 @@
         <location filename="../QMenuStrings.cpp" line="865"/>
         <location filename="../QMenuStrings.cpp" line="2398"/>
         <source>Cursor For&amp;ward and Select</source>
-        <translation>Avancer le curseur d&apos;une mes&amp;ure et sélectionner</translation>
+        <translation>Ava&amp;ncer le curseur d&apos;une mesure et sélectionner</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="872"/>
@@ -3956,7 +3956,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2228"/>
         <source>Cycle &amp;Dots</source>
-        <translation>Parcourir les mo&amp;des de notes pointées</translation>
+        <translation>&amp;Parcourir les modes de notes pointées</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2235"/>
@@ -4295,7 +4295,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3477"/>
         <source>Double Sharp</source>
-        <translation>Double dièze</translation>
+        <translation>Double dièse</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3478"/>
@@ -4390,7 +4390,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3525"/>
         <source>Save &amp;As...</source>
-        <translation>Enregistrer &amp;sous...</translation>
+        <translation>Enre&amp;gistrer sous...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3534"/>
@@ -4425,7 +4425,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3613"/>
         <source>Cut &amp;Range</source>
-        <translation>Couper une &amp;Plage</translation>
+        <translation>Couper une Plag&amp;e</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3622"/>
@@ -4663,7 +4663,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3910"/>
         <source>Select &amp;Previous Track</source>
-        <translation>Sélectionner piste &amp;précédente</translation>
+        <translation>Sélectionner piste précédent&amp;e</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3919"/>
@@ -6429,7 +6429,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
         <location filename="../InstrumentStrings.cpp" line="381"/>
         <source>E#</source>
         <comment>note name</comment>
-        <translation>Mi dièze</translation>
+        <translation>Mi dièse</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="382"/>
@@ -10534,7 +10534,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../../src/commands/notation/AddIndicationCommand.cpp" line="242"/>
         <source>Add &amp;Crescendo</source>
-        <translation>Ajouter un &amp;Crescendo</translation>
+        <translation>Ajouter un Cre&amp;scendo</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddIndicationCommand.cpp" line="244"/>
@@ -10549,7 +10549,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     <message>
         <location filename="../../src/commands/notation/AddIndicationCommand.cpp" line="248"/>
         <source>Add Tri&amp;ll With Line</source>
-        <translation>Ajouter une tri&amp;lle avec ligne</translation>
+        <translation>Ajouter une trille avec li&amp;gne</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddIndicationCommand.cpp" line="251"/>
@@ -12121,7 +12121,7 @@ Souhaitez vous les enregistrer avant de quitter l&apos;éditeur de banques?</tra
     <message>
         <location filename="../../src/commands/edit/ChangeVelocityCommand.h" line="46"/>
         <source>&amp;Reduce Velocity</source>
-        <translation>&amp;Diminuer Vélocité</translation>
+        <translation>D&amp;iminuer Vélocité</translation>
     </message>
 </context>
 <context>
@@ -16182,7 +16182,7 @@ un peu d&apos;attente au début de l&apos;exécution à cause du volume de donn�
     <message>
         <location filename="../../src/commands/notation/MakeAccidentalsCautionaryCommand.cpp" line="56"/>
         <source>Cancel C&amp;autionary Accidentals</source>
-        <translation>Annuler les altérations &amp;prudentes</translation>
+        <translation>Annuler les &amp;altérations prudentes</translation>
     </message>
 </context>
 <context>
@@ -18265,7 +18265,7 @@ Ceci est un bogue (le programme aurait dû s&apos;arrêter anormalement)</transl
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="906"/>
         <source>S&amp;pacing</source>
-        <translation>Es&amp;pacement</translation>
+        <translation>Espa&amp;cement</translation>
     </message>
     <message>
         <source>Du&amp;ration Factor</source>
