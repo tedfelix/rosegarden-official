@@ -33,7 +33,7 @@
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="514"/>
         <source>Internal Synth</source>
-        <translation>Внутренний синтезатор</translation>
+        <translation>Внутренний вирт. инструмент</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="483"/>
@@ -69,7 +69,7 @@
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="498"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new playback device&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Создать новое устройство воспроизведения&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="500"/>
@@ -80,7 +80,7 @@
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="502"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected playback device.  Any tracks using this device will need to be reassigned, and any program or bank changes on those tracks will be lost permanently&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Удалить выбранное устройство воспроизведения. Все использующие его дорожки придётся переназначить, а изменения программ и банков в них будут безвозвратно потеряны.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="504"/>
@@ -106,18 +106,18 @@
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="518"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI outputs (hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Доступные выходы MIDI (аппаратные или программные)&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="557"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI inputs (from hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Доступные входы MIDI (аппаратные или программные)&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="521"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="560"/>
         <source>&lt;qt&gt;&lt;p&gt;Click to refresh the port list after connecting a new piece of equipment or starting a new soft synth&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Щёлкните для обновления списка портов после подсоединения нового устройства или запуска нового виртуального инструмента&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="523"/>
@@ -133,12 +133,12 @@
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="526"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new recording device&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Создать новое устройство записи&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="530"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected recording device&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Удалить выбранное устройство записи&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="532"/>
@@ -1059,7 +1059,7 @@
         <location filename="../QMenuStrings.cpp" line="3259"/>
         <location filename="../QMenuStrings.cpp" line="4087"/>
         <source>Tools Toolbar</source>
-        <translation type="unfinished">Инструменты</translation>
+        <translation>Инструменты</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1680"/>
@@ -1086,7 +1086,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="1753"/>
         <source>Show &amp;Plugin Buttons</source>
-        <translation>Показать кнопки &amp;модулей</translation>
+        <translation>Показать кнопки &amp;эффектов</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1754"/>
@@ -1478,7 +1478,7 @@
         <location filename="../QMenuStrings.cpp" line="583"/>
         <location filename="../QMenuStrings.cpp" line="1895"/>
         <source>Insert Pitch &amp;Bend Sequence...</source>
-        <translation type="unfinished"></translation>
+        <translation>Вставить последовательность сдвига в&amp;ысоты тона...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="595"/>
@@ -1669,7 +1669,7 @@
         <location filename="../QMenuStrings.cpp" line="856"/>
         <location filename="../QMenuStrings.cpp" line="2389"/>
         <source>Cursor Back &amp;Bar and Select</source>
-        <translation type="unfinished"></translation>
+        <translation>Курсор на такт &amp;назад и выделить</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="863"/>
@@ -1682,7 +1682,7 @@
         <location filename="../QMenuStrings.cpp" line="865"/>
         <location filename="../QMenuStrings.cpp" line="2398"/>
         <source>Cursor For&amp;ward and Select</source>
-        <translation type="unfinished"></translation>
+        <translation>Курсор на такт впер&amp;ёд и выделить</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="872"/>
@@ -1781,14 +1781,14 @@
         <location filename="../QMenuStrings.cpp" line="2907"/>
         <location filename="../QMenuStrings.cpp" line="3061"/>
         <source>I/do</source>
-        <translation type="unfinished"></translation>
+        <translation>I/до</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1053"/>
         <location filename="../QMenuStrings.cpp" line="2760"/>
         <source>A</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">A</translation>
+        <translation>A</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1055"/>
@@ -1798,7 +1798,7 @@
         <location filename="../QMenuStrings.cpp" line="2916"/>
         <location filename="../QMenuStrings.cpp" line="3070"/>
         <source>I/do sharp</source>
-        <translation type="unfinished"></translation>
+        <translation>I/до диез</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1062"/>
@@ -1815,7 +1815,7 @@
         <location filename="../QMenuStrings.cpp" line="2925"/>
         <location filename="../QMenuStrings.cpp" line="3079"/>
         <source>II/re flat</source>
-        <translation type="unfinished"></translation>
+        <translation>II/ре бемоль</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1071"/>
@@ -1833,7 +1833,7 @@
         <location filename="../QMenuStrings.cpp" line="2934"/>
         <location filename="../QMenuStrings.cpp" line="3088"/>
         <source>II/re</source>
-        <translation type="unfinished"></translation>
+        <translation>II/ре</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1080"/>
@@ -1850,7 +1850,7 @@
         <location filename="../QMenuStrings.cpp" line="2943"/>
         <location filename="../QMenuStrings.cpp" line="3097"/>
         <source>II/re sharp</source>
-        <translation type="unfinished"></translation>
+        <translation>II/ре диез</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1089"/>
@@ -1867,7 +1867,7 @@
         <location filename="../QMenuStrings.cpp" line="2952"/>
         <location filename="../QMenuStrings.cpp" line="3106"/>
         <source>III/mi flat</source>
-        <translation type="unfinished"></translation>
+        <translation>III/ми бемоль</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1098"/>
@@ -1884,7 +1884,7 @@
         <location filename="../QMenuStrings.cpp" line="2961"/>
         <location filename="../QMenuStrings.cpp" line="3115"/>
         <source>III/mi</source>
-        <translation type="unfinished"></translation>
+        <translation>III/ми</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1107"/>
@@ -1902,7 +1902,7 @@
         <location filename="../QMenuStrings.cpp" line="2970"/>
         <location filename="../QMenuStrings.cpp" line="3124"/>
         <source>IV/fa</source>
-        <translation type="unfinished"></translation>
+        <translation>IV/фа</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1116"/>
@@ -1919,7 +1919,7 @@
         <location filename="../QMenuStrings.cpp" line="2979"/>
         <location filename="../QMenuStrings.cpp" line="3133"/>
         <source>IV/fa sharp</source>
-        <translation type="unfinished"></translation>
+        <translation>IV/фа диез</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1125"/>
@@ -1936,14 +1936,14 @@
         <location filename="../QMenuStrings.cpp" line="2988"/>
         <location filename="../QMenuStrings.cpp" line="3142"/>
         <source>V/sol flat</source>
-        <translation type="unfinished"></translation>
+        <translation>V/соль бемоль</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1134"/>
         <location filename="../QMenuStrings.cpp" line="2841"/>
         <source>Ctrl+Shift+J</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+J</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1136"/>
@@ -1953,7 +1953,7 @@
         <location filename="../QMenuStrings.cpp" line="2997"/>
         <location filename="../QMenuStrings.cpp" line="3151"/>
         <source>V/sol</source>
-        <translation type="unfinished"></translation>
+        <translation>V/соль</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1143"/>
@@ -1970,7 +1970,7 @@
         <location filename="../QMenuStrings.cpp" line="3006"/>
         <location filename="../QMenuStrings.cpp" line="3160"/>
         <source>V/sol sharp</source>
-        <translation type="unfinished"></translation>
+        <translation>V/соль диез</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1152"/>
@@ -1987,7 +1987,7 @@
         <location filename="../QMenuStrings.cpp" line="3015"/>
         <location filename="../QMenuStrings.cpp" line="3169"/>
         <source>VI/la flat</source>
-        <translation type="unfinished"></translation>
+        <translation>VI/ля бемоль</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1161"/>
@@ -2004,7 +2004,7 @@
         <location filename="../QMenuStrings.cpp" line="3024"/>
         <location filename="../QMenuStrings.cpp" line="3178"/>
         <source>VI/la</source>
-        <translation type="unfinished"></translation>
+        <translation>VI/ля</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1170"/>
@@ -2021,7 +2021,7 @@
         <location filename="../QMenuStrings.cpp" line="3033"/>
         <location filename="../QMenuStrings.cpp" line="3187"/>
         <source>VI/la sharp</source>
-        <translation type="unfinished"></translation>
+        <translation>VI/ля диез</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1179"/>
@@ -2038,7 +2038,7 @@
         <location filename="../QMenuStrings.cpp" line="3042"/>
         <location filename="../QMenuStrings.cpp" line="3196"/>
         <source>VII/ti flat</source>
-        <translation type="unfinished"></translation>
+        <translation>VII/си бемоль</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1188"/>
@@ -2055,7 +2055,7 @@
         <location filename="../QMenuStrings.cpp" line="3051"/>
         <location filename="../QMenuStrings.cpp" line="3205"/>
         <source>VII/ti</source>
-        <translation type="unfinished"></translation>
+        <translation>VII/си</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1197"/>
@@ -2455,7 +2455,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2054"/>
         <source>&amp;Cycle Slashes</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Циклически перебирать чёрточки</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2061"/>
@@ -2471,17 +2471,17 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2064"/>
         <source>Classical</source>
-        <translation type="unfinished"></translation>
+        <translation>Классический</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2065"/>
         <source>Cross</source>
-        <translation type="unfinished"></translation>
+        <translation>Крестик</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2066"/>
         <source>Mensural</source>
-        <translation type="unfinished"></translation>
+        <translation>Мензуральный</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2068"/>
@@ -2660,7 +2660,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2198"/>
         <source>Add Trill With &amp;Line</source>
-        <translation type="unfinished"></translation>
+        <translation>Добавить трель с л&amp;инией</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2199"/>
@@ -2723,7 +2723,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2228"/>
         <source>Cycle &amp;Dots</source>
-        <translation type="unfinished"></translation>
+        <translation>Циклически перебирать &amp;точки</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2235"/>
@@ -2734,7 +2734,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2237"/>
         <source>Cycle Dots With&amp;out Duration Change</source>
-        <translation type="unfinished"></translation>
+        <translation>Циклически перебирать &amp;точки, не меняя длительность</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2244"/>
@@ -2887,31 +2887,31 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2711"/>
         <source>Dotted Ha&amp;lf Note</source>
-        <translation type="unfinished"></translation>
+        <translation>1/2 с точко&amp;й</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2716"/>
         <location filename="../QMenuStrings.cpp" line="3467"/>
         <source>Switch To &amp;Notes</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Ноты</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2725"/>
         <location filename="../QMenuStrings.cpp" line="3468"/>
         <source>Switch To &amp;Rests</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Паузы</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2734"/>
         <location filename="../QMenuStrings.cpp" line="3469"/>
         <source>To&amp;ggle Dot On</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Включить точки</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2743"/>
         <location filename="../QMenuStrings.cpp" line="3470"/>
         <source>To&amp;ggle Dot Off</source>
-        <translation type="unfinished"></translation>
+        <translation>В&amp;ыключить точки</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1045"/>
@@ -3015,36 +3015,36 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2425"/>
         <source>Next Staff &amp;Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Нотоносец в&amp;ыше</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2434"/>
         <source>Next Staff &amp;Down</source>
-        <translation type="unfinished"></translation>
+        <translation>Нотоносец ни&amp;же</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="892"/>
         <location filename="../QMenuStrings.cpp" line="2443"/>
         <source>Pre&amp;vious Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Предыдущий сегмент</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="901"/>
         <location filename="../QMenuStrings.cpp" line="2452"/>
         <source>Ne&amp;xt Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Следующий сегмент</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="912"/>
         <location filename="../QMenuStrings.cpp" line="2475"/>
         <source>Step &amp;Back</source>
-        <translation type="unfinished"></translation>
+        <translation>Шаг &amp;назад</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="927"/>
         <location filename="../QMenuStrings.cpp" line="2490"/>
         <source>Step &amp;Forward</source>
-        <translation type="unfinished"></translation>
+        <translation>Шаг &amp;вперёд</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1917"/>
@@ -3103,7 +3103,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="838"/>
         <source>Cursor Back and Se&amp;lect</source>
-        <translation type="unfinished"></translation>
+        <translation>Курсор &amp;назад и выделить ноту</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1896"/>
@@ -3119,33 +3119,33 @@
         <location filename="../QMenuStrings.cpp" line="925"/>
         <location filename="../QMenuStrings.cpp" line="2488"/>
         <source>Step Back (Left)</source>
-        <translation type="unfinished"></translation>
+        <translation>Шаг назад (влево)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2466"/>
         <source>Play</source>
-        <translation type="unfinished">Воспр.</translation>
+        <translation>Воспроизвести</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="940"/>
         <location filename="../QMenuStrings.cpp" line="2503"/>
         <source>Step Forward (Right)</source>
-        <translation type="unfinished"></translation>
+        <translation>Шаг вперёд (вправо)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="47"/>
         <source>&amp;Action</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Действие</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="49"/>
         <source>Insert into Selected Audio Track</source>
-        <translation type="unfinished"></translation>
+        <translation>Вставить в выбранную звуковую дорожку</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="50"/>
         <source>Distribute Audio on MIDI Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Распределить звук по сегменту MIDI</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="52"/>
@@ -3165,167 +3165,167 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2542"/>
         <source>Solo the Active Track</source>
-        <translation type="unfinished"></translation>
+        <translation>Сделать активную дорожку солирующей</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2557"/>
         <source>Scroll to Follow Playback</source>
-        <translation type="unfinished"></translation>
+        <translation>Прокручивать по ходу воспроизведения</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2572"/>
         <source>Panic! (Ctrl+Alt+P)</source>
-        <translation type="unfinished"></translation>
+        <translation>Паника! (Ctrl+Alt+P)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3266"/>
         <source>Double Whole Note (5)</source>
-        <translation type="unfinished"></translation>
+        <translation>Двойная целая нота (5)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3272"/>
         <source>Whole Note (1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Целая нота (1)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3278"/>
         <source>Half Note (2)</source>
-        <translation type="unfinished"></translation>
+        <translation>1/2 нота (2)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3284"/>
         <source>Quarter Note (4)</source>
-        <translation type="unfinished"></translation>
+        <translation>1/4 нота (4)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3290"/>
         <source>Eighth Note (8)</source>
-        <translation type="unfinished"></translation>
+        <translation>1/8 нота (8)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3296"/>
         <source>Sixteenth Note (6)</source>
-        <translation type="unfinished"></translation>
+        <translation>1/16 нота (6)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3302"/>
         <source>Thirty-Second Note (3)</source>
-        <translation type="unfinished"></translation>
+        <translation>1/32 нота (3)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3308"/>
         <source>Sixty-Fourth Note (0)</source>
-        <translation type="unfinished"></translation>
+        <translation>1/64 нота (0)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3314"/>
         <source>Dotted Double Whole Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Двойная целая нота с точкой</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3320"/>
         <source>Dotted Whole Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Целая нота с точкой</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3326"/>
         <source>Dotted Half Note</source>
-        <translation type="unfinished"></translation>
+        <translation>1/2 нота с точкой</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3332"/>
         <source>Dotted Quarter Note</source>
-        <translation type="unfinished"></translation>
+        <translation>1/4 нота с точкой</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3338"/>
         <source>Dotted Eighth Note</source>
-        <translation type="unfinished"></translation>
+        <translation>1/8 нота с точкой</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3344"/>
         <source>Dotted Sixteenth Note</source>
-        <translation type="unfinished"></translation>
+        <translation>1/16 нота с точкой</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3350"/>
         <source>Dotted Thirty-Second Note</source>
-        <translation type="unfinished"></translation>
+        <translation>1/32 нота с точкой</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3356"/>
         <source>Double Whole Rest (5)</source>
-        <translation type="unfinished"></translation>
+        <translation>Двойная целая пауза (5)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3362"/>
         <source>Whole Rest (1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Целая пауза (1)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3368"/>
         <source>Half Rest (2)</source>
-        <translation type="unfinished"></translation>
+        <translation>1/2 пауза (2)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3374"/>
         <source>Quarter Rest (4)</source>
-        <translation type="unfinished"></translation>
+        <translation>1/4 пауза (4)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3380"/>
         <source>Eighth Rest (8)</source>
-        <translation type="unfinished"></translation>
+        <translation>1/8 пауза (8)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3386"/>
         <source>Sixteenth Rest (6)</source>
-        <translation type="unfinished"></translation>
+        <translation>1/6 пауза (6)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3392"/>
         <source>Thirty-Second Rest (3)</source>
-        <translation type="unfinished"></translation>
+        <translation>1/32 пауза (3)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3398"/>
         <source>Sixty-Fourth Rest (0)</source>
-        <translation type="unfinished"></translation>
+        <translation>1/64 пауза (0)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3404"/>
         <source>Dotted Double Whole Rest</source>
-        <translation type="unfinished"></translation>
+        <translation>Двойная целая пауза с точкой</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3410"/>
         <source>Dotted Whole Rest</source>
-        <translation type="unfinished"></translation>
+        <translation>Целая пауза с точкой</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3416"/>
         <source>Dotted Half Rest</source>
-        <translation type="unfinished"></translation>
+        <translation>1/2 пауза с точкой</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3422"/>
         <source>Dotted Quarter Rest</source>
-        <translation type="unfinished"></translation>
+        <translation>1/4 пауза с точкой</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3428"/>
         <source>Dotted Eighth Rest</source>
-        <translation type="unfinished"></translation>
+        <translation>1/8 пауза с точкой</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3434"/>
         <source>Dotted Sixteenth Rest</source>
-        <translation type="unfinished"></translation>
+        <translation>1/16 пауза с точкой</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3440"/>
         <source>Dotted Thirty-Second Rest</source>
-        <translation type="unfinished"></translation>
+        <translation>1/32 пауза с точкой</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3450"/>
@@ -3340,37 +3340,37 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3453"/>
         <source>Switch to Insert Tool</source>
-        <translation type="unfinished">Вставка</translation>
+        <translation>Вставка</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3455"/>
         <source>Collapse Rests</source>
-        <translation type="unfinished">Объединить паузы</translation>
+        <translation>Объединить паузы</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3456"/>
         <source>Respell as Flat</source>
-        <translation type="unfinished">Перечитать как бемоль</translation>
+        <translation>Перечитать как бемоль</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3457"/>
         <source>Respell as Sharp</source>
-        <translation type="unfinished">Перечитать как диез</translation>
+        <translation>Перечитать как диез</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3458"/>
         <source>Respell as Natural</source>
-        <translation type="unfinished">Перечитать как бекар</translation>
+        <translation>Перечитать как бекар</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3459"/>
         <source>Collapse Notes</source>
-        <translation type="unfinished">Объединить ноты</translation>
+        <translation>Объединить ноты</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3460"/>
         <source>Interpret</source>
-        <translation type="unfinished">Интерпретация</translation>
+        <translation>Интерпретация</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3461"/>
@@ -3385,17 +3385,17 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3463"/>
         <source>Make Invisible</source>
-        <translation type="unfinished">Сделать невидимым</translation>
+        <translation>Сделать невидимым</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3464"/>
         <source>Make Visible</source>
-        <translation type="unfinished">Сделать видимым</translation>
+        <translation>Сделать видимым</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3471"/>
         <source>Auto-Beam when appropriate</source>
-        <translation type="unfinished">Автогруппировка</translation>
+        <translation>Автогруппировка при возможности</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3474"/>
@@ -3535,7 +3535,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3698"/>
         <source>Set &amp;Tempo to Audio Segment Duration</source>
-        <translation type="unfinished">Установить &amp;темп для всего звукового сегмента</translation>
+        <translation>Установить &amp;темп для всего звукового сегмента</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3699"/>
@@ -3545,7 +3545,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3700"/>
         <source>Change &amp;Composition Start and End...</source>
-        <translation type="unfinished">Изменить &amp;начало и конец композиции...</translation>
+        <translation>Изменить &amp;начало и конец композиции...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3701"/>
@@ -3699,7 +3699,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3940"/>
         <source>&amp;Remap Instruments...</source>
-        <translation type="unfinished">П&amp;ерераспределить инструменты...</translation>
+        <translation>П&amp;ерераспределить инструменты...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3978"/>
@@ -3709,22 +3709,22 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="4042"/>
         <source>P&amp;unch in Record</source>
-        <translation type="unfinished">Записать &amp;врезкой (punch-in)</translation>
+        <translation>Записать &amp;врезкой</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3664"/>
         <source>Show Trac&amp;ks Toolbar</source>
-        <translation>Показать панель «&amp;Дорожки»</translation>
+        <translation>&amp;Дорожки</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3665"/>
         <source>Show &amp;Editors Toolbar</source>
-        <translation>Показать панель «&amp;Правка»</translation>
+        <translation>&amp;Правка</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3667"/>
         <source>Show &amp;Zoom Toolbar</source>
-        <translation>Показать панель «&amp;Масштаб»</translation>
+        <translation>&amp;Масштаб</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3669"/>
@@ -3776,27 +3776,27 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="4113"/>
         <source>Insert Tempo Change</source>
-        <translation type="unfinished">Вставить смену темпа</translation>
+        <translation>Вставить смену темпа</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="4114"/>
         <source>Insert Tempo Change at Playback Position</source>
-        <translation type="unfinished">Вставить смену темпа в точку воспроизведения</translation>
+        <translation>Вставить смену темпа в точку воспроизведения</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="4115"/>
         <source>Delete Tempo Change</source>
-        <translation type="unfinished">Удалить смену темпа</translation>
+        <translation>Удалить смену темпа</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="4116"/>
         <source>Ramp Tempo to Next Tempo</source>
-        <translation type="unfinished">Плавно поменять темп на следующий</translation>
+        <translation>Плавно поменять темп на следующий</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="4117"/>
         <source>Un-Ramp Tempo</source>
-        <translation type="unfinished">Выключить плавную смену темпа</translation>
+        <translation>Выключить плавную смену темпа</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="4118"/>
@@ -3831,7 +3831,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="4265"/>
         <source>Pa&amp;ste as New Triggered Segment</source>
-        <translation type="unfinished">Вставить как &amp;новый переключаемый сегмент</translation>
+        <translation>Вставить как &amp;новый переключаемый сегмент</translation>
     </message>
     <message>
         <source>The Restricted paste type requires enough empty space (containing only rests) at the paste position to hold all of the events to be pasted.
@@ -3978,7 +3978,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../QMenuStrings.cpp" line="48"/>
         <source>Play Preview</source>
-        <translation type="unfinished"></translation>
+        <translation>Воспроизвести фрагмент</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="74"/>
@@ -4014,12 +4014,12 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../QMenuStrings.cpp" line="293"/>
         <source>Set Se&amp;gment Start Time...</source>
-        <translation type="unfinished"></translation>
+        <translation>Установить время &amp;начала сегмента...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="294"/>
         <source>Set Seg&amp;ment Duration...</source>
-        <translation type="unfinished"></translation>
+        <translation>Установить &amp;длительность сегмента...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1913"/>
@@ -4178,12 +4178,12 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../QMenuStrings.cpp" line="699"/>
         <source>&amp;Repeat Last Quantize</source>
-        <translation type="unfinished"></translation>
+        <translation>Повторить последнее &amp;квантование</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="727"/>
         <source>&amp;Jog Right</source>
-        <translation type="unfinished"></translation>
+        <translation>Сместить в&amp;право</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="754"/>
@@ -4203,24 +4203,24 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../QMenuStrings.cpp" line="836"/>
         <source>Remove &amp;Triggers</source>
-        <translation type="unfinished"></translation>
+        <translation>Удалить п&amp;ереключатели</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2371"/>
         <source>Cursor back and Se&amp;lect</source>
-        <translation type="unfinished"></translation>
+        <translation>Курсор &amp;назад и выделить ноту</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="874"/>
         <location filename="../QMenuStrings.cpp" line="2407"/>
         <source>Set Loop &amp;to Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Сделать &amp;петлю из выделения</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="962"/>
         <location filename="../QMenuStrings.cpp" line="2537"/>
         <source>S&amp;olo</source>
-        <translation type="unfinished"></translation>
+        <translation>Со&amp;ло</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="972"/>
@@ -4229,7 +4229,7 @@ If you want to paste anyway, consider using one of the other paste types from th
         <location filename="../QMenuStrings.cpp" line="2559"/>
         <location filename="../QMenuStrings.cpp" line="4060"/>
         <source>P&amp;anic</source>
-        <translation type="unfinished"></translation>
+        <translation>Па&amp;ника</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="673"/>
@@ -4257,158 +4257,158 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../QMenuStrings.cpp" line="1740"/>
         <source>&amp;1 Input</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;1 вход</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1741"/>
         <source>&amp;2 Inputs</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;2 входа</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1742"/>
         <source>&amp;4 Inputs</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;4 входа</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1743"/>
         <source>&amp;8 Inputs</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;8 входов</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1744"/>
         <source>1&amp;6 Inputs</source>
-        <translation type="unfinished"></translation>
+        <translation>1&amp;6 входов</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1747"/>
         <source>&amp;2 Submasters</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;2 субмикса</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1748"/>
         <source>&amp;4 Submasters</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;4 субмикса</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1749"/>
         <source>&amp;8 Submasters</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;8 субмиксов</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1750"/>
         <source>Show &amp;Audio Faders</source>
-        <translation type="unfinished"></translation>
+        <translation>Показывать &amp;аудиофейдеры</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1751"/>
         <source>Show &amp;Synth Faders</source>
-        <translation type="unfinished"></translation>
+        <translation>Показывать фейдеры &amp;виртуальных инструментов</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1752"/>
         <source>Show Audio Su&amp;bmasters</source>
-        <translation type="unfinished"></translation>
+        <translation>Показывать &amp;аудиосубмиксы</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1768"/>
         <source>Switch to Inserting Tool</source>
-        <translation type="unfinished"></translation>
+        <translation>Вставка</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1769"/>
         <source>Collapse Rests After Erase</source>
-        <translation type="unfinished"></translation>
+        <translation>Объединить паузы после удаления</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1781"/>
         <location filename="../QMenuStrings.cpp" line="3537"/>
         <source>&amp;Print...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Печать...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1780"/>
         <source>P&amp;rint preview...</source>
-        <translation type="unfinished"></translation>
+        <translation>Прос&amp;мотр печати...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1864"/>
         <source>&amp;Move to Staff Above</source>
-        <translation type="unfinished"></translation>
+        <translation>Переместить в нотоносец &amp;выше</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1865"/>
         <source>Move to Staff &amp;Below</source>
-        <translation type="unfinished"></translation>
+        <translation>Переместить в нотоносец &amp;ниже</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1958"/>
         <source>Add Sta&amp;ccato</source>
-        <translation type="unfinished"></translation>
+        <translation>Добавить ста&amp;ккато</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1959"/>
         <source>Add &amp;Staccatissimo</source>
-        <translation type="unfinished"></translation>
+        <translation>Добавить &amp;стаккатиссимо</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1960"/>
         <source>Add &amp;Marcato</source>
-        <translation type="unfinished"></translation>
+        <translation>Добавить &amp;маркато</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1963"/>
         <source>Add S&amp;forzando</source>
-        <translation type="unfinished"></translation>
+        <translation>Добавить с&amp;форцандо</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1964"/>
         <source>Add R&amp;inforzando</source>
-        <translation type="unfinished"></translation>
+        <translation>Добавить р&amp;инфорцандо</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1965"/>
         <source>Add Tri&amp;ll</source>
-        <translation type="unfinished"></translation>
+        <translation>Добавить &amp;трель</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1966"/>
         <source>Add &amp;Turn</source>
-        <translation type="unfinished"></translation>
+        <translation>Добавить &amp;группетто</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1967"/>
         <source>Add M&amp;ordent</source>
-        <translation type="unfinished"></translation>
+        <translation>Добавить м&amp;ордент</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1968"/>
         <source>Add I&amp;nverted Mordent</source>
-        <translation type="unfinished"></translation>
+        <translation>Добавить &amp;инвертированный мордент</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1969"/>
         <source>Add Long Mordent</source>
-        <translation type="unfinished"></translation>
+        <translation>Добавить долгий мордент</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1970"/>
         <source>Add Lon&amp;g Inverted Mordent</source>
-        <translation type="unfinished"></translation>
+        <translation>Добавить дол&amp;гий инвертированный мордент</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1971"/>
         <source>Add &amp;Up-Bow</source>
-        <translation type="unfinished"></translation>
+        <translation>Добавить движение смычком вв&amp;ерх</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1972"/>
         <source>Add &amp;Down-Bow</source>
-        <translation type="unfinished"></translation>
+        <translation>Добавить движение см&amp;ычком вниз</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1974"/>
         <source>Add &amp;Pause</source>
-        <translation type="unfinished"></translation>
+        <translation>Добавить &amp;паузу</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1979"/>
@@ -4418,32 +4418,32 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../QMenuStrings.cpp" line="1992"/>
         <source>Add Fingering &amp;1</source>
-        <translation type="unfinished"></translation>
+        <translation>Добавить аппликатуру &amp;1</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2001"/>
         <source>Add Fingering &amp;2</source>
-        <translation type="unfinished"></translation>
+        <translation>Добавить аппликатуру &amp;2</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2010"/>
         <source>Add Fingering &amp;3</source>
-        <translation type="unfinished"></translation>
+        <translation>Добавить аппликатуру &amp;3</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2019"/>
         <source>Add Fingering &amp;4</source>
-        <translation type="unfinished"></translation>
+        <translation>Добавить аппликатуру &amp;4</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2028"/>
         <source>Add Fingering &amp;5</source>
-        <translation type="unfinished"></translation>
+        <translation>Добавить аппликатуру &amp;5</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2037"/>
         <source>&amp;Add Fingering +</source>
-        <translation type="unfinished"></translation>
+        <translation>До&amp;бавить аппликатуру +</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2049"/>
@@ -4473,27 +4473,27 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../QMenuStrings.cpp" line="2070"/>
         <source>Respell with Dou&amp;ble Flat</source>
-        <translation type="unfinished"></translation>
+        <translation>Перечитать с &amp;дубль-бемолем</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2071"/>
         <source>Respell with &amp;Flat</source>
-        <translation type="unfinished"></translation>
+        <translation>Перечитать с &amp;бемолем</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2072"/>
         <source>Respell with &amp;Natural</source>
-        <translation type="unfinished"></translation>
+        <translation>Перечитать с бе&amp;каром</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2073"/>
         <source>Respell with &amp;Sharp</source>
-        <translation type="unfinished"></translation>
+        <translation>Перечитать с д&amp;иезом</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2074"/>
         <source>Respell with Do&amp;uble Sharp</source>
-        <translation type="unfinished"></translation>
+        <translation>Перечитать с двойным ди&amp;езом</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2077"/>
@@ -4528,12 +4528,12 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../QMenuStrings.cpp" line="2166"/>
         <source>T&amp;ie</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Связующая лига</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2177"/>
         <source>&amp;Restore Tie Position</source>
-        <translation type="unfinished"></translation>
+        <translation>Восстановить позицию св&amp;язующей лиги</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2189"/>
@@ -4543,12 +4543,12 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../QMenuStrings.cpp" line="2200"/>
         <source>&amp;Add Double-Octave Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Добавить перенос на две октавы в&amp;верх</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2203"/>
         <source>Add Double &amp;Octave Down</source>
-        <translation type="unfinished"></translation>
+        <translation>Добавить перенос на две октавы в&amp;низ</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2322"/>
@@ -4563,12 +4563,12 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../QMenuStrings.cpp" line="2345"/>
         <source>&amp;Push Right</source>
-        <translation type="unfinished"></translation>
+        <translation>Сместить в&amp;право</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2584"/>
         <source>Draw &amp;Notes and Rests</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Ноты и паузы</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2635"/>
@@ -4579,72 +4579,72 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../QMenuStrings.cpp" line="2637"/>
         <source>&amp;Durations</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Длительности</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2638"/>
         <source>&amp;Double Whole Note</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Двойная целая</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2647"/>
         <source>&amp;Whole Note</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Целая</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2656"/>
         <source>&amp;Half Note</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;1/2</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2665"/>
         <source>&amp;Quarter Note</source>
-        <translation type="unfinished"></translation>
+        <translation>1/&amp;4</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2674"/>
         <source>&amp;Eighth Note</source>
-        <translation type="unfinished"></translation>
+        <translation>1/&amp;8</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2683"/>
         <source>&amp;Sixteenth note</source>
-        <translation type="unfinished"></translation>
+        <translation>1/1&amp;6</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2692"/>
         <source>&amp;Thirty-Second Note</source>
-        <translation type="unfinished"></translation>
+        <translation>1/&amp;32</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2701"/>
         <source>Sixty-&amp;Fourth Note</source>
-        <translation type="unfinished"></translation>
+        <translation>1/&amp;64</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2710"/>
         <source>D&amp;otted Whole Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Ц&amp;елая с точкой</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2712"/>
         <source>Dotted Q&amp;uarter Note</source>
-        <translation type="unfinished"></translation>
+        <translation>1/4 с &amp;точкой</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2713"/>
         <source>Dotted E&amp;ighth Note</source>
-        <translation type="unfinished"></translation>
+        <translation>1/8 с т&amp;очкой</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2714"/>
         <source>Dotted Si&amp;xteenth Note</source>
-        <translation type="unfinished"></translation>
+        <translation>1/16 с то&amp;чкой</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2715"/>
         <source>Dotted Thirt&amp;y-Second Note</source>
-        <translation type="unfinished"></translation>
+        <translation>1/32 с точ&amp;кой</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2603"/>
@@ -4654,7 +4654,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../QMenuStrings.cpp" line="2604"/>
         <source>&amp;Follow Previous Accidental</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Следовать предыдущему знаку альтерации</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2606"/>
@@ -4693,7 +4693,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../QMenuStrings.cpp" line="3214"/>
         <source>Insert rest</source>
-        <translation type="unfinished"></translation>
+        <translation>Вставить паузу</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3221"/>
@@ -4717,17 +4717,17 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../QMenuStrings.cpp" line="3241"/>
         <source>Grace Insert &amp;Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Режим ввода &amp;форшлагов</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3472"/>
         <source>No Accidental</source>
-        <translation type="unfinished"></translation>
+        <translation>Без знака альтерации</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3473"/>
         <source>Follow Previous Accidental</source>
-        <translation type="unfinished"></translation>
+        <translation>Следовать предыдущему знаку альтерации</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3477"/>
@@ -4818,7 +4818,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../QMenuStrings.cpp" line="3697"/>
         <source>&amp;Open Tempo and Time Signature Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Открыть &amp;редактор темпа и размера</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3708"/>
@@ -4829,12 +4829,12 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../QMenuStrings.cpp" line="3711"/>
         <source>&amp;Set Quick Marker at Playback Position</source>
-        <translation type="unfinished"></translation>
+        <translation>Вставить &amp;быстрый маркер в точку воспроизведения</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3720"/>
         <source>&amp;Jump to Quick Marker</source>
-        <translation type="unfinished"></translation>
+        <translation>Перейти к б&amp;ыстрому маркеру</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3727"/>
@@ -4850,7 +4850,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../QMenuStrings.cpp" line="3736"/>
         <source>MIDI &amp;Thru Routing</source>
-        <translation type="unfinished"></translation>
+        <translation>С&amp;квозная маршрутизация MIDI</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3749"/>
@@ -4867,7 +4867,7 @@ If you want to paste anyway, consider using one of the other paste types from th
         <location filename="../QMenuStrings.cpp" line="3759"/>
         <source>Return</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ввод</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3797"/>
@@ -4882,7 +4882,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../QMenuStrings.cpp" line="3818"/>
         <source>Stretch &amp;or Squash...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Растянуть или сжать...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="686"/>
@@ -4912,7 +4912,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../QMenuStrings.cpp" line="3852"/>
         <source> Split &amp;at Time...</source>
-        <translation type="unfinished"></translation>
+        <translation>Разделить по &amp;времени...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3872"/>
@@ -4934,12 +4934,12 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../QMenuStrings.cpp" line="3919"/>
         <source>Mute or Unmute Tra&amp;ck</source>
-        <translation type="unfinished"></translation>
+        <translation>При&amp;глушить дорожку или снять приглушение</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3928"/>
         <source>Arm &amp;or Un-arm Track for Record</source>
-        <translation type="unfinished"></translation>
+        <translation>Вк&amp;лючить или отключить записываемость</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="300"/>
@@ -4957,19 +4957,19 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../QMenuStrings.cpp" line="4084"/>
         <source>Main Toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>Основная панель</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2528"/>
         <location filename="../QMenuStrings.cpp" line="4091"/>
         <source>Rewind to Beginning</source>
-        <translation type="unfinished"></translation>
+        <translation>Перемотать в начало</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2535"/>
         <location filename="../QMenuStrings.cpp" line="4100"/>
         <source>Fast Forward to End</source>
-        <translation type="unfinished"></translation>
+        <translation>Перемотать в конец</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="4204"/>
@@ -10336,7 +10336,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="297"/>
         <source>Synth plugin </source>
-        <translation type="unfinished">Синт. модули</translation>
+        <translation>Вирт. инструмент</translation>
     </message>
 </context>
 <context>
@@ -10354,7 +10354,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../../src/gui/dialogs/AboutDialog.cpp" line="54"/>
         <source>&lt;p&gt;Copyright 2000-2010 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Авторские права 2000-2010 команда разработчиков Rosegarden &lt;/p&gt;&lt;p&gt;Версия: %1 &amp;nbsp; Версия Qt: %2&lt;br&gt;Ключ сборки: %3&lt;/p&gt;&lt;p&gt;Rosegarden был создан для вас международной командой разработчиков. Полный список участников проекта вы можете получить по &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;этому&lt;/a&gt; адресу.&lt;br&gt;Более подробная информация о Rosegarden есть на &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;сайте программы&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Лицензия: GNU General Public License Version 2&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
@@ -10362,7 +10362,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../../src/gui/general/ActionCommandRegistry.cpp" line="63"/>
         <source>Rosegarden - Query</source>
-        <translation>Rosegarden - Запрос</translation>
+        <translation>Запрос</translation>
     </message>
 </context>
 <context>
@@ -10804,12 +10804,12 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="79"/>
         <source>&lt;no plugin&gt;</source>
-        <translation>&lt;нет модуля&gt;</translation>
+        <translation>&lt;нет эффекта&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="91"/>
         <source>&lt;no synth&gt;</source>
-        <translation>&lt;нет синтезатора&gt;</translation>
+        <translation>&lt;нет вирт. инструмента&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="151"/>
@@ -10872,37 +10872,37 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../../src/sound/AudioFileManager.cpp" line="660"/>
         <source>Cannot download file %1</source>
-        <translation type="unfinished">Не удаётся загрузить файл %1</translation>
+        <translation>Не удаётся загрузить файл %1</translation>
     </message>
     <message>
         <location filename="../../src/sound/AudioFileManager.cpp" line="660"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/sound/AudioFileManager.cpp" line="730"/>
         <source>Converting audio file...</source>
-        <translation type="unfinished">Преобразовывается звуковой файл...</translation>
+        <translation>Преобразовывается звуковой файл...</translation>
     </message>
     <message>
         <location filename="../../src/sound/AudioFileManager.cpp" line="732"/>
         <source>Resampling audio file...</source>
-        <translation type="unfinished">Ресэмплируется звуковой файл...</translation>
+        <translation>Ресэмплируется звуковой файл...</translation>
     </message>
     <message>
         <location filename="../../src/sound/AudioFileManager.cpp" line="734"/>
         <source>Converting and resampling audio file...</source>
-        <translation type="unfinished">Преобразовывается и ресэмплируется звуковой файл...</translation>
+        <translation>Преобразовывается и ресэмплируется звуковой файл...</translation>
     </message>
     <message>
         <location filename="../../src/sound/AudioFileManager.cpp" line="736"/>
         <source>Importing audio file...</source>
-        <translation type="unfinished">Импортируется звуковой файл...</translation>
+        <translation>Импортируется звуковой файл...</translation>
     </message>
     <message>
         <location filename="../../src/sound/AudioFileManager.cpp" line="798"/>
         <source>Failed to convert or resample audio file on import</source>
-        <translation type="unfinished">Не удалось преобразовать или ресэмплировать импортируемый звуковой файл</translation>
+        <translation>Не удалось преобразовать или ресэмплировать импортируемый звуковой файл</translation>
     </message>
 </context>
 <context>
@@ -10910,7 +10910,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="80"/>
         <source>Click to rename this instrument</source>
-        <translation type="unfinished"></translation>
+        <translation>Щёлкните для переименования этого инструмента</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="92"/>
@@ -10921,13 +10921,13 @@ If you want to paste anyway, consider using one of the other paste types from th
         <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="195"/>
         <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="371"/>
         <source>&lt;no synth&gt;</source>
-        <translation type="unfinished">&lt;нет синтезатора&gt;</translation>
+        <translation>&lt;нет вирт. инструмента&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="198"/>
         <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="375"/>
         <source>&lt;no plugin&gt;</source>
-        <translation type="unfinished">&lt;нет модуля&gt;</translation>
+        <translation>&lt;нет эффекта&gt;</translation>
     </message>
 </context>
 <context>
@@ -10988,7 +10988,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="521"/>
         <source>Save File As</source>
-        <translation type="unfinished"></translation>
+        <translation>Сохранить файл как</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="523"/>
@@ -11003,7 +11003,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="648"/>
         <source>This will unload audio file &quot;%1&quot; and remove all associated segments.  Are you sure?</source>
-        <translation type="unfinished">Это приведёт к выгрузке звукового файла &quot;%1&quot; и удалению связанных с ним сегментов? Вы уверены?</translation>
+        <translation>Это приведёт к выгрузке звукового файла &quot;%1&quot; и удалению связанных с ним сегментов? Вы уверены?</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="652"/>
@@ -11015,7 +11015,7 @@ If you want to paste anyway, consider using one of the other paste types from th
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1208"/>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1225"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="736"/>
@@ -11060,7 +11060,7 @@ If you want to paste anyway, consider using one of the other paste types from th
 This action cannot be undone, and associations with these files will be lost.
 Files will not be removed from your disk.
 Are you sure?</source>
-        <translation type="unfinished">Все звуковые файлы и связанные с ними сегменты будут выгружены.
+        <translation>Все звуковые файлы будут выгружены, а связанные с ними сегменты — удалены.
 Это действие необратимо, все связи с убранными файлами будут утеряны.
 Файлы не будут удалены с диска.
 Вы уверены?</translation>
@@ -11071,7 +11071,7 @@ Are you sure?</source>
 This action cannot be undone, and associations with these files will be lost.
 Files will not be removed from your disk.
 Are you sure?</source>
-        <translation type="unfinished">Все звуковые файлы, с которыми не связан ни один сегмент, будут выгружены.
+        <translation>Все звуковые файлы, с которыми не связан ни один сегмент, будут выгружены.
 Это действие необратимо, все связи с убранными файлами будут утеряны.
 Файлы не будут удалены с диска.
 Вы уверены?</translation>
@@ -11090,10 +11090,10 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message numerus="yes">
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="954"/>
         <source>&lt;qt&gt;About to delete %n audio file(s) permanently from the hard disk.&lt;br&gt;This action cannot be undone, and there will be no way to recover the files.&lt;br&gt;Are you sure?&lt;/qt&gt;</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>&lt;qt&gt;%n звуковой файл будет навсегда удалён с жесткого диска.&lt;br&gt;Это действие необратимо, восстановить файлы будет невозможно.&lt;br&gt;Вы уверены?&lt;/qt&gt;</numerusform>
+            <numerusform>&lt;qt&gt;%n звуковых файла будут навсегда удалены с жесткого диска.&lt;br&gt;Это действие необратимо, восстановить файлы будет невозможно.&lt;br&gt;Вы уверены?&lt;/qt&gt;</numerusform>
+            <numerusform>&lt;qt&gt;%n звуковых файлов будет навсегда удалено с жесткого диска.&lt;br&gt;Это действие необратимо, восстановить файлы будет невозможно.&lt;br&gt;Вы уверены?&lt;/qt&gt;</numerusform>
         </translation>
     </message>
     <message>
@@ -11114,12 +11114,12 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1175"/>
         <source>importing a remote audio file</source>
-        <translation type="unfinished">Импортируется звуковой файл...</translation>
+        <translation>Импортируется удалённый звуковой файл</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1177"/>
         <source>importing an audio file that needs to be converted or resampled</source>
-        <translation type="unfinished"></translation>
+        <translation>Импортируется звуковой файл, который необходимо преобразовать или изменить его частоту сэмплирования</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1180"/>
@@ -11135,18 +11135,17 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1216"/>
         <source>Generating audio preview...</source>
-        <translation type="unfinished">Создаётся просмотр волновой формы...</translation>
+        <translation>Создаётся просмотр волновой формы...</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1224"/>
         <source>Try copying this file to a directory where you have write permission and re-add it</source>
-        <translation type="unfinished">Попробуйте скопировать этот в файл в директорию,
-на запись в которую у вас есть права, а затем добавьте файл заново.</translation>
+        <translation>Попробуйте скопировать этот в файл в каталог, на запись в которую у вас есть права, а затем добавьте файл заново</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1386"/>
         <source>http://rosegardenmusic.com/wiki/doc:audioManager-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:audioManager-en</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="133"/>
@@ -11159,23 +11158,23 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="239"/>
         <source>Audio Mixer</source>
-        <translation type="unfinished">Звуковой микшер</translation>
+        <translation>Звуковой микшер</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="271"/>
         <source>Record input source</source>
-        <translation type="unfinished">Источник записи</translation>
+        <translation>Источник записи</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="281"/>
         <source>Output destination</source>
-        <translation type="unfinished">Куда вывести</translation>
+        <translation>Куда вывести</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="294"/>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="431"/>
         <source>Pan</source>
-        <translation type="unfinished">Панорама</translation>
+        <translation>Панорама</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="302"/>
@@ -11183,12 +11182,12 @@ Please select the ones you wish to delete permanently from the hard disk.
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="438"/>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="439"/>
         <source>Audio level</source>
-        <translation type="unfinished">Громкость звука</translation>
+        <translation>Громкость звука</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="310"/>
         <source>Mono or stereo</source>
-        <translation type="unfinished">Моно или стерео</translation>
+        <translation>Моно или стерео</translation>
     </message>
     <message>
         <source>Mute</source>
@@ -11210,7 +11209,7 @@ Please select the ones you wish to delete permanently from the hard disk.
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="646"/>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="824"/>
         <source>&lt;none&gt;</source>
-        <translation type="unfinished">&lt;ничего&gt;</translation>
+        <translation>&lt;ничего&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="331"/>
@@ -11226,12 +11225,12 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="354"/>
         <source>Audio %1</source>
-        <translation type="unfinished">Звук (аудио) %1</translation>
+        <translation>Звук %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="359"/>
         <source>Synth %1</source>
-        <translation type="unfinished">Синтезатор %1</translation>
+        <translation>Виртуальный инструмент %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="364"/>
@@ -11259,12 +11258,12 @@ Please select the ones you wish to delete permanently from the hard disk.
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="647"/>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="825"/>
         <source>&lt;no plugin&gt;</source>
-        <translation type="unfinished">&lt;нет модуля&gt;</translation>
+        <translation>&lt;нет эффекта&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="1652"/>
         <source>http://rosegardenmusic.com/wiki/doc:audioMixerWindow-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:audioMixerWindow-en</translation>
     </message>
 </context>
 <context>
@@ -11272,12 +11271,12 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/gui/dialogs/AudioPlayingDialog.cpp" line="37"/>
         <source>Playing audio file</source>
-        <translation type="unfinished">Воспроизведение звукового файла</translation>
+        <translation>Воспроизведение звукового файла</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPlayingDialog.cpp" line="45"/>
         <source>Playing audio file &quot;%1&quot;</source>
-        <translation type="unfinished">Воспроизводится звуковой файл &quot;%1&quot;</translation>
+        <translation>Воспроизводится звуковой файл &quot;%1&quot;</translation>
     </message>
 </context>
 <context>
@@ -11361,7 +11360,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="414"/>
         <source>&lt;no plugin&gt;</source>
-        <translation>&lt;нет модуля&gt;</translation>
+        <translation>&lt;нет эффекта&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="121"/>
@@ -11428,7 +11427,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="522"/>
         <source>%1 in, %2 out</source>
-        <translation type="unfinished">%1 вх., %2 вых.</translation>
+        <translation>%1 вх, %2 вых</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="545"/>
@@ -11443,12 +11442,12 @@ Please select the ones you wish to delete permanently from the hard disk.
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="806"/>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="835"/>
         <source>&lt;none selected&gt;</source>
-        <translation type="unfinished">&lt;ничего не выделено&gt;</translation>
+        <translation>&lt;ничего не выделено&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="1013"/>
         <source>http://rosegardenmusic.com/wiki/doc:audioPluginDialog-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:audioPluginDialog-en</translation>
     </message>
 </context>
 <context>
@@ -11514,17 +11513,17 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/gui/configuration/AudioPropertiesPage.cpp" line="133"/>
         <source>%1 kB out of %2 kB (%3% kB used)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 КБ из %2 КБ (использовано %3% КБ)</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioPropertiesPage.cpp" line="156"/>
         <source>minutes at</source>
-        <translation type="unfinished">минут в</translation>
+        <translation>минут в</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioPropertiesPage.cpp" line="165"/>
         <source>Audio Recording Path</source>
-        <translation type="unfinished"></translation>
+        <translation>Каталог хранения записанного звука</translation>
     </message>
 </context>
 <context>
@@ -11532,7 +11531,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/gui/widgets/AudioRouteMenu.cpp" line="229"/>
         <source>In %1</source>
-        <translation type="unfinished">Вх %1</translation>
+        <translation>Вх %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioRouteMenu.cpp" line="231"/>
@@ -11544,37 +11543,37 @@ Please select the ones you wish to delete permanently from the hard disk.
         <location filename="../../src/gui/widgets/AudioRouteMenu.cpp" line="233"/>
         <location filename="../../src/gui/widgets/AudioRouteMenu.cpp" line="256"/>
         <source>Sub %1</source>
-        <translation type="unfinished">Суб %1</translation>
+        <translation>Суб %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioRouteMenu.cpp" line="239"/>
         <source>In %1 R</source>
-        <translation type="unfinished">Вх %1 П</translation>
+        <translation>Вх %1 П</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioRouteMenu.cpp" line="240"/>
         <source>In %1 L</source>
-        <translation type="unfinished">Вх %1 Л</translation>
+        <translation>Вх %1 Л</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioRouteMenu.cpp" line="242"/>
         <source>Master R</source>
-        <translation type="unfinished">Общий П</translation>
+        <translation>Общий П</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioRouteMenu.cpp" line="243"/>
         <source>Master L</source>
-        <translation type="unfinished">Общий Л</translation>
+        <translation>Общий Л</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioRouteMenu.cpp" line="245"/>
         <source>Sub %1 R</source>
-        <translation type="unfinished">Суб %1 П</translation>
+        <translation>Суб %1 П</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioRouteMenu.cpp" line="246"/>
         <source>Sub %1 L</source>
-        <translation type="unfinished">Суб %1 Л</translation>
+        <translation>Суб %1 Л</translation>
     </message>
 </context>
 <context>
@@ -11930,7 +11929,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/commands/notation/BeamCommand.h" line="42"/>
         <source>&amp;Beam Group</source>
-        <translation type="unfinished">&amp;Сгруппировать</translation>
+        <translation>&amp;Сгруппировать</translation>
     </message>
 </context>
 <context>
@@ -11977,12 +11976,12 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/commands/notation/ChangeSlurPositionCommand.h" line="47"/>
         <source>Slur &amp;Above</source>
-        <translation type="unfinished">Легато с&amp;верху</translation>
+        <translation>Легато с&amp;верху</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/ChangeSlurPositionCommand.h" line="47"/>
         <source>Slur &amp;Below</source>
-        <translation type="unfinished">Легато с&amp;низу</translation>
+        <translation>Легато с&amp;низу</translation>
     </message>
 </context>
 <context>
@@ -12003,7 +12002,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/commands/notation/ChangeStyleCommand.h" line="49"/>
         <source>Change &amp;Note Style</source>
-        <translation type="unfinished">Сменить нотный &amp;стиль</translation>
+        <translation>Сменить нотный &amp;стиль</translation>
     </message>
 </context>
 <context>
@@ -12011,12 +12010,12 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/commands/notation/ChangeTiePositionCommand.h" line="44"/>
         <source>Tie &amp;Above</source>
-        <translation type="unfinished">Лигу с&amp;верху</translation>
+        <translation>Лигу с&amp;верху</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/ChangeTiePositionCommand.h" line="44"/>
         <source>Tie &amp;Below</source>
-        <translation type="unfinished">Лига с&amp;низу</translation>
+        <translation>Лига с&amp;низу</translation>
     </message>
 </context>
 <context>
@@ -12024,12 +12023,12 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/commands/edit/ChangeVelocityCommand.h" line="45"/>
         <source>&amp;Increase Velocity</source>
-        <translation type="unfinished">У&amp;величить силу нажатия</translation>
+        <translation>У&amp;величить силу нажатия</translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/ChangeVelocityCommand.h" line="46"/>
         <source>&amp;Reduce Velocity</source>
-        <translation type="unfinished">Уме&amp;ньшить силу нажатия</translation>
+        <translation>Уме&amp;ньшить силу нажатия</translation>
     </message>
 </context>
 <context>
@@ -12583,7 +12582,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/gui/rulers/ControlToolBox.cpp" line="59"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
 </context>
 <context>
@@ -12591,7 +12590,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="286"/>
         <source>Unsupported Event Type</source>
-        <translation type="unfinished">Неподдерживаемый тип событий</translation>
+        <translation>Неподдерживаемый тип событий</translation>
     </message>
     <message>
         <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="296"/>
@@ -12715,7 +12714,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/commands/notation/CycleSlashesCommand.h" line="37"/>
         <source>Cycle Slashes</source>
-        <translation type="unfinished"></translation>
+        <translation>Циклически перебирать чёрточки</translation>
     </message>
 </context>
 <context>
@@ -12766,7 +12765,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="919"/>
         <source>http://rosegardenmusic.com/wiki/doc:device-manager-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:device-manager-en</translation>
     </message>
 </context>
 <context>
@@ -13410,12 +13409,12 @@ This could cause problems if it overrides a different computed value later on.</
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="95"/>
         <source>lowest:</source>
-        <translation type="unfinished"></translation>
+        <translation>Самая низкая:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="98"/>
         <source>highest:</source>
-        <translation type="unfinished"></translation>
+        <translation>Самая высокая:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="101"/>
@@ -13462,7 +13461,7 @@ This could cause problems if it overrides a different computed value later on.</
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="192"/>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="199"/>
         <source>longest</source>
-        <translation type="unfinished"></translation>
+        <translation>Самая долгая</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="214"/>
@@ -13488,17 +13487,17 @@ This could cause problems if it overrides a different computed value later on.</
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="254"/>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="255"/>
         <source>shortest</source>
-        <translation type="unfinished">пауза</translation>
+        <translation>Самая короткая</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="359"/>
         <source>Lowest pitch</source>
-        <translation type="unfinished"></translation>
+        <translation>Минимальная высота тона</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="369"/>
         <source>Highest pitch</source>
-        <translation type="unfinished"></translation>
+        <translation>Максимальная высота тона</translation>
     </message>
 </context>
 <context>
@@ -13506,7 +13505,7 @@ This could cause problems if it overrides a different computed value later on.</
     <message>
         <location filename="../../src/commands/edit/EventInsertionCommand.cpp" line="31"/>
         <source>Insert Event</source>
-        <translation type="unfinished">Вставить событие</translation>
+        <translation>Вставить событие</translation>
     </message>
 </context>
 <context>
@@ -13514,7 +13513,7 @@ This could cause problems if it overrides a different computed value later on.</
     <message>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="47"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="66"/>
@@ -13556,31 +13555,31 @@ This could cause problems if it overrides a different computed value later on.</
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="118"/>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="148"/>
         <source>Value</source>
-        <translation type="unfinished">Значение</translation>
+        <translation>Значение</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="156"/>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="183"/>
         <source>First Value</source>
-        <translation type="unfinished">Первое значение</translation>
+        <translation>Первое значение</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="157"/>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="184"/>
         <source>Second Value</source>
-        <translation type="unfinished">Второе значение</translation>
+        <translation>Второе значение</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="165"/>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="175"/>
         <source>Low Value</source>
-        <translation type="unfinished">Низкое значение</translation>
+        <translation>Низкое значение</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="166"/>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="174"/>
         <source>High Value</source>
-        <translation type="unfinished">Высокое значение</translation>
+        <translation>Высокое значение</translation>
     </message>
 </context>
 <context>
@@ -13814,7 +13813,7 @@ This could cause problems if it overrides a different computed value later on.</
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="1519"/>
         <source>%1%2 - Triggered Segment: %3</source>
-        <translation type="unfinished"></translation>
+        <translation>%1%2 — Переключаемый сегмент: %3</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="1535"/>
@@ -13868,49 +13867,49 @@ This could cause problems if it overrides a different computed value later on.</
     <message>
         <location filename="../../src/gui/dialogs/FileLocateDialog.cpp" line="44"/>
         <source>Locate audio file</source>
-        <translation type="unfinished">Указать звуковой файл</translation>
+        <translation>Указать звуковой файл</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/FileLocateDialog.cpp" line="52"/>
         <source>Can&apos;t find file &quot;%1&quot;.
 Would you like to try and locate this file or skip it?</source>
-        <translation type="unfinished">Не удаётся найти файл &quot;%1&quot;.
+        <translation>Не удаётся найти файл &quot;%1&quot;.
 Вы предпочитаете найти его или пропустить?</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/FileLocateDialog.cpp" line="64"/>
         <source>&amp;Skip</source>
-        <translation type="unfinished">&amp;Пропустить</translation>
+        <translation>&amp;Пропустить</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/FileLocateDialog.cpp" line="68"/>
         <source>Skip &amp;All</source>
-        <translation type="unfinished">Пропустить &amp;все</translation>
+        <translation>Пропустить &amp;все</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/FileLocateDialog.cpp" line="72"/>
         <source>&amp;Locate</source>
-        <translation type="unfinished">&amp;Указать</translation>
+        <translation>&amp;Указать</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/FileLocateDialog.cpp" line="86"/>
         <source>Select an Audio File</source>
-        <translation type="unfinished">Выберите звуковой файл</translation>
+        <translation>Выберите звуковой файл</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/FileLocateDialog.cpp" line="87"/>
         <source>Requested file</source>
-        <translation type="unfinished"></translation>
+        <translation>Запрошенный файл</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/FileLocateDialog.cpp" line="88"/>
         <source>WAV files</source>
-        <translation type="unfinished">Файлы WAV</translation>
+        <translation>Файлы WAV</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/FileLocateDialog.cpp" line="89"/>
         <source>All files</source>
-        <translation type="unfinished">Все файлы</translation>
+        <translation>Все файлы</translation>
     </message>
 </context>
 <context>
@@ -13918,37 +13917,37 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location filename="../../src/gui/dialogs/FileMergeDialog.cpp" line="53"/>
         <source>Merge File</source>
-        <translation type="unfinished">Объединить с файлом</translation>
+        <translation>Объединить с файлом</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/FileMergeDialog.cpp" line="65"/>
         <source>Merge new file  </source>
-        <translation type="unfinished">Добавить новый файл</translation>
+        <translation>Вставить новый файл</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/FileMergeDialog.cpp" line="71"/>
         <source>At start of existing composition</source>
-        <translation type="unfinished">в начало текущей композиции</translation>
+        <translation>в начало текущей композиции</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/FileMergeDialog.cpp" line="72"/>
         <source>From end of existing composition</source>
-        <translation type="unfinished">в конец текущей композиции</translation>
+        <translation>в конец текущей композиции</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/FileMergeDialog.cpp" line="76"/>
         <source>The file has different time signatures or tempos.</source>
-        <translation type="unfinished">Файл содержит различные ключевые тональности или темпы</translation>
+        <translation>Файл содержит иные ключевые тональности или темпы.</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/FileMergeDialog.cpp" line="77"/>
         <source>Import these as well</source>
-        <translation type="unfinished">Импортировать их тоже</translation>
+        <translation>Импортировать их тоже</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/FileMergeDialog.cpp" line="115"/>
         <source>http://rosegardenmusic.com/wiki/doc:fileMergeDialog-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:fileMergeDialog-en</translation>
     </message>
 </context>
 <context>
@@ -13958,12 +13957,12 @@ Would you like to try and locate this file or skip it?</source>
         <location filename="../../src/gui/general/FileSource.cpp" line="136"/>
         <location filename="../../src/gui/general/FileSource.cpp" line="163"/>
         <source>Unsupported scheme in URL</source>
-        <translation type="unfinished"></translation>
+        <translation>Неподдерживаемая схема в URL</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/FileSource.cpp" line="304"/>
         <source>Downloading %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Скачивается %1...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/FileSource.cpp" line="582"/>
@@ -13998,7 +13997,7 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location filename="../../src/gui/general/FileSource.cpp" line="642"/>
         <source>File contains no data!</source>
-        <translation type="unfinished"></translation>
+        <translation>Файл не содержит данных!</translation>
     </message>
 </context>
 <context>
@@ -14006,7 +14005,7 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location filename="../../src/commands/notation/FixNotationQuantizeCommand.h" line="45"/>
         <source>Fi&amp;x Notation Quantization</source>
-        <translation type="unfinished">&amp;Исправляющее партитуру квантование</translation>
+        <translation>&amp;Исправить квантование партитуры</translation>
     </message>
 </context>
 <context>
@@ -14034,7 +14033,7 @@ Would you like to try and locate this file or skip it?</source>
         <location filename="../../src/gui/editors/notation/FontViewFrame.cpp" line="107"/>
         <location filename="../../src/gui/editors/notation/FontViewFrame.cpp" line="114"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/FontViewFrame.cpp" line="107"/>
@@ -14348,7 +14347,7 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordEditorDialog.cpp" line="40"/>
         <source>Guitar Chord Editor</source>
-        <translation type="unfinished">Редактор гитарных аккордов</translation>
+        <translation>Редактор гитарных аккордов</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordEditorDialog.cpp" line="47"/>
@@ -14363,7 +14362,7 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordEditorDialog.cpp" line="60"/>
         <source>Extension</source>
-        <translation type="unfinished">Расширение</translation>
+        <translation>Расширение</translation>
     </message>
 </context>
 <context>
@@ -14371,7 +14370,7 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location filename="../../src/commands/notation/GuitarChordInsertionCommand.cpp" line="32"/>
         <source>Insert Guitar Chord</source>
-        <translation type="unfinished">Вставить гитарный аккорд</translation>
+        <translation>Вставить гитарный аккорд</translation>
     </message>
 </context>
 <context>
@@ -14389,7 +14388,7 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="73"/>
         <source>Extension</source>
-        <translation type="unfinished">Расширение</translation>
+        <translation>Расширение</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="78"/>
@@ -14409,17 +14408,17 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="83"/>
         <source>beginner</source>
-        <translation type="unfinished">Начинающие</translation>
+        <translation>начинающий</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="84"/>
         <source>common</source>
-        <translation type="unfinished">Обычные</translation>
+        <translation>обычный</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="85"/>
         <source>all</source>
-        <translation type="unfinished">Все</translation>
+        <translation>все</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="108"/>
@@ -14435,7 +14434,7 @@ Would you like to try and locate this file or skip it?</source>
         <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="498"/>
         <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="508"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="508"/>
@@ -14613,42 +14612,42 @@ for use with the text in this file:
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="92"/>
         <source>Western Europe</source>
-        <translation type="unfinished">Западная Европа</translation>
+        <translation>Западная Европа</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="93"/>
         <source>Western Europe + Euro</source>
-        <translation type="unfinished">Западная Европа + Евро</translation>
+        <translation>Западная Европа + Евро</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="94"/>
         <source>Eastern Europe</source>
-        <translation type="unfinished">Восточная Европа</translation>
+        <translation>Восточная Европа</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="95"/>
         <source>Southern Europe</source>
-        <translation type="unfinished">Южная Европа</translation>
+        <translation>Южная Европа</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="96"/>
         <source>Northern Europe</source>
-        <translation type="unfinished">Северная Европа</translation>
+        <translation>Северная Европа</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="97"/>
         <source>Cyrillic</source>
-        <translation type="unfinished">Кириллица</translation>
+        <translation>Кириллица</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="98"/>
         <source>Arabic</source>
-        <translation type="unfinished">Арабский</translation>
+        <translation>Арабский</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="99"/>
         <source>Greek</source>
-        <translation type="unfinished">Греческий</translation>
+        <translation>Греческий</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="100"/>
@@ -14658,7 +14657,7 @@ for use with the text in this file:
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="101"/>
         <source>Turkish</source>
-        <translation type="unfinished">Турецкий</translation>
+        <translation>Турецкая</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="102"/>
@@ -14678,32 +14677,32 @@ for use with the text in this file:
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="105"/>
         <source>Celtic</source>
-        <translation type="unfinished">Кельтский</translation>
+        <translation>Кельтская</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="107"/>
         <source>Traditional Chinese</source>
-        <translation type="unfinished">Традиционный китайский</translation>
+        <translation>Традиционный китайский</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="108"/>
         <source>Simplified Chinese</source>
-        <translation type="unfinished">Упрощённый китайский</translation>
+        <translation>Упрощённый китайский</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="109"/>
         <source>Russian</source>
-        <translation type="unfinished">Русский</translation>
+        <translation>Русская</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="110"/>
         <source>Ukrainian</source>
-        <translation type="unfinished">Украинская</translation>
+        <translation>Украинская</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="111"/>
         <source>Tamil</source>
-        <translation type="unfinished">Тамильский</translation>
+        <translation>Тамильская</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="142"/>
@@ -14713,13 +14712,13 @@ for use with the text in this file:
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="148"/>
         <source>%1 (%2)</source>
-        <translation type="unfinished">%1 (%2)</translation>
+        <translation>%1 (%2)</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="167"/>
         <source>
 Example text from file:</source>
-        <translation type="unfinished">
+        <translation>
 Пример текста из файла:</translation>
     </message>
 </context>
@@ -14728,82 +14727,82 @@ Example text from file:</source>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="68"/>
         <source>Import from Device...</source>
-        <translation type="unfinished">Импортировать из устройства...</translation>
+        <translation>Импортировать из устройства...</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="86"/>
         <source>Cannot download file %1</source>
-        <translation type="unfinished">Не удаётся загрузить файл %1</translation>
+        <translation>Не удалось загрузить файл %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="108"/>
         <source>Cannot open file %1</source>
-        <translation type="unfinished">Не удаётся открыть файл &quot;%1&quot;</translation>
+        <translation>Не удалось открыть файл &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="119"/>
         <source>No devices found in file %1</source>
-        <translation type="unfinished">В файле &quot;%1&quot; устройств не обнаружено</translation>
+        <translation>В файле &quot;%1&quot; устройств не обнаружено</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="127"/>
         <source>Source device</source>
-        <translation type="unfinished">Исходное устройство</translation>
+        <translation>Исходное устройство</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="135"/>
         <source>Import from: </source>
-        <translation type="unfinished">Импортировать из: </translation>
+        <translation>Импортировать из: </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="157"/>
         <source>Device %1</source>
-        <translation type="unfinished">Устройство %1</translation>
+        <translation>Устройство %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="171"/>
         <source>Options</source>
-        <translation type="unfinished">Параметры</translation>
+        <translation>Параметры</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="175"/>
         <source>Import banks</source>
-        <translation type="unfinished">Импортировать банки</translation>
+        <translation>Импортировать банки</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="177"/>
         <source>Import key mappings</source>
-        <translation type="unfinished">Импортировать компоновки</translation>
+        <translation>Импортировать компоновки</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="179"/>
         <source>Import controllers</source>
-        <translation type="unfinished">Импортировать контроллеры</translation>
+        <translation>Импортировать контроллеры</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="183"/>
         <source>Import device name</source>
-        <translation type="unfinished">Импортировать имя устройства</translation>
+        <translation>Импортировать имя устройства</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="189"/>
         <source>Bank import behavior</source>
-        <translation type="unfinished">Поведение при импорте банка</translation>
+        <translation>Поведение при импорте банка</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="194"/>
         <source>Merge banks</source>
-        <translation type="unfinished">Объединить банки</translation>
+        <translation>Объединить банки</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="198"/>
         <source>Overwrite banks</source>
-        <translation type="unfinished">Перезаписать банки</translation>
+        <translation>Перезаписать банки</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="416"/>
         <source>Bank %1:%2</source>
-        <translation type="unfinished">Банк %1:%2</translation>
+        <translation>Банк %1:%2</translation>
     </message>
 </context>
 <context>
@@ -14811,7 +14810,7 @@ Example text from file:</source>
     <message>
         <location filename="../../src/commands/notation/IncrementDisplacementsCommand.h" line="54"/>
         <source>Fine Reposition</source>
-        <translation type="unfinished">Точное перепозиционирование</translation>
+        <translation>Точное перепозиционирование</translation>
     </message>
 </context>
 <context>
@@ -14835,7 +14834,7 @@ Example text from file:</source>
     <message>
         <location filename="../../src/commands/edit/InsertTriggerNoteCommand.cpp" line="48"/>
         <source>Insert Trigger Note</source>
-        <translation type="unfinished">Вставить переключаемую ноту</translation>
+        <translation>Вставить переключаемую ноту</translation>
     </message>
 </context>
 <context>
@@ -14843,12 +14842,12 @@ Example text from file:</source>
     <message>
         <location filename="../../src/gui/widgets/InstrumentAliasButton.cpp" line="49"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/InstrumentAliasButton.cpp" line="50"/>
         <source>Enter instrument alias:</source>
-        <translation type="unfinished"></translation>
+        <translation>Введите псевдоним инструмента:</translation>
     </message>
 </context>
 <context>
@@ -14856,17 +14855,17 @@ Example text from file:</source>
     <message>
         <location filename="../../src/gui/editors/parameters/InstrumentParameterBox.cpp" line="46"/>
         <source>Instrument</source>
-        <translation type="unfinished">Инструмент</translation>
+        <translation>Инструмент</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/InstrumentParameterBox.cpp" line="47"/>
         <source>Instrument Parameters</source>
-        <translation type="unfinished">Параметры инструмента</translation>
+        <translation>Параметры инструмента</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/InstrumentParameterBox.cpp" line="157"/>
         <source>Track</source>
-        <translation type="unfinished">Дорожка</translation>
+        <translation>Дорожка</translation>
     </message>
 </context>
 <context>
@@ -14874,7 +14873,7 @@ Example text from file:</source>
     <message>
         <location filename="../../src/commands/notation/InterpretCommand.h" line="65"/>
         <source>&amp;Interpret...</source>
-        <translation type="unfinished">&amp;Интерпретировать...</translation>
+        <translation>&amp;Интерпретировать...</translation>
     </message>
 </context>
 <context>
@@ -14882,17 +14881,17 @@ Example text from file:</source>
     <message>
         <location filename="../../src/gui/dialogs/InterpretDialog.cpp" line="45"/>
         <source>Interpret</source>
-        <translation type="unfinished">Интерпретация</translation>
+        <translation>Интерпретация</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/InterpretDialog.cpp" line="49"/>
         <source>Interpretations to apply</source>
-        <translation type="unfinished">Применяемые интерпретации</translation>
+        <translation>Применяемые интерпретации</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/InterpretDialog.cpp" line="54"/>
         <source>Apply text dynamics (p, mf, ff etc)</source>
-        <translation type="unfinished">Применить маркеры динамики (p, mf, ff и др.)</translation>
+        <translation>Применить маркеры динамики (p, mf, ff и др.)</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/InterpretDialog.cpp" line="57"/>
@@ -14912,12 +14911,12 @@ Example text from file:</source>
     <message>
         <location filename="../../src/gui/dialogs/InterpretDialog.cpp" line="66"/>
         <source>All available interpretations</source>
-        <translation type="unfinished">Все доступные интерпретации</translation>
+        <translation>Все доступные интерпретации</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/InterpretDialog.cpp" line="149"/>
         <source>http://rosegardenmusic.com/wiki/doc:interpretDialog-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:interpretDialog-en</translation>
     </message>
 </context>
 <context>
@@ -15432,7 +15431,7 @@ Would you like to use
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="141"/>
         <source>do not specify</source>
-        <translation type="unfinished">Не указывать</translation>
+        <translation>Не указывать</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="143"/>
@@ -15452,7 +15451,7 @@ Would you like to use
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="105"/>
         <source>Export content</source>
-        <translation>Что экспортировать:</translation>
+        <translation>Экспортировать содержимое</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="109"/>
@@ -15487,7 +15486,7 @@ Would you like to use
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="178"/>
         <source>Advanced options</source>
-        <translation type="unfinished"></translation>
+        <translation>Дополнительные параметры</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="189"/>
@@ -15533,12 +15532,12 @@ Would you like to use
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="217"/>
         <source>Export track staff brackets</source>
-        <translation type="unfinished"></translation>
+        <translation>Экспортировать акколады дорожек</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="202"/>
         <source>Left</source>
-        <translation type="unfinished">Left</translation>
+        <translation>Слева</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="196"/>
@@ -15548,12 +15547,12 @@ Would you like to use
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="203"/>
         <source>Center</source>
-        <translation type="unfinished"></translation>
+        <translation>По центру</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="204"/>
         <source>Right</source>
-        <translation type="unfinished">Right</translation>
+        <translation>Справа</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="206"/>
@@ -15583,27 +15582,27 @@ Would you like to use
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="234"/>
         <source>No markers</source>
-        <translation type="unfinished">Нет субмиксов</translation>
+        <translation>Без маркеров</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="235"/>
         <source>Rehearsal marks</source>
-        <translation type="unfinished">Удалить все маркеры</translation>
+        <translation>Пометки для репетиции</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="236"/>
         <source>Marker text</source>
-        <translation type="unfinished">Время маркера  </translation>
+        <translation>Текст пометки</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="239"/>
         <source>Export markers</source>
-        <translation type="unfinished">Экспортировать метки темпа</translation>
+        <translation>Экспортировать пометки</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="152"/>
         <source>Staff size</source>
-        <translation type="unfinished"></translation>
+        <translation>Размер нотоносца</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="155"/>
@@ -15772,22 +15771,22 @@ Would you like to use
     <message>
         <location filename="../../src/gui/dialogs/LyricEditDialog.cpp" line="85"/>
         <source>Add Verse</source>
-        <translation type="unfinished"></translation>
+        <translation>Добавить строфу</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LyricEditDialog.cpp" line="88"/>
         <source>Remove Verse</source>
-        <translation type="unfinished"></translation>
+        <translation>Удалить строфу</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LyricEditDialog.cpp" line="323"/>
         <source>Verse %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Строфа %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LyricEditDialog.cpp" line="351"/>
         <source>http://rosegardenmusic.com/wiki/doc:lyricEditDialog-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:lyricEditDialog-en</translation>
     </message>
 </context>
 <context>
@@ -15852,7 +15851,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="176"/>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="183"/>
         <source>Choose...</source>
-        <translation type="unfinished">Выберите...</translation>
+        <translation>Выберите...</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="180"/>
@@ -16001,7 +16000,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="143"/>
         <source>Receive external</source>
-        <translation type="unfinished"></translation>
+        <translation>Получать извне</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="263"/>
@@ -16481,17 +16480,17 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixPainter.cpp" line="191"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
-        <translation type="unfinished">Нажмите Shift, чтобы отключить прилипание к тактовой сетке</translation>
+        <translation>Нажмите Shift, чтобы отключить прилипание к тактовой сетке</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixPainter.cpp" line="342"/>
         <source>Click and drag to draw a note; Shift to avoid snapping to grid</source>
-        <translation type="unfinished">Щелкните и перетащите курсор мыши для рисования ноты; с Shift, чтобы не прилипать к сетке</translation>
+        <translation>Щёлкните и перетащите курсор мыши для рисования ноты; с Shift, чтобы не прилипать к сетке</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixPainter.cpp" line="344"/>
         <source>Click and drag to draw a note</source>
-        <translation type="unfinished">Щелкните и перетащите курсор мыши для рисования ноты</translation>
+        <translation>Щёлкните и перетащите курсор мыши для рисования ноты</translation>
     </message>
 </context>
 <context>
@@ -16499,7 +16498,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/commands/matrix/MatrixPercussionInsertionCommand.cpp" line="39"/>
         <source>Insert Percussion Note</source>
-        <translation type="unfinished">Вставить ноту перкуссии</translation>
+        <translation>Вставить ноту перкуссии</translation>
     </message>
 </context>
 <context>
@@ -16507,7 +16506,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixResizer.cpp" line="108"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
-        <translation type="unfinished">Нажмите Shift, чтобы отключить прилипание к тактовой сетке</translation>
+        <translation>Нажмите Shift, чтобы отключить прилипание к тактовой сетке</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixResizer.cpp" line="174"/>
@@ -16541,32 +16540,32 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixSelector.cpp" line="572"/>
         <source>Click and drag to resize selected notes</source>
-        <translation type="unfinished">Щелкните и перетащите курсор мыши для смены размера нот</translation>
+        <translation>Щёлкните и перетащите указатель мыши для смены размера нот</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixSelector.cpp" line="574"/>
         <source>Click and drag to resize note</source>
-        <translation type="unfinished">Щелкните и перетащите курсор мыши для смены размера ноты</translation>
+        <translation>Щёлкните и перетащите указателя мыши для смены размера ноты</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixSelector.cpp" line="579"/>
         <source>Click and drag to move selected notes; hold Ctrl as well to copy</source>
-        <translation type="unfinished">Щелкните и перетащите курсор мыши для перемещения выбранных нот; с Ctrl — для копирования нот</translation>
+        <translation>Щёлкните и перетащите указатель мыши для перемещения выбранных нот; с Ctrl — для копирования нот</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixSelector.cpp" line="581"/>
         <source>Click and drag to copy selected notes</source>
-        <translation type="unfinished">Щелкните и перетащите курсор мыши для копирования нот</translation>
+        <translation>Щёлкните и перетащите указатель мыши для копирования выделенных нот</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixSelector.cpp" line="585"/>
         <source>Click and drag to move note; hold Ctrl as well to copy</source>
-        <translation type="unfinished">Щелкните и перетащите курсор мыши для перемещения ноты; с Ctrl — для копирования ноты</translation>
+        <translation>Щелкните и перетащите указатель мыши для перемещения ноты; с Ctrl — для копирования ноты</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixSelector.cpp" line="587"/>
         <source>Click and drag to copy note</source>
-        <translation type="unfinished">Щелкните и перетащите курсор мыши для копирования ноты</translation>
+        <translation>Щёлкните и перетащите указатель мыши для копирования ноты</translation>
     </message>
 </context>
 <context>
@@ -16582,17 +16581,17 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixVelocity.cpp" line="144"/>
         <source>Velocity change: %1</source>
-        <translation type="unfinished">Сила нажатия  </translation>
+        <translation>Смена силы нажатия: %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixVelocity.cpp" line="223"/>
         <source>Change Velocity</source>
-        <translation type="unfinished">Базовая сила нажатия</translation>
+        <translation>Смена силы нажатия</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixVelocity.cpp" line="226"/>
         <source>Change Velocities</source>
-        <translation type="unfinished">Сила нажатия</translation>
+        <translation>Смена сил нажатия</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixVelocity.cpp" line="257"/>
@@ -17041,7 +17040,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/studio/MidiMixerWindow.cpp" line="694"/>
         <source>http://rosegardenmusic.com/wiki/doc:midiMixerWindow-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:midiMixerWindow-en</translation>
     </message>
 </context>
 <context>
@@ -18724,27 +18723,27 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/dialogs/PasteNotationDialog.cpp" line="45"/>
         <source>Paste</source>
-        <translation type="unfinished">Вставить</translation>
+        <translation>Вставить</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PasteNotationDialog.cpp" line="54"/>
         <source>Paste type</source>
-        <translation type="unfinished">Тип вставки</translation>
+        <translation>Тип вставки</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PasteNotationDialog.cpp" line="75"/>
         <source>Options</source>
-        <translation type="unfinished">Параметры</translation>
+        <translation>Параметры</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PasteNotationDialog.cpp" line="81"/>
         <source>Make this the default paste type</source>
-        <translation type="unfinished">Сделать этот тип вставки стандартным</translation>
+        <translation>Использовать этот тип вставки по умолчанию</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PasteNotationDialog.cpp" line="127"/>
         <source>http://rosegardenmusic.com/wiki/doc:pasteNotationDialog-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:pasteNotationDialog-en</translation>
     </message>
 </context>
 <context>
@@ -18752,7 +18751,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/segment/PasteRangeCommand.cpp" line="37"/>
         <source>Paste Range</source>
-        <translation type="unfinished">Вставить диапазон</translation>
+        <translation>Вставить область</translation>
     </message>
 </context>
 <context>
@@ -18760,7 +18759,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/edit/PasteSegmentsCommand.h" line="55"/>
         <source>&amp;Paste</source>
-        <translation type="unfinished">Вст&amp;авить</translation>
+        <translation>Вст&amp;авить</translation>
     </message>
 </context>
 <context>
@@ -18768,7 +18767,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/segment/PasteToTriggerSegmentCommand.cpp" line="39"/>
         <source>Paste as New Triggered Segment</source>
-        <translation type="unfinished">Вставить как новый переключаемый сегмент</translation>
+        <translation>Вставить как новый переключаемый сегмент</translation>
     </message>
 </context>
 <context>
@@ -18777,7 +18776,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="52"/>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="241"/>
         <source>Pitch Bend Sequence</source>
-        <translation type="unfinished"></translation>
+        <translation>Последовательность сдвига высоты тона</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="61"/>
@@ -18792,57 +18791,57 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="70"/>
         <source>User</source>
-        <translation type="unfinished"></translation>
+        <translation>Пользовательский</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="71"/>
         <source>Linear ramp</source>
-        <translation type="unfinished"></translation>
+        <translation>Плавное линейное смещение</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="72"/>
         <source>Fast vibrato arm release</source>
-        <translation type="unfinished"></translation>
+        <translation>Быстрое вибрато</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="73"/>
         <source>Vibrato</source>
-        <translation type="unfinished"></translation>
+        <translation>Вибрато</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="76"/>
         <source>Pre Bend</source>
-        <translation type="unfinished"></translation>
+        <translation>Перед смещением</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="82"/>
         <source>Value (%):</source>
-        <translation type="unfinished"></translation>
+        <translation>Значение (%):</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="93"/>
         <source>Duration (%):</source>
-        <translation type="unfinished"></translation>
+        <translation>Длительность (%):</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="108"/>
         <source>Ramp duration (%):</source>
-        <translation type="unfinished"></translation>
+        <translation>Длительность смещения (%):</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="116"/>
         <source>End value (%):</source>
-        <translation type="unfinished"></translation>
+        <translation>Конечное значение (%):</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="124"/>
         <source>Vibrato start amplitude (%):</source>
-        <translation type="unfinished"></translation>
+        <translation>Начальная амплитуда вибрато (%):</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="133"/>
         <source>Vibrato end amplitude (%):</source>
-        <translation type="unfinished"></translation>
+        <translation>Конечная амплитуда вибрато (%):</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="308"/>
@@ -18852,22 +18851,22 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="102"/>
         <source>Bend Sequence</source>
-        <translation type="unfinished"></translation>
+        <translation>Последовательность смещения</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="142"/>
         <source>Vibrato wavelength:</source>
-        <translation type="unfinished"></translation>
+        <translation>Длина волны вибрато:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="152"/>
         <source>Resolution:</source>
-        <translation type="unfinished"></translation>
+        <translation>Разрешение:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="167"/>
         <source>Invalid end time. Have you selected some events?</source>
-        <translation type="unfinished"></translation>
+        <translation>Неправильно указано конечно время. Вы выделили какие-либо события?</translation>
     </message>
 </context>
 <context>
@@ -19289,7 +19288,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/rulers/PropertyViewRuler.cpp" line="65"/>
         <source>%1 controller</source>
-        <translation type="unfinished">%1 контроллер</translation>
+        <translation>Контроллер %1</translation>
     </message>
 </context>
 <context>
@@ -19297,7 +19296,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/dialogs/QuantizeDialog.cpp" line="36"/>
         <source>Quantize</source>
-        <translation type="unfinished">Квантование</translation>
+        <translation>Квантование</translation>
     </message>
     <message>
         <source>Advanced</source>
@@ -19309,129 +19308,129 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="66"/>
         <source>Quantizer</source>
-        <translation type="unfinished">Квантователь</translation>
+        <translation>Квантователь</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="71"/>
         <source>Quantizer type:</source>
-        <translation type="unfinished">Тип квантователя:</translation>
+        <translation>Тип квантователя:</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="73"/>
         <source>Grid quantizer</source>
-        <translation type="unfinished">Квантование по сетке</translation>
+        <translation>Квантование по сетке</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="74"/>
         <source>Legato quantizer</source>
-        <translation type="unfinished">Квантование легато</translation>
+        <translation>Квантование легато</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="75"/>
         <source>Heuristic notation quantizer</source>
-        <translation type="unfinished">Эвристический квантователь нотации</translation>
+        <translation>Эвристический квантователь партитуры</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="79"/>
         <source>Quantize for notation only (leave performance unchanged)</source>
-        <translation type="unfinished">Квантовать только нотацию (оставить исполнение без изменения)</translation>
+        <translation>Квантовать только партитуру (не менять исполнение)</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="87"/>
         <source>Notation parameters</source>
-        <translation type="unfinished">Параметры нотации</translation>
+        <translation>Параметры партитуры</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="93"/>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="126"/>
         <source>Base grid unit:</source>
-        <translation type="unfinished">Основная единица сетки:</translation>
+        <translation>Основная единица сетки:</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="97"/>
         <source>Complexity:</source>
-        <translation type="unfinished">Сложность:</translation>
+        <translation>Сложность:</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="100"/>
         <source>Very high</source>
-        <translation type="unfinished">Очень высокая</translation>
+        <translation>Очень высокая</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="101"/>
         <source>High</source>
-        <translation type="unfinished">Высокая</translation>
+        <translation>Высокая</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="102"/>
         <source>Normal</source>
-        <translation type="unfinished">Нормальная</translation>
+        <translation>Нормальная</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="103"/>
         <source>Low</source>
-        <translation type="unfinished">Низкая</translation>
+        <translation>Низкая</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="104"/>
         <source>Very low</source>
-        <translation type="unfinished">Очень низкая</translation>
+        <translation>Очень низкая</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="107"/>
         <source>Tuplet level:</source>
-        <translation type="unfinished">Уровень группирования:</translation>
+        <translation>Уровень группирования:</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="109"/>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="249"/>
         <source>None</source>
-        <translation type="unfinished">Нет</translation>
+        <translation>Нет</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="110"/>
         <source>2-in-the-time-of-3</source>
-        <translation type="unfinished">2 за время 3</translation>
+        <translation>2 за время 3</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="111"/>
         <source>Triplet</source>
-        <translation type="unfinished">Триоль</translation>
+        <translation>Триоль</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="112"/>
         <source>Any</source>
-        <translation type="unfinished">Любой</translation>
+        <translation>Любой</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="115"/>
         <source>Permit counterpoint</source>
-        <translation type="unfinished">Разрешить контрапункт</translation>
+        <translation>Разрешить контрапункт</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="120"/>
         <source>Grid parameters</source>
-        <translation type="unfinished">Параметры сетки</translation>
+        <translation>Параметры сетки</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="130"/>
         <source>Swing:</source>
-        <translation type="unfinished">Свинг:</translation>
+        <translation>Свинг:</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="135"/>
         <source>Iterative amount:</source>
-        <translation type="unfinished">Повторяющееся количество:</translation>
+        <translation>Повторяющееся количество:</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="141"/>
         <source>Quantize durations as well as start times</source>
-        <translation type="unfinished">Квантовать длительности и времена начала</translation>
+        <translation>Квантовать длительности и времена начала</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="146"/>
         <source>After quantization</source>
-        <translation type="unfinished">После квантования</translation>
+        <translation>После квантования</translation>
     </message>
     <message>
         <source>Show advanced options</source>
@@ -19440,27 +19439,27 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="152"/>
         <source>Re-beam</source>
-        <translation type="unfinished">Перегруппировать</translation>
+        <translation>Перегруппировать</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="154"/>
         <source>Add articulations (staccato, tenuto, slurs)</source>
-        <translation type="unfinished">Добавить артикуляцию (стаккато, тенуто, легато)</translation>
+        <translation>Добавить артикуляцию (стаккато, тенуто, легато)</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="155"/>
         <source>Tie notes at barlines etc</source>
-        <translation type="unfinished">Слиговать ноты по тактовым чертам и пр.</translation>
+        <translation>Слиговать ноты по тактовым чертам и пр.</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="156"/>
         <source>Split-and-tie overlapping chords</source>
-        <translation type="unfinished">Слиговать-разлиговать перекрывающиеся аккорды</translation>
+        <translation>Слиговать-разлиговать перекрывающиеся аккорды</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="255"/>
         <source>Full quantize</source>
-        <translation type="unfinished">Полное квантование</translation>
+        <translation>Полное квантование</translation>
     </message>
     <message>
         <source>Show Advanced Options</source>
@@ -19476,7 +19475,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/rulers/RawNoteRuler.cpp" line="451"/>
         <source>Track #%1, Segment &quot;%2&quot; (runtime id %3)</source>
-        <translation type="unfinished"></translation>
+        <translation>Дорожка #%1, сегмент &quot;%2&quot; (runtime id %3)</translation>
     </message>
 </context>
 <context>
@@ -19484,7 +19483,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/studio/ReconnectDeviceCommand.h" line="50"/>
         <source>Reconnect Device</source>
-        <translation type="unfinished">Заново присоединить устройство</translation>
+        <translation>Заново присоединить устройство</translation>
     </message>
 </context>
 <context>
@@ -19492,49 +19491,49 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="51"/>
         <source>Remap Instrument assigments...</source>
-        <translation type="unfinished">Перераспределить привязки инструментов...</translation>
+        <translation>Перераспределить привязки инструментов...</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="60"/>
         <source>Device or Instrument</source>
-        <translation type="unfinished">Устройство или инструмент</translation>
+        <translation>Устройство или инструмент</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="64"/>
         <source>Remap Tracks by all Instruments on a Device or by single Instrument</source>
-        <translation type="unfinished">Перераспределить дорожки по всем инструментам
+        <translation>Перераспределить дорожки по всем инструментам
 в устройстве или по отдельному инструменту</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="66"/>
         <source>Device</source>
-        <translation type="unfinished">Устройство</translation>
+        <translation>Устройство</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="68"/>
         <source>Instrument</source>
-        <translation type="unfinished">Инструмент</translation>
+        <translation>Инструмент</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="77"/>
         <source>Choose Source and Destination</source>
-        <translation type="unfinished">Укажите источник и место назначения</translation>
+        <translation>Укажите источник и место назначения</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="81"/>
         <source>From</source>
-        <translation type="unfinished">Из</translation>
+        <translation>Из</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="82"/>
         <source>To</source>
-        <translation type="unfinished">В</translation>
+        <translation>В</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="139"/>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="140"/>
         <source>&lt;no devices&gt;</source>
-        <translation type="unfinished">&lt;нет устройств&gt;</translation>
+        <translation>&lt;нет устройств&gt;</translation>
     </message>
 </context>
 <context>
@@ -19767,17 +19766,17 @@ There may be some incompatibilities with the file format.</source>
     <message>
         <location filename="../../src/document/RoseXmlHandler.cpp" line="451"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/document/RoseXmlHandler.cpp" line="1020"/>
         <source>Open Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Открыть каталог</translation>
     </message>
     <message>
         <location filename="../../src/document/RoseXmlHandler.cpp" line="1703"/>
         <source>Loading plugins...</source>
-        <translation type="unfinished">Загружаются модули...</translation>
+        <translation>Загружаются эффекты...</translation>
     </message>
 </context>
 <context>
@@ -19785,7 +19784,7 @@ There may be some incompatibilities with the file format.</source>
     <message>
         <location filename="../../src/gui/application/RosegardenApplication.cpp" line="67"/>
         <source>Failed to load soundfont %1</source>
-        <translation type="unfinished">Не удалось загрузить soundfont %1</translation>
+        <translation>Не удалось загрузить сэмпл %1</translation>
     </message>
 </context>
 <context>
@@ -19845,10 +19844,10 @@ Do you want to save it?</source>
     <message numerus="yes">
         <location filename="../../src/document/RosegardenDocument.cpp" line="491"/>
         <source>Delete the %n audio file(s) recorded during the unsaved session?</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Удалить %n звуковой файл, записанный во время этого несохранённого сеанса?</numerusform>
+            <numerusform>Удалить %n звуковых файла, записанных во время этого несохранённого сеанса?</numerusform>
+            <numerusform>Удалить %n звуковых файлов, записанных во время этого несохранённого сеанса?</numerusform>
         </translation>
     </message>
     <message>
@@ -19950,7 +19949,7 @@ Please select any you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="1679"/>
         <source>&lt;h3&gt;Audio and plugins not available&lt;/h3&gt;&lt;p&gt;This composition uses audio files or plugins, but Rosegarden is currently running without audio because the JACK audio server was not available on startup.&lt;/p&gt;&lt;p&gt;Please exit Rosegarden, start the JACK audio server and re-start Rosegarden if you wish to load this complete composition.&lt;/p&gt;&lt;p&gt;&lt;b&gt;WARNING:&lt;/b&gt; If you re-save this composition, all audio and plugin data and settings in it will be lost.&lt;/p&gt;</source>
-        <translation type="unfinished">&lt;h3&gt;Аудио и расширения недоступны&lt;/h3&gt;&lt;p&gt;В этой композиции использованы звуковые файлы, либо расширения. Но Rosegarden сейчас работает без аудиоподсистемы, поскольку при запуске программы звуковой сервер JACK не работал.&lt;/p&gt;&lt;p&gt;Завершите работу с Rosegarden, запустите JACK и снова запустите Rosegarden, если хотите загрузить всю композицию.&lt;/p&gt;&lt;p&gt;&lt;b&gt;ПРЕДУПРЕЖДЕНИЕ:&lt;/b&gt; Если вы сейчас сохраните композицию, все звуковые файлы и параметры расширений будут потеряны.&lt;/p&gt;</translation>
+        <translation>&lt;h3&gt;Аудио и эффекты недоступны&lt;/h3&gt;&lt;p&gt;В этой композиции использованы звуковые файлы, либо эффекты. Но Rosegarden сейчас работает без звуковой подсистемы, поскольку при запуске программы звуковой сервер JACK не работал.&lt;/p&gt;&lt;p&gt;Завершите работу с Rosegarden, запустите JACK и снова запустите Rosegarden, если хотите загрузить всю композицию.&lt;/p&gt;&lt;p&gt;&lt;b&gt;ПРЕДУПРЕЖДЕНИЕ:&lt;/b&gt; Если вы сейчас сохраните композицию, все звуковые файлы и параметры эффектов будут потеряны.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="1682"/>
@@ -19970,17 +19969,17 @@ Please select any you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="1730"/>
         <source>Inconsistent sample rates</source>
-        <translation type="unfinished">Несогласованные частоты сэмплирования</translation>
+        <translation>Несогласованные частоты сэмплирования</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="1744"/>
         <source>&lt;h3&gt;Plugins not found&lt;/h3&gt;&lt;p&gt;The following audio plugins could not be loaded:&lt;/p&gt;&lt;ul&gt;</source>
-        <translation type="unfinished">&lt;h3&gt;Расширения не найдены&lt;/h3&gt;&lt;p&gt;Следующие расширения не удалось загрузить:&lt;/p&gt;&lt;ul&gt;</translation>
+        <translation>&lt;h3&gt;Эффекты не найдены&lt;/h3&gt;&lt;p&gt;Следующие звуковые эффекты не удалось загрузить:&lt;/p&gt;&lt;ul&gt;</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="1752"/>
         <source>&lt;li&gt;%1 (from %2)&lt;/li&gt;</source>
-        <translation type="unfinished">&lt;li&gt;%1 (из %2)&lt;/li&gt;</translation>
+        <translation>&lt;li&gt;%1 (из %2)&lt;/li&gt;</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="1766"/>
@@ -20096,7 +20095,7 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="304"/>
         <source>Initializing plugin manager...</source>
-        <translation>Инициализируется диспетчер расширений...</translation>
+        <translation>Инициализируется диспетчер эффектов...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="346"/>
@@ -20159,7 +20158,7 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1445"/>
         <source>An auto-save file for this document has been found
 Do you want to open it instead ?</source>
-        <translation type="unfinished">Найдена автоматически сохранённая копия этого файла
+        <translation>Найдена автоматически сохранённая копия этого файла
 Вы хотите загрузить её вместо указанного файла?</translation>
     </message>
     <message>
@@ -20257,7 +20256,7 @@ Error was : %2</source>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="778"/>
         <source>Ctrl+R</source>
-        <translation type="unfinished">Ctrl+R</translation>
+        <translation>Ctrl+R</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1734"/>
@@ -20891,7 +20890,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6297"/>
         <source>Input</source>
-        <translation type="unfinished"></translation>
+        <translation>Введите метку</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7383"/>
@@ -20901,7 +20900,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7420"/>
         <source>http://rosegardenmusic.com/wiki/doc:manual-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:manual-en</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7427"/>
@@ -20971,12 +20970,12 @@ Would you like to set it now?</source>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7623"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7665"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="298"/>
         <source>Starting sequencer...</source>
-        <translation type="unfinished"></translation>
+        <translation>Запускается секвенсер...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2069"/>
@@ -20987,7 +20986,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2071"/>
         <source> as a template </source>
-        <translation type="unfinished"></translation>
+        <translation> как шаблон </translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7532"/>
@@ -20997,8 +20996,8 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7592"/>
         <source>Are you sure you want to save this as your default studio?</source>
-        <translation type="unfinished">Вы действительно хотите сделать этот документ
-стандартным описанием студии?</translation>
+        <translation>Вы действительно хотите сделать этот документ
+описанием студии, используемым по умолчанию?</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7598"/>
@@ -21214,52 +21213,52 @@ Error was : %2</source>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="84"/>
         <source>Segment</source>
-        <translation type="unfinished">Сегмент</translation>
+        <translation>Сегмент</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="85"/>
         <source>Segment Parameters</source>
-        <translation type="unfinished">Параметры сегмента</translation>
+        <translation>Параметры сегмента</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="126"/>
         <source>Label</source>
-        <translation type="unfinished">Метка</translation>
+        <translation>Метка</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="127"/>
         <source>Repeat</source>
-        <translation type="unfinished">Повтор</translation>
+        <translation>Повтор</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="128"/>
         <source>Quantize</source>
-        <translation type="unfinished">Квантование</translation>
+        <translation>Квантование</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="129"/>
         <source>Transpose</source>
-        <translation type="unfinished">Транспозиция</translation>
+        <translation>Транспозиция</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="130"/>
         <source>Delay</source>
-        <translation type="unfinished">Задержка</translation>
+        <translation>Задержка</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="131"/>
         <source>Color</source>
-        <translation type="unfinished">Цвет</translation>
+        <translation>Цвет</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="146"/>
         <source>Edit</source>
-        <translation type="unfinished">Изменить</translation>
+        <translation>Изменить</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="148"/>
         <source>&lt;qt&gt;Edit the segment label for any selected segments&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Измените метки любых выделенных сегментов&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="156"/>
@@ -21279,73 +21278,73 @@ Error was : %2</source>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="227"/>
         <source>&lt;qt&gt;&lt;p&gt;Change the color of any selected segments&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Измените цвет любых выделенных сегментов&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="295"/>
         <source>Off</source>
-        <translation type="unfinished">Выкл</translation>
+        <translation>Выкл</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="333"/>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="685"/>
         <source>%1 ms</source>
-        <translation type="unfinished">%1 мс</translation>
+        <translation>%1 мс</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="400"/>
         <source>Default</source>
-        <translation type="unfinished">По умолчанию</translation>
+        <translation>По умолчанию</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="416"/>
         <source>Add New Color</source>
-        <translation type="unfinished">Добавить новый цвет</translation>
+        <translation>Добавить новый цвет</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="882"/>
         <source>New Color Name</source>
-        <translation type="unfinished">Имя нового цвета</translation>
+        <translation>Имя нового цвета</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="883"/>
         <source>Enter new name</source>
-        <translation type="unfinished">Введите новое имя</translation>
+        <translation>Введите новое имя</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="885"/>
         <source>New</source>
-        <translation type="unfinished">Новый</translation>
+        <translation>Новый</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="922"/>
         <source>Highest playable note</source>
-        <translation type="unfinished">Самая высокая играемая нота</translation>
+        <translation>Самая высокая играемая нота</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="942"/>
         <source>Lowest playable note</source>
-        <translation type="unfinished">Самая низкая играемая нота</translation>
+        <translation>Самая низкая играемая нота</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="973"/>
         <source>Modify Segment label</source>
-        <translation type="unfinished">Изменить метку сегмента</translation>
+        <translation>Изменить метку сегмента</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="974"/>
         <source>Modify Segments label</source>
-        <translation type="unfinished">Изменить метки сегментов</translation>
+        <translation>Изменить метки сегментов</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="986"/>
         <source>Enter new label:</source>
-        <translation type="unfinished"></translation>
+        <translation>Введите новую метку:</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1052"/>
         <source>Instrument</source>
-        <translation type="unfinished">Инструмент</translation>
+        <translation>Инструмент</translation>
     </message>
 </context>
 <context>
@@ -21363,7 +21362,7 @@ Error was : %2</source>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentPencil.cpp" line="283"/>
         <source>Click and drag to draw an empty segment.  Control+Alt click and drag to draw in overlap mode.</source>
-        <translation type="unfinished"></translation>
+        <translation>Щёлкните и перетащите указатель мыши для создания пустого сегмента. С Ctrl и Alt можно рисовать поверх существующих сегментов.</translation>
     </message>
 </context>
 <context>
@@ -21556,18 +21555,18 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/commands/segment/SegmentSplitByRecordingSrcCommand.h" line="44"/>
         <source>Split by &amp;Recording Source...</source>
-        <translation type="unfinished">Разделить по &amp;источнику записи...</translation>
+        <translation>Разделить по &amp;источнику записи...</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/SegmentSplitByRecordingSrcCommand.cpp" line="36"/>
         <source>Split by Recording Source</source>
-        <translation type="unfinished">Разделение по источнику записи</translation>
+        <translation>Разделить по источнику записи</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/SegmentSplitByRecordingSrcCommand.cpp" line="114"/>
         <location filename="../../src/commands/segment/SegmentSplitByRecordingSrcCommand.cpp" line="115"/>
         <source>(split)</source>
-        <translation type="unfinished">(разделено)</translation>
+        <translation>(разделено)</translation>
     </message>
 </context>
 <context>
@@ -21575,13 +21574,13 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/commands/segment/SegmentSplitCommand.cpp" line="35"/>
         <source>Split Segment</source>
-        <translation type="unfinished">Разделить сегмент</translation>
+        <translation>Разделить сегмент</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/SegmentSplitCommand.cpp" line="129"/>
         <location filename="../../src/commands/segment/SegmentSplitCommand.cpp" line="130"/>
         <source>(split)</source>
-        <translation type="unfinished">(разделено)</translation>
+        <translation>(разделено)</translation>
     </message>
 </context>
 <context>
@@ -21589,7 +21588,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/commands/segment/SegmentSplitTwiceCommand.cpp" line="44"/>
         <source>Split Twice Segment</source>
-        <translation type="unfinished">Разделить сегмент надвое</translation>
+        <translation>Разделить сегмент надвое</translation>
     </message>
 </context>
 <context>
@@ -22439,7 +22438,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/studio/SynthPluginManagerDialog.cpp" line="69"/>
         <source>Manage Synth Plugins</source>
-        <translation>Настроить эффекты синтеза</translation>
+        <translation>Управление виртуальными инструментами</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/SynthPluginManagerDialog.cpp" line="195"/>
@@ -22459,7 +22458,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/studio/SynthPluginManagerDialog.cpp" line="250"/>
         <source>http://rosegardenmusic.com/wiki/doc:synth-plugin-manager-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:synth-plugin-manager-en</translation>
     </message>
 </context>
 <context>
@@ -22537,7 +22536,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/TempoDialog.cpp" line="200"/>
         <source>Also make this the default tempo</source>
-        <translation>Также сделать этот темп стандартным</translation>
+        <translation>Также использовать этот темп по умолчанию</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TempoDialog.cpp" line="293"/>
@@ -22577,7 +22576,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/TempoDialog.cpp" line="516"/>
         <source>http://rosegardenmusic.com/wiki/doc:tempoDialog-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:tempoDialog-en</translation>
     </message>
 </context>
 <context>
@@ -22688,7 +22687,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/editors/tempo/TempoView.cpp" line="786"/>
         <source>http://rosegardenmusic.com/wiki/doc:tempoView-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:tempoView-en</translation>
     </message>
 </context>
 <context>
@@ -22709,7 +22708,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="67"/>
         <source>Specification</source>
-        <translation type="unfinished">Спецификация</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="69"/>
@@ -22774,7 +22773,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="164"/>
         <source>Verse:  </source>
-        <translation>Строфа</translation>
+        <translation>Строфа:  </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="174"/>
@@ -24079,7 +24078,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="72"/>
         <source>[ No port ]</source>
-        <translation>[ Без порта ]</translation>
+        <translation>[ Нет порта ]</translation>
     </message>
 </context>
 <context>
@@ -24305,7 +24304,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/widgets/WarningWidget.cpp" line="143"/>
         <source>&lt;qt&gt;Safe graphics mode&lt;br&gt;Click for more information&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Безопасный графический режим&lt;br&gt;Щёлкните, чтобы получить подробную информацию&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/WarningWidget.cpp" line="196"/>
@@ -24315,7 +24314,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/widgets/WarningWidget.cpp" line="197"/>
         <source>&lt;qt&gt;&lt;p&gt;Rosegarden is using safe graphics mode.  This provides the greatest stability, but graphics performance is very slow.&lt;/p&gt;&lt;p&gt;You may wish to visit &lt;b&gt;Edit -&gt; Preferences -&gt; Behavior -&gt; Graphics performance&lt;/b&gt; and try &quot;Normal&quot; or &quot;Fast&quot; for better performance.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Rosegarden использует безопасный графический режим. Это даёт повышенную стабильность, но меньшую производительность при отрисовке.&lt;/p&gt;&lt;p&gt;Возможно, вам захочется включить обычный или быстрый режим через меню &lt;b&gt;Правка &gt; Параметры &gt; Поведение &gt; Производительность графики&lt;/b&gt;.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -24338,7 +24337,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="2534"/>
         <source>(recorded)</source>
-        <translation type="unfinished">(записано)</translation>
+        <translation>(записано)</translation>
     </message>
 </context>
 <context>
@@ -24392,17 +24391,17 @@ Would you like to set it now?</source>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1071"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1072"/>
         <source>NO EVENTS</source>
-        <translation type="unfinished">НЕТ СОБЫТИЙ</translation>
+        <translation>НЕТ СОБЫТИЙ</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1074"/>
         <source>Record</source>
-        <translation type="unfinished">Записать</translation>
+        <translation>Записать</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1077"/>
         <source>Record either MIDI or audio</source>
-        <translation type="unfinished">Записать либо MIDI, либо звук</translation>
+        <translation>Записать MIDI или звук</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1081"/>
@@ -24514,7 +24513,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1141"/>
         <source>Stops playback or recording.</source>
-        <translation>Останавливает воспроизведение или запись</translation>
+        <translation>Останавить воспроизведение или запись</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1145"/>
@@ -24524,7 +24523,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1148"/>
         <source>Moves the current pointer position forwards one bar.</source>
-        <translation type="unfinished">Перемещает текущую позицию курсора на один такт вперёд.</translation>
+        <translation>Переместить текущую позицию курсора на один такт вперёд.</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1152"/>
@@ -24534,14 +24533,14 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1155"/>
         <source>Moves the pointer position to the end of the composition.  (This may mean going backwards if the pointer is already beyond the end.)</source>
-        <translation type="unfinished">Перемещает текущую позицию курсора к концу композиции.
+        <translation>Переместить текущую позицию курсора к концу композиции.
 (Если курсор уже находится в конце композиции, то курсор
 переместится назад.)</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1159"/>
         <source>Display time to end</source>
-        <translation type="unfinished">Показать время до конца</translation>
+        <translation>Показать время до конца</translation>
     </message>
 </context>
 </TS>
