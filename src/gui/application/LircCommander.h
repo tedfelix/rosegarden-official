@@ -58,7 +58,7 @@ signals:
     void trackRecord();
     
 private slots:
-    void slotExecute(char *);
+    void slotExecute(const char *);
     //void slotDocumentChanged(RosegardenDocument *);
         
 private:
@@ -86,7 +86,7 @@ private:
     // the command -> method mapping table
     static struct command
     {
-        char *name;        /* command name */
+        const char *name;  /* command name */
         commandCode code;  /* function to process it */
     }
     commands[];

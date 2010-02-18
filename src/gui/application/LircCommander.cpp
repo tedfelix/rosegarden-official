@@ -40,8 +40,8 @@ LircCommander::LircCommander(LircClient *lirc, RosegardenMainWindow *rgGUIApp)
 {
     m_lirc = lirc;
     m_rgGUIApp = rgGUIApp;
-    connect(m_lirc, SIGNAL(buttonPressed(char *)),
-            this, SLOT(slotExecute(char *)) );
+    connect(m_lirc, SIGNAL(buttonPressed(const char *)),
+            this, SLOT(slotExecute(const char *)) );
 
     connect(this, SIGNAL(play()),
             m_rgGUIApp, SLOT(slotPlay()) );
@@ -91,7 +91,7 @@ int LircCommander::compareCommandName(const void *c1, const void *c2)
     return (strcmp(((struct command *)c1)->name, ((struct command *)c2)->name));
 }
 
-void LircCommander::slotExecute(char *command)
+void LircCommander::slotExecute(const char *command)
 {
     struct command tmp, *res;
 
