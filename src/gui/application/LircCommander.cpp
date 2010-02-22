@@ -28,6 +28,7 @@
 #include "gui/editors/segment/TrackButtons.h"
 #include "RosegardenMainWindow.h"
 #include "RosegardenMainViewWidget.h"
+#include "document/CommandHistory.h"
 
 #include <QObject>
 
@@ -67,6 +68,10 @@ LircCommander::LircCommander(LircClient *lirc, RosegardenMainWindow *rgGUIApp)
             m_rgGUIApp, SLOT(slotToggleMutedCurrentTrack()) );
     connect(this, SIGNAL(trackRecord()),
             m_rgGUIApp, SLOT(slotToggleRecordCurrentTrack()) );
+    connect(this, SIGNAL(undo()),
+            CommandHistory::getInstance(), SLOT(undo()) );
+    connect(this, SIGNAL(redo()),
+            CommandHistory::getInstance(), SLOT(redo()) );
 }
 
 LircCommander::command LircCommander::commands[] =
@@ -76,6 +81,7 @@ LircCommander::command LircCommander::commands[] =
         { "PLAY",               cmd_play },
         { "PUNCHINRECORD",      cmd_toggleRecord },
         { "RECORD",             cmd_record },
+        { "REDO",               cmd_redo },
         { "REWIND",             cmd_rewind },
         { "REWINDTOBEGINNING",  cmd_rewindToBeginning },
         { "STOP",               cmd_stop },
@@ -83,6 +89,7 @@ LircCommander::command LircCommander::commands[] =
         { "TRACK-",             cmd_trackDown },
         { "TRACK-MUTE",         cmd_trackMute },
         { "TRACK-RECORD",       cmd_trackRecord },
+        { "UNDO",               cmd_undo },
     };
 
 
@@ -142,6 +149,12 @@ void LircCommander::slotExecute(const char *command)
             break;
         case cmd_trackRecord:
             emit trackRecord(); 
+            break;
+        case cmd_undo:
+            emit undo(); 
+            break;
+        case cmd_redo:
+            emit redo(); 
             break;
         default:
             RG_DEBUG <<  "LircCommander::slotExecute: unhandled command " << command << endl;

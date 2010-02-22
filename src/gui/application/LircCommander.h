@@ -56,6 +56,8 @@ signals:
     void trackUp();
     void trackMute();
     void trackRecord();
+    void undo();
+    void redo();
     
 private slots:
     void slotExecute(const char *);
@@ -79,7 +81,9 @@ private:
     	cmd_trackDown,
     	cmd_trackUp,
     	cmd_trackMute,
-    	cmd_trackRecord
+    	cmd_trackRecord,
+    	cmd_undo,
+    	cmd_redo
     };
     
     
