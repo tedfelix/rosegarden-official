@@ -23,7 +23,11 @@
 
 #include <misc/Strings.h>
 
+#ifdef __FreeBSD__
+#include <stdlib.h>
+#else
 #include <alloca.h>
+#endif
 
 //#define DEBUG_DSSI 1
 //#define DEBUG_DSSI_PROCESS 1

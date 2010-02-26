@@ -78,7 +78,7 @@ AudioFileManager::AudioFileManager() :
 
     pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
 #else
-#ifdef PTHREAD_MUTEX_RECURSIVE
+#if defined(PTHREAD_MUTEX_RECURSIVE) || defined(__FreeBSD__)
 
     pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
 #else

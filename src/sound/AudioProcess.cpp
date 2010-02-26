@@ -31,7 +31,11 @@
 
 #include <cmath>
 
+#ifdef __FreeBSD__
+#include <stdlib.h>
+#else
 #include <alloca.h>
+#endif
 
 //#define DEBUG_THREAD_CREATE_DESTROY 1
 //#define DEBUG_BUSS_MIXER 1

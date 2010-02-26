@@ -58,8 +58,9 @@ if test x$MAKEDEPEND = x ; then
 fi
 
 AC_PATH_PROG([SHA1SUM],[sha1sum])
+AC_PATH_PROG([SHA1SUM],[sha1 -q])
 if test x$SHA1SUM = x ; then
-       	AC_MSG_ERROR([Failed to find required sha1sum program.])
+       	AC_MSG_ERROR([Failed to find required sha1sum or sha1 programs.])
 fi
 
 AC_PATH_PROG([CUT],[cut])

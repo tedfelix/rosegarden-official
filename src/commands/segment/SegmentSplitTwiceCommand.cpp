@@ -1,5 +1,5 @@
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
-
+      
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.

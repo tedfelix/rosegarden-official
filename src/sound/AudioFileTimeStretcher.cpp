@@ -26,7 +26,11 @@
 #include <iostream>
 #include <fstream>
 
+#ifdef __FreeBSD__
+#include <stdlib.h>
+#else
 #include <alloca.h>
+#endif
 
 namespace Rosegarden {
 
