@@ -1158,20 +1158,54 @@ SegmentNotationHelper::deleteNote(Event *e, bool collapseRest)
 	erase(i);
 
     } else {
-
-	// replace with a rest
-	Event *newRest = new Event(Note::EventRestType,
-				   e->getAbsoluteTime(), e->getDuration(),
-				   Note::EventRestSubOrdering);
-	insert(newRest);
-	erase(i);
-
-	// collapse the new rest
-        if (collapseRest) {
+    if (e->has(BEAMED_GROUP_TUPLET_BASE)==false){
+       // replace with a rest
+       Event *newRest = new Event(Note::EventRestType,
+                                  e->getAbsoluteTime(), e->getDuration(),
+                                  Note::EventRestSubOrdering);
+       insert(newRest);
+       erase(i);
+       // collapse the new rest
+       if (collapseRest) {
             bool dummy;
             collapseRestsIfValid(newRest, dummy);
         }
 
+    }else{
+        int untupled = e->get<Int>(BEAMED_GROUP_UNTUPLED_COUNT);
+        iterator begin, end;
+        int count = findBorderTuplet(i, begin, end);
+        if (count>1){
+            // insert rest instead of note
+            string type = (*i)->getType();
+            int note_type = (*i)->get<Int>(NOTE_TYPE);
+            insertRest((*i)->getAbsoluteTime(), Note(note_type,0));
+        }else {
+            // replace with a rest
+            timeT time = (*begin)->getAbsoluteTime();
+            Event *newRest = new Event(Note::EventRestType,
+                    (*begin)->getAbsoluteTime(),
+                    (*begin)->getDuration()*untupled,
+                    Note::EventRestSubOrdering);
+            segment().erase(begin, end);
+            insert(newRest);
+            timeT startTime = segment().getStartTime();
+            if (time==startTime){
+                begin=segment().findTime(startTime);
+                (*begin)->unset(BEAMED_GROUP_ID);
+                (*begin)->unset(BEAMED_GROUP_TYPE);
+                (*begin)->unset(BEAMED_GROUP_TUPLET_BASE);
+                (*begin)->unset(BEAMED_GROUP_TUPLED_COUNT);
+                (*begin)->unset(BEAMED_GROUP_UNTUPLED_COUNT);
+            }
+
+            // collapse the new rest
+            if (collapseRest) {
+                bool dummy;
+                collapseRestsIfValid(newRest, dummy);
+            }
+        }
+    }
     }
 }
 
@@ -2136,6 +2170,51 @@ SegmentNotationHelper::autoSlur(timeT startTime, timeT endTime, bool legatoOnly)
     }
 }
 
+int SegmentNotationHelper::findBorderTuplet(iterator it, iterator &start, iterator &end){
+    iterator beginB = segment().findTime(segment().getBarStartForTime((*it)->getAbsoluteTime()));
+    iterator endB = segment().findTime(segment().getBarEndForTime((*it)->getAbsoluteTime()));
+    int maxcount = 0;
+    int count = 0;
+    int index = 0;
+    bool ourTuplet = false;
+    bool newTuplet = true;
 
+    if ((*beginB)->getType()=="clefchange"){
+        beginB++;
+    }
+
+    for ( ;beginB!=endB; ++beginB){
+        index++;
+        if (index>maxcount){
+            index=1;
+            count = 0;
+            newTuplet=true;
+        }
+        if ((*beginB)->has(BEAMED_GROUP_TUPLET_BASE)==true){
+            maxcount = (*beginB)->get<Int>(BEAMED_GROUP_UNTUPLED_COUNT);
+            if ((*beginB)->getType() == "note"){
+                count++;
+            }
+            if (it == beginB) ourTuplet = true;
+            if (newTuplet){
+                start = beginB;
+                newTuplet=false;
+            }
+            if (ourTuplet && index==maxcount){
+                end = ++beginB;
+                return count;
+            }
+            continue;
+        }else maxcount=0;
+        if (ourTuplet == true){
+            end = beginB;
+            return count;
+        }
+        newTuplet = true;
+        count = 0;
+    }
+    end=endB;
+    return count;
+}
 } // end of namespace
 

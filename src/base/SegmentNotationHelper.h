@@ -584,6 +584,9 @@ protected:
 
     /// for use by collapseRestsAggressively
     void mergeContiguousRests(timeT, timeT, std::vector<Event *>&);
+
+    /// find border of tupled
+    int findBorderTuplet(iterator, iterator &start, iterator &end);
 };
 
 }
