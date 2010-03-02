@@ -131,7 +131,11 @@ CompositionView::CompositionView(RosegardenDocument* doc,
     
     setDragAutoScroll(true);
 
-    viewport()->setPaletteBackgroundColor(GUIPalette::getColour(GUIPalette::SegmentCanvas));
+    viewport()->setAttribute(Qt::WA_PaintOnScreen);
+    viewport()->setAttribute(Qt::WA_OpaquePaintEvent);
+
+    viewport()->setPaletteBackgroundColor
+        (GUIPalette::getColour(GUIPalette::SegmentCanvas));
 
     slotUpdateSize();
 

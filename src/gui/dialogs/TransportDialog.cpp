@@ -47,6 +47,7 @@
 #include <QWidget>
 #include <QHBoxLayout>
 #include <QDesktopWidget>
+#include <QPainter>
 
 
 
@@ -357,9 +358,15 @@ void
 TransportDialog::loadPixmaps()
 {
     m_lcdList.clear();
+    m_lcdListDefault.clear();
 
     for (int i = 0; i < 10; i++) {
         m_lcdList[i] = IconLoader().loadPixmap(QString("led-%1").arg(i));
+        QImage im(m_lcdList[i].size(), QImage::Format_RGB32);
+        im.fill(0);
+        QPainter p(&im);
+        p.drawPixmap(0, 0, m_lcdList[i]);
+        m_lcdListDefault[i] = QPixmap::fromImage(im);
     }
 
     // Load the "negative" sign pixmap
@@ -777,85 +784,28 @@ TransportDialog::updateTimeDisplay()
 {
     Profiler profiler("TransportDialog::updateTimeDisplay");
 
-    if (m_tenThousandths != m_lastTenThousandths) {
-        if (m_tenThousandths < 0)
-            m_transport->TenThousandthsPixmap->clear();
-        else
-            m_transport->TenThousandthsPixmap->setPixmap(m_lcdList[m_tenThousandths]);
-        m_lastTenThousandths = m_tenThousandths;
+#define UPDATE(NEW,OLD,WIDGET)                                     \
+    if (NEW != OLD) {                                              \
+        if (NEW < 0) {                                             \
+            m_transport->WIDGET->clear();                          \
+        } else if (!m_isBackgroundSet) {                           \
+            m_transport->WIDGET->setPixmap(m_lcdListDefault[NEW]); \
+        } else {                                                   \
+            m_transport->WIDGET->setPixmap(m_lcdList[NEW]);        \
+        }                                                          \
+        OLD = NEW;                                                 \
     }
 
-    if (m_thousandths != m_lastThousandths) {
-        if (m_thousandths < 0)
-            m_transport->ThousandthsPixmap->clear();
-        else
-            m_transport->ThousandthsPixmap->setPixmap(m_lcdList[m_thousandths]);
-        m_lastThousandths = m_thousandths;
-    }
-
-    if (m_hundreths != m_lastHundreths) {
-        if (m_hundreths < 0)
-            m_transport->HundredthsPixmap->clear();
-        else
-            m_transport->HundredthsPixmap->setPixmap(m_lcdList[m_hundreths]);
-        m_lastHundreths = m_hundreths;
-    }
-
-    if (m_tenths != m_lastTenths) {
-        if (m_tenths < 0)
-            m_transport->TenthsPixmap->clear();
-        else
-            m_transport->TenthsPixmap->setPixmap(m_lcdList[m_tenths]);
-        m_lastTenths = m_tenths;
-    }
-
-    if (m_unitSeconds != m_lastUnitSeconds) {
-        if (m_unitSeconds < 0)
-            m_transport->UnitSecondsPixmap->clear();
-        else
-            m_transport->UnitSecondsPixmap->setPixmap(m_lcdList[m_unitSeconds]);
-        m_lastUnitSeconds = m_unitSeconds;
-    }
-
-    if (m_tenSeconds != m_lastTenSeconds) {
-        if (m_tenSeconds < 0)
-            m_transport->TenSecondsPixmap->clear();
-        else
-            m_transport->TenSecondsPixmap->setPixmap(m_lcdList[m_tenSeconds]);
-        m_lastTenSeconds = m_tenSeconds;
-    }
-
-    if (m_unitMinutes != m_lastUnitMinutes) {
-        if (m_unitMinutes < 0)
-            m_transport->UnitMinutesPixmap->clear();
-        else
-            m_transport->UnitMinutesPixmap->setPixmap(m_lcdList[m_unitMinutes]);
-        m_lastUnitMinutes = m_unitMinutes;
-    }
-
-    if (m_tenMinutes != m_lastTenMinutes) {
-        if (m_tenMinutes < 0)
-            m_transport->TenMinutesPixmap->clear();
-        else
-            m_transport->TenMinutesPixmap->setPixmap(m_lcdList[m_tenMinutes]);
-        m_lastTenMinutes = m_tenMinutes;
-    }
-
-    if (m_unitHours != m_lastUnitHours) {
-        if (m_unitHours < 0)
-            m_transport->UnitHoursPixmap->clear();
-        else
-            m_transport->UnitHoursPixmap->setPixmap(m_lcdList[m_unitHours]);
-        m_lastUnitHours = m_unitHours;
-    }
-
-    if (m_tenHours != m_lastTenHours) {
-        if (m_tenHours < 0)
-            m_transport->TenHoursPixmap->clear();
-        else
-            m_transport->TenHoursPixmap->setPixmap(m_lcdList[m_tenHours]);
-        m_lastTenHours = m_tenHours;
-    }
+    UPDATE(m_tenThousandths, m_lastTenThousandths, TenThousandthsPixmap);
+    UPDATE(m_thousandths,    m_lastThousandths,    ThousandthsPixmap);
+    UPDATE(m_hundreths,      m_lastHundreths,      HundredthsPixmap);
+    UPDATE(m_tenths,         m_lastTenths,         TenthsPixmap);
+    UPDATE(m_unitSeconds,    m_lastUnitSeconds,    UnitSecondsPixmap);
+    UPDATE(m_tenSeconds,     m_lastTenSeconds,     TenSecondsPixmap);
+    UPDATE(m_unitMinutes,    m_lastUnitMinutes,    UnitMinutesPixmap);
+    UPDATE(m_tenMinutes,     m_lastTenMinutes,     TenMinutesPixmap);
+    UPDATE(m_unitHours,      m_lastUnitHours,      UnitHoursPixmap);
+    UPDATE(m_tenHours,       m_lastTenHours,       TenHoursPixmap);
 }
 
 void
