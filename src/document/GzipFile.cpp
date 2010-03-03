@@ -46,20 +46,18 @@ GzipFile::readFromFile(QString file, QString &text)
     gzFile fd = gzopen(file.toLocal8Bit().data(), "rb");
     if (!fd) return false;
 
-    std::string raw;
-    char buffer[1000];
+    QByteArray ba;
+    char buffer[100000];
+    int got = 0;
 
-    while (gzgets(fd, buffer, 1000)) {
-        raw += std::string(buffer);
-	if (gzeof(fd)) {
-	    gzclose(fd);
-            text = QString::fromUtf8(raw.c_str());
-	    return true;
-	}
+    while ((got = gzread(fd, buffer, 100000)) > 0) {
+        ba.append(buffer, got);
     }
-	
-    // gzgets only returns false on error
-    return false;
+
+    bool ok = gzeof(fd);
+    gzclose(fd);
+    text = QString::fromUtf8(ba);
+    return ok;
 }    
 
 }

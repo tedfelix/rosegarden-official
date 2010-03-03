@@ -1255,7 +1255,7 @@ NotationScene::layout(NotationStaff *singleStaff,
                       timeT startTime, timeT endTime)
 {
     Profiler profiler("NotationScene::layout", true);
-    std::cerr << "NotationScene::layout: from " << startTime << " to " << endTime << std::endl;
+    NOTATION_DEBUG << "NotationScene::layout: from " << startTime << " to " << endTime << endl;
 
     bool full = (singleStaff == 0 && startTime == endTime);
 
@@ -1286,8 +1286,8 @@ NotationScene::layout(NotationStaff *singleStaff,
         }
     }
 
-    std::cerr << "overall start time = " << startTime << ", end time = "
-              << endTime << std::endl;
+    NOTATION_DEBUG << "overall start time = " << startTime << ", end time = "
+                   << endTime << endl;
 
     {
         Profiler profiler("NotationScene::layout: Scan layouts", true);
