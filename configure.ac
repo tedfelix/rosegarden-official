@@ -22,20 +22,35 @@ PKG_PROG_PKG_CONFIG
 
 RG_CHECK_QT
 
-# the following just test for things, they don't yet set the proper
-# flags or bail out
+AC_CHECK_LIB([X11],[XSetErrorHandler],[LIBS="$LIBS -lX11"],[AC_MSG_ERROR(Failed to find required X11 library)])
+AC_CHECK_LIB([z],[gzopen],[LIBS="$LIBS -lz"],[AC_MSG_ERROR(Failed to find required libz library)])
+AC_CHECK_LIB([dl],[dlopen],[LIBS="$LIBS -ldl"],[AC_MSG_ERROR(Failed to find required dl library)])
+
+PKG_CHECK_MODULES([JACK],[jack >= 0.100],[HAVES="$HAVES -DHAVE_LIBJACK"],[
+AC_MSG_WARN(No JACK library found: audio will be unavailable!)])
+
+# This little bit of juggling is to enable DSSI to be included even on
+# systems without ALSA (dssi.h includes an ALSA header, but we can
+# fill in the gap if ALSA itself is not present)
+PRIOR_CXXFLAGS="$CXXFLAGS"
+DSSI_LOCALFLAGS=""
+PKG_CHECK_MODULES([ALSA],[alsa >= 0.9],[HAVES="$HAVES -DHAVE_ALSA"],[
+AC_MSG_WARN(No ALSA library found: MIDI will be unavailable!)
+AC_MSG_NOTICE(Using compatibility code for DSSI event types)
+DSSI_LOCALFLAGS="-Isrc/sound/dssi-compatibility"
+CXXFLAGS="$CXXFLAGS $DSSI_LOCALFLAGS"
+])
+AC_CHECK_HEADER([dssi.h],[],[AC_MSG_ERROR(Failed to find required DSSI header dssi.h)])
+CXXFLAGS="$PRIOR_CXXFLAGS"
 
 AC_CHECK_HEADER([ladspa.h],[],[AC_MSG_ERROR(Failed to find required LADSPA header ladspa.h)])
 AC_CHECK_HEADER([X11/SM/SMlib.h],[],[AC_MSG_ERROR(Failed to find required X11 header X11/SM/SMlib.h)])
 
-AC_CHECK_HEADER([lirc/lirc_client.h],[HAVES="$HAVES -DHAVE_LIRC"],[AC_MSG_ERROR(Failed to find required LIRC header lirc/lirc_client.h)])
-AC_CHECK_LIB([lirc_client],[lirc_init],[LIBS="$LIBS -llirc_client"],[AC_MSG_ERROR(Failed to find required LIRC library lirc_client)])
+AC_CHECK_HEADER([lirc/lirc_client.h],[HAVES="$HAVES -DHAVE_LIRC"],[AC_MSG_NOTICE(Failed to find LIRC header lirc/lirc_client.h)])
+AC_CHECK_LIB([lirc_client],[lirc_init],[LIBS="$LIBS -llirc_client"],[AC_MSG_NOTICE(Failed to find LIRC library lirc_client)])
 
 AC_C_BIGENDIAN([AC_SUBST(ENDIANNESS,"-DBIG_ENDIAN=1")],[AC_SUBST(ENDIANNESS,"-DLITTLE_ENDIAN=1")],[AC_MSG_ERROR(Could not find system endianess)])
-# hm, we'll probably want a newer version for jack_client_open
-PKG_CHECK_MODULES([JACK],[jack >= 0.77],[HAVES="$HAVES -DHAVE_LIBJACK"],[])
-PKG_CHECK_MODULES([ALSA],[alsa >= 0.9],[HAVES="$HAVES -DHAVE_ALSA"],[])
-PKG_CHECK_MODULES([DSSI],[dssi >= 0.9],[],[])
+
 PKG_CHECK_MODULES([liblo],[liblo >= 0.7],[],[])
 PKG_CHECK_MODULES([lrdf],[lrdf >= 0.2],[],[])
 PKG_CHECK_MODULES([fftw3f],[fftw3f >= 3.0.0],[],[])
@@ -60,7 +75,7 @@ fi
 AC_PATH_PROG([SHA1SUM],[sha1sum])
 AC_PATH_PROG([SHA1SUM],[sha1 -q])
 if test x$SHA1SUM = x ; then
-       	AC_MSG_ERROR([Failed to find required sha1sum or sha1 programs.])
+       	AC_MSG_ERROR([Failed to find required sha1sum or sha1 program.])
 fi
 
 AC_PATH_PROG([CUT],[cut])
@@ -68,22 +83,34 @@ if test x$CUT = x ; then
        	AC_MSG_ERROR([Failed to find required cut program.])
 fi
 
-DEBUGFLAGS="-DDEBUG -DBUILD_DEBUG -DWANT_TIMING"
-RELEASEFLAGS="-DNDEBUG -DBUILD_RELEASE -DNO_TIMING"
-MINIMAL_CFLAGS="$RELEASEFLAGS"
+CXXFLAGS_DEBUG=
+CXXFLAGS_RELEASE=
+CXXFLAGS_MINIMAL=
 
 if test "x$GCC" = "xyes"; then
-#	DEBUGFLAGS="$DEBUGFLAGS -Wall -Woverloaded-virtual -Wextra -Wformat-nonliteral -Wformat-security -Winit-self -Wswitch-enum -O1 -g -pipe"
-	DEBUGFLAGS="$DEBUGFLAGS -Wall -Woverloaded-virtual -Wextra -Wformat-nonliteral -Wformat-security -Winit-self -Wswitch-enum -O0 -g -pipe"
-	RELEASEFLAGS="$RELEASEFLAGS -g0 -O2 -Wall -pipe"
-	MINIMAL_CFLAGS="$MINIMAL_CFLAGS -g0 -O0"
+        CXXFLAGS_DEBUG="-Wall -Woverloaded-virtual -Wextra -Wformat-nonliteral -Wformat-security -Winit-self -Wswitch-enum -O0 -g -pipe"
+   	CXXFLAGS_RELEASE="-g0 -O2 -Wall -pipe"
+   	CXXFLAGS_MINIMAL="$CXXFLAGS_RELEASE"
 fi
 
-BUILDFLAGS="$RELEASEFLAGS"
+RG_DEFINES_DEBUG="-DDEBUG -DBUILD_DEBUG -DWANT_TIMING"
+RG_DEFINES_RELEASE="-DNDEBUG -DBUILD_RELEASE -DNO_TIMING"
+RG_DEFINES_MINIMAL="$RG_DEFINES_RELEASE"
+
+CXXFLAGS_BUILD="$CXXFLAGS_RELEASE"
+RG_DEFINES_BUILD="$RG_DEFINES_RELEASE"
+
 AC_ARG_ENABLE(debug, [AS_HELP_STRING([--enable-debug],[enable debug support [default=no]])],[AC_MSG_NOTICE([enabling debug build])
-BUILDFLAGS="$DEBUGFLAGS"])
-#CXXFLAGS="$CXXFLAGS $BUILDFLAGS"
-CXXFLAGS="$BUILDFLAGS"
+CXXFLAGS_BUILD="$CXXFLAGS_DEBUG"
+RG_DEFINES_BUILD="$RG_DEFINES_DEBUG"])
+
+if test x"$CXXFLAGS" != x; then
+   	AC_MSG_NOTICE(I see you have set the CXXFLAGS environment variable)
+	AC_MSG_NOTICE(Completely overriding default compiler flags with user flags)
+	CXXFLAGS_BUILD="$CXXFLAGS"
+fi
+
+CXXFLAGS="$CXXFLAGS_BUILD $RG_DEFINES_BUILD"
 
 AC_SUBST(PERL)
 AC_SUBST(XARGS)
@@ -95,6 +122,7 @@ AC_SUBST(CFLAGS)
 AC_SUBST(CXXFLAGS)
 AC_SUBST(HAVES)
 AC_SUBST(MINIMAL_CFLAGS)
+AC_SUBST(DSSI_LOCALFLAGS)
 
 AC_SUBST(CC)
 AC_SUBST(CXX)

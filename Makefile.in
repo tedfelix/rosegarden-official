@@ -25,12 +25,12 @@ CXXFLAGS	:= @CXXFLAGS@ \
 		   @QT_CXXFLAGS@ \
 		   @JACK_CFLAGS@ \
 		   @ALSA_CFLAGS@ \
-		   @DSSI_CFLAGS@ \
 		   @liblo_CFLAGS@ \
 		   @lrdf_CFLAGS@ \
 		   @fftw3f_CFLAGS@ \
 		   @samplerate_CFLAGS@ \
 		   @sndfile_CFLAGS@ \
+		   @DSSI_LOCALFLAGS@ \
 		   @ENDIANNESS@ \
 		   -D'VERSION="$(VERSION)"' \
 		   -D'CODENAME="$(CODENAME)"' \
@@ -48,7 +48,6 @@ MOCFLAGS	:= @HAVES@ @ENDIANNESS@
 LIBS		:= @QT_LIBS@ \
 		   @JACK_LIBS@ \
 		   @ALSA_LIBS@ \
-		   @DSSI_LIBS@ \
 		   @liblo_LIBS@ \
 		   @lrdf_LIBS@ \
 		   @fftw3f_LIBS@ \
