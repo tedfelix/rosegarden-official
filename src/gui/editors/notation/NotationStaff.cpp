@@ -1852,6 +1852,15 @@ NotationStaff::regenerate(timeT from, timeT to, bool secondary)
 
     //!!! NB This does not yet correctly handle clef and key lists!
 
+    if (to < from) {
+        std::cerr << "NotationStaff::regenerate(" << from << ", " << to << ", "
+                  << secondary << "): ERROR: to < from" << std::endl;
+        to = from;
+    }
+
+    from = getSegment().getBarStartForTime(from);
+    to = getSegment().getBarEndForTime(to);
+
     NotationElementList::iterator i = getViewElementList()->findTime(from);
     NotationElementList::iterator j = getViewElementList()->findTime(to);
 

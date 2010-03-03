@@ -1286,6 +1286,9 @@ NotationScene::layout(NotationStaff *singleStaff,
         }
     }
 
+    std::cerr << "overall start time = " << startTime << ", end time = "
+              << endTime << std::endl;
+
     {
         Profiler profiler("NotationScene::layout: Scan layouts", true);
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
@@ -1358,8 +1361,6 @@ NotationScene::layout(NotationStaff *singleStaff,
         // risky to "fix" it in a dead-end branch; at least here it
         // will necessarily get some testing.
 
-        startTime = staff->getSegment().getBarStartForTime(startTime);
-        endTime = staff->getSegment().getBarEndForTime(endTime);
         bool secondary = (singleStaff && (singleStaff != staff));
         staff->regenerate(startTime, endTime, secondary);
     }
