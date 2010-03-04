@@ -310,7 +310,8 @@ TrackEditor::init(QWidget* rosegardenguiview)
     connect(m_compositionView->horizontalScrollBar(), SIGNAL(sliderMoved(int)),
             m_chordNameRuler, SLOT(slotScrollHoriz(int)));
 
-    connect(this, SIGNAL(needUpdate()), m_compositionView, SLOT(slotUpdateSegmentsDrawBuffer()));
+    connect(this, SIGNAL(needUpdate()),
+            m_compositionView, SLOT(slotUpdateSegmentsDrawBuffer()));
 
     connect(m_compositionView->getModel(),
             SIGNAL(selectedSegments(const SegmentSelection &)),
