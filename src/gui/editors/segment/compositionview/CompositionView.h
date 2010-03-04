@@ -260,15 +260,6 @@ protected:
 
 protected slots:
     void slotSegmentsDrawBufferNeedsRefresh() {
-		//### qt3-doc: The following code finds the part of the canvas 
-		//### that is visible in this view, i.e. the bounding rectangle
-		// of the view in canvas coordinates.
-		// 
-		// QRect rc = QRect(myCanvasView->contentsX(), 
-		// 					myCanvasView->contentsY(),
-		// 					myCanvasView->visibleWidth(), ... )
-		// 
-		
         m_segmentsDrawBufferRefresh =
             QRect(contentsX(), contentsY(), visibleWidth(), visibleHeight());
     }
@@ -289,7 +280,7 @@ protected slots:
         m_artifactsDrawBufferRefresh |=
             (QRect(contentsX(), contentsY(), visibleWidth(), visibleHeight())
              & r);
-	updateContents();
+	updateContents(r);
     }
 
     void slotAllDrawBuffersNeedRefresh() {
