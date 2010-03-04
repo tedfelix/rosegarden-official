@@ -8,6 +8,13 @@ CODENAME="Abraham Darby"
 
 AC_CONFIG_SRCDIR(src/base/Composition.h)
 
+# Autoconf will set CXXFLAGS; we don't want it to, because we either
+# define our own flags or else use the user's preferences.  We need to
+# ensure CXXFLAGS is only set if the user has expressly set it.  So,
+# save the user's (or empty) setting now and restore it after Autoconf
+# has done its bit of piddling about.
+USER_CXXFLAGS="$CXXFLAGS"
+
 AC_LANG_CPLUSPLUS
 
 AC_PROG_CC
@@ -32,7 +39,6 @@ AC_MSG_WARN(No JACK library found: audio will be unavailable!)])
 # This little bit of juggling is to enable DSSI to be included even on
 # systems without ALSA (dssi.h includes an ALSA header, but we can
 # fill in the gap if ALSA itself is not present)
-PRIOR_CXXFLAGS="$CXXFLAGS"
 DSSI_LOCALFLAGS=""
 PKG_CHECK_MODULES([ALSA],[alsa >= 0.9],[HAVES="$HAVES -DHAVE_ALSA"],[
 AC_MSG_WARN(No ALSA library found: MIDI will be unavailable!)
@@ -41,13 +47,13 @@ DSSI_LOCALFLAGS="-Isrc/sound/dssi-compatibility"
 CXXFLAGS="$CXXFLAGS $DSSI_LOCALFLAGS"
 ])
 AC_CHECK_HEADER([dssi.h],[],[AC_MSG_ERROR(Failed to find required DSSI header dssi.h)])
-CXXFLAGS="$PRIOR_CXXFLAGS"
+
+# Now restore CXXFLAGS as it was before both Autoconf and our own DSSI
+# test manipulations got to it
+CXXFLAGS="$USER_CXXFLAGS"
 
 AC_CHECK_HEADER([ladspa.h],[],[AC_MSG_ERROR(Failed to find required LADSPA header ladspa.h)])
 AC_CHECK_HEADER([X11/SM/SMlib.h],[],[AC_MSG_ERROR(Failed to find required X11 header X11/SM/SMlib.h)])
-
-AC_CHECK_HEADER([lirc/lirc_client.h],[HAVES="$HAVES -DHAVE_LIRC"],[AC_MSG_NOTICE(Failed to find LIRC header lirc/lirc_client.h)])
-AC_CHECK_LIB([lirc_client],[lirc_init],[LIBS="$LIBS -llirc_client"],[AC_MSG_NOTICE(Failed to find LIRC library lirc_client)])
 
 AC_C_BIGENDIAN([AC_SUBST(ENDIANNESS,"-DBIG_ENDIAN=1")],[AC_SUBST(ENDIANNESS,"-DLITTLE_ENDIAN=1")],[AC_MSG_ERROR(Could not find system endianess)])
 
@@ -83,6 +89,11 @@ if test x$CUT = x ; then
        	AC_MSG_ERROR([Failed to find required cut program.])
 fi
 
+# Do this last, so that the warning is visible (we will repeat any
+# really vital warnings, i.e. those for ALSA and JACK, afterward)
+AC_CHECK_HEADER([lirc/lirc_client.h],[HAVES="$HAVES -DHAVE_LIRC"],[AC_MSG_WARN(Failed to find LIRC header lirc/lirc_client.h)])
+AC_CHECK_LIB([lirc_client],[lirc_init],[LIBS="$LIBS -llirc_client"],[AC_MSG_WARN(Failed to find LIRC library lirc_client)])
+
 CXXFLAGS_DEBUG=
 CXXFLAGS_RELEASE=
 CXXFLAGS_MINIMAL=
@@ -105,12 +116,19 @@ CXXFLAGS_BUILD="$CXXFLAGS_DEBUG"
 RG_DEFINES_BUILD="$RG_DEFINES_DEBUG"])
 
 if test x"$CXXFLAGS" != x; then
-   	AC_MSG_NOTICE(I see you have set the CXXFLAGS environment variable)
-	AC_MSG_NOTICE(Completely overriding default compiler flags with user flags)
+   	AC_MSG_NOTICE([The CXXFLAGS environment variable is set to "$CXXFLAGS".])
+	AC_MSG_NOTICE(Overriding default compiler flags with the above user setting.)
 	CXXFLAGS_BUILD="$CXXFLAGS"
 fi
 
 CXXFLAGS="$CXXFLAGS_BUILD $RG_DEFINES_BUILD"
+
+if test -z "$JACK_CFLAGS" ; then
+   AC_MSG_WARN([Required JACK library not found, building with no audio!])
+fi
+if test -z "$ALSA_CFLAGS" ; then
+   AC_MSG_WARN([Required ALSA library not found, building with no MIDI!])
+fi
 
 AC_SUBST(PERL)
 AC_SUBST(XARGS)
