@@ -39,7 +39,7 @@ CXXFLAGS	:= @CXXFLAGS@ \
 
 RCC_CXXFLAGS	:= @QT_CXXFLAGS@ \
                    @ENDIANNESS@ \
-                   @MINIMAL_CFLAGS@
+                   @CXXFLAGS_MINIMAL@
 
 RCCFLAGS	:= -threshold 0 -compress 9
 

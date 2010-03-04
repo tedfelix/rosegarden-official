@@ -8,11 +8,12 @@ CODENAME="Abraham Darby"
 
 AC_CONFIG_SRCDIR(src/base/Composition.h)
 
-# Autoconf will set CXXFLAGS; we don't want it to, because we either
-# define our own flags or else use the user's preferences.  We need to
-# ensure CXXFLAGS is only set if the user has expressly set it.  So,
-# save the user's (or empty) setting now and restore it after Autoconf
-# has done its bit of piddling about.
+# Autoconf will set CXXFLAGS; we don't usually want it to, because we
+# either define our own flags (at least if GCC is in use) or else use
+# the user's preferences.  We need to ensure CXXFLAGS is only set if
+# the user has expressly set it.  So, save the user's (or empty)
+# setting now and restore it after Autoconf has done its bit of
+# piddling about.
 USER_CXXFLAGS="$CXXFLAGS"
 
 AC_LANG_CPLUSPLUS
@@ -24,6 +25,11 @@ AC_PROG_MKDIR_P
 
 AC_PATH_X
 AC_HEADER_STDC
+
+# These are the flags Autoconf guesses for us; we use them later if
+# the user has set none and we are not using GCC (so lack our own
+# preferred flags)
+AUTOCONF_CXXFLAGS="$CXXFLAGS"
 
 PKG_PROG_PKG_CONFIG
 
@@ -47,10 +53,6 @@ DSSI_LOCALFLAGS="-Isrc/sound/dssi-compatibility"
 CXXFLAGS="$CXXFLAGS $DSSI_LOCALFLAGS"
 ])
 AC_CHECK_HEADER([dssi.h],[],[AC_MSG_ERROR(Failed to find required DSSI header dssi.h)])
-
-# Now restore CXXFLAGS as it was before both Autoconf and our own DSSI
-# test manipulations got to it
-CXXFLAGS="$USER_CXXFLAGS"
 
 AC_CHECK_HEADER([ladspa.h],[],[AC_MSG_ERROR(Failed to find required LADSPA header ladspa.h)])
 AC_CHECK_HEADER([X11/SM/SMlib.h],[],[AC_MSG_ERROR(Failed to find required X11 header X11/SM/SMlib.h)])
@@ -94,19 +96,24 @@ fi
 AC_CHECK_HEADER([lirc/lirc_client.h],[HAVES="$HAVES -DHAVE_LIRC"],[AC_MSG_WARN(Failed to find LIRC header lirc/lirc_client.h)])
 AC_CHECK_LIB([lirc_client],[lirc_init],[LIBS="$LIBS -llirc_client"],[AC_MSG_WARN(Failed to find LIRC library lirc_client)])
 
-CXXFLAGS_DEBUG=
-CXXFLAGS_RELEASE=
-CXXFLAGS_MINIMAL=
-
-if test "x$GCC" = "xyes"; then
-        CXXFLAGS_DEBUG="-Wall -Woverloaded-virtual -Wextra -Wformat-nonliteral -Wformat-security -Winit-self -Wswitch-enum -O0 -g -pipe"
-   	CXXFLAGS_RELEASE="-g0 -O2 -Wall -pipe"
-   	CXXFLAGS_MINIMAL="$CXXFLAGS_RELEASE"
-fi
-
 RG_DEFINES_DEBUG="-DDEBUG -DBUILD_DEBUG -DWANT_TIMING"
 RG_DEFINES_RELEASE="-DNDEBUG -DBUILD_RELEASE -DNO_TIMING"
 RG_DEFINES_MINIMAL="$RG_DEFINES_RELEASE"
+
+# Now we have: USER_CXXFLAGS contains any flags the user set
+# explicitly; AUTOCONF_CXXFLAGS contains flags that Autoconf thought
+# we should use.  If we have GCC, we override the latter but then
+# allow ourselves to be overridden (later) by the former
+
+CXXFLAGS_DEBUG="$AUTOCONF_CXXFLAGS"
+CXXFLAGS_RELEASE="$AUTOCONF_CXXFLAGS"
+CXXFLAGS_MINIMAL="$AUTOCONF_CXXFLAGS"
+
+if test "x$GCC" = "xyes"; then
+        CXXFLAGS_DEBUG="-Wall -Woverloaded-virtual -Wextra -Wformat-nonliteral -Wformat-security -Winit-self -Wswitch-enum -g -pipe"
+   	CXXFLAGS_RELEASE="-g0 -O2 -Wall -pipe"
+   	CXXFLAGS_MINIMAL="-g0 -O0"
+fi
 
 CXXFLAGS_BUILD="$CXXFLAGS_RELEASE"
 RG_DEFINES_BUILD="$RG_DEFINES_RELEASE"
@@ -115,10 +122,11 @@ AC_ARG_ENABLE(debug, [AS_HELP_STRING([--enable-debug],[enable debug support [def
 CXXFLAGS_BUILD="$CXXFLAGS_DEBUG"
 RG_DEFINES_BUILD="$RG_DEFINES_DEBUG"])
 
-if test x"$CXXFLAGS" != x; then
+if test x"$USER_CXXFLAGS" != x; then
    	AC_MSG_NOTICE([The CXXFLAGS environment variable is set to "$CXXFLAGS".])
 	AC_MSG_NOTICE(Overriding default compiler flags with the above user setting.)
-	CXXFLAGS_BUILD="$CXXFLAGS"
+	CXXFLAGS_BUILD="$USER_CXXFLAGS"
+	CXXFLAGS_MINIMAL="$USER_CXXFLAGS"
 fi
 
 CXXFLAGS="$CXXFLAGS_BUILD $RG_DEFINES_BUILD"
@@ -138,8 +146,8 @@ AC_SUBST(CUT)
 
 AC_SUBST(CFLAGS)
 AC_SUBST(CXXFLAGS)
+AC_SUBST(CXXFLAGS_MINIMAL)
 AC_SUBST(HAVES)
-AC_SUBST(MINIMAL_CFLAGS)
 AC_SUBST(DSSI_LOCALFLAGS)
 
 AC_SUBST(CC)
