@@ -41,29 +41,29 @@ VUMeter::VUMeter(QWidget *parent,
                  int height,
                  VUAlignment alignment,
                  const char *name):
-        QLabel(parent, name),
-        m_originalHeight(height),
-        m_active(true),
-        m_type(type),
-        m_alignment(alignment),
-        m_levelLeft(0),
-        m_recordLevelLeft(0),
-        m_peakLevelLeft(0),
-        m_levelStepLeft(m_baseLevelStep),
-        m_recordLevelStepLeft(m_baseLevelStep),
-        m_fallTimerLeft(0),
-        m_peakTimerLeft(0),
-        m_levelRight(0),
-        m_recordLevelRight(0),
-        m_peakLevelRight(0),
-        m_levelStepRight(0),
-        m_recordLevelStepRight(0),
-        m_fallTimerRight(0),
-        m_peakTimerRight(0),
-        m_showPeakLevel(true),
-        m_baseLevelStep(3),
-        m_stereo(stereo),
-        m_hasRecord(hasRecord)
+    QLabel(parent, name),
+    m_originalHeight(height),
+    m_active(true),
+    m_type(type),
+    m_alignment(alignment),
+    m_levelLeft(0),
+    m_recordLevelLeft(0),
+    m_peakLevelLeft(0),
+    m_levelStepLeft(m_baseLevelStep),
+    m_recordLevelStepLeft(m_baseLevelStep),
+    m_fallTimerLeft(0),
+    m_peakTimerLeft(0),
+    m_levelRight(0),
+    m_recordLevelRight(0),
+    m_peakLevelRight(0),
+    m_levelStepRight(0),
+    m_recordLevelStepRight(0),
+    m_fallTimerRight(0),
+    m_peakTimerRight(0),
+    m_showPeakLevel(true),
+    m_baseLevelStep(3),
+    m_stereo(stereo),
+    m_hasRecord(hasRecord)
 {
     // Work out if we need peak hold first
     //
@@ -150,9 +150,9 @@ VUMeter::VUMeter(QWidget *parent,
     }
 
     if (m_type == AudioPeakHoldLong ||
-            m_type == AudioPeakHoldShort ||
-            m_type == AudioPeakHoldIEC ||
-            m_type == AudioPeakHoldIECLong) {
+        m_type == AudioPeakHoldShort ||
+        m_type == AudioPeakHoldIEC ||
+        m_type == AudioPeakHoldIECLong) {
         m_velocityColour =
             new VelocityColour(GUIPalette::getColour(GUIPalette::LevelMeterSolidRed),
                                GUIPalette::getColour(GUIPalette::LevelMeterSolidOrange),
@@ -218,30 +218,30 @@ VUMeter::setLevel(double leftLevel, double rightLevel, bool record)
 
     case AudioPeakHoldShort:
         ll = AudioLevel::dB_to_fader
-             (leftLevel, m_maxLevel, AudioLevel::ShortFader);
+            (leftLevel, m_maxLevel, AudioLevel::ShortFader);
         lr = AudioLevel::dB_to_fader
-             (rightLevel, m_maxLevel, AudioLevel::ShortFader);
+            (rightLevel, m_maxLevel, AudioLevel::ShortFader);
         break;
 
     case AudioPeakHoldLong:
         ll = AudioLevel::dB_to_fader
-             (leftLevel, m_maxLevel, AudioLevel::LongFader);
+            (leftLevel, m_maxLevel, AudioLevel::LongFader);
         lr = AudioLevel::dB_to_fader
-             (rightLevel, m_maxLevel, AudioLevel::LongFader);
+            (rightLevel, m_maxLevel, AudioLevel::LongFader);
         break;
 
     case AudioPeakHoldIEC:
         ll = AudioLevel::dB_to_fader
-             (leftLevel, m_maxLevel, AudioLevel::IEC268Meter);
+            (leftLevel, m_maxLevel, AudioLevel::IEC268Meter);
         lr = AudioLevel::dB_to_fader
-             (rightLevel, m_maxLevel, AudioLevel::IEC268Meter);
+            (rightLevel, m_maxLevel, AudioLevel::IEC268Meter);
         break;
 
     case AudioPeakHoldIECLong:
         ll = AudioLevel::dB_to_fader
-             (leftLevel, m_maxLevel, AudioLevel::IEC268LongMeter);
+            (leftLevel, m_maxLevel, AudioLevel::IEC268LongMeter);
         lr = AudioLevel::dB_to_fader
-             (rightLevel, m_maxLevel, AudioLevel::IEC268LongMeter);
+            (rightLevel, m_maxLevel, AudioLevel::IEC268LongMeter);
         break;
 
     default:
@@ -335,9 +335,9 @@ VUMeter::paintEvent(QPaintEvent *e)
     int h = height() - 1;
 
     if (m_type == VUMeter::AudioPeakHoldShort ||
-            m_type == VUMeter::AudioPeakHoldLong ||
-            m_type == VUMeter::AudioPeakHoldIEC ||
-            m_type == VUMeter::AudioPeakHoldIECLong) {
+        m_type == VUMeter::AudioPeakHoldLong ||
+        m_type == VUMeter::AudioPeakHoldIEC ||
+        m_type == VUMeter::AudioPeakHoldIECLong) {
         paint.setPen(m_background);
         paint.setBrush(m_background);
         paint.drawRect(0, 0, w, h);
@@ -380,14 +380,14 @@ VUMeter::drawColouredBar(QPainter *paint, int channel,
                          int x, int y, int w, int h)
 {
     if (m_type == AudioPeakHoldLong ||
-            m_type == AudioPeakHoldShort ||
-            m_type == AudioPeakHoldIEC ||
-            m_type == AudioPeakHoldIECLong) {
+        m_type == AudioPeakHoldShort ||
+        m_type == AudioPeakHoldIEC ||
+        m_type == AudioPeakHoldIECLong) {
 
         Qt::BrushStyle style = Qt::SolidPattern;
 
         int medium = m_velocityColour->getMediumKnee(),
-                     loud = m_velocityColour->getLoudKnee();
+            loud = m_velocityColour->getLoudKnee();
 
         if (m_alignment == Vertical) {
             if (h > loud) {
@@ -463,7 +463,7 @@ void
 VUMeter::drawMeterLevel(QPainter* paint)
 {
     int medium = m_velocityColour->getMediumKnee(),
-                 loud = m_velocityColour->getLoudKnee();
+        loud = m_velocityColour->getLoudKnee();
 
     if (m_stereo) {
         if (m_alignment == VUMeter::Vertical) {
@@ -578,9 +578,9 @@ VUMeter::drawMeterLevel(QPainter* paint)
             paint->drawRect(0, 0, width(), y);
 
             /*
-            RG_DEBUG << "VUMeter::drawMeterLevel - height = " << height() 
-                     << ", vertical rect height = " << y << endl;
-                     */
+              RG_DEBUG << "VUMeter::drawMeterLevel - height = " << height() 
+              << ", vertical rect height = " << y << endl;
+            */
 
             if (m_showPeakLevel) {
                 paint->setPen(QColor(Qt::white));

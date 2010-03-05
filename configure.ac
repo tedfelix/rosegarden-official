@@ -123,7 +123,7 @@ CXXFLAGS_BUILD="$CXXFLAGS_DEBUG"
 RG_DEFINES_BUILD="$RG_DEFINES_DEBUG"])
 
 if test x"$USER_CXXFLAGS" != x; then
-   	AC_MSG_NOTICE([The CXXFLAGS environment variable is set to "$CXXFLAGS".])
+   	AC_MSG_NOTICE([The CXXFLAGS environment variable is set to "$USER_CXXFLAGS".])
 	AC_MSG_NOTICE(Overriding default compiler flags with the above user setting.)
 	CXXFLAGS_BUILD="$USER_CXXFLAGS"
 	CXXFLAGS_MINIMAL="$USER_CXXFLAGS"
