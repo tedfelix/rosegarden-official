@@ -1374,8 +1374,8 @@ JackDriver::jackProcessRecord(InstrumentId id,
     float gain = AudioLevel::dB_to_multiplier(level);
 
     if (m_alsaDriver->getRecordStatus() == RECORD_ON &&
-            clocksRunning &&
-            m_fileWriter->haveRecordFileOpen(id)) {
+        clocksRunning &&
+        m_fileWriter->haveRecordFileOpen(id)) {
 
 #ifdef DEBUG_JACK_PROCESS
         std::cerr << "JackDriver::jackProcessRecord(" << id << "): recording" << std::endl;
@@ -1444,7 +1444,7 @@ JackDriver::jackProcessRecord(InstrumentId id,
             sample_t *buf = 0;
             if (m_outputMonitors.size() > 0) {
                 buf = static_cast<sample_t *>
-                      (jack_port_get_buffer(m_outputMonitors[0], nframes));
+                    (jack_port_get_buffer(m_outputMonitors[0], nframes));
             }
 
             for (size_t i = 0; i < nframes; ++i) {
@@ -1460,7 +1460,7 @@ JackDriver::jackProcessRecord(InstrumentId id,
                 buf = 0;
                 if (m_outputMonitors.size() > 1) {
                     buf = static_cast<sample_t *>
-                          (jack_port_get_buffer(m_outputMonitors[1], nframes));
+                        (jack_port_get_buffer(m_outputMonitors[1], nframes));
                 }
 
                 for (size_t i = 0; i < nframes; ++i) {
@@ -2024,7 +2024,7 @@ JackDriver::updateAudioData()
         // when recording the record input number.
 
         MappedObjectValueList connections = fader->getConnections
-                                            (MappedConnectableObject::In);
+            (MappedConnectableObject::In);
         int input = 1000;
 
         if (connections.empty()) {
@@ -2042,7 +2042,7 @@ JackDriver::updateAudioData()
         } else {
 
             MappedObject *obj = m_alsaDriver->getMappedStudio()->
-                                getObjectById(MappedObjectId(*connections.begin()));
+                getObjectById(MappedObjectId(*connections.begin()));
 
             if (!obj) {
 

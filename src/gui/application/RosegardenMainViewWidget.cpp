@@ -1119,12 +1119,11 @@ RosegardenMainViewWidget::updateMeters()
     }
 
     for (Composition::trackcontainer::iterator i =
-                getDocument()->getComposition().getTracks().begin();
-            i != getDocument()->getComposition().getTracks().end(); ++i) {
+             getDocument()->getComposition().getTracks().begin();
+         i != getDocument()->getComposition().getTracks().end(); ++i) {
 
         Track *track = i->second;
-        if (!track)
-            continue;
+        if (!track) continue;
 
         InstrumentId instrumentId = track->getInstrument();
 
@@ -1143,21 +1142,20 @@ RosegardenMainViewWidget::updateMeters()
         }
 
         if (states[instrumentId] == oldState &&
-                recStates[instrumentId] == oldState)
+            recStates[instrumentId] == oldState)
             continue;
 
         Instrument *instrument =
             getDocument()->getStudio().getInstrumentById(instrumentId);
-        if (!instrument)
-            continue;
+        if (!instrument) continue;
 
-		// This records the level of this instrument, not neccessarily
-		//  caused by notes on this particular track.
+        // This records the level of this instrument, not necessarily
+        // caused by notes on this particular track.
         LevelInfo &info = levels[instrumentId];
         LevelInfo &recInfo = recLevels[instrumentId];
 
         if (instrument->getType() == Instrument::Audio ||
-                instrument->getType() == Instrument::SoftSynth) {
+            instrument->getType() == Instrument::SoftSynth) {
 
             float dBleft = AudioLevel::DB_FLOOR;
             float dBright = AudioLevel::DB_FLOOR;
@@ -1167,8 +1165,8 @@ RosegardenMainViewWidget::updateMeters()
             bool toSet = false;
 
             if (states[instrumentId] == newState &&
-                    (getDocument()->getSequenceManager()->getTransportStatus()
-                     != STOPPED)) {
+                (getDocument()->getSequenceManager()->getTransportStatus()
+                 != STOPPED)) {
 
                 if (info.level != 0 || info.levelRight != 0) {
                     dBleft = AudioLevel::fader_to_dB
@@ -1182,9 +1180,9 @@ RosegardenMainViewWidget::updateMeters()
             }
 
             if (recStates[instrumentId] == newState &&
-                    instrument->getType() == Instrument::Audio &&
-                    (getDocument()->getSequenceManager()->getTransportStatus()
-                     != PLAYING)) {
+                instrument->getType() == Instrument::Audio &&
+                (getDocument()->getSequenceManager()->getTransportStatus()
+                 != PLAYING)) {
 
                 if (recInfo.level != 0 || recInfo.levelRight != 0) {
                     recDBleft = AudioLevel::fader_to_dB
@@ -1196,26 +1194,26 @@ RosegardenMainViewWidget::updateMeters()
             }
 
             if (toSet &&
-                    m_instrumentParameterBox->getSelectedInstrument() &&
-                    instrument->getId() ==
-                    m_instrumentParameterBox->getSelectedInstrument()->getId()) {
+                m_instrumentParameterBox->getSelectedInstrument() &&
+                instrument->getId() ==
+                m_instrumentParameterBox->getSelectedInstrument()->getId()) {
 
                 m_instrumentParameterBox->setAudioMeter(dBleft, dBright,
                                                         recDBleft, recDBright);
             }
 
         } else {
-			// Not audio or softsynth
+            // Not audio or softsynth
             if (info.level == 0)
                 continue;
 
             if (getDocument()->getSequenceManager()->getTransportStatus()
-                    != STOPPED) {
+                != STOPPED) {
 
-				// The information in 'info' is specific for this instrument, not
-				//  for this track.
-				//m_trackEditor->getTrackButtons()->slotSetTrackMeter
-				//	(info.level / 127.0, track->getPosition());
+                // The information in 'info' is specific for this instrument, not
+                //  for this track.
+                //m_trackEditor->getTrackButtons()->slotSetTrackMeter
+                //	(info.level / 127.0, track->getPosition());
                 m_trackEditor->getTrackButtons()->slotSetMetersByInstrument
                 	(info.level / 127.0, instrumentId);
             }

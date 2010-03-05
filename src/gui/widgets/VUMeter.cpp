@@ -65,6 +65,9 @@ VUMeter::VUMeter(QWidget *parent,
     m_stereo(stereo),
     m_hasRecord(hasRecord)
 {
+    setAttribute(Qt::WA_PaintOnScreen);
+    setAttribute(Qt::WA_OpaquePaintEvent);
+
     // Work out if we need peak hold first
     //
     switch (m_type) {
@@ -214,6 +217,9 @@ VUMeter::setLevel(double leftLevel, double rightLevel, bool record)
     short &ll = (record ? m_recordLevelLeft : m_levelLeft);
     short &lr = (record ? m_recordLevelRight : m_levelRight);
 
+    short pll = ll;
+    short plr = lr;
+
     switch (m_type) {
 
     case AudioPeakHoldShort:
@@ -307,8 +313,8 @@ VUMeter::setLevel(double leftLevel, double rightLevel, bool record)
         }
     }
 
-    if (m_active) {
-        repaint();
+    if (m_active && (ll != pll || lr != plr)) {
+        update();
     }
 }
 
@@ -330,6 +336,8 @@ VUMeter::paintEvent(QPaintEvent *e)
 {
     //    RG_DEBUG << "VUMeter::paintEvent - height = " << height() << endl;
     QPainter paint(this);
+
+    paint.setRenderHint(QPainter::Antialiasing, false);
 
     int w = width() - 1;
     int h = height() - 1;
@@ -359,6 +367,7 @@ VUMeter::paintEvent(QPaintEvent *e)
         else {
             meterStop();
             drawFrame(&paint);
+            paint.end();
             QLabel::paintEvent(e);
         }
     } else {
@@ -370,6 +379,7 @@ VUMeter::paintEvent(QPaintEvent *e)
         } else {
             meterStop();
             drawFrame(&paint);
+            paint.end();
             QLabel::paintEvent(e);			
 	}
     }
@@ -647,7 +657,7 @@ VUMeter::slotReduceLevelRight()
         meterStop();
     }
 
-    repaint();
+    update();
 }
 
 void
@@ -681,7 +691,7 @@ VUMeter::slotReduceLevelLeft()
         meterStop();
     }
 
-    repaint();
+    update();
 }
 
 void
