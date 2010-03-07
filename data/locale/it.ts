@@ -5546,7 +5546,8 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location filename="../InstrumentStrings.cpp" line="118"/>
         <source>Descant pommer</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Bombarda soprana</translatorcomment>
+        <translation></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="119"/>
@@ -5632,42 +5633,42 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location filename="../InstrumentStrings.cpp" line="135"/>
         <source>Sopranino sarrusophone</source>
-        <translation type="unfinished"></translation>
+        <translation>Sarrusophone sopranino</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="136"/>
         <source>Soprano sarrusophone</source>
-        <translation type="unfinished"></translation>
+        <translation>Sarrusophone soprano</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="137"/>
         <source>Alto sarrusophone</source>
-        <translation type="unfinished"></translation>
+        <translation>Sarrusophone alto</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="138"/>
         <source>Tenor sarrusophone</source>
-        <translation type="unfinished"></translation>
+        <translation>Sarrusophone tenore</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="139"/>
         <source>Baritone sarrusophone</source>
-        <translation type="unfinished"></translation>
+        <translation>Sarrusophone baritono</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="140"/>
         <source>Bass sarrusophone</source>
-        <translation type="unfinished"></translation>
+        <translation>Sarrusophone basso</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="141"/>
         <source>Contrabass sarrusophone</source>
-        <translation type="unfinished"></translation>
+        <translation>Sarrusophone contrabbasso</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="142"/>
         <source>Bagpipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Cornamusa scozzese</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="143"/>
@@ -5732,7 +5733,7 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location filename="../InstrumentStrings.cpp" line="155"/>
         <source>Sopranino chalumeau</source>
-        <translation type="unfinished"></translation>
+        <translation>Chalumeau sopranino</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="156"/>
@@ -8073,32 +8074,32 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location filename="../AutoloadStrings.cpp" line="293"/>
         <source>Mute Cuica</source>
-        <translation type="unfinished"></translation>
+        <translation>Cuica muta</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="294"/>
         <source>Open Cuica</source>
-        <translation type="unfinished"></translation>
+        <translation>Cuica aperta</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="295"/>
         <source>Mute Triangle</source>
-        <translation type="unfinished"></translation>
+        <translation>Triangolo muto</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="296"/>
         <source>Open Triangle</source>
-        <translation type="unfinished"></translation>
+        <translation>Triangolo aperto</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="297"/>
         <source>MIDI input system device</source>
-        <translation type="unfinished"></translation>
+        <translation>Dispositivo MIDI input di sistema</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="298"/>
         <source>&amp;lt;none&amp;gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;lt;nessuno&amp;gt;</translation>
     </message>
     <message>
         <location filename="../../src/base/Studio.cpp" line="56"/>
@@ -10208,22 +10209,22 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location filename="../AutoloadStrings.cpp" line="727"/>
         <source>Red pastel</source>
-        <translation type="unfinished"></translation>
+        <translation>Pastello rosso</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="728"/>
         <source>Green pastel</source>
-        <translation type="unfinished"></translation>
+        <translation>Pastello verde</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="729"/>
         <source>Orange pastel</source>
-        <translation type="unfinished"></translation>
+        <translation>Pastello arancione</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="730"/>
         <source>Yellow pastel</source>
-        <translation type="unfinished"></translation>
+        <translation>Pastello giallo</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="726"/>
@@ -12033,7 +12034,7 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1088"/>
         <source>&lt;new bank %1&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;nuovo banco %1&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1592"/>
@@ -12558,7 +12559,7 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
 <context>
     <name>Rosegarden::CompositionView</name>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/CompositionView.cpp" line="332"/>
+        <location filename="../../src/gui/editors/segment/compositionview/CompositionView.cpp" line="330"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
@@ -20187,9 +20188,9 @@ affinché sia ancora leggibile nelle prossime versioni.</translation>
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="598"/>
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="737"/>
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="814"/>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1534"/>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1539"/>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1560"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1532"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1537"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1558"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
@@ -20219,28 +20220,28 @@ Guarda Impostazioni -&gt; Configura Rosegarden -&gt; Audio.</translation>
         <translation type="obsolete">Importazione di un file audio esterno</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1503"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1501"/>
         <source>importing an audio file that needs to be converted or resampled</source>
         <translation>importando un file audio che deve essere convertito o ricampionato</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1508"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1506"/>
         <source>Adding audio file...</source>
         <translation>Aggiunta file audio...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1533"/>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1538"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1531"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1536"/>
         <source>Can&apos;t add dropped file. </source>
         <translation>Non posso aggiungere il file rilasciato.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1549"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1547"/>
         <source>Generating audio preview...</source>
         <translation>Generazione anteprima audio...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1559"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1557"/>
         <source>Try copying this file to a directory where you have write permission and re-add it</source>
         <translation>Prova a copiare questo file in una directory dove hai i diritti di scrittura e riaggiungilo</translation>
     </message>
@@ -23488,22 +23489,22 @@ Vuoi impostarlo adesso?</translation>
 <context>
     <name>Rosegarden::TrackEditor</name>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="680"/>
+        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="681"/>
         <source>Turn Repeating Segment into Real Copies</source>
         <translation>Trasforma il segmento ripetuto in copie</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="682"/>
+        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="683"/>
         <source>Turn Repeating Segments into Real Copies</source>
         <translation>Trasforma i segmenti ripetuti in copie</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="904"/>
+        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="905"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="905"/>
+        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="906"/>
         <source>Rosegarden cannot accept dropped files of this type.</source>
         <translation>Rosegarden non può accettare i files caduti di questo tipo.</translation>
     </message>
@@ -23919,43 +23920,43 @@ Vuoi impostarlo adesso?</translation>
 <context>
     <name>Rosegarden::TransportDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="95"/>
+        <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="96"/>
         <source>Rosegarden Transport</source>
         <translation>Trasporto di Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="923"/>
-        <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="983"/>
+        <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="873"/>
+        <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="933"/>
         <source>PITCH WHEEL</source>
         <translation>ROTELLA DELL&apos;ALTEZZA</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="927"/>
-        <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="987"/>
+        <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="877"/>
+        <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="937"/>
         <source>CONTROLLER</source>
         <translation>CONTROLLER</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="931"/>
-        <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="991"/>
+        <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="881"/>
+        <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="941"/>
         <source>PROG CHNGE</source>
         <translation>CAMBIO PROG</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="936"/>
-        <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="996"/>
+        <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="886"/>
+        <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="946"/>
         <source>PRESSURE</source>
         <translation>PRESSIONE</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="940"/>
-        <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="1000"/>
+        <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="890"/>
+        <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="950"/>
         <source>SYS MESSAGE</source>
         <translation>MESSAGGIO SIST</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="960"/>
-        <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="1020"/>
+        <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="910"/>
+        <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="970"/>
         <source>NO EVENTS</source>
         <translation>NESSUN EVENTO</translation>
     </message>
