@@ -58,6 +58,14 @@ signals:
     void trackRecord();
     void undo();
     void redo();
+    void aboutrg();
+    void editInEventList();
+    void editInMatrix();
+    void editInPercussionMatrix();
+    void editAsNotation();
+    void quit();
+    void closeTransport();
+    void toggleTransportVisibility();
     
 private slots:
     void slotExecute(const char *);
@@ -82,8 +90,16 @@ private:
     	cmd_trackUp,
     	cmd_trackMute,
     	cmd_trackRecord,
-    	cmd_undo,
-    	cmd_redo
+	cmd_undo,
+    	cmd_redo,
+	cmd_aboutrg,
+	cmd_editInEventList,
+	cmd_editInMatrix,
+	cmd_editInPercussionMatrix,
+	cmd_editAsNotation,
+	cmd_quit,
+	cmd_closeTransport,
+	cmd_toggleTransportVisibility
     };
     
     

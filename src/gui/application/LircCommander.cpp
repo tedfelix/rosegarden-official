@@ -72,19 +72,43 @@ LircCommander::LircCommander(LircClient *lirc, RosegardenMainWindow *rgGUIApp)
             CommandHistory::getInstance(), SLOT(undo()) );
     connect(this, SIGNAL(redo()),
             CommandHistory::getInstance(), SLOT(redo()) );
+    connect(this, SIGNAL(aboutrg()),
+            m_rgGUIApp, SLOT(slotHelpAbout()) );
+    connect(this, SIGNAL(editInMatrix()),
+            m_rgGUIApp, SLOT(slotEditInMatrix()) );
+    connect(this, SIGNAL(editInPercussionMatrix()),
+            m_rgGUIApp, SLOT(slotEditInPercussionMatrix()) );
+    connect(this, SIGNAL(editInEventList()),
+            m_rgGUIApp, SLOT(slotEditInEventList()) );
+    connect(this, SIGNAL(editAsNotation()),
+            m_rgGUIApp, SLOT(slotEditAsNotation()) );
+    connect(this, SIGNAL(quit()),
+            m_rgGUIApp, SLOT(slotQuit()) );
+    connect(this, SIGNAL(closeTransport()),
+            m_rgGUIApp, SLOT(slotCloseTransport()) );
+    connect(this, SIGNAL(toggleTransportVisibility()),
+            m_rgGUIApp, SLOT(slotToggleTransportVisibility()) );
 }
 
 LircCommander::command LircCommander::commands[] =
     {
+        { "ABOUTRG",            cmd_aboutrg },
+        { "CLOSETRANSPORT",     cmd_closeTransport },
+        { "EDITEVLIST",         cmd_editInEventList },
+        { "EDITMATRIX",         cmd_editInMatrix },
+        { "EDITNOTATION",       cmd_editAsNotation },
+        { "EDITPMATRIX",        cmd_editInPercussionMatrix },
         { "FORWARD",            cmd_fastForward },
         { "FORWARDTOEND",       cmd_fastForwardToEnd },
         { "PLAY",               cmd_play },
         { "PUNCHINRECORD",      cmd_toggleRecord },
+        { "QUIT",               cmd_quit },
         { "RECORD",             cmd_record },
         { "REDO",               cmd_redo },
         { "REWIND",             cmd_rewind },
         { "REWINDTOBEGINNING",  cmd_rewindToBeginning },
         { "STOP",               cmd_stop },
+        { "TOGGLETRANSPORT",    cmd_toggleTransportVisibility },
         { "TRACK+",             cmd_trackUp },
         { "TRACK-",             cmd_trackDown },
         { "TRACK-MUTE",         cmd_trackMute },
@@ -155,6 +179,30 @@ void LircCommander::slotExecute(const char *command)
             break;
         case cmd_redo:
             emit redo(); 
+            break;
+        case cmd_aboutrg:
+            emit aboutrg(); 
+            break;
+        case cmd_editInEventList:
+            emit editInEventList(); 
+            break;
+        case cmd_editInMatrix:
+            emit editInMatrix(); 
+            break;
+        case cmd_editInPercussionMatrix:
+            emit editInPercussionMatrix(); 
+            break;
+        case cmd_editAsNotation:
+            emit editAsNotation(); 
+            break;
+        case cmd_quit:
+            emit quit(); 
+            break;
+        case cmd_closeTransport:
+            emit closeTransport(); 
+            break;
+        case cmd_toggleTransportVisibility:
+            emit toggleTransportVisibility(); 
             break;
         default:
             RG_DEBUG <<  "LircCommander::slotExecute: unhandled command " << command << endl;
