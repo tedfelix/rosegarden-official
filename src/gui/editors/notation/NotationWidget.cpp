@@ -923,7 +923,8 @@ NotationWidget::slotEnsureLastMouseMoveVisible()
     m_inMove = true;
     QPointF pos = m_lastMouseMoveScenePos;
     if (m_scene) m_scene->constrainToSegmentArea(pos);
-    m_view->ensureVisible(QRectF(pos, pos));
+    // Reduce margin from 5O (default) to 10 pixels to fix bug #2954074
+    m_view->ensureVisible(QRectF(pos, pos), 10, 10);
     m_inMove = false;
 }    
 
