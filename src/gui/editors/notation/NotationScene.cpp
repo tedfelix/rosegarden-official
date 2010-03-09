@@ -526,10 +526,6 @@ NotationScene::setupMouseEvent(QGraphicsSceneMouseEvent *e,
     
     if (nme.staff) {
 
-        if (nme.buttons != Qt::NoButton) {
-            setCurrentStaff(nme.staff);
-        }
-
         Event *clefEvent = 0, *keyEvent = 0;
         NotationElementList::iterator i =
             nme.staff->getElementUnderSceneCoords(sx, sy, clefEvent, keyEvent);
@@ -651,6 +647,7 @@ NotationScene::mousePressEvent(QGraphicsSceneMouseEvent *e)
 {
     NotationMouseEvent nme;
     setupMouseEvent(e, nme);
+    if (nme.staff) setCurrentStaff(nme.staff);
     emit mousePressed(&nme);
 }
 
@@ -1594,37 +1591,32 @@ NotationScene::playNote(Segment &segment, int pitch, int velocity)
 bool
 NotationScene::constrainToSegmentArea(QPointF &scenePos)
 {
-    //!!!
-#ifdef NOT_JUST_YET
     bool ok = true;
+    
+    NotationStaff *currentStaff = getCurrentStaff();
+    if (!currentStaff) return ok;
 
-    int pitch = 127 - (lrint(scenePos.y()) / (m_resolution + 1));
-    if (pitch < 0) {
+    QRectF area = currentStaff->getSceneArea();
+
+    double y = scenePos.y();
+    if (y < area.top()) {
+        scenePos.setY(area.top());
         ok = false;
-        scenePos.setY(127 * (m_resolution + 1));
-    } else if (pitch > 127) {
+    } else if (y > area.bottom()) {
+        scenePos.setY(area.bottom());
         ok = false;
-        scenePos.setY(0);
+    }
+    
+    double x = scenePos.x();
+    if (x < area.left()) {
+        scenePos.setX(area.left());
+        ok = false;
+    } else if (x > area.right()) {
+        scenePos.setX(area.right());
+        ok = false;
     }
 
-    timeT t = m_scale->getTimeForX(scenePos.x());
-    timeT start = 0, end = 0;
-    for (size_t i = 0; i < m_segments.size(); ++i) {
-        timeT t0 = m_segments[i]->getClippedStartTime();
-        timeT t1 = m_segments[i]->getEndMarkerTime();
-        if (i == 0 || t0 < start) start = t0;
-        if (i == 0 || t1 > end) end = t1; 
-    }
-    if (t < start) {
-        ok = false;
-        scenePos.setX(m_scale->getXForTime(start));
-    } else if (t > end) {
-        ok = false;
-        scenePos.setX(m_scale->getXForTime(end));
-    }
     return ok;
-#endif
-    return true;
 }
 
 }

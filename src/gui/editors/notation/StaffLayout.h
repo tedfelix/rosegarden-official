@@ -502,6 +502,11 @@ public:
     // the staff-drawing process.
     virtual void drawStaffName();
 
+    /**
+     * Return the smaller rectangle (in scene coords) enclosing the
+     * whole segment area.
+     */
+    virtual QRectF getSceneArea();
 
 public:
     // This should not really be public -- it should be one of the

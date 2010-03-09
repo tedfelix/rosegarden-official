@@ -1092,4 +1092,81 @@ StaffLayout::positionAllElements()
                      m_viewSegment->getSegment().getEndTime());
 }
 
+QRectF
+StaffLayout::getSceneArea()
+{
+    double top, bottom;
+    double left, right;
+    int firstRow, lastRow;
+
+    switch (m_pageMode) {
+
+    case ContinuousPageMode:
+
+        firstRow = getRowForLayoutX(m_startLayoutX);
+        lastRow = getRowForLayoutX(m_endLayoutX);
+
+        if (lastRow != firstRow) {
+            left = m_x;
+            right = m_x + m_pageWidth;
+        } else {
+            left = getSceneXForLayoutX(m_startLayoutX);
+            right = getSceneXForLayoutX(m_endLayoutX);
+        }
+
+        top = getSceneYForTopOfStaff(firstRow);        
+        bottom = getSceneYForTopOfStaff(lastRow) + getHeightOfRow();
+
+        break;
+
+    case MultiPageMode:
+
+        firstRow = getRowForLayoutX(m_startLayoutX);
+        lastRow = getRowForLayoutX(m_endLayoutX);
+
+        if (lastRow == firstRow) {
+            left = getSceneXForLayoutX(m_startLayoutX);
+            right = getSceneXForLayoutX(m_endLayoutX);
+            top = getSceneYForTopOfStaff(firstRow);        
+            bottom = getSceneYForTopOfStaff(lastRow) + getHeightOfRow();
+        } else {
+
+            int firstPage = firstRow / getRowsPerPage();
+            int lastPage = lastRow / getRowsPerPage();
+
+            if (lastPage == firstPage) {
+                left = getSceneXForLeftOfRow(firstRow);
+                right = getSceneXForRightOfRow(lastRow);
+
+                top = getSceneYForTopOfStaff(firstRow);
+                bottom = getSceneYForTopOfStaff(lastRow) + getHeightOfRow();
+            } else {
+
+              /// TODO : Two special cases should be processed here 
+              ///          1 - Only one row on the first page
+              ///          2 - Only one row on the last page
+
+                left = getSceneXForLeftOfRow(firstRow);
+                right = getSceneXForRightOfRow(lastRow);
+
+                top = m_y;
+                bottom = m_y + getHeightOfRow()
+                         + getRowsPerPage() * m_rowSpacing;
+            }
+        }
+
+        break;
+
+    case LinearMode:
+    default:
+      
+        left = m_startLayoutX;
+        right = m_endLayoutX;
+        top = getSceneYForTopOfStaff();
+        bottom = top + getHeightOfRow();
+    }
+
+    return QRectF(left, top, right - left, bottom - top);
+}
+
 }
