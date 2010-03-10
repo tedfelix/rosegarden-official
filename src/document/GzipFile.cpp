@@ -51,7 +51,7 @@ GzipFile::readFromFile(QString file, QString &text)
     int got = 0;
 
     while ((got = gzread(fd, buffer, 100000)) > 0) {
-        ba.append(buffer, got);
+        ba.append(QByteArray(buffer, got));
     }
 
     bool ok = gzeof(fd);
