@@ -1393,13 +1393,15 @@ RosegardenMainWindow::createDocument(QString filePath, ImportType importType)
         else if (fileMimeType->objectName() == "audio/x-rosegarden")
             */
         
-        if(filePath.endsWith(".mid") || filePath.endsWith(".midi"))
+        QString testFileType = filePath.toLower();
+        
+        if(testFileType.endsWith(".mid") || testFileType.endsWith(".midi"))
                 importType = ImportMIDI;
-        else if (filePath.endsWith(".rg"))
+        else if (testFileType.endsWith(".rg"))
             importType = ImportRG4;
-        else if (filePath.endsWith(".rose"))
+        else if (testFileType.endsWith(".rose"))
             importType = ImportRG21;
-        else if (filePath.endsWith(".h2song"))
+        else if (testFileType.endsWith(".h2song"))
             importType = ImportHydrogen;
     }
 
