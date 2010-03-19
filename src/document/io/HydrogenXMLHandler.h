@@ -26,6 +26,7 @@
 #include <QString>
 #include <vector>
 #include <qxml.h>
+#include "misc/Version.h"
 
 #include <QCoreApplication>
 
@@ -64,6 +65,16 @@ public:
     virtual bool characters(const QString& ch);
 
     virtual bool endDocument ();
+
+private:
+    virtual bool startElement_093(const QString& namespaceURI,
+                                  const QString& localName,
+                                  const QString& qName,
+                                  const QXmlAttributes& atts);
+    virtual bool endElement_093(const QString& namespaceURI,
+                                const QString& localName,
+                                const QString& qName);
+    virtual bool characters_093(const QString& ch);
 
 protected:
     Composition *m_composition;

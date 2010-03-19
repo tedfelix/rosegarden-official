@@ -125,13 +125,15 @@ HydrogenXMLHandler::startDocument()
     return true;
 }
 
-bool
-HydrogenXMLHandler::startElement(const QString& /*namespaceURI*/,
-                                 const QString& /*localName*/,
-                                 const QString& qName,
-                                 const QXmlAttributes& /*atts*/)
+
+bool HydrogenXMLHandler::startElement_093(const QString& /*namespaceURI*/,
+                                          const QString& /*localName*/,
+                                          const QString& qName,
+                                          const QXmlAttributes& /*atts*/)
 {
     QString lcName = qName.toLower();
+
+    RG_DEBUG << "HydrogenXMLHandler::startElement - " << lcName << endl;
 
     if (lcName == "note") {
 
@@ -163,9 +165,30 @@ HydrogenXMLHandler::startElement(const QString& /*namespaceURI*/,
 }
 
 bool
-HydrogenXMLHandler::endElement(const QString& /*namespaceURI*/,
-                               const QString& /*localName*/,
-                               const QString& qName)
+HydrogenXMLHandler::startElement(const QString& /*namespaceURI*/,
+                                 const QString& /*localName*/,
+                                 const QString& qName,
+                                 const QXmlAttributes& /*atts*/)
+{
+ bool rc=false;
+ QXmlAttributes DummyAttr;
+ QString DummyQString;
+
+ if (m_version=="") {
+   /* no version yet, use 093 */
+   rc=startElement_093(DummyQString, DummyQString, qName, DummyAttr);
+ }
+ else {
+   /* select version dependant function */
+   rc=startElement_093(DummyQString, DummyQString, qName, DummyAttr);
+ }
+ return rc;
+}
+
+bool
+HydrogenXMLHandler::endElement_093(const QString& /*namespaceURI*/,
+                                   const QString& /*localName*/,
+                                   const QString& qName)
 {
     QString lcName = qName.toLower();
 
@@ -278,13 +301,59 @@ HydrogenXMLHandler::endElement(const QString& /*namespaceURI*/,
 
         m_inSequence = false;
 
+    } else if (lcName == "version") {
+        // up to now we can only read files of version 0.9.3 and earlier
+        // there was an xml format change  in 0.9.4
+        Version canHandleVersion, versionInFile;
+
+        canHandleVersion.qstrtoversion("0.9.3");
+        versionInFile.qstrtoversion(strtoqstr(m_version));
+
+        RG_DEBUG << "HydrogenXMLHandler::endElement version " << m_version << endl;
+        RG_DEBUG << "ch_major: " << canHandleVersion.Major() << 
+                    "  ch_minor: " << canHandleVersion.Minor() << 
+                    "  ch_micro: " << canHandleVersion.Micro() << endl;
+        RG_DEBUG << "if_major: " << versionInFile.Major() << 
+                    "  if_minor: " << versionInFile.Minor() << 
+                    "  if_micro: " << versionInFile.Micro() << endl;
+
+        bool bCanHandleFile=(versionInFile<=canHandleVersion);
+
+        if (bCanHandleFile==true) {
+          // go on, this is a good version 
+          RG_DEBUG << "HydrogenXMLHandler::endElement version: version ok " << endl;
+        }
+        else {
+          // error 
+          RG_DEBUG << "HydrogenXMLHandler::endElement version: bad version (file created with hydrogen version " << m_version << " can not be parsed)" << endl;
+          return false;
+        }
     }
 
     return true;
 }
 
 bool
-HydrogenXMLHandler::characters(const QString& chars)
+HydrogenXMLHandler::endElement(const QString& /*namespaceURI*/,
+                               const QString& /*localName*/,
+                               const QString& qName)
+{
+ bool rc=false;
+ QString DummyQString;
+
+ if (m_version=="") {
+   /* no version yet, use 093 */
+   rc=endElement_093(DummyQString, DummyQString, qName);
+ }
+ else {
+   /* select version dependant function */
+   rc=endElement_093(DummyQString, DummyQString, qName);
+ }
+ return rc;
+}
+
+bool
+HydrogenXMLHandler::characters_093(const QString& chars)
 {
     QString ch = chars.trimmed();
     if (ch == "")
@@ -383,6 +452,22 @@ HydrogenXMLHandler::characters(const QString& chars)
     }
 
     return true;
+}
+
+bool
+HydrogenXMLHandler::characters(const QString& chars)
+{
+ bool rc=false;
+
+ if (m_version=="") {
+   /* no version yet, use 093 */
+   rc=characters_093(chars);
+ }
+ else {
+   /* select version dependant function */
+   rc=characters_093(chars);
+ }
+ return rc;
 }
 
 bool
