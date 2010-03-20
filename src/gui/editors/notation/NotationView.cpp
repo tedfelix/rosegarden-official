@@ -72,6 +72,7 @@
 #include "commands/edit/EventEditCommand.h"
 #include "commands/edit/CollapseNotesCommand.h"
 #include "commands/edit/AddDotCommand.h"
+#include "commands/edit/SetNoteTypeCommand.h"
 
 #include "commands/segment/AddTempoChangeCommand.h"
 #include "commands/segment/AddTimeSignatureAndNormalizeCommand.h"
@@ -807,6 +808,26 @@ NotationView::setupActions()
     // ensure both get carried across somehow
     createAction("add_dot", SLOT(slotAddDot()));
     createAction("add_notation_dot", SLOT(slotAddDotNotationOnly()));
+
+    //set duration of notes by CTRL+<number>
+    createAction("set_note_type_doublewhole",SLOT(slotSetNoteType()));
+    createAction("set_note_type_whole",SLOT(slotSetNoteType()));
+    createAction("set_note_type_half",SLOT(slotSetNoteType()));
+    createAction("set_note_type_quarter",SLOT(slotSetNoteType()));
+    createAction("set_note_type_eighth",SLOT(slotSetNoteType()));
+    createAction("set_note_type_sixteenth",SLOT(slotSetNoteType()));
+    createAction("set_note_type_thirtysecond",SLOT(slotSetNoteType()));
+    createAction("set_note_type_sixtyfourth",SLOT(slotSetNoteType()));
+
+    //set duration of notes by CTRL+ALT+<number>
+    createAction("set_note_type_notation_doublewhole",SLOT(slotSetNoteTypeNotationOnly()));
+    createAction("set_note_type_notation_whole",SLOT(slotSetNoteTypeNotationOnly()));
+    createAction("set_note_type_notation_half",SLOT(slotSetNoteTypeNotationOnly()));
+    createAction("set_note_type_notation_quarter",SLOT(slotSetNoteTypeNotationOnly()));
+    createAction("set_note_type_notation_eighth",SLOT(slotSetNoteTypeNotationOnly()));
+    createAction("set_note_type_notation_sixteenth",SLOT(slotSetNoteTypeNotationOnly()));
+    createAction("set_note_type_notation_thirtysecond",SLOT(slotSetNoteTypeNotationOnly()));
+    createAction("set_note_type_notation_sixtyfourth",SLOT(slotSetNoteTypeNotationOnly()));
 
     //JAS insert note section is a rewrite
     //JAS from EditView::createInsertPitchActionMenu()
@@ -4302,6 +4323,55 @@ NotationView::slotAddDotNotationOnly()
     TmpStatusMsg msg(tr("Adding dot..."), this);
     CommandHistory::getInstance()->addCommand
             (new AddDotCommand(*selection, true));
+}
+
+
+void
+NotationView::slotSetNoteType()
+{
+    QObject *s = sender();
+    QString name = s->objectName();
+    int note=Note::WholeNote;
+
+    EventSelection *selection = getSelection();
+    if (!selection) return;
+    TmpStatusMsg msg(tr("Set Note Type..."), this);
+
+    if (name == "set_note_type_doublewhole") note=Note::DoubleWholeNote;
+    else if (name == "set_note_type_whole") note=Note::WholeNote;
+    else if (name == "set_note_type_half") note=Note::HalfNote;
+    else if (name == "set_note_type_quarter") note=Note::QuarterNote;
+    else if (name == "set_note_type_eighth") note=Note::EighthNote;
+    else if (name == "set_note_type_sixteenth") note=Note::SixteenthNote;
+    else if (name == "set_note_type_thirtysecond") note=Note::ThirtySecondNote;
+    else if (name == "set_note_type_sixtyfourth") note=Note::SixtyFourthNote;
+
+    CommandHistory::getInstance()->addCommand
+            (new SetNoteTypeCommand(*selection, note, false));
+}
+
+void
+NotationView::slotSetNoteTypeNotationOnly()
+{
+    QObject *s = sender();
+    QString name = s->objectName();
+    int note=Note::WholeNote;
+
+    EventSelection *selection = getSelection();
+    if (!selection) return;
+    TmpStatusMsg msg(tr("Set Note Type notation only..."), this);
+
+    if (name == "set_note_type_notation_doublewhole") note=Note::DoubleWholeNote;
+    else if (name == "set_note_type_notation_whole") note=Note::WholeNote;
+    else if (name == "set_note_type_notation_half") note=Note::HalfNote;
+    else if (name == "set_note_type_notation_quarter") note=Note::QuarterNote;
+    else if (name == "set_note_type_notation_eighth") note=Note::EighthNote;
+    else if (name == "set_note_type_notation_sixteenth") note=Note::SixteenthNote;
+    else if (name == "set_note_type_notation_thirtysecond") note=Note::ThirtySecondNote;
+    else if (name == "set_note_type_notation_sixtyfourth") note=Note::SixtyFourthNote;
+
+    CommandHistory::getInstance()->addCommand
+            (new SetNoteTypeCommand(*selection, note, true));
 }
 
 void

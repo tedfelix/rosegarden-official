@@ -303,6 +303,22 @@
       <Action name="de_counterpoint" text="Split-and-Tie Overlapping &amp;Chords" icon="transforms-decounterpoint" />
       <Action name="add_dot" text="Cycle &amp;Dots" icon="cycle-dots" shortcut="Ctrl+." />
       <Action name="add_notation_dot" text="Cycle Dots With&amp;out Duration Change" shortcut="Ctrl+Alt+." />
+      <Action name="set_note_type_doublewhole" text="Double Whole Note" shortcut="Ctrl+5"/>
+      <Action name="set_note_type_whole" text="Whole Note" shortcut="Ctrl+1"/>
+      <Action name="set_note_type_half" text="Half Note" shortcut="Ctrl+2"/>
+      <Action name="set_note_type_quarter" text="Quarter Note" shortcut="Ctrl+4"/>
+      <Action name="set_note_type_eighth" text="Eighth Note" shortcut="Ctrl+8"/>
+      <Action name="set_note_type_sixteenth" text="Sixteenth Note" shortcut="Ctrl+6"/>
+      <Action name="set_note_type_thirtysecond" text="Thirty-Second Note" shortcut="Ctrl+3"/>
+      <Action name="set_note_type_sixtyfourth" text="Sixty-Fourth Note" shortcut="Ctrl+0"/>
+      <Action name="set_note_type_notation_doublewhole" text="Double Whole Note (Without Duration Change)" shortcut="Ctrl+Alt+5"/>
+      <Action name="set_note_type_notation_whole" text="Whole Note (Without Duration Change)" shortcut="Ctrl+Alt+9"/>
+      <Action name="set_note_type_notation_half" text="Half Note (Without Duration Change)" shortcut="Ctrl+Alt+2"/>
+      <Action name="set_note_type_notation_quarter" text="Quarter Note (Without Duration Change)" shortcut="Ctrl+Alt+4"/>
+      <Action name="set_note_type_notation_eighth" text="Eighth Note (Without Duration Change)" shortcut="Ctrl+Alt+8"/>
+      <Action name="set_note_type_notation_sixteenth" text="Sixteenth Note (Without Duration Change)" shortcut="Ctrl+Alt+6"/>
+      <Action name="set_note_type_notation_thirtysecond" text="Thirty-Second Note (Without Duration Change)" shortcut="Ctrl+Alt+3"/>
+      <Action name="set_note_type_notation_sixtyfourth" text="Sixty-Fourth Note (Without Duration Change)" shortcut="Ctrl+Alt+0"/>
     </Menu>
     <Separator/>
     <Menu name="quantize_notes">

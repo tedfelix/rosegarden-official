@@ -166,6 +166,12 @@ protected slots:
     void slotAddDotNotationOnly();
 
     /**
+     * Set notes of different types
+     */
+    void slotSetNoteType();
+    void slotSetNoteTypeNotationOnly();
+
+    /**
      * Process calls to insert a notes.
      */
     void slotNoteAction();
