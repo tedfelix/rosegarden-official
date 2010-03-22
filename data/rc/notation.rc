@@ -140,7 +140,7 @@
     <Action name="transpose_segment" text="Transpose by &amp;Interval..." />
     <Action name="switch_preset" text="&amp;Convert Notation for..." />
   <Separator/>
-    <Action name="add_layer" text="Add &amp;Layer" icon="add-layer" shortcut="Ctrl+Alt+1" />
+    <Action name="add_layer" text="Add &amp;Layer" icon="add-layer" shortcut="Ctrl+Alt++" />
   </Menu>
 
   <Menu name="Notes">
@@ -312,7 +312,7 @@
       <Action name="set_note_type_thirtysecond" text="Thirty-Second Note" shortcut="Ctrl+3"/>
       <Action name="set_note_type_sixtyfourth" text="Sixty-Fourth Note" shortcut="Ctrl+0"/>
       <Action name="set_note_type_notation_doublewhole" text="Double Whole Note (Without Duration Change)" shortcut="Ctrl+Alt+5"/>
-      <Action name="set_note_type_notation_whole" text="Whole Note (Without Duration Change)" shortcut="Ctrl+Alt+9"/>
+      <Action name="set_note_type_notation_whole" text="Whole Note (Without Duration Change)" shortcut="Ctrl+Alt+1"/>
       <Action name="set_note_type_notation_half" text="Half Note (Without Duration Change)" shortcut="Ctrl+Alt+2"/>
       <Action name="set_note_type_notation_quarter" text="Quarter Note (Without Duration Change)" shortcut="Ctrl+Alt+4"/>
       <Action name="set_note_type_notation_eighth" text="Eighth Note (Without Duration Change)" shortcut="Ctrl+Alt+8"/>
