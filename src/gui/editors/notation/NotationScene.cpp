@@ -925,6 +925,15 @@ NotationScene::segmentRemoved(const Composition *c, Segment *s)
          i != m_staffs.end(); ++i) {
         if (s == &(*i)->getSegment()) {
             found = true;
+            
+            // Fix bug #2960243:
+            // If the segment going to be delete is current, set the
+            // first segment as the current one. This avoid a crash when the 
+            // segment to be deleted is the last one in the notation.
+            if (getCurrentSegment() == s) {
+                setCurrentStaff(*m_staffs.begin());
+            }
+            
             emit segmentDeleted(s);
             delete *i;
             m_staffs.erase(i);

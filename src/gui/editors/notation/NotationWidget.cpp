@@ -417,8 +417,10 @@ NotationWidget::setSegments(RosegardenDocument *document,
     connect(m_scene, SIGNAL(mouseDoubleClicked(const NotationMouseEvent *)),
             this, SLOT(slotDispatchMouseDoubleClick(const NotationMouseEvent *)));
 
+    // Bug #2960243: the Qt::QueuedConnection flag is mandatory to avoid
+    // a crash after deleting the notation scene from inside its own code.
     connect(m_scene, SIGNAL(segmentDeleted(Segment *)),
-            this, SIGNAL(segmentDeleted(Segment *)));
+            this, SIGNAL(segmentDeleted(Segment *)), Qt::QueuedConnection);
 
     connect(m_scene, SIGNAL(currentStaffChanged()),
             this, SLOT(slotUpdatePointerPosition()));
