@@ -3117,7 +3117,10 @@ NotationView::slotSegmentDeleted(Segment *s)
             NOTATION_DEBUG << "NotationView::slotSegmentDeleted: Erased segment from vector, have " << m_segments.size() << " segment(s) remaining" << endl;
 
             // Fix bug #2960243:
-            // Regenerate the whole notation widget when a segment is deleted.
+            // When a segment is deleted : remove the selection rect 
+            NotationTool * tool =  m_notationWidget->getCurrentTool();
+            if (tool) tool->stow();
+            // and regenerate the whole notation widget .
             m_notationWidget->setSegments(m_document, m_segments);
             
             return;
