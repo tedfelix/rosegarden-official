@@ -59,7 +59,7 @@
            </size>
           </property>
           <property name="toolTip">
-           <string>&lt;qt&gt;&lt;p&gt;Create new playback devices here. Click the device name to change it. Select a device here and connect it to a MIDI output port by clicking on a port to the right.&lt;/p&gt;&lt;/qt&gt;</string>
+           <string>&lt;qt&gt;&lt;p&gt;Create new playback devices here. Double-click the device name to change it. Select a device here and connect it to a MIDI output port by clicking on a port to the right.&lt;/p&gt;&lt;/qt&gt;</string>
           </property>
           <property name="autoFillBackground">
            <bool>false</bool>
