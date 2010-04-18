@@ -229,6 +229,13 @@ public:
     ProgressBar *getCPUBar() { return m_cpuBar; }
 
     /**
+     * Get a device manager object
+     */
+    DeviceManagerDialog *getDeviceManager() { return m_deviceManager; }
+
+
+
+    /**
      * Equivalents of the GUI slots, for DCOP use
      */
     virtual void fileNew()    { slotFileNew(); }

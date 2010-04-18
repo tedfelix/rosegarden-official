@@ -30,6 +30,7 @@ namespace Rosegarden
 {
 
 class Studio;
+class RosegardenMainWindow;
 
 
 class CreateOrDeleteDeviceCommand : public NamedCommand

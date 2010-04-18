@@ -24,6 +24,8 @@
 #include "base/MidiDevice.h"
 #include "base/Studio.h"
 #include "sequencer/RosegardenSequencer.h"
+#include "gui/studio/DeviceManagerDialog.h"
+#include "gui/application/RosegardenMainWindow.h"
 
 #include <QByteArray>
 #include <QDataStream>
@@ -98,6 +100,11 @@ CreateOrDeleteDeviceCommand::execute()
             if (md) md->setDirection(m_direction);
         }
 
+        /* update view automatically (without pressing refresh button) */
+        DeviceManagerDialog *dmd=RosegardenMainWindow::self()->getDeviceManager();
+        if (dmd!=NULL) {
+          dmd->slotResyncDevicesReceived();
+        }
     } else {
 
         // Delete
