@@ -12570,12 +12570,12 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
 <context>
     <name>Rosegarden::CreateOrDeleteDeviceCommand</name>
     <message>
-        <location filename="../../src/commands/studio/CreateOrDeleteDeviceCommand.h" line="61"/>
+        <location filename="../../src/commands/studio/CreateOrDeleteDeviceCommand.h" line="62"/>
         <source>Delete Device</source>
         <translation>Effacer périphérique</translation>
     </message>
     <message>
-        <location filename="../../src/commands/studio/CreateOrDeleteDeviceCommand.h" line="61"/>
+        <location filename="../../src/commands/studio/CreateOrDeleteDeviceCommand.h" line="62"/>
         <source>Create Device</source>
         <translation>Créer périphérique</translation>
     </message>
