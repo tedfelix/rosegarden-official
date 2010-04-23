@@ -81,7 +81,7 @@ public:
     };
 
     MidiFile(Studio *studio);
-    MidiFile (const std::string &fn, Studio *studio);
+    MidiFile (const QString &fn, Studio *studio);
     ~MidiFile();
 
     // Declare our virtuals

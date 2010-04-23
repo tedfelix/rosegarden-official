@@ -67,11 +67,11 @@ AudioFileTimeStretcher::getStretchedAudioFile(AudioFileId source,
     std::cerr << "AudioFileTimeStretcher: got derived file id " << file->getId()
               << ", name " << file->getFilename() << std::endl;
 
-    std::ifstream streamIn(sourceFile->getFilename().c_str(),
+    std::ifstream streamIn(sourceFile->getFilename(),
 			   std::ios::in | std::ios::binary);
     if (!streamIn) {
 	throw SoundFile::BadSoundFileException
-	    (file->getFilename().c_str(),
+	    (file->getFilename(),
 	     "Failed to open source stream for time stretcher");
     }
     

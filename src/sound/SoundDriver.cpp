@@ -307,12 +307,12 @@ SoundDriver::getMappedDevice(DeviceId id)
 
 
 bool
-SoundDriver::addAudioFile(const std::string &fileName, unsigned int id)
+SoundDriver::addAudioFile(const QString &fileName, unsigned int id)
 {
     AudioFile *ins = 0;
 
     try {
-        ins = new WAVAudioFile(id, fileName, fileName);
+        ins = new WAVAudioFile(id, qstrtostr(fileName), fileName);
         ins->open();
         m_audioFiles.push_back(ins);
 

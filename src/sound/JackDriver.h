@@ -129,7 +129,7 @@ public:
     // the integrity is correct (sample sizes must be written).
     //
     bool openRecordFile(InstrumentId id,
-                        const std::string &fileName);
+                        const QString &fileName);
     bool closeRecordFile(InstrumentId id,
                          AudioFileId &returnedId);
 

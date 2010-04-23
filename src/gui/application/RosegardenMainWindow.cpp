@@ -3693,7 +3693,7 @@ RosegardenMainWindow::createDocumentFromMIDIFile(QString file)
     //
     RosegardenDocument *newDoc = new RosegardenDocument(this, m_pluginManager);
 
-    std::string fname(QFile::encodeName(file));
+    QString fname(QFile::encodeName(file));
 
     MidiFile midiFile(fname,
                       &newDoc->getStudio());
@@ -4666,7 +4666,7 @@ RosegardenMainWindow::exportMIDIFile(QString file)
                                500,
                                this);
 
-    std::string fname(QFile::encodeName(file));
+    QString fname(QFile::encodeName(file));
 
     MidiFile midiFile(fname,
                       &m_doc->getStudio());
@@ -6004,7 +6004,7 @@ RosegardenMainWindow::createRecordAudioFiles(const QVector<InstrumentId> &record
         // language if you wish.  The n in <i>n</i>.wav refers to an unknown
         // number, such as might be used in a mathematical equation
                                  tr("<qt><p>You must choose a filename for this composition before recording audio.</p><p>Audio files will be saved to <b>%1</b> as <b>rg-[<i>filename</i>]-[<i>instrument</i>]-<i>date</i>_<i>time</i>-<i>n</i>.wav</b>.  You may wish to rename audio instruments before recording as well.  For more information, please see the <a style=\"color:gold\" href=\"http://www.rosegardenmusic.com/wiki/doc:audio-filenames-en\">Rosegarden Wiki</a>.</p></qt>")
-                                    .arg(strtoqstr(m_doc->getAudioFileManager().getAudioPath())),
+                                    .arg(m_doc->getAudioFileManager().getAudioPath()),
                                  QMessageBox::Ok,
                                  QMessageBox::Ok);
 
@@ -6030,7 +6030,7 @@ RosegardenMainWindow::createRecordAudioFiles(const QVector<InstrumentId> &record
             if (aF) {
                 // createRecordingAudioFile doesn't actually write to the disk,
                 // and in principle it shouldn't fail
-                qv.push_back(aF->getFilename().c_str());
+                qv.push_back(aF->getFilename());
                 m_doc->addRecordAudioSegment(recordInstruments[i],
                                              aF->getId());
             } else {
@@ -6049,7 +6049,7 @@ RosegardenMainWindow::createRecordAudioFiles(const QVector<InstrumentId> &record
 QString
 RosegardenMainWindow::getAudioFilePath()
 {
-    return QString(m_doc->getAudioFileManager().getAudioPath().c_str());
+    return m_doc->getAudioFileManager().getAudioPath();
 }
 
 QVector<InstrumentId>
@@ -6214,10 +6214,10 @@ RosegardenMainWindow::slotAddAudioFile(unsigned int id)
     if (aF == 0) return;
 
     int result = RosegardenSequencer::getInstance()->
-        addAudioFile(strtoqstr(aF->getFilename()), aF->getId());
+        addAudioFile(aF->getFilename(), aF->getId());
 
     if (!result) {
-        QMessageBox::critical(0, tr("Rosegarden"), tr("Sequencer failed to add audio file %1").arg(aF->getFilename().c_str()));
+        QMessageBox::critical(0, tr("Rosegarden"), tr("Sequencer failed to add audio file %1").arg(aF->getFilename()));
     }
 }
 
@@ -6978,7 +6978,7 @@ RosegardenMainWindow::slotPluginSelected(InstrumentId instrumentId,
 
     inst->setConfigurationValue
     (qstrtostr(PluginIdentifier::RESERVED_PROJECT_DIRECTORY_KEY),
-     m_doc->getAudioFileManager().getAudioPath());
+     qstrtostr(m_doc->getAudioFileManager().getAudioPath()));
 
     // Set opaque string configuration data (e.g. for DSSI plugin)
     //
@@ -8024,7 +8024,7 @@ RosegardenMainWindow::slotSwitchPreset()
 void
 RosegardenMainWindow::checkAudioPath()
 {
-    QString  audioPath = strtoqstr(m_doc->getAudioFileManager().getAudioPath());
+    QString  audioPath = m_doc->getAudioFileManager().getAudioPath();
     QDir dir(audioPath);
     QString text(tr("<h3>Invalid audio path</h3>"));
     QString correctThis(tr("<p>You will not be able to record audio or drag and drop audio files onto Rosegarden until you correct this in <b>View -> Document Properties -> Audio</b>.</p>"));

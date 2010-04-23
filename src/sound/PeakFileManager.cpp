@@ -293,7 +293,7 @@ PeakFileManager::stopPreview()
     if (m_currentPeakFile) {
         // Stop processing
         //
-        QString fileName = QString(m_currentPeakFile->getFilename().data());
+        QString fileName = m_currentPeakFile->getFilename();
         m_currentPeakFile->setProcessingPeaks(false);
         m_currentPeakFile->disconnect();
 

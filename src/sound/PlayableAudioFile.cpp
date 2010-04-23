@@ -368,7 +368,7 @@ PlayableAudioFile::initialise(size_t bufferSize, size_t smallFileSize)
 
     if (!m_isSmallFile) {
 
-        m_file = new std::ifstream(m_audioFile->getFilename().c_str(),
+        m_file = new std::ifstream(m_audioFile->getFilename(),
                                    std::ios::in | std::ios::binary);
 
         if (!*m_file) {
@@ -641,7 +641,7 @@ PlayableAudioFile::checkSmallFileCache(size_t smallFileSize)
 
     } else if (m_audioFile->getSize() <= smallFileSize) {
 
-	std::ifstream file(m_audioFile->getFilename().c_str(),
+	std::ifstream file(m_audioFile->getFilename(),
 			   std::ios::in | std::ios::binary);
 
 	if (!file) {
@@ -724,7 +724,7 @@ PlayableAudioFile::fillBuffers()
 #endif
 
     if (!m_isSmallFile && (!m_file || !*m_file)) {
-	m_file = new std::ifstream(m_audioFile->getFilename().c_str(),
+	m_file = new std::ifstream(m_audioFile->getFilename(),
 				   std::ios::in | std::ios::binary);
 	if (!*m_file) {
 	    std::cerr << "ERROR: PlayableAudioFile::fillBuffers: Failed to open audio file " << m_audioFile->getFilename() << std::endl;
@@ -768,7 +768,7 @@ PlayableAudioFile::fillBuffers(const RealTime &currentTime)
     }
 
     if (!m_isSmallFile && (!m_file || !*m_file)) {
-	m_file = new std::ifstream(m_audioFile->getFilename().c_str(),
+	m_file = new std::ifstream(m_audioFile->getFilename(),
 				   std::ios::in | std::ios::binary);
 	if (!*m_file) {
 	    std::cerr << "ERROR: PlayableAudioFile::fillBuffers: Failed to open audio file " << m_audioFile->getFilename() << std::endl;

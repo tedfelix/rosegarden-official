@@ -21,7 +21,7 @@ namespace Rosegarden
 
 AudioFile::AudioFile(unsigned int id,
                      const std::string &label,
-                     const std::string &fileName):
+                     const QString &fileName):
         SoundFile(fileName),
         m_type(UNKNOWN),
         m_id(id),
@@ -31,10 +31,10 @@ AudioFile::AudioFile(unsigned int id,
         m_channels(0),
         m_dataChunkIndex( -1)
 {
-    m_fileInfo = new QFileInfo(QString(fileName.c_str()));
+    m_fileInfo = new QFileInfo(fileName);
 }
 
-AudioFile::AudioFile(const std::string &fileName,
+AudioFile::AudioFile(const QString &fileName,
                      unsigned int channels = 1,
                      unsigned int sampleRate = 48000,
                      unsigned int bitsPerSample = 16):
@@ -47,7 +47,7 @@ AudioFile::AudioFile(const std::string &fileName,
         m_channels(channels),
         m_dataChunkIndex( -1)
 {
-    m_fileInfo = new QFileInfo(QString(fileName.c_str()));
+    m_fileInfo = new QFileInfo(fileName);
 }
 
 AudioFile::~AudioFile()

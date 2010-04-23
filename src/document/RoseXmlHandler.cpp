@@ -1009,7 +1009,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         // same time)
         //
         if (getAudioFileManager().insertFile(qstrtostr(label),
-                                             qstrtostr(file),
+                                             file,
                                              id.toInt()) == false) {
             // Ok, now attempt to use the QFileDialog saved default
             // value for the AudioPath.
@@ -1021,7 +1021,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                                         "/home", QFileDialog::ShowDirsOnly
                                                 | QFileDialog::DontResolveSymlinks);            
             
-            getAudioFileManager().setAudioPath( qstrtostr(url) );
+            getAudioFileManager().setAudioPath( url );
             
             /*
             RG_DEBUG << "ATTEMPTING TO FIND IN PATH = " 
@@ -1030,7 +1030,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
             if (getAudioFileManager().
                     insertFile(qstrtostr(label),
-                               qstrtostr(file), id.toInt()) == false) {
+                               file, id.toInt()) == false) {
 
                 // Freeze the progress dialog
                 CurrentProgressDialog::freeze();
@@ -1053,7 +1053,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                     //FileLocateDialog fL((RosegardenMainWindow *)m_doc->parent(),
                     FileLocateDialog fL((QWidget *)m_doc->parent(),
                                         file,
-                                        QString(getAudioFileManager().getAudioPath().c_str()));
+                                        getAudioFileManager().getAudioPath());
                     int result = fL.exec();
 
                     if (result == QDialog::Accepted) {
@@ -1071,11 +1071,11 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
 
                 } while (getAudioFileManager().insertFile(qstrtostr(label),
-                         qstrtostr(newFilename),
+                         newFilename,
                          id.toInt()) == false);
 
                 if (newPath != "") {
-                    getAudioFileManager().setAudioPath(qstrtostr(newPath));
+                    getAudioFileManager().setAudioPath(newPath);
                     // Set a document post-modify flag
                     //m_doc->setModified(true);
                 }
@@ -1114,7 +1114,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             }
         }
 
-        getAudioFileManager().setAudioPath(qstrtostr(search));
+        getAudioFileManager().setAudioPath(search);
 
     } else if (lcName == "begin") {
 

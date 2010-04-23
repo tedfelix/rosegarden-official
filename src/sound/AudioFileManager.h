@@ -67,19 +67,19 @@ public:
     class BadAudioPathException : public Exception
     {
     public:
-        BadAudioPathException(std::string path) :
-            Exception(qstrtostr(QObject::tr("Bad audio file path ")) + path), m_path(path) { }
-        BadAudioPathException(std::string path, std::string file, int line) :
-            Exception(qstrtostr(QObject::tr("Bad audio file path ")) + path, file, line), m_path(path) { }
+        BadAudioPathException(QString path) :
+            Exception(QObject::tr("Bad audio file path ") + path), m_path(path) { }
+        BadAudioPathException(QString path, QString file, int line) :
+            Exception(QObject::tr("Bad audio file path ") + path, file, line), m_path(path) { }
         BadAudioPathException(const SoundFile::BadSoundFileException &e) :
-            Exception(qstrtostr(QObject::tr("Bad audio file path (malformed file?) ")) + e.getPath()), m_path(e.getPath()) { }
+            Exception(QObject::tr("Bad audio file path (malformed file?) ") + e.getPath()), m_path(e.getPath()) { }
 
         ~BadAudioPathException() throw() { }
 
-        std::string getPath() const { return m_path; }
+        QString getPath() const { return m_path; }
 
     private:
-        std::string m_path;
+        QString m_path;
     };
 
 private:
@@ -93,7 +93,7 @@ public:
     // that are already in a format RG understands natively.  If you
     // are not sure about that, use importFile or importURL instead.
     //
-    AudioFileId addFile(const std::string &filePath);
+    AudioFileId addFile(const QString &filePath);
     // throw BadAudioPathException
 
     // Create an audio file by importing (i.e. converting and/or
@@ -101,7 +101,7 @@ public:
     // you are not sure whether to use addFile or importFile, go for
     // importFile.
     //
-    AudioFileId importFile(const std::string &filePath,
+    AudioFileId importFile(const QString &filePath,
 			   int targetSampleRate = 0);
     // throw BadAudioPathException, BadSoundFileException
 
@@ -116,7 +116,7 @@ public:
     // have both name and filename/path.
     //
     AudioFileId insertFile(const std::string &name,
-                           const std::string &fileName);
+                           const QString &fileName);
     // throw BadAudioPathException
 
     // Convert an audio file from arbitrary external format to an
@@ -125,9 +125,9 @@ public:
     // returns 0 for OK.  This is used by importFile and importURL
     // which normally provide the more suitable interface for import.
     // 
-    int convertAudioFile(const std::string inFile, const std::string outFile);
+    int convertAudioFile(const QString inFile, const QString outFile);
 
-    bool insertFile(const std::string &name, const std::string &fileName,
+    bool insertFile(const std::string &name, const QString &fileName,
                     AudioFileId id);
     // throw BadAudioPathException
 
@@ -141,7 +141,7 @@ public:
 
     // Does a specific file path exist?  Return ID or -1.
     //
-    int fileExists(const std::string &path);
+    int fileExists(const QString &path);
 
     // get audio file by id
     //
@@ -161,8 +161,8 @@ public:
 
     // Get and set the record path
     //
-    std::string getAudioPath() const { return m_audioPath; }
-    void setAudioPath(const std::string &path);
+    QString getAudioPath() const { return m_audioPath; }
+    void setAudioPath(const QString &path);
 
     // Throw if the current audio path does not exist or is not writable
     //
@@ -246,18 +246,18 @@ public:
 
     // Get a short file name from a long one (with '/'s)
     //
-    std::string getShortFilename(const std::string &fileName);
+    QString getShortFilename(const QString &fileName);
 
     // Get a directory from a full file path
     //
-    std::string getDirectory(const std::string &path);
+    QString getDirectory(const QString &path);
 
     // Attempt to subsititute a tilde '~' for a home directory
     // to make paths a little more generic when saving.  Also
     // provide the inverse function as convenience here.
     //
-    std::string substituteHomeForTilde(const std::string &path);
-    std::string substituteTildeForHome(const std::string &path);
+    QString substituteHomeForTilde(const QString &path);
+    QString substituteTildeForHome(const QString &path);
 
     // Show entries for debug purposes
     //
@@ -298,12 +298,12 @@ public slots:
     void slotStopImport();
 
 private:
-    std::string getFileInPath(const std::string &file);
+    QString getFileInPath(const QString &file);
 
     AudioFileId getFirstUnusedID();
 
     std::vector<AudioFile*> m_audioFiles;
-    std::string m_audioPath;
+    QString m_audioPath;
 
     PeakFileManager m_peakManager;
 

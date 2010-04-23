@@ -2237,7 +2237,7 @@ AudioFileWriter::~AudioFileWriter()
 
 bool
 AudioFileWriter::openRecordFile(InstrumentId id,
-                                const std::string &fileName)
+                                const QString &fileName)
 {
     getLock();
 

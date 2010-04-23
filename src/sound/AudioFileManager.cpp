@@ -47,7 +47,8 @@
 #include "sound/audiostream/AudioWriteStream.h"
 #include "sound/audiostream/AudioWriteStreamFactory.h"
 
-
+#define DEBUG_AUDIOFILEMANAGER
+#define DEBUG_AUDIOFILEMANAGER_INSERT_FILE
 
 namespace Rosegarden
 {
@@ -108,14 +109,14 @@ AudioFileManager::~AudioFileManager()
 // Add a file from an absolute path
 //
 AudioFileId
-AudioFileManager::addFile(const std::string &filePath)
+AudioFileManager::addFile(const QString &filePath)
 {
     MutexLock lock (&_audioFileManagerLock);
 
     QString ext;
 
     if (filePath.length() > 3) {
-	ext = QString(filePath.substr(filePath.length() - 3, 3).c_str()).toLower();
+	ext = filePath.mid(filePath.length() - 3, 3).toLower();
     }
 
     // Check for file existing already in manager by path
@@ -139,14 +140,14 @@ AudioFileManager::addFile(const std::string &filePath)
 #endif
 
             try {
-                aF = new BWFAudioFile(id, getShortFilename(filePath), filePath);
+                aF = new BWFAudioFile(id, qstrtostr(getShortFilename(filePath)), filePath);
             } catch (SoundFile::BadSoundFileException e) {
                 delete aF;
                 throw BadAudioPathException(e);
             }
         } else if (subType == WAV) {
             try {
-                aF = new WAVAudioFile(id, getShortFilename(filePath), filePath);
+                aF = new WAVAudioFile(id, qstrtostr(getShortFilename(filePath)), filePath);
             } catch (SoundFile::BadSoundFileException e) {
                 delete aF;
                 throw BadAudioPathException(e);
@@ -186,28 +187,28 @@ AudioFileManager::addFile(const std::string &filePath)
 }
 
 // Convert long filename to shorter version
-std::string
-AudioFileManager::getShortFilename(const std::string &fileName)
+QString
+AudioFileManager::getShortFilename(const QString &fileName)
 {
-    std::string rS = fileName;
-    size_t pos = rS.find_last_of("/");
+    QString rS = fileName;
+    int pos = rS.lastIndexOf("/");
 
     if (pos > 0 && ( pos + 1 ) < rS.length())
-        rS = rS.substr(pos + 1, rS.length());
+        rS = rS.mid(pos + 1, rS.length());
 
     return rS;
 }
 
 // Turn a long path into a directory ending with a slash
 //
-std::string
-AudioFileManager::getDirectory(const std::string &path)
+QString
+AudioFileManager::getDirectory(const QString &path)
 {
-    std::string rS = path;
-    size_t pos = rS.find_last_of("/");
+    QString rS = path;
+    int pos = rS.lastIndexOf("/");
 
     if (pos > 0 && ( pos + 1 ) < rS.length())
-        rS = rS.substr(0, pos + 1);
+        rS = rS.mid(0, pos + 1);
 
     return rS;
 }
@@ -218,19 +219,19 @@ AudioFileManager::getDirectory(const std::string &path)
 //
 AudioFileId
 AudioFileManager::insertFile(const std::string &name,
-                             const std::string &fileName)
+                             const QString &fileName)
 {
     MutexLock lock (&_audioFileManagerLock)
         ;
 
     // first try to expand any beginning tilde
     //
-    std::string foundFileName = substituteTildeForHome(fileName);
+    QString foundFileName = substituteTildeForHome(fileName);
 
     // If we've expanded and we can't find the file
     // then try to find it in audio file directory.
     //
-    QFileInfo info(foundFileName.c_str());
+    QFileInfo info(foundFileName);
     if (!info.exists())
         foundFileName = getFileInPath(foundFileName);
 
@@ -330,19 +331,19 @@ AudioFileManager::getFirstUnusedID()
 
 bool
 AudioFileManager::insertFile(const std::string &name,
-                             const std::string &fileName,
+                             const QString &fileName,
                              AudioFileId id)
 {
     MutexLock lock (&_audioFileManagerLock)
         ;
 
     // first try to expany any beginning tilde
-    std::string foundFileName = substituteTildeForHome(fileName);
+    QString foundFileName = substituteTildeForHome(fileName);
 
     // If we've expanded and we can't find the file
     // then try to find it in audio file directory.
     //
-    QFileInfo info(foundFileName.c_str());
+    QFileInfo info(foundFileName);
     if (!info.exists())
         foundFileName = getFileInPath(foundFileName);
 
@@ -386,22 +387,23 @@ AudioFileManager::insertFile(const std::string &name,
 // Add a given path to our sample search path
 //
 void
-AudioFileManager::setAudioPath(const std::string &path)
+AudioFileManager::setAudioPath(const QString &path)
 {
     MutexLock lock (&_audioFileManagerLock)
         ;
 
-    std::string hPath = path;
-
+    QString hPath = path;
+    QString homePath = getenv("HOME");
+    
     // add a trailing / if we don't have one
     //
     if (hPath[hPath.size() - 1] != '/')
-        hPath += std::string("/");
+        hPath += "/";
 
     // get the home directory
     if (hPath[0] == '~') {
-        hPath.erase(0, 1);
-        hPath = std::string(getenv("HOME")) + hPath;
+        hPath.remove(0, 1);
+        hPath = homePath + hPath;
     }
 
     m_audioPath = hPath;
@@ -411,10 +413,10 @@ AudioFileManager::setAudioPath(const std::string &path)
 void
 AudioFileManager::testAudioPath() throw (BadAudioPathException)
 {
-    QFileInfo info(m_audioPath.c_str());
+    QFileInfo info(m_audioPath);
     if (!(info.exists() && info.isDir() && !info.isRelative() &&
             info.isWritable() && info.isReadable()))
-        throw BadAudioPathException(m_audioPath.data());
+        throw BadAudioPathException(m_audioPath);
 }
 
 
@@ -422,13 +424,13 @@ AudioFileManager::testAudioPath() throw (BadAudioPathException)
 // return the first occurence of a match or the empty
 // std::string if no match.
 //
-std::string
-AudioFileManager::getFileInPath(const std::string &file)
+QString
+AudioFileManager::getFileInPath(const QString &file)
 {
     MutexLock lock (&_audioFileManagerLock)
         ;
 
-    QFileInfo info(file.c_str());
+    QFileInfo info(file);
 
     if (info.exists())
         return file;
@@ -436,7 +438,7 @@ AudioFileManager::getFileInPath(const std::string &file)
     // Build the search filename from the audio path and
     // the file basename.
     //
-    QString searchFile = QString(m_audioPath.c_str()) + info.fileName();
+    QString searchFile = m_audioPath + info.fileName();
     QFileInfo searchInfo(searchFile);
 
     if (searchInfo.exists())
@@ -452,7 +454,7 @@ AudioFileManager::getFileInPath(const std::string &file)
 // Check for file path existence
 //
 int
-AudioFileManager::fileExists(const std::string &path)
+AudioFileManager::fileExists(const QString &path)
 {
     MutexLock lock (&_audioFileManagerLock)
         ;
@@ -517,8 +519,9 @@ AudioFileManager::clear()
 AudioFile *
 AudioFileManager::createRecordingAudioFile(QString projectName, QString instrumentAlias)
 {
-    MutexLock lock (&_audioFileManagerLock)
-        ;
+    MutexLock lock (&_audioFileManagerLock);
+
+std::cerr << "XXX createRecordingAudioFile: " << projectName << std::endl;
 
     // just throw an _ in place of any characters that should be avoided
     instrumentAlias.replace(QRegExp("&"),   "_");
@@ -549,7 +552,7 @@ AudioFileManager::createRecordingAudioFile(QString projectName, QString instrume
                    .arg(QDateTime::currentDateTime().toString("yyyy-MM-dd_hh.mm.ss"))
                    .arg(newId + 1);
 
-        if (QFile(m_audioPath.c_str() + fileName).exists()) {
+        if (QFile(m_audioPath + fileName).exists()) {
             fileName = "";
             ++newId;
         }
@@ -558,9 +561,9 @@ AudioFileManager::createRecordingAudioFile(QString projectName, QString instrume
     // insert file into vector
     WAVAudioFile *aF = 0;
 
-	QString aup( strtoqstr(m_audioPath) );
+	QString aup( m_audioPath );
 	QString fnm(fileName);
-	const std::string fpath = m_audioPath + qstrtostr(fileName);
+	const QString fpath = m_audioPath + fileName;
     try {
 		aF = new WAVAudioFile( static_cast<const unsigned int>(newId), qstrtostr(fileName), fpath );
 		//aF = new WAVAudioFile(newId, fileName.data(), m_audioPath + qstrtostr(fileName) );
@@ -613,21 +616,21 @@ AudioFileManager::createDerivedAudioFile(AudioFileId source,
     AudioFileId newId = getFirstUnusedID();
     QString fileName = "";
 
-    std::string sourceBase = sourceFile->getShortFilename();
-    if (sourceBase.length() > 4 && sourceBase.substr(0, 3) == "rg-") {
-	sourceBase = sourceBase.substr(3);
+    QString sourceBase = sourceFile->getShortFilename();
+    if (sourceBase.length() > 4 && sourceBase.mid(0, 3) == "rg-") {
+	sourceBase = sourceBase.mid(3);
     }
-    if (sourceBase.length() > 15) sourceBase = sourceBase.substr(0, 15);
+    if (sourceBase.length() > 15) sourceBase = sourceBase.mid(0, 15);
 
     while (fileName == "") {
 
         fileName = QString("%1-%2-%3-%4.wav")
 	    .arg(prefix)
-	    .arg( strtoqstr(sourceBase) )
+	    .arg( sourceBase )
 	    .arg(QDateTime::currentDateTime().toString("yyyyMMdd-hhmmss"))
 	    .arg(newId + 1);
 
-        if (QFile(m_audioPath.c_str() + fileName).exists()) {
+        if (QFile(m_audioPath + fileName).exists()) {
             fileName = "";
             ++newId;
         }
@@ -639,7 +642,7 @@ AudioFileManager::createDerivedAudioFile(AudioFileId source,
     try {
         aF = new WAVAudioFile(newId,
 			      qstrtostr(fileName),
-			      m_audioPath + qstrtostr(fileName) );
+			      m_audioPath + fileName );
         m_audioFiles.push_back(aF);
 	m_derivedAudioFiles.insert(aF);
     } catch (SoundFile::BadSoundFileException e) {
@@ -656,17 +659,16 @@ AudioFileManager::importURL(const QUrl &url, int sampleRate)
     FileSource source(url);
     if (!source.isAvailable()) {
 	QMessageBox::critical(0, tr("Rosegarden"), tr("Cannot download file %1").arg(url.toString()));
-	throw SoundFile::BadSoundFileException(qstrtostr(url.toString()));
+	throw SoundFile::BadSoundFileException(url.toString());
     }
 
     source.waitForData();
 
-    return importFile(qStrToStrLocal8(source.getLocalFilename()),
-                      sampleRate);
+    return importFile(source.getLocalFilename(), sampleRate);
 }
 
 AudioFileId
-AudioFileManager::importFile(const std::string &fileName, int sampleRate)
+AudioFileManager::importFile(const QString &fileName, int sampleRate)
 {
     MutexLock lock (&_audioFileManagerLock);
 
@@ -677,7 +679,7 @@ AudioFileManager::importFile(const std::string &fileName, int sampleRate)
     AudioFileId newId = getFirstUnusedID();
     QString targetName = "";
 
-    QString sourceBase = QFileInfo(fileName.c_str()).baseName();
+    QString sourceBase = QFileInfo(fileName).baseName();
     if (sourceBase.length() > 3 && sourceBase.startsWith("rg-")) {
 	sourceBase = sourceBase.right(sourceBase.length() - 3);
     }
@@ -690,19 +692,18 @@ AudioFileManager::importFile(const std::string &fileName, int sampleRate)
 	    .arg(QDateTime::currentDateTime().toString("yyyyMMdd-hhmmss"))
 	    .arg(newId + 1);
 
-        if (QFile(m_audioPath.c_str() + targetName).exists()) {
+        if (QFile(m_audioPath + targetName).exists()) {
             targetName = "";
             ++newId;
         }
     }
 
-    std::string outFileName = m_audioPath + targetName.toStdString();
+    QString outFileName = m_audioPath + targetName;
     int ec = convertAudioFile(fileName, outFileName);
 
     if (ec) {
 	throw SoundFile::BadSoundFileException
-            (fileName, qstrtostr
-             (tr("Failed to convert or resample audio file on import")) );
+            (fileName, qstrtostr(tr("Failed to convert or resample audio file on import")) );
     }
 
     // insert file into vector
@@ -710,7 +711,7 @@ AudioFileManager::importFile(const std::string &fileName, int sampleRate)
 
     aF = new WAVAudioFile(newId,
 			  qstrtostr(targetName),
-			  m_audioPath + qstrtostr(targetName));
+			  m_audioPath + targetName);
     m_audioFiles.push_back(aF);
     m_derivedAudioFiles.insert(aF);
     // Don't catch SoundFile::BadSoundFileException
@@ -720,12 +721,12 @@ AudioFileManager::importFile(const std::string &fileName, int sampleRate)
     return aF->getId();
 }
 
-int AudioFileManager::convertAudioFile(std::string inFile, std::string outFile)
+int AudioFileManager::convertAudioFile(QString inFile, QString outFile)
 {
     std::cerr << "AudioFileManager::convertAudioFile: inFile = "
               << inFile << ", outFile = " << outFile << std::endl;
 
-    AudioReadStream *rs = AudioReadStreamFactory::createReadStream( strtoqstr(inFile));
+    AudioReadStream *rs = AudioReadStreamFactory::createReadStream( inFile);
     if (!rs || !rs->isOK()) {
         std::cerr << "ERROR: Failed to read audio file";
         if (rs) std::cerr << ": " << rs->getError() << std::endl;
@@ -740,7 +741,7 @@ int AudioFileManager::convertAudioFile(std::string inFile, std::string outFile)
     rs->setRetrievalSampleRate(rate);
 
     AudioWriteStream *ws = AudioWriteStreamFactory::createWriteStream
-            (strtoqstr(outFile), channels, rate);
+            (outFile, channels, rate);
 
     if (!ws || !ws->isOK()) {
         std::cerr << "ERROR: Failed to write audio file";
@@ -790,33 +791,33 @@ AudioFileManager::getLastAudioFile()
     return audioFile;
 }
 
-std::string
-AudioFileManager::substituteHomeForTilde(const std::string &path)
+QString
+AudioFileManager::substituteHomeForTilde(const QString &path)
 {
-    std::string rS = path;
-    std::string homePath = std::string(getenv("HOME"));
+    QString rS = path;
+    QString homePath = getenv("HOME");
 
     // if path length is less than homePath then just return unchanged
     if (rS.length() < homePath.length())
         return rS;
 
     // if the first section matches the path then substitute
-    if (rS.substr(0, homePath.length()) == homePath) {
-        rS.erase(0, homePath.length());
+    if (rS.mid(0, homePath.length()) == homePath) {
+        rS.remove(0, homePath.length());
         rS = "~" + rS;
     }
 
     return rS;
 }
 
-std::string
-AudioFileManager::substituteTildeForHome(const std::string &path)
+QString
+AudioFileManager::substituteTildeForHome(const QString &path)
 {
-    std::string rS = path;
-    std::string homePath = std::string(getenv("HOME"));
+    QString rS = path;
+    QString homePath = getenv("HOME");
 
-    if (rS.substr(0, 2) == std::string("~/")) {
-        rS.erase(0, 1); // erase tilde and prepend HOME env
+    if (rS.mid(0, 2) == "~/") {
+        rS.remove(0, 1); // erase tilde and prepend HOME env
         rS = homePath + rS;
     }
 
@@ -837,7 +838,7 @@ AudioFileManager::toXmlString()
         ;
 
     std::stringstream audioFiles;
-    std::string audioPath = substituteHomeForTilde(m_audioPath);
+    QString audioPath = substituteHomeForTilde(m_audioPath);
 
     audioFiles << "<audiofiles";
     if (m_expectedSampleRate != 0) {
@@ -847,7 +848,7 @@ AudioFileManager::toXmlString()
     audioFiles << "    <audioPath value=\""
     << audioPath << "\"/>" << std::endl;
 
-    std::string fileName;
+    QString fileName;
     std::vector<AudioFile*>::iterator it;
 
     for (it = m_audioFiles.begin(); it != m_audioFiles.end(); ++it) {

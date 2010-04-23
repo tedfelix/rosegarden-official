@@ -4477,7 +4477,7 @@ AlsaDriver::record(RecordStatus recordStatus,
 
 #ifdef HAVE_LIBJACK
                     if (m_jackDriver &&
-                        m_jackDriver->openRecordFile(id, qstrtostr(fileName))) {
+                        m_jackDriver->openRecordFile(id, fileName)) {
                         good = true;
                     }
 #endif

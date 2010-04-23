@@ -57,19 +57,19 @@ public:
     class BadPeakFileException : public Exception
     {
     public:
-        BadPeakFileException(std::string path) :
-            Exception(qstrtostr(QObject::tr("Bad peak file ")) + path), m_path(path) { }
-        BadPeakFileException(std::string path, std::string file, int line) :
-            Exception(qstrtostr(QObject::tr("Bad peak file ")) + path, file, line), m_path(path) { }
+        BadPeakFileException(QString path) :
+            Exception(QObject::tr("Bad peak file ") + path), m_path(path) { }
+        BadPeakFileException(QString path, QString file, int line) :
+            Exception(QObject::tr("Bad peak file ") + path, file, line), m_path(path) { }
         BadPeakFileException(const SoundFile::BadSoundFileException &e) :
-            Exception(qstrtostr(QObject::tr("Bad peak file (malformed audio?) ")) + e.getPath()), m_path(e.getPath()) { }
+            Exception(QObject::tr("Bad peak file (malformed audio?) ") + e.getPath()), m_path(e.getPath()) { }
 
         ~BadPeakFileException() throw() { }
 
-        std::string getPath() const { return m_path; }
+        QString getPath() const { return m_path; }
 
     private:
-        std::string m_path;
+        QString m_path;
     };
 
 private:

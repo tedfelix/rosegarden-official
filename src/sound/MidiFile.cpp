@@ -52,7 +52,7 @@ using std::ends;
 using std::ios;
 
 MidiFile::MidiFile(Studio *studio):
-        SoundFile(std::string("unnamed.mid")),
+        SoundFile("unnamed.mid"),
         m_timingFormat(MIDI_TIMING_PPQ_TIMEBASE),
         m_timingDivision(0),
         m_fps(0),
@@ -65,7 +65,7 @@ MidiFile::MidiFile(Studio *studio):
         m_studio(studio)
 {}
 
-MidiFile::MidiFile(const std::string &fn,
+MidiFile::MidiFile(const QString &fn,
                    Studio *studio):
         SoundFile(fn),
         m_timingFormat(MIDI_TIMING_PPQ_TIMEBASE),
@@ -325,7 +325,7 @@ MidiFile::open()
 #endif
 
     // Open the file
-    ifstream *midiFile = new ifstream(m_fileName.c_str(), ios::in | ios::binary);
+    ifstream *midiFile = new ifstream(m_fileName, ios::in | ios::binary);
 
     try {
         if (*midiFile) {
@@ -2183,7 +2183,7 @@ MidiFile::write()
     bool retOK = true;
 
     std::ofstream *midiFile =
-        new std::ofstream(m_fileName.c_str(), ios::out | ios::binary);
+        new std::ofstream(m_fileName, ios::out | ios::binary);
 
 
     if (!(*midiFile)) {

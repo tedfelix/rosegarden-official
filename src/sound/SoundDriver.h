@@ -333,7 +333,7 @@ public:
     // Handle audio file references
     //
     void clearAudioFiles();
-    bool addAudioFile(const std::string &fileName, unsigned int id);
+    bool addAudioFile(const QString &fileName, unsigned int id);
     bool removeAudioFile(unsigned int id);
                     
     void initialiseAudioQueue(const std::vector<MappedEvent> &audioEvents);

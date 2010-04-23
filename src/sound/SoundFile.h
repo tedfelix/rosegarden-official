@@ -57,25 +57,25 @@ class SoundFile
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::SoundFile)
 
 public:
-    SoundFile(const std::string &fileName);
+    SoundFile(const QString &fileName);
     virtual ~SoundFile();
 
     class BadSoundFileException : public Exception
     {
     public:
-        BadSoundFileException(std::string path) :
-            Exception(qstrtostr(QObject::tr("Bad sound file ")) + path), m_path(path) { }
-        BadSoundFileException(std::string path, std::string message) :
-            Exception(qstrtostr(QObject::tr("Bad sound file ")) + path + ": " + message), m_path(path) { }
-        BadSoundFileException(std::string path, std::string file, int line) :
-            Exception(qstrtostr(QObject::tr("Bad sound file ")) + path, file, line), m_path(path) { }
+        BadSoundFileException(QString path) :
+            Exception(QObject::tr("Bad sound file ") + path), m_path(path) { }
+        BadSoundFileException(QString path, std::string message) :
+            Exception(QObject::tr("Bad sound file ") + path + ": " + strtoqstr(message)), m_path(path) { }
+        BadSoundFileException(QString path, QString file, int line) :
+            Exception(QObject::tr("Bad sound file ") + path, file, line), m_path(path) { }
 
         ~BadSoundFileException() throw() { }
 
-        std::string getPath() const { return m_path; }
+        QString getPath() const { return m_path; }
 
     private:
-        std::string m_path;
+        QString m_path;
     };
 
     // All files should be able open, write and close
@@ -83,9 +83,9 @@ public:
     virtual bool write() = 0;
     virtual void close() = 0;
 
-    std::string getShortFilename() const;
-    std::string getFilename() const { return m_fileName; }
-    void setFilename(const std::string &fileName) { m_fileName = fileName; }
+    QString getShortFilename() const;
+    QString getFilename() const { return m_fileName; }
+    void setFilename(const QString &fileName) { m_fileName = fileName; }
 
     // Useful methods that operate on our file data
     //
@@ -113,7 +113,7 @@ public:
         { if (m_inFile) return m_inFile->eof(); else return true; }
 
 protected:
-    std::string m_fileName;
+    QString m_fileName;
 
     // get some bytes from an input stream - unbuffered as we can
     // modify the file stream

@@ -55,7 +55,7 @@ private:
     Composition *m_composition;
     Segment *m_segment;
     AudioFileManager *m_mgr;
-    std::string m_audioFileName;
+    QString m_audioFileName;
     bool m_detached;
 };
 

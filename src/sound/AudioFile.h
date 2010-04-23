@@ -62,13 +62,13 @@ public:
     ///
     AudioFile(AudioFileId id,
               const std::string &label,
-              const std::string &fileName);
+              const QString &fileName);
 
     /// The "write" constructor - we only need to
     /// specify a file&label and some parameters and
     /// then write it out.
     ///
-    AudioFile(const std::string &fileName,
+    AudioFile(const QString &fileName,
               unsigned int channels,
               unsigned int sampleRate,
               unsigned int bitsPerSample);
@@ -167,7 +167,7 @@ public:
 
     /// Return the peak file filename
     ///
-    virtual std::string getPeakFilename() = 0;
+    virtual QString getPeakFilename() = 0;
 
     /// Return the modification timestamp
     ///

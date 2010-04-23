@@ -28,14 +28,14 @@ namespace Rosegarden
 
 BWFAudioFile::BWFAudioFile(const unsigned int &id,
                            const std::string &name,
-                           const std::string &fileName):
+                           const QString &fileName):
         RIFFAudioFile(id, name, fileName)
 {
     m_type = WAV;
 
 }
 
-BWFAudioFile::BWFAudioFile(const std::string &fileName,
+BWFAudioFile::BWFAudioFile(const QString &fileName,
                            unsigned int channels = 1,
                            unsigned int sampleRate = 48000,
                            unsigned int bytesPerSecond = 6000,
@@ -61,7 +61,7 @@ BWFAudioFile::open()
     if (m_inFile && (*m_inFile))
         return true;
 
-    m_inFile = new std::ifstream(m_fileName.c_str(),
+    m_inFile = new std::ifstream(m_fileName,
                                  std::ios::in | std::ios::binary);
 
     if (!(*m_inFile)) {
@@ -97,7 +97,7 @@ BWFAudioFile::write()
     }
 
     // open for writing
-    m_outFile = new std::ofstream(m_fileName.c_str(),
+    m_outFile = new std::ofstream(m_fileName,
                                   std::ios::out | std::ios::binary);
 
     if (!(*m_outFile))

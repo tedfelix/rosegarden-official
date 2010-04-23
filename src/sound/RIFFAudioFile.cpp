@@ -30,14 +30,14 @@ namespace Rosegarden
 
 RIFFAudioFile::RIFFAudioFile(unsigned int id,
                              const std::string &name,
-                             const std::string &fileName):
+                             const QString &fileName):
     AudioFile(id, name, fileName),
     m_subFormat(PCM),
     m_bytesPerSecond(0),
     m_bytesPerFrame(0)
 {}
 
-RIFFAudioFile::RIFFAudioFile(const std::string &fileName,
+RIFFAudioFile::RIFFAudioFile(const QString &fileName,
                              unsigned int channels = 1,
                              unsigned int sampleRate = 48000,
                              unsigned int bytesPerSecond = 6000,
@@ -478,11 +478,11 @@ RIFFAudioFile::readFormatChunk()
 
     if (m_subFormat == PCM) {
         if (m_bitsPerSample != 8 && m_bitsPerSample != 16 && m_bitsPerSample != 24) {
-            throw BadSoundFileException(qstrtostr(QObject::tr("Rosegarden currently only supports 8-, 16- or 24-bit PCM in RIFF files")));
+            throw BadSoundFileException(QObject::tr("Rosegarden currently only supports 8-, 16- or 24-bit PCM in RIFF files"));
         }
     } else if (m_subFormat == FLOAT) {
         if (m_bitsPerSample != 32) {
-            throw BadSoundFileException(qstrtostr(QObject::tr("Rosegarden currently only supports 32-bit floating-point in RIFF files")));
+            throw BadSoundFileException(QObject::tr("Rosegarden currently only supports 32-bit floating-point in RIFF files"));
         }
     }
 
@@ -557,10 +557,10 @@ RIFFAudioFile::writeFormatChunk()
 
 
 AudioFileType
-RIFFAudioFile::identifySubType(const std::string &filename)
+RIFFAudioFile::identifySubType(const QString &filename)
 {
     std::ifstream *testFile =
-        new std::ifstream(filename.c_str(), std::ios::in | std::ios::binary);
+        new std::ifstream(filename, std::ios::in | std::ios::binary);
 
     if (!(*testFile))
         return UNKNOWN;

@@ -22,7 +22,7 @@ namespace Rosegarden
 
 {
 
-SoundFile::SoundFile(const std::string &fileName):
+SoundFile::SoundFile(const QString &fileName):
         m_fileName(fileName),
         m_readChunkPtr( -1),
         m_readChunkSize(4096),  // 4k blocks
@@ -227,14 +227,14 @@ SoundFile::putBytes(std::ofstream *file, const char *buffer, size_t n)
 
 
 // Clip off any path from the filename
-std::string
+QString
 SoundFile::getShortFilename() const
 {
-    std::string rS = m_fileName;
-    size_t pos = rS.find_last_of("/");
+    QString rS = m_fileName;
+    size_t pos = rS.lastIndexOf("/");
 
     if (pos > 0 && ( pos + 1 ) < rS.length())
-        rS = rS.substr(pos + 1, rS.length());
+        rS = rS.mid(pos + 1, rS.length());
 
     return rS;
 }

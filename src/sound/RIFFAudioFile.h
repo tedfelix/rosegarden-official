@@ -41,9 +41,9 @@ class RIFFAudioFile : public AudioFile
 public:
     RIFFAudioFile(unsigned int id,
                   const std::string &name,
-                  const std::string &fileName);
+                  const QString &fileName);
 
-    RIFFAudioFile(const std::string &fileName,
+    RIFFAudioFile(const QString &fileName,
                   unsigned int channels,
                   unsigned int sampleRate,
                   unsigned int bytesPerSecond,
@@ -122,7 +122,7 @@ public:
 
     // Allow easy identification of wav file type
     //
-    static AudioFileType identifySubType(const std::string &filename);
+    static AudioFileType identifySubType(const QString &filename);
 
     // Convert a single sample from byte format, given the right
     // number of bytes for the sample width

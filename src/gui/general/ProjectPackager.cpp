@@ -206,7 +206,7 @@ ProjectPackager::getAudioFiles()
             // some polite sanity checking to avoid possible crashes
             if (!file) continue;
 
-            list << strtoqstr(file->getFilename());
+            list << file->getFilename();
         }
     }
 

@@ -61,7 +61,7 @@ AudioPropertiesPage::AudioPropertiesPage(RosegardenDocument *doc,  QWidget *pare
     QGridLayout *layout = new QGridLayout(frame);
     layout->setSpacing(5);
     layout->addWidget(new QLabel(tr("Audio file path:"), frame), 0, 0);
-    m_path = new QLabel(QString(afm.getAudioPath().c_str()), frame);
+    m_path = new QLabel(afm.getAudioPath(), frame);
     layout->addWidget(m_path, 0, 1);
 
     m_changePathButton =
@@ -162,7 +162,7 @@ AudioPropertiesPage::slotFileDialog()
 {
     AudioFileManager &afm = m_doc->getAudioFileManager();
 
-    QFileDialog *fileDialog = new QFileDialog(this, tr("Audio Recording Path"), QString(afm.getAudioPath().c_str()));
+    QFileDialog *fileDialog = new QFileDialog(this, tr("Audio Recording Path"), afm.getAudioPath());
 	fileDialog->setFileMode( QFileDialog::Directory );
 
 // Interestingly enough, these slots didn't exist in stable_1_7 either, and
@@ -188,7 +188,7 @@ AudioPropertiesPage::apply()
     QString newDir = m_path->text();
 
     if (!newDir.isNull()) {
-        afm.setAudioPath(qstrtostr(newDir));
+        afm.setAudioPath(newDir);
         m_doc->slotDocumentModified();
     }
 }

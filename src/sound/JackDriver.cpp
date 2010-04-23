@@ -2427,7 +2427,7 @@ JackDriver::clearSynthPluginEvents()
 
 bool
 JackDriver::openRecordFile(InstrumentId id,
-                           const std::string &filename)
+                           const QString &filename)
 {
     if (m_fileWriter) {
         if (!m_fileWriter->running()) {

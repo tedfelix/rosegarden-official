@@ -33,9 +33,9 @@ class BWFAudioFile : public RIFFAudioFile
 public:
     BWFAudioFile(const unsigned int &id,
                  const std::string &name,
-                 const std::string &fileName);
+                 const QString &fileName);
 
-    BWFAudioFile(const std::string &fileName,
+    BWFAudioFile(const QString &fileName,
                   unsigned int channels,
                   unsigned int sampleRate,
                   unsigned int bytesPerSecond,
@@ -64,8 +64,8 @@ public:
 
     // Peak file name
     //
-    virtual std::string getPeakFilename()
-        { return (m_fileName + std::string(".pk")); }
+    virtual QString getPeakFilename()
+        { return (m_fileName + ".pk"); }
 
 
     //!!! NOT IMPLEMENTED YET

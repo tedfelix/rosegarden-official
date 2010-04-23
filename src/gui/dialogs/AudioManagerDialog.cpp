@@ -341,7 +341,7 @@ AudioManagerDialog::slotPopulateFileList()
         //!!! Why isn't the label the label the user assigned to the file?
         // Why do we allow the user to assign a label at all, then?
 
-        QString label = QString((*it)->getShortFilename().c_str());
+        QString label = (*it)->getShortFilename();
 
         // Set the label, duration, envelope pixmap and filename
         //
@@ -368,9 +368,8 @@ AudioManagerDialog::slotPopulateFileList()
 
         // File location
         //
-        item->setText(6, QString(
-                          m_doc->getAudioFileManager().
-                          substituteHomeForTilde((*it)->getFilename()).c_str()));
+        item->setText(6,  m_doc->getAudioFileManager().
+                          substituteHomeForTilde((*it)->getFilename()));
 
         // Resolution
         //
@@ -546,7 +545,7 @@ AudioManagerDialog::slotExportAudio()
     }
 
     WAVAudioFile *destFile
-    = new WAVAudioFile(qstrtostr(saveFile),
+    = new WAVAudioFile(saveFile,
                        sourceFile->getChannels(),
                        sourceFile->getSampleRate(),
                        sourceFile->getBytesPerSecond(),
@@ -646,7 +645,7 @@ AudioManagerDialog::slotRemove()
     if (haveSegments) {
 
         QString question = tr("This will unload audio file \"%1\" and remove all associated segments.  Are you sure?")
-                           .arg(QString(audioFile->getFilename().c_str()));
+                           .arg(audioFile->getFilename());
 
         // Ask the question
         int reply = QMessageBox::warning(this, tr("Rosegarden"), question, QMessageBox::Yes | QMessageBox::Cancel , QMessageBox::Cancel);
@@ -699,7 +698,7 @@ AudioManagerDialog::slotPlayPreview()
     // now open up the playing dialog
     //
     m_audioPlayingDialog =
-        new AudioPlayingDialog(this, QString(audioFile->getFilename().c_str()));
+        new AudioPlayingDialog(this, audioFile->getFilename());
 
     // Setup timer to pop down dialog after file has completed
     //
@@ -934,8 +933,8 @@ AudioManagerDialog::slotDeleteUnused()
             aIt = m_doc->getAudioFileManager().begin();
             aIt != m_doc->getAudioFileManager().end(); ++aIt) {
         if (audioFiles.find((*aIt)->getId()) == audioFiles.end()) {
-            toDelete.push_back(strtoqstr((*aIt)->getFilename()));
-            nameMap[strtoqstr((*aIt)->getFilename())] = (*aIt)->getId();
+            toDelete.push_back((*aIt)->getFilename());
+            nameMap[(*aIt)->getFilename()] = (*aIt)->getId();
         }
     }
 

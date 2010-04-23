@@ -361,7 +361,7 @@ public:
 
     void kick(bool wantLock = true);
 
-    bool openRecordFile(InstrumentId id, const std::string &fileName);
+    bool openRecordFile(InstrumentId id, const QString &fileName);
     bool closeRecordFile(InstrumentId id, AudioFileId &returnedId);
 
     bool haveRecordFileOpen(InstrumentId id);

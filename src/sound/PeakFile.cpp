@@ -67,7 +67,7 @@ PeakFile::open()
 {
     // Set the file size
     //
-    QFileInfo info(QString(m_fileName.c_str()));
+    QFileInfo info(m_fileName);
     m_fileSize = (size_t)info.size(); // cast from qint64
 
     // If we're already open then don't open again
@@ -77,7 +77,7 @@ PeakFile::open()
 
     // Open
     //
-    m_inFile = new std::ifstream(m_fileName.c_str(),
+    m_inFile = new std::ifstream(m_fileName,
                                  std::ios::in | std::ios::binary);
     // Check we're open
     //
@@ -210,7 +210,7 @@ PeakFile::write(unsigned short updatePercentage)
     }
 
     // create and test that we've made it
-    m_outFile = new std::ofstream(m_fileName.c_str(),
+    m_outFile = new std::ofstream(m_fileName,
                                   std::ios::out | std::ios::binary);
     if (!(*m_outFile))
         return false;

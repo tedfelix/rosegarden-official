@@ -33,9 +33,9 @@ class WAVAudioFile : public RIFFAudioFile
 public:
     WAVAudioFile(const unsigned int &id,
                  const std::string &name,
-                 const std::string &fileName);
+                 const QString &fileName);
 
-    WAVAudioFile(const std::string &fileName,
+    WAVAudioFile(const QString &fileName,
                   unsigned int channels,
                   unsigned int sampleRate,
                   unsigned int bytesPerSecond,
@@ -73,8 +73,8 @@ public:
 
     // Peak file name
     //
-    virtual std::string getPeakFilename()
-        { return (m_fileName + std::string(".pk")); }
+    virtual QString getPeakFilename()
+        { return (m_fileName + ".pk"); }
 
 
 protected:
