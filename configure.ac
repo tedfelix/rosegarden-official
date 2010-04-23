@@ -1,10 +1,10 @@
 
-AC_INIT(Rosegarden, 10.04, rosegarden-devel@lists.sourceforge.net)
+AC_INIT(Rosegarden, 10.06, rosegarden-devel@lists.sourceforge.net)
 
 dnl  Each release will need the proper version  (e.g. 09.10) in the line above
 dnl  and the proper codename (e.g. Abraham Darby) in the following line
-CODENAME="Abraham Darby"
-# next up: Betty Prior
+CODENAME="Betty Prior"
+# next up: "Claire de Lune" unless someone has a better suggestion
 
 AC_CONFIG_SRCDIR(src/base/Composition.h)
 
