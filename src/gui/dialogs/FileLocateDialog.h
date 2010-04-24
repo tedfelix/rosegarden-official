@@ -43,11 +43,12 @@ public:
     QString getDirectory() { return m_path; }
     QString getFilename() { return m_file; }
 
-protected:
+protected slots:
     virtual void slotUser1();
     virtual void slotUser2();
     virtual void slotUser3();
 
+protected:
     QString m_file;
     QString m_path;
 
