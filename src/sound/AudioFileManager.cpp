@@ -47,8 +47,8 @@
 #include "sound/audiostream/AudioWriteStream.h"
 #include "sound/audiostream/AudioWriteStreamFactory.h"
 
-#define DEBUG_AUDIOFILEMANAGER
-#define DEBUG_AUDIOFILEMANAGER_INSERT_FILE
+// #define DEBUG_AUDIOFILEMANAGER
+// #define DEBUG_AUDIOFILEMANAGER_INSERT_FILE
 
 namespace Rosegarden
 {
@@ -392,21 +392,29 @@ AudioFileManager::setAudioPath(const QString &path)
     MutexLock lock (&_audioFileManagerLock)
         ;
 
-    QString hPath = path;
-    QString homePath = getenv("HOME");
+    if (path.size()!=0) {
+        QString hPath = path;
+        QString homePath = getenv("HOME");
     
-    // add a trailing / if we don't have one
-    //
-    if (hPath[hPath.size() - 1] != '/')
-        hPath += "/";
+        // add a trailing / if we don't have one
+        //
+        if (hPath[hPath.size() - 1] != '/')
+            hPath += "/";
 
-    // get the home directory
-    if (hPath[0] == '~') {
-        hPath.remove(0, 1);
-        hPath = homePath + hPath;
+        // get the home directory
+        if (hPath[0] == '~') {
+            hPath.remove(0, 1);
+            hPath = homePath + hPath;
+        }
+
+        m_audioPath = hPath;
     }
-
-    m_audioPath = hPath;
+    else {
+#ifdef DEBUG_AUDIOFILEMANAGER
+        std::cout << "AudioFileManager::setAudioPath - zero length path, do nothing"
+        << std::endl;
+#endif
+    }
 
 }
 
