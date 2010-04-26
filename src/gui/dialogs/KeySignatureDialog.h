@@ -57,7 +57,7 @@ public:
                        Rosegarden::Key::DefaultKey,
                        bool showApplyToAll = true,
                        bool showConversionOptions = true,
-                       QString explanatoryText = 0);
+                       QString explanatoryText = "");
 
     bool isValid() const;
     ::Rosegarden::Key getKey() const;

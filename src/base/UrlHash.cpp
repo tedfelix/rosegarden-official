@@ -16,10 +16,10 @@
 
 #include <QUrl>
 #include <QHash> // to ensure correct qHash(const QString &) is found
-
+#if QT_VERSION < 0x040700
 unsigned int
 qHash(const QUrl &u)
 {
     return qHash(u.toString());
 }
-
+#endif

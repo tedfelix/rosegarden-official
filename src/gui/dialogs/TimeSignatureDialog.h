@@ -49,7 +49,7 @@ public:
                         TimeSignature defaultSig =
                             TimeSignature::DefaultTimeSignature,
                         bool timeEditable = false,
-                        QString explanatoryText = 0);
+                        QString explanatoryText = "");
 
     TimeSignature getTimeSignature() const;
 

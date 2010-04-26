@@ -73,7 +73,7 @@ SynthPluginManagerDialog::SynthPluginManagerDialog(QWidget *parent,
     setupGuiMain();
     setupGuiCreatePluginList();
     
-    createGUI ( "synthpluginmanager.rc" );
+//    createGUI ( "synthpluginmanager.rc" );
 
     setAttribute(Qt::WA_DeleteOnClose);
     setSizePolicy(QSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum));
