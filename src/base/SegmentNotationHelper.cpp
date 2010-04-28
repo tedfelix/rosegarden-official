@@ -848,6 +848,8 @@ SegmentNotationHelper::insertSomething(iterator i, int duration,
     // 1. If we hit a bar line in the course of the intended inserted
     // note, we should split the note rather than make the bar the
     // wrong length.  (Not implemented yet)
+    // [NB. This is now implemented, but not here -- see end of
+    // NoteInsertionCommand::modifySegment --cc, 20100428]
     //
     // 2. If there's nothing at the insertion point but rests (and
     // enough of them to cover the entire duration of the new note),
