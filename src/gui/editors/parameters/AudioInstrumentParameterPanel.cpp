@@ -173,8 +173,9 @@ AudioInstrumentParameterPanel::slotPluginSelected(InstrumentId instrumentId,
         int index, int plugin)
 {
     if (!m_selectedInstrument ||
-            instrumentId != m_selectedInstrument->getId())
-        return ;
+        instrumentId != m_selectedInstrument->getId()) {
+        return;
+    }
 
     RG_DEBUG << "AudioInstrumentParameterPanel::slotPluginSelected - "
              << "instrument = " << instrumentId
@@ -342,6 +343,8 @@ void
 AudioInstrumentParameterPanel::setupForInstrument(Instrument* instrument)
 {
     blockSignals(true);
+
+    RG_DEBUG << "AudioInstrumentParameterPanel[" << this << "]::setupForInstrument(" << instrument << ")" << endl;
 
     m_selectedInstrument = instrument;
 
