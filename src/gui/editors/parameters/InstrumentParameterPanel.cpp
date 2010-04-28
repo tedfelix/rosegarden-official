@@ -43,6 +43,7 @@ void
 InstrumentParameterPanel::setDocument(RosegardenDocument* doc)
 {
     m_doc = doc;
+    m_selectedInstrument = 0;
 }
 
 }
