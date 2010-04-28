@@ -22,7 +22,9 @@
 #include "gui/general/SelectionManager.h"
 #include "gui/general/EditViewBase.h"
 #include "gui/widgets/ProgressBar.h"
+#include "gui/dialogs/TempoDialog.h"
 #include "base/NotationTypes.h"
+#include "base/Composition.h"
 
 #include <QMainWindow>
 #include <QLabel>
@@ -78,6 +80,10 @@ signals:
     void panic();
     void editTriggerSegment(int);
     void stepByStepTargetRequested(QObject *);
+    void changeTempo(timeT,  // tempo change time
+                     tempoT,  // tempo value
+                     tempoT,  // target value
+                     TempoDialog::TempoDialogAction); // tempo action
 
 protected slots:
     /// Remove a segment from our list when it is deleted from the composition

@@ -25,6 +25,7 @@
 #include "gui/general/SelectionManager.h"
 #include "gui/general/EditViewBase.h"
 #include "gui/widgets/DeferScrollArea.h"
+#include "gui/dialogs/TempoDialog.h"
 
 #include <QMainWindow>
 
@@ -91,6 +92,10 @@ signals:
     void panic();
 
     void stepByStepTargetRequested(QObject *);
+    void changeTempo(timeT,  // tempo change time
+                     tempoT,  // tempo value
+                     tempoT,  // target value
+                     TempoDialog::TempoDialogAction); // tempo action
 
 protected slots:
     /// Remove a segment from our list when it is deleted from the composition
