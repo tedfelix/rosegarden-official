@@ -7757,6 +7757,7 @@ RosegardenMainWindow::slotImportStudioFromFile(const QString &file)
             command->addCommand(new CreateOrDeleteDeviceCommand
                                 (&oldStudio,
                                  *di));
+            ++di;
         }
 
         oldStudio.setMIDIThruFilter(newStudio.getMIDIThruFilter());
