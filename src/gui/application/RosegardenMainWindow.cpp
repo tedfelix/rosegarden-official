@@ -7712,8 +7712,7 @@ RosegardenMainWindow::slotImportStudioFromFile(const QString &file)
         for (DeviceList::const_iterator i =
                  oldStudio.begin(); i != oldStudio.end(); ++i) {
 
-            MidiDevice *md =
-                dynamic_cast<MidiDevice *>(*i);
+            MidiDevice *md = dynamic_cast<MidiDevice *>(*i);
 
             if (md && (md->getDirection() == MidiDevice::Play)) {
                 midiPlayDevices.push_back((*i)->getId());
@@ -7722,11 +7721,10 @@ RosegardenMainWindow::slotImportStudioFromFile(const QString &file)
 
         std::vector<DeviceId>::iterator di(midiPlayDevices.begin());
 
-        for (DeviceList::const_iterator i =
-                    newStudio.begin(); i != newStudio.end(); ++i) {
+        for (DeviceList::const_iterator i = newStudio.begin();
+             i != newStudio.end(); ++i) {
 
-            MidiDevice *md =
-                dynamic_cast<MidiDevice *>(*i);
+            MidiDevice *md = dynamic_cast<MidiDevice *>(*i);
 
             if (md && (md->getDirection() == MidiDevice::Play)) {
                 if (di != midiPlayDevices.end()) {
@@ -7736,11 +7734,12 @@ RosegardenMainWindow::slotImportStudioFromFile(const QString &file)
                     ProgramList pl(md->getPrograms());
                     ControlList cl(md->getControlParameters());
 
-                    ModifyDeviceCommand* mdCommand = new ModifyDeviceCommand(&oldStudio,
-                                                     *di,
-                                                     md->getName(),
-                                                     md->getLibrarianName(),
-                                                     md->getLibrarianEmail());
+                    ModifyDeviceCommand* mdCommand =
+                        new ModifyDeviceCommand(&oldStudio,
+                                                *di,
+                                                md->getName(),
+                                                md->getLibrarianName(),
+                                                md->getLibrarianEmail());
                     mdCommand->setVariation(variation);
                     mdCommand->setBankList(bl);
                     mdCommand->setProgramList(pl);
@@ -7767,7 +7766,8 @@ RosegardenMainWindow::slotImportStudioFromFile(const QString &file)
         m_doc->initialiseStudio(); // The other document will have reset it
         
         if (m_view) {
-            m_view->slotSelectTrackSegments(m_doc->getComposition().getSelectedTrack());
+            m_view->slotSelectTrackSegments
+                (m_doc->getComposition().getSelectedTrack());
         }
     }
     delete doc;
