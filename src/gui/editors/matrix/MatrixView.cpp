@@ -1571,7 +1571,7 @@ MatrixView::slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn
 
     Event modelEvent(Note::EventType, 0, 1);
     modelEvent.set<Int>(BaseProperties::PITCH, pitch);
-    static timeT insertionTime(getInsertionTime());
+    timeT insertionTime(getInsertionTime());
     if (insertionTime >= segment->getEndMarkerTime()) {
         MATRIX_DEBUG << "WARNING: off end of segment" << endl;
         return ;
