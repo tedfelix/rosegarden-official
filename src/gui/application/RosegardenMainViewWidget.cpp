@@ -896,19 +896,81 @@ void RosegardenMainViewWidget::slotSelectTrackSegments(int trackId)
     if (track == 0)
         return ;
 
+    SegmentSelection segments;
+
+    if (QApplication::keyboardModifiers() != Qt::ShiftModifier) {
+      
+        // Shift key is not pressed :
+        
+        // Select all segments on the current track
+        // (all the other segments will be deselected)
+        for (Composition::iterator i =
+                    getDocument()->getComposition().begin();
+                i != getDocument()->getComposition().end(); i++) {
+            if (((int)(*i)->getTrack()) == trackId)
+                segments.insert(*i);
+        }
+      
+    } else {
+
+        // Shift key is pressed :
+
+        // Get the list of the currently selected segments 
+        segments = getSelection();
+
+        // Segments on the current track will be added to or removed
+        // from this list depending of the number of segments already
+        // selected on this track.
+
+        // Look for already selected segments on this track
+        bool noSegSelected = true;
+        for (Composition::iterator i =
+                  getDocument()->getComposition().begin();
+              i != getDocument()->getComposition().end(); i++) {
+            if (((int)(*i)->getTrack()) == trackId) {
+                if (segments.count(*i)) {
+                    // Segment *i is selected
+                    noSegSelected = false;
+                }
+            }
+        }
+
+        if (!noSegSelected) {
+
+            // Some segments are selected :
+            // Deselect all selected segments on this track
+            for (Composition::iterator i =
+                     getDocument()->getComposition().begin();
+                 i != getDocument()->getComposition().end(); i++) {
+                if (((int)(*i)->getTrack()) == trackId) {
+                    if (segments.count(*i)) {
+                        // Segment *i is selected
+                        segments.erase(*i);
+                    }
+                }
+            }
+            
+
+        } else {
+        
+            // There is no selected segment on this track :
+            // Select all segments on this track
+            for (Composition::iterator i =
+                     getDocument()->getComposition().begin();
+                 i != getDocument()->getComposition().end(); i++) {
+                if (((int)(*i)->getTrack()) == trackId) {
+                    segments.insert(*i);
+                }
+            }
+        }
+        
+    }
+    
+
     // Show the selection on the track buttons.  Find the position.
     //
     m_trackEditor->getTrackButtons()->selectLabel(track->getPosition());
     m_trackEditor->slotScrollToTrack(track->getPosition());
-
-    SegmentSelection segments;
-
-    for (Composition::iterator i =
-                getDocument()->getComposition().begin();
-            i != getDocument()->getComposition().end(); i++) {
-        if (((int)(*i)->getTrack()) == trackId)
-            segments.insert(*i);
-    }
 
     // Store the selected Track in the Composition
     //

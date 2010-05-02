@@ -85,7 +85,13 @@ TrackLabel::TrackLabel(TrackId id,
     connect(m_pressTimer, SIGNAL(timeout()),
             this, SIGNAL(changeToInstrumentList()));
 
-    this->setToolTip(tr("<qt>Click and hold with either mouse button to assign this track to an instrument.</qt>"));
+    this->setToolTip(tr("<qt>"
+                        "<p>Click to select all the segments on this track.</p>"
+                        "<p>Shift+click to add to or to remove from the"
+                        " selection all the segments on this track.</p>"
+                        "<p>Click and hold with either mouse button to assign"
+                        " this track to an instrument.</p>"
+                        "</qt>"));
 
 }
 
