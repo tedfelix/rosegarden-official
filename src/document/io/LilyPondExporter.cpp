@@ -1390,6 +1390,8 @@ LilyPondExporter::write()
         // Sync the code below with LyricEditDialog::unparse() !!
         //
                 if (m_exportLyrics != EXPORT_NO_LYRICS) {
+            // To force correct ordering of verses must track when first verse is printed.
+            bool isFirstPrintedVerse = true;
             for (long currentVerse = 0, lastVerse = 0; 
                          currentVerse <= lastVerse; 
              currentVerse++) {
@@ -1464,9 +1466,15 @@ LilyPondExporter::write()
                         << " \\new Lyrics \\lyricmode {" << std::endl;
                             } else {
                     str << indent(col)
-                        << "\\new Lyrics \\with {alignBelowContext=\"track " << (trackPos + 1) << "\"} "
-                                    << "\\lyricsto \"" << voiceNumber.str() << "\"" << " \\lyricmode {" << std::endl;
-                            }
+                        << "\\new Lyrics ";
+                    // Put special alignment info for first printed verse only.
+                    // Otherwise, verses print in reverse order.
+                    if (isFirstPrintedVerse) {
+                        str << "\\with {alignBelowContext=\"track " << (trackPos + 1) << "\"} ";
+                        isFirstPrintedVerse = false;
+                    }
+                    str << "\\lyricsto \"" << voiceNumber.str() << "\"" << " \\lyricmode {" << std::endl;
+                    }
                 if (m_exportLyrics == EXPORT_LYRICS_RIGHT) {
                 str << indent(++col) << "\\override LyricText #'self-alignment-X = #RIGHT"
                     << std::endl;
