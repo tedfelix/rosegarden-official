@@ -1092,7 +1092,8 @@ LilyPondExporter::write()
                             }
 
                 if (numberOfChords == -1) {
-                    str << indent(col++) << "\\new ChordNames \\chordmode {" << std::endl;
+                    str << indent(col++) << "\\new ChordNames " << "\\with {alignAboveContext=\"track " <<
+                    (trackPos + 1) << "\"}" << "\\chordmode {" << std::endl;
                 str << indent(col) << "\\set chordNameExceptions = #chExceptions" << std::endl;
                 str << indent(col);
                         numberOfChords++;
