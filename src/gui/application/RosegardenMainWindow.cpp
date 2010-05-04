@@ -179,6 +179,7 @@
 #include "gui/studio/DeviceManagerDialog.h"
 #include "gui/widgets/InputDialog.h"
 #include "TranzportClient.h"
+#include "gui/dialogs/ShortcutsDialog.h"
 
 #include <QApplication>
 #include <QDesktopServices>
@@ -740,6 +741,13 @@ RosegardenMainWindow::setupActions()
     createAction("debug_dump_segments", SLOT(slotDebugDump()));
     
     createAction("repeat_segment_onoff", m_segmentParameterBox, SLOT(slotRepeatPressed()));
+
+    createAction("edit_shortcuts",SLOT(slotEditShortcuts()));
+    createAction("load_shortcuts",SLOT(slotLoadShortcuts()));
+    createAction("save_shortcuts",SLOT(slotSaveShortcuts()));
+    /* load previously saved stuff */
+    /* In order to get the default values, do not automatically load shortcuts  */
+    /* slotLoadShortcuts(); */
 
     createGUI("rosegardenmainwindow.rc");
 
@@ -5794,6 +5802,49 @@ RosegardenMainWindow::slotTestClipboard()
             leaveActionState("have_clipboard_single_segment");
         }
     }
+}
+
+void
+RosegardenMainWindow::slotEditShortcuts()
+{
+    RG_DEBUG << "RosegardenMainWindow::slotEditShortcuts()" << endl;
+    QObjectList shortcutsList = queryList("QAction");
+    ShortcutsDialog shortcutsDialog(&shortcutsList, this);
+    shortcutsDialog.exec();
+}
+
+void
+RosegardenMainWindow::slotLoadShortcuts()
+{
+    RG_DEBUG << "RosegardenMainWindow::slotLoadShortcuts()" << endl;
+    QSettings settings;
+    settings.beginGroup("Shortcuts");
+
+    QObjectList shortcutsList = queryList("QAction");
+    for (QObjectList::iterator i=shortcutsList.begin(); i!=shortcutsList.end();++i) {
+        QAction *shortcut = static_cast<QAction*>((*i));
+        QString accelText = settings.readEntry(shortcut->text());
+        if (!accelText.isNull())
+            shortcut->setAccel(QKeySequence(accelText));
+    }
+    settings.endGroup();
+}
+
+void
+RosegardenMainWindow::slotSaveShortcuts()
+{
+    RG_DEBUG << "RosegardenMainWindow::slotSaveShortcuts()" << endl;
+    QSettings settings;
+    settings.beginGroup("Shortcuts");
+
+    QObjectList shortcutsList = queryList("QAction");
+    for (QObjectList::iterator i=shortcutsList.begin(); i!=shortcutsList.end();++i) {
+        QAction *shortcut = static_cast<QAction*>((*i));
+        QString accelText = QString(shortcut->accel());
+        RG_DEBUG << "accelText: " << accelText << " / shortcut->text " << shortcut->text() << endl;
+        settings.writeEntry(shortcut->text(), accelText);
+    }
+    settings.endGroup();
 }
 
 void
