@@ -1683,36 +1683,36 @@ LilyPondExporter::writeBar(Segment *s,
         return ;
 
     if (MultiMeasureRestCount == 0) {
-    str << std::endl;
+        str << std::endl;
 
-    if ((barNo + 1) % 5 == 0) {
-        str << "%% " << barNo + 1 << std::endl << indent(col);
-    } else {
-        str << indent(col);
-    }
+        if ((barNo + 1) % 5 == 0) {
+            str << "%% " << barNo + 1 << std::endl << indent(col);
+        } else {
+            str << indent(col);
+        }
     }
 
     bool isNew = false;
     TimeSignature timeSignature = m_composition->getTimeSignatureInBar(barNo, isNew);
     if (isNew) {
-    if (timeSignature.isHidden()) {
-        str << "\\once \\override Staff.TimeSignature #'break-visibility = #(vector #f #f #f) ";
-    }
-    //
-    // It is not possible to jump between common time signature "C"
-    // and fractioned time signature "4/4", because new time signature
-    // is entered only if the time signature fraction changes.
-    // Maybe some tweak is needed in order to allow the jumping between
-    // "C" and "4/4" ? (HJJ)
-    //
-    if (timeSignature.isCommon() == false) {
-        // use numberedtime signature: 4/4
-        str << "\\once \\override Staff.TimeSignature #'style = #'() ";
-    }
-        str << "\\time "
-        << timeSignature.getNumerator() << "/"
-        << timeSignature.getDenominator()
-        << std::endl << indent(col);
+        if (timeSignature.isHidden()) {
+            str << "\\once \\override Staff.TimeSignature #'break-visibility = #(vector #f #f #f) ";
+        }
+        //
+        // It is not possible to jump between common time signature "C"
+        // and fractioned time signature "4/4", because new time signature
+        // is entered only if the time signature fraction changes.
+        // Maybe some tweak is needed in order to allow the jumping between
+        // "C" and "4/4" ? (HJJ)
+        //
+        if (timeSignature.isCommon() == false) {
+            // use numberedtime signature: 4/4
+            str << "\\once \\override Staff.TimeSignature #'style = #'() ";
+        }
+            str << "\\time "
+            << timeSignature.getNumerator() << "/"
+            << timeSignature.getDenominator()
+            << std::endl << indent(col);
     }
 
     timeT absTime = (*i)->getNotationAbsoluteTime();
@@ -1757,8 +1757,7 @@ LilyPondExporter::writeBar(Segment *s,
                 (*i)->isa(Symbol::EventType)) {
 
             long newGroupId = -1;
-            if ((*i)->get
-                    <Int>(BEAMED_GROUP_ID, newGroupId)) {
+            if ((*i)->get<Int>(BEAMED_GROUP_ID, newGroupId)) {
 
                 if (newGroupId != groupId) {
                     // entering a new beamed group
@@ -1783,10 +1782,8 @@ LilyPondExporter::writeBar(Segment *s,
                     if (groupType == GROUP_TYPE_TUPLED) {
                         long numerator = 0;
                         long denominator = 0;
-                        (*i)->get
-                        <Int>(BEAMED_GROUP_TUPLED_COUNT, numerator);
-                        (*i)->get
-                        <Int>(BEAMED_GROUP_UNTUPLED_COUNT, denominator);
+                        (*i)->get<Int>(BEAMED_GROUP_TUPLED_COUNT, numerator);
+                        (*i)->get<Int>(BEAMED_GROUP_UNTUPLED_COUNT, denominator);
                         if (numerator == 0 || denominator == 0) {
                             std::cerr << "WARNING: LilyPondExporter::writeBar: "
                             << "tupled event without tupled/untupled counts"
@@ -1842,13 +1839,13 @@ LilyPondExporter::writeBar(Segment *s,
         if ((*i)->has(IS_GRACE_NOTE) && (*i)->get<Bool>(IS_GRACE_NOTE)) {
             if (isGrace == 0) { 
                 isGrace = 1;
-                    str << "\\grace { ";
+                str << "\\grace { ";
                 // str << "%{ grace starts %} "; // DEBUG
             }
         } else if (isGrace == 1) {
             isGrace = 0;
             // str << "%{ grace ends %} "; // DEBUG
-                str << "} ";
+            str << "} ";
         }
         str << qStrToStrUtf8(startGroupBeamingsStr);
 
@@ -1910,8 +1907,7 @@ LilyPondExporter::writeBar(Segment *s,
             }
 
             if (e->has(NotationProperties::STEM_UP)) {
-                if (e->get
-                        <Bool>(NotationProperties::STEM_UP)) {
+                if (e->get<Bool>(NotationProperties::STEM_UP)) {
                     if (lastStem != 1) {
                         str << "\\stemUp ";
                         lastStem = 1;
@@ -2013,8 +2009,7 @@ LilyPondExporter::writeBar(Segment *s,
             std::vector<Mark> marks(chord.getMarksForChord());
             // problem here: stem direction unavailable (it's a view-local property)
             bool stemUp = true;
-            e->get
-            <Bool>(NotationProperties::STEM_UP, stemUp);
+            e->get<Bool>(NotationProperties::STEM_UP, stemUp);
             for (std::vector<Mark>::iterator j = marks.begin(); j != marks.end(); ++j) {
                 str << composeLilyMark(*j, stemUp);
             }
@@ -2025,16 +2020,16 @@ LilyPondExporter::writeBar(Segment *s,
             handleStartingPostEvents(postEventsToStart, str);
 
             if (tiedForward) {
-            if (tiedUp) {
+                if (tiedUp) {
                     str << "^~ ";
-        } else {
-            str << "_~ ";
+                } else {
+                    str << "_~ ";
+                }
             }
-        }
 
-        if (hiddenNote) {
-            str << "\\unHideNotes ";
-        }
+            if (hiddenNote) {
+                str << "\\unHideNotes ";
+            }
 
             if (newBeamedGroup) {
                 // This is a workaround for bug #1705430:
@@ -2045,12 +2040,12 @@ LilyPondExporter::writeBar(Segment *s,
                 Note note(Note::getNearestNote(duration, MAX_DOTS));
 
                 switch (note.getNoteType()) {
-                case Note::SixtyFourthNote:
-                case Note::ThirtySecondNote:
-                case Note::SixteenthNote:
-                case Note::EighthNote:
-                    notesInBeamedGroup++;
-                    break;
+                    case Note::SixtyFourthNote:
+                    case Note::ThirtySecondNote:
+                    case Note::SixteenthNote:
+                    case Note::EighthNote:
+                        notesInBeamedGroup++;
+                        break;
                 }
             }
             // // Old version before the workaround for bug #1705430:
@@ -2060,8 +2055,7 @@ LilyPondExporter::writeBar(Segment *s,
 
             bool hiddenRest = false;
             if ((*i)->has(INVISIBLE)) {
-                if ((*i)->get
-                        <Bool>(INVISIBLE)) {
+                if ((*i)->get<Bool>(INVISIBLE)) {
                     hiddenRest = true;
                 }
             }
@@ -2087,116 +2081,117 @@ LilyPondExporter::writeBar(Segment *s,
                  std::cout << "NO REST OFFSET" << std::endl;
             }
 
-        if (MultiMeasureRestCount == 0) {
-        if (hiddenRest) {
+            if (MultiMeasureRestCount == 0) {
+                if (hiddenRest) {
                     std::cout << "HIDDEN REST" << std::endl;
-            str << "s";
-        } else if (duration == timeSignature.getBarDuration()) {
-            // Look ahead the segment in order to detect
-            // the number of measures in the multi measure rest.
-            std::cout << "INCREMENTING MULTI-MEASURE COUNTER (offset rest height will be ignored)" << std::endl;
-            Segment::iterator mm_i = i;
-            while (s->isBeforeEndMarker(++mm_i)) {
-            if ((*mm_i)->isa(Note::EventRestType) &&
-                (*mm_i)->getNotationDuration() == (*i)->getNotationDuration() &&
-                timeSignature == m_composition->getTimeSignatureAt((*mm_i)->getNotationAbsoluteTime())) {
-                MultiMeasureRestCount++;
-            } else {
-                break;
-            }
-            }
-            str << "R";
-        } else {
-            handleEndingPreEvents(preEventsInProgress, i, str);
-            handleStartingPreEvents(preEventsToStart, str);
+                    str << "s";
+                } else if (duration == timeSignature.getBarDuration()) {
+                    // Look ahead the segment in order to detect
+                    // the number of measures in the multi measure rest.
+                    std::cout << "INCREMENTING MULTI-MEASURE COUNTER (offset rest height will be ignored)" << std::endl;
+                    Segment::iterator mm_i = i;
+                    while (s->isBeforeEndMarker(++mm_i)) {
+                        if ((*mm_i)->isa(Note::EventRestType) &&
+                        (*mm_i)->getNotationDuration() == (*i)->getNotationDuration() &&
+                        timeSignature == m_composition->getTimeSignatureAt((*mm_i)->getNotationAbsoluteTime())) {
+                            MultiMeasureRestCount++;
+                        } else {
+                            break;
+                        }
+                    }
+                    str << "R";
+                } else {
+                    handleEndingPreEvents(preEventsInProgress, i, str);
+                    handleStartingPreEvents(preEventsToStart, str);
 
-            if (offsetRest) {
-                // translate the fine tuning of steps into steps
-                int offset = -(restOffset / 500);
+                    if (offsetRest) {
+                        // translate the fine tuning of steps into steps
+                        int offset = -(restOffset / 500);
 
-                // accept only even steps to imitate Rosegarden's behaviour
-                if (offset % 2 != 0) {
-                    offset += (offset > 0 ? -1 : 1);
+                        // accept only even steps to imitate Rosegarden's behaviour
+                        if (offset % 2 != 0) {
+                            offset += (offset > 0 ? -1 : 1);
+                        }
+                        // move the default position of the rest
+                        int heightOnStaff = 4 + offset;
+
+                        // find out the pitch corresponding to the rest position
+                        Clef m_lastClefFound((*s).getClefAtTime((*i)->getAbsoluteTime()));
+                        Pitch helper(heightOnStaff, m_lastClefFound, Rosegarden::Key::DefaultKey);
+
+                        // use MIDI pitch to get a named note with octavation
+                        int p = helper.getPerformancePitch();
+                        std::string n = convertPitchToLilyNote(p, Accidentals::NoAccidental,
+                                                               Rosegarden::Key::DefaultKey);
+
+                        // write named note
+                        str << n;
+
+                        std::cout << "Offsetting rest: "
+                                  << "offset = " << offset << ", "
+                                  << "heightOnStaff = " << heightOnStaff << ", "
+                                  << "pitch = " << p << ", "
+                                  << "note = " << n
+                                  << std::endl;
+
+                        // defer the \rest until after any duration, because it
+                        // can't come before a duration
+                        // necessary, which is all determined a bit further on
+                        needsSlashRest = true;
+
+                    } else {
+                        str << "r";
+
+                        // a rest CAN have a fermata, and it could have a text
+                        // mark conceivably, so we need to export these
+                        std::vector<Mark> marks(Marks::getMarks(**i));
+                        for (std::vector<Mark>::iterator j = marks.begin(); j != marks.end(); ++j) {
+                            // even at the most optimistic, I doubt we'd ever
+                            // find a way to get a stemUp from a rest, so just
+                            // set this true, because a fermata is the main
+                            // thing we're after, and it will want to go up top
+                            // more often than not
+                            str << composeLilyMark(*j, true);
+                        }
+                        if (marks.size() > 0)
+                            str << " ";
+                    }
                 }
-                // move the default position of the rest
-                int heightOnStaff = 4 + offset;
-
-                // find out the pitch corresponding to the rest position
-                Clef m_lastClefFound((*s).getClefAtTime((*i)->getAbsoluteTime()));
-                Pitch helper(heightOnStaff, m_lastClefFound, Rosegarden::Key::DefaultKey);
-
-                // use MIDI pitch to get a named note with octavation
-                int p = helper.getPerformancePitch();
-                std::string n = convertPitchToLilyNote(p, Accidentals::NoAccidental, Rosegarden::Key::DefaultKey);
-
-                // write named note
-                str << n;
-
-                std::cout << "Offsetting rest: "
-                          << "offset = " << offset << ", "
-                          << "heightOnStaff = " << heightOnStaff << ", "
-                          << "pitch = " << p << ", "
-                          << "note = " << n
-                          << std::endl;
-
-                // defer the \rest until after any duration, because it
-                // can't come before a duration
-                // necessary, which is all determined a bit further on
-                needsSlashRest = true;
-
-             } else {
-                 str << "r";
-
-                 // a rest CAN have a fermata, and it could have a text
-                 // mark conceivably, so we need to export these
-                 std::vector<Mark> marks(Marks::getMarks(**i));
-                 for (std::vector<Mark>::iterator j = marks.begin(); j != marks.end(); ++j) {
-                     // even at the most optimistic, I doubt we'd ever
-                     // find a way to get a stemUp from a rest, so just
-                     // set this true, because a fermata is the main
-                     // thing we're after, and it will want to go up top
-                     // more often than not
-                    str << composeLilyMark(*j, true);
-                 }
-                 if (marks.size() > 0)
-                 str << " ";
-             }
-        }
         
-        if (duration != prevDuration) {
-            durationRatio = writeDuration(duration, str);
-            if (MultiMeasureRestCount > 0) {
-            str << "*" << (1 + MultiMeasureRestCount);
+                if (duration != prevDuration) {
+                    durationRatio = writeDuration(duration, str);
+                    if (MultiMeasureRestCount > 0) {
+                        str << "*" << (1 + MultiMeasureRestCount);
+                    }
+                    prevDuration = duration;
+                }
+
+                // have to add \rest to a fake rest note after any required
+                // duration change
+                if (needsSlashRest) {
+                    str << "\\rest";
+                    needsSlashRest = false;
+                }
+
+                if (lilyText != "") {
+                    str << lilyText;
+                    lilyText = "";
+                }
+
+                str << " ";
+        
+                handleEndingPostEvents(postEventsInProgress, i, str);
+                handleStartingPostEvents(postEventsToStart, str);
+
+                if (newBeamedGroup)
+                    notesInBeamedGroup++;
+            } else {
+                MultiMeasureRestCount--;
             }
-            prevDuration = duration;
-        }
-
-        // have to add \rest to a fake rest note after any required
-        // duration change
-        if (needsSlashRest) {
-            str << "\\rest";
-            needsSlashRest = false;
-        }
-
-        if (lilyText != "") {
-            str << lilyText;
-            lilyText = "";
-        }
-
-        str << " ";
-        
-        handleEndingPostEvents(postEventsInProgress, i, str);
-        handleStartingPostEvents(postEventsToStart, str);
-
-        if (newBeamedGroup)
-            notesInBeamedGroup++;
-        } else {
-            MultiMeasureRestCount--;
-        }
-        writtenDuration += soundingDuration;
-        std::pair<int,int> ratio = fractionProduct(durationRatio,tupletRatio);
-        durationRatioSum = fractionSum(durationRatioSum, ratio);
-        // str << qstrtostr(QString(" %{ %1/%2 * %3/%4 = %5/%6 %} ").arg(durationRatio.first).arg(durationRatio.second).arg(tupletRatio.first).arg(tupletRatio.second).arg(ratio.first).arg(ratio.second)); // DEBUG
+            writtenDuration += soundingDuration;
+            std::pair<int,int> ratio = fractionProduct(durationRatio,tupletRatio);
+            durationRatioSum = fractionSum(durationRatioSum, ratio);
+            // str << qstrtostr(QString(" %{ %1/%2 * %3/%4 = %5/%6 %} ").arg(durationRatio.first).arg(durationRatio.second).arg(tupletRatio.first).arg(tupletRatio.second).arg(ratio.first).arg(ratio.second)); // DEBUG
         } else if ((*i)->isa(Clef::EventType)) {
 
             try {
@@ -2205,8 +2200,7 @@ LilyPondExporter::writeBar(Segment *s,
                 str << "\\clef \"";
 
                 Clef clef(**i);
-
-                if (clef.getClefType() == Clef::Treble) {
+                 if (clef.getClefType() == Clef::Treble) {
                     str << "treble";
                 } else if (clef.getClefType() == Clef::French) {
                     str << "french";
@@ -2229,14 +2223,14 @@ LilyPondExporter::writeBar(Segment *s,
                 }
 
                 // save clef for later use by rests that need repositioned
-                 m_lastClefFound = clef;
-                 std::cout << "getting clef"
-                           << std::endl
-                            << "clef: "
-                            << clef.getClefType()
-                            << " lastClefFound: "
-                            << m_lastClefFound.getClefType()
-                            << std::endl;
+                m_lastClefFound = clef;
+                std::cout << "getting clef"
+                          << std::endl
+                          << "clef: "
+                          << clef.getClefType()
+                          << " lastClefFound: "
+                          << m_lastClefFound.getClefType()
+                          << std::endl;
 
                 // Transpose the clef one or two octaves up or down, if specified.
                 int octaveOffset = clef.getOctaveOffset();
@@ -2263,7 +2257,6 @@ LilyPondExporter::writeBar(Segment *s,
                 // grab the value of the key anyway, so we know what it was for
                 // future calls to writePitch() (fixes #2039048)
                 key = Rosegarden::Key(**i);
-
                 // then we only write a \key change to the export stream if the
                 // key signature was meant to be visible
                 if (!hiddenKey) {
@@ -2280,7 +2273,7 @@ LilyPondExporter::writeBar(Segment *s,
                     }
                     str << std::endl << indent(col);
                 }
-
+                  
             } catch (Exception e) {
                 std::cerr << "Bad key: " << e.getMessage() << std::endl;
             }
@@ -2398,7 +2391,7 @@ LilyPondExporter::writeBar(Segment *s,
         qstrtostr(QString("% %1").
                 arg(tr("warning: bar too short, padding with rests")));
         str << std::endl << indent(col) <<
-            qstrtostr(QString("% %1 + %2 < %3  &&  %4/%5 < %6/%7").
+        qstrtostr(QString("% %1 + %2 < %3  &&  %4/%5 < %6/%7").
                       arg(barStart).
                       arg(writtenDuration).
                       arg(barEnd).
