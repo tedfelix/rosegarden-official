@@ -1871,9 +1871,9 @@ LilyPondExporter::writeBar(Segment *s,
             Symbol symbol(**i);
 
             if (symbol.getSymbolType() == Symbol::Segno) {
-              str << "^\\markup { \\musicglyph #\"scripts.segno\" } ";
+              str << "\\mark \\markup { \\musicglyph #\"scripts.segno\" } ";
             } else if (symbol.getSymbolType() == Symbol::Coda) {
-              str << "^\\markup { \\musicglyph #\"scripts.coda\" } ";
+              str << "\\mark \\markup { \\musicglyph #\"scripts.coda\" } ";
             } else if (symbol.getSymbolType() == Symbol::Breath) {
               str << "\\breathe ";
             }
