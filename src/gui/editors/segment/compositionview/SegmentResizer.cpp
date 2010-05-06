@@ -134,7 +134,8 @@ void SegmentResizer::handleMouseButtonRelease(QMouseEvent *e)
             newStartTime = oldStartTime;
         }
 
-        if (changeMade()) {
+        // If something has changed
+        if (newStartTime != oldStartTime  ||  newEndTime != oldEndTime) {
                 
             if (newStartTime > newEndTime) std::swap(newStartTime, newEndTime);
 
@@ -277,85 +278,78 @@ int SegmentResizer::handleMouseMove(QMouseEvent *e)
 
     QRect oldRect = m_currentIndex->rect();
 
+    // Indicate fine-grain snap resolution.
+    // ??? rename setSnapGrain() -> setSnapFineGrain()
     m_canvas->setSnapGrain(true);
 
+    // Convert X coord to time
     timeT time = m_canvas->grid().snapX(e->pos().x());
-    timeT snap = m_canvas->grid().getSnapTime(double(e->pos().x()));
-    if (snap == 0)
-        snap = Note(Note::Shortest).getDuration();
 
-    // We only want to snap the end that we were actually resizing.
+    // Get the "snap size" of the grid at the current X coord.  It can change
+    // with certain snap modes and different time signatures.
+    // ??? rename getSnapTime() -> getSnapTimeForX()
+    timeT snapSize = m_canvas->grid().getSnapTime(double(e->pos().x()));
 
-    timeT itemStartTime, itemEndTime;
-
-    if (m_resizeStart) {
-        itemStartTime = CompositionItemHelper::getStartTime
-                        (m_currentIndex, m_canvas->grid());
-        itemEndTime = segment->getEndMarkerTime();
-    } else {
-        itemEndTime = CompositionItemHelper::getEndTime
-                      (m_currentIndex, m_canvas->grid());
-        itemStartTime = segment->getStartTime();
+    // If snap to grid is off
+    if (snapSize == 0) {
+        // Use the shortest note duration.
+        snapSize = Note(Note::Shortest).getDuration();
     }
 
-    timeT duration = 0;
-
     if (m_resizeStart) {
 
-        duration = itemEndTime - time;
+        timeT itemEndTime = segment->getEndMarkerTime();
+
+        timeT duration = itemEndTime - time;
+
         //         RG_DEBUG << "SegmentResizer::handleMouseMove() resize start : duration = "
-        //                  << duration << " - snap = " << snap
+        //                  << duration << " - snap = " << snapSize
         //                  << " - itemEndTime : " << itemEndTime
         //                  << " - time : " << time
         //                  << endl;
 
-        timeT newStartTime = 0;
+        timeT newStartTime = time;
 
-        if ((duration > 0 && duration < snap) ||
-                (duration < 0 && duration > -snap)) {
-
-            newStartTime = itemEndTime - (duration < 0 ? -snap : snap);
-
-        } else {
-
-            newStartTime = itemEndTime - duration;
+        if (duration < snapSize) {
+        
+            // Make sure the segment can never be smaller than the snap size.
+            newStartTime = itemEndTime - snapSize;
 
         }
 
+        // Change the size of the segment on the canvas.
         CompositionItemHelper::setStartTime(m_currentIndex,
                                             newStartTime,
                                             m_canvas->grid());
     } else { // resize end
 
-        duration = time - itemStartTime;
+        timeT itemStartTime = segment->getStartTime();
 
-        timeT newEndTime = 0;
+        timeT duration = time - itemStartTime;
+
+        timeT newEndTime = time;
 
         //         RG_DEBUG << "SegmentResizer::handleMouseMove() resize end : duration = "
-        //                  << duration << " - snap = " << snap
-        //                  << " - itemEndTime : " << itemEndTime
+        //                  << duration << " - snap = " << snapSize
+        //                  << " - itemStartTime : " << itemStartTime
         //                  << " - time : " << time
         //                  << endl;
 
-        if ((duration > 0 && duration < snap) ||
-                (duration < 0 && duration > -snap)) {
+        if (duration < snapSize) {
 
-            newEndTime = (duration < 0 ? -snap : snap) + itemStartTime;
-
-        } else {
-
-            newEndTime = duration + itemStartTime;
+            // Make sure the segment can't be resized smaller than the snap
+            // size.
+            newEndTime = itemStartTime + snapSize;
 
         }
 
+        // Change the size of the segment on the canvas.
         CompositionItemHelper::setEndTime(m_currentIndex,
                                           newEndTime,
                                           m_canvas->grid());
     }
 
-    if (duration != 0)
-        setChangeMade(true);
-
+    // Redraw the canvas
     m_canvas->slotUpdateSegmentsDrawBuffer(m_currentIndex->rect() | oldRect);
 
     return RosegardenScrollView::FollowHorizontal;
