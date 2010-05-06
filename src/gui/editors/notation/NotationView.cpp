@@ -1013,7 +1013,7 @@ NotationView::slotUpdateMenuStates()
         enterActionState("note_rest_tool_current");
         
     } else {
-        NOTATION_DEBUG << "Do note have NoteRestInserter " << endl;
+        NOTATION_DEBUG << "Do not have NoteRestInserter " << endl;
         leaveActionState("note_rest_tool_current");
     }
 
@@ -1921,15 +1921,26 @@ NotationView::slotSwitchToNotes()
     NOTATION_DEBUG << "NotationView::slotSwitchToNotes : entered. " << endl;
 
     QString actionName = "";
+    NoteRestInserter *currentInserter = NULL;
     if (m_notationWidget) {
-        NoteRestInserter *currentInserter = dynamic_cast<NoteRestInserter *>
+        currentInserter = dynamic_cast<NoteRestInserter *>
             (m_notationWidget->getCurrentTool());
 
         if (!currentInserter) {
-            NOTATION_DEBUG << "NotationView::slotSwitchToNotes() : expected"
-                       << " NoteRestInserter as current tool.  Silent exit."
-                       << endl;
-            return;
+            // Switch to NoteRestInserter
+            slotSetNoteRestInserter();
+            NOTATION_DEBUG << "NotationView::slotSwitchToNotes() : " 
+                    << "NoteRestInserter not current. Attempted to  switch. " << endl;
+            
+            //Try again to see if tool is set.
+            currentInserter = dynamic_cast<NoteRestInserter *>
+                    (m_notationWidget->getCurrentTool());
+            if (!currentInserter) {
+                NOTATION_DEBUG << "NotationView::slotSwitchToNotes() : expected"
+                        << " NoteRestInserter as current tool & "
+                        << "could not switch to it.  Silent exit." << endl;
+                return;
+            }
         }
 
         Note::Type unitType = currentInserter->getCurrentNote()
@@ -1968,15 +1979,26 @@ NotationView::slotSwitchToRests()
     NOTATION_DEBUG << "NotationView::slotSwitchToRests : entered. " << endl;
 
     QString actionName = "";
+    NoteRestInserter *currentInserter = NULL;
     if (m_notationWidget) {
-        NoteRestInserter *currentInserter = dynamic_cast<NoteRestInserter *>
+        currentInserter = dynamic_cast<NoteRestInserter *>
             (m_notationWidget->getCurrentTool());
 
         if (!currentInserter) {
-            NOTATION_DEBUG << "NotationView::slotSwitchToRests() : expected"
-                       << " NoteRestInserter as current tool.  Silent exit."
-                       << endl;
-            return;
+            // Switch to NoteRestInserter
+            slotSetNoteRestInserter();
+            NOTATION_DEBUG << "NotationView::slotSwitchToRests() : " 
+                    << "NoteRestInserter not current. Attempted to  switch. " << endl;
+            
+            //Try again to see if tool is set.
+            currentInserter = dynamic_cast<NoteRestInserter *>
+                    (m_notationWidget->getCurrentTool());
+            if (!currentInserter) {
+                NOTATION_DEBUG << "NotationView::slotSwitchToRests() : expected"
+                        << " NoteRestInserter as current tool & "
+                        << "could not switch to it.  Silent exit." << endl;
+                return;
+            }
         }
 
         Note::Type unitType = currentInserter->getCurrentNote()
@@ -2364,14 +2386,26 @@ void
 NotationView::slotToggleDot()
 {
     NOTATION_DEBUG << "NotationView::slotToggleDot : entered. " << endl;
+    NoteRestInserter *currentInserter = NULL;
     if (m_notationWidget) {
-        NoteRestInserter *currentInserter = dynamic_cast<NoteRestInserter *>
+        currentInserter = dynamic_cast<NoteRestInserter *>
             (m_notationWidget->getCurrentTool());
         if (!currentInserter) {
-            NOTATION_DEBUG << "NotationView::slotToggleDot : expected "
-                << "NoteRestInserter as current tool.  Silent exit."
-                << endl;       
-            return ;
+            // Switch to NoteRestInserter
+            slotSetNoteRestInserter();
+            NOTATION_DEBUG << "NotationView::slotToggleDot() : " 
+                    << "NoteRestInserter not current. Attempted to  switch. " << endl;
+            
+            //Try again to see if tool is set.
+            currentInserter = dynamic_cast<NoteRestInserter *>
+                    (m_notationWidget->getCurrentTool());
+            if (!currentInserter) {
+
+                NOTATION_DEBUG << "NotationView::slotToggleDot() : expected"
+                        << " NoteRestInserter as current tool & "
+                        << "could not switch to it.  Silent exit." << endl;
+                return;
+            }
         }
         Note note = currentInserter->getCurrentNote();
 
