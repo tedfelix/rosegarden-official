@@ -2808,7 +2808,12 @@ NotationView::slotEditAddClef()
     NotationScene *scene = m_notationWidget->getScene();
     if (!scene) return;
 
-    ClefDialog dialog(this, scene->getNotePixmapFactory(), lastClef);
+    // Fix bug #2997311 : don't use a NotePixmapFactory in selection mode
+    // to draw inside the dialog
+    NotePixmapFactory npf = *scene->getNotePixmapFactory();
+    npf.setSelected(false);
+
+    ClefDialog dialog(this, &npf, lastClef);
 
     if (dialog.exec() == QDialog::Accepted) {
 
@@ -2846,9 +2851,13 @@ NotationView::slotEditAddKeySignature()
     NotationScene *scene = m_notationWidget->getScene();
     if (!scene) return;
 
+    // Fix bug #2997311 : don't use a NotePixmapFactory in selection mode
+    // to draw inside the dialog
+    NotePixmapFactory npf = *scene->getNotePixmapFactory();
+    npf.setSelected(false);
 
     KeySignatureDialog dialog(this,
-                              scene->getNotePixmapFactory(),
+                              &npf,
                               clef,
                               key,
                               true,
