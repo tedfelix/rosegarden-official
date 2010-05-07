@@ -182,7 +182,7 @@ NoteRestInserter::handleMouseRelease(const NotationMouseEvent *e)
         doAddCommand
         (segment, m_clickTime, endTime, note, m_clickPitch,
          ((m_accidental == Accidentals::NoAccidental && m_followAccidental) ?
-          m_lastAccidental : m_accidental));
+          m_lastAccidental : m_accidental), 100);  // Velocity hard coded for now,
 
     if (lastInsertedEvent) {
 
@@ -256,6 +256,7 @@ void NoteRestInserter::showMenu()
 void
 NoteRestInserter::insertNote(Segment &segment, timeT insertionTime,
                          int pitch, Accidental accidental,
+                         int velocity,
                          bool suppressPreview)
 {
     Note note(m_noteType, m_noteDots);
@@ -270,7 +271,8 @@ NoteRestInserter::insertNote(Segment &segment, timeT insertionTime,
     }
 
     Event *lastInsertedEvent = doAddCommand
-                               (segment, insertionTime, endTime, note, pitch, accidental);
+                               (segment, insertionTime, endTime, note, pitch, accidental,
+                                velocity);
 
     if (lastInsertedEvent) {
 
@@ -549,7 +551,7 @@ NoteRestInserter::getOttavaShift(Segment &segment, timeT time)
 
 Event *
 NoteRestInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
-                           const Note &note, int pitch, Accidental accidental)
+                           const Note &note, int pitch, Accidental accidental, int velocity)
 {
     NOTATION_DEBUG << "doAddCommand: time " << time << ", endTime " << endTime
                    << ", pitch " << pitch << ",isaRestInserter "
@@ -593,7 +595,8 @@ NoteRestInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
               NoteInsertionCommand::GraceModeOn)
              : NoteInsertionCommand::GraceModeOff,
              targetSubordering,
-             m_defaultStyle);
+             m_defaultStyle,
+             velocity);
 
         activeCommand = insertionCommand;
 

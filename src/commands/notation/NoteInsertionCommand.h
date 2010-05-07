@@ -81,7 +81,8 @@ public:
                              MatrixMode matrixType,
                              GraceMode grace,
                              float targetSubordering,
-                             NoteStyleName noteStyle);
+                             NoteStyleName noteStyle,
+                             int velocity = 0); // Zero for rest inserter
     virtual ~NoteInsertionCommand();
 
     virtual EventSelection *getSubsequentSelection();
@@ -102,6 +103,7 @@ protected:
     GraceMode m_grace;
     float m_targetSubordering;
     NoteStyleName m_noteStyle;
+    int m_velocity;
 
     Event *m_lastInsertedEvent;
 };

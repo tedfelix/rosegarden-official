@@ -64,6 +64,7 @@ public:
                     timeT insertionTime,
                     int pitch,
                     Accidental accidental,
+                    int velocity,
                     bool suppressPreview = false);
 
     static const QString ToolName;
@@ -110,7 +111,8 @@ protected:
                                 timeT time,
                                 timeT endTime,
                                 const Note &,
-                                int pitch, Accidental);
+                                int pitch, Accidental,
+                                int velocity = 0);
 
     virtual bool computeLocationAndPreview(const NotationMouseEvent *e);
     virtual void showPreview();

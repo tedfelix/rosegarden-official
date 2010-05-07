@@ -45,7 +45,8 @@ NoteInsertionCommand::NoteInsertionCommand(Segment &segment, timeT time,
                                            MatrixMode matrixType,
                                            GraceMode grace,
                                            float targetSubordering,
-                                           NoteStyleName noteStyle) :
+                                           NoteStyleName noteStyle,
+                                           int velocity) :
         BasicCommand(tr("Insert Note"), segment,
                      getModificationStartTime(segment, time),
                      (autoBeam ? segment.getBarEndForTime(endTime) : endTime)),
@@ -59,6 +60,7 @@ NoteInsertionCommand::NoteInsertionCommand(Segment &segment, timeT time,
         m_grace(grace),
         m_targetSubordering(targetSubordering),
         m_noteStyle(noteStyle),
+        m_velocity(velocity),
         m_lastInsertedEvent(0)
 {
     // nothing
@@ -145,7 +147,7 @@ NoteInsertionCommand::modifySegment()
     }
 
     e->set<Int>(PITCH, m_pitch);
-    e->set<Int>(VELOCITY, 100);
+    e->set<Int>(VELOCITY, m_velocity);
 
     if (m_accidental != Accidentals::NoAccidental) {
         e->set<String>(ACCIDENTAL, m_accidental);

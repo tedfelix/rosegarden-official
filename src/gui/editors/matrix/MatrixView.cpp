@@ -1530,8 +1530,6 @@ MatrixView::slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn
     //  - proceed if notes do not overlap
     //  - make the chord if notes do overlap, and do not proceed
 
-    velocity = 42; // shut up warning; one day it would be nice to use velocity for something
-
     static int numberOfNotesOn = 0;
     static time_t lastInsertionTime = 0;
     if (!noteOn) {
@@ -1571,6 +1569,7 @@ MatrixView::slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn
 
     Event modelEvent(Note::EventType, 0, 1);
     modelEvent.set<Int>(BaseProperties::PITCH, pitch);
+    modelEvent.set<Int>(BaseProperties::VELOCITY, velocity);
     timeT insertionTime(getInsertionTime());
     if (insertionTime >= segment->getEndMarkerTime()) {
         MATRIX_DEBUG << "WARNING: off end of segment" << endl;

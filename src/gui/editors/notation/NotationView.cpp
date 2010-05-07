@@ -2346,7 +2346,7 @@ NotationView::slotInsertNoteFromAction()
 
             NOTATION_DEBUG << "Inserting note at pitch " << pitch << endl;
             currentInserter->insertNote(*segment, insertionTime,
-                pitch, accidental);
+                pitch, accidental, 100); // Velocity hard coded for now.
         }
     }
 }
@@ -3626,7 +3626,7 @@ void
 //!!! shut up compiler warning about unused 'velocity' but left original intact
 // because it would be a good thing to make use of velocity one day
 //NotationView::slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn)
-NotationView::slotInsertableNoteEventReceived(int pitch, int, bool noteOn)
+NotationView::slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn)
 {
     // NOTE: these next comments are from before 1.0, and that should be
     // understood when considering them in relation to Thorn
@@ -3705,7 +3705,7 @@ NotationView::slotInsertableNoteEventReceived(int pitch, int, bool noteOn)
             return ;
         NOTATION_DEBUG << "Inserting note in chord at pitch " << pitch << endl;
         noteInserter->insertNote(*segment, getInsertionTime(), pitch,
-                                 Accidentals::NoAccidental,
+                                 Accidentals::NoAccidental, velocity,
                                  true);
 
     } else {
@@ -3749,7 +3749,7 @@ NotationView::slotInsertableNoteEventReceived(int pitch, int, bool noteOn)
             numberOfNotesOn++;
 
             noteInserter->insertNote(*segment, insertionTime, pitch,
-                                     Accidentals::NoAccidental,
+                                     Accidentals::NoAccidental, velocity,
                                      true);
         }
     }
