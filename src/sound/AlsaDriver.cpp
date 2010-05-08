@@ -2484,8 +2484,8 @@ AlsaDriver::getMappedEventList(MappedEventList &composition)
                 std::cerr << "NOTE OFF: found NOTE ON at " << mE->getEventTime() << std::endl;
 #endif
 
-                if (duration < RealTime::zeroTime) {
-                    duration = RealTime::zeroTime;
+                if (duration <= RealTime::zeroTime) {
+                    duration = RealTime::fromMilliseconds(1); // Fix zero duration record bug.
                     mE->setEventTime(eventTime);
                 }
 
