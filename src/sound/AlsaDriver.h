@@ -385,7 +385,7 @@ protected:
     ClientPortPair getFirstDestination(bool duplex);
     ClientPortPair getPairForMappedInstrument(InstrumentId id);
     int getOutputPortForMappedInstrument(InstrumentId id);
-    std::map<unsigned int, std::map<unsigned int, MappedEvent*> >  m_noteOnMap;
+    std::map<unsigned int, std::multimap<unsigned int, MappedEvent*> >  m_noteOnMap;
 
     /**
      * Bring m_alsaPorts up-to-date; if newPorts is non-null, also

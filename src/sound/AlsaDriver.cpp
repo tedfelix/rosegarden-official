@@ -2464,20 +2464,24 @@ AlsaDriver::getMappedEventList(MappedEventList &composition)
                 // them.
                 //
                 composition.insert(new MappedEvent(mE));
-                m_noteOnMap[deviceId][chanNoteKey] = mE;
+                m_noteOnMap[deviceId].insert(std::pair<unsigned int, MappedEvent*>(chanNoteKey, mE));
 
                 break;
             }
 
-        case SND_SEQ_EVENT_NOTEOFF:
+        case SND_SEQ_EVENT_NOTEOFF: {
             if (fromController)
                 continue;
 
-            if (m_noteOnMap[deviceId][chanNoteKey] != 0) {
+            // Check the note on map for any note on events to close.
+//            std::map<unsigned int, std::multimap<unsigned int, MappedEvent*> >::iterator noteOnMapIt = m_noteOnMap.find(deviceId);
+            std::multimap<unsigned int, MappedEvent*>::iterator noteOnIt = m_noteOnMap[deviceId].find(chanNoteKey);
+            
+            if (noteOnIt != m_noteOnMap[deviceId].end()) {
 
                 // Set duration correctly on the NOTE OFF
                 //
-                MappedEvent *mE = m_noteOnMap[deviceId][chanNoteKey];
+                MappedEvent *mE = noteOnIt->second;
                 RealTime duration = eventTime - mE->getEventTime();
 
 #ifdef DEBUG_ALSA
@@ -2500,9 +2504,10 @@ AlsaDriver::getMappedEventList(MappedEventList &composition)
 
                 // reset the reference
                 //
-                m_noteOnMap[deviceId][chanNoteKey] = 0;
+                m_noteOnMap[deviceId].erase(noteOnIt);
 
             }
+        }
             break;
 
         case SND_SEQ_EVENT_KEYPRESS: {
