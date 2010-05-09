@@ -78,11 +78,11 @@ Panned::drawForeground(QPainter *paint, const QRectF &)
     }
 
     if (m_pointerVisible && scene()) {
-        QPoint top = mapFromScene(m_pointerTop + sceneRect().topLeft());
+        QPoint top = mapFromScene(m_pointerTop);
         float height = m_pointerHeight;
         if (height == 0.f) height = scene()->height();
         QPoint bottom = mapFromScene
-            (m_pointerTop + sceneRect().topLeft() + QPointF(0, height));
+            (m_pointerTop + QPointF(0, height));
         paint->save();
         paint->setWorldMatrix(QMatrix());
         paint->setPen(QPen(GUIPalette::getColour(GUIPalette::Pointer), 2));
