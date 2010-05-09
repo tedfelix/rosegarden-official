@@ -123,7 +123,7 @@ LilyPondExporter::readConfigVariables(void)
     m_fontSize = settings.value("lilyfontsize", FONT_20).toUInt() ;
     m_raggedBottom = qStrToBool(settings.value("lilyraggedbottom", "false")) ;
     m_exportSelection = settings.value("lilyexportselection", EXPORT_NONMUTED_TRACKS).toUInt() ;
-    m_exportLyrics = qStrToBool(settings.value("lilylyricshalignment", EXPORT_LYRICS_LEFT)) ;
+    m_exportLyrics = qStrToBool(settings.value("lilyexportlyrics", EXPORT_LYRICS_LEFT)) ;
     m_exportTempoMarks = settings.value("lilyexporttempomarks", EXPORT_NONE_TEMPO_MARKS).toUInt() ;
     m_exportBeams = qStrToBool(settings.value("lilyexportbeamings", "false")) ;
     m_exportStaffGroup = qStrToBool(settings.value("lilyexportstaffbrackets", "true")) ;
