@@ -204,6 +204,7 @@ MatrixScene::setCurrentSegment(Segment *s)
     for (int i = 0; i < int(m_segments.size()); ++i) {
         if (s == m_segments[i]) {
             m_currentSegmentIndex = i;
+            recreateLines();
             updateCurrentSegment();
             return;
         }
