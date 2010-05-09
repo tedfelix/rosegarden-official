@@ -163,6 +163,7 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     m_segmentChanger->setDefaultValue(0);
     m_segmentChanger->setShowScale(true);
     m_segmentChanger->setValue(60);
+    m_segmentChanger->setSpeed(0.05);
     m_lastSegmentChangerValue = m_segmentChanger->getValue();
     connect(m_segmentChanger, SIGNAL(valueChanged(int)), this,
             SLOT(slotSegmentChangerMoved(int)));

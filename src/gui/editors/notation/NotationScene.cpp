@@ -393,13 +393,13 @@ NotationScene::getStaffBelow()
 NotationStaff *
 NotationScene::getPriorStaffOnTrack()
 {
-    return getNextStaffHorizontally(-1, true);
+    return getNextStaffHorizontally(-1, false);
 }
 
 NotationStaff *
 NotationScene::getNextStaffOnTrack()
 {
-    return getNextStaffHorizontally(1, true);
+    return getNextStaffHorizontally(1, false);
 }
 
 NotationStaff *

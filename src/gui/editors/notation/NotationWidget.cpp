@@ -175,6 +175,8 @@ NotationWidget::NotationWidget() :
     m_HsegmentChanger->setDefaultValue(0);
     m_HsegmentChanger->setShowScale(true);
     m_HsegmentChanger->setValue(60);
+    m_HsegmentChanger->setSpeed(0.05);
+
     m_lastSegmentChangerValue = m_HsegmentChanger->getValue();
     connect(m_HsegmentChanger, SIGNAL(valueChanged(int)), this,
             SLOT(slotSegmentChangerMoved(int)));
@@ -187,6 +189,7 @@ NotationWidget::NotationWidget() :
     m_VsegmentChanger->setDefaultValue(0);
     m_VsegmentChanger->setShowScale(true);
     m_VsegmentChanger->setValue(60);
+    m_VsegmentChanger->setSpeed(0.05);
     m_lastSegmentChangerValue = m_VsegmentChanger->getValue();
     connect(m_VsegmentChanger, SIGNAL(valueChanged(int)), this,
             SLOT(slotSegmentChangerMoved(int)));
