@@ -331,6 +331,17 @@ MatrixScene::recreateLines()
 
         for (int index = 0; index < gridLines; ++index) {
 
+            // Check to see if we are withing the first segments start time.
+            if (x < startPos) {
+                x += dx;
+                continue;
+            }
+            
+            // Exit if we have passed the end of last segment end time.
+            if (x > endPos) {
+                break;
+            }
+
             // index 0 is the bar line
 
             QGraphicsLineItem *line;
@@ -352,13 +363,7 @@ MatrixScene::recreateLines()
 
             line->setLine(x, 0, x, 128 * (m_resolution + 1));
             
-            // Force hide of lines that are outside of segment range
-            if (x < startPos || x > endPos) {
-                line->hide();
-            } else {
-                line->show();
-            }
-
+            line->show();
             x += dx;
             ++i;
         }
