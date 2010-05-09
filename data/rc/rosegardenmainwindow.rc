@@ -244,13 +244,6 @@
       <Action name="toggle_tracking" text="Scro&amp;ll to Follow Playback" icon="transport-tracking" shortcut="Pause" checked="true" />
       <Action name="panic" text="P&amp;anic" icon="transport-panic" shortcut="Alt+Ctrl+P" />
     </Menu>
-    <Separator/>
-    <Menu name="Shortcuts">
-    <text>&amp;Shortcuts</text>
-     <Action name="edit_shortcuts" text="&amp;Edit shortcuts" icon="split" shortcut="F12" />
-     <Action name="load_shortcuts" text="&amp;Load shortcuts" icon="split" shortcut="F11" />
-     <Action name="save_shortcuts" text="&amp;Save shortcuts" icon="split" shortcut="F10" />
-    </Menu>
   </Menu>
 
   <Menu name="help" append="about_merge">

@@ -1557,13 +1557,6 @@ public slots:
                             QString text,
                             QString informativeText);
 
-    /*
-     * slots for handling (load, save, edit) Shortcuts
-     */
-    void slotEditShortcuts();
-    void slotSaveShortcuts();
-    void slotLoadShortcuts();
-
 protected slots:
     void setupRecentFilesMenu();
 
