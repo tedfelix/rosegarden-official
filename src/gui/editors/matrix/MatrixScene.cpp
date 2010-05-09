@@ -270,8 +270,8 @@ MatrixScene::recreateLines()
 //    double pw = 0.5;
     double pw = 0;
 
-    double x0 = m_scale->getXForTime(start);
-    double x1 = m_scale->getXForTime(end);
+    double startPos = m_scale->getXForTime(start);
+    double endPos = m_scale->getXForTime(end);
 
     int i = 0;
 
@@ -288,7 +288,7 @@ MatrixScene::recreateLines()
             addItem(line);
             m_horizontals.push_back(line);
         }
-        line->setLine(x0, y, x1, y);
+        line->setLine(startPos, y, endPos, y);
         line->show();
         ++i;
     }
@@ -297,7 +297,7 @@ MatrixScene::recreateLines()
         ++i;
     }
 
-    setSceneRect(QRectF(x0, 0, x1 - x0, 128 * (m_resolution + 1)));
+    setSceneRect(QRectF(startPos, 0, endPos - startPos, 128 * (m_resolution + 1)));
 
     Composition *c = &m_document->getComposition();
 
@@ -351,12 +351,18 @@ MatrixScene::recreateLines()
             }
 
             line->setLine(x, 0, x, 128 * (m_resolution + 1));
-            line->show();
+            
+            // Force hide of lines that are outside of segment range
+            if (x < startPos || x > endPos) {
+                line->hide();
+            } else {
+                line->show();
+            }
 
             x += dx;
             ++i;
 
-            if (bar == lastbar) break; // only the bar line, no grid lines here
+//            if (bar == lastbar) break; // only the bar line, no grid lines here
         }
     }
     while (i < (int)m_verticals.size()) {
