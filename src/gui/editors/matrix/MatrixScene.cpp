@@ -361,8 +361,6 @@ MatrixScene::recreateLines()
 
             x += dx;
             ++i;
-
-//            if (bar == lastbar) break; // only the bar line, no grid lines here
         }
     }
     while (i < (int)m_verticals.size()) {
