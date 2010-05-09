@@ -121,7 +121,7 @@
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="487"/>
         <source>&lt;qt&gt;&lt;p&gt;Create new playback devices here. Double-click the device name to change it. Select a device here and connect it to a MIDI output port by clicking on a port to the right.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Crea qui nuovi playback devices. Doppio click sul nome del device per cambiarlo. Seleziona qui un device e connettilo ad una porta output MIDI cliccando su una porta sulla destra.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="523"/>
@@ -2024,7 +2024,7 @@
         <location filename="../QMenuStrings.cpp" line="1952"/>
         <source>Ctrl+Alt++</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Alt++</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1990"/>
@@ -3363,172 +3363,172 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2246"/>
         <source>Double Whole Note</source>
-        <translation type="unfinished"></translation>
+        <translation>breve</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2253"/>
         <source>Ctrl+5</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+5</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2255"/>
         <source>Whole Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Semibreve</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2262"/>
         <source>Ctrl+1</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+1</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2264"/>
         <source>Half Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Minima</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2271"/>
         <source>Ctrl+2</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+2</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2273"/>
         <source>Quarter Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Semiminima</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2280"/>
         <source>Ctrl+4</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+4</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2282"/>
         <source>Eighth Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Ottavo</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2289"/>
         <source>Ctrl+8</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+8</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2291"/>
         <source>Sixteenth Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Semicroma</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2298"/>
         <source>Ctrl+6</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+6</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2300"/>
         <source>Thirty-Second Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Biscroma</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2307"/>
         <source>Ctrl+3</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+3</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2309"/>
         <source>Sixty-Fourth Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Semibiscroma</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2316"/>
         <source>Ctrl+0</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+0</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2318"/>
         <source>Double Whole Note (Without Duration Change)</source>
-        <translation type="unfinished"></translation>
+        <translation>Breve (senza cambiamento della durata)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2325"/>
         <source>Ctrl+Alt+5</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Alt+5</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2327"/>
         <source>Whole Note (Without Duration Change)</source>
-        <translation type="unfinished"></translation>
+        <translation>Semibreve (senza cambiamento della durata)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2336"/>
         <source>Half Note (Without Duration Change)</source>
-        <translation type="unfinished"></translation>
+        <translation>Minima (senza cambiamento della durata)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2343"/>
         <source>Ctrl+Alt+2</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Alt+2</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2345"/>
         <source>Quarter Note (Without Duration Change)</source>
-        <translation type="unfinished"></translation>
+        <translation>Semiminima (senza cambiamento della durata)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2352"/>
         <source>Ctrl+Alt+4</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Alt+4</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2354"/>
         <source>Eighth Note (Without Duration Change)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ottavo (senza cambiamento della durata)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2361"/>
         <source>Ctrl+Alt+8</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Alt+8</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2363"/>
         <source>Sixteenth Note (Without Duration Change)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sedicesimo (senza cambiamento della durata)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2370"/>
         <source>Ctrl+Alt+6</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Alt+6</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2372"/>
         <source>Thirty-Second Note (Without Duration Change)</source>
-        <translation type="unfinished"></translation>
+        <translation>Trentaduesimo (senza cambiamento della durata)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2379"/>
         <source>Ctrl+Alt+3</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Alt+6</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2381"/>
         <source>Sixty-Fourth Note (Without Duration Change)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sessantaquattresimo (senza cambiamento della durata)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2388"/>
         <source>Ctrl+Alt+0</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Alt+0</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2400"/>
