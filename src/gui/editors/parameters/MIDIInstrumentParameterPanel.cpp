@@ -918,7 +918,8 @@ MIDIInstrumentParameterPanel::slotToggleBank(bool value)
     populateProgramList();
     populateVariationList();
 
-    sendBankAndProgram();
+    if (value)
+        sendBankAndProgram();
 
     emit changeInstrumentLabel(m_selectedInstrument->getId(),
                                strtoqstr(m_selectedInstrument->
@@ -981,7 +982,8 @@ MIDIInstrumentParameterPanel::slotToggleVariation(bool value)
 
     populateVariationList();
 
-    sendBankAndProgram();
+//    if (value)
+//        sendBankAndProgram();
 
     emit changeInstrumentLabel(m_selectedInstrument->getId(),
                                strtoqstr(m_selectedInstrument->
@@ -1225,20 +1227,22 @@ MIDIInstrumentParameterPanel::sendBankAndProgram()
         StudioControl::sendMappedEvent(mELSB);
     }
 
-    MappedEvent mE(m_selectedInstrument->getId(),
-                   MappedEvent::MidiProgramChange,
-                   m_selectedInstrument->getProgramChange(),
-                   (MidiByte)0);
+    if (m_selectedInstrument->sendsProgramChange()) {
+        MappedEvent mE(m_selectedInstrument->getId(),
+                       MappedEvent::MidiProgramChange,
+                       m_selectedInstrument->getProgramChange(),
+                       (MidiByte)0);
 
-    RG_DEBUG << "MIDIInstrumentParameterPanel::sendBankAndProgram - "
-    << "sending program change = "
-    << int(m_selectedInstrument->getProgramChange())
-    << endl;
+        RG_DEBUG << "MIDIInstrumentParameterPanel::sendBankAndProgram - "
+        << "sending program change = "
+        << int(m_selectedInstrument->getProgramChange())
+        << endl;
 
 
-    // Send the controller change
-    //
-    StudioControl::sendMappedEvent(mE);
+        // Send the controller change
+        //
+        StudioControl::sendMappedEvent(mE);
+    }
 }
 
 void
