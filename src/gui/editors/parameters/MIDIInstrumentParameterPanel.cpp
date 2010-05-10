@@ -624,7 +624,12 @@ MIDIInstrumentParameterPanel::populateBankList()
         m_bankValue->addItem(QObject::tr(strtoqstr(i->getName())));
     }
 
-    m_bankValue->setEnabled(m_selectedInstrument->sendsBankSelect());
+    // Keep bank value enabled if percussion map is in use
+    if  (m_percussionCheckBox->isChecked()) {
+        m_bankValue->setDisabled(false);
+    } else {
+        m_bankValue->setEnabled(m_selectedInstrument->sendsBankSelect());
+    }    
 
     if (currentBank < 0 && !banks.empty()) {
         m_bankValue->setCurrentIndex(0);
@@ -697,7 +702,12 @@ MIDIInstrumentParameterPanel::populateProgramList()
         }
     }
 
-    m_programValue->setEnabled(m_selectedInstrument->sendsProgramChange());
+    // Keep program value enabled if percussion map is in use
+    if  (m_percussionCheckBox->isChecked()) {
+        m_programValue->setDisabled(false);
+    } else {
+        m_programValue->setEnabled(m_selectedInstrument->sendsProgramChange());
+    }    
 
     if (currentProgram < 0 && !m_programs.empty()) {
         m_programValue->setCurrentIndex(0);
@@ -852,7 +862,12 @@ MIDIInstrumentParameterPanel::populateVariationList()
         }
     }
 
-    m_variationValue->setEnabled(m_selectedInstrument->sendsBankSelect());
+    // Keep variation value enabled if percussion map is in use
+    if  (m_percussionCheckBox->isChecked()) {
+        m_variationValue->setDisabled(false);
+    } else {
+        m_variationValue->setEnabled(m_selectedInstrument->sendsBankSelect());
+    }    
 }
 
 void
@@ -892,7 +907,13 @@ MIDIInstrumentParameterPanel::slotToggleBank(bool value)
     m_variationCheckBox->setChecked(value);
     m_selectedInstrument->setSendBankSelect(value);
 
-    m_bankValue->setDisabled(!value);
+    // Keep bank value enabled if percussion map is in use
+    if  (m_percussionCheckBox->isChecked()) {
+        m_bankValue->setDisabled(false);
+    } else {
+        m_bankValue->setDisabled(!value);
+    }
+
     populateBankList();
     populateProgramList();
     populateVariationList();
@@ -918,7 +939,13 @@ MIDIInstrumentParameterPanel::slotToggleProgramChange(bool value)
 
     m_selectedInstrument->setSendProgramChange(value);
 
-    m_programValue->setDisabled(!value);
+    // Keep program value enabled if percussion map is in use
+    if  (m_percussionCheckBox->isChecked()) {
+        m_bankValue->setDisabled(false);
+    } else {
+        m_programValue->setDisabled(!value);
+    }
+
     populateProgramList();
     populateVariationList();
 
@@ -945,7 +972,13 @@ MIDIInstrumentParameterPanel::slotToggleVariation(bool value)
     m_bankCheckBox->setChecked(value);
     m_selectedInstrument->setSendBankSelect(value);
 
-    m_variationValue->setDisabled(!value);
+    // Keep variation value enabled if percussion map is in use
+    if  (m_percussionCheckBox->isChecked()) {
+        m_bankValue->setDisabled(false);
+    } else {
+        m_variationValue->setDisabled(!value);
+    }
+
     populateVariationList();
 
     sendBankAndProgram();
