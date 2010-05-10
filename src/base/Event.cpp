@@ -18,6 +18,7 @@
 #include <iostream>
 #include "Event.h"
 #include "XmlExportable.h"
+#include "NotationTypes.h"
 
 #include <sstream>
 
@@ -217,8 +218,17 @@ Event::toXmlString(timeT expectedTime)
 	out << " type=\"" << getType() << "\"";
     }
 
-    if (getDuration() != 0) {
-	out << " duration=\"" << getDuration() << "\"";
+    // Check for zero note durations and fix it (fixing in setters and
+    // constructors is problematic since -1 durations are used in recording
+    // and many events are indeed 0 duration events.
+    timeT duration = getDuration();
+    
+    if (isa(Note::EventType) && duration < 1) {
+        duration = 1;
+    }
+    
+    if (duration != 0) {
+	out << " duration=\"" << duration << "\"";
     }
 
     if (getSubOrdering() != 0) {
