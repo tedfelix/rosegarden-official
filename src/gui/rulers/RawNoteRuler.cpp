@@ -57,12 +57,32 @@ RawNoteRuler::RawNoteRuler(RulerScale *rulerScale,
 {
     setBackgroundColor(GUIPalette::getColour(GUIPalette::RawNoteRulerBackground));
     this->setToolTip("");
+    
+    if (m_segment) m_segment->addObserver(this);
 }
 
 RawNoteRuler::~RawNoteRuler()
 {
     // QToolTip::remove(this);
-    // nothing else
+    
+    if (m_segment) m_segment->removeObserver(this);
+}
+
+void
+RawNoteRuler::setCurrentSegment(Segment *segment)
+{
+    if (segment == m_segment) return;  // Don't waste CPU time
+    
+    if (m_segment) m_segment->removeObserver(this);
+    m_segment = segment;
+    if (m_segment) m_segment->addObserver(this);
+}
+
+void
+RawNoteRuler::segmentDeleted(const Segment *)
+{
+   if (m_segment) m_segment->removeObserver(this);
+   m_segment = 0;
 }
 
 void

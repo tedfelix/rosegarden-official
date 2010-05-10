@@ -45,7 +45,7 @@ class DefaultVelocityColour;
  * It has no editing function (yet?)
  */
 
-class RawNoteRuler : public QWidget
+class RawNoteRuler : public QWidget, public SegmentObserver
 {
     Q_OBJECT
 
@@ -59,21 +59,29 @@ public:
 
     ~RawNoteRuler();
 
-    void setCurrentSegment(Segment *segment) {
-        m_segment = segment;
-    }
+    void setCurrentSegment(Segment *segment);
 
     virtual QSize sizeHint() const;
     virtual QSize minimumSizeHint() const;
 
     void setMinimumWidth(int width) { m_width = width; }
+    
+    
+/** SegmentObserver methods : **/
+
+// Used to update the ruler when notes are moved around or deleted
+    virtual void eventAdded(const Segment *, Event *) { update(); }
+    virtual void eventRemoved(const Segment *, Event *) { update(); }
+
+    virtual void segmentDeleted(const Segment *);
+
 
 public slots:
     void slotScrollHoriz(int x);
 
 protected:
     virtual void paintEvent(QPaintEvent*);
-
+    
 private:
     double m_xorigin;
     int  m_height;
