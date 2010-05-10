@@ -218,6 +218,8 @@ RoseXmlHandler::RoseXmlHandler(RosegardenDocument *doc,
     m_deviceRunningId(Device::NO_DEVICE),
     m_deviceInstrumentBase(MidiInstrumentBase),
     m_deviceReadInstrumentBase(0),
+    m_sendProgramChange(false),
+    m_sendBankSelect(false),
     m_msb(0),
     m_lsb(0),
     m_instrument(0),
@@ -1335,6 +1337,13 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             m_percussion = (atts.value("percussion").toLower() == "true");
             m_msb = (atts.value("msb")).toInt();
             m_lsb = (atts.value("lsb")).toInt();
+            
+            // Must account for file format <1.6.0
+            // which would return an empty string.
+            //
+            // File formats <1.6.0 assume the existence of bank tag implies
+            // send bank select should be set to true.
+            m_sendBankSelect = !(atts.value("send").toLower() == "false");
 
             // To actually create a bank
             //
@@ -1358,7 +1367,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                         m_instrument->setPercussion(m_percussion);
                         m_instrument->setMSB(m_msb);
                         m_instrument->setLSB(m_lsb);
-                        m_instrument->setSendBankSelect(true);
+                        m_instrument->setSendBankSelect(m_sendBankSelect);
                     }
                 }
         }
@@ -1394,9 +1403,16 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             } else if (m_section == InInstrument)
             {
                 if (m_instrument) {
+                    // Must account for file format <1.6.0
+                    // which would return an empty string.
+                    //
+                    // File formats <1.6.0 assume the existence of bank tag implies
+                    // send program change should be set to true.
+                    m_sendProgramChange = !(atts.value("send").toLower() == "false");
+
                     MidiByte id = atts.value("id").toInt();
                     m_instrument->setProgramChange(id);
-                    m_instrument->setSendProgramChange(true);
+                    m_instrument->setSendProgramChange(m_sendProgramChange);
                 }
             } else
             {

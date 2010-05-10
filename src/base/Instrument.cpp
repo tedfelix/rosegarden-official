@@ -472,20 +472,16 @@ Instrument::toXmlString()
     {
         instrument << "midi\">" << std::endl;
 
-        if (m_sendBankSelect)
-        {
-            instrument << "            <bank percussion=\""
-		       << (isPercussion() ? "true" : "false") << "\" msb=\""
-		       << (int)getMSB();
-            instrument << "\" lsb=\"" << (int)getLSB() << "\"/>" << std::endl;
-        }
+        instrument << "            <bank send=\""
+                   << (m_sendBankSelect ? "true" : "false") << "\" percussion=\""
+                   << (isPercussion() ? "true" : "false") << "\" msb=\""
+		   << (int)getMSB()
+                   << "\" lsb=\"" << (int)getLSB() << "\"/>" << std::endl;
 
-        if (m_sendProgramChange)
-        {
-            instrument << "            <program id=\""
-                       << (int)getProgramChange() << "\"/>"
-                       << std::endl;
-        }
+        instrument << "            <program id=\""
+                   << (int)getProgramChange() << "\" send=\""
+                   << (m_sendProgramChange ? "true" : "false") << "\"/>"
+                   << std::endl;
     
         instrument << "            <pan value=\""
                    << (int)m_pan << "\"/>" << std::endl;

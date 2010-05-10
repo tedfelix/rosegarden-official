@@ -164,6 +164,8 @@ protected:
     InstrumentId                      m_deviceReadInstrumentBase;
     std::map<InstrumentId, InstrumentId> m_actualInstrumentIdMap;
     bool                              m_percussion;
+    bool                              m_sendProgramChange;
+    bool                              m_sendBankSelect;
     MidiByte                          m_msb;
     MidiByte                          m_lsb;
     Instrument                       *m_instrument;
