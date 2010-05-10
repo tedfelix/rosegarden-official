@@ -34,8 +34,6 @@ XmlStorableEvent::XmlStorableEvent(const QXmlAttributes &attributes,
 {
     setDuration(0);
 
-    bool isNote = false;
-    
     for (int i = 0; i < attributes.length(); ++i) {
 
         QString attrName(attributes.qName(i)),
@@ -47,7 +45,6 @@ XmlStorableEvent::XmlStorableEvent(const QXmlAttributes &attributes,
 
         } else if (attrName == "type") {
 
-            if (attrVal == "note") isNote = true;
             setType(qstrtostr(attrVal));
 
         } else if (attrName == "subordering") {
@@ -132,7 +129,8 @@ XmlStorableEvent::XmlStorableEvent(const QXmlAttributes &attributes,
         }
     }
 
-    if (isNote && getDuration() < 1) setDuration(1);
+    if (isa(Note::EventType) && getDuration() < 1)
+        setDuration(1);
     setAbsoluteTime(absoluteTime);
 }
 
