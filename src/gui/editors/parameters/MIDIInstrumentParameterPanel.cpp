@@ -240,6 +240,15 @@ void
 MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
 {
     RG_DEBUG << "MIDIInstrumentParameterPanel::setupForInstrument" << endl;
+
+    // In some cases setupForInstrument gets called several times.
+    // This shortcuts this activity since only one setup is needed.
+    if (m_selectedInstrument == instrument) {
+        RG_DEBUG << "MIDIInstrumentParameterPanel::setupForInstrument "
+                 << "-- early exit.  instrument didn't change." << endl;
+        return;
+    }
+
     MidiDevice *md = dynamic_cast<MidiDevice*>
                      (instrument->getDevice());
     if (!md) {
@@ -292,10 +301,24 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
 
     // Activate all checkboxes
     //
+    
+    // Block signals
+    m_percussionCheckBox->blockSignals(true);
+    m_programCheckBox->blockSignals(true);
+    m_bankCheckBox->blockSignals(true);
+    m_variationCheckBox->blockSignals(true);
+    
+    // Change state
     m_percussionCheckBox->setChecked(instrument->isPercussion());
     m_programCheckBox->setChecked(instrument->sendsProgramChange());
     m_bankCheckBox->setChecked(instrument->sendsBankSelect());
     m_variationCheckBox->setChecked(instrument->sendsBankSelect());
+
+    // Block signals
+    m_percussionCheckBox->blockSignals(false);
+    m_programCheckBox->blockSignals(false);
+    m_bankCheckBox->blockSignals(false);
+    m_variationCheckBox->blockSignals(false);
 
     // Basic parameters
     //
@@ -305,6 +328,9 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
     populateBankList();
     populateProgramList();
     populateVariationList();
+    
+    // Transmit Program / Bank changes
+    sendBankAndProgram();
 
     // Setup the ControlParameters
     //
