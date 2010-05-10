@@ -426,6 +426,7 @@ MusicXmlExporter::write()
                     if (!first) {
                         if (startedAttributes) {
                             str << "\t\t\t</attributes>" << std::endl;
+                            startedAttributes = false;
                         }                            
                         str << "\t\t</measure>\n" << std::endl;
                     }
