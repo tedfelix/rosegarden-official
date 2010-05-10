@@ -329,9 +329,6 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
     populateProgramList();
     populateVariationList();
     
-    // Transmit Program / Bank changes
-    sendBankAndProgram();
-
     // Setup the ControlParameters
     //
     setupControllers(md);
