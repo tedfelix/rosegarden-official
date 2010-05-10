@@ -63,6 +63,8 @@ XmlStorableEvent::XmlStorableEvent(const QXmlAttributes &attributes,
 
             bool isNumeric = true;
             timeT d = attrVal.toInt(&isNumeric);
+            // avoid 0 duration:
+            if (d < 1) d = 1;
 
             if (!isNumeric) {
                 try {
