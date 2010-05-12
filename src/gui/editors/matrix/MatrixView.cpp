@@ -1524,19 +1524,6 @@ MatrixView::slotStepForward()
 void
 MatrixView::slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn)
 {
-    // hjj:
-    // The default insertion mode is implemented equivalently in
-    // matrixviewslots.cpp:
-    //  - proceed if notes do not overlap
-    //  - make the chord if notes do overlap, and do not proceed
-
-    static int numberOfNotesOn = 0;
-    static time_t lastInsertionTime = 0;
-    if (!noteOn) {
-        numberOfNotesOn--;
-        return ;
-    }
-
     QAction *action = findAction("toggle_step_by_step");
 
     if (!action) {
@@ -1565,16 +1552,37 @@ MatrixView::slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn
 
 //    TmpStatusMsg msg(tr("Inserting note"), this);
 
-    MATRIX_DEBUG << "Inserting note at pitch " << pitch << endl;
+    static int numberOfNotesOn = 0;
+    static timeT insertionTime = getInsertionTime();
+    static time_t lastInsertionTime = 0;
 
-    Event modelEvent(Note::EventType, 0, 1);
-    modelEvent.set<Int>(BaseProperties::PITCH, pitch);
-    modelEvent.set<Int>(BaseProperties::VELOCITY, velocity);
-    timeT insertionTime(getInsertionTime());
-    if (insertionTime >= segment->getEndMarkerTime()) {
-        MATRIX_DEBUG << "WARNING: off end of segment" << endl;
+    if (!noteOn) {
+        numberOfNotesOn--;
         return ;
     }
+    // Rules:
+    //
+    // * If no other note event has turned up within half a
+    //   second, insert this note and advance.
+    //
+    // * Relatedly, if this note is within half a second of
+    //   the previous one, they're chords.  Insert the previous
+    //   one, don't advance, and use the same rules for this.
+    //
+    // * If a note event turns up before that time has elapsed,
+    //   we need to wait for the note-off events: if the second
+    //   note happened less than half way through the first,
+    //   it's a chord.
+    //
+    // We haven't implemented these yet... For now:
+    //
+    // Rules (hjj):
+    //
+    // * The overlapping notes are always included in to a chord.
+    //   This is the most convenient for step inserting of chords.
+    //
+    // * The timer resets the numberOfNotesOn, if noteOff signals were
+    //   drop out for some reason (which has not been encountered yet).
     time_t now;
     time (&now);
     double elapsed = difftime(now, lastInsertionTime);
@@ -1585,6 +1593,19 @@ MatrixView::slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn
         insertionTime = getInsertionTime();
     }
     numberOfNotesOn++;
+    
+
+    MATRIX_DEBUG << "Inserting note at pitch " << pitch << endl;
+
+    Event modelEvent(Note::EventType, 0, 1);
+    modelEvent.set<Int>(BaseProperties::PITCH, pitch);
+    modelEvent.set<Int>(BaseProperties::VELOCITY, velocity);
+
+    if (insertionTime >= segment->getEndMarkerTime()) {
+        MATRIX_DEBUG << "WARNING: off end of segment" << endl;
+        return ;
+    }
+
     timeT endTime(insertionTime + getSnapGrid()->getSnapTime(insertionTime));
 
     if (endTime <= insertionTime) {
@@ -1603,11 +1624,9 @@ MatrixView::slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn
 
     CommandHistory::getInstance()->addCommand(command);
 
-    m_document->slotSetPointerPosition(endTime);
-
-//    if (!isInChordMode()) {
-//        slotSetInsertCursorPosition(endTime);
-//    }
+    if (!m_inChordMode) {
+        m_document->slotSetPointerPosition(endTime);
+    }
 }
 
 void
