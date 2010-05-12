@@ -413,6 +413,9 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
 
     // populate combo from doc colors
     slotDocColoursChanged();
+    
+    // Force a popluation of Record / Playback Devices (Playback was not populating).
+    slotPopulateDeviceLists();
 
     mainLayout->addWidget(cframe, 4, 0);
 
