@@ -130,8 +130,9 @@ CompositionView::CompositionView(RosegardenDocument* doc,
     
     setDragAutoScroll(true);
 
-    viewport()->setAttribute(Qt::WA_PaintOnScreen);
-    viewport()->setAttribute(Qt::WA_OpaquePaintEvent);
+// Causing slow refresh issues on RG Mian Window -- 10-12-2010 - JAS
+//    viewport()->setAttribute(Qt::WA_PaintOnScreen);
+//    viewport()->setAttribute(Qt::WA_OpaquePaintEvent);
 
     viewport()->setPaletteBackgroundColor
         (GUIPalette::getColour(GUIPalette::SegmentCanvas));
