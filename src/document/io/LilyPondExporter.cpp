@@ -122,7 +122,7 @@ LilyPondExporter::readConfigVariables(void)
     m_fontSize = settings.value("lilyfontsize", FONT_20).toUInt() ;
     m_raggedBottom = qStrToBool(settings.value("lilyraggedbottom", "false")) ;
     m_exportSelection = settings.value("lilyexportselection", EXPORT_NONMUTED_TRACKS).toUInt() ;
-    m_exportLyrics = qStrToBool(settings.value("lilyexportlyrics", EXPORT_LYRICS_LEFT)) ;
+    m_exportLyrics = settings.value("lilyexportlyrics", EXPORT_LYRICS_LEFT).toUInt() ;
     m_exportTempoMarks = settings.value("lilyexporttempomarks", EXPORT_NONE_TEMPO_MARKS).toUInt() ;
     m_exportBeams = qStrToBool(settings.value("lilyexportbeamings", "false")) ;
     m_exportStaffGroup = qStrToBool(settings.value("lilyexportstaffbrackets", "true")) ;
@@ -2582,6 +2582,9 @@ LilyPondExporter::handleText(const Event *textEvent,
             lilyText += "\\small ";
         } else if (text.getText() == Text::NormalSize) {
             lilyText += "\\normalsize ";
+        } else if (text.getText() == Text::Lyric) {
+            // avoid printing a misleading warning that something is amiss when
+            // it really isn't
         } else {
             textEvent->get
                 <String>(Text::TextTypePropertyName, s);
