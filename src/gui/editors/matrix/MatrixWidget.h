@@ -159,7 +159,7 @@ protected slots:
     void slotDispatchMouseMove(const MatrixMouseEvent *);
     void slotDispatchMouseDoubleClick(const MatrixMouseEvent *);
 
-    void slotPointerPositionChanged(timeT);
+    void slotPointerPositionChanged(timeT, bool moveView = true);
     void slotEnsureLastMouseMoveVisible();
 
     void slotHScrollBarRangeChanged(int min, int max);

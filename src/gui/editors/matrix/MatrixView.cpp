@@ -1495,8 +1495,16 @@ MatrixView::slotStepBackward()
     Segment *segment = getCurrentSegment();
     if (!segment) return;
 
-    timeT time = getSnapGrid()->snapTime(getInsertionTime() - 1,
-                                         SnapGrid::SnapLeft);
+    // Sanity check.  Move postion marker inside segmet if not
+    timeT time = getInsertionTime();  // Un-checked current insertion time
+    
+    timeT segmentEndTime = segment->getEndMarkerTime();
+    if (time > segment->getEndMarkerTime()) {
+        // Move to inside the current segment
+        time = segment->getStartTime();
+    }
+        
+    time = getSnapGrid()->snapTime(time - 1, SnapGrid::SnapLeft);
 
     if (time < segment->getStartTime()){
         m_document->slotSetPointerPosition(segment->getStartTime());
@@ -1506,15 +1514,25 @@ MatrixView::slotStepBackward()
 }
 
 void
-MatrixView::slotStepForward()
+MatrixView::slotStepForward(bool force)
 {
     Segment *segment = getCurrentSegment();
     if (!segment) return;
 
-    timeT time = getSnapGrid()->snapTime(getInsertionTime() + 1, 
-                                         SnapGrid::SnapRight);
+    // Sanity check.  Move postion marker inside segmet if not
+    timeT time = getInsertionTime();  // Un-checked current insertion time
     
-    if (time > segment->getEndMarkerTime()){
+    timeT segmentStartTime = segment->getStartTime();
+
+    if (!force && ((time < segmentStartTime) ||
+            (time > segment->getEndMarkerTime()))) {
+        // Move to inside the current segment
+        time = segmentStartTime;
+    }
+        
+    time = getSnapGrid()->snapTime(time + 1, SnapGrid::SnapRight);
+    
+    if (!force && (time > segment->getEndMarkerTime())){
         m_document->slotSetPointerPosition(segment->getEndMarkerTime());
     } else {
         m_document->slotSetPointerPosition(time);
@@ -1601,9 +1619,12 @@ MatrixView::slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn
     modelEvent.set<Int>(BaseProperties::PITCH, pitch);
     modelEvent.set<Int>(BaseProperties::VELOCITY, velocity);
 
-    if (insertionTime >= segment->getEndMarkerTime()) {
-        MATRIX_DEBUG << "WARNING: off end of segment" << endl;
-        return ;
+    timeT segStartTime = segment->getStartTime();
+    if ((insertionTime < segStartTime) ||
+            (insertionTime > segment->getEndMarkerTime())) {
+        MATRIX_DEBUG << "WARNING: off of segment -- "
+                     <<"moving to start of segment" << endl;
+        insertionTime = segStartTime;
     }
 
     timeT endTime(insertionTime + getSnapGrid()->getSnapTime(insertionTime));
@@ -1990,7 +2011,7 @@ MatrixView::slotExtendSelectionForward(bool bar)
     timeT oldTime = getInsertionTime();
 
     if (bar) emit fastForwardPlayback();
-    else slotStepForward();
+    else slotStepForward(true);
 
     timeT newTime = getInsertionTime();
 

@@ -763,6 +763,7 @@ MatrixWidget::slotCurrentSegmentPrior()
     if (!m_scene) return;
     Segment *s = m_scene->getPriorSegment();
     if (s) m_scene->setCurrentSegment(s);
+    slotPointerPositionChanged(m_document->getComposition().getPosition(), false);
     updateSegmentChangerBackground();
 }
 
@@ -772,6 +773,7 @@ MatrixWidget::slotCurrentSegmentNext()
     if (!m_scene) return;
     Segment *s = m_scene->getNextSegment();
     if (s) m_scene->setCurrentSegment(s);
+    slotPointerPositionChanged(m_document->getComposition().getPosition(), false);
     updateSegmentChangerBackground();
 }
 
@@ -1022,7 +1024,7 @@ MatrixWidget::slotHScrollBarRangeChanged(int min, int max)
 }
 
 void
-MatrixWidget::slotPointerPositionChanged(timeT t)
+MatrixWidget::slotPointerPositionChanged(timeT t, bool moveView)
 {
     QObject *s = sender();
     bool fromDocument = (s == m_document);
@@ -1031,6 +1033,22 @@ MatrixWidget::slotPointerPositionChanged(timeT t)
 
     double sceneX = m_scene->getRulerScale()->getXForTime(t);
 
+    // Find the limits of the current segment
+    Segment *currentSeg = getCurrentSegment();
+    if (currentSeg && !moveView) {
+        double segSceneTime = m_scene->getRulerScale()->getXForTime(currentSeg->getStartTime());
+        if (segSceneTime > sceneX) {
+            // Move pointer to start of current segment
+            sceneX = segSceneTime;
+        } else {
+            segSceneTime = m_scene->getRulerScale()->getXForTime(
+                    currentSeg->getEndMarkerTime());
+            if (segSceneTime < sceneX) {
+                   sceneX = segSceneTime;
+            }
+        }
+    }
+    
     // Never move the pointer outside the scene (else the scene will grow)
     double x1 = m_scene->sceneRect().x();
     double x2 = x1 + m_scene->sceneRect().width();
@@ -1044,7 +1062,7 @@ MatrixWidget::slotPointerPositionChanged(timeT t)
     }
 
     if (getPlayTracking() || !fromDocument) {
-        m_view->slotEnsurePositionPointerInView(fromDocument);
+        if (moveView) m_view->slotEnsurePositionPointerInView(fromDocument);
     }
 }
 
@@ -1464,7 +1482,7 @@ MatrixWidget::showInitialPointer()
 {
     if (!m_scene) return;
 
-    timeT t = m_document->getComposition().getPosition();
+    timeT t = getCurrentSegment()->getStartTime();
 
     double sceneX = m_scene->getRulerScale()->getXForTime(t);
 
@@ -1473,8 +1491,9 @@ MatrixWidget::showInitialPointer()
     double x2 = x1 + m_scene->sceneRect().width();
 
     if ((sceneX < x1) || (sceneX > x2)) {
-        m_view->slotHidePositionPointer();
-        m_hpanner->slotHidePositionPointer();
+        // Place insertion marker at begining of scene.
+        m_view->slotShowPositionPointer(x1);
+        m_hpanner->slotShowPositionPointer(x1);
     } else {
         m_view->slotShowPositionPointer(sceneX);
         m_hpanner->slotShowPositionPointer(sceneX);

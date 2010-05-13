@@ -202,7 +202,7 @@ protected slots:
     void slotJogRight();
     
     void slotStepBackward();
-    void slotStepForward();
+    void slotStepForward(bool force = false);
 
     void slotExtendSelectionBackward();
     void slotExtendSelectionForward();
