@@ -782,6 +782,10 @@ StaffHeader::updateHeader(int width)
             m_foreground = Qt::white;
             m_foregroundType = NotePixmapFactory::PlainColourLight;
         }
+        
+        // Fix staff header variant of bug #2997311 (Part 1)
+        bool selectedMode = npf->isSelected();
+        npf->setSelected(false);
 
         delete m_clefItem;
         m_clefItem = npf->makeClef(m_clef, m_foregroundType);
@@ -789,6 +793,9 @@ StaffHeader::updateHeader(int width)
         delete m_keyItem;
         m_keyItem = npf->makeKey(m_key, m_clef,
                                  Rosegarden::Key("C major"), m_foregroundType);
+
+        // Fix staff header variant of bug #2997311 (Part 2)
+        npf->setSelected(selectedMode);
 
         m_lineSpacing = npf->getLineSpacing();
         m_maxDelta = npf->getAccidentalWidth(Accidentals::Sharp);
