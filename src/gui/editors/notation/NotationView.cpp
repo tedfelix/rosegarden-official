@@ -2238,33 +2238,53 @@ NotationView::getPitchFromNoteInsertAction(QString name,
         int scalePitch = name.toInt();
 
         if (scalePitch < 0 || scalePitch > 7) {
-            NOTATION_DEBUG << "NotationView::getPitchFromNoteInsertAction: pitch "
-            << scalePitch << " out of range, using 0" << endl;
+            std::cerr << "NotationView::getPitchFromNoteInsertAction: pitch "
+                      << scalePitch << " out of range, using 0" << std::endl;
             scalePitch = 0;
         }
 
         Pitch clefPitch(clef.getAxisHeight(), clef, key, NoAccidental);
 
-        int pitchOctave = clefPitch.getOctave() + octave;
+        int clefOctave = clefPitch.getOctave();
+        int pitchOctave = clefOctave + octave;
 
-        std::cerr << "NotationView::getPitchFromNoteInsertAction:"
-                  << " key = " << key.getName() 
-                  << ", clef = " << clef.getClefType() 
-                  << ", octaveoffset = " << clef.getOctaveOffset() << std::endl;
-        std::cerr << "NotationView::getPitchFromNoteInsertAction: octave = " << pitchOctave << std::endl;
+        NOTATION_DEBUG << "NotationView::getPitchFromNoteInsertAction:"
+                       << " key = " << key.getName() 
+                       << ", clef = " << clef.getClefType() 
+                       << ", octaveoffset = " << clef.getOctaveOffset()
+                       << endl;
+        NOTATION_DEBUG << "NotationView::getPitchFromNoteInsertAction: octave = "
+                       << pitchOctave << endl;
+        
+        // Rewrite to fix bug #2997303 :
+        //
+        // We want to make sure that
+        //    (i) The lowest note in scale (with octave = -1) is drawn below
+        //        the staff
+        //    (ii) The highest note in scale (with octave = +1) is drawn above
+        //         the staff
+        //
+        // Let lnh be the height on staff of this lowest note and let hnh be
+        // the height on staff of this highest note.
+        //    (iii) hnh = lnh + 7 + 7 + 6 = lnh + 20
+        //
+        // (iv) One way to have (i) and (ii) verified is to make the middle
+        // of lnh and hnh, i.e. (lnh + hnh) / 2, as near as possible of
+        // the middle of the staff, i.e. 4.
+        //    
+        // (iii) and (iv) result in lnh being as near as possible of -6,
+        //    i.e.  -10 < lnh < -2.
 
-        // We want still to make sure that when (i) octave = 0,
-        //  (ii) one of the noteInScale = 0..6 is
-        //  (iii) at the same heightOnStaff than the heightOnStaff of the key.
         int lowestNoteInScale = 0;
-        Pitch lowestPitch(lowestNoteInScale, clefPitch.getOctave(), key, NoAccidental);
+        Pitch lowestPitch(lowestNoteInScale, clefOctave - 1, key, NoAccidental);
 
-        int heightToAdjust = (clefPitch.getHeightOnStaff(clef, key) - lowestPitch.getHeightOnStaff(clef, key));
-        for (; heightToAdjust < 0; heightToAdjust += 7) pitchOctave++;
-        for (; heightToAdjust > 6; heightToAdjust -= 7) pitchOctave--;
+        int lnh = lowestPitch.getHeightOnStaff(clef, key);
+        for (; lnh < -9; lnh += 7) pitchOctave++;
+        for (; lnh > -3; lnh -= 7) pitchOctave--;
 
-        std::cerr << "NotationView::getPitchFromNoteInsertAction: octave = " << pitchOctave << " (adjusted)" << std::endl;
-
+        NOTATION_DEBUG << "NotationView::getPitchFromNoteInsertAction: octave = "
+                       << pitchOctave << " (adjusted)" << endl;
+        
         Pitch pitch(scalePitch, pitchOctave, key, accidental);
         return pitch.getPerformancePitch();
 
