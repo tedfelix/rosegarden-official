@@ -3267,7 +3267,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2246"/>
         <source>Double Whole Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Kaksoiskokonuotti</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2253"/>
@@ -3278,7 +3278,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2255"/>
         <source>Whole Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Kokonuotti</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2262"/>
@@ -3289,7 +3289,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2264"/>
         <source>Half Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Puolinuotti</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2271"/>
@@ -3300,7 +3300,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2273"/>
         <source>Quarter Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Neljäsosanuotti</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2280"/>
@@ -3311,7 +3311,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2282"/>
         <source>Eighth Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Kahdeksasosanuotti</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2289"/>
@@ -3322,7 +3322,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2291"/>
         <source>Sixteenth Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Kuudestoistaosanuotti</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2298"/>
@@ -3333,7 +3333,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2300"/>
         <source>Thirty-Second Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Kolmaskymmeneskahdesosanuotti</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2307"/>
@@ -3344,7 +3344,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2309"/>
         <source>Sixty-Fourth Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Kuudeskymmenesneljäsosanuotti</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2316"/>
@@ -3355,7 +3355,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2318"/>
         <source>Double Whole Note (Without Duration Change)</source>
-        <translation type="unfinished"></translation>
+        <translation>Kaksoiskokonuotti (ilman keston muutosta)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2325"/>
@@ -3366,12 +3366,12 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2327"/>
         <source>Whole Note (Without Duration Change)</source>
-        <translation type="unfinished"></translation>
+        <translation>Kokonuotti (ilman keston muutosta)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2336"/>
         <source>Half Note (Without Duration Change)</source>
-        <translation type="unfinished"></translation>
+        <translation>Puolinuotti (ilman keston muutosta)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2343"/>
@@ -3382,7 +3382,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2345"/>
         <source>Quarter Note (Without Duration Change)</source>
-        <translation type="unfinished"></translation>
+        <translation>Neljäsosanuotti (ilman keston muutosta)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2352"/>
@@ -3393,7 +3393,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2354"/>
         <source>Eighth Note (Without Duration Change)</source>
-        <translation type="unfinished"></translation>
+        <translation>Kahdeksasosanuotti (ilman keston muutosta)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2361"/>
@@ -3404,7 +3404,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2363"/>
         <source>Sixteenth Note (Without Duration Change)</source>
-        <translation type="unfinished"></translation>
+        <translation>Kuudestoistaosanuotti (ilman keston muutosta)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2370"/>
@@ -3415,7 +3415,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2372"/>
         <source>Thirty-Second Note (Without Duration Change)</source>
-        <translation type="unfinished"></translation>
+        <translation>Kolmaskymmeneskahdesosanuotti (ilman keston muutosta)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2379"/>
@@ -3426,7 +3426,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2381"/>
         <source>Sixty-Fourth Note (Without Duration Change)</source>
-        <translation type="unfinished"></translation>
+        <translation>Kuudeskymmenesneljäsosanuotti (ilman keston muutosta)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2388"/>
