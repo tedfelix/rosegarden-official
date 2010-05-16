@@ -122,7 +122,7 @@
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="487"/>
         <source>&lt;qt&gt;&lt;p&gt;Create new playback devices here. Double-click the device name to change it. Select a device here and connect it to a MIDI output port by clicking on a port to the right.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Luo uusi toistolaite tässä. Kaksoisnapsauta laitteen nimeä muuttaaksesi sitä. Valitse laite tästä ja kytke se MIDI-ulostuloon napsauttamalla oikealla olevaa porttia.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="523"/>
@@ -11919,7 +11919,7 @@ Ole hyvä ja valitse halutessasi niistä joitakin poistaaksesi ne pysyvästi kov
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1088"/>
         <source>&lt;new bank %1&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;uusi pankki %1&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1129"/>
@@ -14508,7 +14508,7 @@ tätä tekstiä varten käytettäväksi:
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="80"/>
         <source>&lt;qt&gt;&lt;p&gt;This file contains text in an unknown language encoding.&lt;/p&gt;&lt;p&gt;Please select one of the following estimated text encodings for use with the text in this file:&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Tämä tiedosto sisältää tekstiä, joka käyttää tuntematonta merkistökoodausta.&lt;/p&gt;&lt;p&gt;Ole hyvä ja valitse yksi seuraavista merkistökoodauksista käytettäväksi tämän tiedoston kanssa:&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="90"/>
@@ -17800,12 +17800,12 @@ Ole hyvä ja varmista, että laite on määritetty oikein pääikkunan Hallitse 
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4346"/>
         <source>Set Note Type...</source>
-        <translation type="unfinished"></translation>
+        <translation>Aseta nuottityyppi...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4370"/>
         <source>Set Note Type notation only...</source>
-        <translation type="unfinished"></translation>
+        <translation>Aseta nuottityyppi (vain nuotinnus)...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4390"/>
