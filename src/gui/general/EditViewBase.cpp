@@ -292,7 +292,8 @@ EditViewBase::slotSetSegmentDuration()
     TimeDialog dialog(this, tr("Segment Duration"),
                       &getDocument()->getComposition(),
                       s->getStartTime(),
-                      s->getEndMarkerTime() - s->getStartTime(), false);
+                      s->getEndMarkerTime() - s->getStartTime(), 
+                      Note(Note::Shortest).getDuration(), false);
 
     if (dialog.exec() == QDialog::Accepted) {
 

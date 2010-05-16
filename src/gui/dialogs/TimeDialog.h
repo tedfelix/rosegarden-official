@@ -44,7 +44,7 @@ public:
 
     /// for durations
     TimeDialog(QWidget *parent, QString title, Composition *composition,
-               timeT startTime, timeT defaultDuration,
+               timeT startTime, timeT defaultDuration, timeT minimumDuration,
                bool constrainToCompositionDuration);
 
     timeT getTime() const;

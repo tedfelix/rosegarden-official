@@ -309,7 +309,7 @@ TriggerSegmentManager::slotAdd()
 {
     TimeDialog dialog(this, tr("Trigger Segment Duration"),
                       &m_doc->getComposition(),
-                      0, 3840, false);
+                      0, 3840, 0, false);
 
     if (dialog.exec() == QDialog::Accepted) {
         addCommandToHistory(new AddTriggerSegmentCommand

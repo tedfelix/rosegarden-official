@@ -1018,6 +1018,7 @@ SimpleEventEditDialog::slotEditDuration()
                       &m_doc->getComposition(),
                       m_timeSpinBox->value(),
                       m_durationSpinBox->value(),
+                      1,
                       true);
     if (dialog.exec() == QDialog::Accepted) {
         m_durationSpinBox->setValue(dialog.getTime());
@@ -1031,6 +1032,7 @@ SimpleEventEditDialog::slotEditNotationDuration()
                       &m_doc->getComposition(),
                       m_notationTimeSpinBox->value(),
                       m_notationDurationSpinBox->value(),
+                      1,
                       true);
     if (dialog.exec() == QDialog::Accepted) {
         m_notationDurationSpinBox->setValue(dialog.getTime());

@@ -2260,7 +2260,7 @@ RosegardenMainWindow::slotInsertRange()
     timeT t0 = m_doc->getComposition().getPosition();
     std::pair<timeT, timeT> r = m_doc->getComposition().getBarRangeForTime(t0);
     TimeDialog dialog(m_view, tr("Duration of empty range to insert"),
-                      &m_doc->getComposition(), t0, r.second - r.first, false);
+                      &m_doc->getComposition(), t0, r.second - r.first, 1, false);
     if (dialog.exec() == QDialog::Accepted) {
         CommandHistory::getInstance()->addCommand
             (new InsertRangeCommand(&m_doc->getComposition(), t0, dialog.getTime()));
@@ -2397,7 +2397,7 @@ RosegardenMainWindow::slotRescaleSelection()
 
     RescaleDialog dialog(m_view, &m_doc->getComposition(),
                          startTime, endTime - startTime,
-                         false, false);
+                         Note(Note::Shortest).getDuration(), false, false);
     if (dialog.exec() != QDialog::Accepted)
         return ;
 
@@ -2775,6 +2775,7 @@ RosegardenMainWindow::slotSetSegmentDurations()
                       &m_doc->getComposition(),
                       someTime,
                       someDuration,
+                      Note(Note::Shortest).getDuration(),
                       false);
 
     if (dialog.exec() == QDialog::Accepted) {

@@ -65,6 +65,7 @@ public:
                Composition *composition, // for bar/beat/msec
                timeT startTime,
                timeT initialDuration,
+               timeT minimumDuration,
                bool editable = true,
                bool constrainToCompositionDuration = true);
 
@@ -92,6 +93,7 @@ private:
     timeT m_time;
     timeT m_startTime;
     timeT m_defaultTime;
+    timeT m_minimumDuration;
 
     QComboBox *m_note;
     QSpinBox  *m_timeT;

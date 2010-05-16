@@ -43,6 +43,7 @@ public:
                   Composition *composition, // for TimeWidget calculations
                   timeT startTime,
                   timeT originalDuration,
+                  timeT minimumDuration,
                   bool showCloseGapOption,
                   bool constrainToCompositionDuration);
 

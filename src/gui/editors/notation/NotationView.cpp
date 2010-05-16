@@ -3417,7 +3417,8 @@ NotationView::slotRescale()
      &getDocument()->getComposition(),
      getSelection()->getStartTime(),
      getSelection()->getEndTime() -
-     getSelection()->getStartTime(),
+         getSelection()->getStartTime(),
+     1,
      true,
      true);
 

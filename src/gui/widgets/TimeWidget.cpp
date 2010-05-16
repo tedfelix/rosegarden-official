@@ -62,6 +62,7 @@ TimeWidget::TimeWidget(QString title,
                        Composition *composition,
                        timeT startTime,
                        timeT duration,
+                       timeT minimumDuration,
                        bool editable,
                        bool constrainToCompositionDuration) :
         QGroupBox(title, parent),
@@ -70,7 +71,8 @@ TimeWidget::TimeWidget(QString title,
         m_constrain(constrainToCompositionDuration),
         m_time(duration),
         m_startTime(startTime),
-        m_defaultTime(duration)
+        m_defaultTime(duration),
+        m_minimumDuration(minimumDuration)
 {
     init(editable);
 }
@@ -588,6 +590,10 @@ TimeWidget::slotSetTime(timeT t)
     bool change = (m_time != t);
     if (!change)
         return ;
+
+    if (m_isDuration  &&  t < m_minimumDuration)
+        t = m_minimumDuration;
+
     m_time = t;
     populate();
     emit timeChanged(getTime());

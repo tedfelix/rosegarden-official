@@ -1311,12 +1311,13 @@ void MatrixView::slotRescale()
     if (!selection) return;
 
     RescaleDialog dialog(this,
-                            &getDocument()->getComposition(),
-                            selection->getStartTime(),
-                            selection->getEndTime() -
-                            selection->getStartTime(),
-                            true,
-                            true
+                         &getDocument()->getComposition(),
+                         selection->getStartTime(),
+                         selection->getEndTime() -
+                             selection->getStartTime(),
+                         1,
+                         true,
+                         true
                         );
 
     if (dialog.exec() == QDialog::Accepted) {
