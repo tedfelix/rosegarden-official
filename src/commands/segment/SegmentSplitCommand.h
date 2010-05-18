@@ -44,6 +44,8 @@ public:
                         bool keepLabel = false);
     virtual ~SegmentSplitCommand();
 
+    bool isValid();
+
     virtual void execute();
     virtual void unexecute();
     

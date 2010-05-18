@@ -91,7 +91,8 @@ SegmentSplitter::handleMouseButtonRelease(QMouseEvent *e)
         } else {
             SegmentSplitCommand *command =
                 new SegmentSplitCommand(segment, m_canvas->grid().snapX(e->pos().x()));
-            addCommandToHistory(command);
+            if (command->isValid())
+                addCommandToHistory(command);
         }
 
 // 		m_canvas->updateContents(item->rect());
