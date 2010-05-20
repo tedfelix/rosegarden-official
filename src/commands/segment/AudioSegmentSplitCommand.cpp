@@ -48,6 +48,23 @@ AudioSegmentSplitCommand::~AudioSegmentSplitCommand()
     delete m_previousEndMarkerTime;
 }
 
+// ??? Or we could have execute() return a bool indicating success, then
+//   deal with failure within CommandHistory::addCommand().  That seems
+//   like a big project, however.
+bool 
+AudioSegmentSplitCommand::isValid()
+{
+    // Can't split at the very start of a segment.
+    if (m_splitTime == m_segment->getStartTime())
+        return false;
+
+    // Can't split at the very end of a segment.
+    if (m_splitTime == m_segment->getEndMarkerTime())
+        return false;
+
+    return true;
+}
+
 void
 AudioSegmentSplitCommand::execute()
 {

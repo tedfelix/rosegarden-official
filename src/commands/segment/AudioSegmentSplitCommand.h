@@ -41,6 +41,9 @@ public:
                              timeT splitTime);
     virtual ~AudioSegmentSplitCommand();
 
+    // Call after ctor and before execute() to see if execute() will succeed.
+    bool isValid();
+
     virtual void execute();
     virtual void unexecute();
 
