@@ -54,12 +54,12 @@ AudioSegmentSplitCommand::~AudioSegmentSplitCommand()
 bool 
 AudioSegmentSplitCommand::isValid()
 {
-    // Can't split at the very start of a segment.
-    if (m_splitTime == m_segment->getStartTime())
+    // Can't split before or at the very start of a segment.
+    if (m_splitTime <= m_segment->getStartTime())
         return false;
 
-    // Can't split at the very end of a segment.
-    if (m_splitTime == m_segment->getEndMarkerTime())
+    // Can't split after or at the very end of a segment.
+    if (m_splitTime >= m_segment->getEndMarkerTime())
         return false;
 
     return true;

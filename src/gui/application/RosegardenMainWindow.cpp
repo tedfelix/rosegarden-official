@@ -2703,16 +2703,35 @@ RosegardenMainWindow::slotSplitSelectionAtTime()
     MacroCommand *command = new MacroCommand(title);
 
     if (dialog.exec() == QDialog::Accepted) {
+        int segmentCount = 0;
         for (SegmentSelection::iterator i = selection.begin();
                 i != selection.end(); ++i) {
 
             if ((*i)->getType() == Segment::Audio) {
-                command->addCommand(new AudioSegmentSplitCommand(*i, dialog.getTime()));
+                AudioSegmentSplitCommand *subCommand = 
+                    new AudioSegmentSplitCommand(*i, dialog.getTime());
+                if (subCommand->isValid()) {
+                    command->addCommand(subCommand);
+                    ++segmentCount;
+                }
             } else {
-                command->addCommand(new SegmentSplitCommand(*i, dialog.getTime()));
+                SegmentSplitCommand *subCommand = 
+                    new SegmentSplitCommand(*i, dialog.getTime());
+                if (subCommand->isValid()) {
+                    command->addCommand(subCommand);
+                    ++segmentCount;
+                }
             }
         }
-        m_view->slotAddCommandToHistory(command);
+
+        if (segmentCount) {
+            // Change the command's name to indicate how many segments were
+            // actually split.
+            title = tr("Split %n Segment(s) at Time", "", segmentCount);
+            command->setName(title);
+
+            m_view->slotAddCommandToHistory(command);
+        }
     }
 }
 
