@@ -2731,6 +2731,10 @@ RosegardenMainWindow::slotSplitSelectionAtTime()
             command->setName(title);
 
             m_view->slotAddCommandToHistory(command);
+        } else {
+            QMessageBox::information(this, tr("Rosegarden"), 
+                tr("Split time is not within a selected segment.\n"
+                "No segments will be split."));
         }
     }
 }

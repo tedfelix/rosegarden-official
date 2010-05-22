@@ -151,7 +151,6 @@ AudioSegmentSplitCommand::unexecute()
         m_segment->clearEndMarker();
     }
 
-    m_segment->setLabel(m_segmentLabel);
     //    RG_DEBUG << "AudioSegmentSplitCommand::unexecute: Setting audio end time of left segment to " << m_previousEndAudioTime << endl;
     //    m_segment->setAudioEndTime(m_previousEndAudioTime);
     m_segment->getComposition()->detachSegment(m_newSegment);

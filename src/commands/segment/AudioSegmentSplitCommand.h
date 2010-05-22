@@ -53,7 +53,6 @@ private:
     timeT m_splitTime;
     timeT *m_previousEndMarkerTime;
     bool m_detached;
-    std::string m_segmentLabel;
 //    RealTime m_previousEndAudioTime;
 };
 
