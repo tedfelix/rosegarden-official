@@ -67,20 +67,22 @@ CopyCommand::CopyCommand(Composition *composition,
     m_sourceClipboard = new Clipboard;
     m_savedClipboard = 0;
 
+    // For each segment in the composition
     for (Composition::iterator i = composition->begin();
             i != composition->end(); ++i) {
+        // If the segment overlaps the copy time range
         if ((*i)->getStartTime() < endTime &&
                 (*i)->getRepeatEndTime() > beginTime) {
+            // Copy the appropriate portion of the segment to the source
+            // clipboard.
             m_sourceClipboard->newSegment(*i, beginTime, endTime, true);
         }
     }
 
-    TimeSignatureSelection tsigsel
-    (*composition, beginTime, endTime, true);
+    TimeSignatureSelection tsigsel(*composition, beginTime, endTime, true);
     m_sourceClipboard->setTimeSignatureSelection(tsigsel);
 
-    TempoSelection temposel
-    (*composition, beginTime, endTime, true);
+    TempoSelection temposel(*composition, beginTime, endTime, true);
     m_sourceClipboard->setTempoSelection(temposel);
 
     m_sourceClipboard->setNominalRange(beginTime, endTime);
