@@ -2226,6 +2226,16 @@ RoseXmlHandler::endElement(const QString& namespaceURI,
 
         if (m_currentSegment && m_segmentEndMarkerTime) {
             m_currentSegment->setEndMarkerTime(*m_segmentEndMarkerTime);
+
+            // If the segment is zero or negative duration
+            if (m_currentSegment->getEndMarkerTime() <= 
+                    m_currentSegment->getStartTime()) {
+                // Make it stick out so the user can take care of it.
+                m_currentSegment->setEndMarkerTime(
+                    m_currentSegment->getStartTime() + 
+                        Note(Note::Shortest).getDuration());
+            }
+
             delete m_segmentEndMarkerTime;
             m_segmentEndMarkerTime = 0;
         }

@@ -114,7 +114,7 @@ SegmentAutoSplitCommand::execute()
             } else {
 
                 // When we meet a non-rest event, start a new split
-                // if an entire bar has passed since the last one
+                // if an entire bar has passed since the last non-rest event
 
                 int lastSoundBarNo = m_composition->getBarNumber(lastSoundTime);
 
