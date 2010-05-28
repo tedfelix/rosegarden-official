@@ -56,8 +56,22 @@ AudioSegmentResizeFromStartCommand::execute()
 
         m_newSegment = new Segment(*m_segment);
         m_newSegment->setStartTime(m_newStartTime);
-        m_newSegment->setAudioStartTime(m_segment->getAudioStartTime() -
-                                        (oldRT - newRT));
+
+        // Compute an audio start time that will keep the audio exactly where
+        // it was in time.
+        RealTime audioStartTime = 
+            m_segment->getAudioStartTime() - (oldRT - newRT);
+
+        // Do not allow a negative audio start time.
+        // ??? This is a stopgap measure as the audio segment preview code 
+        //   will crash if the audio start time is negative.  Need to fix the
+        //   preview code, then check to see if the playback code works
+        //   properly given a negative start time.  Then this can be removed.
+        if (audioStartTime <= RealTime::zeroTime)
+            m_newSegment->setAudioStartTime(RealTime::zeroTime);
+        else
+            m_newSegment->setAudioStartTime(
+                m_segment->getAudioStartTime() - (oldRT - newRT));
     }
 
     c->addSegment(m_newSegment);
