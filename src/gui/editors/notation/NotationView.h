@@ -85,6 +85,9 @@ signals:
                      tempoT,  // target value
                      TempoDialog::TempoDialogAction); // tempo action
 
+protected:
+    virtual void readOptions();
+
 protected slots:
     /// Remove a segment from our list when it is deleted from the composition
     void slotSegmentDeleted(Segment *);

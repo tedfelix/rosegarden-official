@@ -354,6 +354,8 @@ NotationView::NotationView(RosegardenDocument *doc,
 
     // Show the pointer as soon as notation editor opens
     m_notationWidget->slotUpdatePointerPosition();
+    
+    readOptions();
 }
 
 NotationView::~NotationView()
@@ -779,8 +781,7 @@ NotationView::setupActions()
 
     //Actions first appear in "settings" Menubar menu
     //"toolbars" subMenu
-    //Where is "options_show_toolbar" created?
-    createAction("show_general_toolbar", SLOT(slotToggleGeneralToolBar()));
+    createAction("options_show_toolbar", SLOT(slotToggleGeneralToolBar()));
     createAction("show_tools_toolbar", SLOT(slotToggleToolsToolBar()));
     createAction("show_duration_toolbar", SLOT(slotToggleDurationToolBar()));
     createAction("show_accidentals_toolbar", SLOT(slotToggleAccidentalsToolBar()));
@@ -792,6 +793,7 @@ NotationView::setupActions()
     createAction("show_layout_toolbar", SLOT(slotToggleLayoutToolBar()));
     createAction("show_layer_toolbar", SLOT(slotToggleLayerToolBar()));
     createAction("show_rulers_toolbar", SLOT(slotToggleRulersToolBar()));
+    createAction("show_duration_toolbar", SLOT(slotToggleDurationToolBar()));
 
     //"rulers" subMenu
     createAction("show_chords_ruler", SLOT(slotToggleChordsRuler()));
@@ -1184,6 +1186,23 @@ NotationView::initStatusBar()
     sb->addWidget(m_selectionCounter);
 
     sb->setContentsMargins(0, 0, 0, 0);
+}
+
+void
+NotationView::readOptions()
+{
+    setCheckBoxState("options_show_toolbar", "General Toolbar");
+    setCheckBoxState("show_tools_toolbar", "Tools Toolbar");
+    setCheckBoxState("show_accidentals_toolbar", "Accidentals Toolbar");
+    setCheckBoxState("show_clefs_toolbar", "Clefs Toolbar");
+    setCheckBoxState("show_marks_toolbar", "Marks Toolbar");
+    setCheckBoxState("show_group_toolbar", "Group Toolbar");
+    setCheckBoxState("show_symbol_toolbar", "Symbols Toolbar");
+    setCheckBoxState("show_transport_toolbar", "Transport Toolbar");
+    setCheckBoxState("show_layout_toolbar", "Layout Toolbar");
+    setCheckBoxState("show_layer_toolbar", "Layer Toolbar");
+    setCheckBoxState("show_rulers_toolbar", "Rulers Toolbar");
+    setCheckBoxState("show_duration_toolbar", "Duration Toolbar");
 }
 
 void
