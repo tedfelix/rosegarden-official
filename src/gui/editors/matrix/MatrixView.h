@@ -261,6 +261,8 @@ private:
     void setupActions();
     void initActionsToolbar();
     void initRulersToolbar();
+    void setCheckBoxState(QString actionName, QString toolbarName);
+    void initToolbarCheckBoxes();
 
     bool m_drumMode;
     bool m_Thorn;

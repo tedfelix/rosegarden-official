@@ -202,7 +202,7 @@ MatrixView::MatrixView(RosegardenDocument *doc,
     readOptions(); // defined in EditViewBase
     
     settings.endGroup();
-
+    
     if (segments.size() > 1) {
         enterActionState("have_multiple_segments");
     } else {
@@ -235,6 +235,8 @@ MatrixView::MatrixView(RosegardenDocument *doc,
     // Show the pointer as soon as matrix editor opens (update pointer position,
     // but don't scroll)
     m_matrixWidget->showInitialPointer();
+    
+    initToolbarCheckBoxes();
 }
 
 
@@ -684,6 +686,25 @@ MatrixView::initRulersToolbar()
     // set the "ruler n" tool button to pop up its menu instantly
     QToolButton *tb = dynamic_cast<QToolButton *>(findToolbar("Rulers Toolbar")->widgetForAction(findAction("add_control_ruler")));
     tb->setPopupMode(QToolButton::InstantPopup);
+}
+
+void
+MatrixView::setCheckBoxState(QString actionName, QString toolbarName)
+{
+  // Use !isHidden() for visibility since ancestors may not be visible
+  // since this is called during the Matrixview constructor.
+  bool view = !findToolbar(toolbarName)->isHidden();
+  findAction(actionName)->setChecked(view);
+}
+
+void
+MatrixView::initToolbarCheckBoxes()
+{
+    setCheckBoxState("options_show_toolbar", "General Toolbar");
+    setCheckBoxState("show_tools_toolbar", "Tools Toolbar");
+    setCheckBoxState("show_transport_toolbar", "Transport Toolbar");
+    setCheckBoxState("show_actions_toolbar", "Actions Toolbar");
+    setCheckBoxState("show_rulers_toolbar", "Rulers Toolbar");  
 }
 
 void
