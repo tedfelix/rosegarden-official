@@ -1842,7 +1842,10 @@ NotePixmapFactory::makeClef(const Clef &clef, const ColourType colourType)
             break;
 
         case PlainColour:
-        default:               m_p->painter().setPen(Qt::black);
+        default:
+            // fix bug with ottava marks not reflecting invisibility properly
+            QColor plain = (m_shaded ? Qt::gray : Qt::black);
+            m_p->painter().setPen(plain);
         }
     }
 

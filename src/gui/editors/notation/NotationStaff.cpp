@@ -853,16 +853,14 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
     bool invisible = false;
     if (elt->event()->get
             <Bool>(BaseProperties::INVISIBLE, invisible) && invisible) {
-        if (m_printPainter)
-            return ;
+//        if (m_printPainter) return ;
         QSettings settings;
         settings.beginGroup( NotationOptionsConfigGroup );
 
         bool showInvisibles = qStrToBool( settings.value("showinvisibles", "true" ) ) ;
         settings.endGroup();
 
-        if (!showInvisibles)
-            return ;
+        if (!showInvisibles) return;
     }
 
     try {
