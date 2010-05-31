@@ -243,6 +243,7 @@ protected slots:
     
 protected:
     const SnapGrid *getSnapGrid() const;
+    virtual void readOptions();
 
 private:
     RosegardenDocument *m_document;
@@ -261,8 +262,6 @@ private:
     void setupActions();
     void initActionsToolbar();
     void initRulersToolbar();
-    void setCheckBoxState(QString actionName, QString toolbarName);
-    void initToolbarCheckBoxes();
 
     bool m_drumMode;
     bool m_Thorn;

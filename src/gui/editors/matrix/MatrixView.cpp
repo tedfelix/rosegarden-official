@@ -199,8 +199,6 @@ MatrixView::MatrixView(RosegardenDocument *doc,
     findAction("show_tempo_ruler")->setChecked(view);
     m_matrixWidget->setTempoRulerVisible(view);
     
-    readOptions(); // defined in EditViewBase
-    
     settings.endGroup();
     
     if (segments.size() > 1) {
@@ -234,9 +232,9 @@ MatrixView::MatrixView(RosegardenDocument *doc,
 
     // Show the pointer as soon as matrix editor opens (update pointer position,
     // but don't scroll)
-    m_matrixWidget->showInitialPointer();
+    m_matrixWidget->showInitialPointer();    
     
-    initToolbarCheckBoxes();
+    readOptions();
 }
 
 
@@ -689,22 +687,18 @@ MatrixView::initRulersToolbar()
 }
 
 void
-MatrixView::setCheckBoxState(QString actionName, QString toolbarName)
+MatrixView::readOptions()
 {
-  // Use !isHidden() for visibility since ancestors may not be visible
-  // since this is called during the Matrixview constructor.
-  bool view = !findToolbar(toolbarName)->isHidden();
-  findAction(actionName)->setChecked(view);
-}
+std::cerr << "MatrixView::readOption - 1" << std::endl;
 
-void
-MatrixView::initToolbarCheckBoxes()
-{
+    EditViewBase::readOptions();
+std::cerr << "MatrixView::readOption - 2" << std::endl;
     setCheckBoxState("options_show_toolbar", "General Toolbar");
     setCheckBoxState("show_tools_toolbar", "Tools Toolbar");
     setCheckBoxState("show_transport_toolbar", "Transport Toolbar");
     setCheckBoxState("show_actions_toolbar", "Actions Toolbar");
     setCheckBoxState("show_rulers_toolbar", "Rulers Toolbar");  
+std::cerr << "MatrixView::readOption - 3" << std::endl;
 }
 
 void

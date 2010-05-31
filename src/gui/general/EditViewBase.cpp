@@ -33,6 +33,7 @@
 #include <QAction>
 #include <QStatusBar>
 #include <QTabWidget>
+#include <QToolBar>
 
 namespace Rosegarden
 {
@@ -87,6 +88,15 @@ void EditViewBase::readOptions()
 //    a = findAction("options_show_toolbar");
 //    if (a) a->setChecked( ! m_toolBar->isHidden());
 }
+
+void EditViewBase::setCheckBoxState(QString actionName, QString toolbarName)
+{
+  // Use !isHidden() for visibility since ancestors may not be visible
+  // since this is called during the Matrixview constructor.
+  bool view = !findToolbar(toolbarName)->isHidden();
+  findAction(actionName)->setChecked(view);
+}
+
 
 void EditViewBase::setupBaseActions(bool haveClipboard)
 {

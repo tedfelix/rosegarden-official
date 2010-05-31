@@ -190,6 +190,11 @@ protected:
     virtual void readOptions();
 
     /**
+     * Helper to set checkboxes for visibility of toolbars
+     */
+    void setCheckBoxState(QString actionName, QString toolbarName);
+
+    /**
      * create menus and toolbars
      */
     virtual void setupBaseActions(bool haveClipboard);
