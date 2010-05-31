@@ -689,16 +689,13 @@ MatrixView::initRulersToolbar()
 void
 MatrixView::readOptions()
 {
-std::cerr << "MatrixView::readOption - 1" << std::endl;
-
     EditViewBase::readOptions();
-std::cerr << "MatrixView::readOption - 2" << std::endl;
+
     setCheckBoxState("options_show_toolbar", "General Toolbar");
     setCheckBoxState("show_tools_toolbar", "Tools Toolbar");
     setCheckBoxState("show_transport_toolbar", "Transport Toolbar");
     setCheckBoxState("show_actions_toolbar", "Actions Toolbar");
     setCheckBoxState("show_rulers_toolbar", "Rulers Toolbar");  
-std::cerr << "MatrixView::readOption - 3" << std::endl;
 }
 
 void
