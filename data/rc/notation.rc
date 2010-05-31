@@ -436,9 +436,9 @@
     </Menu>
     <Menu name="Symbols">
       <text>S&amp;ymbols</text>
-      <Action name="add_segno" text="Add &amp;Segno" icon="segno" />
-      <Action name="add_coda" text="Add &amp;Coda" icon="coda" />
-      <Action name="add_breath" text="Add &amp;Breath mark" icon="breath" />
+      <Action name="add_segno" text="Add &amp;Segno" icon="segno" checked="false" group="tools_note" />
+      <Action name="add_coda" text="Add &amp;Coda" icon="coda" checked="false" group="tools_note" />
+      <Action name="add_breath" text="Add &amp;Breath mark" icon="breath" checked="false" group="tools_note" />
     </Menu>
   <Separator/>
     <Action name="text" text="&amp;Text" icon="text" checked="false" group="tools_note" shortcut="F8" />
@@ -690,9 +690,9 @@
 
 <ToolBar name="Symbols Toolbar" hidden="false" position="left">
   <text>Symbols Toolbar</text>
-  <Action name="add_segno" text="Add &amp;Segno" checked="false" group="tools_symbol" />
-  <Action name="add_coda" text="Add &amp;Coda" checked="false" group="tools_symbol" />
-  <Action name="add_breath" text="Add &amp;Breath mark" checked="false" group="tools_symbol" /> 
+  <Action name="add_segno" />
+  <Action name="add_coda" />
+  <Action name="add_breath" /> 
 </ToolBar>
 
 <ToolBar name="Marks Toolbar" newline="true" hidden="false" position="right">
