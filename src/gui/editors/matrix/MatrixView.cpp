@@ -509,6 +509,8 @@ MatrixView::setupActions()
     createAction("options_show_toolbar", SLOT(slotToggleGeneralToolBar()));
     createAction("show_tools_toolbar", SLOT(slotToggleToolsToolBar()));
     createAction("show_transport_toolbar", SLOT(slotToggleTransportToolBar()));
+    createAction("show_actions_toolbar", SLOT(slotToggleActionsToolBar()));
+    createAction("show_rulers_toolbar", SLOT(slotToggleRulersToolBar()));
 
     
     createAction("manual", SLOT(slotHelp()));
@@ -1867,6 +1869,18 @@ void
 MatrixView::slotToggleTransportToolBar()
 {
     toggleNamedToolBar("Transport Toolbar");
+}
+
+void
+MatrixView::slotToggleActionsToolBar()
+{
+    toggleNamedToolBar("Actions Toolbar");
+}
+
+void
+MatrixView::slotToggleRulersToolBar()
+{
+    toggleNamedToolBar("Rulers Toolbar");
 }
 
 void

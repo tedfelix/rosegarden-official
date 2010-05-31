@@ -237,6 +237,8 @@ protected slots:
 
     void slotToggleGeneralToolBar();
     void slotToggleToolsToolBar();
+    void slotToggleActionsToolBar();
+    void slotToggleRulersToolBar();
     void slotToggleTransportToolBar();
     
 protected:
