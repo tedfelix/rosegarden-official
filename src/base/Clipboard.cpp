@@ -95,7 +95,7 @@ Clipboard::newSegment()
 {
     Segment *s = new Segment();
     m_segments.insert(s);
-    // don't change m_partial
+    // don't change m_partial as we are inserting a complete segment
     return s;
 }
 
@@ -104,7 +104,7 @@ Clipboard::newSegment(const Segment *copyFrom)
 {
     Segment *s = new Segment(*copyFrom);
     m_segments.insert(s);
-    // don't change m_partial
+    // don't change m_partial as we are inserting a complete segment
     return s;
 }
 
@@ -115,12 +115,17 @@ Clipboard::newSegment(const Segment *copyFrom, timeT from, timeT to,
     // create with copy ctor so as to inherit track, instrument etc
     Segment *s = new Segment(*copyFrom);
 
+    // If the segment is within the time range
     if (from <= s->getStartTime() && to >= s->getEndMarkerTime()) {
-	m_segments.insert(s);
-	s->setEndTime(s->getEndMarkerTime());
-	// don't change m_partial
-	return;
+        // Insert the whole thing.
+        m_segments.insert(s);
+
+        // don't change m_partial as we are inserting a complete segment
+
+        return;
     }
+
+    // Only a portion of the source segment will be used.
 
     timeT segStart = copyFrom->getStartTime();
     timeT segEnd = copyFrom->getEndMarkerTime();
@@ -197,6 +202,8 @@ Clipboard::newSegment(const Segment *copyFrom, timeT from, timeT to,
 	return;
     }
 
+    // We have a normal (MIDI) segment.
+
     s->erase(s->begin(), s->end());
 
     for (int repeat = firstRepeat; repeat <= lastRepeat; ++repeat) {
@@ -218,6 +225,7 @@ Clipboard::newSegment(const Segment *copyFrom, timeT from, timeT to,
 	    }
 	}
 
+        // For each event in the time range and before the end marker.
 	for (Segment::const_iterator i = ifrom;
 	     i != ito && copyFrom->isBeforeEndMarker(i); ++i) {
 

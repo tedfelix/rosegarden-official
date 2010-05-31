@@ -699,8 +699,9 @@ private: // stuff to support SegmentObservers
     void notifyTransposeChange();
     void notifySourceDeletion() const;
 
-private: // assignment operator not provided
+private:
 
+    // assignment operator not provided
     Segment &operator=(const Segment &);
 
     // Used for mapping the segment to runtime things like PlayableAudioFiles at

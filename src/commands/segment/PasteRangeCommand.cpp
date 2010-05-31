@@ -63,6 +63,8 @@ PasteRangeCommand::PasteRangeCommand(Composition *composition,
     }
 
     // Need to split segments before opening, at t0
+    
+    // ??? Is this similar to InsertRangeCommand?  Can we use that instead?
 
     for (Composition::iterator i = composition->begin();
             i != composition->end(); ++i) {

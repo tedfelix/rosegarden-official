@@ -104,7 +104,7 @@ Segment::Segment(const Segment &segment):
     m_fadeOutTime(segment.getFadeOutTime())
 {
     for (const_iterator it = segment.begin();
-	 segment.isBeforeEndMarker(it); ++it) {
+	 it != segment.end(); ++it) {
         insert(new Event(**it));
     }
 }
