@@ -2223,7 +2223,7 @@ MatrixView::setRewFFwdToAutoRepeat()
 
                 (*i)->setAutoRepeat(true);
                 connect((*i),
-                        SIGNAL(clicked()),
+                        SIGNAL(triggered()),
                         this,
                         SIGNAL(rewindPlayback()));
 
@@ -2231,7 +2231,7 @@ MatrixView::setRewFFwdToAutoRepeat()
 
                 (*i)->setAutoRepeat(true);
                 connect((*i),
-                        SIGNAL(clicked()),
+                        SIGNAL(triggered()),
                         this,
                         SIGNAL(fastForwardPlayback()));
 
@@ -2239,7 +2239,7 @@ MatrixView::setRewFFwdToAutoRepeat()
 
                 (*i)->setAutoRepeat(true);
                 connect((*i),
-                        SIGNAL(clicked()),
+                        SIGNAL(triggered()),
                         this,
                         SLOT(slotStepBackward()));
 
@@ -2247,7 +2247,7 @@ MatrixView::setRewFFwdToAutoRepeat()
 
                 (*i)->setAutoRepeat(true);
                 connect((*i),
-                        SIGNAL(clicked()),
+                        SIGNAL(triggered()),
                         this,
                         SLOT(slotStepForward()));
             }

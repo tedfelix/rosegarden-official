@@ -4552,7 +4552,7 @@ NotationView::setRewFFwdToAutoRepeat()
 
                 (*i)->setAutoRepeat(true);
                 connect((*i),
-                        SIGNAL(clicked()),
+                        SIGNAL(triggered()),
                         this,
                         SIGNAL(rewindPlayback()));
 
@@ -4560,7 +4560,7 @@ NotationView::setRewFFwdToAutoRepeat()
 
                 (*i)->setAutoRepeat(true);
                 connect((*i),
-                        SIGNAL(clicked()),
+                        SIGNAL(triggered()),
                         this,
                         SIGNAL(fastForwardPlayback()));
 
@@ -4568,7 +4568,7 @@ NotationView::setRewFFwdToAutoRepeat()
 
                 (*i)->setAutoRepeat(true);
                 connect((*i),
-                        SIGNAL(clicked()),
+                        SIGNAL(triggered()),
                         this,
                         SLOT(slotStepBackward()));
 
@@ -4576,7 +4576,7 @@ NotationView::setRewFFwdToAutoRepeat()
 
                 (*i)->setAutoRepeat(true);
                 connect((*i),
-                        SIGNAL(clicked()),
+                        SIGNAL(triggered()),
                         this,
                         SLOT(slotStepForward()));
             }
