@@ -126,7 +126,7 @@ public slots:
 
     // Show RMB menu
     //
-    void slotPopupMenu(QTreeWidgetItem*, const QPoint&, int);
+    void slotPopupMenu(const QPoint&);
     void slotMenuActivated(int);
 
     // on double click on the event list

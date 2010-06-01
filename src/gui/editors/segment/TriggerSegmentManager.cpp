@@ -104,10 +104,8 @@ TriggerSegmentManager::TriggerSegmentManager(QWidget *parent,
     mainFrameLayout->addWidget(btnBox);
 
 
-    //!!! Being able to add an empty triggered segment that can never be edited seems
-    // like a completely useless action to me.  An oversight?
-//    m_addButton = btnBox->addButton(tr("Add"), QDialogButtonBox::ActionRole);
-//    m_addButton->setToolTip(tr("Add a Triggered Segment"));
+    m_addButton = btnBox->addButton(tr("Add"), QDialogButtonBox::ActionRole);
+    m_addButton->setToolTip(tr("Add a Triggered Segment"));
 
     m_deleteButton = btnBox->addButton(tr("Delete"), QDialogButtonBox::ActionRole);
     m_deleteButton->setToolTip(tr("Delete a Triggered Segment"));
@@ -120,8 +118,8 @@ TriggerSegmentManager::TriggerSegmentManager(QWidget *parent,
     connect(btnBox, SIGNAL(accepted()), this, SLOT(slotClose()));
     connect(btnBox, SIGNAL(rejected()), this, SLOT(slotClose()));
     
-//    connect(m_addButton, SIGNAL(released()),
-//            SLOT(slotAdd()));
+    connect(m_addButton, SIGNAL(released()),
+            SLOT(slotAdd()));
 
     connect(m_deleteButton, SIGNAL(released()),
             SLOT(slotDelete()));
@@ -136,10 +134,10 @@ TriggerSegmentManager::TriggerSegmentManager(QWidget *parent,
     connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
             this, SLOT(slotUpdate()));
 
-    connect(m_listView, SIGNAL(doubleClicked(QTreeWidgetItem *)),
+    connect(m_listView, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)),
             SLOT(slotEdit(QTreeWidgetItem *)));
 
-    connect(m_listView, SIGNAL(pressed(QTreeWidgetItem *)),
+    connect(m_listView, SIGNAL(itemPressed(QTreeWidgetItem *, int)),
             this, SLOT(slotItemClicked(QTreeWidgetItem *)));
 
     // Highlight all columns - enable extended selection mode

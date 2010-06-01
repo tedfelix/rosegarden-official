@@ -71,6 +71,7 @@
 #include <QPoint>
 #include <QPushButton>
 #include <QSettings>
+#include <QSignalMapper>
 #include <QSize>
 #include <QStatusBar>
 #include <QString>
@@ -236,9 +237,10 @@ EventView::EventView(RosegardenDocument *doc,
     connect(m_eventList, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)),
             SLOT(slotPopupEventEditor(QTreeWidgetItem*, int)));
 
+    m_eventList->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(m_eventList,
-            SIGNAL(rightButtonPressed(QTreeWidgetItem*, const QPoint&, int)),
-            SLOT(slotPopupMenu(QTreeWidgetItem*, const QPoint&, int)));
+            SIGNAL(customContextMenuRequested(const QPoint&)),
+            SLOT(slotPopupMenu(const QPoint&)));
 
     m_eventList->setAllColumnsShowFocus(true);
     m_eventList->setSelectionMode( QAbstractItemView::ExtendedSelection );
@@ -1424,8 +1426,10 @@ EventView::slotPopupEventEditor(QTreeWidgetItem *item, int)
 }
 
 void
-EventView::slotPopupMenu(QTreeWidgetItem *item, const QPoint &pos, int)
+EventView::slotPopupMenu(const QPoint& pos)
 {
+    QTreeWidgetItem *item = m_eventList->itemAt(pos);
+    
     if (!item)
         return ;
 
@@ -1438,7 +1442,7 @@ EventView::slotPopupMenu(QTreeWidgetItem *item, const QPoint &pos, int)
 
     if (m_menu)
         //m_menu->exec(QCursor::pos());
-        m_menu->exec(pos);
+        m_menu->exec(m_eventList->mapToGlobal(pos));
     else
         RG_DEBUG << "EventView::showMenu() : no menu to show\n";
 }
@@ -1448,10 +1452,19 @@ EventView::createMenu()
 {
     //m_menu = new QPopupMenu(this);
     m_menu = new QMenu(this);
-    m_menu->addAction( tr("Open in Event Editor") );
-    m_menu->addAction( tr("Open in Expert Event Editor") );
+    QAction *eventEditorAction = m_menu->addAction( tr("Open in Event Editor") );
+    QAction *expertEventEditorAction = m_menu->addAction( tr("Open in Expert Event Editor") );
 
-    connect(m_menu, SIGNAL(activated(int)),
+    QSignalMapper *signalMapper = new QSignalMapper(this);
+    signalMapper->setMapping(eventEditorAction, 0);
+    signalMapper->setMapping(expertEventEditorAction, 1);
+
+    connect(eventEditorAction, SIGNAL(triggered()),
+            signalMapper, SLOT (map()));
+    connect(expertEventEditorAction, SIGNAL(triggered()),
+            signalMapper, SLOT (map()));
+
+    connect(signalMapper, SIGNAL(mapped(int)),
             SLOT(slotMenuActivated(int)));
 }
 
