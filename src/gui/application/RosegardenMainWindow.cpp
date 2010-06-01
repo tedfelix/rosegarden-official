@@ -821,21 +821,18 @@ RosegardenMainWindow::setRewFFwdToAutoRepeat()
             // it up differently from what it got in createAction(), as
             // determined empirically (bleargh!!)
             if (act == rewAction) {
-
-                (*i)->setAutoRepeat(true);
-                connect((*i),
-                        SIGNAL(clicked()),
-                        this,
-                        SLOT(slotRewind()));
+                connect((*i), SIGNAL(clicked()), this, SLOT(slotRewind()));
 
             } else if (act == ffwAction) {
+                connect((*i), SIGNAL(clicked()), this, SLOT(slotFastforward()));
 
-                (*i)->setAutoRepeat(true);
-                connect((*i),
-                        SIGNAL(clicked()),
-                        this,
-                        SLOT(slotFastforward()));
+            } else  {
+                continue;
             }
+
+            //  Must have found an button to update
+            (*i)->removeAction(act);
+            (*i)->setAutoRepeat(true);
         }
 
     } else {

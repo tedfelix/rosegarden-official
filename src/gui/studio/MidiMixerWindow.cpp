@@ -736,22 +736,18 @@ MidiMixerWindow::setRewFFwdToAutoRepeat()
             // it up differently from what it got in createAction(), as
             // determined empirically (bleargh!!)
             if (act == rewAction) {
-
-                (*i)->setAutoRepeat(true);
-                connect((*i),
-                        SIGNAL(clicked()),
-                        this,
-                        SIGNAL(rewindPlayback()));
+                connect((*i), SIGNAL(clicked()), this, SIGNAL(rewindPlayback()));
 
             } else if (act == ffwAction) {
+                connect((*i), SIGNAL(clicked()), this, SIGNAL(fastForwardPlayback()));
 
-                (*i)->setAutoRepeat(true);
-                connect((*i),
-                        SIGNAL(clicked()),
-                        this,
-                        SIGNAL(fastForwardPlayback()));
-
+            } else  {
+                continue;
             }
+
+            //  Must have found an button to update
+            (*i)->removeAction(act);
+            (*i)->setAutoRepeat(true);
         }
     }
 }

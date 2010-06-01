@@ -2220,38 +2220,24 @@ MatrixView::setRewFFwdToAutoRepeat()
             // it up differently from what it got in createAction(), as
             // determined empirically (bleargh!!)
             if (act == rewAction) {
-
-                (*i)->setAutoRepeat(true);
-                connect((*i),
-                        SIGNAL(triggered()),
-                        this,
-                        SIGNAL(rewindPlayback()));
+                connect((*i), SIGNAL(clicked()), this, SIGNAL(rewindPlayback()));
 
             } else if (act == ffwAction) {
-
-                (*i)->setAutoRepeat(true);
-                connect((*i),
-                        SIGNAL(triggered()),
-                        this,
-                        SIGNAL(fastForwardPlayback()));
+                connect((*i), SIGNAL(clicked()), this, SIGNAL(fastForwardPlayback()));
 
             } else if (act == cbkAction) {
-
-                (*i)->setAutoRepeat(true);
-                connect((*i),
-                        SIGNAL(triggered()),
-                        this,
-                        SLOT(slotStepBackward()));
+                connect((*i), SIGNAL(clicked()), this, SLOT(slotStepBackward()));
 
             } else if (act == cfwAction) {
+                connect((*i), SIGNAL(clicked()), this, SLOT(slotStepForward()));
 
-                (*i)->setAutoRepeat(true);
-                connect((*i),
-                        SIGNAL(triggered()),
-                        this,
-                        SLOT(slotStepForward()));
+            } else  {
+                continue;
             }
 
+            //  Must have found an button to update
+            (*i)->removeAction(act);
+            (*i)->setAutoRepeat(true);
         }
 
     }
