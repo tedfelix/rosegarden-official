@@ -157,7 +157,7 @@ QSize LoopRuler::minimumSizeHint() const
 
 void LoopRuler::paintEvent(QPaintEvent* e)
 {
-    RG_DEBUG << "LoopRuler::paintEvent" << endl;
+//    RG_DEBUG << "LoopRuler::paintEvent" << endl;
 
     QPainter paint(this);
 
