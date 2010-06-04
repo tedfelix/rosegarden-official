@@ -908,7 +908,11 @@ NotationScene::checkUpdate()
 
     if (need) {
         if (all) layoutAll();
-        else layout(single, start, end);        
+        else {
+            // Test count to fix bug #2973777 
+            if (count == 1) layout(single, start, end); 
+            else  layout(0, start, end);
+        }       
     }
 }
 
