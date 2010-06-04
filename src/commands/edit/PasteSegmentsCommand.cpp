@@ -127,9 +127,13 @@ PasteSegmentsCommand::execute()
     }
 
     // User preference? Update song pointer position on paste
-    m_composition->setPosition(latestEndTime
-                               + m_pasteTime
-                               - earliestStartTime);
+    // ??? This needs to refresh the display so the user can see the change.
+    //   RosegardenDocument::pointerPositionChanged() appears to be the
+    //   signal to send, but we have no visibility to RosegardenDocument.
+    //   Removing this for now as it is confusing.
+//    m_composition->setPosition(latestEndTime
+//                               + m_pasteTime
+//                               - earliestStartTime);
 
     m_detached = false;
 }
