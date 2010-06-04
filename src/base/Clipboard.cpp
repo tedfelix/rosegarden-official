@@ -15,6 +15,7 @@
 
 #include "Clipboard.h"
 #include "Selection.h"
+#include "misc/Debug.h"
 
 namespace Rosegarden
 {
@@ -112,6 +113,13 @@ void
 Clipboard::newSegment(const Segment *copyFrom, timeT from, timeT to,
 		      bool expandRepeats)
 {
+//RG_DEBUG << "Clipboard::newSegment() with time range";
+//RG_DEBUG << "  Incoming segment:";
+//RG_DEBUG << *copyFrom;
+//RG_DEBUG << "  from: " << from << "(bar" << from / (960.0*4.0) + 1 << ")";
+//RG_DEBUG << "  to: " << to << "(bar" << to / (960.0*4.0) + 1 << ")";
+//RG_DEBUG << "  expandRepeats: " << expandRepeats;
+
     // create with copy ctor so as to inherit track, instrument etc
     Segment *s = new Segment(*copyFrom);
 
@@ -127,9 +135,9 @@ Clipboard::newSegment(const Segment *copyFrom, timeT from, timeT to,
 
     // Only a portion of the source segment will be used.
 
-    timeT segStart = copyFrom->getStartTime();
-    timeT segEnd = copyFrom->getEndMarkerTime();
-    timeT segDuration = segEnd - segStart;
+    const timeT segStart = copyFrom->getStartTime();
+    const timeT segEndMarker = copyFrom->getEndMarkerTime();
+    timeT segDuration = segEndMarker - segStart;
     
     int firstRepeat = 0;
     int lastRepeat = 0;
@@ -153,7 +161,7 @@ Clipboard::newSegment(const Segment *copyFrom, timeT from, timeT to,
 	for (int repeat = firstRepeat; repeat <= lastRepeat; ++repeat) {
 
 	    timeT wrappedFrom = segStart;
-	    timeT wrappedTo = segEnd;
+	    timeT wrappedTo = segEndMarker;
 
 	    if (!expandRepeats) {
 		wrappedFrom = from;
@@ -179,7 +187,7 @@ Clipboard::newSegment(const Segment *copyFrom, timeT from, timeT to,
 		s->setStartTime(segStart + repeat * segDuration);
 	    }
 
-	    if (wrappedTo < segEnd) {
+	    if (wrappedTo < segEndMarker) {
 		s->setEndMarkerTime(to);
 		if (c) {
 		    s->setAudioEndTime
@@ -203,8 +211,12 @@ Clipboard::newSegment(const Segment *copyFrom, timeT from, timeT to,
     }
 
     // We have a normal (MIDI) segment.
+//RG_DEBUG << "  Normal MIDI segment.";
 
     s->erase(s->begin(), s->end());
+    
+//RG_DEBUG << "  After erase(), s...";
+//RG_DEBUG << *s;
 
     for (int repeat = firstRepeat; repeat <= lastRepeat; ++repeat) {
 
@@ -226,8 +238,23 @@ Clipboard::newSegment(const Segment *copyFrom, timeT from, timeT to,
 	}
 
         // For each event in the time range and before the end marker.
+#if 1
 	for (Segment::const_iterator i = ifrom;
 	     i != ito && copyFrom->isBeforeEndMarker(i); ++i) {
+#else
+// This variation will copy additional events beyond the end marker time
+// up to the "to" time.  But the end marker time needs to be adjusted
+// in s for this to work.  Still working on this...
+	for (Segment::const_iterator i = ifrom; i != ito; ++i) {
+	     
+            // If we are repeating, copy up to the end marker, otherwise
+            // copy up to "to".
+            // ??? Problem is that this doesn't set the end marker time
+            //   properly.  We would need to copy that from the original
+            //   segment.
+            if (expandRepeats  &&  !copyFrom->isBeforeEndMarker(i))
+                break;
+#endif
 
 	    timeT absTime = (*i)->getAbsoluteTime() + repeat * segDuration;
 	    timeT duration = (*i)->getDuration();
@@ -253,9 +280,34 @@ Clipboard::newSegment(const Segment *copyFrom, timeT from, timeT to,
 
     // need to call getEndMarkerTime() on copyFrom, not on s, because
     // its return value may depend on the composition it's in
-    if (copyFrom->getEndMarkerTime() > to) {
+    if (segEndMarker > to) {
 	s->setEndMarkerTime(to);
     }
+
+    // Fix the beginning.
+    
+    timeT firstEventTime = s->getStartTime();
+    
+    // if the beginning was chopped off and the first event isn't at the start
+    if (from > segStart  &&  firstEventTime > from) {
+        // Expand the beginning to the left so that it starts at the expected
+        // time (from).
+        s->fillWithRests(from, firstEventTime);
+    }
+
+    // Fix zero-length segments.
+    
+    // if s is zero length
+    if (s->getStartTime() == s->getEndMarkerTime()) {
+        // Figure out what start and end time would look right.
+        timeT finalStartTime = ((segStart > from) ? segStart : from);
+        timeT finalEndTime = ((segEndMarker < to) ? segEndMarker : to);
+        // Fill it up so it appears.
+        s->fillWithRests(finalStartTime, finalEndTime);
+    }
+
+//RG_DEBUG << "  After copying the events in, s...";
+//RG_DEBUG << *s;
 
     m_segments.insert(s);
     m_partial = true;
