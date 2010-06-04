@@ -58,8 +58,21 @@ operator<<(QDebug &dbg, const Rosegarden::Event &e)
 QDebug &
 operator<<(QDebug &dbg, const Rosegarden::Segment &t)
 {
-    dbg << "Segment for instrument " << t.getTrack()
-    << " starting at " << t.getStartTime() << endl;
+//    dbg << "Segment for instrument " << t.getTrack()
+//    << " starting at " << t.getStartTime() << endl;
+
+    dbg << "Segment Object" << endl;
+    dbg << "  Label: " << t.getLabel() << endl;
+    dbg << "  Track: " << t.getTrack() << endl;
+    // Assume 4/4 time and provide a potentially helpful bar number.
+    dbg << "  Start Time: " << t.getStartTime() << 
+        "(4/4 bar" << t.getStartTime() / (960.0*4.0) + 1 << ")" << endl;
+    dbg << "  End Time: " << t.getEndTime() << 
+        "(4/4 bar" << t.getEndTime() / (960.0*4.0) + 1 << ")" << endl;
+    dbg << "  End Marker Time: " << t.getEndMarkerTime() << 
+        "(4/4 bar" << t.getEndMarkerTime() / (960.0*4.0) + 1 << ")" << endl;
+
+    dbg << "Events:" << endl;
 
     for (Rosegarden::Segment::const_iterator i = t.begin();
             i != t.end(); ++i) {
@@ -68,7 +81,6 @@ operator<<(QDebug &dbg, const Rosegarden::Segment &t)
             continue;
         }
 
-        dbg << "Dumping Event : \n";
         dbg << *(*i) << endl;
     }
 
