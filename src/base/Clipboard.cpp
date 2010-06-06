@@ -113,13 +113,6 @@ void
 Clipboard::newSegment(const Segment *copyFrom, timeT from, timeT to,
 		      bool expandRepeats)
 {
-//RG_DEBUG << "Clipboard::newSegment() with time range";
-//RG_DEBUG << "  Incoming segment:";
-//RG_DEBUG << *copyFrom;
-//RG_DEBUG << "  from: " << from << "(bar" << from / (960.0*4.0) + 1 << ")";
-//RG_DEBUG << "  to: " << to << "(bar" << to / (960.0*4.0) + 1 << ")";
-//RG_DEBUG << "  expandRepeats: " << expandRepeats;
-
     // create with copy ctor so as to inherit track, instrument etc
     Segment *s = new Segment(*copyFrom);
 
@@ -211,13 +204,9 @@ Clipboard::newSegment(const Segment *copyFrom, timeT from, timeT to,
     }
 
     // We have a normal (MIDI) segment.
-//RG_DEBUG << "  Normal MIDI segment.";
 
     s->erase(s->begin(), s->end());
     
-//RG_DEBUG << "  After erase(), s...";
-//RG_DEBUG << *s;
-
     for (int repeat = firstRepeat; repeat <= lastRepeat; ++repeat) {
 
 	Segment::const_iterator ifrom = copyFrom->begin();
@@ -238,23 +227,8 @@ Clipboard::newSegment(const Segment *copyFrom, timeT from, timeT to,
 	}
 
         // For each event in the time range and before the end marker.
-#if 1
 	for (Segment::const_iterator i = ifrom;
 	     i != ito && copyFrom->isBeforeEndMarker(i); ++i) {
-#else
-// This variation will copy additional events beyond the end marker time
-// up to the "to" time.  But the end marker time needs to be adjusted
-// in s for this to work.  Still working on this...
-	for (Segment::const_iterator i = ifrom; i != ito; ++i) {
-	     
-            // If we are repeating, copy up to the end marker, otherwise
-            // copy up to "to".
-            // ??? Problem is that this doesn't set the end marker time
-            //   properly.  We would need to copy that from the original
-            //   segment.
-            if (expandRepeats  &&  !copyFrom->isBeforeEndMarker(i))
-                break;
-#endif
 
 	    timeT absTime = (*i)->getAbsoluteTime() + repeat * segDuration;
 	    timeT duration = (*i)->getDuration();
@@ -278,8 +252,9 @@ Clipboard::newSegment(const Segment *copyFrom, timeT from, timeT to,
 	}
     }
 
-    // need to call getEndMarkerTime() on copyFrom, not on s, because
-    // its return value may depend on the composition it's in
+    // Make sure the end of the segment doesn't go past the end of the range.
+    // Need to use the end marker time from the original segment, not s, 
+    // because its value may depend on the composition it's in.
     if (segEndMarker > to) {
 	s->setEndMarkerTime(to);
     }
@@ -306,12 +281,9 @@ Clipboard::newSegment(const Segment *copyFrom, timeT from, timeT to,
         s->fillWithRests(finalStartTime, finalEndTime);
     }
 
-//RG_DEBUG << "  After copying the events in, s...";
-//RG_DEBUG << *s;
-
     m_segments.insert(s);
+
     m_partial = true;
-    return;
 }
 
 Segment *
