@@ -1537,6 +1537,14 @@ EventView::updateWindowTitle(bool m)
 
     } else if (m_segments.size() == 1) {
 
+        // Fix bug #3007112
+        if (!m_segments[0]->getComposition()) {
+            // The segment is no more in the composition.
+            // Nothing to edit : close the editor.
+            close();
+            return;
+        }
+        
         TrackId trackId = m_segments[0]->getTrack();
         Track *track =
             m_segments[0]->getComposition()->getTrackById(trackId);
