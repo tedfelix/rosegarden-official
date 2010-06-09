@@ -411,6 +411,7 @@
     <Action name="quantize_selection"/>
     <Action name="repeat_quantize"/>
 <!--    <Action name="harmonize_selection"/> -->
+    <Action name="switch_preset"/>
     <Action name="rescale"/>
     <Action name="jog_left"/>
     <Action name="jog_right"/>
@@ -448,6 +449,7 @@
     <Action name="edit_event_list"/>
     <Action name="quantize_selection"/>
     <Action name="repeat_quantize"/>
+    <Action name="switch_preset"/>
 <!--        <Action name="rescale"/> -->
     <Action name="split_by_pitch"/>
     <Action name="split_by_recording"/>
