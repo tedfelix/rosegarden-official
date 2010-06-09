@@ -7091,9 +7091,9 @@ RosegardenMainWindow::slotChangePluginPort(InstrumentId instrumentId,
     }
 
     RG_DEBUG << "RosegardenMainWindow::slotPluginPortChanged - "
-    << "setting plugin port (" << inst->getMappedId()
-    << ", " << portIndex << ") from " << port->value
-    << " to " << value << endl;
+             << "setting plugin port (" << inst->getMappedId()
+             << ", " << portIndex << ") from " << port->value
+             << " to " << value << endl;
 
     port->setValue(value);
 
@@ -7111,35 +7111,35 @@ RosegardenMainWindow::slotChangePluginPort(InstrumentId instrumentId,
 
 void
 RosegardenMainWindow::slotPluginPortChanged(InstrumentId instrumentId,
-                                        int pluginIndex,
-                                        int portIndex)
+                                            int pluginIndex,
+                                            int portIndex)
 {
     PluginContainer *container = 0;
 
     container = m_doc->getStudio().getContainerById(instrumentId);
     if (!container) {
         RG_DEBUG << "RosegardenMainWindow::slotPluginPortChanged - "
-        << "no instrument or buss of id " << instrumentId << endl;
+                 << "no instrument or buss of id " << instrumentId << endl;
         return ;
     }
 
     AudioPluginInstance *inst = container->getPlugin(pluginIndex);
     if (!inst) {
         RG_DEBUG << "RosegardenMainWindow::slotPluginPortChanged - "
-        << "no plugin at index " << pluginIndex << " on " << instrumentId << endl;
+                 << "no plugin at index " << pluginIndex << " on " << instrumentId << endl;
         return ;
     }
 
     PluginPortInstance *port = inst->getPort(portIndex);
     if (!port) {
         RG_DEBUG << "RosegardenMainWindow::slotPluginPortChanged - no port "
-        << portIndex << endl;
+                 << portIndex << endl;
         return ;
     }
 
     RG_DEBUG << "RosegardenMainWindow::slotPluginPortChanged - "
-    << "setting plugin port (" << inst->getMappedId()
-    << ", " << portIndex << ") to " << port->value << endl;
+             << "setting plugin port (" << inst->getMappedId()
+             << ", " << portIndex << ") to " << port->value << endl;
 
     StudioControl::setStudioPluginPort(inst->getMappedId(),
                                        portIndex, port->value);

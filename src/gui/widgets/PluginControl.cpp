@@ -188,25 +188,34 @@ PluginControl::PluginControl(QWidget *parent,
 void
 PluginControl::setValue(float value, bool emitSignals)
 {
-    if (!emitSignals)
-        m_dial->blockSignals(true);
-    m_dial->setPosition(value);
-    if (!emitSignals)
-        m_dial->blockSignals(false);
-    else
-        emit valueChanged(value);
+    float position = value;
+    if (m_port->getDisplayHint() & PluginPort::Logarithmic) {
+        position = log10f(position);
+    }
+    if (!emitSignals) m_dial->blockSignals(true);
+    m_dial->setPosition(position);
+    if (!emitSignals) m_dial->blockSignals(false);
+    else emit valueChanged(value);
 }
 
 float
 PluginControl::getValue() const
 {
-    return m_dial == 0 ? 0 : m_dial->getPosition();
+    if (m_port->getDisplayHint() & PluginPort::Logarithmic) {
+        return m_dial == 0 ? 0 : powf(10, m_dial->getPosition());
+    } else {
+        return m_dial == 0 ? 0 : m_dial->getPosition();
+    }
 }
 
 void
 PluginControl::slotValueChanged(float value)
 {
-    emit valueChanged(value);
+    if (m_port->getDisplayHint() & PluginPort::Logarithmic) {
+        emit valueChanged(powf(10, value));
+    } else {
+        emit valueChanged(value);
+    }
 }
 
 }
