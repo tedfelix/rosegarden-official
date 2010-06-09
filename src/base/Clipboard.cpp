@@ -252,12 +252,14 @@ Clipboard::newSegment(const Segment *copyFrom, timeT from, timeT to,
 	}
     }
 
+    if (expandRepeats)
+        s->setEndMarkerTime(to);
+
     // Make sure the end of the segment doesn't go past the end of the range.
     // Need to use the end marker time from the original segment, not s, 
     // because its value may depend on the composition it's in.
-    if (segEndMarker > to) {
+    if (segEndMarker > to)
 	s->setEndMarkerTime(to);
-    }
 
     // Fix the beginning.
     
