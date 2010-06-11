@@ -234,11 +234,12 @@ protected slots:
                              unsigned long kBUsed,
                              unsigned long kBAvail);
 
-    void slotScheduledCompositionMapperReset() { resetCompositionMapper(); }
+    void slotScheduledCompositionMapperReset();
     
 protected:
 
     void resetCompositionMapper();
+    void populateCompositionMapper();
     void resetControlBlock();
     void resetMetronomeMapper();
     void resetTempoSegmentMapper();

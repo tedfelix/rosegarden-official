@@ -164,19 +164,8 @@ SequenceManager::setDocument(RosegardenDocument *doc)
             this, SLOT(update()));
 
     resetCompositionMapper();
-
-    for (Composition::iterator i = comp.begin(); i != comp.end(); ++i) {
-        SEQMAN_DEBUG << "Adding segment with rid " << (*i)->getRuntimeId() << endl;
-        processAddedSegment(*i);
-    }
-
-    for (Composition::triggersegmentcontaineriterator i =
-                comp.getTriggerSegments().begin();
-         i != comp.getTriggerSegments().end(); ++i) {
-        m_triggerSegments.insert(SegmentRefreshMap::value_type
-                                 ((*i)->getSegment(),
-                                  (*i)->getSegment()->getNewRefreshStatusId()));
-    }
+    
+    populateCompositionMapper();
 }
 
 void
@@ -1560,6 +1549,24 @@ void SequenceManager::resetCompositionMapper()
     resetControlBlock();
 }
 
+void SequenceManager::populateCompositionMapper()
+{
+    Composition &comp = m_doc->getComposition();
+
+    for (Composition::iterator i = comp.begin(); i != comp.end(); ++i) {
+        SEQMAN_DEBUG << "Adding segment with rid " << (*i)->getRuntimeId() << endl;
+        processAddedSegment(*i);
+    }
+
+    for (Composition::triggersegmentcontaineriterator i =
+                comp.getTriggerSegments().begin();
+         i != comp.getTriggerSegments().end(); ++i) {
+        m_triggerSegments.insert(SegmentRefreshMap::value_type
+                                 ((*i)->getSegment(),
+                                  (*i)->getSegment()->getNewRefreshStatusId()));
+    }
+
+}
 void SequenceManager::resetMetronomeMapper()
 {
     SEQMAN_DEBUG << "SequenceManager::resetMetronomeMapper()" << endl;
@@ -2025,6 +2032,13 @@ SequenceManager::slotFoundMountPoint(const QString&,
 {
     m_gotDiskSpaceResult = true;
     m_diskSpaceKBAvail = kBAvail;
+}
+
+void
+SequenceManager::slotScheduledCompositionMapperReset()
+{
+    resetCompositionMapper();
+    populateCompositionMapper();
 }
 
 void
