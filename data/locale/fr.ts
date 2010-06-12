@@ -4349,7 +4349,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3679"/>
         <source>Re&amp;vert</source>
-        <translation>In&amp;verser</translation>
+        <translation>Re&amp;charger</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3680"/>
@@ -19014,7 +19014,7 @@ Nous vous recommandons de sauver à nouveau ce fichier en utilisant la version c
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="1785"/>
         <source>&lt;qt&gt;&lt;h2&gt;Channels were remapped&lt;/h2&gt;&lt;p&gt;Beginning with version 10.02, Rosegarden no longer provides controls for changing the channel associated with each MIDI instrument.  Instead, each instrument uses the same channel as its instrument number.  For example, &quot;MIDI Input System Device #12&quot; always uses channel 12.&lt;/p&gt;&lt;p&gt;The file you just loaded contained instruments whose channels differed from the instrument numbers.  These channels have been reassigned so that instrument #1 will always use channel 1, regardless of what channel it might have used previously.  In most cases, you will experience no difference, but you may have to make some small changes to this file in order for it to play as intended.  We recommend that you save this file in order to avoid seeing this warning in the future.&lt;/p&gt;&lt;p&gt;We apologize for any inconvenience.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;h2&gt;Les canaux ont été redistribués&lt;/h2&gt;&lt;p&gt;A partir de la version 10.02, Rosegarden ne permet plus de modifier le numéro de canal associé à chaque instrument MIDI.  Maintenant, chaque instrument utilise le canal ayant le même numéro que l&apos;instrument lui-même.  Par exemple, &quot;MIDI Input System Device #12&quot; utilise toujours le canal 12.&lt;/p&gt;&lt;p&gt;Le fichier que vous venez de charger contient des instruments associés à des canaux dont les numéros différent de celui de ces instruments.  Ces canaux doivent être réassignés afin que l&apos;instrument n°1 utilise toujours le canal n°1, quelque soit le canal qui était utilisé auparavant.  La plupart du temps vous ne constaterez aucune différence, il se peut cependant qu&apos;une légère modification du fichier soit nécessaire pour obtenir le résultat attendu.  Nous vous recommandons de sauvegarder ce fichier si vous ne voulez plus revoir cet avertissement.&lt;/p&gt;&lt;p&gt;Nous vous prions de bien vouloir nous excuser si cette évolution vous à occasionné un dérangement.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;h2&gt;Les canaux ont été redistribués&lt;/h2&gt;&lt;p&gt;A partir de la version 10.02, Rosegarden ne permet plus de modifier le numéro de canal associé à un instrument MIDI.  Maintenant, chaque instrument utilise le canal de même numéro.  Par exemple, &quot;MIDI Input System Device #12&quot; utilise toujours le canal 12.&lt;/p&gt;&lt;p&gt;Le fichier que vous venez de charger contient des instruments associés à des canaux dont les numéros sont différents.  Ces canaux doivent être réassignés afin que l&apos;instrument n°1 utilise toujours le canal n°1, quelque fut le canal qui était utilisé auparavant.  La plupart du temps vous ne constaterez aucune différence, il se peut cependant qu&apos;une légère modification du fichier soit nécessaire pour obtenir le résultat attendu.  Dans ce cas, nous vous recommandons de sauvegarder ce fichier si vous ne voulez plus revoir cet avertissement.&lt;/p&gt;&lt;p&gt;Nous vous prions de bien vouloir nous excuser si cette évolution vous à occasionné un dérangement.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="2323"/>
@@ -19046,9 +19046,9 @@ Nous vous recommandons de sauver à nouveau ce fichier en utilisant la version c
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="598"/>
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="737"/>
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="814"/>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1532"/>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1537"/>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1558"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1594"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1599"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1620"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
@@ -19068,28 +19068,28 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
 Voir : Editer -&gt; Configuration -&gt; Audio.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1501"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1563"/>
         <source>importing an audio file that needs to be converted or resampled</source>
         <translation>importation d&apos;un fichier audio nécessitant une conversion ou un réchantillonnage</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1506"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1568"/>
         <source>Adding audio file...</source>
         <translation>Ajout d&apos;un fichier audio...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1531"/>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1536"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1593"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1598"/>
         <source>Can&apos;t add dropped file. </source>
         <translation>Ne peut pas ajouter ce fichier. </translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1547"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1609"/>
         <source>Generating audio preview...</source>
         <translation>Génération des pré-versions audio...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1557"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="1619"/>
         <source>Try copying this file to a directory where you have write permission and re-add it</source>
         <translation>Essayer de copier ce fichier dans un répertoire où vous disposez des droits d&apos;écriture puis ajoutez le de nouveau</translation>
     </message>
@@ -19977,7 +19977,7 @@ Erreur obtenue : %2</translation>
     <message>
         <location filename="../../src/gui/widgets/Rotary.cpp" line="89"/>
         <source>&lt;qt&gt;&lt;p&gt;Click and drag up and down or left and right to modify.&lt;/p&gt;&lt;p&gt;Double click to edit value directly.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Cliquer et glisser de haut en bas ou de droite à gauche pour modifier.&lt;/p&gt;&lt;p&gt;Double-cliquer pour directement éditer la valeur.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Cliquer et glisser de haut en bas ou de droite à gauche pour modifier.&lt;/p&gt;&lt;p&gt;Double-cliquer pour éditer directement la valeur.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/Rotary.cpp" line="430"/>
@@ -22223,16 +22223,16 @@ Souhaitez vous le faire tout de suite ?</translation>
     <name>Rosegarden::TrackLabel</name>
     <message>
         <location filename="../../src/gui/editors/segment/TrackLabel.cpp" line="88"/>
-        <source>&lt;qt&gt;Click and hold with either mouse button to assign this track to an instrument.&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;Cliquer et maintenir avec n&apos;importe quel bouton de la souris pour affecter cette piste à un instrument.&lt;/qt&gt;</translation>
+        <source>&lt;qt&gt;&lt;p&gt;Click to select all the segments on this track.&lt;/p&gt;&lt;p&gt;Shift+click to add to or to remove from the selection all the segments on this track.&lt;/p&gt;&lt;p&gt;Click and hold with either mouse button to assign this track to an instrument.&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation>&lt;qt&gt;&lt;p&gt;Cliquer pour sélectionner tous les segments de cette piste.&lt;/p&gt;&lt;p&gt;Majuscules + cliquer pour ajouter à la sélection tous les segments de cette piste ou pour les en retirer.&lt;/p&gt;&lt;p&gt;Cliquer et maintenir pour associer un instrument à cette piste.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackLabel.cpp" line="221"/>
+        <location filename="../../src/gui/editors/segment/TrackLabel.cpp" line="227"/>
         <source>Change track name</source>
         <translation>Renommer une piste</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackLabel.cpp" line="222"/>
+        <location filename="../../src/gui/editors/segment/TrackLabel.cpp" line="228"/>
         <source>Enter new track name</source>
         <translation>Entrer le nouveau nom de la piste</translation>
     </message>
@@ -22309,7 +22309,7 @@ Souhaitez vous le faire tout de suite ?</translation>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="259"/>
         <source>Small</source>
-        <translation>Petit</translation>
+        <translation>Petite</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="260"/>
@@ -22324,7 +22324,7 @@ Souhaitez vous le faire tout de suite ?</translation>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="272"/>
         <source>&lt;qt&gt;&lt;p&gt;Bracket staffs in LilyPond&lt;br&gt;(fragile, use with caution)&lt;/p&gt;&lt;qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Accolades des systèmes de portées pour LilyPond&lt;br&gt;(délicat, utiliser avec pré caution)&lt;/p&gt;&lt;qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Accolades des systèmes de portées pour LilyPond&lt;br&gt;(délicat, utiliser avec précaution)&lt;/p&gt;&lt;qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="274"/>
@@ -22419,7 +22419,7 @@ Souhaitez vous le faire tout de suite ?</translation>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="256"/>
         <source>&lt;qt&gt;&lt;p&gt;Choose normal, \small or \tiny font size for notation elements on this (normal-sized) staff when exporting to LilyPond.&lt;/p&gt;&lt;p&gt;This is as close as we get to enabling you to print parts in cue size&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Choix d&apos;une taille de caractères musicaux (normaux, \small ou \tiny) pour cette portée (dont la taille restera normale) à l&apos;exportation vers LilyPond.&lt;/p&gt;&lt;p&gt;C&apos;est le maximum que nous puissions faire pour vous permettre d&apos;imprimer le rappel d&apos;une partie dans la partition d&apos;une autre partie.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Choix d&apos;une taille de caractères musicaux (normale, petite ou minuscule) pour cette portée (dont la taille restera normale) à l&apos;exportation vers LilyPond.&lt;/p&gt;&lt;p&gt;C&apos;est le maximum que nous puissions faire pour vous permettre d&apos;imprimer le rappel d&apos;une partie dans la partition d&apos;une autre partie.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="316"/>
