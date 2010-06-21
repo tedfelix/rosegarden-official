@@ -145,8 +145,8 @@ Clipboard::newSegment(const Segment *copyFrom, timeT from, timeT to,
 
     if (expandRepeats) {
 	firstRepeat = (from - segStart) / segDuration;
-	lastRepeat = (to - segStart) / segDuration;
 	to = std::min(to, copyFrom->getRepeatEndTime());
+	lastRepeat = (to - segStart) / segDuration;
     }
 
     s->setRepeating(false);
