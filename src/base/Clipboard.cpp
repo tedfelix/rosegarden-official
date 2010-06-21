@@ -132,12 +132,9 @@ Clipboard::newSegment(const Segment *copyFrom, timeT from, timeT to,
     const timeT segEndMarker = copyFrom->getEndMarkerTime();
     timeT segDuration = segEndMarker - segStart;
     
-    // ??? This hasn't been tested with audio segments yet.
-    if (s->getType() != Segment::Audio) {
-        // We can't copy starting prior to the start of the segment.
-        if (from < segStart)
-            from = segStart;
-    }
+    // We can't copy starting prior to the start of the segment.
+    if (from < segStart)
+        from = segStart;
 
     int firstRepeat = 0;
     int lastRepeat = 0;
