@@ -856,35 +856,63 @@ void RosegardenMainViewWidget::slotEditSegmentAudio(Segment *segment)
 
 void RosegardenMainViewWidget::setZoomSize(double size)
 {
+    double oldSize = m_rulerScale->getUnitsPerPixel();
+
+    // For readability
+    CompositionView *compositionView = m_trackEditor->getCompositionView();
+    
+    QScrollBar *horizScrollBar = compositionView->horizontalScrollBar();
+    int halfWidth = lround(compositionView->viewport()->width() / 2.0);
+    int oldHCenter = horizScrollBar->value() + halfWidth;
+
+    // Set the new zoom factor
     m_rulerScale->setUnitsPerPixel(size);
 
+#if 0
     double duration44 = TimeSignature(4, 4).getBarDuration();
-
     double xScale = duration44 / (size * barWidth44);
-    RG_DEBUG << "RosegardenMainViewWidget::setZoomSize - xScale =  " << xScale << endl;
+    RG_DEBUG << "RosegardenMainViewWidget::setZoomSize():  xScale = " << 
+        xScale;
+#endif
 
-    m_trackEditor->slotSetPointerPosition
-    (getDocument()->getComposition().getPosition());
+    // Redraw everything
 
-    m_trackEditor->getCompositionView()->clearSegmentRectsCache(true);
-    m_trackEditor->getCompositionView()->slotUpdateSize();
-    m_trackEditor->getCompositionView()->slotUpdateSegmentsDrawBuffer();
+    // Redraw the playback position pointer.
+    // Move these lines to a new CompositionView::redrawPointer()?
+    timeT pointerTime = getDocument()->getComposition().getPosition();
+    double pointerXPosition = compositionView->
+        grid().getRulerScale()->getXForTime(pointerTime);
+    compositionView->setPointerPos(pointerXPosition);
 
-    if (m_trackEditor->getTempoRuler()) {
+    compositionView->clearSegmentRectsCache(true);
+    compositionView->slotUpdateSize();
+    compositionView->slotUpdateSegmentsDrawBuffer();
+
+    // At this point, the scroll bar's range has been updated.
+    // We can now safely modify it.
+    
+    // Maintain the center of the view.
+    // ??? See MatrixWidget and NotationWidget for a more extensive 
+    //   zoom/panner feature.
+    horizScrollBar->setValue(
+        (int)(oldHCenter * (oldSize / size)) - halfWidth);
+    
+    // ??? An alternate behavior is to have the zoom always center on the
+    //   playback position pointer.  Might make this a user preference, or
+    //   maybe when holding down "Shift" while zooming.
+//    horizScrollBar->setValue(pointerXPosition - halfWidth);
+
+    if (m_trackEditor->getTempoRuler())
         m_trackEditor->getTempoRuler()->repaint();
-    }
 
-    if (m_trackEditor->getChordNameRuler()) {
+    if (m_trackEditor->getChordNameRuler())
         m_trackEditor->getChordNameRuler()->repaint();
-    }
 
-    if (m_trackEditor->getTopStandardRuler()) {
+    if (m_trackEditor->getTopStandardRuler())
         m_trackEditor->getTopStandardRuler()->repaint();
-    }
 
-    if (m_trackEditor->getBottomStandardRuler()) {
+    if (m_trackEditor->getBottomStandardRuler())
         m_trackEditor->getBottomStandardRuler()->repaint();
-    }
 }
 
 void RosegardenMainViewWidget::slotSelectTrackSegments(int trackId)
