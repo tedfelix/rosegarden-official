@@ -217,12 +217,18 @@ void RosegardenScrollView::updateContents()
 
 void RosegardenScrollView::updateScrollBars()
 {
-    this->horizontalScrollBar()->setPageStep(visibleWidth());
-    this->horizontalScrollBar()->setMaximum(std::max(contentsWidth()-visibleWidth(),0));
-    this->verticalScrollBar()->setPageStep(visibleHeight());
-    this->verticalScrollBar()->setMaximum(std::max(contentsHeight()-visibleHeight(),0));
+    horizontalScrollBar()->setPageStep(visibleWidth());
+    horizontalScrollBar()->setLineStep(visibleWidth() / 10);
+    horizontalScrollBar()->setMaximum(
+        std::max(contentsWidth()-visibleWidth(),0));
+    verticalScrollBar()->setPageStep(visibleHeight());
+    verticalScrollBar()->setLineStep(visibleHeight() / 10);
+    verticalScrollBar()->setMaximum(
+        std::max(contentsHeight()-visibleHeight(),0));
 
-//	RG_DEBUG << "RosegardenScrollView::updateScrollBars :" << " pagewidth - " << visibleWidth() << " pageheight - " << visibleHeight() << endl;
+//	RG_DEBUG << "RosegardenScrollView::updateScrollBars :" << 
+//        " pagewidth - " << visibleWidth() << 
+//        " pageheight - " << visibleHeight();
 }
 
 void RosegardenScrollView::paintEvent( QPaintEvent* event )
