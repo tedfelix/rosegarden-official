@@ -21,7 +21,9 @@
 #include <QList>
 #include <QUrl>
 #include <QDesktopServices>
+#include <QApplication>
 
+#include "gui/general/ThornStyle.h"
 #include "misc/Debug.h"
 
 
@@ -42,7 +44,7 @@ FileDialog::FileDialog(QWidget *parent,
     // navigation arrows from inside here.  It never worked from the external
     // stylesheet, and I can't even remember what I tried unsuccessfully in the
     // past.
-   
+
     // set up the sidebar stuff; the entire purpose of this class 
     QList<QUrl> urls;
 
@@ -88,6 +90,11 @@ FileDialog::getOpenFileName(QWidget *parent,
                             QString *selectedFilter,
                             QFileDialog::Options options)
 {
+    if (!qobject_cast<ThornStyle *>(QApplication::style())) {
+        return QFileDialog::getOpenFileName(parent, caption, dir, filter,
+                                            selectedFilter, options);
+    }
+
     FileDialog dialog(parent, caption, dir, filter);
 
 #if QT_VERSION >= 0x040500
@@ -117,6 +124,11 @@ FileDialog::getOpenFileNames(QWidget *parent,
                              QString *selectedFilter,
                              QFileDialog::Options options)
 {
+    if (!qobject_cast<ThornStyle *>(QApplication::style())) {
+        return QFileDialog::getOpenFileNames(parent, caption, dir, filter,
+                                             selectedFilter, options);
+    }
+
     FileDialog dialog(parent, caption, dir, filter);
 
 #if QT_VERSION >= 0x040500
@@ -146,6 +158,11 @@ FileDialog::getSaveFileName(QWidget *parent,
                             QString *selectedFilter,
                             QFileDialog::Options options)
 {
+    if (!qobject_cast<ThornStyle *>(QApplication::style())) {
+        return QFileDialog::getSaveFileName(parent, caption, dir, filter,
+                                            selectedFilter, options);
+    }
+
     FileDialog dialog(parent, caption, dir, filter);
 
 #if QT_VERSION >= 0x040500

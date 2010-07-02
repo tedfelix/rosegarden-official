@@ -20,7 +20,8 @@
 
 #include <QFileDialog>
 
-/** We used to use static convenience functions to create file dialogs, like
+/**
+ * We used to use static convenience functions to create file dialogs, like
  * fname = QFileDialog::getOpenFilename(...).  This was convenient, but
  * unfortunately did not permit us to do anything with the default sidebar.
  *
@@ -41,11 +42,6 @@ class FileDialog : public QFileDialog
 {
     Q_OBJECT
 public:
-    explicit FileDialog(QWidget *parent = 0,
-                        const QString &caption = QString(),
-                        const QString &dir = QString(),
-                        const QString &filter = QString());
-
     ~FileDialog();
 
     /** See documentation for QFileDialog::getOpenFilename()
@@ -74,6 +70,13 @@ public:
                                    const QString &filter = QString(),
                                    QString *selectedFilter = 0,
                                    QFileDialog::Options options = 0);
+
+protected:
+    explicit FileDialog(QWidget *parent = 0,
+                        const QString &caption = QString(),
+                        const QString &dir = QString(),
+                        const QString &filter = QString());
+
 };
 
 }

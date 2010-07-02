@@ -1198,8 +1198,6 @@ bool RosegardenDocument::saveDocument(const QString& filename,
 
     QString tempFileName = temp.fileName(); // Must do this before temp.close()
 
-    std::cerr << "Temporary file name is: \"" << tempFileName << "\": is this a full path?  We hope so" << std::endl;
-
     // The temporary file is now open: close it (without removing it)
     temp.close();
 
