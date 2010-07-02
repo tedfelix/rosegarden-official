@@ -3,7 +3,7 @@
 <rosegarden-chord-data version="1.0" format-version-major="1"
 	format-version-minor="0" format-version-point="0">
 	<chords>
-		<chordset root="C">
+		<chordset root="C"> <!-- CEG -->
 			<chord>
 				<fingering>x 3 2 0 1 0</fingering>
 				<fingering>x 3 5 5 5 0</fingering>
@@ -20,7 +20,7 @@
 				<fingering>0 3 5 5 5 0</fingering>
 				<fingering>0 3 5 5 5 3</fingering>
 			</chord>
-			<chord ext="m">
+			<chord ext="m"> <!-- CEbG -->
 				<fingering>x 3 1 0 1 x</fingering>
 				<fingering>x 3 5 5 4 3</fingering>
 				<fingering>8 10 10 8 8 8</fingering>
@@ -29,13 +29,17 @@
 				<fingering>3 3 1 0 1 x</fingering>
 				<fingering>3 3 5 5 4 3</fingering>
 			</chord>
+			<chord ext="m/Eb">
+				<fingering>x 6 5 5 4 x</fingering>
+			</chord>
 			<chord ext="m/E">
 				<fingering>0 3 1 0 1 x</fingering>
 				<fingering>0 3 5 5 4 3</fingering>
 			</chord>
-			<chord ext="7">
+			<chord ext="7"> <!-- CEGBb -->
 				<fingering>x 3 2 3 1 0</fingering>
 				<fingering>x 3 5 3 5 3</fingering>
+				<fingering>8 10 8 9 8 8</fingering>
 				<fingering>8 10 8 9 11 8</fingering>
 				<fingering>8 10 10 9 11 8</fingering>
 			</chord>
@@ -47,11 +51,10 @@
 				<fingering>0 3 2 3 1 0</fingering>
 				<fingering>0 3 5 3 5 3</fingering>
 			</chord>
-			<chord ext="m7">
+			<chord ext="m7"> <!-- CEbGBb -->
 				<fingering>x 3 1 3 1 x</fingering>
-				<fingering>3 3 1 3 1 x</fingering>
 				<fingering>x 3 5 3 4 3</fingering>
-				<fingering>3 3 5 3 4 6</fingering>
+				<fingering>x 3 5 3 4 6</fingering>
 				<fingering>8 10 8 8 11 8</fingering>
 				<fingering>8 10 10 8 11 8</fingering>
 				<fingering>8 x 8 8 8 8</fingering>
@@ -61,12 +64,15 @@
 				<fingering>3 3 5 3 4 3</fingering>
 				<fingering>3 3 5 3 4 6</fingering>
 			</chord>
+			<chord ext="m7/Eb">
+				<fingering>x 6 5 5 x 6</fingering>
+			</chord>
 			<chord ext="m7/E">
 				<fingering>0 3 1 3 1 x</fingering>
 				<fingering>0 3 5 3 4 3</fingering>
 				<fingering>0 3 5 3 4 6</fingering>
 			</chord>
-			<chord ext="maj7">
+			<chord ext="maj7"> <!-- CEGB -->
 				<fingering>x 3 2 0 0 0</fingering>
 				<fingering>x 3 5 4 5 3</fingering>
 				<fingering>x x 10 9 8 7</fingering>
@@ -74,37 +80,38 @@
 			</chord>
 			<chord ext="maj7/G">
 				<fingering>3 3 2 0 0 0</fingering>
-				<fingering>3 1 5 4 5 1</fingering>
+				<fingering>3 3 5 4 5 3</fingering>
 			</chord>
 			<chord ext="maj7/E">
 				<fingering>0 3 2 0 0 0</fingering>
-				<fingering>0 3 5 4 5 1</fingering>
+				<fingering>0 3 5 4 5 3</fingering>
 			</chord>
-			<chord ext="m7-5">
+			<chord ext="m7-5"> <!-- CEbGbBb -->
 				<fingering>8 x 8 8 7 x</fingering>
 			</chord>
-			<chord ext="sus4">
+			<chord ext="sus4"> <!-- CFG -->
 				<fingering>x 3 3 0 1 x</fingering>
 				<fingering>3 3 3 0 1 1</fingering>
-				<fingering>0 3 5 5 6 1</fingering>
+				<fingering>x 3 5 5 6 3</fingering>
 				<fingering>3 3 5 5 6 3</fingering>
 				<fingering>8 8 10 10 8 8</fingering>
 			</chord>
-			<chord ext="7sus4">
+			<chord ext="7sus4"> <!-- CFGBb -->
 				<fingering>x 3 3 3 1 x</fingering>
 				<fingering>3 3 3 3 1 x</fingering>
 				<fingering>x 3 5 3 6 1</fingering>
 				<fingering>3 3 5 3 6 1</fingering>
 				<fingering>8 10 8 10 8 8</fingering>
 			</chord>
-			<chord ext="6">
+			<chord ext="6"> <!-- CEGA -->
+				<fingering>x 3 2 2 1 0</fingering>
 				<fingering>0 3 2 2 1 0</fingering>
 				<fingering>3 3 2 2 1 0</fingering>
 				<fingering>x 3 5 5 5 5</fingering>
 				<fingering>3 3 5 5 5 5</fingering>
 				<fingering>8 x 10 9 10 8</fingering>
 			</chord>
-			<chord ext="m6">
+			<chord ext="m6"> <!-- CEbGA -->
 				<fingering>x 3 1 2 1 x</fingering>
 				<fingering>3 3 1 2 1 x</fingering>
 				<fingering>x 3 x 5 4 5</fingering>
@@ -114,77 +121,77 @@
 				<fingering>8 x 10 8 10 8</fingering>
 				<fingering>8 10 10 8 10 8</fingering>
 			</chord>
-			<chord ext="9">
+			<chord ext="9"> <!-- CEGBbD -->
 				<fingering>x 3 2 3 3 x</fingering>
 				<fingering>3 3 2 3 3 3</fingering>
 				<fingering>x 7 8 7 8 x</fingering>
 				<fingering>x x 8 7 8 8</fingering>
 			</chord>
-			<chord ext="m9">
+			<chord ext="m9"> <!-- CEbGBbD -->
 				<fingering>x 3 1 3 3 x</fingering>
 				<fingering>3 3 1 3 3 3</fingering>
 				<fingering>8 6 8 7 x x</fingering>
 				<fingering>8 10 8 8 8 10</fingering>
 			</chord>
-			<chord ext="maj9">
+			<chord ext="maj9"> <!-- CEGBD -->
 				<fingering>x 3 2 4 3 x</fingering>
 				<fingering>8 7 9 7 x x</fingering>
 				<fingering>x x 10 7 8 7</fingering>
 			</chord>
-			<chord ext="6/9">
+			<chord ext="6/9"> <!-- CEGAD -->
 				<fingering>0 3 2 2 3 3</fingering>
 				<fingering>3 3 2 2 3 3</fingering>
 				<fingering>8 7 7 7 8 8</fingering>
 				<fingering>x x 10 9 10 10</fingering>
 			</chord>
-			<chord ext="7+9">
+			<chord ext="7+9"> <!-- CEGBbD# -->
 				<fingering>x 3 2 3 4 x</fingering>
 				<fingering>8 7 8 8 8 x</fingering>
 				<fingering>8 10 8 9 8 11</fingering>
 			</chord>
-			<chord ext="7-9">
+			<chord ext="7-9"> <!-- CEGBbDb -->
 				<fingering>x 3 2 3 2 x</fingering>
 				<fingering>8 7 8 6 x x</fingering>
 				<fingering>8 x 8 9 8 9</fingering>
 			</chord>
-			<chord ext="aug">
+			<chord ext="aug"> <!-- CEG# -->
 				<fingering>x 3 2 1 1 x</fingering>
 				<fingering>4 3 2 1 x x</fingering>
 				<fingering>x x 6 5 5 4</fingering>
 			</chord>
-			<chord ext="7+5">
+			<chord ext="7+5"> <!-- CEG#Bb -->
 				<fingering>x 1 2 1 1 x</fingering>
 				<fingering>x 3 6 3 5 4</fingering>
 				<fingering>8 x 8 9 9 8</fingering>
 			</chord>
-			<chord ext="dim">
+			<chord ext="dim"> <!-- CEbGb -->
 				<fingering>2 3 1 2 x x</fingering>
 				<fingering>x 3 4 2 4 x</fingering>
 				<fingering>x x 1 2 1 2</fingering>
 			</chord>
-			<chord ext="-5">
+			<chord ext="-5"> <!-- CEGb -->
 				<fingering>x 3 4 5 5 x</fingering>
 				<fingering>x x 10 9 7 8</fingering>
 				<fingering>8 9 10 9 x x</fingering>
 			</chord>
-			<chord ext="7-5">
+			<chord ext="7-5"> <!-- CEGbBb -->
 				<fingering>x 3 4 3 5 x</fingering>
 				<fingering>x x 8 9 7 8</fingering>
 				<fingering>8 9 8 9 x x</fingering>
 			</chord>
-			<chord ext="9-5">
+			<chord ext="9-5"> <!-- CEGbBbD -->
 				<fingering>2 3 2 3 3 2</fingering>
 				<fingering>8 7 8 7 7 8</fingering>
 				<fingering>x x 10 11 11 10</fingering>
 			</chord>
-			<chord ext="11">
+			<chord ext="11"> <!-- CEGBbDF -->
 				<fingering>0 3 3 3 3 3</fingering>
 				<fingering>3 3 3 3 3 3</fingering>
 				<fingering>8 x 8 7 6 6</fingering>
 				<fingering>x 0 10 10 11 10</fingering>
 				<fingering>x 10 10 10 11 10</fingering>
 			</chord>
-			<chord ext="13">
+			<chord ext="13"> <!-- CEGBbDFA  1 3 (5) b7 (9) (11) 13 -->
 				<fingering>x 3 2 3 3 5</fingering>
 				<fingering>3 3 2 3 3 5</fingering>
 				<fingering>8 x 8 7 5 5</fingering>
@@ -195,8 +202,8 @@
 			<chord>
 				<fingering>x 0 2 2 2 0</fingering>
 				<fingering>5 7 7 6 5 5</fingering>
-				<fingering>12 12 11 9 10 9</fingering>
 				<fingering>x 12 11 9 10 9</fingering>
+				<fingering>12 12 11 9 10 9</fingering>
 			</chord>
 			<chord ext="7">
 				<fingering>x 0 2 0 2 0</fingering>
@@ -464,8 +471,8 @@
 		</chordset>
 		<chordset root="B">
 			<chord>
-				<fingering>2 2 4 4 4 2</fingering>
 				<fingering>x 2 4 4 4 x</fingering>
+				<fingering>2 2 4 4 4 2</fingering>
 				<fingering>7 9 9 8 7 7</fingering>
 				<fingering>x x 9 11 12 11</fingering>
 			</chord>
@@ -607,10 +614,10 @@
 		</chordset>
 		<chordset root="C#/Db">
 			<chord>
-				<fingering>4 4 3 1 2 1</fingering>
 				<fingering>x 4 3 1 2 1</fingering>
-				<fingering>4 4 6 6 6 4</fingering>
+				<fingering>4 4 3 1 2 1</fingering>
 				<fingering>x 4 6 6 6 x</fingering>
+				<fingering>4 4 6 6 6 4</fingering>
 				<fingering>9 11 11 10 9 9</fingering>
 			</chord>
 			<chord ext="7">
@@ -752,9 +759,10 @@
 		</chordset>
 		<chordset root="D">
 			<chord>
+				<fingering>x x 0 2 3 2</fingering>
 				<fingering>x 0 0 2 3 2</fingering>
-				<fingering>5 5 7 7 7 5</fingering>
 				<fingering>x 5 7 7 7 x</fingering>
+				<fingering>5 5 7 7 7 5</fingering>
 				<fingering>10 12 12 11 10 10</fingering>
 			</chord>
 			<chord ext="7">
@@ -890,10 +898,10 @@
 		</chordset>
 		<chordset root="D#/Eb">
 			<chord>
-				<fingering>6 6 5 3 4 3</fingering>
 				<fingering>x 6 5 3 4 3</fingering>
-				<fingering>6 6 8 8 8 6</fingering>
+				<fingering>6 6 5 3 4 3</fingering>
 				<fingering>x 6 8 8 8 x</fingering>
+				<fingering>6 6 8 8 8 6</fingering>
 				<fingering>11 13 13 12 11 11</fingering>
 			</chord>
 			<chord ext="7">
@@ -1034,7 +1042,7 @@
 		</chordset>
 		<chordset root="E">
 			<chord>
-				<fingering>2 2 1 0 0 0</fingering>
+				<fingering>0 2 2 1 0 0</fingering>
 				<fingering>0 7 6 4 5 4</fingering>
 				<fingering>0 7 9 9 9 7</fingering>
 				<fingering>0 7 9 9 9 0</fingering>
@@ -1162,10 +1170,10 @@
 		<chordset root="F">
 			<chord>
 				<fingering>1 3 3 2 1 1</fingering>
-				<fingering>8 8 7 5 6 5</fingering>
 				<fingering>x 8 7 5 6 5</fingering>
-				<fingering>8 8 10 10 10 8</fingering>
+				<fingering>8 8 7 5 6 5</fingering>
 				<fingering>x 8 10 10 10 x</fingering>
+				<fingering>8 8 10 10 10 8</fingering>
 			</chord>
 			<chord ext="7">
 				<fingering>1 3 3 2 4 1</fingering>
@@ -1307,10 +1315,10 @@
 		<chordset root="F#/Gb">
 			<chord>
 				<fingering>2 4 4 3 2 2</fingering>
-				<fingering>9 9 8 6 7 6</fingering>
 				<fingering>x 9 8 6 7 6</fingering>
-				<fingering>9 9 11 11 11 9</fingering>
+				<fingering>9 9 8 6 7 6</fingering>
 				<fingering>x 9 11 11 11 x</fingering>
+				<fingering>9 9 11 11 11 9</fingering>
 			</chord>
 			<chord ext="7">
 				<fingering>2 4 4 3 5 2</fingering>
@@ -1452,10 +1460,10 @@
 		</chordset>
 		<chordset root="G">
 			<chord>
-				<fingering>3 2 0 0 0 2</fingering>
+				<fingering>3 2 0 0 0 3</fingering>
 				<fingering>3 5 5 4 3 3</fingering>
-				<fingering>10 10 9 7 8 7</fingering>
 				<fingering>x 10 9 7 8 7</fingering>
+				<fingering>10 10 9 7 8 7</fingering>
 			</chord>
 			<chord ext="7">
 				<fingering>3 2 0 0 0 1</fingering>
@@ -1482,6 +1490,7 @@
 				<fingering>3 x 3 3 3 x</fingering>
 			</chord>
 			<chord ext="maj7">
+				<fingering>3 2 0 0 0 2</fingering>
 				<fingering>x x 5 4 3 2</fingering>
 				<fingering>3 5 4 4 3 x</fingering>
 				<fingering>10 10 9 7 7 7</fingering>
@@ -1594,8 +1603,8 @@
 			<chord>
 				<fingering>x x 1 1 1 4</fingering>
 				<fingering>4 6 6 5 4 4</fingering>
-				<fingering>11 11 10 8 9 8</fingering>
 				<fingering>x 11 10 8 9 8</fingering>
+				<fingering>11 11 10 8 9 8</fingering>
 			</chord>
 			<chord ext="7">
 				<fingering>x x 1 1 1 2</fingering>
