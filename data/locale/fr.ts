@@ -7,470 +7,7 @@
         <location filename="../../src/sound/MidiFile.cpp" line="104"/>
         <source></source>
         <comment>&quot;long&quot; is a C++ data type</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/sound/MidiFile.cpp" line="127"/>
-        <source></source>
-        <comment>&quot;int&quot; is a C++ data type</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6024"/>
-        <source></source>
-        <comment>you may change &quot;doc:audio-filename-en&quot; to a page in your</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="35"/>
-        <location filename="../QMenuStrings.cpp" line="54"/>
-        <location filename="../QMenuStrings.cpp" line="66"/>
-        <location filename="../QMenuStrings.cpp" line="76"/>
-        <location filename="../QMenuStrings.cpp" line="85"/>
-        <location filename="../QMenuStrings.cpp" line="94"/>
-        <location filename="../QMenuStrings.cpp" line="103"/>
-        <location filename="../QMenuStrings.cpp" line="113"/>
-        <location filename="../QMenuStrings.cpp" line="127"/>
-        <location filename="../QMenuStrings.cpp" line="136"/>
-        <location filename="../QMenuStrings.cpp" line="146"/>
-        <location filename="../QMenuStrings.cpp" line="155"/>
-        <location filename="../QMenuStrings.cpp" line="165"/>
-        <location filename="../QMenuStrings.cpp" line="176"/>
-        <location filename="../QMenuStrings.cpp" line="185"/>
-        <location filename="../QMenuStrings.cpp" line="195"/>
-        <location filename="../QMenuStrings.cpp" line="204"/>
-        <location filename="../QMenuStrings.cpp" line="213"/>
-        <location filename="../QMenuStrings.cpp" line="222"/>
-        <location filename="../QMenuStrings.cpp" line="231"/>
-        <location filename="../QMenuStrings.cpp" line="241"/>
-        <location filename="../QMenuStrings.cpp" line="250"/>
-        <location filename="../QMenuStrings.cpp" line="259"/>
-        <location filename="../QMenuStrings.cpp" line="268"/>
-        <location filename="../QMenuStrings.cpp" line="277"/>
-        <location filename="../QMenuStrings.cpp" line="286"/>
-        <location filename="../QMenuStrings.cpp" line="309"/>
-        <location filename="../QMenuStrings.cpp" line="328"/>
-        <location filename="../QMenuStrings.cpp" line="338"/>
-        <location filename="../QMenuStrings.cpp" line="347"/>
-        <location filename="../QMenuStrings.cpp" line="361"/>
-        <location filename="../QMenuStrings.cpp" line="376"/>
-        <location filename="../QMenuStrings.cpp" line="385"/>
-        <location filename="../QMenuStrings.cpp" line="394"/>
-        <location filename="../QMenuStrings.cpp" line="403"/>
-        <location filename="../QMenuStrings.cpp" line="412"/>
-        <location filename="../QMenuStrings.cpp" line="421"/>
-        <location filename="../QMenuStrings.cpp" line="430"/>
-        <location filename="../QMenuStrings.cpp" line="439"/>
-        <location filename="../QMenuStrings.cpp" line="448"/>
-        <location filename="../QMenuStrings.cpp" line="457"/>
-        <location filename="../QMenuStrings.cpp" line="466"/>
-        <location filename="../QMenuStrings.cpp" line="475"/>
-        <location filename="../QMenuStrings.cpp" line="485"/>
-        <location filename="../QMenuStrings.cpp" line="494"/>
-        <location filename="../QMenuStrings.cpp" line="504"/>
-        <location filename="../QMenuStrings.cpp" line="513"/>
-        <location filename="../QMenuStrings.cpp" line="522"/>
-        <location filename="../QMenuStrings.cpp" line="531"/>
-        <location filename="../QMenuStrings.cpp" line="540"/>
-        <location filename="../QMenuStrings.cpp" line="549"/>
-        <location filename="../QMenuStrings.cpp" line="558"/>
-        <location filename="../QMenuStrings.cpp" line="567"/>
-        <location filename="../QMenuStrings.cpp" line="576"/>
-        <location filename="../QMenuStrings.cpp" line="590"/>
-        <location filename="../QMenuStrings.cpp" line="600"/>
-        <location filename="../QMenuStrings.cpp" line="610"/>
-        <location filename="../QMenuStrings.cpp" line="620"/>
-        <location filename="../QMenuStrings.cpp" line="630"/>
-        <location filename="../QMenuStrings.cpp" line="640"/>
-        <location filename="../QMenuStrings.cpp" line="649"/>
-        <location filename="../QMenuStrings.cpp" line="658"/>
-        <location filename="../QMenuStrings.cpp" line="694"/>
-        <location filename="../QMenuStrings.cpp" line="703"/>
-        <location filename="../QMenuStrings.cpp" line="712"/>
-        <location filename="../QMenuStrings.cpp" line="722"/>
-        <location filename="../QMenuStrings.cpp" line="731"/>
-        <location filename="../QMenuStrings.cpp" line="740"/>
-        <location filename="../QMenuStrings.cpp" line="749"/>
-        <location filename="../QMenuStrings.cpp" line="761"/>
-        <location filename="../QMenuStrings.cpp" line="770"/>
-        <location filename="../QMenuStrings.cpp" line="781"/>
-        <location filename="../QMenuStrings.cpp" line="790"/>
-        <location filename="../QMenuStrings.cpp" line="799"/>
-        <location filename="../QMenuStrings.cpp" line="808"/>
-        <location filename="../QMenuStrings.cpp" line="820"/>
-        <location filename="../QMenuStrings.cpp" line="829"/>
-        <location filename="../QMenuStrings.cpp" line="842"/>
-        <location filename="../QMenuStrings.cpp" line="851"/>
-        <location filename="../QMenuStrings.cpp" line="860"/>
-        <location filename="../QMenuStrings.cpp" line="869"/>
-        <location filename="../QMenuStrings.cpp" line="878"/>
-        <location filename="../QMenuStrings.cpp" line="887"/>
-        <location filename="../QMenuStrings.cpp" line="896"/>
-        <location filename="../QMenuStrings.cpp" line="905"/>
-        <location filename="../QMenuStrings.cpp" line="916"/>
-        <location filename="../QMenuStrings.cpp" line="931"/>
-        <location filename="../QMenuStrings.cpp" line="946"/>
-        <location filename="../QMenuStrings.cpp" line="955"/>
-        <location filename="../QMenuStrings.cpp" line="967"/>
-        <location filename="../QMenuStrings.cpp" line="976"/>
-        <location filename="../QMenuStrings.cpp" line="986"/>
-        <location filename="../QMenuStrings.cpp" line="995"/>
-        <location filename="../QMenuStrings.cpp" line="1004"/>
-        <location filename="../QMenuStrings.cpp" line="1013"/>
-        <location filename="../QMenuStrings.cpp" line="1022"/>
-        <location filename="../QMenuStrings.cpp" line="1031"/>
-        <location filename="../QMenuStrings.cpp" line="1040"/>
-        <location filename="../QMenuStrings.cpp" line="1050"/>
-        <location filename="../QMenuStrings.cpp" line="1059"/>
-        <location filename="../QMenuStrings.cpp" line="1068"/>
-        <location filename="../QMenuStrings.cpp" line="1077"/>
-        <location filename="../QMenuStrings.cpp" line="1086"/>
-        <location filename="../QMenuStrings.cpp" line="1095"/>
-        <location filename="../QMenuStrings.cpp" line="1104"/>
-        <location filename="../QMenuStrings.cpp" line="1113"/>
-        <location filename="../QMenuStrings.cpp" line="1122"/>
-        <location filename="../QMenuStrings.cpp" line="1131"/>
-        <location filename="../QMenuStrings.cpp" line="1140"/>
-        <location filename="../QMenuStrings.cpp" line="1149"/>
-        <location filename="../QMenuStrings.cpp" line="1158"/>
-        <location filename="../QMenuStrings.cpp" line="1167"/>
-        <location filename="../QMenuStrings.cpp" line="1176"/>
-        <location filename="../QMenuStrings.cpp" line="1185"/>
-        <location filename="../QMenuStrings.cpp" line="1194"/>
-        <location filename="../QMenuStrings.cpp" line="1204"/>
-        <location filename="../QMenuStrings.cpp" line="1213"/>
-        <location filename="../QMenuStrings.cpp" line="1222"/>
-        <location filename="../QMenuStrings.cpp" line="1231"/>
-        <location filename="../QMenuStrings.cpp" line="1240"/>
-        <location filename="../QMenuStrings.cpp" line="1249"/>
-        <location filename="../QMenuStrings.cpp" line="1258"/>
-        <location filename="../QMenuStrings.cpp" line="1267"/>
-        <location filename="../QMenuStrings.cpp" line="1276"/>
-        <location filename="../QMenuStrings.cpp" line="1285"/>
-        <location filename="../QMenuStrings.cpp" line="1294"/>
-        <location filename="../QMenuStrings.cpp" line="1303"/>
-        <location filename="../QMenuStrings.cpp" line="1312"/>
-        <location filename="../QMenuStrings.cpp" line="1321"/>
-        <location filename="../QMenuStrings.cpp" line="1330"/>
-        <location filename="../QMenuStrings.cpp" line="1339"/>
-        <location filename="../QMenuStrings.cpp" line="1348"/>
-        <location filename="../QMenuStrings.cpp" line="1358"/>
-        <location filename="../QMenuStrings.cpp" line="1367"/>
-        <location filename="../QMenuStrings.cpp" line="1376"/>
-        <location filename="../QMenuStrings.cpp" line="1385"/>
-        <location filename="../QMenuStrings.cpp" line="1394"/>
-        <location filename="../QMenuStrings.cpp" line="1403"/>
-        <location filename="../QMenuStrings.cpp" line="1412"/>
-        <location filename="../QMenuStrings.cpp" line="1421"/>
-        <location filename="../QMenuStrings.cpp" line="1430"/>
-        <location filename="../QMenuStrings.cpp" line="1439"/>
-        <location filename="../QMenuStrings.cpp" line="1448"/>
-        <location filename="../QMenuStrings.cpp" line="1457"/>
-        <location filename="../QMenuStrings.cpp" line="1466"/>
-        <location filename="../QMenuStrings.cpp" line="1475"/>
-        <location filename="../QMenuStrings.cpp" line="1484"/>
-        <location filename="../QMenuStrings.cpp" line="1493"/>
-        <location filename="../QMenuStrings.cpp" line="1502"/>
-        <location filename="../QMenuStrings.cpp" line="1511"/>
-        <location filename="../QMenuStrings.cpp" line="1522"/>
-        <location filename="../QMenuStrings.cpp" line="1541"/>
-        <location filename="../QMenuStrings.cpp" line="1550"/>
-        <location filename="../QMenuStrings.cpp" line="1559"/>
-        <location filename="../QMenuStrings.cpp" line="1568"/>
-        <location filename="../QMenuStrings.cpp" line="1577"/>
-        <location filename="../QMenuStrings.cpp" line="1586"/>
-        <location filename="../QMenuStrings.cpp" line="1595"/>
-        <location filename="../QMenuStrings.cpp" line="1604"/>
-        <location filename="../QMenuStrings.cpp" line="1613"/>
-        <location filename="../QMenuStrings.cpp" line="1622"/>
-        <location filename="../QMenuStrings.cpp" line="1631"/>
-        <location filename="../QMenuStrings.cpp" line="1640"/>
-        <location filename="../QMenuStrings.cpp" line="1649"/>
-        <location filename="../QMenuStrings.cpp" line="1659"/>
-        <location filename="../QMenuStrings.cpp" line="1668"/>
-        <location filename="../QMenuStrings.cpp" line="1685"/>
-        <location filename="../QMenuStrings.cpp" line="1695"/>
-        <location filename="../QMenuStrings.cpp" line="1707"/>
-        <location filename="../QMenuStrings.cpp" line="1716"/>
-        <location filename="../QMenuStrings.cpp" line="1733"/>
-        <location filename="../QMenuStrings.cpp" line="1760"/>
-        <location filename="../QMenuStrings.cpp" line="1775"/>
-        <location filename="../QMenuStrings.cpp" line="1786"/>
-        <location filename="../QMenuStrings.cpp" line="1796"/>
-        <location filename="../QMenuStrings.cpp" line="1805"/>
-        <location filename="../QMenuStrings.cpp" line="1814"/>
-        <location filename="../QMenuStrings.cpp" line="1823"/>
-        <location filename="../QMenuStrings.cpp" line="1832"/>
-        <location filename="../QMenuStrings.cpp" line="1841"/>
-        <location filename="../QMenuStrings.cpp" line="1850"/>
-        <location filename="../QMenuStrings.cpp" line="1859"/>
-        <location filename="../QMenuStrings.cpp" line="1872"/>
-        <location filename="../QMenuStrings.cpp" line="1881"/>
-        <location filename="../QMenuStrings.cpp" line="1890"/>
-        <location filename="../QMenuStrings.cpp" line="1950"/>
-        <location filename="../QMenuStrings.cpp" line="1988"/>
-        <location filename="../QMenuStrings.cpp" line="1997"/>
-        <location filename="../QMenuStrings.cpp" line="2006"/>
-        <location filename="../QMenuStrings.cpp" line="2015"/>
-        <location filename="../QMenuStrings.cpp" line="2024"/>
-        <location filename="../QMenuStrings.cpp" line="2033"/>
-        <location filename="../QMenuStrings.cpp" line="2042"/>
-        <location filename="../QMenuStrings.cpp" line="2059"/>
-        <location filename="../QMenuStrings.cpp" line="2082"/>
-        <location filename="../QMenuStrings.cpp" line="2091"/>
-        <location filename="../QMenuStrings.cpp" line="2103"/>
-        <location filename="../QMenuStrings.cpp" line="2112"/>
-        <location filename="../QMenuStrings.cpp" line="2121"/>
-        <location filename="../QMenuStrings.cpp" line="2130"/>
-        <location filename="../QMenuStrings.cpp" line="2139"/>
-        <location filename="../QMenuStrings.cpp" line="2149"/>
-        <location filename="../QMenuStrings.cpp" line="2158"/>
-        <location filename="../QMenuStrings.cpp" line="2171"/>
-        <location filename="../QMenuStrings.cpp" line="2185"/>
-        <location filename="../QMenuStrings.cpp" line="2194"/>
-        <location filename="../QMenuStrings.cpp" line="2211"/>
-        <location filename="../QMenuStrings.cpp" line="2222"/>
-        <location filename="../QMenuStrings.cpp" line="2233"/>
-        <location filename="../QMenuStrings.cpp" line="2242"/>
-        <location filename="../QMenuStrings.cpp" line="2251"/>
-        <location filename="../QMenuStrings.cpp" line="2260"/>
-        <location filename="../QMenuStrings.cpp" line="2269"/>
-        <location filename="../QMenuStrings.cpp" line="2278"/>
-        <location filename="../QMenuStrings.cpp" line="2287"/>
-        <location filename="../QMenuStrings.cpp" line="2296"/>
-        <location filename="../QMenuStrings.cpp" line="2305"/>
-        <location filename="../QMenuStrings.cpp" line="2314"/>
-        <location filename="../QMenuStrings.cpp" line="2323"/>
-        <location filename="../QMenuStrings.cpp" line="2332"/>
-        <location filename="../QMenuStrings.cpp" line="2341"/>
-        <location filename="../QMenuStrings.cpp" line="2350"/>
-        <location filename="../QMenuStrings.cpp" line="2359"/>
-        <location filename="../QMenuStrings.cpp" line="2368"/>
-        <location filename="../QMenuStrings.cpp" line="2377"/>
-        <location filename="../QMenuStrings.cpp" line="2386"/>
-        <location filename="../QMenuStrings.cpp" line="2396"/>
-        <location filename="../QMenuStrings.cpp" line="2409"/>
-        <location filename="../QMenuStrings.cpp" line="2418"/>
-        <location filename="../QMenuStrings.cpp" line="2429"/>
-        <location filename="../QMenuStrings.cpp" line="2438"/>
-        <location filename="../QMenuStrings.cpp" line="2447"/>
-        <location filename="../QMenuStrings.cpp" line="2456"/>
-        <location filename="../QMenuStrings.cpp" line="2472"/>
-        <location filename="../QMenuStrings.cpp" line="2481"/>
-        <location filename="../QMenuStrings.cpp" line="2498"/>
-        <location filename="../QMenuStrings.cpp" line="2507"/>
-        <location filename="../QMenuStrings.cpp" line="2520"/>
-        <location filename="../QMenuStrings.cpp" line="2529"/>
-        <location filename="../QMenuStrings.cpp" line="2538"/>
-        <location filename="../QMenuStrings.cpp" line="2547"/>
-        <location filename="../QMenuStrings.cpp" line="2556"/>
-        <location filename="../QMenuStrings.cpp" line="2565"/>
-        <location filename="../QMenuStrings.cpp" line="2574"/>
-        <location filename="../QMenuStrings.cpp" line="2583"/>
-        <location filename="../QMenuStrings.cpp" line="2592"/>
-        <location filename="../QMenuStrings.cpp" line="2601"/>
-        <location filename="../QMenuStrings.cpp" line="2624"/>
-        <location filename="../QMenuStrings.cpp" line="2639"/>
-        <location filename="../QMenuStrings.cpp" line="2654"/>
-        <location filename="../QMenuStrings.cpp" line="2663"/>
-        <location filename="../QMenuStrings.cpp" line="2693"/>
-        <location filename="../QMenuStrings.cpp" line="2708"/>
-        <location filename="../QMenuStrings.cpp" line="2724"/>
-        <location filename="../QMenuStrings.cpp" line="2733"/>
-        <location filename="../QMenuStrings.cpp" line="2742"/>
-        <location filename="../QMenuStrings.cpp" line="2768"/>
-        <location filename="../QMenuStrings.cpp" line="2777"/>
-        <location filename="../QMenuStrings.cpp" line="2787"/>
-        <location filename="../QMenuStrings.cpp" line="2796"/>
-        <location filename="../QMenuStrings.cpp" line="2805"/>
-        <location filename="../QMenuStrings.cpp" line="2814"/>
-        <location filename="../QMenuStrings.cpp" line="2823"/>
-        <location filename="../QMenuStrings.cpp" line="2832"/>
-        <location filename="../QMenuStrings.cpp" line="2841"/>
-        <location filename="../QMenuStrings.cpp" line="2850"/>
-        <location filename="../QMenuStrings.cpp" line="2865"/>
-        <location filename="../QMenuStrings.cpp" line="2874"/>
-        <location filename="../QMenuStrings.cpp" line="2883"/>
-        <location filename="../QMenuStrings.cpp" line="2892"/>
-        <location filename="../QMenuStrings.cpp" line="2902"/>
-        <location filename="../QMenuStrings.cpp" line="2911"/>
-        <location filename="../QMenuStrings.cpp" line="2920"/>
-        <location filename="../QMenuStrings.cpp" line="2929"/>
-        <location filename="../QMenuStrings.cpp" line="2938"/>
-        <location filename="../QMenuStrings.cpp" line="2947"/>
-        <location filename="../QMenuStrings.cpp" line="2956"/>
-        <location filename="../QMenuStrings.cpp" line="2965"/>
-        <location filename="../QMenuStrings.cpp" line="2974"/>
-        <location filename="../QMenuStrings.cpp" line="2983"/>
-        <location filename="../QMenuStrings.cpp" line="2992"/>
-        <location filename="../QMenuStrings.cpp" line="3001"/>
-        <location filename="../QMenuStrings.cpp" line="3010"/>
-        <location filename="../QMenuStrings.cpp" line="3019"/>
-        <location filename="../QMenuStrings.cpp" line="3028"/>
-        <location filename="../QMenuStrings.cpp" line="3037"/>
-        <location filename="../QMenuStrings.cpp" line="3046"/>
-        <location filename="../QMenuStrings.cpp" line="3056"/>
-        <location filename="../QMenuStrings.cpp" line="3065"/>
-        <location filename="../QMenuStrings.cpp" line="3074"/>
-        <location filename="../QMenuStrings.cpp" line="3083"/>
-        <location filename="../QMenuStrings.cpp" line="3092"/>
-        <location filename="../QMenuStrings.cpp" line="3101"/>
-        <location filename="../QMenuStrings.cpp" line="3110"/>
-        <location filename="../QMenuStrings.cpp" line="3119"/>
-        <location filename="../QMenuStrings.cpp" line="3128"/>
-        <location filename="../QMenuStrings.cpp" line="3137"/>
-        <location filename="../QMenuStrings.cpp" line="3146"/>
-        <location filename="../QMenuStrings.cpp" line="3155"/>
-        <location filename="../QMenuStrings.cpp" line="3164"/>
-        <location filename="../QMenuStrings.cpp" line="3173"/>
-        <location filename="../QMenuStrings.cpp" line="3182"/>
-        <location filename="../QMenuStrings.cpp" line="3191"/>
-        <location filename="../QMenuStrings.cpp" line="3200"/>
-        <location filename="../QMenuStrings.cpp" line="3210"/>
-        <location filename="../QMenuStrings.cpp" line="3219"/>
-        <location filename="../QMenuStrings.cpp" line="3228"/>
-        <location filename="../QMenuStrings.cpp" line="3237"/>
-        <location filename="../QMenuStrings.cpp" line="3246"/>
-        <location filename="../QMenuStrings.cpp" line="3255"/>
-        <location filename="../QMenuStrings.cpp" line="3264"/>
-        <location filename="../QMenuStrings.cpp" line="3273"/>
-        <location filename="../QMenuStrings.cpp" line="3282"/>
-        <location filename="../QMenuStrings.cpp" line="3291"/>
-        <location filename="../QMenuStrings.cpp" line="3300"/>
-        <location filename="../QMenuStrings.cpp" line="3309"/>
-        <location filename="../QMenuStrings.cpp" line="3318"/>
-        <location filename="../QMenuStrings.cpp" line="3327"/>
-        <location filename="../QMenuStrings.cpp" line="3336"/>
-        <location filename="../QMenuStrings.cpp" line="3345"/>
-        <location filename="../QMenuStrings.cpp" line="3354"/>
-        <location filename="../QMenuStrings.cpp" line="3363"/>
-        <location filename="../QMenuStrings.cpp" line="3372"/>
-        <location filename="../QMenuStrings.cpp" line="3381"/>
-        <location filename="../QMenuStrings.cpp" line="3393"/>
-        <location filename="../QMenuStrings.cpp" line="3626"/>
-        <location filename="../QMenuStrings.cpp" line="3652"/>
-        <location filename="../QMenuStrings.cpp" line="3662"/>
-        <location filename="../QMenuStrings.cpp" line="3671"/>
-        <location filename="../QMenuStrings.cpp" line="3686"/>
-        <location filename="../QMenuStrings.cpp" line="3695"/>
-        <location filename="../QMenuStrings.cpp" line="3705"/>
-        <location filename="../QMenuStrings.cpp" line="3714"/>
-        <location filename="../QMenuStrings.cpp" line="3723"/>
-        <location filename="../QMenuStrings.cpp" line="3732"/>
-        <location filename="../QMenuStrings.cpp" line="3741"/>
-        <location filename="../QMenuStrings.cpp" line="3750"/>
-        <location filename="../QMenuStrings.cpp" line="3759"/>
-        <location filename="../QMenuStrings.cpp" line="3768"/>
-        <location filename="../QMenuStrings.cpp" line="3777"/>
-        <location filename="../QMenuStrings.cpp" line="3786"/>
-        <location filename="../QMenuStrings.cpp" line="3795"/>
-        <location filename="../QMenuStrings.cpp" line="3818"/>
-        <location filename="../QMenuStrings.cpp" line="3827"/>
-        <location filename="../QMenuStrings.cpp" line="3847"/>
-        <location filename="../QMenuStrings.cpp" line="3857"/>
-        <location filename="../QMenuStrings.cpp" line="3866"/>
-        <location filename="../QMenuStrings.cpp" line="3888"/>
-        <location filename="../QMenuStrings.cpp" line="3898"/>
-        <location filename="../QMenuStrings.cpp" line="3907"/>
-        <location filename="../QMenuStrings.cpp" line="3916"/>
-        <location filename="../QMenuStrings.cpp" line="3925"/>
-        <location filename="../QMenuStrings.cpp" line="3934"/>
-        <location filename="../QMenuStrings.cpp" line="3944"/>
-        <location filename="../QMenuStrings.cpp" line="3953"/>
-        <location filename="../QMenuStrings.cpp" line="3967"/>
-        <location filename="../QMenuStrings.cpp" line="3976"/>
-        <location filename="../QMenuStrings.cpp" line="3985"/>
-        <location filename="../QMenuStrings.cpp" line="4002"/>
-        <location filename="../QMenuStrings.cpp" line="4011"/>
-        <location filename="../QMenuStrings.cpp" line="4020"/>
-        <location filename="../QMenuStrings.cpp" line="4029"/>
-        <location filename="../QMenuStrings.cpp" line="4038"/>
-        <location filename="../QMenuStrings.cpp" line="4047"/>
-        <location filename="../QMenuStrings.cpp" line="4056"/>
-        <location filename="../QMenuStrings.cpp" line="4065"/>
-        <location filename="../QMenuStrings.cpp" line="4074"/>
-        <location filename="../QMenuStrings.cpp" line="4088"/>
-        <location filename="../QMenuStrings.cpp" line="4097"/>
-        <location filename="../QMenuStrings.cpp" line="4106"/>
-        <location filename="../QMenuStrings.cpp" line="4115"/>
-        <location filename="../QMenuStrings.cpp" line="4124"/>
-        <location filename="../QMenuStrings.cpp" line="4133"/>
-        <location filename="../QMenuStrings.cpp" line="4143"/>
-        <location filename="../QMenuStrings.cpp" line="4152"/>
-        <location filename="../QMenuStrings.cpp" line="4161"/>
-        <location filename="../QMenuStrings.cpp" line="4170"/>
-        <location filename="../QMenuStrings.cpp" line="4179"/>
-        <location filename="../QMenuStrings.cpp" line="4188"/>
-        <location filename="../QMenuStrings.cpp" line="4197"/>
-        <location filename="../QMenuStrings.cpp" line="4206"/>
-        <location filename="../QMenuStrings.cpp" line="4216"/>
-        <location filename="../QMenuStrings.cpp" line="4237"/>
-        <location filename="../QMenuStrings.cpp" line="4246"/>
-        <location filename="../QMenuStrings.cpp" line="4268"/>
-        <location filename="../QMenuStrings.cpp" line="4277"/>
-        <location filename="../QMenuStrings.cpp" line="4287"/>
-        <location filename="../QMenuStrings.cpp" line="4296"/>
-        <location filename="../QMenuStrings.cpp" line="4305"/>
-        <location filename="../QMenuStrings.cpp" line="4314"/>
-        <location filename="../QMenuStrings.cpp" line="4323"/>
-        <location filename="../QMenuStrings.cpp" line="4332"/>
-        <location filename="../QMenuStrings.cpp" line="4341"/>
-        <location filename="../QMenuStrings.cpp" line="4350"/>
-        <location filename="../QMenuStrings.cpp" line="4367"/>
-        <location filename="../QMenuStrings.cpp" line="4383"/>
-        <location filename="../QMenuStrings.cpp" line="4393"/>
-        <location filename="../QMenuStrings.cpp" line="4402"/>
-        <location filename="../QMenuStrings.cpp" line="4411"/>
-        <location filename="../QMenuStrings.cpp" line="4425"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="924"/>
-        <location filename="../QMenuStrings.cpp" line="939"/>
-        <location filename="../QMenuStrings.cpp" line="2610"/>
-        <location filename="../QMenuStrings.cpp" line="2617"/>
-        <location filename="../QMenuStrings.cpp" line="2632"/>
-        <location filename="../QMenuStrings.cpp" line="2647"/>
-        <location filename="../QMenuStrings.cpp" line="2672"/>
-        <location filename="../QMenuStrings.cpp" line="2679"/>
-        <location filename="../QMenuStrings.cpp" line="2686"/>
-        <location filename="../QMenuStrings.cpp" line="2701"/>
-        <location filename="../QMenuStrings.cpp" line="2716"/>
-        <location filename="../QMenuStrings.cpp" line="3410"/>
-        <location filename="../QMenuStrings.cpp" line="3416"/>
-        <location filename="../QMenuStrings.cpp" line="3422"/>
-        <location filename="../QMenuStrings.cpp" line="3428"/>
-        <location filename="../QMenuStrings.cpp" line="3434"/>
-        <location filename="../QMenuStrings.cpp" line="3440"/>
-        <location filename="../QMenuStrings.cpp" line="3446"/>
-        <location filename="../QMenuStrings.cpp" line="3452"/>
-        <location filename="../QMenuStrings.cpp" line="3458"/>
-        <location filename="../QMenuStrings.cpp" line="3464"/>
-        <location filename="../QMenuStrings.cpp" line="3470"/>
-        <location filename="../QMenuStrings.cpp" line="3476"/>
-        <location filename="../QMenuStrings.cpp" line="3482"/>
-        <location filename="../QMenuStrings.cpp" line="3488"/>
-        <location filename="../QMenuStrings.cpp" line="3494"/>
-        <location filename="../QMenuStrings.cpp" line="3500"/>
-        <location filename="../QMenuStrings.cpp" line="3506"/>
-        <location filename="../QMenuStrings.cpp" line="3512"/>
-        <location filename="../QMenuStrings.cpp" line="3518"/>
-        <location filename="../QMenuStrings.cpp" line="3524"/>
-        <location filename="../QMenuStrings.cpp" line="3530"/>
-        <location filename="../QMenuStrings.cpp" line="3536"/>
-        <location filename="../QMenuStrings.cpp" line="3542"/>
-        <location filename="../QMenuStrings.cpp" line="3548"/>
-        <location filename="../QMenuStrings.cpp" line="3554"/>
-        <location filename="../QMenuStrings.cpp" line="3560"/>
-        <location filename="../QMenuStrings.cpp" line="3566"/>
-        <location filename="../QMenuStrings.cpp" line="3572"/>
-        <location filename="../QMenuStrings.cpp" line="3578"/>
-        <location filename="../QMenuStrings.cpp" line="3584"/>
-        <source></source>
-        <comment>this is a tooltip. If it contains a string in () this string is a keyboard shortcut * and this shortcut SHOULD be translated to your target language, because Qt will not translate * these strings for you. You will need to sync these manually.</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -1277,42 +814,42 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="588"/>
         <source>&amp;Snap to 1/64</source>
-        <translation>Accrochage à la quadruple croche</translation>
+        <translation>&amp;Accrochage à la quadruple croche</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="597"/>
         <source>Snap to &amp;1/48</source>
-        <translation>Accrochage au tiers de double croche</translation>
+        <translation>Accrochage au tiers &amp;de double croche</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="598"/>
         <source>Sn&amp;ap to 1/32</source>
-        <translation>Accrochage à la triple croche</translation>
+        <translation>Accrochage à la &amp;triple croche</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="607"/>
         <source>Snap to 1/&amp;24</source>
-        <translation>Accrochage au tiers de croche</translation>
+        <translation>Accrochage au ti&amp;ers de croche</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="608"/>
         <source>Sna&amp;p to 1/16</source>
-        <translation>Accrochage à la double croche</translation>
+        <translation>Accro&amp;chage à la double croche</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="617"/>
         <source>Snap t&amp;o 1/12</source>
-        <translation>Accrochage au tiers de noire</translation>
+        <translation>Accrochage au tiers de &amp;noire</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="618"/>
         <source>Snap to 1/&amp;8</source>
-        <translation>Accrochage à la croche</translation>
+        <translation>Acc&amp;rochage à la croche</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="627"/>
         <source>Snap to &amp;3/16</source>
-        <translation>Accrochage à la croche pointée</translation>
+        <translation>Accrochage à la cro&amp;che pointée</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="628"/>
@@ -2236,7 +1773,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2075"/>
         <source>Respell with &amp;Natural</source>
-        <translation>Récrire sans altération</translation>
+        <translation>Récrire sa&amp;ns altération</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2076"/>
@@ -4024,17 +3561,17 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="669"/>
         <source>Show A&amp;ctions Toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher la barre d&apos;outils des &amp;actions</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="670"/>
         <source>Show R&amp;ulers Toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher la barre des &amp;réglettes</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1920"/>
         <source>Show &amp;Duration Toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher la barre des &amp;durées</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1955"/>
@@ -10705,7 +10242,7 @@
     <message>
         <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="66"/>
         <source>Bars %1 to %2:</source>
-        <translation>Mesures %1 à %2</translation>
+        <translation>Mesures %1 à %2:</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="120"/>
@@ -13093,7 +12630,7 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="72"/>
         <source>[ No port ]</source>
-        <translation type="unfinished">[ Pas de port ]</translation>
+        <translation>[ Pas de port ]</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="801"/>
@@ -14177,7 +13714,7 @@ Voulez-vous essayer de localiser ce fichier?</translation>
     <message>
         <location filename="../../src/gui/editors/guitar/Fingering.cpp" line="110"/>
         <source>couldn&apos;t parse fingering &apos;%1&apos; in &apos;%2&apos;</source>
-        <translation type="unfinished">Échec de l&apos;analyse du doigté &apos;%1&apos; dans &apos;%2&apos;</translation>
+        <translation>Échec de l&apos;analyse du doigté &apos;%1&apos; dans &apos;%2&apos;</translation>
     </message>
 </context>
 <context>
@@ -20135,7 +19672,7 @@ Veuillez quitter puis relancer Rosegarden pour rétablir ces fonctionnalités.</
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2733"/>
         <source>Split time is not within a selected segment.
 No segment will be split.</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4618"/>
@@ -20850,7 +20387,7 @@ Souhaitez vous le faire tout de suite ?</translation>
         <source>Move Segment(s)</source>
         <translation>
             <numerusform>Déplacer le segment</numerusform>
-            <numerusform>Déplacer les segments</numerusform>
+            <numerusform>Déplace %n segments</numerusform>
         </translation>
     </message>
     <message>
@@ -23146,7 +22683,7 @@ Souhaitez vous le faire tout de suite ?</translation>
     <message>
         <location filename="../../src/commands/edit/TransposeCommand.h" line="57"/>
         <source>&amp;Transpose by Semitones...</source>
-        <translation>Transposer par demi-tons...</translation>
+        <translation>&amp;Transposer par demi-tons...</translation>
     </message>
 </context>
 <context>
@@ -23197,7 +22734,7 @@ Souhaitez vous le faire tout de suite ?</translation>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="84"/>
         <source>Manage Triggered Segments</source>
-        <translation>Gérer les segments déclenché</translation>
+        <translation>Gérer les segments déclenchés</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="91"/>
@@ -23247,12 +22784,12 @@ Souhaitez vous le faire tout de suite ?</translation>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="107"/>
         <source>Add</source>
-        <translation type="unfinished">Ajouter</translation>
+        <translation>Ajouter</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="108"/>
         <source>Add a Triggered Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajouter un segment déclenché</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="114"/>
@@ -23877,19 +23414,7 @@ Souhaitez vous le faire tout de suite ?</translation>
         <location filename="../../src/gui/editors/tempo/TempoView.cpp" line="781"/>
         <source></source>
         <comment>if the manual is translated into your language, you can</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="609"/>
-        <source></source>
-        <comment>the pixmap in this error string contains no English</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="914"/>
-        <source></source>
-        <comment>We recommend pointing help URLs to a wiki page in your native language.</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 </TS>
