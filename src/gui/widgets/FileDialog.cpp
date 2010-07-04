@@ -22,10 +22,10 @@
 #include <QUrl>
 #include <QDesktopServices>
 #include <QApplication>
+#include <QSettings>
 
-#include "gui/general/ThornStyle.h"
 #include "misc/Debug.h"
-
+#include "misc/ConfigGroups.h"
 
 namespace Rosegarden
 {
@@ -67,13 +67,6 @@ FileDialog::FileDialog(QWidget *parent,
          ; // closing ; on this line to allow the lines above to be shuffled easily
 
     setSidebarUrls(urls);
-
-    // I can't seem to do anything about the up/down/left arrows used without
-    // resorting to extreme brute force, and these experiments in changing the
-    // background color were all worse than leaving well enough alone.  Enough
-    // time poured down the well for now.  We'll just leave it.
-//    QString localStyle = "QToolButton { background: #02E2FF }";
-//    setStyleSheet(localStyle);
 }
 
 
@@ -90,7 +83,12 @@ FileDialog::getOpenFileName(QWidget *parent,
                             QString *selectedFilter,
                             QFileDialog::Options options)
 {
-    if (!qobject_cast<ThornStyle *>(QApplication::style())) {
+    QSettings settings;
+    settings.beginGroup(GeneralOptionsConfigGroup);
+    bool Thorn = settings.value("use_thorn_style", true).toBool();
+    settings.endGroup();
+
+    if (!Thorn) {
         return QFileDialog::getOpenFileName(parent, caption, dir, filter,
                                             selectedFilter, options);
     }
@@ -124,7 +122,12 @@ FileDialog::getOpenFileNames(QWidget *parent,
                              QString *selectedFilter,
                              QFileDialog::Options options)
 {
-    if (!qobject_cast<ThornStyle *>(QApplication::style())) {
+    QSettings settings;
+    settings.beginGroup(GeneralOptionsConfigGroup);
+    bool Thorn = settings.value("use_thorn_style", true).toBool();
+    settings.endGroup();
+
+    if (!Thorn) {
         return QFileDialog::getOpenFileNames(parent, caption, dir, filter,
                                              selectedFilter, options);
     }
@@ -158,7 +161,12 @@ FileDialog::getSaveFileName(QWidget *parent,
                             QString *selectedFilter,
                             QFileDialog::Options options)
 {
-    if (!qobject_cast<ThornStyle *>(QApplication::style())) {
+    QSettings settings;
+    settings.beginGroup(GeneralOptionsConfigGroup);
+    bool Thorn = settings.value("use_thorn_style", true).toBool();
+    settings.endGroup();
+
+    if (!Thorn) {
         return QFileDialog::getSaveFileName(parent, caption, dir, filter,
                                             selectedFilter, options);
     }
