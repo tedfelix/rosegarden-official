@@ -383,9 +383,14 @@ int main(int argc, char *argv[])
 #ifdef Q_WS_X11
 #if QT_VERSION >= 0x040500
     bool systemSpecified = false;
+    bool styleSpecified = false;
     for (int i = 1; i < argc; ++i) {
         if (!strcmp(argv[i], "-graphicssystem")) {
             systemSpecified = true;
+            break;
+        }
+        if (!strcmp(argv[i], "-style")) {
+            styleSpecified = true;
             break;
         }
     }
@@ -431,9 +436,19 @@ int main(int argc, char *argv[])
 
     preAppSettings.beginGroup(GeneralOptionsConfigGroup);
     bool Thorn = preAppSettings.value("use_thorn_style", true).toBool();
+
+    // If the option was turned on in settings, but the user has specified a
+    // style on the command line (obnoxious user!) then we must turn this option
+    // _off_ in settings as though the user had un-checked it on the config
+    // page, or else mayhem and chaos will reign.
+    if (Thorn && styleSpecified) {
+        preAppSettings.setValue("use_thorn_style", false);
+        Thorn = false;
+    }
+
     preAppSettings.endGroup();
 
-    std::cout << "Thorn - " << Thorn << std::endl;
+    std::cout << "Thorn - " << std::boolalpha << Thorn << std::endl;
 
     // In order to ensure the Thorn style comes out right, we need to set our
     // custom style, which is based on QPlastiqueStyle
