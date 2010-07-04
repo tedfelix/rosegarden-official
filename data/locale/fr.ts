@@ -11,135 +11,6 @@
     </message>
 </context>
 <context>
-    <name>DeviceManagerDialogUi</name>
-    <message>
-        <source>Manage MIDI Devices</source>
-        <translation type="obsolete">Gestion des périphériques MIDI</translation>
-    </message>
-    <message>
-        <source>MIDI Playback</source>
-        <translation type="obsolete">Execution MIDI</translation>
-    </message>
-    <message>
-        <source>Sends its data through</source>
-        <translation type="obsolete">Envoi des données vers</translation>
-    </message>
-    <message>
-        <source>Rosegarden playback device</source>
-        <translation type="obsolete">Périphérique d&apos;exécution Rosegarden</translation>
-    </message>
-    <message>
-        <source>Internal Synth</source>
-        <translation type="obsolete">Synthétiseur interne</translation>
-    </message>
-    <message>
-        <source>Default playback device</source>
-        <translation type="obsolete">Périphérique d&apos;exécution par défaut</translation>
-    </message>
-    <message>
-        <source>&lt;qt&gt;&lt;p&gt;Bank definitions allow you to tell Rosegarden about the programs or patches available for use on the equipment (hardware or software synth) connected to this device.&lt;/p&gt;&lt;p&gt;You must have something defined for any program or bank changes you wish to transmit, as Rosegarden hides all bank and program numbers that are undefined.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;La gestion des banques permet de spécifier les programmes ou timbres disponibles sur l&apos;équipement (synthétiseur matériel ou logiciel) connecté à ce périphérique.&lt;/p&gt;&lt;p&gt;Il est nécessaire d&apos;avoir défini quelque chose pour tout changement de programme ou de banque que vous désirez transmettre, car Rosegarden cache les numéros des banques et des programmes non définis.&lt;/p&gt;&lt;/qt&gt;</translation>
-    </message>
-    <message>
-        <source>Banks...</source>
-        <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
-        <translation type="obsolete">Banques...</translation>
-    </message>
-    <message>
-        <source>&lt;qt&gt;&lt;p&gt;Edit the controllers associated with this device.&lt;/p&gt;&lt;p&gt;You must define controllers here in order to use them anywhere in Rosegarden, such as on control rulers or in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box,  You can change which controllers are displayed in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box, and rearrange their layout&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Edition des contrôleurs associés à ce périphérique.&lt;/p&gt;&lt;p&gt;Il est nécessaire de définir les contrôleurs ici pour pouvoir les utiliser ensuite dans Rosegarden, par exemple sur une règlette de contrôle ou dans la boîte des &lt;b&gt;Paramètres d&apos;Instruments&lt;/b&gt;,  Vous pouvez définir quels contrôleurs sont affichés dans la boîte des &lt;b&gt;Paramètres d&apos;Instruments&lt;/b&gt; et leurs positions dans cette boîte&lt;/p&gt;&lt;/qt&gt;</translation>
-    </message>
-    <message>
-        <source>Controllers...</source>
-        <translation type="obsolete">Contrôleurs...</translation>
-    </message>
-    <message>
-        <source>&lt;qt&gt;&lt;p&gt;Create a new playback device&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Créer un nouveau périphérique d&apos;exécution&lt;/p&gt;&lt;/qt&gt;</translation>
-    </message>
-    <message>
-        <source>New</source>
-        <translation type="obsolete">Nouveau</translation>
-    </message>
-    <message>
-        <source>&lt;qt&gt;&lt;p&gt;Delete the selected playback device.  Any tracks using this device will need to be reassigned, and any program or bank changes on those tracks will be lost permanently&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Supprimer le périphérique sélectionné.  Toutes les pistes connectées à ce périphérique devront être réassignées et tout changement de programme ou de banque placé sur l&apos;une de ces pistes sera définitivement perdu.&lt;/p&gt;&lt;/qt&gt;</translation>
-    </message>
-    <message>
-        <source>Delete</source>
-        <translation type="obsolete">Supprimer</translation>
-    </message>
-    <message>
-        <source>MIDI outputs</source>
-        <translation type="obsolete">Sorties MIDI</translation>
-    </message>
-    <message>
-        <source>Available outputs</source>
-        <translation type="obsolete">Sorties disponibles</translation>
-    </message>
-    <message>
-        <source>No port</source>
-        <translation type="obsolete">Pas de port</translation>
-    </message>
-    <message>
-        <source>&lt;qt&gt;&lt;p&gt;Available MIDI outputs (hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Sorties MIDI (matérielles ou logicielles) disponibles&lt;/p&gt;&lt;/qt&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;qt&gt;&lt;p&gt;Available MIDI inputs (from hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Entrées MIDI (matérielles ou logicielles) disponibles&lt;/p&gt;&lt;/qt&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;qt&gt;&lt;p&gt;Click to refresh the port list after connecting a new piece of equipment or starting a new soft synth&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Cliquer pour rafraîchir la liste des ports après avoir connecté un nouveau matériel ou démarré un nouveau synthétiseur logiciel&lt;/p&gt;&lt;/qt&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;qt&gt;&lt;p&gt;Create new playback devices here. Double-click the device name to change it. Select a device here and connect it to a MIDI output port by clicking on a port to the right.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Pour créer de nouveaux périphériques d&apos;entrée/sortie du son:&lt;br&gt; Double-cliquer le nom d&apos;un périphérique pour le renommer. Sélectionner le nom d&apos;un périphérique puis cliquer sur un port dans la partie droite pour le connecter à une entrée ou à une sortie MIDI.&lt;/p&gt;&lt;/qt&gt;</translation>
-    </message>
-    <message>
-        <source>Refresh</source>
-        <translation type="obsolete">Rafraîchir</translation>
-    </message>
-    <message>
-        <source>MIDI Recording</source>
-        <translation type="obsolete">Enregistrement MIDI</translation>
-    </message>
-    <message>
-        <source>&lt;qt&gt;&lt;p&gt;Create a new recording device&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Créer un nouveau périphérique d&apos;enregistrement&lt;/p&gt;&lt;/qt&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;qt&gt;&lt;p&gt;Delete the selected recording device&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Supprimer le périphérique d&apos;enregistrement sélectionné&lt;/p&gt;&lt;/qt&gt;</translation>
-    </message>
-    <message>
-        <source>Delete</source>
-        <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
-        <translation type="obsolete">Supprimer</translation>
-    </message>
-    <message>
-        <source>Receives its data from</source>
-        <translation type="obsolete">Réception des données depuis</translation>
-    </message>
-    <message>
-        <source>Rosegarden recording device</source>
-        <translation type="obsolete">Périphérique d&apos;enregistrement de Rosegarden</translation>
-    </message>
-    <message>
-        <source>Default record device</source>
-        <translation type="obsolete">Périphérique d&apos;enregistrement par défaut</translation>
-    </message>
-    <message>
-        <source>MIDI inputs</source>
-        <translation type="obsolete">Entrées MIDI</translation>
-    </message>
-    <message>
-        <source>Available inputs</source>
-        <translation type="obsolete">Entrées disponibles</translation>
-    </message>
-</context>
-<context>
     <name>QObject</name>
     <message>
         <location filename="../../src/gui/editors/notation/NoteFontMap.cpp" line="44"/>
@@ -10018,22 +9889,22 @@
         <translation>Rosegarden - Un éditeur de partitions et séquenceur musical</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/main.cpp" line="446"/>
+        <location filename="../../src/gui/application/main.cpp" line="461"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/main.cpp" line="759"/>
+        <location filename="../../src/gui/application/main.cpp" line="774"/>
         <source>Welcome!</source>
         <translation>Bienvenue !</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/main.cpp" line="775"/>
+        <location filename="../../src/gui/application/main.cpp" line="790"/>
         <source>http://rosegardenmusic.com/wiki/doc:manual-en</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/main.cpp" line="776"/>
+        <location filename="../../src/gui/application/main.cpp" line="791"/>
         <source>&lt;h2&gt;Welcome to Rosegarden!&lt;/h2&gt;&lt;p&gt;Welcome to the Rosegarden audio and MIDI sequencer and musical notation editor.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;If you have not already done so, you may wish to install some DSSI synth plugins, or a separate synth program such as QSynth.  Rosegarden does not synthesize sounds from MIDI on its own, so without these you will hear nothing.&lt;/li&gt;&lt;li&gt;Rosegarden uses the JACK audio server for recording and playback of audio, and for playback from DSSI synth plugins.  These features will only be available if the JACK server is running.&lt;/li&gt;&lt;li&gt;Rosegarden has comprehensive documentation: see the &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&quot;&gt;Rosegarden website&lt;/a&gt; for the &lt;a style=&quot;color:gold&quot; href=&quot;%1&quot;&gt;manual&lt;/a&gt;, &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;tutorials&lt;/a&gt;, and other information!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  To learn more, go to the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;Rosegarden website&lt;/a&gt;.&lt;/p&gt;</source>
         <translation>&lt;h2&gt;Bienvenue dans Rosegarden!&lt;/h2&gt;&lt;p&gt;Bienvenue dans le séquenceur audio et MIDI et dans l&apos;éditeur de partitions musicales Rosegarden.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Si ce n&apos;est déjà fait, il peut être souhaitable que vous installiez quelques greffons synthétiseurs DSSI ou un synthétiseur externe comme QSynth.  En leur absence, vous ne pourrez rien entendre, car Rosegarden seul n&apos;est pas capable de produire des sons à partir de données MIDI.&lt;/li&gt;&lt;li&gt;Rosegarden utilise le serveur audio JACK pour jouer en enregistrer l&apos;audio, que ce soit seul ou par l&apos;intermédiaire des greffons DSSI.  Ces fonctionnalités ne seront disponibles que si le serveur JACK est en fonctionnement.&lt;/li&gt;&lt;li&gt;Rosegarden dispose d&apos;une documentation facilitant son utilisation: voir sur le &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&quot;&gt;site web Rosegarden&lt;/a&gt; les &lt;a style=&quot;color:gold&quot; href=&quot;%1&quot;&gt;manuel&lt;/a&gt;, &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;tutoriels&lt;/a&gt;, et d&apos;autres informations!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegarden vous a été apporté par un groupe de volontaires du monde entier.  Pour en savoir plus, consultez le &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;site web Rosegarden&lt;/a&gt;.&lt;/p&gt;</translation>
     </message>
@@ -14040,13 +13911,6 @@ Voulez-vous essayer de localiser ce fichier?</translation>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="541"/>
         <source>Changes to the textured background in the main window will not take effect until you restart Rosegarden.</source>
         <translation>La modification de la texture de fond affichée dans la fenêtre principale ne sera effective qu&apos;au prochain redémarrage de Rosegarden.</translation>
-    </message>
-</context>
-<context>
-    <name>Rosegarden::Guitar::Fingering</name>
-    <message>
-        <source>couldn&apos;t parse fingering &apos;%1&apos; in &apos;%2&apos;</source>
-        <translation type="obsolete">Échec de l&apos;analyse du doigté &apos;%1&apos; dans &apos;%2&apos;</translation>
     </message>
 </context>
 <context>
@@ -20079,13 +19943,6 @@ Erreur obtenue : %2</translation>
     </message>
 </context>
 <context>
-    <name>Rosegarden::SegmentJoinCommand</name>
-    <message>
-        <source>&amp;Join</source>
-        <translation type="obsolete">&amp;Joindre</translation>
-    </message>
-</context>
-<context>
     <name>Rosegarden::SegmentLabelCommand</name>
     <message>
         <location filename="../../src/commands/segment/SegmentLabelCommand.h" line="47"/>
@@ -22932,13 +22789,6 @@ Souhaitez vous le faire tout de suite ?</translation>
     </message>
 </context>
 <context>
-    <name>Rosegarden::Ui</name>
-    <message>
-        <source>[ No port ]</source>
-        <translation type="obsolete">[ Pas de port ]</translation>
-    </message>
-</context>
-<context>
     <name>Rosegarden::UnGraceCommand</name>
     <message>
         <location filename="../../src/commands/notation/UnGraceCommand.h" line="43"/>
@@ -23172,13 +23022,6 @@ Souhaitez vous le faire tout de suite ?</translation>
         <location filename="../../src/gui/widgets/WarningWidget.cpp" line="197"/>
         <source>&lt;qt&gt;&lt;p&gt;Rosegarden is using safe graphics mode.  This provides the greatest stability, but graphics performance is very slow.&lt;/p&gt;&lt;p&gt;You may wish to visit &lt;b&gt;Edit -&gt; Preferences -&gt; Behavior -&gt; Graphics performance&lt;/b&gt; and try &quot;Normal&quot; or &quot;Fast&quot; for better performance.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Rosegarden utilise le mode d&apos;affichage &quot;Sans Risque&quot;.  La meilleure stabilité possible est ainsi assurée, mais l&apos;affichage est très lent.&lt;/p&gt;&lt;p&gt;Vous pouvez aller dans &lt;b&gt;Editer -&gt; Configuration... -&gt; Comportement -&gt; Performance de l&apos;affichage&lt;/b&gt; et essayer &quot;Normale&quot; or &quot;Rapide&quot; pour améliorer les performances.&lt;/p&gt;&lt;/qt&gt;</translation>
-    </message>
-</context>
-<context>
-    <name>RosegardenDocument</name>
-    <message>
-        <source>(recorded)</source>
-        <translation type="obsolete">(enregistré)</translation>
     </message>
 </context>
 <context>
