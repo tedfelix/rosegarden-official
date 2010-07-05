@@ -380,10 +380,10 @@ int main(int argc, char *argv[])
     preAppSettings.endGroup();
 
 
+    bool styleSpecified = false;
 #ifdef Q_WS_X11
 #if QT_VERSION >= 0x040500
     bool systemSpecified = false;
-    bool styleSpecified = false;
     for (int i = 1; i < argc; ++i) {
         if (!strcmp(argv[i], "-graphicssystem")) {
             systemSpecified = true;
