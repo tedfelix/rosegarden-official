@@ -71,26 +71,35 @@ SegmentJoinCommand::execute()
 
     if (!m_newSegment) {
 
-        // Find out the leftmost segment
+        // Find the leftmost segment's index and the rightmost segment's
+        // index.
         timeT t0 = m_oldSegments[0]->getStartTime();
-        size_t i0 = 0;
+        timeT t1 = m_oldSegments[0]->getEndMarkerTime();
+        size_t leftmostIndex = 0;
+        size_t rightmostIndex = 0;
         for (size_t i = 1; i < m_oldSegments.size(); ++i) {
-            timeT t = m_oldSegments[i]->getStartTime();
-            if (t < t0) {
-                t0 = t;
-                i0 = i;
+            timeT startTime = m_oldSegments[i]->getStartTime();
+            if (startTime < t0) {
+                t0 = startTime;
+                leftmostIndex = i;
+            }
+            timeT endMarkerTime = m_oldSegments[i]->getEndMarkerTime();
+            if (endMarkerTime > t1) {
+                t1 = endMarkerTime;
+                rightmostIndex = i;
             }
         }
 
         // Always begin with the leftmost segment to keep in the new segment
         // any clef or key change found at the start of this segment.
-        m_newSegment = new Segment(*m_oldSegments[i0]);
+        m_newSegment = new Segment(*m_oldSegments[leftmostIndex]);
 
-        // that duplicated segment i0; now do the rest
+        // that duplicated the leftmost segment; now do the rest
 
         for (size_t i = 0; i < m_oldSegments.size(); ++i) {
 
-            if (i == i0) continue; // Don't add twice the first old segment
+            // Don't add twice the first old segment
+            if (i == leftmostIndex) continue;
 
             Segment *s = m_oldSegments[i];
 
@@ -122,8 +131,18 @@ SegmentJoinCommand::execute()
                 m_newSegment->setEndMarkerTime(start);
             }
 
-            for (Segment::iterator si = s->begin();
-                 s->isBeforeEndMarker(si); ++si) {
+            for (Segment::iterator si = s->begin(); ; ++si) {
+
+                // If we're in the rightmost segment
+                if (i == rightmostIndex) {
+                    // Copy all of the events to the end
+                    if (si == s->end())
+                        break;
+                } else {
+                    // Just copy up to the End Marker of this segment.
+                    if (!s->isBeforeEndMarker(si))
+                        break;
+                }
 
                 // weed out duplicate clefs and keys
 
