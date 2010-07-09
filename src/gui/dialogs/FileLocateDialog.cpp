@@ -18,6 +18,7 @@
 
 #include "FileLocateDialog.h"
 
+#include "gui/widgets/FileDialog.h"
 #include "misc/Debug.h"
 #include <QDialog>
 #include <QDialogButtonBox>
@@ -36,10 +37,15 @@ namespace Rosegarden
 
 FileLocateDialog::FileLocateDialog(QWidget *parent,
                                    const QString &file,
-                                   const QString & /*path*/):
-        QDialog(parent),
-        m_file(file)
+                                   const QString &path):
+    QDialog(parent),
+    m_file(file),
+    m_path(path)
 {
+    if (m_path == "") {
+        m_path = QDir::currentPath();
+    }
+
     setModal(true);
     setWindowTitle(tr("Locate audio file"));
     QGridLayout *metagrid = new QGridLayout;
@@ -83,10 +89,13 @@ void
 FileLocateDialog::slotUser3()
 {
     if (!m_file.isEmpty()) {
-        m_file = QFileDialog::getOpenFileName( this, tr("Select an Audio File"), QDir::currentPath(),
-                 tr("Requested file") + QString(" (%1)").arg(QFileInfo(m_file).fileName()) + ";;" +
-                 tr("WAV files") + " (*.wav *.WAV)" + ";;" +
-                 tr("All files") + " (*)");
+        m_file = FileDialog::getOpenFileName
+            (this,
+             tr("Select an Audio File"),
+             m_path,
+             tr("Requested file") + QString(" (%1)").arg(QFileInfo(m_file).fileName()) + ";;" +
+             tr("WAV files") + " (*.wav *.WAV)" + ";;" +
+             tr("All files") + " (*)");
 
         RG_DEBUG << "FileLocateDialog::slotUser3() : m_file = " << m_file << endl;
 
@@ -99,8 +108,9 @@ FileLocateDialog::slotUser3()
             accept();
         }
 
-    } else
+    } else {
         reject();
+    }
 }
 
 void

@@ -1013,26 +1013,31 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         if (getAudioFileManager().insertFile(qstrtostr(label),
                                              file,
                                              id.toInt()) == false) {
-            // Ok, now attempt to use the QFileDialog saved default
-            // value for the AudioPath.
-            //
-            QString thing;
-            //KURL url = QFileDialog::getStartURL(QString(":WAVS"), thing);  // kde3
-            //KURL url = QFileDialog.directory()
-            QString url = QFileDialog::getExistingDirectory(0, tr("Open Directory"),
-                                        "/home", QFileDialog::ShowDirsOnly
-                                                | QFileDialog::DontResolveSymlinks);            
-            
-            getAudioFileManager().setAudioPath( url );
-            
-            /*
-            RG_DEBUG << "ATTEMPTING TO FIND IN PATH = " 
-                << url.path() << endl;
-                */
 
-            if (getAudioFileManager().
-                    insertFile(qstrtostr(label),
-                               file, id.toInt()) == false) {
+            // We failed to find the audio file.  First we'll try to
+            // set the audio file path to "a sensible default", and if
+            // this still doesn't work, we show a locate-file dialog.
+            // In earlier times, RG used to use the last file path
+            // that the KDE file dialog had associated with an audio
+            // file for its sensible default, but we no longer have
+            // that facility.  More recent code dropped the sensible
+            // default and went straight to showing a directory
+            // location dialog to ask the user to set the audio file
+            // path -- but without any explanation of what the dialog
+            // is for, this behaviour is just baffling.  And we're
+            // about to show a file-locate dialog if this fails
+            // anyway.  So instead let's just start by looking in the
+            // same place as the .rg file.
+
+            QString docPath = m_doc->getAbsFilePath();
+            QString dirPath = QFileInfo(docPath).dirPath();
+            getAudioFileManager().setAudioPath(dirPath);
+
+            RG_DEBUG << "Attempting to find audio file " << file
+                     << " in path " << dirPath << endl;
+
+            if (getAudioFileManager().insertFile(qstrtostr(label),
+                                                 file, id.toInt()) == false) {
 
                 // Freeze the progress dialog
                 CurrentProgressDialog::freeze();
@@ -1052,7 +1057,6 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
                 do {
 
-                    //FileLocateDialog fL((RosegardenMainWindow *)m_doc->parent(),
                     FileLocateDialog fL((QWidget *)m_doc->parent(),
                                         file,
                                         getAudioFileManager().getAudioPath());

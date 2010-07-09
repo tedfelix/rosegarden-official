@@ -51,7 +51,6 @@ protected slots:
 protected:
     QString m_file;
     QString m_path;
-
 };
   
 

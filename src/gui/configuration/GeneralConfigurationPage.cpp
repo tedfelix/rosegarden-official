@@ -138,7 +138,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
     m_autoSave->addItem(tr("Every half an hour"));
     m_autoSave->addItem(tr("Never"));
 
-    bool doAutoSave = qStrToBool(settings.value("autosave", "true")) ;
+    bool doAutoSave = settings.value("autosave", true).toBool();
     int autoSaveInterval = settings.value("autosaveinterval", 300).toUInt() ;
     if (!doAutoSave || autoSaveInterval == 0) {
         m_autoSave->setCurrentIndex(4); // off
@@ -162,7 +162,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
     connect(m_appendLabel, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
     // I traditionally had these turned off, and when they reappeared, I found
     // them incredibly annoying, so I'm making false the default:
-    m_appendLabel->setChecked(qStrToBool(settings.value("appendlabel", "false")));
+    m_appendLabel->setChecked(settings.value("appendlabel", false).toBool());
     layout->addWidget(m_appendLabel, row, 1, row- row+1, 2);
     row++;
     settings.endGroup();
@@ -186,8 +186,8 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
         m_jackTransport->addItem(tr("Sync, and offer timebase master"));
     */
 
-    bool jackMaster = qStrToBool(settings.value("jackmaster", "false")) ;
-    bool jackTransport = qStrToBool(settings.value("jacktransport", "false")) ;
+    bool jackMaster = settings.value("jackmaster", false).toBool();
+    bool jackTransport = settings.value("jacktransport", false).toBool();
 /*
     if (jackTransport)
         m_jackTransport->setCurrentIndex(1);
@@ -257,7 +257,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
                                  frame), row, 0);
 
     m_Thorn = new QCheckBox;
-    connect(m_Thorn, SIGNAL(activated(int)), this, SLOT(slotModified()));
+    connect(m_Thorn, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
     layout->addWidget(m_Thorn, row, 1, 1, 3);
     m_Thorn->setToolTip(tr("<qt>When checked, Rosegarden will use the Thorn look and feel, otherwise default system preferences will be used the next time Rosegarden starts.</qt>"));
     m_Thorn->setChecked(settings.value("use_thorn_style", true).toBool());
@@ -293,13 +293,12 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
     connect(m_notationBackgroundTextures, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
     layout->addWidget(m_notationBackgroundTextures, row, 2);
 
-    m_backgroundTextures->setChecked(qStrToBool(settings.value("backgroundtextures", true)));
+    m_backgroundTextures->setChecked(settings.value("backgroundtextures", true).toBool());
 
     settings.endGroup();
 
     settings.beginGroup(NotationViewConfigGroup);
-    m_notationBackgroundTextures->setChecked(qStrToBool(settings.value(
-            "backgroundtextures", true)));
+    m_notationBackgroundTextures->setChecked(settings.value("backgroundtextures", true).toBool());
     settings.endGroup();
 
     ++row;
@@ -430,7 +429,7 @@ void GeneralConfigurationPage::apply()
     bool texturesChanged = false;
     bool mainTextureChanged = false;
 
-    if (qStrToBool(settings.value("backgroundtextures", "true"))  !=
+    if (settings.value("backgroundtextures", true).toBool() !=
         m_backgroundTextures->isChecked()) {
         texturesChanged = true;
         mainTextureChanged = true;
@@ -438,7 +437,7 @@ void GeneralConfigurationPage::apply()
     } else {
         settings.endGroup();
         settings.beginGroup(NotationViewConfigGroup);
-        if (qStrToBool(settings.value("backgroundtextures", "true"))  !=
+        if (settings.value("backgroundtextures", true).toBool() !=
             m_notationBackgroundTextures->isChecked()) {
             texturesChanged = true;
         }
@@ -456,6 +455,16 @@ void GeneralConfigurationPage::apply()
     settings.endGroup();
 
     settings.beginGroup(GeneralOptionsConfigGroup);
+
+    bool thornChanged = false;
+    if (settings.value("use_thorn_style", true).toBool()
+        != m_Thorn->isChecked()) {
+        thornChanged = true;
+    }
+
+    std::cerr << "NB. use_thorn_style = " <<
+        settings.value("use_thorn_style", true).toBool()
+              << ", m_Thorn->isChecked() = " << m_Thorn->isChecked() << std::endl;
 
     settings.setValue("use_thorn_style", m_Thorn->isChecked());
 
@@ -541,7 +550,7 @@ void GeneralConfigurationPage::apply()
         QMessageBox::information(this, tr("Rosegarden"), tr("Changes to the textured background in the main window will not take effect until you restart Rosegarden."));
     }
 
-    if (graphicsSystemChanged) {
+    if (graphicsSystemChanged || thornChanged) {
         QMessageBox::information(this, tr("Rosegarden"), tr("You must restart Rosegarden for the graphics system change to take effect."));
     }
 }
