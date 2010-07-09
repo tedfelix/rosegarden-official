@@ -7,7 +7,7 @@
     <text>&amp;File</text>
     <Action name="file_save" text="&amp;Save" icon="filesave" shortcut="Ctrl+S" />
   <Separator/>
-    <Action name="file_preview_lilypond" text="P&amp;rint preview..." icon="filepreviewlily" />
+    <Action name="file_preview_lilypond" text="P&amp;rint Preview..." icon="filepreviewlily" />
     <Action name="file_print_lilypond" text="&amp;Print..." icon="fileprintlily" />
   <Separator/>
     <Action name="file_close" text="&amp;Close" icon="fileclose" shortcut="Ctrl+W" />

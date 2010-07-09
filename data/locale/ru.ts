@@ -4477,7 +4477,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1782"/>
-        <source>P&amp;rint preview...</source>
+        <source>P&amp;rint Preview...</source>
         <translation>Прос&amp;мотр печати...</translation>
     </message>
     <message>
@@ -4917,7 +4917,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3680"/>
-        <source>Prin&amp;t preview...</source>
+        <source>Prin&amp;t Preview...</source>
         <translation>Просмотр пе&amp;чати...</translation>
     </message>
     <message>

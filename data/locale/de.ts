@@ -1557,7 +1557,7 @@
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1782"/>
-        <source>P&amp;rint preview...</source>
+        <source>P&amp;rint Preview...</source>
         <translatorcomment>amp ok</translatorcomment>
         <translation>Vorschau d&amp;rucken...</translation>
     </message>
@@ -4685,7 +4685,7 @@
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3680"/>
-        <source>Prin&amp;t preview...</source>
+        <source>Prin&amp;t Preview...</source>
         <translatorcomment>amp ok</translatorcomment>
         <translation>&amp;Vorschau drucken...</translation>
     </message>

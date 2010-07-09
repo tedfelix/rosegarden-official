@@ -49,7 +49,7 @@
     <Action name="file_save_as_template" text="Save as &amp;Template..." icon="filesaveas" />
     <Action name="file_revert" text="Re&amp;vert" icon="revert" />
   <Separator/>
-    <Action name="file_preview_lilypond" append="print_merge" text="Prin&amp;t preview..." icon="filepreviewlily" />
+    <Action name="file_preview_lilypond" append="print_merge" text="Prin&amp;t Preview..." icon="filepreviewlily" />
     <Action name="file_print_lilypond" append="print_merge" text="&amp;Print..." icon="fileprintlily" />
   <Separator/>
     <Action name="audio_manager" text="Manage A&amp;udio Files" icon="manage-audio-segments" />

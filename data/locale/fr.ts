@@ -1262,7 +1262,7 @@
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1782"/>
-        <source>P&amp;rint preview...</source>
+        <source>P&amp;rint Preview...</source>
         <translation>Ape&amp;rçu avant impression...</translation>
     </message>
     <message>
@@ -4209,7 +4209,7 @@
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3680"/>
-        <source>Prin&amp;t preview...</source>
+        <source>Prin&amp;t Preview...</source>
         <translation>Prévisualisa&amp;tion impression...</translation>
     </message>
     <message>
