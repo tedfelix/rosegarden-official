@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0">
+<TS version="2.0" language="it_IT">
 <context>
     <name></name>
     <message>
@@ -2840,17 +2840,17 @@
     <message>
         <location line="-1288"/>
         <source>Show A&amp;ctions Toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostra barra delle &amp;azioni</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Show R&amp;ulers Toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostra la barra dei &amp;righelli</translation>
     </message>
     <message>
         <location line="+1250"/>
         <source>Show &amp;Duration Toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostra barra delle &amp;durate</translation>
     </message>
     <message>
         <location line="+38"/>
@@ -5548,42 +5548,42 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location line="+1"/>
         <source>Garklein recorder</source>
-        <translation type="unfinished"></translation>
+        <translation>Flauto dolce garklein</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Sopranino recorder</source>
-        <translation>Sopranino recorder</translation>
+        <translation>Flauto dolce sopranino</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Soprano recorder</source>
-        <translation>Soprano recorder</translation>
+        <translation>Flauto dolce soprano</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Alto recorder</source>
-        <translation>Alto recorder</translation>
+        <translation>Flauto dolce alto</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Tenor recorder</source>
-        <translation>Tenore recorder</translation>
+        <translation>Flauto dolce tenore</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Bass recorder</source>
-        <translation>Basso recorder</translation>
+        <translation>Flauto dolce basso</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Greatbass recorder</source>
-        <translation type="unfinished"></translation>
+        <translation>Flauto dolce granbasso</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Contrabass recorder</source>
-        <translation>Contrabasso recorder</translation>
+        <translation>Flauto dolce contrabasso</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -11469,9 +11469,10 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message numerus="yes">
         <location line="+10"/>
         <source>&lt;qt&gt;About to delete %n audio file(s) permanently from the hard disk.&lt;br&gt;This action cannot be undone, and there will be no way to recover the files.&lt;br&gt;Are you sure?&lt;/qt&gt;</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>&lt;qt&gt;Sto per rimuovere %n file audio definitivamente dal disco fisso.&lt;br&gt;Questa azione non può essere annullata, e non ci sarà modo di recuperare i file.&lt;br&gt;Sei sicuro?&lt;/qt&gt;
         </numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -13137,7 +13138,7 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="-385"/>
         <source>[ No port ]</source>
-        <translation type="unfinished">[Porta assente]</translation>
+        <translation>[Porta assente]</translation>
     </message>
     <message>
         <location line="+729"/>
@@ -13759,7 +13760,7 @@ La rimozione di proprietà necessarie può causare comportamenti imprevisti.</tr
     <message>
         <location line="+4"/>
         <source>&amp;Delete</source>
-        <translation>Cancella</translation>
+        <translation>&amp;Cancella</translation>
     </message>
     <message>
         <location line="+29"/>
@@ -14391,7 +14392,7 @@ Vuoi provare a cercarlo o saltarlo?</translation>
     <message>
         <location filename="../../src/gui/editors/guitar/Fingering.cpp" line="+110"/>
         <source>couldn&apos;t parse fingering &apos;%1&apos; in &apos;%2&apos;</source>
-        <translation type="unfinished">non posso analizzare la diteggiatura &quot;%1&quot; in &quot;%2&quot;</translation>
+        <translation>non posso analizzare la diteggiatura &quot;%1&quot; in &quot;%2&quot;</translation>
     </message>
 </context>
 <context>
@@ -14420,7 +14421,7 @@ Vuoi provare a cercarlo o saltarlo?</translation>
     <message>
         <location filename="../../src/gui/editors/notation/FontViewFrame.cpp" line="+99"/>
         <source>Error: Unable to match font name %1</source>
-        <translation type="unfinished">Errore: non trovo il font %1</translation>
+        <translation>Errore: non trovo il font %1</translation>
     </message>
     <message>
         <location line="+0"/>
@@ -15481,17 +15482,19 @@ Testo di esempio dal file:</translation>
     <message numerus="yes">
         <location line="+8"/>
         <source>up %n octave(s) and %1</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>su di %n ottave e %1
         </numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location line="+3"/>
         <source>up %n octave(s)</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>su di %n ottave
         </numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -15502,17 +15505,19 @@ Testo di esempio dal file:</translation>
     <message numerus="yes">
         <location line="+5"/>
         <source>down %n octave(s) and %1</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>giù di %n ottave e %1
         </numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location line="+3"/>
         <source>down %n octave(s)</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>giù di %n ottave
         </numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -17086,9 +17091,10 @@ Doppio click per aprire l&apos;editor dei marcatori.</translation>
     <message numerus="yes">
         <location line="+7"/>
         <source>%1%2 - %n Segment(s) - %3</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>%1%2 - %n Segmenti - %3
         </numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -18453,9 +18459,9 @@ Questo è un baco (il programma avrebbe dovuto interrompersi...)</translation>
     <message numerus="yes">
         <location line="-8"/>
         <source>%n pixel(s)</source>
-        <translation type="unfinished">
-            <numerusform>
-        </numerusform>
+        <translation>
+            <numerusform>%n pixel </numerusform>
+            <numerusform>%n pixel </numerusform>
         </translation>
     </message>
     <message>
@@ -18636,9 +18642,10 @@ Questo è un baco (il programma avrebbe dovuto interrompersi...)</translation>
     <message numerus="yes">
         <location line="-451"/>
         <source>  %n event(s) selected </source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>  %n eventi selezionati
         </numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -18676,7 +18683,7 @@ Questo è un baco (il programma avrebbe dovuto interrompersi...)</translation>
         <location line="+217"/>
         <location line="+69"/>
         <source>&lt;qt&gt;&lt;p&gt;The Restricted paste type requires enough empty space (containing only rests) at the paste position to hold all of the events to be pasted.&lt;/p&gt;&lt;p&gt;Not enough space was found.&lt;/p&gt;&lt;p&gt;If you want to paste anyway, consider using one of the other paste types from the &lt;b&gt;Paste...&lt;/b&gt; option on the Edit menu.  You can also change the default paste type to something other than Restricted if you wish.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Il modo di incollare Ristretto richiede uno spazio vuoto sufficiente (contenente solo pause) nella posizione di incollamento, per poter contenere tutti gli eventi da incollare.&lt;/p&gt;&lt;p&gt;Non è stato trovato spazio sufficiente.&lt;/p&gt;&lt;p&gt;Se volete incollare comunque, provate ad usare un altro modo di incollare dall&apos;opzione &lt;b&gt;Incolla...&lt;/b&gt; nel menù Modifica.  Volendo, potete anche cambiare il modo di incollare predefinito.</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Il modo di incollare Ristretto richiede uno spazio vuoto sufficiente (contenente solo pause) nella posizione di incollamento, per poter contenere tutti gli eventi da incollare.&lt;/p&gt;&lt;p&gt;Non è stato trovato spazio sufficiente.&lt;/p&gt;&lt;p&gt;Se volete incollare comunque, provate ad usare un altro modo di incollare dall&apos;opzione &lt;b&gt;Incolla...&lt;/b&gt; nel menù Modifica.  Volendo, potete anche cambiare il modo di incollare predefinito.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="-44"/>
@@ -18826,9 +18833,10 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message numerus="yes">
         <location line="+6"/>
         <source>%1%2 - %n Segment(s) - Notation</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>%1%2 - %n Segmenti - Notazione
         </numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -18869,12 +18877,12 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location line="+374"/>
         <source>Set Note Type...</source>
-        <translation type="unfinished"></translation>
+        <translation>Imposta tipo di nota...</translation>
     </message>
     <message>
         <location line="+24"/>
         <source>Set Note Type notation only...</source>
-        <translation type="unfinished"></translation>
+        <translation>Imposta solo il tipo di notazione della nota...</translation>
     </message>
     <message>
         <location line="+20"/>
@@ -19125,13 +19133,13 @@ Accertati che il dispositivo sia correttamente configurato alla voce
         <location filename="../../src/gui/rulers/PercussionPitchRuler.cpp" line="+56"/>
         <source>  A#2   Acoustic Bass Drum  </source>
         <extracomment>Note to the translators: Don&apos;t translate literally. This string is never displayed but defines the largest width of the text (pitch and intrument name) in the percussion ruler.</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>  A#2   Tamburo basso acustico</translation>
     </message>
     <message>
         <location line="+37"/>
         <source>A#2</source>
         <extracomment>Note to the translators: Don&apos;t translate literally. This string is never displayed but defines the largest width of the pitch name in the percussion ruler text.</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>A#2</translation>
     </message>
 </context>
 <context>
@@ -20190,9 +20198,10 @@ Vuoi salvarlo?</translation>
     <message numerus="yes">
         <location line="+124"/>
         <source>Delete the %n audio file(s) recorded during the unsaved session?</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>Cancello %n file audio registrati durante la sessione non salvata?
         </numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -20215,7 +20224,9 @@ Scegli quelli che vuoi cancellare definitivamente dal disco fisso.
     <message numerus="yes">
         <location line="+16"/>
         <source>&lt;qt&gt;About to delete %n audio file(s) permanently from the hard disk.&lt;br&gt;There will be no way to recover the file(s).&lt;br&gt;Are you sure?&lt;/qt&gt;</source>
-        <translation type="unfinished">
+        <translation>
+            <numerusform>&lt;qt&gt;Sto per rimuovere %n file audio definitivamente dal disco fisso.&lt;br&gt;Non ci sarà modo di recuperare i file.&lt;br&gt;Sei sicuro?&lt;/qt&gt;
+        </numerusform>
             <numerusform>&lt;qt&gt;Sto per rimuovere %n file audio definitivamente dal disco fisso.&lt;br&gt;Non ci sarà modo di recuperare i file.&lt;br&gt;Siete sicuri?&lt;/qt&gt;
         </numerusform>
         </translation>
@@ -20734,10 +20745,10 @@ L&apos;errore è: %2</translation>
         <source>The audio file path does not exist or is not writable.
 You must set the audio file path to a valid directory in Document Properties before %1.
 Would you like to set it now?</source>
-        <translation type="unfinished">Il percorso del file audio non esiste o non è scrivibile.
-Devi impostare il percorso del file audio su una directory valida nelle
-Proprietà del documento prima %1.
-Vuoi impostarlo adesso?</translation>
+        <translation>La cartella del file audio non esiste o non è scrivibile.
+Devi prima impostare la cartella del file audio su una valida nelle
+Proprietà del documento %1.
+Vuoi impostarla adesso?</translation>
     </message>
     <message>
         <location line="+70"/>
@@ -20748,8 +20759,10 @@ Vuoi impostarlo adesso?</translation>
         <location line="+142"/>
         <location line="+34"/>
         <source>Split %n Segment(s) at Time</source>
-        <translation type="unfinished">
-            <numerusform>Suddividi %n Segmenti al tempo
+        <translation>
+            <numerusform>Spezza %n Segmenti al tempo
+        </numerusform>
+            <numerusform>Spezza %n Segmenti al tempo
         </numerusform>
         </translation>
     </message>
@@ -21104,7 +21117,8 @@ Prova a chiudere e riavviare Rosegarden per ripristinare il suono.</translation>
         <location line="+657"/>
         <source>Split time is not within a selected segment.
 No segment will be split.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il tempo spezzato non è all&apos;interno di un segmento selezionato.
+Nessun segmento sarà spezzato.</translation>
     </message>
     <message>
         <location line="+1885"/>
@@ -21820,9 +21834,10 @@ Vuoi impostarlo adesso?</translation>
     <message numerus="yes">
         <location line="+167"/>
         <source>Move Segment(s)</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>Sposta i %n segmenti
         </numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -23716,7 +23731,7 @@ Vuoi impostarlo adesso?</translation>
     <message>
         <location filename="../../src/gui/editors/segment/TrackLabel.cpp" line="+88"/>
         <source>&lt;qt&gt;&lt;p&gt;Click to select all the segments on this track.&lt;/p&gt;&lt;p&gt;Shift+click to add to or to remove from the selection all the segments on this track.&lt;/p&gt;&lt;p&gt;Click and hold with either mouse button to assign this track to an instrument.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Clicca per selezionare tutti i segmenti su questa traccia.&lt;/p&gt;&lt;p&gt;Shift+click per aggiungere o rimuovere dalla selezione tutti i segmenti su questa traccia.&lt;/p&gt;&lt;p&gt;Clicca e tieni con entrambi i bottoni del mouse per assegnare questa traccia ad un strumento.&lt;/p&gt;&lt;p&gt;</translation>
     </message>
     <message>
         <location line="+139"/>
@@ -24288,12 +24303,12 @@ Vuoi impostarlo adesso?</translation>
     <message>
         <location line="-4"/>
         <source>Add</source>
-        <translation type="unfinished">Aggiungi</translation>
+        <translation>Aggiungi</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Add a Triggered Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Aggiungi segmento attivo</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -24308,9 +24323,10 @@ Vuoi impostarlo adesso?</translation>
     <message numerus="yes">
         <location line="+2"/>
         <source>%1 on %n track(s)</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>%1 in %n tracce
         </numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -24343,9 +24359,10 @@ Vuoi impostarlo adesso?</translation>
     <message numerus="yes">
         <location line="+22"/>
         <source>This triggered segment is used %n time(s) in the current composition.  Are you sure you want to remove it?</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>Questo segmento attivato è utilizzato %n volte nella composizione corrente. Sei sicuro di volerlo rimuovere?
         </numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -24864,6 +24881,7 @@ Vuoi impostarlo adesso?</translation>
     <message>
         <source></source>
         <comment>if the manual is translated into your language, you can</comment>
+        <translatorcomment>Se il manuale è tradotto nella tua lingua tu puoi</translatorcomment>
         <translation></translation>
     </message>
 </context>
