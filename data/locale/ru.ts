@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0">
+<TS version="2.0" language="ru_RU">
 <context>
     <name></name>
     <message>
@@ -2295,7 +2295,7 @@
         <location line="+7"/>
         <source>Ctrl+Alt++</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Alt++</translation>
     </message>
     <message>
         <location line="+294"/>
@@ -2306,7 +2306,7 @@
         <location line="+7"/>
         <source>Ctrl+5</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+5</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -2317,7 +2317,7 @@
         <location line="+7"/>
         <source>Ctrl+1</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+1</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -2328,7 +2328,7 @@
         <location line="+7"/>
         <source>Ctrl+2</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+2</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -2339,7 +2339,7 @@
         <location line="+7"/>
         <source>Ctrl+4</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+4</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -2350,7 +2350,7 @@
         <location line="+7"/>
         <source>Ctrl+8</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+8</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -2361,7 +2361,7 @@
         <location line="+7"/>
         <source>Ctrl+6</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+6</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -2372,7 +2372,7 @@
         <location line="+7"/>
         <source>Ctrl+3</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+3</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -2383,7 +2383,7 @@
         <location line="+7"/>
         <source>Ctrl+0</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+0</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -2394,7 +2394,7 @@
         <location line="+7"/>
         <source>Ctrl+Alt+5</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">Ctrl+Alt+5</translation>
+        <translation>Ctrl+Alt+5</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -2833,7 +2833,7 @@
         <location line="+7"/>
         <source>Ctrl+Alt+2</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">Ctrl+Alt+2</translation>
+        <translation>Ctrl+Alt+2</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -2844,7 +2844,7 @@
         <location line="+7"/>
         <source>Ctrl+Alt+4</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">Ctrl+Alt+4</translation>
+        <translation>Ctrl+Alt+4</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -2855,7 +2855,7 @@
         <location line="+7"/>
         <source>Ctrl+Alt+8</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">Ctrl+Alt+8</translation>
+        <translation>Ctrl+Alt+8</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -2866,7 +2866,7 @@
         <location line="+7"/>
         <source>Ctrl+Alt+6</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">Ctrl+Alt+6</translation>
+        <translation>Ctrl+Alt+6</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -2877,7 +2877,7 @@
         <location line="+7"/>
         <source>Ctrl+Alt+3</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">Ctrl+Alt+3</translation>
+        <translation>Ctrl+Alt+3</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -2888,7 +2888,7 @@
         <location line="+7"/>
         <source>Ctrl+Alt+0</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">Ctrl+Alt+0</translation>
+        <translation>Ctrl+Alt+0</translation>
     </message>
     <message>
         <location line="+12"/>
@@ -3218,7 +3218,7 @@
         <location line="-3919"/>
         <location line="+289"/>
         <source>Preferences...</source>
-        <translation>Параметры</translation>
+        <translation>Параметры...</translation>
     </message>
     <message>
         <source>0</source>
@@ -4084,7 +4084,7 @@ If you want to paste anyway, consider using one of the other paste types from th
         <location line="+63"/>
         <location line="+436"/>
         <source>Pan</source>
-        <translation type="unfinished">Панорама</translation>
+        <translation>Панорама</translation>
     </message>
     <message>
         <location line="-497"/>
@@ -4098,7 +4098,7 @@ If you want to paste anyway, consider using one of the other paste types from th
         <location line="+63"/>
         <location line="+436"/>
         <source>Sustain</source>
-        <translation type="unfinished">Стабильная фаза</translation>
+        <translation>Стабильная фаза</translation>
     </message>
     <message>
         <location filename="../../src/base/Studio.cpp" line="+53"/>
@@ -7831,217 +7831,217 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location line="+1"/>
         <source>Bass Drum 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Bass Drum 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Side Stick</source>
-        <translation type="unfinished"></translation>
+        <translation>Side Stick</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Acoustic Snare</source>
-        <translation type="unfinished"></translation>
+        <translation>Acoustic Snare</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Hand Clap</source>
-        <translation type="unfinished"></translation>
+        <translation>Hand Clap</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Electric Snare</source>
-        <translation type="unfinished"></translation>
+        <translation>Electric Snare</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Low Floor Tom</source>
-        <translation type="unfinished"></translation>
+        <translation>Low Floor Tom</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Closed Hi-Hat</source>
-        <translation type="unfinished"></translation>
+        <translation>Closed Hi-Hat</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>High Floor Tom</source>
-        <translation type="unfinished"></translation>
+        <translation>High Floor Tom</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Pedal Hi-Hat</source>
-        <translation type="unfinished"></translation>
+        <translation>Pedal Hi-Hat</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Low Tom</source>
-        <translation type="unfinished"></translation>
+        <translation>Low Tom</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Open Hi-Hat</source>
-        <translation type="unfinished"></translation>
+        <translation>Open Hi-Hat</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Low-Mid Tom</source>
-        <translation type="unfinished"></translation>
+        <translation>Low-Mid Tom</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Hi-Mid Tom</source>
-        <translation type="unfinished"></translation>
+        <translation>Hi-Mid Tom</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Crash Cymbal 1</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>High Tom</source>
-        <translation type="unfinished"></translation>
+        <translation>High Tom</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Ride Cymbal 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ride Cymbal 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Chinese Cymbal</source>
-        <translation type="unfinished"></translation>
+        <translation>Chinese Cymbal</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Ride Bell</source>
-        <translation type="unfinished"></translation>
+        <translation>Ride Bell</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Splash Cymbal</source>
-        <translation type="unfinished"></translation>
+        <translation>Splash Cymbal</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Cowbell</source>
-        <translation type="unfinished"></translation>
+        <translation>Cowbell</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Crash Cymbal 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Crash Cymbal 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Vibraslap</source>
-        <translation type="unfinished"></translation>
+        <translation>Vibraslap</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Ride Cymbal 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Ride Cymbal 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Hi Bongo</source>
-        <translation type="unfinished"></translation>
+        <translation>Hi Bongo</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Low Bongo</source>
-        <translation type="unfinished"></translation>
+        <translation>Low Bongo</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Mute Hi Conga</source>
-        <translation type="unfinished"></translation>
+        <translation>Mute Hi Conga</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Open Hi Conga</source>
-        <translation type="unfinished"></translation>
+        <translation>Open Hi Conga</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Low Conga</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>High Timbale</source>
-        <translation type="unfinished"></translation>
+        <translation>High Timbale</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Low Timbale</source>
-        <translation type="unfinished"></translation>
+        <translation>Low Timbale</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>High Agogo</source>
-        <translation type="unfinished"></translation>
+        <translation>High Agogo</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Low Agogo</source>
-        <translation type="unfinished"></translation>
+        <translation>Low Agogo</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Short Whistle</source>
-        <translation type="unfinished"></translation>
+        <translation>Short Whistle</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Long Whistle</source>
-        <translation type="unfinished"></translation>
+        <translation>Long Whistle</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Short Guiro</source>
-        <translation type="unfinished"></translation>
+        <translation>Short Guiro</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Long Guiro</source>
-        <translation type="unfinished"></translation>
+        <translation>Long Guiro</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Hi Wood Block</source>
-        <translation type="unfinished"></translation>
+        <translation>Hi Wood Block</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Low Wood Block</source>
-        <translation type="unfinished"></translation>
+        <translation>Low Wood Block</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Mute Cuica</source>
-        <translation type="unfinished"></translation>
+        <translation>Mute Cuica</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Open Cuica</source>
-        <translation type="unfinished"></translation>
+        <translation>Open Cuica</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Mute Triangle</source>
-        <translation type="unfinished"></translation>
+        <translation>Mute Triangle</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Open Triangle</source>
-        <translation type="unfinished"></translation>
+        <translation>Open Triangle</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>MIDI input system device</source>
-        <translation>Системное устройство ввода MIDI</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+1"/>
@@ -8059,2087 +8059,2087 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../AutoloadStrings.cpp" line="+268"/>
         <source>AudioDefault</source>
-        <translation type="unfinished"></translation>
+        <translation>AudioDefault</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>MidnightBlue</source>
-        <translation type="unfinished">Полуночно-синий</translation>
+        <translation>Полуночно-синий</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>NavyBlue</source>
-        <translation type="unfinished">Тёмно-синий морской</translation>
+        <translation>Тёмно-синий морской</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>CornflowerBlue</source>
-        <translation type="unfinished">Васильковый</translation>
+        <translation>Васильковый</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DarkSlateBlue</source>
-        <translation type="unfinished">Тёмный грифельно-синий</translation>
+        <translation>Тёмный грифельно-синий</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>SlateBlue</source>
-        <translation type="unfinished">Грифельно-синий</translation>
+        <translation>Грифельно-синий</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>MediumSlateBlue</source>
-        <translation type="unfinished">Умеренный грифельно-синий</translation>
+        <translation>Умеренный грифельно-синий</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LightSlateBlue</source>
-        <translation type="unfinished">Светлый грифельно-синий</translation>
+        <translation>Светлый грифельно-синий</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>MediumBlue</source>
-        <translation type="unfinished">Умеренный синий</translation>
+        <translation>Умеренный синий</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>RoyalBlue</source>
-        <translation type="unfinished">Голубой королевский</translation>
+        <translation>Голубой королевский</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>blue</source>
-        <translation type="unfinished">Синий</translation>
+        <translation>Синий</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DodgerBlue</source>
-        <translation type="unfinished">Тускло-васильковый</translation>
+        <translation>Тускло-васильковый</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DeepSkyBlue</source>
-        <translation type="unfinished">Тёмный небесно-голубой</translation>
+        <translation>Тёмный небесно-голубой</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>SkyBlue</source>
-        <translation type="unfinished">Небесно-голубой</translation>
+        <translation>Небесно-голубой</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LightSkyBlue</source>
-        <translation type="unfinished">Светлый небесно-голубой</translation>
+        <translation>Светлый небесно-голубой</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>SteelBlue</source>
-        <translation type="unfinished">Синий со стальным оттенком</translation>
+        <translation>Синий со стальным оттенком</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LightSteelBlue</source>
-        <translation type="unfinished">Голубой со стальным оттенком</translation>
+        <translation>Голубой со стальным оттенком</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LightBlue</source>
-        <translation type="unfinished">Светло-синий</translation>
+        <translation>Светло-синий</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>PowderBlue</source>
-        <translation type="unfinished">Синий с пороховым оттенком</translation>
+        <translation>Синий с пороховым оттенком</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>PaleTurquoise</source>
-        <translation type="unfinished">Бледно-бирюзовый</translation>
+        <translation>Бледно-бирюзовый</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DarkTurquoise</source>
-        <translation type="unfinished">Тёмно-бирюзовый</translation>
+        <translation>Тёмно-бирюзовый</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>MediumTurquoise</source>
-        <translation type="unfinished">Умеренный бирюзовый</translation>
+        <translation>Умеренный бирюзовый</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>turquoise</source>
-        <translation type="unfinished">Бирюзовый</translation>
+        <translation>Бирюзовый</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>cyan</source>
-        <translation type="unfinished">Зеленовато-голубой</translation>
+        <translation>Зеленовато-голубой</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LightCyan</source>
-        <translation type="unfinished">Светлый циан</translation>
+        <translation>Светлый циан</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>CadetBlue</source>
-        <translation type="unfinished">Серо-синий</translation>
+        <translation>Серо-синий</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>MediumAquamarine</source>
-        <translation type="unfinished">Умеренный аквамарин</translation>
+        <translation>Умеренный аквамарин</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>aquamarine</source>
-        <translation type="unfinished">Аквамарин</translation>
+        <translation>Аквамарин</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DarkGreen</source>
-        <translation type="unfinished">Тёмно-зелёный</translation>
+        <translation>Тёмно-зелёный</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DarkOliveGreen</source>
-        <translation type="unfinished">Тёмно-оливковый</translation>
+        <translation>Тёмно-оливковый</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DarkSeaGreen</source>
-        <translation type="unfinished">Тёмный морской волны</translation>
+        <translation>Тёмный морской волны</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>SeaGreen</source>
-        <translation type="unfinished">Морской волны</translation>
+        <translation>Морской волны</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>MediumSeaGreen</source>
-        <translation type="unfinished">Умеренный морской волны</translation>
+        <translation>Умеренный морской волны</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LightSeaGreen</source>
-        <translation type="unfinished">Светлый морской волны</translation>
+        <translation>Светлый морской волны</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>PaleGreen</source>
-        <translation type="unfinished">Бледно-зелёный</translation>
+        <translation>Бледно-зелёный</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>SpringGreen</source>
-        <translation type="unfinished">Весенне-зелёный</translation>
+        <translation>Весенне-зелёный</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LawnGreen</source>
-        <translation type="unfinished">Зелёная лужайка</translation>
+        <translation>Зелёная лужайка</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>green</source>
-        <translation type="unfinished">Зелёный</translation>
+        <translation>Зелёный</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>chartreuse</source>
-        <translation type="unfinished">Зеленовато-жёлтый</translation>
+        <translation>Зеленовато-жёлтый</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>MediumSpringGreen</source>
-        <translation type="unfinished">Умеренный весенне-зелёный</translation>
+        <translation>Умеренный весенне-зелёный</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>GreenYellow</source>
-        <translation type="unfinished">Жёлто-зелёный</translation>
+        <translation>Жёлто-зелёный</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LimeGreen</source>
-        <translation type="unfinished">Лимонно-зелёный</translation>
+        <translation>Лимонно-зелёный</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>YellowGreen</source>
-        <translation type="unfinished">Жёлто-зелёный</translation>
+        <translation>Жёлто-зелёный</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>ForestGreen</source>
-        <translation type="unfinished">Зелёный лесной</translation>
+        <translation>Зелёный лесной</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>OliveDrab</source>
-        <translation type="unfinished">Нежно-оливковый</translation>
+        <translation>Нежно-оливковый</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DarkKhaki</source>
-        <translation type="unfinished">Тёмный хаки</translation>
+        <translation>Тёмный хаки</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>khaki</source>
-        <translation type="unfinished">Хаки</translation>
+        <translation>Хаки</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>PaleGoldenrod</source>
-        <translation type="unfinished">Бледно-золотистый</translation>
+        <translation>Бледно-золотистый</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LightGoldenrodYellow</source>
-        <translation type="unfinished">Светло-жёлтый золотистый</translation>
+        <translation>Светло-жёлтый золотистый</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LightYellow</source>
-        <translation type="unfinished">Светло-жёлтый</translation>
+        <translation>Светло-жёлтый</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>yellow</source>
-        <translation type="unfinished">Жёлтый</translation>
+        <translation>Жёлтый</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>gold</source>
-        <translation type="unfinished">Золотой</translation>
+        <translation>Золотой</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LightGoldenrod</source>
-        <translation type="unfinished">Светло-золотистый</translation>
+        <translation>Светло-золотистый</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>goldenrod</source>
-        <translation type="unfinished">Золотистый</translation>
+        <translation>Золотистый</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DarkGoldenrod</source>
-        <translation type="unfinished">Тёмно-золотистый</translation>
+        <translation>Тёмно-золотистый</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>RosyBrown</source>
-        <translation type="unfinished">Розово-коричневый</translation>
+        <translation>Розово-коричневый</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>IndianRed</source>
-        <translation type="unfinished">Ярко-красный</translation>
+        <translation>Ярко-красный</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>SaddleBrown</source>
-        <translation type="unfinished">Кожано-коричневый</translation>
+        <translation>Кожано-коричневый</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>sienna</source>
-        <translation type="unfinished">Охра</translation>
+        <translation>Охра</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>peru</source>
-        <translation type="unfinished">Тёмно-рыжий</translation>
+        <translation>Тёмно-рыжий</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>burlywood</source>
-        <translation type="unfinished">Желтоватый</translation>
+        <translation>Желтоватый</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>beige</source>
-        <translation type="unfinished">Бежевый</translation>
+        <translation>Бежевый</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>wheat</source>
-        <translation type="unfinished">Пшеничный</translation>
+        <translation>Пшеничный</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>SandyBrown</source>
-        <translation type="unfinished">Песочно-коричневый</translation>
+        <translation>Песочно-коричневый</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>tan</source>
-        <translation type="unfinished">Рыжевато-коричневый</translation>
+        <translation>Рыжевато-коричневый</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>chocolate</source>
-        <translation type="unfinished">Шоколадный</translation>
+        <translation>Шоколадный</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>firebrick</source>
-        <translation type="unfinished">Кирпичный</translation>
+        <translation>Кирпичный</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>brown</source>
-        <translation type="unfinished">Коричневый</translation>
+        <translation>Коричневый</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DarkSalmon</source>
-        <translation type="unfinished">Тёмный оранжево-розовый</translation>
+        <translation>Тёмный оранжево-розовый</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>salmon</source>
-        <translation type="unfinished">Сомон</translation>
+        <translation>Сомон</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LightSalmon</source>
-        <translation type="unfinished">Светлый сомон</translation>
+        <translation>Светлый сомон</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>orange</source>
-        <translation type="unfinished">Оранжевый</translation>
+        <translation>Оранжевый</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DarkOrange</source>
-        <translation type="unfinished">Тёмно-оранжевый</translation>
+        <translation>Тёмно-оранжевый</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>coral</source>
-        <translation type="unfinished">Коралловый</translation>
+        <translation>Коралловый</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LightCoral</source>
-        <translation type="unfinished">Светло-коралловый</translation>
+        <translation>Светло-коралловый</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>tomato</source>
-        <translation type="unfinished">Томатный</translation>
+        <translation>Томатный</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>OrangeRed</source>
-        <translation type="unfinished">Оранжево-красный</translation>
+        <translation>Оранжево-красный</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>red</source>
-        <translation type="unfinished">Красный</translation>
+        <translation>Красный</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>HotPink</source>
-        <translation type="unfinished">Ярко-розовый</translation>
+        <translation>Ярко-розовый</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DeepPink</source>
-        <translation type="unfinished">Тёмно-розовый</translation>
+        <translation>Тёмно-розовый</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>pink</source>
-        <translation type="unfinished">Розовый</translation>
+        <translation>Розовый</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LightPink</source>
-        <translation type="unfinished">Светло-розовый</translation>
+        <translation>Светло-розовый</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>PaleVioletRed</source>
-        <translation type="unfinished">Бледный красно-фиолетовый</translation>
+        <translation>Бледный красно-фиолетовый</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>maroon</source>
-        <translation type="unfinished">Тёмно-бордовый</translation>
+        <translation>Тёмно-бордовый</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>MediumVioletRed</source>
-        <translation type="unfinished">Умеренный красно-фиолетовый</translation>
+        <translation>Умеренный красно-фиолетовый</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>VioletRed</source>
-        <translation type="unfinished">Красно-фиолетовый</translation>
+        <translation>Красно-фиолетовый</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>magenta</source>
-        <translation type="unfinished">Фуксин</translation>
+        <translation>Фуксин</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>violet</source>
-        <translation type="unfinished">Фиолетовый</translation>
+        <translation>Фиолетовый</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>plum</source>
-        <translation type="unfinished">Сливовый</translation>
+        <translation>Сливовый</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>orchid</source>
-        <translation type="unfinished">Орсель</translation>
+        <translation>Орсель</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>MediumOrchid</source>
-        <translation type="unfinished">Умеренный орсель</translation>
+        <translation>Умеренный орсель</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DarkOrchid</source>
-        <translation type="unfinished">Тёмный орсель</translation>
+        <translation>Тёмный орсель</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DarkViolet</source>
-        <translation type="unfinished">Тёмно-фиолетовый</translation>
+        <translation>Тёмно-фиолетовый</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>BlueViolet</source>
-        <translation type="unfinished">Светло-фиолетовый</translation>
+        <translation>Светло-фиолетовый</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>purple</source>
-        <translation type="unfinished">Пурпурный</translation>
+        <translation>Пурпурный</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>MediumPurple</source>
-        <translation type="unfinished">Умеренный пурпурный</translation>
+        <translation>Умеренный пурпурный</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>thistle</source>
-        <translation type="unfinished">Чертополоха</translation>
+        <translation>Чертополоха</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>snow1</source>
-        <translation type="unfinished">Белоснежный 1</translation>
+        <translation>Белоснежный 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>snow2</source>
-        <translation type="unfinished">Белоснежный 2</translation>
+        <translation>Белоснежный 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>snow3</source>
-        <translation type="unfinished">Белоснежный 3</translation>
+        <translation>Белоснежный 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>snow4</source>
-        <translation type="unfinished">Белоснежный 4</translation>
+        <translation>Белоснежный 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>seashell1</source>
-        <translation type="unfinished">Морской раковины 1</translation>
+        <translation>Морской раковины 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>seashell2</source>
-        <translation type="unfinished">Морской раковины 2</translation>
+        <translation>Морской раковины 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>seashell3</source>
-        <translation type="unfinished">Морской раковины 3</translation>
+        <translation>Морской раковины 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>seashell4</source>
-        <translation type="unfinished">Морской раковины 4</translation>
+        <translation>Морской раковины 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>AntiqueWhite1</source>
-        <translation type="unfinished">Белый-антик 1</translation>
+        <translation>Белый-антик 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>AntiqueWhite2</source>
-        <translation type="unfinished">Белый-антик 2</translation>
+        <translation>Белый-антик 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>AntiqueWhite3</source>
-        <translation type="unfinished">Белый-антик 3</translation>
+        <translation>Белый-антик 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>AntiqueWhite4</source>
-        <translation type="unfinished">Белый-антик 4</translation>
+        <translation>Белый-антик 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>bisque1</source>
-        <translation type="unfinished">Бисквитный 1</translation>
+        <translation>Бисквитный 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>bisque2</source>
-        <translation type="unfinished">Бисквитный 2</translation>
+        <translation>Бисквитный 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>bisque3</source>
-        <translation type="unfinished">Бисквитный 3</translation>
+        <translation>Бисквитный 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>bisque4</source>
-        <translation type="unfinished">Бисквитный 4</translation>
+        <translation>Бисквитный 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>PeachPuff1</source>
-        <translation type="unfinished">Персиковый 1</translation>
+        <translation>Персиковый 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>PeachPuff2</source>
-        <translation type="unfinished">Персиковый 2</translation>
+        <translation>Персиковый 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>PeachPuff3</source>
-        <translation type="unfinished">Персиковый 3</translation>
+        <translation>Персиковый 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>PeachPuff4</source>
-        <translation type="unfinished">Персиковый 4</translation>
+        <translation>Персиковый 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>NavajoWhite1</source>
-        <translation type="unfinished">Белый навахо 1</translation>
+        <translation>Белый навахо 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>NavajoWhite2</source>
-        <translation type="unfinished">Белый навахо 2</translation>
+        <translation>Белый навахо 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>NavajoWhite3</source>
-        <translation type="unfinished">Белый навахо 3</translation>
+        <translation>Белый навахо 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>NavajoWhite4</source>
-        <translation type="unfinished">Белый навахо 4</translation>
+        <translation>Белый навахо 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LemonChiffon1</source>
-        <translation type="unfinished">Лимонный 1</translation>
+        <translation>Лимонный 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LemonChiffon2</source>
-        <translation type="unfinished">Лимонный 2</translation>
+        <translation>Лимонный 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LemonChiffon3</source>
-        <translation type="unfinished">Лимонный 3</translation>
+        <translation>Лимонный 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LemonChiffon4</source>
-        <translation type="unfinished">Лимонный 4</translation>
+        <translation>Лимонный 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>cornsilk1</source>
-        <translation type="unfinished">Шёлковый оттенок 1</translation>
+        <translation>Шёлковый оттенок 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>cornsilk2</source>
-        <translation type="unfinished">Шёлковый оттенок 2</translation>
+        <translation>Шёлковый оттенок 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>cornsilk3</source>
-        <translation type="unfinished">Шёлковый оттенок 3</translation>
+        <translation>Шёлковый оттенок 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>cornsilk4</source>
-        <translation type="unfinished">Шёлковый оттенок 4</translation>
+        <translation>Шёлковый оттенок 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>ivory1</source>
-        <translation type="unfinished">Слоновая кость 1</translation>
+        <translation>Слоновая кость 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>ivory2</source>
-        <translation type="unfinished">Слоновая кость 2</translation>
+        <translation>Слоновая кость 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>ivory3</source>
-        <translation type="unfinished">Слоновая кость 3</translation>
+        <translation>Слоновая кость 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>ivory4</source>
-        <translation type="unfinished">Слоновая кость 4</translation>
+        <translation>Слоновая кость 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>honeydew1</source>
-        <translation type="unfinished">Медовый 1</translation>
+        <translation>Медовый 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>honeydew2</source>
-        <translation type="unfinished">Медовый 2</translation>
+        <translation>Медовый 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>honeydew3</source>
-        <translation type="unfinished">Медовый 3</translation>
+        <translation>Медовый 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>honeydew4</source>
-        <translation type="unfinished">Медовый 4</translation>
+        <translation>Медовый 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LavenderBlush1</source>
-        <translation type="unfinished">Голубой с красным отливом 1</translation>
+        <translation>Голубой с красным отливом 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LavenderBlush2</source>
-        <translation type="unfinished">Голубой с красным отливом 2</translation>
+        <translation>Голубой с красным отливом 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LavenderBlush3</source>
-        <translation type="unfinished">Голубой с красным отливом 3</translation>
+        <translation>Голубой с красным отливом 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LavenderBlush4</source>
-        <translation type="unfinished">Голубой с красным отливом 4</translation>
+        <translation>Голубой с красным отливом 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>MistyRose1</source>
-        <translation type="unfinished">Бледно-розовый 1</translation>
+        <translation>Бледно-розовый 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>MistyRose2</source>
-        <translation type="unfinished">Бледно-розовый 2</translation>
+        <translation>Бледно-розовый 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>MistyRose3</source>
-        <translation type="unfinished">Бледно-розовый 3</translation>
+        <translation>Бледно-розовый 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>MistyRose4</source>
-        <translation type="unfinished">Бледно-розовый 4</translation>
+        <translation>Бледно-розовый 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>azure1</source>
-        <translation type="unfinished">Лазурный 1</translation>
+        <translation>Лазурный 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>azure2</source>
-        <translation type="unfinished">Лазурный 2</translation>
+        <translation>Лазурный 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>azure3</source>
-        <translation type="unfinished">Лазурный 3</translation>
+        <translation>Лазурный 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>azure4</source>
-        <translation type="unfinished">Лазурный 4</translation>
+        <translation>Лазурный 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>SlateBlue1</source>
-        <translation type="unfinished">Грифельно-синий 1</translation>
+        <translation>Грифельно-синий 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>SlateBlue2</source>
-        <translation type="unfinished">Грифельно-синий 2</translation>
+        <translation>Грифельно-синий 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>SlateBlue3</source>
-        <translation type="unfinished">Грифельно-синий 3</translation>
+        <translation>Грифельно-синий 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>SlateBlue4</source>
-        <translation type="unfinished">Грифельно-синий 4</translation>
+        <translation>Грифельно-синий 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>RoyalBlue1</source>
-        <translation type="unfinished">Голубой королевский 1</translation>
+        <translation>Голубой королевский 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>RoyalBlue2</source>
-        <translation type="unfinished">Голубой королевский 2</translation>
+        <translation>Голубой королевский 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>RoyalBlue3</source>
-        <translation type="unfinished">Голубой королевский 3</translation>
+        <translation>Голубой королевский 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>RoyalBlue4</source>
-        <translation type="unfinished">Голубой королевский 4</translation>
+        <translation>Голубой королевский 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>blue1</source>
-        <translation type="unfinished">Синий 1</translation>
+        <translation>Синий 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>blue2</source>
-        <translation type="unfinished">Синий 2</translation>
+        <translation>Синий 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>blue3</source>
-        <translation type="unfinished">Синий 3</translation>
+        <translation>Синий 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>blue4</source>
-        <translation type="unfinished">Синий 4</translation>
+        <translation>Синий 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DodgerBlue1</source>
-        <translation type="unfinished">Тускло-васильковый 1</translation>
+        <translation>Тускло-васильковый 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DodgerBlue2</source>
-        <translation type="unfinished">Тускло-васильковый 2</translation>
+        <translation>Тускло-васильковый 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DodgerBlue3</source>
-        <translation type="unfinished">Тускло-васильковый 3</translation>
+        <translation>Тускло-васильковый 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DodgerBlue4</source>
-        <translation type="unfinished">Тускло-васильковый 4</translation>
+        <translation>Тускло-васильковый 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>SteelBlue1</source>
-        <translation type="unfinished">Синий со стальным оттенком 1</translation>
+        <translation>Синий со стальным оттенком 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>SteelBlue2</source>
-        <translation type="unfinished">Синий со стальным оттенком 2</translation>
+        <translation>Синий со стальным оттенком 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>SteelBlue3</source>
-        <translation type="unfinished">Синий со стальным оттенком 3</translation>
+        <translation>Синий со стальным оттенком 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>SteelBlue4</source>
-        <translation type="unfinished">Синий со стальным оттенком 4</translation>
+        <translation>Синий со стальным оттенком 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DeepSkyBlue1</source>
-        <translation type="unfinished">Тёмный небесно-голубой 1</translation>
+        <translation>Тёмный небесно-голубой 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DeepSkyBlue2</source>
-        <translation type="unfinished">Тёмный небесно-голубой 2</translation>
+        <translation>Тёмный небесно-голубой 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DeepSkyBlue3</source>
-        <translation type="unfinished">Тёмный небесно-голубой 3</translation>
+        <translation>Тёмный небесно-голубой 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DeepSkyBlue4</source>
-        <translation type="unfinished">Тёмный небесно-голубой 4</translation>
+        <translation>Тёмный небесно-голубой 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>SkyBlue1</source>
-        <translation type="unfinished">Небесно-голубой 1</translation>
+        <translation>Небесно-голубой 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>SkyBlue2</source>
-        <translation type="unfinished">Небесно-голубой 2</translation>
+        <translation>Небесно-голубой 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>SkyBlue3</source>
-        <translation type="unfinished">Небесно-голубой 3</translation>
+        <translation>Небесно-голубой 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>SkyBlue4</source>
-        <translation type="unfinished">Небесно-голубой 4</translation>
+        <translation>Небесно-голубой 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LightSkyBlue1</source>
-        <translation type="unfinished">Светлый небесно-голубой 1</translation>
+        <translation>Светлый небесно-голубой 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LightSkyBlue2</source>
-        <translation type="unfinished">Светлый небесно-голубой 2</translation>
+        <translation>Светлый небесно-голубой 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LightSkyBlue3</source>
-        <translation type="unfinished">Светлый небесно-голубой 3</translation>
+        <translation>Светлый небесно-голубой 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LightSkyBlue4</source>
-        <translation type="unfinished">Светлый небесно-голубой 4</translation>
+        <translation>Светлый небесно-голубой 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>SlateGray1</source>
-        <translation type="unfinished">Синевато-серый 1</translation>
+        <translation>Синевато-серый 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>SlateGray2</source>
-        <translation type="unfinished">Синевато-серый 2</translation>
+        <translation>Синевато-серый 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>SlateGray3</source>
-        <translation type="unfinished">Синевато-серый 3</translation>
+        <translation>Синевато-серый 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>SlateGray4</source>
-        <translation type="unfinished">Синевато-серый 4</translation>
+        <translation>Синевато-серый 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LightSteelBlue1</source>
-        <translation type="unfinished">Голубой со стальным оттенком 1</translation>
+        <translation>Голубой со стальным оттенком 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LightSteelBlue2</source>
-        <translation type="unfinished">Голубой со стальным оттенком 2</translation>
+        <translation>Голубой со стальным оттенком 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LightSteelBlue3</source>
-        <translation type="unfinished">Голубой со стальным оттенком 3</translation>
+        <translation>Голубой со стальным оттенком 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LightSteelBlue4</source>
-        <translation type="unfinished">Голубой со стальным оттенком 4</translation>
+        <translation>Голубой со стальным оттенком 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LightBlue1</source>
-        <translation type="unfinished">Светло-синий 1</translation>
+        <translation>Светло-синий 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LightBlue2</source>
-        <translation type="unfinished">Светло-синий 2</translation>
+        <translation>Светло-синий 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LightBlue3</source>
-        <translation type="unfinished">Светло-синий 3</translation>
+        <translation>Светло-синий 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LightBlue4</source>
-        <translation type="unfinished">Светло-синий 4</translation>
+        <translation>Светло-синий 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LightCyan1</source>
-        <translation type="unfinished">Светлый циан 1</translation>
+        <translation>Светлый циан 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LightCyan2</source>
-        <translation type="unfinished">Светлый циан 2</translation>
+        <translation>Светлый циан 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LightCyan3</source>
-        <translation type="unfinished">Светлый циан 3</translation>
+        <translation>Светлый циан 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LightCyan4</source>
-        <translation type="unfinished">Светлый циан 4</translation>
+        <translation>Светлый циан 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>PaleTurquoise1</source>
-        <translation type="unfinished">Бледно-бирюзовый 1</translation>
+        <translation>Бледно-бирюзовый 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>PaleTurquoise2</source>
-        <translation type="unfinished">Бледно-бирюзовый 2</translation>
+        <translation>Бледно-бирюзовый 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>PaleTurquoise3</source>
-        <translation type="unfinished">Бледно-бирюзовый 3</translation>
+        <translation>Бледно-бирюзовый 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>PaleTurquoise4</source>
-        <translation type="unfinished">Бледно-бирюзовый 4</translation>
+        <translation>Бледно-бирюзовый 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>CadetBlue1</source>
-        <translation type="unfinished">Серо-синий 1</translation>
+        <translation>Серо-синий 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>CadetBlue2</source>
-        <translation type="unfinished">Серо-синий 2</translation>
+        <translation>Серо-синий 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>CadetBlue3</source>
-        <translation type="unfinished">Серо-синий 3</translation>
+        <translation>Серо-синий 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>CadetBlue4</source>
-        <translation type="unfinished">Серо-синий 4</translation>
+        <translation>Серо-синий 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>turquoise1</source>
-        <translation type="unfinished">Бирюзовый 1</translation>
+        <translation>Бирюзовый 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>turquoise2</source>
-        <translation type="unfinished">Бирюзовый 2</translation>
+        <translation>Бирюзовый 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>turquoise3</source>
-        <translation type="unfinished">Бирюзовый 3</translation>
+        <translation>Бирюзовый 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>turquoise4</source>
-        <translation type="unfinished">Бирюзовый 4</translation>
+        <translation>Бирюзовый 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>cyan1</source>
-        <translation type="unfinished">Зеленовато-голубой 1</translation>
+        <translation>Зеленовато-голубой 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>cyan2</source>
-        <translation type="unfinished">Зеленовато-голубой 2</translation>
+        <translation>Зеленовато-голубой 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>cyan3</source>
-        <translation type="unfinished">Зеленовато-голубой 3</translation>
+        <translation>Зеленовато-голубой 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>cyan4</source>
-        <translation type="unfinished">Зеленовато-голубой 4</translation>
+        <translation>Зеленовато-голубой 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DarkSlateGray1</source>
-        <translation type="unfinished">Тёмный грифельно-серый 1</translation>
+        <translation>Тёмный грифельно-серый 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DarkSlateGray2</source>
-        <translation type="unfinished">Тёмный грифельно-серый 2</translation>
+        <translation>Тёмный грифельно-серый 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DarkSlateGray3</source>
-        <translation type="unfinished">Тёмный грифельно-серый 3</translation>
+        <translation>Тёмный грифельно-серый 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DarkSlateGray4</source>
-        <translation type="unfinished">Тёмный грифельно-серый 4</translation>
+        <translation>Тёмный грифельно-серый 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>aquamarine1</source>
-        <translation type="unfinished">Аквамарин 1</translation>
+        <translation>Аквамарин 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>aquamarine2</source>
-        <translation type="unfinished">Аквамарин 2</translation>
+        <translation>Аквамарин 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>aquamarine3</source>
-        <translation type="unfinished">Аквамарин 3</translation>
+        <translation>Аквамарин 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>aquamarine4</source>
-        <translation type="unfinished">Аквамарин 4</translation>
+        <translation>Аквамарин 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DarkSeaGreen1</source>
-        <translation type="unfinished">Тёмный морской волны 1</translation>
+        <translation>Тёмный морской волны 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DarkSeaGreen2</source>
-        <translation type="unfinished">Тёмный морской волны 2</translation>
+        <translation>Тёмный морской волны 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DarkSeaGreen3</source>
-        <translation type="unfinished">Тёмный морской волны 3</translation>
+        <translation>Тёмный морской волны 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DarkSeaGreen4</source>
-        <translation type="unfinished">Тёмный морской волны 4</translation>
+        <translation>Тёмный морской волны 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>SeaGreen1</source>
-        <translation type="unfinished">Морской волны 1</translation>
+        <translation>Морской волны 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>SeaGreen2</source>
-        <translation type="unfinished">Морской волны 2</translation>
+        <translation>Морской волны 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>SeaGreen3</source>
-        <translation type="unfinished">Морской волны 3</translation>
+        <translation>Морской волны 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>SeaGreen4</source>
-        <translation type="unfinished">Морской волны 4</translation>
+        <translation>Морской волны 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>PaleGreen1</source>
-        <translation type="unfinished">Бледно-зелёный 1</translation>
+        <translation>Бледно-зелёный 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>PaleGreen2</source>
-        <translation type="unfinished">Бледно-зелёный 2</translation>
+        <translation>Бледно-зелёный 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>PaleGreen3</source>
-        <translation type="unfinished">Бледно-зелёный 3</translation>
+        <translation>Бледно-зелёный 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>PaleGreen4</source>
-        <translation type="unfinished">Бледно-зелёный 4</translation>
+        <translation>Бледно-зелёный 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>SpringGreen1</source>
-        <translation type="unfinished">Весенне-зелёный 1</translation>
+        <translation>Весенне-зелёный 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>SpringGreen2</source>
-        <translation type="unfinished">Весенне-зелёный 2</translation>
+        <translation>Весенне-зелёный 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>SpringGreen3</source>
-        <translation type="unfinished">Весенне-зелёный 3</translation>
+        <translation>Весенне-зелёный 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>SpringGreen4</source>
-        <translation type="unfinished">Весенне-зелёный 4</translation>
+        <translation>Весенне-зелёный 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>green1</source>
-        <translation type="unfinished">Зелёный 1</translation>
+        <translation>Зелёный 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>green2</source>
-        <translation type="unfinished">Зелёный 2</translation>
+        <translation>Зелёный 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>green3</source>
-        <translation type="unfinished">Зелёный 3</translation>
+        <translation>Зелёный 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>green4</source>
-        <translation type="unfinished">Зелёный 4</translation>
+        <translation>Зелёный 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>chartreuse1</source>
-        <translation type="unfinished">Зеленовато-жёлтый 1</translation>
+        <translation>Зеленовато-жёлтый 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>chartreuse2</source>
-        <translation type="unfinished">Зеленовато-жёлтый 2</translation>
+        <translation>Зеленовато-жёлтый 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>chartreuse3</source>
-        <translation type="unfinished">Зеленовато-жёлтый 3</translation>
+        <translation>Зеленовато-жёлтый 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>chartreuse4</source>
-        <translation type="unfinished">Зеленовато-жёлтый 4</translation>
+        <translation>Зеленовато-жёлтый 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>OliveDrab1</source>
-        <translation type="unfinished">Нежно-оливковый 1</translation>
+        <translation>Нежно-оливковый 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>OliveDrab2</source>
-        <translation type="unfinished">Нежно-оливковый 2</translation>
+        <translation>Нежно-оливковый 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>OliveDrab3</source>
-        <translation type="unfinished">Нежно-оливковый 3</translation>
+        <translation>Нежно-оливковый 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>OliveDrab4</source>
-        <translation type="unfinished">Нежно-оливковый 4</translation>
+        <translation>Нежно-оливковый 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DarkOliveGreen1</source>
-        <translation type="unfinished">Тёмно-оливковый 1</translation>
+        <translation>Тёмно-оливковый 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DarkOliveGreen2</source>
-        <translation type="unfinished">Тёмно-оливковый 2</translation>
+        <translation>Тёмно-оливковый 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DarkOliveGreen3</source>
-        <translation type="unfinished">Тёмно-оливковый 3</translation>
+        <translation>Тёмно-оливковый 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DarkOliveGreen4</source>
-        <translation type="unfinished">Тёмно-оливковый 4</translation>
+        <translation>Тёмно-оливковый 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>khaki1</source>
-        <translation type="unfinished">Хаки 1</translation>
+        <translation>Хаки 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>khaki2</source>
-        <translation type="unfinished">Хаки 2</translation>
+        <translation>Хаки 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>khaki3</source>
-        <translation type="unfinished">Хаки 3</translation>
+        <translation>Хаки 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>khaki4</source>
-        <translation type="unfinished">Хаки 4</translation>
+        <translation>Хаки 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LightGoldenrod1</source>
-        <translation type="unfinished">Светло-золотистый 1</translation>
+        <translation>Светло-золотистый 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LightGoldenrod2</source>
-        <translation type="unfinished">Светло-золотистый 2</translation>
+        <translation>Светло-золотистый 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LightGoldenrod3</source>
-        <translation type="unfinished">Светло-золотистый 3</translation>
+        <translation>Светло-золотистый 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LightGoldenrod4</source>
-        <translation type="unfinished">Светло-золотистый 4</translation>
+        <translation>Светло-золотистый 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LightYellow1</source>
-        <translation type="unfinished">Светло-жёлтый 1</translation>
+        <translation>Светло-жёлтый 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LightYellow2</source>
-        <translation type="unfinished">Светло-жёлтый 2</translation>
+        <translation>Светло-жёлтый 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LightYellow3</source>
-        <translation type="unfinished">Светло-жёлтый 3</translation>
+        <translation>Светло-жёлтый 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LightYellow4</source>
-        <translation type="unfinished">Светло-жёлтый 4</translation>
+        <translation>Светло-жёлтый 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>yellow1</source>
-        <translation type="unfinished">Жёлтый 1</translation>
+        <translation>Жёлтый 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>yellow2</source>
-        <translation type="unfinished">Жёлтый 2</translation>
+        <translation>Жёлтый 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>yellow3</source>
-        <translation type="unfinished">Жёлтый 3</translation>
+        <translation>Жёлтый 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>yellow4</source>
-        <translation type="unfinished">Жёлтый 4</translation>
+        <translation>Жёлтый 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>gold1</source>
-        <translation type="unfinished">Золотой 1</translation>
+        <translation>Золотой 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>gold2</source>
-        <translation type="unfinished">Золотой 2</translation>
+        <translation>Золотой 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>gold3</source>
-        <translation type="unfinished">Золотой 3</translation>
+        <translation>Золотой 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>gold4</source>
-        <translation type="unfinished">Золотой 4</translation>
+        <translation>Золотой 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>goldenrod1</source>
-        <translation type="unfinished">Золотистый 1</translation>
+        <translation>Золотистый 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>goldenrod2</source>
-        <translation type="unfinished">Золотистый 2</translation>
+        <translation>Золотистый 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>goldenrod3</source>
-        <translation type="unfinished">Золотистый 3</translation>
+        <translation>Золотистый 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>goldenrod4</source>
-        <translation type="unfinished">Золотистый 4</translation>
+        <translation>Золотистый 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DarkGoldenrod1</source>
-        <translation type="unfinished">Тёмно-золотистый 1</translation>
+        <translation>Тёмно-золотистый 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DarkGoldenrod2</source>
-        <translation type="unfinished">Тёмно-золотистый 2</translation>
+        <translation>Тёмно-золотистый 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DarkGoldenrod3</source>
-        <translation type="unfinished">Тёмно-золотистый 3</translation>
+        <translation>Тёмно-золотистый 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DarkGoldenrod4</source>
-        <translation type="unfinished">Тёмно-золотистый 4</translation>
+        <translation>Тёмно-золотистый 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>RosyBrown1</source>
-        <translation type="unfinished">Розово-коричневый 1</translation>
+        <translation>Розово-коричневый 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>RosyBrown2</source>
-        <translation type="unfinished">Розово-коричневый 2</translation>
+        <translation>Розово-коричневый 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>RosyBrown3</source>
-        <translation type="unfinished">Розово-коричневый 3</translation>
+        <translation>Розово-коричневый 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>RosyBrown4</source>
-        <translation type="unfinished">Розово-коричневый 4</translation>
+        <translation>Розово-коричневый 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>IndianRed1</source>
-        <translation type="unfinished">Ярко-красный 1</translation>
+        <translation>Ярко-красный 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>IndianRed2</source>
-        <translation type="unfinished">Ярко-красный 2</translation>
+        <translation>Ярко-красный 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>IndianRed3</source>
-        <translation type="unfinished">Ярко-красный 3</translation>
+        <translation>Ярко-красный 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>IndianRed4</source>
-        <translation type="unfinished">Ярко-красный 4</translation>
+        <translation>Ярко-красный 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>sienna1</source>
-        <translation type="unfinished">Охра 1</translation>
+        <translation>Охра 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>sienna2</source>
-        <translation type="unfinished">Охра 2</translation>
+        <translation>Охра 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>sienna3</source>
-        <translation type="unfinished">Охра 3</translation>
+        <translation>Охра 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>sienna4</source>
-        <translation type="unfinished">Охра 4</translation>
+        <translation>Охра 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>burlywood1</source>
-        <translation type="unfinished">Желтоватый 1</translation>
+        <translation>Желтоватый 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>burlywood2</source>
-        <translation type="unfinished">Желтоватый 2</translation>
+        <translation>Желтоватый 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>burlywood3</source>
-        <translation type="unfinished">Желтоватый 3</translation>
+        <translation>Желтоватый 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>burlywood4</source>
-        <translation type="unfinished">Желтоватый 4</translation>
+        <translation>Желтоватый 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>wheat1</source>
-        <translation type="unfinished">Пшеничный 1</translation>
+        <translation>Пшеничный 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>wheat2</source>
-        <translation type="unfinished">Пшеничный 2</translation>
+        <translation>Пшеничный 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>wheat3</source>
-        <translation type="unfinished">Пшеничный 3</translation>
+        <translation>Пшеничный 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>wheat4</source>
-        <translation type="unfinished">Пшеничный 4</translation>
+        <translation>Пшеничный 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>tan1</source>
-        <translation type="unfinished">Рыжевато-коричневый 1</translation>
+        <translation>Рыжевато-коричневый 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>tan2</source>
-        <translation type="unfinished">Рыжевато-коричневый 2</translation>
+        <translation>Рыжевато-коричневый 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>tan3</source>
-        <translation type="unfinished">Рыжевато-коричневый 3</translation>
+        <translation>Рыжевато-коричневый 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>tan4</source>
-        <translation type="unfinished">Рыжевато-коричневый 4</translation>
+        <translation>Рыжевато-коричневый 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>chocolate1</source>
-        <translation type="unfinished">Шоколадный 1</translation>
+        <translation>Шоколадный 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>chocolate2</source>
-        <translation type="unfinished">Шоколадный 2</translation>
+        <translation>Шоколадный 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>chocolate3</source>
-        <translation type="unfinished">Шоколадный 3</translation>
+        <translation>Шоколадный 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>chocolate4</source>
-        <translation type="unfinished">Шоколадный 4</translation>
+        <translation>Шоколадный 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>firebrick1</source>
-        <translation type="unfinished">Кирпичный 1</translation>
+        <translation>Кирпичный 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>firebrick2</source>
-        <translation type="unfinished">Кирпичный 2</translation>
+        <translation>Кирпичный 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>firebrick3</source>
-        <translation type="unfinished">Кирпичный 3</translation>
+        <translation>Кирпичный 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>firebrick4</source>
-        <translation type="unfinished">Кирпичный 4</translation>
+        <translation>Кирпичный 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>brown1</source>
-        <translation type="unfinished">Коричневый 1</translation>
+        <translation>Коричневый 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>brown2</source>
-        <translation type="unfinished">Коричневый 2</translation>
+        <translation>Коричневый 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>brown3</source>
-        <translation type="unfinished">Коричневый 3</translation>
+        <translation>Коричневый 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>brown4</source>
-        <translation type="unfinished">Коричневый 4</translation>
+        <translation>Коричневый 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>salmon1</source>
-        <translation type="unfinished">Сомон 1</translation>
+        <translation>Сомон 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>salmon2</source>
-        <translation type="unfinished">Сомон 2</translation>
+        <translation>Сомон 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>salmon3</source>
-        <translation type="unfinished">Сомон 3</translation>
+        <translation>Сомон 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>salmon4</source>
-        <translation type="unfinished">Сомон 4</translation>
+        <translation>Сомон 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LightSalmon1</source>
-        <translation type="unfinished">Светлый сомон 1</translation>
+        <translation>Светлый сомон 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LightSalmon2</source>
-        <translation type="unfinished">Светлый сомон 2</translation>
+        <translation>Светлый сомон 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LightSalmon3</source>
-        <translation type="unfinished">Светлый сомон 3</translation>
+        <translation>Светлый сомон 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LightSalmon4</source>
-        <translation type="unfinished">Светлый сомон 4</translation>
+        <translation>Светлый сомон 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>orange1</source>
-        <translation type="unfinished">Оранжевый 1</translation>
+        <translation>Оранжевый 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>orange2</source>
-        <translation type="unfinished">Оранжевый 2</translation>
+        <translation>Оранжевый 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>orange3</source>
-        <translation type="unfinished">Оранжевый 3</translation>
+        <translation>Оранжевый 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>orange4</source>
-        <translation type="unfinished">Оранжевый 4</translation>
+        <translation>Оранжевый 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DarkOrange1</source>
-        <translation type="unfinished">Тёмно-оранжевый 1</translation>
+        <translation>Тёмно-оранжевый 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DarkOrange2</source>
-        <translation type="unfinished">Тёмно-оранжевый 2</translation>
+        <translation>Тёмно-оранжевый 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DarkOrange3</source>
-        <translation type="unfinished">Тёмно-оранжевый 3</translation>
+        <translation>Тёмно-оранжевый 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DarkOrange4</source>
-        <translation type="unfinished">Тёмно-оранжевый 4</translation>
+        <translation>Тёмно-оранжевый 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>coral1</source>
-        <translation type="unfinished">Коралловый 1</translation>
+        <translation>Коралловый 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>coral2</source>
-        <translation type="unfinished">Коралловый 2</translation>
+        <translation>Коралловый 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>coral3</source>
-        <translation type="unfinished">Коралловый 3</translation>
+        <translation>Коралловый 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>coral4</source>
-        <translation type="unfinished">Коралловый 4</translation>
+        <translation>Коралловый 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>tomato1</source>
-        <translation type="unfinished">Томатный 1</translation>
+        <translation>Томатный 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>tomato2</source>
-        <translation type="unfinished">Томатный 2</translation>
+        <translation>Томатный 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>tomato3</source>
-        <translation type="unfinished">Томатный 3</translation>
+        <translation>Томатный 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>tomato4</source>
-        <translation type="unfinished">Томатный 4</translation>
+        <translation>Томатный 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>OrangeRed1</source>
-        <translation type="unfinished">Оранжево-красный 1</translation>
+        <translation>Оранжево-красный 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>OrangeRed2</source>
-        <translation type="unfinished">Оранжево-красный 2</translation>
+        <translation>Оранжево-красный 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>OrangeRed3</source>
-        <translation type="unfinished">Оранжево-красный 3</translation>
+        <translation>Оранжево-красный 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>OrangeRed4</source>
-        <translation type="unfinished">Оранжево-красный 4</translation>
+        <translation>Оранжево-красный 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>red1</source>
-        <translation type="unfinished">Красный 1</translation>
+        <translation>Красный 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>red2</source>
-        <translation type="unfinished">Красный 2</translation>
+        <translation>Красный 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>red3</source>
-        <translation type="unfinished">Красный 3</translation>
+        <translation>Красный 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>red4</source>
-        <translation type="unfinished">Красный 4</translation>
+        <translation>Красный 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DeepPink1</source>
-        <translation type="unfinished">Тёмно-розовый 1</translation>
+        <translation>Тёмно-розовый 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DeepPink2</source>
-        <translation type="unfinished">Тёмно-розовый 2</translation>
+        <translation>Тёмно-розовый 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DeepPink3</source>
-        <translation type="unfinished">Тёмно-розовый 3</translation>
+        <translation>Тёмно-розовый 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DeepPink4</source>
-        <translation type="unfinished">Тёмно-розовый 4</translation>
+        <translation>Тёмно-розовый 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>HotPink1</source>
-        <translation type="unfinished">Ярко-розовый 1</translation>
+        <translation>Ярко-розовый 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>HotPink2</source>
-        <translation type="unfinished">Ярко-розовый 2</translation>
+        <translation>Ярко-розовый 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>HotPink3</source>
-        <translation type="unfinished">Ярко-розовый 3</translation>
+        <translation>Ярко-розовый 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>HotPink4</source>
-        <translation type="unfinished">Ярко-розовый 4</translation>
+        <translation>Ярко-розовый 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>pink1</source>
-        <translation type="unfinished">Розовый 1</translation>
+        <translation>Розовый 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>pink2</source>
-        <translation type="unfinished">Розовый 2</translation>
+        <translation>Розовый 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>pink3</source>
-        <translation type="unfinished">Розовый 3</translation>
+        <translation>Розовый 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>pink4</source>
-        <translation type="unfinished">Розовый 4</translation>
+        <translation>Розовый 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LightPink1</source>
-        <translation type="unfinished">Светло-розовый 1</translation>
+        <translation>Светло-розовый 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LightPink2</source>
-        <translation type="unfinished">Светло-розовый 2</translation>
+        <translation>Светло-розовый 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LightPink3</source>
-        <translation type="unfinished">Светло-розовый 3</translation>
+        <translation>Светло-розовый 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LightPink4</source>
-        <translation type="unfinished">Светло-розовый 4</translation>
+        <translation>Светло-розовый 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>PaleVioletRed1</source>
-        <translation type="unfinished">Бледный красно-фиолетовый 1</translation>
+        <translation>Бледный красно-фиолетовый 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>PaleVioletRed2</source>
-        <translation type="unfinished">Бледный красно-фиолетовый 2</translation>
+        <translation>Бледный красно-фиолетовый 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>PaleVioletRed3</source>
-        <translation type="unfinished">Бледный красно-фиолетовый 3</translation>
+        <translation>Бледный красно-фиолетовый 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>PaleVioletRed4</source>
-        <translation type="unfinished">Бледный красно-фиолетовый 4</translation>
+        <translation>Бледный красно-фиолетовый 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>maroon1</source>
-        <translation type="unfinished">Тёмно-бордовый 1</translation>
+        <translation>Тёмно-бордовый 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>maroon2</source>
-        <translation type="unfinished">Тёмно-бордовый 2</translation>
+        <translation>Тёмно-бордовый 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>maroon3</source>
-        <translation type="unfinished">Тёмно-бордовый 3</translation>
+        <translation>Тёмно-бордовый 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>maroon4</source>
-        <translation type="unfinished">Тёмно-бордовый 4</translation>
+        <translation>Тёмно-бордовый 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>VioletRed1</source>
-        <translation type="unfinished">Красно-фиолетовый 1</translation>
+        <translation>Красно-фиолетовый 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>VioletRed2</source>
-        <translation type="unfinished">Красно-фиолетовый 2</translation>
+        <translation>Красно-фиолетовый 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>VioletRed3</source>
-        <translation type="unfinished">Красно-фиолетовый 3</translation>
+        <translation>Красно-фиолетовый 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>VioletRed4</source>
-        <translation type="unfinished">Красно-фиолетовый 4</translation>
+        <translation>Красно-фиолетовый 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>magenta1</source>
-        <translation type="unfinished">Фуксин 1</translation>
+        <translation>Фуксин 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>magenta2</source>
-        <translation type="unfinished">Фуксин 2</translation>
+        <translation>Фуксин 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>magenta3</source>
-        <translation type="unfinished">Фуксин 3</translation>
+        <translation>Фуксин 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>magenta4</source>
-        <translation type="unfinished">Фуксин 4</translation>
+        <translation>Фуксин 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>orchid1</source>
-        <translation type="unfinished">Орсель 1</translation>
+        <translation>Орсель 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>orchid2</source>
-        <translation type="unfinished">Орсель 2</translation>
+        <translation>Орсель 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>orchid3</source>
-        <translation type="unfinished">Орсель 3</translation>
+        <translation>Орсель 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>orchid4</source>
-        <translation type="unfinished">Орсель 4</translation>
+        <translation>Орсель 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>plum1</source>
-        <translation type="unfinished">Сливовый 1</translation>
+        <translation>Сливовый 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>plum2</source>
-        <translation type="unfinished">Сливовый 2</translation>
+        <translation>Сливовый 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>plum3</source>
-        <translation type="unfinished">Сливовый 3</translation>
+        <translation>Сливовый 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>plum4</source>
-        <translation type="unfinished">Сливовый 4</translation>
+        <translation>Сливовый 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>MediumOrchid1</source>
-        <translation type="unfinished">Умеренный орсель 1</translation>
+        <translation>Умеренный орсель 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>MediumOrchid2</source>
-        <translation type="unfinished">Умеренный орсель 2</translation>
+        <translation>Умеренный орсель 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>MediumOrchid3</source>
-        <translation type="unfinished">Умеренный орсель 3</translation>
+        <translation>Умеренный орсель 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>MediumOrchid4</source>
-        <translation type="unfinished">Умеренный орсель 4</translation>
+        <translation>Умеренный орсель 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DarkOrchid1</source>
-        <translation type="unfinished">Тёмный орсель 1</translation>
+        <translation>Тёмный орсель 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DarkOrchid2</source>
-        <translation type="unfinished">Тёмный орсель 2</translation>
+        <translation>Тёмный орсель 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DarkOrchid3</source>
-        <translation type="unfinished">Тёмный орсель 3</translation>
+        <translation>Тёмный орсель 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DarkOrchid4</source>
-        <translation type="unfinished">Тёмный орсель 4</translation>
+        <translation>Тёмный орсель 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>purple1</source>
-        <translation type="unfinished">Пурпурный 1</translation>
+        <translation>Пурпурный 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>purple2</source>
-        <translation type="unfinished">Пурпурный 2</translation>
+        <translation>Пурпурный 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>purple3</source>
-        <translation type="unfinished">Пурпурный 3</translation>
+        <translation>Пурпурный 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>purple4</source>
-        <translation type="unfinished">Пурпурный 4</translation>
+        <translation>Пурпурный 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>MediumPurple1</source>
-        <translation type="unfinished">Умеренный пурпурный 1</translation>
+        <translation>Умеренный пурпурный 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>MediumPurple2</source>
-        <translation type="unfinished">Умеренный пурпурный 2</translation>
+        <translation>Умеренный пурпурный 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>MediumPurple3</source>
-        <translation type="unfinished">Умеренный пурпурный 3</translation>
+        <translation>Умеренный пурпурный 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>MediumPurple4</source>
-        <translation type="unfinished">Умеренный пурпурный 4</translation>
+        <translation>Умеренный пурпурный 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>thistle1</source>
-        <translation type="unfinished">Чертополоха 1</translation>
+        <translation>Чертополоха 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>thistle2</source>
-        <translation type="unfinished">Чертополоха 2</translation>
+        <translation>Чертополоха 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>thistle3</source>
-        <translation type="unfinished">Чертополоха 3</translation>
+        <translation>Чертополоха 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>thistle4</source>
-        <translation type="unfinished">Чертополоха 4</translation>
+        <translation>Чертополоха 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>black</source>
-        <translation type="unfinished">Чёрный</translation>
+        <translation>Чёрный</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DarkSlateGray</source>
-        <translation type="unfinished">Тёмный грифельно-серый</translation>
+        <translation>Тёмный грифельно-серый</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DimGray</source>
-        <translation type="unfinished">Тускло-серый</translation>
+        <translation>Тускло-серый</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>SlateGray</source>
-        <translation type="unfinished">Синевато-серый</translation>
+        <translation>Синевато-серый</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LightSlateGray</source>
-        <translation type="unfinished">Грифельно-серый</translation>
+        <translation>Грифельно-серый</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>grey</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LightGray</source>
-        <translation type="unfinished">Светло-серый</translation>
+        <translation>Светло-серый</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>white</source>
-        <translation type="unfinished">Белый</translation>
+        <translation>Белый</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -10192,17 +10192,17 @@ If you want to paste anyway, consider using one of the other paste types from th
         <location line="+7"/>
         <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="+457"/>
         <source>%1</source>
-        <translation type="unfinished">%1</translation>
+        <translation>%1</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/DialogSuppressor.cpp" line="+76"/>
         <source>Do not show this warning again</source>
-        <translation type="unfinished">Больше не показывать это предупреждение</translation>
+        <translation>Больше не показывать это предупреждение</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ActionFileParser.cpp" line="+9"/>
         <source>%1 (%2)</source>
-        <translation type="unfinished">%1 (%2)</translation>
+        <translation>%1 (%2)</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+451"/>
@@ -10210,7 +10210,7 @@ If you want to paste anyway, consider using one of the other paste types from th
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+765"/>
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+1597"/>
         <source>%1 Controller %2 %3</source>
-        <translation type="unfinished">Контроллер %1 — %2 %3</translation>
+        <translation>Контроллер %1 — %2 %3</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/main.cpp" line="+319"/>
@@ -10242,83 +10242,83 @@ If you want to paste anyway, consider using one of the other paste types from th
         <location filename="../InstrumentStrings.cpp" line="-17"/>
         <source>C</source>
         <comment>note name</comment>
-        <translation type="unfinished">C</translation>
+        <translation>C</translation>
     </message>
     <message>
         <location line="+0"/>
         <location filename="../InstrumentStrings.cpp" line="+1"/>
         <source>C#</source>
         <comment>note name</comment>
-        <translation type="unfinished">C#</translation>
+        <translation>C#</translation>
     </message>
     <message>
         <location line="+1"/>
         <location filename="../InstrumentStrings.cpp" line="+2"/>
         <source>D</source>
         <comment>note name</comment>
-        <translation type="unfinished">D</translation>
+        <translation>D</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>D#</source>
         <comment>note name</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <location filename="../InstrumentStrings.cpp" line="+2"/>
         <source>E</source>
         <comment>note name</comment>
-        <translation type="unfinished">E</translation>
+        <translation>E</translation>
     </message>
     <message>
         <location line="+0"/>
         <location filename="../InstrumentStrings.cpp" line="+3"/>
         <source>F</source>
         <comment>note name</comment>
-        <translation type="unfinished">F</translation>
+        <translation>F</translation>
     </message>
     <message>
         <location line="+1"/>
         <location filename="../InstrumentStrings.cpp" line="+1"/>
         <source>F#</source>
         <comment>note name</comment>
-        <translation type="unfinished">F#</translation>
+        <translation>F#</translation>
     </message>
     <message>
         <location line="+0"/>
         <location filename="../InstrumentStrings.cpp" line="+1"/>
         <source>G</source>
         <comment>note name</comment>
-        <translation type="unfinished">G</translation>
+        <translation>G</translation>
     </message>
     <message>
         <location line="+1"/>
         <location filename="../InstrumentStrings.cpp" line="+1"/>
         <source>G#</source>
         <comment>note name</comment>
-        <translation type="unfinished">G#</translation>
+        <translation>G#</translation>
     </message>
     <message>
         <location line="+0"/>
         <location filename="../InstrumentStrings.cpp" line="+3"/>
         <source>A</source>
         <comment>note name</comment>
-        <translation type="unfinished">A</translation>
+        <translation>A</translation>
     </message>
     <message>
         <location line="+1"/>
         <location filename="../InstrumentStrings.cpp" line="-1"/>
         <source>A#</source>
         <comment>note name</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+0"/>
         <location filename="../InstrumentStrings.cpp" line="+3"/>
         <source>B</source>
         <comment>note name</comment>
-        <translation type="unfinished">B</translation>
+        <translation>B</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="+511"/>
@@ -10437,27 +10437,27 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="+64"/>
         <source>Bar %1:</source>
-        <translation type="unfinished"></translation>
+        <translation>Такт %1:</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Bars %1 to %2:</source>
-        <translation type="unfinished"></translation>
+        <translation>Такты с %1 по %2:</translation>
     </message>
     <message>
         <location line="+54"/>
         <source>%1 %2</source>
-        <translation type="unfinished">%1 %2</translation>
+        <translation>%1 %2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>minor</source>
-        <translation type="unfinished"></translation>
+        <translation>минор</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>major</source>
-        <translation type="unfinished"></translation>
+        <translation>мажор</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="+297"/>
@@ -10838,7 +10838,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../../src/commands/segment/AddTriggerSegmentCommand.cpp" line="+34"/>
         <source>Add Triggered Segment</source>
-        <translation type="unfinished">Добавить переключаемый сегмент</translation>
+        <translation>Добавить переключаемый сегмент</translation>
     </message>
 </context>
 <context>
@@ -10846,87 +10846,87 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.h" line="+54"/>
         <source>Audio</source>
-        <translation type="unfinished">Звук</translation>
+        <translation>Звук</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Audio Settings</source>
-        <translation type="unfinished">Параметры звука</translation>
+        <translation>Параметры звука</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="+88"/>
         <source>Audio preview scale</source>
-        <translation type="unfinished">Масштаб просмотра волновой формы</translation>
+        <translation>Масштаб просмотра волновой формы</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Linear - easier to see loud peaks</source>
-        <translation type="unfinished">Линейный — проще видеть пики громкости</translation>
+        <translation>Линейный — проще видеть пики громкости</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Meter scaling - easier to see quiet activity</source>
-        <translation type="unfinished">По индикатору — проще видеть тихие пассажи</translation>
+        <translation>По индикатору — проще видеть тихие пассажи</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>Record audio files as</source>
-        <translation type="unfinished">Записывать звуковые файлы как</translation>
+        <translation>Записывать звуковые файлы как</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>16-bit PCM WAV format (smaller files)</source>
-        <translation type="unfinished">16-bit PCM WAV (меньше размер)</translation>
+        <translation>16-bit PCM WAV (меньше размер)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>32-bit float WAV format (higher quality)</source>
-        <translation type="unfinished">32-bit float WAV (лучше качество)</translation>
+        <translation>32-bit float WAV (лучше качество)</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>External audio editor</source>
-        <translation type="unfinished">Внешний редактор звука</translation>
+        <translation>Внешний звуковой редактор</translation>
     </message>
     <message>
         <location line="+21"/>
         <source>Choose...</source>
-        <translation type="unfinished">Выберите...</translation>
+        <translation>Выберите...</translation>
     </message>
     <message>
         <location line="+8"/>
         <source>Create JACK outputs</source>
-        <translation type="unfinished">Создать выходы для JACK</translation>
+        <translation>Создать выходы JACK</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>for individual audio instruments</source>
-        <translation type="unfinished">Для отдельных аудиоинструментов</translation>
+        <translation>Для отдельных аудиоинструментов</translation>
     </message>
     <message>
         <location line="+8"/>
         <source>for submasters</source>
-        <translation type="unfinished">Для субмиксов</translation>
+        <translation>Для субмиксов</translation>
     </message>
     <message>
         <location line="+13"/>
         <source>General</source>
-        <translation type="unfinished">Общее</translation>
+        <translation>Общее</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>External audio editor path</source>
-        <translation type="unfinished">Путь к внешнему редактору звука</translation>
+        <translation>Путь к внешнему звуковому редактору</translation>
     </message>
     <message>
         <location line="+34"/>
         <source>External audio editor &quot;%1&quot; not found or not executable</source>
-        <translation type="unfinished">Внешний звуковой редактор &quot;%1&quot; не найден или не является исполняемым файлом</translation>
+        <translation>Внешний звуковой редактор &quot;%1&quot; не найден или не является исполняемым файлом</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
 </context>
 <context>
@@ -10949,22 +10949,22 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location line="+17"/>
         <source>Set the audio pan position in the stereo field</source>
-        <translation type="unfinished">Установить панорамирование для звуковых файлов в стерео</translation>
+        <translation>Установить панорамирование для звуковых файлов в стерео</translation>
     </message>
     <message>
         <location line="-87"/>
         <source>Click to load an audio plugin</source>
-        <translation type="unfinished"></translation>
+        <translation>Щёлкните для загрузки звукового эффекта</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Click to load a synth plugin for playing MIDI</source>
-        <translation type="unfinished"></translation>
+        <translation>Щёлкните для загрузки виртуального инструмента</translation>
     </message>
     <message>
         <location line="+77"/>
         <source>Open the synth plugin&apos;s native editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Открыть собственный редактор инструмента</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -11662,7 +11662,7 @@ Please select the ones you wish to delete permanently from the hard disk.
         <location line="+2"/>
         <location line="+23"/>
         <source>Master</source>
-        <translation type="unfinished">Общий</translation>
+        <translation>Микс</translation>
     </message>
     <message>
         <location line="-21"/>
@@ -12194,57 +12194,57 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location line="-46"/>
         <source>Lower clef</source>
-        <translation type="unfinished">Расположить ключ ниже</translation>
+        <translation>Расположить ключ ниже</translation>
     </message>
     <message>
         <location line="-12"/>
         <source>Up an Octave</source>
-        <translation type="unfinished">Октавой выше</translation>
+        <translation>Октавой выше</translation>
     </message>
     <message>
         <location line="+42"/>
         <source>Down an Octave</source>
-        <translation type="unfinished">Октавой ниже</translation>
+        <translation>Октавой ниже</translation>
     </message>
     <message>
         <location line="-11"/>
         <source>Higher clef</source>
-        <translation type="unfinished">Расположить ключ выше</translation>
+        <translation>Расположить ключ выше</translation>
     </message>
     <message>
         <location line="+33"/>
         <source>Maintain current pitches</source>
-        <translation type="unfinished">Сохранить существующие высоты тонов</translation>
+        <translation>Сохранить существующие высоты тонов</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Transpose into appropriate octave</source>
-        <translation type="unfinished">Транспонировать в соответствующую октаву</translation>
+        <translation>Транспонировать в соответствующую октаву</translation>
     </message>
     <message>
         <location line="+156"/>
         <source>%1 down an octave</source>
-        <translation type="unfinished">%1 октавой ниже</translation>
+        <translation>%1 октавой ниже</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>%1 down two octaves</source>
-        <translation type="unfinished">%1 двумя октавами ниже</translation>
+        <translation>%1 двумя октавами ниже</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>%1 up an octave</source>
-        <translation type="unfinished">%1 октавой выше</translation>
+        <translation>%1 октавой выше</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>%1 up two octaves</source>
-        <translation type="unfinished">%1 двумя октавами выше</translation>
+        <translation>%1 двумя октавами выше</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>Treble</source>
-        <translation type="unfinished">Высокие</translation>
+        <translation>Высокие</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -12254,7 +12254,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location line="+2"/>
         <source>Soprano</source>
-        <translation type="unfinished">Сопрановый</translation>
+        <translation>Сопрановый</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -12297,7 +12297,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/commands/notation/ClefInsertionCommand.cpp" line="+75"/>
         <source>Add Cle&amp;f Change...</source>
-        <translation type="unfinished">Добавить смену &amp;ключа...</translation>
+        <translation>Добавить смену &amp;ключа...</translation>
     </message>
 </context>
 <context>
@@ -12305,7 +12305,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/commands/edit/CollapseNotesCommand.h" line="+45"/>
         <source>Collapse &amp;Equal-Pitch Notes</source>
-        <translation type="unfinished">Объединить ноты с &amp;одинаковой высотой тона</translation>
+        <translation>Объединить ноты с &amp;одинаковой высотой тона</translation>
     </message>
 </context>
 <context>
@@ -12313,7 +12313,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/commands/notation/CollapseRestsCommand.h" line="+50"/>
         <source>&amp;Collapse Rests</source>
-        <translation type="unfinished">&amp;Объединить паузы</translation>
+        <translation>&amp;Объединить паузы</translation>
     </message>
 </context>
 <context>
@@ -12321,42 +12321,42 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/gui/configuration/ColourConfigurationPage.h" line="+52"/>
         <source>Color</source>
-        <translation type="unfinished">Цвет</translation>
+        <translation>Цвет</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Color Settings</source>
-        <translation type="unfinished">Параметры цветов</translation>
+        <translation>Параметры цветов</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/ColourConfigurationPage.cpp" line="+67"/>
         <source>Add New Color</source>
-        <translation type="unfinished">Добавить новый цвет</translation>
+        <translation>Добавить новый цвет</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Delete Color</source>
-        <translation type="unfinished">Удалить цвет</translation>
+        <translation>Удалить цвет</translation>
     </message>
     <message>
         <location line="+19"/>
         <source>Color Map</source>
-        <translation type="unfinished">Карта цветов</translation>
+        <translation>Карта цветов</translation>
     </message>
     <message>
         <location line="+35"/>
         <source>New Color Name</source>
-        <translation type="unfinished">Имя нового цвета</translation>
+        <translation>Имя нового цвета</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Enter new name</source>
-        <translation type="unfinished">Введите новое имя</translation>
+        <translation>Введите новое имя</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>New</source>
-        <translation type="unfinished">Новый</translation>
+        <translation>Новый</translation>
     </message>
 </context>
 <context>
@@ -12364,27 +12364,27 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/gui/widgets/ColourTable.cpp" line="+58"/>
         <source>Name</source>
-        <translation type="unfinished">Имя</translation>
+        <translation>Имя</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>Color</source>
-        <translation type="unfinished">Цвет</translation>
+        <translation>Цвет</translation>
     </message>
     <message>
         <location line="+18"/>
         <source>Modify Color Name</source>
-        <translation type="unfinished">Изменить имя цвета</translation>
+        <translation>Изменить имя цвета</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Enter new name</source>
-        <translation type="unfinished">Введите новое имя</translation>
+        <translation>Введите новое имя</translation>
     </message>
     <message>
         <location line="+40"/>
         <source>Default Color</source>
-        <translation type="unfinished">Цвет по умолчанию</translation>
+        <translation>Цвет по умолчанию</translation>
     </message>
 </context>
 <context>
@@ -12502,7 +12502,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/gui/rulers/ControlChangeCommand.cpp" line="+27"/>
         <source>Control Change</source>
-        <translation type="unfinished">Смена контроллера</translation>
+        <translation>Смена контроллера</translation>
     </message>
 </context>
 <context>
@@ -12525,7 +12525,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location line="+10"/>
         <source>  Controllers for %1 (device %2)</source>
-        <translation type="unfinished"> </translation>
+        <translation>  Контроллеры для %1 (устройство %2)</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -12555,7 +12555,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location line="+1"/>
         <source>Default value  </source>
-        <translation type="unfinished"></translation>
+        <translation>Значение по умолчанию  </translation>
     </message>
     <message>
         <location line="+1"/>
@@ -12586,17 +12586,17 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location line="-255"/>
         <source>Add a Control Parameter to the Studio</source>
-        <translation type="unfinished">Добавить параметр контроллера в Студию</translation>
+        <translation>Добавить параметр контроллера в Студию</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Delete a Control Parameter from the Studio</source>
-        <translation type="unfinished">Удалить параметр контроллера из Студии</translation>
+        <translation>Удалить параметр контроллера из Студии</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Close the Control Parameter editor</source>
-        <translation type="unfinished">Закрыть редактор параметров контроллера</translation>
+        <translation>Закрыть редактор параметров контроллера</translation>
     </message>
     <message>
         <location line="+96"/>
@@ -12616,7 +12616,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location line="+185"/>
         <source>http://rosegardenmusic.com/wiki/doc:controlEditorDialog-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:controlEditorDialog-en</translation>
     </message>
 </context>
 <context>
@@ -12624,62 +12624,62 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="+76"/>
         <source>Name:</source>
-        <translation type="unfinished">Имя:</translation>
+        <translation>Имя:</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Type:</source>
-        <translation type="unfinished">Тип:</translation>
+        <translation>Тип:</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>Description:</source>
-        <translation type="unfinished">Описание:</translation>
+        <translation>Описание:</translation>
     </message>
     <message>
         <location line="-30"/>
         <source>Edit Controller</source>
-        <translation type="unfinished"></translation>
+        <translation>Изменить контроллер</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>Controller Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Свойства контроллера</translation>
     </message>
     <message>
         <location line="+29"/>
         <source>Controller number:</source>
-        <translation type="unfinished">Номер контроллера:</translation>
+        <translation>Номер контроллера:</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Minimum value:</source>
-        <translation type="unfinished">Миним. значение:</translation>
+        <translation>Мин. значение:</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Maximum value:</source>
-        <translation type="unfinished">Максим. значение:</translation>
+        <translation>Макс. значение:</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Default value:</source>
-        <translation type="unfinished">Стандартное значение:</translation>
+        <translation>По умолчанию:</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Color:</source>
-        <translation type="unfinished">Цвет:</translation>
+        <translation>Цвет:</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Instrument Parameter Box position:</source>
-        <translation type="unfinished">Положение панели параметров инструмента:</translation>
+        <translation>Положение панели параметров инструмента:</translation>
     </message>
     <message>
         <location line="+72"/>
         <source>&lt;not showing&gt;</source>
-        <translation type="unfinished">&lt;не отображается&gt;</translation>
+        <translation>&lt;не показывается&gt;</translation>
     </message>
 </context>
 <context>
@@ -12687,7 +12687,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/gui/rulers/ControlRulerEventEraseCommand.cpp" line="+29"/>
         <source>Erase Controller Event(s)</source>
-        <translation type="unfinished">Удалить событие(я) контроллера</translation>
+        <translation>Удалить событие(я) контроллера</translation>
     </message>
 </context>
 <context>
@@ -12695,7 +12695,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/gui/rulers/ControlRulerEventInsertCommand.cpp" line="+28"/>
         <source>Insert Controller Event</source>
-        <translation type="unfinished">Вставить событие контроллера</translation>
+        <translation>Вставить событие контроллера</translation>
     </message>
 </context>
 <context>
@@ -12703,7 +12703,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/gui/rulers/ControlRulerWidget.cpp" line="+307"/>
         <source>Velocity</source>
-        <translation type="unfinished"></translation>
+        <translation>Сила нажатия</translation>
     </message>
 </context>
 <context>
@@ -12729,7 +12729,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location line="+5"/>
         <source>Controller Events</source>
-        <translation type="unfinished">События контроллера</translation>
+        <translation>События контроллера</translation>
     </message>
     <message>
         <location line="+142"/>
@@ -12888,7 +12888,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="-385"/>
         <source>[ No port ]</source>
-        <translation type="unfinished">[ Нет порта ]</translation>
+        <translation>[ Нет порта ]</translation>
     </message>
     <message>
         <location line="+729"/>
@@ -13395,12 +13395,12 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="+75"/>
         <source>Advanced Event Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Расширенный редактор событий</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>Advanced Event Viewer</source>
-        <translation type="unfinished"></translation>
+        <translation>Расширенный просмотрщик событий</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -15214,7 +15214,7 @@ Example text from file:</source>
     <message>
         <location line="+3"/>
         <source>%1</source>
-        <translation type="unfinished">%1</translation>
+        <translation>%1</translation>
     </message>
     <message numerus="yes">
         <location line="+8"/>
@@ -15875,7 +15875,7 @@ Would you like to use
     <message>
         <location line="+0"/>
         <source>PDF viewer</source>
-        <translation type="unfinished">Просмотрщик PDF</translation>
+        <translation>Просмотрщик PDF</translation>
     </message>
 </context>
 <context>
@@ -18751,7 +18751,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/notation/NoteInsertionCommand.cpp" line="+50"/>
         <source>Insert Note</source>
-        <translation type="unfinished">Вставить ноту</translation>
+        <translation>Вставить ноту</translation>
     </message>
 </context>
 <context>
@@ -18759,7 +18759,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/editors/notation/NotePixmapFactory.cpp" line="+185"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
 </context>
 <context>
@@ -18795,7 +18795,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/segment/OpenOrCloseRangeCommand.cpp" line="+35"/>
         <source>Open or Close Range</source>
-        <translation type="unfinished">Открыть или закрыть диапазон</translation>
+        <translation>Открыть или закрыть диапазон</translation>
     </message>
 </context>
 <context>
@@ -18803,7 +18803,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/segment/PasteConductorDataCommand.cpp" line="+34"/>
         <source>Paste Tempos and Time Signatures</source>
-        <translation type="unfinished">Вставить темпы и тактовые размеры</translation>
+        <translation>Вставить темпы и тактовые размеры</translation>
     </message>
 </context>
 <context>
@@ -18811,32 +18811,32 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/edit/PasteEventsCommand.h" line="+85"/>
         <source>&amp;Paste</source>
-        <translation type="unfinished">Вст&amp;авить</translation>
+        <translation>Вст&amp;авить</translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/PasteEventsCommand.cpp" line="+91"/>
         <source>Paste into an existing gap [&quot;restricted&quot;]</source>
-        <translation type="unfinished">Вставить в существующий интервал [«ограничено»]</translation>
+        <translation>Вставить в существующий интервал [«ограничено»]</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Erase existing events to make room [&quot;simple&quot;]</source>
-        <translation type="unfinished">Стереть существующие события для освобождения пространства [«просто»]</translation>
+        <translation>Стереть существующие события для освобождения пространства [«просто»]</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Move existing events out of the way [&quot;open-n-paste&quot;]</source>
-        <translation type="unfinished">Убрать с пути существующие события [«открыть-и-вставить»]</translation>
+        <translation>Убрать с пути существующие события [«открыть-и-вставить»]</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Overlay notes, tying against present notes [&quot;note-overlay&quot;]</source>
-        <translation type="unfinished">Перекрыть ноты, связывая против текущих [«перекрытие нот»]</translation>
+        <translation>Перекрыть ноты, связывая против текущих [«перекрытие нот»]</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Overlay notes, ignoring present notes [&quot;matrix-overlay&quot;]</source>
-        <translation type="unfinished">Перекрыть ноты, игнорируя текущие [«перекрытие матрицы»]</translation>
+        <translation>Перекрыть ноты, игнорируя текущие [«перекрытие матрицы»]</translation>
     </message>
 </context>
 <context>
@@ -19039,7 +19039,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location line="+1"/>
         <source>Play</source>
-        <translation>Воспр.</translation>
+        <translation>Играть</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -19675,7 +19675,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/studio/RemoveControlParameterCommand.h" line="+55"/>
         <source>&amp;Remove Control Parameter</source>
-        <translation type="unfinished">&amp;Удалить параметр контроллера</translation>
+        <translation>&amp;Удалить параметр контроллера</translation>
     </message>
 </context>
 <context>
@@ -19683,7 +19683,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/notation/RemoveFingeringMarksCommand.h" line="+45"/>
         <source>&amp;Remove Fingerings</source>
-        <translation type="unfinished">&amp;Удалить аппликатуру</translation>
+        <translation>&amp;Удалить аппликатуру</translation>
     </message>
 </context>
 <context>
@@ -19691,7 +19691,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/edit/RemoveMarkerCommand.h" line="+50"/>
         <source>&amp;Remove Marker</source>
-        <translation type="unfinished">&amp;Удалить маркер</translation>
+        <translation>&amp;Удалить пометку</translation>
     </message>
 </context>
 <context>
@@ -19699,7 +19699,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/notation/RemoveMarksCommand.h" line="+45"/>
         <source>&amp;Remove All Marks</source>
-        <translation type="unfinished">&amp;Удалить все пометки</translation>
+        <translation>&amp;Удалить все пометки</translation>
     </message>
 </context>
 <context>
@@ -19707,7 +19707,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/notation/RemoveNotationQuantizeCommand.h" line="+45"/>
         <source>Remo&amp;ve Notation Quantization</source>
-        <translation type="unfinished">&amp;Удалить квантование партитуры</translation>
+        <translation>&amp;Удалить квантование партитуры</translation>
     </message>
 </context>
 <context>
@@ -19715,7 +19715,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/segment/RemoveTempoChangeCommand.h" line="+53"/>
         <source>Remove &amp;Tempo Change...</source>
-        <translation type="unfinished">Удалить с&amp;мену темпа...</translation>
+        <translation>Удалить с&amp;мену темпа...</translation>
     </message>
 </context>
 <context>
@@ -19723,7 +19723,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/segment/RemoveTimeSignatureCommand.h" line="+53"/>
         <source>Remove &amp;Time Signature Change...</source>
-        <translation type="unfinished">Удалить смену размера...</translation>
+        <translation>Удалить &amp;смену размера...</translation>
     </message>
 </context>
 <context>
@@ -19731,7 +19731,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/studio/RenameDeviceCommand.h" line="+50"/>
         <source>Rename Device</source>
-        <translation type="unfinished">Переименовать устройство</translation>
+        <translation>Переименовать устройство</translation>
     </message>
 </context>
 <context>
@@ -19739,7 +19739,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/segment/RenameTrackCommand.h" line="+47"/>
         <source>Rename Track</source>
-        <translation type="unfinished">Переименовать дорожку</translation>
+        <translation>Переименовать дорожку</translation>
     </message>
 </context>
 <context>
@@ -19747,7 +19747,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/edit/RescaleCommand.h" line="+45"/>
         <source>Stretch or S&amp;quash...</source>
-        <translation type="unfinished">&amp;Растянуть или сжать...</translation>
+        <translation>&amp;Растянуть или сжать...</translation>
     </message>
 </context>
 <context>
@@ -19755,22 +19755,22 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/dialogs/RescaleDialog.cpp" line="+51"/>
         <source>Stretch or Squash</source>
-        <translation type="unfinished"></translation>
+        <translation>Растянуть или сжать</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Duration of selection</source>
-        <translation type="unfinished">Длительность выделения</translation>
+        <translation>Длительность выделения</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Options</source>
-        <translation type="unfinished">Параметры</translation>
+        <translation>Параметры</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Adjust times of following events accordingly</source>
-        <translation type="unfinished">Соотв. образом изменить времена следующих событий</translation>
+        <translation>Соотв. образом изменить времена следующих событий</translation>
     </message>
 </context>
 <context>
@@ -19778,7 +19778,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/notation/ResetDisplacementsCommand.h" line="+45"/>
         <source>&amp;Restore Positions</source>
-        <translation type="unfinished">&amp;Восстановить позиции</translation>
+        <translation>&amp;Восстановить позиции</translation>
     </message>
 </context>
 <context>
@@ -19786,32 +19786,32 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/notation/RespellCommand.cpp" line="+40"/>
         <source>Respell with %1</source>
-        <translation type="unfinished">Перечитать с %1</translation>
+        <translation>Перечитать с %1</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Do&amp;uble Sharp</source>
-        <translation type="unfinished">дв&amp;ойным диезом</translation>
+        <translation>дв&amp;ойным диезом</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&amp;Sharp</source>
-        <translation type="unfinished">&amp;диезом</translation>
+        <translation>&amp;диезом</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&amp;Flat</source>
-        <translation type="unfinished">&amp;бемолем</translation>
+        <translation>&amp;бемолем</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Dou&amp;ble Flat</source>
-        <translation type="unfinished">д&amp;войным бемолем</translation>
+        <translation>д&amp;войным бемолем</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&amp;Natural</source>
-        <translation type="unfinished">бе&amp;каром</translation>
+        <translation>бе&amp;каром</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -19821,22 +19821,22 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location line="+6"/>
         <source>Respell Accidentals &amp;Upward</source>
-        <translation type="unfinished">Перечитать случайные знаки альтерации в&amp;верх</translation>
+        <translation>Перечитать случайные знаки альтерации в&amp;верх</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Respell Accidentals &amp;Downward</source>
-        <translation type="unfinished">Перечитать случайные знаки альтерации в&amp;низ</translation>
+        <translation>Перечитать случайные знаки альтерации в&amp;низ</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>&amp;Restore Accidentals</source>
-        <translation type="unfinished">В&amp;осстановить знаки альтерации</translation>
+        <translation>В&amp;осстановить знаки альтерации</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Respell Accidentals</source>
-        <translation type="unfinished">Перечитать случайные знаки альтерации</translation>
+        <translation>Перечитать знаки альтерации</translation>
     </message>
 </context>
 <context>
@@ -21520,7 +21520,7 @@ Error was : %2</source>
     <message>
         <location filename="../../src/commands/segment/SegmentRecordCommand.cpp" line="+30"/>
         <source>Record</source>
-        <translation type="unfinished">Записать</translation>
+        <translation>Записать</translation>
     </message>
 </context>
 <context>
@@ -21528,7 +21528,7 @@ Error was : %2</source>
     <message>
         <location filename="../../src/commands/segment/SegmentRepeatToCopyCommand.cpp" line="+32"/>
         <source>Turn Repeats into Copies</source>
-        <translation type="unfinished">Превратить повторы в копии</translation>
+        <translation>Превратить повторы в копии</translation>
     </message>
 </context>
 <context>
@@ -21536,12 +21536,12 @@ Error was : %2</source>
     <message>
         <location filename="../../src/commands/segment/SegmentRescaleCommand.h" line="+53"/>
         <source>Stretch or S&amp;quash...</source>
-        <translation type="unfinished">&amp;Растянуть или сжать...</translation>
+        <translation>&amp;Растянуть или сжать...</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/SegmentRescaleCommand.cpp" line="+97"/>
         <source>(rescaled)</source>
-        <translation type="unfinished">(перемасштабировано)</translation>
+        <translation>(размер изменён)</translation>
     </message>
 </context>
 <context>
@@ -21549,7 +21549,7 @@ Error was : %2</source>
     <message>
         <location filename="../../src/commands/segment/SegmentResizeFromStartCommand.cpp" line="+31"/>
         <source>Resize Segment</source>
-        <translation type="unfinished">Изменить размер сегмента</translation>
+        <translation>Изменить размер сегмента</translation>
     </message>
 </context>
 <context>
@@ -21557,31 +21557,31 @@ Error was : %2</source>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="+149"/>
         <source>Warning</source>
-        <translation type="unfinished">Предупреждение</translation>
+        <translation>Предупреждение</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>The audio file path does not exist or is not writable.
 You must set the audio file path to a valid directory in Document Properties before rescaling an audio file.
 Would you like to set it now?</source>
-        <translation type="unfinished">Каталог со звуковыми файлами не существует или закрыт для записи.
+        <translation>Каталог со звуковыми файлами не существует или закрыт для записи.
  Укажите правильный каталог в свойствах документа перед началом записи.
 Хотите сделать это прямо сейчас?</translation>
     </message>
     <message>
         <location line="+16"/>
         <source>Rescaling audio file...</source>
-        <translation type="unfinished">Экспортируется звуковой файл...</translation>
+        <translation>Меняется размер звукового файла...</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>Generating audio preview...</source>
-        <translation type="unfinished">Создаётся просмотр волновой формы...</translation>
+        <translation>Создаётся просмотр волновой формы...</translation>
     </message>
     <message>
         <location line="+78"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
-        <translation type="unfinished">Нажмите Shift, чтобы отключить прилипание к тактовой сетке</translation>
+        <translation>Нажмите Shift, чтобы отключить прилипание к тактовой сетке</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -21596,7 +21596,7 @@ Would you like to set it now?</source>
     <message>
         <location line="+2"/>
         <source>Click and drag to rescale segment</source>
-        <translation type="unfinished">Измените размер сегмента щелчком и перетаскиванием</translation>
+        <translation>Измените размер сегмента щелчком и перетаскиванием</translation>
     </message>
 </context>
 <context>
