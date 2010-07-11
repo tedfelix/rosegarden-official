@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0">
+<TS version="2.0" language="fr_FR">
 <context>
     <name>:</name>
     <message>
@@ -10860,7 +10860,7 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
     <message numerus="yes">
         <location line="+10"/>
         <source>&lt;qt&gt;About to delete %n audio file(s) permanently from the hard disk.&lt;br&gt;This action cannot be undone, and there will be no way to recover the files.&lt;br&gt;Are you sure?&lt;/qt&gt;</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>&lt;qt&gt;%n fichiers audio vont être effacés sur le disque dur.&lt;br&gt;Cette action ne pourra pas être annulée et il n&apos;existera aucun moyen de récupérer ces fichiers.&lt;br&gt;Etes vous sûr de vouloir continuer?&lt;/qt&gt;
         </numerusform>
         </translation>
@@ -11774,7 +11774,7 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
     <message>
         <location filename="../../src/gui/rulers/ChordNameRuler.cpp" line="+90"/>
         <source>&lt;qt&gt;&lt;p&gt;Chord name ruler.  This ruler analyzes your harmonies and attempts to guess what chords your composition contains.  These chords cannot be printed or manipulated, and this is only a reference for your information.&lt;/p&gt;&lt;p&gt;Turn it on and off with the &lt;b&gt;View -&gt; Rulers&lt;/b&gt; menu.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Réglette des noms d&apos;accords.  Cette réglette analyse l&apos;harmonie et tente de déterminer les accords contenus par la commosition.  Ces accords ne peuvent être ni imprimés ni manipulés et ne sont donnés qu&apos;à titre d&apos;information.&lt;/p&gt;&lt;p&gt;Le menu  &lt;b&gt;Visualiser -&gt; Réglettes&lt;/b&gt; contrôle la visibilité de cette réglette.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Réglette des noms d&apos;accords.  Cette réglette analyse l&apos;harmonie et tente de déterminer les accords contenus par la composition.  Ces accords ne peuvent être ni imprimés ni manipulés et ne sont donnés qu&apos;à titre d&apos;information.&lt;/p&gt;&lt;p&gt;Le menu  &lt;b&gt;Visualiser -&gt; Réglettes&lt;/b&gt; contrôle la visibilité de cette réglette.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -12492,7 +12492,7 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="-385"/>
         <source>[ No port ]</source>
-        <translation type="unfinished">[ Pas de port ]</translation>
+        <translation>[ Pas de port ]</translation>
     </message>
     <message>
         <location line="+729"/>
@@ -13575,7 +13575,7 @@ Voulez-vous essayer de localiser ce fichier?</translation>
     <message>
         <location filename="../../src/gui/editors/guitar/Fingering.cpp" line="+110"/>
         <source>couldn&apos;t parse fingering &apos;%1&apos; in &apos;%2&apos;</source>
-        <translation type="unfinished">Échec de l&apos;analyse du doigté &apos;%1&apos; dans &apos;%2&apos;</translation>
+        <translation>Échec de l&apos;analyse du doigté &apos;%1&apos; dans &apos;%2&apos;</translation>
     </message>
 </context>
 <context>
@@ -13604,7 +13604,7 @@ Voulez-vous essayer de localiser ce fichier?</translation>
     <message>
         <location filename="../../src/gui/editors/notation/FontViewFrame.cpp" line="+99"/>
         <source>Error: Unable to match font name %1</source>
-        <translation type="unfinished">Erreur: Nom introuvable %1</translation>
+        <translation>Erreur: Police %1 introuvable</translation>
     </message>
     <message>
         <location line="+0"/>
@@ -14635,17 +14635,17 @@ Texte d&apos;exemple depuis le fichier:</translation>
     <message numerus="yes">
         <location line="+8"/>
         <source>up %n octave(s) and %1</source>
-        <translation type="unfinished">
-            <numerusform>%n octaves et %1 vers le haut
-        </numerusform>
+        <translation>
+            <numerusform>%n octave(s) et %1 vers le haut</numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location line="+3"/>
         <source>up %n octave(s)</source>
-        <translation type="unfinished">
-            <numerusform>%n octaves vers le haut
-        </numerusform>
+        <translation>
+            <numerusform>%n octave(s) vers le haut</numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -14656,17 +14656,17 @@ Texte d&apos;exemple depuis le fichier:</translation>
     <message numerus="yes">
         <location line="+5"/>
         <source>down %n octave(s) and %1</source>
-        <translation type="unfinished">
-            <numerusform>%n octaves et %1 vers le bas
-        </numerusform>
+        <translation>
+            <numerusform>%n octave(s) et %1 vers le bas</numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location line="+3"/>
         <source>down %n octave(s)</source>
-        <translation type="unfinished">
-            <numerusform>%n octaves vers le bas
-        </numerusform>
+        <translation>
+            <numerusform>%n octave(s) vers le bas</numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -16120,9 +16120,9 @@ Double-cliquer pour ouvrir l&apos;éditeur de marqueur.</translation>
     <message numerus="yes">
         <location line="+7"/>
         <source>%1%2 - %n Segment(s) - %3</source>
-        <translation type="unfinished">
-            <numerusform>%1%2 - %n Segments - %3
-        </numerusform>
+        <translation>
+            <numerusform>%1%2 - %n Segment - %3</numerusform>
+            <numerusform>%1%2 - %n Segments - %3</numerusform>
         </translation>
     </message>
     <message>
@@ -17115,9 +17115,9 @@ Ceci est un bogue (le programme aurait dû s&apos;arrêter anormalement)</transl
     <message numerus="yes">
         <location line="-8"/>
         <source>%n pixel(s)</source>
-        <translation type="unfinished">
-            <numerusform>%n pixels
-        </numerusform>
+        <translation>
+            <numerusform>%n pixel(s)</numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -17143,9 +17143,9 @@ Ceci est un bogue (le programme aurait dû s&apos;arrêter anormalement)</transl
     <message numerus="yes">
         <location line="-90"/>
         <source>  %n event(s) selected </source>
-        <translation type="unfinished">
-            <numerusform>  %n événements sélectionnés 
-        </numerusform>
+        <translation>
+            <numerusform>  %n événement(s) sélectionné(s)</numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -17379,9 +17379,9 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
     <message numerus="yes">
         <location line="+6"/>
         <source>%1%2 - %n Segment(s) - Notation</source>
-        <translation type="unfinished">
-            <numerusform>%1%2 - %n Segments - Partition
-        </numerusform>
+        <translation>
+            <numerusform>%1%2 - %n Segment - Partition</numerusform>
+            <numerusform>%1%2 - %n Segments - Partition</numerusform>
         </translation>
     </message>
     <message>
@@ -18698,9 +18698,9 @@ Il peut y avoir des incompatibilités avec ce format de fichier.</translation>
     <message numerus="yes">
         <location line="+124"/>
         <source>Delete the %n audio file(s) recorded during the unsaved session?</source>
-        <translation type="unfinished">
-            <numerusform>Effacer les %n fichiers audio enregistrés au cours de la session abandonnée?
-        </numerusform>
+        <translation>
+            <numerusform>Effacer le fichier audio enregistré au cours de la session abandonnée?</numerusform>
+            <numerusform>Effacer les %n fichiers audio enregistrés au cours de la session abandonnée?</numerusform>
         </translation>
     </message>
     <message>
@@ -18724,9 +18724,9 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
     <message numerus="yes">
         <location line="+16"/>
         <source>&lt;qt&gt;About to delete %n audio file(s) permanently from the hard disk.&lt;br&gt;There will be no way to recover the file(s).&lt;br&gt;Are you sure?&lt;/qt&gt;</source>
-        <translation type="unfinished">
-            <numerusform>&lt;qt&gt;%n fichiers audio vont être définitivement effacés du disque dur.&lt;br&gt;Il sera impossible de récupérer ces fichiers.&lt;br&gt;Etes vous sûr de vouloir continuer?&lt;/qt&gt;
-        </numerusform>
+        <translation>
+            <numerusform>&lt;qt&gt;%n fichier audio va être définitivement effacé du disque dur.&lt;br&gt;Il sera impossible de récupérer ce fichier.&lt;br&gt;Etes vous sûr de vouloir continuer?&lt;/qt&gt;</numerusform>
+            <numerusform>&lt;qt&gt;%n fichiers audio vont être définitivement effacés du disque dur.&lt;br&gt;Il sera impossible de récupérer ces fichiers.&lt;br&gt;Etes vous sûr de vouloir continuer?&lt;/qt&gt;</numerusform>
         </translation>
     </message>
     <message>
@@ -19216,8 +19216,8 @@ L&apos;erreur était : %2</translation>
         <source>The audio file path does not exist or is not writable.
 You must set the audio file path to a valid directory in Document Properties before %1.
 Would you like to set it now?</source>
-        <translation type="unfinished">Le chemin des fichiers audio n&apos;existe pas ou ne peut pas être écrit.
-Vous devez définir un chemin des fichiers audio pointant vers un répertoire valide (en utilisant le menu &quot;Composition -&gt; Propriété du document&quot;) avant de %1.
+        <translation>Le chemin des fichiers audio n&apos;existe pas ou ne peut pas être écrit.
+Vous devez définir un chemin des fichiers audio pointant vers un répertoire valide avant de %1.
 Souhaitez vous le faire maintenant ?</translation>
     </message>
     <message>
@@ -19229,9 +19229,9 @@ Souhaitez vous le faire maintenant ?</translation>
         <location line="+142"/>
         <location line="+34"/>
         <source>Split %n Segment(s) at Time</source>
-        <translation type="unfinished">
-            <numerusform>Diviser %n segments au temps
-        </numerusform>
+        <translation>
+            <numerusform>Diviser %n segment au temps</numerusform>
+            <numerusform>Diviser %n segments au temps</numerusform>
         </translation>
     </message>
     <message>
@@ -20230,9 +20230,9 @@ Souhaitez vous le faire tout de suite ?</translation>
     <message numerus="yes">
         <location line="+167"/>
         <source>Move Segment(s)</source>
-        <translation type="unfinished">
-            <numerusform>Déplace %n segments
-        </numerusform>
+        <translation>
+            <numerusform>Déplace le segment</numerusform>
+            <numerusform>Déplacer les segments</numerusform>
         </translation>
     </message>
     <message>
@@ -22649,9 +22649,9 @@ Souhaitez vous le faire tout de suite ?</translation>
     <message numerus="yes">
         <location line="+2"/>
         <source>%1 on %n track(s)</source>
-        <translation type="unfinished">
-            <numerusform>%1 sur %n pistes
-        </numerusform>
+        <translation>
+            <numerusform>%1 sur %n piste</numerusform>
+            <numerusform>%1 sur %n pistes</numerusform>
         </translation>
     </message>
     <message>
@@ -22684,9 +22684,9 @@ Souhaitez vous le faire tout de suite ?</translation>
     <message numerus="yes">
         <location line="+22"/>
         <source>This triggered segment is used %n time(s) in the current composition.  Are you sure you want to remove it?</source>
-        <translation type="unfinished">
-            <numerusform>
-        </numerusform>
+        <translation>
+            <numerusform>Ce segment déclenché est utilisé %n fois dans la composition courante.  Voulez vous vraiment le supprimer?</numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
