@@ -16,6 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
+#include <cmath>
+
 #include "NoteSymbols.h"
 #include "Fingering.h"
 #include "misc/Debug.h"
@@ -232,13 +234,30 @@ NoteSymbols::drawFretNumber ( QPainter* p,
         QString tmp;
         tmp.setNum( fret_num );
 
-        // Use NoteSymbols to grab X and Y for first fret
-        posPair y_pos = getY( imgHeight, 0, m_nbOfFrets );
+        // Get the Y coord of the first fret.
+        posPair y_pos = getY( imgHeight, 1, m_nbOfFrets );
+
+        // Compute half the ascent of the font.
+        QFontMetrics fontMetrics(font);
+        int halfAscent = lround(fontMetrics.ascent() / 2.0);
+
+        // pixelSize() and ascent() are always the same.  Both lead to the
+        // number being just slightly lower than centered.  fudgeCenter
+        // below will fix this.
+        
+        // There is a variation of drawText() that takes a rectangle and then
+        // will take a flag, AlignVCenter, which might fix this.  Use AlignLeft
+        // with it.
+
+        // Fudge it by 10% to get closer to looking like it is centered
+        // perfectly on the first fret.        
+        int fudgeCenter = lround(fontMetrics.ascent() * .1); 
 
         p->setPen(Qt::black);
-        p->drawText( getLeftBorder( imgWidth ) / 4,
-                     y_pos.first + ( y_pos.second / 2 ),
-                     tmp );
+        p->drawText(
+            getLeftBorder( imgWidth ) / 4,
+            y_pos.first + halfAscent - fudgeCenter + TOP_GUITAR_CHORD_MARGIN,
+            tmp );
 
         p->restore();
     }
