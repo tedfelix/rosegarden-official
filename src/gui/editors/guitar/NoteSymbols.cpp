@@ -16,8 +16,6 @@
     COPYING included with this distribution for more information.
 */
 
-#include <cmath>
-
 #include "NoteSymbols.h"
 #include "Fingering.h"
 #include "misc/Debug.h"
@@ -237,27 +235,25 @@ NoteSymbols::drawFretNumber ( QPainter* p,
         // Get the Y coord of the first fret.
         posPair y_pos = getY( imgHeight, 1, m_nbOfFrets );
 
-        // Compute half the ascent of the font.
-        QFontMetrics fontMetrics(font);
-        int halfAscent = lround(fontMetrics.ascent() / 2.0);
+        // Compute the "true" center.
+        int y = y_pos.first + TOP_GUITAR_CHORD_MARGIN;
 
-        // pixelSize() and ascent() are always the same.  Both lead to the
-        // number being just slightly lower than centered.  fudgeCenter
-        // below will fix this.
-        
-        // There is a variation of drawText() that takes a rectangle and then
-        // will take a flag, AlignVCenter, which might fix this.  Use AlignLeft
-        // with it.
-
-        // Fudge it by 10% to get closer to looking like it is centered
-        // perfectly on the first fret.        
-        int fudgeCenter = lround(fontMetrics.ascent() * .1); 
+        // Make a rect around the center.  Don't worry about the size as 
+        // drawText() will give us the required bounding rect.
+        QRect rect(getLeftBorder( imgWidth ) / 4, y - 10, 20, 20);
 
         p->setPen(Qt::black);
+
+        // Using AlignVCenter ends up slightly high as the descent is probably
+        // also included.  Looks OK, though.
+
+        // Get the required bounding rect.
+        QRect requiredRect;
         p->drawText(
-            getLeftBorder( imgWidth ) / 4,
-            y_pos.first + halfAscent - fudgeCenter + TOP_GUITAR_CHORD_MARGIN,
-            tmp );
+            rect, Qt::AlignVCenter | Qt::AlignLeft, tmp, &requiredRect);
+
+        // Use the required bounding rect to draw the text.
+        p->drawText(requiredRect, Qt::AlignVCenter | Qt::AlignLeft, tmp);
 
         p->restore();
     }
