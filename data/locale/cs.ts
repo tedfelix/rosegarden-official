@@ -8344,7 +8344,7 @@ Chcete-li i přesto provést vložení, zvažte použití jednoho z dalších ty
         <location filename="../AutoloadStrings.cpp" line="299"/>
         <location filename="../AutoloadStrings.cpp" line="735"/>
         <source>Pan</source>
-        <translation>Pánev</translation>
+        <translation>Vyvážení (Pan)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="237"/>
@@ -20357,7 +20357,7 @@ Ujistěte se, že je zařízení správně nastaveno v dialogu Správa zařízen
     <message>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="51"/>
         <source>Remap Instrument assigments...</source>
-        <translation type="unfinished">Navrhnout nové přidělení nástrojů...</translation>
+        <translation>Navrhnout nové přidělení nástrojů...</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="60"/>
@@ -20367,7 +20367,7 @@ Ujistěte se, že je zařízení správně nastaveno v dialogu Správa zařízen
     <message>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="64"/>
         <source>Remap Tracks by all Instruments on a Device or by single Instrument</source>
-        <translation type="unfinished">Navrhnout znovu stopy pomocí všech nástrojů zařízení nebo pomocí jednoho nástrojem</translation>
+        <translation>Navrhnout znovu stopy pomocí všech nástrojů zařízení nebo pomocí jednoho nástrojem</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="66"/>
@@ -20387,7 +20387,7 @@ Ujistěte se, že je zařízení správně nastaveno v dialogu Správa zařízen
     <message>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="81"/>
         <source>From</source>
-        <translation type="unfinished">Z</translation>
+        <translation>Z</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="82"/>
@@ -22549,7 +22549,7 @@ Ukončení ostatních běžících aplikací by mohlo zlepšit výkon aplikace R
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="954"/>
         <source>A serious error has occurred in the ALSA MIDI subsystem.  It may not be possible to continue sequencing.  Please check console output for more information.</source>
-        <translation>V subsystému ALSA MIDI dolšo k vážné chybě. Nemusí být dále možné pokračovat v práci (sekvencer). Více informací naleznete na výstupu z ovládacího panelu (konzole).</translation>
+        <translation>V subsystému ALSA MIDI došlo k vážné chybě. Nemusí být dále možné pokračovat v práci (sekvencer). Více informací naleznete na výstupu z ovládacího panelu (konzole).</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="980"/>
@@ -25166,7 +25166,7 @@ Chcete cestu nastavit nyní?</translation>
     <message>
         <location filename="../../src/gui/widgets/WarningDialog.cpp" line="88"/>
         <source>System timer</source>
-        <translation type="unfinished">Systémový časovač</translation>
+        <translation>Systémový časovač</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/WarningDialog.cpp" line="92"/>
