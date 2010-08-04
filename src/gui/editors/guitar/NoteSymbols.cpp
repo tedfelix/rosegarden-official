@@ -239,7 +239,7 @@ NoteSymbols::drawFretNumber ( QPainter* p,
         int y = y_pos.first + TOP_GUITAR_CHORD_MARGIN;
 
         // Make a rect around the center.  Don't worry about the size as 
-        // drawText() will give us the required bounding rect.
+        // boundingRect() will give us the required bounding rect.
         QRect rect(getLeftBorder( imgWidth ) / 4, y - 10, 20, 20);
 
         p->setPen(Qt::black);
@@ -248,9 +248,8 @@ NoteSymbols::drawFretNumber ( QPainter* p,
         // also included.  Looks OK, though.
 
         // Get the required bounding rect.
-        QRect requiredRect;
-        p->drawText(
-            rect, Qt::AlignVCenter | Qt::AlignLeft, tmp, &requiredRect);
+        QRect requiredRect = p->boundingRect(
+            rect, Qt::AlignVCenter | Qt::AlignLeft, tmp);
 
         // Use the required bounding rect to draw the text.
         p->drawText(requiredRect, Qt::AlignVCenter | Qt::AlignLeft, tmp);
