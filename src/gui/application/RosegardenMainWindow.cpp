@@ -226,6 +226,13 @@
 #include <QFontDialog>
 #include <QPageSetupDialog>
 
+// Ladish lv1 support
+#include <cerrno>   // for errno
+#include <csignal>  // for sigaction()
+#include <cstring>  // for strerror()
+#include <unistd.h> // for pipe()
+#include <QSocketNotifier>
+
 
 namespace Rosegarden
 {
@@ -469,6 +476,9 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
 
     connectOutsideCtorHack();
     checkAudioPath();
+
+    if (!installSignalHandlers())
+        qWarning("%s", "Signal handlers not installed!");
 }
 
 RosegardenMainWindow::~RosegardenMainWindow()
@@ -501,6 +511,71 @@ RosegardenMainWindow::~RosegardenMainWindow()
     delete m_tranzport;    
     delete m_doc;
     Profiles::getInstance()->dump();
+}
+
+int RosegardenMainWindow::sigpipe[2];
+
+/* Handler for system signals (SIGUSR1, SIGINT...)
+ * Write a message to the pipe and leave as soon as possible
+ */
+void
+RosegardenMainWindow::handleSignal(int sig)
+{
+    if (write(sigpipe[1], &sig, sizeof(sig)) == -1) {
+        qWarning("write() failed: %s", std::strerror(errno));
+    }
+}
+
+/* Install signal handlers (may be more than one; called from the
+ * constructor of your MainWindow class*/
+bool
+RosegardenMainWindow::installSignalHandlers()
+{
+    /*install pipe to forward received system signals*/
+    if (pipe(sigpipe) < 0) {
+        qWarning("pipe() failed: %s", std::strerror(errno));
+        return false;
+    }
+
+    /*install notifier to handle pipe messages*/
+    QSocketNotifier* signalNotifier = new QSocketNotifier(sigpipe[0],
+            QSocketNotifier::Read, this);
+    connect(signalNotifier, SIGNAL(activated(int)),
+            this, SLOT(signalAction(int)));
+
+    /*install signal handlers*/
+    struct sigaction action;
+    memset(&action, 0, sizeof(action));
+    action.sa_handler = handleSignal;
+
+    if (sigaction(SIGUSR1, &action, NULL) == -1) {
+        qWarning("sigaction() failed: %s", std::strerror(errno));
+        return false;
+    }
+
+    return true;
+}
+
+/* Slot to give response to the incoming pipe message;
+   e.g.: save current file */
+void
+RosegardenMainWindow::signalAction(int fd)
+{
+    int message;
+
+    if (read(fd, &message, sizeof(message)) == -1) {
+        qWarning("read() failed: %s", std::strerror(errno));
+        return;
+    }
+
+    switch (message) {
+        case SIGUSR1:
+            slotFileSave();
+            break;
+        default:
+            qWarning("Unexpected signal received: %d", message);
+            break;
+    }
 }
 
 void

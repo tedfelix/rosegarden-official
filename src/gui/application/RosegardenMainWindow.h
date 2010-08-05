@@ -1692,6 +1692,14 @@ private:
     DeviceManagerDialog *m_deviceManager;    
 
     WarningWidget *m_warningWidget;
+
+    // Ladish lv1 support
+    static int sigpipe[2];
+    static void handleSignal(int);
+    bool installSignalHandlers();
+
+private slots:
+    void signalAction(int);
 };
 
 
