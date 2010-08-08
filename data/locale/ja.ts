@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0">
+<TS version="2.0" language="ja_JP">
 <context>
     <name>:</name>
     <message>
@@ -2593,7 +2593,7 @@
     <message>
         <location line="+9"/>
         <source>Pa&amp;ste...</source>
-        <translation>貼り付け(&amp;s)</translation>
+        <translation>貼り付け(&amp;s)...</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -3775,7 +3775,7 @@
     <message>
         <location line="-2603"/>
         <source>&amp;Action</source>
-        <translation type="unfinished"></translation>
+        <translation>動作(&amp;A)</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -3785,7 +3785,7 @@
     <message>
         <location line="+1"/>
         <source>Distribute Audio on MIDI Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDIセグメント上の分散オーディオ</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -3849,28 +3849,28 @@
     <message>
         <location line="-280"/>
         <source>&amp;Cycle Slashes</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="-1388"/>
         <source>Show A&amp;ctions Toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>動作ツールバーを表示(&amp;c)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Show R&amp;ulers Toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>ルーラツールバーを表示(&amp;u)</translation>
     </message>
     <message>
         <location line="+1250"/>
         <source>Show &amp;Duration Toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>デュレーションツールバーを表示(&amp;D)</translation>
     </message>
     <message>
         <location line="+35"/>
         <source>Ctrl+Alt++</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Alt++</translation>
     </message>
     <message>
         <location line="+109"/>
@@ -3881,7 +3881,7 @@
     <message>
         <location line="+5"/>
         <source>Mensural</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+48"/>
@@ -3892,7 +3892,7 @@
     <message>
         <location line="+114"/>
         <source>Cycle &amp;Dots</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+7"/>
@@ -3914,172 +3914,172 @@
     <message>
         <location line="+2"/>
         <source>Double Whole Note</source>
-        <translation type="unfinished"></translation>
+        <translation>倍全音符</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Ctrl+5</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+5</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Whole Note</source>
-        <translation type="unfinished"></translation>
+        <translation>全音符</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Ctrl+1</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+1</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Half Note</source>
-        <translation type="unfinished"></translation>
+        <translation>二分音符</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Ctrl+2</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+2</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Quarter Note</source>
-        <translation type="unfinished"></translation>
+        <translation>四分音符</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Ctrl+4</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+4</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Eighth Note</source>
-        <translation type="unfinished"></translation>
+        <translation>八分音符</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Ctrl+8</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+8</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Sixteenth Note</source>
-        <translation type="unfinished"></translation>
+        <translation>十六分音符</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Ctrl+6</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+6</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Thirty-Second Note</source>
-        <translation type="unfinished"></translation>
+        <translation>三十二分音符</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Ctrl+3</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+3</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Sixty-Fourth Note</source>
-        <translation type="unfinished"></translation>
+        <translation>六十四分音符</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Ctrl+0</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+0</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Double Whole Note (Without Duration Change)</source>
-        <translation type="unfinished"></translation>
+        <translation>倍全音符（デュレーション変更なし）</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Ctrl+Alt+5</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">Ctrl+Alt+5</translation>
+        <translation>Ctrl+Alt+5</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Whole Note (Without Duration Change)</source>
-        <translation type="unfinished"></translation>
+        <translation>全音符（デュレーション変更なし）</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>Half Note (Without Duration Change)</source>
-        <translation type="unfinished"></translation>
+        <translation>二分音符（デュレーション変更なし）</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Ctrl+Alt+2</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">Ctrl+Alt+2</translation>
+        <translation>Ctrl+Alt+2</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Quarter Note (Without Duration Change)</source>
-        <translation type="unfinished"></translation>
+        <translation>四分音符（デュレーション変更なし）</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Ctrl+Alt+4</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">Ctrl+Alt+4</translation>
+        <translation>Ctrl+Alt+4</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Eighth Note (Without Duration Change)</source>
-        <translation type="unfinished"></translation>
+        <translation>八分音符（デュレーション変更なし）</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Ctrl+Alt+8</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">Ctrl+Alt+8</translation>
+        <translation>Ctrl+Alt+8</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Sixteenth Note (Without Duration Change)</source>
-        <translation type="unfinished"></translation>
+        <translation>十六分音符（デュレーション変更なし）</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Ctrl+Alt+6</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">Ctrl+Alt+6</translation>
+        <translation>Ctrl+Alt+6</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Thirty-Second Note (Without Duration Change)</source>
-        <translation type="unfinished"></translation>
+        <translation>三十二分音符（デュレーション変更なし）</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Ctrl+Alt+3</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">Ctrl+Alt+3</translation>
+        <translation>Ctrl+Alt+3</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Sixty-Fourth Note (Without Duration Change)</source>
-        <translation type="unfinished"></translation>
+        <translation>六十四分音符（デュレーション変更なし）</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Ctrl+Alt+0</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">Ctrl+Alt+0</translation>
+        <translation>Ctrl+Alt+0</translation>
     </message>
     <message>
         <location line="+229"/>
@@ -5099,7 +5099,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location line="+1"/>
         <source>Plucked strings</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
@@ -5184,7 +5184,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location line="+1"/>
         <source>Secunda balalaika</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
@@ -6342,7 +6342,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location line="+1"/>
         <source>Tubo</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
@@ -6755,7 +6755,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location line="+1"/>
         <source>Duck call</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
@@ -7508,7 +7508,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location line="+1"/>
         <source>Orchestral Pad</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
@@ -7548,12 +7548,12 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location line="+1"/>
         <source>Melo Tom 2</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>808 Tom</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
@@ -7813,7 +7813,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location line="+1"/>
         <source>Side Stick</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
@@ -7833,42 +7833,42 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location line="+1"/>
         <source>Low Floor Tom</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Closed Hi-Hat</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>High Floor Tom</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Pedal Hi-Hat</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Low Tom</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Open Hi-Hat</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Low-Mid Tom</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Hi-Mid Tom</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
@@ -7878,12 +7878,12 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location line="+1"/>
         <source>High Tom</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Ride Cymbal 1</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
@@ -7893,7 +7893,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location line="+1"/>
         <source>Ride Bell</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+2"/>
@@ -7918,52 +7918,52 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location line="+1"/>
         <source>Ride Cymbal 2</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Hi Bongo</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Low Bongo</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Mute Hi Conga</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Open Hi Conga</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Low Conga</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>High Timbale</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Low Timbale</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>High Agogo</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Low Agogo</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+3"/>
@@ -7973,7 +7973,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location line="+1"/>
         <source>Long Whistle</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
@@ -7988,22 +7988,22 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location line="+2"/>
         <source>Hi Wood Block</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Low Wood Block</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Mute Cuica</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Open Cuica</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
@@ -8013,7 +8013,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location line="+1"/>
         <source>Open Triangle</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
@@ -10128,27 +10128,27 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location line="+1"/>
         <source>generalmap</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Red pastel</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Green pastel</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Orange pastel</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Yellow pastel</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="-4"/>
@@ -11229,7 +11229,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message numerus="yes">
         <location line="+10"/>
         <source>&lt;qt&gt;About to delete %n audio file(s) permanently from the hard disk.&lt;br&gt;This action cannot be undone, and there will be no way to recover the files.&lt;br&gt;Are you sure?&lt;/qt&gt;</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>&lt;qt&gt;%n個のオーディオファイルをハードディスクから完全に削除することについて。&lt;br&gt;この操作は元に戻せません。ファイルを復活させる方法もありません。&lt;br&gt;よろしいですか?&lt;/qt&gt;
         </numerusform>
         </translation>
@@ -11952,7 +11952,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location line="+859"/>
         <source>&lt;new bank %1&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;新しいバンク %1&gt;</translation>
     </message>
     <message>
         <location line="+725"/>
@@ -12739,7 +12739,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location line="+142"/>
         <source>Insert Line of Controllers</source>
-        <translation type="unfinished"></translation>
+        <translation>コントローラのラインを挿入</translation>
     </message>
     <message>
         <location line="+140"/>
@@ -14142,7 +14142,7 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location filename="../../src/gui/editors/guitar/Fingering.cpp" line="+110"/>
         <source>couldn&apos;t parse fingering &apos;%1&apos; in &apos;%2&apos;</source>
-        <translation type="unfinished">指使いを解析できない &apos;%1&apos; 中の &apos;%2&apos;</translation>
+        <translation>指使いを解析できない &apos;%2&apos; 中の &apos;%1&apos;</translation>
     </message>
 </context>
 <context>
@@ -14171,7 +14171,7 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location filename="../../src/gui/editors/notation/FontViewFrame.cpp" line="+99"/>
         <source>Error: Unable to match font name %1</source>
-        <translation type="unfinished">エラー: フォント名 %1 は一致してません</translation>
+        <translation>エラー: フォント名 %1 に一致しません</translation>
     </message>
     <message>
         <location line="+0"/>
@@ -14337,7 +14337,7 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location line="+0"/>
         <source>You must restart Rosegarden for the graphics system change to take effect.</source>
-        <translation type="unfinished"></translation>
+        <translation>グラフィックシステムへの変更効果を反映するために、Rosegardenを再起動しなければなりません。</translation>
     </message>
     <message>
         <location line="-288"/>
@@ -15224,17 +15224,15 @@ Example text from file:</source>
     <message numerus="yes">
         <location line="+8"/>
         <source>up %n octave(s) and %1</source>
-        <translation type="unfinished">
-            <numerusform>%nオクターブ上へと%1
-        </numerusform>
+        <translation>
+            <numerusform>%nオクターブ上へと%1</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location line="+3"/>
         <source>up %n octave(s)</source>
-        <translation type="unfinished">
-            <numerusform>%nオクターブ上へ
-        </numerusform>
+        <translation>
+            <numerusform>%nオクターブ上へ</numerusform>
         </translation>
     </message>
     <message>
@@ -15245,17 +15243,15 @@ Example text from file:</source>
     <message numerus="yes">
         <location line="+5"/>
         <source>down %n octave(s) and %1</source>
-        <translation type="unfinished">
-            <numerusform>%nオクターブ下へと%1
-        </numerusform>
+        <translation>
+            <numerusform>%nオクターブ下へと%1</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location line="+3"/>
         <source>down %n octave(s)</source>
-        <translation type="unfinished">
-            <numerusform>%nオクターブ下へ
-        </numerusform>
+        <translation>
+            <numerusform>%nオクターブ下へ</numerusform>
         </translation>
     </message>
     <message>
@@ -16834,9 +16830,8 @@ Double-click to open the marker editor.</source>
     <message numerus="yes">
         <location line="+7"/>
         <source>%1%2 - %n Segment(s) - %3</source>
-        <translation type="unfinished">
-            <numerusform>%1%2 - %n セグメント - %3
-        </numerusform>
+        <translation>
+            <numerusform>%1%2 - %n セグメント - %3</numerusform>
         </translation>
     </message>
     <message>
@@ -17020,7 +17015,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location line="+1083"/>
         <source>&lt;qt&gt;Rotate wheel to change the active segment&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;アクティブなセグメントを変更するためにホイールを回転&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;アクティブなセグメントを変更するためにホイールを回転&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -17069,7 +17064,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location line="+10"/>
         <source>THRU events to ignore</source>
-        <translation type="unfinished">THRU eventsを無視</translation>
+        <translation>THRU eventsを無視</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -18191,9 +18186,8 @@ This is a bug (the program would previously have crashed by now)</source>
     <message numerus="yes">
         <location line="-8"/>
         <source>%n pixel(s)</source>
-        <translation type="unfinished">
-            <numerusform>%nピクセル
-        </numerusform>
+        <translation>
+            <numerusform>%nピクセル</numerusform>
         </translation>
     </message>
     <message>
@@ -18374,9 +18368,8 @@ This is a bug (the program would previously have crashed by now)</source>
     <message numerus="yes">
         <location line="-451"/>
         <source>  %n event(s) selected </source>
-        <translation type="unfinished">
-            <numerusform>  %n イベントが選択された
-        </numerusform>
+        <translation>
+            <numerusform>  %n イベントが選択された</numerusform>
         </translation>
     </message>
     <message>
@@ -18564,8 +18557,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <location line="+6"/>
         <source>%1%2 - %n Segment(s) - Notation</source>
         <translation type="unfinished">
-            <numerusform>%1%2 - %n セグメント - 譜面
-        </numerusform>
+            <numerusform>%1%2 - %n セグメント - 譜面</numerusform>
         </translation>
     </message>
     <message>
@@ -18606,12 +18598,12 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location line="+374"/>
         <source>Set Note Type...</source>
-        <translation type="unfinished"></translation>
+        <translation>音符のタイプの設定...</translation>
     </message>
     <message>
         <location line="+24"/>
         <source>Set Note Type notation only...</source>
-        <translation type="unfinished"></translation>
+        <translation>音符のタイプの設定のみ...</translation>
     </message>
     <message>
         <location line="+20"/>
@@ -18862,13 +18854,13 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <location filename="../../src/gui/rulers/PercussionPitchRuler.cpp" line="+56"/>
         <source>  A#2   Acoustic Bass Drum  </source>
         <extracomment>Note to the translators: Don&apos;t translate literally. This string is never displayed but defines the largest width of the text (pitch and intrument name) in the percussion ruler.</extracomment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+37"/>
         <source>A#2</source>
         <extracomment>Note to the translators: Don&apos;t translate literally. This string is never displayed but defines the largest width of the pitch name in the percussion ruler text.</extracomment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -19927,9 +19919,8 @@ Do you want to save it?</source>
     <message numerus="yes">
         <location line="+124"/>
         <source>Delete the %n audio file(s) recorded during the unsaved session?</source>
-        <translation type="unfinished">
-            <numerusform>未保存のセッション中で録音された %n オーディオファイルを削除しますか?
-        </numerusform>
+        <translation>
+            <numerusform>未保存のセッション中で録音された %n オーディオファイルを削除しますか?</numerusform>
         </translation>
     </message>
     <message>
@@ -19951,9 +19942,8 @@ Please select any you wish to delete permanently from the hard disk.
     <message numerus="yes">
         <location line="+16"/>
         <source>&lt;qt&gt;About to delete %n audio file(s) permanently from the hard disk.&lt;br&gt;There will be no way to recover the file(s).&lt;br&gt;Are you sure?&lt;/qt&gt;</source>
-        <translation type="unfinished">
-            <numerusform>&lt;qt&gt;%n オーディオファイルをハードディスクから完全に削除することについて。&lt;br&gt;ファイルを復活させる方法はありません。&lt;br&gt;よろしいですか?&lt;/qt&gt;
-        </numerusform>
+        <translation>
+            <numerusform>&lt;qt&gt;%n オーディオファイルをハードディスクから完全に削除することについて。&lt;br&gt;ファイルを復活させる方法はありません。&lt;br&gt;よろしいですか?&lt;/qt&gt;</numerusform>
         </translation>
     </message>
     <message>
@@ -20473,7 +20463,7 @@ Error was : %2</source>
         <source>The audio file path does not exist or is not writable.
 You must set the audio file path to a valid directory in Document Properties before %1.
 Would you like to set it now?</source>
-        <translation type="unfinished">オーディオファイルのパスが存在しないか書き込みができません
+        <translation>オーディオファイルのパスが存在しないか書き込みができません
 %1 の前にドキュメントプロパティで正しいディレクトリパスを設定してください。
 すぐに設定をしますか?</translation>
     </message>
@@ -20487,8 +20477,7 @@ Would you like to set it now?</source>
         <location line="+34"/>
         <source>Split %n Segment(s) at Time</source>
         <translation type="unfinished">
-            <numerusform>
-        </numerusform>
+            <numerusform> </numerusform>
         </translation>
     </message>
     <message>
@@ -21555,8 +21544,7 @@ Would you like to set it now?</source>
         <location line="+167"/>
         <source>Move Segment(s)</source>
         <translation type="unfinished">
-            <numerusform>セグメントの移動
-        </numerusform>
+            <numerusform>セグメントの移動</numerusform>
         </translation>
     </message>
     <message>
@@ -23432,7 +23420,7 @@ Would you like to set it now?</source>
     <message>
         <location line="+1"/>
         <source>Rosegarden cannot accept dropped files of this type.</source>
-        <translation type="unfinished"></translation>
+        <translation>Rosegardenはこのタイプのドロップされたファイルを受け付けることができません。</translation>
     </message>
     <message>
         <source>You can&apos;t drop files into Rosegarden from this client.  Try using Konqueror instead.</source>
@@ -24024,12 +24012,12 @@ Would you like to set it now?</source>
     <message>
         <location line="-4"/>
         <source>Add</source>
-        <translation type="unfinished">追加</translation>
+        <translation>追加</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Add a Triggered Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>トリガセグメントを追加</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -24044,9 +24032,8 @@ Would you like to set it now?</source>
     <message numerus="yes">
         <location line="+2"/>
         <source>%1 on %n track(s)</source>
-        <translation type="unfinished">
-            <numerusform>%1 上の %n トラック
-        </numerusform>
+        <translation>
+            <numerusform>%n 上の %1 トラック</numerusform>
         </translation>
     </message>
     <message>
@@ -24079,9 +24066,8 @@ Would you like to set it now?</source>
     <message numerus="yes">
         <location line="+22"/>
         <source>This triggered segment is used %n time(s) in the current composition.  Are you sure you want to remove it?</source>
-        <translation type="unfinished">
-            <numerusform>このトリガされたセグメントは現在のコンポジションの中で%n回使われています。これを本当に削除したいですか?
-        </numerusform>
+        <translation>
+            <numerusform>このトリガされたセグメントは現在のコンポジションの中で%n回使われています。これを本当に削除したいですか?</numerusform>
         </translation>
     </message>
     <message>
@@ -24148,22 +24134,22 @@ Would you like to set it now?</source>
     <message>
         <location line="+12"/>
         <source>Group with current timing:</source>
-        <translation type="unfinished">変更前の長さの合計は:</translation>
+        <translation>現在のタイミングでグループ化:</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Group with new timing:</source>
-        <translation type="unfinished">変更後の長さの合計は</translation>
+        <translation>新しいタイミングでグループ化</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Gap created by timing change:</source>
-        <translation type="unfinished">変更前後の差は</translation>
+        <translation>タイミング変更によってできたギャップ</translation>
     </message>
     <message>
         <location line="+13"/>
         <source>Unchanged at end of selection:</source>
-        <translation type="unfinished">選択終端付近で変更しない長さは</translation>
+        <translation>選択終端付近で変更しない:</translation>
     </message>
     <message>
         <location line="+237"/>
@@ -24381,7 +24367,7 @@ Would you like to set it now?</source>
     <message>
         <location line="+21"/>
         <source>&lt;qt&gt;&lt;p&gt;Information available.&lt;/p&gt;&lt;p&gt;Click to display details&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;情報が有効。&lt;/p&gt;&lt;p&gt;クリックして詳細を参照。&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+24"/>
@@ -24401,7 +24387,7 @@ Would you like to set it now?</source>
     <message>
         <location line="+9"/>
         <source>&lt;qt&gt;Safe graphics mode&lt;br&gt;Click for more information&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;安全なグラフィックモード&lt;br&gt;詳細はクリック&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+53"/>
@@ -24411,7 +24397,7 @@ Would you like to set it now?</source>
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;&lt;p&gt;Rosegarden is using safe graphics mode.  This provides the greatest stability, but graphics performance is very slow.&lt;/p&gt;&lt;p&gt;You may wish to visit &lt;b&gt;Edit -&gt; Preferences -&gt; Behavior -&gt; Graphics performance&lt;/b&gt; and try &quot;Normal&quot; or &quot;Fast&quot; for better performance.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Rosegardenmは安全なグラフィックモードを使っています。  これは、とても安定していますが、画面描画能力はとても劣ります。&lt;/p&gt;&lt;p&gt;You may wish to visit &lt;b&gt;編集 -&gt; 設定 -&gt; 振る舞い -&gt; グラフぃcuすパフォーマンス&lt;/b&gt;を選び、よりパフォーマンスを向上させるために、&quot;通常&quot; か &quot;高速&quot; を選んでもよいでしょう。&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
