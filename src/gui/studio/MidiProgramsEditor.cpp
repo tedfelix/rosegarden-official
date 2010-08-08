@@ -221,8 +221,7 @@ MidiProgramsEditor::populate(QTreeWidgetItem* item)
     noKeyPixmap = il.loadPixmap("key-white");
     keyPixmap = il.loadPixmap("key-green");
 
-    bool haveKeyMappings = m_currentBank->isPercussion()
-                           && (m_device->getKeyMappings().size() > 0);
+    bool haveKeyMappings = m_device->getKeyMappings().size() > 0;
 
     for (unsigned int i = 0; i < (unsigned int)m_names.size(); i++) {
 
@@ -306,8 +305,7 @@ MidiProgramsEditor::slotNewPercussion()
     // Hack to force the percussion icons to switch state if needed.
     // code stole from populate.
     if (m_device) {
-        bool haveKeyMappings = m_currentBank->isPercussion()
-                               && (m_device->getKeyMappings().size() > 0);
+        bool haveKeyMappings = m_device->getKeyMappings().size() > 0;
 
         for (unsigned int i = 0; i < (unsigned int)m_names.size(); i++) {
             getKeyMapButton(i)->setEnabled(haveKeyMappings);
