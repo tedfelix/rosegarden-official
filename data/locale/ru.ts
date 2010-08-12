@@ -6840,49 +6840,49 @@ If you want to paste anyway, consider using one of the other paste types from th
         <location line="+1"/>
         <source>Cb</source>
         <comment>note name</comment>
-        <translation type="unfinished"></translation>
+        <translation>Cb</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Db</source>
         <comment>note name</comment>
-        <translation type="unfinished"></translation>
+        <translation>Db</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Eb</source>
         <comment>note name</comment>
-        <translation type="unfinished">Eb</translation>
+        <translation>Eb</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>E#</source>
         <comment>note name</comment>
-        <translation type="unfinished"></translation>
+        <translation>E#</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Fb</source>
         <comment>note name</comment>
-        <translation type="unfinished"></translation>
+        <translation>Fb</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Ab</source>
         <comment>note name</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ab</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Bb</source>
         <comment>note name</comment>
-        <translation type="unfinished">Bb</translation>
+        <translation>Bb</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>B#</source>
         <comment>note name</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="-24"/>
@@ -7727,7 +7727,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location line="+1"/>
         <source>TR-808</source>
-        <translation type="unfinished"></translation>
+        <translation>TR-808</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -11947,7 +11947,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location line="+859"/>
         <source>&lt;new bank %1&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;новый банк %1&gt;</translation>
     </message>
     <message>
         <location line="+504"/>
@@ -19816,7 +19816,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location line="+2"/>
         <source>N&amp;one</source>
-        <translation type="unfinished">&amp;Ничего</translation>
+        <translation>&amp;Нет</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -19844,7 +19844,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/notation/RestoreSlursCommand.h" line="+45"/>
         <source>&amp;Restore Slur Positions</source>
-        <translation type="unfinished">&amp;Восстановить позиции легато</translation>
+        <translation>&amp;Восстановить позиции легато</translation>
     </message>
 </context>
 <context>
@@ -19852,7 +19852,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/notation/RestoreStemsCommand.h" line="+45"/>
         <source>&amp;Restore Stems</source>
-        <translation type="unfinished">&amp;Восстановить направление штилей</translation>
+        <translation>&amp;Восстановить направление штилей</translation>
     </message>
 </context>
 <context>
@@ -19860,7 +19860,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/notation/RestoreTiesCommand.h" line="+45"/>
         <source>&amp;Restore Tie Positions</source>
-        <translation type="unfinished">&amp;Восстановить позиции лиг</translation>
+        <translation>&amp;Восстановить позиции лиг</translation>
     </message>
 </context>
 <context>
@@ -19868,7 +19868,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/edit/RetrogradeCommand.h" line="+46"/>
         <source>&amp;Retrograde</source>
-        <translation type="unfinished">&amp;Ракоход («Крабий канон»)</translation>
+        <translation>&amp;Ракоход («Крабий канон»)</translation>
     </message>
 </context>
 <context>
@@ -19876,7 +19876,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/edit/RetrogradeInvertCommand.h" line="+46"/>
         <source>Re&amp;trograde Invert</source>
-        <translation type="unfinished">&amp;Инвертированный ракоход</translation>
+        <translation>&amp;Инвертированный ракоход</translation>
     </message>
 </context>
 <context>
@@ -21172,12 +21172,12 @@ Error was : %2</source>
     <message>
         <location line="+212"/>
         <source>&lt;h3&gt;Newer version available&lt;/h3&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;h3&gt;Доступная более новая версия&lt;/h3&gt;</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&lt;p&gt;You are using version %1.  Version %2 is now available.&lt;/p&gt;&lt;p&gt;Please consult the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;Rosegarden website&lt;/a&gt; for more information.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Вы используете версию %1. В настоящее время доступна более новая версия %2.&lt;/p&gt;&lt;p&gt;Подробности можно узнать на сайте &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;Rosegarden&lt;/a&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="-3096"/>
@@ -21756,7 +21756,7 @@ Would you like to set it now?</source>
         <location line="+11"/>
         <location line="+8"/>
         <source>Sync segment parameters</source>
-        <translation type="unfinished">Параметры сегмента</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -21764,7 +21764,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentToolBox.cpp" line="+79"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
 </context>
 <context>
@@ -21772,13 +21772,13 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/commands/segment/SegmentTransposeCommand.h" line="+49"/>
         <source>Transpose by &amp;Interval...</source>
-        <translation type="unfinished">&amp;Транспонировать на интервал...</translation>
+        <translation>&amp;Транспонировать на интервал...</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/SegmentTransposeCommand.cpp" line="+29"/>
         <location line="+6"/>
         <source>Change segment transposition</source>
-        <translation type="unfinished">Изменить транспозицию сегмента</translation>
+        <translation>Транспонировать сегмент</translation>
     </message>
 </context>
 <context>
@@ -21786,7 +21786,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/commands/edit/SelectionPropertyCommand.h" line="+61"/>
         <source>Set &amp;Property</source>
-        <translation type="unfinished">Установить &amp;свойство</translation>
+        <translation>Установить &amp;свойство</translation>
     </message>
 </context>
 <context>
@@ -22327,7 +22327,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location line="-14"/>
         <source>Track %1 : &quot;%2&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>Дорожка %1 : &quot;%2&quot;</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -22352,100 +22352,100 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location line="+48"/>
         <source>&lt;qt&gt;&lt;p&gt;Notation is not consistent&lt;/p&gt;&lt;p&gt;Click to get more information&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Партитура несогласована.&lt;/p&gt;&lt;p&gt;Щёлкните для получения подробной информации.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+167"/>
         <location line="+50"/>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation>...</translation>
     </message>
     <message>
         <location line="+75"/>
         <source>C</source>
         <comment>note name</comment>
-        <translation type="unfinished">C</translation>
+        <translation>C</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>C#</source>
         <comment>note name</comment>
-        <translation type="unfinished">C#</translation>
+        <translation>C#</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>D</source>
         <comment>note name</comment>
-        <translation type="unfinished">D</translation>
+        <translation>D</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Eb</source>
         <comment>note name</comment>
-        <translation type="unfinished">Eb</translation>
+        <translation>Eb</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>E</source>
         <comment>note name</comment>
-        <translation type="unfinished">E</translation>
+        <translation>E</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>F</source>
         <comment>note name</comment>
-        <translation type="unfinished">F</translation>
+        <translation>F</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>F#</source>
         <comment>note name</comment>
-        <translation type="unfinished">F#</translation>
+        <translation>F#</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>G</source>
         <comment>note name</comment>
-        <translation type="unfinished">G</translation>
+        <translation>G</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>G#</source>
         <comment>note name</comment>
-        <translation type="unfinished">G#</translation>
+        <translation>G#</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>A</source>
         <comment>note name</comment>
-        <translation type="unfinished">A</translation>
+        <translation>A</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Bb</source>
         <comment>note name</comment>
-        <translation type="unfinished">Bb</translation>
+        <translation>Bb</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>B</source>
         <comment>note name</comment>
-        <translation type="unfinished">B</translation>
+        <translation>B</translation>
     </message>
     <message>
         <location line="+340"/>
         <source>&lt;h2&gt;Notation Inconsistencies&lt;/h2&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;h2&gt;Несогласованности в партитуре&lt;/h2&gt;</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;h3&gt;Filename: %1 &lt;/h3&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;h3&gt;Имя файла: %1 &lt;/h3&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>&lt;h3&gt;Track %1: &quot;%2&quot;&lt;/h3&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;h3&gt;Дорожка %1: &quot;%2&quot;&lt;/h3&gt;</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -22455,7 +22455,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location line="+2"/>
         <source>Segment &quot;%1&quot;: %2 clef</source>
-        <translation type="unfinished"></translation>
+        <translation>Сегмент &quot;%1&quot;: ключ %2</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -22465,7 +22465,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location line="+2"/>
         <source>Segment &quot;%1&quot;: %2 key</source>
-        <translation type="unfinished"></translation>
+        <translation>Сегмент &quot;%1&quot;: тональность %2</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -22475,12 +22475,12 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location line="+2"/>
         <source>Segment &quot;%1&quot;: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Сегмент &quot;%1&quot;: %2</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <source>C</source>
@@ -22533,7 +22533,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location line="-260"/>
         <source>%1: %2</source>
-        <translation type="unfinished">%1: %2</translation>
+        <translation>%1: %2</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -22844,7 +22844,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location line="+7"/>
         <source>Specification</source>
-        <translation type="unfinished"></translation>
+        <translation>Спецификация</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -23220,12 +23220,12 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/widgets/Thumbwheel.cpp" line="+268"/>
         <source>Enter new value</source>
-        <translation type="unfinished"></translation>
+        <translation>Введите новое значение</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Enter a new value from %1 to %2:</source>
-        <translation type="unfinished"></translation>
+        <translation>Введите новое значение от %1 до %2:</translation>
     </message>
 </context>
 <context>
@@ -23334,69 +23334,69 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/widgets/TimeWidget.cpp" line="+97"/>
         <source>Note:</source>
-        <translation type="unfinished">Нота:</translation>
+        <translation>Нота:</translation>
     </message>
     <message>
         <location line="+7"/>
         <location line="+35"/>
         <source>&lt;inexact&gt;</source>
-        <translation type="unfinished">&lt;неточно&gt;</translation>
+        <translation>&lt;неточно&gt;</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Units:</source>
-        <translation type="unfinished">Единиц:</translation>
+        <translation>Единиц:</translation>
     </message>
     <message>
         <location line="+22"/>
         <source>Time:</source>
-        <translation type="unfinished">Время:</translation>
+        <translation>Время:</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>units</source>
-        <translation type="unfinished">единиц</translation>
+        <translation>единиц</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>Measures:</source>
-        <translation type="unfinished">Тактов:</translation>
+        <translation>Тактов:</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>Measure:</source>
-        <translation type="unfinished">Тактов:</translation>
+        <translation>Тактов:</translation>
     </message>
     <message>
         <location line="+19"/>
         <source>beats:</source>
-        <translation type="unfinished">Долей:</translation>
+        <translation>Долей:</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>beat:</source>
-        <translation type="unfinished">Доля:</translation>
+        <translation>Доля:</translation>
     </message>
     <message>
         <location line="+18"/>
         <source>%1:</source>
-        <translation type="unfinished">%1:</translation>
+        <translation>%1:</translation>
     </message>
     <message>
         <location line="+22"/>
         <source>Seconds:</source>
-        <translation type="unfinished">Секунд:</translation>
+        <translation>Секунд:</translation>
     </message>
     <message>
         <location line="+19"/>
         <source>msec:</source>
-        <translation type="unfinished">мс:</translation>
+        <translation>мс:</translation>
     </message>
     <message>
         <location line="+136"/>
         <location line="+125"/>
         <source>(%1/%2 time)</source>
-        <translation type="unfinished">(размер %1/%2)</translation>
+        <translation>(размер %1/%2)</translation>
     </message>
     <message>
         <location line="-79"/>
@@ -24020,7 +24020,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="+84"/>
         <source>Manage Triggered Segments</source>
-        <translation type="unfinished">Настройка переключаемых сегментов</translation>
+        <translation>Управлениепереключаемыми сегментами</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -24070,12 +24070,12 @@ Would you like to set it now?</source>
     <message>
         <location line="-4"/>
         <source>Add</source>
-        <translation type="unfinished">Добавить</translation>
+        <translation>Добавить</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Add a Triggered Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Добавить переключаемый сегмент</translation>
     </message>
     <message>
         <location line="+6"/>
