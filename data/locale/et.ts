@@ -16798,8 +16798,8 @@ Double-click to open the marker editor.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+140"/>
-        <location line="+330"/>
+        <location line="+139"/>
+        <location line="+329"/>
         <source>Key Mapping: %1</source>
         <translation type="unfinished">Lisa helisti&amp;ku muutus...</translation>
     </message>
@@ -19579,7 +19579,7 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
 <context>
     <name>Rosegarden::RosegardenMainWindow</name>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="+304"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="+311"/>
         <source>Initializing plugin manager...</source>
         <translation type="unfinished">Pluginate halduri initsialiseerimine...</translation>
     </message>
@@ -19609,7 +19609,7 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
         <translation type="unfinished">Käivitamine...</translation>
     </message>
     <message>
-        <location line="+433"/>
+        <location line="+501"/>
         <source>  Zoom:  </source>
         <translation type="unfinished">  Suurendus:  </translation>
     </message>
@@ -20171,12 +20171,12 @@ Please exit and restart Rosegarden to restore sound capability.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-4316"/>
+        <location line="-4384"/>
         <source>Starting sequencer...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1776"/>
+        <location line="+1844"/>
         <source>Saving file%1with a new filename...</source>
         <comment>&apos;file%1with&apos; is correct. %1 will either become &apos; &apos; or &apos; as a template &apos; at runtime</comment>
         <translation type="unfinished"></translation>
@@ -23722,104 +23722,200 @@ Would you like to set it now?</source>
 <context>
     <name>RosegardenTransport</name>
     <message>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1047"/>
         <source>Rosegarden Transport</source>
-        <translation type="obsolete">Rosegardeni transport</translation>
+        <translation type="unfinished">Rosegardeni transport</translation>
     </message>
     <message>
+        <location line="+2"/>
+        <source>Hide additional controls</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
         <source>Panic Button</source>
-        <translation type="obsolete">Paanika nupp</translation>
+        <translation type="unfinished">Paanika nupp</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Resets all MIDI devices if you&apos;ve got stuck notes</source>
-        <translation type="obsolete">Lähtestab kõik MIDI seadmed kui mõni noot on hangunud</translation>
+        <translation type="unfinished">Lähtestab kõik MIDI seadmed kui mõni noot on hangunud</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Metronome</source>
-        <translation type="obsolete">Metronoom</translation>
+        <translation type="unfinished">Metronoom</translation>
     </message>
     <message>
+        <location line="+3"/>
+        <source>Provides a metronome click for you to play along with</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Shows MIDI activity in and out of Rosegarden</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
         <source>IN</source>
-        <translation type="obsolete">IN</translation>
+        <translation type="unfinished">IN</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>OUT</source>
-        <translation type="obsolete">OUT</translation>
+        <translation type="unfinished">OUT</translation>
     </message>
     <message>
+        <location line="+1"/>
+        <location line="+1"/>
         <source>NO EVENTS</source>
-        <translation type="obsolete">NO EVENTS</translation>
+        <translation type="unfinished">NO EVENTS</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Record</source>
-        <translation type="obsolete">Salvesta</translation>
+        <translation type="unfinished">Salvesta</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Record either MIDI or audio</source>
-        <translation type="obsolete">MIDI või audio salvestamine</translation>
+        <translation type="unfinished">MIDI või audio salvestamine</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Loop</source>
-        <translation type="obsolete">Kordus</translation>
+        <translation type="unfinished">Kordus</translation>
     </message>
     <message>
+        <location line="+3"/>
+        <source>Turn on and off the loop markers (if set)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
         <source>Solo</source>
-        <translation type="obsolete">Soolo</translation>
+        <translation type="unfinished">Soolo</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Mutes all but the currently selected track</source>
-        <translation type="obsolete">Vaigistab kõik rajad peale aktiivse</translation>
+        <translation type="unfinished">Vaigistab kõik rajad peale aktiivse</translation>
     </message>
     <message>
+        <location line="+4"/>
+        <source>Start loop or range here</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>End loop or range here</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>SIG</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
         <source>DIV</source>
-        <translation type="obsolete">IV</translation>
+        <translation type="unfinished">IV</translation>
     </message>
     <message>
+        <location line="+1"/>
+        <source>/16</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>TEMPO</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>END</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>BAR</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Switch between real time, musical time, and frame count</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Show additional controls</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
         <source>Rewind</source>
-        <translation type="obsolete">Tagasi kerimine</translation>
+        <translation type="unfinished">Tagasi kerimine</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Moves the current pointer position back one bar.</source>
-        <translation type="obsolete">Liigutab kursori asukoha ühe takti võrra tagasi.</translation>
+        <translation type="unfinished">Liigutab kursori asukoha ühe takti võrra tagasi.</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Rewind to beginning</source>
-        <translation type="obsolete">Tagasikerimine algusesse</translation>
+        <translation type="unfinished">Tagasikerimine algusesse</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Moves the pointer position to the start of the composition. (This may mean going forwards if the pointer is currently before the start.)</source>
-        <translation type="obsolete">Liigutab kursori kompositsiooni algusese. (See võib tähendada edasi liigutamist kui kursor asub eespool algust.)</translation>
+        <translation type="unfinished">Liigutab kursori kompositsiooni algusese. (See võib tähendada edasi liigutamist kui kursor asub eespool algust.)</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Play/Pause</source>
-        <translation type="obsolete">Esita/paus</translation>
+        <translation type="unfinished">Esita/paus</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Plays from the current pointer position, or pauses playback if already in progress.</source>
-        <translation type="obsolete">Mahamängimine alates kursori asukohast või paus kui mahamängimine on aktiivne.</translation>
+        <translation type="unfinished">Mahamängimine alates kursori asukohast või paus kui mahamängimine on aktiivne.</translation>
     </message>
     <message>
+        <location line="+4"/>
+        <source>Stop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
         <source>Stops playback or recording.</source>
-        <translation type="obsolete">Peatab mahamängimise või salvestamise.</translation>
+        <translation type="unfinished">Peatab mahamängimise või salvestamise.</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Fast forward</source>
-        <translation type="obsolete">Edasi kerimine</translation>
+        <translation type="unfinished">Edasi kerimine</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Moves the current pointer position forwards one bar.</source>
-        <translation type="obsolete">Liigutab aktiivse kursori ühe takti võrra edasi.</translation>
+        <translation type="unfinished">Liigutab aktiivse kursori ühe takti võrra edasi.</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Fast forward to end</source>
-        <translation type="obsolete">Kiire kerimine lõppu</translation>
+        <translation type="unfinished">Kiire kerimine lõppu</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Moves the pointer position to the end of the composition.  (This may mean going backwards if the pointer is already beyond the end.)</source>
-        <translation type="obsolete">Liigutab kursori kompositsiooni lõppu. (See võib tähendada tagasi liikumist kui kursor on juba lõpust üle.)</translation>
+        <translation type="unfinished">Liigutab kursori kompositsiooni lõppu. (See võib tähendada tagasi liikumist kui kursor on juba lõpust üle.)</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Display time to end</source>
-        <translation type="obsolete">Näita aega lõpuni</translation>
+        <translation type="unfinished">Näita aega lõpuni</translation>
     </message>
 </context>
 <context>

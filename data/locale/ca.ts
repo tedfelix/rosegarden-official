@@ -16980,8 +16980,8 @@ Double-click to open the marker editor.</source>
         <translation type="unfinished">Valor LSB</translation>
     </message>
     <message>
-        <location line="+140"/>
-        <location line="+330"/>
+        <location line="+139"/>
+        <location line="+329"/>
         <source>Key Mapping: %1</source>
         <translation type="unfinished">Drecera: %1</translation>
     </message>
@@ -19938,7 +19938,7 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
 <context>
     <name>Rosegarden::RosegardenMainWindow</name>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="+304"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="+311"/>
         <source>Initializing plugin manager...</source>
         <translation type="unfinished">S&apos;està iniciant el gestor de connectors...</translation>
     </message>
@@ -19968,7 +19968,7 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
         <translation type="unfinished">S&apos;està iniciant...</translation>
     </message>
     <message>
-        <location line="+433"/>
+        <location line="+501"/>
         <source>  Zoom:  </source>
         <translation type="unfinished">  Zoom:  </translation>
     </message>
@@ -20550,12 +20550,12 @@ Please exit and restart Rosegarden to restore sound capability.</source>
 Heu de sortir i tornar a iniciar el Rosegarden per restaurar el sistema de so.</translation>
     </message>
     <message>
-        <location line="-4316"/>
+        <location line="-4384"/>
         <source>Starting sequencer...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1776"/>
+        <location line="+1844"/>
         <source>Saving file%1with a new filename...</source>
         <comment>&apos;file%1with&apos; is correct. %1 will either become &apos; &apos; or &apos; as a template &apos; at runtime</comment>
         <translation type="unfinished"></translation>
@@ -24115,148 +24115,200 @@ Voleu configurar-ho ara?</translation>
 <context>
     <name>RosegardenTransport</name>
     <message>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1047"/>
         <source>Rosegarden Transport</source>
-        <translation type="obsolete">Transport del Rosegarden</translation>
+        <translation type="unfinished">Transport del Rosegarden</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Hide additional controls</source>
-        <translation type="obsolete">Amaga els controls addicionals</translation>
+        <translation type="unfinished">Amaga els controls addicionals</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Panic Button</source>
-        <translation type="obsolete">Botó de pànic</translation>
+        <translation type="unfinished">Botó de pànic</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Resets all MIDI devices if you&apos;ve got stuck notes</source>
-        <translation type="obsolete">Fa callar tots els dispositius MIDI si teniu cap nota clavada</translation>
+        <translation type="unfinished">Fa callar tots els dispositius MIDI si teniu cap nota clavada</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Metronome</source>
-        <translation type="obsolete">Metrònom</translation>
+        <translation type="unfinished">Metrònom</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Provides a metronome click for you to play along with</source>
-        <translation type="obsolete">Us dóna un tic-tac de metrònom per ajudar-vos a tocar conjutament</translation>
+        <translation type="unfinished">Us dóna un tic-tac de metrònom per ajudar-vos a tocar conjutament</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Shows MIDI activity in and out of Rosegarden</source>
-        <translation type="obsolete">Mostra l&apos;activiatat d&apos;entrada i sortida del MIDI del Rosegarden </translation>
+        <translation type="unfinished">Mostra l&apos;activiatat d&apos;entrada i sortida del MIDI del Rosegarden </translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>IN</source>
-        <translation type="obsolete">Entrada</translation>
+        <translation type="unfinished">Entrada</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>OUT</source>
-        <translation type="obsolete">Sortida</translation>
+        <translation type="unfinished">Sortida</translation>
     </message>
     <message>
+        <location line="+1"/>
+        <location line="+1"/>
         <source>NO EVENTS</source>
-        <translation type="obsolete">Sense esdeveniments</translation>
+        <translation type="unfinished">Sense esdeveniments</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Record</source>
-        <translation type="obsolete">Registra</translation>
+        <translation type="unfinished">Registra</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Record either MIDI or audio</source>
-        <translation type="obsolete">Grava o MIDI o àudio</translation>
+        <translation type="unfinished">Grava o MIDI o àudio</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Loop</source>
-        <translation type="obsolete">Bucle de repetició</translation>
+        <translation type="unfinished">Bucle de repetició</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Turn on and off the loop markers (if set)</source>
-        <translation type="obsolete">Commuta les marques dels bucles (si n&apos;hi ha)</translation>
+        <translation type="unfinished">Commuta les marques dels bucles (si n&apos;hi ha)</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Solo</source>
-        <translation type="obsolete">Solo</translation>
+        <translation type="unfinished">Solo</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Mutes all but the currently selected track</source>
-        <translation type="obsolete">Posa silencia a totes les pistes excepte la seleccionada</translation>
+        <translation type="unfinished">Posa silencia a totes les pistes excepte la seleccionada</translation>
     </message>
     <message>
+        <location line="+4"/>
+        <source>Start loop or range here</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>End loop or range here</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
         <source>SIG</source>
-        <translation type="obsolete">SIG</translation>
+        <translation type="unfinished">SIG</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>DIV</source>
-        <translation type="obsolete">DIV</translation>
+        <translation type="unfinished">DIV</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>/16</source>
-        <translation type="obsolete">/16</translation>
+        <translation type="unfinished">/16</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>TEMPO</source>
-        <translation type="obsolete">TEMPO</translation>
+        <translation type="unfinished">TEMPO</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>END</source>
-        <translation type="obsolete">END</translation>
+        <translation type="unfinished">END</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>BAR</source>
-        <translation type="obsolete">BAR</translation>
+        <translation type="unfinished">BAR</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Switch between real time, musical time, and frame count</source>
-        <translation type="obsolete">Commuta entre temps real, temps musical i comptador de trams</translation>
+        <translation type="unfinished">Commuta entre temps real, temps musical i comptador de trams</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Show additional controls</source>
-        <translation type="obsolete">Mostra els controls addicionals</translation>
+        <translation type="unfinished">Mostra els controls addicionals</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Rewind</source>
-        <translation type="obsolete">Rebobina</translation>
+        <translation type="unfinished">Rebobina</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Moves the current pointer position back one bar.</source>
-        <translation type="obsolete">Mou la posició una compàs enrere.</translation>
+        <translation type="unfinished">Mou la posició una compàs enrere.</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Rewind to beginning</source>
-        <translation type="obsolete">Rebobina fins al començament</translation>
+        <translation type="unfinished">Rebobina fins al començament</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Moves the pointer position to the start of the composition. (This may mean going forwards if the pointer is currently before the start.)</source>
-        <translation type="obsolete">Torna al principi de la composició. (Això pot voler dir que es mou endavant, en cas que la posició actual era més enrere del principi.)</translation>
+        <translation type="unfinished">Torna al principi de la composició. (Això pot voler dir que es mou endavant, en cas que la posició actual era més enrere del principi.)</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Play/Pause</source>
-        <translation type="obsolete">Reprodueix/pausa</translation>
+        <translation type="unfinished">Reprodueix/pausa</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Plays from the current pointer position, or pauses playback if already in progress.</source>
-        <translation type="obsolete">Toca des de la posició actual, o para de reproduir si estava en marxa.</translation>
+        <translation type="unfinished">Toca des de la posició actual, o para de reproduir si estava en marxa.</translation>
     </message>
     <message>
+        <location line="+4"/>
+        <source>Stop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
         <source>Stops playback or recording.</source>
-        <translation type="obsolete">Para de reproduir o de gravar.</translation>
+        <translation type="unfinished">Para de reproduir o de gravar.</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Fast forward</source>
-        <translation type="obsolete">Avança ràpidament</translation>
+        <translation type="unfinished">Avança ràpidament</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Moves the current pointer position forwards one bar.</source>
-        <translation type="obsolete">Mou la posició una compàs endavant.</translation>
+        <translation type="unfinished">Mou la posició una compàs endavant.</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Fast forward to end</source>
-        <translation type="obsolete">Avança ràpidament fins al final</translation>
+        <translation type="unfinished">Avança ràpidament fins al final</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Moves the pointer position to the end of the composition.  (This may mean going backwards if the pointer is already beyond the end.)</source>
-        <translation type="obsolete">Va al final de la composició. (Això pot voler dir que es mou endarrere, en cas que la posició actual sigui més enllà del final.)</translation>
+        <translation type="unfinished">Va al final de la composició. (Això pot voler dir que es mou endarrere, en cas que la posició actual sigui més enllà del final.)</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Display time to end</source>
-        <translation type="obsolete">Mostra el temps que queda</translation>
+        <translation type="unfinished">Mostra el temps que queda</translation>
     </message>
 </context>
 <context>

@@ -16505,8 +16505,8 @@ Dubbelklik om de marker-editor te openen.</translation>
         <translation>LSB Waarde</translation>
     </message>
     <message>
-        <location line="+140"/>
-        <location line="+330"/>
+        <location line="+139"/>
+        <location line="+329"/>
         <source>Key Mapping: %1</source>
         <translation>Toets-mapping: %1</translation>
     </message>
@@ -19008,7 +19008,7 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
 <context>
     <name>Rosegarden::RosegardenMainWindow</name>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="+304"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="+311"/>
         <source>Initializing plugin manager...</source>
         <translation>Plugin-beheerder initialiseren...</translation>
     </message>
@@ -19038,7 +19038,7 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
         <translation>Starten...</translation>
     </message>
     <message>
-        <location line="+433"/>
+        <location line="+501"/>
         <source>  Zoom:  </source>
         <translation>  Detail:  </translation>
     </message>
@@ -19582,12 +19582,12 @@ Please exit and restart Rosegarden to restore sound capability.</source>
 Sluit af en start Rosegarden opnieuw om geluidsmogelijkheden te herstellen.</translation>
     </message>
     <message>
-        <location line="-4316"/>
+        <location line="-4384"/>
         <source>Starting sequencer...</source>
         <translation>Sequencer starten...</translation>
     </message>
     <message>
-        <location line="+1776"/>
+        <location line="+1844"/>
         <source>Saving file%1with a new filename...</source>
         <comment>&apos;file%1with&apos; is correct. %1 will either become &apos; &apos; or &apos; as a template &apos; at runtime</comment>
         <translation type="unfinished"></translation>
@@ -23105,160 +23105,200 @@ Wilt u het pad nu instellen?</translation>
 <context>
     <name>RosegardenTransport</name>
     <message>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1047"/>
         <source>Rosegarden Transport</source>
-        <translation type="obsolete">Rosegarden Transport</translation>
+        <translation type="unfinished">Rosegarden Transport</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Hide additional controls</source>
-        <translation type="obsolete">Verberg extra controls</translation>
+        <translation type="unfinished">Verberg extra controls</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Panic Button</source>
-        <translation type="obsolete">Paniek-knop</translation>
+        <translation type="unfinished">Paniek-knop</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Resets all MIDI devices if you&apos;ve got stuck notes</source>
-        <translation type="obsolete">Herstelt alle MIDI-apparaten als er een noot blijft hangen</translation>
+        <translation type="unfinished">Herstelt alle MIDI-apparaten als er een noot blijft hangen</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Metronome</source>
-        <translation type="obsolete">Metronoom</translation>
+        <translation type="unfinished">Metronoom</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Provides a metronome click for you to play along with</source>
-        <translation type="obsolete">Geeft metronoomtikken om mee mee te spelen</translation>
+        <translation type="unfinished">Geeft metronoomtikken om mee mee te spelen</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Shows MIDI activity in and out of Rosegarden</source>
-        <translation type="obsolete">Toont MIDI-activiteit van en naar Rosegarden</translation>
+        <translation type="unfinished">Toont MIDI-activiteit van en naar Rosegarden</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>IN</source>
-        <translation type="obsolete">INI</translation>
+        <translation type="unfinished">INI</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>OUT</source>
-        <translation type="obsolete">UIT</translation>
+        <translation type="unfinished">UIT</translation>
     </message>
     <message>
+        <location line="+1"/>
+        <location line="+1"/>
         <source>NO EVENTS</source>
-        <translation type="obsolete">GEEN GEBEURTENISSEN</translation>
+        <translation type="unfinished">GEEN GEBEURTENISSEN</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Record</source>
-        <translation type="obsolete">Opnemen</translation>
+        <translation type="unfinished">Opnemen</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Record either MIDI or audio</source>
-        <translation type="obsolete">Neem MIDI of audio op</translation>
+        <translation type="unfinished">Neem MIDI of audio op</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Loop</source>
-        <translation type="obsolete">Loop</translation>
+        <translation type="unfinished">Loop</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Turn on and off the loop markers (if set)</source>
-        <translation type="obsolete">Zet de loop-markers aan en uit (indien gezet)</translation>
+        <translation type="unfinished">Zet de loop-markers aan en uit (indien gezet)</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Solo</source>
-        <translation type="obsolete">Solo</translation>
+        <translation type="unfinished">Solo</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Mutes all but the currently selected track</source>
-        <translation type="obsolete">Dempt alle sporen behalve de nu geselcteerde</translation>
+        <translation type="unfinished">Dempt alle sporen behalve de nu geselcteerde</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Start loop or range here</source>
-        <translation type="obsolete">Start loop of bereik hier</translation>
+        <translation type="unfinished">Start loop of bereik hier</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>End loop or range here</source>
-        <translation type="obsolete">Eindig loop of bereik hier</translation>
+        <translation type="unfinished">Eindig loop of bereik hier</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>SIG</source>
-        <translation type="obsolete">MAAT</translation>
+        <translation type="unfinished">MAAT</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>DIV</source>
-        <translation type="obsolete">EENH</translation>
+        <translation type="unfinished">EENH</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>/16</source>
-        <translation type="obsolete">/16</translation>
+        <translation type="unfinished">/16</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>TEMPO</source>
-        <translation type="obsolete">TEMPO</translation>
+        <translation type="unfinished">TEMPO</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>END</source>
-        <translation type="obsolete">EIND</translation>
+        <translation type="unfinished">EIND</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>BAR</source>
-        <translation type="obsolete">MAATNR</translation>
+        <translation type="unfinished">MAATNR</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Switch between real time, musical time, and frame count</source>
-        <translation type="obsolete">Switch tussen kloktijd, maat, en frame-aantal</translation>
+        <translation type="unfinished">Switch tussen kloktijd, maat, en frame-aantal</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Show additional controls</source>
-        <translation type="obsolete">Toon extra controls</translation>
+        <translation type="unfinished">Toon extra controls</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Rewind</source>
-        <translation type="obsolete">Terugspoelen</translation>
+        <translation type="unfinished">Terugspoelen</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Moves the current pointer position back one bar.</source>
-        <translation type="obsolete">Verplaats de huidige aanwijzerpositie een maat terug.</translation>
+        <translation type="unfinished">Verplaats de huidige aanwijzerpositie een maat terug.</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Rewind to beginning</source>
-        <translation type="obsolete">Terugspoelen naar begin</translation>
+        <translation type="unfinished">Terugspoelen naar begin</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Moves the pointer position to the start of the composition. (This may mean going forwards if the pointer is currently before the start.)</source>
-        <translation type="obsolete">Zet de pointer-positie op het begin van de compositie. (Dat kan betekenen dat hij vooruit gaat als de pointer nog voor het begin staat.)</translation>
+        <translation type="unfinished">Zet de pointer-positie op het begin van de compositie. (Dat kan betekenen dat hij vooruit gaat als de pointer nog voor het begin staat.)</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Play/Pause</source>
-        <translation type="obsolete">Afspelen/Pauze</translation>
+        <translation type="unfinished">Afspelen/Pauze</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Plays from the current pointer position, or pauses playback if already in progress.</source>
-        <translation type="obsolete">Speelt vanaf de huidige aanwijzerpositie, of pauzeert afspelen als die loopt.</translation>
+        <translation type="unfinished">Speelt vanaf de huidige aanwijzerpositie, of pauzeert afspelen als die loopt.</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Stop</source>
-        <translation type="obsolete">Stoppen</translation>
+        <translation type="unfinished">Stoppen</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Stops playback or recording.</source>
-        <translation type="obsolete">Stopt afspelen of opnemen.</translation>
+        <translation type="unfinished">Stopt afspelen of opnemen.</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Fast forward</source>
-        <translation type="obsolete">Snel doorspoelen</translation>
+        <translation type="unfinished">Snel doorspoelen</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Moves the current pointer position forwards one bar.</source>
-        <translation type="obsolete">Verplaatst de huidige aanwijzerpositie een maat vooruit.</translation>
+        <translation type="unfinished">Verplaatst de huidige aanwijzerpositie een maat vooruit.</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Fast forward to end</source>
-        <translation type="obsolete">Doorspoelen naar het einde</translation>
+        <translation type="unfinished">Doorspoelen naar het einde</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Moves the pointer position to the end of the composition.  (This may mean going backwards if the pointer is already beyond the end.)</source>
-        <translation type="obsolete">Zet de pointer-positie op het eind van de compositie. (Dat kan betekenen dat hij achteruit gaat als de pointer al voorbij het einde is.)</translation>
+        <translation type="unfinished">Zet de pointer-positie op het eind van de compositie. (Dat kan betekenen dat hij achteruit gaat als de pointer al voorbij het einde is.)</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Display time to end</source>
-        <translation type="obsolete">Toon resterende tijd</translation>
+        <translation type="unfinished">Toon resterende tijd</translation>
     </message>
 </context>
 <context>

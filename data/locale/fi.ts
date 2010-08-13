@@ -16810,8 +16810,8 @@ Tupla-klikkaa avataksesi merkintöjen muokkaimen.</translation>
         <translation>LSB-arvo</translation>
     </message>
     <message>
-        <location line="+140"/>
-        <location line="+330"/>
+        <location line="+139"/>
+        <location line="+329"/>
         <source>Key Mapping: %1</source>
         <translation>Näppäinkuvaus: %1</translation>
     </message>
@@ -19322,7 +19322,7 @@ Katso Muokkaa -&gt; Asetukset -&gt; Ääni.</translation>
 <context>
     <name>Rosegarden::RosegardenMainWindow</name>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="+304"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="+311"/>
         <source>Initializing plugin manager...</source>
         <translation>Alustetaan lisäosien hallintaa...</translation>
     </message>
@@ -19352,7 +19352,7 @@ Katso Muokkaa -&gt; Asetukset -&gt; Ääni.</translation>
         <translation>Aloitetaan...</translation>
     </message>
     <message>
-        <location line="+433"/>
+        <location line="+501"/>
         <source>  Zoom:  </source>
         <translation>  Suurennos:  </translation>
     </message>
@@ -19913,12 +19913,12 @@ Please exit and restart Rosegarden to restore sound capability.</source>
 Ole hyvä, sulje ja käynnistä uudelleen Rosegarden palauttaaksesi äänitoiminnot.</translation>
     </message>
     <message>
-        <location line="-4316"/>
+        <location line="-4384"/>
         <source>Starting sequencer...</source>
         <translation>Käynnistetään sekvensseri...</translation>
     </message>
     <message>
-        <location line="+1776"/>
+        <location line="+1844"/>
         <source>Saving file%1with a new filename...</source>
         <comment>&apos;file%1with&apos; is correct. %1 will either become &apos; &apos; or &apos; as a template &apos; at runtime</comment>
         <translation>Tallennetaan tiedosto%1uudella nimellä...</translation>
@@ -23469,160 +23469,200 @@ Haluatko asettaa sen nyt?</translation>
 <context>
     <name>RosegardenTransport</name>
     <message>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1047"/>
         <source>Rosegarden Transport</source>
-        <translation type="obsolete">Rosegarden Kuljetin</translation>
+        <translation type="unfinished">Rosegarden Kuljetin</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Hide additional controls</source>
-        <translation type="obsolete">Piilota lisähallinnat</translation>
+        <translation type="unfinished">Piilota lisähallinnat</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Panic Button</source>
-        <translation type="obsolete">Paniikkinappi</translation>
+        <translation type="unfinished">Paniikkinappi</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Resets all MIDI devices if you&apos;ve got stuck notes</source>
-        <translation type="obsolete">Nollaa kaikki MIDI-laitteet, joilla on jumiutuneita nuotteja</translation>
+        <translation type="unfinished">Nollaa kaikki MIDI-laitteet, joilla on jumiutuneita nuotteja</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Metronome</source>
-        <translation type="obsolete">Metronomi</translation>
+        <translation type="unfinished">Metronomi</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Provides a metronome click for you to play along with</source>
-        <translation type="obsolete">Tuottaa metronimiäänen, jonka kanssa voit soittaa</translation>
+        <translation type="unfinished">Tuottaa metronimiäänen, jonka kanssa voit soittaa</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Shows MIDI activity in and out of Rosegarden</source>
-        <translation type="obsolete">Näytä MIDI:n sisään- ja ulostuloaktiivisuus Rosegardenissa</translation>
+        <translation type="unfinished">Näytä MIDI:n sisään- ja ulostuloaktiivisuus Rosegardenissa</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>IN</source>
-        <translation type="obsolete">SISÄÄN</translation>
+        <translation type="unfinished">SISÄÄN</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>OUT</source>
-        <translation type="obsolete">ULOS</translation>
+        <translation type="unfinished">ULOS</translation>
     </message>
     <message>
+        <location line="+1"/>
+        <location line="+1"/>
         <source>NO EVENTS</source>
-        <translation type="obsolete">EI TAPAHTUMIA</translation>
+        <translation type="unfinished">EI TAPAHTUMIA</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Record</source>
-        <translation type="obsolete">Nauhoita</translation>
+        <translation type="unfinished">Nauhoita</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Record either MIDI or audio</source>
-        <translation type="obsolete">Nauhoita joko MIDI tai ääni</translation>
+        <translation type="unfinished">Nauhoita joko MIDI tai ääni</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Loop</source>
-        <translation type="obsolete">Silmukka</translation>
+        <translation type="unfinished">Silmukka</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Turn on and off the loop markers (if set)</source>
-        <translation type="obsolete">Kytke päälle ja pois silmukkamerkit (jos on asetettuna)</translation>
+        <translation type="unfinished">Kytke päälle ja pois silmukkamerkit (jos on asetettuna)</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Solo</source>
-        <translation type="obsolete">Soolo</translation>
+        <translation type="unfinished">Soolo</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Mutes all but the currently selected track</source>
-        <translation type="obsolete">Vaienna kaikki muut paitsi valittu raita</translation>
+        <translation type="unfinished">Vaienna kaikki muut paitsi valittu raita</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Start loop or range here</source>
-        <translation type="obsolete">Aloita kertaus tai alue tästä</translation>
+        <translation type="unfinished">Aloita kertaus tai alue tästä</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>End loop or range here</source>
-        <translation type="obsolete">Lopeta kertaus tai alue tässä</translation>
+        <translation type="unfinished">Lopeta kertaus tai alue tässä</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>SIG</source>
-        <translation type="obsolete">TLAJI</translation>
+        <translation type="unfinished">TLAJI</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>DIV</source>
-        <translation type="obsolete">JAKO</translation>
+        <translation type="unfinished">JAKO</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>/16</source>
-        <translation type="obsolete">/16</translation>
+        <translation type="unfinished">/16</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>TEMPO</source>
-        <translation type="obsolete">TEMPO</translation>
+        <translation type="unfinished">TEMPO</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>END</source>
-        <translation type="obsolete">LOPPU</translation>
+        <translation type="unfinished">LOPPU</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>BAR</source>
-        <translation type="obsolete">TAHTI</translation>
+        <translation type="unfinished">TAHTI</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Switch between real time, musical time, and frame count</source>
-        <translation type="obsolete">Vaihda kellonajan, musiikkiajan ja kehysmäärän välillä</translation>
+        <translation type="unfinished">Vaihda kellonajan, musiikkiajan ja kehysmäärän välillä</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Show additional controls</source>
-        <translation type="obsolete">Näytä lisähallinnat</translation>
+        <translation type="unfinished">Näytä lisähallinnat</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Rewind</source>
-        <translation type="obsolete">Kelaa taaksepäin</translation>
+        <translation type="unfinished">Kelaa taaksepäin</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Moves the current pointer position back one bar.</source>
-        <translation type="obsolete">Siirtää osoittimen yhden tahtin taaksepäin.</translation>
+        <translation type="unfinished">Siirtää osoittimen yhden tahtin taaksepäin.</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Rewind to beginning</source>
-        <translation type="obsolete">Kelaa alkuun</translation>
+        <translation type="unfinished">Kelaa alkuun</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Moves the pointer position to the start of the composition. (This may mean going forwards if the pointer is currently before the start.)</source>
-        <translation type="obsolete">Siirtää osoittimen sävellyksen alkuun. (Tämä voi merkitä myös eteenpäin menoa, jos osoitin on ennen alkukohtaa.)</translation>
+        <translation type="unfinished">Siirtää osoittimen sävellyksen alkuun. (Tämä voi merkitä myös eteenpäin menoa, jos osoitin on ennen alkukohtaa.)</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Play/Pause</source>
-        <translation type="obsolete">Toista/Keskeytä</translation>
+        <translation type="unfinished">Toista/Keskeytä</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Plays from the current pointer position, or pauses playback if already in progress.</source>
-        <translation type="obsolete">Soittaa nykyisestä toisto-osoittimen kohdasta, tai keskeyttää meneillään olevan toiston.</translation>
+        <translation type="unfinished">Soittaa nykyisestä toisto-osoittimen kohdasta, tai keskeyttää meneillään olevan toiston.</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Stop</source>
-        <translation type="obsolete">Pysäytä</translation>
+        <translation type="unfinished">Pysäytä</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Stops playback or recording.</source>
-        <translation type="obsolete">Pysäyttää toiston tai nauhoituksen.</translation>
+        <translation type="unfinished">Pysäyttää toiston tai nauhoituksen.</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Fast forward</source>
-        <translation type="obsolete">Kelaa eteenpäin</translation>
+        <translation type="unfinished">Kelaa eteenpäin</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Moves the current pointer position forwards one bar.</source>
-        <translation type="obsolete">Siirtää nykyisen osoittimen yhden tahtin eteenpäin.</translation>
+        <translation type="unfinished">Siirtää nykyisen osoittimen yhden tahtin eteenpäin.</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Fast forward to end</source>
-        <translation type="obsolete">Kelaa loppuun</translation>
+        <translation type="unfinished">Kelaa loppuun</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Moves the pointer position to the end of the composition.  (This may mean going backwards if the pointer is already beyond the end.)</source>
-        <translation type="obsolete">Siirtää osoittimen sävellyksen loppuun. (Tämä voi merkitä myös taaksepäin menoa, jos osoitin on jo ylittänyt loppukohdan.)</translation>
+        <translation type="unfinished">Siirtää osoittimen sävellyksen loppuun. (Tämä voi merkitä myös taaksepäin menoa, jos osoitin on jo ylittänyt loppukohdan.)</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Display time to end</source>
-        <translation type="obsolete">Näytä aika loppuun</translation>
+        <translation type="unfinished">Näytä aika loppuun</translation>
     </message>
 </context>
 <context>

@@ -16962,8 +16962,8 @@ Double-click to open the marker editor.</source>
         <translation type="unfinished">LSB Balorea</translation>
     </message>
     <message>
-        <location line="+140"/>
-        <location line="+330"/>
+        <location line="+139"/>
+        <location line="+329"/>
         <source>Key Mapping: %1</source>
         <translation type="unfinished">Teklatuaren Mapa: %1 </translation>
     </message>
@@ -19922,7 +19922,7 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
 <context>
     <name>Rosegarden::RosegardenMainWindow</name>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="+304"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="+311"/>
         <source>Initializing plugin manager...</source>
         <translation type="unfinished">Pluginen kudeatzailea hasieratzen...</translation>
     </message>
@@ -19952,7 +19952,7 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
         <translation type="unfinished">Hasieratzen...</translation>
     </message>
     <message>
-        <location line="+433"/>
+        <location line="+501"/>
         <source>  Zoom:  </source>
         <translation type="unfinished">  Handitu:  </translation>
     </message>
@@ -20533,12 +20533,12 @@ Please exit and restart Rosegarden to restore sound capability.</source>
 Mesedez, irten eta berrasi Rosegarden soinurako gaitasuna berreskuratzeko.</translation>
     </message>
     <message>
-        <location line="-4316"/>
+        <location line="-4384"/>
         <source>Starting sequencer...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1776"/>
+        <location line="+1844"/>
         <source>Saving file%1with a new filename...</source>
         <comment>&apos;file%1with&apos; is correct. %1 will either become &apos; &apos; or &apos; as a template &apos; at runtime</comment>
         <translation type="unfinished"></translation>
@@ -24098,156 +24098,200 @@ Konfiguratu nahi duzu orain?</translation>
 <context>
     <name>RosegardenTransport</name>
     <message>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1047"/>
         <source>Rosegarden Transport</source>
-        <translation type="obsolete">Rosegardenen Transportea</translation>
+        <translation type="unfinished">Rosegardenen Transportea</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Hide additional controls</source>
-        <translation type="obsolete">Kontrol gehigarriak ezkutatu</translation>
+        <translation type="unfinished">Kontrol gehigarriak ezkutatu</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Panic Button</source>
-        <translation type="obsolete">Izuaren Botoia</translation>
+        <translation type="unfinished">Izuaren Botoia</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Resets all MIDI devices if you&apos;ve got stuck notes</source>
-        <translation type="obsolete">MIDI dispositibo guztiak berrasten ditu, nota blokeatuak baldin badauzkazu</translation>
+        <translation type="unfinished">MIDI dispositibo guztiak berrasten ditu, nota blokeatuak baldin badauzkazu</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Metronome</source>
-        <translation type="obsolete">Metronomoa</translation>
+        <translation type="unfinished">Metronomoa</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Provides a metronome click for you to play along with</source>
-        <translation type="obsolete">Metronomo seinale bat ematen du, berarekin batera jotzeko</translation>
+        <translation type="unfinished">Metronomo seinale bat ematen du, berarekin batera jotzeko</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Shows MIDI activity in and out of Rosegarden</source>
-        <translation type="obsolete">Rosegardenen kanpoko eta barruko MIDI aktibitatea erakusten du</translation>
+        <translation type="unfinished">Rosegardenen kanpoko eta barruko MIDI aktibitatea erakusten du</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>IN</source>
-        <translation type="obsolete">IN</translation>
+        <translation type="unfinished">IN</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>OUT</source>
-        <translation type="obsolete">OUT</translation>
+        <translation type="unfinished">OUT</translation>
     </message>
     <message>
+        <location line="+1"/>
+        <location line="+1"/>
         <source>NO EVENTS</source>
-        <translation type="obsolete">GERTAERARIK GABE</translation>
+        <translation type="unfinished">GERTAERARIK GABE</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Record</source>
-        <translation type="obsolete">Grabaketa</translation>
+        <translation type="unfinished">Grabaketa</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Record either MIDI or audio</source>
-        <translation type="obsolete">Bai MIDI eta baita audioa ere grabatu</translation>
+        <translation type="unfinished">Bai MIDI eta baita audioa ere grabatu</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Loop</source>
-        <translation type="obsolete">Errepikatu</translation>
+        <translation type="unfinished">Errepikatu</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Turn on and off the loop markers (if set)</source>
-        <translation type="obsolete">Errepikapen markatzaileak aktibatu eta desaktibatu egiten ditu (baldin badaude)</translation>
+        <translation type="unfinished">Errepikapen markatzaileak aktibatu eta desaktibatu egiten ditu (baldin badaude)</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Solo</source>
-        <translation type="obsolete">Solo</translation>
+        <translation type="unfinished">Solo</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Mutes all but the currently selected track</source>
-        <translation type="obsolete">Hautatutakoa izan ezik, gainerako pistak mututzen ditu</translation>
+        <translation type="unfinished">Hautatutakoa izan ezik, gainerako pistak mututzen ditu</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Start loop or range here</source>
-        <translation type="obsolete">Buklea edo esparrua hemen hasi</translation>
+        <translation type="unfinished">Buklea edo esparrua hemen hasi</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>End loop or range here</source>
-        <translation type="obsolete">Buklea edo esparrua hemen bukatu</translation>
+        <translation type="unfinished">Buklea edo esparrua hemen bukatu</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>SIG</source>
-        <translation type="obsolete">SIG</translation>
+        <translation type="unfinished">SIG</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>DIV</source>
-        <translation type="obsolete">DIV</translation>
+        <translation type="unfinished">DIV</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>/16</source>
-        <translation type="obsolete">/16</translation>
+        <translation type="unfinished">/16</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>TEMPO</source>
-        <translation type="obsolete">TENPOA</translation>
+        <translation type="unfinished">TENPOA</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>END</source>
-        <translation type="obsolete">BUKAERA</translation>
+        <translation type="unfinished">BUKAERA</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>BAR</source>
-        <translation type="obsolete">KONPASA</translation>
+        <translation type="unfinished">KONPASA</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Switch between real time, musical time, and frame count</source>
-        <translation type="obsolete">Denbora errealaren, denbora musikalaren eta koadroen kontaketaren artean aldatu.</translation>
+        <translation type="unfinished">Denbora errealaren, denbora musikalaren eta koadroen kontaketaren artean aldatu.</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Show additional controls</source>
-        <translation type="obsolete">Kontrol gehigarriak erakutsi.</translation>
+        <translation type="unfinished">Kontrol gehigarriak erakutsi.</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Rewind</source>
-        <translation type="obsolete">Birbobinatu</translation>
+        <translation type="unfinished">Birbobinatu</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Moves the current pointer position back one bar.</source>
-        <translation type="obsolete">Punteroaren oraingo posizioa konpas bat atzera mugitzen du</translation>
+        <translation type="unfinished">Punteroaren oraingo posizioa konpas bat atzera mugitzen du</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Rewind to beginning</source>
-        <translation type="obsolete">Hasierara birbobinatu</translation>
+        <translation type="unfinished">Hasierara birbobinatu</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Moves the pointer position to the start of the composition. (This may mean going forwards if the pointer is currently before the start.)</source>
-        <translation type="obsolete">Kurtsorearen posizioa konposizoaren hasieraramugitzen du. (Hau izan daiteke aurrera joatea punteroa hasiera baino lehenago baldin badago)</translation>
+        <translation type="unfinished">Kurtsorearen posizioa konposizoaren hasieraramugitzen du. (Hau izan daiteke aurrera joatea punteroa hasiera baino lehenago baldin badago)</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Play/Pause</source>
-        <translation type="obsolete">Jo/Pausa</translation>
+        <translation type="unfinished">Jo/Pausa</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Plays from the current pointer position, or pauses playback if already in progress.</source>
-        <translation type="obsolete">Punteroaren oraingo posiziotik jotzen du, edo jotzen badabil erreprodukzioa gelditzen du.</translation>
+        <translation type="unfinished">Punteroaren oraingo posiziotik jotzen du, edo jotzen badabil erreprodukzioa gelditzen du.</translation>
     </message>
     <message>
+        <location line="+4"/>
+        <source>Stop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
         <source>Stops playback or recording.</source>
-        <translation type="obsolete">Grabaketa edo erreprodukzioa gelditu.</translation>
+        <translation type="unfinished">Grabaketa edo erreprodukzioa gelditu.</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Fast forward</source>
-        <translation type="obsolete">Aurreratze arina</translation>
+        <translation type="unfinished">Aurreratze arina</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Moves the current pointer position forwards one bar.</source>
-        <translation type="obsolete">Kurtsorearen oraingo posizioa konpas bat aurrera mugitzen du.</translation>
+        <translation type="unfinished">Kurtsorearen oraingo posizioa konpas bat aurrera mugitzen du.</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Fast forward to end</source>
-        <translation type="obsolete">Aurreratze arina bukaerarantz</translation>
+        <translation type="unfinished">Aurreratze arina bukaerarantz</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Moves the pointer position to the end of the composition.  (This may mean going backwards if the pointer is already beyond the end.)</source>
-        <translation type="obsolete">Kurtsorearen posizioa konposizoaren bukaerara mugitzen du. (Hau izan daiteke birbobinatzea punteroa bukaeraz haraindi baldin badago)</translation>
+        <translation type="unfinished">Kurtsorearen posizioa konposizoaren bukaerara mugitzen du. (Hau izan daiteke birbobinatzea punteroa bukaeraz haraindi baldin badago)</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Display time to end</source>
-        <translation type="obsolete">Falta den denbora erakusten du</translation>
+        <translation type="unfinished">Falta den denbora erakusten du</translation>
     </message>
 </context>
 <context>

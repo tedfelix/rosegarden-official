@@ -16514,8 +16514,8 @@ Double-click to open the marker editor.</source>
         <translation>Nilai LSB</translation>
     </message>
     <message>
-        <location line="+140"/>
-        <location line="+330"/>
+        <location line="+139"/>
+        <location line="+329"/>
         <source>Key Mapping: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19007,7 +19007,7 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
 <context>
     <name>Rosegarden::RosegardenMainWindow</name>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="+304"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="+311"/>
         <source>Initializing plugin manager...</source>
         <translation>Menginisiasi manajer pengaya...</translation>
     </message>
@@ -19037,7 +19037,7 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
         <translation>Memulai...</translation>
     </message>
     <message>
-        <location line="+433"/>
+        <location line="+501"/>
         <source>  Zoom:  </source>
         <translation>  Zum:  </translation>
     </message>
@@ -19563,12 +19563,12 @@ Please exit and restart Rosegarden to restore sound capability.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-4316"/>
+        <location line="-4384"/>
         <source>Starting sequencer...</source>
         <translation>Memulai sekuenser...</translation>
     </message>
     <message>
-        <location line="+1776"/>
+        <location line="+1844"/>
         <source>Saving file%1with a new filename...</source>
         <comment>&apos;file%1with&apos; is correct. %1 will either become &apos; &apos; or &apos; as a template &apos; at runtime</comment>
         <translation>Menyimpan berkas%1dengan nama baru...</translation>
@@ -23085,80 +23085,200 @@ Would you like to set it now?</source>
 <context>
     <name>RosegardenTransport</name>
     <message>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1047"/>
         <source>Rosegarden Transport</source>
-        <translation type="obsolete">Transpor Rosegarden</translation>
+        <translation type="unfinished">Transpor Rosegarden</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Hide additional controls</source>
-        <translation type="obsolete">Sembunyikan kontrol tambahan</translation>
+        <translation type="unfinished">Sembunyikan kontrol tambahan</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Panic Button</source>
-        <translation type="obsolete">Tombol Panik</translation>
+        <translation type="unfinished">Tombol Panik</translation>
     </message>
     <message>
+        <location line="+3"/>
+        <source>Resets all MIDI devices if you&apos;ve got stuck notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
         <source>Metronome</source>
-        <translation type="obsolete">Metronom</translation>
+        <translation type="unfinished">Metronom</translation>
     </message>
     <message>
+        <location line="+3"/>
+        <source>Provides a metronome click for you to play along with</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Shows MIDI activity in and out of Rosegarden</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
         <source>IN</source>
-        <translation type="obsolete">MASUK</translation>
+        <translation type="unfinished">MASUK</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>OUT</source>
-        <translation type="obsolete">KELUAR</translation>
+        <translation type="unfinished">KELUAR</translation>
     </message>
     <message>
+        <location line="+1"/>
+        <location line="+1"/>
+        <source>NO EVENTS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
         <source>Record</source>
-        <translation type="obsolete">Rekam</translation>
+        <translation type="unfinished">Rekam</translation>
     </message>
     <message>
+        <location line="+3"/>
+        <source>Record either MIDI or audio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Loop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Turn on and off the loop markers (if set)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
         <source>Solo</source>
-        <translation type="obsolete">Solo</translation>
+        <translation type="unfinished">Solo</translation>
     </message>
     <message>
+        <location line="+3"/>
+        <source>Mutes all but the currently selected track</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Start loop or range here</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>End loop or range here</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
         <source>SIG</source>
-        <translation type="obsolete">SIG</translation>
+        <translation type="unfinished">SIG</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>DIV</source>
-        <translation type="obsolete">DIV</translation>
+        <translation type="unfinished">DIV</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>/16</source>
-        <translation type="obsolete">/16</translation>
+        <translation type="unfinished">/16</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>TEMPO</source>
-        <translation type="obsolete">TEMPO</translation>
+        <translation type="unfinished">TEMPO</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>END</source>
-        <translation type="obsolete">AKHIR</translation>
+        <translation type="unfinished">AKHIR</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>BAR</source>
-        <translation type="obsolete">BAR</translation>
+        <translation type="unfinished">BAR</translation>
     </message>
     <message>
+        <location line="+2"/>
+        <source>Switch between real time, musical time, and frame count</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
         <source>Show additional controls</source>
-        <translation type="obsolete">Tampilkan kontrol tambahan</translation>
+        <translation type="unfinished">Tampilkan kontrol tambahan</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Rewind</source>
-        <translation type="obsolete">Putar Ulang</translation>
+        <translation type="unfinished">Putar Ulang</translation>
     </message>
     <message>
+        <location line="+3"/>
+        <source>Moves the current pointer position back one bar.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
         <source>Rewind to beginning</source>
-        <translation type="obsolete">Putar Ulang ke Awal</translation>
+        <translation type="unfinished">Putar Ulang ke Awal</translation>
     </message>
     <message>
+        <location line="+3"/>
+        <source>Moves the pointer position to the start of the composition. (This may mean going forwards if the pointer is currently before the start.)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
         <source>Play/Pause</source>
-        <translation type="obsolete">Putar/Tahan</translation>
+        <translation type="unfinished">Putar/Tahan</translation>
     </message>
     <message>
+        <location line="+3"/>
+        <source>Plays from the current pointer position, or pauses playback if already in progress.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
         <source>Stop</source>
-        <translation type="obsolete">Henti</translation>
+        <translation type="unfinished">Henti</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Stops playback or recording.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Fast forward</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Moves the current pointer position forwards one bar.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Fast forward to end</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Moves the pointer position to the end of the composition.  (This may mean going backwards if the pointer is already beyond the end.)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Display time to end</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -16923,8 +16923,8 @@ Double-click to open the marker editor.</source>
         <translation type="unfinished">Gwerth LSB</translation>
     </message>
     <message>
-        <location line="+140"/>
-        <location line="+330"/>
+        <location line="+139"/>
+        <location line="+329"/>
         <source>Key Mapping: %1</source>
         <translation type="unfinished">Newid Allwedd</translation>
     </message>
@@ -19827,7 +19827,7 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
 <context>
     <name>Rosegarden::RosegardenMainWindow</name>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="+304"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="+311"/>
         <source>Initializing plugin manager...</source>
         <translation type="unfinished">Ymgychwyn rheolydd ategynnau...</translation>
     </message>
@@ -19857,7 +19857,7 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
         <translation type="unfinished">Dechrau...</translation>
     </message>
     <message>
-        <location line="+433"/>
+        <location line="+501"/>
         <source>  Zoom:  </source>
         <translation type="unfinished">Chwyddo:</translation>
     </message>
@@ -20423,12 +20423,12 @@ Please exit and restart Rosegarden to restore sound capability.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-4316"/>
+        <location line="-4384"/>
         <source>Starting sequencer...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1776"/>
+        <location line="+1844"/>
         <source>Saving file%1with a new filename...</source>
         <comment>&apos;file%1with&apos; is correct. %1 will either become &apos; &apos; or &apos; as a template &apos; at runtime</comment>
         <translation type="unfinished"></translation>
@@ -23978,148 +23978,200 @@ Would you like to set it now?</source>
 <context>
     <name>RosegardenTransport</name>
     <message>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1047"/>
         <source>Rosegarden Transport</source>
-        <translation type="obsolete">Cludiant Rosegarden</translation>
+        <translation type="unfinished">Cludiant Rosegarden</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Hide additional controls</source>
-        <translation type="obsolete">Cuddio rheolau ychwanegol</translation>
+        <translation type="unfinished">Cuddio rheolau ychwanegol</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Panic Button</source>
-        <translation type="obsolete">Botwm Dychryn</translation>
+        <translation type="unfinished">Botwm Dychryn</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Resets all MIDI devices if you&apos;ve got stuck notes</source>
-        <translation type="obsolete">Ail-osod pob dyfais MIDI os mae ganddoch nodau glynedig</translation>
+        <translation type="unfinished">Ail-osod pob dyfais MIDI os mae ganddoch nodau glynedig</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Metronome</source>
-        <translation type="obsolete">Metronom</translation>
+        <translation type="unfinished">Metronom</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Provides a metronome click for you to play along with</source>
-        <translation type="obsolete">Darparu clic metronom i chi chwarae ynghyd a fo</translation>
+        <translation type="unfinished">Darparu clic metronom i chi chwarae ynghyd a fo</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Shows MIDI activity in and out of Rosegarden</source>
-        <translation type="obsolete">Dangos gweithgarwch MIDI i mewn ac allan o Rosegarden</translation>
+        <translation type="unfinished">Dangos gweithgarwch MIDI i mewn ac allan o Rosegarden</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>IN</source>
-        <translation type="obsolete">I MEWN</translation>
+        <translation type="unfinished">I MEWN</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>OUT</source>
-        <translation type="obsolete">ALLAN</translation>
+        <translation type="unfinished">ALLAN</translation>
     </message>
     <message>
+        <location line="+1"/>
+        <location line="+1"/>
         <source>NO EVENTS</source>
-        <translation type="obsolete">DIM DIGWYDDIADAU</translation>
+        <translation type="unfinished">DIM DIGWYDDIADAU</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Record</source>
-        <translation type="obsolete">Recordio</translation>
+        <translation type="unfinished">Recordio</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Record either MIDI or audio</source>
-        <translation type="obsolete">Recordio ai MIDI neu sain</translation>
+        <translation type="unfinished">Recordio ai MIDI neu sain</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Loop</source>
-        <translation type="obsolete">Dolen</translation>
+        <translation type="unfinished">Dolen</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Turn on and off the loop markers (if set)</source>
-        <translation type="obsolete">Dangos a cuddio&apos;r nodwyr dolen (os ar osod)</translation>
+        <translation type="unfinished">Dangos a cuddio&apos;r nodwyr dolen (os ar osod)</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Solo</source>
-        <translation type="obsolete">Unawd</translation>
+        <translation type="unfinished">Unawd</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Mutes all but the currently selected track</source>
-        <translation type="obsolete">Distewi pob un trac ond yr yn sydd wedi&apos;i ddewis yn gyfredol</translation>
+        <translation type="unfinished">Distewi pob un trac ond yr yn sydd wedi&apos;i ddewis yn gyfredol</translation>
     </message>
     <message>
+        <location line="+4"/>
+        <source>Start loop or range here</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>End loop or range here</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
         <source>SIG</source>
-        <translation type="obsolete">SIG</translation>
+        <translation type="unfinished">SIG</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>DIV</source>
-        <translation type="obsolete">DIV</translation>
+        <translation type="unfinished">DIV</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>/16</source>
-        <translation type="obsolete">/16</translation>
+        <translation type="unfinished">/16</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>TEMPO</source>
-        <translation type="obsolete">TEMPO</translation>
+        <translation type="unfinished">TEMPO</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>END</source>
-        <translation type="obsolete">DIWEDD</translation>
+        <translation type="unfinished">DIWEDD</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>BAR</source>
-        <translation type="obsolete">BAR</translation>
+        <translation type="unfinished">BAR</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Switch between real time, musical time, and frame count</source>
-        <translation type="obsolete">Newid rhwng amser gwir, amser cerddorol, a fframiau SMPTE</translation>
+        <translation type="unfinished">Newid rhwng amser gwir, amser cerddorol, a fframiau SMPTE</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Show additional controls</source>
-        <translation type="obsolete">Dangos rheolau ychwanegol</translation>
+        <translation type="unfinished">Dangos rheolau ychwanegol</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Rewind</source>
-        <translation type="obsolete">Ail-ddirwyn</translation>
+        <translation type="unfinished">Ail-ddirwyn</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Moves the current pointer position back one bar.</source>
-        <translation type="obsolete">Symud lle&apos;r pwyntydd cyfredol yn ol un far.</translation>
+        <translation type="unfinished">Symud lle&apos;r pwyntydd cyfredol yn ol un far.</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Rewind to beginning</source>
-        <translation type="obsolete">Ail-ddirwyn i&apos;r dechrau</translation>
+        <translation type="unfinished">Ail-ddirwyn i&apos;r dechrau</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Moves the pointer position to the start of the composition. (This may mean going forwards if the pointer is currently before the start.)</source>
-        <translation type="obsolete">Symud lle y pwyntydd i ddechrau&apos;r cyfansoddiad.  (Gall hyn olygu symud ymlaen os mae&apos;r pwyntydd cyn y dechreuad ar hyn o bryd.)</translation>
+        <translation type="unfinished">Symud lle y pwyntydd i ddechrau&apos;r cyfansoddiad.  (Gall hyn olygu symud ymlaen os mae&apos;r pwyntydd cyn y dechreuad ar hyn o bryd.)</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Play/Pause</source>
-        <translation type="obsolete">Chwarae/Seibio</translation>
+        <translation type="unfinished">Chwarae/Seibio</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Plays from the current pointer position, or pauses playback if already in progress.</source>
-        <translation type="obsolete">Chwarae o le y pwyntydd cyfredol, neu seibio chwarae os ar fynd.</translation>
+        <translation type="unfinished">Chwarae o le y pwyntydd cyfredol, neu seibio chwarae os ar fynd.</translation>
     </message>
     <message>
+        <location line="+4"/>
+        <source>Stop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
         <source>Stops playback or recording.</source>
-        <translation type="obsolete">Aros chwarae neu recordio.</translation>
+        <translation type="unfinished">Aros chwarae neu recordio.</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Fast forward</source>
-        <translation type="obsolete">Brys ymlaen</translation>
+        <translation type="unfinished">Brys ymlaen</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Moves the current pointer position forwards one bar.</source>
-        <translation type="obsolete">Symud lle y pwyntydd cyfredol ymlaen un far.</translation>
+        <translation type="unfinished">Symud lle y pwyntydd cyfredol ymlaen un far.</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Fast forward to end</source>
-        <translation type="obsolete">Brys ymlaen i&apos;r diwedd</translation>
+        <translation type="unfinished">Brys ymlaen i&apos;r diwedd</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Moves the pointer position to the end of the composition.  (This may mean going backwards if the pointer is already beyond the end.)</source>
-        <translation type="obsolete">Symud y pwyntydd i ddiwedd y cyfansoddiad.  (Gall hyn olygu symud yn ol os mae&apos;r pwyntydd tu hwnt i&apos;r diwedd yn barod.)</translation>
+        <translation type="unfinished">Symud y pwyntydd i ddiwedd y cyfansoddiad.  (Gall hyn olygu symud yn ol os mae&apos;r pwyntydd tu hwnt i&apos;r diwedd yn barod.)</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Display time to end</source>
-        <translation type="obsolete">Dangos amser i&apos;r diwedd</translation>
+        <translation type="unfinished">Dangos amser i&apos;r diwedd</translation>
     </message>
 </context>
 <context>

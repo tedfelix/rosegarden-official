@@ -16921,8 +16921,8 @@ Double-click to open the marker editor.</source>
         <translation type="unfinished">最低有效位(LSB)值</translation>
     </message>
     <message>
-        <location line="+140"/>
-        <location line="+330"/>
+        <location line="+139"/>
+        <location line="+329"/>
         <source>Key Mapping: %1</source>
         <translation type="unfinished">基调修改</translation>
     </message>
@@ -19825,7 +19825,7 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
 <context>
     <name>Rosegarden::RosegardenMainWindow</name>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="+304"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="+311"/>
         <source>Initializing plugin manager...</source>
         <translation type="unfinished">正在初始化插件管理器...</translation>
     </message>
@@ -19855,7 +19855,7 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
         <translation type="unfinished">已开始...</translation>
     </message>
     <message>
-        <location line="+433"/>
+        <location line="+501"/>
         <source>  Zoom:  </source>
         <translation type="unfinished">  缩放：</translation>
     </message>
@@ -20427,12 +20427,12 @@ Please exit and restart Rosegarden to restore sound capability.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-4316"/>
+        <location line="-4384"/>
         <source>Starting sequencer...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1776"/>
+        <location line="+1844"/>
         <source>Saving file%1with a new filename...</source>
         <comment>&apos;file%1with&apos; is correct. %1 will either become &apos; &apos; or &apos; as a template &apos; at runtime</comment>
         <translation type="unfinished"></translation>
@@ -23989,144 +23989,200 @@ Would you like to set it now?</source>
 <context>
     <name>RosegardenTransport</name>
     <message>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1047"/>
         <source>Rosegarden Transport</source>
-        <translation type="obsolete">玫瑰园播放控制器</translation>
+        <translation type="unfinished">玫瑰园播放控制器</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Hide additional controls</source>
-        <translation type="obsolete">隐藏额外控件</translation>
+        <translation type="unfinished">隐藏额外控件</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Panic Button</source>
-        <translation type="obsolete">应急按钮</translation>
+        <translation type="unfinished">应急按钮</translation>
     </message>
     <message>
+        <location line="+3"/>
+        <source>Resets all MIDI devices if you&apos;ve got stuck notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
         <source>Metronome</source>
-        <translation type="obsolete">节拍器</translation>
+        <translation type="unfinished">节拍器</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Provides a metronome click for you to play along with</source>
-        <translation type="obsolete">提供一个节拍器滴答声以便您能跟随它播放</translation>
+        <translation type="unfinished">提供一个节拍器滴答声以便您能跟随它播放</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Shows MIDI activity in and out of Rosegarden</source>
-        <translation type="obsolete">于玫瑰园内或外显示 MIDI 激活</translation>
+        <translation type="unfinished">于玫瑰园内或外显示 MIDI 激活</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>IN</source>
-        <translation type="obsolete">内</translation>
+        <translation type="unfinished">内</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>OUT</source>
-        <translation type="obsolete">外</translation>
+        <translation type="unfinished">外</translation>
     </message>
     <message>
+        <location line="+1"/>
+        <location line="+1"/>
         <source>NO EVENTS</source>
-        <translation type="obsolete">没有事件</translation>
+        <translation type="unfinished">没有事件</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Record</source>
-        <translation type="obsolete">录制</translation>
+        <translation type="unfinished">录制</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Record either MIDI or audio</source>
-        <translation type="obsolete">录制 MIDI 或音频</translation>
+        <translation type="unfinished">录制 MIDI 或音频</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Loop</source>
-        <translation type="obsolete">循环</translation>
+        <translation type="unfinished">循环</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Turn on and off the loop markers (if set)</source>
-        <translation type="obsolete">开启或关闭循环标记(如果设置的话)</translation>
+        <translation type="unfinished">开启或关闭循环标记(如果设置的话)</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Solo</source>
-        <translation type="obsolete">独奏</translation>
+        <translation type="unfinished">独奏</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Mutes all but the currently selected track</source>
-        <translation type="obsolete">除了当前选中的轨道外全部静音</translation>
+        <translation type="unfinished">除了当前选中的轨道外全部静音</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Start loop or range here</source>
-        <translation type="obsolete">从这里开始进程条 %1</translation>
+        <translation type="unfinished">从这里开始进程条 %1</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>End loop or range here</source>
-        <translation type="obsolete">从这里开始进程条 %1</translation>
+        <translation type="unfinished">从这里开始进程条 %1</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>SIG</source>
-        <translation type="obsolete">标记</translation>
+        <translation type="unfinished">标记</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>DIV</source>
-        <translation type="obsolete">DIV</translation>
+        <translation type="unfinished">DIV</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>/16</source>
-        <translation type="obsolete">/16</translation>
+        <translation type="unfinished">/16</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>TEMPO</source>
-        <translation type="obsolete">节拍</translation>
+        <translation type="unfinished">节拍</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>END</source>
-        <translation type="obsolete">结束</translation>
+        <translation type="unfinished">结束</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>BAR</source>
-        <translation type="obsolete">进程条</translation>
+        <translation type="unfinished">进程条</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Switch between real time, musical time, and frame count</source>
-        <translation type="obsolete">在真实时间、音乐时间和帧计数之间切换</translation>
+        <translation type="unfinished">在真实时间、音乐时间和帧计数之间切换</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Show additional controls</source>
-        <translation type="obsolete">显示额外控件</translation>
+        <translation type="unfinished">显示额外控件</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Rewind</source>
-        <translation type="obsolete">回绕</translation>
+        <translation type="unfinished">回绕</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Moves the current pointer position back one bar.</source>
-        <translation type="obsolete">将当前指针位置向后移动一个进程条</translation>
+        <translation type="unfinished">将当前指针位置向后移动一个进程条</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Rewind to beginning</source>
-        <translation type="obsolete">回绕到起点</translation>
+        <translation type="unfinished">回绕到起点</translation>
     </message>
     <message>
+        <location line="+3"/>
+        <source>Moves the pointer position to the start of the composition. (This may mean going forwards if the pointer is currently before the start.)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
         <source>Play/Pause</source>
-        <translation type="obsolete">播放/暂停</translation>
+        <translation type="unfinished">播放/暂停</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Plays from the current pointer position, or pauses playback if already in progress.</source>
-        <translation type="obsolete">从当前的指针位置播放，或者如果正在播放则暂停回放。</translation>
+        <translation type="unfinished">从当前的指针位置播放，或者如果正在播放则暂停回放。</translation>
     </message>
     <message>
+        <location line="+4"/>
+        <source>Stop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
         <source>Stops playback or recording.</source>
-        <translation type="obsolete">停止播放或录音。</translation>
+        <translation type="unfinished">停止播放或录音。</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Fast forward</source>
-        <translation type="obsolete">快进</translation>
+        <translation type="unfinished">快进</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Moves the current pointer position forwards one bar.</source>
-        <translation type="obsolete">将当前指针位置向前移动一个进程条。</translation>
+        <translation type="unfinished">将当前指针位置向前移动一个进程条。</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Fast forward to end</source>
-        <translation type="obsolete">快进至终点</translation>
+        <translation type="unfinished">快进至终点</translation>
     </message>
     <message>
+        <location line="+3"/>
+        <source>Moves the pointer position to the end of the composition.  (This may mean going backwards if the pointer is already beyond the end.)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
         <source>Display time to end</source>
-        <translation type="obsolete">以倒计时方式显示时间</translation>
+        <translation type="unfinished">以倒计时方式显示时间</translation>
     </message>
 </context>
 <context>

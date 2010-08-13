@@ -11220,6 +11220,8 @@ Please select the ones you wish to delete permanently from the hard disk.
         <translation type="unfinished">
             <numerusform>&lt;qt&gt;%n звуковых файлов будет навсегда удалено с жесткого диска.&lt;br&gt;Это действие необратимо, восстановить файлы будет невозможно.&lt;br&gt;Вы уверены?&lt;/qt&gt;
         </numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -11340,7 +11342,7 @@ Please select the ones you wish to delete permanently from the hard disk.
         <location line="-493"/>
         <location line="+121"/>
         <source>Click to load an audio plugin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Щёлкните для загрузки звукового эффекта</translation>
     </message>
     <message>
         <location line="-104"/>
@@ -15222,6 +15224,8 @@ Example text from file:</source>
         <translation type="unfinished">
             <numerusform>
         </numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -15230,6 +15234,8 @@ Example text from file:</source>
         <translation type="unfinished">
             <numerusform>
         </numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -15243,6 +15249,8 @@ Example text from file:</source>
         <translation type="unfinished">
             <numerusform>
         </numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -15251,6 +15259,8 @@ Example text from file:</source>
         <translation type="unfinished">
             <numerusform>
         </numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -16835,6 +16845,8 @@ Double-click to open the marker editor.</source>
         <translation type="unfinished">
             <numerusform>
         </numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -17207,8 +17219,8 @@ Double-click to open the marker editor.</source>
         <translation>Значение LSB</translation>
     </message>
     <message>
-        <location line="+140"/>
-        <location line="+330"/>
+        <location line="+139"/>
+        <location line="+329"/>
         <source>Key Mapping: %1</source>
         <translation>Компоновка клавиатуры: %1</translation>
     </message>
@@ -18223,6 +18235,8 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation type="unfinished">
             <numerusform>%n пикселов
         </numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -18268,6 +18282,8 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation type="unfinished">
             <numerusform>Выделено %n событий
         </numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -18601,6 +18617,8 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <translation type="unfinished">
             <numerusform>%1%2 — %n сегментов — Нотный редактор
         </numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -19980,6 +19998,8 @@ Do you want to save it?</source>
         <translation type="unfinished">
             <numerusform>Удалить %n звуковых файлов, записанных во время этого несохранённого сеанса?
         </numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -20005,6 +20025,8 @@ Please select any you wish to delete permanently from the hard disk.
         <translation type="unfinished">
             <numerusform>
         </numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -20224,7 +20246,7 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
 <context>
     <name>Rosegarden::RosegardenMainWindow</name>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="+304"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="+311"/>
         <source>Initializing plugin manager...</source>
         <translation>Инициализируется диспетчер эффектов...</translation>
     </message>
@@ -20254,7 +20276,7 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
         <translation>Ключ на старт...</translation>
     </message>
     <message>
-        <location line="+433"/>
+        <location line="+501"/>
         <source>  Zoom:  </source>
         <translation>  Масштаб:  </translation>
     </message>
@@ -20542,6 +20564,8 @@ Would you like to set it now?</source>
         <translation type="unfinished">
             <numerusform>Разделить %n сегментов за раз
         </numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -21111,12 +21135,12 @@ Would you like to set it now?</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="-7396"/>
+        <location line="-7464"/>
         <source>Starting sequencer...</source>
         <translation>Запускается секвенсер...</translation>
     </message>
     <message>
-        <location line="+1776"/>
+        <location line="+1844"/>
         <source>Saving file%1with a new filename...</source>
         <comment>&apos;file%1with&apos; is correct. %1 will either become &apos; &apos; or &apos; as a template &apos; at runtime</comment>
         <translation type="unfinished"></translation>
@@ -21612,6 +21636,8 @@ Would you like to set it now?</source>
         <translation type="unfinished">
             <numerusform>
         </numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -24093,6 +24119,8 @@ Would you like to set it now?</source>
         <translation type="unfinished">
             <numerusform>%1 в %n дорожках
         </numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -24128,6 +24156,8 @@ Would you like to set it now?</source>
         <translation type="unfinished">
             <numerusform>
         </numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -24485,164 +24515,204 @@ Would you like to set it now?</source>
 <context>
     <name>RosegardenTransport</name>
     <message>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1047"/>
         <source>Rosegarden Transport</source>
-        <translation type="obsolete">Транспорт Rosegarden</translation>
+        <translation type="unfinished">Транспорт Rosegarden</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Hide additional controls</source>
-        <translation type="obsolete">Скрыть дополнительные кнопки</translation>
+        <translation type="unfinished">Скрыть дополнительные кнопки</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Panic Button</source>
-        <translation type="obsolete">Panic (снять все события)</translation>
+        <translation type="unfinished">Panic (снять все события)</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Resets all MIDI devices if you&apos;ve got stuck notes</source>
-        <translation type="obsolete">Перезагрузить все устройства MIDI при «проглатывании» нот</translation>
+        <translation type="unfinished">Перезагрузить все устройства MIDI при «проглатывании» нот</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Metronome</source>
-        <translation type="obsolete">Метроном</translation>
+        <translation type="unfinished">Метроном</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Provides a metronome click for you to play along with</source>
-        <translation type="obsolete">Включает метроном</translation>
+        <translation type="unfinished">Включает метроном</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Shows MIDI activity in and out of Rosegarden</source>
-        <translation type="obsolete">Отображает MIDI-события в/вне Rosegarden</translation>
+        <translation type="unfinished">Отображает MIDI-события в/вне Rosegarden</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>IN</source>
-        <translation type="obsolete">ВХ</translation>
+        <translation type="unfinished">ВХ</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>OUT</source>
-        <translation type="obsolete">ВЫХ</translation>
+        <translation type="unfinished">ВЫХ</translation>
     </message>
     <message>
+        <location line="+1"/>
+        <location line="+1"/>
         <source>NO EVENTS</source>
-        <translation type="obsolete">НЕТ СОБЫТИЙ</translation>
+        <translation type="unfinished">НЕТ СОБЫТИЙ</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Record</source>
-        <translation type="obsolete">Записать</translation>
+        <translation type="unfinished">Записать</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Record either MIDI or audio</source>
-        <translation type="obsolete">Записать MIDI или звук</translation>
+        <translation type="unfinished">Записать MIDI или звук</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Loop</source>
-        <translation type="obsolete">Петля</translation>
+        <translation type="unfinished">Петля</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Turn on and off the loop markers (if set)</source>
-        <translation type="obsolete">Включить или выключить метки цикла (если установлены)</translation>
+        <translation type="unfinished">Включить или выключить метки цикла (если установлены)</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Solo</source>
-        <translation type="obsolete">Соло</translation>
+        <translation type="unfinished">Соло</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Mutes all but the currently selected track</source>
-        <translation type="obsolete">Приглушить все дорожки кроме выбранных</translation>
+        <translation type="unfinished">Приглушить все дорожки кроме выбранных</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Start loop or range here</source>
-        <translation type="obsolete">Начать петлю или область здесь</translation>
+        <translation type="unfinished">Начать петлю или область здесь</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>End loop or range here</source>
-        <translation type="obsolete">Закончить здесь петлю или область</translation>
+        <translation type="unfinished">Закончить здесь петлю или область</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>SIG</source>
-        <translation type="obsolete">РАЗМ</translation>
+        <translation type="unfinished">РАЗМ</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>DIV</source>
-        <translation type="obsolete">ДЕЛ</translation>
+        <translation type="unfinished">ДЕЛ</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>/16</source>
-        <translation type="obsolete">/16</translation>
+        <translation type="unfinished">/16</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>TEMPO</source>
-        <translation type="obsolete">ТЕМП</translation>
+        <translation type="unfinished">ТЕМП</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>END</source>
-        <translation type="obsolete">КНЦ</translation>
+        <translation type="unfinished">КНЦ</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>BAR</source>
-        <translation type="obsolete">ТАКТ</translation>
+        <translation type="unfinished">ТАКТ</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Switch between real time, musical time, and frame count</source>
-        <translation type="obsolete">Переключиться между реальным временем, музыкальным и кадрами</translation>
+        <translation type="unfinished">Переключиться между реальным временем, музыкальным и кадрами</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Show additional controls</source>
-        <translation type="obsolete">Показать дополнительные кнопки управления</translation>
+        <translation type="unfinished">Показать дополнительные кнопки управления</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Rewind</source>
-        <translation type="obsolete">Перемотать назад</translation>
+        <translation type="unfinished">Перемотать назад</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Moves the current pointer position back one bar.</source>
-        <translation type="obsolete">Перемещает текущую позицию курсора на один такт назад.</translation>
+        <translation type="unfinished">Перемещает текущую позицию курсора на один такт назад.</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Rewind to beginning</source>
-        <translation type="obsolete">Перемотать к началу</translation>
+        <translation type="unfinished">Перемотать к началу</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Moves the pointer position to the start of the composition. (This may mean going forwards if the pointer is currently before the start.)</source>
-        <translation type="obsolete">Перемещает текущую позицию курсора к концу композиции.
+        <translation type="unfinished">Перемещает текущую позицию курсора к концу композиции.
 (Если курсор уже находится в начале композиции, курсор
 переместится вперёд.)</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Play/Pause</source>
-        <translation type="obsolete">Воспроизведение/Пауза</translation>
+        <translation type="unfinished">Воспроизведение/Пауза</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Plays from the current pointer position, or pauses playback if already in progress.</source>
-        <translation type="obsolete">Воспроизводит композицию начиная с текущей позиции курсора, либо приостанавливает воспроизведение.</translation>
+        <translation type="unfinished">Воспроизводит композицию начиная с текущей позиции курсора, либо приостанавливает воспроизведение.</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Stop</source>
-        <translation type="obsolete">Стоп</translation>
+        <translation type="unfinished">Стоп</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Stops playback or recording.</source>
-        <translation type="obsolete">Останавить воспроизведение или запись</translation>
+        <translation type="unfinished">Останавить воспроизведение или запись</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Fast forward</source>
-        <translation type="obsolete">Перемотать вперёд</translation>
+        <translation type="unfinished">Перемотать вперёд</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Moves the current pointer position forwards one bar.</source>
-        <translation type="obsolete">Переместить текущую позицию курсора на один такт вперёд.</translation>
+        <translation type="unfinished">Переместить текущую позицию курсора на один такт вперёд.</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Fast forward to end</source>
-        <translation type="obsolete">Перемотать до конца</translation>
+        <translation type="unfinished">Перемотать до конца</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Moves the pointer position to the end of the composition.  (This may mean going backwards if the pointer is already beyond the end.)</source>
-        <translation type="obsolete">Переместить текущую позицию курсора к концу композиции.
+        <translation type="unfinished">Переместить текущую позицию курсора к концу композиции.
 (Если курсор уже находится в конце композиции, то курсор
 переместится назад.)</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Display time to end</source>
-        <translation type="obsolete">Показать время до конца</translation>
+        <translation type="unfinished">Показать время до конца</translation>
     </message>
 </context>
 <context>

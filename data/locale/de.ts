@@ -16599,8 +16599,8 @@ Doppel-Klick öffnet den Marker Editor.</translation>
         <translation>LSB-Wert</translation>
     </message>
     <message>
-        <location line="+140"/>
-        <location line="+330"/>
+        <location line="+139"/>
+        <location line="+329"/>
         <source>Key Mapping: %1</source>
         <translation>Tasten-Übersetzungstabelle: %1</translation>
     </message>
@@ -19105,7 +19105,7 @@ Siehe: Editieren -&gt; Einstellungen -&gt; Audio.</translation>
 <context>
     <name>Rosegarden::RosegardenMainWindow</name>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="+304"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="+311"/>
         <source>Initializing plugin manager...</source>
         <translation>Plugin Manager wird initialisiert...</translation>
     </message>
@@ -19135,7 +19135,7 @@ Siehe: Editieren -&gt; Einstellungen -&gt; Audio.</translation>
         <translation>Beginn...</translation>
     </message>
     <message>
-        <location line="+433"/>
+        <location line="+501"/>
         <source>  Zoom:  </source>
         <translation>  Zoom:  </translation>
     </message>
@@ -19681,12 +19681,12 @@ Please exit and restart Rosegarden to restore sound capability.</source>
 Bitte Beenden und erneut Starten, damit der Ton wieder funktioniert.</translation>
     </message>
     <message>
-        <location line="-4316"/>
+        <location line="-4384"/>
         <source>Starting sequencer...</source>
         <translation>Sequencer starten...</translation>
     </message>
     <message>
-        <location line="+1776"/>
+        <location line="+1844"/>
         <source>Saving file%1with a new filename...</source>
         <comment>&apos;file%1with&apos; is correct. %1 will either become &apos; &apos; or &apos; as a template &apos; at runtime</comment>
         <translation>Datei%1 mit einem neuen Dateinamen speichern...</translation>
@@ -23221,160 +23221,200 @@ Möchten Sie den Pfad jetzt setzen?</translation>
 <context>
     <name>RosegardenTransport</name>
     <message>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1047"/>
         <source>Rosegarden Transport</source>
-        <translation type="obsolete">Rosegarden Bedienfeld</translation>
+        <translation type="unfinished">Rosegarden Bedienfeld</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Hide additional controls</source>
-        <translation type="obsolete">Zusätzliche Kontrollelemente verbergen</translation>
+        <translation type="unfinished">Zusätzliche Kontrollelemente verbergen</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Panic Button</source>
-        <translation type="obsolete">Not-Halt</translation>
+        <translation type="unfinished">Not-Halt</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Resets all MIDI devices if you&apos;ve got stuck notes</source>
-        <translation type="obsolete">Setzt alle MIDI-Geräte bei hängengebliebenen Tönen zurück</translation>
+        <translation type="unfinished">Setzt alle MIDI-Geräte bei hängengebliebenen Tönen zurück</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Metronome</source>
-        <translation type="obsolete">Metronom</translation>
+        <translation type="unfinished">Metronom</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Provides a metronome click for you to play along with</source>
-        <translation type="obsolete">Stellt einen Metronom-Klick zur Verfügung</translation>
+        <translation type="unfinished">Stellt einen Metronom-Klick zur Verfügung</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Shows MIDI activity in and out of Rosegarden</source>
-        <translation type="obsolete">Zeigt MIDI-Aktivitäten aus Rosegarden heraus und nach Rosegarden hinein</translation>
+        <translation type="unfinished">Zeigt MIDI-Aktivitäten aus Rosegarden heraus und nach Rosegarden hinein</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>IN</source>
-        <translation type="obsolete">IN</translation>
+        <translation type="unfinished">IN</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>OUT</source>
-        <translation type="obsolete">OUT</translation>
+        <translation type="unfinished">OUT</translation>
     </message>
     <message>
+        <location line="+1"/>
+        <location line="+1"/>
         <source>NO EVENTS</source>
-        <translation type="obsolete">NO EVENTS</translation>
+        <translation type="unfinished">NO EVENTS</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Record</source>
-        <translation type="obsolete">Aufnahme</translation>
+        <translation type="unfinished">Aufnahme</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Record either MIDI or audio</source>
-        <translation type="obsolete">MIDI- oder Audio-Aufnahme</translation>
+        <translation type="unfinished">MIDI- oder Audio-Aufnahme</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Loop</source>
-        <translation type="obsolete">Schleife</translation>
+        <translation type="unfinished">Schleife</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Turn on and off the loop markers (if set)</source>
-        <translation type="obsolete">Schleifen-Markierungen an- oder ausschalten (wenn gesetzt)</translation>
+        <translation type="unfinished">Schleifen-Markierungen an- oder ausschalten (wenn gesetzt)</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Solo</source>
-        <translation type="obsolete">Solo</translation>
+        <translation type="unfinished">Solo</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Mutes all but the currently selected track</source>
-        <translation type="obsolete">Schaltet alle Spuren stumm bis auf die aktuell ausgewählte</translation>
+        <translation type="unfinished">Schaltet alle Spuren stumm bis auf die aktuell ausgewählte</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Start loop or range here</source>
-        <translation type="obsolete">Beginne Schleife oder Bereich hier</translation>
+        <translation type="unfinished">Beginne Schleife oder Bereich hier</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>End loop or range here</source>
-        <translation type="obsolete">Beende Schleife oder Bereich hier</translation>
+        <translation type="unfinished">Beende Schleife oder Bereich hier</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>SIG</source>
-        <translation type="obsolete">SIG</translation>
+        <translation type="unfinished">SIG</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>DIV</source>
-        <translation type="obsolete">DIV</translation>
+        <translation type="unfinished">DIV</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>/16</source>
-        <translation type="obsolete">/16</translation>
+        <translation type="unfinished">/16</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>TEMPO</source>
-        <translation type="obsolete">TEMPO</translation>
+        <translation type="unfinished">TEMPO</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>END</source>
-        <translation type="obsolete">END</translation>
+        <translation type="unfinished">END</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>BAR</source>
-        <translation type="obsolete">BAR</translation>
+        <translation type="unfinished">BAR</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Switch between real time, musical time, and frame count</source>
-        <translation type="obsolete">Zwischen Echtzeit, Taktschlägen und Rahmen umschalten</translation>
+        <translation type="unfinished">Zwischen Echtzeit, Taktschlägen und Rahmen umschalten</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Show additional controls</source>
-        <translation type="obsolete">Weitere Kontrollelemente anzeigen</translation>
+        <translation type="unfinished">Weitere Kontrollelemente anzeigen</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Rewind</source>
-        <translation type="obsolete">Zurückspulen</translation>
+        <translation type="unfinished">Zurückspulen</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Moves the current pointer position back one bar.</source>
-        <translation type="obsolete">Bewegt den aktuellen Zeiger einen Takt zurück.</translation>
+        <translation type="unfinished">Bewegt den aktuellen Zeiger einen Takt zurück.</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Rewind to beginning</source>
-        <translation type="obsolete">Zum Beginn zurückspulen</translation>
+        <translation type="unfinished">Zum Beginn zurückspulen</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Moves the pointer position to the start of the composition. (This may mean going forwards if the pointer is currently before the start.)</source>
-        <translation type="obsolete">Bewegt den Zeiger zum Beginn des Stücks.  (Wenn sich der Zeiger bereits vor dem Beginn des Stücks befindet, wird der Zeiger entsprechend vorwärts bewegt.)</translation>
+        <translation type="unfinished">Bewegt den Zeiger zum Beginn des Stücks.  (Wenn sich der Zeiger bereits vor dem Beginn des Stücks befindet, wird der Zeiger entsprechend vorwärts bewegt.)</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Play/Pause</source>
-        <translation type="obsolete">Wiedergabe/Pause</translation>
+        <translation type="unfinished">Wiedergabe/Pause</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Plays from the current pointer position, or pauses playback if already in progress.</source>
-        <translation type="obsolete">Spielt von der aktuellen Cursorposition, oder hält die Wiedergabe an, wenn sie schon im Gang ist.</translation>
+        <translation type="unfinished">Spielt von der aktuellen Cursorposition, oder hält die Wiedergabe an, wenn sie schon im Gang ist.</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Stop</source>
-        <translation type="obsolete">Stopp</translation>
+        <translation type="unfinished">Stopp</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Stops playback or recording.</source>
-        <translation type="obsolete">Beendet Wiedergabe bzw. Aufnahme.</translation>
+        <translation type="unfinished">Beendet Wiedergabe bzw. Aufnahme.</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Fast forward</source>
-        <translation type="obsolete">Schnell vorspulen</translation>
+        <translation type="unfinished">Schnell vorspulen</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Moves the current pointer position forwards one bar.</source>
-        <translation type="obsolete">Bewegt die aktuelle Cursorposition einen Takt vorwärts.</translation>
+        <translation type="unfinished">Bewegt die aktuelle Cursorposition einen Takt vorwärts.</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Fast forward to end</source>
-        <translation type="obsolete">Schnell ans Ende vorspulen</translation>
+        <translation type="unfinished">Schnell ans Ende vorspulen</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Moves the pointer position to the end of the composition.  (This may mean going backwards if the pointer is already beyond the end.)</source>
-        <translation type="obsolete">Bewegt den Zeiger zum Ende des Stücks.  (Wenn sich der Zeiger bereits hinter dem Ende des Stücks befindet, wird der Zeiger entsprechend zurück bewegt.)</translation>
+        <translation type="unfinished">Bewegt den Zeiger zum Ende des Stücks.  (Wenn sich der Zeiger bereits hinter dem Ende des Stücks befindet, wird der Zeiger entsprechend zurück bewegt.)</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Display time to end</source>
-        <translation type="obsolete">Zeit bis zum Ende zeigen</translation>
+        <translation type="unfinished">Zeit bis zum Ende zeigen</translation>
     </message>
 </context>
 <context>
