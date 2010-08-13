@@ -445,7 +445,7 @@
     <message>
         <location line="+1"/>
         <source>Set Seg&amp;ment Duration...</source>
-        <translation>Définir la durée du seg&amp;ment</translation>
+        <translation>Définir la durée du seg&amp;ment...</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -496,7 +496,7 @@
         <location line="+1254"/>
         <location line="+1959"/>
         <source>Edit &amp;With</source>
-        <translation>Éditer</translation>
+        <translation>Éditer &amp;avec</translation>
     </message>
     <message>
         <location line="-3591"/>
@@ -572,7 +572,7 @@
         <location line="-723"/>
         <location line="+724"/>
         <source>To&amp;ggle Dot Off</source>
-        <translation>Ne pas pointer les notes et silences</translation>
+        <translation>Ne pas &amp;pointer les notes et silences</translation>
     </message>
     <message>
         <location line="-1699"/>
@@ -972,7 +972,7 @@
     <message>
         <location line="-1723"/>
         <source>&amp;Set to Current Velocity</source>
-        <translation>Mettre à la vélocité courante</translation>
+        <translation>Mettre à la vélo&amp;cité courante</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -1036,7 +1036,7 @@
         <location line="-1639"/>
         <location line="+1648"/>
         <source>&amp;Transpose by Semitones...</source>
-        <translation>Transposer par demi-tons...</translation>
+        <translation>&amp;Transposer par demi-tons...</translation>
     </message>
     <message>
         <location line="-1647"/>
@@ -1515,7 +1515,7 @@
         <location line="+4"/>
         <location line="+2014"/>
         <source>&amp;Convert Notation for...</source>
-        <translation>Convertir cette partition pour...</translation>
+        <translation>&amp;Convertir cette partition pour...</translation>
     </message>
     <message>
         <location line="-2004"/>
@@ -1635,7 +1635,7 @@
     <message>
         <location line="+1"/>
         <source>&amp;Remove Ornament...</source>
-        <translation>Supprime&amp;r ornement</translation>
+        <translation>Supprime&amp;r ornement...</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4418,7 +4418,7 @@
     <message>
         <location line="+1"/>
         <source>&amp;Set Quick Marker at Playback Position</source>
-        <translation>Positionner le marqueur rapide à l&apos;emplacement du pointeur d&apos;exécution</translation>
+        <translation>Positionner le marqueur &amp;rapide à l&apos;emplacement du pointeur d&apos;exécution</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -4453,7 +4453,7 @@
     <message>
         <location line="+1"/>
         <source>Modify MIDI &amp;Filters</source>
-        <translation>Modifier &amp;filtres MIDI... </translation>
+        <translation>Modifier &amp;filtres MIDI</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4488,7 +4488,7 @@
     <message>
         <location line="+45"/>
         <source>R&amp;elabel...</source>
-        <translation>Ré-étiqueter...</translation>
+        <translation>Ré-é&amp;tiqueter...</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -4668,7 +4668,7 @@
     <message>
         <location line="-24"/>
         <source>Show Playback Position R&amp;uler</source>
-        <translation>Afficher réglette de position du curseur d&apos;exécution</translation>
+        <translation>Afficher réglette de position du curseur d&apos;exéc&amp;ution</translation>
     </message>
     <message>
         <location line="-177"/>
@@ -4678,7 +4678,7 @@
     <message>
         <location line="+5"/>
         <source>Merge &amp;X11 Rosegarden file...</source>
-        <translation>Fusionner un fichier Rosegarden X11...</translation>
+        <translation>Fusionner un fichier Rosegarden &amp;X11...</translation>
     </message>
     <message>
         <location line="+234"/>
@@ -10994,9 +10994,8 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
         <location line="+10"/>
         <source>&lt;qt&gt;About to delete %n audio file(s) permanently from the hard disk.&lt;br&gt;This action cannot be undone, and there will be no way to recover the files.&lt;br&gt;Are you sure?&lt;/qt&gt;</source>
         <translation>
-            <numerusform>&lt;qt&gt;%n fichiers audio vont être effacés sur le disque dur.&lt;br&gt;Cette action ne pourra pas être annulée et il n&apos;existera aucun moyen de récupérer ces fichiers.&lt;br&gt;Etes vous sûr de vouloir continuer?&lt;/qt&gt;
-        </numerusform>
-            <numerusform></numerusform>
+            <numerusform>&lt;qt&gt;%n fichier audio va être effacé sur le disque dur.&lt;br&gt;Cette action ne pourra pas être annulée et il n&apos;existera aucun moyen de récupérer le fichier.&lt;br&gt;Etes vous sûr de vouloir continuer?&lt;/qt&gt;</numerusform>
+            <numerusform>&lt;qt&gt;%n fichiers audio vont être effacés sur le disque dur.&lt;br&gt;Cette action ne pourra pas être annulée et il n&apos;existera aucun moyen de récupérer ces fichiers.&lt;br&gt;Etes vous sûr de vouloir continuer?&lt;/qt&gt;</numerusform>
         </translation>
     </message>
     <message>
@@ -12626,7 +12625,7 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="-385"/>
         <source>[ No port ]</source>
-        <translation type="unfinished">[ Pas de port ]</translation>
+        <translation>[ Pas de port ]</translation>
     </message>
     <message>
         <location line="+729"/>
@@ -13004,7 +13003,7 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
     <message>
         <location line="+18"/>
         <source>Sub-ordering: </source>
-        <translation>Sous-ordonnancement</translation>
+        <translation>Sous-ordonnancement: </translation>
     </message>
     <message>
         <location line="+15"/>
@@ -13626,7 +13625,7 @@ Voulez-vous essayer de localiser ce fichier?</translation>
     <message>
         <location line="+12"/>
         <source>Merge new file  </source>
-        <translation>Fusionner un nouveau fichier..</translation>
+        <translation>Fusionner un nouveau fichier  </translation>
     </message>
     <message>
         <location line="+6"/>
@@ -13709,7 +13708,7 @@ Voulez-vous essayer de localiser ce fichier?</translation>
     <message>
         <location filename="../../src/gui/editors/guitar/Fingering.cpp" line="+110"/>
         <source>couldn&apos;t parse fingering &apos;%1&apos; in &apos;%2&apos;</source>
-        <translation type="unfinished">Échec de l&apos;analyse du doigté &apos;%1&apos; dans &apos;%2&apos;</translation>
+        <translation>Échec de l&apos;analyse du doigté &apos;%1&apos; dans &apos;%2&apos;</translation>
     </message>
 </context>
 <context>
@@ -14770,16 +14769,16 @@ Texte d&apos;exemple depuis le fichier:</translation>
         <location line="+8"/>
         <source>up %n octave(s) and %1</source>
         <translation>
-            <numerusform>%n octave(s) et %1 vers le haut</numerusform>
-            <numerusform></numerusform>
+            <numerusform>%n octave et %1 vers le haut</numerusform>
+            <numerusform>%n octaves et %1 vers le haut</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location line="+3"/>
         <source>up %n octave(s)</source>
         <translation>
-            <numerusform>%n octave(s) vers le haut</numerusform>
-            <numerusform></numerusform>
+            <numerusform>%n octave vers le haut</numerusform>
+            <numerusform>%n octaves vers le haut</numerusform>
         </translation>
     </message>
     <message>
@@ -14791,16 +14790,16 @@ Texte d&apos;exemple depuis le fichier:</translation>
         <location line="+5"/>
         <source>down %n octave(s) and %1</source>
         <translation>
-            <numerusform>%n octave(s) et %1 vers le bas</numerusform>
-            <numerusform></numerusform>
+            <numerusform>%n octave et %1 vers le bas</numerusform>
+            <numerusform>%n octaves et %1 vers le bas</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location line="+3"/>
         <source>down %n octave(s)</source>
         <translation>
-            <numerusform>%n octave(s) vers le bas</numerusform>
-            <numerusform></numerusform>
+            <numerusform>%n octave vers le bas</numerusform>
+            <numerusform>%n octaves vers le bas</numerusform>
         </translation>
     </message>
     <message>
@@ -15953,7 +15952,7 @@ un peu d&apos;attente au début de l&apos;exécution à cause du volume de donn�
     <message>
         <location line="+19"/>
         <source>Remove all markers</source>
-        <translation>&amp;Enlever tous les marqueurs</translation>
+        <translation>Enlever tous les marqueurs</translation>
     </message>
     <message>
         <location line="+308"/>
@@ -17250,8 +17249,8 @@ Ceci est un bogue (le programme aurait dû s&apos;arrêter anormalement)</transl
         <location line="-8"/>
         <source>%n pixel(s)</source>
         <translation>
-            <numerusform>%n pixel(s)</numerusform>
-            <numerusform></numerusform>
+            <numerusform>%n pixel</numerusform>
+            <numerusform>%n pixels</numerusform>
         </translation>
     </message>
     <message>
@@ -17278,8 +17277,8 @@ Ceci est un bogue (le programme aurait dû s&apos;arrêter anormalement)</transl
         <location line="-90"/>
         <source>  %n event(s) selected </source>
         <translation>
-            <numerusform>  %n événement(s) sélectionné(s)</numerusform>
-            <numerusform></numerusform>
+            <numerusform>  %n événement sélectionné</numerusform>
+            <numerusform>  %n événements sélectionnés</numerusform>
         </translation>
     </message>
     <message>
@@ -17373,7 +17372,7 @@ Ceci est un bogue (le programme aurait dû s&apos;arrêter anormalement)</transl
     <message>
         <location line="+18"/>
         <source>Previewing with LilyPond...</source>
-        <translation>Prévisualisation avec LilyPond   </translation>
+        <translation>Prévisualisation avec LilyPond...</translation>
     </message>
     <message>
         <location line="+25"/>
@@ -18829,7 +18828,7 @@ Il peut y avoir des incompatibilités avec ce format de fichier.</translation>
         <location line="+124"/>
         <source>Delete the %n audio file(s) recorded during the unsaved session?</source>
         <translation>
-            <numerusform>Effacer le fichier audio enregistré au cours de la session abandonnée?</numerusform>
+            <numerusform>Effacer le %n fichier audio enregistré au cours de la session abandonnée?</numerusform>
             <numerusform>Effacer les %n fichiers audio enregistrés au cours de la session abandonnée?</numerusform>
         </translation>
     </message>
@@ -22823,7 +22822,7 @@ Souhaitez vous le faire tout de suite ?</translation>
         <source>This triggered segment is used %n time(s) in the current composition.  Are you sure you want to remove it?</source>
         <translation>
             <numerusform>Ce segment déclenché est utilisé %n fois dans la composition courante.  Voulez vous vraiment le supprimer?</numerusform>
-            <numerusform></numerusform>
+            <numerusform>Ce segment déclenché est utilisé %n fois dans la composition courante.  Voulez vous vraiment le supprimer?</numerusform>
         </translation>
     </message>
     <message>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0">
+<TS version="2.0" language="es" sourcelanguage="en_US">
 <context>
     <name>:</name>
     <message>
@@ -10848,9 +10848,9 @@ Por favor, seleccione cuáles de ellos quiere borrar permanentemente del disco d
     <message numerus="yes">
         <location line="+10"/>
         <source>&lt;qt&gt;About to delete %n audio file(s) permanently from the hard disk.&lt;br&gt;This action cannot be undone, and there will be no way to recover the files.&lt;br&gt;Are you sure?&lt;/qt&gt;</source>
-        <translation type="unfinished">
-            <numerusform>&lt;qt&gt;Se borrarán %n archivos de audio del disco duro de modo permanente.&lt;br&gt;Esta acción no se puede deshacer y no habrá modo de recuperar estos archivos.&lt;br&gt;¿Está seguro?&lt;/qt&gt;
-        </numerusform>
+        <translation>
+            <numerusform>&lt;qt&gt;Se borrará un archivo de audio del disco duro de modo permanente.&lt;br&gt;Esta acción no se puede deshacer y no habrá modo de recuperar estos archivos.&lt;br&gt;¿Está seguro?&lt;/qt&gt;</numerusform>
+            <numerusform>&lt;qt&gt;Se borrarán %n archivos de audio del disco duro de modo permanente.&lt;br&gt;Esta acción no se puede deshacer y no habrá modo de recuperar estos archivos.&lt;br&gt;¿Está seguro?&lt;/qt&gt;</numerusform>
         </translation>
     </message>
     <message>
@@ -12480,7 +12480,7 @@ Por favor, seleccione cuáles de ellos quiere borrar permanentemente del disco d
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="-385"/>
         <source>[ No port ]</source>
-        <translation type="unfinished">[ningún]</translation>
+        <translation>[ningún]</translation>
     </message>
     <message>
         <location line="+729"/>
@@ -13563,7 +13563,7 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location filename="../../src/gui/editors/guitar/Fingering.cpp" line="+110"/>
         <source>couldn&apos;t parse fingering &apos;%1&apos; in &apos;%2&apos;</source>
-        <translation type="unfinished">no se ha podido interpretar la digitación de &apos;%1&apos; en &apos;%2&apos;</translation>
+        <translation>no se ha podido interpretar la digitación de «%1» en «%2»</translation>
     </message>
 </context>
 <context>
@@ -13592,7 +13592,7 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location filename="../../src/gui/editors/notation/FontViewFrame.cpp" line="+99"/>
         <source>Error: Unable to match font name %1</source>
-        <translation type="unfinished">Error: Incapaz de emparejar el nombre de tipografía %1</translation>
+        <translation>Error: Incapaz de emparejar el nombre de tipografía %1</translation>
     </message>
     <message>
         <location line="+0"/>
@@ -14623,17 +14623,17 @@ Ejemplo de texto perteneciente del archivo:</translation>
     <message numerus="yes">
         <location line="+8"/>
         <source>up %n octave(s) and %1</source>
-        <translation type="unfinished">
-            <numerusform>subir %n octavas y %1
-        </numerusform>
+        <translation>
+            <numerusform>subir una octava y %1</numerusform>
+            <numerusform>subir %n octavas y %1</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location line="+3"/>
         <source>up %n octave(s)</source>
-        <translation type="unfinished">
-            <numerusform>subir %n octavas
-        </numerusform>
+        <translation>
+            <numerusform>subir una octava</numerusform>
+            <numerusform>subir %n octavas</numerusform>
         </translation>
     </message>
     <message>
@@ -14644,17 +14644,17 @@ Ejemplo de texto perteneciente del archivo:</translation>
     <message numerus="yes">
         <location line="+5"/>
         <source>down %n octave(s) and %1</source>
-        <translation type="unfinished">
-            <numerusform>bajar %n octavas y %1
-        </numerusform>
+        <translation>
+            <numerusform>bajar una octava y %1</numerusform>
+            <numerusform>bajar %n octavas y %1</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location line="+3"/>
         <source>down %n octave(s)</source>
-        <translation type="unfinished">
-            <numerusform>bajar %n octavas
-        </numerusform>
+        <translation>
+            <numerusform>bajar una octava</numerusform>
+            <numerusform>bajar %n octavas</numerusform>
         </translation>
     </message>
     <message>
@@ -16105,9 +16105,9 @@ Doble clic para abrir el editor de marcadores.</translation>
     <message numerus="yes">
         <location line="+7"/>
         <source>%1%2 - %n Segment(s) - %3</source>
-        <translation type="unfinished">
-            <numerusform>%1%2 - %n Segmentos - %3
-        </numerusform>
+        <translation>
+            <numerusform>%1%2 - Un segmento - %3</numerusform>
+            <numerusform>%1%2 - %n segmentos - %3</numerusform>
         </translation>
     </message>
     <message>
@@ -17098,9 +17098,9 @@ Esto es un bug (el programa debería haber fallado ya)</translation>
     <message numerus="yes">
         <location line="-8"/>
         <source>%n pixel(s)</source>
-        <translation type="unfinished">
-            <numerusform>%n pixeles
-        </numerusform>
+        <translation>
+            <numerusform>un pixel</numerusform>
+            <numerusform>%n pixeles</numerusform>
         </translation>
     </message>
     <message>
@@ -17126,9 +17126,9 @@ Esto es un bug (el programa debería haber fallado ya)</translation>
     <message numerus="yes">
         <location line="-90"/>
         <source>  %n event(s) selected </source>
-        <translation type="unfinished">
-            <numerusform>  %n eventos seleccionados
-        </numerusform>
+        <translation>
+            <numerusform>  un evento seleccionado</numerusform>
+            <numerusform>  %n eventos seleccionados</numerusform>
         </translation>
     </message>
     <message>
@@ -17329,9 +17329,9 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message numerus="yes">
         <location line="+6"/>
         <source>%1%2 - %n Segment(s) - Notation</source>
-        <translation type="unfinished">
-            <numerusform>%1%2 - %n Segmentos - Partitura
-        </numerusform>
+        <translation>
+            <numerusform>%1%2 - Un segmento - Partitura</numerusform>
+            <numerusform>%1%2 - %n segmentos - Partitura</numerusform>
         </translation>
     </message>
     <message>
@@ -18681,9 +18681,9 @@ Pueden haber incompatibilidades con el formato del archivo.</translation>
     <message numerus="yes">
         <location line="+124"/>
         <source>Delete the %n audio file(s) recorded during the unsaved session?</source>
-        <translation type="unfinished">
-            <numerusform>¿Borrar los %n archivos de audio grabado durante la sesión que no se ha guardada?
-        </numerusform>
+        <translation>
+            <numerusform>¿Borrar el archivo de audio grabado durante la sesión que no se ha guardada?</numerusform>
+            <numerusform>¿Borrar los %n archivos de audio grabado durante la sesión que no se ha guardada?</numerusform>
         </translation>
     </message>
     <message>
@@ -18706,9 +18706,9 @@ Por favor, decida si quiere borrarlos permanentemente del disco duro.
     <message numerus="yes">
         <location line="+16"/>
         <source>&lt;qt&gt;About to delete %n audio file(s) permanently from the hard disk.&lt;br&gt;There will be no way to recover the file(s).&lt;br&gt;Are you sure?&lt;/qt&gt;</source>
-        <translation type="unfinished">
-            <numerusform>&lt;qt&gt;Se borrarán %n archivos de audio del disco duro de modo permanente.&lt;br&gt;Esta acción no se puede deshacer y no habrá modo de recuperar estos archivos.&lt;br&gt;¿Está seguro?&lt;/qt&gt;
-        </numerusform>
+        <translation>
+            <numerusform>&lt;qt&gt;Se borrará un archivo de audio del disco duro de modo permanente.&lt;br&gt;Esta acción no se puede deshacer y no habrá modo de recuperar este archivo.&lt;br&gt;¿Está seguro?&lt;/qt&gt;</numerusform>
+            <numerusform>&lt;qt&gt;Se borrarán %n archivos de audio del disco duro de modo permanente.&lt;br&gt;Esta acción no se puede deshacer y no habrá modo de recuperar estos archivos.&lt;br&gt;¿Está seguro?&lt;/qt&gt;</numerusform>
         </translation>
     </message>
     <message>
@@ -19199,7 +19199,7 @@ Error fue: %2</translation>
         <source>The audio file path does not exist or is not writable.
 You must set the audio file path to a valid directory in Document Properties before %1.
 Would you like to set it now?</source>
-        <translation type="unfinished">El directorio de archivos de audio no existe o no se puede escribir.
+        <translation>El directorio de archivos de audio no existe o no se puede escribir.
 Usted debe establecer el directorio de archivos de audio en un directorio válido desde Propiedades del Documento antes de %1.
 ¿Quiere configurarlo ahora?</translation>
     </message>
@@ -19212,9 +19212,9 @@ Usted debe establecer el directorio de archivos de audio en un directorio válid
         <location line="+142"/>
         <location line="+34"/>
         <source>Split %n Segment(s) at Time</source>
-        <translation type="unfinished">
-            <numerusform>Dividir %n segmentos por tiempo
-        </numerusform>
+        <translation>
+            <numerusform>Dividir un segmento por tiempo</numerusform>
+            <numerusform>Dividir %n segmentos por tiempo</numerusform>
         </translation>
     </message>
     <message>
@@ -20215,9 +20215,9 @@ Por favor, configure el directorio de archivos de audio hacia un directorio vál
     <message numerus="yes">
         <location line="+167"/>
         <source>Move Segment(s)</source>
-        <translation type="unfinished">
-            <numerusform>Mover %n segmentos
-        </numerusform>
+        <translation>
+            <numerusform>Mover un segmento</numerusform>
+            <numerusform>Mover %n segmentos</numerusform>
         </translation>
     </message>
     <message>
@@ -22634,9 +22634,9 @@ Por favor, configura el directorio de archivos de audio hacia un directorio vál
     <message numerus="yes">
         <location line="+2"/>
         <source>%1 on %n track(s)</source>
-        <translation type="unfinished">
-            <numerusform>%1 en %n pistas
-        </numerusform>
+        <translation>
+            <numerusform>%1 en una pista</numerusform>
+            <numerusform>%1 en %n pistas</numerusform>
         </translation>
     </message>
     <message>
@@ -22669,9 +22669,9 @@ Por favor, configura el directorio de archivos de audio hacia un directorio vál
     <message numerus="yes">
         <location line="+22"/>
         <source>This triggered segment is used %n time(s) in the current composition.  Are you sure you want to remove it?</source>
-        <translation type="unfinished">
-            <numerusform>Este segmento activado se usa %n veces en la composición actual.  ¿Está seguro que quiere borrarlo?
-        </numerusform>
+        <translation>
+            <numerusform>Este segmento activado se usa una vez en la composición actual.  ¿Está seguro que quiere borrarlo?</numerusform>
+            <numerusform>Este segmento activado se usa %n veces en la composición actual.  ¿Está seguro que quiere borrarlo?</numerusform>
         </translation>
     </message>
     <message>
@@ -23016,198 +23016,198 @@ Por favor, configura el directorio de archivos de audio hacia un directorio vál
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1047"/>
         <source>Rosegarden Transport</source>
-        <translation type="unfinished">Transporte de Rosegarden</translation>
+        <translation>Transporte de Rosegarden</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Hide additional controls</source>
-        <translation type="unfinished">Ocultar controles adicionales</translation>
+        <translation>Ocultar controles adicionales</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Panic Button</source>
-        <translation type="unfinished">Botón de alarma</translation>
+        <translation>Botón de alarma</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Resets all MIDI devices if you&apos;ve got stuck notes</source>
-        <translation type="unfinished">Restablece todos los dispositivos MIDI cuando hay notas colgadas</translation>
+        <translation>Restablece todos los dispositivos MIDI cuando hay notas colgadas</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Metronome</source>
-        <translation type="unfinished">Metrónomo</translation>
+        <translation>Metrónomo</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Provides a metronome click for you to play along with</source>
-        <translation type="unfinished">Proporciona una señal de metrónomo para tocar con ella</translation>
+        <translation>Proporciona una señal de metrónomo para tocar con ella</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Shows MIDI activity in and out of Rosegarden</source>
-        <translation type="unfinished">Muestra actividad de entrada y salida MIDI en Rosegarden</translation>
+        <translation>Muestra actividad de entrada y salida MIDI en Rosegarden</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>IN</source>
-        <translation type="unfinished">IN</translation>
+        <translation>IN</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>OUT</source>
-        <translation type="unfinished">OUT</translation>
+        <translation>OUT</translation>
     </message>
     <message>
         <location line="+1"/>
         <location line="+1"/>
         <source>NO EVENTS</source>
-        <translation type="unfinished">SIN EVENTOS</translation>
+        <translation>SIN EVENTOS</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Record</source>
-        <translation type="unfinished">Grabar</translation>
+        <translation>Grabar</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Record either MIDI or audio</source>
-        <translation type="unfinished">Grabar tanto MIDI como audio</translation>
+        <translation>Grabar tanto MIDI como audio</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Loop</source>
-        <translation type="unfinished">Repetir</translation>
+        <translation>Repetir</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Turn on and off the loop markers (if set)</source>
-        <translation type="unfinished">Activa y desactiva las marcas de repetición (si hay)</translation>
+        <translation>Activa y desactiva las marcas de repetición (si hay)</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Solo</source>
-        <translation type="unfinished">Solo</translation>
+        <translation>Solo</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Mutes all but the currently selected track</source>
-        <translation type="unfinished">Silencia todas las pistas excepto la seleccionada</translation>
+        <translation>Silencia todas las pistas excepto la seleccionada</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Start loop or range here</source>
-        <translation type="unfinished">Comenzar bucle o ámbito aquí</translation>
+        <translation>Comenzar bucle o ámbito aquí</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>End loop or range here</source>
-        <translation type="unfinished">Terminar bucle o ámbito aquí</translation>
+        <translation>Terminar bucle o ámbito aquí</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>SIG</source>
-        <translation type="unfinished">SIG</translation>
+        <translation>SIG</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DIV</source>
-        <translation type="unfinished">DIV</translation>
+        <translation>DIV</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>/16</source>
-        <translation type="unfinished">/16</translation>
+        <translation>/16</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>TEMPO</source>
-        <translation type="unfinished">TEMPO</translation>
+        <translation>TEMPO</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>END</source>
-        <translation type="unfinished">FIN</translation>
+        <translation>FIN</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>BAR</source>
-        <translation type="unfinished">COMPÁS</translation>
+        <translation>COMPÁS</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Switch between real time, musical time, and frame count</source>
-        <translation type="unfinished">Conmutar entre tiempo real, tiempo musical y cuadros</translation>
+        <translation>Conmutar entre tiempo real, tiempo musical y cuadros</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Show additional controls</source>
-        <translation type="unfinished">Mostrar controles adicionales</translation>
+        <translation>Mostrar controles adicionales</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Rewind</source>
-        <translation type="unfinished">Rebobinar</translation>
+        <translation>Rebobinar</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Moves the current pointer position back one bar.</source>
-        <translation type="unfinished">Mueve la posición actual del cursor un compás hacia atrás.</translation>
+        <translation>Mueve la posición actual del cursor un compás hacia atrás.</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Rewind to beginning</source>
-        <translation type="unfinished">Rebobinar al principio</translation>
+        <translation>Rebobinar al principio</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Moves the pointer position to the start of the composition. (This may mean going forwards if the pointer is currently before the start.)</source>
-        <translation type="unfinished">Mueve la posición del cursor al comienzo de la composición (esto puede significar adelantarlo si el cursor está actualmente antes del comienzo)</translation>
+        <translation>Mueve la posición del cursor al comienzo de la composición (esto puede significar adelantarlo si el cursor está actualmente antes del comienzo)</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Play/Pause</source>
-        <translation type="unfinished">Reproducción/Pausa</translation>
+        <translation>Reproducción/Pausa</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Plays from the current pointer position, or pauses playback if already in progress.</source>
-        <translation type="unfinished">Toca desde la posición actual del cursor, o para la reproducción si ya está tocando.</translation>
+        <translation>Toca desde la posición actual del cursor, o para la reproducción si ya está tocando.</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Stop</source>
-        <translation type="unfinished">Parar</translation>
+        <translation>Parar</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Stops playback or recording.</source>
-        <translation type="unfinished">Para la grabación o reproducción.</translation>
+        <translation>Para la grabación o reproducción.</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Fast forward</source>
-        <translation type="unfinished">Avance rápido</translation>
+        <translation>Avance rápido</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Moves the current pointer position forwards one bar.</source>
-        <translation type="unfinished">Mueve la posición actual del cursor un compás hacia delante.</translation>
+        <translation>Mueve la posición actual del cursor un compás hacia delante.</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Fast forward to end</source>
-        <translation type="unfinished">Avance rápido hacia el final</translation>
+        <translation>Avance rápido hacia el final</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Moves the pointer position to the end of the composition.  (This may mean going backwards if the pointer is already beyond the end.)</source>
-        <translation type="unfinished">Mueve la posición del cursor al final de la composición. (Esto puede significar rebobinado si la posición ya está más allá del final.)</translation>
+        <translation>Mueve la posición del cursor al final de la composición. (Esto puede significar rebobinado si la posición ya está más allá del final.)</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Display time to end</source>
-        <translation type="unfinished">Muestra tiempo restante</translation>
+        <translation>Muestra tiempo restante</translation>
     </message>
 </context>
 <context>
