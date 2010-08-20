@@ -297,14 +297,14 @@ AudioFileManager::removeFile(AudioFileId id)
 }
 
 
-AudioFileId
-AudioFileManager::getFirstUnusedID()
-{
-    return AudioFile::getNewAudioFileID(); // defined in AudioFile.h
-}
+//AudioFileId
+//AudioFileManager::getFirstUnusedID()
+//{
+//    return AudioFile::getNewAudioFileID(); // defined in AudioFile.h
+//}
 // */
 
-/*
+///*
 AudioFileId
 AudioFileManager::getFirstUnusedID()
 {

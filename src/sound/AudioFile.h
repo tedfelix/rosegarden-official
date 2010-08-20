@@ -36,8 +36,8 @@ namespace Rosegarden
 typedef unsigned int AudioFileId;
 
 
-//initialize static
-static unsigned int _LAST_AUDIO_FILE_ID = 0;
+////initialize static
+//static unsigned int _LAST_AUDIO_FILE_ID = 0;
 
 
 
@@ -191,10 +191,10 @@ public:
                         bool addToResultBuffers = false) = 0;
 
 
-    static AudioFileId getNewAudioFileID() {
-        _LAST_AUDIO_FILE_ID++;
-        return _LAST_AUDIO_FILE_ID;
-    };
+//    static AudioFileId getNewAudioFileID() {
+//        _LAST_AUDIO_FILE_ID++;
+//        return _LAST_AUDIO_FILE_ID;
+//    };
 
 
 protected:
