@@ -128,7 +128,7 @@ AudioFileManager::addFile(const QString &filePath)
 
     // prepare for audio file
     AudioFile *aF = 0;
-    AudioFileId id = getFirstUnusedID();
+    AudioFileId id = getUniqueAudioFileID();
 
     if (ext == "wav") {
         // identify file type
@@ -246,7 +246,7 @@ AudioFileManager::insertFile(const std::string &name,
     if (foundFileName == "")
         return false;
 
-    AudioFileId id = getFirstUnusedID();
+    AudioFileId id = getUniqueAudioFileID();
 
     WAVAudioFile *aF = 0;
 
@@ -297,22 +297,21 @@ AudioFileManager::removeFile(AudioFileId id)
 }
 
 
-//AudioFileId
-//AudioFileManager::getFirstUnusedID()
-//{
-//    return AudioFile::getNewAudioFileID(); // defined in AudioFile.h
-//}
-// */
-
-///*
 AudioFileId
-AudioFileManager::getFirstUnusedID()
-{
+AudioFileManager::getUniqueAudioFileID() {
+    _LAST_AUDIO_FILE_ID++;
+    return _LAST_AUDIO_FILE_ID;
+}
+
+void
+AudioFileManager::resetAudioFileID() {
+
+    if (m_audioFiles.size() == 0) {
+        _LAST_AUDIO_FILE_ID = 0;
+        return;
+    }
+
     AudioFileId rI = 0;
-
-    if (m_audioFiles.size() == 0)
-        return rI;
-
     std::vector<AudioFile*>::iterator it;
 
     for (it = m_audioFiles.begin();
@@ -322,12 +321,8 @@ AudioFileManager::getFirstUnusedID()
             rI = (*it)->getId();
     }
 
-    rI++;
-
-    return rI;
+    _LAST_AUDIO_FILE_ID = ++rI;
 }
-// */
-
 
 bool
 AudioFileManager::insertFile(const std::string &name,
@@ -549,7 +544,7 @@ std::cerr << "XXX createRecordingAudioFile: " << projectName << std::endl;
 
     if (instrumentAlias.isEmpty()) instrumentAlias = "not_specified";
 
-    AudioFileId newId = getFirstUnusedID();
+    AudioFileId newId = getUniqueAudioFileID();
     QString fileName = "";
 
     while (fileName == "") {
@@ -621,7 +616,7 @@ AudioFileManager::createDerivedAudioFile(AudioFileId source,
     AudioFile *sourceFile = getAudioFile(source);
     if (!sourceFile) return 0;
 
-    AudioFileId newId = getFirstUnusedID();
+    AudioFileId newId = getUniqueAudioFileID();
     QString fileName = "";
 
     QString sourceBase = sourceFile->getShortFilename();
@@ -684,7 +679,7 @@ AudioFileManager::importFile(const QString &fileName, int sampleRate)
 
     emit setOperationName(tr("Importing audio file..."));
 
-    AudioFileId newId = getFirstUnusedID();
+    AudioFileId newId = getUniqueAudioFileID();
     QString targetName = "";
 
     QString sourceBase = QFileInfo(fileName).baseName();

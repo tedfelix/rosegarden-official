@@ -57,6 +57,9 @@ namespace Rosegarden
 
 typedef std::vector<AudioFile*>::const_iterator AudioFileManagerIterator;
 
+//initialize static
+static unsigned int _LAST_AUDIO_FILE_ID = 0;
+
 class AudioFileManager : public QObject, public XmlExportable
 {
     Q_OBJECT
@@ -286,6 +289,9 @@ public:
 
     std::set<int> getActualSampleRates() const;
 
+    /// Reset ID counter based on actual Audio Diles in Composition
+    void resetAudioFileID();
+
 signals:
     void setValue(int);
     void setOperationName(QString);
@@ -300,7 +306,8 @@ public slots:
 private:
     QString getFileInPath(const QString &file);
 
-    AudioFileId getFirstUnusedID();
+    /// Fetch a unique ID for Audio Files
+    AudioFileId getUniqueAudioFileID();
 
     std::vector<AudioFile*> m_audioFiles;
     QString m_audioPath;
