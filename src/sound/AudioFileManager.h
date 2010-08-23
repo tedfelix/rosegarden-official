@@ -57,9 +57,6 @@ namespace Rosegarden
 
 typedef std::vector<AudioFile*>::const_iterator AudioFileManagerIterator;
 
-//initialize static
-static unsigned int _LAST_AUDIO_FILE_ID = 0;
-
 class AudioFileManager : public QObject, public XmlExportable
 {
     Q_OBJECT
@@ -289,7 +286,7 @@ public:
 
     std::set<int> getActualSampleRates() const;
 
-    /// Reset ID counter based on actual Audio Diles in Composition
+    /// Reset ID counter based on actual Audio Files in Composition
     void resetAudioFileID();
 
 signals:
@@ -323,6 +320,10 @@ private:
     std::set<AudioFile *> m_derivedAudioFiles;
 
     int m_expectedSampleRate;
+    
+    //Audio ID tracking
+    unsigned int m_lastAudioFileID;
+
 };
 
 }

@@ -785,45 +785,53 @@ void TrackEditor::dropEvent(QDropEvent *e)
 
     if (!internal && !uriList.empty()) {
 
+        // Update code allow multiple audio drops to TrackEditor
+        // Old behavoir of stopping if .rg or .midi file encountered still works
         // We have a URI, and it didn't come from within RG
 
         RG_DEBUG << "TrackEditor::dropEvent() : got URI :" << uriList.first() << endl;
-        QString uri = uriList.first();
-        QString tester = uri.toLower();
+        
+        QStringList::const_iterator ci;
+        for (ci = uriList.constBegin(); ci != uriList.constEnd(); ++ci) {
 
-        if (tester.endsWith(".rg") || tester.endsWith(".rgp") ||
-            tester.endsWith(".mid") || tester.endsWith(".midi")) {
+            QString uri = *ci;
+            QString tester = uri.toLower();
 
-            // is a rosegarden document or project
+            if (tester.endsWith(".rg") || tester.endsWith(".rgp") ||
+                tester.endsWith(".mid") || tester.endsWith(".midi")) {
 
-            emit droppedDocument(uri);
-            return;
-            //
-            // WARNING
-            //
-            // DO NOT PERFORM ANY OPERATIONS AFTER THAT
-            // EMITTING THIS SIGNAL TRIGGERS THE LOADING OF A NEW DOCUMENT
-            // AND AS A CONSEQUENCE THE DELETION OF THIS TrackEditor OBJECT
-            //
+                // is a rosegarden document or project
 
-        } else {
+                emit droppedDocument(uri);
+                return;
+                //
+                // WARNING
+                //
+                // DO NOT PERFORM ANY OPERATIONS AFTER THAT
+                // EMITTING THIS SIGNAL TRIGGERS THE LOADING OF A NEW DOCUMENT
+                // AND AS A CONSEQUENCE THE DELETION OF THIS TrackEditor OBJECT
+                //
+
+            } else {
             
-            if (!track) return;
+                if (!track) return;
 
-            RG_DEBUG << "TrackEditor::dropEvent() : dropping at track pos = "
-                     << trackPos
-                     << ", time = " << time
-                     << ", x = " << e->pos().x()
-                     << endl;
+                RG_DEBUG << "TrackEditor::dropEvent() : dropping at track pos = "
+                         << trackPos
+                         << ", time = " << time
+                         << ", x = " << e->pos().x()
+                         << endl;
 
-            QTextStream t(&audioText, QIODevice::ReadWrite);
-            t << uri << "\n";
-            t << track->getId() << "\n";
-            t << time << "\n";
-            t.flush();
-            RG_DEBUG << "TrackEditor::dropEvent() audioText = \n " << audioText << "\n";
-            emit droppedNewAudio(QString(audioText));
-            // connected to RosegardenMainViewWidget::droppedNewAudio()
+                audioText.clear();
+                QTextStream t(&audioText, QIODevice::ReadWrite);
+                t << uri << "\n";
+                t << track->getId() << "\n";
+                t << time << "\n";
+                t.flush();
+                RG_DEBUG << "TrackEditor::dropEvent() audioText = \n " << audioText << "\n";
+                emit droppedNewAudio(QString(audioText));
+                // connected to RosegardenMainViewWidget::droppedNewAudio()
+            }
         }
 
     } else if (internal && !text.isEmpty()) {

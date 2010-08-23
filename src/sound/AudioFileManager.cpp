@@ -71,7 +71,8 @@ private:
 };
 
 AudioFileManager::AudioFileManager() :
-    m_expectedSampleRate(0)
+    m_expectedSampleRate(0),
+    m_lastAudioFileID(0)
 {
     pthread_mutexattr_t attr;
     pthread_mutexattr_init(&attr);
@@ -299,15 +300,15 @@ AudioFileManager::removeFile(AudioFileId id)
 
 AudioFileId
 AudioFileManager::getUniqueAudioFileID() {
-    _LAST_AUDIO_FILE_ID++;
-    return _LAST_AUDIO_FILE_ID;
+    m_lastAudioFileID++;
+    return m_lastAudioFileID;
 }
 
 void
 AudioFileManager::resetAudioFileID() {
 
     if (m_audioFiles.size() == 0) {
-        _LAST_AUDIO_FILE_ID = 0;
+        m_lastAudioFileID = 1;
         return;
     }
 
@@ -321,7 +322,7 @@ AudioFileManager::resetAudioFileID() {
             rI = (*it)->getId();
     }
 
-    _LAST_AUDIO_FILE_ID = ++rI;
+    m_lastAudioFileID = ++rI;
 }
 
 bool
