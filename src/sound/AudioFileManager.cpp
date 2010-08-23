@@ -305,24 +305,10 @@ AudioFileManager::getUniqueAudioFileID() {
 }
 
 void
-AudioFileManager::resetAudioFileID() {
+AudioFileManager::updateAudioFileID(AudioFileId id) {
 
-    if (m_audioFiles.size() == 0) {
-        m_lastAudioFileID = 1;
-        return;
-    }
-
-    AudioFileId rI = 0;
-    std::vector<AudioFile*>::iterator it;
-
-    for (it = m_audioFiles.begin();
-            it != m_audioFiles.end();
-            ++it) {
-        if (rI < (*it)->getId())
-            rI = (*it)->getId();
-    }
-
-    m_lastAudioFileID = ++rI;
+    if (m_lastAudioFileID < id)
+        m_lastAudioFileID = id;
 }
 
 bool
@@ -371,6 +357,7 @@ AudioFileManager::insertFile(const std::string &name,
         }
 
         m_audioFiles.push_back(aF);
+        updateAudioFileID(id);
 
     } catch (SoundFile::BadSoundFileException e) {
         delete aF;

@@ -693,9 +693,6 @@ bool RosegardenDocument::openDocument(const QString& filename,
         //
         initialiseControllers();
         
-        // Reset Audio ID's in Audio File Manager (fix duplicate bugs)
-        m_audioFileManager.resetAudioFileID();
-
     } else {
         RG_DEBUG << "RosegardenDocument::openDocument: Sequencer is not running" << endl;
     }

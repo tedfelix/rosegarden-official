@@ -286,9 +286,6 @@ public:
 
     std::set<int> getActualSampleRates() const;
 
-    /// Reset ID counter based on actual Audio Files in Composition
-    void resetAudioFileID();
-
 signals:
     void setValue(int);
     void setOperationName(QString);
@@ -302,6 +299,9 @@ public slots:
 
 private:
     QString getFileInPath(const QString &file);
+
+    /// Reset ID counter based on actual Audio Files in Composition
+    void updateAudioFileID(AudioFileId id);
 
     /// Fetch a unique ID for Audio Files
     AudioFileId getUniqueAudioFileID();
