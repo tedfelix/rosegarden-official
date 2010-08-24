@@ -38,10 +38,13 @@ PasteRangeCommand::PasteRangeCommand(Composition *composition,
 {
     timeT clipBeginTime = clipboard->getBaseTime();
 
+    // Compute t1, the end of the pasted range in the composition.
+    
     timeT t1 = t0;
 
     if (clipboard->hasNominalRange()) {
 
+        // Use the clipboard's time range to compute t1.
         clipboard->getNominalRange(clipBeginTime, t1);
         t1 = t0 + (t1 - clipBeginTime);
 
@@ -49,6 +52,8 @@ PasteRangeCommand::PasteRangeCommand(Composition *composition,
 
         timeT duration = 0;
 
+        // For each segment in the clipboard, find the longest paste range 
+        // duration required.
         for (Clipboard::iterator i = clipboard->begin();
                 i != clipboard->end(); ++i) {
             timeT durationHere = (*i)->getEndMarkerTime() - clipBeginTime;
@@ -59,6 +64,7 @@ PasteRangeCommand::PasteRangeCommand(Composition *composition,
 
         if (duration <= 0)
             return ;
+
         t1 = t0 + duration;
     }
 
@@ -66,13 +72,16 @@ PasteRangeCommand::PasteRangeCommand(Composition *composition,
     
     // ??? Is this similar to InsertRangeCommand?  Can we use that instead?
 
+    // For each segment in the composition
     for (Composition::iterator i = composition->begin();
             i != composition->end(); ++i) {
 
+        // If the segment doesn't cross the paste point (t0), try the next.
         if ((*i)->getStartTime() >= t0 || (*i)->getEndMarkerTime() <= t0) {
             continue;
         }
 
+        // Split this segment at the paste point (t0).
         if ((*i)->getType() == Segment::Audio) {
             addCommand(new AudioSegmentSplitCommand(*i, t0));
         } else {

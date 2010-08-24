@@ -53,9 +53,8 @@ OpenOrCloseRangeCommand::execute()
     if (m_opening) {
         if (offset + m_composition->getDuration() >
                 m_composition->getEndMarker()) {
-            m_composition->setEndMarker
-            (m_composition->getBarEndForTime
-             (m_composition->getDuration() + offset));
+            m_composition->setEndMarker(m_composition->getBarEndForTime(
+                m_composition->getDuration() + offset));
         }
     }
 
@@ -102,9 +101,16 @@ OpenOrCloseRangeCommand::execute()
         m_prepared = true;
     }
 
+    // For each segment in the moving list
     for (std::vector<Segment *>::iterator i = m_moving.begin();
             i != m_moving.end(); ++i) {
-        //	RG_DEBUG << "Moving segment on track " << (*i)->getTrack() << " from " << (*i)->getStartTime() << " to " << ((*i)->getStartTime() + offset) << " (current end time is " << (*i)->getEndTime() << ", end marker is " << (*i)->getEndMarkerTime() << ")" << endl;
+
+// RG_DEBUG << "Moving segment on track " << (*i)->getTrack() << " from " << 
+//     (*i)->getStartTime() << " to " << ((*i)->getStartTime() + offset) << 
+//     " (current end time is " << (*i)->getEndTime() << ", end marker is " << 
+//     (*i)->getEndMarkerTime() << ")" << endl;
+
+        // Move the segment
         (*i)->setStartTime((*i)->getStartTime() + offset);
     }
 
