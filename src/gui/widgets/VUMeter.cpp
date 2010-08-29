@@ -377,7 +377,6 @@ VUMeter::paintEvent(QPaintEvent *e)
             paint.drawRect(0, 0, w, h);
             drawMeterLevel(&paint);
         } else {
-RG_DEBUG << "VUMeter::paintEvent - default Stopped" << endl;
             meterStop();
             drawFrame(&paint);
             paint.setPen(palette().color(backgroundRole()));
