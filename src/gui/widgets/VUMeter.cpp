@@ -334,7 +334,7 @@ VUMeter::setLevel(double leftLevel, double rightLevel, bool record)
 void
 VUMeter::paintEvent(QPaintEvent *e)
 {
-    //    RG_DEBUG << "VUMeter::paintEvent - height = " << height() << endl;
+//    RG_DEBUG << "VUMeter::paintEvent - height = " << height() << endl;
     QPainter paint(this);
 
     paint.setRenderHint(QPainter::Antialiasing, false);
@@ -377,8 +377,12 @@ VUMeter::paintEvent(QPaintEvent *e)
             paint.drawRect(0, 0, w, h);
             drawMeterLevel(&paint);
         } else {
+RG_DEBUG << "VUMeter::paintEvent - default Stopped" << endl;
             meterStop();
             drawFrame(&paint);
+            paint.setPen(palette().color(backgroundRole()));
+            paint.setBrush(palette().color(backgroundRole()));
+            paint.drawRect(0, 0, w, h);
             paint.end();
             QLabel::paintEvent(e);			
 	}
