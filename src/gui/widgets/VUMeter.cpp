@@ -366,7 +366,7 @@ VUMeter::paintEvent(QPaintEvent *e)
             drawMeterLevel(&paint);
         else {
             meterStop();
-            drawFrame(&paint);
+//&&            drawFrame(&paint);  //Q3Support -- not needed?
             paint.end();
             QLabel::paintEvent(e);
         }
@@ -378,9 +378,9 @@ VUMeter::paintEvent(QPaintEvent *e)
             drawMeterLevel(&paint);
         } else {
             meterStop();
-            drawFrame(&paint);
-            paint.setPen(palette().color(backgroundRole()));
-            paint.setBrush(palette().color(backgroundRole()));
+            QColor background = palette().color(backgroundRole());
+            paint.setPen(background);
+            paint.setBrush(background);
             paint.drawRect(0, 0, w, h);
             paint.end();
             QLabel::paintEvent(e);			
