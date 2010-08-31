@@ -19,134 +19,169 @@
 <context>
     <name>DeviceManagerDialogUi</name>
     <message>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+474"/>
         <source>Manage MIDI Devices</source>
-        <translation type="obsolete">Gestisci dispositivi MIDI</translation>
+        <translation type="unfinished">Gestisci dispositivi MIDI</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>MIDI Playback</source>
-        <translation type="obsolete">Riproduzione MIDI</translation>
+        <translation type="unfinished">Riproduzione MIDI</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Sends its data through</source>
-        <translation type="obsolete">Manda i dati attraverso</translation>
+        <translation type="unfinished">Manda i dati attraverso</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>Rosegarden playback device</source>
-        <translation type="obsolete">Dispositivo di riproduzione di Rosegarden</translation>
+        <translation type="unfinished">Dispositivo di riproduzione di Rosegarden</translation>
     </message>
     <message>
+        <location line="+36"/>
         <source>Internal Synth</source>
-        <translation type="obsolete">Sintetizzatore interno</translation>
+        <translation type="unfinished">Sintetizzatore interno</translation>
     </message>
     <message>
+        <location line="-31"/>
         <source>Default playback device</source>
-        <translation type="obsolete">Dispositivo di riproduzione predefinito</translation>
+        <translation type="unfinished">Dispositivo di riproduzione predefinito</translation>
     </message>
     <message>
         <source>&lt;qt&gt;&lt;p&gt;Create new playback devices here. Click the device name to change it. Select a device here and connect it to a MIDI output port by clicking on a port to the right.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Crea qui nuovi dispositivi di riproduzione. Clicca sul nome del dispositivo per cambiarlo. Seleziona un dispositivo e connettilo a una porta di uscita MIDI cliccando su una porta sulla destra.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
+        <location line="+7"/>
         <source>&lt;qt&gt;&lt;p&gt;Bank definitions allow you to tell Rosegarden about the programs or patches available for use on the equipment (hardware or software synth) connected to this device.&lt;/p&gt;&lt;p&gt;You must have something defined for any program or bank changes you wish to transmit, as Rosegarden hides all bank and program numbers that are undefined.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Le definizioni dei banchi permettono di informare Rosegarden dei programmi del sistema (sintetizzatore hardware o software) collegati a questo dispositivo.&lt;/p&gt;&lt;p&gt;Devi avere qualcosa di definito per ogni cambiamento di programma o di banco che vuoi trasmettere, poiché Rosegarden nasconde tutti i numeri di banco e di programma che non sono stati definiti.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Le definizioni dei banchi permettono di informare Rosegarden dei programmi del sistema (sintetizzatore hardware o software) collegati a questo dispositivo.&lt;/p&gt;&lt;p&gt;Devi avere qualcosa di definito per ogni cambiamento di programma o di banco che vuoi trasmettere, poiché Rosegarden nasconde tutti i numeri di banco e di programma che non sono stati definiti.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Banks...</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
-        <translation type="obsolete">Banchi...</translation>
+        <translation type="unfinished">Banchi...</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Edit the controllers associated with this device.&lt;/p&gt;&lt;p&gt;You must define controllers here in order to use them anywhere in Rosegarden, such as on control rulers or in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box,  You can change which controllers are displayed in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box, and rearrange their layout&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Modifica i controlli associati a questo dispositivo.&lt;/p&gt;&lt;p&gt;Devi definire qui i controlli, in modo da poterli usare ovunque in Rosegarden, ad esempio nelle barre di controllo o nel riquadro &lt;b&gt;Parametri dello strumento&lt;/b&gt;,  Puoi scegliere quali controlli vengono mostrati nel riquadro &lt;b&gt;Parametri dello strumento&lt;/b&gt;, e cambiarne la disposizione.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Modifica i controlli associati a questo dispositivo.&lt;/p&gt;&lt;p&gt;Devi definire qui i controlli, in modo da poterli usare ovunque in Rosegarden, ad esempio nelle barre di controllo o nel riquadro &lt;b&gt;Parametri dello strumento&lt;/b&gt;,  Puoi scegliere quali controlli vengono mostrati nel riquadro &lt;b&gt;Parametri dello strumento&lt;/b&gt;, e cambiarne la disposizione.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Controllers...</source>
-        <translation type="obsolete">Controlli...</translation>
+        <translation type="unfinished">Controlli...</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new playback device&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Crea un nuovo dispositivo di riproduzione&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Crea un nuovo dispositivo di riproduzione&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
+        <location line="+2"/>
+        <location line="+28"/>
         <source>New</source>
-        <translation type="obsolete">Nuovo</translation>
+        <translation type="unfinished">Nuovo</translation>
     </message>
     <message>
+        <location line="-26"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected playback device.  Any tracks using this device will need to be reassigned, and any program or bank changes on those tracks will be lost permanently&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Cancella il dispositivo di riproduzione selezionato.  Ogni traccia che usa questo dispositivo dovrà essere riassegnata, e ogni cambiamento di banco o di programma su queste tracce verrà perduto definitivamente&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Cancella il dispositivo di riproduzione selezionato.  Ogni traccia che usa questo dispositivo dovrà essere riassegnata, e ogni cambiamento di banco o di programma su queste tracce verrà perduto definitivamente&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Delete</source>
-        <translation type="obsolete">Cancella</translation>
+        <translation type="unfinished">Cancella</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>MIDI outputs</source>
-        <translation type="obsolete">Uscite MIDI</translation>
+        <translation type="unfinished">Uscite MIDI</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Available outputs</source>
-        <translation type="obsolete">Uscite disponibili</translation>
+        <translation type="unfinished">Uscite disponibili</translation>
     </message>
     <message>
+        <location line="+5"/>
+        <location line="+41"/>
         <source>No port</source>
-        <translation type="obsolete">No porta</translation>
+        <translation type="unfinished">No porta</translation>
     </message>
     <message>
+        <location line="-35"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI outputs (hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Uscite MIDI disponibili (hardware o software)&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Uscite MIDI disponibili (hardware o software)&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
+        <location line="+39"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI inputs (from hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Ingressi MIDI disponibili (from hardware o software)&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Ingressi MIDI disponibili (from hardware o software)&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
+        <location line="-36"/>
+        <location line="+39"/>
         <source>&lt;qt&gt;&lt;p&gt;Click to refresh the port list after connecting a new piece of equipment or starting a new soft synth&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Clicca per aggiornare la lista delle porte dopo aver collegato un nuovo dispositivo o dopo aver avviato un nuovo sintetizzatore software&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Clicca per aggiornare la lista delle porte dopo aver collegato un nuovo dispositivo o dopo aver avviato un nuovo sintetizzatore software&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
+        <location line="-73"/>
         <source>&lt;qt&gt;&lt;p&gt;Create new playback devices here. Double-click the device name to change it. Select a device here and connect it to a MIDI output port by clicking on a port to the right.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Crea qui nuovi playback devices. Doppio click sul nome del device per cambiarlo. Seleziona qui un device e connettilo ad una porta output MIDI cliccando su una porta sulla destra.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Crea qui nuovi playback devices. Doppio click sul nome del device per cambiarlo. Seleziona qui un device e connettilo ad una porta output MIDI cliccando su una porta sulla destra.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
+        <location line="+36"/>
+        <location line="+39"/>
         <source>Refresh</source>
-        <translation type="obsolete">Aggiorna</translation>
+        <translation type="unfinished">Aggiorna</translation>
     </message>
     <message>
+        <location line="-38"/>
         <source>MIDI Recording</source>
-        <translation type="obsolete">Registrazione MIDI</translation>
+        <translation type="unfinished">Registrazione MIDI</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new recording device&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Crea un nuovo dispositivo di registrazione&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Crea un nuovo dispositivo di registrazione&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected recording device&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Cancella il dispositivo di registrazione selezionato&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Cancella il dispositivo di registrazione selezionato&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Delete</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
-        <translation type="obsolete">Cancella</translation>
+        <translation type="unfinished">Cancella</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Receives its data from</source>
-        <translation type="obsolete">Riceve dati da</translation>
+        <translation type="unfinished">Riceve dati da</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>Rosegarden recording device</source>
-        <translation type="obsolete">Dispositivo di registrazione di Rosegarden</translation>
+        <translation type="unfinished">Dispositivo di registrazione di Rosegarden</translation>
     </message>
     <message>
+        <location line="+5"/>
         <source>Default record device</source>
-        <translation type="obsolete">Dispositivo di registrazione predefinito</translation>
+        <translation type="unfinished">Dispositivo di registrazione predefinito</translation>
     </message>
     <message>
+        <location line="+6"/>
         <source>MIDI inputs</source>
-        <translation type="obsolete">Ingressi MIDI</translation>
+        <translation type="unfinished">Ingressi MIDI</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Available inputs</source>
-        <translation type="obsolete">Ingressi disponibili</translation>
+        <translation type="unfinished">Ingressi disponibili</translation>
     </message>
 </context>
 <context>
@@ -10575,8 +10610,11 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
         <translation>&lt;qt&gt;&lt;p&gt;Non posso cominciare a registrare l&apos;audio.&lt;/p&gt;&lt;p&gt;Per favore metta un percorso di incisione valido in &lt;b&gt;Compositione -&gt; Edit Proprietà del Documento... -&gt; Audio&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
+        <location filename="../../src/sound/SoundFile.h" line="+67"/>
+        <location line="+2"/>
+        <location line="+2"/>
         <source>Bad sound file </source>
-        <translation type="obsolete">Cattivo file sound </translation>
+        <translation type="unfinished">Cattivo file sound </translation>
     </message>
     <message>
         <location filename="../../src/sound/MidiFile.cpp" line="+105"/>
@@ -10678,12 +10716,15 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
         <translation>Cancellato</translation>
     </message>
     <message>
+        <location filename="../../src/sound/PeakFileManager.h" line="+61"/>
+        <location line="+2"/>
         <source>Bad peak file </source>
-        <translation type="obsolete">Cattivo picco di file</translation>
+        <translation type="unfinished">Cattivo picco di file</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Bad peak file (malformed audio?) </source>
-        <translation type="obsolete">Cattivo picco di file (file malfatto?)</translation>
+        <translation type="unfinished">Cattivo picco di file (file malfatto?)</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="+64"/>
@@ -11255,7 +11296,7 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
 <context>
     <name>Rosegarden::AudioFileManager</name>
     <message>
-        <location filename="../../src/sound/AudioFileManager.cpp" line="+669"/>
+        <location filename="../../src/sound/AudioFileManager.cpp" line="+652"/>
         <source>Cannot download file %1</source>
         <translation>Non è possibile scaricare il file %1</translation>
     </message>
@@ -21529,8 +21570,9 @@ L&apos;errore è: %2</translation>
 <context>
     <name>Rosegarden::SegmentJoinCommand</name>
     <message>
+        <location filename="../../src/commands/segment/SegmentJoinCommand.h" line="+48"/>
         <source>&amp;Join</source>
-        <translation type="obsolete">&amp;Unisci</translation>
+        <translation type="unfinished">&amp;Unisci</translation>
     </message>
 </context>
 <context>
@@ -23708,7 +23750,7 @@ Vuoi impostarlo adesso?</translation>
         <translation>Trasforma i segmenti ripetuti in copie</translation>
     </message>
     <message>
-        <location line="+222"/>
+        <location line="+230"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>

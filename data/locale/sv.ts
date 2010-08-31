@@ -12,130 +12,169 @@
 <context>
     <name>DeviceManagerDialogUi</name>
     <message>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+474"/>
         <source>Manage MIDI Devices</source>
-        <translation type="obsolete">Hantera MIDI-enheter</translation>
+        <translation type="unfinished">Hantera MIDI-enheter</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>MIDI Playback</source>
-        <translation type="obsolete">MIDI-uppspelning</translation>
+        <translation type="unfinished">MIDI-uppspelning</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Sends its data through</source>
-        <translation type="obsolete">Skickar data genom</translation>
+        <translation type="unfinished">Skickar data genom</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>Rosegarden playback device</source>
-        <translation type="obsolete">Rosegarden uppspelningsenhet</translation>
+        <translation type="unfinished">Rosegarden uppspelningsenhet</translation>
     </message>
     <message>
+        <location line="+36"/>
         <source>Internal Synth</source>
-        <translation type="obsolete">Intern synt</translation>
+        <translation type="unfinished">Intern synt</translation>
     </message>
     <message>
+        <location line="-31"/>
         <source>Default playback device</source>
-        <translation type="obsolete">Standarduppspelningsenhet</translation>
+        <translation type="unfinished">Standarduppspelningsenhet</translation>
     </message>
     <message>
         <source>&lt;qt&gt;&lt;p&gt;Create new playback devices here. Click the device name to change it. Select a device here and connect it to a MIDI output port by clicking on a port to the right.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Skapa nya uppspelningsenheter här. Klicka på enhetsnamnet för att ändra det. Välj en enhet här och anslut den till en MIDI-utgång genom att klicka på en port till höger.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
+        <location line="+7"/>
         <source>&lt;qt&gt;&lt;p&gt;Bank definitions allow you to tell Rosegarden about the programs or patches available for use on the equipment (hardware or software synth) connected to this device.&lt;/p&gt;&lt;p&gt;You must have something defined for any program or bank changes you wish to transmit, as Rosegarden hides all bank and program numbers that are undefined.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Bankdefinitioner gör det möjligt att tala om för Rosegarden vilka program eller patcher som är tillgängliga att använda i utrustningen (verklig synt eller programvarusynt) ansluten till enheten.&lt;/p&gt;&lt;p&gt;Någonting måste vara definierat för alla program- eller bankändringar du vill sända, eftersom Rosegarden döljer alla program- och banknummer som är odefinierade.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Bankdefinitioner gör det möjligt att tala om för Rosegarden vilka program eller patcher som är tillgängliga att använda i utrustningen (verklig synt eller programvarusynt) ansluten till enheten.&lt;/p&gt;&lt;p&gt;Någonting måste vara definierat för alla program- eller bankändringar du vill sända, eftersom Rosegarden döljer alla program- och banknummer som är odefinierade.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Banks...</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
-        <translation type="obsolete">Banker...</translation>
+        <translation type="unfinished">Banker...</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Edit the controllers associated with this device.&lt;/p&gt;&lt;p&gt;You must define controllers here in order to use them anywhere in Rosegarden, such as on control rulers or in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box,  You can change which controllers are displayed in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box, and rearrange their layout&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Redigera effekter kopplade till enheten.&lt;p&gt;&lt;p&gt;Du måste definiera effekter här för att kunna använda dem var som helst i Rosegarden, såsom på styrlinjaler eller i rutan &lt;b&gt;Instrumentparametrar&lt;/b&gt;. Du kan ändra vilka effekter som visas i rutan &lt;b&gt;Instrumentparametrar&lt;/b&gt;, och arrangera om deras utläggning&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Redigera effekter kopplade till enheten.&lt;p&gt;&lt;p&gt;Du måste definiera effekter här för att kunna använda dem var som helst i Rosegarden, såsom på styrlinjaler eller i rutan &lt;b&gt;Instrumentparametrar&lt;/b&gt;. Du kan ändra vilka effekter som visas i rutan &lt;b&gt;Instrumentparametrar&lt;/b&gt;, och arrangera om deras utläggning&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Controllers...</source>
-        <translation type="obsolete">Effekter...</translation>
+        <translation type="unfinished">Effekter...</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new playback device&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Skapa en ny uppspelningsenhet&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Skapa en ny uppspelningsenhet&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
+        <location line="+2"/>
+        <location line="+28"/>
         <source>New</source>
-        <translation type="obsolete">Ny</translation>
+        <translation type="unfinished">Ny</translation>
     </message>
     <message>
+        <location line="-26"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected playback device.  Any tracks using this device will need to be reassigned, and any program or bank changes on those tracks will be lost permanently&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Radera den markerade uppspelningsenheten. Alla spår som använder enheten måste tilldelas på nytt, och alla program- eller bankändringar för dessa spår kommer att förloras permanent&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Radera den markerade uppspelningsenheten. Alla spår som använder enheten måste tilldelas på nytt, och alla program- eller bankändringar för dessa spår kommer att förloras permanent&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Delete</source>
-        <translation type="obsolete">Radera</translation>
+        <translation type="unfinished">Radera</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>MIDI outputs</source>
-        <translation type="obsolete">MIDI-utgångar</translation>
+        <translation type="unfinished">MIDI-utgångar</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Available outputs</source>
-        <translation type="obsolete">Tillgängliga utgångar</translation>
+        <translation type="unfinished">Tillgängliga utgångar</translation>
     </message>
     <message>
+        <location line="+5"/>
+        <location line="+41"/>
         <source>No port</source>
-        <translation type="obsolete">Ingen utgång</translation>
+        <translation type="unfinished">Ingen utgång</translation>
     </message>
     <message>
+        <location line="-35"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI outputs (hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Tillgängliga MIDI-utgångar (maskinvara eller programvara)&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Tillgängliga MIDI-utgångar (maskinvara eller programvara)&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
+        <location line="+39"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI inputs (from hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Tillgängliga MIDI-ingångar (från maskinvara eller programvara)&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Tillgängliga MIDI-ingångar (från maskinvara eller programvara)&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
+        <location line="-36"/>
+        <location line="+39"/>
         <source>&lt;qt&gt;&lt;p&gt;Click to refresh the port list after connecting a new piece of equipment or starting a new soft synth&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Klicka för att uppdatera portlistan efter att ha anslutit ny utrustning eller startat en ny programsynt&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Klicka för att uppdatera portlistan efter att ha anslutit ny utrustning eller startat en ny programsynt&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
+        <location line="-73"/>
+        <source>&lt;qt&gt;&lt;p&gt;Create new playback devices here. Double-click the device name to change it. Select a device here and connect it to a MIDI output port by clicking on a port to the right.&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+36"/>
+        <location line="+39"/>
         <source>Refresh</source>
-        <translation type="obsolete">Uppdatera</translation>
+        <translation type="unfinished">Uppdatera</translation>
     </message>
     <message>
+        <location line="-38"/>
         <source>MIDI Recording</source>
-        <translation type="obsolete">MIDI-inspelning</translation>
+        <translation type="unfinished">MIDI-inspelning</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new recording device&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Skapa en ny inspelningsenhet&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Skapa en ny inspelningsenhet&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected recording device&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Radera den markerade inspelningsenheten&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Radera den markerade inspelningsenheten&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Delete</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
-        <translation type="obsolete">Radera</translation>
+        <translation type="unfinished">Radera</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Receives its data from</source>
-        <translation type="obsolete">Tar emot sin data från</translation>
+        <translation type="unfinished">Tar emot sin data från</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>Rosegarden recording device</source>
-        <translation type="obsolete">Rosegarden inspelningsenhet</translation>
+        <translation type="unfinished">Rosegarden inspelningsenhet</translation>
     </message>
     <message>
+        <location line="+5"/>
         <source>Default record device</source>
-        <translation type="obsolete">Standardinspelningsenhet</translation>
+        <translation type="unfinished">Standardinspelningsenhet</translation>
     </message>
     <message>
+        <location line="+6"/>
         <source>MIDI inputs</source>
-        <translation type="obsolete">MIDI-ingångar</translation>
+        <translation type="unfinished">MIDI-ingångar</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Available inputs</source>
-        <translation type="obsolete">Tillgängliga ingångar</translation>
+        <translation type="unfinished">Tillgängliga ingångar</translation>
     </message>
 </context>
 <context>
@@ -10117,8 +10156,11 @@
         <translation>&lt;qt&gt;&lt;p&gt;Kunde inte starta inspelning av ljud.&lt;/p&gt;&lt;p&gt;Ställ in en giltig sökväg för inspelningar med &lt;b&gt;Komposition -&gt; Redgera dokumentegenskaper... -&gt; Ljud&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
+        <location filename="../../src/sound/SoundFile.h" line="+67"/>
+        <location line="+2"/>
+        <location line="+2"/>
         <source>Bad sound file </source>
-        <translation type="obsolete">Felaktig ljudfil</translation>
+        <translation type="unfinished">Felaktig ljudfil</translation>
     </message>
     <message>
         <location filename="../../src/sound/MidiFile.cpp" line="+105"/>
@@ -10220,12 +10262,15 @@
         <translation>Avbruten</translation>
     </message>
     <message>
+        <location filename="../../src/sound/PeakFileManager.h" line="+61"/>
+        <location line="+2"/>
         <source>Bad peak file </source>
-        <translation type="obsolete">Felaktig toppfil</translation>
+        <translation type="unfinished">Felaktig toppfil</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Bad peak file (malformed audio?) </source>
-        <translation type="obsolete">Felaktig toppfil (felformat ljud?)</translation>
+        <translation type="unfinished">Felaktig toppfil (felformat ljud?)</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="+64"/>
@@ -10803,7 +10848,7 @@
 <context>
     <name>Rosegarden::AudioFileManager</name>
     <message>
-        <location filename="../../src/sound/AudioFileManager.cpp" line="+669"/>
+        <location filename="../../src/sound/AudioFileManager.cpp" line="+652"/>
         <source>Cannot download file %1</source>
         <translation>Kan inte ladda ner filen %1</translation>
     </message>
@@ -20114,8 +20159,9 @@ Felet är: %2</translation>
 <context>
     <name>Rosegarden::SegmentJoinCommand</name>
     <message>
+        <location filename="../../src/commands/segment/SegmentJoinCommand.h" line="+48"/>
         <source>&amp;Join</source>
-        <translation type="obsolete">&amp;Sammanfoga</translation>
+        <translation type="unfinished">&amp;Sammanfoga</translation>
     </message>
 </context>
 <context>
@@ -22230,7 +22276,7 @@ Vill du ställa in den nu?</translation>
         <translation>Omvandla upprepade segment till riktiga kopior</translation>
     </message>
     <message>
-        <location line="+222"/>
+        <location line="+230"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>

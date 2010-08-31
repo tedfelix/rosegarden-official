@@ -12,126 +12,169 @@
 <context>
     <name>DeviceManagerDialogUi</name>
     <message>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+474"/>
         <source>Manage MIDI Devices</source>
-        <translation type="obsolete">MIDIデバイスの操作</translation>
+        <translation type="unfinished">MIDIデバイスの操作</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>MIDI Playback</source>
-        <translation type="obsolete">MIDI再生</translation>
+        <translation type="unfinished">MIDI再生</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Rosegarden playback device</source>
-        <translation type="obsolete">Rosegarden再生デバイス</translation>
+        <translation type="unfinished">Rosegarden再生デバイス</translation>
     </message>
     <message>
+        <location line="+36"/>
         <source>Internal Synth</source>
-        <translation type="obsolete">内部シンセサイザ</translation>
+        <translation type="unfinished">内部シンセサイザ</translation>
     </message>
     <message>
+        <location line="-31"/>
         <source>Default playback device</source>
-        <translation type="obsolete">既定値:再生デバイス</translation>
+        <translation type="unfinished">既定値:再生デバイス</translation>
     </message>
     <message>
         <source>&lt;qt&gt;&lt;p&gt;Create new playback devices here. Click the device name to change it. Select a device here and connect it to a MIDI output port by clicking on a port to the right.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="obsolete">&lt;qt&gt;&lt;p&gt;ここで新しい再生デバイスを作成する。変更したいデバイス名をクリックする。ここでデバイスを選択し、ポート上でクリックして右に持っていくことで、MIDI出力ポートに接続する。&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
+        <location line="+7"/>
         <source>&lt;qt&gt;&lt;p&gt;Bank definitions allow you to tell Rosegarden about the programs or patches available for use on the equipment (hardware or software synth) connected to this device.&lt;/p&gt;&lt;p&gt;You must have something defined for any program or bank changes you wish to transmit, as Rosegarden hides all bank and program numbers that are undefined.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;バンク定義は、このデバイスに接続されたイクゥイップメント(ハードウェアかソフトウェアシンセサイザー)上での使用のために有効なプログラムかパッチについて、Rosegardenに通知することを出来るようにします。&lt;/p&gt;&lt;p&gt;未定義の、すべてのバンクとプログラム番号をRosegardenが隠すように、転送させたい任意のプログラムまたはバンクチェンジのために、何か定義する必要があります。&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;バンク定義は、このデバイスに接続されたイクゥイップメント(ハードウェアかソフトウェアシンセサイザー)上での使用のために有効なプログラムかパッチについて、Rosegardenに通知することを出来るようにします。&lt;/p&gt;&lt;p&gt;未定義の、すべてのバンクとプログラム番号をRosegardenが隠すように、転送させたい任意のプログラムまたはバンクチェンジのために、何か定義する必要があります。&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Banks...</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
-        <translation type="obsolete">バンク...</translation>
+        <translation type="unfinished">バンク...</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Edit the controllers associated with this device.&lt;/p&gt;&lt;p&gt;You must define controllers here in order to use them anywhere in Rosegarden, such as on control rulers or in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box,  You can change which controllers are displayed in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box, and rearrange their layout&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;このデバイスに関連付けられているコントローラを編集します。&lt;/p&gt;&lt;p&gt;Rosegardenの任意の場所でこれらを使用するために、ここでコントローラを定義する必要があります。それらは、たとえばコントーロールルーラの上や、&lt;b&gt;インストゥルメントパラメータ&lt;/b&gt;ボックスの上などです。&lt;b&gt;インストゥルメントパラメータ&lt;/b&gt;ボックス上でどのコントローラが表示されるかを変更し、そのレイアウトを再調整することができます。&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;このデバイスに関連付けられているコントローラを編集します。&lt;/p&gt;&lt;p&gt;Rosegardenの任意の場所でこれらを使用するために、ここでコントローラを定義する必要があります。それらは、たとえばコントーロールルーラの上や、&lt;b&gt;インストゥルメントパラメータ&lt;/b&gt;ボックスの上などです。&lt;b&gt;インストゥルメントパラメータ&lt;/b&gt;ボックス上でどのコントローラが表示されるかを変更し、そのレイアウトを再調整することができます。&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Controllers...</source>
-        <translation type="obsolete">コントローラ...</translation>
+        <translation type="unfinished">コントローラ...</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new playback device&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;新しい再生デバイスを作成&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;新しい再生デバイスを作成&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
+        <location line="+2"/>
+        <location line="+28"/>
         <source>New</source>
-        <translation type="obsolete">新規</translation>
+        <translation type="unfinished">新規</translation>
     </message>
     <message>
+        <location line="-26"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected playback device.  Any tracks using this device will need to be reassigned, and any program or bank changes on those tracks will be lost permanently&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;選択された再生デバイスを削除します。  このデバイスを使うどのトラックも、再割り当てする必要があり、それらのトラック上のプログラムかバンクチェンジは完全に失われます。&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;選択された再生デバイスを削除します。  このデバイスを使うどのトラックも、再割り当てする必要があり、それらのトラック上のプログラムかバンクチェンジは完全に失われます。&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Delete</source>
-        <translation type="obsolete">削除</translation>
+        <translation type="unfinished">削除</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>MIDI outputs</source>
-        <translation type="obsolete">MIDI出力</translation>
+        <translation type="unfinished">MIDI出力</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Available outputs</source>
-        <translation type="obsolete">有効な出力</translation>
+        <translation type="unfinished">有効な出力</translation>
     </message>
     <message>
+        <location line="+5"/>
+        <location line="+41"/>
         <source>No port</source>
-        <translation type="obsolete">ポートなし</translation>
+        <translation type="unfinished">ポートなし</translation>
     </message>
     <message>
+        <location line="-35"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI outputs (hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;有効なMIDI出力(ハードウェアまたはソフトウェア)&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;有効なMIDI出力(ハードウェアまたはソフトウェア)&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
+        <location line="+39"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI inputs (from hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;有効なMIDI入力(ハードウェアまたはソフトウェアから)&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;有効なMIDI入力(ハードウェアまたはソフトウェアから)&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
+        <location line="-36"/>
+        <location line="+39"/>
         <source>&lt;qt&gt;&lt;p&gt;Click to refresh the port list after connecting a new piece of equipment or starting a new soft synth&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;新しいイクイップメントを接続後か新しいソフトシンセサイザーを起動後に、ポートリストを更新するためにクリック&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;新しいイクイップメントを接続後か新しいソフトシンセサイザーを起動後に、ポートリストを更新するためにクリック&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
+        <location line="-83"/>
+        <source>Sends its data through</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>&lt;qt&gt;&lt;p&gt;Create new playback devices here. Double-click the device name to change it. Select a device here and connect it to a MIDI output port by clicking on a port to the right.&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+36"/>
+        <location line="+39"/>
         <source>Refresh</source>
-        <translation type="obsolete">リフレッシュ</translation>
+        <translation type="unfinished">リフレッシュ</translation>
     </message>
     <message>
+        <location line="-38"/>
         <source>MIDI Recording</source>
-        <translation type="obsolete">MIDI録音</translation>
+        <translation type="unfinished">MIDI録音</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new recording device&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;新しい録音デバイスを作成&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;新しい録音デバイスを作成&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected recording device&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;選択された録音デバイスを作成&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;選択された録音デバイスを作成&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Delete</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
-        <translation type="obsolete">削除</translation>
+        <translation type="unfinished">削除</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Receives its data from</source>
-        <translation type="obsolete">右記からデータを受信</translation>
+        <translation type="unfinished">右記からデータを受信</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>Rosegarden recording device</source>
-        <translation type="obsolete">Rosegarden録音デバイス</translation>
+        <translation type="unfinished">Rosegarden録音デバイス</translation>
     </message>
     <message>
+        <location line="+5"/>
         <source>Default record device</source>
-        <translation type="obsolete">既定値の録音デバイス</translation>
+        <translation type="unfinished">既定値の録音デバイス</translation>
     </message>
     <message>
+        <location line="+6"/>
         <source>MIDI inputs</source>
-        <translation type="obsolete">MIDI入力</translation>
+        <translation type="unfinished">MIDI入力</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Available inputs</source>
-        <translation type="obsolete">有効な入力</translation>
+        <translation type="unfinished">有効な入力</translation>
     </message>
 </context>
 <context>
@@ -10336,8 +10379,11 @@ If you want to paste anyway, consider using one of the other paste types from th
         <translation>&lt;qt&gt;&lt;p&gt;オーディオの録音が開始できません。&lt;/p&gt;&lt;p&gt;Please set a valid recording path in &lt;b&gt;コンポジション -&gt; ドキュメントプロパティの編集... -&gt; オーディオ&lt;/b&gt;中で有効な録音パスを設定してください。&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
+        <location filename="../../src/sound/SoundFile.h" line="+67"/>
+        <location line="+2"/>
+        <location line="+2"/>
         <source>Bad sound file </source>
-        <translation type="obsolete">不正なサウンドファイル</translation>
+        <translation type="unfinished">不正なサウンドファイル</translation>
     </message>
     <message>
         <location filename="../../src/sound/MidiFile.cpp" line="+105"/>
@@ -10439,12 +10485,15 @@ If you want to paste anyway, consider using one of the other paste types from th
         <translation>キャンセルしました</translation>
     </message>
     <message>
+        <location filename="../../src/sound/PeakFileManager.h" line="+61"/>
+        <location line="+2"/>
         <source>Bad peak file </source>
-        <translation type="obsolete">不正なピークファイル</translation>
+        <translation type="unfinished">不正なピークファイル</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Bad peak file (malformed audio?) </source>
-        <translation type="obsolete">不正なピークファイル(壊れたオーディオ?)</translation>
+        <translation type="unfinished">不正なピークファイル(壊れたオーディオ?)</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="+297"/>
@@ -11016,7 +11065,7 @@ If you want to paste anyway, consider using one of the other paste types from th
 <context>
     <name>Rosegarden::AudioFileManager</name>
     <message>
-        <location filename="../../src/sound/AudioFileManager.cpp" line="+669"/>
+        <location filename="../../src/sound/AudioFileManager.cpp" line="+652"/>
         <source>Cannot download file %1</source>
         <translation>ファイル %1 がダウンロードできない</translation>
     </message>
@@ -21239,8 +21288,9 @@ Error was : %2</source>
 <context>
     <name>Rosegarden::SegmentJoinCommand</name>
     <message>
+        <location filename="../../src/commands/segment/SegmentJoinCommand.h" line="+48"/>
         <source>&amp;Join</source>
-        <translation type="obsolete">結合(&amp;J)</translation>
+        <translation type="unfinished">結合(&amp;J)</translation>
     </message>
 </context>
 <context>
@@ -23413,7 +23463,7 @@ Would you like to set it now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+222"/>
+        <location line="+230"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>

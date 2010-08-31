@@ -12,130 +12,165 @@
 <context>
     <name>DeviceManagerDialogUi</name>
     <message>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+474"/>
         <source>Manage MIDI Devices</source>
-        <translation type="obsolete">Gestion des périphériques MIDI</translation>
+        <translation type="unfinished">Gestion des périphériques MIDI</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>MIDI Playback</source>
-        <translation type="obsolete">Périphérique d&apos;exécution MIDI</translation>
+        <translation type="unfinished">Périphérique d&apos;exécution MIDI</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Sends its data through</source>
-        <translation type="obsolete">Envoie ses données vers</translation>
+        <translation type="unfinished">Envoie ses données vers</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>Rosegarden playback device</source>
-        <translation type="obsolete">Nom Rosegarden</translation>
+        <translation type="unfinished">Nom Rosegarden</translation>
     </message>
     <message>
+        <location line="+5"/>
         <source>Default playback device</source>
-        <translation type="obsolete">Périphérique de sortie par défaut</translation>
+        <translation type="unfinished">Périphérique de sortie par défaut</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>&lt;qt&gt;&lt;p&gt;Create new playback devices here. Double-click the device name to change it. Select a device here and connect it to a MIDI output port by clicking on a port to the right.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Créer ici les nouveaux périphériques d&apos;exécution. Pour renommer un périphérique, double-cliquer son nom. Pour connecter un périphérique à une sortie MIDI, sélectionner le périphérique ici et cliquer sur une sortie à droite.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Créer ici les nouveaux périphériques d&apos;exécution. Pour renommer un périphérique, double-cliquer son nom. Pour connecter un périphérique à une sortie MIDI, sélectionner le périphérique ici et cliquer sur une sortie à droite.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>&lt;qt&gt;&lt;p&gt;Bank definitions allow you to tell Rosegarden about the programs or patches available for use on the equipment (hardware or software synth) connected to this device.&lt;/p&gt;&lt;p&gt;You must have something defined for any program or bank changes you wish to transmit, as Rosegarden hides all bank and program numbers that are undefined.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Les définitions de banques permettent d&apos;informer Rosegarden sur les programmes (ou &quot;patches&quot;) diponibles pour l&apos;équipement (synthétiseur matériel ou logiciel) connecté à ce périphérique.&lt;/p&gt;&lt;p&gt;Ces définitions sont impératives pour pouvoir émettre des changements de banque ou de programme car Rosegarden ne montre que les numéros des programmes et banques définis.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Les définitions de banques permettent d&apos;informer Rosegarden sur les programmes (ou &quot;patches&quot;) diponibles pour l&apos;équipement (synthétiseur matériel ou logiciel) connecté à ce périphérique.&lt;/p&gt;&lt;p&gt;Ces définitions sont impératives pour pouvoir émettre des changements de banque ou de programme car Rosegarden ne montre que les numéros des programmes et banques définis.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Banks...</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
-        <translation type="obsolete">Banques...</translation>
+        <translation type="unfinished">Banques...</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Edit the controllers associated with this device.&lt;/p&gt;&lt;p&gt;You must define controllers here in order to use them anywhere in Rosegarden, such as on control rulers or in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box,  You can change which controllers are displayed in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box, and rearrange their layout&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Editer les paramètres de contrôle associés au périphérique.&lt;/p&gt;&lt;p&gt;Les paramètres de contrôle doivent avoir été définis ici pour être utilisables dans Rosegarden, sur une réglette de contrôle ou dans la boîte des &lt;b&gt;Paramètres d&apos;instrument&lt;/b&gt;.  Vous pouvez changer les paramètres de contrôle visibles dans la boîte des &lt;b&gt;Paramètres d&apos;instrument&lt;/b&gt;, et modifier leur disposition.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Editer les paramètres de contrôle associés au périphérique.&lt;/p&gt;&lt;p&gt;Les paramètres de contrôle doivent avoir été définis ici pour être utilisables dans Rosegarden, sur une réglette de contrôle ou dans la boîte des &lt;b&gt;Paramètres d&apos;instrument&lt;/b&gt;.  Vous pouvez changer les paramètres de contrôle visibles dans la boîte des &lt;b&gt;Paramètres d&apos;instrument&lt;/b&gt;, et modifier leur disposition.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Controllers...</source>
-        <translation type="obsolete">Contrôleurs...</translation>
+        <translation type="unfinished">Contrôleurs...</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new playback device&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Créer un nouveau périphérique d&apos;exécution&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Créer un nouveau périphérique d&apos;exécution&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
+        <location line="+2"/>
+        <location line="+28"/>
         <source>New</source>
-        <translation type="obsolete">Créer</translation>
+        <translation type="unfinished">Créer</translation>
     </message>
     <message>
+        <location line="-26"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected playback device.  Any tracks using this device will need to be reassigned, and any program or bank changes on those tracks will be lost permanently&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Supprimer le périphérique d&apos;exécution sélectionné.  Toute piste associée à ce périphérique devra être réassignée et tout changement de banque ou de programme sur cette piste sera perdu définitivement.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Supprimer le périphérique d&apos;exécution sélectionné.  Toute piste associée à ce périphérique devra être réassignée et tout changement de banque ou de programme sur cette piste sera perdu définitivement.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Delete</source>
-        <translation type="obsolete">Supprimer</translation>
+        <translation type="unfinished">Supprimer</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>MIDI outputs</source>
-        <translation type="obsolete">Sorties MIDI</translation>
+        <translation type="unfinished">Sorties MIDI</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Available outputs</source>
-        <translation type="obsolete">Sorties disponibles</translation>
+        <translation type="unfinished">Sorties disponibles</translation>
     </message>
     <message>
+        <location line="+5"/>
+        <location line="+41"/>
         <source>No port</source>
-        <translation type="obsolete">Pas de port</translation>
+        <translation type="unfinished">Pas de port</translation>
     </message>
     <message>
+        <location line="-39"/>
         <source>Internal Synth</source>
-        <translation type="obsolete">Synthétiseur interne</translation>
+        <translation type="unfinished">Synthétiseur interne</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI outputs (hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Sortie MIDI disponibles (synthétiseurs matériels ou logiciels)&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Sortie MIDI disponibles (synthétiseurs matériels ou logiciels)&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
+        <location line="+3"/>
+        <location line="+39"/>
         <source>&lt;qt&gt;&lt;p&gt;Click to refresh the port list after connecting a new piece of equipment or starting a new soft synth&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Cliquer pour rafraîchir la liste des ports après avoir connecté un nouveau matériel ou démarré un nouveau synthétiseur logiciel.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Cliquer pour rafraîchir la liste des ports après avoir connecté un nouveau matériel ou démarré un nouveau synthétiseur logiciel.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
+        <location line="-37"/>
+        <location line="+39"/>
         <source>Refresh</source>
-        <translation type="obsolete">Rafraîchir</translation>
+        <translation type="unfinished">Rafraîchir</translation>
     </message>
     <message>
+        <location line="-38"/>
         <source>MIDI Recording</source>
-        <translation type="obsolete">Périphérique d&apos;enregistrement MIDI</translation>
+        <translation type="unfinished">Périphérique d&apos;enregistrement MIDI</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new recording device&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Créer un nouveau périphérique d&apos;enregistrement&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Créer un nouveau périphérique d&apos;enregistrement&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected recording device&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Supprimer le périphérique d&apos;enregistrement sélectionné&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Supprimer le périphérique d&apos;enregistrement sélectionné&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Delete</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
-        <translation type="obsolete">Supprimer</translation>
+        <translation type="unfinished">Supprimer</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Receives its data from</source>
-        <translation type="obsolete">Reçoit ses données de</translation>
+        <translation type="unfinished">Reçoit ses données de</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>Rosegarden recording device</source>
-        <translation type="obsolete">Nom Rosegarden</translation>
+        <translation type="unfinished">Nom Rosegarden</translation>
     </message>
     <message>
+        <location line="+5"/>
         <source>Default record device</source>
-        <translation type="obsolete">Périphérique d&apos;entrée par défaut</translation>
+        <translation type="unfinished">Périphérique d&apos;entrée par défaut</translation>
     </message>
     <message>
+        <location line="+6"/>
         <source>MIDI inputs</source>
-        <translation type="obsolete">Entrées MIDI</translation>
+        <translation type="unfinished">Entrées MIDI</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Available inputs</source>
-        <translation type="obsolete">Entrées disponibles</translation>
+        <translation type="unfinished">Entrées disponibles</translation>
     </message>
     <message>
+        <location line="+9"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI inputs (from hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Entrées MIDI disponibles (matérielles ou logicielles)&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Entrées MIDI disponibles (matérielles ou logicielles)&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -10248,16 +10283,22 @@
         <translation></translation>
     </message>
     <message>
+        <location filename="../../src/sound/PeakFileManager.h" line="+61"/>
+        <location line="+2"/>
         <source>Bad peak file </source>
-        <translation type="obsolete">Fichier de niveau crête anormal </translation>
+        <translation type="unfinished">Fichier de niveau crête anormal </translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Bad peak file (malformed audio?) </source>
-        <translation type="obsolete">Fichier de niveau crête anormal (fichier audio anormal ?) </translation>
+        <translation type="unfinished">Fichier de niveau crête anormal (fichier audio anormal ?) </translation>
     </message>
     <message>
+        <location filename="../../src/sound/SoundFile.h" line="+67"/>
+        <location line="+2"/>
+        <location line="+2"/>
         <source>Bad sound file </source>
-        <translation type="obsolete">Fichier audio anormal </translation>
+        <translation type="unfinished">Fichier audio anormal </translation>
     </message>
 </context>
 <context>
@@ -10791,7 +10832,7 @@
 <context>
     <name>Rosegarden::AudioFileManager</name>
     <message>
-        <location filename="../../src/sound/AudioFileManager.cpp" line="+669"/>
+        <location filename="../../src/sound/AudioFileManager.cpp" line="+652"/>
         <source>Cannot download file %1</source>
         <translation>Impossible de charger le fichier %1</translation>
     </message>
@@ -20062,8 +20103,9 @@ Erreur obtenue : %2</translation>
 <context>
     <name>Rosegarden::SegmentJoinCommand</name>
     <message>
+        <location filename="../../src/commands/segment/SegmentJoinCommand.h" line="+48"/>
         <source>&amp;Join</source>
-        <translation type="obsolete">&amp;Joindre</translation>
+        <translation type="unfinished">&amp;Joindre</translation>
     </message>
 </context>
 <context>
@@ -22178,7 +22220,7 @@ Souhaitez vous le faire tout de suite ?</translation>
         <translation>Transformer les répétitions des segments en véritables copies</translation>
     </message>
     <message>
-        <location line="+222"/>
+        <location line="+230"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
