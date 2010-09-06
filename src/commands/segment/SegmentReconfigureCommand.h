@@ -47,14 +47,14 @@ public:
     struct SegmentRec {
         Segment *segment;
         timeT startTime;
-        timeT endMarkerTime;
+        timeT endTime;
         TrackId track;
     };
     typedef std::vector<SegmentRec> SegmentRecSet;
 
     void addSegment(Segment *segment,
                     timeT startTime,
-                    timeT endMarkerTime,
+                    timeT endTime,
                     TrackId track);
 
     void addSegments(const SegmentRecSet &records);
@@ -63,8 +63,17 @@ public:
     void unexecute();
 
 private:
-    SegmentRecSet m_records;
     void swap();
+    
+    // Track end of segments to determine if composition must expand
+    void trackCompositionEnd(SegmentRec record);
+
+    SegmentRecSet m_records;
+    bool m_shouldExpand;
+    timeT m_compEndTime;
+    Composition *m_comp;
+    
+    
 };
 
 

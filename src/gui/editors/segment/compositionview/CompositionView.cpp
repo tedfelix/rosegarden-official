@@ -1540,10 +1540,14 @@ void CompositionView::contentsMouseMoveEvent(QMouseEvent* e)
         doAutoScroll();
 
         if (follow & RosegardenScrollView::FollowHorizontal) {
-            slotScrollHorizSmallSteps(e->pos().x());
+            int mouseX = e->pos().x();
+            slotScrollHorizSmallSteps(mouseX);
 
             // enlarge composition if needed
-            if (horizontalScrollBar()->value() == horizontalScrollBar()->maximum()) {
+            if ((horizontalScrollBar()->value() == horizontalScrollBar()->maximum()) &&
+               // This code minimizes the chances of auto expand when moving segments
+               // Not a perfect fix -- but fixes several auto expand errors
+               (mouseX > (contentsX() + visibleWidth() * 0.95))) {
                 resizeContents(contentsWidth() + m_stepSize, contentsHeight());
                 setContentsPos(contentsX() + m_stepSize, contentsY());
                 getModel()->setLength(contentsWidth());

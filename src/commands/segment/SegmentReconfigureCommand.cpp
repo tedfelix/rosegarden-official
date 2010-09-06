@@ -19,6 +19,7 @@
 #include "SegmentReconfigureCommand.h"
 
 #include "base/Segment.h"
+#include "base/Composition.h"
 #include "base/Track.h"
 #include <QString>
 
@@ -27,7 +28,11 @@ namespace Rosegarden
 {
 
 SegmentReconfigureCommand::SegmentReconfigureCommand(QString name) :
-        NamedCommand(name)
+        NamedCommand(name),
+        m_shouldExpand(false),
+        m_compEndTime(0),
+        m_comp(0)
+        
 {}
 
 SegmentReconfigureCommand::~SegmentReconfigureCommand()
@@ -36,15 +41,16 @@ SegmentReconfigureCommand::~SegmentReconfigureCommand()
 void
 SegmentReconfigureCommand::addSegment(Segment *segment,
                                       timeT startTime,
-                                      timeT endMarkerTime,
+                                      timeT endTime,
                                       TrackId track)
 {
     SegmentRec record;
     record.segment = segment;
     record.startTime = startTime;
-    record.endMarkerTime = endMarkerTime;
+    record.endTime = endTime;
     record.track = track;
     m_records.push_back(record);
+    trackCompositionEnd(record);
 }
 
 void
@@ -52,6 +58,7 @@ SegmentReconfigureCommand::addSegments(const SegmentRecSet &records)
 {
     for (SegmentRecSet::const_iterator i = records.begin(); i != records.end(); ++i) {
         m_records.push_back(*i);
+        trackCompositionEnd(*i);
     }
 }
 
@@ -70,6 +77,7 @@ SegmentReconfigureCommand::unexecute()
 void
 SegmentReconfigureCommand::swap()
 {
+    
     for (SegmentRecSet::iterator i = m_records.begin();
             i != m_records.end(); ++i) {
 
@@ -82,18 +90,16 @@ SegmentReconfigureCommand::swap()
         // end marker time.
 
         timeT prevStartTime = i->segment->getStartTime();
-        timeT prevEndMarkerTime = i->segment->getEndMarkerTime();
+        timeT prevEndTime = i->segment->getEndTime();
 
-        if (i->segment->getStartTime() != i->startTime) {
-            i->segment->setStartTime(i->startTime);
-        }
-
-        if (i->segment->getEndMarkerTime() != i->endMarkerTime) {
-            i->segment->setEndMarkerTime(i->endMarkerTime);
-        }
+        // Set start and end time without regard to composition
+        // Start and end time.  This allows segments to soft truncate
+        // along start and end of composition.
+        i->segment->setStartTime(i->startTime);
+        i->segment->setEndTime(i->endTime);
 
         i->startTime = prevStartTime;
-        i->endMarkerTime = prevEndMarkerTime;
+        i->endTime = prevEndTime;
 
         TrackId currentTrack = i->segment->getTrack();
 
@@ -102,6 +108,32 @@ SegmentReconfigureCommand::swap()
             i->track = currentTrack;
         }
     }
+    
+    // Swap Composition End Times
+    if (m_shouldExpand && m_comp) {
+        timeT prevEndTime = m_comp->getEndMarker();
+        m_comp->setEndMarker(m_compEndTime);
+        m_compEndTime = prevEndTime;
+    }
 }
 
+void
+SegmentReconfigureCommand::trackCompositionEnd(SegmentRec record) {
+    Composition *comp = record.segment->getComposition();
+    
+    if (!comp) {
+        // Segment not part of composition
+        return;
+    }
+    
+    timeT compEndTime = comp->getEndMarker();
+    if (record.endTime > compEndTime) {
+        m_shouldExpand = true;
+        m_comp = comp;
+    }
+    
+    if (m_shouldExpand && record.endTime > m_compEndTime) {
+        m_compEndTime = record.endTime;
+    }
+}
 }
