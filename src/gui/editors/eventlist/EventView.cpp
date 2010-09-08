@@ -1043,7 +1043,7 @@ EventView::slotEditDelete()
         }
 
         addCommandToHistory(new EraseCommand(*deleteSelection));
-
+        updateView();
     }
 }
 
