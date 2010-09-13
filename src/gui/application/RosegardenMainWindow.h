@@ -1213,6 +1213,11 @@ public slots:
     void slotParametersClosed();
 
     /**
+     * The parameters box was hidden
+     */
+    void slotParameterAreaHidden();
+
+    /**
      * The parameters box was docked back
      */
 //    void slotParametersDockedBack(QDockWidget*, QDockWidget::DockPosition);    //&&& restore DockPosition

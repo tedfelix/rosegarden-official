@@ -362,6 +362,9 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
                                     settings.value("sidebarstyle",
                                     RosegardenParameterArea::CLASSIC_STYLE).toUInt());
 
+    connect(m_parameterArea, SIGNAL(hidden()),
+            this, SLOT(slotParameterAreaHidden()));
+
     // Load the initial document (this includes doc's own autoload)
     //
     setDocument(doc);
@@ -3232,7 +3235,16 @@ RosegardenMainWindow::slotDockParametersBack()
 void
 RosegardenMainWindow::slotParametersClosed()
 {
+    // ??? This code appears to be dead.
     m_dockVisible = false;
+}
+
+void
+RosegardenMainWindow::slotParameterAreaHidden()
+{
+    // Since the parameter area is now hidden, clear the checkbox in the
+    // menu to keep things in sync.
+    findAction("show_inst_segment_parameters")->setChecked(false);
 }
 
 void

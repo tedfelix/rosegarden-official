@@ -210,6 +210,11 @@ void RosegardenParameterArea::setArrangement(Arrangement style)
 
 }
 
+void RosegardenParameterArea::hideEvent(QHideEvent *)
+{
+    emit hidden();
+}
+
 void RosegardenParameterArea::moveWidget(QWidget *old_container,
         QWidget *new_container,
         RosegardenParameterBox *box)

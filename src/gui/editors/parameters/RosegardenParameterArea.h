@@ -70,6 +70,11 @@ public:
     void setArrangement(Arrangement style);
 
 protected:
+    virtual void hideEvent(QHideEvent *);
+
+signals:
+    void hidden();
+
 private:
     Arrangement m_style;                // The current layout style.
 
