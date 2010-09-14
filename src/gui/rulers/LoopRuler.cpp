@@ -209,7 +209,7 @@ void LoopRuler::drawBarSections(QPainter* paint)
 
     paint->setPen(GUIPalette::getColour(GUIPalette::LoopRulerForeground));
 
-    for (int i = firstBar; i <= lastBar; ++i) {
+    for (int i = firstBar; i < lastBar; ++i) {
 
         double x = m_rulerScale->getBarPosition(i) + m_currentXOffset + m_xorigin;
         if ((x * getHScaleFactor()) > clipRect.x() + clipRect.width())
