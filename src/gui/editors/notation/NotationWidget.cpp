@@ -680,12 +680,19 @@ void
 NotationWidget::slotSetFontName(QString name)
 {
     if (m_scene) m_scene->setFontName(name);
+    
+    // Note: See slotSetFontSize, if standard rulers and position do not refresh
 }
 
 void
 NotationWidget::slotSetFontSize(int size)
 {
     if (m_scene) m_scene->setFontSize(size);
+
+    // Force standard rulers and pointer pointer to refresh -- otherwise
+    m_bottomStandardRuler->updateStandardRuler();
+    m_topStandardRuler->updateStandardRuler();
+    slotUpdatePointerPosition();
 }
 
 NotationTool *

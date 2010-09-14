@@ -247,6 +247,10 @@ NotationView::NotationView(RosegardenDocument *doc,
     }
     m_notationWidget->slotSetFontSize(m_fontSize);
 
+    //Update Font Size pulldown menu
+    QString action = QString("note_font_size_%1").arg(m_fontSize);
+    findAction(action)->setChecked(true);
+
 
     // Set initial notation layout mode
     int layoutMode = settings.value("layoutmode", 0).toInt();

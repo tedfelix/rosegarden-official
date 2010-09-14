@@ -66,6 +66,13 @@ public:
     void setMinimumWidth(int width);
 
     void setHScaleFactor(double dy);
+    
+    /**
+     * Update all components of standard ruler.
+     * Useful when the scene has changed due to font change,
+     * font size change in NotationView, etc.
+     */
+    void updateStandardRuler();
 
 public slots:
     void slotScrollHoriz(int x);
