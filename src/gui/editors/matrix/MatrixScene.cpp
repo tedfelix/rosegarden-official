@@ -274,14 +274,41 @@ MatrixScene::recreateLines()
     double startPos = m_scale->getXForTime(start);
     double endPos = m_scale->getXForTime(end);
 
+    // Draw horizontal lines
+    int i = 0; 	   	 
+    while (i < 127) { 	 
+         int y = (i + 1) * (m_resolution + 1); 	 
+         QGraphicsLineItem *line; 	 
+         if (i < (int)m_horizontals.size()) { 	 
+             line = m_horizontals[i]; 	 
+         } else { 	 
+             line = new QGraphicsLineItem; 	 
+             line->setZValue(-9); 	 
+             line->setPen(QPen(GUIPalette::getColour 	 
+                               (GUIPalette::MatrixHorizontalLine), pw)); 	 
+             addItem(line); 	 
+             m_horizontals.push_back(line); 	 
+         } 	 
+         line->setLine(startPos, y, endPos, y); 	 
+         line->show(); 	 
+         ++i; 	 
+     } 	 
+
+
+     // Hide the other lines, if there are any.  Just a double check.
+     while (i < (int)m_horizontals.size()) { 	 
+         m_horizontals[i]->hide(); 	 
+         ++i; 	 
+    }
+
     setSceneRect(QRectF(startPos, 0, endPos - startPos, 128 * (m_resolution + 1)));
 
     Composition *c = &m_document->getComposition();
 
     int firstbar = c->getBarNumber(start), lastbar = c->getBarNumber(end);
 
-    // Count number of vertical grid lines
-    int i = 0;
+    // Draw Vertical Lines
+    i = 0;
     for (int bar = firstbar; bar <= lastbar; ++bar) {
 
         std::pair<timeT, timeT> range = c->getBarRange(bar);
