@@ -28,11 +28,7 @@ namespace Rosegarden
 {
 
 SegmentReconfigureCommand::SegmentReconfigureCommand(QString name) :
-        NamedCommand(name),
-        m_shouldExpand(false),
-        m_compEndTime(0),
-        m_comp(0)
-        
+        NamedCommand(name)
 {}
 
 SegmentReconfigureCommand::~SegmentReconfigureCommand()
@@ -50,7 +46,6 @@ SegmentReconfigureCommand::addSegment(Segment *segment,
     record.endTime = endTime;
     record.track = track;
     m_records.push_back(record);
-    trackCompositionEnd(record);
 }
 
 void
@@ -58,7 +53,6 @@ SegmentReconfigureCommand::addSegments(const SegmentRecSet &records)
 {
     for (SegmentRecSet::const_iterator i = records.begin(); i != records.end(); ++i) {
         m_records.push_back(*i);
-        trackCompositionEnd(*i);
     }
 }
 
@@ -109,31 +103,6 @@ SegmentReconfigureCommand::swap()
         }
     }
     
-    // Swap Composition End Times
-    if (m_shouldExpand && m_comp) {
-        timeT prevEndTime = m_comp->getEndMarker();
-        m_comp->setEndMarker(m_compEndTime);
-        m_compEndTime = prevEndTime;
-    }
 }
 
-void
-SegmentReconfigureCommand::trackCompositionEnd(SegmentRec record) {
-    Composition *comp = record.segment->getComposition();
-    
-    if (!comp) {
-        // Segment not part of composition
-        return;
-    }
-    
-    timeT compEndTime = comp->getEndMarker();
-    if (record.endTime > compEndTime) {
-        m_shouldExpand = true;
-        m_comp = comp;
-    }
-    
-    if (m_shouldExpand && record.endTime > m_compEndTime) {
-        m_compEndTime = record.endTime;
-    }
-}
 }

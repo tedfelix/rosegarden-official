@@ -65,18 +65,8 @@ public:
 private:
     void swap();
     
-    // Track end of segments to determine if composition must expand
-    void trackCompositionEnd(SegmentRec record);
-
-    SegmentRecSet m_records;
-    bool m_shouldExpand;
-    timeT m_compEndTime;
-    Composition *m_comp;
-    
-    
+    SegmentRecSet m_records; 
 };
-
-
 
 }
 
