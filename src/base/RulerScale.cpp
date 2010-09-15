@@ -150,7 +150,11 @@ double
 RulerScale::getTotalWidth() const
 {
     int n = getLastVisibleBar();
-    return getBarPosition(n) + getBarWidth(n);
+    // This line adds extra padding to the the actual width -- JAS
+    // return getBarPosition(n) + getBarWidth(n);
+
+    // Return only the actual size instead.
+    return getBarPosition(n);
 }
 
 
