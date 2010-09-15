@@ -258,6 +258,7 @@ MatrixScene::recreateLines()
 {
     timeT start = 0, end = 0;
 
+    // Determine total distance that requires lines (considering multiple segments
     for (unsigned int i = 0; i < m_segments.size(); ++i) {
         if (i == 0 || m_segments[i]->getClippedStartTime() < start) {
             start = m_segments[i]->getClippedStartTime();
@@ -267,49 +268,25 @@ MatrixScene::recreateLines()
         }
     }
 
-//    double pw = 1.0 / 64.0;
-//    double pw = 0.5;
+    // Pen Width?
     double pw = 0;
 
     double startPos = m_scale->getXForTime(start);
     double endPos = m_scale->getXForTime(end);
-
-    int i = 0;
-
-    while (i < 127) {
-        int y = (i + 1) * (m_resolution + 1);
-        QGraphicsLineItem *line;
-        if (i < (int)m_horizontals.size()) {
-            line = m_horizontals[i];
-        } else {
-            line = new QGraphicsLineItem;
-            line->setZValue(-9);
-            line->setPen(QPen(GUIPalette::getColour
-                              (GUIPalette::MatrixHorizontalLine), pw));
-            addItem(line);
-            m_horizontals.push_back(line);
-        }
-        line->setLine(startPos, y, endPos, y);
-        line->show();
-        ++i;
-    }
-    while (i < (int)m_horizontals.size()) {
-        m_horizontals[i]->hide();
-        ++i;
-    }
 
     setSceneRect(QRectF(startPos, 0, endPos - startPos, 128 * (m_resolution + 1)));
 
     Composition *c = &m_document->getComposition();
 
     int firstbar = c->getBarNumber(start), lastbar = c->getBarNumber(end);
-    i = 0;
 
+    // Count number of vertical grid lines
+    int i = 0;
     for (int bar = firstbar; bar <= lastbar; ++bar) {
 
         std::pair<timeT, timeT> range = c->getBarRange(bar);
 
-        bool discard;
+        bool discard = false;  // was not initalied...hmmm...try false?
         TimeSignature timeSig = c->getTimeSignatureInBar(bar, discard);
 
         double x0 = m_scale->getXForTime(range.first);
@@ -343,25 +320,24 @@ MatrixScene::recreateLines()
                 break;
             }
 
-            // index 0 is the bar line
-
             QGraphicsLineItem *line;
 
             if (i < (int)m_verticals.size()) {
                 line = m_verticals[i];
             } else {
                 line = new QGraphicsLineItem;
-                line->setZValue(index > 0 ? -10 : -8);
                 addItem(line);
                 m_verticals.push_back(line);
             }
 
             if (index == 0) {
+              // index 0 is the bar line
                 line->setPen(QPen(GUIPalette::getColour(GUIPalette::MatrixBarLine), pw));
             } else {
                 line->setPen(QPen(GUIPalette::getColour(GUIPalette::BeatLine), pw));
             }
 
+            line->setZValue(index > 0 ? -10 : -8);
             line->setLine(x, 0, x, 128 * (m_resolution + 1));
             
             line->show();
@@ -369,12 +345,17 @@ MatrixScene::recreateLines()
             ++i;
         }
     }
+
+    // Hide the other lines. We are not using them right now.
     while (i < (int)m_verticals.size()) {
         m_verticals[i]->hide();
         ++i;
     }
 
     recreatePitchHighlights();
+    
+    // Force update so all vertical lines are drawn correctly
+    update();
 }
 
 void
