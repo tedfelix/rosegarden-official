@@ -207,7 +207,7 @@ GuitarChordSelectorDialog::refresh()
 void
 GuitarChordSelectorDialog::slotRootHighlighted(int i)
 {
-    std::cerr << "GuitarChordSelectorDialog::slotRootHighlighted " << i << std::endl;
+// RG_DEBUG << "GuitarChordSelectorDialog::slotRootHighlighted " << i;
 
     if (i < 0) return;
 
@@ -225,7 +225,7 @@ GuitarChordSelectorDialog::slotRootHighlighted(int i)
 void
 GuitarChordSelectorDialog::slotChordExtHighlighted(int i)
 {
-    std::cerr << "GuitarChordSelectorDialog::slotChordExtHighlighted " << i << std::endl;
+// RG_DEBUG << "GuitarChordSelectorDialog::slotChordExtHighlighted " << i;
 
     if (i < 0) return;
 
@@ -240,7 +240,7 @@ GuitarChordSelectorDialog::slotChordExtHighlighted(int i)
 void
 GuitarChordSelectorDialog::slotFingeringHighlighted(int i)
 {
-    std::cerr << "GuitarChordSelectorDialog::slotFingeringHighlighted(int)" << std::endl;
+// RG_DEBUG << "GuitarChordSelectorDialog::slotFingeringHighlighted(int)";
 
     QListWidgetItem* it = m_fingeringsList->item(i);
     if (it) slotFingeringHighlighted(it);
@@ -249,7 +249,8 @@ GuitarChordSelectorDialog::slotFingeringHighlighted(int i)
 void
 GuitarChordSelectorDialog::slotFingeringHighlighted(QListWidgetItem* listBoxItem)
 {
-    std::cerr << "GuitarChordSelectorDialog::slotFingeringHighlighted(QListWidgetItem*)" << std::endl;
+// RG_DEBUG << "GuitarChordSelectorDialog::slotFingeringHighlighted("
+//   "QListWidgetItem*)";
     
     FingeringListBoxItem* fingeringItem = dynamic_cast<FingeringListBoxItem*>(listBoxItem);
     if (fingeringItem) {
@@ -323,11 +324,17 @@ GuitarChordSelectorDialog::slotEditFingering()
     GuitarChordEditorDialog* chordEditorDialog = new GuitarChordEditorDialog(newChord, m_chordMap, this);
     
     if (chordEditorDialog->exec() == QDialog::Accepted) {
-        std::cerr << "GuitarChordSelectorDialog::slotEditFingering() - current map state :\n";
-        m_chordMap.debugDump();
+
+// RG_DEBUG << "GuitarChordSelectorDialog::slotEditFingering() - "
+//   "current map state :";
+// m_chordMap.debugDump();  // ??? Make sure this is going to RG_DEBUG
+
         m_chordMap.substitute(m_chord, newChord);
-        std::cerr << "GuitarChordSelectorDialog::slotEditFingering() - new map state :\n";
-        m_chordMap.debugDump();
+
+// RG_DEBUG << "GuitarChordSelectorDialog::slotEditFingering() - "
+//   "new map state :";
+// m_chordMap.debugDump();  // ??? Make sure this is going to RG_DEBUG
+
         setChord(newChord);
     }
     
@@ -350,7 +357,7 @@ GuitarChordSelectorDialog::accept()
 void
 GuitarChordSelectorDialog::setChord(const Guitar::Chord& chord)
 {
-    std::cerr << "GuitarChordSelectorDialog::setChord " /*<< chord*/ << std::endl;
+// RG_DEBUG << "GuitarChordSelectorDialog::setChord() " /*<< chord*/;
     
     m_chord = chord;
 
@@ -400,17 +407,25 @@ void
 GuitarChordSelectorDialog::populateFingerings(const Guitar::ChordMap::chordarray& chords, const Guitar::Fingering& refFingering)
 {
     m_fingeringsList->clear();
-    
+
     for(Guitar::ChordMap::chordarray::const_iterator i = chords.begin(); i != chords.end(); ++i) {
         const Guitar::Chord& chord = *i; 
         QString fingeringString = strtoqstr(chord.getFingering().toString() );
-        //std::cerr << "GuitarChordSelectorDialog::populateFingerings " << chord << std::endl;
-        
+
+// RG_DEBUG << "GuitarChordSelectorDialog::populateFingerings " << chord;
+
         QIcon fingeringPixmap = getFingeringPixmap(chord.getFingering());
         
         FingeringListBoxItem *item = new FingeringListBoxItem(chord, m_fingeringsList, fingeringPixmap, fingeringString);
+
+// RG_DEBUG << "GuitarChordSelectorDialog::populateFingerings(): " <<
+//   fingeringString;
+
         if (refFingering == chord.getFingering()) {
-            std::cerr << "GuitarChordSelectorDialog::populateFingerings - fingering found " << fingeringString << std::endl;
+
+// RG_DEBUG << "GuitarChordSelectorDialog::populateFingerings - "
+//   "fingering found " << fingeringString;
+
             //m_fingeringsList->setSelected(item, true);
             m_fingeringsList->setCurrentItem(item);
         }
@@ -422,7 +437,7 @@ GuitarChordSelectorDialog::populateFingerings(const Guitar::ChordMap::chordarray
 QPixmap
 GuitarChordSelectorDialog::getFingeringPixmap(const Guitar::Fingering& fingering) const
 {
-    std::cerr << "GuitarChordSelectorDialog::getFingeringPixmap()" << std::endl;
+// RG_DEBUG << "GuitarChordSelectorDialog::getFingeringPixmap()";
 
     QPixmap pixmap(FINGERING_PIXMAP_WIDTH, FINGERING_PIXMAP_HEIGHT);
     pixmap.fill();
@@ -451,7 +466,10 @@ GuitarChordSelectorDialog::populateExtensions(const QStringList& extList)
         QStringList filteredList;
         for(QStringList::const_iterator i = extList.constBegin(); i != extList.constEnd(); ++i) {
             if (evaluateChordComplexity((*i).toLower().trimmed()) <= complexityLevel) {
-                std::cerr << "GuitarChordSelectorDialog::populateExtensions - adding '" << *i << "'\n";
+
+// RG_DEBUG << "GuitarChordSelectorDialog::populateExtensions - "
+//   "adding '" << *i << "'";
+
                 filteredList.append(*i); 
             }
         }
@@ -501,9 +519,14 @@ GuitarChordSelectorDialog::parseChordFile(const QString& chordFileName)
     QXmlSimpleReader reader;
     reader.setContentHandler(&handler);
     reader.setErrorHandler(&handler);
-    std::cerr << "GuitarChordSelectorDialog::parseChordFile() parsing " << chordFileName << std::endl;
+
+// RG_DEBUG << "GuitarChordSelectorDialog::parseChordFile() parsing " << 
+//   chordFileName;
+
     reader.parse(source);
-    std::cerr << "  parsed OK, without crashing!  W00t!" << std::endl;
+
+// RG_DEBUG << "  parsed OK, without crashing!  W00t!";
+
     if (!ok)
         QMessageBox::critical(0, tr("Rosegarden"), tr("couldn't parse chord dictionary : %1").arg(handler.errorString()));
     
@@ -528,8 +551,9 @@ GuitarChordSelectorDialog::getChordFile()
 
     name = ResourceFinder().getResourcePath("chords", "chords.xml");
 
-    std::cerr << "GuitarChordSelectorDialog::getChordFile : adding file \" " << name << "\"" << std::endl;
-    std::cerr << "  (if file on the preceding line was \"\" then this is a BUG)" << std::endl;    
+// RG_DEBUG << "GuitarChordSelectorDialog::getChordFile : adding file \" " << 
+//   name << "\"";
+// RG_DEBUG << "  (if file on the preceding line was \"\" then this is a BUG)";
 
     return name;
 }
@@ -543,7 +567,9 @@ GuitarChordSelectorDialog::saveUserChordMap()
     QString userChordDictPath = rf.getResourceSaveDir("chords");
     userChordDictPath += "/chords.xml";
     
-    std::cerr << "GuitarChordSelectorDialog::saveUserChordMap() : saving user chord map to " << userChordDictPath << std::endl;
+// RG_DEBUG "GuitarChordSelectorDialog::saveUserChordMap() : "
+//   "saving user chord map to " << userChordDictPath;
+    
     QString errMsg;
 
     // we're just saving back to chords.xml now, so we'll set this to be false,
