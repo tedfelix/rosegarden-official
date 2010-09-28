@@ -184,7 +184,7 @@ void SegmentMover::handleMouseButtonRelease(QMouseEvent *e)
                 // We absolutely don't want to snap the end time
                 // to the grid.  We want it to remain exactly the same
                 // as it was, but relative to the new start time.
-                timeT newEndTime = newStartTime + segment->getEndTime()
+                timeT newEndTime = newStartTime + segment->getEndMarkerTime()
                                    - segment->getStartTime();
 
                 command->addSegment(segment,

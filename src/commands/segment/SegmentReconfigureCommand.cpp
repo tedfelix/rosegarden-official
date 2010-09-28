@@ -37,13 +37,13 @@ SegmentReconfigureCommand::~SegmentReconfigureCommand()
 void
 SegmentReconfigureCommand::addSegment(Segment *segment,
                                       timeT startTime,
-                                      timeT endTime,
+                                      timeT endMarkerTime,
                                       TrackId track)
 {
     SegmentRec record;
     record.segment = segment;
     record.startTime = startTime;
-    record.endTime = endTime;
+    record.endMarkerTime = endMarkerTime;
     record.track = track;
     m_records.push_back(record);
 }
@@ -84,16 +84,48 @@ SegmentReconfigureCommand::swap()
         // end marker time.
 
         timeT prevStartTime = i->segment->getStartTime();
-        timeT prevEndTime = i->segment->getEndTime();
+        timeT prevEndMarkerTime = i->segment->getEndMarkerTime();
+
+        // Hold the preliminary and most likely end time for this segment
+        timeT newEndMarkerTime = i->endMarkerTime;
+        
+        // Must determine several things about the new segment to see:
+        //
+        // 1. if it is in the composition
+        // 2. if this was a 'move' or a 'resize' event that we are performing.
+        // 3. if the 'moving' segment was being moved to the left.
+        // 4. if the right hand of the segment truncated by the composition end marker.
+        // 
+        // So we will know how to gracefully handle restoring of the true duration
+        // of the segment.
+        //
+        // NOTE: A resized segment that is placed at the end of the composition
+        // will loss its resize info as it is moved back into the composition.
+        // We would need to track a third state to handle the distiction between
+        // a resize and when the end of composition truncates the segment.
+        Composition *comp = i->segment->getComposition();
+        
+        if (comp) {
+            timeT prevEndTime = i->segment->getEndTime();
+            timeT compEndMarkerTime = comp->getEndMarker();
+            
+            bool isMove = (prevEndMarkerTime - prevStartTime) == (i->endMarkerTime - i->startTime);
+
+            if ((compEndMarkerTime == prevEndMarkerTime) &&
+                (compEndMarkerTime < prevEndTime) &&
+                (prevStartTime > i->startTime) && (isMove)) {
+                newEndMarkerTime = prevEndTime - (prevStartTime - i->startTime);
+            }
+        }
 
         // Set start and end time without regard to composition
         // Start and end time.  This allows segments to soft truncate
-        // along start and end of composition.
+        // along end of composition.
         i->segment->setStartTime(i->startTime);
-        i->segment->setEndTime(i->endTime);
+        i->segment->setEndMarkerTime(newEndMarkerTime);
 
         i->startTime = prevStartTime;
-        i->endTime = prevEndTime;
+        i->endMarkerTime = prevEndMarkerTime;
 
         TrackId currentTrack = i->segment->getTrack();
 

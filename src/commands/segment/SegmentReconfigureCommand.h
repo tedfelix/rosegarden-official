@@ -47,14 +47,14 @@ public:
     struct SegmentRec {
         Segment *segment;
         timeT startTime;
-        timeT endTime;
+        timeT endMarkerTime;
         TrackId track;
     };
     typedef std::vector<SegmentRec> SegmentRecSet;
 
     void addSegment(Segment *segment,
                     timeT startTime,
-                    timeT endTime,
+                    timeT endMarkerTime,
                     TrackId track);
 
     void addSegments(const SegmentRecSet &records);
