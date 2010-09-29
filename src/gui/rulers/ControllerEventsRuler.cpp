@@ -218,7 +218,7 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
     }
     
     painter.drawLine(mapXToWidget(lastX),mapYToWidget(lastY),
-            mapXToWidget(m_rulerScale->getXForTime(m_segment->getEndTime())),
+            mapXToWidget(m_rulerScale->getXForTime(m_segment->getEndTime())*m_xScale),
             mapYToWidget(lastY));
     
     // Use a fast vector list to record selected items that are currently visible so that they
