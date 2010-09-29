@@ -654,7 +654,7 @@ void ControlRuler::mouseMoveEvent(QMouseEvent* e)
     ControlTool::FollowMode mode = m_currentTool->handleMouseMove(&controlMouseEvent);
 
     if (mode != ControlTool::NoFollow) {
-        emit dragScroll(m_rulerScale->getTimeForX(controlMouseEvent.x));
+        emit dragScroll(m_rulerScale->getTimeForX(controlMouseEvent.x/m_xScale));
     }
 }
 

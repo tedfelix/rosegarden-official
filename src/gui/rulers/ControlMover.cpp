@@ -152,11 +152,12 @@ ControlMover::handleMouseMove(const ControlMouseEvent *e)
             if (item) item->reconfigure(x,y);
             pIt++;
         }
+        return FollowHorizontal;
     }
 
     m_ruler->update();
     
-    return FollowHorizontal;
+    return NoFollow;
 }
 
 void
