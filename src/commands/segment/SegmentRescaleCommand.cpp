@@ -86,7 +86,10 @@ SegmentRescaleCommand::execute()
 {
     timeT startTime = m_segment->getStartTime();
 
-    if (m_startTimeGiven) startTime = m_startTime;
+    // If we didn't get a start time, assume use the segmetn start
+    if (!m_startTimeGiven) {
+        m_startTime = startTime;
+    }
 
     if (!m_newSegment) {
 
@@ -97,11 +100,17 @@ SegmentRescaleCommand::execute()
                 label, qstrtostr(tr("(rescaled)"))));
         m_newSegment->setColourIndex(m_segment->getColourIndex());
 
+        // Now entire contents (even hidden contents are resized
+        // in segment.
         for (Segment::iterator i = m_segment->begin();
-                m_segment->isBeforeEndMarker(i); ++i) {
+                  i != m_segment->end(); i++) {
+        // Changed condition from m_segment->isBeforeEndMarker(i).
 
-            if ((*i)->isa(Note::EventRestType))
-                continue;
+              //&& Need to place rests in new segment otherwise rests at
+              // beginning and end of segment are lost
+              //
+              // if ((*i)->isa(Note::EventRestType))
+              //    continue;
 
             timeT dt = (*i)->getAbsoluteTime() - startTime;
             timeT duration = (*i)->getDuration();
@@ -110,7 +119,7 @@ SegmentRescaleCommand::execute()
 
             m_newSegment->insert
             (new Event(**i,
-                       startTime + rescale(dt),
+                       m_startTime + rescale(dt),
                        rescale(duration)));
         }
     }
@@ -121,7 +130,7 @@ SegmentRescaleCommand::execute()
                                  m_newSegment->getEndTime());
 
     m_newSegment->setEndMarkerTime
-    (startTime + rescale(m_segment->getEndMarkerTime() - 
+    (m_startTime + rescale(m_segment->getEndMarkerTime() - 
                          m_segment->getStartTime()));
 
     m_detached = true;
