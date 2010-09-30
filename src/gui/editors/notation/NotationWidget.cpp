@@ -866,7 +866,7 @@ NotationWidget::slotPointerPositionChanged(timeT t, bool moveView)
         m_hpanner->slotShowPositionPointer(QPointF(sceneX, sceneY), height);
     }
 
-    if (getPlayTracking() || !fromDocument) {
+    if ((getPlayTracking() && (m_document->getSequenceManager()->getTransportStatus() != STOPPED )) || !fromDocument) {
         if (moveView) m_view->slotEnsurePositionPointerInView(fromDocument);
     }
 }

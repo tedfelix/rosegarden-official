@@ -7540,7 +7540,7 @@ RosegardenMainWindow::slotHelp()
 void
 RosegardenMainWindow::slotTutorial()
 {
-    QString tutorialURL = tr("http://rosegardenmusic.com/wiki/users_helping_users");
+    QString tutorialURL = tr("http://rosegardenmusic.com/tutorials/");
     QDesktopServices::openUrl(QUrl(tutorialURL));
 }
 

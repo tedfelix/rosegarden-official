@@ -147,7 +147,7 @@ Panned::slotEnsurePositionPointerInView(bool page)
     int hMax = horizontalScrollBar()->maximum();
 
     double leftDist = 0.15;
-    double rightDist = 0.20;
+    double rightDist = 0.15;
 
     int w = width();                        // View width in pixels
     QRectF r = mapToScene(0, 0, w, 1).boundingRect();
@@ -174,7 +174,7 @@ Panned::slotEnsurePositionPointerInView(bool page)
 //    std::cerr << "x = " << x << ", left = " << left << ", leftThreshold = " << leftThreshold << ", right = " << right << ", rightThreshold = " << rightThreshold << std::endl;
 
     // Is x inside the view?
-    if (x < left || (x > rightThreshold && x < right && page)) {
+    if (x < leftThreshold || (x > rightThreshold && x < right && page)) {
 //        std::cerr << "big scroll (x is off left, or paging)" << std::endl;
         // scroll to have the left of the view, plus threshold, at x
         value = hMin + (((x - ws * leftDist) - x1) * (hMax - hMin)) / (length - ws);

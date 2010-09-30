@@ -123,6 +123,9 @@ protected:
     int  m_currentXOffset;
     int  m_width;
     bool m_activeMousePress;
+    // remeber the mouse x pos in mousePressEvent and in mouseMoveEvent so that
+    // we can emit it in mouseReleaseEvent to update the pointer position in other views
+    double m_lastMouseXPos;
 
     RosegardenDocument *m_doc;
     bool m_mainWindow;

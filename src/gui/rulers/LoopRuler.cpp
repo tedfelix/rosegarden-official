@@ -301,6 +301,8 @@ LoopRuler::mousePressEvent(QMouseEvent *mE)
             // button is pressed, before we begin to drag it.
             emit dragPointerToPosition(m_grid->snapX(x));
 
+            m_lastMouseXPos = x;
+
         }
 
         m_activeMousePress = true;
@@ -335,8 +337,9 @@ LoopRuler::mouseReleaseEvent(QMouseEvent *mE)
             // other views (typically, in the seg. canvas while the user has dragged the pointer
             // in an edit view)
             //
-            double x = mouseEventToSceneX(mE);
-            emit setPointerPosition(m_grid->snapX(x));
+
+            emit setPointerPosition(m_grid->snapX(m_lastMouseXPos));
+
         }
         emit stopMouseMove();
         m_activeMousePress = false;
@@ -371,6 +374,9 @@ LoopRuler::mouseMoveEvent(QMouseEvent *mE)
         }
     } else {
         emit dragPointerToPosition(m_grid->snapX(x));
+
+        m_lastMouseXPos = x;
+
     }
 
     emit mouseMove();
