@@ -327,7 +327,8 @@ void NotationSelector::handleMouseRelease(const NotationMouseEvent *e)
     // least at a casual testing-in-the-middle-of-development glance, I'm moving
     // on for now.
 
-    if ((w > -3 && w < 3 && h > -3 && h < 3 && !m_startedFineDrag) //||
+    if ((w > -3 && w < 3 && h > -3 && h < 3 && !m_startedFineDrag)
+            ||(m_clickedShift) //||
         // detour:
 /*        (m_selectionRect->x() == 0 && m_selectionRect->y() == 0 && !m_startedFineDrag)*/) {
 
