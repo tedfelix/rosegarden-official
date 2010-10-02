@@ -180,7 +180,7 @@ Segment::getClippedStartTime() const
 }
 
 timeT
-Segment::getEndMarkerTime() const
+Segment::getEndMarkerTime(bool comp) const
 {
     timeT endTime;
 
@@ -198,7 +198,7 @@ Segment::getEndMarkerTime() const
 	    endTime = getEndTime();
 	}
 
-	if (m_composition) {
+	if (m_composition && comp) {
 	    endTime = std::min(endTime, m_composition->getEndMarker());
 	}
     }

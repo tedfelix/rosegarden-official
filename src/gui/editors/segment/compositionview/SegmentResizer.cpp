@@ -120,7 +120,7 @@ void SegmentResizer::handleMouseButtonRelease(QMouseEvent *e)
         timeT oldStartTime, oldEndTime;
         
         oldStartTime = segment->getStartTime();
-        oldEndTime = segment->getEndMarkerTime();
+        oldEndTime = segment->getEndMarkerTime(FALSE);
 
         timeT newStartTime, newEndTime;
 

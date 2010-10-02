@@ -2633,7 +2633,7 @@ RosegardenMainWindow::jogSelection(timeT amount)
 
         command->addSegment((*i),
                             (*i)->getStartTime() + amount,
-                            (*i)->getEndMarkerTime() + amount,
+                            (*i)->getEndMarkerTime(FALSE) + amount,
                             (*i)->getTrack());
     }
 
@@ -2844,7 +2844,7 @@ RosegardenMainWindow::slotSetSegmentStartTimes()
 
             command->addSegment
             (*i, dialog.getTime(),
-             (*i)->getEndMarkerTime() - (*i)->getStartTime() + dialog.getTime(),
+             (*i)->getEndMarkerTime(FALSE) - (*i)->getStartTime() + dialog.getTime(),
              (*i)->getTrack());
         }
 
