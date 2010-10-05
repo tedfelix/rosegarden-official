@@ -327,13 +327,13 @@ GuitarChordSelectorDialog::slotEditFingering()
 
 // RG_DEBUG << "GuitarChordSelectorDialog::slotEditFingering() - "
 //   "current map state :";
-// m_chordMap.debugDump();  // ??? Make sure this is going to RG_DEBUG
+// m_chordMap.debugDump();
 
         m_chordMap.substitute(m_chord, newChord);
 
 // RG_DEBUG << "GuitarChordSelectorDialog::slotEditFingering() - "
 //   "new map state :";
-// m_chordMap.debugDump();  // ??? Make sure this is going to RG_DEBUG
+// m_chordMap.debugDump();
 
         setChord(newChord);
     }
@@ -567,7 +567,7 @@ GuitarChordSelectorDialog::saveUserChordMap()
     QString userChordDictPath = rf.getResourceSaveDir("chords");
     userChordDictPath += "/chords.xml";
     
-// RG_DEBUG "GuitarChordSelectorDialog::saveUserChordMap() : "
+// RG_DEBUG << "GuitarChordSelectorDialog::saveUserChordMap() : "
 //   "saving user chord map to " << userChordDictPath;
     
     QString errMsg;

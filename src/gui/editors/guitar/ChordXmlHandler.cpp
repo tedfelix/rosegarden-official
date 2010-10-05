@@ -105,6 +105,10 @@ bool ChordXmlHandler::characters(const QString& ch)
 
 bool ChordXmlHandler::endDocument()
 {
+    // m_chordMap is now a complete and unchanged copy of the data in the
+    // file, so it does not need to be saved.
+    m_chordMap.clearNeedSave();
+
     return true;
 }
 
