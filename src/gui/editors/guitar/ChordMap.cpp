@@ -28,6 +28,10 @@ namespace Rosegarden
 namespace Guitar
 {
     
+int ChordMap::FILE_FORMAT_VERSION_MAJOR = 1;
+int ChordMap::FILE_FORMAT_VERSION_MINOR = 0;
+int ChordMap::FILE_FORMAT_VERSION_POINT = 0;
+
 ChordMap::ChordMap()
     : m_needSave(false)
 {
@@ -35,8 +39,6 @@ ChordMap::ChordMap()
 
 void ChordMap::insert(const Chord& c)
 {
-RG_DEBUG << "ChordMap::insert()";
-
     m_map.insert(c);
     m_needSave = true;
 }
@@ -137,16 +139,13 @@ ChordMap::substitute(const Chord& oldChord, const Chord& newChord)
 void
 ChordMap::remove(const Chord& c)
 {
-// RG_DEBUG << "ChordMap::remove()";
-
     m_map.erase(c);
     m_needSave = true;    
 }
 
-bool ChordMap::saveDocument(const QString& filename, bool userChordsOnly, QString& errMsg)
+bool ChordMap::saveDocument(
+    const QString& filename, bool userChordsOnly, QString& /*errMsg*/)
 {
-// RG_DEBUG << "ChordMap::saveDocument()";
-
     QFile file(filename);
     file.open(QIODevice::WriteOnly);
    
@@ -165,7 +164,9 @@ bool ChordMap::saveDocument(const QString& filename, bool userChordsOnly, QStrin
     outStream << "<chords>\n";
     
     QString currentExt, currentRoot;
-    
+    bool inChord = false;
+    bool inChordset = false;
+
     for(iterator i = begin(); i != end(); ++i) {
         const Chord& chord = *i;
     
@@ -174,56 +175,68 @@ bool ChordMap::saveDocument(const QString& filename, bool userChordsOnly, QStrin
             
         if (chord.getRoot() != currentRoot) {
 
-// RG_DEBUG << "  New Root...";
-// RG_DEBUG << chord;
-
             currentRoot = chord.getRoot();
-            
-            // close current chordset (if there was one)
-            if (i != begin())
-                outStream << "\n</chordset>\n";
+
+            // If we are in a <chord>, close it.
+            if (inChord) {
+                outStream << "  </chord>\n";
+                inChord = false;
+            }
+
+            // If we are in a <chordset>, close it.
+            if (inChordset) {
+                outStream << " </chordset>\n";
+                inChordset = false;
+            }
 
             // open new chordset            
-            outStream << "<chordset root=\"" << chord.getRoot() << "\">\n";
-            currentExt = "NEWEXT"; // to make sure we open a new chord right after that
+            outStream << " <chordset root=\"" << chord.getRoot() << "\">\n";
+            inChordset = true;
+            currentExt = "NEWEXT"; // make sure we open a new chord
         }
     
         if (chord.getExt() != currentExt) {
             
             currentExt = chord.getExt();
             
-            // close current chord (if there was one)
-            // ??? This will not work.  If we have moved on to a new chordset,
-            //   this will put a </chord> immediately after a <chordset>.
-            if (i != begin())
-                outStream << "</chord>\n";
+            // If we are in a <chord>, close it.
+            if (inChord) {
+                outStream << "  </chord>\n";
+                inChord = false;
+            }
 
             // open new chord            
-            outStream << "<chord";
+            outStream << "  <chord";
             if (!chord.getExt().isEmpty())
                 outStream << " ext=\"" << chord.getExt() << "\"";
             if (chord.isUserChord())
                 outStream << " user=\"true\"";
                 
             outStream << ">\n";
+            inChord = true;
         }
-        
-        outStream << "<fingering>" << chord.getFingering().toString() << "</fingering>\n";
+
+        outStream << "   <fingering>" << chord.getFingering().toString() <<
+            "</fingering>\n";
     }
 
-    if (!m_map.empty())
-        outStream << "</chord>\n"; // close last written chord
+    // If we are in a <chord>, close it.
+    if (inChord) {
+        outStream << "  </chord>\n";
+        inChord = false;
+    }
         
+    // If we are in a <chordset>, close it.
+    if (inChordset) {
+        outStream << " </chordset>\n";
+        inChordset = false;
+    }
+
     outStream << "</chords>\n";    
     outStream << "</rosegarden-chord-data>\n";
   
     return outStream.device()->status() == QTextStream::Ok;
 }
-
-int ChordMap::FILE_FORMAT_VERSION_MAJOR = 1;
-int ChordMap::FILE_FORMAT_VERSION_MINOR = 0;
-int ChordMap::FILE_FORMAT_VERSION_POINT = 0;
-
 
 void
 ChordMap::debugDump() const
