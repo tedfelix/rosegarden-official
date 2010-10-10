@@ -52,7 +52,7 @@ void
 Clipboard::clear()
 {
     for (iterator i = begin(); i != end(); ++i) {
-	delete *i;
+        delete *i;
     }
     m_segments.clear();
     clearTimeSignatureSelection();
@@ -65,17 +65,17 @@ bool
 Clipboard::isEmpty() const
 {
     return (m_segments.size() == 0 &&
-	    !m_haveTimeSigSelection &&
-	    !m_haveTempoSelection &&
-	    m_nominalStart == m_nominalEnd);
+        !m_haveTimeSigSelection &&
+        !m_haveTempoSelection &&
+        m_nominalStart == m_nominalEnd);
 }
 
 bool
 Clipboard::isSingleSegment() const
 {
     return (m_segments.size() == 1 &&
-	    !m_haveTimeSigSelection &&
-	    !m_haveTempoSelection);
+        !m_haveTimeSigSelection &&
+        !m_haveTempoSelection);
 }
 
 Segment *
@@ -111,7 +111,7 @@ Clipboard::newSegment(const Segment *copyFrom)
 
 void
 Clipboard::newSegment(const Segment *copyFrom, timeT from, timeT to,
-		      bool expandRepeats)
+    bool expandRepeats)
 {
     // create with copy ctor so as to inherit track, instrument etc
     Segment *s = new Segment(*copyFrom);
@@ -140,71 +140,71 @@ Clipboard::newSegment(const Segment *copyFrom, timeT from, timeT to,
     int lastRepeat = 0;
 
     if (!copyFrom->isRepeating() || segDuration <= 0) {
-	expandRepeats = false;
+        expandRepeats = false;
     }
 
     if (expandRepeats) {
-	firstRepeat = (from - segStart) / segDuration;
-	to = std::min(to, copyFrom->getRepeatEndTime());
-	lastRepeat = (to - segStart) / segDuration;
+        firstRepeat = (from - segStart) / segDuration;
+        to = std::min(to, copyFrom->getRepeatEndTime());
+        lastRepeat = (to - segStart) / segDuration;
     }
 
     s->setRepeating(false);
     
     if (s->getType() == Segment::Audio) {
-	
-	Composition *c = copyFrom->getComposition();
 
-	for (int repeat = firstRepeat; repeat <= lastRepeat; ++repeat) {
+        Composition *c = copyFrom->getComposition();
 
-	    timeT wrappedFrom = segStart;
-	    timeT wrappedTo = segEndMarker;
+        for (int repeat = firstRepeat; repeat <= lastRepeat; ++repeat) {
 
-	    if (!expandRepeats) {
-		wrappedFrom = from;
-		wrappedTo = to;
-	    } else {
-		if (repeat == firstRepeat) {
-		    wrappedFrom = segStart + (from - segStart) % segDuration;
-		}
-		if (repeat == lastRepeat) {
-		    wrappedTo = segStart + (to - segStart) % segDuration;
-		}
-	    }
+            timeT wrappedFrom = segStart;
+            timeT wrappedTo = segEndMarker;
 
-	    if (wrappedFrom > segStart) {
-		if (c) {
-		    s->setAudioStartTime
-			(s->getAudioStartTime() +
-			 c->getRealTimeDifference(segStart + repeat * segDuration,
-						  from));
-		}
-		s->setStartTime(from);
-	    } else {
-		s->setStartTime(segStart + repeat * segDuration);
-	    }
+            if (!expandRepeats) {
+                wrappedFrom = from;
+                wrappedTo = to;
+            } else {
+                if (repeat == firstRepeat) {
+                    wrappedFrom = segStart + (from - segStart) % segDuration;
+                }
+                if (repeat == lastRepeat) {
+                    wrappedTo = segStart + (to - segStart) % segDuration;
+                }
+            }
 
-	    if (wrappedTo < segEndMarker) {
-		s->setEndMarkerTime(to);
-		if (c) {
-		    s->setAudioEndTime
-			(s->getAudioStartTime() +
-			 c->getRealTimeDifference(segStart + repeat * segDuration,
-						  to));
-		}
-	    } else {
-		s->setEndMarkerTime(segStart + (repeat + 1) * segDuration);
-	    }
+            if (wrappedFrom > segStart) {
+                if (c) {
+                    s->setAudioStartTime
+                        (s->getAudioStartTime() +
+                         c->getRealTimeDifference(segStart + repeat * segDuration,
+                                                  from));
+                }
+                s->setStartTime(from);
+            } else {
+                s->setStartTime(segStart + repeat * segDuration);
+            }
 
-	    m_segments.insert(s);
-	    if (repeat < lastRepeat) {
-		s = new Segment(*copyFrom);
-		s->setRepeating(false);
-	    }
-	}
+            if (wrappedTo < segEndMarker) {
+                s->setEndMarkerTime(to);
+                if (c) {
+                    s->setAudioEndTime
+                        (s->getAudioStartTime() +
+                         c->getRealTimeDifference(segStart + repeat * segDuration,
+                                                  to));
+                }
+            } else {
+                s->setEndMarkerTime(segStart + (repeat + 1) * segDuration);
+            }
 
-	m_partial = true;
-	return;
+            m_segments.insert(s);
+            if (repeat < lastRepeat) {
+                s = new Segment(*copyFrom);
+                s->setRepeating(false);
+            }
+        }
+
+        m_partial = true;
+        return;
     }
 
     // We have a normal (MIDI) segment.
@@ -213,31 +213,31 @@ Clipboard::newSegment(const Segment *copyFrom, timeT from, timeT to,
     
     for (int repeat = firstRepeat; repeat <= lastRepeat; ++repeat) {
 
-	Segment::const_iterator ifrom = copyFrom->begin();
-	Segment::const_iterator ito = copyFrom->end();
+        Segment::const_iterator ifrom = copyFrom->begin();
+        Segment::const_iterator ito = copyFrom->end();
 
-	if (!expandRepeats) {
-	    ifrom = copyFrom->findTime(from);
-	    ito = copyFrom->findTime(to);
-	} else {
-	    if (repeat == firstRepeat) {
-		ifrom = copyFrom->findTime
-		    (segStart + (from - segStart) % segDuration);
-	    }
-	    if (repeat == lastRepeat) {
-		ito = copyFrom->findTime
-		    (segStart + (to - segStart) % segDuration);
-	    }
-	}
+        if (!expandRepeats) {
+            ifrom = copyFrom->findTime(from);
+            ito = copyFrom->findTime(to);
+        } else {
+            if (repeat == firstRepeat) {
+                ifrom = copyFrom->findTime
+                    (segStart + (from - segStart) % segDuration);
+            }
+            if (repeat == lastRepeat) {
+                ito = copyFrom->findTime
+                    (segStart + (to - segStart) % segDuration);
+            }
+        }
 
         // For each event in the time range and before the end marker.
-	for (Segment::const_iterator i = ifrom;
-	     i != ito && copyFrom->isBeforeEndMarker(i); ++i) {
+        for (Segment::const_iterator i = ifrom;
+             i != ito && copyFrom->isBeforeEndMarker(i); ++i) {
 
-	    Event *e = (*i)->copyMoving(repeat * segDuration);
+            Event *e = (*i)->copyMoving(repeat * segDuration);
 
             s->insert(e);
-	}
+        }
     }
 
     if (expandRepeats)
@@ -247,7 +247,7 @@ Clipboard::newSegment(const Segment *copyFrom, timeT from, timeT to,
     // Need to use the end marker time from the original segment, not s, 
     // because its value may depend on the composition it's in.
     if (segEndMarker > to)
-	s->setEndMarkerTime(to);
+        s->setEndMarkerTime(to);
 
     // Fix the beginning.
     
@@ -285,8 +285,8 @@ Clipboard::newSegment(const EventSelection *copyFrom)
 
     const EventSelection::eventcontainer &events(copyFrom->getSegmentEvents());
     for (EventSelection::eventcontainer::const_iterator i = events.begin();
-	 i != events.end(); ++i) {
-	s->insert(new Event(**i));
+         i != events.end(); ++i) {
+        s->insert(new Event(**i));
     }
 
     m_segments.insert(s);
@@ -341,7 +341,7 @@ Clipboard::copyFrom(const Clipboard *c)
     clear();
 
     for (Clipboard::const_iterator i = c->begin(); i != c->end(); ++i) {
-	newSegment(*i);
+        newSegment(*i);
     }
 
     m_partial = c->m_partial;
@@ -360,27 +360,27 @@ timeT
 Clipboard::getBaseTime() const
 {
     if (hasNominalRange()) {
-	return m_nominalStart;
+        return m_nominalStart;
     }
 
     timeT t = 0;
 
     for (const_iterator i = begin(); i != end(); ++i) {
-	if (i == begin() || (*i)->getStartTime() < t) {
-	    t = (*i)->getStartTime();
-	}
+        if (i == begin() || (*i)->getStartTime() < t) {
+            t = (*i)->getStartTime();
+        }
     }
 
     if (m_haveTimeSigSelection && !m_timeSigSelection.empty()) {
-	if (m_timeSigSelection.begin()->first < t) {
-	    t = m_timeSigSelection.begin()->first;
-	}
+        if (m_timeSigSelection.begin()->first < t) {
+            t = m_timeSigSelection.begin()->first;
+        }
     }
 
     if (m_haveTempoSelection && !m_tempoSelection.empty()) {
-	if (m_tempoSelection.begin()->first < t) {
-	    t = m_tempoSelection.begin()->first;
-	}
+        if (m_tempoSelection.begin()->first < t) {
+            t = m_tempoSelection.begin()->first;
+        }
     }
     
     return t;
