@@ -400,4 +400,26 @@ Clipboard::getNominalRange(timeT &start, timeT &end)
     end = m_nominalEnd;
 }
 
+void
+Clipboard::removeAudioSegments()
+{
+    iterator i = begin();
+
+    // For each segment
+    while (i != end()) {
+        // Make sure we don't erase what the iterator is pointing to.
+        iterator j = i;
+        ++i;
+
+        // If this is an audio segment, erase it.
+        if ((*j)->getType() == Segment::Audio) {
+            m_segments.erase(j);
+        }
+    }
+    
+    // If there are no segments, clear the clipboard.
+    if (m_segments.empty())
+        clear();
+}
+
 }

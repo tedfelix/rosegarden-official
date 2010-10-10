@@ -1357,6 +1357,10 @@ RosegardenMainWindow::setDocument(RosegardenDocument* newDocument)
     //
     m_doc->prepareAudio();
 
+    // Remove the audio segments from the clipboard as they point to 
+    // bogus file IDs now.
+    m_clipboard->removeAudioSegments();
+
     // Do not reset instrument prog. changes after all.
     //     if (m_seqManager)
     //         m_seqManager->preparePlayback(true);
@@ -1782,7 +1786,7 @@ RosegardenMainWindow::slotFileNewWindow()
 void
 RosegardenMainWindow::slotFileNew()
 {
-    RG_DEBUG << "RosegardenMainWindow::slotFileNew()\n";
+// RG_DEBUG << "RosegardenMainWindow::slotFileNew()\n";
 
     TmpStatusMsg msg(tr("Creating new document..."), this);
 

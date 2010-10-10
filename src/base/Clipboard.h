@@ -178,6 +178,11 @@ public:
     
     void getNominalRange(timeT &start, timeT &end);
 
+    /**
+     * Remove all audio segments from the clipboard.
+     */
+    void removeAudioSegments();
+
 private:
     segmentcontainer m_segments;
     bool m_partial;
