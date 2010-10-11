@@ -3727,12 +3727,12 @@ RosegardenMainWindow::guessTextCodec(std::string text)
             IdentifyTextCodecDialog dialog(0, text);
             dialog.exec();
 
-            std::string codecName = dialog.getCodec();
+            QString codecName = dialog.getCodec();
 
             CurrentProgressDialog::thaw();
 
             if (codecName != "") {
-                codec = QTextCodec::codecForName(codecName.c_str());
+                codec = QTextCodec::codecForName(codecName.toAscii());
             }
             break;
         }

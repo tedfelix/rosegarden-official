@@ -29,6 +29,12 @@ class QWidget;
 namespace Rosegarden
 {
 
+/*
+ * Creates a small dialog box containing a PitchChooser widget.  The
+ * info paramter provides extra information as a reminder what this particular
+ * picker is for, eg. Highest, Lowest, From, To
+ */
+
 class PitchPickerDialog : public QDialog
 {
     Q_OBJECT

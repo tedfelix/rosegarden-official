@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -21,6 +20,7 @@
 
 #include <string>
 #include <QDialog>
+#include <QString>
 #include <deque>
 
 
@@ -40,24 +40,20 @@ class IdentifyTextCodecDialog : public QDialog
 public:
     IdentifyTextCodecDialog(QWidget *parent, std::string text);
 
-    std::string getCodec() const { return m_codec; }
+    QString getCodec() const { return m_codec; }
 
 protected slots:
     void slotCodecSelected(int);
 
 protected:
+    QString getExampleText();
+    
     std::string m_text;
-    std::string m_codec;
-    std::deque<std::string> m_codecs;
+    QString m_codec;
+    QStringList m_codecs;
     QLabel *m_example;
 };
 
-
-/*
- * Creates a small dialog box containing a PitchChooser widget.  The
- * info paramter provides extra information as a reminder what this particular
- * picker is for, eg. Highest, Lowest, From, To
- */
 
 }
 
