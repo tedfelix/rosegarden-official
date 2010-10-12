@@ -22,6 +22,9 @@
 #include "base/Composition.h"
 #include "base/Segment.h"
 #include "base/Track.h"
+#include "gui/application/RosegardenMainWindow.h"
+#include "document/RosegardenDocument.h"
+
 #include <QString>
 
 
@@ -102,6 +105,15 @@ PasteSegmentsCommand::execute()
 
     for (Clipboard::iterator i = m_clipboard->begin();
             i != m_clipboard->end(); ++i) {
+ 
+        // If the segment is an audio segment
+        if ((*i)->getType() == Segment::Audio)
+            // If the segment's file ID isn't in the audio file manager
+            if (!RosegardenMainWindow::self()->getDocument()->
+                getAudioFileManager().fileExists((*i)->getAudioFileId())) {
+                // Skip pasting it.
+                continue;
+            }
 
         int newTrackPos = trackOffset +
                           m_composition->getTrackPositionById((*i)->getTrack());
