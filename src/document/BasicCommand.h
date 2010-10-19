@@ -84,10 +84,8 @@ private:
     void copyTo(Segment *);
     void copyFrom(Segment *);
 
-    timeT calculateStartTime(timeT given,
-                                         Segment &segment);
-    timeT calculateEndTime(timeT given,
-                                       Segment &segment);
+    timeT calculateStartTime(timeT given, Segment &segment);
+    timeT calculateEndTime(timeT given, Segment &segment);
 
     timeT m_startTime;
     timeT m_endTime;

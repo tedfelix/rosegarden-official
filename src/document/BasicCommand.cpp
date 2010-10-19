@@ -27,7 +27,7 @@ namespace Rosegarden
 {
     
 BasicCommand::BasicCommand(const QString &name, Segment &segment,
-               timeT start, timeT end, bool bruteForceRedo) :
+                           timeT start, timeT end, bool bruteForceRedo) :
     NamedCommand(name),
     m_startTime(calculateStartTime(start, segment)),
     m_endTime(calculateEndTime(end, segment)),
@@ -56,10 +56,10 @@ BasicCommand::calculateStartTime(timeT given, Segment &segment)
     timeT actual = given;
     Segment::iterator i = segment.findTime(given);
 
-    while (i != segment.end() && (*i)->getAbsoluteTime() == given) {
-    timeT notation = (*i)->getNotationAbsoluteTime();
-    if (notation < given) actual = notation;
-    ++i;
+    while (i != segment.end()  &&  (*i)->getAbsoluteTime() == given) {
+        timeT notation = (*i)->getNotationAbsoluteTime();
+        if (notation < given) actual = notation;
+        ++i;
     }
 
     return actual;
@@ -71,10 +71,10 @@ BasicCommand::calculateEndTime(timeT given, Segment &segment)
     timeT actual = given;
     Segment::iterator i = segment.findTime(given);
 
-    while (i != segment.end() && (*i)->getAbsoluteTime() == given) {
-    timeT notation = (*i)->getNotationAbsoluteTime();
-    if (notation > given) actual = notation;
-    ++i;
+    while (i != segment.end()  &&  (*i)->getAbsoluteTime() == given) {
+        timeT notation = (*i)->getNotationAbsoluteTime();
+        if (notation > given) actual = notation;
+        ++i;
     }
 
     return actual;
@@ -108,6 +108,7 @@ BasicCommand::execute()
     }
 
     m_segment.updateRefreshStatuses(getStartTime(), getRelayoutEndTime());
+
     RG_DEBUG << "BasicCommand(" << getName() << "): updated refresh statuses "
          << getStartTime() << " -> " << getRelayoutEndTime() << endl;
 }
@@ -116,8 +117,8 @@ void
 BasicCommand::unexecute()
 {
     if (m_redoEvents) {
-    copyTo(m_redoEvents);
-    m_doBruteForceRedo = true;
+        copyTo(m_redoEvents);
+        m_doBruteForceRedo = true;
     }
 
     copyFrom(&m_savedEvents);
@@ -128,34 +129,38 @@ BasicCommand::unexecute()
 void
 BasicCommand::copyTo(Rosegarden::Segment *events)
 {
-    RG_DEBUG << "BasicCommand(" << getName() << ")::copyTo: " << &m_segment << " to "
-         << events << ", range (" 
-         << m_startTime << "," << m_endTime
-         << ")" << endl;
+    RG_DEBUG << "BasicCommand(" << getName() << ")::copyTo: " << &m_segment << 
+        " to " << events << ", range (" << m_startTime << "," << m_endTime << 
+        ")" << endl;
 
     Segment::iterator from = m_segment.findTime(m_startTime);
     Segment::iterator to   = m_segment.findTime(m_endTime);
 
     for (Segment::iterator i = from; i != m_segment.end() && i != to; ++i) {
-//  RG_DEBUG << "Found event of type " << (*i)->getType() << " and duration " << (*i)->getDuration() << endl;
-    events->insert(new Event(**i));
+
+// RG_DEBUG << "Found event of type " << (*i)->getType() << 
+//   " and duration " << (*i)->getDuration() << endl;
+
+       events->insert(new Event(**i));
     }
 }
    
 void
 BasicCommand::copyFrom(Rosegarden::Segment *events)
 {
-    RG_DEBUG << "BasicCommand(" << getName() << ")::copyFrom: " << events << " to "
-         << &m_segment << ", range (" 
-         << m_startTime << "," << m_endTime
-         << ")" << endl;
+    RG_DEBUG << "BasicCommand(" << getName() << ")::copyFrom: " << events << 
+        " to " << &m_segment << ", range (" << m_startTime << "," << 
+        m_endTime << ")" << endl;
 
     m_segment.erase(m_segment.findTime(m_startTime),
-            m_segment.findTime(m_endTime));
+                    m_segment.findTime(m_endTime));
 
     for (Segment::iterator i = events->begin(); i != events->end(); ++i) {
-//  RG_DEBUG << "Found event of type " << (*i)->getType() << " and duration " << (*i)->getDuration() << endl;
-    m_segment.insert(new Event(**i));
+
+// RG_DEBUG << "Found event of type " << (*i)->getType() << 
+//   " and duration " << (*i)->getDuration() << endl;
+
+        m_segment.insert(new Event(**i));
     }
 
     events->clear();
