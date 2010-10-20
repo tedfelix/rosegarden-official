@@ -33,7 +33,7 @@
         <location line="-5"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+1"/>
         <source>Rosegarden playback device</source>
-        <translation>Périphérique de sortie de Rosegarden</translation>
+        <translation>Nom Rosegarden</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -64,7 +64,7 @@
         <location line="+19"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Edit the controllers associated with this device.&lt;/p&gt;&lt;p&gt;You must define controllers here in order to use them anywhere in Rosegarden, such as on control rulers or in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box,  You can change which controllers are displayed in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box, and rearrange their layout&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Editer les paramètres de contrôle associés au périphérique.&lt;/p&gt;&lt;p&gt;Les paramètres de contrôle doivent avoir été définis ici pour être utilisables dans Rosegarden, sur une réglette de contrôle ou dans la boîte des &lt;b&gt;Paramètres d&apos;instrument&lt;/b&gt;.  Vous pouvez changer les paramètres de contrôle visibles dans la boîte des &lt;b&gt;Paramètres d&apos;instrument&lt;/b&gt;, et modifier leur disposition.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Editer les contrôleurs associés au périphérique.&lt;/p&gt;&lt;p&gt;Les contrôleurs doivent avoir été définis ici pour être utilisables dans Rosegarden, sur une réglette de contrôle ou dans la boîte des &lt;b&gt;Paramètres d&apos;instrument&lt;/b&gt;.  Vous pouvez changer les contrôleurs visibles dans la boîte des &lt;b&gt;Paramètres d&apos;instrument&lt;/b&gt;, et modifier leur disposition.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -128,7 +128,7 @@
         <location line="-60"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+4"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI outputs (hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Sortie MIDI disponibles (synthétiseurs matériels ou logiciels)&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Sorties MIDI disponibles (synthétiseurs matériels ou logiciels)&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+100"/>
@@ -10083,7 +10083,7 @@
     <message>
         <location line="+16"/>
         <source>http://rosegardenmusic.com/wiki/doc:manual-en</source>
-        <translation></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:manual-fr</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -12716,7 +12716,7 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
     <message>
         <location line="+97"/>
         <source>http://rosegardenmusic.com/wiki/doc:device-manager-en</source>
-        <translation></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:device-manager-fr</translation>
     </message>
 </context>
 <context>
@@ -13730,7 +13730,7 @@ Voulez-vous essayer de localiser ce fichier?</translation>
     <message>
         <location line="+38"/>
         <source>http://rosegardenmusic.com/wiki/doc:fileMergeDialog-en</source>
-        <translation></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:fileMergeDialog-fr</translation>
     </message>
 </context>
 <context>
@@ -15150,7 +15150,7 @@ Voulez-vous utiliser
     <message>
         <location line="+134"/>
         <source>http://rosegardenmusic.com/wiki/doc:manual-lilypondoptions-en</source>
-        <translation></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:manual-lilypondoptions-fr</translation>
     </message>
     <message>
         <location line="-172"/>
@@ -17614,7 +17614,7 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
     <message>
         <location line="+75"/>
         <source>http://rosegardenmusic.com/wiki/doc:notation-en</source>
-        <translation></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:notation-fr</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -19564,7 +19564,7 @@ Souhaitez vous le faire maintenant ?</translation>
     <message>
         <location line="+1123"/>
         <source>http://rosegardenmusic.com/wiki/doc:manual-en</source>
-        <translation></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:manual-fr</translation>
     </message>
     <message>
         <location line="-6397"/>
@@ -22913,7 +22913,7 @@ Souhaitez vous le faire tout de suite ?</translation>
     <message>
         <location line="+199"/>
         <source>http://rosegardenmusic.com/wiki/doc:triggerSegmentManager-en</source>
-        <translation></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:triggerSegmentManager-fr</translation>
     </message>
 </context>
 <context>
@@ -22989,7 +22989,7 @@ Souhaitez vous le faire tout de suite ?</translation>
     <message>
         <location line="+237"/>
         <source>http://rosegardenmusic.com/wiki/doc:tupletDialog-en</source>
-        <translation></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:tupletDialog-fr</translation>
     </message>
 </context>
 <context>
