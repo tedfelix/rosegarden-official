@@ -15,31 +15,31 @@
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="+18"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+474"/>
         <source>Manage MIDI Devices</source>
-        <translation type="unfinished">MIDIデバイスの操作</translation>
+        <translation>MIDIデバイスの操作</translation>
     </message>
     <message>
         <location line="+26"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+1"/>
         <source>MIDI Playback</source>
-        <translation type="unfinished">MIDI再生</translation>
+        <translation>MIDI再生</translation>
     </message>
     <message>
         <location line="+52"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+3"/>
         <source>Rosegarden playback device</source>
-        <translation type="unfinished">Rosegarden再生デバイス</translation>
+        <translation>Rosegarden再生デバイス</translation>
     </message>
     <message>
         <location line="+253"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+36"/>
         <source>Internal Synth</source>
-        <translation type="unfinished">内部シンセサイザ</translation>
+        <translation>内部シンセサイザ</translation>
     </message>
     <message>
         <location line="-243"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-31"/>
         <source>Default playback device</source>
-        <translation type="unfinished">既定値:再生デバイス</translation>
+        <translation>既定値:再生デバイス</translation>
     </message>
     <message>
         <source>&lt;qt&gt;&lt;p&gt;Create new playback devices here. Click the device name to change it. Select a device here and connect it to a MIDI output port by clicking on a port to the right.&lt;/p&gt;&lt;/qt&gt;</source>
@@ -49,32 +49,32 @@
         <location line="+44"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+7"/>
         <source>&lt;qt&gt;&lt;p&gt;Bank definitions allow you to tell Rosegarden about the programs or patches available for use on the equipment (hardware or software synth) connected to this device.&lt;/p&gt;&lt;p&gt;You must have something defined for any program or bank changes you wish to transmit, as Rosegarden hides all bank and program numbers that are undefined.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;バンク定義は、このデバイスに接続されたイクゥイップメント(ハードウェアかソフトウェアシンセサイザー)上での使用のために有効なプログラムかパッチについて、Rosegardenに通知することを出来るようにします。&lt;/p&gt;&lt;p&gt;未定義の、すべてのバンクとプログラム番号をRosegardenが隠すように、転送させたい任意のプログラムまたはバンクチェンジのために、何か定義する必要があります。&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;バンク定義は、このデバイスに接続されたイクゥイップメント(ハードウェアかソフトウェアシンセサイザー)上での使用のために有効なプログラムかパッチについて、Rosegardenに通知することを出来るようにします。&lt;/p&gt;&lt;p&gt;未定義の、すべてのバンクとプログラム番号をRosegardenが隠すように、転送させたい任意のプログラムまたはバンクチェンジのために、何か定義する必要があります。&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>Banks...</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
-        <translation type="unfinished">バンク...</translation>
+        <translation>バンク...</translation>
     </message>
     <message>
         <location line="+19"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Edit the controllers associated with this device.&lt;/p&gt;&lt;p&gt;You must define controllers here in order to use them anywhere in Rosegarden, such as on control rulers or in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box,  You can change which controllers are displayed in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box, and rearrange their layout&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;このデバイスに関連付けられているコントローラを編集します。&lt;/p&gt;&lt;p&gt;Rosegardenの任意の場所でこれらを使用するために、ここでコントローラを定義する必要があります。それらは、たとえばコントーロールルーラの上や、&lt;b&gt;インストゥルメントパラメータ&lt;/b&gt;ボックスの上などです。&lt;b&gt;インストゥルメントパラメータ&lt;/b&gt;ボックス上でどのコントローラが表示されるかを変更し、そのレイアウトを再調整することができます。&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;このデバイスに関連付けられているコントローラを編集します。&lt;/p&gt;&lt;p&gt;Rosegardenの任意の場所でこれらを使用するために、ここでコントローラを定義する必要があります。それらは、たとえばコントーロールルーラの上や、&lt;b&gt;インストゥルメントパラメータ&lt;/b&gt;ボックスの上などです。&lt;b&gt;インストゥルメントパラメータ&lt;/b&gt;ボックス上でどのコントローラが表示されるかを変更し、そのレイアウトを再調整することができます。&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>Controllers...</source>
-        <translation type="unfinished">コントローラ...</translation>
+        <translation>コントローラ...</translation>
     </message>
     <message>
         <location line="+43"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new playback device&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;新しい再生デバイスを作成&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;新しい再生デバイスを作成&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -82,31 +82,31 @@
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <location line="+28"/>
         <source>New</source>
-        <translation type="unfinished">新規</translation>
+        <translation>新規</translation>
     </message>
     <message>
         <location line="-228"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-26"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected playback device.  Any tracks using this device will need to be reassigned, and any program or bank changes on those tracks will be lost permanently&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;選択された再生デバイスを削除します。  このデバイスを使うどのトラックも、再割り当てする必要があり、それらのトラック上のプログラムかバンクチェンジは完全に失われます。&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;選択された再生デバイスを削除します。  このデバイスを使うどのトラックも、再割り当てする必要があり、それらのトラック上のプログラムかバンクチェンジは完全に失われます。&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>Delete</source>
-        <translation type="unfinished">削除</translation>
+        <translation>削除</translation>
     </message>
     <message>
         <location line="+19"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+1"/>
         <source>MIDI outputs</source>
-        <translation type="unfinished">MIDI出力</translation>
+        <translation>MIDI出力</translation>
     </message>
     <message>
         <location line="+69"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>Available outputs</source>
-        <translation type="unfinished">有効な出力</translation>
+        <translation>有効な出力</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -114,19 +114,19 @@
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+5"/>
         <location line="+41"/>
         <source>No port</source>
-        <translation type="unfinished">ポートなし</translation>
+        <translation>ポートなし</translation>
     </message>
     <message>
         <location line="-394"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-35"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI outputs (hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;有効なMIDI出力(ハードウェアまたはソフトウェア)&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;有効なMIDI出力(ハードウェアまたはソフトウェア)&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+344"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+39"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI inputs (from hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;有効なMIDI入力(ハードウェアまたはソフトウェアから)&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;有効なMIDI入力(ハードウェアまたはソフトウェアから)&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="-244"/>
@@ -134,19 +134,19 @@
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-36"/>
         <location line="+39"/>
         <source>&lt;qt&gt;&lt;p&gt;Click to refresh the port list after connecting a new piece of equipment or starting a new soft synth&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;新しいイクイップメントを接続後か新しいソフトシンセサイザーを起動後に、ポートリストを更新するためにクリック&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;新しいイクイップメントを接続後か新しいソフトシンセサイザーを起動後に、ポートリストを更新するためにクリック&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="-628"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-83"/>
         <source>Sends its data through</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="-39"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+10"/>
         <source>&lt;qt&gt;&lt;p&gt;Create new playback devices here. Double-click the device name to change it. Select a device here and connect it to a MIDI output port by clicking on a port to the right.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+330"/>
@@ -154,62 +154,62 @@
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+36"/>
         <location line="+39"/>
         <source>Refresh</source>
-        <translation type="unfinished">リフレッシュ</translation>
+        <translation>リフレッシュ</translation>
     </message>
     <message>
         <location line="-303"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-38"/>
         <source>MIDI Recording</source>
-        <translation type="unfinished">MIDI録音</translation>
+        <translation>MIDI録音</translation>
     </message>
     <message>
         <location line="+39"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new recording device&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;新しい録音デバイスを作成&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;新しい録音デバイスを作成&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+25"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+4"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected recording device&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;選択された録音デバイスを作成&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;選択された録音デバイスを作成&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>Delete</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
-        <translation type="unfinished">削除</translation>
+        <translation>削除</translation>
     </message>
     <message>
         <location line="+82"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>Receives its data from</source>
-        <translation type="unfinished">右記からデータを受信</translation>
+        <translation>右記からデータを受信</translation>
     </message>
     <message>
         <location line="-5"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+1"/>
         <source>Rosegarden recording device</source>
-        <translation type="unfinished">Rosegarden録音デバイス</translation>
+        <translation>Rosegarden録音デバイス</translation>
     </message>
     <message>
         <location line="+10"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+5"/>
         <source>Default record device</source>
-        <translation type="unfinished">既定値の録音デバイス</translation>
+        <translation>既定値の録音デバイス</translation>
     </message>
     <message>
         <location line="+26"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+6"/>
         <source>MIDI inputs</source>
-        <translation type="unfinished">MIDI入力</translation>
+        <translation>MIDI入力</translation>
     </message>
     <message>
         <location line="+69"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>Available inputs</source>
-        <translation type="unfinished">有効な入力</translation>
+        <translation>有効な入力</translation>
     </message>
 </context>
 <context>

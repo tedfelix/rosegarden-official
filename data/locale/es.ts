@@ -15,68 +15,68 @@
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="+18"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+474"/>
         <source>Manage MIDI Devices</source>
-        <translation type="unfinished"></translation>
+        <translation>Gestionar Dispositivos MIDI</translation>
     </message>
     <message>
         <location line="+26"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+1"/>
         <source>MIDI Playback</source>
-        <translation type="unfinished"></translation>
+        <translation>Reproducción MIDI</translation>
     </message>
     <message>
         <location line="+57"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>Sends its data through</source>
-        <translation type="unfinished"></translation>
+        <translation>Emite sus datos por</translation>
     </message>
     <message>
         <location line="-5"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+1"/>
         <source>Rosegarden playback device</source>
-        <translation type="unfinished"></translation>
+        <translation>Dispositivo de reproducción de Rosegarden</translation>
     </message>
     <message>
         <location line="+10"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+5"/>
         <source>Default playback device</source>
-        <translation type="unfinished"></translation>
+        <translation>Dispositivo de reproducción por omisión</translation>
     </message>
     <message>
         <location line="-44"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+4"/>
         <source>&lt;qt&gt;&lt;p&gt;Create new playback devices here. Double-click the device name to change it. Select a device here and connect it to a MIDI output port by clicking on a port to the right.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Crear nuevos dispositivos de reproducción aquí.  Hacer doble clic en el nombre del dispositivo para cambiarlo. Seleccionar un dispositivo aquí y conectarlo a un puerto de salida de MIDI haciendo clic en un puerto hacia el derecho.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+88"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+3"/>
         <source>&lt;qt&gt;&lt;p&gt;Bank definitions allow you to tell Rosegarden about the programs or patches available for use on the equipment (hardware or software synth) connected to this device.&lt;/p&gt;&lt;p&gt;You must have something defined for any program or bank changes you wish to transmit, as Rosegarden hides all bank and program numbers that are undefined.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Describir los programas o parches que están disponibles en el equipo (hard o soft) conectado con este dispositivo&lt;/p&gt;&lt;p&gt;Rosegarden esconde todos los programas que no se describen aquí.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>Banks...</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
-        <translation type="unfinished"></translation>
+        <translation>Bancos...</translation>
     </message>
     <message>
         <location line="+19"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Edit the controllers associated with this device.&lt;/p&gt;&lt;p&gt;You must define controllers here in order to use them anywhere in Rosegarden, such as on control rulers or in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box,  You can change which controllers are displayed in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box, and rearrange their layout&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Editar los controladores de este dispositivo.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>Controllers...</source>
-        <translation type="unfinished"></translation>
+        <translation>Controladores...</translation>
     </message>
     <message>
         <location line="+43"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new playback device&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Crear nuevo dispositivo de reproducción&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -84,31 +84,31 @@
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <location line="+28"/>
         <source>New</source>
-        <translation type="unfinished">Nuevo</translation>
+        <translation>Nuevo</translation>
     </message>
     <message>
         <location line="-228"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-26"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected playback device.  Any tracks using this device will need to be reassigned, and any program or bank changes on those tracks will be lost permanently&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Borrar el dispositivo de reproducción seleccionado.  Se borrarán todos los cambios de programa y de banco relacionados con este dispositivo.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Borrar</translation>
     </message>
     <message>
         <location line="+19"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+1"/>
         <source>MIDI outputs</source>
-        <translation type="unfinished"></translation>
+        <translation>Salidas MIDI</translation>
     </message>
     <message>
         <location line="+69"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>Available outputs</source>
-        <translation type="unfinished"></translation>
+        <translation>Salidas disponibles</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -116,19 +116,19 @@
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+5"/>
         <location line="+41"/>
         <source>No port</source>
-        <translation type="unfinished"></translation>
+        <translation>Ningún puerto</translation>
     </message>
     <message>
         <location line="-334"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-39"/>
         <source>Internal Synth</source>
-        <translation type="unfinished"></translation>
+        <translation>Sinte interno</translation>
     </message>
     <message>
         <location line="-60"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+4"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI outputs (hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Salidas MIDI disponibles (hard o soft)&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+100"/>
@@ -136,7 +136,7 @@
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+3"/>
         <location line="+39"/>
         <source>&lt;qt&gt;&lt;p&gt;Click to refresh the port list after connecting a new piece of equipment or starting a new soft synth&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Haga clic para actualizar la lista después de cambiar algo afuera de Rosegarden&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="-337"/>
@@ -144,68 +144,68 @@
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-37"/>
         <location line="+39"/>
         <source>Refresh</source>
-        <translation type="unfinished"></translation>
+        <translation>Actualizar</translation>
     </message>
     <message>
         <location line="-303"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-38"/>
         <source>MIDI Recording</source>
-        <translation type="unfinished"></translation>
+        <translation>Grabación MIDI</translation>
     </message>
     <message>
         <location line="+39"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new recording device&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Crear un nuevo dispositivo de grabación&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+25"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+4"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected recording device&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Borrar el dispositivo de grabación seleccionado&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>Delete</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
-        <translation type="unfinished"></translation>
+        <translation>Borrar</translation>
     </message>
     <message>
         <location line="+82"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>Receives its data from</source>
-        <translation type="unfinished"></translation>
+        <translation>Recibe sus datos por</translation>
     </message>
     <message>
         <location line="-5"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+1"/>
         <source>Rosegarden recording device</source>
-        <translation type="unfinished"></translation>
+        <translation>Dispositivo de grabación de Rosegarden</translation>
     </message>
     <message>
         <location line="+10"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+5"/>
         <source>Default record device</source>
-        <translation type="unfinished"></translation>
+        <translation>Dispositivo de grabación por omisión</translation>
     </message>
     <message>
         <location line="+26"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+6"/>
         <source>MIDI inputs</source>
-        <translation type="unfinished"></translation>
+        <translation>Entradas MIDI</translation>
     </message>
     <message>
         <location line="+69"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>Available inputs</source>
-        <translation type="unfinished"></translation>
+        <translation>Entradas disponibles</translation>
     </message>
     <message>
         <location line="-45"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+9"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI inputs (from hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Entradas MIDI disponibles (hard o soft)&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -907,7 +907,7 @@
     <message>
         <location line="+30"/>
         <source>&amp;Rosegarden Tutorials</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Tutoriales</translation>
     </message>
     <message>
         <location line="+19"/>
@@ -10325,19 +10325,19 @@
         <location filename="../../src/sound/PeakFileManager.h" line="+61"/>
         <location line="+2"/>
         <source>Bad peak file </source>
-        <translation type="unfinished"></translation>
+        <translation>Archivo peak erróneo</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Bad peak file (malformed audio?) </source>
-        <translation type="unfinished"></translation>
+        <translation>Archivo peak erróneo (¿audio malformado?)</translation>
     </message>
     <message>
         <location filename="../../src/sound/SoundFile.h" line="+67"/>
         <location line="+2"/>
         <location line="+2"/>
         <source>Bad sound file </source>
-        <translation type="unfinished"></translation>
+        <translation>Archivo de audio erróneo </translation>
     </message>
 </context>
 <context>
@@ -19625,7 +19625,7 @@ Usted debe establecer el directorio de archivos de audio en un directorio válid
     <message>
         <location line="-238"/>
         <source>http://rosegardenmusic.com/tutorials/</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+484"/>
@@ -20144,7 +20144,7 @@ Error fue : %2</translation>
     <message>
         <location filename="../../src/commands/segment/SegmentJoinCommand.h" line="+48"/>
         <source>&amp;Join</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Unir</translation>
     </message>
 </context>
 <context>
