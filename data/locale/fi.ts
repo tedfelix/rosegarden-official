@@ -22,37 +22,37 @@
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="+18"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+474"/>
         <source>Manage MIDI Devices</source>
-        <translation type="unfinished">Hallitse MIDI-laitteita</translation>
+        <translation>Hallitse MIDI-laitteita</translation>
     </message>
     <message>
         <location line="+26"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+1"/>
         <source>MIDI Playback</source>
-        <translation type="unfinished">MIDI-toisto</translation>
+        <translation>MIDI-toisto</translation>
     </message>
     <message>
         <location line="+57"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>Sends its data through</source>
-        <translation type="unfinished">Kohde johon data lähetetään</translation>
+        <translation>Kohde johon data lähetetään</translation>
     </message>
     <message>
         <location line="-5"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+1"/>
         <source>Rosegarden playback device</source>
-        <translation type="unfinished">Rosegardenin toistolaite</translation>
+        <translation>Rosegardenin toistolaite</translation>
     </message>
     <message>
         <location line="+253"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+36"/>
         <source>Internal Synth</source>
-        <translation type="unfinished">Sisäinen syntetisaattori</translation>
+        <translation>Sisäinen syntetisaattori</translation>
     </message>
     <message>
         <location line="-243"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-31"/>
         <source>Default playback device</source>
-        <translation type="unfinished">Oletustoistolaite</translation>
+        <translation>Oletustoistolaite</translation>
     </message>
     <message>
         <source>&lt;qt&gt;&lt;p&gt;Create new playback devices here. Click the device name to change it. Select a device here and connect it to a MIDI output port by clicking on a port to the right.&lt;/p&gt;&lt;/qt&gt;</source>
@@ -62,32 +62,32 @@
         <location line="+44"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+7"/>
         <source>&lt;qt&gt;&lt;p&gt;Bank definitions allow you to tell Rosegarden about the programs or patches available for use on the equipment (hardware or software synth) connected to this device.&lt;/p&gt;&lt;p&gt;You must have something defined for any program or bank changes you wish to transmit, as Rosegarden hides all bank and program numbers that are undefined.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Pankkimääritysten avulla voit määritellä Rosegardenille tämän laitteen (kiinteä tai ohjelmallinen syntetisointi) instrumentit.&lt;/p&gt;&lt;p&gt;Sinulla täytyy olla jotain määritettynä kutakin välitettävää instrumentti- tai pankinmuutosta varten, sillä Rosegaden piilottaa kaikki määrittämättömät pankki- tai instrumenttinumerot.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Pankkimääritysten avulla voit määritellä Rosegardenille tämän laitteen (kiinteä tai ohjelmallinen syntetisointi) instrumentit.&lt;/p&gt;&lt;p&gt;Sinulla täytyy olla jotain määritettynä kutakin välitettävää instrumentti- tai pankinmuutosta varten, sillä Rosegaden piilottaa kaikki määrittämättömät pankki- tai instrumenttinumerot.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>Banks...</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
-        <translation type="unfinished">Pankit...</translation>
+        <translation>Pankit...</translation>
     </message>
     <message>
         <location line="+19"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Edit the controllers associated with this device.&lt;/p&gt;&lt;p&gt;You must define controllers here in order to use them anywhere in Rosegarden, such as on control rulers or in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box,  You can change which controllers are displayed in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box, and rearrange their layout&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Muokkaa tähän laitteeseen liitettyjä ohjaimia.&lt;/p&gt;&lt;p&gt;Sinun täytyy määritellä ohjaimet täällä, jotta voisit käyttää niitä muualla Rosegardenissa, kuten ohjainviivamessa tai &lt;b&gt;Instrumentin Valinnat&lt;/b&gt; -laatikkossa,  Voit vaihtaa näytettävät ohjaimet &lt;b&gt;Instrumentin Valinnat&lt;/b&gt; -laatikosta, ja järjestää niiden asemoinnit.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Muokkaa tähän laitteeseen liitettyjä ohjaimia.&lt;/p&gt;&lt;p&gt;Sinun täytyy määritellä ohjaimet täällä, jotta voisit käyttää niitä muualla Rosegardenissa, kuten ohjainviivamessa tai &lt;b&gt;Instrumentin Valinnat&lt;/b&gt; -laatikkossa,  Voit vaihtaa näytettävät ohjaimet &lt;b&gt;Instrumentin Valinnat&lt;/b&gt; -laatikosta, ja järjestää niiden asemoinnit.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>Controllers...</source>
-        <translation type="unfinished">Ohjaimet...</translation>
+        <translation>Ohjaimet...</translation>
     </message>
     <message>
         <location line="+43"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new playback device&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Luo uusi toistolaite&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Luo uusi toistolaite&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -95,31 +95,31 @@
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <location line="+28"/>
         <source>New</source>
-        <translation type="unfinished">Uusi</translation>
+        <translation>Uusi</translation>
     </message>
     <message>
         <location line="-228"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-26"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected playback device.  Any tracks using this device will need to be reassigned, and any program or bank changes on those tracks will be lost permanently&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Poista valitut toistolaitteet.  Kaikkien tätä laitetta käyttävien raitojen toistolaite täytyy määrittää uudestaan, ja niiden instrumenttimääritykset katoavat pysyvästi&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Poista valitut toistolaitteet.  Kaikkien tätä laitetta käyttävien raitojen toistolaite täytyy määrittää uudestaan, ja niiden instrumenttimääritykset katoavat pysyvästi&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>Delete</source>
-        <translation type="unfinished">Poista</translation>
+        <translation>Poista</translation>
     </message>
     <message>
         <location line="+19"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+1"/>
         <source>MIDI outputs</source>
-        <translation type="unfinished">MIDI-ulostulot</translation>
+        <translation>MIDI-ulostulot</translation>
     </message>
     <message>
         <location line="+69"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>Available outputs</source>
-        <translation type="unfinished">Saatavilla olevat ulostulot</translation>
+        <translation>Saatavilla olevat ulostulot</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -127,19 +127,19 @@
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+5"/>
         <location line="+41"/>
         <source>No port</source>
-        <translation type="unfinished">Ei porttia</translation>
+        <translation>Ei porttia</translation>
     </message>
     <message>
         <location line="-394"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-35"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI outputs (hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Saatavilla olevat MIDI-lähdöt (rauta tai ohjelmallinen)&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Saatavilla olevat MIDI-lähdöt (rauta tai ohjelmallinen)&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+344"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+39"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI inputs (from hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Saatavilla olevat MIDI-tulot (rauta tai ohjelmallinen)&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Saatavilla olevat MIDI-tulot (rauta tai ohjelmallinen)&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="-244"/>
@@ -147,13 +147,13 @@
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-36"/>
         <location line="+39"/>
         <source>&lt;qt&gt;&lt;p&gt;Click to refresh the port list after connecting a new piece of equipment or starting a new soft synth&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Klikkaa virkistääksesi porttilista kytkettyäsi uuden laitteen tai käynnistettyäsi uuden ohjelmallisen syntetisaattorin&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Klikkaa virkistääksesi porttilista kytkettyäsi uuden laitteen tai käynnistettyäsi uuden ohjelmallisen syntetisaattorin&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="-667"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-73"/>
         <source>&lt;qt&gt;&lt;p&gt;Create new playback devices here. Double-click the device name to change it. Select a device here and connect it to a MIDI output port by clicking on a port to the right.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Luo uusi toistolaite tässä. Kaksoisnapsauta laitteen nimeä muuttaaksesi sitä. Valitse laite tästä ja kytke se MIDI-ulostuloon napsauttamalla oikealla olevaa porttia.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Luo uusi toistolaite tässä. Kaksoisnapsauta laitteen nimeä muuttaaksesi sitä. Valitse laite tästä ja kytke se MIDI-ulostuloon napsauttamalla oikealla olevaa porttia.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+330"/>
@@ -161,62 +161,62 @@
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+36"/>
         <location line="+39"/>
         <source>Refresh</source>
-        <translation type="unfinished">Virkistä</translation>
+        <translation>Virkistä</translation>
     </message>
     <message>
         <location line="-303"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-38"/>
         <source>MIDI Recording</source>
-        <translation type="unfinished">MIDI-nauhoitus</translation>
+        <translation>MIDI-nauhoitus</translation>
     </message>
     <message>
         <location line="+39"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new recording device&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Luo uusi nauhoituslaite&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Luo uusi nauhoituslaite&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+25"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+4"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected recording device&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Poista valittu nauhoituslaite&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Poista valittu nauhoituslaite&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>Delete</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
-        <translation type="unfinished">Poista</translation>
+        <translation>Poista</translation>
     </message>
     <message>
         <location line="+82"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>Receives its data from</source>
-        <translation type="unfinished">Kohde josta data vastaanotetaan</translation>
+        <translation>Kohde josta data vastaanotetaan</translation>
     </message>
     <message>
         <location line="-5"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+1"/>
         <source>Rosegarden recording device</source>
-        <translation type="unfinished">Rosegardenin nauhoituslaite</translation>
+        <translation>Rosegardenin nauhoituslaite</translation>
     </message>
     <message>
         <location line="+10"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+5"/>
         <source>Default record device</source>
-        <translation type="unfinished">Oletusnauhoituslaite</translation>
+        <translation>Oletusnauhoituslaite</translation>
     </message>
     <message>
         <location line="+26"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+6"/>
         <source>MIDI inputs</source>
-        <translation type="unfinished">MIDI-sisääntulot</translation>
+        <translation>MIDI-sisääntulot</translation>
     </message>
     <message>
         <location line="+69"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>Available inputs</source>
-        <translation type="unfinished">Saatavilla olevat sisääntulot</translation>
+        <translation>Saatavilla olevat sisääntulot</translation>
     </message>
 </context>
 <context>
@@ -10372,7 +10372,7 @@
         <location line="+2"/>
         <location line="+2"/>
         <source>Bad sound file </source>
-        <translation type="unfinished">Epäkelpo äänitiedosto</translation>
+        <translation>Epäkelpo äänitiedosto</translation>
     </message>
     <message>
         <location filename="../../src/sound/MidiFile.cpp" line="+105"/>
@@ -10477,12 +10477,12 @@
         <location filename="../../src/sound/PeakFileManager.h" line="+61"/>
         <location line="+2"/>
         <source>Bad peak file </source>
-        <translation type="unfinished">Epäkelpo piikkitiedosto</translation>
+        <translation>Epäkelpo piikkitiedosto</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Bad peak file (malformed audio?) </source>
-        <translation type="unfinished">Epäkelpo piikkitiedosto (viallinen ääni?)</translation>
+        <translation>Epäkelpo piikkitiedosto (viallinen ääni?)</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="+64"/>
@@ -15068,19 +15068,17 @@ Esimerkkiteksti tiedostosta:</translation>
     <message numerus="yes">
         <location line="+8"/>
         <source>up %n octave(s) and %1</source>
-        <translation type="unfinished">
-            <numerusform>%n oktaavia ja %1 ylös
-        </numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n oktaavi ja %1 ylös</numerusform>
+            <numerusform>%n oktaavia ja %1 ylös</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location line="+3"/>
         <source>up %n octave(s)</source>
-        <translation type="unfinished">
-            <numerusform>%n oktaavia ylös
-        </numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n oktaavi ylös</numerusform>
+            <numerusform>%n oktaavia ylös</numerusform>
         </translation>
     </message>
     <message>
@@ -15091,19 +15089,17 @@ Esimerkkiteksti tiedostosta:</translation>
     <message numerus="yes">
         <location line="+5"/>
         <source>down %n octave(s) and %1</source>
-        <translation type="unfinished">
-            <numerusform>%n oktaavia ja %1 alas
-        </numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n oktaavi ja %1 alas</numerusform>
+            <numerusform>%n oktaavia ja %1 alas</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location line="+3"/>
         <source>down %n octave(s)</source>
-        <translation type="unfinished">
-            <numerusform>%n oktaavia alas
-        </numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n oktaavi alas</numerusform>
+            <numerusform>%n oktaavia alas</numerusform>
         </translation>
     </message>
     <message>
@@ -16568,10 +16564,9 @@ Tupla-klikkaa avataksesi merkintöjen muokkaimen.</translation>
     <message numerus="yes">
         <location line="+7"/>
         <source>%1%2 - %n Segment(s) - %3</source>
-        <translation type="unfinished">
-            <numerusform>%1%2 - %n osaa - %3
-        </numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1%2 - %n osa - %3</numerusform>
+            <numerusform>%1%2 - %n osaa - %3</numerusform>
         </translation>
     </message>
     <message>
@@ -17569,10 +17564,9 @@ Tämä on ohjelmointivirhe (aiemmin ohjelma kaatui tässä kohdassa)</translatio
     <message numerus="yes">
         <location line="-8"/>
         <source>%n pixel(s)</source>
-        <translation type="unfinished">
-            <numerusform>%n kuvapistettä
-        </numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n kuvapiste</numerusform>
+            <numerusform>%n kuvapistettä</numerusform>
         </translation>
     </message>
     <message>
@@ -17598,10 +17592,9 @@ Tämä on ohjelmointivirhe (aiemmin ohjelma kaatui tässä kohdassa)</translatio
     <message numerus="yes">
         <location line="-90"/>
         <source>  %n event(s) selected </source>
-        <translation type="unfinished">
-            <numerusform>  %n tapahtumaa valittuna 
-        </numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>  %n tapahtuma valittuna</numerusform>
+            <numerusform>  %n tapahtumaa valittuna</numerusform>
         </translation>
     </message>
     <message>
@@ -17822,10 +17815,9 @@ Ole hyvä ja varmista, että laite on määritetty oikein pääikkunan Hallitse 
     <message numerus="yes">
         <location line="+6"/>
         <source>%1%2 - %n Segment(s) - Notation</source>
-        <translation type="unfinished">
-            <numerusform>%1%2 - %n Osaa - Nuotinnus
-        </numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1%2 - %n Osa - Nuotinnus</numerusform>
+            <numerusform>%1%2 - %n Osaa - Nuotinnus</numerusform>
         </translation>
     </message>
     <message>
@@ -19174,10 +19166,9 @@ Tiedostomuodossa voi olla joitain yhteensopimattomuuksia.</translation>
     <message numerus="yes">
         <location line="+124"/>
         <source>Delete the %n audio file(s) recorded during the unsaved session?</source>
-        <translation type="unfinished">
-            <numerusform>Poista %n äänitiedostoa, jotka nauhoitettiin tallentamattoman istunnon aikana?
-        </numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Poista %n äänitiedosto, joka nauhoitettiin tallentamattoman istunnon aikana?</numerusform>
+            <numerusform>Poista %n äänitiedostoa, jotka nauhoitettiin tallentamattoman istunnon aikana?</numerusform>
         </translation>
     </message>
     <message>
@@ -19200,10 +19191,9 @@ Ole hyvä ja valitse haluamasi tiedostot poistaaksesi ne pysyvästi kovalevyltä
     <message numerus="yes">
         <location line="+16"/>
         <source>&lt;qt&gt;About to delete %n audio file(s) permanently from the hard disk.&lt;br&gt;There will be no way to recover the file(s).&lt;br&gt;Are you sure?&lt;/qt&gt;</source>
-        <translation type="unfinished">
-            <numerusform>&lt;qt&gt;Ollaan poistamassa %n äänitiedostoa pysyvästi kovalevyltä.&lt;br&gt;Tapoja palauttaa tiedostoja ei ole.&lt;br&gt;Oletko varma?&lt;/qt&gt;
-        </numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>&lt;qt&gt;Ollaan poistamassa %n äänitiedosto pysyvästi kovalevyltä.&lt;br&gt;Tapoja palauttaa tiedostoa ei ole.&lt;br&gt;Oletko varma?&lt;/qt&gt;</numerusform>
+            <numerusform>&lt;qt&gt;Ollaan poistamassa %n äänitiedostoa pysyvästi kovalevyltä.&lt;br&gt;Tapoja palauttaa tiedostoja ei ole.&lt;br&gt;Oletko varma?&lt;/qt&gt;</numerusform>
         </translation>
     </message>
     <message>
@@ -19713,7 +19703,7 @@ Virhe oli: %2</translation>
         <source>The audio file path does not exist or is not writable.
 You must set the audio file path to a valid directory in Document Properties before %1.
 Would you like to set it now?</source>
-        <translation type="unfinished">Äänitiedostopolkua ei ole tai kirjoitus siihen ei onnistu.
+        <translation>Äänitiedostopolkua ei ole tai kirjoitus siihen ei onnistu.
 Ole hyvä ja aseta äänitiedostopoluksi kelpo hakemisto Asiakirjan ominaisuuksista ennen %1.
 Haluatko asettaa sen nyt?</translation>
     </message>
@@ -19726,10 +19716,9 @@ Haluatko asettaa sen nyt?</translation>
         <location line="+142"/>
         <location line="+34"/>
         <source>Split %n Segment(s) at Time</source>
-        <translation type="unfinished">
-            <numerusform>Jaa %n osaa kerrallaan
-        </numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Jaa %n osa kerrallaan</numerusform>
+            <numerusform>Jaa %n osaa kerrallaan</numerusform>
         </translation>
     </message>
     <message>
@@ -20433,7 +20422,7 @@ Virhe oli: %2</translation>
     <message>
         <location filename="../../src/commands/segment/SegmentJoinCommand.h" line="+48"/>
         <source>&amp;Join</source>
-        <translation type="unfinished">&amp;Yhdistä</translation>
+        <translation>&amp;Yhdistä</translation>
     </message>
 </context>
 <context>
@@ -20776,10 +20765,9 @@ Haluatko asettaa sen nyt?</translation>
     <message numerus="yes">
         <location line="-282"/>
         <source>Move Segment(s)</source>
-        <translation type="unfinished">
-            <numerusform>Siirrä osat %n
-        </numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Siirrä osa</numerusform>
+            <numerusform>Siirrä osat</numerusform>
         </translation>
     </message>
 </context>
@@ -23161,12 +23149,12 @@ Haluatko asettaa sen nyt?</translation>
     <message>
         <location line="-4"/>
         <source>Add</source>
-        <translation type="unfinished">Lisää</translation>
+        <translation>Lisää</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Add a Triggered Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Lisää sysättävä osa</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -23181,10 +23169,9 @@ Haluatko asettaa sen nyt?</translation>
     <message numerus="yes">
         <location line="+2"/>
         <source>%1 on %n track(s)</source>
-        <translation type="unfinished">
-            <numerusform>%1, %n raidalla
-        </numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1, %n raidalla</numerusform>
+            <numerusform>%1, %n raidalla</numerusform>
         </translation>
     </message>
     <message>
@@ -23217,10 +23204,9 @@ Haluatko asettaa sen nyt?</translation>
     <message numerus="yes">
         <location line="+22"/>
         <source>This triggered segment is used %n time(s) in the current composition.  Are you sure you want to remove it?</source>
-        <translation type="unfinished">
-            <numerusform>Tätä sysäistävää osaa on käytetty %n kertaa nykyisessä sävellyksessä.  Oletko varma sen poistamisesta?
-        </numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Tätä sysäistävää osaa on käytetty %n kerta nykyisessä sävellyksessä.  Oletko varma sen poistamisesta?</numerusform>
+            <numerusform>Tätä sysäistävää osaa on käytetty %n kerta nykyisessä sävellyksessä.  Oletko varma sen poistamisesta?</numerusform>
         </translation>
     </message>
     <message>
