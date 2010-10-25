@@ -28,6 +28,23 @@ namespace Rosegarden
 {
 
 
+ProgressBar::ProgressBar(/*int totalSteps, */
+                         QWidget *parent) :
+         QProgressBar(parent)
+{
+/*    setRange(0, totalSteps); */
+
+    QSettings settings;
+    settings.beginGroup(GeneralOptionsConfigGroup);
+    bool Thorn = settings.value("use_thorn_style", true).toBool();
+    settings.endGroup();
+
+    QString localStyle("QProgressBar { color: #000000; background: #FFFFFF; border: 1px solid #AAAAAA; border-radius: 3px; }  QProgressBar::chunk { background-color: #D6E8FB; width: 20px; }");
+    if (Thorn) setStyleSheet(localStyle);
+
+    connect (this, SIGNAL(valueChanged(int)), this, SLOT(WTF(int)));
+}
+
 ProgressBar::ProgressBar(int totalSteps,
                          QWidget *parent) :
          QProgressBar(parent)

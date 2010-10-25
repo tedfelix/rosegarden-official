@@ -73,7 +73,7 @@ LilyPondProcessor::LilyPondProcessor(QWidget *parent, int mode, QString filename
     m_info->setWordWrap(true);
     layout->addWidget(m_info, 0, 1);
 
-    m_progress = new ProgressBar(100, this);
+    m_progress = new ProgressBar(this);
     layout->addWidget(m_progress, 1, 1);
 
     QPushButton *ok = new QPushButton(tr("Cancel"), this);

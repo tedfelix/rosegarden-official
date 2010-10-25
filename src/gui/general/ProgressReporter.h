@@ -35,6 +35,13 @@ class ProgressReporter : public QObject
 public:
     ProgressReporter(QObject* parent, const char* name = 0);
 
+    /*
+      We have to use these accessors rather than throwing directly
+      from slotCancel() because Qt is generally compiled without
+      exception support, so we can't throw from a slot.
+    */
+    bool isOperationCancelled() const { return m_isCancelled; }
+
     // exception class for cancellations
     class Cancelled { };
 
@@ -44,12 +51,6 @@ protected:
      */
     void throwIfCancelled();
 
-    /*
-      We have to use these accessors rather than throwing directly
-      from slotCancel() because Qt is generally compiled without
-      exception support, so we can't throw from a slot.
-    */
-    bool isOperationCancelled() const { return m_isCancelled; }
 //     void resetOperationCancelledState() { m_isCancelled = false; }
 
 protected slots:
@@ -58,7 +59,7 @@ protected slots:
 signals:
     /// Report value()
     void setValue(int);
-    void incrementProgress(int);
+//    void incrementProgress(int);
     void setOperationName(QString);
 
 protected:

@@ -124,6 +124,7 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     m_fileList = new AudioListView(centralWidget); // internal class needs parent (?)
     m_fileList->setSelectionMode(QAbstractItemView::SingleSelection);
     m_fileList->setSelectionBehavior(QAbstractItemView::SelectRows);
+    m_fileList->setIconSize(QSize(m_maxPreviewWidth, m_previewHeight));
     
     boxLayout->addWidget(m_fileList);
 
@@ -188,11 +189,6 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     connect(m_fileList, SIGNAL(itemSelectionChanged()),
             this, SLOT(slotSelectionChanged()));
     
-    
-    //### TODO: Fix drag n drop
-//     connect(m_fileList, SIGNAL(dropped(QDropEvent*, QTreeWidgetItem*)),
-//             SLOT(slotDropped(QDropEvent*, QTreeWidgetItem*)));
-
     connect(m_fileList, SIGNAL(dropped(QDropEvent*, QTreeWidget*, QStringList)),
             SLOT(slotDropped(QDropEvent*, QTreeWidget*, QStringList)));
     
@@ -217,13 +213,6 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     connect(m_playTimer, SIGNAL(timeout()),
             this, SLOT(slotCancelPlayingAudio()));
 
-// No such signal, and I couldn't find anything of the sort in QMainWindow or
-// anything it inherits from.  In practice, the closeEvent() code fires when you
-// close out the dialog, and I don't think slotClose() is needed.  Leaving it in
-// here for now in case it is needed after all, and we work out some way to
-// hook it back up.
-//    connect(this, SIGNAL(close()), this,
-//                      SLOT(slotClose()));
 
     createGUI("audiomanager.rc"); //@@@ JAS orig. 0
 
@@ -326,17 +315,21 @@ AudioManagerDialog::slotPopulateFileList()
             it != m_doc->getAudioFileManager().end();
             ++it) {
         try {
+    std::cerr << "\n*** AudioManagerDialog:: 1" << std::endl;
             m_doc->getAudioFileManager().
             drawPreview((*it)->getId(),
                         RealTime::zeroTime,
                         (*it)->getLength(),
                         audioPixmap);
+    std::cerr << "\n*** AudioManagerDialog:: 2" << std::endl;
         } catch (Exception e) {
+    std::cerr << "\n*** AudioManagerDialog:: 3" << std::endl;
             audioPixmap->fill(); // white
             QPainter p(audioPixmap);
             p.setPen(QColor(Qt::black));
             p.drawText(10, m_previewHeight / 2, QString("<no preview>"));
         }
+    std::cerr << "\n*** AudioManagerDialog:: 4" << std::endl;
 
         //!!! Why isn't the label the label the user assigned to the file?
         // Why do we allow the user to assign a label at all, then?
@@ -362,7 +355,6 @@ AudioManagerDialog::slotPopulateFileList()
 
         // Envelope pixmap
         //
-        //item->setPixmap(2, *audioPixmap);
         item->setIcon(2, QIcon(*audioPixmap));    // row, col    
         
 
@@ -529,12 +521,8 @@ AudioManagerDialog::slotExportAudio()
     if (saveFile.contains(".") == 0)
         saveFile += ".wav";
 
-    ProgressDialog progressDlg(tr("Exporting audio file..."),
-                               100,
-                               500,
-                               this);
-
-    progressDlg.setValue(0);
+    ProgressDialog *progressDlg = new ProgressDialog(tr("Exporting audio file..."),
+                               (QWidget*)this);
 
     RealTime clipStartTime = RealTime::zeroTime;
     RealTime clipDuration = sourceFile->getLength();
@@ -552,13 +540,20 @@ AudioManagerDialog::slotExportAudio()
                        sourceFile->getBytesPerFrame(),
                        sourceFile->getBitsPerSample());
 
+    progressDlg->show();
+    progressDlg->setValue(40);
     if (sourceFile->open() == false) {
         delete destFile;
+        progressDlg->close();
         return ;
     }
-
+    qApp->processEvents(QEventLoop::AllEvents, 100);
+    
     destFile->write();
 
+    qApp->processEvents(QEventLoop::AllEvents, 100);
+    progressDlg->setValue(80);
+    
     sourceFile->scanTo(clipStartTime);
     destFile->appendSamples(sourceFile->getSampleFrameSlice(clipDuration));
 
@@ -566,7 +561,8 @@ AudioManagerDialog::slotExportAudio()
     sourceFile->close();
     delete destFile;
 
-    progressDlg.setValue(100);
+    progressDlg->setValue(100);
+    progressDlg->close();
 }
 
 void
@@ -1173,23 +1169,22 @@ AudioManagerDialog::addFile(const QUrl& kurl)
         return false;
     }
     
-    ProgressDialog progressDlg(tr("Adding audio file..."),
-                               100,
-                               500,
-                               this);
+    // If mulitple audio files are added concurrently, this implementation
+    // looks funny to the user, but it is functional for now.  NO time for
+    // a more robust solution.
+    ProgressDialog *progressDlg = new ProgressDialog(tr("Adding audio file..."),
+                               (QWidget*)this);
 
-    CurrentProgressDialog::set(&progressDlg);
-    progressDlg.setValue(0);
-    progressDlg.setIndeterminate(true);
-    progressDlg.show();
+    CurrentProgressDialog::set(progressDlg);
+    progressDlg->setIndeterminate(true);
     
     // Connect the progress dialog
     //
     connect(&aFM, SIGNAL(setValue(int)),
-            &progressDlg, SLOT(setValue(int)));
+            progressDlg, SLOT(setValue(int)));
     connect(&aFM, SIGNAL(setOperationName(QString)),
-            &progressDlg, SLOT(slotSetOperationName(QString)));
-    connect(&progressDlg, SIGNAL(canceled()),
+            progressDlg, SLOT(setLabelText(QString)));
+    connect(progressDlg, SIGNAL(canceled()),
             &aFM, SLOT(slotStopImport()));
 
     try {
@@ -1198,20 +1193,26 @@ AudioManagerDialog::addFile(const QUrl& kurl)
         CurrentProgressDialog::freeze();
         QString errorString = tr("Failed to add audio file. ") + strtoqstr(e.getMessage());
         QMessageBox::warning(this, tr("Rosegarden"), errorString);
+        progressDlg->close();
         return false;
     } catch (SoundFile::BadSoundFileException e) {
         CurrentProgressDialog::freeze();
         QString errorString = tr("Failed to add audio file. ") + strtoqstr(e.getMessage());
         QMessageBox::warning(this, tr("Rosegarden"), errorString);
+        progressDlg->close();
         return false;
     }
-            
-    disconnect(&progressDlg, SIGNAL(canceled()),
+    
+    disconnect(progressDlg, SIGNAL(canceled()),
                &aFM, SLOT(slotStopImport()));
-    connect(&progressDlg, SIGNAL(canceled()),
+
+    progressDlg->setIndeterminate(false);
+    progressDlg->setValue(0);
+    
+    progressDlg->setLabelText(tr("Generating audio preview..."));
+
+    connect(progressDlg, SIGNAL(canceled()),
             &aFM, SLOT(slotStopPreview()));
-    progressDlg.setIndeterminate(false);
-    progressDlg.slotSetOperationName(tr("Generating audio preview..."));
 
     try {
         aFM.generatePreview(id);
@@ -1223,10 +1224,12 @@ AudioManagerDialog::addFile(const QUrl& kurl)
         QMessageBox::information(this, tr("Rosegarden"), message);
     }
 
-    disconnect(&progressDlg, SIGNAL(canceled()),
-               &aFM, SLOT(slotStopPreview()));
+    //Disconnect all signals from &aFM from the Progress Bar
+    disconnect(progressDlg, 0, &aFM, 0);
 
     slotPopulateFileList();
+    
+    progressDlg->close();
 
     // tell the sequencer
     emit addAudioFile(id);
@@ -1244,7 +1247,7 @@ AudioManagerDialog::slotDropped(QDropEvent *event, QTreeWidget*, QStringList sl)
     QUrl urlx;
     
     // iterate over dropped URIs
-    for( uint i=0; i<sl.count(); i++ ){
+    for( int i=0; i<sl.count(); i++ ){
         urlx = sl[i];
         
         addFile( urlx );

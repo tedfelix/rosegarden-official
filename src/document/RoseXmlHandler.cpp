@@ -1721,7 +1721,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 //            std::cerr << "Have container" << std::endl;
 
             emit setOperationName(tr("Loading plugins..."));
-            ProgressDialog::processEvents();
+            qApp->processEvents(QEventLoop::AllEvents, 100);
 
             // Get the details
             int position;
@@ -2165,7 +2165,7 @@ RoseXmlHandler::endElement(const QString& namespaceURI,
 //        std::cout << "emitting setValue(" << int(double(m_elementsSoFar) / double(m_totalElements) * 100.0) << ")" << std::endl;
 
         emit setValue(int(double(m_elementsSoFar) / double(m_totalElements) * 100.0));
-        ProgressDialog::processEvents();
+        qApp->processEvents(QEventLoop::AllEvents, 100);
     }
 
     QString lcName = qName.toLower();

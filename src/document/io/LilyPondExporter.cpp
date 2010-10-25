@@ -743,6 +743,12 @@ LilyPondExporter::write()
     timeT compositionStartTime = (*i)->getStartTime();
     timeT compositionEndTime = (*i)->getEndMarkerTime();
     for (; i != m_composition->end(); ++i) {
+        
+        // Allow some oportunities for user to cancel
+        if (isOperationCancelled()) {
+            return false;
+        }
+        
         if (compositionStartTime > (*i)->getStartTime()) {
             compositionStartTime = (*i)->getStartTime();
         }
@@ -768,6 +774,11 @@ LilyPondExporter::write()
     int leftBar = 0;
     int rightBar = leftBar;
     do {
+        // Allow some oportunities for user to cancel
+        if (isOperationCancelled()) {
+            return false;
+        }
+        
         bool isNew = false;
         m_composition->getTimeSignatureInBar(rightBar + 1, isNew);
 
@@ -827,6 +838,11 @@ LilyPondExporter::write()
 
         for (int i = 0; i < tempoCount; ++i) {
 
+            // Allow some oportunities for user to cancel
+            if (isOperationCancelled()) {
+                return false;
+            }
+
             std::pair<timeT, tempoT> tempoChange =
                 m_composition->getTempoChange(i);
 
@@ -884,6 +900,11 @@ LilyPondExporter::write()
         Composition::markerconstiterator i_marker = markers.begin();
 
         while  (i_marker != markers.end()) {
+            // Allow some oportunities for user to cancel
+            if (isOperationCancelled()) {
+                return false;
+            }
+        
             timeT markerTime = m_composition->getBarStartForTime((*i_marker)->getTime());
             RG_DEBUG << "Marker: " << (*i_marker)->getTime() << " previous: " << prevMarkerTime << endl;
             // how to cope with time signature changes?
@@ -932,6 +953,11 @@ LilyPondExporter::write()
     for (int trackPos = 0;
          (track = m_composition->getTrackByPosition(trackPos)) != 0; ++trackPos) {
 
+        // Allow some oportunities for user to cancel
+        if (isOperationCancelled()) {
+            return false;
+        }
+        
         for (Composition::iterator i = m_composition->begin();
              i != m_composition->end(); ++i) {
 
@@ -978,7 +1004,9 @@ LilyPondExporter::write()
 
             emit setValue(int(double(trackPos) /
                               double(m_composition->getNbTracks()) * 100.0));
-            rosegardenApplication->refreshGUI(50);
+                              
+            qApp->processEvents(QEventLoop::AllEvents, 100);
+            //            rosegardenApplication->refreshGUI(50);
         
             bool currentSegmentSelected = false;
             if ((m_exportSelection == EXPORT_SELECTED_SEGMENTS) && 

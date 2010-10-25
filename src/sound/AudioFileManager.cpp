@@ -689,6 +689,8 @@ AudioFileManager::importFile(const QString &fileName, int sampleRate)
         }
     }
 
+    emit setOperationName(tr("Converting audio file..."));
+
     QString outFileName = m_audioPath + targetName;
     int ec = convertAudioFile(fileName, outFileName);
 
@@ -1014,10 +1016,9 @@ AudioFileManager::drawPreview(AudioFileId id,
                                  false);
 
     QPainter painter(pixmap);
-    pixmap->fill(qApp->palette().color(QPalette::Active,
-                                       QColorGroup::Base));
+    pixmap->fill(Qt::white);
     painter.setPen(qApp->palette().color(QPalette::Active,
-                                         QColorGroup::Dark));
+                                         QColorGroup::Mid));
 
     if (values.size() == 0) {
 #ifdef DEBUG_AUDIOFILEMANAGER

@@ -114,7 +114,6 @@ public:
 
 signals:
     void setValue(int);
-    void incrementProgress(int);
     
 private:
 

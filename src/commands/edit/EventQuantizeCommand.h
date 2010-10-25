@@ -69,10 +69,11 @@ public:
     ~EventQuantizeCommand();
     
     static QString getGlobalName(Quantizer *quantizer = 0);
-    void setProgressTotal(int total) { m_progressTotal = total; }
+    void setProgressTotal(int total, int perCall) { m_progressTotal = total;
+                                                    m_progressPerCall = perCall; };
 
 signals:
-    void incrementProgress(int);
+    void setValue(int);
 
 protected:
     virtual void modifySegment();
@@ -82,6 +83,7 @@ private:
     EventSelection *m_selection;
     QString m_settingsGroup;
     int m_progressTotal;
+    int m_progressPerCall;
 
     /// Sets to m_quantizer as well as returning value
     Quantizer *makeQuantizer(QString, QuantizeScope);

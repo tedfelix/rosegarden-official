@@ -1593,25 +1593,20 @@ RosegardenMainViewWidget::slotDroppedNewAudio(QString audioDesc)
     }
 
     // from qt4-doc : " don't use a (modal) QProgressDialog inside a paintEvent() !"
-    ProgressDialog progressDlg(tr("Adding audio file..."),
-                               100,
-                               500,
-                               this);
-    progressDlg.setIndeterminate(true);
+    ProgressDialog *progressDlg = new ProgressDialog(tr("Adding audio file..."),
+                               (QWidget*)this);
+    progressDlg->setIndeterminate(true);
     
     // warning: pointer &progressDlg becomes invalid, if function quits.
-    CurrentProgressDialog::set(&progressDlg);
+    CurrentProgressDialog::set(progressDlg);
     
-    progressDlg.setValue(0);
-    progressDlg.show();
-
     // Connect the progress dialog
     //
     connect(&aFM, SIGNAL(setValue(int)),
-            &progressDlg, SLOT(setValue(int)));
+            progressDlg, SLOT(setValue(int)));
     connect(&aFM, SIGNAL(setOperationName(QString)),
-            &progressDlg, SLOT(slotSetOperationName(QString)));
-    connect(&progressDlg, SIGNAL(canceled()),
+            progressDlg, SLOT(setLabelText(QString)));
+    connect(progressDlg, SIGNAL(canceled()),
             &aFM, SLOT(slotStopImport()));
 
     try {
@@ -1619,25 +1614,24 @@ RosegardenMainViewWidget::slotDroppedNewAudio(QString audioDesc)
     } catch (AudioFileManager::BadAudioPathException e) {
         CurrentProgressDialog::freeze();
         QString errorString = tr("Can't add dropped file. ") + strtoqstr(e.getMessage());
-         QMessageBox::warning(this, tr("Rosegarden"), errorString);
+        QMessageBox::warning(this, tr("Rosegarden"), errorString);
+        progressDlg->close(); 
         return ;
     } catch (SoundFile::BadSoundFileException e) {
         CurrentProgressDialog::freeze();
         QString errorString = tr("Can't add dropped file. ") + strtoqstr(e.getMessage());
-         QMessageBox::warning(this, tr("Rosegarden"), errorString);
-        return ;
+        QMessageBox::warning(this, tr("Rosegarden"), errorString);
+        progressDlg->close(); 
+        return;
     }
+
+    progressDlg->close(); 
              
-    disconnect(&progressDlg, SIGNAL(canceled()),
-               &aFM, SLOT(slotStopImport()));
-    connect(&progressDlg, SIGNAL(canceled()),
+    progressDlg = new ProgressDialog(tr("Generating audio preview..."),
+                               (QWidget*)this);
+
+    connect(progressDlg, SIGNAL(canceled()),
             &aFM, SLOT(slotStopPreview()));
-    
-    
-    progressDlg.slotSetOperationName(tr("Generating audio preview..."));
-    progressDlg.setValue(0);
-    progressDlg.setIndeterminate(false);
-    progressDlg.show();
     
     try {
         aFM.generatePreview(audioFileId);
@@ -1646,10 +1640,11 @@ RosegardenMainViewWidget::slotDroppedNewAudio(QString audioDesc)
         QString message = strtoqstr(e.getMessage()) + "\n\n" +
                           tr("Try copying this file to a directory where you have write permission and re-add it");
         QMessageBox::information(this, tr("Rosegarden"), message);
-        //return false;
+        progressDlg->close(); 
+        return;
     }
 
-    disconnect(&progressDlg, SIGNAL(canceled()),
+    disconnect(progressDlg, SIGNAL(canceled()),
                &aFM, SLOT(slotStopPreview()));
 
     // add the file at the sequencer
@@ -1671,8 +1666,7 @@ RosegardenMainViewWidget::slotDroppedNewAudio(QString audioDesc)
         
     }
     
-    progressDlg.hide();
-    CurrentProgressDialog::get()->close();  // note: Qt::WA_DeleteOnClose set
+    progressDlg->close();  // note: Qt::WA_DeleteOnClose set
     CurrentProgressDialog::set(0);
 }
 

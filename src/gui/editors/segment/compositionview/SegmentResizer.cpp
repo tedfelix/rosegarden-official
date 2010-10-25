@@ -162,22 +162,22 @@ void SegmentResizer::handleMouseButtonRelease(QMouseEvent *e)
                         new AudioSegmentRescaleCommand(m_doc, segment, ratio,
                                                        newStartTime, newEndTime);
 
-                    ProgressDialog progressDlg
-                        (tr("Rescaling audio file..."), 100, 0);
-                    progressDlg.setAutoClose(false);
-                    progressDlg.setAutoReset(false);
-                    progressDlg.show();
-                    command->connectProgressDialog(&progressDlg);
+                    ProgressDialog *progressDlg = new ProgressDialog(
+                            tr("Rescaling audio file..."), (QWidget*)parent());
+                    command->connectProgressDialog(progressDlg);
                     
                     addCommandToHistory(command);
 
 //                     progressDlg.setLabel( new QLabel(tr("Generating audio preview..."), this, Qt::Tool) );
-                    progressDlg.setLabelText( tr("Generating audio preview...") );
+                    command->disconnectProgressDialog(progressDlg);
+                    progressDlg->close();
                     
-                    command->disconnectProgressDialog(&progressDlg);
+                    progressDlg = new ProgressDialog(tr("Generating audio preview..."),
+                                                     (QWidget*)parent());
+
                     connect(&m_doc->getAudioFileManager(), SIGNAL(setValue(int)),
-                            &progressDlg, SLOT(setValue(int)));
-                    connect(&progressDlg, SIGNAL(cancelClicked()),
+                            progressDlg, SLOT(setValue(int)));
+                    connect(progressDlg, SIGNAL(cancelClicked()),
                             &m_doc->getAudioFileManager(), SLOT(slotStopPreview()));
 
                     int fid = command->getNewAudioFileId();
@@ -185,6 +185,7 @@ void SegmentResizer::handleMouseButtonRelease(QMouseEvent *e)
                         RosegardenMainWindow::self()->slotAddAudioFile(fid);
                         m_doc->getAudioFileManager().generatePreview(fid);
                     }
+                    progressDlg->close();
                 
                 } else {
                     
