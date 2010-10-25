@@ -10887,7 +10887,7 @@
     <message>
         <location line="+40"/>
         <source>Converting audio file...</source>
-        <translation type="unfinished">Audiodatei wird gerade konvertiert...</translation>
+        <translation>Audiodatei wird gerade konvertiert...</translation>
     </message>
     <message>
         <source>Resampling audio file...</source>
@@ -18221,7 +18221,7 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location filename="../../src/gui/widgets/ProgressDialog.cpp" line="+64"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <source>&lt;qt&gt;&lt;h3&gt;Processing...&lt;/h3&gt;&lt;/qt&gt;</source>

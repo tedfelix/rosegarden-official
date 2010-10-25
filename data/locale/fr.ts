@@ -10888,7 +10888,7 @@
     <message>
         <location line="+24"/>
         <source>Converting audio file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Conversion du fichier audio...</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -18199,7 +18199,7 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
     <message>
         <location filename="../../src/gui/widgets/ProgressDialog.cpp" line="+64"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
 </context>
 <context>

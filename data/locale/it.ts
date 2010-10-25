@@ -11347,7 +11347,7 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location line="+40"/>
         <source>Converting audio file...</source>
-        <translation type="unfinished">Conversione del file audio...</translation>
+        <translation>Conversione del file audio...</translation>
     </message>
     <message>
         <source>Resampling audio file...</source>
@@ -19529,7 +19529,7 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location filename="../../src/gui/widgets/ProgressDialog.cpp" line="+64"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <source>&lt;qt&gt;&lt;h3&gt;Processing...&lt;/h3&gt;&lt;/qt&gt;</source>
