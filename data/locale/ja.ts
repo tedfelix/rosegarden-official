@@ -113,7 +113,7 @@
     <message>
         <location line="-83"/>
         <source>Sends its data through</source>
-        <translation></translation>
+        <translation>データ送信先</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -2085,7 +2085,7 @@
         <location line="+1702"/>
         <location line="+1548"/>
         <source>&amp;Quantize...</source>
-        <translation>クオンタイズ(&amp;Q)</translation>
+        <translation>クオンタイズ(&amp;Q)...</translation>
     </message>
     <message>
         <location line="-3241"/>
@@ -2135,7 +2135,7 @@
     <message>
         <location line="+1"/>
         <source>Set Event &amp;Velocities...</source>
-        <translation>イベントベロシティの設定(&amp;V)</translation>
+        <translation>イベントベロシティの設定(&amp;V)...</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -2657,7 +2657,7 @@
         <location line="-1253"/>
         <location line="+1254"/>
         <source>Add &amp;Key Change...</source>
-        <translation>キーチェンジの追加(&amp;K)</translation>
+        <translation>キーチェンジの追加(&amp;K)...</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -2768,7 +2768,7 @@
     <message>
         <location line="+1"/>
         <source>Add &amp;Pause</source>
-        <translation></translation>
+        <translation>フェルマータの追加(&amp;P)</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -2788,7 +2788,7 @@
     <message>
         <location line="+1"/>
         <source>Trigger &amp;Ornament...</source>
-        <translation>オルナメントの設定(&amp;O)</translation>
+        <translation>オルナメントの設定(&amp;O)...</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -2798,7 +2798,7 @@
     <message>
         <location line="+1"/>
         <source>Ma&amp;ke Ornament...</source>
-        <translation>オルナメントを作成(&amp;k)</translation>
+        <translation>オルナメントを作成(&amp;k)...</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -2995,7 +2995,7 @@
     <message>
         <location line="+9"/>
         <source>Tupl&amp;et...</source>
-        <translation>連符(&amp;e)</translation>
+        <translation>連符(&amp;e)...</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -3163,7 +3163,7 @@
     <message>
         <location line="+1"/>
         <source>&amp;Interpret...</source>
-        <translation>解析(&amp;I)</translation>
+        <translation>解析(&amp;I)...</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4412,7 +4412,7 @@
     <message>
         <location line="+9"/>
         <source>&amp;Insert Range...</source>
-        <translation>レンジの挿入(&amp;I)</translation>
+        <translation>レンジの挿入(&amp;I)...</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -4447,12 +4447,12 @@
     <message>
         <location line="+1"/>
         <source>Edit Mar&amp;kers...</source>
-        <translation>マーカーの編集(&amp;k)</translation>
+        <translation>マーカーの編集(&amp;k)...</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>Edit Document P&amp;roperties...</source>
-        <translation>ドキュメントプロパティの編集(&amp;r)</translation>
+        <translation>ドキュメントプロパティの編集(&amp;r)...</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4576,12 +4576,12 @@
     <message>
         <location line="+1"/>
         <source>Split by &amp;Pitch...</source>
-        <translation>音程で分割(&amp;P)</translation>
+        <translation>音程で分割(&amp;P)...</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Split by &amp;Recording Source...</source>
-        <translation>録音ソースで分割(&amp;R)</translation>
+        <translation>録音ソースで分割(&amp;R)...</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4646,7 +4646,7 @@
     <message>
         <location line="+9"/>
         <source>Arm &amp;or Un-arm Track for Record</source>
-        <translation>録音のためにトラックを有効化/無効化</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+9"/>
@@ -10201,7 +10201,7 @@
     <message>
         <location filename="../../src/sound/RIFFAudioFile.cpp" line="+59"/>
         <source>Rosegarden currently only supports 16 or 32-bit PCM or IEEE floating-point RIFF files for writing</source>
-        <translation>Rosegardenは、現在書き込み時に16か32ビットPCMかIEEE浮動小数点RIFFファイルのみをサポートしています。</translation>
+        <translation>Rosegardenは、現在書き込み時に16か32ビットPCMかIEEE浮動小数点RIFFファイルのみをサポートしています</translation>
     </message>
     <message>
         <location line="+317"/>
@@ -12346,7 +12346,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location line="+1"/>
         <source>Position on instrument panel</source>
-        <translation>インスツルメントパネル上の位置</translation>
+        <translation>インストゥルメントパネルの位置</translation>
     </message>
     <message>
         <location line="+17"/>
@@ -15301,7 +15301,7 @@ Would you like to use
     <message>
         <location line="+2"/>
         <source>Rosegarden - %1 with LilyPond...</source>
-        <translation>LilyPondを使用するRosegarden   %1</translation>
+        <translation>LilyPondを使用するRosegarden   %1...</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -16690,7 +16690,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/commands/segment/MoveTracksCommand.h" line="+46"/>
         <source>Move Tracks...</source>
-        <translation>トラックの移動</translation>
+        <translation>トラックの移動...</translation>
     </message>
 </context>
 <context>
@@ -16703,7 +16703,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location line="+2"/>
         <source>Add &amp;Key Change...</source>
-        <translation>キーチェンジの追加(&amp;K)</translation>
+        <translation>キーチェンジの追加(&amp;K)...</translation>
     </message>
 </context>
 <context>
@@ -16805,7 +16805,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location line="+11"/>
         <source>Show notes outside suggested playable range in red</source>
-        <translation>推奨される演奏可能な範囲外の音符は赤で表示されます。</translation>
+        <translation>推奨される演奏可能な範囲外の音符は赤で表示されます</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -16815,7 +16815,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location line="+14"/>
         <source>When recording MIDI, split-and-tie long notes at barlines</source>
-        <translation>MIDIを録音中、小節線で長い音は分割され、タイで結ばれます。</translation>
+        <translation>MIDIを録音中、小節線で長い音は分割され、タイで結ばれます</translation>
     </message>
     <message>
         <location line="+12"/>
@@ -17019,7 +17019,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location line="+51"/>
         <source>Rendering notes on staff %1...</source>
-        <translation>譜表上の音符をレンダリング...</translation>
+        <translation>譜表上の音符%1をレンダリング...</translation>
     </message>
     <message>
         <location line="+129"/>
@@ -17418,7 +17418,7 @@ This is a bug (the program would previously have crashed by now)</source>
         <location line="-26"/>
         <location line="+69"/>
         <source>Couldn&apos;t paste at this point.</source>
-        <translation>この位置で貼り付けできません</translation>
+        <translation>この位置で貼り付けできません。</translation>
     </message>
     <message>
         <location line="+2442"/>
@@ -17453,12 +17453,12 @@ This is a bug (the program would previously have crashed by now)</source>
     <message>
         <location line="+47"/>
         <source>Normalizing rests...</source>
-        <translation>休符を正規化中</translation>
+        <translation>休符を正規化中...</translation>
     </message>
     <message>
         <location line="+13"/>
         <source>Collapsing notes...</source>
-        <translation>音符をつなげる</translation>
+        <translation>音符をつなげる...</translation>
     </message>
     <message>
         <location line="-1846"/>
@@ -18604,7 +18604,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/segment/RemoveTempoChangeCommand.h" line="+53"/>
         <source>Remove &amp;Tempo Change...</source>
-        <translation>テンポ変更の削除(&amp;T)</translation>
+        <translation>テンポ変更の削除(&amp;T)...</translation>
     </message>
 </context>
 <context>
@@ -18612,7 +18612,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/segment/RemoveTimeSignatureCommand.h" line="+53"/>
         <source>Remove &amp;Time Signature Change...</source>
-        <translation>拍子変更を削除</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -18845,7 +18845,7 @@ There may be some incompatibilities with the file format.</source>
     <message>
         <location line="-2332"/>
         <source>Could not save document at %1</source>
-        <translation>ドキュメントを %1 に保存できません。</translation>
+        <translation>ドキュメントを %1 に保存できません</translation>
     </message>
     <message numerus="yes">
         <location line="+124"/>
@@ -19010,7 +19010,7 @@ We recommend you re-save this file from this version of Rosegarden to ensure tha
     <message>
         <location line="+149"/>
         <source>Generating audio preview...</source>
-        <translation>オーディオプレビューの生成</translation>
+        <translation>オーディオプレビューの生成...</translation>
     </message>
 </context>
 <context>
@@ -19062,12 +19062,12 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
         <location line="+25"/>
         <location line="+5"/>
         <source>Can&apos;t add dropped file. </source>
-        <translation>ドロップされたファイルを追加できない</translation>
+        <translation>ドロップされたファイルを追加できない。</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Generating audio preview...</source>
-        <translation>オーディオプレビューの生成</translation>
+        <translation>オーディオプレビューの生成...</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -19378,7 +19378,7 @@ Would you like to set it now?</source>
         <location line="+34"/>
         <source>Split %n Segment(s) at Time</source>
         <translation type="unfinished">
-            <numerusform> </numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -19965,7 +19965,7 @@ Error was : %2</source>
     <message>
         <location filename="../../src/gui/widgets/Rotary.cpp" line="+89"/>
         <source>&lt;qt&gt;&lt;p&gt;Click and drag up and down or left and right to modify.&lt;/p&gt;&lt;p&gt;Double click to edit value directly.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;クリックし、上下または左右にドラッグして変更します。&lt;/p&gt;&lt;p&gt;ダブルクリックで値を直接編集します。&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+341"/>
@@ -19983,7 +19983,7 @@ Error was : %2</source>
     <message>
         <location filename="../../src/commands/segment/SegmentAutoSplitCommand.h" line="+48"/>
         <source>&amp;Split on Silence</source>
-        <translation>無音部分で分割</translation>
+        <translation>無音部分で分割(&amp;S)</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/SegmentAutoSplitCommand.cpp" line="+143"/>
@@ -20009,12 +20009,12 @@ Error was : %2</source>
     <message>
         <location filename="../../src/commands/segment/SegmentChangeTransposeCommand.h" line="+47"/>
         <source>Undo change transposition</source>
-        <translation type="unfinished"></translation>
+        <translation>移調を戻す</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Change transposition to %1</source>
-        <translation type="unfinished"></translation>
+        <translation>%1へ移調</translation>
     </message>
 </context>
 <context>
@@ -20022,7 +20022,7 @@ Error was : %2</source>
     <message>
         <location filename="../../src/commands/segment/SegmentColourCommand.h" line="+47"/>
         <source>Change Segment Color...</source>
-        <translation>セグメントカラーの変更</translation>
+        <translation>セグメントカラーの変更...</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/SegmentColourCommand.cpp" line="+32"/>
@@ -20035,7 +20035,7 @@ Error was : %2</source>
     <message>
         <location filename="../../src/commands/segment/SegmentColourMapCommand.h" line="+47"/>
         <source>Change Segment Color Map...</source>
-        <translation>セグメントカラーマップの変更</translation>
+        <translation>セグメントカラーマップの変更...</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/SegmentColourMapCommand.cpp" line="+33"/>
@@ -20090,7 +20090,7 @@ Error was : %2</source>
     <message>
         <location filename="../../src/commands/segment/SegmentLabelCommand.h" line="+47"/>
         <source>Re&amp;label...</source>
-        <translation>ラベルの変更(&amp;l)</translation>
+        <translation>ラベルの変更(&amp;l)...</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/SegmentLabelCommand.cpp" line="+33"/>
@@ -20275,7 +20275,7 @@ Error was : %2</source>
     <message>
         <location line="+6"/>
         <source>Click and drag to draw an empty segment.  Control+Alt click and drag to draw in overlap mode.</source>
-        <translation>クリック+ドラッグで空白のセグメントを描画。Ctrl+Alt+クリック+ドラッグでオーバラップモードで描画</translation>
+        <translation>クリック+ドラッグで空白のセグメントを描画。Ctrl+Alt+クリック+ドラッグでオーバラップモードで描画。</translation>
     </message>
 </context>
 <context>
@@ -20443,7 +20443,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/commands/segment/SegmentSplitByPitchCommand.h" line="+56"/>
         <source>Split by &amp;Pitch...</source>
-        <translation>音程で分割(&amp;P)</translation>
+        <translation>音程で分割(&amp;P)...</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/SegmentSplitByPitchCommand.cpp" line="+42"/>
@@ -20466,7 +20466,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/commands/segment/SegmentSplitByRecordingSrcCommand.h" line="+44"/>
         <source>Split by &amp;Recording Source...</source>
-        <translation>録音ソースで分割(&amp;R)</translation>
+        <translation>録音ソースで分割(&amp;R)...</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/SegmentSplitByRecordingSrcCommand.cpp" line="+36"/>
@@ -21404,7 +21404,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location line="+4"/>
         <source>in the middle of measure %1.</source>
-        <translation>%1 小節目内</translation>
+        <translation>%1 小節目内。</translation>
     </message>
     <message>
         <location line="+19"/>
@@ -22211,7 +22211,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/editors/segment/TrackLabel.cpp" line="+88"/>
         <source>&lt;qt&gt;&lt;p&gt;Click to select all the segments on this track.&lt;/p&gt;&lt;p&gt;Shift+click to add to or to remove from the selection all the segments on this track.&lt;/p&gt;&lt;p&gt;Click and hold with either mouse button to assign this track to an instrument.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;クリックしてこのトラック上のすべてのセグメントを選択。&lt;/p&gt;&lt;p&gt;Shiftしながらクリックしてこのトラック上のすべての選択されたセグメントをセンタ熊田は削除。&lt;/p&gt;&lt;p&gt;クリックしてそのままどちらかのマウスボタンを押したままにすることで、このトラックに対してインストゥルメントを割り当て。&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+139"/>
@@ -22271,7 +22271,7 @@ Would you like to set it now?</source>
     <message>
         <location line="+19"/>
         <source>&lt;qt&gt;&lt;p&gt;This track will only record Audio/MIDI from the selected device, filtering anything else out&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;このトラックは、選択されたオーディオ/MIDIデバイスからのみ録音し、それ以外はフィルタします。&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -22910,12 +22910,12 @@ Would you like to set it now?</source>
     <message>
         <location line="+11"/>
         <source>Group with new timing:</source>
-        <translation>新しいタイミングでグループ化</translation>
+        <translation>新しいタイミングでグループ化:</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Gap created by timing change:</source>
-        <translation>タイミング変更によってできたギャップ</translation>
+        <translation>タイミング変更によってできたギャップ:</translation>
     </message>
     <message>
         <location line="+13"/>
