@@ -551,7 +551,7 @@ void ControllerEventsRuler::slotSetTool(const QString &matrixtoolname)
 
 Event *ControllerEventsRuler::insertEvent(float x, float y)
 {
-    timeT insertTime = m_rulerScale->getTimeForX(x);
+    timeT insertTime = m_rulerScale->getTimeForX(x/m_xScale);
 
     Event* controllerEvent = new Event(m_controller->getType(), insertTime);
 
