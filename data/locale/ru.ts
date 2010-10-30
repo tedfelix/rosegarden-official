@@ -1577,12 +1577,12 @@
     <message>
         <location line="-2123"/>
         <source>Show A&amp;ctions Toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Действия</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Show R&amp;ulers Toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Линейки</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -2365,7 +2365,7 @@
     <message>
         <location line="+65"/>
         <source>Show &amp;Duration Toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Длительности</translation>
     </message>
     <message>
         <location line="+28"/>
@@ -2381,7 +2381,7 @@
     <message>
         <location line="+294"/>
         <source>Double Whole Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Двойная целая</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -2392,7 +2392,7 @@
     <message>
         <location line="+2"/>
         <source>Whole Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Целая</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -2403,7 +2403,7 @@
     <message>
         <location line="+2"/>
         <source>Half Note</source>
-        <translation type="unfinished"></translation>
+        <translation>1/2</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -2414,7 +2414,7 @@
     <message>
         <location line="+2"/>
         <source>Quarter Note</source>
-        <translation type="unfinished"></translation>
+        <translation>1/4</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -2425,7 +2425,7 @@
     <message>
         <location line="+2"/>
         <source>Eighth Note</source>
-        <translation type="unfinished"></translation>
+        <translation>1/8</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -2436,7 +2436,7 @@
     <message>
         <location line="+2"/>
         <source>Sixteenth Note</source>
-        <translation type="unfinished"></translation>
+        <translation>1/16</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -2447,7 +2447,7 @@
     <message>
         <location line="+2"/>
         <source>Thirty-Second Note</source>
-        <translation type="unfinished"></translation>
+        <translation>1/32</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -2458,7 +2458,7 @@
     <message>
         <location line="+2"/>
         <source>Sixty-Fourth Note</source>
-        <translation type="unfinished"></translation>
+        <translation>1/64</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -2469,7 +2469,7 @@
     <message>
         <location line="+2"/>
         <source>Double Whole Note (Without Duration Change)</source>
-        <translation type="unfinished"></translation>
+        <translation>Двойная целая (без смены длительности)</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -2480,7 +2480,7 @@
     <message>
         <location line="+2"/>
         <source>Whole Note (Without Duration Change)</source>
-        <translation type="unfinished"></translation>
+        <translation>Целая (без смены длительности)</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -10321,7 +10321,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location line="+1"/>
         <source>&lt;h2&gt;Welcome to Rosegarden!&lt;/h2&gt;&lt;p&gt;Welcome to the Rosegarden audio and MIDI sequencer and musical notation editor.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;If you have not already done so, you may wish to install some DSSI synth plugins, or a separate synth program such as QSynth.  Rosegarden does not synthesize sounds from MIDI on its own, so without these you will hear nothing.&lt;/li&gt;&lt;li&gt;Rosegarden uses the JACK audio server for recording and playback of audio, and for playback from DSSI synth plugins.  These features will only be available if the JACK server is running.&lt;/li&gt;&lt;li&gt;Rosegarden has comprehensive documentation: see the &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&quot;&gt;Rosegarden website&lt;/a&gt; for the &lt;a style=&quot;color:gold&quot; href=&quot;%1&quot;&gt;manual&lt;/a&gt;, &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;tutorials&lt;/a&gt;, and other information!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  To learn more, go to the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;Rosegarden website&lt;/a&gt;.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;h2&gt;Приветствуем вас в Rosegarden!&lt;/h2&gt;&lt;p&gt;Добро пожаловать в Rosegarden — свободный MIDI-секвенсер и нотный редактор.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Если вы ещё не установили виртуальные инструменты DSSI или дополнительные синтезаторы вроде QSynth, мы настоятельно рекомендуем вам сделать это. Rosegarden не выполняется звуковой синтез самостоятельно, без дополнительных виртуальных инструментов вы ничего не услышите.&lt;/li&gt;&lt;li&gt;Rosegarden использует звуковой сервер JACK для записи и воспроизведения звука, а также для воспроизведения звука виртуальных инструментов DSSI. эти функции доступны лишь при запущенном звуковом сервере JACK.&lt;/li&gt;&lt;li&gt;Для Rosegarden написана достаточноп одробная документация: на &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&quot;&gt;сайте Rosegarden&lt;/a&gt; вы можете найти &lt;a style=&quot;color:gold&quot; href=&quot;%1&quot;&gt;руководство пользователя&lt;/a&gt;, &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;уроки&lt;/a&gt; и прочую полезную информацию!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Программа создана для вас международной командой разработчиков. Более подробную информацию вы можете получить на &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;сайте Rosegarden&lt;/a&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="+35"/>
@@ -10409,7 +10409,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="+511"/>
         <source>Audio subsystem is not available - can&apos;t record audio</source>
-        <translation type="unfinished"></translation>
+        <translation>Звуковая подсистема недоступна — запись звука невозможна</translation>
     </message>
     <message>
         <location line="+100"/>
@@ -10467,17 +10467,17 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location line="+317"/>
         <source>Can&apos;t find RIFF identifier</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось найти идентификатор RIFF</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>Can&apos;t find WAV identifier</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось найти идентификатор WAV</translation>
     </message>
     <message>
         <location line="+13"/>
         <source>Can&apos;t find FORMAT identifier</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось найти идентификатор FORMAT</translation>
     </message>
     <message>
         <location line="+53"/>
@@ -11116,7 +11116,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location line="+40"/>
         <source>Converting audio file...</source>
-        <translation type="unfinished">Преобразовывается звуковой файл...</translation>
+        <translation>Преобразовывается звуковой файл...</translation>
     </message>
     <message>
         <source>Resampling audio file...</source>
@@ -11322,11 +11322,10 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message numerus="yes">
         <location line="+10"/>
         <source>&lt;qt&gt;About to delete %n audio file(s) permanently from the hard disk.&lt;br&gt;This action cannot be undone, and there will be no way to recover the files.&lt;br&gt;Are you sure?&lt;/qt&gt;</source>
-        <translation type="unfinished">
-            <numerusform>&lt;qt&gt;%n звуковых файлов будет навсегда удалено с жесткого диска.&lt;br&gt;Это действие необратимо, восстановить файлы будет невозможно.&lt;br&gt;Вы уверены?&lt;/qt&gt;
-        </numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>&lt;qt&gt;%n звуковой файл будет навсегда удалён с жёсткого диска.&lt;br&gt;Это действие необратимо, восстановить файлы будет невозможно.&lt;br&gt;Вы уверены?&lt;/qt&gt;</numerusform>
+            <numerusform>&lt;qt&gt;%n звуковых файла будет навсегда удалено с жёсткого диска.&lt;br&gt;Это действие необратимо, восстановить файлы будет невозможно.&lt;br&gt;Вы уверены?&lt;/qt&gt;</numerusform>
+            <numerusform>&lt;qt&gt;%n звуковых файлов будет навсегда удалено с жёсткого диска.&lt;br&gt;Это действие необратимо, восстановить файлы будет невозможно.&lt;br&gt;Вы уверены?&lt;/qt&gt;</numerusform>
         </translation>
     </message>
     <message>
@@ -11478,7 +11477,7 @@ Please select the ones you wish to delete permanently from the hard disk.
         <location line="+39"/>
         <location line="+1"/>
         <source>Audio master output level</source>
-        <translation type="unfinished">Уровень звукового мастер-выхода</translation>
+        <translation>Уровень общего звукового выхода</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -11639,7 +11638,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location line="+5"/>
         <source>This plugin does not have any controls that can be edited here.</source>
-        <translation type="unfinished"></translation>
+        <translation>У этого модуля нет изменяемых параметров, которые можно здесь отрегулировать.</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -12281,7 +12280,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/commands/edit/ClearTriggersCommand.h" line="+46"/>
         <source>&amp;Clear Triggers</source>
-        <translation type="unfinished">Очистить п&amp;ереключатели</translation>
+        <translation>Очистить п&amp;ереключатели</translation>
     </message>
 </context>
 <context>
@@ -12366,7 +12365,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location line="+2"/>
         <source>Mezzo-soprano</source>
-        <translation type="unfinished">сопрано</translation>
+        <translation>Меццо-сопрано</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -14223,17 +14222,17 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location line="+2"/>
         <source>FTP download aborted</source>
-        <translation type="unfinished"></translation>
+        <translation>Скачивание с FTP прервано</translation>
     </message>
     <message>
         <location line="+20"/>
         <source>Download cancelled</source>
-        <translation type="unfinished"></translation>
+        <translation>Скачивание отменено</translation>
     </message>
     <message>
         <location line="+31"/>
         <source>Failed to create local file %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось создать локальный файл %1</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -14246,7 +14245,7 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location filename="../../src/gui/editors/guitar/Fingering.cpp" line="+110"/>
         <source>couldn&apos;t parse fingering &apos;%1&apos; in &apos;%2&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось распознать аппликатуру &apos;%1&apos; в &apos;%2&apos;</translation>
     </message>
 </context>
 <context>
@@ -14465,7 +14464,7 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location line="+14"/>
         <source>Show textured background on</source>
-        <translation>Где использовать фон:</translation>
+        <translation>Где использовать фон с текстурой</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -14510,7 +14509,7 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location line="+17"/>
         <source>&lt;qt&gt;Rosegarden relies on external applications to provide certain features.  Each selected application must be installed and available on your path.  When choosing an application to use, please ensure that it can run from a &quot;run command&quot; box (typically &lt;b&gt;Alt+F2&lt;/b&gt;) which should allow Rosegarden to make use of it when necessary.&lt;br&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Rosegarden использует внешние приложения для предоставления некоторой функциональности. Каждая перечисленная программа должна быть установлена в системный каталог. Перед выбором приложения убедитесь в том, что оно установлено.&lt;br&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -15146,7 +15145,7 @@ Example text from file:</source>
     <message>
         <location line="+3"/>
         <source>Articulate slurs, staccato, tenuto etc</source>
-        <translation type="unfinished">Исполнять легато, стаккато, тенуто и т.д.</translation>
+        <translation>Исполнять легато, стаккато, тенуто и т.д.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -15185,22 +15184,22 @@ Example text from file:</source>
     <message>
         <location line="-233"/>
         <source>Effect on Key</source>
-        <translation type="unfinished">Влияние на тональность</translation>
+        <translation>Влияние на тональность</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Transpose within key</source>
-        <translation type="unfinished">Транспонировать в рамках тональности</translation>
+        <translation>Транспонировать в рамках тональности</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Change key for selection</source>
-        <translation type="unfinished">Изменить тональность в выделении</translation>
+        <translation>Изменить тональность в выделении</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>Adjust segment transposition in opposite direction (maintain audible pitch)</source>
-        <translation type="unfinished">Скорректировать транспозицию сегмента в противоположном направлении (сохранить высоту тона)</translation>
+        <translation>Скорректировать транспозицию сегмента в противоположном направлении (сохранить слышимую высоту тона)</translation>
     </message>
     <message>
         <location line="+104"/>
@@ -15378,7 +15377,7 @@ Example text from file:</source>
     <message>
         <location filename="../../src/commands/edit/InvertCommand.h" line="+46"/>
         <source>&amp;Invert</source>
-        <translation type="unfinished">&amp;Инвертировать</translation>
+        <translation>&amp;Инвертировать</translation>
     </message>
 </context>
 <context>
@@ -15386,12 +15385,12 @@ Example text from file:</source>
     <message>
         <location filename="../../src/commands/notation/KeyInsertionCommand.h" line="+65"/>
         <source>Change to &amp;Key %1...</source>
-        <translation type="unfinished">Изменить на &amp;тональность %1...</translation>
+        <translation>Изменить на &amp;тональность %1...</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Add &amp;Key Change...</source>
-        <translation type="unfinished">Добавить смену &amp;тональности...</translation>
+        <translation>Добавить смену &amp;тональности...</translation>
     </message>
 </context>
 <context>
@@ -15548,7 +15547,7 @@ Would you like to use
  %1
 
  instead?</source>
-        <translation type="unfinished">В Lilypond недопустимы пробелы и обратные черты в именах файлов.
+        <translation>В Lilypond недопустимы пробелы и обратные черты в именах файлов.
 
 Вы хотите использовать
 
@@ -15559,12 +15558,12 @@ Would you like to use
     <message>
         <location line="+1824"/>
         <source>warning: overlong bar truncated here</source>
-        <translation type="unfinished">Предупреждение: слишком длинный такт здесь урезан</translation>
+        <translation>Предупреждение: слишком длинный такт здесь урезан</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>warning: bar too short, padding with rests</source>
-        <translation type="unfinished">Предупреждение: слишком короткий так был заполнен паузами.</translation>
+        <translation>Предупреждение: слишком короткий такт был заполнен паузами.</translation>
     </message>
 </context>
 <context>
@@ -15597,7 +15596,7 @@ Would you like to use
     <message>
         <location line="+3"/>
         <source>Selected tracks</source>
-        <translation type="unfinished"></translation>
+        <translation>Выделенные дорожки</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -15856,7 +15855,7 @@ Would you like to use
     <message>
         <location line="+14"/>
         <source>%1 pt %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 pt %2</translation>
     </message>
     <message>
         <location line="+0"/>
@@ -15869,7 +15868,7 @@ Would you like to use
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="+67"/>
         <source>Preview</source>
-        <translation type="unfinished">Предосмотр</translation>
+        <translation>Предпросмотр</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -16631,7 +16630,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/configuration/MatrixConfigurationPage.cpp" line="+48"/>
         <source>General</source>
-        <translation type="unfinished">Общее</translation>
+        <translation>Общие</translation>
     </message>
 </context>
 <context>
@@ -16701,22 +16700,22 @@ Double-click to open the marker editor.</source>
     <message>
         <location line="+132"/>
         <source>Click and drag to move a note; hold Ctrl as well to copy it</source>
-        <translation type="unfinished">Щелкните и перетащите курсор мыши для перемещения ноты; с Ctrl — для копирования ноты</translation>
+        <translation>Щёлкните и перетащите курсор мыши для перемещения ноты; с Ctrl — для копирования ноты</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Click and drag to copy a note</source>
-        <translation type="unfinished">Щелкните и перетащите курсор мыши для копирования ноты</translation>
+        <translation>Щёлкните и перетащите курсор мыши для копирования ноты</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Click and drag to move selected notes; hold Ctrl as well to copy</source>
-        <translation type="unfinished">Щелкните и перетащите курсор мыши для перемещения выбранных нот; с Ctrl — для копирования нот</translation>
+        <translation>Щёлкните и перетащите курсор мыши для перемещения выбранных нот; с Ctrl — для копирования нот</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Click and drag to copy selected notes</source>
-        <translation type="unfinished">Щелкните и перетащите курсор мыши для копирования нот</translation>
+        <translation>Щёлкните и перетащите курсор мыши для копирования выделенных нот</translation>
     </message>
 </context>
 <context>
@@ -16755,22 +16754,22 @@ Double-click to open the marker editor.</source>
     <message>
         <location line="+66"/>
         <source>Resize Event</source>
-        <translation type="unfinished">Изменить размер события</translation>
+        <translation>Изменить размер события</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Resize Events</source>
-        <translation type="unfinished">Изменить размер событий</translation>
+        <translation>Изменить размер событий</translation>
     </message>
     <message>
         <location line="+100"/>
         <source>Click and drag to resize selected notes</source>
-        <translation type="unfinished">Щелкните и перетащите курсор мыши для смены размера нот</translation>
+        <translation>Щёлкните и перетащите курсор мыши для смены размера нот</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Click and drag to resize a note</source>
-        <translation type="unfinished">Щелкните и перетащите курсор мыши для смены размера ноты</translation>
+        <translation>Щёлкните и перетащите курсор мыши для смены размера ноты</translation>
     </message>
 </context>
 <context>
@@ -16941,16 +16940,15 @@ Double-click to open the marker editor.</source>
     <message>
         <location line="+10"/>
         <source>%1%2 - All Segments - %3</source>
-        <translation type="unfinished">%1 — Все сегменты — %3 {1%2 ?}</translation>
+        <translation>%1%2 — Все сегменты — %3</translation>
     </message>
     <message numerus="yes">
         <location line="+7"/>
         <source>%1%2 - %n Segment(s) - %3</source>
-        <translation type="unfinished">
-            <numerusform>
-        </numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1%2 — %n сегмент — %3</numerusform>
+            <numerusform>%1%2 — %n сегмента — %3</numerusform>
+            <numerusform>%1%2 — %n сегментов — %3</numerusform>
         </translation>
     </message>
     <message>
@@ -17013,19 +17011,19 @@ Double-click to open the marker editor.</source>
     <message>
         <location line="+7"/>
         <source>http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</source>
-        <translation type="unfinished">http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</translation>
+        <translation>http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</source>
-        <translation type="unfinished">http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</translation>
+        <translation>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</translation>
     </message>
     <message>
         <location line="+13"/>
         <location line="+155"/>
         <location line="+76"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location line="+389"/>
@@ -17080,7 +17078,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location line="+10"/>
         <source>Remove Triggers</source>
-        <translation type="unfinished">Удалить переключатели</translation>
+        <translation>Удалить переключатели</translation>
     </message>
     <message>
         <location line="-764"/>
@@ -17363,7 +17361,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/commands/studio/ModifyDeviceMappingCommand.h" line="+50"/>
         <source>Modify &amp;Device Mapping</source>
-        <translation type="unfinished">Изменить привязку &amp;устройств</translation>
+        <translation>Изменить привязку &amp;устройств</translation>
     </message>
 </context>
 <context>
@@ -17387,7 +17385,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/commands/edit/MoveAcrossSegmentsCommand.cpp" line="+65"/>
         <source>&amp;Move Events to Other Segment</source>
-        <translation type="unfinished">С&amp;местить события в другой сегмент</translation>
+        <translation>С&amp;местить события в другой сегмент</translation>
     </message>
 </context>
 <context>
@@ -17413,7 +17411,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/commands/segment/MoveTracksCommand.h" line="+46"/>
         <source>Move Tracks...</source>
-        <translation type="unfinished">Переместить дорожки...</translation>
+        <translation>Переместить дорожки...</translation>
     </message>
 </context>
 <context>
@@ -17421,12 +17419,12 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/commands/notation/MultiKeyInsertionCommand.h" line="+58"/>
         <source>Change all to &amp;Key %1...</source>
-        <translation type="unfinished">Изменить все на &amp;тональность %1...</translation>
+        <translation>Изменить всё на &amp;тональность %1...</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Add &amp;Key Change...</source>
-        <translation type="unfinished">Добавить смену &amp;тональности...</translation>
+        <translation>Добавить смену &amp;тональности...</translation>
     </message>
 </context>
 <context>
@@ -17775,7 +17773,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location line="+8"/>
         <source>Default spacing</source>
-        <translation type="unfinished">Стандартный промежуток</translation>
+        <translation>Промежуток по умолчанию</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -17974,7 +17972,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location line="+6"/>
         <source>View</source>
-        <translation type="unfinished"></translation>
+        <translation>Вид</translation>
     </message>
     <message>
         <location line="+21"/>
@@ -18070,7 +18068,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location line="+229"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location line="+326"/>
@@ -18283,7 +18281,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/editors/notation/NotationToolBox.cpp" line="+81"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
 </context>
 <context>
@@ -22702,7 +22700,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/commands/notation/SymbolInsertionCommand.cpp" line="+62"/>
         <source>Insert &amp;Symbol...</source>
-        <translation type="unfinished"></translation>
+        <translation>Вставить &amp;символ…</translation>
     </message>
 </context>
 <context>
@@ -23377,92 +23375,92 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="+70"/>
         <source>Time Signature</source>
-        <translation type="unfinished">Размер</translation>
+        <translation>Размер</translation>
     </message>
     <message>
         <location line="+13"/>
         <source>Time signature</source>
-        <translation type="unfinished">Размер</translation>
+        <translation>Размер</translation>
     </message>
     <message>
         <location line="+51"/>
         <source>Time where signature takes effect</source>
-        <translation type="unfinished">Время, когда ключевые знаки вступают в силу</translation>
+        <translation>Время, когда ключевые знаки вступают в силу</translation>
     </message>
     <message>
         <location line="+13"/>
         <source>Scope</source>
-        <translation type="unfinished">Границы</translation>
+        <translation>Границы</translation>
     </message>
     <message>
         <location line="+14"/>
         <source>Insertion point is at start of measure %1.</source>
-        <translation type="unfinished">Точка вставки находится в начале такта %1.</translation>
+        <translation>Точка вставки находится в начале такта %1.</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Insertion point is in the middle of measure %1.</source>
-        <translation type="unfinished">Точка вставки находится в середине такта %1.</translation>
+        <translation>Точка вставки находится в середине такта %1.</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Insertion point is at start of composition.</source>
-        <translation type="unfinished">Точка вставки находится в начале композиции.</translation>
+        <translation>Точка вставки находится в начале композиции.</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Start measure %1 here</source>
-        <translation type="unfinished">Начать такт %1 здесь</translation>
+        <translation>Начать такт %1 здесь</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Change time from start of measure %1</source>
-        <translation type="unfinished">Изменить время начиная с такта %1</translation>
+        <translation>Изменить время начиная с такта %1</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>Time change will take effect at the start of measure %1.</source>
-        <translation type="unfinished">Изменение временных параметров станет актуальным с начала такта %1.</translation>
+        <translation>Изменение размера вступит в силу с начала такта %1.</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Options</source>
-        <translation type="unfinished">Параметры</translation>
+        <translation>Параметры</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Hide the time signature</source>
-        <translation type="unfinished">Скрыть размер</translation>
+        <translation>Скрыть размер</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Hide the affected bar lines</source>
-        <translation type="unfinished">Скрыть измененные тактовые черты</translation>
+        <translation>Скрыть изменённые тактовые черты</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Show as common time</source>
-        <translation type="unfinished">Показывать как обычное время</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Correct the durations of following measures</source>
-        <translation type="unfinished">Исправить длительность следующих тактов</translation>
+        <translation>Исправить длительность следующих тактов</translation>
     </message>
     <message>
         <location line="+106"/>
         <source>Display as common time</source>
-        <translation type="unfinished">Показывать как обычное время</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Display as cut common time</source>
-        <translation type="unfinished">Показывать оставшееся время</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+40"/>
         <source>http://rosegardenmusic.com/wiki/doc:timeSignatureDialog-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:timeSignatureDialog-en</translation>
     </message>
 </context>
 <context>
@@ -23607,22 +23605,22 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="+681"/>
         <source>Turn Repeating Segment into Real Copies</source>
-        <translation type="unfinished">Превратить повторение сегмента в его настоящие копии</translation>
+        <translation>Превратить повторение сегмента в его настоящие копии</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Turn Repeating Segments into Real Copies</source>
-        <translation type="unfinished">Превратить повторение сегментов в их настоящие копии</translation>
+        <translation>Превратить повторение сегментов в их настоящие копии</translation>
     </message>
     <message>
         <location line="+230"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Rosegarden cannot accept dropped files of this type.</source>
-        <translation type="unfinished"></translation>
+        <translation>Rosegarden не может работать с фалами этого типа.</translation>
     </message>
     <message>
         <source>You can&apos;t drop files into Rosegarden from this client.  Try using Konqueror instead.</source>
@@ -23634,17 +23632,17 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/editors/segment/TrackLabel.cpp" line="+88"/>
         <source>&lt;qt&gt;&lt;p&gt;Click to select all the segments on this track.&lt;/p&gt;&lt;p&gt;Shift+click to add to or to remove from the selection all the segments on this track.&lt;/p&gt;&lt;p&gt;Click and hold with either mouse button to assign this track to an instrument.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Щёлкните здесь для выделения всех сегментов этой дорожки.&lt;/p&gt;&lt;p&gt;Shift+щелчок добавляет все сегменты этой дорожки к существующему выделению сегментов другой дорожки, либо убирает их из выделения.&lt;/p&gt;&lt;p&gt;Щелчок и удерживание открывает меню выбора инструмента для этой дорожки.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+139"/>
         <source>Change track name</source>
-        <translation type="unfinished">Сменить имени дорожки</translation>
+        <translation>Изменить название дорожки</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Enter new track name</source>
-        <translation type="unfinished">Введите новое имя дорожки</translation>
+        <translation>Введите новое имя дорожки</translation>
     </message>
 </context>
 <context>
@@ -24018,7 +24016,7 @@ Would you like to set it now?</source>
     <message>
         <location line="+0"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location line="+44"/>
@@ -24354,7 +24352,7 @@ Would you like to set it now?</source>
     <message>
         <location line="+237"/>
         <source>http://rosegardenmusic.com/wiki/doc:tupletDialog-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:tupletDialog-en</translation>
     </message>
 </context>
 <context>
@@ -24628,19 +24626,19 @@ Would you like to set it now?</source>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="+25"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1047"/>
         <source>Rosegarden Transport</source>
-        <translation type="unfinished">Транспорт Rosegarden</translation>
+        <translation>Транспорт Rosegarden</translation>
     </message>
     <message>
         <location line="+34"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+2"/>
         <source>Hide additional controls</source>
-        <translation type="unfinished">Скрыть дополнительные кнопки</translation>
+        <translation>Скрыть дополнительные кнопки</translation>
     </message>
     <message>
         <location line="+36"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Panic Button</source>
-        <translation type="unfinished">Panic (снять все события)</translation>
+        <translation>Panic (снять все события)</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -24652,31 +24650,31 @@ Would you like to set it now?</source>
         <location line="+35"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Metronome</source>
-        <translation type="unfinished">Метроном</translation>
+        <translation>Метроном</translation>
     </message>
     <message>
         <location line="+3"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Provides a metronome click for you to play along with</source>
-        <translation type="unfinished">Включает метроном</translation>
+        <translation>Включает метроном</translation>
     </message>
     <message>
         <location line="+465"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Shows MIDI activity in and out of Rosegarden</source>
-        <translation type="unfinished">Отображает MIDI-события в/вне Rosegarden</translation>
+        <translation>Показывает MIDI-события в и вне Rosegarden</translation>
     </message>
     <message>
         <location line="+469"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+2"/>
         <source>IN</source>
-        <translation type="unfinished">ВХ</translation>
+        <translation>ВХ</translation>
     </message>
     <message>
         <location line="+464"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
         <source>OUT</source>
-        <translation type="unfinished">ВЫХ</translation>
+        <translation>ВЫХ</translation>
     </message>
     <message>
         <location line="+465"/>
@@ -24684,127 +24682,127 @@ Would you like to set it now?</source>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
         <location line="+1"/>
         <source>NO EVENTS</source>
-        <translation type="unfinished">НЕТ СОБЫТИЙ</translation>
+        <translation>НЕТ СОБЫТИЙ</translation>
     </message>
     <message>
         <location line="+23"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+2"/>
         <source>Record</source>
-        <translation type="unfinished">Записать</translation>
+        <translation>Записать</translation>
     </message>
     <message>
         <location line="+3"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Record either MIDI or audio</source>
-        <translation type="unfinished">Записать MIDI или звук</translation>
+        <translation>Записать MIDI или звук</translation>
     </message>
     <message>
         <location line="+41"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Loop</source>
-        <translation type="unfinished">Петля</translation>
+        <translation>Петля</translation>
     </message>
     <message>
         <location line="+3"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Turn on and off the loop markers (if set)</source>
-        <translation type="unfinished">Включить или выключить метки цикла (если установлены)</translation>
+        <translation>Включить или выключить метки цикла (если установлены)</translation>
     </message>
     <message>
         <location line="+41"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Solo</source>
-        <translation type="unfinished">Соло</translation>
+        <translation>Соло</translation>
     </message>
     <message>
         <location line="+3"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Mutes all but the currently selected track</source>
-        <translation type="unfinished">Приглушить все дорожки кроме выбранных</translation>
+        <translation>Приглушить все дорожки кроме выбранных</translation>
     </message>
     <message>
         <location line="+23"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Start loop or range here</source>
-        <translation type="unfinished">Начать петлю или область здесь</translation>
+        <translation>Начать петлю или область здесь</translation>
     </message>
     <message>
         <location line="+20"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>End loop or range here</source>
-        <translation type="unfinished">Закончить здесь петлю или область</translation>
+        <translation>Закончить здесь петлю или область</translation>
     </message>
     <message>
         <location line="+1037"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>SIG</source>
-        <translation type="unfinished">РАЗМ</translation>
+        <translation>РАЗМ</translation>
     </message>
     <message>
         <location line="+464"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
         <source>DIV</source>
-        <translation type="unfinished">ДЕЛ</translation>
+        <translation>ДЕЛ</translation>
     </message>
     <message>
         <location line="+465"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
         <source>/16</source>
-        <translation type="unfinished">/16</translation>
+        <translation>/16</translation>
     </message>
     <message>
         <location line="+467"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
         <source>TEMPO</source>
-        <translation type="unfinished">ТЕМП</translation>
+        <translation>ТЕМП</translation>
     </message>
     <message>
         <location line="+474"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
         <source>END</source>
-        <translation type="unfinished">КНЦ</translation>
+        <translation>КНЦ</translation>
     </message>
     <message>
         <location line="+467"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
         <source>BAR</source>
-        <translation type="unfinished">ТАКТ</translation>
+        <translation>ТАКТ</translation>
     </message>
     <message>
         <location line="+151"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+2"/>
         <source>Switch between real time, musical time, and frame count</source>
-        <translation type="unfinished">Переключиться между реальным временем, музыкальным и кадрами</translation>
+        <translation>Переключиться между реальным временем, музыкальным и кадрами</translation>
     </message>
     <message>
         <location line="+33"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Show additional controls</source>
-        <translation type="unfinished">Показать дополнительные кнопки управления</translation>
+        <translation>Показать дополнительные кнопки управления</translation>
     </message>
     <message>
         <location line="+36"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Rewind</source>
-        <translation type="unfinished">Перемотать назад</translation>
+        <translation>Перемотать назад</translation>
     </message>
     <message>
         <location line="+3"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Moves the current pointer position back one bar.</source>
-        <translation type="unfinished">Перемещает текущую позицию курсора на один такт назад.</translation>
+        <translation>Перемещает текущую позицию курсора на один такт назад.</translation>
     </message>
     <message>
         <location line="+29"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Rewind to beginning</source>
-        <translation type="unfinished">Перемотать к началу</translation>
+        <translation>Перемотать к началу</translation>
     </message>
     <message>
         <location line="+3"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Moves the pointer position to the start of the composition. (This may mean going forwards if the pointer is currently before the start.)</source>
-        <translation type="unfinished">Перемещает текущую позицию курсора к концу композиции.
+        <translation>Перемещает текущую позицию курсора к концу композиции.
 (Если курсор уже находится в начале композиции, курсор
 переместится вперёд.)</translation>
     </message>
@@ -24812,49 +24810,49 @@ Would you like to set it now?</source>
         <location line="+26"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Play/Pause</source>
-        <translation type="unfinished">Воспроизведение/Пауза</translation>
+        <translation>Воспроизведение/Пауза</translation>
     </message>
     <message>
         <location line="+3"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Plays from the current pointer position, or pauses playback if already in progress.</source>
-        <translation type="unfinished">Воспроизводит композицию начиная с текущей позиции курсора, либо приостанавливает воспроизведение.</translation>
+        <translation>Воспроизводит композицию начиная с текущей позиции курсора, либо приостанавливает воспроизведение.</translation>
     </message>
     <message>
         <location line="+38"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Stop</source>
-        <translation type="unfinished">Стоп</translation>
+        <translation>Стоп</translation>
     </message>
     <message>
         <location line="+3"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Stops playback or recording.</source>
-        <translation type="unfinished">Останавить воспроизведение или запись</translation>
+        <translation>Останавливает воспроизведение или запись.</translation>
     </message>
     <message>
         <location line="+32"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Fast forward</source>
-        <translation type="unfinished">Перемотать вперёд</translation>
+        <translation>Перемотать вперёд</translation>
     </message>
     <message>
         <location line="+3"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Moves the current pointer position forwards one bar.</source>
-        <translation type="unfinished">Переместить текущую позицию курсора на один такт вперёд.</translation>
+        <translation>Перемещает текущую позицию курсора на один такт вперёд.</translation>
     </message>
     <message>
         <location line="+29"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Fast forward to end</source>
-        <translation type="unfinished">Перемотать до конца</translation>
+        <translation>Перемотать до конца</translation>
     </message>
     <message>
         <location line="+3"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Moves the pointer position to the end of the composition.  (This may mean going backwards if the pointer is already beyond the end.)</source>
-        <translation type="unfinished">Переместить текущую позицию курсора к концу композиции.
+        <translation>Перемещает текущую позицию курсора к концу композиции.
 (Если курсор уже находится в конце композиции, то курсор
 переместится назад.)</translation>
     </message>
@@ -24862,7 +24860,7 @@ Would you like to set it now?</source>
         <location line="+27"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Display time to end</source>
-        <translation type="unfinished">Показать время до конца</translation>
+        <translation>Показать время до конца</translation>
     </message>
 </context>
 <context>
