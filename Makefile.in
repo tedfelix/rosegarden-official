@@ -63,6 +63,8 @@ INSTMIMEDIR	:= $(DESTDIR)$(PREFIX)/share/mime
 INSTMIMEXMLDIR	:= $(INSTMIMEDIR)/packages
 INSTDESKTOPDIR	:= $(DESTDIR)$(PREFIX)/share/applications
 INSTICONDIR	:= $(DESTDIR)$(PREFIX)/share/icons/hicolor/32x32/apps
+INSTICONDIR64	:= $(DESTDIR)$(PREFIX)/share/icons/hicolor/64x64/apps
+INSTICONDIR128	:= $(DESTDIR)$(PREFIX)/share/icons/hicolor/128x128/apps
 
 RESOURCES	:= $(wildcard data/*.qrc data/*/*.qrc src/*.qrc src/*/*.qrc src/*/*/*.qrc src/*/*/*/*.qrc)
 QRCSOURCES	:= $(patsubst %.qrc,%.cpp,$(RESOURCES))
@@ -182,7 +184,11 @@ install:
 	$(MKDIR_P) -m 755 $(INSTDESKTOPDIR)
 	$(INSTALL) -m 644 data/desktop/rosegarden.desktop $(INSTDESKTOPDIR)
 	$(MKDIR_P) -m 755 $(INSTICONDIR)
+	$(MKDIR_P) -m 755 $(INSTICONDIR64)
+	$(MKDIR_P) -m 755 $(INSTICONDIR128)
 	$(INSTALL) -m 644 data/pixmaps/icons/rg-rwb-rose3-32x32.png $(INSTICONDIR)/rosegarden.png
+	$(INSTALL) -m 644 data/pixmaps/icons/rg-rwb-rose3-64x64.png $(INSTICONDIR64)/rosegarden.png
+	$(INSTALL) -m 644 data/pixmaps/icons/rg-rwb-rose3-128x128.png $(INSTICONDIR128)/rosegarden.png
 
 uninstall:
 	rm -f $(INSTBINDIR)/rosegarden
