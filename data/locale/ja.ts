@@ -10083,7 +10083,7 @@
     <message>
         <location line="+16"/>
         <source>http://rosegardenmusic.com/wiki/doc:manual-en</source>
-        <translation>http://rosegardenmusic.com/wiki/doc:manual-en</translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:manual-ja</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -11126,7 +11126,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location line="+164"/>
         <source>http://rosegardenmusic.com/wiki/doc:audioManager-en</source>
-        <translation>http://rosegardenmusic.com/wiki/doc:audioManager-en</translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:audioManager-ja</translation>
     </message>
 </context>
 <context>
@@ -11231,7 +11231,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location line="+827"/>
         <source>http://rosegardenmusic.com/wiki/doc:audioMixerWindow-en</source>
-        <translation>http://rosegardenmusic.com/wiki/doc:audioMixerWindow-en</translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:audioMixerWindow-ja</translation>
     </message>
 </context>
 <context>
@@ -11415,7 +11415,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location line="+178"/>
         <source>http://rosegardenmusic.com/wiki/doc:audioPluginDialog-en</source>
-        <translation>http://rosegardenmusic.com/wiki/doc:audioPluginDialog-en</translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:audioPluginDialog-ja</translation>
     </message>
 </context>
 <context>
@@ -11642,7 +11642,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location line="+33"/>
         <source>http://rosegardenmusic.com/wiki/doc:audioSplitDialog-en</source>
-        <translation>http://rosegardenmusic.com/wiki/doc:audioSplitDialog-en</translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:audioSplitDialog-ja</translation>
     </message>
     <message>
         <location line="+41"/>
@@ -11791,7 +11791,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location line="+37"/>
         <source>http://rosegardenmusic.com/wiki/doc:bankEditorDialog-en</source>
-        <translation>http://rosegardenmusic.com/wiki/doc:bankEditorDialog-en</translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:bankEditorDialog-ja</translation>
     </message>
     <message>
         <location line="-768"/>
@@ -12437,7 +12437,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location line="+185"/>
         <source>http://rosegardenmusic.com/wiki/doc:controlEditorDialog-en</source>
-        <translation></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:controlEditorDialog-ja</translation>
     </message>
 </context>
 <context>
@@ -12720,7 +12720,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location line="+97"/>
         <source>http://rosegardenmusic.com/wiki/doc:device-manager-en</source>
-        <translation>http://rosegardenmusic.com/wiki/doc:device-manager-en</translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:device-manager-ja</translation>
     </message>
 </context>
 <context>
@@ -13622,7 +13622,7 @@ This could cause problems if it overrides a different computed value later on.</
     <message>
         <location line="+18"/>
         <source>http://rosegardenmusic.com/wiki/doc:eventView-en</source>
-        <translation>http://rosegardenmusic.com/wiki/doc:eventView-en</translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:eventView-ja</translation>
     </message>
 </context>
 <context>
@@ -13733,7 +13733,7 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location line="+38"/>
         <source>http://rosegardenmusic.com/wiki/doc:fileMergeDialog-en</source>
-        <translation>http://rosegardenmusic.com/wiki/doc:fileMergeDialog-en</translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:fileMergeDialog-ja</translation>
     </message>
 </context>
 <context>
@@ -14674,7 +14674,7 @@ Example text from file:</source>
     <message>
         <location line="+83"/>
         <source>http://rosegardenmusic.com/wiki/doc:interpretDialog-en</source>
-        <translation></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:interpretDialog-ja</translation>
     </message>
 </context>
 <context>
@@ -15152,7 +15152,7 @@ Would you like to use
     <message>
         <location line="+58"/>
         <source>http://rosegardenmusic.com/wiki/doc:manual-lilypondoptions-en</source>
-        <translation>http://rosegardenmusic.com/wiki/doc:manual-lilypondoptions-en</translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:manual-lilypondoptions-ja</translation>
     </message>
     <message>
         <location line="-172"/>
@@ -15492,7 +15492,7 @@ Would you like to use
     <message>
         <location line="+28"/>
         <source>http://rosegardenmusic.com/wiki/doc:lyricEditDialog-en</source>
-        <translation>http://rosegardenmusic.com/wiki/doc:lyricEditDialog-en</translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:lyricEditDialog-ja</translation>
     </message>
 </context>
 <context>
@@ -16027,7 +16027,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location line="+308"/>
         <source>http://rosegardenmusic.com/wiki/doc:markerEditor-en</source>
-        <translation>http://rosegardenmusic.com/wiki/doc:markerEditor-en</translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:markerEditor-ja</translation>
     </message>
 </context>
 <context>
@@ -17598,7 +17598,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location line="+75"/>
         <source>http://rosegardenmusic.com/wiki/doc:notation-en</source>
-        <translation>http://rosegardenmusic.com/wiki/doc:notation-en</translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:notation-ja</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -17841,7 +17841,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location line="+46"/>
         <source>http://rosegardenmusic.com/wiki/doc:pasteNotationDialog-en</source>
-        <translation>http://rosegardenmusic.com/wiki/doc:pasteNotationDialog-en</translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:pasteNotationDialog-ja</translation>
     </message>
 </context>
 <context>
@@ -17959,7 +17959,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location line="+175"/>
         <source>http://rosegardenmusic.com/wiki/doc:pitchBendSequenceDialog-en</source>
-        <translation>http://rosegardenmusic.com/wiki/doc:pitchBendSequenceDialog-en</translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:pitchBendSequenceDialog-ja</translation>
     </message>
     <message>
         <location line="-206"/>
@@ -19546,7 +19546,7 @@ Would you like to set it now?</source>
     <message>
         <location line="+1123"/>
         <source>http://rosegardenmusic.com/wiki/doc:manual-en</source>
-        <translation>http://rosegardenmusic.com/wiki/doc:manual-en</translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:manual-ja</translation>
     </message>
     <message>
         <location line="-6389"/>
@@ -21359,7 +21359,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location line="+26"/>
         <source>http://rosegardenmusic.com/wiki/doc:synth-plugin-manager-en</source>
-        <translation>http://rosegardenmusic.com/wiki/doc:synth-plugin-manager-en</translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:synth-plugin-manager-ja</translation>
     </message>
 </context>
 <context>
@@ -22897,7 +22897,7 @@ Would you like to set it now?</source>
     <message>
         <location line="+199"/>
         <source>http://rosegardenmusic.com/wiki/doc:triggerSegmentManager-en</source>
-        <translation>http://rosegardenmusic.com/wiki/doc:triggerSegmentManager-en</translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:triggerSegmentManager-ja</translation>
     </message>
 </context>
 <context>
