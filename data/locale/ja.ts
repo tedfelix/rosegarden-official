@@ -2237,7 +2237,7 @@
         <location line="+518"/>
         <location line="+1496"/>
         <source>Transpose by &amp;Interval...</source>
-        <translation>間隔でトランスポーズ(&amp;I)...</translation>
+        <translation>音程を指定して移調(&amp;I)...</translation>
     </message>
     <message>
         <location line="-3143"/>
@@ -14682,17 +14682,17 @@ Example text from file:</source>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="+47"/>
         <source>Specify Interval</source>
-        <translation>インターバルを指定</translation>
+        <translation>間隔を指定</translation>
     </message>
     <message>
         <location line="+13"/>
         <source>Reference note:</source>
-        <translation>参照する音譜:</translation>
+        <translation>元の音符:</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Target note:</source>
-        <translation>ターゲットの音符:</translation>
+        <translation>移調先の音符:</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -16402,7 +16402,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location line="+84"/>
         <source>Transpose</source>
-        <translation>トランスポーズ</translation>
+        <translation>移調</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -20229,7 +20229,7 @@ Error was : %2</source>
     <message>
         <location line="+31"/>
         <source>&lt;qt&gt;&lt;p&gt;Raise or lower playback of any selected segments by this number of semitones&lt;/p&gt;&lt;p&gt;&lt;i&gt;NOTE: This control changes segments that already exist.&lt;/i&gt;&lt;/p&gt;&lt;p&gt;&lt;i&gt;Use the transpose control in &lt;b&gt;Track Parameters&lt;/b&gt; under &lt;b&gt;Create segments with&lt;/b&gt; to pre-select this   setting before drawing or recording new segments.&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;この半音の数値で選択された任意のセグメントの再生を上げたり下げたりします。&lt;/p&gt;&lt;p&gt;&lt;i&gt;注意:このコントロールは既に存在するセグメントを変更します。&lt;/i&gt;&lt;/p&gt;&lt;i&gt;新しいセグメントの描画か録音設定の前に、これをあらかじめ選択するため、&lt;b&gt;Create segments with&lt;/b&gt;配下の&lt;b&gt;トラックパラメータ&lt;/b&gt;中のトランスポーズコントロールを使ってください。&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;この半音の数値で選択された任意のセグメントの再生を上げたり下げたりします。&lt;/p&gt;&lt;p&gt;&lt;i&gt;注意:このコントロールは既に存在するセグメントを変更します。&lt;/i&gt;&lt;/p&gt;&lt;i&gt;新しいセグメントの描画か録音設定の前に、これをあらかじめ選択するため、&lt;b&gt;セグメントの作成&lt;/b&gt;配下の&lt;b&gt;トラックパラメータ&lt;/b&gt;中のトランスポーズコントロールを使ってください。&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+17"/>
@@ -20595,7 +20595,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/commands/segment/SegmentTransposeCommand.h" line="+49"/>
         <source>Transpose by &amp;Interval...</source>
-        <translation>間隔でトランスポーズ(&amp;I)...</translation>
+        <translation>音程を指定して移調(&amp;I)...</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/SegmentTransposeCommand.cpp" line="+29"/>
