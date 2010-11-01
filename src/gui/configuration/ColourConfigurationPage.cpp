@@ -68,9 +68,15 @@ ColourConfigurationPage::ColourConfigurationPage(RosegardenDocument *doc, QWidge
                                    frame);
     layout->addWidget(addColourButton, 1, 0, Qt::AlignHCenter);
 
+    // disable until we can remove it after release
+    addColourButton->setEnabled(false);
+
     QPushButton* deleteColourButton = new QPushButton(tr("Delete Color"),
                                       frame);
     layout->addWidget(deleteColourButton, 1, 1, Qt::AlignHCenter);
+
+    // disable until we can remove it after release
+    deleteColourButton->setEnabled(false);
 
     connect(addColourButton, SIGNAL(clicked()),
             this, SLOT(slotAddNew()));

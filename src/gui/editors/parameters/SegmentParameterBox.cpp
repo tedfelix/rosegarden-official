@@ -414,6 +414,12 @@ SegmentParameterBox::slotDocColoursChanged()
 
     m_addColourPos = i;
     m_colourValue->addItem(tr("Add New Color"), m_addColourPos);
+    
+    // remove the item we just inserted; this leaves the translation alone, but
+    // eliminates the useless option
+    //
+    //!!! fix after release
+    m_colourValue->removeItem(m_addColourPos);
 
     m_colourValue->setCurrentIndex(0);
 }
