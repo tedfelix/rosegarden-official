@@ -42,14 +42,9 @@ namespace Rosegarden
 PropertyAdjuster::PropertyAdjuster(ControlRuler *parent) :
     ControlTool("", "PropertyAdjuster", parent)
 {
-//    createAction("select", SLOT(slotSelectSelected()));
-//    createAction("draw", SLOT(slotDrawSelected()));
-//    createAction("erase", SLOT(slotEraseSelected()));
-//    createAction("resize", SLOT(slotResizeSelected()));
-//
-//    createMenu();
-    if (dynamic_cast<ControllerEventsRuler *> (parent)) m_canSelect = true;
-    else m_canSelect = false;
+//    if (dynamic_cast<ControllerEventsRuler *> (parent)) m_canSelect = true;
+//    else m_canSelect = false;
+    m_canSelect = true;
 }
 
 void

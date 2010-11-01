@@ -16,17 +16,18 @@
 */
 
 
-#include <QPaintEvent>
 #include "PropertyViewRuler.h"
+#include "DefaultVelocityColour.h"
 
 #include "base/Event.h"
 #include "misc/Strings.h"
 #include "base/PropertyName.h"
 #include "base/RulerScale.h"
 #include "base/Segment.h"
-#include "DefaultVelocityColour.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/general/HZoomable.h"
+
+#include <QPaintEvent>
 #include <QFont>
 #include <QFontMetrics>
 #include <QPainter>
