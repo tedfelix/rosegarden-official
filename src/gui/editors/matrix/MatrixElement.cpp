@@ -103,6 +103,12 @@ MatrixElement::reconfigure(timeT time, timeT duration, int pitch, int velocity)
 
     m_velocity = velocity;
 
+    // if the note has TIED_FORWARD or TIED_BACK properties, draw it with a
+    // different fill pattern
+    bool tiedNote = (event()->has(BaseProperties::TIED_FORWARD) ||
+                     event()->has(BaseProperties::TIED_BACKWARD));
+    Qt::BrushStyle brushPattern = (tiedNote ? Qt::Dense2Pattern : Qt::SolidPattern);
+
     QColor colour;
     if (event()->has(BaseProperties::TRIGGER_SEGMENT_ID)) {
         //!!! Using gray for trigger events and events from other, non-active
@@ -135,7 +141,7 @@ MatrixElement::reconfigure(timeT time, timeT duration, int pitch, int velocity)
         item->setPolygon(polygon);
         item->setPen
             (QPen(GUIPalette::getColour(GUIPalette::MatrixElementBorder), 0));
-        item->setBrush(colour);
+        item->setBrush(QBrush(colour, brushPattern));
     } else {
         QGraphicsRectItem *item = dynamic_cast<QGraphicsRectItem *>(m_item);
         if (!item) {
@@ -150,7 +156,7 @@ MatrixElement::reconfigure(timeT time, timeT duration, int pitch, int velocity)
         item->setRect(rect);
         item->setPen
             (QPen(GUIPalette::getColour(GUIPalette::MatrixElementBorder), 0));
-        item->setBrush(colour);
+        item->setBrush(QBrush(colour, brushPattern));
     }
 
     setLayoutX(x0);
@@ -165,6 +171,9 @@ MatrixElement::reconfigure(timeT time, timeT duration, int pitch, int velocity)
 //              << std::endl;
 
     m_item->setPos(x0, (127 - pitch - m_pitchOffset) * (resolution + 1));
+
+    // set a tooltip explaining why this event is drawn in a different pattern
+    if (tiedNote) m_item->setToolTip(QObject::tr("This event is tied to another event."));
 }
 
 bool
