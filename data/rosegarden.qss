@@ -1444,7 +1444,7 @@ QComboBox::editable,
 QInputDialog QComboBox::editable,
 #RosegardenParameterArea QComboBox:editable
 {
-    background-color: orange;
+    background-color: #FFFFFF;
 }
 
 QComboBox::!editable,
