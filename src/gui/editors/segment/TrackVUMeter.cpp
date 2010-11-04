@@ -23,6 +23,7 @@
 #include <QFont>
 #include <QString>
 #include <QWidget>
+#include <iostream>
 
 
 namespace Rosegarden
@@ -40,9 +41,16 @@ TrackVUMeter::TrackVUMeter(QWidget *parent,
     setAlignment(Qt::AlignCenter);
 
     QFont font;
-    font.setPointSize(font.pointSize() * 95 / 100);
-    if (font.pointSize() > 14)
-        font.setPointSize(14);
+
+//    font.setPointSize(font.pointSize() * 95 / 100);
+//    if (font.pointSize() > 14)
+//        font.setPointSize(14);
+ 
+    // for reasons not understood, larger fonts are getting cut off in seriously
+    // annoying ways since Qt 4.6 or so; after much experimentation, putting in
+    // a hard limit seems to be the only reasonable way to address this
+    font.setPointSize(7);
+
     font.setBold(false);
     setFont(font);
 }
