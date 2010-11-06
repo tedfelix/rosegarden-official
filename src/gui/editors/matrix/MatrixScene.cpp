@@ -715,9 +715,47 @@ MatrixScene::setSingleSelectedEvent(MatrixViewSegment *vs,
                                     MatrixElement *e,
                                     bool preview)
 {
+    std::cout << "we're in A" << std::endl;
     if (!vs || !e) return;
     EventSelection *s = new EventSelection(vs->getSegment());
     s->addEvent(e->event());
+
+    if (e->event()->has(BaseProperties::TIED_FORWARD)) {
+        std::cout << "event has tied forward" << std::endl;
+
+        bool found = false;
+        long oldPitch = 0;
+        e->event()->get<Int>(PITCH, oldPitch);
+        for (Segment::iterator si = vs->getSegment().begin();
+             si != vs->getSegment().end(); ++si) {
+            // skip everything before and up through to the target event
+            if (*si != e->event() && !found) continue;
+            found = true;
+            
+            long newPitch = 0;
+            (*si)->get<Int>(PITCH, newPitch);
+
+            // forward from the target, find all notes that are tied backwards,
+            // until hitting the end of the segment or the first note at the
+            // same pitch that is not tied backwards.
+            if (oldPitch == newPitch) {
+                if ((*si)->has(BaseProperties::TIED_BACKWARD)) {
+                    std::cout << "found event with tied backwards that has same pitch" << std::endl;
+                    s->addEvent(*si);
+                } else {
+                    // break the search
+                    std::cout << "same pitch, not tied, breaking" << std::endl;
+                    if (*si != e->event()) si = vs->getSegment().end();
+                }
+            }
+        }
+
+    }
+    
+    if (e->event()->has(BaseProperties::TIED_BACKWARD)) {
+        std::cout << "event has tied back" << std::endl;
+    }
+
     setSelection(s, preview);
 }
 
