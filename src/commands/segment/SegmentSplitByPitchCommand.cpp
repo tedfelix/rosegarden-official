@@ -80,8 +80,10 @@ SegmentSplitByPitchCommand::execute()
         for (Segment::iterator i = m_segment->begin();
                 m_segment->isBeforeEndMarker(i); ++i) {
 
-            if ((*i)->isa(Note::EventRestType))
-                continue;
+            if ((*i)->isa(Note::EventRestType)) continue;
+            // just skip indications:
+            if ((*i)->isa(Indication::EventType)) continue;
+
             if ((*i)->isa(Clef::EventType) &&
                     m_clefHandling != LeaveClefs)
                 continue;
