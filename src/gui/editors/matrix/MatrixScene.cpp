@@ -752,12 +752,12 @@ MatrixScene::setSingleSelectedEvent(MatrixViewSegment *vs,
     
     if (e->event()->has(BaseProperties::TIED_BACKWARD)) {
 
-        bool found = false, endProcessing = false;
+        bool found = false;
         long oldPitch = 0;
         if (e->event()->has(BaseProperties::PITCH)) e->event()->get<Int>(PITCH, oldPitch);
         for (Segment::iterator si = vs->getSegment().end();
-             si != vs->getSegment().begin(); --si) {
-            if (endProcessing) continue; // kludge to get around a crash
+             si != vs->getSegment().begin(); ) {
+            --si; // has to be outside the for statement to reverse-iterate, apparently
             if (!(*si)->isa(Note::EventType)) continue;
             // skip everything before and up through to the target event
             if (*si != e->event() && !found) continue;
@@ -774,7 +774,7 @@ MatrixScene::setSingleSelectedEvent(MatrixViewSegment *vs,
                     s->addEvent(*si);
                 } else {
                     // break the search
-                    if (*si != e->event()) endProcessing = true;
+                    if (*si != e->event()) si = vs->getSegment().begin();
                 }
             }
         }
@@ -826,12 +826,12 @@ MatrixScene::setSingleSelectedEvent(Segment *seg,
     
     if (e->has(BaseProperties::TIED_BACKWARD)) {
 
-        bool found = false, endProcessing = false;
+        bool found = false;
         long oldPitch = 0;
         if (e->has(BaseProperties::PITCH)) e->get<Int>(PITCH, oldPitch);
         for (Segment::iterator si = seg->end();
-             si != seg->begin(); --si) {
-            if (endProcessing) continue; // kludge to get around a crash
+             si != seg->begin(); ) {
+            --si; // has to be outside the for statement to reverse-iterate, apparently
             if (!(*si)->isa(Note::EventType)) continue;
             // skip everything before and up through to the target event
             if (*si != e && !found) continue;
@@ -848,7 +848,7 @@ MatrixScene::setSingleSelectedEvent(Segment *seg,
                     s->addEvent(*si);
                 } else {
                     // break the search
-                    if (*si != e) endProcessing = true;
+                    if (*si != e) si = seg->begin();
                 }
             }
         }
