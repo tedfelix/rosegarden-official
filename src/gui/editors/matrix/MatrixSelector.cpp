@@ -522,7 +522,73 @@ MatrixSelector::getSelection(EventSelection *&selection)
                 //!!! NB. In principle, this element might not come
                 //!!! from the right segment (in practice we only have
                 //!!! one segment, but that may change)
+                //
+                // (and it has since that comment was written!  ramifications?)
+
                 selection->addEvent(element->event());
+
+                if (element->event()->has(BaseProperties::TIED_FORWARD)) {
+
+                    bool found = false;
+                    long oldPitch = 0;
+                    if (element->event()->has(BaseProperties::PITCH)) element->event()->get<Int>(BaseProperties::PITCH, oldPitch);
+                    for (Segment::iterator si = m_currentViewSegment->getSegment().begin();
+                         si != m_currentViewSegment->getSegment().end(); ++si) {
+                        if (!(*si)->isa(Note::EventType)) continue;
+                        // skip everything before and up through to the target element->event()
+                        if (*si != element->event() && !found) continue;
+                        found = true;
+                        
+                        long newPitch = 0;
+                        if ((*si)->has(BaseProperties::PITCH)) (*si)->get<Int>(BaseProperties::PITCH, newPitch);
+
+                        // forward from the target, find all notes that are tied backwards,
+                        // until hitting the end of the segment or the first note at the
+                        // same pitch that is not tied backwards.
+                        if (oldPitch == newPitch) {
+                            if ((*si)->has(BaseProperties::TIED_BACKWARD)) {
+                                selection->addEvent(*si);
+                            } else {
+                                // break the search
+                                if (*si != element->event()) si = m_currentViewSegment->getSegment().end();
+                            }
+                        }
+                    }
+
+                }
+                
+                if (element->event()->has(BaseProperties::TIED_BACKWARD)) {
+
+                    bool found = false, endProcessing = false;
+                    long oldPitch = 0;
+                    if (element->event()->has(BaseProperties::PITCH)) element->event()->get<Int>(BaseProperties::PITCH, oldPitch);
+                    for (Segment::iterator si = m_currentViewSegment->getSegment().end();
+                         si != m_currentViewSegment->getSegment().begin(); ) {
+                        --si;
+                        if (endProcessing) continue; // kludge to get around a crash
+                        if (!(*si)->isa(Note::EventType)) continue;
+                        // skip everything before and up through to the target element->event()
+                        if (*si != element->event() && !found) continue;
+                        found = true;
+                        
+                        long newPitch = 0;
+                        if ((*si)->has(BaseProperties::PITCH)) (*si)->get<Int>(BaseProperties::PITCH, newPitch);
+
+                        // back from the target, find all notes that are tied forward,
+                        // until hitting the end of the segment or the first note at the
+                        // same pitch that is not tied forward.
+                        if (oldPitch == newPitch) {
+                            if ((*si)->has(BaseProperties::TIED_FORWARD)) {
+                                selection->addEvent(*si);
+                            } else {
+                                // break the search
+                                if (*si != element->event()) endProcessing = true;
+                            }
+                        }
+                    }
+
+                }
+
             }
         }
     }
