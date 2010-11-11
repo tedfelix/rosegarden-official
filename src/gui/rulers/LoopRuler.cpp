@@ -74,7 +74,7 @@ LoopRuler::LoopRuler(RosegardenDocument *doc,
     //setAutoFillBackground(true);
     //setBackgroundColor(GUIPalette::getColour(GUIPalette::LoopRulerBackground));
 //    QString localStyle=("background: #787878; color: #FFFFFF;");
-//    this->setStyleSheet(localStyle);
+//    setStyleSheet(localStyle);
 
     // Always snap loop extents to beats; by default apply no snap to
     // pointer position
@@ -82,7 +82,7 @@ LoopRuler::LoopRuler(RosegardenDocument *doc,
     m_defaultGrid.setSnapTime(SnapGrid::NoSnap);
     m_loopGrid->setSnapTime(SnapGrid::SnapToBeat);
 
-    this->setToolTip(tr("<qt><p>Click and drag to move the playback pointer.</p><p>Shift-click and drag to set a range for looping or editing.</p><p>Shift-click to clear the loop or range.</p><p>Double-click to start playback.</p></qt>"));
+    setToolTip(tr("<qt><p>Click and drag to move the playback pointer.</p><p>Shift-click and drag to set a range for looping or editing.</p><p>Shift-click to clear the loop or range.</p><p>Ctrl-click and drag to move the playback pointer with snap to beat.</p><p>Double-click to start playback.</p></qt>"));
 }
 
 LoopRuler::~LoopRuler()
@@ -290,11 +290,22 @@ LoopRuler::mousePressEvent(QMouseEvent *mE)
         if (m_loopingMode) {
             m_endLoop = m_startLoop = m_loopGrid->snapX(x);
         } else {
+            // If we are still using the default grid, that means we are being
+            // used by the TrackEditor (instead of the MatrixEditor).
+            if (m_grid == &m_defaultGrid) {
+                // If the ctrl key is pressed, enable snap to beat
+                if ((bs & Qt::ControlModifier) != 0)
+                    m_defaultGrid.setSnapTime(SnapGrid::SnapToBeat);
+                else
+                    m_defaultGrid.setSnapTime(SnapGrid::NoSnap);
+            }
+            
             // No -- now that we're emitting when the button is
             // released, we _don't_ want to emit here as well --
             // otherwise we get an irritating stutter when simply
             // clicking on the ruler during playback
-//            RG_DEBUG << "emitting setPointerPosition(" << m_rulerScale->getTimeForX(x) << ")" << endl;
+//RG_DEBUG << "emitting setPointerPosition(" << 
+//    m_rulerScale->getTimeForX(x) << ")" << endl;
 //            emit setPointerPosition(m_rulerScale->getTimeForX(x));
 
             // But we want to see the pointer under the mouse as soon as the
@@ -362,6 +373,17 @@ LoopRuler::mouseDoubleClickEvent(QMouseEvent *mE)
 void
 LoopRuler::mouseMoveEvent(QMouseEvent *mE)
 {
+    // If we are still using the default grid, that means we are being
+    // used by the TrackEditor (instead of the MatrixEditor).
+    if (m_grid == &m_defaultGrid) {
+        Qt::ButtonState bs = mE->state();
+        // If the ctrl key is pressed, enable snap to beat
+        if ((bs & Qt::ControlModifier) != 0)
+            m_defaultGrid.setSnapTime(SnapGrid::SnapToBeat);
+        else
+            m_defaultGrid.setSnapTime(SnapGrid::NoSnap);
+    }
+
     double x = mouseEventToSceneX(mE);
     if (x < 0)
         x = 0;
