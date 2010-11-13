@@ -1549,7 +1549,7 @@ SegmentNotationHelper::autoBeamBar(iterator from, iterator to,
 
     } else {
 
-        if (num == 6 && denom == 8) { // special hack for 6/8
+        if (num % 3 == 0 && denom == 8) { // special hack for 6/8, 12/8 etc...
             average = 3 * Note(Note::Quaver).getDuration();
 
         } else {
