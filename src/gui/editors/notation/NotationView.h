@@ -220,6 +220,8 @@ protected slots:
     void slotGroupGeneralTuplet();
     void slotGroupTuplet(bool simple);
     void slotUpdateInsertModeStatus();
+    void slotUpdateInsertModeStatusTriplet();
+    void slotUpdateInsertModeStatusTuplet();
     void slotHalveDurations();
     void slotDoubleDurations();
     void slotRescale();
@@ -423,6 +425,7 @@ private:
     void setupActions();
     bool isInChordMode();
     bool isInTripletMode();
+    bool isInTupletMode();
     bool isInGraceMode();
 
     void setCurrentNotePixmap(QPixmap);

@@ -48,13 +48,30 @@ class NotationElement : public ViewElement
 public:
     typedef Exception NoGraphicsItem;
     
+    /**
+     * Create a new NotationElement encapsulating the Event in parameter
+     */
     NotationElement(Event *event);
 
+    /**
+     * Only destroy the graphical representation of the Event, not the Event itself (Obviously)
+     */
     ~NotationElement();
 
+    /**
+     * Returns the time at which the Event begins
+     */
     virtual timeT getViewAbsoluteTime() const;
+
+    /**
+     * Returns the duration of the Event
+     */
     virtual timeT getViewDuration() const;
 
+    /**
+     * Put in the parameters the suspected position and horizontal size of the item (does not usually corresponds to the position and size of the displayed element)
+     * These informations are computed in another class.
+     */
     void getLayoutAirspace(double &x, double &width) {
         x = m_airX;
         width = m_airWidth;
@@ -156,6 +173,9 @@ protected:
     bool m_recentlyRegenerated;
     bool m_isColliding;
 
+    /**
+     * The graphical representation of the event
+     */
     QGraphicsItem *m_item;
 
     typedef std::vector<QGraphicsItem *> ItemList;

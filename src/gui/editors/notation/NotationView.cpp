@@ -108,6 +108,7 @@
 #include "gui/dialogs/KeySignatureDialog.h"
 #include "gui/dialogs/IntervalDialog.h"
 #include "gui/dialogs/TupletDialog.h"
+#include "gui/dialogs/InsertTupletDialog.h"
 #include "gui/dialogs/RescaleDialog.h"
 #include "gui/dialogs/TempoDialog.h"
 #include "gui/dialogs/TimeSignatureDialog.h"
@@ -724,7 +725,8 @@ NotationView::setupActions()
     //"insert_note_actionmenu" coded below. 
 
     createAction("chord_mode", SLOT(slotUpdateInsertModeStatus()));
-    createAction("triplet_mode", SLOT(slotUpdateInsertModeStatus()));
+    createAction("triplet_mode", SLOT(slotUpdateInsertModeStatusTriplet()));
+    createAction("tuplet_mode", SLOT(slotUpdateInsertModeStatusTuplet()));
     createAction("grace_mode", SLOT(slotUpdateInsertModeStatus()));
     createAction("toggle_step_by_step", SLOT(slotToggleStepByStep()));
 
@@ -3344,18 +3346,44 @@ NotationView::slotGroupTuplet(bool simple)
 }
 
 void
+NotationView::slotUpdateInsertModeStatusTriplet()
+{
+    if (isInTripletMode()) {
+      m_notationWidget->setTupletMode(true);
+      m_notationWidget->setTupledCount();
+      m_notationWidget->setUntupledCount();
+      (findAction("tuplet_mode"))->setChecked(false);
+    } else m_notationWidget->setTupletMode(false);
+    slotUpdateInsertModeStatus();
+}
+
+void
+NotationView::slotUpdateInsertModeStatusTuplet()
+{
+    if (isInTupletMode()) {
+      m_notationWidget->setTupletMode(true);
+      InsertTupletDialog dialog(this, m_notationWidget->getUntupledCount(),  m_notationWidget->getTupledCount());
+      if (dialog.exec() == QDialog::Accepted) {
+        m_notationWidget->setTupledCount(dialog.getTupledCount());
+        m_notationWidget->setUntupledCount(dialog.getUntupledCount());
+      }
+      (findAction("triplet_mode"))->setChecked(false);
+    } else m_notationWidget->setTupletMode(false);
+    slotUpdateInsertModeStatus();
+}
+
+void
 NotationView::slotUpdateInsertModeStatus()
 {
-    QString tripletMessage = tr("Triplet");
+    QString tripletMessage = tr("Tuplet");
     QString chordMessage = tr("Chord");
     QString graceMessage = tr("Grace");
     QString message;
 
     m_notationWidget->setChordMode(isInChordMode());
-    m_notationWidget->setTripletMode(isInTripletMode());
     m_notationWidget->setGraceMode(isInGraceMode());
 
-    if (isInTripletMode()) {
+    if (isInTripletMode()||isInTupletMode()) {
         message = tr("%1 %2").arg(message).arg(tripletMessage);
     }
 
@@ -3381,6 +3409,13 @@ bool
 NotationView::isInTripletMode()
 {
     QAction* tac = findAction("triplet_mode");
+    return tac->isChecked();
+}
+
+bool
+NotationView::isInTupletMode()
+{
+    QAction* tac = findAction("tuplet_mode");
     return tac->isChecked();
 }
 

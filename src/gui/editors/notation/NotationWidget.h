@@ -78,11 +78,15 @@ public:
     timeT getInsertionTime() const;
 
     bool isInChordMode() { return m_chordMode; }
-    bool isInTripletMode() { return m_tripletMode; }
+    bool isInTupletMode() { return m_tupletMode; }
     bool isInGraceMode() { return m_graceMode; }
 
     void setChordMode(bool state = true) { m_chordMode = state; }
-    void setTripletMode(bool state = true) { m_tripletMode = state;}
+    void setTupletMode(bool state = true) { m_tupletMode = state;}
+    void setTupledCount(const unsigned short n = 2) { m_tupledCount = n;}
+    void setUntupledCount(const unsigned short d = 3) { m_untupledCount = d;}
+    unsigned int getTupledCount() const { return  m_tupledCount;}
+    unsigned int getUntupledCount() const { return  m_untupledCount;}
     void setGraceMode(bool state = true) { m_graceMode = state; }
 
     bool getPlayTracking() const { return m_playTracking; }
@@ -278,8 +282,11 @@ private:
     bool m_headersAreVisible;           // Only valid in linear mode
 
     bool m_chordMode;
-    bool m_tripletMode;
+    bool m_tupletMode;
     bool m_graceMode;
+
+    unsigned short m_tupledCount;
+    unsigned short m_untupledCount;
 
     bool m_updatesSuspended;
 

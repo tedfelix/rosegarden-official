@@ -47,6 +47,14 @@ LineEdit::LineEdit(const QString& string, QWidget *parent) :
     setStyleSheet(localStyle);
 }
 
+LineEdit::LineEdit(const QString & string, const QString & inputMask, QWidget * parent, const char * name) :
+        QLineEdit(string, inputMask, parent, name)
+{
+    // Leave everything but the background to the external stylesheet
+    QString localStyle = "background-color: #FFFFFF;";
+    setStyleSheet(localStyle);
+}
+
 LineEdit::~LineEdit()
 {
 }

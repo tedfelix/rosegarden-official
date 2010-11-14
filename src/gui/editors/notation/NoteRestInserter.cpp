@@ -470,7 +470,7 @@ NoteRestInserter::getOffsetWithinRest(NotationStaff *staff,
     //!!! To make this work correctly in tuplet mode, our divisor would
     // have to be the tupletified duration of the tuplet unit -- we can
     // do that, we just haven't yet
-    if (m_widget->isInTripletMode())
+    if (m_widget->isInTupletMode())
         return 0;
 
     NotationElement* el = static_cast<NotationElement*>(*i);
@@ -565,8 +565,8 @@ NoteRestInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
         timeT noteEnd = time + note.getDuration();
 
         // #1046934: make it possible to insert triplet at end of segment!
-        if (m_widget->isInTripletMode()) {
-            noteEnd = time + (note.getDuration() * 2 / 3);
+        if (m_widget->isInTupletMode()) {
+            noteEnd = time + (note.getDuration() * m_widget->getTupledCount() / m_widget->getUntupledCount());
         }
 
         if (time < segment.getStartTime() ||
@@ -584,13 +584,13 @@ NoteRestInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
 
         insertionCommand = new NoteInsertionCommand
             (segment, time, endTime, note, pitch, accidental,
-             (m_autoBeam && !m_widget->isInTripletMode() && !m_widget->isInGraceMode()) ?
+             (m_autoBeam && !m_widget->isInTupletMode() && !m_widget->isInGraceMode()) ?
              NoteInsertionCommand::AutoBeamOn : NoteInsertionCommand::AutoBeamOff,
              m_autoTieBarlines ? NoteInsertionCommand::AutoTieBarlinesOn : NoteInsertionCommand::AutoTieBarlinesOff,
              m_matrixInsertType && !m_widget->isInGraceMode() ?
              NoteInsertionCommand::MatrixModeOn : NoteInsertionCommand::MatrixModeOff,
              m_widget->isInGraceMode() ?
-             (m_widget->isInTripletMode() ?
+             (m_widget->isInTupletMode() ?
               NoteInsertionCommand::GraceAndTripletModesOn :
               NoteInsertionCommand::GraceModeOn)
              : NoteInsertionCommand::GraceModeOff,
@@ -600,7 +600,7 @@ NoteRestInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
 
         activeCommand = insertionCommand;
 
-        if (m_widget->isInTripletMode() && !m_widget->isInGraceMode()) {
+        if (m_widget->isInTupletMode() && !m_widget->isInGraceMode()) {
             Segment::iterator i(segment.findTime(time));
             if (i != segment.end() &&
                 !(*i)->has(BaseProperties::BEAMED_GROUP_TUPLET_BASE)) {
@@ -616,14 +616,15 @@ NoteRestInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
                 command->addCommand(new RestInsertionCommand
                                     (segment, time,
                                      time + note.getDuration() * 2,
-                                     Note::getNearestNote(note.getDuration() * 2)));
+                                     Note::getNearestNote(note.getDuration() * 2))); // have to find out what these 2 mean
                 //## }
                 //# These comments should probably be deleted.
             
 
                 command->addCommand(new TupletCommand
                                     (segment, time, note.getDuration(),
-                                     3, 2, true)); // #1046934: "has timing already"
+                                            m_widget->getUntupledCount(),
+                                            m_widget->getTupledCount(), true)); // #1046934: "has timing already"
                 command->addCommand(insertionCommand);
                 activeCommand = command;
             }
@@ -640,7 +641,7 @@ NoteRestInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
     
         activeCommand = insertionCommand;
 
-        if (m_widget->isInTripletMode()) {
+        if (m_widget->isInTupletMode()) {
             Segment::iterator i(segment.findTime(time));
             if (i != segment.end() &&
                 !(*i)->has(BaseProperties::BEAMED_GROUP_TUPLET_BASE)) { //+ scope
