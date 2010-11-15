@@ -20,8 +20,6 @@
 #include <QLayout>
 
 #include "base/NotationTypes.h"
-#include "gui/editors/notation/NotationStrings.h"
-#include "gui/editors/notation/NotePixmapFactory.h"
 #include "gui/widgets/LineEdit.h"
 #include <QComboBox>
 #include <QDialog>
@@ -35,8 +33,6 @@
 #include <QString>
 #include <QWidget>
 #include <QVBoxLayout>
-#include <QUrl>
-#include <QDesktopServices>
 #include <sstream>
 
 namespace Rosegarden
@@ -58,12 +54,14 @@ InsertTupletDialog::InsertTupletDialog(QWidget *parent, unsigned int untupledCou
     setLayout(metagrid);
     QWidget *vbox = new QWidget(this);
     QVBoxLayout *vboxLayout = new QVBoxLayout;
+    vbox->setLayout(vboxLayout);
     metagrid->addWidget(vbox, 0, 0);
 
 
     QGroupBox *timingBox = new QGroupBox( tr("New timing for tuplet group"), vbox );
     timingBox->setContentsMargins(5, 5, 5, 5);
-    QGridLayout *timingLayout = new QGridLayout(timingBox);
+    QGridLayout *timingLayout = new QGridLayout;
+    timingBox->setLayout(timingLayout);
     timingLayout->setSpacing(5);
     vboxLayout->addWidget(timingBox);
 

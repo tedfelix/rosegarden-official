@@ -103,9 +103,9 @@ TupletDialog::TupletDialog(QWidget *parent, Note::Type defaultUnitType,
     timingLayout->addWidget(m_tupledCombo, 1, 1);
 
     m_hasTimingAlready = new QCheckBox
-                         (tr("Timing is already correct: update display only"), timingBox);
+        (tr("Timing is already correct: update display only"), timingBox);
     m_hasTimingAlready->setChecked(false);
-    timingLayout->addWidget(m_hasTimingAlready, 2, 0, 0+1, 2- 1);
+    timingLayout->addWidget(m_hasTimingAlready, 2, 0, 1, 3);
 
     timingBox->setLayout(timingLayout);
 
