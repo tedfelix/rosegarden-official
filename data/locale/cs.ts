@@ -3978,7 +3978,7 @@
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3361"/>
-        <source>Insert rest</source>
+        <source>Insert Rest</source>
         <translation>Vložit pomlku</translation>
     </message>
     <message>

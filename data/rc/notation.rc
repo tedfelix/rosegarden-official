@@ -555,7 +555,7 @@
       </Menu>
     </Menu>
 
-    <Action name="insert_rest" text="Insert rest" shortcut="P" />
+    <Action name="insert_rest" text="Insert Rest" shortcut="P" />
 
     <Action name="chord_mode" text="C&amp;hord Insert Mode" icon="chord" shortcut="H" checked="false" />
     <Action name="triplet_mode" text="Triplet Insert Mo&amp;de" icon="triplet" shortcut="G" checked="false" />

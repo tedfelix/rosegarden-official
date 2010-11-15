@@ -3486,7 +3486,7 @@
     </message>
     <message>
         <location line="+154"/>
-        <source>Insert rest</source>
+        <source>Insert Rest</source>
         <translation>休符の挿入</translation>
     </message>
     <message>

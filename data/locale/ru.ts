@@ -4927,7 +4927,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     </message>
     <message>
         <location line="+464"/>
-        <source>Insert rest</source>
+        <source>Insert Rest</source>
         <translation>Вставить паузу</translation>
     </message>
     <message>

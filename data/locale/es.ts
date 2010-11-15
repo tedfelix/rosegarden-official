@@ -3785,7 +3785,7 @@
     </message>
     <message>
         <location line="+154"/>
-        <source>Insert rest</source>
+        <source>Insert Rest</source>
         <translation>Insertar silencio</translation>
     </message>
     <message>
