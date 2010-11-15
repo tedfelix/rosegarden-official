@@ -54,9 +54,10 @@ typedef long timeT;
 class Event
 {
 public:
-	/**
-	 * Exception raised when the user tries to acess a property/data that is not present in the event
-	 */
+    /**
+     * Exception raised when the user tries to acess a property/data
+     * that is not present in the event
+     */
     class NoData : public Exception {
     public:
         NoData(std::string property) :
@@ -66,7 +67,8 @@ public:
     };
 
     /**
-     * Exception raised when the user tries to access a property/data with the wrong type
+     * Exception raised when the user tries to access a property/data
+     * with the wrong type
      */
     class BadType : public Exception {
     public:
@@ -179,9 +181,11 @@ public:
     ///////////////////////////////////////////////////////////
 
     /**
-     * Returns the type of the Event (usually a Note, an Accidental, a Key ... see NotationTypes.h for more information)
+     * Returns the type of the Event (usually a Note, an Accidental, a
+     * Key ... see NotationTypes.h for more examples)
      */
     const std::string &getType() const    { return  m_data->m_type; }
+
     /**
      * Tests if the Event is of the type in parameter
      */
@@ -213,7 +217,8 @@ public:
     bool get(const PropertyName &name, typename PropertyDefn<P>::basic_type &val) const;
 
     /**
-     * Tests if the specified property/data is persistent (is copied when duplicating the event) or not
+     * Tests if the specified property/data is persistent (is copied
+     * when duplicating the event) or not
      * \throws NoData if the property/data is not present in the Event
      */
     template <PropertyType P>
@@ -245,7 +250,9 @@ public:
     std::string getAsString(const PropertyName &name) const;
 
     /**
-     * Define the value of the specified property/data. If the property/data already exists, this function just modifies the stored value, and if not, it creates the association.
+     * Define the value of the specified property/data. If the
+     * property/data already exists, this function just modifies the
+     * stored value, and if not, it creates the association.
      * \param name the name of the property/data
      * \param value the value of the property/data
      * \throws BadType if the specified type does not correspond to the type of the value
@@ -255,7 +262,8 @@ public:
              bool persistent = true);
 
     /**
-     * Stores the specified value in the property/data only if it doesn't already exists as a persistent value
+     * Stores the specified value in the property/data only if it
+     * doesn't already exists as a persistent value
      * \param name the name of the property/data
      * \param value the value of the property/data
      * \throws BadType if the specified type does not correspond to the type of the value
@@ -264,7 +272,9 @@ public:
     void setMaybe(const PropertyName &name, typename PropertyDefn<P>::basic_type value);
 
     /**
-     * Define the value of the specified property/data. If the property/data already exists, this function just modifies the stored value, and if not, it creates the association.
+     * Define the value of the specified property/data. If the
+     * property/data already exists, this function just modifies the
+     * stored value, and if not, it creates the association.
      * \param name the name of the property/data
      * \param value the value of the property/data in a string form. This string will be parsed to compute the actual value stored in the property/data
      * \throws BadType if the parsing does not goes well (i.e. the string does not correspond to a value of the specified type)
@@ -275,7 +285,9 @@ public:
 
     /**
      * Destroy the specified property/data
-     * If the property/data does not exists in the Event, this function does nothing
+     *
+     * If the property/data does not exist in the Event, this
+     * function does nothing
      */
     void unset(const PropertyName &name);
 
@@ -293,7 +305,8 @@ public:
     void clearNonPersistentProperties();
 
     /**
-     * Structure used to create sets and multisets of Event, like Segment
+     * Comparator structure used when creating sets and multisets of
+     * Event, like Segment
      */
     struct EventCmp
     {
@@ -306,7 +319,9 @@ public:
     };
 
     /**
-     * Structure used to export music to other format, like XML files or Lilypond files
+     * Comparator structure used to compare end times of events, used
+     * for example in classes that export to other formats, like
+     * MusicXML or Lilypond
      */
     struct EventEndCmp
     {
@@ -321,14 +336,14 @@ public:
     };
 
     /**
-     * Tests if the input Event starts before (strict) the tiem in parameter
+     * Tests if the input Event starts before (strict) the time in parameter
      */
     static bool compareEvent2Time(const Event *e, timeT t) {
         return e->getAbsoluteTime() < t;
     }
 
     /**
-     * Tests if the input Event starts after (strict) the tiem in parameter
+     * Tests if the input Event starts after (strict) the time in parameter
      */
     static bool compareTime2Event(timeT t, const Event *e) {
         return t <  e->getAbsoluteTime();

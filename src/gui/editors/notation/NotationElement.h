@@ -49,28 +49,40 @@ public:
     typedef Exception NoGraphicsItem;
     
     /**
-     * Create a new NotationElement encapsulating the Event in parameter
+     * Create a new NotationElement encapsulating the Event in
+     * parameter.  NotationElement does not take ownership of the
+     * event itself.
      */
     NotationElement(Event *event);
 
     /**
-     * Only destroy the graphical representation of the Event, not the Event itself (Obviously)
+     * Only destroy the graphical representation of the Event, not the
+     * Event itself
      */
     ~NotationElement();
 
     /**
-     * Returns the time at which the Event begins
+     * Returns the time at which the Event is to be displayed in
+     * notation (usually the result of notation quantization on the
+     * raw event time)
      */
     virtual timeT getViewAbsoluteTime() const;
 
     /**
-     * Returns the duration of the Event
+     * Returns the duration with which the Event is to be displayed in
+     * notation (usually the result of notation quantization on the
+     * raw event duration)
      */
     virtual timeT getViewDuration() const;
 
     /**
-     * Put in the parameters the suspected position and horizontal size of the item (does not usually corresponds to the position and size of the displayed element)
-     * These informations are computed in another class.
+     * Return the position and horizontal size spanned by the item,
+     * including adjoining space that "belongs" to the item.  This is
+     * used when calculating which element is "under" the mouse
+     * position.  The values are usually more extensive than the
+     * position and size of the displayed element.  These are computed
+     * by NotationHLayout and set to this class using
+     * setLayoutAirspace
      */
     void getLayoutAirspace(double &x, double &width) {
         x = m_airX;
@@ -166,8 +178,6 @@ public:
     static NotationElement *getNotationElement(QGraphicsItem *);
 
 protected:
-    //--------------- Data members ---------------------------------
-
     double m_airX;
     double m_airWidth;
     bool m_recentlyRegenerated;
