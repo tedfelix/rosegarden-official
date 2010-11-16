@@ -44,7 +44,6 @@ class LineEdit : public QLineEdit
 public:
     LineEdit(QWidget *parent=0);
     LineEdit(const QString&, QWidget *parent=0);
-    LineEdit(const QString&, const QString&, QWidget *parent=0, const char *name=0);
     ~LineEdit();
 };
 
