@@ -20,7 +20,7 @@
 #include <QLayout>
 
 #include "base/NotationTypes.h"
-#include "gui/widgets/LineEdit.h"
+#include <QSpinBox>
 #include <QComboBox>
 #include <QDialog>
 #include <QDialogButtonBox>
@@ -33,7 +33,6 @@
 #include <QString>
 #include <QWidget>
 #include <QVBoxLayout>
-#include <sstream>
 
 namespace Rosegarden
 {
@@ -42,9 +41,6 @@ InsertTupletDialog::InsertTupletDialog(QWidget *parent, unsigned int untupledCou
         unsigned int tupledCount) :
         QDialog(parent)
 {
-    std::ostringstream untupledCountStr, tupledCountStr;
-    untupledCountStr << untupledCount;
-    tupledCountStr << tupledCount;
 
     //setHelp("nv-tuplets");
     setModal(true);
@@ -67,12 +63,14 @@ InsertTupletDialog::InsertTupletDialog(QWidget *parent, unsigned int untupledCou
 
 
     timingLayout->addWidget(new QLabel(tr("Play "), timingBox), 0, 0);
-    m_untupledLine = new LineEdit(QString((untupledCountStr.str()).c_str()),QString("99"),timingBox);
-    timingLayout->addWidget(m_untupledLine, 0, 1);
+    m_untupledSpin = new QSpinBox(1,99,1,parent);
+    m_untupledSpin->setValue(untupledCount);
+    timingLayout->addWidget(m_untupledSpin, 0, 1);
 
     timingLayout->addWidget(new QLabel(tr("in the time of  "), timingBox), 1, 0);
-    m_tupledLine = new LineEdit(QString((tupledCountStr.str()).c_str()),QString("99"),timingBox);
-    timingLayout->addWidget(m_tupledLine, 1, 1);
+    m_tupledSpin = new QSpinBox(1,99,1,parent);
+    m_tupledSpin->setValue(tupledCount);
+    timingLayout->addWidget(m_tupledSpin, 1, 1);
 
 
 
@@ -89,23 +87,13 @@ InsertTupletDialog::InsertTupletDialog(QWidget *parent, unsigned int untupledCou
 unsigned int
 InsertTupletDialog::getUntupledCount() const
 {
-    bool isNumeric = true;
-    int count = m_untupledLine->text().toInt(&isNumeric);
-    if (count == 0 || !isNumeric)
-        return 1;
-    else
-        return count;
+     return m_untupledSpin->value();
 }
 
 unsigned int
 InsertTupletDialog::getTupledCount() const
 {
-    bool isNumeric = true;
-    int count = m_tupledLine->text().toInt(&isNumeric);
-    if (count == 0 || !isNumeric)
-        return 1;
-    else
-        return count;
+     return m_tupledSpin->value();
 }
 
 

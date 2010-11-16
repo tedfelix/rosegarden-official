@@ -26,17 +26,14 @@
 
 class QWidget;
 class QString;
-class QLabel;
+class QSpinBox;
 class QGroupBox;
-class QCheckBox;
-class QComboBox;
 
 
 
 namespace Rosegarden
 {
 
-class LineEdit;
 
 
 class InsertTupletDialog : public QDialog
@@ -56,8 +53,8 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    LineEdit *m_untupledLine;
-    LineEdit *m_tupledLine;
+    QSpinBox *m_untupledSpin;
+    QSpinBox *m_tupledSpin;
 
 
     QGroupBox *m_timingDisplayGrid;
