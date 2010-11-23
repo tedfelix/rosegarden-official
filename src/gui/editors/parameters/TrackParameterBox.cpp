@@ -798,14 +798,24 @@ TrackParameterBox::slotPlaybackDeviceChanged(int index)
         devId = m_playDeviceIds[index];
     }
 
+    // used to be "General MIDI Device #7" now we change to "QSynth Device" and
+    // we want to remember the #7 bit
+    int previousIndex = m_instrument->currentIndex();
+
+    // clear the instrument combo and re-populate it from the new device
     m_instrument->clear();
     m_instrument->addItems(m_instrumentNames[devId]);
+
+    // try to keep the same index (the #7 bit) as was in use previously, unless
+    // the new instrument has fewer indices available than the previous one did,
+    // in which case we just go with the highest valid index available
+    if (previousIndex > m_instrument->count()) previousIndex = m_instrument->count();
 
     populateRecordingDeviceList();
 
     if (index != -1) {
-        m_instrument->setCurrentIndex(0);
-        slotInstrumentChanged(0);
+        m_instrument->setCurrentIndex(previousIndex);
+        slotInstrumentChanged(previousIndex);
     }
 }
 
