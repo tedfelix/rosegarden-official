@@ -41,8 +41,11 @@ Panner::Panner() :
 {
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    setOptimizationFlags(QGraphicsView::DontSavePainterState |
-			 QGraphicsView::IndirectPainting);
+    setOptimizationFlags(QGraphicsView::DontSavePainterState
+#if QT_VERSION >= 0x040600
+                         |QGraphicsView::IndirectPainting
+#endif
+                        );
     setMouseTracking(true);
     setInteractive(false);
 }
