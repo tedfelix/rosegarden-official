@@ -22,7 +22,9 @@
 #include "misc/Strings.h"
 #include "base/Event.h"
 #include "base/NotationTypes.h"
+//#include "base/BaseProperties.h"
 #include "gui/editors/notation/NotationStrings.h"
+
 #include <QString>
 
 
@@ -128,9 +130,14 @@ XmlStorableEvent::XmlStorableEvent(const QXmlAttributes &attributes,
             }
         }
     }
+/*
+    if (isa(Note::EventType)
+        && getDuration() < 1
+        && !has(BaseProperties::IS_GRACE_NOTE)) {
 
-    if (isa(Note::EventType) && getDuration() < 1)
         setDuration(1);
+    }
+*/
     setAbsoluteTime(absoluteTime);
 }
 

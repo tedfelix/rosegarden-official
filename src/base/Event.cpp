@@ -19,6 +19,7 @@
 #include "Event.h"
 #include "XmlExportable.h"
 #include "NotationTypes.h"
+#include "BaseProperties.h"
 
 #include <sstream>
 
@@ -223,7 +224,10 @@ Event::toXmlString(timeT expectedTime)
     // and many events are indeed 0 duration events.
     timeT duration = getDuration();
     
-    if (isa(Note::EventType) && duration < 1) {
+    if (isa(Note::EventType) &&
+        duration < 1 &&
+        !has(BaseProperties::IS_GRACE_NOTE)) {
+
         duration = 1;
     }
     
