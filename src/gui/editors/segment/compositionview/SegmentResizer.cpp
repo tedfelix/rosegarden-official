@@ -85,7 +85,6 @@ void SegmentResizer::slotCanvasScrolled(int newX, int newY)
 void SegmentResizer::handleMouseButtonPress(QMouseEvent *e)
 {
     RG_DEBUG << "SegmentResizer::handleMouseButtonPress" << endl;
-    m_canvas->getModel()->clearSelected();
 
     CompositionItem item = m_canvas->getFirstItemAt(e->pos());
 
@@ -100,7 +99,9 @@ void SegmentResizer::handleMouseButtonPress(QMouseEvent *e)
             m_resizeStart = false;
         }
 
-        m_canvas->getModel()->startChange(item, m_resizeStart ? CompositionModel::ChangeResizeFromStart : CompositionModel::ChangeResizeFromEnd);
+        m_canvas->getModel()->startChange(item, 
+            m_resizeStart ? CompositionModel::ChangeResizeFromStart :
+                            CompositionModel::ChangeResizeFromEnd);
 
     }
 }

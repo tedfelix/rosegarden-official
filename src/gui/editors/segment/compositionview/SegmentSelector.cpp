@@ -121,10 +121,11 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
 
         if ((!m_segmentAddMode ||
              !m_canvas->getModel()->haveSelection()) &&
-            SegmentResizer::cursorIsCloseEnoughToEdge(item, e->pos(), threshold, start)) {
+            SegmentResizer::cursorIsCloseEnoughToEdge(
+                item, e->pos(), threshold, start)) {
 
-            SegmentResizer* resizer =
-                dynamic_cast<SegmentResizer*>(getToolBox()->getTool(SegmentResizer::ToolName));
+            SegmentResizer* resizer = dynamic_cast<SegmentResizer*>(
+                getToolBox()->getTool(SegmentResizer::ToolName));
 
             resizer->setEdgeThreshold(threshold);
 
@@ -132,12 +133,13 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
             // at a time.
             //
             m_canvas->getModel()->clearSelected();
+            m_canvas->getModel()->setSelected(item);
 
             m_dispatchTool = resizer;
 
             m_dispatchTool->ready(); // set mouse cursor
             m_dispatchTool->handleMouseButtonPress(e);
-            return ;
+            return;
         }
 
         bool selecting = true;
