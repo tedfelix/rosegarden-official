@@ -10758,12 +10758,12 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
         <location filename="../../src/sound/PeakFileManager.h" line="+61"/>
         <location line="+2"/>
         <source>Bad peak file </source>
-        <translation type="unfinished">Cattivo picco di file</translation>
+        <translation>Cattivo picco di file</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Bad peak file (malformed audio?) </source>
-        <translation type="unfinished">Cattivo picco di file (file malfatto?)</translation>
+        <translation>Cattivo picco di file (file malfatto?)</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="+64"/>
@@ -21035,7 +21035,7 @@ Vuoi impostarla adesso?</translation>
     <message>
         <location line="-233"/>
         <source>http://rosegardenmusic.com/tutorials/</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/tutorials/</translation>
     </message>
     <message>
         <location line="+479"/>
@@ -21616,7 +21616,7 @@ L&apos;errore è: %2</translation>
     <message>
         <location filename="../../src/commands/segment/SegmentJoinCommand.h" line="+48"/>
         <source>&amp;Join</source>
-        <translation type="unfinished">&amp;Unisci</translation>
+        <translation>&amp;Unisci</translation>
     </message>
 </context>
 <context>
@@ -24809,55 +24809,55 @@ Vuoi impostarlo adesso?</translation>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="+25"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1047"/>
         <source>Rosegarden Transport</source>
-        <translation type="unfinished">Trasporto di Rosegarden</translation>
+        <translation>Trasporto di Rosegarden</translation>
     </message>
     <message>
         <location line="+34"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+2"/>
         <source>Hide additional controls</source>
-        <translation type="unfinished">Nascondi i controlli aggiuntivi</translation>
+        <translation>Nascondi i controlli aggiuntivi</translation>
     </message>
     <message>
         <location line="+36"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Panic Button</source>
-        <translation type="unfinished">Bottone di allarme</translation>
+        <translation>Bottone di allarme</translation>
     </message>
     <message>
         <location line="+3"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Resets all MIDI devices if you&apos;ve got stuck notes</source>
-        <translation type="unfinished">Azzera tutti i dispositivi MIDI se ci sono note bloccate</translation>
+        <translation>Azzera tutti i dispositivi MIDI se ci sono note bloccate</translation>
     </message>
     <message>
         <location line="+35"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Metronome</source>
-        <translation type="unfinished">Metronomo</translation>
+        <translation>Metronomo</translation>
     </message>
     <message>
         <location line="+3"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Provides a metronome click for you to play along with</source>
-        <translation type="unfinished">Produce un battito del metronomo da seguire per suonare</translation>
+        <translation>Produce un battito del metronomo da seguire per suonare</translation>
     </message>
     <message>
         <location line="+465"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Shows MIDI activity in and out of Rosegarden</source>
-        <translation type="unfinished">Mostra l&apos;attività MIDI fuori e dentro Rosegarden</translation>
+        <translation>Mostra l&apos;attività MIDI fuori e dentro Rosegarden</translation>
     </message>
     <message>
         <location line="+469"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+2"/>
         <source>IN</source>
-        <translation type="unfinished">Ingresso</translation>
+        <translation>Ingresso</translation>
     </message>
     <message>
         <location line="+464"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
         <source>OUT</source>
-        <translation type="unfinished">Uscita</translation>
+        <translation>Uscita</translation>
     </message>
     <message>
         <location line="+465"/>
@@ -24865,181 +24865,181 @@ Vuoi impostarlo adesso?</translation>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
         <location line="+1"/>
         <source>NO EVENTS</source>
-        <translation type="unfinished">NESSUN EVENTO</translation>
+        <translation>NESSUN EVENTO</translation>
     </message>
     <message>
         <location line="+23"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+2"/>
         <source>Record</source>
-        <translation type="unfinished">Registra</translation>
+        <translation>Registra</translation>
     </message>
     <message>
         <location line="+3"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Record either MIDI or audio</source>
-        <translation type="unfinished">Registra MIDI oppure audio</translation>
+        <translation>Registra MIDI oppure audio</translation>
     </message>
     <message>
         <location line="+41"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Loop</source>
-        <translation type="unfinished">Ciclico</translation>
+        <translation>Ciclico</translation>
     </message>
     <message>
         <location line="+3"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Turn on and off the loop markers (if set)</source>
-        <translation type="unfinished">Accendi e spegni i marcatori della ripetizione (se attivati)</translation>
+        <translation>Accendi e spegni i marcatori della ripetizione (se attivati)</translation>
     </message>
     <message>
         <location line="+41"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Solo</source>
-        <translation type="unfinished">Solo</translation>
+        <translation>Solo</translation>
     </message>
     <message>
         <location line="+3"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Mutes all but the currently selected track</source>
-        <translation type="unfinished">Rendi silenziose tutte le tracce tranne quella selezionata</translation>
+        <translation>Rendi silenziose tutte le tracce tranne quella selezionata</translation>
     </message>
     <message>
         <location line="+23"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Start loop or range here</source>
-        <translation type="unfinished">Inizia qui il ciclo o l&apos;intervallo</translation>
+        <translation>Inizia qui il ciclo o l&apos;intervallo</translation>
     </message>
     <message>
         <location line="+20"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>End loop or range here</source>
-        <translation type="unfinished">Chiudi qui il ciclo o l&apos;intervallo</translation>
+        <translation>Chiudi qui il ciclo o l&apos;intervallo</translation>
     </message>
     <message>
         <location line="+1037"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>SIG</source>
-        <translation type="unfinished">SIG</translation>
+        <translation>SIG</translation>
     </message>
     <message>
         <location line="+464"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
         <source>DIV</source>
-        <translation type="unfinished">DIV</translation>
+        <translation>DIV</translation>
     </message>
     <message>
         <location line="+465"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
         <source>/16</source>
-        <translation type="unfinished">/16</translation>
+        <translation>/16</translation>
     </message>
     <message>
         <location line="+467"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
         <source>TEMPO</source>
-        <translation type="unfinished">TEMPO</translation>
+        <translation>TEMPO</translation>
     </message>
     <message>
         <location line="+474"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
         <source>END</source>
-        <translation type="unfinished">FINE</translation>
+        <translation>FINE</translation>
     </message>
     <message>
         <location line="+467"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
         <source>BAR</source>
-        <translation type="unfinished">BATTUTA</translation>
+        <translation>BATTUTA</translation>
     </message>
     <message>
         <location line="+151"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+2"/>
         <source>Switch between real time, musical time, and frame count</source>
-        <translation type="unfinished">Commuta tra tempo reale, tempo musicale e conteggio dei frame</translation>
+        <translation>Commuta tra tempo reale, tempo musicale e conteggio dei frame</translation>
     </message>
     <message>
         <location line="+33"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Show additional controls</source>
-        <translation type="unfinished">Mostra i controlli aggiuntivi</translation>
+        <translation>Mostra i controlli aggiuntivi</translation>
     </message>
     <message>
         <location line="+36"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Rewind</source>
-        <translation type="unfinished">Riavvolgi</translation>
+        <translation>Riavvolgi</translation>
     </message>
     <message>
         <location line="+3"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Moves the current pointer position back one bar.</source>
-        <translation type="unfinished">Muove li puntatore indietro di una battuta.</translation>
+        <translation>Muove li puntatore indietro di una battuta.</translation>
     </message>
     <message>
         <location line="+29"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Rewind to beginning</source>
-        <translation type="unfinished">Indietro all&apos;inizio</translation>
+        <translation>Indietro all&apos;inizio</translation>
     </message>
     <message>
         <location line="+3"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Moves the pointer position to the start of the composition. (This may mean going forwards if the pointer is currently before the start.)</source>
-        <translation type="unfinished">Muove il puntatore all&apos;inizio della composizione.  (Questo può significare un avanzamento se il puntatore si trova prima dell&apos;inizio.)</translation>
+        <translation>Muove il puntatore all&apos;inizio della composizione.  (Questo può significare un avanzamento se il puntatore si trova prima dell&apos;inizio.)</translation>
     </message>
     <message>
         <location line="+26"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Play/Pause</source>
-        <translation type="unfinished">Riproduci/Pausa</translation>
+        <translation>Riproduci/Pausa</translation>
     </message>
     <message>
         <location line="+3"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Plays from the current pointer position, or pauses playback if already in progress.</source>
-        <translation type="unfinished">Suona dalla posizione corrente, o mette in pausa se sta già suonando.</translation>
+        <translation>Suona dalla posizione corrente, o mette in pausa se sta già suonando.</translation>
     </message>
     <message>
         <location line="+38"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Stop</source>
-        <translation type="unfinished">Iterrompi</translation>
+        <translation>Iterrompi</translation>
     </message>
     <message>
         <location line="+3"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Stops playback or recording.</source>
-        <translation type="unfinished">Arresta la riproduzione o la registrazione.</translation>
+        <translation>Arresta la riproduzione o la registrazione.</translation>
     </message>
     <message>
         <location line="+32"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Fast forward</source>
-        <translation type="unfinished">Avanti veloce</translation>
+        <translation>Avanti veloce</translation>
     </message>
     <message>
         <location line="+3"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Moves the current pointer position forwards one bar.</source>
-        <translation type="unfinished">Muove li puntatore avanti di una battuta.</translation>
+        <translation>Muove li puntatore avanti di una battuta.</translation>
     </message>
     <message>
         <location line="+29"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Fast forward to end</source>
-        <translation type="unfinished">Avanti veloce fino alla fine</translation>
+        <translation>Avanti veloce fino alla fine</translation>
     </message>
     <message>
         <location line="+3"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Moves the pointer position to the end of the composition.  (This may mean going backwards if the pointer is already beyond the end.)</source>
-        <translation type="unfinished">Muove il puntatore alla fine della composizione.  (Questo può significare un ritorno indietro se il puntatore si trova oltre la fine.)</translation>
+        <translation>Muove il puntatore alla fine della composizione.  (Questo può significare un ritorno indietro se il puntatore si trova oltre la fine.)</translation>
     </message>
     <message>
         <location line="+27"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Display time to end</source>
-        <translation type="unfinished">Mostra il tempo alla fine</translation>
+        <translation>Mostra il tempo alla fine</translation>
     </message>
 </context>
 <context>
