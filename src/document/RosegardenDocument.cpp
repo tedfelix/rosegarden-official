@@ -2076,7 +2076,7 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
                         (*recordMIDISegment,
                          updateFrom,
                          recordMIDISegment->getEndTime(),
-                         "Notation Options",
+                         NotationOptionsConfigGroup,
                          EventQuantizeCommand::QUANTIZE_NOTATION_ONLY);
                     // don't add to history
                     command->execute();
@@ -2365,7 +2365,7 @@ RosegardenDocument::stopRecordingMidi()
                             (*s,
                              s->getStartTime(),
                              s->getEndTime(),
-                             "Notation Options",
+                             NotationOptionsConfigGroup,
                              EventQuantizeCommand::QUANTIZE_NOTATION_ONLY));
 
         command->addCommand(new NormalizeRestsCommand
