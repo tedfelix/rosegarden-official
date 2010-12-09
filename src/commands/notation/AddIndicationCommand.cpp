@@ -137,7 +137,21 @@ EventSelection *
 AddIndicationCommand::getSubsequentSelection()
 {
     EventSelection *selection = new EventSelection(getSegment());
-    selection->addEvent(getLastInsertedEvent());
+    //!!! EXPERIMENTAL: Let's see if any users notice and complain about this.
+    // The behavior up to now has been to leave the indication that was just
+    // created the only thing selected in the segment after adding it.  The nice
+    // thing about that is that it shows you in blue what you just did, and
+    // primes you to do something else with the indication.  However, I'm facing
+    // several hundred groups of notes I have to add slurs to, and using the
+    // keyboard for this is the only sane way to go.  With the old behavior, I
+    // have to remember to hit escape in between groups to clear the selection
+    // away from the slur I created on the last iteration.  If I don't, the next
+    // slur will begin in the same place the last one did.  Having to hit escape
+    // in between iterations is awkward, and not sitting well with my fingers at
+    // all.  I keep messing it up, and it made me crazy enough to hunt this down
+    // and make it stop.  So let's turn the following line off, and see if there
+    // are any negative repercussions:
+//    selection->addEvent(getLastInsertedEvent());
     return selection;
 }
 
