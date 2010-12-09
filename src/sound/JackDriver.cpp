@@ -22,6 +22,9 @@
 #include "Audit.h"
 #include "PluginFactory.h"
 
+#include "misc/ConfigGroups.h"
+#include <QSettings>
+
 #ifdef HAVE_ALSA
 #ifdef HAVE_LIBJACK
 
@@ -306,136 +309,145 @@ JackDriver::initialise(bool reinitialise)
         return ;
     }
 
-    // Now set up the default connections.
+    // Now set up the default connections, if configured to do so
+    QSettings settings;
+    settings.beginGroup(SequencerOptionsConfigGroup);
+    bool connectDefaultOutputs = settings.value("connect_default_jack_outputs", true).toBool();
+    bool connectDefaultInputs = settings.value("connect_default_jack_inputs", true).toBool();
 
-    std::string playback_1, playback_2;
+    const char **ports = jack_get_ports(m_client, NULL, NULL,
+            JackPortIsPhysical | JackPortIsInput);
+    
+    if (connectDefaultOutputs) {
 
-    const char **ports =
-        jack_get_ports(m_client, NULL, NULL,
-                       JackPortIsPhysical | JackPortIsInput);
+        std::string playback_1, playback_2;
 
-    if (ports) {
-        if (ports[0])
-            playback_1 = std::string(ports[0]);
-        if (ports[1])
-            playback_2 = std::string(ports[1]);
+        if (ports) {
+            if (ports[0])
+                playback_1 = std::string(ports[0]);
+            if (ports[1])
+                playback_2 = std::string(ports[1]);
 
-        // count ports
-        unsigned int i = 0;
-        for (i = 0; ports[i]; i++)
-            ;
-        audit << "JackDriver::initialiseAudio - "
-        << "found " << i << " JACK physical outputs"
-        << std::endl;
-    } else
-        audit << "JackDriver::initialiseAudio - "
-        << "no JACK physical outputs found"
-        << std::endl;
-    free(ports);
-
-    if (playback_1 != "") {
-        audit << "JackDriver::initialiseAudio - "
-        << "connecting from "
-        << "\"" << jack_port_name(m_outputMasters[0])
-        << "\" to \"" << playback_1.c_str() << "\""
-        << std::endl;
-
-        // connect our client up to the ALSA ports - first left output
-        //
-        if (jack_connect(m_client, jack_port_name(m_outputMasters[0]),
-                         playback_1.c_str())) {
+            // count ports
+            unsigned int i = 0;
+            for (i = 0; ports[i]; i++)
+                ;
             audit << "JackDriver::initialiseAudio - "
-            << "cannot connect to JACK output port" << std::endl;
-            return ;
+            << "found " << i << " JACK physical outputs"
+            << std::endl;
+        } else
+            audit << "JackDriver::initialiseAudio - "
+            << "no JACK physical outputs found"
+            << std::endl;
+        free(ports);
+
+        if (playback_1 != "") {
+            audit << "JackDriver::initialiseAudio - "
+            << "connecting from "
+            << "\"" << jack_port_name(m_outputMasters[0])
+            << "\" to \"" << playback_1.c_str() << "\""
+            << std::endl;
+
+            // connect our client up to the ALSA ports - first left output
+            //
+            if (jack_connect(m_client, jack_port_name(m_outputMasters[0]),
+                             playback_1.c_str())) {
+                audit << "JackDriver::initialiseAudio - "
+                << "cannot connect to JACK output port" << std::endl;
+                return ;
+            }
+
+            /*
+                    if (jack_connect(m_client, jack_port_name(m_outputMonitors[0]),
+                                     playback_1.c_str()))
+                    {
+                        audit << "JackDriver::initialiseAudio - "
+                              << "cannot connect to JACK output port" << std::endl;
+                        return;
+                    }
+            */
         }
 
-        /*
-                if (jack_connect(m_client, jack_port_name(m_outputMonitors[0]),
-                                 playback_1.c_str()))
-                {
-                    audit << "JackDriver::initialiseAudio - "
-        		  << "cannot connect to JACK output port" << std::endl;
-        	    return;
-                }
-        */
-    }
-
-    if (playback_2 != "") {
-        audit << "JackDriver::initialiseAudio - "
-        << "connecting from "
-        << "\"" << jack_port_name(m_outputMasters[1])
-        << "\" to \"" << playback_2.c_str() << "\""
-        << std::endl;
-
-        if (jack_connect(m_client, jack_port_name(m_outputMasters[1]),
-                         playback_2.c_str())) {
+        if (playback_2 != "") {
             audit << "JackDriver::initialiseAudio - "
-            << "cannot connect to JACK output port" << std::endl;
+            << "connecting from "
+            << "\"" << jack_port_name(m_outputMasters[1])
+            << "\" to \"" << playback_2.c_str() << "\""
+            << std::endl;
+
+            if (jack_connect(m_client, jack_port_name(m_outputMasters[1]),
+                             playback_2.c_str())) {
+                audit << "JackDriver::initialiseAudio - "
+                << "cannot connect to JACK output port" << std::endl;
+            }
+
+            /*
+                    if (jack_connect(m_client, jack_port_name(m_outputMonitors[1]),
+                                     playback_2.c_str()))
+                    {
+                        audit << "JackDriver::initialiseAudio - "
+                              << "cannot connect to JACK output port" << std::endl;
+                    }
+            */
         }
 
-        /*
-                if (jack_connect(m_client, jack_port_name(m_outputMonitors[1]),
-                                 playback_2.c_str()))
-                {
-                    audit << "JackDriver::initialiseAudio - "
-        		  << "cannot connect to JACK output port" << std::endl;
-                }
-        */
     }
 
+    if (connectDefaultInputs) {
 
-    std::string capture_1, capture_2;
+        std::string capture_1, capture_2;
 
-    ports =
-        jack_get_ports(m_client, NULL, NULL,
-                       JackPortIsPhysical | JackPortIsOutput);
+        ports =
+            jack_get_ports(m_client, NULL, NULL,
+                           JackPortIsPhysical | JackPortIsOutput);
 
-    if (ports) {
-        if (ports[0])
-            capture_1 = std::string(ports[0]);
-        if (ports[1])
-            capture_2 = std::string(ports[1]);
+        if (ports) {
+            if (ports[0])
+                capture_1 = std::string(ports[0]);
+            if (ports[1])
+                capture_2 = std::string(ports[1]);
 
-        // count ports
-        unsigned int i = 0;
-        for (i = 0; ports[i]; i++)
-            ;
-        audit << "JackDriver::initialiseAudio - "
-        << "found " << i << " JACK physical inputs"
-        << std::endl;
-    } else
-        audit << "JackDriver::initialiseAudio - "
-        << "no JACK physical inputs found"
-        << std::endl;
-    free(ports);
-
-    if (capture_1 != "") {
-
-        audit << "JackDriver::initialiseAudio - "
-        << "connecting from "
-        << "\"" << capture_1.c_str()
-        << "\" to \"" << jack_port_name(m_inputPorts[0]) << "\""
-        << std::endl;
-
-        if (jack_connect(m_client, capture_1.c_str(),
-                         jack_port_name(m_inputPorts[0]))) {
+            // count ports
+            unsigned int i = 0;
+            for (i = 0; ports[i]; i++)
+                ;
             audit << "JackDriver::initialiseAudio - "
-            << "cannot connect to JACK input port" << std::endl;
+            << "found " << i << " JACK physical inputs"
+            << std::endl;
+        } else
+            audit << "JackDriver::initialiseAudio - "
+            << "no JACK physical inputs found"
+            << std::endl;
+        free(ports);
+
+        if (capture_1 != "") {
+
+            audit << "JackDriver::initialiseAudio - "
+            << "connecting from "
+            << "\"" << capture_1.c_str()
+            << "\" to \"" << jack_port_name(m_inputPorts[0]) << "\""
+            << std::endl;
+
+            if (jack_connect(m_client, capture_1.c_str(),
+                             jack_port_name(m_inputPorts[0]))) {
+                audit << "JackDriver::initialiseAudio - "
+                << "cannot connect to JACK input port" << std::endl;
+            }
         }
-    }
 
-    if (capture_2 != "") {
+        if (capture_2 != "") {
 
-        audit << "JackDriver::initialiseAudio - "
-        << "connecting from "
-        << "\"" << capture_2.c_str()
-        << "\" to \"" << jack_port_name(m_inputPorts[1]) << "\""
-        << std::endl;
-
-        if (jack_connect(m_client, capture_2.c_str(),
-                         jack_port_name(m_inputPorts[1]))) {
             audit << "JackDriver::initialiseAudio - "
-            << "cannot connect to JACK input port" << std::endl;
+            << "connecting from "
+            << "\"" << capture_2.c_str()
+            << "\" to \"" << jack_port_name(m_inputPorts[1]) << "\""
+            << std::endl;
+
+            if (jack_connect(m_client, capture_2.c_str(),
+                             jack_port_name(m_inputPorts[1]))) {
+                audit << "JackDriver::initialiseAudio - "
+                << "cannot connect to JACK input port" << std::endl;
+            }
         }
     }
 

@@ -171,6 +171,27 @@ AudioConfigurationPage::AudioConfigurationPage(
     settings.endGroup();
 #endif
 
+    ++row;
+    layout->addWidget(new QLabel(tr("Make default JACK connections for"),frame),
+                      row, 0);
+
+#ifdef HAVE_LIBJACK
+    settings.beginGroup(SequencerOptionsConfigGroup);
+
+    m_connectDefaultAudioOutputs = new QCheckBox(tr("audio outputs"));
+    connect(m_connectDefaultAudioOutputs, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
+    m_connectDefaultAudioOutputs->setChecked(qStrToBool(settings.value("connect_default_jack_outputs", "true")));
+    layout->addWidget(m_connectDefaultAudioOutputs, row, 1);
+    ++row;
+
+    m_connectDefaultAudioInputs = new QCheckBox(tr("audio inputs"));
+    connect(m_connectDefaultAudioInputs, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
+    m_connectDefaultAudioInputs->setChecked(qStrToBool(settings.value("connect_default_jack_inputs", "true")));
+    layout->addWidget(m_connectDefaultAudioInputs, row, 1);
+    settings.endGroup();
+    ++row;
+#endif
+
     layout->setRowStretch(row, 10);
 
     addTab(frame, tr("General"));
@@ -196,6 +217,8 @@ AudioConfigurationPage::apply()
     settings.setValue("audiofaderouts", m_createFaderOuts->isChecked());
     settings.setValue("audiosubmasterouts", m_createSubmasterOuts->isChecked());
     settings.setValue("audiorecordfileformat", m_audioRecFormat->currentIndex());
+    settings.setValue("connect_default_jack_outputs", m_connectDefaultAudioOutputs->isChecked());
+    settings.setValue("connect_default_jack_inputs", m_connectDefaultAudioInputs->isChecked());
 #endif
 
     settings.endGroup();

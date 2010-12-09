@@ -83,6 +83,8 @@ protected:
     //
     QCheckBox    *m_createFaderOuts;
     QCheckBox    *m_createSubmasterOuts;
+    QCheckBox    *m_connectDefaultAudioOutputs;
+    QCheckBox    *m_connectDefaultAudioInputs;
 
     QComboBox    *m_audioRecFormat;
 

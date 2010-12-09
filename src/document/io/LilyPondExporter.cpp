@@ -2110,7 +2110,7 @@ LilyPondExporter::writeBar(Segment *s,
 
             if (MultiMeasureRestCount == 0) {
                 if (hiddenRest) {
-                    std::cout << "HIDDEN REST" << std::endl;
+                    std::cout << "HIDDEN REST.  Using duration " << duration << std::endl;
                     str << "s";
                 } else if (duration == timeSignature.getBarDuration()) {
                     // Look ahead the segment in order to detect
