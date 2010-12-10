@@ -548,7 +548,7 @@ int main(int argc, char *argv[])
             } else {
                 std::cerr << "Not loading stylesheet per user request.  Caveat emptor." << std::endl;
             }
-            settings.endGroup();
+//            settings.endGroup();
         }
     }
 
