@@ -715,72 +715,9 @@ MatrixScene::setSingleSelectedEvent(MatrixViewSegment *vs,
                                     MatrixElement *e,
                                     bool preview)
 {
-    std::cout << "MatrixScene::setSingleSelectedEvent: version A with ViewSegment and MatrixElement" << std::endl;
     if (!vs || !e) return;
     EventSelection *s = new EventSelection(vs->getSegment());
     s->addEvent(e->event());
-
-    if (e->event()->has(BaseProperties::TIED_FORWARD)) {
-
-        bool found = false;
-        long oldPitch = 0;
-        if (e->event()->has(BaseProperties::PITCH)) e->event()->get<Int>(PITCH, oldPitch);
-        for (Segment::iterator si = vs->getSegment().begin();
-             si != vs->getSegment().end(); ++si) {
-            if (!(*si)->isa(Note::EventType)) continue;
-            // skip everything before and up through to the target event
-            if (*si != e->event() && !found) continue;
-            found = true;
-            
-            long newPitch = 0;
-            if ((*si)->has(BaseProperties::PITCH)) (*si)->get<Int>(PITCH, newPitch);
-
-            // forward from the target, find all notes that are tied backwards,
-            // until hitting the end of the segment or the first note at the
-            // same pitch that is not tied backwards.
-            if (oldPitch == newPitch) {
-                if ((*si)->has(BaseProperties::TIED_BACKWARD)) {
-                    s->addEvent(*si);
-                } else {
-                    // break the search
-                    if (*si != e->event()) si = vs->getSegment().end();
-                }
-            }
-        }
-
-    }
-    
-    if (e->event()->has(BaseProperties::TIED_BACKWARD)) {
-
-        bool found = false;
-        long oldPitch = 0;
-        if (e->event()->has(BaseProperties::PITCH)) e->event()->get<Int>(PITCH, oldPitch);
-        for (Segment::iterator si = vs->getSegment().end();
-             si != vs->getSegment().begin(); ) {
-            --si; // has to be outside the for statement to reverse-iterate, apparently
-            if (!(*si)->isa(Note::EventType)) continue;
-            // skip everything before and up through to the target event
-            if (*si != e->event() && !found) continue;
-            found = true;
-            
-            long newPitch = 0;
-            if ((*si)->has(BaseProperties::PITCH)) (*si)->get<Int>(PITCH, newPitch);
-
-            // back from the target, find all notes that are tied forward,
-            // until hitting the end of the segment or the first note at the
-            // same pitch that is not tied forward.
-            if (oldPitch == newPitch) {
-                if ((*si)->has(BaseProperties::TIED_FORWARD)) {
-                    s->addEvent(*si);
-                } else {
-                    // break the search
-                    if (*si != e->event()) si = vs->getSegment().begin();
-                }
-            }
-        }
-
-    }
-
     setSelection(s, preview);
 }
 
@@ -789,71 +726,9 @@ MatrixScene::setSingleSelectedEvent(Segment *seg,
                                     Event *e,
                                     bool preview)
 {
-    std::cout << "MatrixScene::setSingleSelectedEvent: version B with Segment and Event" << std::endl;
     if (!seg || !e) return;
     EventSelection *s = new EventSelection(*seg);
     s->addEvent(e);
-
-    if (e->has(BaseProperties::TIED_FORWARD)) {
-
-        bool found = false;
-        long oldPitch = 0;
-        if (e->has(BaseProperties::PITCH)) e->get<Int>(PITCH, oldPitch);
-        for (Segment::iterator si = seg->begin();
-             si != seg->end(); ++si) {
-            if (!(*si)->isa(Note::EventType)) continue;
-            // skip everything before and up through to the target event
-            if (*si != e && !found) continue;
-            found = true;
-            
-            long newPitch = 0;
-            if ((*si)->has(BaseProperties::PITCH)) (*si)->get<Int>(PITCH, newPitch);
-
-            // forward from the target, find all notes that are tied backwards,
-            // until hitting the end of the segment or the first note at the
-            // same pitch that is not tied backwards.
-            if (oldPitch == newPitch) {
-                if ((*si)->has(BaseProperties::TIED_BACKWARD)) {
-                    s->addEvent(*si);
-                } else {
-                    // break the search
-                    if (*si != e) si = seg->end();
-                }
-            }
-        }
-
-    }
-    
-    if (e->has(BaseProperties::TIED_BACKWARD)) {
-
-        bool found = false;
-        long oldPitch = 0;
-        if (e->has(BaseProperties::PITCH)) e->get<Int>(PITCH, oldPitch);
-        for (Segment::iterator si = seg->end();
-             si != seg->begin(); ) {
-            --si; // has to be outside the for statement to reverse-iterate, apparently
-            if (!(*si)->isa(Note::EventType)) continue;
-            // skip everything before and up through to the target event
-            if (*si != e && !found) continue;
-            found = true;
-            
-            long newPitch = 0;
-            if ((*si)->has(BaseProperties::PITCH)) (*si)->get<Int>(PITCH, newPitch);
-
-            // back from the target, find all notes that are tied forward,
-            // until hitting the end of the segment or the first note at the
-            // same pitch that is not tied forward.
-            if (oldPitch == newPitch) {
-                if ((*si)->has(BaseProperties::TIED_FORWARD)) {
-                    s->addEvent(*si);
-                } else {
-                    // break the search
-                    if (*si != e) si = seg->begin();
-                }
-            }
-        }
-
-    }
     setSelection(s, preview);
 }
 
