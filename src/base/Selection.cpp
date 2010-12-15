@@ -261,14 +261,105 @@ EventSelection::removeEvent(Event *e)
 	interval = m_segmentEvents.equal_range(e);
 
     for (eventcontainer::iterator it = interval.first;
-         it != interval.second; it++)
-    {
+         it != interval.second; it++) {
+
         if (*it == e) {
+
+            // erase the intended event at minimum
 	    m_segmentEvents.erase(it);
+
 	    // Notify observers of new selected events
             for (ObserverSet::const_iterator i = m_observers.begin(); i != m_observers.end(); ++i) {
 	        (*i)->eventDeselected(this,e);
             }
+
+            
+            // Now we handle the tied notes themselves.  If the event we're removing is
+            // tied, then we iterate forward and back to try to find all of its linked
+            // neighbors, and treat them as though they were one unit.  Musically, they
+            // ARE one unit, and having selections treat them that way solves a lot of
+            // usability problems.
+            //
+            // looking AHEAD:
+            if (e->has(BaseProperties::TIED_FORWARD)) {
+
+                bool found = false;
+                long oldPitch = 0;
+                if (e->has(BaseProperties::PITCH)) e->get<Int>(BaseProperties::PITCH, oldPitch);
+                for (Segment::iterator si = m_originalSegment.begin();
+                     si != m_originalSegment.end(); ++si) {
+                    if (!(*si)->isa(Note::EventType)) continue;
+                    // skip everything before and up through to the target event
+                    if (*si != e && !found) continue;
+                    found = true;
+                    
+                    long newPitch = 0;
+                    if ((*si)->has(BaseProperties::PITCH)) (*si)->get<Int>(BaseProperties::PITCH, newPitch);
+
+                    // forward from the target, find all notes that are tied backwards,
+                    // until hitting the end of the segment or the first note at the
+                    // same pitch that is not tied backwards.
+                    if (oldPitch == newPitch) {
+                        if ((*si)->has(BaseProperties::TIED_BACKWARD)) {
+
+                            // remove the event
+                            m_segmentEvents.erase(*si);
+
+                            // notify observers (it's gross having to iterate through
+                            // all the observers in every iteration of this loop, but
+                            // it's probably fast enough not to notice)
+                            for (ObserverSet::const_iterator i = m_observers.begin(); i != m_observers.end(); ++i) {
+                                (*i)->eventDeselected(this, *si);
+                            }
+                        } else {
+                            // break the search
+                            if (*si != e) si = m_originalSegment.end();
+                        }
+                    }
+                }
+
+            }
+            
+            // looking BACK:
+            if (e->has(BaseProperties::TIED_BACKWARD)) {
+
+                bool found = false;
+                long oldPitch = 0;
+                if (e->has(BaseProperties::PITCH)) e->get<Int>(BaseProperties::PITCH, oldPitch);
+                for (Segment::iterator si = m_originalSegment.end();
+                     si != m_originalSegment.begin(); ) {
+                    --si;
+                    if (!(*si)->isa(Note::EventType)) continue;
+                    // skip everything before and up through to the target event
+                    if (*si != e && !found) continue;
+                    found = true;
+                    
+                    long newPitch = 0;
+                    if ((*si)->has(BaseProperties::PITCH)) (*si)->get<Int>(BaseProperties::PITCH, newPitch);
+
+                    // back from the target, find all notes that are tied forward,
+                    // until hitting the end of the segment or the first note at the
+                    // same pitch that is not tied forward.
+                    if (oldPitch == newPitch) {
+                        if ((*si)->has(BaseProperties::TIED_FORWARD)) {
+
+                            // remove the event
+                            m_segmentEvents.erase(*si);
+
+                            // notify observers (it's gross having to iterate through
+                            // all the observers in every iteration of this loop, but
+                            // it's probably fast enough not to notice)
+                            for (ObserverSet::const_iterator i = m_observers.begin(); i != m_observers.end(); ++i) {
+                                (*i)->eventDeselected(this, *si);
+                            }
+                        } else {
+                            // break the search
+                            if (*si != e) si = m_originalSegment.begin();
+                        }
+                    }
+                }
+            }
+
 	    return;
 	}
     }
