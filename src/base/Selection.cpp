@@ -180,7 +180,7 @@ EventSelection::addEvent(Event *e)
                     // all the observers in every iteration of this loop, but
                     // it's probably fast enough not to notice)
                     for (ObserverSet::const_iterator i = m_observers.begin(); i != m_observers.end(); ++i) {
-                        (*i)->eventSelected(this, e);
+                        (*i)->eventSelected(this, *si);
                     }
                 } else {
                     // break the search
@@ -218,7 +218,7 @@ EventSelection::addEvent(Event *e)
                     // all the observers in every iteration of this loop, but
                     // it's probably fast enough not to notice)
                     for (ObserverSet::const_iterator i = m_observers.begin(); i != m_observers.end(); ++i) {
-                        (*i)->eventSelected(this, e);
+                        (*i)->eventSelected(this, *si);
                     }
                 } else {
                     // break the search
