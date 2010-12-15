@@ -122,17 +122,6 @@ EventSelection::addEvent(Event *e)
 
     if (contains(e)) return;
 
-    // Even though we are treating chains of tied note events as single units
-    // for selection purposes, we don't change the selection start and end
-    // markers to reflect any additional notes that have spilled outside the
-    // boundaries of time that the user originally sought to manipulate, and we
-    // just leave any extra events that were brought into the selection "poking
-    // out of the box" on either side.  Will this cause problems?  If not, it's
-    // the easiest way to handle the business of selections pulling in events
-    // that the user didn't explicitly grab, which were only added due to being
-    // part of a chain of tied notes.  (This impacts, eg. selecting an entire
-    // bar, where the user could well wind up selecting events well outside that
-    // bar after following the links between tied notes.)
     if (e->getAbsoluteTime() < m_beginTime || !m_haveRealStartTime) {
 	m_beginTime = e->getAbsoluteTime();
 	m_haveRealStartTime = true;
@@ -154,6 +143,8 @@ EventSelection::addEvent(Event *e)
     // neighbors, and treat them as though they were one unit.  Musically, they
     // ARE one unit, and having selections treat them that way solves a lot of
     // usability problems.
+    //
+    // looking AHEAD:
     if (e->has(BaseProperties::TIED_FORWARD)) {
 
         bool found = false;
@@ -174,8 +165,20 @@ EventSelection::addEvent(Event *e)
             // same pitch that is not tied backwards.
             if (oldPitch == newPitch) {
                 if ((*si)->has(BaseProperties::TIED_BACKWARD)) {
+
                     // add the event
                     m_segmentEvents.insert(*si);
+
+                    // while looking ahead, we have to keep pushing our
+                    // [selection] end boundary ahead to the end of the most
+                    // distant tied note encountered
+                    eventDuration = (*si)->getDuration();
+                    if (eventDuration == 0) eventDuration = 1;
+
+                    if ((*si)->getAbsoluteTime() + eventDuration > m_endTime) {
+                        m_endTime = (*si)->getAbsoluteTime() + eventDuration;
+                    }
+
                     // notify observers (it's gross having to iterate through
                     // all the observers in every iteration of this loop, but
                     // it's probably fast enough not to notice)
@@ -191,6 +194,7 @@ EventSelection::addEvent(Event *e)
 
     }
     
+    // looking BACK:
     if (e->has(BaseProperties::TIED_BACKWARD)) {
 
         bool found = false;
@@ -212,8 +216,18 @@ EventSelection::addEvent(Event *e)
             // same pitch that is not tied forward.
             if (oldPitch == newPitch) {
                 if ((*si)->has(BaseProperties::TIED_FORWARD)) {
+
                     // add the event
                     m_segmentEvents.insert(*si);
+
+                    // while searching backwards, we need to keep adjusting our
+                    // start boundary [we are a selection] to the left to
+                    // incorporate each new tied note encountered
+                    if ((*si)->getAbsoluteTime() < m_beginTime) {
+                        m_beginTime = (*si)->getAbsoluteTime();
+                        // (m_haveRealStartTime will have already been set true)
+                    }
+
                     // notify observers (it's gross having to iterate through
                     // all the observers in every iteration of this loop, but
                     // it's probably fast enough not to notice)
