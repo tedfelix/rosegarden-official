@@ -35,10 +35,9 @@ public:
 };
 	
 /**
- * EventSelection records a (possibly non-contiguous) selection
- * of Events in a single Segment, used for cut'n paste operations.
- * It does not take a copy of those Events, it just remembers
- * which ones they are.
+ * EventSelection records a (possibly non-contiguous) selection of the Events
+ * that are contained in a single Segment, used for cut'n paste operations.  It
+ * does not take a copy of those Events, it just remembers which ones they are.
  */
 
 class EventSelection : public SegmentObserver

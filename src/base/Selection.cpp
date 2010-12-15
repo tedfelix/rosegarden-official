@@ -122,6 +122,17 @@ EventSelection::addEvent(Event *e)
 
     if (contains(e)) return;
 
+    // Even though we are treating chains of tied note events as single units
+    // for selection purposes, we don't change the selection start and end
+    // markers to reflect any additional notes that have spilled outside the
+    // boundaries of time that the user originally sought to manipulate, and we
+    // just leave any extra events that were brought into the selection "poking
+    // out of the box" on either side.  Will this cause problems?  If not, it's
+    // the easiest way to handle the business of selections pulling in events
+    // that the user didn't explicitly grab, which were only added due to being
+    // part of a chain of tied notes.  (This impacts, eg. selecting an entire
+    // bar, where the user could well wind up selecting events well outside that
+    // bar after following the links between tied notes.)
     if (e->getAbsoluteTime() < m_beginTime || !m_haveRealStartTime) {
 	m_beginTime = e->getAbsoluteTime();
 	m_haveRealStartTime = true;
@@ -129,12 +140,95 @@ EventSelection::addEvent(Event *e)
     if (e->getAbsoluteTime() + eventDuration > m_endTime) {
 	m_endTime = e->getAbsoluteTime() + eventDuration;
     }
+
+    // Always add at least the one Event we were called with.
     m_segmentEvents.insert(e);
-    
+
     // Notify observers of new selected events
     for (ObserverSet::const_iterator i = m_observers.begin(); i != m_observers.end(); ++i) {
-	(*i)->eventSelected(this,e);
+	(*i)->eventSelected(this, e);
     }
+
+    // Now we handle the tied notes themselves.  If the event we're adding is
+    // tied, then we iterate forward and back to try to find all of its linked
+    // neighbors, and treat them as though they were one unit.  Musically, they
+    // ARE one unit, and having selections treat them that way solves a lot of
+    // usability problems.
+    if (e->has(BaseProperties::TIED_FORWARD)) {
+
+        bool found = false;
+        long oldPitch = 0;
+        if (e->has(BaseProperties::PITCH)) e->get<Int>(BaseProperties::PITCH, oldPitch);
+        for (Segment::iterator si = m_originalSegment.begin();
+             si != m_originalSegment.end(); ++si) {
+            if (!(*si)->isa(Note::EventType)) continue;
+            // skip everything before and up through to the target event
+            if (*si != e && !found) continue;
+            found = true;
+            
+            long newPitch = 0;
+            if ((*si)->has(BaseProperties::PITCH)) (*si)->get<Int>(BaseProperties::PITCH, newPitch);
+
+            // forward from the target, find all notes that are tied backwards,
+            // until hitting the end of the segment or the first note at the
+            // same pitch that is not tied backwards.
+            if (oldPitch == newPitch) {
+                if ((*si)->has(BaseProperties::TIED_BACKWARD)) {
+                    // add the event
+                    m_segmentEvents.insert(*si);
+                    // notify observers (it's gross having to iterate through
+                    // all the observers in every iteration of this loop, but
+                    // it's probably fast enough not to notice)
+                    for (ObserverSet::const_iterator i = m_observers.begin(); i != m_observers.end(); ++i) {
+                        (*i)->eventSelected(this, e);
+                    }
+                } else {
+                    // break the search
+                    if (*si != e) si = m_originalSegment.end();
+                }
+            }
+        }
+
+    }
+    
+    if (e->has(BaseProperties::TIED_BACKWARD)) {
+
+        bool found = false;
+        long oldPitch = 0;
+        if (e->has(BaseProperties::PITCH)) e->get<Int>(BaseProperties::PITCH, oldPitch);
+        for (Segment::iterator si = m_originalSegment.end();
+             si != m_originalSegment.begin(); ) {
+            --si;
+            if (!(*si)->isa(Note::EventType)) continue;
+            // skip everything before and up through to the target event
+            if (*si != e && !found) continue;
+            found = true;
+            
+            long newPitch = 0;
+            if ((*si)->has(BaseProperties::PITCH)) (*si)->get<Int>(BaseProperties::PITCH, newPitch);
+
+            // back from the target, find all notes that are tied forward,
+            // until hitting the end of the segment or the first note at the
+            // same pitch that is not tied forward.
+            if (oldPitch == newPitch) {
+                if ((*si)->has(BaseProperties::TIED_FORWARD)) {
+                    // add the event
+                    m_segmentEvents.insert(*si);
+                    // notify observers (it's gross having to iterate through
+                    // all the observers in every iteration of this loop, but
+                    // it's probably fast enough not to notice)
+                    for (ObserverSet::const_iterator i = m_observers.begin(); i != m_observers.end(); ++i) {
+                        (*i)->eventSelected(this, e);
+                    }
+                } else {
+                    // break the search
+                    if (*si != e) si = m_originalSegment.begin();
+                }
+            }
+        }
+
+    }
+
 }
 
 void

@@ -377,7 +377,7 @@ public:
     //////
     //
     // ADVANCED, ESOTERIC, or PLAIN STUPID MANIPULATION
-
+    
     /**
      * Returns the range [start, end[ of events which are at absoluteTime
      */
