@@ -315,26 +315,8 @@ void NotationSelector::handleMouseRelease(const NotationMouseEvent *e)
     //!!! Deeper bug here, surely.  The code commented out above revealed
     // m_selectionRect was always (0,0) in every situation where I could get this
     // code to fire.  This makes the above values for w and h above completely
-    // meaningless nonsense as far as I can see.  We needed to get past the next
-    // test, so I added a detour around it.  PLEASE REVIEW!
-    //
-    // NOTE: Adding this detour enabled me to Shift+click to select multiple
-    // notes one by one, and then de-select them by re-clicking.  It is possible
-    // to Shift+click and drag to add sweep selections to an existing selection,
-    // but if you sweep over existing notes, those are *not* removed from the
-    // broader selection.  I tested Classic, and it had the same behavior.  This
-    // is worth fixing I think, but since it's the same as in Classic now, at
-    // least at a casual testing-in-the-middle-of-development glance, I'm moving
-    // on for now.
-
-//    if ((w > -3 && w < 3 && h > -3 && h < 3 && !m_startedFineDrag)
-//            ||(m_clickedShift) //||
-//        // detour:
-///*        (m_selectionRect->x() == 0 && m_selectionRect->y() == 0 && !m_startedFineDrag)*/) {
-
-    // The detour described above caused it to be very easy to move a note while
-    // merely trying to click on it to select it.  Let's try reverting the
-    // detour...
+    // meaningless nonsense as far as I can see.
+     
     if ((w > -3 && w < 3 && h > -3 && h < 3 && !m_startedFineDrag) ||
         (m_clickedShift) ||
         (m_selectionRect->x() == 0 && m_selectionRect->y() == 0 && !m_startedFineDrag)) {
@@ -380,8 +362,6 @@ void NotationSelector::handleMouseRelease(const NotationMouseEvent *e)
         }
 
     } else {
-
-        std::cout << "We're in, Gomez!" << std::endl;
 
         if (m_startedFineDrag) {
             dragFine(e->sceneX, e->sceneY, true);
