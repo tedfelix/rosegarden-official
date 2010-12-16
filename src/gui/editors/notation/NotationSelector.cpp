@@ -316,8 +316,14 @@ void NotationSelector::handleMouseRelease(const NotationMouseEvent *e)
     // meaningless nonsense as far as I can see.
      
     if ((w > -3 && w < 3 && h > -3 && h < 3 && !m_startedFineDrag) ||
-        (m_clickedShift) ||
-        (m_selectionRect->x() == 0 && m_selectionRect->y() == 0 && !m_startedFineDrag)) {
+        (m_clickedShift)) {
+      
+        //!!! Removing this test is necessary in order to make it possible for
+        // the user to drag a note and drop it somewhere.  I think it's all tied
+        // up in the broken "fine drag" mechanism.  I'm honestly not sure about
+        // much after a day of whacking moles, but it's safe to say this next
+        // test is very detrimental, so it has been removed once again.
+        // || (m_selectionRect->x() == 0 && m_selectionRect->y() == 0 && !m_startedFineDrag)*/) {
 
         if (m_clickedElement != 0 && m_selectedStaff) {
             
