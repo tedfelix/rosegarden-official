@@ -262,13 +262,16 @@ NotationSelector::handleMouseMove(const NotationMouseEvent *e)
 
     if (m_clickedElement /* && !m_clickedElement->isRest() */) {
 
-        if (m_startedFineDrag) {
-            dragFine(e->sceneX, e->sceneY, false);
-        } else if (m_clickedShift) {
-            if (w > 2 || w < -2 || h > 2 || h < -2) {
-                dragFine(e->sceneX, e->sceneY, false);
-            }
-        } else if (w > 3 || w < -3 || h > 3 || h < -3) {
+// Fine (micro-position) drag is BROKEN, and I'm bypassing its mangled corpse.        
+//        if (m_startedFineDrag) {
+//            dragFine(e->sceneX, e->sceneY, false);
+//        } else if (m_clickedShift) {
+//            if (w > 2 || w < -2 || h > 2 || h < -2) {
+//                dragFine(e->sceneX, e->sceneY, false);
+//           }
+//        } else 
+           
+        if (w > 3 || w < -3 || h > 3 || h < -3) {
             drag(e->sceneX, e->sceneY, false);
         }
 
@@ -367,9 +370,11 @@ void NotationSelector::handleMouseRelease(const NotationMouseEvent *e)
 
     } else {
 
-        if (m_startedFineDrag) {
-            dragFine(e->sceneX, e->sceneY, true);
-        } else if (m_clickedElement /* && !m_clickedElement->isRest() */) {
+//        if (m_startedFineDrag) {
+//            dragFine(e->sceneX, e->sceneY, true);
+//        } else
+
+        if (m_clickedElement /* && !m_clickedElement->isRest() */) {
             drag(e->sceneX, e->sceneY, true);
         } else {
             setViewCurrentSelection(false);
@@ -571,15 +576,16 @@ void NotationSelector::drag(int x, int y, bool final)
 
 void NotationSelector::dragFine(int x, int y, bool final)
 {
-    NOTATION_DEBUG << "NotationSelector::dragFine (micro-position) " << x << ", " << y << endl;
-
-    //!!! This feature is utterly broken.  Trying to micro-position things just
-    // leads to chaos.  Better to return and fail to do anything until someone
-    // can sort this out.  Alternatively, we could scrap the feature in favor of
-    // smarter rest layout when multiple voices are drawn on the same staff,
-    // leaving the other issues to be sorted out by LilyPond automagically.
-    NOTATION_DEBUG << "User tried to micro-position something, and I punted, because I suck at life that way." <<  endl;
+    //!!! Fine drag is very seriously broken, and its presence is complicating
+    // the matter of sorting out far more serious problems.  I haven't been able
+    // to so much as scratch the surface of sorting it out, so I've bypassed it.
+    // Nobody has complained about how broken this has been since the port, so I
+    // intend to leave it broken, and try to compensate by improving the layout
+    // code instead.
+    NOTATION_DEBUG << "NotationSelector::dragFine: Fine drag is broken and has been bypassed.  Seeing this message is a BUG!" << endl;
     return;
+
+    NOTATION_DEBUG << "NotationSelector::dragFine (micro-position) x:" << x << " y: " << y << endl;
 
     if (!m_clickedElement || !m_selectedStaff)
         return ;
