@@ -162,9 +162,6 @@ NotationSelector::handleRightButtonPress(const NotationMouseEvent *e)
             m_scene->setSingleSelectedEvent
                 (m_selectedStaff, m_clickedElement, true);
         }
-
-        //!!!??? do we really want this? removing for now
-//        handleLeftButtonPress(e);
     }
 
     NotationTool::handleRightButtonPress(e);
@@ -271,7 +268,8 @@ NotationSelector::handleMouseMove(const NotationMouseEvent *e)
 //           }
 //        } else 
            
-        if (w > 3 || w < -3 || h > 3 || h < -3) {
+        if ((w > 3 || w < -3 || h > 3 || h < -3) &&
+            !m_clickedShift) {
             drag(e->sceneX, e->sceneY, false);
         }
 
@@ -370,11 +368,17 @@ void NotationSelector::handleMouseRelease(const NotationMouseEvent *e)
 
     } else {
 
+// Fine (micro-position) drag is BROKEN, and I'm bypassing its mangled corpse.        
 //        if (m_startedFineDrag) {
 //            dragFine(e->sceneX, e->sceneY, true);
 //        } else
 
-        if (m_clickedElement /* && !m_clickedElement->isRest() */) {
+        // in a world without fine drag, we do _not_ want to begin any kind of
+        // drag operation if Shift was pressed, because this modifier can only
+        // be used to make additive selections
+        if (m_clickedElement &&
+            !m_clickedShift /* &&
+            !m_clickedElement->isRest() */) {
             drag(e->sceneX, e->sceneY, true);
         } else {
             setViewCurrentSelection(false);
@@ -384,7 +388,6 @@ void NotationSelector::handleMouseRelease(const NotationMouseEvent *e)
     m_clickedElement = 0;
     m_selectionRect->hide();
     m_wholeStaffSelectionComplete = false;
-    //!!! m_nParentView->canvas()->update();
 }
 
 void NotationSelector::drag(int x, int y, bool final)
@@ -679,19 +682,13 @@ void NotationSelector::dragFine(int x, int y, bool final)
 
 void NotationSelector::ready()
 {
-//    if (m_selectionRect) {
-//        m_selectionRect->hide();
-//       m_selectionRect->setPen(GUIPalette::getColour(GUIPalette::SelectionRectangle));
-
     m_widget->setCanvasCursor(Qt::arrowCursor);
-    //!!!??? m_widget->setHeightTracking(false);
 }
 
 void NotationSelector::stow()
 {
     delete m_selectionRect;
     m_selectionRect = 0;
-    //m_nParentView->canvas()->update();
 }
 
 void NotationSelector::handleEventRemoved(Event *e)
@@ -705,8 +702,6 @@ void NotationSelector::slotHideSelection()
 {
     if (!m_selectionRect) return;
     m_selectionRect->hide();
-//    m_selectionRect->setSize(0, 0);
-//    m_nParentView->canvas()->update();
 }
 
 void NotationSelector::slotInsertSelected()
@@ -891,5 +886,3 @@ const QString NotationSelector::ToolName = "notationselector";
 
 }
 #include "NotationSelector.moc"
-
-
