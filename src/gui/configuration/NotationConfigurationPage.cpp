@@ -210,7 +210,11 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
          row, 0, 1, 2);
     m_splitAndTie = new QCheckBox(frame);
     connect(m_splitAndTie, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
-    bool defaultSplitAndTie = qStrToBool(settings.value("quantizemakeviable", "false")) ;
+    //NB. The split-and-tie feature is turned on by default once more, now that
+    // the matrix and notation editors both handle strings of adjacent tied
+    // notes as though they were a single unit.  This makes more sense when
+    // inserting, say, a whole note that won't fit inside a measure.
+    bool defaultSplitAndTie = qStrToBool(settings.value("quantizemakeviable", "true")) ;
     m_splitAndTie->setChecked(defaultSplitAndTie);
     layout->addWidget(m_splitAndTie, row, 2);
     ++row;
