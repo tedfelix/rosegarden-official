@@ -258,7 +258,7 @@ NotationSelector::handleMouseMove(const NotationMouseEvent *e)
     int w = int(e->sceneX - m_selectionRect->x());
     int h = int(e->sceneY - m_selectionRect->y());
 
-//    std::cout << "w: " << w << " h: " << h << std::endl;
+    NOTATION_DEBUG << "NotationSelector::handleMouseMove:  w: " << w << " h: " << h << endl;
 
     if (m_clickedElement /* && !m_clickedElement->isRest() */) {
 
@@ -287,9 +287,7 @@ NotationSelector::handleMouseMove(const NotationMouseEvent *e)
         m_selectionRect->setRect(r.x() + 0.5, r.y() + 0.5, r.width(), r.height());
         m_selectionRect->show();
 
-//        m_selectionRect->setSize(w, h);
         setViewCurrentSelection(true);
-//        m_nParentView->canvas()->update();
     }
 
     return FollowMode(FollowHorizontal | FollowVertical);
@@ -567,8 +565,15 @@ void NotationSelector::drag(int x, int y, bool final)
 
 void NotationSelector::dragFine(int x, int y, bool final)
 {
-    NOTATION_DEBUG << "NotationSelector::drag " << x << ", " << y << endl;
-    std::cout << "fine drag..." << std::endl;
+    NOTATION_DEBUG << "NotationSelector::dragFine (micro-position) " << x << ", " << y << endl;
+
+    //!!! This feature is utterly broken.  Trying to micro-position things just
+    // leads to chaos.  Better to return and fail to do anything until someone
+    // can sort this out.  Alternatively, we could scrap the feature in favor of
+    // smarter rest layout when multiple voices are drawn on the same staff,
+    // leaving the other issues to be sorted out by LilyPond automagically.
+    NOTATION_DEBUG << "User tried to micro-position something, and I punted, because I suck at life that way." <<  endl;
+    return;
 
     if (!m_clickedElement || !m_selectedStaff)
         return ;
@@ -580,7 +585,6 @@ void NotationSelector::dragFine(int x, int y, bool final)
         selection->addEvent(m_clickedElement->event());
     m_scene->setSelection(selection, false);
 
-//#ifdef NOT_JUST_YET
     // Fine drag modifies the DISPLACED_X and DISPLACED_Y properties on
     // each event.  The modifications have to be relative to the previous
     // values of these properties, not to zero, so for each event we need
@@ -634,7 +638,6 @@ void NotationSelector::dragFine(int x, int y, bool final)
 
         IncrementDisplacementsCommand *command = new IncrementDisplacementsCommand
                 (*selection, long(dx), long(dy));
-//        m_nParentView->addCommandToHistory(command);
         CommandHistory::getInstance()->addCommand(command);
 
     } else {
@@ -660,8 +663,6 @@ void NotationSelector::dragFine(int x, int y, bool final)
         selection->getSegment().updateRefreshStatuses(startTime, endTime);
         m_scene->update();
     }
-
-//#endif
 }
 
 void NotationSelector::ready()
