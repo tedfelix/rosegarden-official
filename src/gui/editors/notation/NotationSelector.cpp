@@ -327,10 +327,17 @@ void NotationSelector::handleMouseRelease(const NotationMouseEvent *e)
     // least at a casual testing-in-the-middle-of-development glance, I'm moving
     // on for now.
 
-    if ((w > -3 && w < 3 && h > -3 && h < 3 && !m_startedFineDrag)
-            ||(m_clickedShift) //||
-        // detour:
-/*        (m_selectionRect->x() == 0 && m_selectionRect->y() == 0 && !m_startedFineDrag)*/) {
+//    if ((w > -3 && w < 3 && h > -3 && h < 3 && !m_startedFineDrag)
+//            ||(m_clickedShift) //||
+//        // detour:
+///*        (m_selectionRect->x() == 0 && m_selectionRect->y() == 0 && !m_startedFineDrag)*/) {
+
+    // The detour described above caused it to be very easy to move a note while
+    // merely trying to click on it to select it.  Let's try reverting the
+    // detour...
+    if ((w > -3 && w < 3 && h > -3 && h < 3 && !m_startedFineDrag) ||
+        (m_clickedShift) ||
+        (m_selectionRect->x() == 0 && m_selectionRect->y() == 0 && !m_startedFineDrag)) {
 
         if (m_clickedElement != 0 && m_selectedStaff) {
             
@@ -373,6 +380,8 @@ void NotationSelector::handleMouseRelease(const NotationMouseEvent *e)
         }
 
     } else {
+
+        std::cout << "We're in, Gomez!" << std::endl;
 
         if (m_startedFineDrag) {
             dragFine(e->sceneX, e->sceneY, true);
