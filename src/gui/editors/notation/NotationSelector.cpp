@@ -432,7 +432,9 @@ void NotationSelector::drag(int x, int y, bool final)
     // get the height from the element that was clicked on
     long clickedHeight = 0;
     (void)m_clickedElement->event()->get<Int>
-    (NotationProperties::HEIGHT_ON_STAFF, clickedHeight);
+            (NotationProperties::HEIGHT_ON_STAFF, clickedHeight);
+    std::cout << "Height of clicked element: " << clickedHeight << std::endl;
+
 
     Event *clefEvt = 0, *keyEvt = 0;
     Clef clef;
@@ -534,7 +536,6 @@ void NotationSelector::drag(int x, int y, bool final)
         Event *lastInsertedEvent = 0;
 
         if (pitch != clickedPitch && m_clickedElement->isNote()) {
-            std::cout << "Ivan P. Gliffenbacher, why the hell is this code firing?!" << std::endl;
             command->addCommand(new TransposeCommand(pitch - clickedPitch,
                                 *selection));
             haveSomething = true;

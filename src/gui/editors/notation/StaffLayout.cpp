@@ -362,6 +362,7 @@ StaffLayout::getHeightAtSceneCoords(double x, int y) const
     int ph = (y - getSceneYForTopLine(row)) * getHeightPerLine() /
              getLineSpacing();
     ph = getTopLineHeight() - ph;
+    std::cout << "If I returned right here, I would say the height was " << ph << std::endl;
 
     int i;
     int mi = -2;
@@ -393,6 +394,7 @@ StaffLayout::getHeightAtSceneCoords(double x, int y) const
         //         } else {
         //             RG_DEBUG << "BAD APPROXIMATION" << endl;
         //         }
+        std::cout << "But I kept trying to refine the height, and returned " << ph + mi << std::endl;
         return ph + mi;
     } else {
         RG_DEBUG << "StaffLayout::getHeightAtSceneCoords: heuristic got " << ph << ", nothing within range (closest was " << (ph + testi) << " which is " << testMd << " away)" << endl;
