@@ -345,6 +345,38 @@ StaffLayout::getLayoutYForHeight(int h) const
 }
 
 int
+StaffLayout::getWeightedHeightAtSceneCoords(int originalHeight, double x, int y)
+{
+    NOTATION_DEBUG << "StaffLayout::getWeightedHeightAtSceneCoords: originalHeight: "
+                   << originalHeight << " non-weighted height: "
+                   << getHeightAtSceneCoords(x, y)
+                   << endl;
+    
+    // return the non-weighted height if it already matches (ie. the user
+    // clicked pretty close to the center of the note head)
+    int nonWeightedHeight = getHeightAtSceneCoords(x, y);
+
+    if (originalHeight == nonWeightedHeight) return nonWeightedHeight;
+
+    // if no match, calculate an approximate height
+    int row = getRowForSceneCoords(x, y);
+    int approximateHeight = (y - getSceneYForTopLine(row)) * getHeightPerLine() / getLineSpacing();
+    approximateHeight = getTopLineHeight() - approximateHeight;
+
+    std::cout << "approximateHeight: " << approximateHeight
+              << " originalHeight: " << originalHeight << std::endl;
+
+    int difference = approximateHeight - originalHeight;
+    if (difference < 0) difference *= -1;
+
+    // the approximate height is very coarse, so let's try using it as a rough
+    // measure of how far the new height differs from the original, and return
+    // the original if it's inside the range of "close enough"
+    if (difference > 1) return nonWeightedHeight;
+    else return originalHeight;
+}
+
+int
 StaffLayout::getHeightAtSceneCoords(double x, int y) const
 {
     //!!! the lazy route: approximate, then get the right value
@@ -394,7 +426,6 @@ StaffLayout::getHeightAtSceneCoords(double x, int y) const
         //         } else {
         //             RG_DEBUG << "BAD APPROXIMATION" << endl;
         //         }
-        std::cout << "Returning corrected height of new click: " << ph + mi << std::endl;
         return ph + mi;
     } else {
         RG_DEBUG << "StaffLayout::getHeightAtSceneCoords: heuristic got " << ph << ", nothing within range (closest was " << (ph + testi) << " which is " << testMd << " away)" << endl;

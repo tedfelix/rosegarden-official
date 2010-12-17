@@ -433,8 +433,6 @@ void NotationSelector::drag(int x, int y, bool final)
     long clickedHeight = 0;
     (void)m_clickedElement->event()->get<Int>
             (NotationProperties::HEIGHT_ON_STAFF, clickedHeight);
-    std::cout << "Height of clicked element: " << clickedHeight << std::endl;
-
 
     Event *clefEvt = 0, *keyEvt = 0;
     Clef clef;
@@ -479,18 +477,17 @@ void NotationSelector::drag(int x, int y, bool final)
     if (keyEvt)
         key = ::Rosegarden::Key(*keyEvt);
 
-    // set height to the height of y at the mouse click that got us here
-    int height = targetStaff->getHeightAtSceneCoords(x, y);
+    // set height to the height of y at the mouse click that got us here,
+    // weighted toward clickedHeight (the height-on-staff property of the
+    // element that was clicked) to make it more difficult to move notes by
+    // mistake
+    int height = targetStaff->getWeightedHeightAtSceneCoords(clickedHeight, x, y);
+
     // set pitch to the pitch of the notation element that got us here
     int pitch = clickedPitch;
 
     // if the height of y isn't the same as the height of the element that got
     // us here, we're doing a move
-    //
-    // If the note is on B and the user clicks too far to the edge of its head,
-    // in the C space, then it means getHeightAtSceneCoords is returning the
-    // height of C instead of B.  This must be our culprit.  That should be
-    // interesting to fix.
     if (height != clickedHeight) {
         pitch = Pitch(height, clef, key,
                       clickedAccidental).getPerformancePitch();

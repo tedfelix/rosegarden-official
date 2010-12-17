@@ -347,6 +347,16 @@ public:
      */
     virtual int getLayoutYForHeight(int height) const;
 
+
+    /**
+     * Returns the height-on-staff value nearest to the given scene coordinates,
+     * weighted toward the height specified in originalHeight.  This is used
+     * when we are comparing a new height calculation to an existing one, and
+     * want the new calculation to err on the side of matching the original
+     * value unless the difference is strong enough.
+     */
+    virtual int getWeightedHeightAtSceneCoords(int originalHeight, double x, int y);
+
     /**
      * Returns the height-on-staff value nearest to the given
      * scene coordinates.
