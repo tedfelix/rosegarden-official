@@ -270,7 +270,7 @@ NotationSelector::handleMouseMove(const NotationMouseEvent *e)
            
         if ((w > 3 || w < -3 || h > 3 || h < -3) &&
             !m_clickedShift) {
-            std::cout << "Dragging from Code Point Bravo: w: " << w << " h: " << h << std::endl;
+//            std::cout << "Dragging from Code Point Bravo: w: " << w << " h: " << h << std::endl;
             drag(e->sceneX, e->sceneY, false);
         }
 
@@ -380,7 +380,7 @@ void NotationSelector::handleMouseRelease(const NotationMouseEvent *e)
         if (m_clickedElement &&
             !m_clickedShift /* &&
             !m_clickedElement->isRest() */) {
-            std::cout << "Dragging from Code Point Foxtrot: w: " << w << " h: " << h << std::endl;
+//            std::cout << "Dragging from Code Point Foxtrot: w: " << w << " h: " << h << std::endl;
             // drag() must be called here from Foxtrot, whether attempting to
             // click to select a note head or to click and drag a note.  It's
             // required in both cases, and neither case works without this call
