@@ -17,6 +17,7 @@
 #define _AUDIO_CACHE_H_
 
 #include <map>
+#include <stddef.h>
 
 namespace Rosegarden
 {
