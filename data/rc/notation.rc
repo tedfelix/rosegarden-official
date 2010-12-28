@@ -559,7 +559,7 @@
 
     <Action name="chord_mode" text="C&amp;hord Insert Mode" icon="chord" shortcut="H" checked="false" />
     <Action name="triplet_mode" text="Triplet Insert Mo&amp;de" icon="triplet" shortcut="G" checked="false" />
-    <Action name="tuplet_mode" text="Tuplet Insert Mo&amp;de" icon="tuplet" shortcut="J" checked="false" />
+    <Action name="tuplet_mode" text="Tuplet Insert Mo&amp;de" icon="tuplet" shortcut=";" checked="false" />
     <Action name="grace_mode" text="Grace Insert &amp;Mode" icon="group-grace" checked="false"/>
   <Separator/>
     <Action name="toggle_step_by_step" text="Ste&amp;p Recording" icon="step_by_step" checked="false" />
