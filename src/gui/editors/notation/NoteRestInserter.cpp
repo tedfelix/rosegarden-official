@@ -184,29 +184,24 @@ NoteRestInserter::handleMouseRelease(const NotationMouseEvent *e)
          ((m_accidental == Accidentals::NoAccidental && m_followAccidental) ?
           m_lastAccidental : m_accidental), 100);  // Velocity hard coded for now,
 
+    // Note lastInsertedEvent can be null when a note fails to insert or when
+    // A split and tie occurs.  This complicates things a bit.
     if (lastInsertedEvent) {
 
         m_scene->setSingleSelectedEvent(&segment, lastInsertedEvent, false);
+    }
 
-        if (m_widget->isInChordMode()){
-            m_widget->setPointerPosition(lastInsertedEvent->getAbsoluteTime());
+    if (!m_widget->isInChordMode()) {
+        // Determine what happend (most likely).
+        timeT nextLocation = m_clickTime + note.getDuration();
 
+        if (endTime >= nextLocation) {
+            // Looks like we did a split and tie (This may fail in some odd
+            // circumstances, but it works in most situations).
+            m_widget->setPointerPosition(nextLocation);
         } else {
-            m_widget->setPointerPosition(lastInsertedEvent->getAbsoluteTime() +
-                                         lastInsertedEvent->getDuration());
+            m_widget->setPointerPosition(m_clickTime);
         }
-/*!!!
-        if (m_widget->isInChordMode()) {
-            m_widget->slotSetInsertCursorAndRecentre
-            (lastInsertedEvent->getAbsoluteTime(), e->x(), (int)e->y(),
-             false);
-        } else {
-            m_widget->slotSetInsertCursorAndRecentre
-            (lastInsertedEvent->getAbsoluteTime() +
-             lastInsertedEvent->getDuration(), e->x(), (int)e->y(),
-             false);
-        }
-*/
     }
 }
 
@@ -274,26 +269,22 @@ NoteRestInserter::insertNote(Segment &segment, timeT insertionTime,
                                (segment, insertionTime, endTime, note, pitch, accidental,
                                 velocity);
 
+    // Note lastInsertedEvent can be null when a note fails to insert or when
+    // A split and tie occurs.  This complicates things a bit.
     if (lastInsertedEvent) {
 
         m_scene->setSingleSelectedEvent(&segment, lastInsertedEvent, false);
+    }
 
-        if (!m_widget->isInChordMode()){
-            m_widget->setPointerPosition(lastInsertedEvent->getAbsoluteTime()
-                                         +lastInsertedEvent->getDuration());
+    if (!m_widget->isInChordMode()) {
+        // Determine what happend (most likely).
+        timeT nextLocation = insertionTime + note.getDuration();
+
+        if (endTime >= nextLocation) {
+            // Looks like we did a split and tie (This may fail in some odd
+            // circumstances, but it works in most situations).
+            m_widget->setPointerPosition(nextLocation);
         }
-//        if (m_widget->isInChordMode()) {
-//            if (m_scene) {
-//                m_scene->slotSetInsertCursorPosition
-//                    (lastInsertedEvent->getAbsoluteTime(), true, false);
-//            }
-//        } else {
-//            if (m_scene) {
-//                m_scene->slotSetInsertCursorPosition
-//                    (lastInsertedEvent->getAbsoluteTime() +
-//                     lastInsertedEvent->getDuration(), true, false);
-//            }
-//        }
     }
 
     if (!suppressPreview) {
