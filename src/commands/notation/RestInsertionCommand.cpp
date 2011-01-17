@@ -53,6 +53,17 @@ RestInsertionCommand::modifySegment()
     Segment::iterator i = helper.insertRest(m_insertionTime, m_note);
     if (i != helper.segment().end())
         m_lastInsertedEvent = *i;
+    
+    if (m_autoTieBarlines) {
+
+        // Note: if m_lastInsertedEvent is null then no note was inserted
+        if (m_lastInsertedEvent) {
+
+            // Do the split
+            m_lastInsertedEvent = helper.makeThisNoteViable(i);
+        }
+    }
+
 }
 
 }
