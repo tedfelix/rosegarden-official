@@ -637,9 +637,8 @@ SegmentNotationHelper::makeRestViable(iterator i)
 }
 
 
-void
-SegmentNotationHelper::makeNotesViable(iterator from, iterator to,
-				       bool splitAtBars)
+Event *
+SegmentNotationHelper::makeThisNoteViable(iterator noteItr, bool splitAtBars)
 {
     // We don't use quantized values here; we want a precise division.
     // Even if it doesn't look precise on the score (because the score
@@ -648,17 +647,14 @@ SegmentNotationHelper::makeNotesViable(iterator from, iterator to,
 
     std::vector<Event *> toInsert;
 
-    for (Segment::iterator i = from, j = i;
-	 segment().isBeforeEndMarker(i) && i != to; i = j) {
-
-	++j;
-
+    Segment::iterator i = noteItr;
+    
 	if (!(*i)->isa(Note::EventType) && !(*i)->isa(Note::EventRestType)) {
-	    continue;
+            return *noteItr;
 	}
 
 	if ((*i)->has(BEAMED_GROUP_TUPLET_BASE)) {
-	    continue;
+            return *noteItr;
 	}
 
 	DurationList dl;
@@ -684,7 +680,7 @@ SegmentNotationHelper::makeNotesViable(iterator from, iterator to,
 
 	if (dl.size() < 2) {
 	    // event is already of the correct duration
-	    continue;
+            return *noteItr;
 	}
     
 	acc = (*i)->getNotationAbsoluteTime();
@@ -728,12 +724,31 @@ SegmentNotationHelper::makeNotesViable(iterator from, iterator to,
 	}
 	
 	delete e;
-    }
 
+    // Insert new events into segement
     for (std::vector<Event *>::iterator ei = toInsert.begin();
 	 ei != toInsert.end(); ++ei) {
 	insert(*ei);
     }
+    
+    // Make assumption that toInsert.begin() != toInsert.end()
+    return *(toInsert.begin());
+
+}
+void
+SegmentNotationHelper::makeNotesViable(iterator from, iterator to,
+				       bool splitAtBars)
+{
+    std::vector<Event *> toInsert;
+
+    for (Segment::iterator i = from, j = i;
+	 segment().isBeforeEndMarker(i) && i != to; i = j) {
+
+	++j;
+	
+	makeThisNoteViable(i, splitAtBars);
+    }
+
 }
 
 void

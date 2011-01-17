@@ -350,7 +350,20 @@ public:
      */
     void makeRestViable(iterator i);
 
-    
+    /**
+     * Split a note or rest up into tied notes or shorter rests of
+     * viable lengths (longest possible viable duration first, then
+     * longest possible viable component of remainder &c).  Also
+     * optionally split a note or rest at barlines -- this is
+     * actually the most common user-visible use of this function.
+     *
+     * Note: no checks performed on validity of noteItr, use caution.
+     *
+     * Returns the original *noteItr Event if no split and tie occurs
+     * or returns the first new event inserted if split and tie occurs
+     */
+    Event * makeThisNoteViable(iterator noteItr, bool splitAtBars = true);
+
     /**
      * Split notes and rests up into tied notes or shorter rests of
      * viable lengths (longest possible viable duration first, then

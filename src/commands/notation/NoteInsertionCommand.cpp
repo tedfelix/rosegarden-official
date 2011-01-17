@@ -301,22 +301,16 @@ NoteInsertionCommand::modifySegment()
 
     if (m_autoTieBarlines) {
 
-        // Split-and-tie.  This might have the consequence of deleting
-        // our m_lastInsertedEvent -- if it does, we need to find out
-        // about it.  One way to do this (without having to
-        // dereference the possibly invalid event pointer afterwards)
-        // is to put the event in a selection, since EventSelection is
-        // a segment observer that updates itself when things change
-        // in the segment.
-        EventSelection sel(segment);
-        if (m_lastInsertedEvent) sel.addEvent(m_lastInsertedEvent);
+        // Note: if m_lastInsertedEvent is null then no note was inserted
+        if (m_lastInsertedEvent) {
 
-        // Do the split
-        helper.makeNotesViable(segment.getStartTime(), segment.getEndTime());
-
-        // If m_lastInsertedEvent has been deleted from the segment,
-        // then the selection will now be empty
-        if (sel.getSegmentEvents().empty()) m_lastInsertedEvent = 0;
+            // Do the split
+            Segment::iterator eventItr = segment.findSingle(m_lastInsertedEvent);
+            
+            if (eventItr != segment.end()) {
+                m_lastInsertedEvent = helper.makeThisNoteViable(eventItr);
+            }
+        }
     }
 }
 

@@ -184,20 +184,16 @@ NoteRestInserter::handleMouseRelease(const NotationMouseEvent *e)
          ((m_accidental == Accidentals::NoAccidental && m_followAccidental) ?
           m_lastAccidental : m_accidental), 100);  // Velocity hard coded for now,
 
-    // Note lastInsertedEvent can be null when a note fails to insert or when
-    // A split and tie occurs.  This complicates things a bit.
+    // Note lastInsertedEvent can be null only when a note fails to insert.
     if (lastInsertedEvent) {
 
         m_scene->setSingleSelectedEvent(&segment, lastInsertedEvent, false);
-    }
 
-    if (!m_widget->isInChordMode()) {
-        // Determine what happend (most likely).
-        timeT nextLocation = m_clickTime + note.getDuration();
-
-        if (endTime >= nextLocation) {
-            // Looks like we did a split and tie (This may fail in some odd
-            // circumstances, but it works in most situations).
+        if (!m_widget->isInChordMode()) {
+            // Since a note could have been split and tied, we need to rely on
+            // the full duration of the original note calculate the position of
+            // the pointer.
+            timeT nextLocation = m_clickTime + note.getDuration();
             m_widget->setPointerPosition(nextLocation);
         } else {
             m_widget->setPointerPosition(m_clickTime);
@@ -269,20 +265,16 @@ NoteRestInserter::insertNote(Segment &segment, timeT insertionTime,
                                (segment, insertionTime, endTime, note, pitch, accidental,
                                 velocity);
 
-    // Note lastInsertedEvent can be null when a note fails to insert or when
-    // A split and tie occurs.  This complicates things a bit.
+    // Note lastInsertedEvent can be null only when a note fails to insert.
     if (lastInsertedEvent) {
 
         m_scene->setSingleSelectedEvent(&segment, lastInsertedEvent, false);
-    }
 
-    if (!m_widget->isInChordMode()) {
-        // Determine what happend (most likely).
-        timeT nextLocation = insertionTime + note.getDuration();
-
-        if (endTime >= nextLocation) {
-            // Looks like we did a split and tie (This may fail in some odd
-            // circumstances, but it works in most situations).
+        if (!m_widget->isInChordMode()) {
+            // Since a note could have been split and tied, we need to rely on
+            // the full duration of the original note calculate the position of
+            // the pointer.
+            timeT nextLocation = insertionTime + note.getDuration();
             m_widget->setPointerPosition(nextLocation);
         }
     }
