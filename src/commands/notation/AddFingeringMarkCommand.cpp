@@ -121,10 +121,13 @@ AddFingeringMarkCommand::modifySegment()
     for (i = m_selection->getSegmentEvents().begin();
          i != m_selection->getSegmentEvents().end(); ++i) {
 
-        if (done.find(*i) != done.end())
-            continue;
-        if (!(*i)->isa(Note::EventType))
-            continue;
+        if (done.find(*i) != done.end()) continue;
+        if (!(*i)->isa(Note::EventType)) continue;
+
+        // If we find a note in the selection with TIED_BACKWARD set, it should
+        // be part of a chain of tied notes.  Putting the same mark on an entire
+        // chain of notes is definitely wrong, so we ignore these events.
+        if ((*i)->has(BaseProperties::TIED_BACKWARD)) continue;
 
         // We should do this on a chord-by-chord basis, considering
         // only those notes in a chord that are also in the selection.

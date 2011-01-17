@@ -139,6 +139,11 @@ AddMarkCommand::modifySegment()
     for (i = m_selection->getSegmentEvents().begin();
          i != m_selection->getSegmentEvents().end(); ++i) {
 
+        // If we find a note in the selection with TIED_BACKWARD set, it should
+        // be part of a chain of tied notes.  Putting the same mark on an entire
+        // chain of notes is definitely wrong, so we ignore these events.
+        if ((*i)->has(BaseProperties::TIED_BACKWARD)) continue;
+
         long n = 0;
         (*i)->get<Int>(MARK_COUNT, n);
         (*i)->set<Int>(MARK_COUNT, n + 1);
