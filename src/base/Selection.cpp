@@ -200,14 +200,12 @@ EventSelection::addEvent(Event *e)
                     // Keep looking for more.
                     continue;
                 }
-                // Better to let this fall through so we can break.
-                // Though this may not be the correct behavior if there are
-                // two events at this time and have the same pitch.
-                // checking for this situation is very complicated.
             }
-            // Break the loop.  There are no more events tied to the original
-            // event in this direction
-            break;
+            if ((*si)->getAbsoluteTime() > m_endTime) {
+                // Break the loop.  There are no more events tied to the original
+                // event in this direction
+                break;
+            }
         }
     }
     
@@ -266,14 +264,12 @@ EventSelection::addEvent(Event *e)
                     // Keep looking for more.
                     continue;
                 }
-                // Better to let this fall through so we can break.
-                // Though this may not be the correct behavior if there are
-                // two events at this time and have the same pitch.
-                // checking for this situation is very complicated.
             }
-            // Break the loop.  There are no more events tied to the original
-            // event in this direction
-            break;
+            if (((*si)->getAbsoluteTime() + (*si)->getDuration()) < m_beginTime) {
+                // Break the loop.  There are no more events tied to the original
+                // event in this direction
+                break;
+            }
         }
     }
 }
@@ -359,14 +355,12 @@ EventSelection::removeEvent(Event *e)
                             // Keep looking for more.
                             continue;
                         }
-                        // Better to let this fall through so we can break.
-                        // Though this may not be the correct behavior if there are
-                        // two events at this time and have the same pitch.
-                        // checking for this situation is very complicated.
                     }
-                    // Break the loop.  There are no more events tied to the original
-                    // event in this direction
-                    break;
+                    if ((*si)->getAbsoluteTime() > m_endTime) {
+                        // Break the loop.  There are no more events tied to the original
+                        // event in this direction
+                        break;
+                    }
                 }
             }
             
@@ -422,9 +416,11 @@ EventSelection::removeEvent(Event *e)
                         // two events at this time and have the same pitch.
                         // checking for this situation is very complicated.
                     }
-                    // Break the loop.  There are no more events tied to the original
-                    // event in this direction
-                    break;
+                    if (((*si)->getAbsoluteTime() + (*si)->getDuration()) < m_beginTime) {
+                        // Break the loop.  There are no more events tied to the original
+                        // event in this direction
+                        break;
+                    }
                 }
             }
         }
