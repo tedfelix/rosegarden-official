@@ -153,9 +153,20 @@ EventSelection::addEvent(Event *e)
         for (Segment::iterator si = m_originalSegment.begin();
              si != m_originalSegment.end(); ++si) {
             if (!(*si)->isa(Note::EventType)) continue;
+
             // skip everything before and up through to the target event
-            if (*si != e && !found) continue;
-            found = true;
+            if (!found) {
+                // See if we found it
+                if (*si == e) {
+                    // The events are equal. We found it.  Step over it
+                    found = true;
+                    continue;
+                } else {
+                    // The events are not equal; so we did not find it.
+                    // Step over it.
+                    continue;
+                }
+            }
             
             long newPitch = 0;
             if ((*si)->has(BaseProperties::PITCH)) (*si)->get<Int>(BaseProperties::PITCH, newPitch);
@@ -185,17 +196,23 @@ EventSelection::addEvent(Event *e)
                     for (ObserverSet::const_iterator i = m_observers.begin(); i != m_observers.end(); ++i) {
                         (*i)->eventSelected(this, *si);
                     }
-                } else {
-                    // break the search
-                    if (*si != e) si = m_originalSegment.end();
+                    // We found an event tied to the original in this direction.
+                    // Keep looking for more.
+                    continue;
                 }
+                // Better to let this fall through so we can break.
+                // Though this may not be the correct behavior if there are
+                // two events at this time and have the same pitch.
+                // checking for this situation is very complicated.
             }
+            // Break the loop.  There are no more events tied to the original
+            // event in this direction
+            break;
         }
-
     }
     
     // looking BACK:
-    if (e->has(BaseProperties::TIED_BACKWARD)) {
+    if (e->has(BaseProperties::TIED_BACKWARD) && (m_originalSegment.begin() != m_originalSegment.end())) {
 
         bool found = false;
         long oldPitch = 0;
@@ -204,9 +221,20 @@ EventSelection::addEvent(Event *e)
              si != m_originalSegment.begin(); ) {
             --si;
             if (!(*si)->isa(Note::EventType)) continue;
+
             // skip everything before and up through to the target event
-            if (*si != e && !found) continue;
-            found = true;
+            if (!found) {
+                // See if we found it
+                if (*si == e) {
+                    // The events are equal. We found it.  Step over it
+                    found = true;
+                    continue;
+                } else {
+                    // The events are not equal; so we did not find it.
+                    // Step over it.
+                    continue;
+                }
+            }
             
             long newPitch = 0;
             if ((*si)->has(BaseProperties::PITCH)) (*si)->get<Int>(BaseProperties::PITCH, newPitch);
@@ -234,15 +262,20 @@ EventSelection::addEvent(Event *e)
                     for (ObserverSet::const_iterator i = m_observers.begin(); i != m_observers.end(); ++i) {
                         (*i)->eventSelected(this, *si);
                     }
-                } else {
-                    // break the search
-                    if (*si != e) si = m_originalSegment.begin();
+                    // We found an event tied to the original in this direction.
+                    // Keep looking for more.
+                    continue;
                 }
+                // Better to let this fall through so we can break.
+                // Though this may not be the correct behavior if there are
+                // two events at this time and have the same pitch.
+                // checking for this situation is very complicated.
             }
+            // Break the loop.  There are no more events tied to the original
+            // event in this direction
+            break;
         }
-
     }
-
 }
 
 void
@@ -289,9 +322,20 @@ EventSelection::removeEvent(Event *e)
                 for (Segment::iterator si = m_originalSegment.begin();
                      si != m_originalSegment.end(); ++si) {
                     if (!(*si)->isa(Note::EventType)) continue;
+
                     // skip everything before and up through to the target event
-                    if (*si != e && !found) continue;
-                    found = true;
+                    if (!found) {
+                        // See if we found it
+                        if (*si == e) {
+                            // The events are equal. We found it.  Step over it
+                            found = true;
+                            continue;
+                        } else {
+                            // The events are not equal; so we did not find it.
+                            // Step over it.
+                            continue;
+                        }
+                    }
                     
                     long newPitch = 0;
                     if ((*si)->has(BaseProperties::PITCH)) (*si)->get<Int>(BaseProperties::PITCH, newPitch);
@@ -311,13 +355,19 @@ EventSelection::removeEvent(Event *e)
                             for (ObserverSet::const_iterator i = m_observers.begin(); i != m_observers.end(); ++i) {
                                 (*i)->eventDeselected(this, *si);
                             }
-                        } else {
-                            // break the search
-                            if (*si != e) si = m_originalSegment.end();
+                            // We found an event tied to the original in this direction.
+                            // Keep looking for more.
+                            continue;
                         }
+                        // Better to let this fall through so we can break.
+                        // Though this may not be the correct behavior if there are
+                        // two events at this time and have the same pitch.
+                        // checking for this situation is very complicated.
                     }
+                    // Break the loop.  There are no more events tied to the original
+                    // event in this direction
+                    break;
                 }
-
             }
             
             // looking BACK:
@@ -330,9 +380,20 @@ EventSelection::removeEvent(Event *e)
                      si != m_originalSegment.begin(); ) {
                     --si;
                     if (!(*si)->isa(Note::EventType)) continue;
+
                     // skip everything before and up through to the target event
-                    if (*si != e && !found) continue;
-                    found = true;
+                    if (!found) {
+                        // See if we found it
+                        if (*si == e) {
+                            // The events are equal. We found it.  Step over it
+                            found = true;
+                            continue;
+                        } else {
+                            // The events are not equal; so we did not find it.
+                            // Step over it.
+                            continue;
+                        }
+                    }
                     
                     long newPitch = 0;
                     if ((*si)->has(BaseProperties::PITCH)) (*si)->get<Int>(BaseProperties::PITCH, newPitch);
@@ -352,16 +413,21 @@ EventSelection::removeEvent(Event *e)
                             for (ObserverSet::const_iterator i = m_observers.begin(); i != m_observers.end(); ++i) {
                                 (*i)->eventDeselected(this, *si);
                             }
-                        } else {
-                            // break the search
-                            if (*si != e) si = m_originalSegment.begin();
+                            // We found an event tied to the original in this direction.
+                            // Keep looking for more.
+                            continue;
                         }
+                        // Better to let this fall through so we can break.
+                        // Though this may not be the correct behavior if there are
+                        // two events at this time and have the same pitch.
+                        // checking for this situation is very complicated.
                     }
+                    // Break the loop.  There are no more events tied to the original
+                    // event in this direction
+                    break;
                 }
             }
-
-	    return;
-	}
+        }
     }
 }
 
