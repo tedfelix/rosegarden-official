@@ -169,9 +169,30 @@ public:
 private:
     EventSelection &operator=(const EventSelection &);
   
+    /**
+     * Function Pointer to allow insertion or erasure of Event from Selection..
+     */
+    typedef void (EventSelection::*EventFuncPtr)(Event *e);
+    
+    /**
+     * Inserts the Event into the selection set and calls the observers.
+     */
+    void insertThisEvent(Event *e);
+    
+    /**
+     * Erases the Event from the selection container and calls the observers.
+     */
+    void eraseThisEvent(Event *e);
+        
+    /**
+     * This methods encapsulates all fo the logic needed to add and remove events
+     * from the seldection set.
+     */
+    void addRemoveEvent(Event *e, EventFuncPtr insertEraseFn);
+        
     typedef std::list<EventSelectionObserver *> ObserverSet;
     ObserverSet m_observers;
-
+    
 protected:
     //--------------- Data members ---------------------------------
 

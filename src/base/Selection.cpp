@@ -104,39 +104,68 @@ EventSelection::operator==(const EventSelection &s)
 }
 
 void
-EventSelection::addObserver(EventSelectionObserver *obs) { 
-    m_observers.push_back(obs); 
+EventSelection::insertThisEvent(Event *e)
+{
+    if (contains(e)) return;
+    
+    m_segmentEvents.insert(e);
+    
+std::cerr << "insertThisEvent 1" << std::endl;
+    // Notify observers of new selected event
+    for (ObserverSet::const_iterator i = m_observers.begin(); i != m_observers.end(); ++i) {
+	(*i)->eventSelected(this, e);
+    }
+std::cerr << "insertThisEvent 2" << std::endl;
 }
 
 void
-EventSelection::removeObserver(EventSelectionObserver *obs) { 
-    m_observers.remove(obs); 
+EventSelection::eraseThisEvent(Event *e)
+{
+    
+    if (!contains(e)) return;  // This probably not needed.
+
+    std::pair<eventcontainer::iterator, eventcontainer::iterator> 
+	interval = m_segmentEvents.equal_range(e);
+
+    for (eventcontainer::iterator it = interval.first;
+         it != interval.second; it++) {
+
+        if (*it == e) {
+
+	    m_segmentEvents.erase(it);
+
+            // Notify observers of new deselected event
+            for (ObserverSet::const_iterator i = m_observers.begin();
+                    i != m_observers.end(); ++i) {
+                (*i)->eventDeselected(this, e);
+                
+            }
+            // Exit, since we found one good match.  Don't worry about others.
+            break;
+        }
+    }
 }
 
-
 void
-EventSelection::addEvent(Event *e)
-{ 
+EventSelection::addRemoveEvent(Event *e, EventFuncPtr insertEraseFn)
+{
     timeT eventDuration = e->getDuration();
     if (eventDuration == 0) eventDuration = 1;
-
-    if (contains(e)) return;
 
     if (e->getAbsoluteTime() < m_beginTime || !m_haveRealStartTime) {
 	m_beginTime = e->getAbsoluteTime();
 	m_haveRealStartTime = true;
     }
+    timeT eventStartTime = e->getAbsoluteTime();
+    timeT eventEndTime = eventStartTime + eventDuration;
+    
     if (e->getAbsoluteTime() + eventDuration > m_endTime) {
 	m_endTime = e->getAbsoluteTime() + eventDuration;
     }
 
     // Always add at least the one Event we were called with.
-    m_segmentEvents.insert(e);
-
-    // Notify observers of new selected events
-    for (ObserverSet::const_iterator i = m_observers.begin(); i != m_observers.end(); ++i) {
-	(*i)->eventSelected(this, e);
-    }
+std::cerr << "In AddRemove Event 1" << std::endl;
+    (this->*insertEraseFn)(e);
 
     // Now we handle the tied notes themselves.  If the event we're adding is
     // tied, then we iterate forward and back to try to find all of its linked
@@ -152,6 +181,7 @@ EventSelection::addEvent(Event *e)
         if (e->has(BaseProperties::PITCH)) e->get<Int>(BaseProperties::PITCH, oldPitch);
         for (Segment::iterator si = m_originalSegment.begin();
              si != m_originalSegment.end(); ++si) {
+std::cerr << "In AddRemove Event 2a" << std::endl;
             if (!(*si)->isa(Note::EventType)) continue;
 
             // skip everything before and up through to the target event
@@ -168,6 +198,12 @@ EventSelection::addEvent(Event *e)
                 }
             }
             
+            if ((*si)->getAbsoluteTime() > eventEndTime) {
+                // Break the loop.  There are no more events tied to the original
+                // event in this direction
+                break;
+            }
+
             long newPitch = 0;
             if ((*si)->has(BaseProperties::PITCH)) (*si)->get<Int>(BaseProperties::PITCH, newPitch);
 
@@ -178,7 +214,8 @@ EventSelection::addEvent(Event *e)
                 if ((*si)->has(BaseProperties::TIED_BACKWARD)) {
 
                     // add the event
-                    m_segmentEvents.insert(*si);
+                    (this->*insertEraseFn)(*si);
+std::cerr << "In AddRemove Event 2b" << std::endl;
 
                     // while looking ahead, we have to keep pushing our
                     // [selection] end boundary ahead to the end of the most
@@ -186,25 +223,15 @@ EventSelection::addEvent(Event *e)
                     eventDuration = (*si)->getDuration();
                     if (eventDuration == 0) eventDuration = 1;
 
-                    if ((*si)->getAbsoluteTime() + eventDuration > m_endTime) {
-                        m_endTime = (*si)->getAbsoluteTime() + eventDuration;
+                    eventEndTime = (*si)->getAbsoluteTime() + eventDuration;
+                    if (eventEndTime > m_endTime) {
+                        m_endTime = eventEndTime;
                     }
 
-                    // notify observers (it's gross having to iterate through
-                    // all the observers in every iteration of this loop, but
-                    // it's probably fast enough not to notice)
-                    for (ObserverSet::const_iterator i = m_observers.begin(); i != m_observers.end(); ++i) {
-                        (*i)->eventSelected(this, *si);
-                    }
-                    // We found an event tied to the original in this direction.
+                   // We found an event tied to the original in this direction.
                     // Keep looking for more.
                     continue;
                 }
-            }
-            if ((*si)->getAbsoluteTime() > m_endTime) {
-                // Break the loop.  There are no more events tied to the original
-                // event in this direction
-                break;
             }
         }
     }
@@ -217,6 +244,7 @@ EventSelection::addEvent(Event *e)
         if (e->has(BaseProperties::PITCH)) e->get<Int>(BaseProperties::PITCH, oldPitch);
         for (Segment::iterator si = m_originalSegment.end();
              si != m_originalSegment.begin(); ) {
+std::cerr << "In AddRemove Event 3a" << std::endl;
             --si;
             if (!(*si)->isa(Note::EventType)) continue;
 
@@ -234,6 +262,12 @@ EventSelection::addEvent(Event *e)
                 }
             }
             
+            if (((*si)->getAbsoluteTime() + (*si)->getDuration()) < eventStartTime) {
+                // Break the loop.  There are no more events tied to the original
+                // event in this direction
+                break;
+            }
+
             long newPitch = 0;
             if ((*si)->has(BaseProperties::PITCH)) (*si)->get<Int>(BaseProperties::PITCH, newPitch);
 
@@ -244,34 +278,44 @@ EventSelection::addEvent(Event *e)
                 if ((*si)->has(BaseProperties::TIED_FORWARD)) {
 
                     // add the event
-                    m_segmentEvents.insert(*si);
+                    (this->*insertEraseFn)(*si);
+std::cerr << "In AddRemove Event 3b" << std::endl;
 
+                    eventStartTime = (*si)->getAbsoluteTime();
+                    
                     // while searching backwards, we need to keep adjusting our
                     // start boundary [we are a selection] to the left to
                     // incorporate each new tied note encountered
-                    if ((*si)->getAbsoluteTime() < m_beginTime) {
+                    if (eventStartTime < m_beginTime) {
                         m_beginTime = (*si)->getAbsoluteTime();
                         // (m_haveRealStartTime will have already been set true)
                     }
 
-                    // notify observers (it's gross having to iterate through
-                    // all the observers in every iteration of this loop, but
-                    // it's probably fast enough not to notice)
-                    for (ObserverSet::const_iterator i = m_observers.begin(); i != m_observers.end(); ++i) {
-                        (*i)->eventSelected(this, *si);
-                    }
                     // We found an event tied to the original in this direction.
                     // Keep looking for more.
                     continue;
                 }
             }
-            if (((*si)->getAbsoluteTime() + (*si)->getDuration()) < m_beginTime) {
-                // Break the loop.  There are no more events tied to the original
-                // event in this direction
-                break;
-            }
         }
     }
+}
+
+void
+EventSelection::addObserver(EventSelectionObserver *obs) { 
+    m_observers.push_back(obs); 
+}
+
+void
+EventSelection::removeObserver(EventSelectionObserver *obs) { 
+    m_observers.remove(obs); 
+}
+
+
+void
+EventSelection::addEvent(Event *e)
+{
+std::cerr << "In Add Event" << std::endl;
+    addRemoveEvent(e, &EventSelection::insertThisEvent);
 }
 
 void
@@ -279,152 +323,16 @@ EventSelection::addFromSelection(EventSelection *sel)
 {
     for (eventcontainer::iterator i = sel->getSegmentEvents().begin();
 	 i != sel->getSegmentEvents().end(); ++i) {
-	if (!contains(*i)) addEvent(*i);
+	// contains() checked a bit deeper now
+	addEvent(*i);
     }
 }
 
 void
 EventSelection::removeEvent(Event *e) 
 {
-    std::pair<eventcontainer::iterator, eventcontainer::iterator> 
-	interval = m_segmentEvents.equal_range(e);
-
-    for (eventcontainer::iterator it = interval.first;
-         it != interval.second; it++) {
-
-        if (*it == e) {
-
-            // erase the intended event at minimum
-	    m_segmentEvents.erase(it);
-
-	    // Notify observers of new selected events
-            for (ObserverSet::const_iterator i = m_observers.begin(); i != m_observers.end(); ++i) {
-	        (*i)->eventDeselected(this,e);
-            }
-
-            
-            // Now we handle the tied notes themselves.  If the event we're removing is
-            // tied, then we iterate forward and back to try to find all of its linked
-            // neighbors, and treat them as though they were one unit.  Musically, they
-            // ARE one unit, and having selections treat them that way solves a lot of
-            // usability problems.
-            //
-            // looking AHEAD:
-            if (e->has(BaseProperties::TIED_FORWARD)) {
-
-                bool found = false;
-                long oldPitch = 0;
-                if (e->has(BaseProperties::PITCH)) e->get<Int>(BaseProperties::PITCH, oldPitch);
-                for (Segment::iterator si = m_originalSegment.begin();
-                     si != m_originalSegment.end(); ++si) {
-                    if (!(*si)->isa(Note::EventType)) continue;
-
-                    // skip everything before and up through to the target event
-                    if (!found) {
-                        // See if we found it
-                        if (*si == e) {
-                            // The events are equal. We found it.  Step over it
-                            found = true;
-                            continue;
-                        } else {
-                            // The events are not equal; so we did not find it.
-                            // Step over it.
-                            continue;
-                        }
-                    }
-                    
-                    long newPitch = 0;
-                    if ((*si)->has(BaseProperties::PITCH)) (*si)->get<Int>(BaseProperties::PITCH, newPitch);
-
-                    // forward from the target, find all notes that are tied backwards,
-                    // until hitting the end of the segment or the first note at the
-                    // same pitch that is not tied backwards.
-                    if (oldPitch == newPitch) {
-                        if ((*si)->has(BaseProperties::TIED_BACKWARD)) {
-
-                            // remove the event
-                            m_segmentEvents.erase(*si);
-
-                            // notify observers (it's gross having to iterate through
-                            // all the observers in every iteration of this loop, but
-                            // it's probably fast enough not to notice)
-                            for (ObserverSet::const_iterator i = m_observers.begin(); i != m_observers.end(); ++i) {
-                                (*i)->eventDeselected(this, *si);
-                            }
-                            // We found an event tied to the original in this direction.
-                            // Keep looking for more.
-                            continue;
-                        }
-                    }
-                    if ((*si)->getAbsoluteTime() > m_endTime) {
-                        // Break the loop.  There are no more events tied to the original
-                        // event in this direction
-                        break;
-                    }
-                }
-            }
-            
-            // looking BACK:
-            if (e->has(BaseProperties::TIED_BACKWARD)) {
-
-                bool found = false;
-                long oldPitch = 0;
-                if (e->has(BaseProperties::PITCH)) e->get<Int>(BaseProperties::PITCH, oldPitch);
-                for (Segment::iterator si = m_originalSegment.end();
-                     si != m_originalSegment.begin(); ) {
-                    --si;
-                    if (!(*si)->isa(Note::EventType)) continue;
-
-                    // skip everything before and up through to the target event
-                    if (!found) {
-                        // See if we found it
-                        if (*si == e) {
-                            // The events are equal. We found it.  Step over it
-                            found = true;
-                            continue;
-                        } else {
-                            // The events are not equal; so we did not find it.
-                            // Step over it.
-                            continue;
-                        }
-                    }
-                    
-                    long newPitch = 0;
-                    if ((*si)->has(BaseProperties::PITCH)) (*si)->get<Int>(BaseProperties::PITCH, newPitch);
-
-                    // back from the target, find all notes that are tied forward,
-                    // until hitting the end of the segment or the first note at the
-                    // same pitch that is not tied forward.
-                    if (oldPitch == newPitch) {
-                        if ((*si)->has(BaseProperties::TIED_FORWARD)) {
-
-                            // remove the event
-                            m_segmentEvents.erase(*si);
-
-                            // notify observers (it's gross having to iterate through
-                            // all the observers in every iteration of this loop, but
-                            // it's probably fast enough not to notice)
-                            for (ObserverSet::const_iterator i = m_observers.begin(); i != m_observers.end(); ++i) {
-                                (*i)->eventDeselected(this, *si);
-                            }
-                            // We found an event tied to the original in this direction.
-                            // Keep looking for more.
-                            continue;
-                        }
-                        // Better to let this fall through so we can break.
-                        // Though this may not be the correct behavior if there are
-                        // two events at this time and have the same pitch.
-                        // checking for this situation is very complicated.
-                    }
-                    if (((*si)->getAbsoluteTime() + (*si)->getDuration()) < m_beginTime) {
-                        // Break the loop.  There are no more events tied to the original
-                        // event in this direction
-                        break;
-                    }
-                }
-            }
-        }
-    }
+std::cerr << "In Remove Event" << std::endl;
+    addRemoveEvent(e, &EventSelection::eraseThisEvent);
 }
 
 bool
@@ -556,7 +464,8 @@ EventSelection::getRangeTimes() const
 void
 EventSelection::eventRemoved(const Segment *s, Event *e)
 {
-    if (s == &m_originalSegment /*&& contains(e)*/) {
+    // contains() checked a bit deeper now.
+    if (s == &m_originalSegment) {
         removeEvent(e);
     }
 }
