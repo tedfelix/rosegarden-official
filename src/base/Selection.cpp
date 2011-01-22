@@ -108,6 +108,19 @@ EventSelection::insertThisEvent(Event *e)
 {
     if (contains(e)) return;
     
+    if (e->getAbsoluteTime() < m_beginTime || !m_haveRealStartTime) {
+	m_beginTime = e->getAbsoluteTime();
+	m_haveRealStartTime = true;
+    }
+
+    timeT eventDuration = e->getDuration();
+    if (eventDuration == 0) eventDuration = 1;
+
+    timeT eventEndTime = e->getAbsoluteTime() + eventDuration;
+    if (eventEndTime > m_endTime) {
+	m_endTime = eventEndTime;
+    }
+    
     m_segmentEvents.insert(e);
     
     // Notify observers of new selected event
@@ -147,21 +160,22 @@ EventSelection::eraseThisEvent(Event *e)
 void
 EventSelection::addRemoveEvent(Event *e, EventFuncPtr insertEraseFn)
 {
+    const Segment::const_iterator baseSegmentItr = m_originalSegment.find(e);
+    
+    // Sanity Check
+    if (baseSegmentItr == m_originalSegment.end()) {
+        std::cerr << "EventSelection::addRemoveEvent Sent event that can not be found "
+                  << "in segment.  Exiting method" << std::endl;
+    
+    }
+
     timeT eventDuration = e->getDuration();
     if (eventDuration == 0) eventDuration = 1;
 
-    if (e->getAbsoluteTime() < m_beginTime || !m_haveRealStartTime) {
-	m_beginTime = e->getAbsoluteTime();
-	m_haveRealStartTime = true;
-    }
     timeT eventStartTime = e->getAbsoluteTime();
     timeT eventEndTime = eventStartTime + eventDuration;
     
-    if (e->getAbsoluteTime() + eventDuration > m_endTime) {
-	m_endTime = e->getAbsoluteTime() + eventDuration;
-    }
-
-    // Always add at least the one Event we were called with.
+    // Always add/remove at least the one Event we were called with.
     (this->*insertEraseFn)(e);
 
     // Now we handle the tied notes themselves.  If the event we're adding is
@@ -173,27 +187,15 @@ EventSelection::addRemoveEvent(Event *e, EventFuncPtr insertEraseFn)
     // looking AHEAD:
     if (e->has(BaseProperties::TIED_FORWARD)) {
 
-        bool found = false;
         long oldPitch = 0;
         if (e->has(BaseProperties::PITCH)) e->get<Int>(BaseProperties::PITCH, oldPitch);
-        for (Segment::iterator si = m_originalSegment.begin();
-             si != m_originalSegment.end(); ++si) {
+        
+        // Set iterator to the next element in container after baseSegmentItr;
+        Segment::const_iterator si = baseSegmentItr;
+        ++si;
+        for (; si != m_originalSegment.end(); ++si) {
             if (!(*si)->isa(Note::EventType)) continue;
 
-            // skip everything before and up through to the target event
-            if (!found) {
-                // See if we found it
-                if (*si == e) {
-                    // The events are equal. We found it.  Step over it
-                    found = true;
-                    continue;
-                } else {
-                    // The events are not equal; so we did not find it.
-                    // Step over it.
-                    continue;
-                }
-            }
-            
             if ((*si)->getAbsoluteTime() > eventEndTime) {
                 // Break the loop.  There are no more events tied to the original
                 // event in this direction
@@ -208,24 +210,16 @@ EventSelection::addRemoveEvent(Event *e, EventFuncPtr insertEraseFn)
             // same pitch that is not tied backwards.
             if (oldPitch == newPitch) {
                 if ((*si)->has(BaseProperties::TIED_BACKWARD)) {
-
                     // add the event
                     (this->*insertEraseFn)(*si);
 
                     // while looking ahead, we have to keep pushing our
-                    // [selection] end boundary ahead to the end of the most
+                    // [selection]  search ahead to the end of the most
                     // distant tied note encountered
                     eventDuration = (*si)->getDuration();
                     if (eventDuration == 0) eventDuration = 1;
 
                     eventEndTime = (*si)->getAbsoluteTime() + eventDuration;
-                    if (eventEndTime > m_endTime) {
-                        m_endTime = eventEndTime;
-                    }
-
-                   // We found an event tied to the original in this direction.
-                    // Keep looking for more.
-                    continue;
                 }
             }
         }
@@ -234,28 +228,17 @@ EventSelection::addRemoveEvent(Event *e, EventFuncPtr insertEraseFn)
     // looking BACK:
     if (e->has(BaseProperties::TIED_BACKWARD) && (m_originalSegment.begin() != m_originalSegment.end())) {
 
-        bool found = false;
         long oldPitch = 0;
         if (e->has(BaseProperties::PITCH)) e->get<Int>(BaseProperties::PITCH, oldPitch);
-        for (Segment::iterator si = m_originalSegment.end();
-             si != m_originalSegment.begin(); ) {
+        
+        for (Segment::const_iterator si = baseSegmentItr;
+                si != m_originalSegment.begin();) {
+
+            // Set iterator to the previous element in container
+            // First step moves iterator to element prior to baseSegmentItr
             --si;
             if (!(*si)->isa(Note::EventType)) continue;
 
-            // skip everything before and up through to the target event
-            if (!found) {
-                // See if we found it
-                if (*si == e) {
-                    // The events are equal. We found it.  Step over it
-                    found = true;
-                    continue;
-                } else {
-                    // The events are not equal; so we did not find it.
-                    // Step over it.
-                    continue;
-                }
-            }
-            
             if (((*si)->getAbsoluteTime() + (*si)->getDuration()) < eventStartTime) {
                 // Break the loop.  There are no more events tied to the original
                 // event in this direction
@@ -270,23 +253,13 @@ EventSelection::addRemoveEvent(Event *e, EventFuncPtr insertEraseFn)
             // same pitch that is not tied forward.
             if (oldPitch == newPitch) {
                 if ((*si)->has(BaseProperties::TIED_FORWARD)) {
-
                     // add the event
                     (this->*insertEraseFn)(*si);
 
+                    // while looking back, we have to keep pushing our
+                    // [selection] search back to the end of the most
+                    // distant tied note encountered
                     eventStartTime = (*si)->getAbsoluteTime();
-                    
-                    // while searching backwards, we need to keep adjusting our
-                    // start boundary [we are a selection] to the left to
-                    // incorporate each new tied note encountered
-                    if (eventStartTime < m_beginTime) {
-                        m_beginTime = (*si)->getAbsoluteTime();
-                        // (m_haveRealStartTime will have already been set true)
-                    }
-
-                    // We found an event tied to the original in this direction.
-                    // Keep looking for more.
-                    continue;
                 }
             }
         }
