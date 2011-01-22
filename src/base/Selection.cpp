@@ -110,12 +110,10 @@ EventSelection::insertThisEvent(Event *e)
     
     m_segmentEvents.insert(e);
     
-std::cerr << "insertThisEvent 1" << std::endl;
     // Notify observers of new selected event
     for (ObserverSet::const_iterator i = m_observers.begin(); i != m_observers.end(); ++i) {
 	(*i)->eventSelected(this, e);
     }
-std::cerr << "insertThisEvent 2" << std::endl;
 }
 
 void
@@ -164,7 +162,6 @@ EventSelection::addRemoveEvent(Event *e, EventFuncPtr insertEraseFn)
     }
 
     // Always add at least the one Event we were called with.
-std::cerr << "In AddRemove Event 1" << std::endl;
     (this->*insertEraseFn)(e);
 
     // Now we handle the tied notes themselves.  If the event we're adding is
@@ -181,7 +178,6 @@ std::cerr << "In AddRemove Event 1" << std::endl;
         if (e->has(BaseProperties::PITCH)) e->get<Int>(BaseProperties::PITCH, oldPitch);
         for (Segment::iterator si = m_originalSegment.begin();
              si != m_originalSegment.end(); ++si) {
-std::cerr << "In AddRemove Event 2a" << std::endl;
             if (!(*si)->isa(Note::EventType)) continue;
 
             // skip everything before and up through to the target event
@@ -215,7 +211,6 @@ std::cerr << "In AddRemove Event 2a" << std::endl;
 
                     // add the event
                     (this->*insertEraseFn)(*si);
-std::cerr << "In AddRemove Event 2b" << std::endl;
 
                     // while looking ahead, we have to keep pushing our
                     // [selection] end boundary ahead to the end of the most
@@ -244,7 +239,6 @@ std::cerr << "In AddRemove Event 2b" << std::endl;
         if (e->has(BaseProperties::PITCH)) e->get<Int>(BaseProperties::PITCH, oldPitch);
         for (Segment::iterator si = m_originalSegment.end();
              si != m_originalSegment.begin(); ) {
-std::cerr << "In AddRemove Event 3a" << std::endl;
             --si;
             if (!(*si)->isa(Note::EventType)) continue;
 
@@ -279,7 +273,6 @@ std::cerr << "In AddRemove Event 3a" << std::endl;
 
                     // add the event
                     (this->*insertEraseFn)(*si);
-std::cerr << "In AddRemove Event 3b" << std::endl;
 
                     eventStartTime = (*si)->getAbsoluteTime();
                     
@@ -314,7 +307,6 @@ EventSelection::removeObserver(EventSelectionObserver *obs) {
 void
 EventSelection::addEvent(Event *e)
 {
-std::cerr << "In Add Event" << std::endl;
     addRemoveEvent(e, &EventSelection::insertThisEvent);
 }
 
@@ -331,7 +323,6 @@ EventSelection::addFromSelection(EventSelection *sel)
 void
 EventSelection::removeEvent(Event *e) 
 {
-std::cerr << "In Remove Event" << std::endl;
     addRemoveEvent(e, &EventSelection::eraseThisEvent);
 }
 
