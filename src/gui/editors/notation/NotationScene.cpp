@@ -1438,13 +1438,16 @@ NotationScene::setSelection(EventSelection *s,
             newStaff->renderElements(oldFrom, oldTo);
             newStaff->renderElements(newFrom, newTo);
         }
-    } else if (oldSelection && oldStaff) {
+    } else {
+        if (oldSelection && oldStaff) {
         oldStaff->renderElements(oldSelection->getStartTime(), 
                                  oldSelection->getEndTime());
-    } else if (m_selection && newStaff) {
+        }
+        if (m_selection && newStaff) {
         newStaff->renderElements(m_selection->getStartTime(), 
                                  m_selection->getEndTime());
-    }        
+        }
+    }
 
     if (preview) previewSelection(m_selection, oldSelection);
 
