@@ -4057,13 +4057,13 @@
     <message>
         <location line="-940"/>
         <source>Tuplet Insert Mo&amp;de</source>
-        <translation type="unfinished"></translation>
+        <translation>Mode insertion de &amp;N-olets</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>;</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+27"/>
@@ -10353,7 +10353,7 @@
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixElement.cpp" line="+176"/>
         <source>This event is tied to another event.</source>
-        <translation type="unfinished"></translation>
+        <translation>Cet événement est lié à autre événement.</translation>
     </message>
 </context>
 <context>
@@ -10798,17 +10798,17 @@
     <message>
         <location line="+12"/>
         <source>Make default JACK connections for</source>
-        <translation type="unfinished"></translation>
+        <translation>Fair connexions de JACK par défaut</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>audio outputs</source>
-        <translation type="unfinished"></translation>
+        <translation>sorties audio</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>audio inputs</source>
-        <translation type="unfinished"></translation>
+        <translation>entrées audio</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -14640,22 +14640,22 @@ Texte d&apos;exemple depuis le fichier:</translation>
     <message>
         <location filename="../../src/gui/dialogs/InsertTupletDialog.cpp" line="+47"/>
         <source>Tuplet</source>
-        <translation type="unfinished">N-olet</translation>
+        <translation>N-olet</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>New timing for tuplet group</source>
-        <translation type="unfinished">Nouvelle durée pour le N-olet</translation>
+        <translation>Nouvelle durée pour le N-olet</translation>
     </message>
     <message>
         <location line="+8"/>
         <source>Play </source>
-        <translation type="unfinished">Jouer </translation>
+        <translation>Jouer </translation>
     </message>
     <message>
         <location line="+5"/>
         <source>in the time of  </source>
-        <translation type="unfinished">dans le temps de  </translation>
+        <translation>dans le temps de  </translation>
     </message>
 </context>
 <context>
@@ -15531,7 +15531,7 @@ répartis verticalement sur la page)</translation>
     <message>
         <location filename="../../src/gui/rulers/LoopRuler.cpp" line="+85"/>
         <source>&lt;qt&gt;&lt;p&gt;Click and drag to move the playback pointer.&lt;/p&gt;&lt;p&gt;Shift-click and drag to set a range for looping or editing.&lt;/p&gt;&lt;p&gt;Shift-click to clear the loop or range.&lt;/p&gt;&lt;p&gt;Ctrl-click and drag to move the playback pointer with snap to beat.&lt;/p&gt;&lt;p&gt;Double-click to start playback.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Cliquer et glisser pour déplacer le pointeur d&apos;exécution.&lt;/p&gt;&lt;p&gt;Majuscule+cliquer et glisser pour définir une plage à exécuter en boucle ou à éditer.&lt;/p&gt;&lt;p&gt;Majuscule+cliquer pour supprimer la définition d&apos;une plage.&lt;/p&gt;Ctrl+cliquer et glisser pour déplacer le pointeur d&apos;exécution sans rester accroché à la grille des temps.&lt;p&gt;Double-cliquer pour démarrer l&apos;exécution.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -17661,7 +17661,7 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
     <message>
         <location line="+120"/>
         <source>Tuplet</source>
-        <translation type="unfinished">N-olet</translation>
+        <translation>N-olet</translation>
     </message>
     <message>
         <location line="+164"/>
