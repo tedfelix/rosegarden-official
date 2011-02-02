@@ -67,8 +67,6 @@ CollapseNotesCommand::modifySegment()
     if (thisOne) {
         helper.collapseNoteAggressively(*i, endTime);
     }
-    
-    helper.makeNotesViable(getStartTime(), endTime);
 }
 
 }
