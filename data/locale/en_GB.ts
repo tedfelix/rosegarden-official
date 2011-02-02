@@ -4085,13 +4085,13 @@
     <message>
         <location line="+1469"/>
         <source>Tuplet Insert Mo&amp;de</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+7"/>
         <source>;</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+208"/>
@@ -10353,7 +10353,7 @@
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixElement.cpp" line="+176"/>
         <source>This event is tied to another event.</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -10798,17 +10798,17 @@
     <message>
         <location line="+12"/>
         <source>Make default JACK connections for</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+6"/>
         <source>audio outputs</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+6"/>
         <source>audio inputs</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+10"/>
@@ -14620,22 +14620,22 @@ Example text from file:</source>
     <message>
         <location filename="../../src/gui/dialogs/InsertTupletDialog.cpp" line="+47"/>
         <source>Tuplet</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+10"/>
         <source>New timing for tuplet group</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+8"/>
         <source>Play </source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+5"/>
         <source>in the time of  </source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -15500,7 +15500,7 @@ Would you like to use
     <message>
         <location filename="../../src/gui/rulers/LoopRuler.cpp" line="+85"/>
         <source>&lt;qt&gt;&lt;p&gt;Click and drag to move the playback pointer.&lt;/p&gt;&lt;p&gt;Shift-click and drag to set a range for looping or editing.&lt;/p&gt;&lt;p&gt;Shift-click to clear the loop or range.&lt;/p&gt;&lt;p&gt;Ctrl-click and drag to move the playback pointer with snap to beat.&lt;/p&gt;&lt;p&gt;Double-click to start playback.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -17584,7 +17584,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location line="+120"/>
         <source>Tuplet</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+9"/>
