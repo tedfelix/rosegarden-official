@@ -150,13 +150,16 @@ AudioPreviewThread::process()
         }
 
         if (found) {
-            unsigned int channels =
-                m_manager->getAudioFile(req.audioFileId)->getChannels();
-            m_results[token] = ResultsPair(channels, results);
-            QObject *notify = req.notify;
-            QApplication::postEvent
-            (notify,
-             new QCustomEvent(AudioPreviewReady, (void *)token));
+            AudioFile *audioFile = m_manager->getAudioFile(req.audioFileId);
+            // If there's an audio file to work with
+            if (audioFile != NULL) {
+                unsigned int channels = audioFile->getChannels();
+                m_results[token] = ResultsPair(channels, results);
+                QObject *notify = req.notify;
+                QApplication::postEvent
+                (notify,
+                 new QCustomEvent(AudioPreviewReady, (void *)token));
+            }
         }
 
         m_mutex.unlock();
