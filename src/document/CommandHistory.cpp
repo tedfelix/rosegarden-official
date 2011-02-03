@@ -478,6 +478,23 @@ CommandHistory::redoActivated(QAction *action)
     }
 }
 
+// This function cribbed from gui/kernel/qaction.cpp in Qt 4.5
+static QString
+strippedText(QString s)
+{
+    s.remove(QString::fromLatin1("..."));
+    int i = 0;
+    while (i < s.size()) {
+        ++i;
+        if (s.at(i-1) != QLatin1Char('&'))
+            continue;
+        if (i < s.size() && s.at(i) == QLatin1Char('&'))
+            ++i;
+        s.remove(i-1,1);
+    }
+    return s.trimmed();
+};
+
 void
 CommandHistory::updateActions()
 {
@@ -496,6 +513,7 @@ CommandHistory::updateActions()
 
 	    action->setEnabled(false);
 	    action->setText(text);
+            action->setToolTip(strippedText(text));
 
 	    menuAction->setEnabled(false);
 	    menuAction->setText(text);
@@ -512,6 +530,7 @@ CommandHistory::updateActions()
 		.arg(commandName);
 
 	    action->setText(text);
+            action->setToolTip(strippedText(text));
 	    menuAction->setText(text);
 	}
 
