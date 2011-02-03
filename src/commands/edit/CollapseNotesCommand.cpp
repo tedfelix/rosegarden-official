@@ -42,26 +42,43 @@ CollapseNotesCommand::modifySegment()
     // it, we can't really iterate through the selection (or segment)
     // while we do it.
 
-    // Instead we have to maintain a copy of all the candidate events,
-    // and check that each one is still in the segment when we come to
-    // collapse it.
+    // We also can't test events to find out whether they're still in
+    // the segment or not, because the event comparator will crash if
+    // an event has actually been deleted.
 
-    QList<Event *> candidates;
+    // So, we maintain a set of the events we have already seen
+    // (checking in this set by pointer comparison only, for safety)
+    // and traverse the selection requesting a collapse for each event
+    // that is not already in our seen set.  Each time a collapse is
+    // requested, we fly back to the start of the selection -- this is
+    // partly so we are sure to see any new events that may appear
+    // during collapsing, and partly so that our active iterator is
+    // always valid even if an event is deleted from the selection.
 
-    foreach (Event *e, m_selection->getSegmentEvents()) {
-        candidates.push_back(e);
-    }
+    QSet<Event *> seen;
 
-    for (int i = 0; i < candidates.size(); ++i) {
+    EventSelection::eventcontainer::iterator i =
+        m_selection->getSegmentEvents().begin();
 
-        Event *e = candidates[i];
-        if (s.findSingle(e) == s.end()) continue;
+    while (i != m_selection->getSegmentEvents().end()) {
 
-        Segment::iterator i = helper.collapseNoteAggressively(e, endTime);
-        if (i != s.end()) {
-            m_selection->addEvent(*i);
-            candidates.push_back(*i);
+        Event *e = *i;
+
+        if (!seen.contains(e)) {
+
+            seen.insert(e);
+
+            Segment::iterator collapsed =
+                helper.collapseNoteAggressively(e, endTime);
+            if (collapsed != s.end()) {
+                m_selection->addEvent(*collapsed);
+            }
+
+            i = m_selection->getSegmentEvents().begin();
+            continue;
         }
+
+        ++i;
     }
 }
 
