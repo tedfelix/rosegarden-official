@@ -31,41 +31,34 @@ namespace Rosegarden
 void
 CollapseNotesCommand::modifySegment()
 {
-    SegmentNotationHelper helper(getSegment());
+    Segment &s(getSegment());
+    SegmentNotationHelper helper(s);
     timeT endTime = getEndTime();
 
-    // This is really nasty stuff.  We can't go in forward direction
-    // using the j-iterator trick because collapseNoteAggressively may
-    // erase the following iterator as well as the preceding one.  We
-    // can't go backward naively, because collapseNoteAggressively
-    // erases i from the EventSelection now that it's a
-    // SegmentObserver.  We need the fancy hybrid j-iterator-backward
-    // technique applied to selections instead of segments.
+    // Because the selection tracks the segment as a SegmentObserver,
+    // anything we do to the segment will also affect the selection.
 
-    EventSelection::eventcontainer::iterator i =
-        m_selection->getSegmentEvents().end();
-    EventSelection::eventcontainer::iterator j = i;
-    EventSelection::eventcontainer::iterator beg =
-        m_selection->getSegmentEvents().begin();
-    bool thisOne = false;
+    // And because collapsing a note may delete events before or after
+    // it, we can't really iterate through the selection (or segment)
+    // while we do it.
 
-    while (i != beg && (!thisOne || (*i != *beg))) {
+    // Instead we have to maintain a copy of all the candidate events,
+    // and check that each one is still in the segment when we come to
+    // collapse it.
 
-        --j;
+    QList<Event *> candidates;
 
-        if (thisOne) {
-            helper.collapseNoteAggressively(*i, endTime);
-        }
-
-        // rather than "true" one could perform a test to see
-        // whether j pointed to a candidate for collapsing:
-        thisOne = true;
-
-        i = j;
+    foreach (Event *e, m_selection->getSegmentEvents()) {
+        candidates.push_back(e);
     }
 
-    if (thisOne) {
-        helper.collapseNoteAggressively(*i, endTime);
+    foreach (Event *e, candidates) {
+        if (s.findSingle(e) != s.end()) {
+            Segment::iterator i = helper.collapseNoteAggressively(e, endTime);
+            if (i != s.end()) {
+                m_selection->addEvent(*i);
+            }
+        }
     }
 }
 
