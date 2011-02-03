@@ -185,8 +185,8 @@ private:
     void eraseThisEvent(Event *e);
         
     /**
-     * This methods encapsulates all fo the logic needed to add and remove events
-     * from the seldection set.
+     * This methods encapsulates all of the logic needed to add and remove events
+     * from the selection set.
      */
     void addRemoveEvent(Event *e, EventFuncPtr insertEraseFn);
         
