@@ -52,12 +52,15 @@ CollapseNotesCommand::modifySegment()
         candidates.push_back(e);
     }
 
-    foreach (Event *e, candidates) {
-        if (s.findSingle(e) != s.end()) {
-            Segment::iterator i = helper.collapseNoteAggressively(e, endTime);
-            if (i != s.end()) {
-                m_selection->addEvent(*i);
-            }
+    for (int i = 0; i < candidates.size(); ++i) {
+
+        Event *e = candidates[i];
+        if (s.findSingle(e) == s.end()) continue;
+
+        Segment::iterator i = helper.collapseNoteAggressively(e, endTime);
+        if (i != s.end()) {
+            m_selection->addEvent(*i);
+            candidates.push_back(*i);
         }
     }
 }
