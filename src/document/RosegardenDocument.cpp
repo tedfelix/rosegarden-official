@@ -1250,13 +1250,16 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
     << "\">\n";
 
     ProgressDialog *progress = 0;
-    
-    if (!autosave) {
 
-        progress = new ProgressDialog(tr("Saving file..."),
-                                         (QWidget*)parent());
-
-    }
+// Disable the progress dialog on saving in all cases, because the alternative
+// is really complicated, and this progress dialog adds little, if any, value.
+//
+//    if (!autosave) {
+//
+//        progress = new ProgressDialog(tr("Saving file..."),
+//                                         (QWidget*)parent());
+//
+//    }
 
     // First make sure all MIDI devices know their current connections
     //
