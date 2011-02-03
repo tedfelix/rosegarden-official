@@ -1958,6 +1958,14 @@ SegmentNotationHelper::collapseNoteAggressively(Event *note,
     newEvent->unset(TIED_BACKWARD);
     newEvent->unset(TIED_FORWARD);
 
+    // Unset any tied notes for these since this will trigger extra
+    // deselecting fro mthe selection set.
+    (*i)->unset(TIED_BACKWARD);
+    (*i)->unset(TIED_FORWARD);
+    
+    (*j)->unset(TIED_BACKWARD);
+    (*j)->unset(TIED_FORWARD);
+
     segment().erase(i);
     segment().erase(j);
     return segment().insert(newEvent);
