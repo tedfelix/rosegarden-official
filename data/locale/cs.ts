@@ -4185,13 +4185,13 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3388"/>
         <source>Tuplet Insert Mo&amp;de</source>
-        <translation type="unfinished"></translation>
+        <translation>R&amp;ežim vkládání rytmických notových skupin</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3395"/>
         <source>;</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>;</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3422"/>
@@ -10728,7 +10728,7 @@ Chcete-li i přesto provést vložení, zvažte použití jednoho z dalších ty
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixElement.cpp" line="176"/>
         <source>This event is tied to another event.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tato událost je svázána s jinou událostí.</translation>
     </message>
 </context>
 <context>
@@ -11177,17 +11177,17 @@ Chcete-li i přesto provést vložení, zvažte použití jednoho z dalších ty
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="175"/>
         <source>Make default JACK connections for</source>
-        <translation type="unfinished"></translation>
+        <translation>Udělat výchozí spojení JACK pro</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="181"/>
         <source>audio outputs</source>
-        <translation type="unfinished"></translation>
+        <translation>zvukové výstupy</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="187"/>
         <source>audio inputs</source>
-        <translation type="unfinished"></translation>
+        <translation>zvukové vstupy</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="197"/>
@@ -11202,7 +11202,7 @@ Chcete-li i přesto provést vložení, zvažte použití jednoho z dalších ty
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="239"/>
         <source>External audio editor &quot;%1&quot; not found or not executable</source>
-        <translation>Vnější zvukový editor &quot;%1&quot; nebyl nalezen nebo nelze spustit</translation>
+        <translation>Vnější zvukový editor &quot;%1&quot; nebyl nalezen nebo jej nelze spustit</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="239"/>
@@ -15290,22 +15290,22 @@ Vzor textu ze souboru:</translation>
     <message>
         <location filename="../../src/gui/dialogs/InsertTupletDialog.cpp" line="47"/>
         <source>Tuplet</source>
-        <translation type="unfinished">Rytmická notová skupina</translation>
+        <translation>Rytmická notová skupina</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/InsertTupletDialog.cpp" line="57"/>
         <source>New timing for tuplet group</source>
-        <translation type="unfinished">Nové dělení dob pro rytmickou notovou skupinu</translation>
+        <translation>Nové dělení dob pro rytmickou notovou skupinu</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/InsertTupletDialog.cpp" line="65"/>
         <source>Play </source>
-        <translation type="unfinished">Hrát </translation>
+        <translation>Hrát </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/InsertTupletDialog.cpp" line="70"/>
         <source>in the time of  </source>
-        <translation type="unfinished">za dobu</translation>
+        <translation>na dobu</translation>
     </message>
 </context>
 <context>
@@ -16275,7 +16275,7 @@ Chcete použít
     <message>
         <location filename="../../src/gui/rulers/LoopRuler.cpp" line="85"/>
         <source>&lt;qt&gt;&lt;p&gt;Click and drag to move the playback pointer.&lt;/p&gt;&lt;p&gt;Shift-click and drag to set a range for looping or editing.&lt;/p&gt;&lt;p&gt;Shift-click to clear the loop or range.&lt;/p&gt;&lt;p&gt;Ctrl-click and drag to move the playback pointer with snap to beat.&lt;/p&gt;&lt;p&gt;Double-click to start playback.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Klepněte a táhněte pro přemístění ukazatele polohy přehrávání.&lt;/p&gt;&lt;p&gt;Shift-klepnutí a tažení pro nastavení oblasti pro opakování a úpravy.&lt;/p&gt;&lt;p&gt;Shift-klepnutí pro smazání opakování nebo oblasti.&lt;/p&gt;&lt;p&gt;Ctrl-klepnutí a tažení pro přemístění ukazatele polohy přehrávání se zapadnutím do doby.&lt;/p&gt;&lt;p&gt;Dvojité klepnutí pro spuštění přehrávání.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -18988,7 +18988,7 @@ Ujistěte se, že je zařízení správně nastaveno v dialogu Správa zařízen
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3378"/>
         <source>Tuplet</source>
-        <translation type="unfinished">Rytmická notová skupina</translation>
+        <translation>Rytmická notová skupina</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3542"/>
@@ -19284,13 +19284,13 @@ Ujistěte se, že je zařízení správně nastaveno v dialogu Správa zařízen
         <location filename="../../src/gui/rulers/PercussionPitchRuler.cpp" line="56"/>
         <source>  A#2   Acoustic Bass Drum  </source>
         <extracomment>Note to the translators: Don&apos;t translate literally. This string is never displayed but defines the largest width of the text (pitch and intrument name) in the percussion ruler.</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>  A#2   Akustický velký buben  </translation>
     </message>
     <message>
         <location filename="../../src/gui/rulers/PercussionPitchRuler.cpp" line="93"/>
         <source>A#2</source>
         <extracomment>Note to the translators: Don&apos;t translate literally. This string is never displayed but defines the largest width of the pitch name in the percussion ruler text.</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>A#2</translation>
     </message>
 </context>
 <context>
