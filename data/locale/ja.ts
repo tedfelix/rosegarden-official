@@ -3816,7 +3816,7 @@
     <message>
         <location line="+2"/>
         <source>Cycle Dots With&amp;out Duration Change</source>
-        <translation type="unfinished"></translation>
+        <translation>デュレーション変更なしの符点切り替え(&amp;o)</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -4002,7 +4002,7 @@
     <message>
         <location line="+69"/>
         <source>Solo the Active Track</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+15"/>
@@ -4057,13 +4057,13 @@
     <message>
         <location line="-940"/>
         <source>Tuplet Insert Mo&amp;de</source>
-        <translation type="unfinished"></translation>
+        <translation>三連符入力モード(&amp;d)</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>;</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+27"/>
@@ -4543,7 +4543,7 @@
     <message>
         <location line="+1"/>
         <source>MIDI &amp;Thru Routing</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4607,7 +4607,7 @@
     <message>
         <location line="+19"/>
         <source>Join</source>
-        <translation></translation>
+        <translation>結合</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -4637,7 +4637,7 @@
     <message>
         <location line="+1"/>
         <source>Turn Re&amp;peats into Copies</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4692,7 +4692,7 @@
     <message>
         <location line="+9"/>
         <source>Arm &amp;or Un-arm Track for Record</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+9"/>
@@ -10353,7 +10353,7 @@
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixElement.cpp" line="+176"/>
         <source>This event is tied to another event.</source>
-        <translation type="unfinished"></translation>
+        <translation>このイベントは他のイベントにタイでつながります。</translation>
     </message>
 </context>
 <context>
@@ -10434,7 +10434,7 @@
     <message>
         <location filename="../../src/commands/notation/AddIndicationCommand.cpp" line="+127"/>
         <source>Can&apos;t add identical overlapping indications</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+114"/>
@@ -10798,17 +10798,17 @@
     <message>
         <location line="+12"/>
         <source>Make default JACK connections for</source>
-        <translation type="unfinished"></translation>
+        <translation>既定値のJACKの接続先</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>audio outputs</source>
-        <translation type="unfinished"></translation>
+        <translation>オーディオ出力</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>audio inputs</source>
-        <translation type="unfinished"></translation>
+        <translation>オーディオ入力</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -10919,7 +10919,7 @@
     <message>
         <location line="+24"/>
         <source>Converting audio file...</source>
-        <translation type="unfinished"></translation>
+        <translation>オーディオファイルに変換...</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -11199,7 +11199,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location line="+8"/>
         <source>Arm recording</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+11"/>
@@ -11517,7 +11517,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location line="+23"/>
         <source>minutes at</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+9"/>
@@ -12695,7 +12695,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/commands/notation/CycleSlashesCommand.h" line="+37"/>
         <source>Cycle Slashes</source>
-        <translation type="unfinished"></translation>
+        <translation>スラッシュの切り替え</translation>
     </message>
 </context>
 <context>
@@ -12908,7 +12908,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location line="+3"/>
         <source>Formal duration (to end marker):</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+5"/>
@@ -14042,7 +14042,7 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location line="+14"/>
         <source>&lt;qt&gt;&lt;p&gt;Qt offers you the choice of three graphics systems. The fast (raster) graphics system offers the best tradeoff between performance and stability, but may cause problems for some users.  If you experience frequent crashes, or distorted graphics, you should try the safe (native) graphics system instead.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Qtは3つのグラフィックシステムが選択できるように用意しています。最速の（ラスタ)グラフィックシステムはパフォーマンスと安定性の間の最適なトレードオフを提供します。しかし、特定のシステムでは問題を引き起こすかもしれません。もしも、しばしばクラッシュするか、グラフィックスが壊れるようであれば、その代わりに、安全な（ネイティブな）グラフィックスを試みるべきです。&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+168"/>
@@ -14631,22 +14631,22 @@ Example text from file:</source>
     <message>
         <location filename="../../src/gui/dialogs/InsertTupletDialog.cpp" line="+47"/>
         <source>Tuplet</source>
-        <translation type="unfinished">連符</translation>
+        <translation>連符</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>New timing for tuplet group</source>
-        <translation type="unfinished">連符を次のように設定</translation>
+        <translation>連符を次のように設定</translation>
     </message>
     <message>
         <location line="+8"/>
         <source>Play </source>
-        <translation type="unfinished">再生</translation>
+        <translation>再生</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>in the time of  </source>
-        <translation type="unfinished">連符全体の長さ</translation>
+        <translation>連符全体の長さ</translation>
     </message>
 </context>
 <context>
@@ -15517,7 +15517,7 @@ Would you like to use
     <message>
         <location filename="../../src/gui/rulers/LoopRuler.cpp" line="+85"/>
         <source>&lt;qt&gt;&lt;p&gt;Click and drag to move the playback pointer.&lt;/p&gt;&lt;p&gt;Shift-click and drag to set a range for looping or editing.&lt;/p&gt;&lt;p&gt;Shift-click to clear the loop or range.&lt;/p&gt;&lt;p&gt;Ctrl-click and drag to move the playback pointer with snap to beat.&lt;/p&gt;&lt;p&gt;Double-click to start playback.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;クリックとドラッグで再生ポインタを移動。&lt;/p&gt;&lt;p&gt;シフトしながらクリックとドラッグでループまたは編集領域を設定。&lt;/p&gt;&lt;p&gt;シフトしながらクリックでループまたは編集領域をクリヤ。&lt;/p&gt;&lt;p&gt;コントロールを押しながらクリックとドラッグで拍子に合わせて再生ポインタを移動。&lt;/p&gt;&lt;p&gt;ダブルクリックで再生を開始。&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -17640,7 +17640,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location line="+120"/>
         <source>Tuplet</source>
-        <translation type="unfinished">連符</translation>
+        <translation>連符</translation>
     </message>
     <message>
         <location line="+164"/>
@@ -17690,7 +17690,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location line="+20"/>
         <source>Cycling slashes...</source>
-        <translation type="unfinished"></translation>
+        <translation>スラッシュの切り替え...</translation>
     </message>
     <message>
         <location line="-767"/>
@@ -18240,7 +18240,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/widgets/ProgressDialog.cpp" line="+64"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
 </context>
 <context>
@@ -20286,7 +20286,7 @@ Error was : %2</source>
     <message>
         <location line="+8"/>
         <source>&lt;qt&gt;&lt;p&gt;When checked,     any selected segments will repeat until they run into another segment,  or the end of the composition.&lt;/p&gt;&lt;p&gt;When viewed in the notation editor or printed via LilyPond, the segments will be bracketed by repeat signs.&lt;/p&gt;&lt;p&gt;&lt;center&gt;&lt;img src=&quot;:pixmaps/tooltip/repeats.png&quot;&gt;&lt;/img&gt;&lt;/center&gt;&lt;/p&gt;&lt;br&gt;These can be used in conjunction with special LilyPond export directives to create repeats with first and second alternate endings. See rosegardenmusic.com for a tutorial. [Ctrl+Shift+R] &lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;これをチェックすると、選択された任意のセグメントは、他のセグメントの中に入るまでか、コンポジションの終端に来るまで繰り返します。&lt;/p&gt;&lt;p&gt;譜面エディタ中で見るか、　LilyPond経由で印刷する時、セグメントは繰り返しサインによって囲まれます(bracketed)。&lt;/p&gt;&lt;p&gt;&lt;center&gt;&lt;img src=&quot;:pixmaps/tooltip/repeats.png&quot;&gt;&lt;/img&gt;&lt;/center&gt;&lt;/p&gt;&lt;br&gt;These can be used in conjunction with special LilyPond export directives to create repeats with first and second alternate endings. rosegardenmusic.comにあるチュートリアルを参照してください。 [Ctrl+Shift+R] &lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;これをチェックすると、選択された任意のセグメントは、他のセグメントの中に入るまでか、コンポジションの終端に来るまで繰り返します。&lt;/p&gt;&lt;p&gt;譜面エディタ中で見るか、　LilyPond経由で印刷する時、セグメントは繰り返しサインによって囲まれます(bracketed)。&lt;/p&gt;&lt;p&gt;&lt;center&gt;&lt;img src=&quot;:pixmaps/tooltip/repeats.png&quot;&gt;&lt;/img&gt;&lt;/center&gt;&lt;/p&gt;&lt;br&gt;These can be used in conjunction with special LilyPond export directives to create repeats with first and second alternate endings. rosegardenmusic.comにあるチュートリアルを参照してください。 [Ctrl+Shift+R] &lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+31"/>
