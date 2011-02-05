@@ -4457,13 +4457,13 @@
     <message>
         <location line="-940"/>
         <source>Tuplet Insert Mo&amp;de</source>
-        <translation type="unfinished"></translation>
+        <translation>Modalità di &amp;terzina</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>;</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>scorciatoia di tastiera</translation>
     </message>
     <message>
         <location line="+27"/>
@@ -5785,12 +5785,12 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location line="+1"/>
         <source>Shawm</source>
-        <translation type="unfinished"></translation>
+        <translation>Flauto dolce medievale</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Sopranino shawm</source>
-        <translation type="unfinished"></translation>
+        <translation>Flauto dolce sopranino medievale</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -10664,7 +10664,7 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
         <location line="+2"/>
         <location line="+2"/>
         <source>Bad sound file </source>
-        <translation type="unfinished">Cattivo file sound </translation>
+        <translation>Cattivo file sound </translation>
     </message>
     <message>
         <location filename="../../src/sound/MidiFile.cpp" line="+105"/>
@@ -10813,7 +10813,7 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixElement.cpp" line="+176"/>
         <source>This event is tied to another event.</source>
-        <translation type="unfinished"></translation>
+        <translation>Questo evento è legato ad un altro evento.</translation>
     </message>
 </context>
 <context>
@@ -11262,17 +11262,17 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location line="+12"/>
         <source>Make default JACK connections for</source>
-        <translation type="unfinished"></translation>
+        <translation>Crea connesioni JACK standard per</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>audio outputs</source>
-        <translation type="unfinished"></translation>
+        <translation>Uscite audio</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>audio inputs</source>
-        <translation type="unfinished"></translation>
+        <translation>Ingressi MIDI</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -15350,22 +15350,22 @@ Testo di esempio dal file:</translation>
     <message>
         <location filename="../../src/gui/dialogs/InsertTupletDialog.cpp" line="+47"/>
         <source>Tuplet</source>
-        <translation type="unfinished">Tupla</translation>
+        <translation>Terzina</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>New timing for tuplet group</source>
-        <translation type="unfinished">Nuovo tempo per il gruppo di tuple</translation>
+        <translation>Nuovo tempo per il gruppo di terzine</translation>
     </message>
     <message>
         <location line="+8"/>
         <source>Play </source>
-        <translation type="unfinished">Riproduci</translation>
+        <translation>Riproduci</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>in the time of  </source>
-        <translation type="unfinished">nel tempo di  </translation>
+        <translation>nel tempo di  </translation>
     </message>
 </context>
 <context>
@@ -16283,7 +16283,7 @@ Vuoi usare
     <message>
         <location filename="../../src/gui/rulers/LoopRuler.cpp" line="+85"/>
         <source>&lt;qt&gt;&lt;p&gt;Click and drag to move the playback pointer.&lt;/p&gt;&lt;p&gt;Shift-click and drag to set a range for looping or editing.&lt;/p&gt;&lt;p&gt;Shift-click to clear the loop or range.&lt;/p&gt;&lt;p&gt;Ctrl-click and drag to move the playback pointer with snap to beat.&lt;/p&gt;&lt;p&gt;Double-click to start playback.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Clicca e trascina per muovere il puntatore di riproduzione.&lt;/p&gt;&lt;p&gt;Shift-clicca e trascina per selezionare un intervallo per l&apos;elaborazione o la riproduzione ciclica.&lt;/p&gt;&lt;p&gt;Shift-clicca per deselezionare l&apos;intervallo.&lt;/p&gt;&lt;p&gt;Ctrl-clicca e trascina per spostare il puntatore di riproduzione con scatto al colpo.&lt;/p&gt;&lt;p&gt;Doppio click per avviare la riproduzione.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -18971,15 +18971,14 @@ Accertati che il dispositivo sia correttamente configurato alla voce
         <location line="+6"/>
         <source>%1%2 - %n Segment(s) - Notation</source>
         <translation>
-            <numerusform>%1%2 - %n Segmenti - Notazione
-        </numerusform>
-            <numerusform></numerusform>
+            <numerusform>%1%2 - %n Traccia del Segmento - Notazione</numerusform>
+            <numerusform>%1%2 - %n Traccia del Segmenti - Notazione</numerusform>
         </translation>
     </message>
     <message>
         <location line="+120"/>
         <source>Tuplet</source>
-        <translation type="unfinished">Tupla</translation>
+        <translation>Terzina</translation>
     </message>
     <message>
         <location line="+164"/>
