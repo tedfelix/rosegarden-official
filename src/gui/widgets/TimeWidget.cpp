@@ -35,6 +35,7 @@
 #include <QString>
 #include <QWidget>
 #include <QLayout>
+#include <QTimer>
 
 
 namespace Rosegarden
@@ -52,7 +53,8 @@ TimeWidget::TimeWidget(QString title,
         m_constrain(constrainToCompositionDuration),
         m_time(absTime),
         m_startTime(0),
-        m_defaultTime(absTime)
+        m_defaultTime(absTime),
+        m_delayUpdateTimer(0)
 {
     init(editable);
 }
@@ -72,9 +74,18 @@ TimeWidget::TimeWidget(QString title,
         m_time(duration),
         m_startTime(startTime),
         m_defaultTime(duration),
-        m_minimumDuration(minimumDuration)
+        m_minimumDuration(minimumDuration),
+        m_delayUpdateTimer(0)
 {
     init(editable);
+}
+
+TimeWidget::~TimeWidget() {
+    if (m_delayUpdateTimer) {
+
+        delete m_delayUpdateTimer;
+        m_delayUpdateTimer =0;
+    }
 }
 
 void
@@ -271,8 +282,10 @@ TimeWidget::init(bool editable)
         m_msec = new QSpinBox;
         m_msec->setMinimum(0);
         m_msec->setSingleStep(10);
+        connect(m_msec, SIGNAL(editingFinished()),
+                this, SLOT(slotMSecUpdate()));
         connect(m_msec, SIGNAL(valueChanged(int)),
-                this, SLOT(slotSecOrMSecChanged(int)));
+                this, SLOT(slotMSecChanged()));
         layout->addWidget(m_msec, 2, 3);
     } else {
         m_msec = 0;
@@ -308,6 +321,14 @@ TimeWidget::init(bool editable)
     }
 
     populate();
+
+    // Create a One-shot timer for use in msec box to delay updates
+    m_delayUpdateTimer = new QTimer(this);
+    m_delayUpdateTimer->setSingleShot(true);
+
+    connect(m_delayUpdateTimer, SIGNAL(timeout()),
+            this, SLOT(slotMSecUpdate()));
+
 }
 
 void
@@ -662,6 +683,23 @@ TimeWidget::slotSecOrMSecChanged(int)
     int msec = m_msec->value();
 
     slotSetRealTime(RealTime(sec, msec * 1000000));
+}
+
+void
+TimeWidget::slotMSecChanged()
+{
+    m_delayUpdateTimer->start(1500);
+}
+
+void
+TimeWidget::slotMSecUpdate()
+{
+    // May have fired already, but stop it in case called when widget lost
+    // focus.
+    m_delayUpdateTimer->stop();
+
+    // Perfrom an imidiate update.
+    slotSecOrMSecChanged(0); // Doesn't matter the value of argument.
 }
 
 }

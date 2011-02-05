@@ -69,6 +69,7 @@ public:
                bool editable = true,
                bool constrainToCompositionDuration = true);
 
+    ~TimeWidget();
     timeT getTime();
     RealTime getRealTime();
 
@@ -84,7 +85,21 @@ public slots:
     void slotNoteChanged(int);
     void slotTimeTChanged(int);
     void slotBarBeatOrFractionChanged(int);
+
+    /**
+     * Determine realtime based on Sec or msec update and repopulate boxes.
+     */
     void slotSecOrMSecChanged(int);
+
+    /**
+     * Restart the update delay timer.
+     */
+    void slotMSecChanged();
+
+    /**
+     * Stop the delay timer and call slotSecOrMSecChanged(int)
+     */
+    void slotMSecUpdate();
 
 private:
     Composition *m_composition;
@@ -109,6 +124,7 @@ private:
     LineEdit  *m_secLabel;
     LineEdit  *m_msecLabel;
     QLabel    *m_tempo;
+    QTimer    *m_delayUpdateTimer;
 
     void init(bool editable);
     void populate();
