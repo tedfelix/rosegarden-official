@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="sv" sourcelanguage="en_US">
+<TS version="2.0" language="sv_SE" sourcelanguage="en_US">
 <context>
     <name>:</name>
     <message>
@@ -901,7 +901,7 @@
     <message>
         <location line="+30"/>
         <source>&amp;Rosegarden Tutorials</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Rosegarden handledningar</translation>
     </message>
     <message>
         <location line="+19"/>
@@ -4060,13 +4060,13 @@
     <message>
         <location line="-940"/>
         <source>Tuplet Insert Mo&amp;de</source>
-        <translation type="unfinished"></translation>
+        <translation>Infogningsläge för annan&amp;delning</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>;</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>;</translation>
     </message>
     <message>
         <location line="+27"/>
@@ -10210,7 +10210,7 @@
         <location line="+2"/>
         <location line="+2"/>
         <source>Bad sound file </source>
-        <translation type="unfinished">Felaktig ljudfil</translation>
+        <translation>Felaktig ljudfil </translation>
     </message>
     <message>
         <location filename="../../src/sound/MidiFile.cpp" line="+105"/>
@@ -10315,12 +10315,12 @@
         <location filename="../../src/sound/PeakFileManager.h" line="+61"/>
         <location line="+2"/>
         <source>Bad peak file </source>
-        <translation type="unfinished">Felaktig toppfil</translation>
+        <translation>Felaktig toppfil </translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Bad peak file (malformed audio?) </source>
-        <translation type="unfinished">Felaktig toppfil (felformat ljud?)</translation>
+        <translation>Felaktig toppfil (felformat ljud?) </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="+64"/>
@@ -10355,12 +10355,12 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="-2636"/>
         <source>P&amp;rint Preview...</source>
-        <translation type="unfinished"></translation>
+        <translation>Fö&amp;rhandsgranska utskrift...</translation>
     </message>
     <message>
         <location line="+1907"/>
         <source>Prin&amp;t Preview...</source>
-        <translation type="unfinished"></translation>
+        <translation>Förhandsgranska u&amp;tskrift...</translation>
     </message>
     <message>
         <source></source>
@@ -10369,7 +10369,7 @@
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixElement.cpp" line="+176"/>
         <source>This event is tied to another event.</source>
-        <translation type="unfinished"></translation>
+        <translation>Den här händelsen är kopplad till en annan händelse.</translation>
     </message>
 </context>
 <context>
@@ -10814,17 +10814,17 @@
     <message>
         <location line="+12"/>
         <source>Make default JACK connections for</source>
-        <translation type="unfinished"></translation>
+        <translation>Skapa JACK standardanslutningar för</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>audio outputs</source>
-        <translation type="unfinished"></translation>
+        <translation>ljudutgångar</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>audio inputs</source>
-        <translation type="unfinished"></translation>
+        <translation>ljudingångar</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -10930,7 +10930,7 @@
     <message>
         <location line="+40"/>
         <source>Converting audio file...</source>
-        <translation type="unfinished">Konverterar ljudfil...</translation>
+        <translation>Konverterar ljudfil...</translation>
     </message>
     <message>
         <source>Resampling audio file...</source>
@@ -11133,10 +11133,9 @@ Välj de du vill ta bort permanent från hårddisken.
     <message numerus="yes">
         <location line="+10"/>
         <source>&lt;qt&gt;About to delete %n audio file(s) permanently from the hard disk.&lt;br&gt;This action cannot be undone, and there will be no way to recover the files.&lt;br&gt;Are you sure?&lt;/qt&gt;</source>
-        <translation type="unfinished">
-            <numerusform>&lt;qt&gt;Står i begrepp att ta bort %n ljudfiler permanent från hårddisken.&lt;br&gt;Åtgärden kan inte ångras, och det kommer inte att finnas något sätt att återställa filerna.&lt;br&gt;Är du säker?&lt;/qt&gt;
-        </numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>&lt;qt&gt;Står i begrepp att ta bort %n ljudfil permanent från hårddisken.&lt;br&gt;Åtgärden kan inte ångras, och det kommer inte att finnas något sätt att återställa filen.&lt;br&gt;Är du säker?&lt;/qt&gt;</numerusform>
+            <numerusform>&lt;qt&gt;Står i begrepp att ta bort %n ljudfiler permanent från hårddisken.&lt;br&gt;Åtgärden kan inte ångras, och det kommer inte att finnas något sätt att återställa filerna.&lt;br&gt;Är du säker?&lt;/qt&gt;</numerusform>
         </translation>
     </message>
     <message>
@@ -12770,7 +12769,7 @@ Välj de du vill ta bort permanent från hårddisken.
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="-385"/>
         <source>[ No port ]</source>
-        <translation type="unfinished">[ Ingen port ]</translation>
+        <translation>[ Ingen port ]</translation>
     </message>
     <message>
         <location line="+729"/>
@@ -13853,7 +13852,7 @@ Vill du försöka söka efter filen eller hoppa över den?</translation>
     <message>
         <location filename="../../src/gui/editors/guitar/Fingering.cpp" line="+110"/>
         <source>couldn&apos;t parse fingering &apos;%1&apos; in &apos;%2&apos;</source>
-        <translation type="unfinished">kunde inte tolka fingersättning &apos;%1&apos; i &apos;%2&apos;</translation>
+        <translation>kunde inte tolka fingersättning &apos;%1&apos; i &apos;%2&apos;</translation>
     </message>
 </context>
 <context>
@@ -13882,7 +13881,7 @@ Vill du försöka söka efter filen eller hoppa över den?</translation>
     <message>
         <location filename="../../src/gui/editors/notation/FontViewFrame.cpp" line="+99"/>
         <source>Error: Unable to match font name %1</source>
-        <translation type="unfinished">Fel: Kan inte hitta passande teckensnitt för namnet %1</translation>
+        <translation>Fel: Kan inte hitta passande teckensnitt för namnet %1</translation>
     </message>
     <message>
         <location line="+0"/>
@@ -14669,22 +14668,22 @@ Exempeltext från filen:</translation>
     <message>
         <location filename="../../src/gui/dialogs/InsertTupletDialog.cpp" line="+47"/>
         <source>Tuplet</source>
-        <translation type="unfinished">Annandelning</translation>
+        <translation>Annandelning</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>New timing for tuplet group</source>
-        <translation type="unfinished">Förhållande för annandelning</translation>
+        <translation>Nytt förhållande för annandelningsgrupp</translation>
     </message>
     <message>
         <location line="+8"/>
         <source>Play </source>
-        <translation type="unfinished">Spela </translation>
+        <translation>Spela </translation>
     </message>
     <message>
         <location line="+5"/>
         <source>in the time of  </source>
-        <translation type="unfinished">under tiden för </translation>
+        <translation>under tiden för </translation>
     </message>
 </context>
 <context>
@@ -14935,19 +14934,17 @@ Exempeltext från filen:</translation>
     <message numerus="yes">
         <location line="+8"/>
         <source>up %n octave(s) and %1</source>
-        <translation type="unfinished">
-            <numerusform>upp %n oktaver och %1
-        </numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>upp %n oktav och %1</numerusform>
+            <numerusform>upp %n oktaver och %1</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location line="+3"/>
         <source>up %n octave(s)</source>
-        <translation type="unfinished">
-            <numerusform>upp %n oktaver
-        </numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>upp %n oktav</numerusform>
+            <numerusform>upp %n oktaver</numerusform>
         </translation>
     </message>
     <message>
@@ -14958,19 +14955,17 @@ Exempeltext från filen:</translation>
     <message numerus="yes">
         <location line="+5"/>
         <source>down %n octave(s) and %1</source>
-        <translation type="unfinished">
-            <numerusform>ner %n oktaver och %1
-        </numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>ner %n oktav och %1</numerusform>
+            <numerusform>ner %n oktaver och %1</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location line="+3"/>
         <source>down %n octave(s)</source>
-        <translation type="unfinished">
-            <numerusform>ner %n oktaver
-        </numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>ner %n oktav</numerusform>
+            <numerusform>ner %n oktaver</numerusform>
         </translation>
     </message>
     <message>
@@ -15563,7 +15558,7 @@ Vill du använda
     <message>
         <location filename="../../src/gui/rulers/LoopRuler.cpp" line="+85"/>
         <source>&lt;qt&gt;&lt;p&gt;Click and drag to move the playback pointer.&lt;/p&gt;&lt;p&gt;Shift-click and drag to set a range for looping or editing.&lt;/p&gt;&lt;p&gt;Shift-click to clear the loop or range.&lt;/p&gt;&lt;p&gt;Ctrl-click and drag to move the playback pointer with snap to beat.&lt;/p&gt;&lt;p&gt;Double-click to start playback.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Klicka och dra för att flytta uppspelningspekaren.&lt;/p&gt;&lt;p&gt;Skift-klicka och dra för att ange ett intervall att repetera eller redigera.&lt;/p&gt;&lt;p&gt;Skift-klicka för att ta bort repetition eller intervall.&lt;/p&gt;&lt;p&gt;Klicka och dra för att flytta uppspelningspekaren låst till takter.&lt;/p&gt;&lt;p&gt;Dubbelklicka för att starta uppspelning.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -16427,10 +16422,9 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
     <message numerus="yes">
         <location line="+7"/>
         <source>%1%2 - %n Segment(s) - %3</source>
-        <translation type="unfinished">
-            <numerusform>%1%2 - %n segment - %3
-        </numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1%2 - %n segment - %3</numerusform>
+            <numerusform>%1%2 - %n segment - %3</numerusform>
         </translation>
     </message>
     <message>
@@ -17428,10 +17422,9 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat)</transla
     <message numerus="yes">
         <location line="-8"/>
         <source>%n pixel(s)</source>
-        <translation type="unfinished">
-            <numerusform>%n bildpunkter
-        </numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n bildpunkt</numerusform>
+            <numerusform>%n bildpunkter</numerusform>
         </translation>
     </message>
     <message>
@@ -17523,10 +17516,9 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat)</transla
     <message numerus="yes">
         <location line="-451"/>
         <source>  %n event(s) selected </source>
-        <translation type="unfinished">
-            <numerusform>%n händelser markerade 
-        </numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n händels markerad </numerusform>
+            <numerusform>%n händelser markerade </numerusform>
         </translation>
     </message>
     <message>
@@ -17693,16 +17685,15 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
     <message numerus="yes">
         <location line="+6"/>
         <source>%1%2 - %n Segment(s) - Notation</source>
-        <translation type="unfinished">
-            <numerusform>%1%2 - %n segment - notskrift
-        </numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1%2 - %n segment - notskrift</numerusform>
+            <numerusform>%1%2 - %n segment - notskrift</numerusform>
         </translation>
     </message>
     <message>
         <location line="+120"/>
         <source>Tuplet</source>
-        <translation type="unfinished">Annandelning</translation>
+        <translation>Annandelning</translation>
     </message>
     <message>
         <location line="+164"/>
@@ -18302,7 +18293,7 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
     <message>
         <location filename="../../src/gui/widgets/ProgressDialog.cpp" line="+64"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <source>&lt;qt&gt;&lt;h3&gt;Processing...&lt;/h3&gt;&lt;/qt&gt;</source>
@@ -19030,10 +19021,9 @@ här versionen. Det kan finnas vissa problem med filformatet.</translation>
     <message numerus="yes">
         <location line="+124"/>
         <source>Delete the %n audio file(s) recorded during the unsaved session?</source>
-        <translation type="unfinished">
-            <numerusform>Radera %n ljudfiler inspelade under den osparade sessionen?
-        </numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Radera %n ljudfil inspelad under den osparade sessionen?</numerusform>
+            <numerusform>Radera %n ljudfiler inspelade under den osparade sessionen?</numerusform>
         </translation>
     </message>
     <message>
@@ -19056,10 +19046,9 @@ Välj alla du vill ta bort permanent från hårddisken.
     <message numerus="yes">
         <location line="+16"/>
         <source>&lt;qt&gt;About to delete %n audio file(s) permanently from the hard disk.&lt;br&gt;There will be no way to recover the file(s).&lt;br&gt;Are you sure?&lt;/qt&gt;</source>
-        <translation type="unfinished">
-            <numerusform>&lt;qt&gt;Står i begrepp att radera %n ljudfiler permanent från hårddisken.&lt;br&gt;Det kommer inte att finnas något sätt att återställa filerna.&lt;br&gt;Är du säker?&lt;/qt&gt;
-        </numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>&lt;qt&gt;Står i begrepp att radera %n ljudfil permanent från hårddisken.&lt;br&gt;Det kommer inte att finnas något sätt att återställa filen.&lt;br&gt;Är du säker?&lt;/qt&gt;</numerusform>
+            <numerusform>&lt;qt&gt;Står i begrepp att radera %n ljudfiler permanent från hårddisken.&lt;br&gt;Det kommer inte att finnas något sätt att återställa filerna.&lt;br&gt;Är du säker?&lt;/qt&gt;</numerusform>
         </translation>
     </message>
     <message>
@@ -19554,7 +19543,7 @@ Felet är: %2</translation>
         <source>The audio file path does not exist or is not writable.
 You must set the audio file path to a valid directory in Document Properties before %1.
 Would you like to set it now?</source>
-        <translation type="unfinished">Ljudfilens sökväg finns inte eller är inte skrivbar.
+        <translation>Ljudfilens sökväg finns inte eller är inte skrivbar.
 Du måste ange ljudfilens sökväg till en giltig katalog i Dokumentegenskaper före %1.
 Vill du ange den nu?</translation>
     </message>
@@ -19567,10 +19556,9 @@ Vill du ange den nu?</translation>
         <location line="+142"/>
         <location line="+34"/>
         <source>Split %n Segment(s) at Time</source>
-        <translation type="unfinished">
-            <numerusform>Dela %n segment vid tiden
-        </numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Dela %n segment vid tiden</numerusform>
+            <numerusform>Dela %n segment vid tiden</numerusform>
         </translation>
     </message>
     <message>
@@ -19756,7 +19744,7 @@ Segment -&gt; Sammanfoga segment.
     <message>
         <location line="-233"/>
         <source>http://rosegardenmusic.com/tutorials/</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/tutorials/</translation>
     </message>
     <message>
         <location line="+479"/>
@@ -20279,7 +20267,7 @@ Felet är: %2</translation>
     <message>
         <location filename="../../src/commands/segment/SegmentJoinCommand.h" line="+48"/>
         <source>&amp;Join</source>
-        <translation type="unfinished">&amp;Sammanfoga</translation>
+        <translation>&amp;Sammanfoga</translation>
     </message>
 </context>
 <context>
@@ -20582,10 +20570,9 @@ Vill du ange den nu?</translation>
     <message numerus="yes">
         <location line="+169"/>
         <source>Move Segment(s)</source>
-        <translation type="unfinished">
-            <numerusform>Flytta segment
-        </numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Flytta segment</numerusform>
+            <numerusform>Flytta segment</numerusform>
         </translation>
     </message>
     <message>
@@ -23006,10 +22993,9 @@ Vill du ställa in den nu?</translation>
     <message numerus="yes">
         <location line="+2"/>
         <source>%1 on %n track(s)</source>
-        <translation type="unfinished">
-            <numerusform>%1 på %n spår
-        </numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1 på %n spår</numerusform>
+            <numerusform>%1 på %n spår</numerusform>
         </translation>
     </message>
     <message>
@@ -23042,10 +23028,9 @@ Vill du ställa in den nu?</translation>
     <message numerus="yes">
         <location line="+22"/>
         <source>This triggered segment is used %n time(s) in the current composition.  Are you sure you want to remove it?</source>
-        <translation type="unfinished">
-            <numerusform>Detta utlösande segment används %n gånger i nuvarande komposition. Är du säker på att du vill radera det?
-        </numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Detta utlösande segment används %n gång i nuvarande komposition. Är du säker på att du vill radera det?</numerusform>
+            <numerusform>Detta utlösande segment används %n gånger i nuvarande komposition. Är du säker på att du vill radera det?</numerusform>
         </translation>
     </message>
     <message>
@@ -23391,55 +23376,55 @@ Vill du ställa in den nu?</translation>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="+25"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1047"/>
         <source>Rosegarden Transport</source>
-        <translation type="unfinished">Spelkontrollpanel</translation>
+        <translation>Spelkontrollpanel</translation>
     </message>
     <message>
         <location line="+34"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+2"/>
         <source>Hide additional controls</source>
-        <translation type="unfinished">Dölj flera knappar</translation>
+        <translation>Dölj flera knappar</translation>
     </message>
     <message>
         <location line="+36"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Panic Button</source>
-        <translation type="unfinished">Panikknapp</translation>
+        <translation>Panikknapp</translation>
     </message>
     <message>
         <location line="+3"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Resets all MIDI devices if you&apos;ve got stuck notes</source>
-        <translation type="unfinished">Återställer alla MIDI-enheter om du har toner som fastnat</translation>
+        <translation>Återställer alla MIDI-enheter om du har toner som fastnat</translation>
     </message>
     <message>
         <location line="+35"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Metronome</source>
-        <translation type="unfinished">Metronom</translation>
+        <translation>Metronom</translation>
     </message>
     <message>
         <location line="+3"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Provides a metronome click for you to play along with</source>
-        <translation type="unfinished">Tillhandahåller ett metronomtick att spela efter</translation>
+        <translation>Tillhandahåller ett metronomtick att spela efter</translation>
     </message>
     <message>
         <location line="+465"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Shows MIDI activity in and out of Rosegarden</source>
-        <translation type="unfinished">Visar MIDI-aktivitet in, till och ut från Rosegarden</translation>
+        <translation>Visar MIDI-aktivitet in, till och ut från Rosegarden</translation>
     </message>
     <message>
         <location line="+469"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+2"/>
         <source>IN</source>
-        <translation type="unfinished">IN</translation>
+        <translation>IN</translation>
     </message>
     <message>
         <location line="+464"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
         <source>OUT</source>
-        <translation type="unfinished">   UT</translation>
+        <translation>   UT</translation>
     </message>
     <message>
         <location line="+465"/>
@@ -23447,181 +23432,181 @@ Vill du ställa in den nu?</translation>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
         <location line="+1"/>
         <source>NO EVENTS</source>
-        <translation type="unfinished">INGENTING</translation>
+        <translation>INGENTING</translation>
     </message>
     <message>
         <location line="+23"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+2"/>
         <source>Record</source>
-        <translation type="unfinished">Spela in</translation>
+        <translation>Spela in</translation>
     </message>
     <message>
         <location line="+3"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Record either MIDI or audio</source>
-        <translation type="unfinished">Spela in antingen MIDI eller ljud</translation>
+        <translation>Spela in antingen MIDI eller ljud</translation>
     </message>
     <message>
         <location line="+41"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Loop</source>
-        <translation type="unfinished">Upprepa</translation>
+        <translation>Upprepa</translation>
     </message>
     <message>
         <location line="+3"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Turn on and off the loop markers (if set)</source>
-        <translation type="unfinished">Sätt på eller stäng av upprepningsmarkeringar (om inställda)</translation>
+        <translation>Sätt på eller stäng av upprepningsmarkeringar (om inställda)</translation>
     </message>
     <message>
         <location line="+41"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Solo</source>
-        <translation type="unfinished">Solo</translation>
+        <translation>Solo</translation>
     </message>
     <message>
         <location line="+3"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Mutes all but the currently selected track</source>
-        <translation type="unfinished">Tystar alla utom nuvarande markerat spår</translation>
+        <translation>Tystar alla utom nuvarande markerat spår</translation>
     </message>
     <message>
         <location line="+23"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Start loop or range here</source>
-        <translation type="unfinished">Börja loop eller omfång här</translation>
+        <translation>Börja loop eller omfång här</translation>
     </message>
     <message>
         <location line="+20"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>End loop or range here</source>
-        <translation type="unfinished">Avsluta loop eller omfång här</translation>
+        <translation>Avsluta loop eller omfång här</translation>
     </message>
     <message>
         <location line="+1037"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>SIG</source>
-        <translation type="unfinished">SIG</translation>
+        <translation>SIG</translation>
     </message>
     <message>
         <location line="+464"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
         <source>DIV</source>
-        <translation type="unfinished">DIV</translation>
+        <translation>DIV</translation>
     </message>
     <message>
         <location line="+465"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
         <source>/16</source>
-        <translation type="unfinished">/16</translation>
+        <translation>/16</translation>
     </message>
     <message>
         <location line="+467"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
         <source>TEMPO</source>
-        <translation type="unfinished">TEMPO</translation>
+        <translation>TEMPO</translation>
     </message>
     <message>
         <location line="+474"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
         <source>END</source>
-        <translation type="unfinished">SLUT</translation>
+        <translation>SLUT</translation>
     </message>
     <message>
         <location line="+467"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
         <source>BAR</source>
-        <translation type="unfinished">TAKT</translation>
+        <translation>TAKT</translation>
     </message>
     <message>
         <location line="+151"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+2"/>
         <source>Switch between real time, musical time, and frame count</source>
-        <translation type="unfinished">Växla mellan klocktid, metronomtid och antal ramar</translation>
+        <translation>Växla mellan klocktid, metronomtid och antal ramar</translation>
     </message>
     <message>
         <location line="+33"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Show additional controls</source>
-        <translation type="unfinished">Visa flera knappar</translation>
+        <translation>Visa flera knappar</translation>
     </message>
     <message>
         <location line="+36"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Rewind</source>
-        <translation type="unfinished">Spola tillbaka</translation>
+        <translation>Spola tillbaka</translation>
     </message>
     <message>
         <location line="+3"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Moves the current pointer position back one bar.</source>
-        <translation type="unfinished">Flyttar nuvarande visarposition en takt bakåt.</translation>
+        <translation>Flyttar nuvarande visarposition en takt bakåt.</translation>
     </message>
     <message>
         <location line="+29"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Rewind to beginning</source>
-        <translation type="unfinished">Spola tillbaka till början</translation>
+        <translation>Spola tillbaka till början</translation>
     </message>
     <message>
         <location line="+3"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Moves the pointer position to the start of the composition. (This may mean going forwards if the pointer is currently before the start.)</source>
-        <translation type="unfinished">Flyttar markören till kompositionens början. (Detta kan betyda att gå framåt om markören för tillfället är framför början.)</translation>
+        <translation>Flyttar markören till kompositionens början. (Detta kan betyda att gå framåt om markören för tillfället är framför början.)</translation>
     </message>
     <message>
         <location line="+26"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Play/Pause</source>
-        <translation type="unfinished">Spela/Pausera</translation>
+        <translation>Spela/Pausera</translation>
     </message>
     <message>
         <location line="+3"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Plays from the current pointer position, or pauses playback if already in progress.</source>
-        <translation type="unfinished">Spelar upp från nuvarande visarposition, eller gör paus i uppspelningen om den redan pågår.</translation>
+        <translation>Spelar upp från nuvarande visarposition, eller gör paus i uppspelningen om den redan pågår.</translation>
     </message>
     <message>
         <location line="+38"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Stop</source>
-        <translation type="unfinished">Stoppa</translation>
+        <translation>Stoppa</translation>
     </message>
     <message>
         <location line="+3"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Stops playback or recording.</source>
-        <translation type="unfinished">Stoppar uppspelning eller inspelning.</translation>
+        <translation>Stoppar uppspelning eller inspelning.</translation>
     </message>
     <message>
         <location line="+32"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Fast forward</source>
-        <translation type="unfinished">Spola fram</translation>
+        <translation>Spola fram</translation>
     </message>
     <message>
         <location line="+3"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Moves the current pointer position forwards one bar.</source>
-        <translation type="unfinished">Flyttar nuvarande visarposition en takt framåt.</translation>
+        <translation>Flyttar nuvarande visarposition en takt framåt.</translation>
     </message>
     <message>
         <location line="+29"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Fast forward to end</source>
-        <translation type="unfinished">Spola fram till slutet</translation>
+        <translation>Spola fram till slutet</translation>
     </message>
     <message>
         <location line="+3"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Moves the pointer position to the end of the composition.  (This may mean going backwards if the pointer is already beyond the end.)</source>
-        <translation type="unfinished">Flyttar markören till kompositionens slut. (Det kan betyda att gå bakåt om markören för tillfället redan är bortom slutet.)</translation>
+        <translation>Flyttar markören till kompositionens slut. (Det kan betyda att gå bakåt om markören för tillfället redan är bortom slutet.)</translation>
     </message>
     <message>
         <location line="+27"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Display time to end</source>
-        <translation type="unfinished">Visa tid till slutet</translation>
+        <translation>Visa tid till slutet</translation>
     </message>
 </context>
 <context>
