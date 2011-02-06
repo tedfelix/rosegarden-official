@@ -482,8 +482,12 @@ TimeWidget::populate()
 
     } else {
 
-        if (m_time > m_composition->getEndMarker()) {
+        if (m_constrain && m_time > m_composition->getEndMarker()) {
             m_time = m_composition->getEndMarker();
+        }
+
+        if (m_constrain && m_time < m_composition->getStartMarker()) {
+            m_time = m_composition->getStartMarker();
         }
 
         if (m_timeT) {
@@ -495,6 +499,7 @@ TimeWidget::populate()
                 m_timeT->setMaximum(INT_MAX);
             }
             m_timeT->setValue(m_time);
+
         }
 
         int bar = 1, beat = 1, hemidemis = 0, remainder = 0;
