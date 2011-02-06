@@ -75,6 +75,11 @@ public:
 private:
 
     /**
+     * Update delay in msec.
+     */
+    static const int UPDATE_DELAY_TIME = 1500;
+
+    /**
      * Disconnect m_timeT, m_msec, and m_delayUpdateTimer
      */
     void disconnectSignals();

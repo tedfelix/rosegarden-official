@@ -696,7 +696,7 @@ TimeWidget::slotTimeTChanged(int t)
     connect(m_delayUpdateTimer, SIGNAL(timeout()),
             this, SLOT(slotTimeTUpdate()));
 
-    m_delayUpdateTimer->start(1500);
+    m_delayUpdateTimer->start(UPDATE_DELAY_TIME);
 }
 
 void
@@ -760,7 +760,7 @@ TimeWidget::slotMSecChanged()
     connect(m_delayUpdateTimer, SIGNAL(timeout()),
             this, SLOT(slotMSecUpdate()));
 
-    m_delayUpdateTimer->start(1500);
+    m_delayUpdateTimer->start(UPDATE_DELAY_TIME);
 }
 
 void
