@@ -69,9 +69,20 @@ public:
                bool editable = true,
                bool constrainToCompositionDuration = true);
 
-    ~TimeWidget();
     timeT getTime();
     RealTime getRealTime();
+
+private:
+
+    /**
+     * Disconnect m_timeT, m_msec, and m_delayUpdateTimer
+     */
+    void disconnectSignals();
+
+    /**
+     * Return a rounded msec reading from the given realTime argument.
+     */
+    int getRoundedMSec(RealTime rt);
 
 signals:
     void timeChanged(timeT);
@@ -83,7 +94,17 @@ public slots:
     void slotResetToDefault();
 
     void slotNoteChanged(int);
+
+    /**
+     * Restart the update delay timer and connect it for m_timeT.
+     */
     void slotTimeTChanged(int);
+
+    /**
+     * Stop the delay timer and call slotSetTime(int)
+     */
+    void slotTimeTUpdate();
+
     void slotBarBeatOrFractionChanged(int);
 
     /**
@@ -92,7 +113,7 @@ public slots:
     void slotSecOrMSecChanged(int);
 
     /**
-     * Restart the update delay timer.
+     * Restart the update delay timer and connect it to m_msec.
      */
     void slotMSecChanged();
 

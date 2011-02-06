@@ -26,6 +26,7 @@
 #include "gui/editors/notation/NotePixmapFactory.h"
 #include "gui/widgets/LineEdit.h"
 
+#include <cmath>
 #include <QComboBox>
 #include <QFrame>
 #include <QGroupBox>
@@ -78,14 +79,6 @@ TimeWidget::TimeWidget(QString title,
         m_delayUpdateTimer(0)
 {
     init(editable);
-}
-
-TimeWidget::~TimeWidget() {
-    if (m_delayUpdateTimer) {
-
-        delete m_delayUpdateTimer;
-        m_delayUpdateTimer =0;
-    }
 }
 
 void
@@ -282,8 +275,6 @@ TimeWidget::init(bool editable)
         m_msec = new QSpinBox;
         m_msec->setMinimum(0);
         m_msec->setSingleStep(10);
-        connect(m_msec, SIGNAL(editingFinished()),
-                this, SLOT(slotMSecUpdate()));
         connect(m_msec, SIGNAL(valueChanged(int)),
                 this, SLOT(slotMSecChanged()));
         layout->addWidget(m_msec, 2, 3);
@@ -322,13 +313,9 @@ TimeWidget::init(bool editable)
 
     populate();
 
-    // Create a One-shot timer for use in msec box to delay updates
+    // Create a One-shot timer for use in msec and unit box to delay updates
     m_delayUpdateTimer = new QTimer(this);
     m_delayUpdateTimer->setSingleShot(true);
-
-    connect(m_delayUpdateTimer, SIGNAL(timeout()),
-            this, SLOT(slotMSecUpdate()));
-
 }
 
 void
@@ -444,7 +431,11 @@ TimeWidget::populate()
         if (m_msec) {
             m_msec->setMinimum(0);
             m_msec->setMaximum(999);
-            m_msec->setValue(rt.msec());
+
+            // Round value instead of direct read from rt.msec
+            // Causes cycle of rounding between msec and units
+            // which creates odd typing behavior
+            m_msec->setValue(getRoundedMSec(rt));
         } else {
             m_msecLabel->setText(QString("%1").arg(rt.msec()));
         }
@@ -564,9 +555,22 @@ TimeWidget::populate()
         }
 
         if (m_msec) {
-            m_msec->setMinimum(0);
-            m_msec->setMaximum(999);
-            m_msec->setValue(rt.msec());
+
+            if (m_time >= 0)
+            {
+                m_msec->setMinimum(0);
+                m_msec->setMaximum(999);
+            }
+            else
+            {
+                m_msec->setMinimum(-999);
+                m_msec->setMaximum(0);
+            }
+
+            // Round value instead of direct read from rt.msec
+            // Causes cycle of rounding between msec and units
+            // which creates odd typing behavior
+            m_msec->setValue(getRoundedMSec(rt));
         } else {
             m_msecLabel->setText(QString("%1").arg(rt.msec()));
         }
@@ -606,12 +610,35 @@ TimeWidget::getRealTime()
 }
 
 void
+TimeWidget::disconnectSignals()
+{
+    // Disconnect any signals from timer
+    m_delayUpdateTimer->disconnect();
+
+    // Disconnect singals from m_timeT
+    if (m_timeT)
+    {
+        m_timeT->disconnect(SIGNAL(editingFinished()));
+    }
+
+    // Disconnect singals from m_msec
+    if (m_msec)
+    {
+        m_msec->disconnect(SIGNAL(editingFinished()));
+    }
+}
+
+int
+TimeWidget::getRoundedMSec(RealTime rt)
+{
+    double msecDouble = rt.usec() / 1000.0;
+    return rt.sec > 0 ? floor(msecDouble + 0.5) : ceil(msecDouble - 0.5);
+
+}
+
+void
 TimeWidget::slotSetTime(timeT t)
 {
-    bool change = (m_time != t);
-    if (!change)
-        return ;
-
     if (m_isDuration  &&  t < m_minimumDuration)
         t = m_minimumDuration;
 
@@ -656,7 +683,39 @@ TimeWidget::slotTimeTChanged(int t)
 {
     RG_DEBUG << "slotTimeTChanged: t is " << t << ", value is " << m_timeT->value() << endl;
 
-    slotSetTime(t);
+    m_delayUpdateTimer->stop();
+
+    disconnectSignals();
+
+    if (m_timeT)  // Checking in case called by accident
+    {
+        connect(m_timeT, SIGNAL(editingFinished()),
+                this, SLOT(slotTimeTUpdate()));
+    }
+
+    connect(m_delayUpdateTimer, SIGNAL(timeout()),
+            this, SLOT(slotTimeTUpdate()));
+
+    m_delayUpdateTimer->start(1500);
+}
+
+void
+TimeWidget::slotTimeTUpdate()
+{
+    // May have fired already, but stop it in case called when widget lost
+    // focus.
+    m_delayUpdateTimer->stop();
+
+    // Perform an immediate update.
+    if (m_timeT)
+    {
+        slotSetTime(m_timeT->value());
+    }
+    else
+    {
+        RG_DEBUG << "slotTimeTUpdate: no m_timeT found, but slotCalled in error "
+                << " noop." << endl;
+    }
 }
 
 void
@@ -688,6 +747,19 @@ TimeWidget::slotSecOrMSecChanged(int)
 void
 TimeWidget::slotMSecChanged()
 {
+    m_delayUpdateTimer->stop();
+
+    disconnectSignals();
+
+    if (m_msec)  // Checking in case called by accident
+    {
+        connect(m_msec, SIGNAL(editingFinished()),
+                this, SLOT(slotMSecUpdate()));
+    }
+
+    connect(m_delayUpdateTimer, SIGNAL(timeout()),
+            this, SLOT(slotMSecUpdate()));
+
     m_delayUpdateTimer->start(1500);
 }
 
@@ -698,7 +770,7 @@ TimeWidget::slotMSecUpdate()
     // focus.
     m_delayUpdateTimer->stop();
 
-    // Perfrom an imidiate update.
+    // Perform an immediate update.
     slotSecOrMSecChanged(0); // Doesn't matter the value of argument.
 }
 
