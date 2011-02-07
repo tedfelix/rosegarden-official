@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0">
+<TS version="2.0" language="nl_NL">
 <context>
     <name>:</name>
     <message>
@@ -15,19 +15,19 @@
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="+18"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+474"/>
         <source>Manage MIDI Devices</source>
-        <translation type="unfinished">Beheer MIDI-apparaten</translation>
+        <translation>Beheer MIDI-apparaten</translation>
     </message>
     <message>
         <location line="+331"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+40"/>
         <source>Internal Synth</source>
-        <translation type="unfinished">Interne Synth</translation>
+        <translation>Interne Synth</translation>
     </message>
     <message>
         <location line="-243"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-31"/>
         <source>Default playback device</source>
-        <translation type="unfinished">Standaard Afspeelapparaten</translation>
+        <translation>Standaard Afspeelapparaten</translation>
     </message>
     <message>
         <location line="-62"/>
@@ -45,7 +45,7 @@
         <location line="-5"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+1"/>
         <source>Rosegarden playback device</source>
-        <translation type="unfinished"></translation>
+        <translation>Rosegarden afspeelapparaten</translation>
     </message>
     <message>
         <location line="-34"/>
@@ -64,7 +64,7 @@
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>Banks...</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
-        <translation type="unfinished">Banken...</translation>
+        <translation>Banken...</translation>
     </message>
     <message>
         <location line="+19"/>
@@ -76,7 +76,7 @@
         <location line="+3"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>Controllers...</source>
-        <translation type="unfinished">Controllers...</translation>
+        <translation>Controllers...</translation>
     </message>
     <message>
         <location line="+43"/>
@@ -90,7 +90,7 @@
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <location line="+28"/>
         <source>New</source>
-        <translation type="unfinished">Nieuw</translation>
+        <translation>Nieuw</translation>
     </message>
     <message>
         <location line="-228"/>
@@ -102,13 +102,13 @@
         <location line="+3"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>Delete</source>
-        <translation type="unfinished">Verwijder</translation>
+        <translation>Verwijder</translation>
     </message>
     <message>
         <location line="+19"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+1"/>
         <source>MIDI outputs</source>
-        <translation type="unfinished">MIDI uitvoers</translation>
+        <translation>MIDI uitvoers</translation>
     </message>
     <message>
         <location line="+69"/>
@@ -122,7 +122,7 @@
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+5"/>
         <location line="+41"/>
         <source>No port</source>
-        <translation type="unfinished">Geen poort</translation>
+        <translation>Geen poort</translation>
     </message>
     <message>
         <location line="-394"/>
@@ -144,13 +144,13 @@
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-37"/>
         <location line="+39"/>
         <source>Refresh</source>
-        <translation type="unfinished">Noveren</translation>
+        <translation>Noveren</translation>
     </message>
     <message>
         <location line="-303"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-38"/>
         <source>MIDI Recording</source>
-        <translation type="unfinished">MIDI opnemen</translation>
+        <translation>MIDI opnemen</translation>
     </message>
     <message>
         <location line="+39"/>
@@ -169,7 +169,7 @@
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>Delete</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
-        <translation type="unfinished">Verwijder</translation>
+        <translation>Verwijder</translation>
     </message>
     <message>
         <location line="+82"/>
@@ -181,13 +181,13 @@
         <location line="-5"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+1"/>
         <source>Rosegarden recording device</source>
-        <translation type="unfinished">Rosegarden opname apparaten</translation>
+        <translation>Rosegarden opname apparaten</translation>
     </message>
     <message>
         <location line="+10"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+5"/>
         <source>Default record device</source>
-        <translation type="unfinished">Standaard opname apparaten</translation>
+        <translation>Standaard opname apparaten</translation>
     </message>
     <message>
         <location line="+26"/>
@@ -897,7 +897,7 @@
     <message>
         <location line="+30"/>
         <source>&amp;Rosegarden Tutorials</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Rosegarden handboek</translation>
     </message>
     <message>
         <location line="+19"/>
@@ -2050,7 +2050,7 @@
         <location line="+35"/>
         <source>Ctrl+Alt++</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+38"/>
@@ -2702,7 +2702,7 @@
     <message>
         <location line="+9"/>
         <source>Clear Select&amp;ion</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwijderen select&amp;ie</translation>
     </message>
     <message>
         <location line="+21"/>
@@ -2747,7 +2747,7 @@
     <message>
         <location line="+22"/>
         <source>Show &amp;Track Headers</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Toon spoorheaders</translation>
     </message>
     <message>
         <location line="-1243"/>
@@ -2848,7 +2848,7 @@
     <message>
         <location line="+1"/>
         <source>Add Tri&amp;ll</source>
-        <translation type="unfinished"></translation>
+        <translation>Voeg Tri&amp;ller</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -3476,22 +3476,22 @@
     <message>
         <location line="+2"/>
         <source>Dotted Q&amp;uarter Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Kwartnoot met p&amp;unt</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Dotted E&amp;ighth Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Achtste noot met pun&amp;t</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Dotted Si&amp;xteenth Note</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Zestiende noot met punt</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Dotted Thirt&amp;y-Second Note</source>
-        <translation type="unfinished"></translation>
+        <translation>T&amp;weeendertigste noot met punt</translation>
     </message>
     <message>
         <location line="-112"/>
@@ -3516,17 +3516,17 @@
     <message>
         <location line="+1"/>
         <source>N&amp;atural</source>
-        <translation type="unfinished"></translation>
+        <translation>H&amp;erstellingsteken</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&amp;Double Sharp</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Dubbelkruis</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>D&amp;ouble Flat</source>
-        <translation type="unfinished"></translation>
+        <translation>Dubbelm&amp;ol</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -3700,12 +3700,12 @@
     <message>
         <location line="+111"/>
         <source>Show To&amp;ols</source>
-        <translation type="unfinished"></translation>
+        <translation>T&amp;oon hulpmiddelen</translation>
     </message>
     <message>
         <location line="+171"/>
         <source>Remove &amp;Triggers</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwijder &amp;triggers</translation>
     </message>
     <message>
         <location line="-170"/>
@@ -3794,7 +3794,7 @@
     <message>
         <location line="+2"/>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Help</translation>
     </message>
     <message>
         <location line="+2179"/>
@@ -3821,90 +3821,90 @@
     <message>
         <location line="+2"/>
         <source>Double Whole Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Brevis</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Ctrl+5</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Whole Note</source>
-        <translation type="unfinished"></translation>
+        <translation>hele noot</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Ctrl+1</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Half Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Halve noot</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Ctrl+2</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Quarter Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Kwartnoot</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Ctrl+4</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Eighth Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Achtste noot</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Ctrl+8</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Sixteenth Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Zestiende noot</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Ctrl+6</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Thirty-Second Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Tweeendertigste noot</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Ctrl+3</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Sixty-Fourth Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Vierenzestigste noot</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Ctrl+0</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+2"/>
@@ -3915,7 +3915,7 @@
         <location line="+7"/>
         <source>Ctrl+Alt+5</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+2"/>
@@ -3931,7 +3931,7 @@
         <location line="+7"/>
         <source>Ctrl+Alt+2</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+2"/>
@@ -3942,7 +3942,7 @@
         <location line="+7"/>
         <source>Ctrl+Alt+4</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+2"/>
@@ -3953,7 +3953,7 @@
         <location line="+7"/>
         <source>Ctrl+Alt+8</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+2"/>
@@ -3964,7 +3964,7 @@
         <location line="+7"/>
         <source>Ctrl+Alt+6</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+2"/>
@@ -3975,7 +3975,7 @@
         <location line="+7"/>
         <source>Ctrl+Alt+3</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+2"/>
@@ -3986,12 +3986,12 @@
         <location line="+7"/>
         <source>Ctrl+Alt+0</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+229"/>
         <source>Stop</source>
-        <translation type="unfinished">Stoppen</translation>
+        <translation>Stoppen</translation>
     </message>
     <message>
         <location line="+69"/>
@@ -4057,7 +4057,7 @@
         <location line="+7"/>
         <source>;</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+27"/>
@@ -4102,7 +4102,7 @@
     <message>
         <location line="+6"/>
         <source>Dotted Double Whole Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Brevis med punt</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -4117,22 +4117,22 @@
     <message>
         <location line="+6"/>
         <source>Dotted Quarter Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Kwartnoot met punt</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Dotted Eighth Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Achtste noot met punt</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Dotted Sixteenth Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Zestiende noot met punt</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Dotted Thirty-Second Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Tweeendertigste noot met punt</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -4392,7 +4392,7 @@
     <message>
         <location line="+1"/>
         <source>&amp;Open...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Open...</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -4897,7 +4897,7 @@
     <message>
         <location line="+9"/>
         <source>&amp;Clear Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwijderen sele&amp;ctie</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -6707,7 +6707,7 @@
     <message>
         <location filename="../AutoloadStrings.cpp" line="-24"/>
         <source>General MIDI Device</source>
-        <translation type="unfinished"></translation>
+        <translation>Algemeen MIDI-apparaten</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -10361,7 +10361,7 @@
     <message>
         <location filename="../../src/gui/dialogs/AboutDialog.cpp" line="+32"/>
         <source>About Rosegarden</source>
-        <translation type="unfinished"></translation>
+        <translation>Over Rosegarden</translation>
     </message>
     <message>
         <location line="+16"/>
@@ -10565,7 +10565,7 @@
     <message>
         <location line="+2"/>
         <source>&amp;Open</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Open</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -10803,7 +10803,7 @@
     <message>
         <location line="+6"/>
         <source>audio outputs</source>
-        <translation type="unfinished"></translation>
+        <translation>Audio uitvoers</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -10914,7 +10914,7 @@
     <message>
         <location line="+40"/>
         <source>Converting audio file...</source>
-        <translation type="unfinished">Audiobestand converteren...</translation>
+        <translation>Audiobestand converteren...</translation>
     </message>
     <message>
         <source>Resampling audio file...</source>
@@ -11118,8 +11118,8 @@ Selecteer welke u permanent van de harde schijf wilt verwijderen.
         <location line="+10"/>
         <source>&lt;qt&gt;About to delete %n audio file(s) permanently from the hard disk.&lt;br&gt;This action cannot be undone, and there will be no way to recover the files.&lt;br&gt;Are you sure?&lt;/qt&gt;</source>
         <translation type="unfinished">
-            <numerusform>
-        </numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -12405,7 +12405,7 @@ Selecteer welke u permanent van de harde schijf wilt verwijderen.
     <message>
         <location line="+1"/>
         <source>Number  </source>
-        <translation type="unfinished"></translation>
+        <translation>Nummer</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -12764,7 +12764,7 @@ Selecteer welke u permanent van de harde schijf wilt verwijderen.
     <message>
         <location line="-847"/>
         <source>[ No port ]</source>
-        <translation type="unfinished"></translation>
+        <translation>[ geen poort ]</translation>
     </message>
 </context>
 <context>
@@ -12901,7 +12901,7 @@ Selecteer welke u permanent van de harde schijf wilt verwijderen.
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.h" line="+48"/>
         <location line="+1"/>
         <source>About</source>
-        <translation type="unfinished"></translation>
+        <translation>Over</translation>
     </message>
     <message>
         <location line="+12"/>
@@ -13836,7 +13836,7 @@ Wilt u proberen het bestand op het zoeken of het overslaan?</translation>
     <message>
         <location filename="../../src/gui/editors/guitar/Fingering.cpp" line="+110"/>
         <source>couldn&apos;t parse fingering &apos;%1&apos; in &apos;%2&apos;</source>
-        <translation type="unfinished">Kon vingerzetting &apos;%1&apos; in &apos;%2&apos; niet parsen</translation>
+        <translation>Kon vingerzetting &apos;%1&apos; in &apos;%2&apos; niet parsen</translation>
     </message>
 </context>
 <context>
@@ -13865,7 +13865,7 @@ Wilt u proberen het bestand op het zoeken of het overslaan?</translation>
     <message>
         <location filename="../../src/gui/editors/notation/FontViewFrame.cpp" line="+99"/>
         <source>Error: Unable to match font name %1</source>
-        <translation type="unfinished">Error: kan lettertypenaam %1 niet matchen</translation>
+        <translation>Error: kan lettertypenaam %1 niet matchen</translation>
     </message>
     <message>
         <location line="+0"/>
@@ -14010,7 +14010,7 @@ Wilt u proberen het bestand op het zoeken of het overslaan?</translation>
     <message>
         <location line="+15"/>
         <source>Use Thorn style</source>
-        <translation type="unfinished"></translation>
+        <translation>Gebruik Thorn stijl</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -14652,22 +14652,22 @@ Voorbeeldtekst uit het bestand:</translation>
     <message>
         <location filename="../../src/gui/dialogs/InsertTupletDialog.cpp" line="+47"/>
         <source>Tuplet</source>
-        <translation type="unfinished">Multiplet</translation>
+        <translation>Multiplet</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>New timing for tuplet group</source>
-        <translation type="unfinished">Nieuwe timing voor multiplet-groep</translation>
+        <translation>Nieuwe timing voor multiplet-groep</translation>
     </message>
     <message>
         <location line="+8"/>
         <source>Play </source>
-        <translation type="unfinished">Speel </translation>
+        <translation>Speel </translation>
     </message>
     <message>
         <location line="+5"/>
         <source>in the time of  </source>
-        <translation type="unfinished">in de tijd van  </translation>
+        <translation>in de tijd van  </translation>
     </message>
 </context>
 <context>
@@ -14919,16 +14919,16 @@ Voorbeeldtekst uit het bestand:</translation>
         <location line="+8"/>
         <source>up %n octave(s) and %1</source>
         <translation type="unfinished">
-            <numerusform>
-        </numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location line="+3"/>
         <source>up %n octave(s)</source>
         <translation type="unfinished">
-            <numerusform>
-        </numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -14940,16 +14940,16 @@ Voorbeeldtekst uit het bestand:</translation>
         <location line="+5"/>
         <source>down %n octave(s) and %1</source>
         <translation type="unfinished">
-            <numerusform>
-        </numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location line="+3"/>
         <source>down %n octave(s)</source>
         <translation type="unfinished">
-            <numerusform>
-        </numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -15132,7 +15132,7 @@ Would you like to use
     <message>
         <location line="+3"/>
         <source>Selected tracks</source>
-        <translation type="unfinished"></translation>
+        <translation>Geselecteerd spoors</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -16395,8 +16395,8 @@ Dubbelklik om de marker-editor te openen.</translation>
         <location line="+7"/>
         <source>%1%2 - %n Segment(s) - %3</source>
         <translation type="unfinished">
-            <numerusform>
-        </numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -17065,7 +17065,7 @@ Dubbelklik om de marker-editor te openen.</translation>
     <message>
         <location line="+6"/>
         <source>View</source>
-        <translation type="unfinished"></translation>
+        <translation>Bekijk</translation>
     </message>
     <message>
         <location line="+21"/>
@@ -17401,8 +17401,8 @@ Dit is een bug (het programma zou anders nu gecrashed zijn)</translation>
         <location line="-8"/>
         <source>%n pixel(s)</source>
         <translation type="unfinished">
-            <numerusform>
-        </numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -17495,8 +17495,8 @@ Dit is een bug (het programma zou anders nu gecrashed zijn)</translation>
         <location line="-451"/>
         <source>  %n event(s) selected </source>
         <translation type="unfinished">
-            <numerusform>
-        </numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -17664,14 +17664,14 @@ Controleer of het apparaat juist is geconfigureerd in het dialoog &apos;Beheer M
         <location line="+6"/>
         <source>%1%2 - %n Segment(s) - Notation</source>
         <translation type="unfinished">
-            <numerusform>
-        </numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
         <location line="+120"/>
         <source>Tuplet</source>
-        <translation type="unfinished">Multiplet</translation>
+        <translation>Multiplet</translation>
     </message>
     <message>
         <location line="+164"/>
@@ -17711,7 +17711,7 @@ Controleer of het apparaat juist is geconfigureerd in het dialoog &apos;Beheer M
     <message>
         <location line="+374"/>
         <source>Set Note Type...</source>
-        <translation type="unfinished"></translation>
+        <translation>Stel noot-type in...</translation>
     </message>
     <message>
         <location line="+24"/>
@@ -18271,7 +18271,7 @@ Controleer of het apparaat juist is geconfigureerd in het dialoog &apos;Beheer M
     <message>
         <location filename="../../src/gui/widgets/ProgressDialog.cpp" line="+64"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <source>&lt;qt&gt;&lt;h3&gt;Processing...&lt;/h3&gt;&lt;/qt&gt;</source>
@@ -18995,8 +18995,8 @@ There may be some incompatibilities with the file format.</source>
         <location line="+124"/>
         <source>Delete the %n audio file(s) recorded during the unsaved session?</source>
         <translation type="unfinished">
-            <numerusform>
-        </numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -19019,8 +19019,8 @@ Selecteer de bestanden die u permanent van de harde schijf wilt wissen.
         <location line="+16"/>
         <source>&lt;qt&gt;About to delete %n audio file(s) permanently from the hard disk.&lt;br&gt;There will be no way to recover the file(s).&lt;br&gt;Are you sure?&lt;/qt&gt;</source>
         <translation type="unfinished">
-            <numerusform>
-        </numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -19512,7 +19512,7 @@ Error was : %2</source>
         <source>The audio file path does not exist or is not writable.
 You must set the audio file path to a valid directory in Document Properties before %1.
 Would you like to set it now?</source>
-        <translation type="unfinished">Het audiobestandspad bestaat niet of is niet schrijfbaar.
+        <translation>Het audiobestandspad bestaat niet of is niet schrijfbaar.
 Het moet naar een geldige map wijzen in Documenteigenschappen voor %1.
 Wilt u het nu instellen?</translation>
     </message>
@@ -19526,8 +19526,8 @@ Wilt u het nu instellen?</translation>
         <location line="+34"/>
         <source>Split %n Segment(s) at Time</source>
         <translation type="unfinished">
-            <numerusform>
-        </numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -19718,7 +19718,7 @@ Segmenten-&gt;Samenvoegen.
     <message>
         <location line="-233"/>
         <source>http://rosegardenmusic.com/tutorials/</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+479"/>
@@ -19759,7 +19759,7 @@ Segmenten-&gt;Samenvoegen.
         <location line="+49"/>
         <location line="+36"/>
         <source>Open X11 Rosegarden File</source>
-        <translation type="unfinished"></translation>
+        <translation>Open X11 Rosegarden-bestanden</translation>
     </message>
     <message>
         <location line="-35"/>
@@ -20230,7 +20230,7 @@ Error was : %2</source>
     <message>
         <location filename="../../src/commands/segment/SegmentJoinCommand.h" line="+48"/>
         <source>&amp;Join</source>
-        <translation type="unfinished">&amp;Samenvoegen</translation>
+        <translation>&amp;Samenvoegen</translation>
     </message>
 </context>
 <context>
@@ -20481,7 +20481,7 @@ Error was : %2</source>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="+150"/>
         <source>Warning</source>
-        <translation type="unfinished">Waarschuwing</translation>
+        <translation>Waarschuwing</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -20533,9 +20533,9 @@ Wilt u het nu instellen?</translation>
     <message numerus="yes">
         <location line="+169"/>
         <source>Move Segment(s)</source>
-        <translation type="unfinished">
-            <numerusform>Verplaats segmenten
-        </numerusform>
+        <translation>
+            <numerusform>Verplaats segment</numerusform>
+            <numerusform>Verplaats segmenten</numerusform>
         </translation>
     </message>
     <message>
@@ -22932,12 +22932,12 @@ Wilt u het pad nu instellen?</translation>
     <message>
         <location line="-4"/>
         <source>Add</source>
-        <translation type="unfinished">Voeg toe</translation>
+        <translation>Voeg toe</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Add a Triggered Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Voeg getriggerd segment toe</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -22953,8 +22953,8 @@ Wilt u het pad nu instellen?</translation>
         <location line="+2"/>
         <source>%1 on %n track(s)</source>
         <translation type="unfinished">
-            <numerusform>
-        </numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -22988,8 +22988,8 @@ Wilt u het pad nu instellen?</translation>
         <location line="+22"/>
         <source>This triggered segment is used %n time(s) in the current composition.  Are you sure you want to remove it?</source>
         <translation type="unfinished">
-            <numerusform>
-        </numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -23328,55 +23328,55 @@ Wilt u het pad nu instellen?</translation>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="+25"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1047"/>
         <source>Rosegarden Transport</source>
-        <translation type="unfinished">Rosegarden Transport</translation>
+        <translation>Rosegarden Transport</translation>
     </message>
     <message>
         <location line="+34"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+2"/>
         <source>Hide additional controls</source>
-        <translation type="unfinished">Verberg extra controls</translation>
+        <translation>Verberg extra controls</translation>
     </message>
     <message>
         <location line="+36"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Panic Button</source>
-        <translation type="unfinished">Paniek-knop</translation>
+        <translation>Paniek-knop</translation>
     </message>
     <message>
         <location line="+3"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Resets all MIDI devices if you&apos;ve got stuck notes</source>
-        <translation type="unfinished">Herstelt alle MIDI-apparaten als er een noot blijft hangen</translation>
+        <translation>Herstelt alle MIDI-apparaten als er een noot blijft hangen</translation>
     </message>
     <message>
         <location line="+35"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Metronome</source>
-        <translation type="unfinished">Metronoom</translation>
+        <translation>Metronoom</translation>
     </message>
     <message>
         <location line="+3"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Provides a metronome click for you to play along with</source>
-        <translation type="unfinished">Geeft metronoomtikken om mee mee te spelen</translation>
+        <translation>Geeft metronoomtikken om mee mee te spelen</translation>
     </message>
     <message>
         <location line="+465"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Shows MIDI activity in and out of Rosegarden</source>
-        <translation type="unfinished">Toont MIDI-activiteit van en naar Rosegarden</translation>
+        <translation>Toont MIDI-activiteit van en naar Rosegarden</translation>
     </message>
     <message>
         <location line="+469"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+2"/>
         <source>IN</source>
-        <translation type="unfinished">INI</translation>
+        <translation>INI</translation>
     </message>
     <message>
         <location line="+464"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
         <source>OUT</source>
-        <translation type="unfinished">UIT</translation>
+        <translation>UIT</translation>
     </message>
     <message>
         <location line="+465"/>
@@ -23384,181 +23384,181 @@ Wilt u het pad nu instellen?</translation>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
         <location line="+1"/>
         <source>NO EVENTS</source>
-        <translation type="unfinished">GEEN GEBEURTENISSEN</translation>
+        <translation>GEEN GEBEURTENISSEN</translation>
     </message>
     <message>
         <location line="+23"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+2"/>
         <source>Record</source>
-        <translation type="unfinished">Opnemen</translation>
+        <translation>Opnemen</translation>
     </message>
     <message>
         <location line="+3"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Record either MIDI or audio</source>
-        <translation type="unfinished">Neem MIDI of audio op</translation>
+        <translation>Neem MIDI of audio op</translation>
     </message>
     <message>
         <location line="+41"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Loop</source>
-        <translation type="unfinished">Loop</translation>
+        <translation>Loop</translation>
     </message>
     <message>
         <location line="+3"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Turn on and off the loop markers (if set)</source>
-        <translation type="unfinished">Zet de loop-markers aan en uit (indien gezet)</translation>
+        <translation>Zet de loop-markers aan en uit (indien gezet)</translation>
     </message>
     <message>
         <location line="+41"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Solo</source>
-        <translation type="unfinished">Solo</translation>
+        <translation>Solo</translation>
     </message>
     <message>
         <location line="+3"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Mutes all but the currently selected track</source>
-        <translation type="unfinished">Dempt alle sporen behalve de nu geselcteerde</translation>
+        <translation>Dempt alle sporen behalve de nu geselcteerde</translation>
     </message>
     <message>
         <location line="+23"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Start loop or range here</source>
-        <translation type="unfinished">Start loop of bereik hier</translation>
+        <translation>Start loop of bereik hier</translation>
     </message>
     <message>
         <location line="+20"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>End loop or range here</source>
-        <translation type="unfinished">Eindig loop of bereik hier</translation>
+        <translation>Eindig loop of bereik hier</translation>
     </message>
     <message>
         <location line="+1037"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>SIG</source>
-        <translation type="unfinished">MAAT</translation>
+        <translation>MAAT</translation>
     </message>
     <message>
         <location line="+464"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
         <source>DIV</source>
-        <translation type="unfinished">EENH</translation>
+        <translation>EENH</translation>
     </message>
     <message>
         <location line="+465"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
         <source>/16</source>
-        <translation type="unfinished">/16</translation>
+        <translation>/16</translation>
     </message>
     <message>
         <location line="+467"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
         <source>TEMPO</source>
-        <translation type="unfinished">TEMPO</translation>
+        <translation>TEMPO</translation>
     </message>
     <message>
         <location line="+474"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
         <source>END</source>
-        <translation type="unfinished">EIND</translation>
+        <translation>EIND</translation>
     </message>
     <message>
         <location line="+467"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
         <source>BAR</source>
-        <translation type="unfinished">MAATNR</translation>
+        <translation>MAATNR</translation>
     </message>
     <message>
         <location line="+151"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+2"/>
         <source>Switch between real time, musical time, and frame count</source>
-        <translation type="unfinished">Switch tussen kloktijd, maat, en frame-aantal</translation>
+        <translation>Switch tussen kloktijd, maat, en frame-aantal</translation>
     </message>
     <message>
         <location line="+33"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Show additional controls</source>
-        <translation type="unfinished">Toon extra controls</translation>
+        <translation>Toon extra controls</translation>
     </message>
     <message>
         <location line="+36"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Rewind</source>
-        <translation type="unfinished">Terugspoelen</translation>
+        <translation>Terugspoelen</translation>
     </message>
     <message>
         <location line="+3"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Moves the current pointer position back one bar.</source>
-        <translation type="unfinished">Verplaats de huidige aanwijzerpositie een maat terug.</translation>
+        <translation>Verplaats de huidige aanwijzerpositie een maat terug.</translation>
     </message>
     <message>
         <location line="+29"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Rewind to beginning</source>
-        <translation type="unfinished">Terugspoelen naar begin</translation>
+        <translation>Terugspoelen naar begin</translation>
     </message>
     <message>
         <location line="+3"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Moves the pointer position to the start of the composition. (This may mean going forwards if the pointer is currently before the start.)</source>
-        <translation type="unfinished">Zet de pointer-positie op het begin van de compositie. (Dat kan betekenen dat hij vooruit gaat als de pointer nog voor het begin staat.)</translation>
+        <translation>Zet de pointer-positie op het begin van de compositie. (Dat kan betekenen dat hij vooruit gaat als de pointer nog voor het begin staat.)</translation>
     </message>
     <message>
         <location line="+26"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Play/Pause</source>
-        <translation type="unfinished">Afspelen/Pauze</translation>
+        <translation>Afspelen/Pauze</translation>
     </message>
     <message>
         <location line="+3"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Plays from the current pointer position, or pauses playback if already in progress.</source>
-        <translation type="unfinished">Speelt vanaf de huidige aanwijzerpositie, of pauzeert afspelen als die loopt.</translation>
+        <translation>Speelt vanaf de huidige aanwijzerpositie, of pauzeert afspelen als die loopt.</translation>
     </message>
     <message>
         <location line="+38"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Stop</source>
-        <translation type="unfinished">Stoppen</translation>
+        <translation>Stoppen</translation>
     </message>
     <message>
         <location line="+3"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Stops playback or recording.</source>
-        <translation type="unfinished">Stopt afspelen of opnemen.</translation>
+        <translation>Stopt afspelen of opnemen.</translation>
     </message>
     <message>
         <location line="+32"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Fast forward</source>
-        <translation type="unfinished">Snel doorspoelen</translation>
+        <translation>Snel doorspoelen</translation>
     </message>
     <message>
         <location line="+3"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Moves the current pointer position forwards one bar.</source>
-        <translation type="unfinished">Verplaatst de huidige aanwijzerpositie een maat vooruit.</translation>
+        <translation>Verplaatst de huidige aanwijzerpositie een maat vooruit.</translation>
     </message>
     <message>
         <location line="+29"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Fast forward to end</source>
-        <translation type="unfinished">Doorspoelen naar het einde</translation>
+        <translation>Doorspoelen naar het einde</translation>
     </message>
     <message>
         <location line="+3"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Moves the pointer position to the end of the composition.  (This may mean going backwards if the pointer is already beyond the end.)</source>
-        <translation type="unfinished">Zet de pointer-positie op het eind van de compositie. (Dat kan betekenen dat hij achteruit gaat als de pointer al voorbij het einde is.)</translation>
+        <translation>Zet de pointer-positie op het eind van de compositie. (Dat kan betekenen dat hij achteruit gaat als de pointer al voorbij het einde is.)</translation>
     </message>
     <message>
         <location line="+27"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Display time to end</source>
-        <translation type="unfinished">Toon resterende tijd</translation>
+        <translation>Toon resterende tijd</translation>
     </message>
 </context>
 <context>
