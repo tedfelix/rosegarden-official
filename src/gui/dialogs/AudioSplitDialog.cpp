@@ -133,6 +133,16 @@ AudioSplitDialog::slotHelpRequested()
 }
 
 void
+AudioSplitDialog::noPreviewMsg()
+{
+    QGraphicsSimpleTextItem *text = 
+        new QGraphicsSimpleTextItem(tr("<no preview generated for this audio file>"));
+    text->setBrush(Qt::black);
+    m_scene->addItem(text);
+    text->setPos(30, 30);
+}
+
+void
 AudioSplitDialog::drawPreview()
 {
     // Delete everything in the scene
@@ -158,7 +168,12 @@ AudioSplitDialog::drawPreview()
     // Get preview in vector form
     //
     AudioFileManager &aFM = m_doc->getAudioFileManager();
-    int channels = aFM.getAudioFile(m_segment->getAudioFileId())->getChannels();
+    AudioFile *aF = aFM.getAudioFile(m_segment->getAudioFileId());
+    if (aF == NULL) {
+        noPreviewMsg();
+        return;
+    }
+    int channels = aF->getChannels();
 
     std::vector<float> values;
 
@@ -169,10 +184,7 @@ AudioSplitDialog::drawPreview()
                                 m_previewWidth,
                                 false);
     } catch (Exception e) {
-        QGraphicsSimpleTextItem *text = new QGraphicsSimpleTextItem(tr("<no preview generated for this audio file>"));
-        text->setBrush(Qt::black);
-        m_scene->addItem(text);
-        text->setPos(30, 30);
+        noPreviewMsg();
         return ;
     }
 

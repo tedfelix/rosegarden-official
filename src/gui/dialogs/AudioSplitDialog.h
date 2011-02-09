@@ -73,6 +73,7 @@ protected:
 
     std::vector<QGraphicsRectItem*> m_previewBoxes;
 
+    void noPreviewMsg();
 };
 
 
