@@ -98,6 +98,7 @@ PasteConductorDataCommand::unexecute()
             i != m_clipboard->getTimeSignatureSelection().end(); ++i) {
 
         timeT t = i->first;
+        t = t - m_clipboard->getBaseTime() + m_t0;
         int n = m_composition->getTimeSignatureNumberAt(t);
 
         if (n >= 0 && m_composition->getTimeSignatureChange(n).first == t) {
@@ -110,6 +111,7 @@ PasteConductorDataCommand::unexecute()
             i != m_clipboard->getTempoSelection().end(); ++i) {
 
         timeT t = i->first;
+        t = t - m_clipboard->getBaseTime() + m_t0;
         int n = m_composition->getTempoChangeNumberAt(t);
 
         if (n >= 0 && m_composition->getTempoChange(n).first == t) {
