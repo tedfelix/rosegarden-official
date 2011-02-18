@@ -144,6 +144,13 @@ AddMarkCommand::modifySegment()
         // chain of notes is definitely wrong, so we ignore these events.
         if ((*i)->has(BaseProperties::TIED_BACKWARD)) continue;
 
+        // If the selection includes rests, check whether
+        // the mark is applicable to this event.
+        if ((*i)->isa(Note::EventRestType)
+            && !Marks::isApplicableToRests(m_mark)) {
+            continue;
+        }
+
         long n = 0;
         (*i)->get<Int>(MARK_COUNT, n);
         (*i)->set<Int>(MARK_COUNT, n + 1);

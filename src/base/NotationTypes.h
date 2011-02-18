@@ -203,6 +203,11 @@ namespace Marks //!!! This would be better as a class, these days
     extern std::string getFingeringFromMark(Mark mark);
 
     /**
+     * Return true if the given mark makes sense when applied to a rest.
+     */
+    extern bool isApplicableToRests(Mark mark);
+
+    /**
      * Extract the number of marks from an event.
      */
     extern int getMarkCount(const Event &e);

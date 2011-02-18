@@ -144,6 +144,12 @@ namespace Marks
         return string(mark).substr(0, 7) == "finger_";
     }
 
+    bool isApplicableToRests(Mark mark) {
+        if (mark == Marks::Pause) return true;
+        if (isTextMark(mark)) return true;
+        return false;
+    }
+
     string getFingeringFromMark(Mark mark) {
         if (!isFingeringMark(mark)) return string();
         else return string(mark).substr(7);
