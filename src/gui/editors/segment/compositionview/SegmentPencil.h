@@ -65,8 +65,12 @@ protected:
     //--------------- Data members ---------------------------------
 
     bool m_newRect;
-    TrackId m_track;
+
+    // X coord of the initial mouse button press
+    int m_pressX;
+    // Start time of the segment as computed by press and move.
     timeT m_startTime;
+    // End time of the segment as computed by press and move.
     timeT m_endTime;
 };
 

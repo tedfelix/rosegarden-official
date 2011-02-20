@@ -88,7 +88,7 @@ protected:
     CompositionView*  m_canvas;
     CompositionItem   m_currentIndex;
     RosegardenDocument* m_doc;
-    QPoint            m_origPos;
+//    QPoint            m_origPos;
     bool              m_changeMade;
 };
 

@@ -41,18 +41,17 @@
 #include <QString>
 #include <QMouseEvent>
 
-
 namespace Rosegarden
 {
 
 SegmentPencil::SegmentPencil(CompositionView *c, RosegardenDocument *d)
         : SegmentTool(c, d),
         m_newRect(false),
-        m_track(0),
+        m_pressX(0),
         m_startTime(0),
         m_endTime(0)
 {
-    RG_DEBUG << "SegmentPencil()\n";
+//RG_DEBUG << "SegmentPencil()\n";
 }
 
 void SegmentPencil::ready()
@@ -79,7 +78,7 @@ void SegmentPencil::slotCanvasScrolled(int newX, int newY)
 
 void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
 {
-    if (e->button() == Qt::RightButton)
+    if (e->button() != Qt::LeftButton)
         return;
 
     // is user holding Ctrl+Alt? (ugly, but we are running short on available
@@ -102,10 +101,13 @@ void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
     }
 
     // make new item
-    //
+
+    // Switch to coarse-grain snap resolution.
     m_canvas->setSnapGrain(false);
 
-    int trackPosition = m_canvas->grid().getYBin(e->pos().y());
+    SnapGrid &snapGrid = m_canvas->grid();
+    
+    int trackPosition = snapGrid.getYBin(e->pos().y());
 
     // Don't do anything if the user clicked beyond the track buttons
     //
@@ -118,20 +120,28 @@ void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
 
     TrackId trackId = t->getId();
 
-    timeT time = int(nearbyint(m_canvas->grid().snapX(e->pos().x(), SnapGrid::SnapLeft)));
-    timeT duration = int(nearbyint(m_canvas->grid().getSnapTime(double(e->pos().x()))));
-    if (duration == 0)
-        duration = Note(Note::Shortest).getDuration();
+    // Save the mouse X as the original Press point
+    m_pressX = e->pos().x();
 
-    int multiple = m_doc->getComposition()
-        .getMaxContemporaneousSegmentsOnTrack(trackId);
-    if (multiple < 1) multiple = 1;
+    m_startTime = snapGrid.snapX(m_pressX, SnapGrid::SnapLeft);
+    m_endTime = snapGrid.snapX(m_pressX, SnapGrid::SnapRight);
+
+    // Don't allow a length smaller than the smallest note
+    if (m_endTime - m_startTime < Note(Note::Shortest).getDuration())
+        m_endTime += Note(Note::Shortest).getDuration();
+
+    int multiple = 
+        m_doc->getComposition().getMaxContemporaneousSegmentsOnTrack(trackId);
+    if (multiple < 1)
+        multiple = 1;
 
     QRect tmpRect;
-    tmpRect.setX(int(nearbyint(m_canvas->grid().getRulerScale()->getXForTime(time))));
-    tmpRect.setY(m_canvas->grid().getYBinCoordinate(trackPosition) + 1);
-    tmpRect.setHeight(m_canvas->grid().getYSnap() * multiple - 2);
-    tmpRect.setWidth(int(nearbyint(m_canvas->grid().getRulerScale()->getWidthForDuration(time, duration))));
+    tmpRect.setLeft(lround(snapGrid.getRulerScale()->
+                               getXForTime(m_startTime)));
+    tmpRect.setRight(lround(snapGrid.getRulerScale()->
+                                getXForTime(m_endTime)));
+    tmpRect.setY(snapGrid.getYBinCoordinate(trackPosition) + 1);
+    tmpRect.setHeight(snapGrid.getYSnap() * multiple - 2);
 
     m_canvas->setTmpRect(tmpRect,
                          GUIPalette::convertColour
@@ -139,15 +149,13 @@ void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
                           getColourByIndex(t->getColor())));
 
     m_newRect = true;
-    m_origPos = e->pos();
 
-// 	m_canvas->updateContents(tmpRect);
 	m_canvas->update(tmpRect);
 }
 
 void SegmentPencil::handleMouseButtonRelease(QMouseEvent* e)
 {
-    if (e->button() == Qt::RightButton)
+    if (e->button() != Qt::LeftButton)
         return ;
 
     setContextHelpFor(e->pos());
@@ -157,16 +165,17 @@ void SegmentPencil::handleMouseButtonRelease(QMouseEvent* e)
         QRect tmpRect = m_canvas->getTmpRect();
 
         int trackPosition = m_canvas->grid().getYBin(tmpRect.y());
-        Track *track = m_doc->getComposition().getTrackByPosition(trackPosition);
-        timeT startTime = int(nearbyint(m_canvas->grid().getRulerScale()->getTimeForX(tmpRect.x()))),
-                          endTime = int(nearbyint(m_canvas->grid().getRulerScale()->getTimeForX(tmpRect.x() + tmpRect.width())));
+        Track *track = 
+            m_doc->getComposition().getTrackByPosition(trackPosition);
 
-        //         RG_DEBUG << "SegmentPencil::handleMouseButtonRelease() : new segment with track id "
-        //                  << track->getId() << endl;
+//RG_DEBUG << "SegmentPencil::handleMouseButtonRelease():";
+//RG_DEBUG << "  m_startTime = " << m_startTime;
+//RG_DEBUG << "  m_endTime = " << m_endTime;
+//RG_DEBUG << "  track id = " << track->getId();
 
         SegmentInsertCommand *command =
             new SegmentInsertCommand(m_doc, track->getId(),
-                                     startTime, endTime);
+                                     m_startTime, m_endTime);
 
         m_newRect = false;
 
@@ -199,12 +208,10 @@ void SegmentPencil::handleMouseButtonRelease(QMouseEvent* e)
         m_canvas->getModel()->clearSelected();
         m_canvas->getModel()->setSelected(item);
         m_canvas->getModel()->signalSelection();
+
         m_canvas->setTmpRect(QRect());
         m_canvas->slotUpdateSegmentsDrawBuffer();
 
-    } else {
-
-        m_newRect = false;
     }
 }
 
@@ -222,44 +229,37 @@ int SegmentPencil::handleMouseMove(QMouseEvent *e)
     }
 
     QRect tmpRect = m_canvas->getTmpRect();
-    QRect oldTmpRect = tmpRect;
 
+    // Switch to coarse-grain snap resolution.
     m_canvas->setSnapGrain(false);
 
-    SnapGrid::SnapDirection direction = SnapGrid::SnapRight;
-    if (e->pos().x() <= m_origPos.x())
-        direction = SnapGrid::SnapLeft;
+    SnapGrid &snapGrid = m_canvas->grid();
 
-    timeT snap = int(nearbyint(m_canvas->grid().getSnapTime(double(e->pos().x()))));
-    if (snap == 0)
-        snap = Note(Note::Shortest).getDuration();
+    int mouseX = e->pos().x();
+    
+    // if mouse X is to the right of the original Press point
+    if (mouseX >= m_pressX) {
+        m_startTime = snapGrid.snapX(m_pressX, SnapGrid::SnapLeft);
+        m_endTime = snapGrid.snapX(mouseX, SnapGrid::SnapRight);
 
-    timeT time = int(nearbyint(m_canvas->grid().snapX(e->pos().x(), direction)));
+        // Make sure the segment is never smaller than the smallest note.
+        if (m_endTime - m_startTime < Note(Note::Shortest).getDuration())
+            m_endTime = m_startTime + Note(Note::Shortest).getDuration();
+    } else {  // we are to the left of the original Press point
+        m_startTime = snapGrid.snapX(mouseX, SnapGrid::SnapLeft);
+        m_endTime = snapGrid.snapX(m_pressX, SnapGrid::SnapRight);
 
-    timeT startTime = int(nearbyint(m_canvas->grid().getRulerScale()->getTimeForX(tmpRect.x())));
-    timeT endTime = int(nearbyint(m_canvas->grid().getRulerScale()->getTimeForX(tmpRect.x() + tmpRect.width())));
-
-    if (direction == SnapGrid::SnapRight) {
-
-        if (time >= startTime) {
-            if ((time - startTime) < snap) {
-                time = startTime + snap;
-            }
-        } else {
-            if ((startTime - time) < snap) {
-                time = startTime - snap;
-            }
-        }
-
-        int w = int(nearbyint(m_canvas->grid().getRulerScale()->getWidthForDuration(startTime, time - startTime)));
-        tmpRect.setWidth(w);
-
-    } else { // SnapGrid::SnapLeft
-
-        //             time += std::max(endTime - startTime, timeT(0));
-        tmpRect.setX(int(m_canvas->grid().getRulerScale()->getXForTime(time)));
-
+        // Make sure the segment is never smaller than the smallest note.
+        if (m_endTime - m_startTime < Note(Note::Shortest).getDuration())
+            m_startTime = m_endTime - Note(Note::Shortest).getDuration();
     }
+
+    int leftX = snapGrid.getRulerScale()->getXForTime(m_startTime);
+    int rightX = snapGrid.getRulerScale()->getXForTime(m_endTime);
+
+    // Adjust the rectangle to go from leftX to rightX
+    tmpRect.setLeft(leftX);
+    tmpRect.setRight(rightX);
 
     m_canvas->setTmpRect(tmpRect);
     return RosegardenScrollView::FollowHorizontal;
