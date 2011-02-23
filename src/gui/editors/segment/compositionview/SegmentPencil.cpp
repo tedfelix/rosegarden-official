@@ -128,7 +128,7 @@ void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
 
     // Don't allow a length smaller than the smallest note
     if (m_endTime - m_startTime < Note(Note::Shortest).getDuration())
-        m_endTime += Note(Note::Shortest).getDuration();
+        m_endTime = m_startTime + Note(Note::Shortest).getDuration();
 
     int multiple = 
         m_doc->getComposition().getMaxContemporaneousSegmentsOnTrack(trackId);
