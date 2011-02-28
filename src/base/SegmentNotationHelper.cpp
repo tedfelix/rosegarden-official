@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2010 the Rosegarden development team.
+    Copyright 2000-2011 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -864,7 +864,7 @@ SegmentNotationHelper::insertSomething(iterator i, int duration,
     // note, we should split the note rather than make the bar the
     // wrong length.  (Not implemented yet)
     // [NB. This is now implemented, but not here -- see end of
-    // NoteInsertionCommand::modifySegment --cc, 20100428]
+    // NoteInsertionCommand::modifySegment --cc, 20110428]
     //
     // 2. If there's nothing at the insertion point but rests (and
     // enough of them to cover the entire duration of the new note),

@@ -92,7 +92,8 @@ arch_package_url='http://www.archlinux.org/packages/extra/i686/rosegarden/'
 
 echo '<tr><td>&nbsp;</td></tr>'
 echo '<tr>'
-echo '<td class="b" align="center" rowspan="'$maxrelease'"><a href="http://www.archlinux.org/"><img src="http://static.archlinux.org/main-20101104/media/logos/archlinux-logo-dark-90dpi.png" alt="Arch Linux" width="180" height="60" border="0"></a></td>'
+echo '<td class="b" align="center" rowspan="'$maxrelease'"><a
+href="http://www.archlinux.org/"><img src="http://static.archlinux.org/main-201101104/media/logos/archlinux-logo-dark-90dpi.png" alt="Arch Linux" width="180" height="60" border="0"></a></td>'
 
 arch_version=`wget -O- "$arch_package_url" 2>/dev/null |  grep 'osegarden [0-9]' | head -1 | sed -e 's/^.*rosegarden \([0-9\.]*\).*$/\1/'`
 
