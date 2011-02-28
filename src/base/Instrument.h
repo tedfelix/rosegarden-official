@@ -88,6 +88,7 @@ public:
     virtual unsigned int getId() const = 0;
     virtual std::string getName() const = 0;
     virtual std::string getPresentationName() const = 0;
+    virtual std::string getAlias() const = 0;
 
 protected:
     PluginContainer(bool havePlugins);
@@ -334,6 +335,7 @@ public:
     virtual std::string toXmlString();
     virtual std::string getName() const;
     virtual std::string getPresentationName() const;
+    virtual std::string getAlias() const;
 
 private:
     BussId m_id;

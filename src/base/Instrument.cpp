@@ -356,7 +356,10 @@ Instrument::getPresentationNumber() const
 std::string
 Instrument::getAlias() const
 {
-    return m_alias;
+    // return the alias if available, else return the "presentation name" rather
+    // than an empty string
+    if (m_alias.size()) return m_alias;
+    else return m_name;
 }
 
 void
@@ -675,6 +678,12 @@ Buss::getName() const
 
 std::string
 Buss::getPresentationName() const
+{
+    return getName();
+}
+
+std::string
+Buss::getAlias() const
 {
     return getName();
 }
