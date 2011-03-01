@@ -70,6 +70,9 @@ private:
 
     TempoSelection m_temposPre;
     TempoSelection m_temposPost;
+
+    timeT m_loopBegin;
+    timeT m_loopEnd;
 };
 
 

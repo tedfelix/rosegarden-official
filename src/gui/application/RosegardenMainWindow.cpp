@@ -2315,8 +2315,6 @@ RosegardenMainWindow::slotPasteRange()
     CommandHistory::getInstance()->addCommand
     (new PasteRangeCommand(&m_doc->getComposition(), m_clipboard,
                            m_doc->getComposition().getPosition()));
-
-    m_doc->setLoop(0, 0);
 }
 
 void

@@ -18,6 +18,8 @@
 
 #include "OpenOrCloseRangeCommand.h"
 
+#include "document/RosegardenDocument.h"
+#include "gui/application/RosegardenMainWindow.h"
 #include "misc/Debug.h"
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
@@ -37,7 +39,9 @@ OpenOrCloseRangeCommand::OpenOrCloseRangeCommand(Composition *composition,
         m_beginTime(rangeBegin),
         m_endTime(rangeEnd),
         m_prepared(false),
-        m_opening(open)
+        m_opening(open),
+        m_loopBegin(0),
+        m_loopEnd(0)
 {}
 
 OpenOrCloseRangeCommand::~OpenOrCloseRangeCommand()
@@ -137,6 +141,28 @@ OpenOrCloseRangeCommand::execute()
                 m_temposPost.begin(); i != m_temposPost.end(); ++i) {
         m_composition->addTempoAtTime(i->first, i->second.first, i->second.second);
     }
+
+    // Preserve the loop range for undo
+    m_loopBegin = m_composition->getLoopStart();
+    m_loopEnd = m_composition->getLoopEnd();
+
+    // If we are opening up a range, try to preserve the loop range.
+    if (m_opening) {
+        RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+        
+        // If the paste point is prior to the loop range
+        if (m_beginTime <= m_loopBegin) {
+            // Shift the loop range right.
+            doc->setLoop(m_loopBegin + offset, m_loopEnd + offset);
+        } else if (m_beginTime < m_loopEnd) {
+            // The paste point is within the loop range
+            
+            // Just shift the end point to expand the loop range
+            doc->setLoop(m_loopBegin, m_loopEnd + offset);
+        } else {
+            // The paste point is after the loop range, so leave it alone.
+        }
+    }
 }
 
 void
@@ -174,6 +200,11 @@ OpenOrCloseRangeCommand::unexecute()
                 m_temposPre.begin(); i != m_temposPre.end(); ++i) {
         m_composition->addTempoAtTime(i->first, i->second.first, i->second.second);
     }
+    
+    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+
+    // Put back the loop range
+    doc->setLoop(m_loopBegin, m_loopEnd);
 }
 
 }
