@@ -672,6 +672,7 @@ AudioPluginDialog::slotPluginSelected(int i)
     m_editorButton->setEnabled(true);
 
     adjustSize();
+    update(0, 0, width(), height());
 }
 
 QStringList
