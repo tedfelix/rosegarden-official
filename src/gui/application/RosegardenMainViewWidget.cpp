@@ -19,6 +19,7 @@
 #include "RosegardenMainViewWidget.h"
 
 #include "sound/Midi.h"
+#include "sound/SoundDriver.h"
 #include "gui/editors/segment/TrackButtons.h"
 #include "misc/Debug.h"
 #include "misc/Strings.h"
@@ -1566,6 +1567,22 @@ RosegardenMainViewWidget::slotAddAudioSegmentDefaultPosition(AudioFileId audioFi
 void
 RosegardenMainViewWidget::slotDroppedNewAudio(QString audioDesc)
 {
+    // If audio is not OK
+    if (getDocument()->getSequenceManager()  &&
+        !(getDocument()->getSequenceManager()->getSoundDriverStatus() & 
+          AUDIO_OK)) {
+
+#ifdef HAVE_LIBJACK
+        QMessageBox::warning(this, tr("Rosegarden"), 
+            tr("Cannot add dropped file.  JACK audio server is not available."));
+#else
+        QMessageBox::warning(this, tr("Rosegarden"), 
+            tr("Cannot add dropped file.  This version of rosegarden was not built with audio support."));
+#endif
+
+        return;
+    }
+
     QTextStream s(&audioDesc, QIODevice::ReadWrite); //### use QIODevice::ReadOnly instead ?
     
     QString url;
