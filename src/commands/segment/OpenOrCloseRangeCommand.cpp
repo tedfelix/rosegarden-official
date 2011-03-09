@@ -149,7 +149,7 @@ OpenOrCloseRangeCommand::execute()
     // If we are opening up a range, try to preserve the loop range.
     if (m_opening) {
         RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
-        
+
         // If the paste point is prior to the loop range
         if (m_beginTime <= m_loopBegin) {
             // Shift the loop range right.
@@ -163,6 +163,11 @@ OpenOrCloseRangeCommand::execute()
             // The paste point is after the loop range, so leave it alone.
         }
     }
+
+    // If we are closing the range, the loop range and the range to be removed
+    // are the same.  We will leave the loop range alone in case the user wants
+    // to Cut Range again (or Delete Range if that is ever added to the UI).
+
 }
 
 void

@@ -2320,6 +2320,9 @@ RosegardenMainWindow::slotPasteRange()
 void
 RosegardenMainWindow::slotDeleteRange()
 {
+    // ??? Dead Code.  There is no reference to the delete_range action in 
+    //   the rc.
+
     timeT t0 = m_doc->getComposition().getLoopStart();
     timeT t1 = m_doc->getComposition().getLoopEnd();
 
@@ -2328,8 +2331,6 @@ RosegardenMainWindow::slotDeleteRange()
 
     CommandHistory::getInstance()->addCommand
     (new DeleteRangeCommand(&m_doc->getComposition(), t0, t1));
-
-    m_doc->setLoop(0, 0);
 }
 
 void
@@ -2342,7 +2343,6 @@ RosegardenMainWindow::slotInsertRange()
     if (dialog.exec() == QDialog::Accepted) {
         CommandHistory::getInstance()->addCommand
             (new InsertRangeCommand(&m_doc->getComposition(), t0, dialog.getTime()));
-        m_doc->setLoop(0, 0);
     }
 }
 
