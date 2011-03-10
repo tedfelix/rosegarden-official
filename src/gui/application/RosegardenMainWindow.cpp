@@ -2054,10 +2054,11 @@ RosegardenMainWindow::slotFileSave()
 
 QString
 RosegardenMainWindow::getValidWriteFileName(QString descriptiveExtension,
-                                        QString label)
+                                            QString label)
 {
     // extract first extension listed in descriptiveExtension, for instance,
-    // ".rg" from "Rosegarden files (*.rg)", or ".mid" from "MIDI Files (*.mid *.midi)"
+    // ".rg" from "Rosegarden files (*.rg)", or ".mid" from 
+    // "MIDI Files (*.mid *.midi)"
     //
     int left = descriptiveExtension.indexOf("*.");
     int right = descriptiveExtension.indexOf(QRegExp("[ ]"),left);
@@ -2077,9 +2078,13 @@ RosegardenMainWindow::getValidWriteFileName(QString descriptiveExtension,
     else if (extension == ".csd") path_key = "export_csound";
     else if (extension == ".mup") path_key = "export_mup";
 
-    RG_DEBUG << "RosegardenMainWindow::getValidWriteFileName() : extension  = " << extension << endl
-             << "                                                path key   = " << path_key << endl;
+//RG_DEBUG << 
+//    "RosegardenMainWindow::getValidWriteFileName() : extension  = " << 
+//    extension << endl << 
+//    "                                                path key   = " << 
+//    path_key;
 
+    // Get the directory from the settings
     QSettings settings;
     settings.beginGroup(LastUsedPathsConfigGroup);
     QString directory = settings.value(path_key, QDir::homePath()).toString();
@@ -2089,11 +2094,12 @@ RosegardenMainWindow::getValidWriteFileName(QString descriptiveExtension,
     // (Hah, all these compiler warnings are useful for something after all.
     // This used to not do anything with the label parameter, and always said
     // "Save File" 100% of the time.)
-    QString name = FileDialog::getSaveFileName(this, label, directory, descriptiveExtension, 0, FileDialog::DontConfirmOverwrite); 
+    QString name = FileDialog::getSaveFileName(
+        this, label, directory, descriptiveExtension, 0, 
+        FileDialog::DontConfirmOverwrite); 
     
-    RG_DEBUG << "RosegardenMainWindow::getValidWriteFileName() : FileDialog::getSaveFileName returned "
-             << name << endl;
-
+//RG_DEBUG << "RosegardenMainWindow::getValidWriteFileName() : " << 
+//            "FileDialog::getSaveFileName returned " << name;
 
     if (name.isEmpty())
         return name;
@@ -2113,33 +2119,40 @@ RosegardenMainWindow::getValidWriteFileName(QString descriptiveExtension,
     if (name.contains("~")) {
         name = name.remove(0, name.indexOf("~") + 1);
         name = name.prepend(QDir::homePath());
-        RG_DEBUG << "doctored filename after ~ swap: " << name << endl;
+        
+//RG_DEBUG << "doctored filename after ~ swap: " << name;
+
     }
 
     QUrl *u = new QUrl(name);
 
     if (!u->isValid()) {
-        QMessageBox::warning(this, tr("Rosegarden"), tr("<qt>Sorry.<br>\"%1\" is not a valid filename.</qt>").arg(name));
-        return QString("");
+        QMessageBox::warning(this, tr("Rosegarden"), 
+            tr("<qt>Sorry.<br>\"%1\" is not a valid filename.</qt>").arg(name));
+        return "";
     }
 
     QFileInfo info(name);
 
     if (info.isDir()) {
-        QMessageBox::warning(this, tr("Rosegarden"), tr("You have specified a folder/directory."));
+        QMessageBox::warning(this, tr("Rosegarden"), 
+                             tr("You have specified a folder/directory."));
         return "";
     }
 
     if (info.exists()) {
-        int overwrite = QMessageBox::question
-                (this, tr("Rosegarden"), tr("The specified file exists.  Overwrite?"), 
-                 QMessageBox::Yes | QMessageBox::No,
-                 QMessageBox::No);
+        int overwrite = QMessageBox::question(
+                this, 
+                tr("Rosegarden"), 
+                tr("The specified file exists.  Overwrite?"), 
+                QMessageBox::Yes | QMessageBox::No,
+                QMessageBox::No);
 
         if (overwrite != QMessageBox::Yes)
             return "";
     }
 
+    // Write the directory to the settings
     QDir d = QFileInfo(u->path()).dir();
     directory = d.canonicalPath();
     settings.setValue(path_key, directory);
