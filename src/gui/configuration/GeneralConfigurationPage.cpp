@@ -343,10 +343,9 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
 
     m_pdfViewer = new QComboBox(frame);
     connect(m_pdfViewer, SIGNAL(activated(int)), this, SLOT(slotModified()));
-    m_pdfViewer->addItem(tr("Okular (KDE 4.x)"));
-    m_pdfViewer->addItem(tr("Evince (GNOME)"));
-    m_pdfViewer->addItem(tr("Adobe Acrobat Reader (non-free)"));
-    m_pdfViewer->addItem(tr("KPDF (KDE 3.x)"));
+    m_pdfViewer->addItem(tr("Okular (KDE 4.x)"), 0);
+    m_pdfViewer->addItem(tr("Evince (GNOME)"), 1);
+    m_pdfViewer->addItem(tr("Adobe Acrobat Reader (non-free)"),2);
     m_pdfViewer->setToolTip(tr("Used to preview generated LilyPond output"));
 
     layout->addWidget(m_pdfViewer, row, 1, 1, 3);
@@ -357,11 +356,10 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
 
     m_filePrinter = new QComboBox(frame);
     connect(m_filePrinter, SIGNAL(activated(int)), this, SLOT(slotModified()));
-    m_filePrinter->addItem(tr("KPrinter (KDE 3)"));
-    m_filePrinter->addItem(tr("Gtk-LP (GNOME)"));
-    m_filePrinter->addItem(tr("lpr (no GUI)"));
-    m_filePrinter->addItem(tr("lp (no GUI)"));
-    m_filePrinter->addItem(tr("HPLIP (Qt 4)"));
+    m_filePrinter->addItem(tr("Gtk-LP (GNOME)"),1);
+    m_filePrinter->addItem(tr("lpr (no GUI)"),2);
+    m_filePrinter->addItem(tr("lp (no GUI)"),3);
+    m_filePrinter->addItem(tr("HPLIP (Qt 4)"),4);
     m_filePrinter->setToolTip(tr("Used to print generated LilyPond output without previewing it"));
 
     layout->addWidget(m_filePrinter, row, 1, 1, 3);
