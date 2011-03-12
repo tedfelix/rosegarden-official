@@ -157,6 +157,7 @@ QString
 FileDialog::getSaveFileName(QWidget *parent,
                             const QString &caption,
                             const QString &dir,
+                            const QString &defaultName,
                             const QString &filter,
                             QString *selectedFilter,
                             QFileDialog::Options options)
@@ -177,6 +178,8 @@ FileDialog::getSaveFileName(QWidget *parent,
     if (options)
         dialog.setOptions(options);
 #endif
+
+    dialog.selectFile(defaultName);
 
     // (code borrowed straight out of Qt 4.5.0 Copyright 2009 Nokia)
     dialog.setAcceptMode(QFileDialog::AcceptSave);

@@ -2089,13 +2089,22 @@ RosegardenMainWindow::getValidWriteFileName(QString descriptiveExtension,
     settings.beginGroup(LastUsedPathsConfigGroup);
     QString directory = settings.value(path_key, QDir::homePath()).toString();
 
+    QFileInfo originalFileInfo(m_doc->getAbsFilePath());
+
+    // Most applications (e.g. OpenOffice.org and the GIMP) use the document's
+    // directory for Save As... and Export rather than the last directory
+    // the user saved to.  To use the document's directory, replace
+    // "directory" in the FileDialog::getSaveFileName() call with
+    // originalFileInfo.absolutePath().
+    
     // Confirm the overwrite of the file later.
     //
     // (Hah, all these compiler warnings are useful for something after all.
     // This used to not do anything with the label parameter, and always said
     // "Save File" 100% of the time.)
     QString name = FileDialog::getSaveFileName(
-        this, label, directory, descriptiveExtension, 0, 
+        this, label, directory, 
+        originalFileInfo.baseName(), descriptiveExtension, 0, 
         FileDialog::DontConfirmOverwrite); 
     
 //RG_DEBUG << "RosegardenMainWindow::getValidWriteFileName() : " << 
