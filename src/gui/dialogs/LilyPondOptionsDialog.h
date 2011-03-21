@@ -55,6 +55,7 @@ protected:
     QComboBox *m_lilyLanguage;
     QComboBox *m_lilyPaperSize;
     QComboBox *m_lilyFontSize;
+    QComboBox *m_lilyNoteLanguage;
     QComboBox *m_lilyTempoMarks;
     QComboBox *m_lilyExportSelection;
     QComboBox *m_lilyExportLyrics;

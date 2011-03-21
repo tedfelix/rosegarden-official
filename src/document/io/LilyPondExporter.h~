@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2011 the Rosegarden development team.
+    Copyright 2000-2009 the Rosegarden development team.
 
     This file is Copyright 2002
         Hans Kieserman      <hkieserman@mail.com>
@@ -32,7 +32,6 @@
 #include "base/Event.h"
 #include "base/PropertyName.h"
 #include "base/Segment.h"
-#include "document/io/LilyPondLanguage.h"
 #include "gui/general/ProgressReporter.h"
 #include "gui/editors/notation/NotationView.h"
 #include <fstream>
@@ -52,7 +51,7 @@ class Studio;
 class RosegardenMainWindow;
 class RosegardenMainViewWidget;
 class RosegardenDocument;
-class NotationView;
+class NewNotationView;
 class Key;
 class Composition;
 
@@ -83,20 +82,19 @@ public:
 
 public:
     LilyPondExporter(RosegardenMainWindow *parent, RosegardenDocument *, std::string fileName);
-    LilyPondExporter(NotationView *parent, RosegardenDocument *, std::string fileName);
+    LilyPondExporter(NewNotationView *parent, RosegardenDocument *, std::string fileName);
     ~LilyPondExporter();
 
     bool write();
 
 protected:
     RosegardenMainViewWidget *m_view;
-    NotationView *m_notationView;
+    NewNotationView *m_notationView;
     RosegardenDocument *m_doc;
     Composition *m_composition;
     Studio *m_studio;
     std::string m_fileName;
     Clef m_lastClefFound;
-    LilyPondLanguage *m_language;
 
     void readConfigVariables(void);
     void writeBar(Segment *, int barNo, timeT barStart, timeT barEnd, int col,
@@ -214,8 +212,6 @@ private:
     static const unsigned int EXPORT_DEFAULT_MARKERS = 1;
     static const unsigned int EXPORT_TEXT_MARKERS = 2;
 
-    unsigned int m_exportNoteLanguage;
-
     int m_languageLevel;
     static const int LILYPOND_VERSION_2_6  = 0;
     static const int LILYPOND_VERSION_2_8  = 1;
@@ -228,25 +224,30 @@ private:
 	    x.second * y.second);
 	return fractionSimplify(z);
     }
+
     std::pair<int,int> fractionProduct(std::pair<int,int> x,std::pair<int,int> y) {
 	std::pair<int,int> z(
 	    x.first * y.first,
 	    x.second * y.second);
 	return fractionSimplify(z);
     }
+
     std::pair<int,int> fractionProduct(std::pair<int,int> x,int y) {
 	std::pair<int,int> z(
 	    x.first * y,
 	    x.second);
 	return fractionSimplify(z);
     }
+
     bool fractionSmaller(std::pair<int,int> x,std::pair<int,int> y) {
 	return (x.first * y.second < x.second * y.first);
     }
+
     std::pair<int,int> fractionSimplify(std::pair<int,int> x) {
 	return std::pair<int,int>(x.first/gcd(x.first,x.second),
 				  x.second/gcd(x.first,x.second));
     }
+
     int gcd(int a, int b) {
 	// Euclid's algorithm to find the greatest common divisor
 	while ( 1 ) {
@@ -257,6 +258,8 @@ private:
 	    b = r; 
 	}
     }
+
+    bool m_trillKludge;
 };
 
 

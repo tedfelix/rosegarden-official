@@ -240,6 +240,26 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     layoutNotation->addWidget(m_lilyMarkerMode, 6, 1);
     m_lilyMarkerMode->setToolTip(tr("<qt>Markers are found on the <b>Marker Ruler</b>.  They may be exported as text, or as rehearsal marks.</qt>"));
 
+    m_lilyNoteLanguage = new QComboBox(frameNotation);
+    // NB: language strings are specific to LilyPond so are not translated here
+    m_lilyNoteLanguage->addItem("Arabic");
+    m_lilyNoteLanguage->addItem("Catalan");
+    m_lilyNoteLanguage->addItem("Deutsch");
+    m_lilyNoteLanguage->addItem("English");
+    m_lilyNoteLanguage->addItem("Espanol");
+    m_lilyNoteLanguage->addItem("Italiano");
+    m_lilyNoteLanguage->addItem("Nederlands");
+    m_lilyNoteLanguage->addItem("Norsk");
+    m_lilyNoteLanguage->addItem("Portugues");
+    m_lilyNoteLanguage->addItem("Suomi");
+    m_lilyNoteLanguage->addItem("Svenska");
+    m_lilyNoteLanguage->addItem("Vlaams");
+
+    layoutNotation->addWidget(new QLabel(
+            tr("Notation language"), frameNotation), 7, 0);
+    layoutNotation->addWidget(m_lilyNoteLanguage, 7, 1);
+    m_lilyNoteLanguage->setToolTip(tr("<qt>Outputs note names and accidentals in any of LilyPond's supported languages</qt>"));
+
     basicOptionsBox->setLayout(basicOptionsBoxLayout);
     specificOptionsBox->setLayout(specificOptionsBoxLayout);
 
@@ -302,6 +322,7 @@ LilyPondOptionsDialog::populateDefaultValues()
     m_lilyExportBeams->setChecked(settings.value("lilyexportbeamings", "false").toBool());
     m_lilyExportStaffGroup->setChecked(settings.value("lilyexportstaffbrackets", "true").toBool());
     m_lilyMarkerMode->setCurrentIndex(settings.value("lilyexportmarkermode", 0).toUInt());
+    m_lilyNoteLanguage->setCurrentIndex(settings.value("lilyexportnotelanguage", 6).toUInt());
 
     std::cerr << "QSettings for LilyPond (populateDefaultValues):" << std::endl
               << "  lilyexportmarkermode: " << settings.value("lilyexportmarkermode").toUInt() << std::endl
@@ -330,6 +351,7 @@ LilyPondOptionsDialog::slotApply()
     settings.setValue("lilyexportbeamings", m_lilyExportBeams->isChecked());
     settings.setValue("lilyexportstaffbrackets", m_lilyExportStaffGroup->isChecked());
     settings.setValue("lilyexportmarkermode", m_lilyMarkerMode->currentIndex());
+    settings.setValue("lilyexportnotelanguage", m_lilyNoteLanguage->currentIndex());
 
     std::cerr << "QSettings for LilyPond (slotApply):" << std::endl
               << "  lilyexportmarkermode: " << settings.value("lilyexportmarkermode").toUInt() << std::endl
