@@ -20766,8 +20766,7 @@ Konfiguratu nahi duzu orain?</translation>
     </message>
     <message>
         <source>The Rosegarden Project Packager helper script</source>
-        <translation type="obsolete">Rosegarden Proiektuaren Enpaketatzailea ez dago eskuragarri
-</translation>
+        <translation type="obsolete">Rosegarden Proiektuaren Enpaketatzailea ez dago eskuragarri </translation>
     </message>
     <message>
         <source>Notation previews through LilyPond</source>

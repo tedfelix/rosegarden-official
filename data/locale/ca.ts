@@ -20782,8 +20782,7 @@ Voleu configurar-ho ara?</translation>
     </message>
     <message>
         <source>The Rosegarden Project Packager helper script</source>
-        <translation type="obsolete">Fitxers de projecte Rosegarden
-</translation>
+        <translation type="obsolete">Fitxers de projecte Rosegarden</translation>
     </message>
     <message>
         <source>Notation previews through LilyPond</source>
@@ -20803,8 +20802,7 @@ Voleu configurar-ho ara?</translation>
     </message>
     <message>
         <source>&lt;li&gt;%1&lt;/li&gt;</source>
-        <translation type="obsolete">--  %1 (des de %2)
-</translation>
+        <translation type="obsolete">--  %1 (des de %2)</translation>
     </message>
     <message>
         <location line="+764"/>

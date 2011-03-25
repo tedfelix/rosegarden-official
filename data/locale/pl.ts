@@ -20842,8 +20842,7 @@ Segmenty-&gt;Połącz Segmenty.
     </message>
     <message>
         <source>The Rosegarden Project Packager helper script</source>
-        <translation type="obsolete">Pliki utworów Różanego Ogrodu
-</translation>
+        <translation type="obsolete">Pliki utworów Różanego Ogrodu </translation>
     </message>
     <message>
         <source>Notation previews through LilyPond</source>
@@ -20863,8 +20862,7 @@ Segmenty-&gt;Połącz Segmenty.
     </message>
     <message>
         <source>&lt;li&gt;%1&lt;/li&gt;</source>
-        <translation type="obsolete">--  %1 (z %2)
-</translation>
+        <translation type="obsolete">--  %1 (z %2)</translation>
     </message>
     <message>
         <location line="+764"/>
