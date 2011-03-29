@@ -56,7 +56,13 @@ namespace Accidentals
     const Accidental Natural = "natural";
     const Accidental DoubleSharp = "double-sharp";
     const Accidental DoubleFlat = "double-flat";
-    
+ 
+    // Additional Accidentals for demi- and sesqui- sharps and flats 
+    const Accidental QuarterFlat = "demiflat";
+    const Accidental ThreeQuarterFlat =  "sesqiflat";
+    const Accidental QuarterSharp = "demisharp";
+    const Accidental ThreeQuarterSharp = "sesquisharp";
+
     AccidentalList getStandardAccidentals() {
 
         static Accidental a[] = {

@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE rosegarden_scales SYSTEM "http://www.n-ism.org/DTD/rosegarden_scales.dtd">
+
+<rosegarden_scales>
+
+<!--
+# Define tunings for the Rosegarden Pitch Tracker here.
+-->
+
+<!--
+# Ratios can be in cents (must include a ".") or the ratio
+# of two integers (e.g., "3/2")
+#
+# Note Spelling
+# Rosegarden denotes microtonal accidentals by changing the value of controller 127.
+# The values are: 
+# 	-4 double flat, -3 triplesemiflat, -2 flat, -1 semiflat
+# 	4 double sharp, 3 triplesemisharp, 2 sharp, 1 semisharp
+# Therefore a B semisharp is B1.
+# 
+-->
+
+<tuning>
+  <name>12-ET</name>
+  <interval ratio="0.0">
+    <spelling>A</spelling>
+    <spelling>B-4</spelling>
+    <spelling>G4</spelling>
+  </interval>
+  <interval ratio="100.0">
+    <spelling>A2</spelling>
+    <spelling>B-2</spelling>
+    <spelling>C-4</spelling>
+  </interval>
+  <interval ratio="200.0">
+    <spelling>B</spelling>
+    <spelling>A4</spelling>
+    <spelling>C-2</spelling>
+  </interval>
+  <interval ratio="300.0">
+    <spelling>C</spelling>
+    <spelling>D-4</spelling>
+    <spelling>B2</spelling>
+  </interval>
+  <interval ratio="400.0">
+    <spelling>C2</spelling>
+    <spelling>D-2</spelling>
+  </interval>
+  <interval ratio="500.0">
+    <spelling>D</spelling>
+    <spelling>E-4</spelling>
+    <spelling>C4</spelling>
+  </interval>
+  <interval ratio="600.0">
+    <spelling>D2</spelling>
+    <spelling>E-2</spelling>
+  </interval>
+  <interval ratio="700.0">
+    <spelling>E</spelling>
+    <spelling>F-2</spelling>
+    <spelling>D4</spelling>
+  </interval>
+  <interval ratio="800.0">
+    <spelling>F</spelling>
+    <spelling>G-4</spelling>
+    <spelling>E2</spelling>
+  </interval>
+  <interval ratio="900.0">
+    <spelling>F2</spelling>
+    <spelling>G-2</spelling>
+  </interval>
+  <interval ratio="1000.0">
+    <spelling>G</spelling>
+    <spelling>A-4</spelling>
+    <spelling>F4</spelling>
+  </interval>
+  <interval ratio="1100.0">
+    <spelling>G2</spelling>
+    <spelling>A-2</spelling>
+  </interval>
+</tuning>
+
+<tuning>
+  <name>19-ET</name>
+  <interval ratio="0.0">
+    <spelling>A</spelling>
+  </interval>
+  <interval ratio="63.158">
+    <spelling>A2</spelling>
+    <spelling>B-4</spelling>
+  </interval>
+  <interval ratio="126.316">
+    <spelling>B-2</spelling>
+    <spelling>A4</spelling>
+  </interval>
+  <interval ratio="189.474">
+    <spelling>B</spelling>
+  </interval>
+  <interval ratio="252.632">
+    <spelling>B2</spelling>
+    <spelling>C-2</spelling>
+  </interval>
+  <interval ratio="315.789">
+    <spelling>C</spelling>
+  </interval>
+  <interval ratio="378.947">
+    <spelling>C2</spelling>
+    <spelling>D-4</spelling>
+  </interval>
+  <interval ratio="442.105">
+    <spelling>D-2</spelling>
+    <spelling>C4</spelling>
+  </interval>
+  <interval ratio="505.263">
+    <spelling>D</spelling>
+  </interval>
+  <interval ratio="568.421">
+    <spelling>D2</spelling>
+    <spelling>E-4</spelling>
+  </interval>
+  <interval ratio="631.579">
+    <spelling>E-2</spelling>
+    <spelling>D4</spelling>
+  </interval>
+  <interval ratio="694.737">
+    <spelling>E</spelling>
+  </interval>
+  <interval ratio="757.895">
+    <spelling>E2</spelling>
+    <spelling>F-2</spelling>
+  </interval>
+  <interval ratio="821.053">
+    <spelling>F</spelling>
+  </interval>
+  <interval ratio="884.211">
+    <spelling>F2</spelling>
+    <spelling>G-4</spelling>
+  </interval>
+  <interval ratio="947.368">
+    <spelling>G-2</spelling>
+    <spelling>F4</spelling>
+  </interval>
+  <interval ratio="1010.526">
+    <spelling>G</spelling>
+  </interval>
+  <interval ratio="1073.684">
+    <spelling>G2</spelling>
+    <spelling>A-4</spelling>
+  </interval>
+  <interval ratio="1136.842">
+    <spelling>A-2</spelling>
+    <spelling>G4</spelling>
+  </interval>
+</tuning>
+
+</rosegarden_scales>

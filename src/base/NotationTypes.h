@@ -83,6 +83,10 @@ namespace Accidentals
     extern const Accidental Natural;
     extern const Accidental DoubleSharp;
     extern const Accidental DoubleFlat;
+    extern const Accidental QuarterFlat;
+    extern const Accidental ThreeQuarterFlat;
+    extern const Accidental QuarterSharp;
+    extern const Accidental ThreeQuarterSharp;
 
     typedef std::vector<Accidental> AccidentalList;
 
