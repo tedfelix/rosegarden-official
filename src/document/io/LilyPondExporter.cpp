@@ -1702,7 +1702,8 @@ LilyPondExporter::writeBar(Segment *s,
     int lastStem = 0; // 0 => unset, -1 => down, 1 => up
     int isGrace = 0;
 
-    Segment::iterator i = s->findTime(barStart);
+    Segment::iterator i =
+        SegmentNotationHelper(*s).findNotationAbsoluteTime(barStart);
     if (!s->isBeforeEndMarker(i))
         return ;
 

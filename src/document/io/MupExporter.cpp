@@ -171,7 +171,8 @@ MupExporter::writeBar(std::ofstream &str,
     bool first = true;
     bool openBeamWaiting = false;
 
-    for (Segment::iterator si = s->findTime(barStart);
+    for (Segment::iterator si =
+             SegmentNotationHelper(*s).findNotationAbsoluteTime(barStart);
             s->isBeforeEndMarker(si) &&
             (*si)->getNotationAbsoluteTime() < barEnd; ++si) {
 
