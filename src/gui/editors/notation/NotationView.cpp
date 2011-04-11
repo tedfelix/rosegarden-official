@@ -712,8 +712,15 @@ NotationView::setupActions()
     //"Transport" subMenu
     createAction("play", SIGNAL(play()));
     createAction("stop", SIGNAL(stop()));
-    createAction("cursor_back", SLOT(slotStepBackward()));
-    createAction("cursor_forward", SLOT(slotStepForward()));    
+    //Step Backward/Forward are protected signals
+    // so the pitch tracker (our derrived class) can see them
+    // Because they're protected, we'll connect them here.
+    createAction("cursor_back", SIGNAL(stepBackward()));
+    connect(this, SIGNAL(stepBackward()),
+            this, SLOT(slotStepBackward()));
+    createAction("cursor_forward", SIGNAL(stepForward()));
+    connect(this, SIGNAL(stepForward()),
+            this, SLOT(slotStepForward()));
     createAction("playback_pointer_back_bar", SIGNAL(rewindPlayback()));
     createAction("playback_pointer_forward_bar", SIGNAL(fastForwardPlayback()));
     createAction("playback_pointer_start", SIGNAL(rewindPlaybackToBeginning()));
@@ -4594,10 +4601,10 @@ NotationView::setRewFFwdToAutoRepeat()
                 connect((*i), SIGNAL(clicked()), this, SIGNAL(fastForwardPlayback()));
 
             } else if (act == cbkAction) {
-                connect((*i), SIGNAL(clicked()), this, SLOT(slotStepBackward()));
+                connect((*i), SIGNAL(clicked()), this, SIGNAL(stepBackward()));
 
             } else if (act == cfwAction) {
-                connect((*i), SIGNAL(clicked()), this, SLOT(slotStepForward()));
+                connect((*i), SIGNAL(clicked()), this, SIGNAL(stepForward()));
 
             } else  {
                 continue;

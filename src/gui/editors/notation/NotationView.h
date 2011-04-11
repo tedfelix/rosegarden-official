@@ -73,6 +73,8 @@ public:
 signals:
     void play();
     void stop();
+    void stepBackward();
+    void stepForward();
     void rewindPlayback();
     void fastForwardPlayback();
     void rewindPlaybackToBeginning();
@@ -431,8 +433,11 @@ private:
     void setCurrentNotePixmap(QPixmap);
     void setCurrentNotePixmapFrom(QAction *);
 
+// FIXME: likely to be debated. --gp     Used for subclassing in pitchtracker
+protected:
     RosegardenDocument *m_document;
     NotationWidget *m_notationWidget;
+private:
     CommandRegistry *m_commandRegistry;
     DurationMonobarModeType m_durationMode;  // Stores morph state.
     QAction *m_durationPressed;  //Store the last duration button pressed.

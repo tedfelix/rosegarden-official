@@ -123,6 +123,11 @@ public:
     double getHorizontalZoomFactor() const;
     double getVerticalZoomFactor() const;
 
+    // used in pitchtracker
+    void addWidgetToBottom(QWidget *bottomWidget);
+
+    void updateSegmentChangerBackground();
+
 signals:
     void segmentDeleted(Segment *);
     void sceneDeleted();
@@ -309,7 +314,8 @@ private:
         BOTTOMRULER_ROW,
         CONTROLS_ROW,
         HSLIDER_ROW,
-        PANNER_ROW
+        PANNER_ROW,
+        BOTTOM_ROW
     };
 
     /**

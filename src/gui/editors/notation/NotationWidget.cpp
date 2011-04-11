@@ -1636,6 +1636,13 @@ NotationWidget::getCurrentDevice()
     return instrument->getDevice();
 }
 
+// used in pitchtracker
+void
+NotationWidget::addWidgetToBottom(QWidget *bottomWidget)
+{
+    m_layout->addWidget(bottomWidget, BOTTOM_ROW, MAIN_COL, 1, 1);
+}
+
 void
 NotationWidget::slotSegmentChangerMoved(int v)
 {
