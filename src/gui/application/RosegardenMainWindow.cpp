@@ -758,6 +758,7 @@ RosegardenMainWindow::setupActions()
     createAction("edit_percussion_matrix", SLOT(slotEditInPercussionMatrix()));
     createAction("edit_notation", SLOT(slotEditAsNotation()));
     createAction("edit_event_list", SLOT(slotEditInEventList()));
+    createAction("edit_pitch_tracker", SLOT(slotEditInPitchTracker()));
     createAction("quantize_selection", SLOT(slotQuantizeSelection()));
     createAction("relabel_segment", SLOT(slotRelabelSegments()));
     createAction("transpose", SLOT(slotTransposeSegments()));
@@ -3074,6 +3075,12 @@ void
 RosegardenMainWindow::slotEditInEventList()
 {
     m_view->slotEditSegmentEventList(0);
+}
+
+void
+RosegardenMainWindow::slotEditInPitchTracker()
+{
+    m_view->slotEditSegmentPitchTracker(0);
 }
 
 void

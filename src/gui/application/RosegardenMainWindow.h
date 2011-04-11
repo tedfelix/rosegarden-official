@@ -839,6 +839,12 @@ public slots:
     void slotEditInPercussionMatrix();
 
     /**
+     * open a pitch tracker view for the currently-selected segments
+     *    (NB: only accepts 1 segment)
+     */
+    void slotEditInPitchTracker();
+
+    /**
      * open a notation view with all currently-selected segments in it
      */
     void slotEditAsNotation();

@@ -55,6 +55,7 @@
 #include "gui/editors/parameters/InstrumentParameterBox.h"
 #include "gui/editors/parameters/SegmentParameterBox.h"
 #include "gui/editors/parameters/TrackParameterBox.h"
+#include "gui/editors/pitchtracker/PitchTrackerView.h"
 #include "gui/editors/segment/compositionview/CompositionView.h"
 #include "gui/editors/segment/compositionview/SegmentSelector.h"
 #include "gui/editors/segment/TrackEditor.h"
@@ -149,6 +150,10 @@ RosegardenMainViewWidget::RosegardenMainViewWidget(bool showTrackLabels,
     connect(m_trackEditor->getCompositionView(),
             SIGNAL(editSegmentNotation(Segment*)),
             SLOT(slotEditSegmentNotation(Segment*)));
+
+    connect(m_trackEditor->getCompositionView(),
+            SIGNAL(editSegmentPitchView(Segment*)),
+            SLOT(slotEditSegmentPitchView(Segment*)));
 
     connect(m_trackEditor->getCompositionView(),
             SIGNAL(editSegmentMatrix(Segment*)),
@@ -500,6 +505,178 @@ RosegardenMainViewWidget::createNotationView(std::vector<Segment *> segmentsToEd
     }
 
     return notationView;
+}
+
+// mostly copied from slotEditSegmentNotationView, but some changes
+// marked with CMT
+void RosegardenMainViewWidget::slotEditSegmentPitchTracker(Segment* p)
+{
+
+    SetWaitCursor waitCursor;
+    std::vector<Segment *> segmentsToEdit;
+
+    RG_DEBUG << "\n\n\n\nRosegardenMainViewWidget::slotEditSegmentNotation: p is " << p << endl;
+
+    // The logic here is: If we're calling for this operation to
+    // happen on a particular segment, then open that segment and if
+    // it's part of a selection open all other selected segments too.
+    // If we're not calling for any particular segment, then open all
+    // selected segments if there are any.
+
+    if (haveSelection()) {
+
+        SegmentSelection selection = getSelection();
+
+        if (!p || (selection.find(p) != selection.end())) {
+            for (SegmentSelection::iterator i = selection.begin();
+                    i != selection.end(); ++i) {
+                if ((*i)->getType() != Segment::Audio) {
+                    segmentsToEdit.push_back(*i);
+                }
+            }
+        } else {
+            if (p->getType() != Segment::Audio) {
+                segmentsToEdit.push_back(p);
+            }
+        }
+
+    } else if (p) {
+        if (p->getType() != Segment::Audio) {
+            segmentsToEdit.push_back(p);
+        }
+    } else {
+        return ;
+    }
+
+    if (segmentsToEdit.empty()) {
+        /* was sorry */ QMessageBox::warning(this, "", tr("No non-audio segments selected"));
+        return ;
+    }
+
+
+    // addition by CMT
+    if (segmentsToEdit.size() > 1) {
+        QMessageBox::warning(this, "", tr("Pitch Tracker can only contain 1 segment."));
+        return ;
+    }
+    //!!! not necessary?  NotationView doesn't do this.  -gp
+//    if (Segment::Audio == segmentsToEdit[0]->getType()) {
+//        QMessageBox::warning(this, "", tr("Pitch Tracker needs a non-audio track."));
+//        return ;
+//    }
+
+    slotEditSegmentsPitchTracker(segmentsToEdit);
+}
+
+void RosegardenMainViewWidget::slotEditSegmentsPitchTracker(std::vector<Segment *> segmentsToEdit)
+{
+    PitchTrackerView *view = createPitchTrackerView(segmentsToEdit);
+    if (view) {
+        if (view->getJackConnected()) {
+            view->show();
+        } else {
+            delete view;
+        }
+    }
+}
+
+//!!! copied (+ renamed vars) blindly from NotationView, but it works.  -gp
+PitchTrackerView *
+RosegardenMainViewWidget::createPitchTrackerView(std::vector<Segment *> segmentsToEdit)
+{
+    PitchTrackerView *pitchTrackerView =
+        new PitchTrackerView(getDocument(), segmentsToEdit, this);
+
+
+    // For tempo changes (ugh -- it'd be nicer to make a tempo change
+    // command that could interpret all this stuff from the dialog)
+    //
+    connect(pitchTrackerView, SIGNAL(changeTempo(timeT,
+                                 tempoT,
+                                 tempoT,
+                                 TempoDialog::TempoDialogAction)),
+            RosegardenMainWindow::self(), SLOT(slotChangeTempo(timeT,
+                                           tempoT,
+                                           tempoT,
+                                           TempoDialog::TempoDialogAction)));
+
+
+    connect(pitchTrackerView, SIGNAL(windowActivated()),
+            this, SLOT(slotActiveMainWindowChanged()));
+
+    connect(pitchTrackerView, SIGNAL(selectTrack(int)),
+            this, SLOT(slotSelectTrackSegments(int)));
+
+    connect(pitchTrackerView, SIGNAL(play()),
+            RosegardenMainWindow::self(), SLOT(slotPlay()));
+    connect(pitchTrackerView, SIGNAL(stop()),
+            RosegardenMainWindow::self(), SLOT(slotStop()));
+    connect(pitchTrackerView, SIGNAL(fastForwardPlayback()),
+            RosegardenMainWindow::self(), SLOT(slotFastforward()));
+    connect(pitchTrackerView, SIGNAL(rewindPlayback()),
+            RosegardenMainWindow::self(), SLOT(slotRewind()));
+    connect(pitchTrackerView, SIGNAL(fastForwardPlaybackToEnd()),
+            RosegardenMainWindow::self(), SLOT(slotFastForwardToEnd()));
+    connect(pitchTrackerView, SIGNAL(rewindPlaybackToBeginning()),
+            RosegardenMainWindow::self(), SLOT(slotRewindToBeginning()));
+    connect(pitchTrackerView, SIGNAL(panic()),
+            RosegardenMainWindow::self(), SLOT(slotPanic()));
+
+    connect(pitchTrackerView, SIGNAL(saveFile()),
+            RosegardenMainWindow::self(), SLOT(slotFileSave()));
+//  This probably is obsolete in Thorn.
+//    connect(pitchTrackerView, SIGNAL(jumpPlaybackTo(timeT)),
+//            getDocument(), SLOT(slotSetPointerPosition(timeT)));
+    connect(pitchTrackerView, SIGNAL(openInNotation(std::vector<Segment *>)),
+            this, SLOT(slotEditSegmentsNotation(std::vector<Segment *>)));
+    connect(pitchTrackerView, SIGNAL(openInMatrix(std::vector<Segment *>)),
+            this, SLOT(slotEditSegmentsMatrix(std::vector<Segment *>)));
+    connect(pitchTrackerView, SIGNAL(openInPercussionMatrix(std::vector<Segment *>)),
+            this, SLOT(slotEditSegmentsPercussionMatrix(std::vector<Segment *>)));
+    connect(pitchTrackerView, SIGNAL(openInEventList(std::vector<Segment *>)),
+            this, SLOT(slotEditSegmentsEventList(std::vector<Segment *>)));
+/* hjj: WHAT DO DO WITH THIS ?
+    connect(pitchTrackerView, SIGNAL(editMetadata(QString)),
+            this, SLOT(slotEditMetadata(QString)));
+*/
+    connect(pitchTrackerView, SIGNAL(editTriggerSegment(int)),
+            this, SLOT(slotEditTriggerSegment(int)));
+    connect(pitchTrackerView, SIGNAL(staffLabelChanged(TrackId, QString)),
+            this, SLOT(slotChangeTrackLabel(TrackId, QString)));
+    connect(pitchTrackerView, SIGNAL(toggleSolo(bool)),
+            RosegardenMainWindow::self(), SLOT(slotToggleSolo(bool)));
+    connect(pitchTrackerView, SIGNAL(editTimeSignature(timeT)),
+            RosegardenMainWindow::self(), SLOT(slotEditTempos(timeT)));
+
+    SequenceManager *sM = getDocument()->getSequenceManager();
+
+    connect(sM, SIGNAL(insertableNoteOnReceived(int, int)),
+            pitchTrackerView, SLOT(slotInsertableNoteOnReceived(int, int)));
+    connect(sM, SIGNAL(insertableNoteOffReceived(int, int)),
+            pitchTrackerView, SLOT(slotInsertableNoteOffReceived(int, int)));
+
+    connect(pitchTrackerView, SIGNAL(stepByStepTargetRequested(QObject *)),
+            this, SIGNAL(stepByStepTargetRequested(QObject *)));
+    connect(this, SIGNAL(stepByStepTargetRequested(QObject *)),
+            pitchTrackerView, SLOT(slotStepByStepTargetRequested(QObject *)));
+    connect(RosegardenMainWindow::self(), SIGNAL(compositionStateUpdate()),
+            pitchTrackerView, SLOT(slotCompositionStateUpdate()));
+    connect(this, SIGNAL(compositionStateUpdate()),
+            pitchTrackerView, SLOT(slotCompositionStateUpdate()));
+
+    // Encourage the notation view window to open to the same
+    // interval as the current segment view
+    if (m_trackEditor->getCompositionView()->horizontalScrollBar()->value() > 1) { // don't scroll unless we need to
+        // first find the time at the center of the visible segment canvas
+        int centerX = (int)(m_trackEditor->getCompositionView()->contentsX() +
+                            m_trackEditor->getCompositionView()->visibleWidth() / 2);
+        timeT centerSegmentView = m_trackEditor->getRulerScale()->getTimeForX(centerX);
+        // then scroll the notation view to that time, "localized" for the current segment
+//!!!        pitchTrackerView->scrollToTime(centerSegmentView);
+//!!!        pitchTrackerView->updateView();
+    }
+
+    return pitchTrackerView;
 }
 
 void RosegardenMainViewWidget::slotEditSegmentMatrix(Segment* p)

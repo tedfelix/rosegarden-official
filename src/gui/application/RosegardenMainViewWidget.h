@@ -46,6 +46,7 @@ class Segment;
 class RosegardenDocument;
 class RealTime;
 class NotationView;
+class PitchTrackerView;
 class MatrixView;
 class MappedEvent;
 class InstrumentParameterBox;
@@ -141,6 +142,8 @@ public slots:
     void slotEditSegmentsPercussionMatrix(std::vector<Segment*>);
     void slotEditSegmentEventList(Segment*);
     void slotEditSegmentsEventList(std::vector<Segment*>);
+    void slotEditSegmentPitchTracker(Segment*);
+    void slotEditSegmentsPitchTracker(std::vector<Segment*>);
     void slotEditTriggerSegment(int);
     void slotEditSegmentAudio(Segment*);
     void slotSegmentAutoSplit(Segment*);
@@ -310,6 +313,7 @@ protected:
     NotationView *createNotationView(std::vector<Segment *>);
     MatrixView   *createMatrixView  (std::vector<Segment *>, bool drumMode);
     EventView    *createEventView   (std::vector<Segment *>);
+    PitchTrackerView *createPitchTrackerView (std::vector<Segment *>);
 
     virtual void windowActivationChange(bool);
 

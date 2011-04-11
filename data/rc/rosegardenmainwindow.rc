@@ -170,6 +170,7 @@
       <Action name="edit_percussion_matrix" text="Open in &amp;Percussion Matrix Editor" icon="matrix-percussion" shortcut="D" />
       <Action name="edit_notation" text="Open in &amp;Notation Editor" icon="notation" shortcut="N" />
       <Action name="edit_event_list" text="Open in &amp;Event List Editor" icon="eventlist" shortcut="E" />
+      <Action name="edit_pitch_tracker" text="Open in &amp;Pitch Tracker" icon="pitchtracker" shortcut="I" />
     </Menu>
   <Separator/>
     <Action name="relabel_segment" text="R&amp;elabel..." icon="text" />
@@ -311,6 +312,7 @@
   <Action name="edit_percussion_matrix" />
   <Action name="edit_notation" />
   <Action name="edit_event_list" />
+  <Action name="edit_pitch_tracker" />
   <Action name="audio_manager" />
 <Separator/>
   <Action name="manage_midi_devices" />
@@ -343,6 +345,7 @@
   <Action name="edit_percussion_matrix" />
   <Action name="edit_notation" />
   <Action name="edit_event_list" />
+  <Action name="edit_pitch_tracker" />
 <Separator/>
   <Action name="edit_undo" />
   <Action name="edit_redo" />
@@ -408,6 +411,7 @@
     <Action name="edit_percussion_matrix"/>
     <Action name="edit_notation"/>
     <Action name="edit_event_list"/>
+    <Action name="edit_pitch_tracker"/>
     <Action name="quantize_selection"/>
     <Action name="repeat_quantize"/>
 <!--    <Action name="harmonize_selection"/> -->
@@ -447,6 +451,7 @@
     <Action name="edit_matrix"/>
     <Action name="edit_percussion_matrix"/>
     <Action name="edit_event_list"/>
+    <Action name="edit_pitch_tracker"/>
     <Action name="quantize_selection"/>
     <Action name="repeat_quantize"/>
     <Action name="switch_preset"/>

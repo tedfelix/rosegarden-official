@@ -126,6 +126,7 @@
       <Action name="open_in_event_list" text="Open in &amp;Event List Editor" icon="eventlist" />
       <Action name="open_in_matrix" text="Open in Matri&amp;x Editor" icon="matrix" />
       <Action name="open_in_percussion_matrix" text="Open in &amp;Percussion Matrix Editor" icon="matrix-percussion" />
+      <Action name="open_in_pitch_tracker" text="Open in &amp;Pitch Tracker" icon="pitchtracker" />
     </Menu>
   <Separator/>
     <Action name="add_clef" text="Add Cle&amp;f Change..." />

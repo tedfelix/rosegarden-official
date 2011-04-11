@@ -121,6 +121,7 @@ void EditViewBase::setupBaseActions(bool haveClipboard)
     createAction("open_in_percussion_matrix", SLOT(slotOpenInPercussionMatrix()));
     createAction("open_in_notation", SLOT(slotOpenInNotation()));
     createAction("open_in_event_list", SLOT(slotOpenInEventList()));
+    createAction("open_in_pitch_tracker", SLOT(slotOpenInPitchTracker()));
     createAction("set_segment_start", SLOT(slotSetSegmentStartTime()));
     createAction("set_segment_duration", SLOT(slotSetSegmentDuration()));
 }
@@ -177,6 +178,12 @@ void
 EditViewBase::slotOpenInEventList()
 {
     emit openInEventList(m_segments);
+}
+
+void
+EditViewBase::slotOpenInPitchTracker()
+{
+    emit slotOpenInPitchTracker(m_segments);
 }
 
 void EditViewBase::closeEvent(QCloseEvent* e)

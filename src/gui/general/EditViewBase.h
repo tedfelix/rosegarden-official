@@ -77,6 +77,7 @@ signals:
     void openInMatrix(std::vector<Segment *>);
     void openInPercussionMatrix(std::vector<Segment *>);
     void openInEventList(std::vector<Segment *>);
+    void slotOpenInPitchTracker(std::vector<Segment *>);
     
     /**
      * Tell the main view that the track being edited is the
@@ -157,6 +158,7 @@ public slots:
     virtual void slotOpenInPercussionMatrix();
     virtual void slotOpenInNotation();
     virtual void slotOpenInEventList();
+    virtual void slotOpenInPitchTracker();
 
     virtual void slotSegmentDeleted(Segment *);
     
