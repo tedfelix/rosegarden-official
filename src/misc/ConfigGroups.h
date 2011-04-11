@@ -27,6 +27,7 @@ namespace Rosegarden
     extern const char* const LatencyOptionsConfigGroup;
     extern const char* const SequencerOptionsConfigGroup;
     extern const char* const NotationViewConfigGroup;
+    extern const char* const PitchTrackerConfigGroup;
     extern const char* const AudioManagerDialogConfigGroup;
     extern const char* const SynthPluginManagerConfigGroup;
     extern const char* const BankEditorConfigGroup;

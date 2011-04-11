@@ -23,6 +23,7 @@
 #include "gui/configuration/ConfigurationPage.h"
 #include "gui/configuration/GeneralConfigurationPage.h"
 #include "gui/configuration/NotationConfigurationPage.h"
+#include "gui/configuration/PitchTrackerConfigurationPage.h"
 #include "gui/configuration/AudioConfigurationPage.h"
 #include "gui/configuration/MIDIConfigurationPage.h"
 #include "gui/general/IconLoader.h"
@@ -79,6 +80,13 @@ ConfigureDialog::ConfigureDialog(RosegardenDocument *doc,
     connect(page,SIGNAL(modified()),this,SLOT(slotActivateApply()));
     addPage(NotationConfigurationPage::iconLabel(),NotationConfigurationPage::title(),il.loadPixmap(NotationConfigurationPage::iconName()),page);
     m_configurationPages.push_back((ConfigurationPage*)page);
+
+    // Pitch Tracker Page
+    page = new PitchTrackerConfigurationPage(this);
+    connect(page,SIGNAL(modified()),this,SLOT(slotActivateApply()));
+    addPage(PitchTrackerConfigurationPage::iconLabel(),PitchTrackerConfigurationPage::title(),il.loadPixmap(PitchTrackerConfigurationPage::iconName()),page);
+    m_configurationPages.push_back((ConfigurationPage*)page);
+
 }
 
 // I don't remember how this used to work, and I have a feeling there's some

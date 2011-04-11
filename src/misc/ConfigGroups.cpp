@@ -24,6 +24,7 @@ namespace Rosegarden
     const char* const LatencyOptionsConfigGroup = "Latency_Options";
     const char* const SequencerOptionsConfigGroup = "Sequencer_Options";
     const char* const NotationViewConfigGroup = "Notation_Options";
+    const char* const PitchTrackerConfigGroup = "Pitch_Tracker_Options";
     const char* const AudioManagerDialogConfigGroup = "AudioManagerDialog";
     const char* const SynthPluginManagerConfigGroup = "Synth_Plugin_Manager";
     const char* const BankEditorConfigGroup = "Bank_Editor";
