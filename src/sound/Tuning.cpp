@@ -73,6 +73,8 @@ std::vector<Tuning*> *Tuning::getTunings() {
     
     QString tuningsPath =
         ResourceFinder().getResourcePath("pitches", "tunings.xml");
+    if (tuningsPath == "")
+        return NULL;
     #   if (TUNING_DEBUG > 1)
     qDebug() << "Path to tunings file:" << tuningsPath;
     #   endif
