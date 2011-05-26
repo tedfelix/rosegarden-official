@@ -410,7 +410,7 @@ MupExporter::writePitch(std::ofstream &str, TrackId trackNo,
     Pitch p(pitch, accidental);
     Accidental acc(p.getDisplayAccidental(ck.second));
     char note(p.getNoteName(ck.second));
-    int octave(p.getOctave());
+    int octave(p.getOctaveAccidental(-2, acc));
 
     // just to avoid assuming that the note names returned by Pitch are in
     // the same set as those expected by Mup -- in practice they are the same

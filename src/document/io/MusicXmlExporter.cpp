@@ -100,9 +100,7 @@ MusicXmlExporter::writeNote(Event *e, timeT lastNoteTime,
 
         str << "\t\t\t\t<pitch>" << std::endl;
 
-        long p = 0;
-        e->get<Int>(PITCH, p);
-        pitch = p;
+        pitch = Pitch(*e);
 
         str << "\t\t\t\t\t<step>" << pitch.getNoteName(key) << "</step>" << std::endl;
 
@@ -128,7 +126,7 @@ MusicXmlExporter::writeNote(Event *e, timeT lastNoteTime,
             str << "\t\t\t\t\t<alter>2</alter>" << std::endl;
         }
 
-        int octave = pitch.getOctave( -1);
+        int octave = pitch.getOctaveAccidental(-1, acc);
         str << "\t\t\t\t\t<octave>" << octave << "</octave>" << std::endl;
 
         str << "\t\t\t\t</pitch>" << std::endl;

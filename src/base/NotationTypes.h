@@ -923,6 +923,13 @@ public:
     int getOctave(int octaveBase = -2) const;
 
     /**
+     * Return the octave containing this pitch, including the accidentals. 
+     * The octaveBase argument specifies the octave containing MIDI pitch 0;
+     * middle-C is in octave octaveBase + 5.
+     */
+    int getOctaveAccidental(int octaveBase = -2, Accidental acc = Accidentals::NoAccidental) const;
+
+    /**
      * Return the pitch within the octave, in the range 0 to 11.
      */
     int getPitchInOctave() const;

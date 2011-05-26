@@ -1695,6 +1695,22 @@ Pitch::getOctave(int octaveBase) const
     return m_pitch / 12 + octaveBase;
 }
 
+int 
+Pitch::getOctaveAccidental(int octaveBase, Accidental acc) const
+{
+    int t_pitch = m_pitch;
+    if (acc == Accidentals::DoubleFlat) {
+        t_pitch += 2;
+    } else if (acc == Accidentals::Flat) {
+        t_pitch += 1;
+    } else if (acc == Accidentals::Sharp) {
+        t_pitch -= 1;
+    } else if (acc == Accidentals::DoubleSharp) {
+        t_pitch -= 2;
+    }
+    return t_pitch / 12 + octaveBase;
+}
+
 int
 Pitch::getPitchInOctave() const
 {
