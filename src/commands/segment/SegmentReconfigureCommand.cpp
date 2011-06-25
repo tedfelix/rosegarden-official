@@ -103,6 +103,30 @@ SegmentReconfigureCommand::swap()
             i->segment->setTrack(i->track);
             i->track = currentTrack;
         }
+
+        // If segment left from the current segment is repeating then we need to reconfigure
+        // it
+        Segment* curr_segment = i->segment;
+        Composition* composition = curr_segment->getComposition();
+        Composition::iterator segment_iterator = composition->findSegment(curr_segment);
+
+        // Check that we don't have most upper left segment in the composition
+        // AND
+        // composition has more than one segment
+        if ( segment_iterator != composition->begin() &&
+             segment_iterator != composition->end() &&
+             composition->getNbSegments() > 1 ) {
+            // move to previous segment
+            segment_iterator--;
+            Segment* prevSegment = *segment_iterator;
+
+            // Segments need to be on the same track
+            if (curr_segment->getTrack() == prevSegment->getTrack()) {
+                if (prevSegment->isRepeating() == true)                    
+                    prevSegment->setRepeating(true);
+            }
+        }
+
     }   
 }
 
