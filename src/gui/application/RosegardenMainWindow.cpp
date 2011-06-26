@@ -362,8 +362,40 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
                                     settings.value("sidebarstyle",
                                     RosegardenParameterArea::CLASSIC_STYLE).toUInt());
 
-    connect(m_parameterArea, SIGNAL(hidden()),
-            this, SLOT(slotParameterAreaHidden()));
+    //!!! The parameter area amnesia problem that's been annoying me for the
+    // longest time was caused by this connection/mechanism.
+    //
+    // Case 1: User presses the [x] button on the parameter area, which is
+    // effectively the same as pressing P to hide the parameters.  They're
+    // hidden, this is called, and the QSettings bits update the menu checkbox
+    // and reflect a valid and intended state.
+    //
+    // Case 2: User merely minimizes the entire main window, eg. to get it out
+    // of the way to make more room for editing.  The parameter area is hidden
+    // along with the entire main window, so this code gets called, and now we
+    // have made minimizing the entire main window perform the additional
+    // function of hiding the parameter area as an unintended consequence.
+    //
+    // There has to be some way to resolve for both case 1 and 2 and behave
+    // nicely by latching onto something finer-grained and more specific than
+    // the hideEvent(), but after a bit of time spent in an attempt to pick
+    // apart all the assorted things RosegardenParameterArea inherits from its
+    // many, many parent classes, I got bored.
+    //
+    // I'm just going to disable this functionality entirely, and move on.  I'd
+    // rather have people complain that the setting on the [x] button doesn't
+    // stick than be constantly turning my parameters off by accident, due to
+    // this other thing sticking quite unintentionally.
+    //
+    // If somebody wants to fix this properly, we need to figure out how to get
+    // to the close button in the parameter area directly, and behave one way if
+    // it's clicked on, and behave differently if we're getting signals from the
+    // whole application being hidden or closed.  You'd expect this would be
+    // really obvious and easy, but it was a wider problem than my attention
+    // span.
+    //
+//    connect(m_parameterArea, SIGNAL(hidden()),
+//            this, SLOT(slotParameterAreaHidden()));
 
     // Load the initial document (this includes doc's own autoload)
     //
@@ -3274,6 +3306,8 @@ RosegardenMainWindow::slotParametersClosed()
 void
 RosegardenMainWindow::slotParameterAreaHidden()
 {
+    RG_DEBUG << "RosegardenMainWindow::slotParameterAreaHidden(): who called this?  Is this the amnesia source?" << endl;
+
     // Since the parameter area is now hidden, clear the checkbox in the
     // menu to keep things in sync.
     findAction("show_inst_segment_parameters")->setChecked(false);
