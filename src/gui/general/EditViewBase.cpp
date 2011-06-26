@@ -338,14 +338,9 @@ EditViewBase::slotCompositionStateUpdate()
     QAction *toggleSolo = findAction("toggle_solo");
     if (!toggleSolo) return;
 
-    if (getDocument()->getComposition().isSolo()) {
-        bool s = m_segments[0]->getTrack() == getDocument()->getComposition().getSelectedTrack();
-        RG_DEBUG << "ListEditView::slotCompositionStateUpdate() : set solo to " << s << endl;
-        toggleSolo->setChecked(s);
-    } else {
-        toggleSolo->setChecked(false);
-        RG_DEBUG << "ListEditView::slotCompositionStateUpdate() : set solo to false\n";
-    }
+    toggleSolo->setChecked(getDocument()->getComposition().isSolo());
+    RG_DEBUG << "EditViewBase::slotCompositionStateUpdate(): set solo to "
+             << (toggleSolo->isChecked() ? "true" : "false") << endl;
 
     // update the window caption
     //
