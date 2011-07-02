@@ -577,13 +577,13 @@ double Tuning::getFrequency(Rosegarden::Pitch p) const {
         octave--;
     }
     
-    int octaveDifference = octave - m_refOctave;
+    const int octaveDifference = octave - m_refOctave;
     
-    int octaveRatio = pow( 2, octaveDifference );
+    const int octaveRatio = pow( 2, octaveDifference );
     
     ratio *= octaveRatio;
     
-    double freq = m_cRefFreq * ratio;
+    const double freq = m_cRefFreq * ratio;
     
 #   if (TUNING_DEBUG)
     qDebug() << "Spelling " << spelling.c_str() 
