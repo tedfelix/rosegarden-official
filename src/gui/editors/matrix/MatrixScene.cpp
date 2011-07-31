@@ -697,7 +697,7 @@ MatrixScene::setSelection(EventSelection *s, bool preview)
 
     if (preview) previewSelection(m_selection, oldSelection);
     delete oldSelection;
-    emit selectionChanged();
+    emit selectionChanged(s);
 }
 
 void

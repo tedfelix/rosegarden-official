@@ -340,24 +340,27 @@ ControlRulerWidget::slotDragScroll(timeT t)
 void
 ControlRulerWidget::slotSelectionChanged(EventSelection *s)
 {
-    ///@TODO This line is necessary only because a null EventSelection is sent by Notation
-    if (!s) return;
-
-//    ViewElementList *selectedElements = new ViewElementList();
     m_selectedElements.clear();
 
-    for (EventSelection::eventcontainer::iterator it =
-            s->getSegmentEvents().begin();
-            it != s->getSegmentEvents().end(); ++it) {
-//        ViewElement *element = 0;
-        ViewElementList::iterator vi = m_viewSegment->findEvent(*it);
-//        if (vi != m_viewSegment->getViewElementList()->end()) {
-//            element = dynamic_cast<ViewElement *>(*vi);
-//        }
-//        if (!element) continue;
-        m_selectedElements.push_back(*vi);
-    }
+    // If empty selection then we will also clean the selection for control ruler
+    if (s) {
+    //    ViewElementList *selectedElements = new ViewElementList();
 
+
+        for (EventSelection::eventcontainer::iterator it =
+                s->getSegmentEvents().begin();
+                it != s->getSegmentEvents().end(); ++it) {
+    //        ViewElement *element = 0;
+                    // TODO check if this code is necessary for some reason
+                    // It seems there abundant work done here
+            ViewElementList::iterator vi = m_viewSegment->findEvent(*it);
+    //        if (vi != m_viewSegment->getViewElementList()->end()) {
+    //            element = dynamic_cast<ViewElement *>(*vi);
+    //        }
+    //        if (!element) continue;
+            m_selectedElements.push_back(*vi);
+        }
+    }
     // Should be dispatched to all PropertyControlRulers
     if (m_controlRulerList.size()) {
         std::list<ControlRuler *>::iterator it;
