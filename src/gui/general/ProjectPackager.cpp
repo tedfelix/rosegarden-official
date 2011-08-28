@@ -25,6 +25,7 @@
 #include "gui/widgets/ProgressBar.h"
 #include "misc/ConfigGroups.h"
 #include "misc/Strings.h"
+#include "misc/Debug.h"
 #include "sound/AudioFile.h"
 #include "sound/AudioFileManager.h"
 #include "document/GzipFile.h"
@@ -42,13 +43,6 @@
 #include <QDirIterator>
 #include <QSet>
 
-#include <iostream>
-
-// NOTE: we're using std::cout everywhere in here for the moment.  It's easy to
-// swap later to std::cerr, and for the time being this is convenient, because
-// we can ./rosegarden > /dev/null to ignore everything except these messages
-// we're generating in here.
-
 namespace Rosegarden
 {
 
@@ -64,10 +58,8 @@ ProjectPackager::ProjectPackager(QWidget *parent, RosegardenDocument *document, 
         m_abortText(tr("<p>Processing aborted</p>"))
 
 {
-    // (I'm not sure why RG_DEBUG didn't work from in here.  Having to use
-    // iostream is mildly irritating, as QStrings have to be converted, but
-    // whatever, I'll figure that out later, or just leave well enough alone)
-    std::cout << "ProjectPackager::ProjectPackager():  mode: " << mode << " m_filename: " << m_filename.toStdString() << std::endl;
+RG_DEBUG << "ProjectPackager::ProjectPackager():  mode: " << mode << 
+    " m_filename: " << m_filename;
 
     this->setModal(false);
 
@@ -109,14 +101,16 @@ ProjectPackager::getTrueFilename()
     QFileInfo origFI(m_filename);
     QString dirname = origFI.path();
 
-    std::cout << "ProjectPackager::getTrueFilename() - directory component is: " << dirname.toStdString() << std::endl;
+RG_DEBUG << "ProjectPackager::getTrueFilename() - directory component is: " <<
+    dirname;
 
     // get the filename component from the true m_trueFilename discovered while
     // unpacking the .rgp + extension (eg. foo.rgp yields bar.rg here)
     QFileInfo trueFI(m_trueFilename);
     QString basename = QString("%1.%2").arg(trueFI.baseName()).arg(trueFI.completeSuffix());
 
-    std::cout << "                                          name component is: " << basename.toStdString() << std::endl;
+RG_DEBUG << "                                          name component is: " <<
+    basename;
 
     return QString("%1/%2").arg(dirname).arg(basename);
 }
@@ -141,13 +135,16 @@ ProjectPackager::puke(QString error)
 void
 ProjectPackager::rmTmpDir()
 {
-    std::cout << "ProjectPackager - rmTmpDir() removing " << m_packTmpDirName.toStdString() << std::endl;
+RG_DEBUG << "ProjectPackager - rmTmpDir() removing " << m_packTmpDirName;
+
     QDir d;
     if (d.exists(m_packTmpDirName)) {
         QProcess rm;
         rm.start("rm", QStringList() << "-rf" << m_packTmpDirName);
         rm.waitForStarted();
-        std::cout << "process started: rm -rf " << qstrtostr(m_packTmpDirName) << std::endl;
+
+RG_DEBUG << "process started: rm -rf " << m_packTmpDirName;
+
         rm.waitForFinished();
     }
 
@@ -160,14 +157,14 @@ ProjectPackager::rmTmpDir()
 //        // first find and remove all the files
 //        QDirIterator fi(dir.path(), QDir::Files, QDirIterator::Subdirectories);
 //        while (fi.hasNext()) {
-//            std::cout << "rm " << fi.next().toStdString() << (QFile::remove(fi.next()) ? "OK" : "FAILED") << std::endl;
+//            RG_DEBUG << "rm " << fi.next() << (QFile::remove(fi.next()) ? "OK" : "FAILED");
 //        }
 //
 //        // then clean up the empty directories
 //        QDirIterator di(dir.path(), QDir::Dirs | QDir::NoDotAndDotDot, QDirIterator::Subdirectories);
 //        while (di.hasNext()) {
 //            QDir d;
-//            std::cout << "rmdir: " << di.next().toStdString() << (d.remove(di.next()) ? "OK" : "FAILED") << std::endl;
+//            RG_DEBUG << "rmdir: " << di.next() << (d.remove(di.next()) ? "OK" : "FAILED");
 //        }
 //    }
 }
@@ -175,7 +172,8 @@ ProjectPackager::rmTmpDir()
 void
 ProjectPackager::reject()
 {
-    std::cout << "User pressed cancel" << std::endl;
+RG_DEBUG << "User pressed cancel";
+
     rmTmpDir();
     QDialog::reject();
 }
@@ -318,10 +316,13 @@ ProjectPackager::getPluginFilesAndRewriteXML(const QString fileToModify, const Q
 
         line = inStream.readLine();
         // don't flood the console
-        if (c < 10) std::cout << "LINE: " << ++c << " BUFFER SIZE: " << line.size() << std::endl;
+        if (c < 10) {
+            RG_DEBUG << "LINE: " << ++c << " BUFFER SIZE: " << line.size();
+        }
 
         if (line.contains(pluginAudioPathKey)) {
-            std::cout << "rewriting plugin audio path tag..." << std::endl;
+
+RG_DEBUG << "rewriting plugin audio path tag...";
 
             // we don't care what the old path was at all, this was the bug;
             // just write the new path straight up
@@ -329,24 +330,26 @@ ProjectPackager::getPluginFilesAndRewriteXML(const QString fileToModify, const Q
             extract.prepend(pluginAudioPathKey);
             extract.append(valueTagEndKey);
 
-            std::cout << "old line: " << line.toStdString() << std::endl;
+RG_DEBUG << "old line: " << line;
 
             line = extract;
 
-            std::cout << "new line: " << line.toStdString() << std::endl << std::endl;
+RG_DEBUG << "new line: " << line;
 
         } else if (line.contains(pluginAudioDataKey)) {
 
             // note that "plugin audio data" is a bit of a misnomer, as this
             // could contain a soundfont or who knows what else; they're handled
             // the same way regardless, as "extra files" to add to the package
-            std::cout << "rewriting the path for a plugin data item..." << std::endl;
+
+RG_DEBUG << "rewriting the path for a plugin data item...";
 
             int s = line.indexOf(pluginAudioDataKey) + pluginAudioDataKey.length();
             int e = line.indexOf(valueTagEndKey);
 
             QString extract = line.mid(s, e - s);
-            std::cout << "extracted value string:  value=\"" << extract.toStdString() << "\"" << std::endl;
+            
+RG_DEBUG << "extracted value string:  value=\"" << extract << "\"";
 
             // save the extracted path to the list of extra files (and this is
             // the one part of these three block copied implementations that
@@ -363,15 +366,15 @@ ProjectPackager::getPluginFilesAndRewriteXML(const QString fileToModify, const Q
             extract.prepend(pluginAudioDataKey);
             extract.append(valueTagEndKey);
 
-            std::cout << "old line: " << line.toStdString() << std::endl;
+RG_DEBUG << "old line: " << line;
 
             line = extract;
 
-            std::cout << "new line: " << line.toStdString() << std::endl << std::endl;
+RG_DEBUG << "new line: " << line << endl;
 
         } else if (line.contains(audioPathKey)) {
 
-            std::cout << "rewriting document audio path..." << std::endl;
+RG_DEBUG << "rewriting document audio path...";
 
             // we don't care what the old path was at all, this was the bug;
             // just write the new path straight up
@@ -380,14 +383,15 @@ ProjectPackager::getPluginFilesAndRewriteXML(const QString fileToModify, const Q
             extract.prepend(audioPathKey);
             extract.append(valueTagEndKey);
 
-            std::cout << "old line: " << line.toStdString() << std::endl;
+RG_DEBUG << "old line: " << line;
 
             line = extract;
 
-            std::cout << "new line: " << line.toStdString() << std::endl << std::endl;
+RG_DEBUG << "new line: " << line << endl;
 
         } else if (line.contains(audioFileKey) && 
-                m_mode == ProjectPackager::Pack) {
+                   m_mode == ProjectPackager::Pack) {
+
             // sigh... more and more brittle, on the pack, but only the PACK
             // step, we have to strip the unused audio files out of the XML,
             // since we're not including them
@@ -399,19 +403,29 @@ ProjectPackager::getPluginFilesAndRewriteXML(const QString fileToModify, const Q
 
             QStringList::const_iterator si;
             bool keep = false;
-            for (si = usedAudioFiles.constBegin(); si != usedAudioFiles.constEnd(); ++si) {
-                std::cout << "\"" << line.toStdString() << "\" contains? \"" << (*si).toStdString() << "\"" << std::endl
-                          << "Qt says " << (line.contains(*si) ? "yes" : "no") << std::endl << std::endl;
+            QFileInfo fileInfo;
+                    
+            for (si = usedAudioFiles.constBegin(); 
+                 si != usedAudioFiles.constEnd(); 
+                 ++si) {
 
-                if (line.contains(*si)) {
+                fileInfo.setFile(*si);
+
+RG_DEBUG << "\"" << line << "\" contains? \"" << (fileInfo.baseName()) << "\"";
+RG_DEBUG << "Qt says " << (line.contains(fileInfo.baseName()) ? "yes" : "no");
+RG_DEBUG << endl;
+
+                if (line.contains(fileInfo.baseName())) {
                     keep = true;
-                    continue;
+                    break;
                 }
             }
 
             if (!keep) {
-                std::cout << "Removed the following line referring to unused audio file: " << std::endl
-                          << "  " << line.toStdString() << std::endl;
+
+RG_DEBUG << "Removed the following line referring to unused audio file: ";
+RG_DEBUG << "  " << line;
+
                 continue;
             }
         }
@@ -507,7 +521,10 @@ ProjectPackager::runPackUnpack(int exitCode, QProcess::ExitStatus) {
     // we tested existed, that's good enough.  Ignore the error code.  (It
     // happens that wvunpack --help returns error code 1.  Odd, but not
     // important so long as the damn thing started.)
-    std::cout << "ProjectPackager::runPackUnpack() - sanity check passed, last process exited " << exitCode << std::endl;
+
+RG_DEBUG << "ProjectPackager::runPackUnpack() - " <<
+    "sanity check passed, last process exited " << exitCode;
+
     delete m_process;
 
     switch (m_mode) {
@@ -524,7 +541,8 @@ ProjectPackager::runPackUnpack(int exitCode, QProcess::ExitStatus) {
 void
 ProjectPackager::runPack()
 {
-    std::cout << "ProjectPackager::runPack()" << std::endl;
+
+RG_DEBUG << "ProjectPackager::runPack()";
 
     m_info->setText(tr("Packing project..."));
 
@@ -540,7 +558,8 @@ ProjectPackager::runPack()
     QFileInfo fi(m_filename);
     m_packDataDirName = fi.baseName();
 
-    std::cout << "using tmp data directory: " << m_packTmpDirName.toStdString() << "/" << m_packDataDirName.toStdString() << std::endl;
+RG_DEBUG << "using tmp data directory: " << m_packTmpDirName << "/" << 
+    m_packDataDirName;
 
     QDir tmpDir(m_packTmpDirName);
 
@@ -597,8 +616,9 @@ ProjectPackager::runPack()
         QString dstFile = QString("%1/%2/%3").arg(m_packTmpDirName).arg(m_packDataDirName).arg(filename);
         QString dstFilePk = QString("%1.pk").arg(dstFile);
 
-        std::cout << "cp " << srcFile.toStdString() << " " << dstFile.toStdString() << std::endl;
-        std::cout << "cp " << srcFilePk.toStdString() << " " << dstFilePk.toStdString() << std::endl;
+RG_DEBUG << "cp " << srcFile << " " << dstFile;
+RG_DEBUG << "cp " << srcFilePk << " " << dstFilePk;
+
         if (!QFile::copy(srcFile, dstFile)) {
             puke(tr("<qt>Could not copy<br>%1<br>  to<br>%2<br><br>Processing aborted.</qt>").arg(srcFile).arg(dstFile));
             return;
@@ -641,7 +661,8 @@ ProjectPackager::runPack()
     // .wav files, and I say no, let's not get that complicated)
 
     // Copy the modified .rg file to the working tmp dir
-    std::cout << "cp " << oldName.toStdString() << " " << newName.toStdString() << std::endl;
+
+RG_DEBUG << "cp " << oldName << " " << newName;
 
     // copy m_filename(.rgp) as $tmp/m_filename.rg
     if (!QFile::copy(oldName, newName)) {
@@ -710,7 +731,8 @@ ProjectPackager::runPack()
         QString basename = QString("%1.%2").arg(efi.baseName()).arg(efi.completeSuffix());
         QString dstFile = QString("%1/%2/%3").arg(m_packTmpDirName).arg(m_packDataDirName).arg(basename);
 
-        std::cout << "cp " << srcFile.toStdString() << " " << dstFile.toStdString() << std::endl;
+RG_DEBUG << "cp " << srcFile << " " << dstFile;
+
         if (!QFile::copy(srcFile, dstFile)) {
             puke(tr("<qt>Could not copy<br>%1<br>  to<br>%2<br><br>Processing aborted.</qt>").arg(srcFile).arg(dstFile));
             return;
@@ -790,7 +812,8 @@ ProjectPackager::startAudioEncoder(QStringList files)
 
 void
 ProjectPackager::finishPack(int exitCode, QProcess::ExitStatus) {
-    std::cout << "ProjectPackager::finishPack - exit code: " << exitCode << std::endl;
+
+RG_DEBUG << "ProjectPackager::finishPack - exit code: " << exitCode;
 
     if (exitCode == 0) {
         delete m_process;
@@ -828,7 +851,9 @@ ProjectPackager::finishPack(int exitCode, QProcess::ExitStatus) {
 void
 ProjectPackager::runUnpack()
 {
-    std::cout << "ProjectPackager::runUnpack() - unpacking " << qstrtostr(m_filename) << std::endl;
+
+RG_DEBUG << "ProjectPackager::runUnpack() - unpacking " << m_filename;
+    
     m_info->setText(tr("Unpacking project..."));
 
     // go into spinner mode, and we'll just leave it there for the duration of
@@ -860,7 +885,9 @@ ProjectPackager::runUnpack()
     // m_filename here)
     m_process->start("tar", QStringList() << "tf" << m_filename);
     m_process->waitForStarted();
-    std::cout << "process started: tar tf " << qstrtostr(m_filename) << std::endl;
+
+RG_DEBUG << "process started: tar tf " << m_filename;
+
     m_process->waitForFinished();
 
     if (m_process->exitCode() == 0) {
@@ -893,16 +920,22 @@ ProjectPackager::runUnpack()
         // find .flac (FLAC) files
         if (line.find(".flac", 0) > 0) {
             flacFiles << line;
-            std::cout << "Discovered FLAC for decoding:    " <<  line.toStdString() << std::endl;
+
+RG_DEBUG << "Discovered FLAC for decoding:    " << line;
+
         // find .wv (WavPack) files
         } else if (line.find(".wv", 0) > 0) {
             wavpackFiles << line;
-            std::cout << "Discovered WavPack for decoding: " <<  line.toStdString() << std::endl;
+
+RG_DEBUG << "Discovered WavPack for decoding: " << line;
+
         // find the true name of the .rg file contained in the package (foo.rgp
         // contains bar.rg and bar/)
         } else if ((line.find(".rg", 0) > 0) && !haveRG) {
             m_trueFilename = line;
-            std::cout << "Discovered true filename: " << m_trueFilename.toStdString() << std::endl;
+
+RG_DEBUG << "Discovered true filename: " << m_trueFilename;
+
             haveRG = true;
         }
 
@@ -987,7 +1020,9 @@ ProjectPackager::startAudioDecoder(QStringList flacFiles, QStringList wavpackFil
         //
         // (let's just try escaping spaces &c. with surrounding " and see if
         // that is good enough)
-        std::cout << "flad -d " << o1.toStdString() << " -o " << o2.toStdString() << std::endl;
+
+RG_DEBUG << "flad -d " << o1 << " -o " << o2;
+
         out << "flac -d \"" <<  o1 << "\" -o \"" << o2 << "\" && rm \"" << o1 <<  "\" || exit " << errorPoint << endl;
         errorPoint++;
     }
@@ -1034,7 +1069,8 @@ ProjectPackager::startAudioDecoder(QStringList flacFiles, QStringList wavpackFil
 // audio path was already hard coded to "/home/$(whoami)/wherever" anyway.
 void
 ProjectPackager::finishUnpack(int exitCode, QProcess::ExitStatus) {
-    std::cout << "ProjectPackager::finishUnpack - exit code: " << exitCode << std::endl;
+
+RG_DEBUG << "ProjectPackager::finishUnpack - exit code: " << exitCode;
 
     if (exitCode == 0) {
         delete m_process;
