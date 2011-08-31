@@ -94,6 +94,9 @@ SegmentJoinCommand::execute()
         // any clef or key change found at the start of this segment.
         m_newSegment = new Segment(*m_oldSegments[leftmostIndex]);
 
+        // drop any events beyond the end marker
+        m_newSegment->setEndTime(m_newSegment->getEndMarkerTime());
+
         // that duplicated the leftmost segment; now do the rest
 
         for (size_t i = 0; i < m_oldSegments.size(); ++i) {
