@@ -53,7 +53,7 @@ class Segment;
 class RosegardenDocument;
 class CompositionRect;
 
-
+/// Draws the Composition on the display.
 class CompositionView : public RosegardenScrollView 
 {
     Q_OBJECT

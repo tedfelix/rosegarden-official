@@ -28,6 +28,18 @@
 namespace Rosegarden
 {
 
+/// The interface for a composition item.
+/**
+ * This is primarily an interface (abstract base) class that defines the
+ * interface for a composition item.  It also has a saved rectangle which
+ * is a common property of composition items.  CompositionItem is a
+ * QPointer to this class.
+ *
+ * See the deriver (CompositionItemImpl) for details.
+ *
+ * Given that there is only one deriver from this interface and
+ * probably has been for quite some time, this class can probably be removed.
+ */
 class _CompositionItem : public QObject {	
 public:
     virtual bool isRepeating() const = 0;

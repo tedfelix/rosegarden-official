@@ -31,7 +31,12 @@ namespace Rosegarden
 
 class Segment;
 
-
+/// Representation of segments that are changing.
+/**
+ * When segments are being selected, moved, or resized, CompositionModelImpl
+ * creates CompositionItemImpl objects to represent those changing segments
+ * as they change.
+ */
 class CompositionItemImpl : public _CompositionItem {
 public:
     CompositionItemImpl(Segment& s, const CompositionRect&);
