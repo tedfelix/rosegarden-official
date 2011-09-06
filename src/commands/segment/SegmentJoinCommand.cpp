@@ -23,6 +23,9 @@
 #include "base/NotationTypes.h"
 #include "base/Segment.h"
 #include "base/Selection.h"
+#include "gui/application/RosegardenMainWindow.h"
+#include "gui/application/RosegardenMainViewWidget.h"
+#include "gui/editors/segment/compositionview/CompositionView.h"
 #include <QString>
 
 
@@ -184,6 +187,10 @@ SegmentJoinCommand::execute()
         m_newSegment->normalizeRests(overlapStart, overlapEnd);
     }
 
+    // Select this new joined segment.
+    RosegardenMainWindow::self()->getView()->getTrackEditor()->
+        getCompositionView()->getModel()->setSelected(m_newSegment);
+    
     for (size_t i = 0; i < m_oldSegments.size(); ++i) {
         composition->detachSegment(m_oldSegments[i]);
     }

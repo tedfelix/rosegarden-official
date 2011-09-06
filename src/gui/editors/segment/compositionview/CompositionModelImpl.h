@@ -51,7 +51,10 @@ class Composition;
 class AudioPreviewUpdater;
 class AudioPreviewThread;
 
-
+/// Composition UI state and behavior.
+/**
+ * See Composition and CompositionView.
+ */
 class CompositionModelImpl : public CompositionModel
 {
     Q_OBJECT
@@ -77,6 +80,7 @@ public:
     virtual void setSelected(const CompositionItem&, bool selected = true);
     virtual bool isSelected(const CompositionItem&) const;
     virtual void setSelected(const itemcontainer&);
+    virtual void setSelected(const Segment*, bool selected = true);
     virtual void clearSelected();
     virtual bool haveSelection() const { return !m_selectedSegments.empty(); }
     virtual bool haveMultipleSelection() const { return m_selectedSegments.size() > 1; }
@@ -151,7 +155,6 @@ protected slots:
 protected:
     bool setTrackHeights(Segment *changed = 0); // true if something changed
 
-    void setSelected(const Segment*, bool selected = true);
     bool isSelected(const Segment*) const;
     bool isTmpSelected(const Segment*) const;
     bool wasTmpSelected(const Segment*) const;

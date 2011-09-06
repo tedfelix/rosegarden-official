@@ -44,7 +44,16 @@ namespace Rosegarden
 class SnapGrid;
 typedef std::vector<QImage> PixmapArray;
 
-
+/// The interface for a composition model.
+/**
+ * This is primarily an interface (abstract base) class that defines the
+ * interface for a composition model.
+ *
+ * See the deriver (CompositionModelImpl) for details.
+ *
+ * Given that there is only one deriver from this interface and probably has
+ * been for quite some time, this class can probably be removed.
+ */
 class CompositionModel : public QObject, public CompositionObserver, public SegmentObserver
 {
     Q_OBJECT
@@ -129,6 +138,7 @@ public:
     virtual void setSelected(const CompositionItem&, bool selected = true) = 0;
     virtual bool isSelected(const CompositionItem&) const = 0;
     virtual void setSelected(const itemcontainer&) = 0;
+    virtual void setSelected(const Segment*, bool selected = true) = 0;
     virtual void clearSelected() = 0;
     virtual bool haveSelection() const = 0;
     virtual bool haveMultipleSelection() const = 0;
