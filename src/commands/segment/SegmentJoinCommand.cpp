@@ -32,8 +32,7 @@
 namespace Rosegarden
 {
 
-SegmentJoinCommand::SegmentJoinCommand(SegmentSelection &
-                                       segments) :
+SegmentJoinCommand::SegmentJoinCommand(SegmentSelection &segments) :
         NamedCommand(getGlobalName()),
         m_newSegment(0),
         m_detached(false) // true if the old segments are detached, not the new
@@ -202,7 +201,11 @@ void
 SegmentJoinCommand::unexecute()
 {
     for (size_t i = 0; i < m_oldSegments.size(); ++i) {
+        // Add the segment back into the composition
         m_newSegment->getComposition()->addSegment(m_oldSegments[i]);
+        // And select it
+        RosegardenMainWindow::self()->getView()->getTrackEditor()->
+            getCompositionView()->getModel()->setSelected(m_oldSegments[i]);
     }
 
     m_newSegment->getComposition()->detachSegment(m_newSegment);
