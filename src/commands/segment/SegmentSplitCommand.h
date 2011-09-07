@@ -59,6 +59,7 @@ private:
     timeT m_splitTime;
     bool m_detached;
     bool m_keepLabel;
+    bool m_wasSelected;
 };
 
 

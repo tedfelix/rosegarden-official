@@ -20,10 +20,15 @@
 
 #include "misc/AppendLabel.h"
 #include "misc/Strings.h"
+#include "misc/Debug.h"
 #include "base/Event.h"
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
 #include "base/Segment.h"
+#include "gui/application/RosegardenMainWindow.h"
+#include "gui/application/RosegardenMainViewWidget.h"
+#include "gui/editors/segment/compositionview/CompositionView.h"
+
 #include <QString>
 
 
@@ -38,7 +43,8 @@ SegmentSplitCommand::SegmentSplitCommand(Segment *segment,
         m_newSegmentB(0),
         m_splitTime(splitTime),
         m_detached(true),
-        m_keepLabel(keepLabel)
+        m_keepLabel(keepLabel),
+        m_wasSelected(false)
 {}
 
 SegmentSplitCommand::~SegmentSplitCommand()
@@ -69,6 +75,10 @@ SegmentSplitCommand::isValid()
 void
 SegmentSplitCommand::execute()
 {
+    m_wasSelected =
+        RosegardenMainWindow::self()->getView()->getTrackEditor()->
+            getCompositionView()->getModel()->isSelected(m_segment);
+
     if (m_newSegmentA) {
         
         m_segment->getComposition()->addSegment(m_newSegmentA);
@@ -179,12 +189,28 @@ SegmentSplitCommand::execute()
     m_segment->getComposition()->detachSegment(m_segment);
 
     m_detached = false; // i.e. new segments are not detached
+
+    // If the original segment was selected
+    if (m_wasSelected) {
+        // Select the two split segments.
+        RosegardenMainWindow::self()->getView()->getTrackEditor()->
+            getCompositionView()->getModel()->setSelected(m_newSegmentA);
+        RosegardenMainWindow::self()->getView()->getTrackEditor()->
+            getCompositionView()->getModel()->setSelected(m_newSegmentB);
+    }
+
 }
 
 void
 SegmentSplitCommand::unexecute()
 {
     m_newSegmentA->getComposition()->addSegment(m_segment);
+
+    // If the original segment was selected, select it
+    if (m_wasSelected) {
+        RosegardenMainWindow::self()->getView()->getTrackEditor()->
+            getCompositionView()->getModel()->setSelected(m_segment);
+    }
 
     m_segment->getComposition()->detachSegment(m_newSegmentA);
     m_segment->getComposition()->detachSegment(m_newSegmentB);

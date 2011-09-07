@@ -139,6 +139,7 @@ public:
     virtual bool isSelected(const CompositionItem&) const = 0;
     virtual void setSelected(const itemcontainer&) = 0;
     virtual void setSelected(const Segment*, bool selected = true) = 0;
+    virtual bool isSelected(const Segment*) const = 0;
     virtual void clearSelected() = 0;
     virtual bool haveSelection() const = 0;
     virtual bool haveMultipleSelection() const = 0;

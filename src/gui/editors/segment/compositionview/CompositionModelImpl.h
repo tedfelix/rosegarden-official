@@ -81,6 +81,7 @@ public:
     virtual bool isSelected(const CompositionItem&) const;
     virtual void setSelected(const itemcontainer&);
     virtual void setSelected(const Segment*, bool selected = true);
+    virtual bool isSelected(const Segment*) const;
     virtual void clearSelected();
     virtual bool haveSelection() const { return !m_selectedSegments.empty(); }
     virtual bool haveMultipleSelection() const { return m_selectedSegments.size() > 1; }
@@ -155,7 +156,6 @@ protected slots:
 protected:
     bool setTrackHeights(Segment *changed = 0); // true if something changed
 
-    bool isSelected(const Segment*) const;
     bool isTmpSelected(const Segment*) const;
     bool wasTmpSelected(const Segment*) const;
     bool isMoving(const Segment*) const;
