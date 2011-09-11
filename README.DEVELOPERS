@@ -42,3 +42,25 @@ tarball           Prepare a tarball for release, stripping out unwanted
                   yet!! (should make the tarball target do locale first)
 
 
+========
+
+Compiling large files
+
+data/data.cpp is quite large (25 megabytes at this writing) and may
+fail to compile on smaller systems.  It can't easily be split because
+it's auto-generated.  
+
+One workaround under gcc is to add the parameters "--param
+ggc-min-expand=0 --param ggc-min-heapsize=4096" to that command line
+(the line that `make' echoes and fails on).  This sets gcc's garbage
+collector to a much more aggressive setting.  It will take much longer
+but it will compile on smaller systems.
+
+The command will look something like:
+
+g++ --param ggc-min-expand=0 --param ggc-min-heapsize=4096 -c -I/usr/include/qt4/Qt3Support -I/usr/include/qt4/QtGui -I/usr/include/qt4/QtXml -I/usr/include/qt4/QtNetwork -I/usr/include/qt4/QtCore -I/usr/include/qt4 -DQT3_SUPPORT -DLITTLE_ENDIAN=1 -g0 -O0 data/data.cpp -o data/data.o
+
+With data/data.o existing, `make' should now succeed without problems.
+
+NB, these parameter values are not tuned, they just worked for me.
+

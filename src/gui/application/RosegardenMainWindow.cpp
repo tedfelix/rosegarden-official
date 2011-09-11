@@ -60,6 +60,7 @@
 #include "commands/segment/CreateTempoMapFromSegmentCommand.h"
 #include "commands/segment/CutRangeCommand.h"
 #include "commands/segment/DeleteRangeCommand.h"
+#include "commands/segment/FitToBeatsCommand.h"
 #include "commands/segment/InsertRangeCommand.h"
 #include "commands/segment/ModifyDefaultTempoCommand.h"
 #include "commands/segment/MoveTracksCommand.h"
