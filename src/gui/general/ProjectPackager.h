@@ -126,10 +126,13 @@ protected slots:
      */
     void puke(QString error);
 
-    /** Remove a directory full of files.  Used to remove the tmp working
-     * directory after a pack, or to clean up from an aborted pack
+    /**
+     * Recursively remove a directory and all of its contents.  Returns
+     * true if successful.
+     *
+     * Candidate for promotion to a utility class, or perhaps Qt itself.
      */
-    void rmTmpDir();
+    static bool rmdirRecursive(QString dirName);
 
     /** If user cancels, clean up tmp dir
      */

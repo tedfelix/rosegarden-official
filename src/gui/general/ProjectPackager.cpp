@@ -132,41 +132,77 @@ ProjectPackager::puke(QString error)
     // the bash equivalent of a spontaneous "exit 1" inside a QDialog.  Hrm.
 }
 
-void
-ProjectPackager::rmTmpDir()
+bool
+ProjectPackager::rmdirRecursive(QString dirName)
 {
-RG_DEBUG << "ProjectPackager - rmTmpDir() removing " << m_packTmpDirName;
+    QDir dir(dirName);
 
-    QDir d;
-    if (d.exists(m_packTmpDirName)) {
-        QProcess rm;
-        rm.start("rm", QStringList() << "-rf" << m_packTmpDirName);
-        rm.waitForStarted();
+    // If the directory is already gone, bail.
+    if (!dir.exists())
+        return true;
 
-RG_DEBUG << "process started: rm -rf " << m_packTmpDirName;
+    bool success = true;
 
-        rm.waitForFinished();
+    // *** Delete all the files
+
+    QDirIterator fileIter(dir.path(), QDir::Files | QDir::Hidden,
+                          QDirIterator::Subdirectories);
+    while (fileIter.hasNext()) {
+        // Create a temp to avoid calling next() twice if we want debug
+        // output.
+        QString currentFile = fileIter.next();
+        //qDebug() << "rm" << currentFile;
+        // Remove the file
+        if (!QFile::remove(currentFile)) {
+            success = false;
+        }
     }
 
-// Bleargh, bollocks to this!  Using a QDirIterator is the right way to handle
-// the possibility of there being extra unexpected subdirectories full of files,
-// but there are sort order issues and all manner of other ills.  While we live
-// on Linux, let's just say the hell with it and do an rm -rf
-//
-//    if (dir.exists()) {
-//        // first find and remove all the files
-//        QDirIterator fi(dir.path(), QDir::Files, QDirIterator::Subdirectories);
-//        while (fi.hasNext()) {
-//            RG_DEBUG << "rm " << fi.next() << (QFile::remove(fi.next()) ? "OK" : "FAILED");
-//        }
-//
-//        // then clean up the empty directories
-//        QDirIterator di(dir.path(), QDir::Dirs | QDir::NoDotAndDotDot, QDirIterator::Subdirectories);
-//        while (di.hasNext()) {
-//            QDir d;
-//            RG_DEBUG << "rmdir: " << di.next() << (d.remove(di.next()) ? "OK" : "FAILED");
-//        }
-//    }
+    // *** Delete the empty directories
+
+    // QDirIterator iterates through the directory tree in reverse order
+    // from that required to properly remove the directories recursively;
+    // it iterates from root to leaf.  So we need to do this in two steps.
+    // First, gather the directories into a vector, then go through the
+    // vector in reverse (from leaf to root) and remove them.
+
+    // It might be better to implement our own recursion so that we can
+    // guarantee that it will always be from leaf to root.  Otherwise a
+    // change to the algorithm in QDirIterator could render this code
+    // useless.
+
+    // Iterate through the directories recursively and collect the names
+    // into a vector.
+    QDirIterator dirIter(dir.path(), QDir::Dirs | QDir::NoDotAndDotDot,
+                    QDirIterator::Subdirectories);
+
+    typedef std::vector<QString> QStringVector;
+    QStringVector v;
+
+    v.push_back(dirName);
+
+    while (dirIter.hasNext()) {
+        // Create a temp to avoid calling next() twice if we want debug
+        // output.
+        QString currentDir = dirIter.next();
+        //qDebug() << "push_back" << currentDir;
+        v.push_back(currentDir);
+    }
+
+    // Have to move back one as rmdir() is relative to QDir's directory.
+    dir.cdUp();
+
+    // Now go through the directories in reverse and remove them...
+    for (QStringVector::const_reverse_iterator I = v.rbegin();
+         I != v.rend();
+         ++I) {
+        //qDebug() << "rmdir" << *I;
+        if (!dir.rmdir(*I)) {
+            success = false;
+        }
+    }
+
+    return success;
 }
 
 void
@@ -174,7 +210,7 @@ ProjectPackager::reject()
 {
 RG_DEBUG << "User pressed cancel";
 
-    rmTmpDir();
+    rmdirRecursive(m_packTmpDirName);
     QDialog::reject();
 }
 
@@ -574,7 +610,7 @@ RG_DEBUG << "using tmp data directory: " << m_packTmpDirName << "/" <<
     QString newName = QString("%1/%2.rg").arg(m_packTmpDirName).arg(fi.baseName());
 
     // if the tmp directory already exists, just hose it
-    rmTmpDir();
+    rmdirRecursive(m_packTmpDirName);
 
     // make the temporary working directory
     if (tmpDir.mkdir(m_packTmpDirName)) {
@@ -837,7 +873,7 @@ RG_DEBUG << "ProjectPackager::finishPack - exit code: " << exitCode;
         return;
     }
 
-    rmTmpDir();
+    rmdirRecursive(m_packTmpDirName);
     accept();
     exitCode++; // break point
 }
