@@ -145,7 +145,7 @@ if test x"$QTLIBDIR" = x ; then
    	# bin is included because that's where Qt DLLs hide on Windows
     # On Mandriva Qt libraries are in /usr/lib or /usr/lib64 although
     # QTDIR is /usr/lib/qt4
-	QTLIB_SEARCH="$QTDIR/lib $QTDIR/lib64 $QTDIR/lib32 $QTDIR/bin /usr/lib /usr/lib64"
+	QTLIB_SEARCH="$QTDIR/lib $QTDIR/lib64 $QTDIR/lib32 $QTDIR/bin /usr/lib /usr/lib/${build_alias} /usr/lib64"
 else
 	case "$QTLIBDIR" in *3*)
 	     AC_MSG_WARN([
