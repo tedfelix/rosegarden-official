@@ -49,6 +49,7 @@ class PitchTrackerConfigurationPage : public TabbedConfigurationPage
 public:
     static const int defaultGraphWidth;     /**< Width of graph in ms */
     static const int defaultGraphHeight;    /**< Max excursion in cents */
+    static const bool defaultIgnore8ve;     /**< Ignore octave errors */
 
     PitchTrackerConfigurationPage(QWidget *parent = 0);
 

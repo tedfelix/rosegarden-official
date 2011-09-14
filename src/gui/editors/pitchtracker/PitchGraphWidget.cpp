@@ -56,6 +56,11 @@ PitchGraphWidget::PitchGraphWidget(PitchHistory &history, QWidget *parent) :
         settings.value("graphwidth",
                        PitchTrackerConfigurationPage::defaultGraphWidth).
                        toInt();
+                       
+    m_ignoreOctave =
+        settings.value("ignoreoctave",
+                       PitchTrackerConfigurationPage::defaultIgnore8ve).
+                       toBool();
     
     qDebug("******************** end pitchgraphwidget ctor");
 }
@@ -138,7 +143,17 @@ PitchGraphWidget::paintEvent(QPaintEvent *event)
                                     tr("None available (check preferences)");    
     painter.drawText(100, 40, tuningName);
     painter.drawText(100, 70, labelStg);
-    if (targetValid) labelStg =  QString::number(freq_err_cents, 'f', 3);
+    if (targetValid) {
+        if (m_ignoreOctave) {
+            int octaves(static_cast<int>(freq_err_cents)/1200);
+            labelStg = QString::number(fmod(freq_err_cents, 1200.0), 'f', 3)
+                       + QString(" ");
+            if (octaves >= 0) labelStg += QString("+");
+            labelStg += QString::number(octaves) + QString("oct");
+        } else {
+            labelStg = QString::number(freq_err_cents, 'f', 3);
+        }
+    }
     painter.drawText(100, 90, labelStg);
     painter.setPen(defaultColor);
     
@@ -194,8 +209,9 @@ PitchGraphWidget::paintEvent(QPaintEvent *event)
 
         // computer graphics: lower numbers -> higher on screen
         // Trace should move in range +/- graphHeight
-        const int y = -height() * 
-	    (0.5*m_history.m_detectErrorsCents[i]/m_graphHeight);
+        double cents_err = m_history.m_detectErrorsCents[i];
+        if (m_ignoreOctave) cents_err = fmod(cents_err, 1200.0);
+        const int y = -height() * (0.5*cents_err/m_graphHeight);
         const bool valid = m_history.m_detectErrorsValid[i];
         QPoint here;
         // draw pitches

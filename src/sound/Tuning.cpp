@@ -579,7 +579,7 @@ double Tuning::getFrequency(Rosegarden::Pitch p) const {
     
     const int octaveDifference = octave - m_refOctave;
     
-    const int octaveRatio = pow( 2, octaveDifference );
+    const double octaveRatio = pow( 2, octaveDifference );
     
     ratio *= octaveRatio;
     

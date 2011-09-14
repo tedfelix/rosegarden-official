@@ -110,7 +110,7 @@ public:
     void setStepSize( int stepSize );     /**< Set no, samples between anals */
     int getBufferSize() const;            /**< Get size of audio buffer */
 
-    void setMethod( Method Method );
+    void setMethod( Method method );
     Method getCurrentMethod() {
         return m_method;
     }
