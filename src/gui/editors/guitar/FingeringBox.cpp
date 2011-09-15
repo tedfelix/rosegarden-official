@@ -135,9 +135,9 @@ FingeringBox::drawContents(QPainter* p)
     
     // draw transient note (visual feedback for mouse move)
     //
-    if (hasMouse() &&
+    if (testAttribute(Qt::WA_UnderMouse) &&
         m_transientFretNb > 0 && m_transientFretNb <= m_nbFretsDisplayed &&
-        m_transientStringNb >= 0 && m_transientStringNb <= m_nbStrings) {
+        m_transientStringNb <= m_nbStrings) {
         p->setBrush(QColor(0, 0x10, 0xFF, 0x10));
         m_noteSymbols.drawNoteSymbol(m_big, p, m_transientStringNb, m_transientFretNb - (m_startFret - 1), true);
     }

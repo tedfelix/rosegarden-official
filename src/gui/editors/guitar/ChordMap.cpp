@@ -151,7 +151,8 @@ bool ChordMap::saveDocument(
    
     QTextStream outStream(&file);
     
-    outStream.setEncoding(QTextStream::UnicodeUTF8);
+    outStream.setCodec("UTF-8");
+
     
     outStream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
     << "<!DOCTYPE rosegarden-chord-data>\n"
@@ -235,7 +236,7 @@ bool ChordMap::saveDocument(
     outStream << "</chords>\n";    
     outStream << "</rosegarden-chord-data>\n";
   
-    return outStream.device()->status() == QTextStream::Ok;
+    return outStream.status() == QTextStream::Ok;
 }
 
 void

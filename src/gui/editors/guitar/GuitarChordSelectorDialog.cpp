@@ -57,7 +57,7 @@ GuitarChordSelectorDialog::GuitarChordSelectorDialog(QWidget *parent)
 
     setModal(true);
     setWindowTitle(tr("Guitar Chord Selector"));
-    setIcon(IconLoader().loadPixmap("window-guitar"));
+    setWindowIcon(IconLoader().loadPixmap("window-guitar"));
 
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
@@ -515,7 +515,7 @@ GuitarChordSelectorDialog::parseChordFile(const QString& chordFileName)
     if (!ok)
         QMessageBox::critical(0, tr("Rosegarden"), tr("couldn't open file '%1'").arg(handler.errorString()));
 
-    QXmlInputSource source(chordFile);
+    QXmlInputSource source(&chordFile);
     QXmlSimpleReader reader;
     reader.setContentHandler(&handler);
     reader.setErrorHandler(&handler);
