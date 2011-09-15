@@ -37,7 +37,7 @@ namespace Rosegarden
 CsoundExporter::CsoundExporter(QObject *parent,
                                Composition *composition,
                                std::string fileName) :
-        ProgressReporter(parent, "csoundExporter"),
+        ProgressReporter(parent),
         m_composition(composition),
         m_fileName(fileName)
 {

@@ -80,7 +80,7 @@ const PropertyName LilyPondExporter::SKIP_PROPERTY = "LilyPondExportSkipThisEven
 LilyPondExporter::LilyPondExporter(RosegardenMainWindow *parent,
                                    RosegardenDocument *doc,
                                    std::string fileName) :
-    ProgressReporter((QObject *)parent, "lilypondExporter"),
+    ProgressReporter((QObject *)parent),
     m_doc(doc),
     m_fileName(fileName),
     m_lastClefFound(Clef::Treble)
@@ -97,7 +97,7 @@ LilyPondExporter::LilyPondExporter(RosegardenMainWindow *parent,
 LilyPondExporter::LilyPondExporter(NotationView *parent,
                                    RosegardenDocument *doc,
                                    std::string fileName) :
-    ProgressReporter((QObject *)parent, "lilypondExporter"),
+    ProgressReporter((QObject *)parent),
     m_doc(doc),
     m_fileName(fileName),
     m_lastClefFound(Clef::Treble)
@@ -558,7 +558,7 @@ LilyPondExporter::write()
 
     // split name into parts:
     QFileInfo nfo(tmpName);
-    QString dirName = nfo.dirPath();
+    QString dirName = nfo.path();
     QString baseName = nfo.fileName();
 
     // sed LilyPond-choking chars out of the filename proper
@@ -1104,7 +1104,7 @@ LilyPondExporter::write()
 
                             // DEBUG: str << " %{ '" << chord.toUtf8() << "' %} ";
                             QRegExp rx("^([a-g]([ei]s)?)([:](m|dim|aug|maj|sus|\\d+|[.^]|[+-])*)?(/[+]?[a-g]([ei]s)?)?$");
-                            if (rx.search(chord) != -1) {
+                            if (rx.indexIn(chord) != -1) {
                                 // The chord duration is zero, but the chord
                                 // intervals is given with skips (see below).
                                 QRegExp rxStart("^([a-g]([ei]s)?)");
@@ -1484,7 +1484,7 @@ LilyPondExporter::write()
                         // Does this save some vertical space, as was written
                         // in earlier comment?
                         QRegExp rx("\"");
-                        if (rx.search(text) != -1) {
+                        if (rx.indexIn(text) != -1) {
         
                             if (m_languageLevel <= LILYPOND_VERSION_2_10) {
                                 str << indent(col) << "\\lyricsto \"" << voiceNumber.str() << "\""

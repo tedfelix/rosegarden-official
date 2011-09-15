@@ -47,7 +47,7 @@ class HydrogenLoader : public ProgressReporter
 {
 public:
     HydrogenLoader(Studio *,
-            QObject *parent = 0, const char *name = 0);
+            QObject *parent = 0);
 
     /**
       * Load and parse the Hydrogen file \a fileName, and write it into the

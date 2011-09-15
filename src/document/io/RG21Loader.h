@@ -51,7 +51,7 @@ class RG21Loader : public ProgressReporter
 {
 public:
     RG21Loader(Studio *,
-               QObject *parent = 0, const char *name = 0);
+               QObject *parent = 0);
     ~RG21Loader();
     
     /**

@@ -41,7 +41,7 @@ using namespace BaseProperties;
 MupExporter::MupExporter(QObject *parent,
                          Composition *composition,
                          string fileName) :
-        ProgressReporter(parent, "mupExporter"),
+        ProgressReporter(parent),
         m_composition(composition),
         m_fileName(fileName)
 {

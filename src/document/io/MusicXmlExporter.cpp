@@ -42,7 +42,7 @@ using namespace BaseProperties;
 MusicXmlExporter::MusicXmlExporter(QObject *parent,
                                    RosegardenDocument *doc,
                                    std::string fileName) :
-        ProgressReporter(parent, "musicXmlExporter"),
+        ProgressReporter(parent),
         m_doc(doc),
         m_fileName(fileName)
 {

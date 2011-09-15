@@ -51,8 +51,8 @@ using namespace Accidentals;
 using namespace Marks;
 
 RG21Loader::RG21Loader(Studio *studio,
-                       QObject *parent, const char* name)
-        : ProgressReporter(parent, name),
+                       QObject *parent)
+        : ProgressReporter(parent),
         m_stream(0),
         m_studio(studio),
         m_composition(0),
@@ -712,7 +712,7 @@ bool RG21Loader::load(const QString &fileName, Composition &comp)
 
         } else if (firstToken == ":") { // chord
 
-            m_tokens.remove(m_tokens.begin()); // get rid of 1st token ':'
+            m_tokens.removeFirst(); // get rid of 1st token ':'
             parseChordItem();
 
         } else if (firstToken == "Rest") { // rest

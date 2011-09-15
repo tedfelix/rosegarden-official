@@ -34,8 +34,8 @@ namespace Rosegarden
 {
 
 HydrogenLoader::HydrogenLoader(Studio *studio,
-                               QObject *parent, const char *name):
-        ProgressReporter(parent, name),
+                               QObject *parent):
+        ProgressReporter(parent),
         m_studio(studio)
 {}
 
@@ -54,7 +54,7 @@ HydrogenLoader::load(const QString& fileName, Composition &comp)
 
     HydrogenXMLHandler handler(m_composition);
 
-    QXmlInputSource source(file);
+    QXmlInputSource source(&file);
     QXmlSimpleReader reader;
     reader.setContentHandler(&handler);
     reader.setErrorHandler(&handler);
