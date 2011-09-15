@@ -646,7 +646,7 @@ int main(int argc, char *argv[])
         startLogo->show();
         startLogo->repaint();
         theApp.processEvents();
-        theApp.flushX();
+        theApp.flush();
     }
 
     struct timeval logoShowTime;
@@ -667,7 +667,11 @@ int main(int argc, char *argv[])
 
     rosegardengui->setIsFirstRun(newVersion);
 
-    theApp.setMainWidget(rosegardengui);
+    //@@@ QApplication.setMainWidget() is no longer supported.
+    //@@@ The documentation suggests connecting the lastWindowsClosed() signal
+    //@@@ to the quit() slot, but QApplication has a boolean quitOnLastWindowClosed
+    //@@@ property that defaults to true, so calling quit() should not be needed.
+    //theApp.setMainWidget(rosegardengui);
 
     rosegardengui->show();
 
@@ -677,7 +681,7 @@ int main(int argc, char *argv[])
         startLogo->raise();
         startLogo->setHideEnabled(true);
         startLogo->repaint();
-        theApp.flushX();
+        theApp.flush();
     }
 
     for (int i = 1; i < args.size(); ++i) {
@@ -695,7 +699,7 @@ int main(int argc, char *argv[])
     if (startLogo) {
         startLogo->raise();
         startLogo->setHideEnabled(true);
-        theApp.flushX();
+        theApp.flush();
     }
 
     settings.endGroup();

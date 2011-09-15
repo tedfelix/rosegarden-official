@@ -62,8 +62,8 @@ void RosegardenApplication::sfxLoadExited(QProcess *proc)
 
             QString soundFontPath = settings.value("soundfontpath", "").toString() ;
             settings.endGroup();		// corresponding to: settings().beginGroup( SequencerOptionsConfigGroup );
-
-            QMessageBox::critical( mainWidget(), "",  
+            //### dtb: Using topLevelWidgets()[0] in place of mainWidget() is a big assumption on my part.
+            QMessageBox::critical( topLevelWidgets()[0], "",
                     tr("Failed to load soundfont %1").arg(soundFontPath ));
     } else {
         RG_DEBUG << "RosegardenApplication::sfxLoadExited() : sfxload exited normally\n";
@@ -72,7 +72,8 @@ void RosegardenApplication::sfxLoadExited(QProcess *proc)
 
 void RosegardenApplication::slotSetStatusMessage(QString msg)
 {
-    QMainWindow* window = dynamic_cast<QMainWindow*>(mainWidget());
+    //### dtb: Using topLevelWidgets()[0] in place of mainWidget() is a big assumption on my part.
+    QMainWindow* window = dynamic_cast<QMainWindow*>(topLevelWidgets()[0]);
     if (window) {
         if (msg.isEmpty())
             msg = TmpStatusMsg::getDefaultMsg();

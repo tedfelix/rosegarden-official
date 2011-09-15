@@ -1012,7 +1012,7 @@ void RosegardenMainViewWidget::slotEditSegmentAudio(Segment *segment)
     }
 
     // wait cursor
-    QApplication::setOverrideCursor(QCursor(Qt::waitCursor));
+    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
     // Setup the process
     //
@@ -1867,7 +1867,7 @@ RosegardenMainViewWidget::slotDroppedNewAudio(QString audioDesc)
 void
 RosegardenMainViewWidget::slotDroppedAudio(QString audioDesc)
 {
-    QTextIStream s(&audioDesc);
+    QTextStream s(&audioDesc, QIODevice::ReadOnly);
 
     AudioFileId audioFileId;
     TrackId trackId;
@@ -2098,7 +2098,7 @@ RosegardenMainViewWidget::slotControllerDeviceEventReceived(MappedEvent *e)
 
                 show();
                 raise();
-                setActiveWindow();
+                activateWindow();
 
             } else if (window < 20) {
 

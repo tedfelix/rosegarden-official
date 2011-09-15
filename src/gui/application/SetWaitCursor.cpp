@@ -30,8 +30,9 @@
 namespace Rosegarden
 {
 
+//### dtb: Using topLevelWidgets()[0] in place of mainWidget() is a big assumption on my part.
 SetWaitCursor::SetWaitCursor()
-        : m_guiApp(dynamic_cast<RosegardenMainWindow*>(qApp->mainWidget()))
+    : m_guiApp(dynamic_cast<RosegardenMainWindow*>(qApp->topLevelWidgets()[0]))
 {
     if (m_guiApp) {
 

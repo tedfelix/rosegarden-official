@@ -120,8 +120,8 @@ void
 StartupTester::parseStdoutBuffer(QStringList &target)
 {
     QRegExp re("Required: ([^\n]*)");
-    if (re.search(m_stdoutBuffer) != -1) {
-        target = QStringList::split(", ", re.cap(1));
+    if (re.indexIn(m_stdoutBuffer) != -1) {
+        target = re.cap(1).split(", ");
     }
 }
 

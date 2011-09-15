@@ -1132,10 +1132,10 @@ RosegardenMainWindow::initView()
     getTransport()->raise();
 
     // set the play metronome button
-    getTransport()->MetronomeButton()->setOn(comp.usePlayMetronome());
+    getTransport()->MetronomeButton()->setFlat(comp.usePlayMetronome());
 
     // Set the solo button
-    getTransport()->SoloButton()->setOn(comp.isSolo());
+    getTransport()->SoloButton()->setFlat(comp.isSolo());
 
     // set the transport mode found in the configuration
     getTransport()->setNewMode(transportMode);
@@ -1457,7 +1457,7 @@ RosegardenMainWindow::openFile(QString filePath, ImportType type)
         }
 
         QFileInfo fInfo(filePath);
-        QString tmp (fInfo.absFilePath());
+        QString tmp (fInfo.absoluteFilePath());
         m_recentFiles.add(tmp);
         
         settings.endGroup();
@@ -1594,7 +1594,7 @@ RosegardenMainWindow::createDocumentFromRGFile(QString filePath)
             //
             newDoc->slotDocumentModified();
             QFileInfo info(filePath);
-            newDoc->setAbsFilePath(info.absFilePath());
+            newDoc->setAbsFilePath(info.absoluteFilePath());
             newDoc->setTitle(info.fileName());
         } else {
             newDoc->clearModifiedStatus();
@@ -1751,7 +1751,7 @@ RosegardenMainWindow::readGlobalProperties()
             slotEnableTransport(true);
             m_doc->slotDocumentModified();
             QFileInfo info(filename);
-            m_doc->setAbsFilePath(info.absFilePath());
+            m_doc->setAbsFilePath(info.absoluteFilePath());
             m_doc->setTitle(info.fileName());
         }
     } else {
@@ -2228,13 +2228,13 @@ RosegardenMainWindow::slotFileSaveAs(bool asTemplate)
     SetWaitCursor waitCursor;
     QFileInfo saveAsInfo(newName);
     m_doc->setTitle(saveAsInfo.fileName());
-    m_doc->setAbsFilePath(saveAsInfo.absFilePath());
+    m_doc->setAbsFilePath(saveAsInfo.absoluteFilePath());
     QString errMsg;
     bool res = m_doc->saveDocument(newName, errMsg);
 
     // save template as read-only, even though this is largely pointless
     if (asTemplate) {
-        QFile chmod(saveAsInfo.absFilePath());
+        QFile chmod(saveAsInfo.absoluteFilePath());
         chmod.setPermissions(QFile::ReadOwner |
                              QFile::ReadUser  | /* for potential platform-independence */
                              QFile::ReadGroup |
@@ -2615,7 +2615,7 @@ RosegardenMainWindow::testAudioPath(QString op)
         // changing the following parent to 0 fixes a nasty style problem cheap:
         if (QMessageBox::warning
                 (0, tr("Warning"),
-         tr("The audio file path does not exist or is not writable.\nYou must set the audio file path to a valid directory in Document Properties before %1.\nWould you like to set it now?", op),
+                 tr("The audio file path does not exist or is not writable.\nYou must set the audio file path to a valid directory in Document Properties before %1.\nWould you like to set it now?", op.toStdString().c_str()),
                 QMessageBox::Yes | QMessageBox::Cancel,
                  QMessageBox::Cancel 
                ) == QMessageBox::Yes
@@ -3349,7 +3349,7 @@ RosegardenMainWindow::slotStatusHelpMsg(QString text)
 {
     ///////////////////////////////////////////////////////////////////
     // change status message of whole statusbar temporary (text, msec)
-    statusBar()->message(text, 2000);
+    statusBar()->showMessage(text, 2000);
 }
 
 void
@@ -3908,7 +3908,7 @@ RosegardenMainWindow::createDocumentFromMIDIFile(QString file)
     // Set the caption
     //
     newDoc->setTitle(QFileInfo(file).fileName());
-    newDoc->setAbsFilePath(QFileInfo(file).absFilePath());
+    newDoc->setAbsFilePath(QFileInfo(file).absoluteFilePath());
 
     // Clean up for notation purposes (after reinitialise, because that
     // sets the composition's end marker time which is needed here)
@@ -4119,7 +4119,7 @@ RosegardenMainWindow::createDocumentFromRG21File(QString file)
     // Set the caption and add recent
     //
     newDoc->setTitle(QFileInfo(file).fileName());
-    newDoc->setAbsFilePath(QFileInfo(file).absFilePath());
+    newDoc->setAbsFilePath(QFileInfo(file).absoluteFilePath());
 
     progressDlg->close();
     return newDoc;
@@ -4238,7 +4238,7 @@ RosegardenMainWindow::createDocumentFromHydrogenFile(QString file)
     // Set the caption and add recent
     //
     newDoc->setTitle(QFileInfo(file).fileName());
-    newDoc->setAbsFilePath(QFileInfo(file).absFilePath());
+    newDoc->setAbsFilePath(QFileInfo(file).absoluteFilePath());
 
     progressDlg->close();
     return newDoc;
@@ -5109,14 +5109,14 @@ RosegardenMainWindow::slotToggleMetronome()
         else
             comp.setRecordMetronome(true);
 
-        getTransport()->MetronomeButton()->setOn(comp.useRecordMetronome());
+        getTransport()->MetronomeButton()->setFlat(comp.useRecordMetronome());
     } else {
         if (comp.usePlayMetronome())
             comp.setPlayMetronome(false);
         else
             comp.setPlayMetronome(true);
 
-        getTransport()->MetronomeButton()->setOn(comp.usePlayMetronome());
+        getTransport()->MetronomeButton()->setFlat(comp.usePlayMetronome());
     }
 }
 
@@ -5188,9 +5188,9 @@ RosegardenMainWindow::slotRecord()
         //
         QMessageBox::critical(0, tr("Rosegarden"), s);
 
-        getTransport()->MetronomeButton()->setOn(false);
-        getTransport()->RecordButton()->setOn(false);
-        getTransport()->PlayButton()->setOn(false);
+        getTransport()->MetronomeButton()->setFlat(false);
+        getTransport()->RecordButton()->setFlat(false);
+        getTransport()->PlayButton()->setFlat(false);
         return ;
     } catch (AudioFileManager::BadAudioPathException e) {
             if (QMessageBox::warning
@@ -5203,16 +5203,16 @@ RosegardenMainWindow::slotRecord()
                 slotOpenAudioPathSettings();
             }//end if
         
-        getTransport()->MetronomeButton()->setOn(false);
-        getTransport()->RecordButton()->setOn(false);
-        getTransport()->PlayButton()->setOn(false);
+        getTransport()->MetronomeButton()->setFlat(false);
+        getTransport()->RecordButton()->setFlat(false);
+        getTransport()->PlayButton()->setFlat(false);
         return ;
     } catch (Exception e) {
         QMessageBox::critical(0, tr("Rosegarden"), strtoqstr(e.getMessage()));
 
-        getTransport()->MetronomeButton()->setOn(false);
-        getTransport()->RecordButton()->setOn(false);
-        getTransport()->PlayButton()->setOn(false);
+        getTransport()->MetronomeButton()->setFlat(false);
+        getTransport()->RecordButton()->setFlat(false);
+        getTransport()->PlayButton()->setFlat(false);
         return ;
     }
 
@@ -5269,10 +5269,10 @@ RosegardenMainWindow::slotSetLoop(timeT lhs, timeT rhs)
 
         // toggle the loop button
         if (lhs != rhs) {
-            getTransport()->LoopButton()->setOn(true);
+            getTransport()->LoopButton()->setFlat(true);
             enterActionState("have_range"); //@@@ JAS orig. KXMLGUIClient::StateNoReverse
         } else {
-            getTransport()->LoopButton()->setOn(false);
+            getTransport()->LoopButton()->setFlat(false);
             leaveActionState("have_range"); //@@@ JAS orig. KXMLGUIClient::StateReverse
         }
     } catch (QString s) {
@@ -5472,7 +5472,7 @@ RosegardenMainWindow::slotToggleSolo(bool value)
     RG_DEBUG << "RosegardenMainWindow::slotToggleSolo value = " << value << endl;
 
     m_doc->getComposition().setSolo(value);
-    getTransport()->SoloButton()->setOn(value);
+    getTransport()->SoloButton()->setFlat(value);
 
     m_doc->slotDocumentModified();
 
@@ -6272,7 +6272,7 @@ RosegardenMainWindow::slotAudioManager()
     if (m_audioManagerDialog) {
         m_audioManagerDialog->show();
         m_audioManagerDialog->raise();
-        m_audioManagerDialog->setActiveWindow();
+        m_audioManagerDialog->activateWindow();
         return ;
     }
 
@@ -6526,7 +6526,7 @@ RosegardenMainWindow::slotManageMIDIDevices()
     if (m_deviceManager) {
         m_deviceManager->show();
         m_deviceManager->raise();
-        m_deviceManager->setActiveWindow();
+        m_deviceManager->activateWindow();
         return;
     }
     if (!m_deviceManager) {
@@ -6577,7 +6577,7 @@ RosegardenMainWindow::slotManageSynths()
     if (m_synthManager) {
         m_synthManager->show();
         m_synthManager->raise();
-        m_synthManager->setActiveWindow();
+        m_synthManager->activateWindow();
         return ;
     }
 
@@ -6613,7 +6613,7 @@ RosegardenMainWindow::slotOpenAudioMixer()
     if (m_audioMixer) {
         m_audioMixer->show();
         m_audioMixer->raise();
-        m_audioMixer->setActiveWindow();
+        m_audioMixer->activateWindow();
         return ;
     }
 
@@ -6693,7 +6693,7 @@ RosegardenMainWindow::slotOpenMidiMixer()
     if (m_midiMixer) {
         m_midiMixer->show();
         m_midiMixer->raise();
-        m_midiMixer->setActiveWindow();
+        m_midiMixer->activateWindow();
         return ;
     }
 
@@ -6752,7 +6752,7 @@ RosegardenMainWindow::slotEditControlParameters(DeviceId device)
             if ((*i)->getDevice() == device) {
                 (*i)->show();
                 (*i)->raise();
-                (*i)->setActiveWindow();
+                (*i)->activateWindow();
                 return ;
             }
         }
@@ -6792,7 +6792,7 @@ RosegardenMainWindow::slotEditBanks(DeviceId device)
             m_bankEditor->setCurrentDevice(device);
         m_bankEditor->show();
         m_bankEditor->raise();
-        m_bankEditor->setActiveWindow();
+        m_bankEditor->activateWindow();
         return ;
     }
 
@@ -6825,7 +6825,7 @@ RosegardenMainWindow::slotManageTriggerSegments()
     if (m_triggerSegmentManager) {
         m_triggerSegmentManager->show();
         m_triggerSegmentManager->raise();
-        m_triggerSegmentManager->setActiveWindow();
+        m_triggerSegmentManager->activateWindow();
         return ;
     }
 
@@ -6854,7 +6854,7 @@ RosegardenMainWindow::slotEditMarkers()
     if (m_markerEditor) {
         m_markerEditor->show();
         m_markerEditor->raise();
-        m_markerEditor->setActiveWindow();
+        m_markerEditor->activateWindow();
         return ;
     }
 
@@ -6885,7 +6885,7 @@ RosegardenMainWindow::slotEditTempos(timeT t)
     if (m_tempoView) {
         m_tempoView->show();
         m_tempoView->raise();
-        m_tempoView->setActiveWindow();
+        m_tempoView->activateWindow();
         return ;
     }
 
@@ -6956,7 +6956,7 @@ RosegardenMainWindow::slotShowPluginDialog(QWidget *parent,
     if (m_pluginDialogs[key]) {
         m_pluginDialogs[key]->show();
         m_pluginDialogs[key]->raise();
-        m_pluginDialogs[key]->setActiveWindow();
+        m_pluginDialogs[key]->activateWindow();
         return ;
     }
 
@@ -7996,7 +7996,7 @@ RosegardenMainWindow::slotUpdateAutoSaveInterval(unsigned int interval)
 {
     RG_DEBUG << "RosegardenMainWindow::slotUpdateAutoSaveInterval - "
     << "changed interval to " << interval << endl;
-    m_autoSaveTimer->changeInterval(int(interval) * 1000);
+    m_autoSaveTimer->setInterval(int(interval) * 1000);
 }
 
 void
