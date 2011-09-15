@@ -45,9 +45,8 @@ RawNoteRuler::RawNoteRuler(RulerScale *rulerScale,
                            Segment *segment,
                            double xorigin,
                            int height,
-                           QWidget *parent,
-                           const char *name) :
-        QWidget(parent, name),
+                           QWidget *parent) :
+        QWidget(parent),
         m_xorigin(xorigin),
         m_height(height),
         m_currentXOffset(0),
@@ -55,7 +54,7 @@ RawNoteRuler::RawNoteRuler(RulerScale *rulerScale,
         m_segment(segment),
         m_rulerScale(rulerScale)
 {
-    setBackgroundColor(GUIPalette::getColour(GUIPalette::RawNoteRulerBackground));
+//    setBackgroundColor(GUIPalette::getColour(GUIPalette::RawNoteRulerBackground));
     this->setToolTip("");
     
     if (m_segment) m_segment->addObserver(this);
@@ -478,7 +477,7 @@ RawNoteRuler::paintEvent(QPaintEvent* e)
 
     QPainter paint(this);
     paint.setClipRegion(e->region());
-    paint.setClipRect(e->rect().normalize());
+    paint.setClipRect(e->rect().normalized());
 
     QRect clipRect = paint.clipRegion().boundingRect();
 

@@ -62,8 +62,7 @@ public:
                    RosegardenDocument *doc,
                    double xorigin = 0.0,
                    int height = 0,
-                   QWidget* parent = 0,
-                   const char *name = 0);
+                   QWidget* parent = 0);
 
     /**
      * Construct a ChordNameRuler that displays the chords in the
@@ -76,8 +75,7 @@ public:
                    std::vector<Segment *> &segments,
                    double xorigin = 0.0,
                    int height = 0,
-                   QWidget* parent = 0,
-                   const char *name = 0);
+                   QWidget* parent = 0);
 
     ~ChordNameRuler();
 

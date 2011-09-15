@@ -671,7 +671,7 @@ void ControlRuler::contextMenuEvent(QContextMenuEvent* e)
         createMenu();
 
     if (m_menu) {
-        RG_DEBUG << "ControlRuler::showMenu() - show menu with" << m_menu->count() << " items\n";
+//        RG_DEBUG << "ControlRuler::showMenu() - show menu with" << m_menu->count() << " items\n";
         m_lastEventPos = e->pos(); ///CJ OK ??? - inverseMapPoint(e->pos());
         m_menu->exec(QCursor::pos());
     } else

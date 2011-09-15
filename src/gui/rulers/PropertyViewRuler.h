@@ -51,8 +51,7 @@ public:
                       const PropertyName &property,
                       double xorigin = 0.0,
                       int height = 0,
-                      QWidget* parent = 0,
-                      const char *name = 0);
+                      QWidget* parent = 0);
 
     ~PropertyViewRuler();
 

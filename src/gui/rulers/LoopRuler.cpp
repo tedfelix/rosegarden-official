@@ -45,12 +45,13 @@ LoopRuler::LoopRuler(RosegardenDocument *doc,
                      int height,
                      double xorigin,
                      bool invert,
-                     QWidget *parent,
-                     const char *name) : 
-    QWidget(parent, name),
+                     bool isForMainWindow,
+                     QWidget *parent) :
+    QWidget(parent),
     m_height(height),
     m_xorigin(xorigin),
     m_invert(invert),
+    m_isForMainWindow(isForMainWindow),
     m_currentXOffset(0),
     m_width( -1),
     m_activeMousePress(false),
@@ -63,14 +64,6 @@ LoopRuler::LoopRuler(RosegardenDocument *doc,
     m_loopingMode(false),
     m_startLoop(0), m_endLoop(0)
 {
-    /*
-     * I need to understand if this ruler is being built for the main
-     * window (Track Editor) or for any of the segment editors. Apparently
-     * the name parameter is supplied (non-NULL) only for the main window.
-     * I can't find of any other (more decent) way to do this. Sorry.
-     */
-    m_mainWindow = (name != 0 && std::string(name).length() != 0);
-    
     //setAutoFillBackground(true);
     //setBackgroundColor(GUIPalette::getColour(GUIPalette::LoopRulerBackground));
 //    QString localStyle=("background: #787878; color: #FFFFFF;");
@@ -165,7 +158,7 @@ void LoopRuler::paintEvent(QPaintEvent* e)
         paint.scale(getHScaleFactor(), 1.0);
 
     paint.setClipRegion(e->region());
-    paint.setClipRect(e->rect().normalize());
+    paint.setClipRect(e->rect().normalized());
 
     // In a stylesheet world, we have to draw the ruler backgrounds.  Hopefully
     // this won't be too flickery.  (Seems OK, and best of all it actually
@@ -177,7 +170,7 @@ void LoopRuler::paintEvent(QPaintEvent* e)
     drawBarSections(&paint);
     drawLoopMarker(&paint);
     
-    if (m_mainWindow) {
+    if (m_isForMainWindow) {
         timeT tQM = m_doc->getQuickMarkerTime();
         if (tQM >= 0) {
             // draw quick marker
@@ -281,8 +274,7 @@ LoopRuler::mousePressEvent(QMouseEvent *mE)
 {
     RG_DEBUG << "LoopRuler::mousePressEvent: x = " << mE->x() << endl;
 
-    Qt::ButtonState bs = mE->state();
-    setLoopingMode((bs & Qt::ShiftModifier) != 0);
+    setLoopingMode((mE->modifiers() & Qt::ShiftModifier) != 0);
 
     if (mE->button() == Qt::LeftButton) {
         double x = mouseEventToSceneX(mE);
@@ -294,7 +286,7 @@ LoopRuler::mousePressEvent(QMouseEvent *mE)
             // used by the TrackEditor (instead of the MatrixEditor).
             if (m_grid == &m_defaultGrid) {
                 // If the ctrl key is pressed, enable snap to beat
-                if ((bs & Qt::ControlModifier) != 0)
+                if ((mE->modifiers() & Qt::ControlModifier) != 0)
                     m_defaultGrid.setSnapTime(SnapGrid::SnapToBeat);
                 else
                     m_defaultGrid.setSnapTime(SnapGrid::NoSnap);
@@ -376,9 +368,8 @@ LoopRuler::mouseMoveEvent(QMouseEvent *mE)
     // If we are still using the default grid, that means we are being
     // used by the TrackEditor (instead of the MatrixEditor).
     if (m_grid == &m_defaultGrid) {
-        Qt::ButtonState bs = mE->state();
         // If the ctrl key is pressed, enable snap to beat
-        if ((bs & Qt::ControlModifier) != 0)
+        if ((mE->modifiers() & Qt::ControlModifier) != 0)
             m_defaultGrid.setSnapTime(SnapGrid::SnapToBeat);
         else
             m_defaultGrid.setSnapTime(SnapGrid::NoSnap);

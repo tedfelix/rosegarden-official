@@ -47,9 +47,8 @@ public:
                   double xorigin,
                   int buttonHeight,
                   bool invert = false, // draw upside-down
-                  QWidget* parent = 0,
-                  const char* name = 0);
-//                  WFlags f=0);
+                  bool isForMainWindow = false,
+                  QWidget* parent = 0);
 
     void setSnapGrid(const SnapGrid *grid);
 
@@ -91,6 +90,7 @@ protected:
 private:
     //--------------- Data members ---------------------------------
     bool m_invert;
+    bool m_isForMainWindow;
     int m_loopRulerHeight;
     int m_currentXOffset;
 

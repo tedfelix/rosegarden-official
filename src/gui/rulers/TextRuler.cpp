@@ -40,9 +40,8 @@ namespace Rosegarden
 TextRuler::TextRuler(RulerScale *rulerScale,
                      Segment *segment,
                      int height,
-                     QWidget *parent,
-                     const char *name)
-        : QWidget(parent, name),
+                     QWidget *parent) :
+        QWidget(parent),
         m_height(height),
         m_currentXOffset(0),
         m_width( -1),
@@ -52,7 +51,7 @@ TextRuler::TextRuler(RulerScale *rulerScale,
         m_fontMetrics(m_font)
 {
     m_mySegmentMaybe = (m_segment->getComposition() != 0);
-    setBackgroundColor(GUIPalette::getColour(GUIPalette::TextRulerBackground));
+//    setBackgroundColor(GUIPalette::getColour(GUIPalette::TextRulerBackground));
 
     m_font.setPixelSize(10);
 }
@@ -76,13 +75,13 @@ TextRuler::slotScrollHoriz(int x)
         return ;
     }
 
-    if (dx > 0) { // moving right, so the existing stuff moves left
-        bitBlt(this, 0, 0, this, dx, 0, w - dx, h);
-        repaint(w - dx, 0, dx, h);
-    } else {      // moving left, so the existing stuff moves right
-        bitBlt(this, -dx, 0, this, 0, 0, w + dx, h);
-        repaint(0, 0, -dx, h);
-    }
+//    if (dx > 0) { // moving right, so the existing stuff moves left
+//        bitBlt(this, 0, 0, this, dx, 0, w - dx, h);
+//        repaint(w - dx, 0, dx, h);
+//    } else {      // moving left, so the existing stuff moves right
+//        bitBlt(this, -dx, 0, this, 0, 0, w + dx, h);
+//        repaint(0, 0, -dx, h);
+//    }
 }
 
 QSize
@@ -112,7 +111,7 @@ TextRuler::paintEvent(QPaintEvent* e)
     paint.setPen(GUIPalette::getColour(GUIPalette::TextRulerForeground));
 
     paint.setClipRegion(e->region());
-    paint.setClipRect(e->rect().normalize());
+    paint.setClipRect(e->rect().normalized());
 
     QRect clipRect = paint.clipRegion().boundingRect();
 

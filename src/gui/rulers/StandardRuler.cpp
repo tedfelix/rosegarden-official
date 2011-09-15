@@ -42,12 +42,11 @@ StandardRuler::StandardRuler(RosegardenDocument *doc,
                              double xorigin,
                              int barHeight,
                              bool invert,
-                             QWidget* parent,
-                             const char* name
-//                              WFlags f):
-		):
-        QWidget(parent, name),
+                             bool isForMainWindow,
+                             QWidget* parent) :
+        QWidget(parent),
         m_invert(invert),
+        m_isForMainWindow(isForMainWindow),
         m_loopRulerHeight(10),
         m_currentXOffset(0),
         m_doc(doc),
@@ -68,7 +67,7 @@ StandardRuler::StandardRuler(RosegardenDocument *doc,
     }
 
     m_loopRuler = new LoopRuler
-                  (m_doc, m_rulerScale, m_loopRulerHeight, xorigin, m_invert, this, name);
+                  (m_doc, m_rulerScale, m_loopRulerHeight, xorigin, m_invert, m_isForMainWindow, this);
     layout->addWidget(m_loopRuler);
 
     if (m_invert) {
@@ -147,7 +146,7 @@ void StandardRuler::connectRulerToDocPointer(RosegardenDocument *doc)
      m_loopRuler,
      SLOT(slotSetLoopMarker(timeT, timeT)));
 
-    m_loopRuler->setBackgroundColor(GUIPalette::getColour(GUIPalette::PointerRuler));
+//    m_loopRuler->setBackgroundColor(GUIPalette::getColour(GUIPalette::PointerRuler));
 }
 
 void StandardRuler::slotScrollHoriz(int x)

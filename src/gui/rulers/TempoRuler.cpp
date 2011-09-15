@@ -208,7 +208,7 @@ TempoRuler::mousePressEvent(QMouseEvent *e)
         m_dragStartTarget = tr.first ? tr.second : -1;
         m_dragOriginalTempo = m_dragStartTempo;
         m_dragOriginalTarget = m_dragStartTarget;
-        m_dragFine = ((e->state() & Qt::ShiftModifier) != 0);
+        m_dragFine = ((e->modifiers() & Qt::ShiftModifier) != 0);
 
         int px = m_rulerScale->getXForTime(tc.first) + m_currentXOffset + m_xorigin;
         if (x >= px && x < px + 5) {
@@ -312,7 +312,7 @@ TempoRuler::mouseReleaseEvent(QMouseEvent *e)
 void
 TempoRuler::mouseMoveEvent(QMouseEvent *e)
 {
-    bool shiftPressed = ((e->state() & Qt::ShiftModifier) != 0);
+    bool shiftPressed = ((e->modifiers() & Qt::ShiftModifier) != 0);
 
     if (m_dragVert) {
 
@@ -640,7 +640,9 @@ TempoRuler::paintEvent(QPaintEvent* e)
     // using Thorn, use a nice dark gray that just contrasts with the black
     // horizontal line here
     QColor kuller(0x40, 0x40, 0x40);
-    if (!m_Thorn) kuller = palette().background();
+// QT3: Piss on it.  Let someone who gives a crap about running without the
+// stylesheet figure out how to fix this next bit:
+//    if (!m_Thorn) kuller = palette().background();
     m_buffer.fill(kuller);
 
     QPainter paint(&m_buffer);
@@ -651,7 +653,7 @@ TempoRuler::paintEvent(QPaintEvent* e)
     paint.setClipRect(clipRect);
 
     if (m_xorigin > 0) {
-        paint.fillRect(0, 0, m_xorigin, height(), paletteBackgroundColor());
+        paint.fillRect(0, 0, m_xorigin, height(), kuller);
     }
 
     timeT from = m_rulerScale->getTimeForX

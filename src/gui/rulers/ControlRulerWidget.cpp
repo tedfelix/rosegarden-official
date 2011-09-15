@@ -266,8 +266,8 @@ ControlRulerWidget::addRuler(ControlRuler *controlruler, QString name)
     m_stackedWidget->addWidget(controlruler);
     // controller names (if translatable) come from AutoLoadStrings.cpp and are
     // in the QObject context/namespace/whatever
-    int index = m_tabBar->addTab(QObject::tr(name));
-    m_tabBar->setCurrentTab(index);
+    int index = m_tabBar->addTab(QObject::tr(name.toStdString().c_str()));
+    m_tabBar->setCurrentIndex(index);
     m_controlRulerList.push_back(controlruler);
     controlruler->slotSetPannedRect(m_pannedRect);
     slotSetToolName(m_currentToolName);

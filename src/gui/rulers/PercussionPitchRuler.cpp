@@ -55,8 +55,6 @@ PercussionPitchRuler::PercussionPitchRuler(QWidget *parent,
     //: text (pitch and intrument name) in the percussion ruler.
     m_width = m_fontMetrics->width(tr("  A#2   Acoustic Bass Drum  "));
 
-    setPaletteBackgroundColor(QColor(238, 238, 224));
-
     setMouseTracking(true);
 }
 
@@ -170,12 +168,10 @@ void PercussionPitchRuler::mouseMoveEvent(QMouseEvent* e)
 
 void PercussionPitchRuler::mousePressEvent(QMouseEvent *e)
 {
-    Qt::ButtonState bs = e->state();
-
-	if (e->button() == Qt::LeftButton) {
+    if (e->button() == Qt::LeftButton) {
 
         m_mouseDown = true;
-        m_selecting = (bs & Qt::ShiftModifier);
+        m_selecting = (e->modifiers() & Qt::ShiftModifier);
 
         if (m_selecting)
             emit keySelected(e->y(), false);
@@ -186,7 +182,7 @@ void PercussionPitchRuler::mousePressEvent(QMouseEvent *e)
 
 void PercussionPitchRuler::mouseReleaseEvent(QMouseEvent *e)
 {
-	if (e->button() == Qt::LeftButton) {
+    if (e->button() == Qt::LeftButton) {
         m_mouseDown = false;
         m_selecting = false;
         emit keyReleased(e->y(), false);

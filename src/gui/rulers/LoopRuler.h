@@ -54,8 +54,8 @@ public:
               int height = 0,
               double xorigin = 0.0,
               bool invert = false,
-              QWidget* parent = 0,
-              const char *name = 0);
+              bool isForMainWindow = false,
+              QWidget* parent = 0);
 
     ~LoopRuler();
 
@@ -120,6 +120,7 @@ protected:
     int  m_height;
     double m_xorigin;
     bool m_invert;
+    bool m_isForMainWindow;
     int  m_currentXOffset;
     int  m_width;
     bool m_activeMousePress;
@@ -128,7 +129,6 @@ protected:
     double m_lastMouseXPos;
 
     RosegardenDocument *m_doc;
-    bool m_mainWindow;
     RulerScale *m_rulerScale;
     SnapGrid   m_defaultGrid;
     SnapGrid   *m_loopGrid;

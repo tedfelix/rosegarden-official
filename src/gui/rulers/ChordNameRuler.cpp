@@ -56,9 +56,8 @@ ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
                                RosegardenDocument *doc,
                                double xorigin,
                                int height,
-                               QWidget *parent,
-                               const char *name) :
-        QWidget(parent, name),
+                               QWidget *parent) :
+        QWidget(parent),
         m_xorigin(xorigin),
         m_height(height),
         m_currentXOffset(0),
@@ -80,7 +79,7 @@ ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
     m_boldFont.setPixelSize(12);
     m_boldFont.setBold(true);
     m_fontMetrics = QFontMetrics(m_boldFont);
-    setBackgroundColor(GUIPalette::getColour(GUIPalette::ChordNameRulerBackground));
+//    setBackgroundColor(GUIPalette::getColour(GUIPalette::ChordNameRulerBackground));
 
     m_compositionRefreshStatusId = m_composition->getNewRefreshStatusId();
 
@@ -95,9 +94,8 @@ ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
                                std::vector<Segment *> &segments,
                                double xorigin,
                                int height,
-                               QWidget *parent,
-                               const char *name) :
-        QWidget(parent, name),
+                               QWidget *parent) :
+        QWidget(parent),
         m_xorigin(xorigin),
         m_height(height),
         m_currentXOffset(0),
@@ -119,7 +117,7 @@ ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
     m_boldFont.setPixelSize(12);
     m_boldFont.setBold(true);
     m_fontMetrics = QFontMetrics(m_boldFont);
-    setBackgroundColor(GUIPalette::getColour(GUIPalette::ChordNameRulerBackground));
+//    setBackgroundColor(GUIPalette::getColour(GUIPalette::ChordNameRulerBackground));
 
     m_compositionRefreshStatusId = m_composition->getNewRefreshStatusId();
 
@@ -427,7 +425,7 @@ ChordNameRuler::paintEvent(QPaintEvent* e)
     paint.setPen(GUIPalette::getColour(GUIPalette::ChordNameRulerForeground));
 
     paint.setClipRegion(e->region());
-    paint.setClipRect(e->rect().normalize());
+    paint.setClipRect(e->rect().normalized());
 
     QRect clipRect = paint.clipRegion().boundingRect();
 

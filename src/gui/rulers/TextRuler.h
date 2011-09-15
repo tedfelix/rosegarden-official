@@ -69,8 +69,7 @@ public:
     TextRuler(RulerScale *rulerScale,
               Segment *segment,
               int height = 0,
-              QWidget* parent = 0,
-              const char *name = 0);
+              QWidget* parent = 0);
 
     ~TextRuler();
 

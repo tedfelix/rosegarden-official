@@ -30,7 +30,7 @@ TempoColour::getColour(double tempo)
 {
     int h, s, v;
     QColor c = GUIPalette::getColour(GUIPalette::TempoBase);
-    c.hsv(&h, &s, &v);
+    c.getHsv(&h, &s, &v);
     v += 20;
     if (v > 255)
         v = 255;
@@ -42,7 +42,7 @@ TempoColour::getColour(double tempo)
     while (h >= 360)
         h -= 360;
 
-    return QColor(h, s, v, QColor::Hsv);
+    return QColor::fromHsv(h, s, v);
 }
 
 }

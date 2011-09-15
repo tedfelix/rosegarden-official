@@ -46,6 +46,7 @@
 #include <QAction>
 #include <QToolTip>
 #include <QMainWindow>
+#include <QRegion>
 
 namespace Rosegarden
 {
@@ -216,7 +217,18 @@ MarkerRuler::getClickPosition()
 Rosegarden::Marker*
 MarkerRuler::getMarkerAtClickPosition()
 {
-    QRect clipRect = visibleRect();
+    // NO_QT3 NOTE:
+    //
+    // Let's try this.  We used to use QRect visibleRect() to get a rect for
+    // further calculations.  Now the equivalent method returns a region instead
+    // of a rect.  A region could be a complex shape, but our old code was
+    // written with a rectangle in mind.  Let's try getting the boundingRect for
+    // the entire region, and using that for our subsequent calculations,
+    // instead of refactoring everything to take a region into account (which
+    // requires deeper understanding of what the old code did than I have at a
+    // glance).  This is a shot in the dark, and it's hard to predict how this
+    // is going to behave until the code is running and testable.
+    QRect clipRect = visibleRegion().boundingRect();
 
     int firstBar = m_rulerScale->getBarForX(clipRect.x() -
                                             m_currentXOffset -
@@ -279,7 +291,8 @@ MarkerRuler::paintEvent(QPaintEvent*)
     if (getHScaleFactor() != 1.0)
         painter.scale(getHScaleFactor(), 1.0);
 
-    QRect clipRect = visibleRect();
+    // See note elsewhere...
+    QRect clipRect = visibleRegion().boundingRect();
 
     // In a stylesheet world, we have to paint our our own background to rescue
     // it from the muddle of QWidget background style hacks
@@ -298,7 +311,7 @@ MarkerRuler::paintEvent(QPaintEvent*)
         firstBar = m_rulerScale->getFirstVisibleBar();
     }
 
-    painter.drawLine(m_currentXOffset, 0, static_cast<int>(visibleRect().width() / getHScaleFactor()), 0);
+    painter.drawLine(m_currentXOffset, 0, static_cast<int>(clipRect.width() / getHScaleFactor()), 0);
 
     float minimumWidth = 25.0;
     float testSize = ((float)(m_rulerScale->getBarPosition(firstBar + 1) -
@@ -341,15 +354,16 @@ MarkerRuler::paintEvent(QPaintEvent*)
             painter.drawLine(static_cast<int>(x), 0, static_cast<int>(x), m_barHeight);
 
             // disable worldXForm for text
-            QPoint textDrawPoint = painter.xForm(QPoint(static_cast<int>(x + 4), 12));
+            //QPoint textDrawPoint = painter.xForm(QPoint(static_cast<int>(x + 4), 12));
+            QPoint textDrawPoint = QPoint(static_cast<int>(x + 4), 12) * painter.combinedTransform();
 
-            bool enableXForm = painter.hasWorldXForm();
-            painter.setWorldXForm(false);
+            bool enableXForm = painter.worldMatrixEnabled();
+            painter.setWorldMatrixEnabled(false);
 
             if (i >= 0)
                 painter.drawText(textDrawPoint, QString("%1").arg(i + 1));
 
-            painter.setWorldXForm(enableXForm);
+            painter.setWorldMatrixEnabled(enableXForm);
         } else {
             const QPen normalPen = painter.pen();
             ;
@@ -385,16 +399,24 @@ MarkerRuler::paintEvent(QPaintEvent*)
                 painter.drawLine(int(x), 1, int(x), m_barHeight - 2);
                 painter.drawLine(int(x) + 1, 1, int(x) + 1, m_barHeight - 2);
 
-                QPoint textDrawPoint = painter.xForm
-                                       (QPoint(static_cast<int>(x + 3), m_barHeight - 4));
+                // NO_QT3 NOTE:  This next bit is a complete shot in the dark,
+                // and is likely to be wrong.
+
+                // was:
+                //
+                //QPoint textDrawPoint = painter.xForm
+                //                       (QPoint(static_cast<int>(x + 3), m_barHeight - 4));
+                //
+
+                QPoint textDrawPoint = QPoint(static_cast<int>(x + 3), m_barHeight - 4) * painter.combinedTransform();
 
                 // disable worldXForm for text
-                bool enableXForm = painter.hasWorldXForm();
-                painter.setWorldXForm(false);
+                bool enableXForm = painter.worldMatrixEnabled();
+                painter.setWorldMatrixEnabled(false);
                 
                 painter.drawText(textDrawPoint, name);
 
-                painter.setWorldXForm(enableXForm);
+                painter.setWorldMatrixEnabled(enableXForm);
             }
         }
     }
@@ -427,7 +449,7 @@ MarkerRuler::mousePressEvent(QMouseEvent *e)
         return;       
     }
             
-    bool shiftPressed = ((e->state() & Qt::ShiftModifier) != 0);
+    bool shiftPressed = ((e->modifiers() & Qt::ShiftModifier) != 0);
 
     Composition &comp = m_doc->getComposition();
     Composition::markercontainer markers = comp.getMarkers();

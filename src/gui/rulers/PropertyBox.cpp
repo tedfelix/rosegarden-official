@@ -32,9 +32,8 @@ namespace Rosegarden
 PropertyBox::PropertyBox(QString label,
                          int width,
                          int height,
-                         QWidget *parent,
-                         const char *name):
-        QWidget(parent, name),
+                         QWidget *parent) :
+        QWidget(parent),
         m_label(label),
         m_width(width),
         m_height(height)
@@ -61,7 +60,7 @@ PropertyBox::paintEvent(QPaintEvent *e)
     //paint.setBrush(GUIPalette::getColour(GUIPalette::MatrixElementBlock));
 
     paint.setClipRegion(e->region());
-    paint.setClipRect(e->rect().normalize());
+    paint.setClipRect(e->rect().normalized());
 
     paint.drawRect(2, 2, m_width - 3, m_height - 3);
     paint.drawText(10, 2 * m_height / 3, m_label);

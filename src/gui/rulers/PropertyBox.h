@@ -45,8 +45,7 @@ public:
     PropertyBox(QString label,
                int width,
                int height,
-               QWidget *parent=0,
-               const char *name = 0);
+               QWidget *parent=0);
 
     virtual QSize sizeHint() const;
     virtual QSize minimumSizeHint() const;

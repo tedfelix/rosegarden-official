@@ -46,9 +46,8 @@ PropertyViewRuler::PropertyViewRuler(RulerScale *rulerScale,
                                      const PropertyName &property,
                                      double xorigin,
                                      int height,
-                                     QWidget *parent,
-                                     const char *name) :
-        QWidget(parent, name),
+                                     QWidget *parent) :
+        QWidget(parent),
         m_propertyName(property),
         m_xorigin(xorigin),
         m_height(height),
@@ -61,7 +60,14 @@ PropertyViewRuler::PropertyViewRuler(RulerScale *rulerScale,
     m_boldFont.setBold(true);
     m_fontMetrics = QFontMetrics(m_boldFont);
 
-    setBackgroundColor(GUIPalette::getColour(GUIPalette::SegmentCanvas));
+    // QT3: What to do with this?  None of the previous attempts at rewriting
+    // palette-related code have ever worked properly, with or without a
+    // stylesheet in use, so it seems pointless to research this topic and come
+    // up with some code that probably won't work.  I'm just going to comment
+    // this out for now and see if anything looks screwed up once this branch is
+    // compiling.  It should be obvious enough if there's a problem, and if so,
+    // I'll deal with it then.
+//    setBackgroundColor(GUIPalette::getColour(GUIPalette::SegmentCanvas));
 
     QString tip = tr("%1 controller").arg(strtoqstr(property));
     this->setToolTip(tip);
@@ -85,13 +91,25 @@ PropertyViewRuler::slotScrollHoriz(int x)
         return ;
     }
 
-    if (dx > 0) { // moving right, so the existing stuff moves left
-        bitBlt(this, 0, 0, this, dx, 0, w - dx, h);
-        repaint(w - dx, 0, dx, h);
-    } else {      // moving left, so the existing stuff moves right
-        bitBlt(this, -dx, 0, this, 0, 0, w + dx, h);
-        repaint(0, 0, -dx, h);
-    }
+//###
+//
+// Someone commented out all the other bitBlt in all the other rulers during the
+// port, and we've gone this long without anybody noticing that stuff was
+// broken.
+//
+// Rewriting this looks to be a pretty involved PITA, and since everything else
+// was already broken, I decided to just break this one too, and move on.
+//
+// Let's see what it looks like and go from there.
+//
+//
+//    if (dx > 0) { // moving right, so the existing stuff moves left
+//        bitBlt(this, 0, 0, this, dx, 0, w - dx, h);
+//        repaint(w - dx, 0, dx, h);
+//    } else {      // moving left, so the existing stuff moves right
+//        bitBlt(this, -dx, 0, this, 0, 0, w + dx, h);
+//        repaint(0, 0, -dx, h);
+//    }
 }
 
 QSize
@@ -125,7 +143,7 @@ PropertyViewRuler::paintEvent(QPaintEvent* e)
 
     paint.setPen(GUIPalette::getColour(GUIPalette::MatrixElementBorder));
 
-    QRect clipRect = e->rect().normalize();
+    QRect clipRect = e->rect().normalized();
 
     timeT from = m_rulerScale->getTimeForX
                  (clipRect.x() - m_currentXOffset - m_xorigin);
