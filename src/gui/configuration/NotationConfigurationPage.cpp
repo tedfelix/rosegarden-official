@@ -621,13 +621,13 @@ NotationConfigurationPage::slotFontComboChanged(int index)
         NoteFont *noteFont = NoteFontFactory::getFont
                              (fontStr, NoteFontFactory::getDefaultSize(fontStr));
         const NoteFontMap &map(noteFont->getNoteFontMap());
-        m_fontOriginLabel->setText(tr(map.getOrigin()));
-        m_fontCopyrightLabel->setText(tr(map.getCopyright()));
-        m_fontMappedByLabel->setText(tr(map.getMappedBy()));
+        m_fontOriginLabel->setText(tr(map.getOrigin().toStdString().c_str()));
+        m_fontCopyrightLabel->setText(tr(map.getCopyright().toStdString().c_str()));
+        m_fontMappedByLabel->setText(tr(map.getMappedBy().toStdString().c_str()));
         if (map.isSmooth()) {
-            m_fontTypeLabel->setText(tr("%1 (smooth)").arg(tr(map.getType())));
+            m_fontTypeLabel->setText(tr("%1 (smooth)").arg(tr(map.getType().toStdString().c_str())));
         } else {
-            m_fontTypeLabel->setText(tr("%1 (jaggy)").arg(tr(map.getType())));
+            m_fontTypeLabel->setText(tr("%1 (jaggy)").arg(tr(map.getType().toStdString().c_str())));
         }
         if (m_viewButton) {
             m_viewButton->setEnabled(map.getSystemFontNames().count() > 0);

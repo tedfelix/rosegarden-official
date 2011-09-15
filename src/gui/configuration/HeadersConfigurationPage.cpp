@@ -86,13 +86,9 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
             // get the std::string from metadata
             header = metadata.get<String>(property);
 
-            // use that variable in a QObject::tr().arg() call, which will
-            // return the English in a QString
-            QString text(QObject::tr("%1").arg(strtoqstr(header)));
-
-            // now we can QObject::tr() the QString in step 3 of this convoluted
-            // process
-            headerStr = QObject::tr(text);
+            //@@@ dtb: tr() only works with char* now, so I'm going to try
+            // using header directly instead of a QString version of header.
+            headerStr = QObject::tr(header.c_str());
         }
     }
 

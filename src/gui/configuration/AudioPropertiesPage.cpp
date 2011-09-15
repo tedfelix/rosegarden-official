@@ -175,7 +175,10 @@ AudioPropertiesPage::slotFileDialog()
 //            SLOT(slotDirectoryDialogClosed()));
 
     if (fileDialog->exec() == QDialog::Accepted) {
-        m_path->setText(fileDialog->selectedFile());
+        QStringList selectedFiles = fileDialog->selectedFiles();
+        if (!selectedFiles.isEmpty()) {
+            m_path->setText(selectedFiles[0]);
+        }
         calculateStats();
     }
     delete fileDialog;
