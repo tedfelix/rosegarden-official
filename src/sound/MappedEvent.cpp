@@ -273,7 +273,7 @@ std::string DataBlockFile::getData()
 void DataBlockFile::addDataByte(MidiByte byte)
 {
     prepareToWrite();
-    m_file.putch(byte);
+    m_file.putChar(byte);
 }
 
 void DataBlockFile::addDataString(const std::string& s)

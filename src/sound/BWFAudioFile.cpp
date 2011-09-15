@@ -61,7 +61,7 @@ BWFAudioFile::open()
     if (m_inFile && (*m_inFile))
         return true;
 
-    m_inFile = new std::ifstream(m_fileName,
+    m_inFile = new std::ifstream(m_fileName.toLocal8Bit(),
                                  std::ios::in | std::ios::binary);
 
     if (!(*m_inFile)) {
@@ -97,7 +97,7 @@ BWFAudioFile::write()
     }
 
     // open for writing
-    m_outFile = new std::ofstream(m_fileName,
+    m_outFile = new std::ofstream(m_fileName.toLocal8Bit(),
                                   std::ios::out | std::ios::binary);
 
     if (!(*m_outFile))

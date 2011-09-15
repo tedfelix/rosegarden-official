@@ -62,10 +62,10 @@ static inline void releaseLock(const char *file, int line)
 QDataStream& operator>>(QDataStream& s, MappedObjectIdList& v)
 {
     v.clear();
-    Q_UINT32 c;
+    quint32 c;
     s >> c;
     v.resize(c);
-    for (Q_UINT32 i = 0; i < c; ++i) {
+    for (quint32 i = 0; i < c; ++i) {
         MappedObjectId t;
         s >> t;
         v[i] = t;
@@ -75,7 +75,7 @@ QDataStream& operator>>(QDataStream& s, MappedObjectIdList& v)
 
 QDataStream& operator<<(QDataStream& s, const MappedObjectIdList& v)
 {
-    s << (Q_UINT32)v.size();
+    s << (quint32)v.size();
     MappedObjectIdList::const_iterator it = v.begin();
     for ( ; it != v.end(); ++it )
         s << *it;
@@ -85,10 +85,10 @@ QDataStream& operator<<(QDataStream& s, const MappedObjectIdList& v)
 QDataStream& operator>>(QDataStream& s, MappedObjectPropertyList& v)
 {
     v.clear();
-    Q_UINT32 c;
+    quint32 c;
     s >> c;
     v.resize(c);
-    for (Q_UINT32 i = 0; i < c; ++i) {
+    for (quint32 i = 0; i < c; ++i) {
         MappedObjectProperty t;
         s >> t;
         v[i] = t;
@@ -98,7 +98,7 @@ QDataStream& operator>>(QDataStream& s, MappedObjectPropertyList& v)
 
 QDataStream& operator<<(QDataStream& s, const MappedObjectPropertyList& v)
 {
-    s << (Q_UINT32)v.size();
+    s << (quint32)v.size();
     MappedObjectPropertyList::const_iterator it = v.begin();
     for ( ; it != v.end(); ++it )
         s << *it;
@@ -108,10 +108,10 @@ QDataStream& operator<<(QDataStream& s, const MappedObjectPropertyList& v)
 QDataStream& operator>>(QDataStream& s, MappedObjectValueList& v)
 {
     v.clear();
-    Q_UINT32 c;
+    quint32 c;
     s >> c;
     v.resize(c);
-    for (Q_UINT32 i = 0; i < c; ++i) {
+    for (quint32 i = 0; i < c; ++i) {
         MappedObjectValue t;
         s >> t;
         v[i] = t;
@@ -121,7 +121,7 @@ QDataStream& operator>>(QDataStream& s, MappedObjectValueList& v)
 
 QDataStream& operator<<(QDataStream& s, const MappedObjectValueList& v)
 {
-    s << (Q_UINT32)v.size();
+    s << (quint32)v.size();
     MappedObjectValueList::const_iterator it = v.begin();
     for ( ; it != v.end(); ++it )
         s << *it;

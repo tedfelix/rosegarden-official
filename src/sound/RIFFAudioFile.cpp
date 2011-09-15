@@ -560,7 +560,7 @@ AudioFileType
 RIFFAudioFile::identifySubType(const QString &filename)
 {
     std::ifstream *testFile =
-        new std::ifstream(filename, std::ios::in | std::ios::binary);
+        new std::ifstream(filename.toLocal8Bit(), std::ios::in | std::ios::binary);
 
     if (!(*testFile))
         return UNKNOWN;

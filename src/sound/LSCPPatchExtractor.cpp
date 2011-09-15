@@ -113,7 +113,7 @@ LSCPPatchExtractor::extractContent(const QString& fileName)
                 temp = temp.replace("x20"," ");
                 temp = temp.remove(".gig");
 
-                currentDevice.bankName = temp.latin1();
+                currentDevice.bankName = temp.toStdString();
                 currentDevice.bankNumber = splitLine.at(positionOfBankElement).toInt();
                 currentDevice.programNumber = splitLine.at(positionOfProgramElement).toInt();
 
@@ -125,7 +125,7 @@ LSCPPatchExtractor::extractContent(const QString& fileName)
                     quotedName.contains("PERSISTENT")) {
                     currentDevice.programName = "Unnamed instrument";
                 } else {
-                    currentDevice.programName = quotedName.latin1();
+                    currentDevice.programName = quotedName.toStdString();
                 }
 
                 device.push_back(currentDevice);

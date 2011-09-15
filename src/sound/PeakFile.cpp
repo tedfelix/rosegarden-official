@@ -77,7 +77,7 @@ PeakFile::open()
 
     // Open
     //
-    m_inFile = new std::ifstream(m_fileName,
+    m_inFile = new std::ifstream(m_fileName.toLocal8Bit(),
                                  std::ios::in | std::ios::binary);
     // Check we're open
     //
@@ -210,7 +210,7 @@ PeakFile::write(unsigned short updatePercentage)
     }
 
     // create and test that we've made it
-    m_outFile = new std::ofstream(m_fileName,
+    m_outFile = new std::ofstream(m_fileName.toLocal8Bit(),
                                   std::ios::out | std::ios::binary);
     if (!(*m_outFile))
         return false;

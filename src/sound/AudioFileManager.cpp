@@ -1017,8 +1017,9 @@ AudioFileManager::drawPreview(AudioFileId id,
 
     QPainter painter(pixmap);
     pixmap->fill(Qt::white);
-    painter.setPen(qApp->palette().color(QPalette::Active,
-                                         QColorGroup::Mid));
+    painter.setPen(Qt::gray);
+//    painter.setPen(qApp->palette().color(QPalette::Active,
+//                                         QColorGroup::Mid));
 
     if (values.size() == 0) {
 #ifdef DEBUG_AUDIOFILEMANAGER
@@ -1096,8 +1097,9 @@ AudioFileManager::drawHighlightedPreview(AudioFileId id,
                          (endTime - startTime)));
 
     QPainter painter(pixmap);
-    pixmap->fill(qApp->palette().color(QPalette::Active,
-                                       QColorGroup::Base));
+    pixmap->fill(Qt::white);
+//    pixmap->fill(qApp->palette().color(QPalette::Active,
+//                                       QColorGroup::Base));
 
     float yStep = pixmap->height() / 2;
     int channels = audioFile->getChannels();
@@ -1120,12 +1122,13 @@ AudioFileManager::drawHighlightedPreview(AudioFileId id,
             ch2Value = values[i * channels + 1];
         }
 
-        if (i < startWidth || i > endWidth)
-            painter.setPen(qApp->palette().color(QPalette::Active,
-                                                 QColorGroup::Mid));
+        if (i < startWidth || i > endWidth) painter.setPen(Qt::gray);
+//            painter.setPen(qApp->palette().color(QPalette::Active,
+//                                                 QColorGroup::Mid));
         else
-            painter.setPen(qApp->palette().color(QPalette::Active,
-                                                 QColorGroup::Dark));
+            painter.setPen(Qt::black);
+//            painter.setPen(qApp->palette().color(QPalette::Active,
+//                                                 QColorGroup::Dark));
 
         painter.drawLine(i, static_cast<int>(yStep - ch1Value * yStep),
                          i, static_cast<int>(yStep + ch2Value * yStep));

@@ -325,7 +325,7 @@ MidiFile::open()
 #endif
 
     // Open the file
-    ifstream *midiFile = new ifstream(m_fileName, ios::in | ios::binary);
+    ifstream *midiFile = new ifstream(m_fileName.toLocal8Bit(), ios::in | ios::binary);
 
     try {
         if (*midiFile) {
@@ -2183,7 +2183,7 @@ MidiFile::write()
     bool retOK = true;
 
     std::ofstream *midiFile =
-        new std::ofstream(m_fileName, ios::out | ios::binary);
+        new std::ofstream(m_fileName.toLocal8Bit(), ios::out | ios::binary);
 
 
     if (!(*midiFile)) {

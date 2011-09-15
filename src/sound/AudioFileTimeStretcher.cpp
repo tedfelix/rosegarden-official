@@ -67,7 +67,7 @@ AudioFileTimeStretcher::getStretchedAudioFile(AudioFileId source,
     std::cerr << "AudioFileTimeStretcher: got derived file id " << file->getId()
               << ", name " << file->getFilename() << std::endl;
 
-    std::ifstream streamIn(sourceFile->getFilename(),
+    std::ifstream streamIn(sourceFile->getFilename().toLocal8Bit(),
 			   std::ios::in | std::ios::binary);
     if (!streamIn) {
 	throw SoundFile::BadSoundFileException

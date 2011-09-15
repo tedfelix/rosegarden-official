@@ -899,7 +899,7 @@ AlsaDriver::renameDevice(DeviceId id, QString name)
     snd_seq_get_port_info(m_midiHandle, i->second, pinfo);
 
     QString oldName = snd_seq_port_info_get_name(pinfo);
-    int sep = oldName.find(" - ");
+    int sep = oldName.indexOf(" - ");
 
     QString newName;
     if (sep < 0) {
@@ -1170,19 +1170,19 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection, bool re
 
     if (idealConnection != "") {
 
-        int colon = idealConnection.find(":");
+        int colon = idealConnection.indexOf(":");
         if (colon >= 0) {
             client = idealConnection.left(colon).toInt();
         }
 
         if (client > 0) {
             QString remainder = idealConnection.mid(colon + 1);
-            int space = remainder.find(" ");
+            int space = remainder.indexOf(" ");
             if (space >= 0) portNo = remainder.left(space).toInt();
         }
     
-        int firstSpace = idealConnection.find(" ");
-        int endOfText = idealConnection.find(QRegExp("[^\\w ]"), firstSpace);
+        int firstSpace = idealConnection.indexOf(" ");
+        int endOfText = idealConnection.indexOf(QRegExp("[^\\w ]"), firstSpace);
 
         if (endOfText < 2) {
             text = idealConnection.mid(firstSpace + 1);

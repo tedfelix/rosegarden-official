@@ -82,7 +82,7 @@ std::vector<Tuning*> *Tuning::getTunings() {
     IntervalList *intervals = new IntervalList;
     SpellingList *spellings = new SpellingList;
     
-    if (infile.open(IO_ReadOnly) ) {
+    if (infile.open(QIODevice::ReadOnly) ) {
         QXmlStreamReader stream(&infile);
         QString tuningName, intervalRatio;
         
@@ -247,11 +247,11 @@ void Tuning::parseSpelling(QString note,
     qDebug() << "Accidental: " << acc << "\tPitch Class: " << note;
 #   endif
     if (acc.toInt() != 0) {
-        const int acc_i = atoi(acc.latin1());
+        const int acc_i = atoi(acc.toStdString().c_str());
         note.append(accMap[acc_i]->c_str());
     }
     //insert into spelling list
-    spellings->insert(Spelling(note.ascii(), intervals->size()-1));
+    spellings->insert(Spelling(note.toStdString().c_str(), intervals->size()-1));
 #   if (TUNING_DEBUG > 1)
     qDebug() << "Translated variation:" << note << "\n";
 #   endif                               
@@ -263,12 +263,12 @@ double Tuning::scalaIntervalToCents(const QString & interval,
     double cents = -1.0;
     bool ok;
     QString intervalString(interval.trimmed());
-    int dotPos = intervalString.find(QChar('.'));                
+    int dotPos = intervalString.indexOf(QChar('.'));                
     if (dotPos == -1) { // interval is a ratio          
 #       if (TUNING_DEBUG > 1)
         qDebug() << "Interval is a ratio";
 #       endif
-        int slashPos = intervalString.find(QChar('/'));
+        int slashPos = intervalString.indexOf(QChar('/'));
         double ratio = 1.0;
         if (slashPos == -1) { // interval is integer ratio
 #           if (TUNING_DEBUG > 1)
@@ -344,7 +344,7 @@ void Tuning::saveTuning(const QString &tuningName,
 #   if (TUNING_DEBUG > 1)
     qDebug() << "End of tuning" << tuningName;
 #   endif
-    std::string name = tuningName.ascii();
+    std::string name = tuningName.toStdString().c_str();
     Tuning *newTuning = new Tuning(name, intervals, spellings);
     m_tunings.push_back(newTuning);
 #   if (TUNING_DEBUG)
@@ -462,7 +462,7 @@ std::string Tuning::getSpelling(Rosegarden::Pitch &pitch) const {
         spelling.append(acc.c_str());
     }
     
-    return spelling.ascii();
+    return spelling.toStdString().c_str();
 }
 
 
