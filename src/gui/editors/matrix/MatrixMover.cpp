@@ -35,6 +35,8 @@
 #include "MatrixViewSegment.h"
 #include "misc/Debug.h"
 
+#include <Qt>
+
 
 namespace Rosegarden
 {
@@ -400,7 +402,7 @@ void MatrixMover::ready()
     connect(this, SIGNAL(hoveredOverNoteChanged(int, bool, timeT)),
             m_widget, SLOT(slotHoveredOverNoteChanged(int, bool, timeT)));
 
-    m_widget->setCanvasCursor(Qt::sizeAllCursor);
+    m_widget->setCanvasCursor(Qt::SizeAllCursor);
     setBasicContextHelp();
 }
 

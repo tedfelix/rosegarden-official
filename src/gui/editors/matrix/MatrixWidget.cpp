@@ -998,7 +998,7 @@ MatrixWidget::slotAddControlRuler(QAction *action)
 
         // strings extracted from data files must be QObject::tr()
         QString itemStr = QObject::tr("%1 Controller %2 %3")
-                                     .arg(QObject::tr(strtoqstr(it->getName())))
+                                     .arg(QObject::tr(it->getName().c_str()))
                                      .arg(it->getControllerValue())
                                      .arg(hexValue);
         

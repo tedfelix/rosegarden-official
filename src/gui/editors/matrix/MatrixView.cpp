@@ -342,7 +342,7 @@ MatrixView::slotUpdateWindowTitle(bool m)
                       .arg(view));
     }
 
-    setIcon(IconLoader().loadPixmap("window-matrix"));
+    setWindowIcon(IconLoader().loadPixmap("window-matrix"));
 }
 
 void
@@ -449,7 +449,7 @@ MatrixView::setupActions()
 
             // strings extracted from data files must be QObject::tr()
             itemStr = QObject::tr("%1 Controller %2 %3")
-                .arg(QObject::tr(strtoqstr(it->getName())))
+                .arg(QObject::tr(it->getName().c_str()))
                 .arg(it->getControllerValue())
                 .arg(hexValue);
 
@@ -1354,10 +1354,19 @@ void MatrixView::slotTranspose()
     int dialogDefault = settings.value("lasttransposition", 0).toInt() ;
 
     bool ok = false;
-    int semitones = QInputDialog::getInteger
-            (tr("Transpose"),
-             tr("By number of semitones: "),
-                dialogDefault, -127, 127, 1, &ok, this);
+    int min = -127;
+    int max = 127;
+    int step = 1;
+    int semitones = QInputDialog::getInt(
+            this,
+            tr("Transpose"),
+            tr("By number of semitones: "),
+            dialogDefault,
+            min,
+            max,
+            step,
+            &ok);
+
     if (!ok || semitones == 0) return;
 
     settings.setValue("lasttransposition", semitones);

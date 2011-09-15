@@ -36,6 +36,8 @@
 
 #include "misc/Debug.h"
 
+#include <Qt>
+
 namespace Rosegarden
 {
 
@@ -301,7 +303,7 @@ void MatrixPainter::ready()
 //    connect(m_parentView->getCanvasView(), SIGNAL(contentsMoving (int, int)),
 //            this, SLOT(slotMatrixScrolled(int, int)));
 
-    if (m_widget) m_widget->setCanvasCursor(Qt::crossCursor);
+    if (m_widget) m_widget->setCanvasCursor(Qt::CrossCursor);
 
     setBasicContextHelp();
 }

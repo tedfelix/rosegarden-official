@@ -241,7 +241,7 @@ void
 MatrixVelocity::ready()
 {
     setBasicContextHelp();
-    m_widget->setCanvasCursor(Qt::sizeVerCursor);
+    m_widget->setCanvasCursor(Qt::SizeVerCursor);
 }
 
 void

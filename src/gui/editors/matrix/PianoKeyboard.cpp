@@ -255,7 +255,7 @@ void PianoKeyboard::mouseMoveEvent(QMouseEvent* e)
     //
     // RWB (20040220)
     //
-    if (e->state() & Qt::LeftButton) {
+    if (e->buttons() & Qt::LeftButton) {
         if (m_selecting)
             emit keySelected(e->y(), true);
         else
@@ -269,11 +269,9 @@ void PianoKeyboard::mouseMoveEvent(QMouseEvent* e)
 
 void PianoKeyboard::mousePressEvent(QMouseEvent *e)
 {
-    Qt::ButtonState bs = e->state();
-
     if (e->button() == Qt::LeftButton) {
         m_mouseDown = true;
-        m_selecting = (bs & Qt::ShiftModifier);
+        m_selecting = (e->modifiers() & Qt::ShiftModifier);
         m_lastKeyPressed = e->y();
 
         if (m_selecting)

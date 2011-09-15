@@ -27,6 +27,8 @@
 #include "document/CommandHistory.h"
 #include "misc/Debug.h"
 
+#include <Qt>
+
 namespace Rosegarden
 {
 
@@ -54,7 +56,7 @@ void MatrixEraser::handleLeftButtonPress(const MatrixMouseEvent *e)
 
 void MatrixEraser::ready()
 {
-    if (m_widget) m_widget->setCanvasCursor(Qt::pointingHandCursor);
+    if (m_widget) m_widget->setCanvasCursor(Qt::PointingHandCursor);
     setBasicContextHelp();
 }
 

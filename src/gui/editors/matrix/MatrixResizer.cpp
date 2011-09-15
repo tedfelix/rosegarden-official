@@ -33,6 +33,8 @@
 #include "MatrixMouseEvent.h"
 #include "misc/Debug.h"
 
+#include <Qt>
+
 
 namespace Rosegarden
 {
@@ -242,7 +244,7 @@ void MatrixResizer::ready()
 {
 //    connect(m_parentView->getCanvasView(), SIGNAL(contentsMoving (int, int)),
 //            this, SLOT(slotMatrixScrolled(int, int)));
-    m_widget->setCanvasCursor(Qt::sizeHorCursor);
+    m_widget->setCanvasCursor(Qt::SizeHorCursor);
     setBasicContextHelp();
 }
 

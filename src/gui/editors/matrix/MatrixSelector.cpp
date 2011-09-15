@@ -393,7 +393,7 @@ MatrixSelector::handleMouseRelease(const MatrixMouseEvent *e)
 void
 MatrixSelector::ready()
 {
-    if (m_widget) m_widget->setCanvasCursor(Qt::arrowCursor);
+    if (m_widget) m_widget->setCanvasCursor(Qt::ArrowCursor);
 
 
 /*!!!
