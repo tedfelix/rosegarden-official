@@ -112,9 +112,8 @@ using namespace BaseProperties;
 RosegardenDocument::RosegardenDocument(QWidget *parent,
                                    AudioPluginManager *pluginManager,
                                    bool skipAutoload,
-                                   bool clearCommandHistory,
-                                   const char *name)
-        : QObject(parent, name),
+                                   bool clearCommandHistory)
+        : QObject(parent),
         m_modified(false),
         m_autoSaved(false),
         m_audioPreviewThread(&m_audioFileManager),
@@ -179,7 +178,7 @@ void RosegardenDocument::attachView(RosegardenMainViewWidget *view)
 
 void RosegardenDocument::detachView(RosegardenMainViewWidget *view)
 {
-    m_viewList.remove(view);
+    m_viewList.removeOne(view);
 }
 
 void RosegardenDocument::attachEditView(EditViewBase *view)
@@ -191,7 +190,7 @@ void RosegardenDocument::detachEditView(EditViewBase *view)
 {
     // auto-deletion is disabled, as
     // the editview detaches itself when being deleted
-    m_editViewList.remove(view);
+    m_editViewList.removeOne(view);
 }
 
 void RosegardenDocument::deleteEditViews()
@@ -291,7 +290,7 @@ QString RosegardenDocument::getAutoSaveFileName()
 {
     QString filename = getAbsFilePath();
     if (filename.isEmpty())
-        filename = QDir::currentDirPath() + "/" + getTitle();
+        filename = QDir::currentPath() + "/" + getTitle();
 
     //!!! NB this should _not_ use the new TempDirectory class -- that
     //!!! is for files that are more temporary than this.  Its files
@@ -605,7 +604,7 @@ bool RosegardenDocument::openDocument(const QString& filename,
         CurrentProgressDialog::set(progressDlg);
     }
 
-    setAbsFilePath(fileInfo.absFilePath());
+    setAbsFilePath(fileInfo.absoluteFilePath());
 
     QString errMsg;
     QString fileContents;
@@ -1237,7 +1236,8 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
 
     QString outText;
     QTextStream outStream(&outText, QIODevice::WriteOnly);
-    outStream.setEncoding(QTextStream::UnicodeUTF8);
+//    outStream.setEncoding(QTextStream::UnicodeUTF8); qt3
+    outStream.setCodec("UTF-8");
 
     // output XML header
     //
@@ -1423,7 +1423,8 @@ bool RosegardenDocument::exportStudio(const QString& filename,
 
     QString outText;
     QTextStream outStream(&outText, QIODevice::WriteOnly);
-    outStream.setEncoding(QTextStream::UnicodeUTF8);
+//    outStream.setEncoding(QTextStream::UnicodeUTF8); qt3
+    outStream.setCodec("UTF-8");
 
     // output XML header
     //
@@ -1441,7 +1442,7 @@ bool RosegardenDocument::exportStudio(const QString& filename,
 
     bool okay = GzipFile::writeToFile(filename, outText);
     if (!okay) {
-        errMsg = tr(QString("Could not open file '%1' for writing").arg(filename));
+        errMsg = tr("Could not open file '%1' for writing").arg(filename);
         return false;
     }
 
@@ -2029,6 +2030,23 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
             case MappedEvent::SystemUpdateInstruments:
                 break;
 
+
+            // list everything in the enum to avoid the annoying compiler
+            // warning
+            case MappedEvent::InvalidMappedEvent:
+            case MappedEvent::SystemJackTransport:
+            case MappedEvent::SystemMMCTransport:
+            case MappedEvent::SystemMIDIClock:
+            case MappedEvent::SystemMetronomeDevice:
+            case MappedEvent::SystemAudioPortCounts:
+            case MappedEvent::SystemAudioPorts:
+            case MappedEvent::SystemFailure:
+            case MappedEvent::TimeSignature:
+            case MappedEvent::Tempo:
+            case MappedEvent::Panic:
+            case MappedEvent::SystemMTCTransport:
+            case MappedEvent::SystemMIDISyncAuto:
+            case MappedEvent::SystemAudioFileFormat:
             default:
                 RG_DEBUG << "RosegardenDocument::insertRecordedMidi() - "
                 << "GOT UNSUPPORTED MAPPED EVENT"

@@ -143,7 +143,7 @@ bool ConfigurationXmlSubHandler::characters(const QString& chars)
     
     if (m_propertyType == "RealTime") {
         Rosegarden::RealTime rt;
-        int sepIdx = ch.find(',');
+        int sepIdx = ch.indexOf(',');
         
         rt.sec = ch.left(sepIdx).toInt();
         rt.nsec = ch.mid(sepIdx + 1).toInt();
@@ -595,7 +595,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         QString recordPlStr = atts.value("recordtracks");
         if (!recordPlStr.isEmpty()) {
             RG_DEBUG << "Record tracks: " << recordPlStr << endl;
-            QStringList recordList = QStringList::split(',', recordPlStr);
+            QStringList recordList = recordPlStr.split(',');
             for (QStringList::iterator i = recordList.begin();
                     i != recordList.end(); ++i) {
                 RG_DEBUG << "Record track: " << (*i).toInt() << endl;
@@ -1030,7 +1030,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             // same place as the .rg file.
 
             QString docPath = m_doc->getAbsFilePath();
-            QString dirPath = QFileInfo(docPath).dirPath();
+            QString dirPath = QFileInfo(docPath).path();
             getAudioFileManager().setAudioPath(dirPath);
 
             RG_DEBUG << "Attempting to find audio file " << file
@@ -1114,7 +1114,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         if (!search.startsWith("/") && !search.startsWith("~")) {
             QString docPath = m_doc->getAbsFilePath();
-            QString dirPath = QFileInfo(docPath).dirPath();
+            QString dirPath = QFileInfo(docPath).path();
             if (QFileInfo(dirPath).exists()) {
                 search = dirPath + "/" + search;
             }

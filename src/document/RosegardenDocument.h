@@ -94,8 +94,7 @@ public:
     RosegardenDocument(QWidget *parent,
                      AudioPluginManager *audioPluginManager = 0,
                      bool skipAutoload = false,
-                     bool clearCommandHistory = true,
-                     const char *name = 0);
+                     bool clearCommandHistory = true);
 
 private:
     RosegardenDocument(RosegardenDocument *doc);
