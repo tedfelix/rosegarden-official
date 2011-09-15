@@ -33,7 +33,7 @@ class ProgressReporter : public QObject
 {
     Q_OBJECT
 public:
-    ProgressReporter(QObject* parent, const char* name = 0);
+    ProgressReporter(QObject* parent);
 
     /*
       We have to use these accessors rather than throwing directly

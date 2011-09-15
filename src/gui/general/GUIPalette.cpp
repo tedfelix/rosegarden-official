@@ -70,7 +70,7 @@ QColor GUIPalette::getColour(const char* const colourName)
 Colour GUIPalette::convertColour(const QColor &input)
 {
     int r, g, b;
-    input.rgb(&r, &g, &b);
+    input.getRgb(&r, &g, &b);
     return Colour(r, g, b);
 }
 
@@ -211,15 +211,15 @@ GUIPalette::GUIPalette()
     m_defaultsMap[QuickMarker] = QColor(Qt::red);
 
     //    m_defaultsMap[MuteTrackLED] = QColor(218, 190, 230, QColor::Hsv);
-    m_defaultsMap[MuteTrackLED] = QColor(211, 194, 238, QColor::Hsv);
-    m_defaultsMap[RecordMIDITrackLED] = QColor(45, 250, 225, QColor::Hsv);
-    m_defaultsMap[RecordAudioTrackLED] = QColor(0, 250, 225, QColor::Hsv);
+    m_defaultsMap[MuteTrackLED] = QColor::fromHsv(211, 194, 238);
+    m_defaultsMap[RecordMIDITrackLED] = QColor::fromHsv(45, 250, 225);
+    m_defaultsMap[RecordAudioTrackLED] = QColor::fromHsv(0, 250, 225);
     m_defaultsMap[RecordSoftSynthTrackLED] = QColor(255, 120, 0);
 
-    m_defaultsMap[PlaybackFaderOutline] = QColor(211, 194, 238, QColor::Hsv);
-    m_defaultsMap[RecordFaderOutline] = QColor(0, 250, 225, QColor::Hsv);
+    m_defaultsMap[PlaybackFaderOutline] = QColor::fromHsv(211, 194, 238);
+    m_defaultsMap[RecordFaderOutline] = QColor::fromHsv(0, 250, 225);
 
-    m_defaultsMap[PannerOverlay] = QColor(211, 194, 238, QColor::Hsv);
+    m_defaultsMap[PannerOverlay] = QColor::fromHsv(211, 194, 238);
 
     m_defaultsMap[ThornGroupBoxBackground] = QColor(0x40, 0x40, 0x40);
 }

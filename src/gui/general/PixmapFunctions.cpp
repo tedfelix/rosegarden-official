@@ -33,7 +33,8 @@ QBitmap
 PixmapFunctions::generateMask(const QPixmap &map, const QRgb &px)
 {
     QImage i(map.toImage());
-    QImage im(i.width(), i.height(), 1, 2, QImage::LittleEndian);
+    // QImage im(i.width(), i.height(), 1, 2, QImage::LittleEndian);
+    QImage im(i.width(), i.height(), QImage::Format_MonoLSB);
 
     for (int y = 0; y < i.height(); ++y) {
         for (int x = 0; x < i.width(); ++x) {
@@ -53,7 +54,7 @@ QBitmap
 PixmapFunctions::generateMask(const QPixmap &map)
 {
     QImage i(map.toImage());
-    QImage im(i.width(), i.height(), 1, 2, QImage::LittleEndian);
+    QImage im(i.width(), i.height(), QImage::Format_MonoLSB);
 
     QRgb px0(i.pixel(0, 0));
     QRgb px1(i.pixel(i.width() - 1, 0));
@@ -101,7 +102,7 @@ PixmapFunctions::colourPixmap(const QPixmap &map, int hue, int minimum, int satu
             QColor oldColour(oldPixel);
 
             int oldHue;
-            oldColour.hsv(&oldHue, &s, &v);
+            oldColour.getHsv(&oldHue, &s, &v);
 
             int newHue = hue;
 
@@ -121,10 +122,10 @@ PixmapFunctions::colourPixmap(const QPixmap &map, int hue, int minimum, int satu
             // saturation of 255
             int newSaturation = (saturation == SaturationNotSpecified  ? 255 - v : saturation);
 
-            QColor newColour(newHue,
-                             newSaturation,
-                             v > minimum ? v : minimum,
-                             QColor::Hsv);
+            QColor newColour = QColor::fromHsv(                
+                                 newHue,
+                                 newSaturation,
+                                 v > minimum ? v : minimum);
 
             QRgb newPixel = qRgba(newColour.red(),
                                   newColour.green(),
@@ -155,13 +156,13 @@ PixmapFunctions::shadePixmap(const QPixmap &map)
 
             QColor pixel(image.pixel(x, y));
 
-            pixel.hsv(&h, &s, &v);
+            pixel.getHsv(&h, &s, &v);
 
-            image.setPixel
-            (x, y, QColor(h,
-                          s,
-                          255 - ((255 - v) / 2),
-                          QColor::Hsv).rgb());
+            int newV =  255 - ((255 - v) / 2);
+            QColor newColor = QColor::fromHsv(h, s, newV);
+            
+            image.setPixel(x, y, newColor.rgb());
+            
         }
     }
 

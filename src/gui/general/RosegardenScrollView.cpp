@@ -44,8 +44,7 @@ const int RosegardenScrollView::InitialScrollShortcut = 5;
 const int RosegardenScrollView::MaxScrollDelta = 100;      // max a.scroll speed
 const double RosegardenScrollView::ScrollShortcutValue = 1.04;// shortcuteration rate
 
-RosegardenScrollView::RosegardenScrollView(QWidget* parent,
-                                           const char* name) //, WFlags f)
+RosegardenScrollView::RosegardenScrollView(QWidget* parent)
     : QAbstractScrollArea(parent),
 		
       m_bottomWidget(0),
@@ -218,11 +217,11 @@ void RosegardenScrollView::updateContents()
 void RosegardenScrollView::updateScrollBars()
 {
     horizontalScrollBar()->setPageStep(visibleWidth());
-    horizontalScrollBar()->setLineStep(visibleWidth() / 10);
+//    horizontalScrollBar()->setLineStep(visibleWidth() / 10);
     horizontalScrollBar()->setMaximum(
         std::max(contentsWidth()-visibleWidth(),0));
     verticalScrollBar()->setPageStep(visibleHeight());
-    verticalScrollBar()->setLineStep(visibleHeight() / 10);
+//    verticalScrollBar()->setLineStep(visibleHeight() / 10);
     verticalScrollBar()->setMaximum(
         std::max(contentsHeight()-visibleHeight(),0));
 
@@ -254,7 +253,7 @@ void RosegardenScrollView::mousePressEvent( QMouseEvent* event )
 void RosegardenScrollView::viewportMousePressEvent(QMouseEvent* e)
 {
     QMouseEvent ce(e->type(), viewportToContents(e->pos()),
-                   e->globalPos(), e->button(), e->state());
+                   e->globalPos(), e->button(), e->buttons(), e->modifiers());
     contentsMousePressEvent(&ce);
     if (!ce.isAccepted())
         e->ignore();
@@ -272,7 +271,7 @@ void RosegardenScrollView::mouseReleaseEvent( QMouseEvent* event )
 void RosegardenScrollView::viewportMouseReleaseEvent(QMouseEvent* e)
 {
     QMouseEvent ce(e->type(), viewportToContents(e->pos()),
-                   e->globalPos(), e->button(), e->state());
+                   e->globalPos(), e->button(), e->buttons(), e->modifiers());
     contentsMouseReleaseEvent(&ce);
     if (!ce.isAccepted())
         e->ignore();
@@ -290,7 +289,7 @@ void RosegardenScrollView::mouseMoveEvent( QMouseEvent* event )
 void RosegardenScrollView::viewportMouseMoveEvent(QMouseEvent* e)
 {
     QMouseEvent ce(e->type(), viewportToContents(e->pos()),
-                   e->globalPos(), e->button(), e->state());
+                   e->globalPos(), e->button(), e->buttons(), e->modifiers());
     contentsMouseMoveEvent(&ce);
     if (!ce.isAccepted())
         e->ignore();
@@ -308,7 +307,7 @@ void RosegardenScrollView::mouseDoubleClickEvent( QMouseEvent* event )
 void RosegardenScrollView::viewportMouseDoubleClickEvent(QMouseEvent* e)
 {
     QMouseEvent ce(e->type(), viewportToContents(e->pos()),
-                   e->globalPos(), e->button(), e->state());
+                   e->globalPos(), e->button(), e->buttons(), e->modifiers());
     contentsMouseDoubleClickEvent(&ce);
     if (!ce.isAccepted())
         e->ignore();
@@ -318,7 +317,7 @@ void RosegardenScrollView::contentsMouseDoubleClickEvent( QMouseEvent* event )
 {
 }
 
-void RosegardenScrollView::setDragAutoScroll(bool state)
+void RosegardenScrollView::setDragAutoScroll(bool)
 {
 }
 
@@ -326,7 +325,7 @@ void RosegardenScrollView::setBottomFixedWidget(QWidget* w)
 {
     m_bottomWidget = w;
     if (m_bottomWidget) {
-        m_bottomWidget->reparent(this, 0, QPoint(0, 0));
+        m_bottomWidget->setParent(this);
         m_bottomWidget->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed));
         setViewportMargins( 0, 0, 0, m_bottomWidget->sizeHint().height() );
         RG_DEBUG << "RosegardenScrollView::setBottomFixedWidget" << endl;

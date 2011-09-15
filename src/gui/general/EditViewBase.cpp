@@ -40,8 +40,8 @@ namespace Rosegarden
 
 EditViewBase::EditViewBase(RosegardenDocument *doc,
                            std::vector<Segment *> segments,
-                           QWidget *parent, const char *name) :
-    QMainWindow(parent, name),
+                           QWidget *parent) :
+    QMainWindow(parent),
     m_doc(doc),
     m_segments(segments),
     m_configDialogPageIndex(0),
@@ -229,7 +229,7 @@ void EditViewBase::slotStatusMsg(const QString &text)
 {
     ///////////////////////////////////////////////////////////////////
     // change status message permanently
-    statusBar()->clear();
+    statusBar()->clearMessage();
     statusBar()->showMessage(text);	//, ID_STATUS_MSG);
 }
 
@@ -237,7 +237,7 @@ void EditViewBase::slotStatusHelpMsg(const QString &text)
 {
     ///////////////////////////////////////////////////////////////////
     // change status message of whole statusbar temporary (text, msec)
-    statusBar()->message(text, 2000);
+    statusBar()->showMessage(text, 2000);
 }
 
 void

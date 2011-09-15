@@ -24,8 +24,8 @@
 namespace Rosegarden
 {
 
-ProgressReporter::ProgressReporter(QObject* parent, const char* name)
-        : QObject(parent, name), m_isCancelled(false)
+ProgressReporter::ProgressReporter(QObject* parent)
+        : QObject(parent), m_isCancelled(false)
 {}
 
 

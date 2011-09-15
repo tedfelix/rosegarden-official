@@ -413,10 +413,10 @@ ActionFileParser::findToolbar(QString toolbarName, Position position)
                 case Right: area = Qt::RightToolBarArea; break;
                 case Bottom: area = Qt::BottomToolBarArea; break;
             }
-            toolbar = new QToolBar(QObject::tr(toolbarName), mw);
+            toolbar = new QToolBar(QObject::tr(toolbarName.toStdString().c_str()), mw);
             mw->addToolBar(area, toolbar);
         } else {
-            toolbar = new QToolBar(QObject::tr(toolbarName), widget);
+            toolbar = new QToolBar(QObject::tr(toolbarName.toStdString().c_str()), widget);
         }
         toolbar->setObjectName(toolbarName);
     }
@@ -431,8 +431,8 @@ ActionFileParser::translate(QString text,
     // scripts/extract*.pl and pulled into the QObject translation context in
     // one great lump.
     
-    if (!disambiguation.isEmpty()) return QObject::tr(text, disambiguation);
-    else return QObject::tr(text);
+    if (!disambiguation.isEmpty()) return QObject::tr(text.toStdString().c_str(), disambiguation.toStdString().c_str());
+    else return QObject::tr(text.toStdString().c_str());
 }                                       
 
 bool
@@ -636,14 +636,14 @@ ActionFileParser::addActionToToolbar(QString toolbarName, QString actionName)
     // no text() toolTip() in English like "Double Whole Note (5)"
     if (!action->toolTip().isEmpty() && action->text().isEmpty()) {
         QString m(action->toolTip());
-        QString tip = QObject::tr("%1").arg(QObject::tr(m));
+        QString tip = QObject::tr("%1").arg(QObject::tr(m.toStdString().c_str()));
         action->setToolTip(tip);
 //        std::cout << "setting tip: " << std::string(tip.toLocal8Bit()) << std::endl;
     // transport toolbar tooltips:
     // text() translated, toolTip() in English
     } else if (strippedText(action->text()) != action->toolTip()) {
         QString m(action->toolTip());
-        QString tip = QObject::tr("%1").arg(QObject::tr(m));
+        QString tip = QObject::tr("%1").arg(QObject::tr(m.toStdString().c_str()));
         action->setToolTip(tip);
 //        std::cout << "setting tip: " << std::string(tip.toLocal8Bit()) << std::endl;
     } else if (action->shortcut() != QKeySequence()) {

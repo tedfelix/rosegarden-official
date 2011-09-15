@@ -63,8 +63,8 @@ const unsigned int ListEditView::NbLayoutRows = 6;
 ListEditView::ListEditView(RosegardenDocument *doc,
                            std::vector<Segment *> segments,
                            unsigned int cols,
-                           QWidget *parent, const char *name) :
-    EditViewBase(doc, segments, parent, name),
+                           QWidget *parent) :
+    EditViewBase(doc, segments, parent),
     m_viewNumber( -1),
     m_viewLocalPropertyPrefix(makeViewLocalPropertyPrefix()),
     m_mainDockWidget(0),

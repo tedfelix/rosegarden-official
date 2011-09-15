@@ -53,7 +53,7 @@ LilyPondProcessor::LilyPondProcessor(QWidget *parent, int mode, QString filename
 
     this->setModal(false);
 
-    setIcon(IconLoader().loadPixmap("window-lilypond"));
+    setWindowIcon(IconLoader().loadPixmap("window-lilypond"));
 
     QGridLayout *layout = new QGridLayout;
     this->setLayout(layout);

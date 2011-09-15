@@ -46,8 +46,7 @@ class EditViewBase : public QMainWindow, public ActionFileClient
 public:
     EditViewBase(RosegardenDocument *doc,
                  std::vector<Segment *> segments,
-                 QWidget *parent,
-                 const char *name = 0);
+                 QWidget *parent);
 
     virtual ~EditViewBase();
 

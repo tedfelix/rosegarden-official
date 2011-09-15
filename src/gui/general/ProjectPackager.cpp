@@ -63,7 +63,7 @@ RG_DEBUG << "ProjectPackager::ProjectPackager():  mode: " << mode <<
 
     this->setModal(false);
 
-    setIcon(IconLoader().loadPixmap("window-packager"));
+    setWindowIcon(IconLoader().loadPixmap("window-packager"));
 
     QGridLayout *layout = new QGridLayout;
     this->setLayout(layout);
@@ -314,7 +314,7 @@ ProjectPackager::getPluginFilesAndRewriteXML(const QString fileToModify, const Q
     // the output stream
     QString outText;
     QTextStream outStream(&outText, QIODevice::WriteOnly);
-    outStream.setEncoding(QTextStream::UnicodeUTF8);
+    outStream.setCodec("UTF-8");
 
     // synth plugin XML:
     //
@@ -796,7 +796,7 @@ ProjectPackager::startAudioEncoder(QStringList files)
     // we can't do a oneliner bash script straight out of a QProcess command
     // line, so we'll have to create a purpose built script and run that
     QString scriptName("/tmp/rosegarden-audio-encoder-backend");
-    m_script.setName(scriptName);
+    m_script.setFileName(scriptName);
 
     // remove any lingering copy from a previous run
     if (m_script.exists()) m_script.remove();
@@ -954,20 +954,20 @@ RG_DEBUG << "process started: tar tf " << m_filename;
         line = in1.readLine(1000);
         if (line.isEmpty()) break;
         // find .flac (FLAC) files
-        if (line.find(".flac", 0) > 0) {
+        if (line.indexOf(".flac", 0) > 0) {
             flacFiles << line;
 
 RG_DEBUG << "Discovered FLAC for decoding:    " << line;
 
         // find .wv (WavPack) files
-        } else if (line.find(".wv", 0) > 0) {
+        } else if (line.indexOf(".wv", 0) > 0) {
             wavpackFiles << line;
 
 RG_DEBUG << "Discovered WavPack for decoding: " << line;
 
         // find the true name of the .rg file contained in the package (foo.rgp
         // contains bar.rg and bar/)
-        } else if ((line.find(".rg", 0) > 0) && !haveRG) {
+        } else if ((line.indexOf(".rg", 0) > 0) && !haveRG) {
             m_trueFilename = line;
 
 RG_DEBUG << "Discovered true filename: " << m_trueFilename;
@@ -1006,7 +1006,7 @@ ProjectPackager::startAudioDecoder(QStringList flacFiles, QStringList wavpackFil
     // we can't do a oneliner bash script straight out of a QProcess command
     // line, so we'll have to create a purpose built script and run that
     QString scriptName("/tmp/rosegarden-audio-decoder-backend");
-    m_script.setName(scriptName);
+    m_script.setFileName(scriptName);
 
     // remove any lingering copy from a previous run
     if (m_script.exists()) m_script.remove();

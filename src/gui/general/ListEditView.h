@@ -68,8 +68,7 @@ public:
     ListEditView(RosegardenDocument *doc,
                  std::vector<Segment *> segments,
                  unsigned int cols,
-                 QWidget *parent,
-                 const char *name = 0);
+                 QWidget *parent);
 
     ~ListEditView();
 

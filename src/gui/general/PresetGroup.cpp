@@ -79,7 +79,7 @@ PresetGroup::PresetGroup() :
 
     QFile presetFile(presetFileName);
 
-    QXmlInputSource source(presetFile);
+    QXmlInputSource source(&presetFile);
     QXmlSimpleReader reader;
     reader.setContentHandler(this);
     reader.setErrorHandler(this);
