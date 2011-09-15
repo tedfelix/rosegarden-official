@@ -53,8 +53,8 @@ using namespace BaseProperties;
 
 NotationHLayout::NotationHLayout(Composition *c, NotePixmapFactory *npf,
                                  const NotationProperties &properties,
-                                 QObject* parent, const char* name) :
-    ProgressReporter(parent, name),
+                                 QObject* parent) :
+    ProgressReporter(parent),
     HorizontalLayoutEngine(c),
     m_totalWidth(0.),
     m_pageMode(false),

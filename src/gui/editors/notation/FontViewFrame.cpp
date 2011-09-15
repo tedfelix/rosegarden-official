@@ -43,8 +43,8 @@
 namespace Rosegarden
 {
 
-FontViewFrame::FontViewFrame( int pixelSize, QWidget* parent, const char* name ) :
-    QFrame(parent, name),
+FontViewFrame::FontViewFrame( int pixelSize, QWidget* parent) :
+    QFrame(parent),
     m_fontSize(pixelSize),
     m_tableFont(0),
     m_ascent(0)

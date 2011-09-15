@@ -49,8 +49,8 @@ using namespace BaseProperties;
 
 NotationVLayout::NotationVLayout(Composition *c, NotePixmapFactory *npf,
                                  const NotationProperties &properties,
-                                 QObject* parent, const char* name) :
-        ProgressReporter(parent, name),
+                                 QObject* parent) :
+        ProgressReporter(parent),
         m_composition(c),
         m_npf(npf),
         m_notationQuantizer(c->getNotationQuantizer()),

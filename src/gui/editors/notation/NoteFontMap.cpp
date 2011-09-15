@@ -83,7 +83,7 @@ NoteFontMap::NoteFontMap(QString name) :
 
     QFile mapFile(mapFileName);
 
-    QXmlInputSource source(mapFile);
+    QXmlInputSource source(&mapFile);
     QXmlSimpleReader reader;
     reader.setContentHandler(this);
     reader.setErrorHandler(this);
@@ -590,7 +590,8 @@ NoteFontMap::startElement(const QString &, const QString &,
         } else if (!names.isEmpty()) {
 
             bool have = false;
-            QStringList list = QStringList::split(",", names, false);
+//            QStringList list = QStringList::split(",", names, false);
+            QStringList list = names.split(",", QString::SkipEmptyParts);
             for (QStringList::Iterator i = list.begin(); i != list.end(); ++i) {
                 SystemFont *font = SystemFont::loadSystemFont
                                    (SystemFontSpec(*i, 12));

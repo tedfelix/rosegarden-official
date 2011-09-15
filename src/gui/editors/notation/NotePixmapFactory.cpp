@@ -688,12 +688,12 @@ NotePixmapFactory::makeNoteHalo(const NotePixmapParameters &params)
 void
 NotePixmapFactory::drawNoteHalo(int x, int y, int w, int h) {
 
-    m_p->painter().setPen(QPen(QColor(GUIPalette::CollisionHaloHue,
+    m_p->painter().setPen(QPen(QColor::fromHsv(GUIPalette::CollisionHaloHue,
                                       GUIPalette::CollisionHaloSaturation,
-                                      255, QColor::Hsv), 1));
-    m_p->painter().setBrush(QColor(GUIPalette::CollisionHaloHue,
+                                      255), 1));
+    m_p->painter().setBrush(QColor::fromHsv(GUIPalette::CollisionHaloHue,
                                    GUIPalette::CollisionHaloSaturation,
-                                   255, QColor::Hsv));
+                                   255));
     m_p->drawEllipse(x, y, w, h);
 }
 
@@ -2524,10 +2524,9 @@ NotePixmapFactory::makeSlur(int length, int dy, bool above, bool phrasing)
 
     if (smooth) {
 
-        QImage i = m_generatedPixmap->convertToImage();
-        if (i.depth() == 1)
-            i = i.convertDepth(32);
-        i = i.smoothScale(i.width() / 2, i.height() / 2);
+        QImage i = m_generatedPixmap->toImage();
+        if (i.depth() == 1) i = i.convertToFormat(QImage::Format_ARGB32);
+        i = i.scaled(i.width() / 2, i.height() / 2, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
         delete m_generatedPixmap;
 //        delete m_generatedMask;

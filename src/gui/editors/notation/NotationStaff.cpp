@@ -442,7 +442,7 @@ NotationStaff::getNoteNameAtSceneCoords(double x, int y,
     // file, and available for translation, so this *should* get us the best
     // spelling for a given key, since we're using the actual key, and not a
     // guess
-    QString tmp = QObject::tr(strtoqstr(s), "note name");
+    QString tmp = QObject::tr(s.c_str(), "note name");
 
     // now tack on the octave, so translators don't have to deal with it
     tmp += tr(" %1").arg(p.getOctave(baseOctave));

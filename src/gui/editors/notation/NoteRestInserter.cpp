@@ -131,7 +131,7 @@ void NoteRestInserter::ready()
 {
     m_clickHappened = false;
     m_clickStaff = 0;
-    m_widget->setCanvasCursor(Qt::crossCursor);
+    m_widget->setCanvasCursor(Qt::CrossCursor);
 //!!!   m_widget->setHeightTracking(true);
 }
 

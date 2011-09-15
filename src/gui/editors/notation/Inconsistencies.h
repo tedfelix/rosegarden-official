@@ -117,7 +117,7 @@ Inconsistencies<Key>::getTranslatedName(Key key) const
     // preserving it from the original string.  This gets it done without the
     // pointless addition of a pile of new strings.
     QString keyName = QString::fromStdString(key.getName());
-    return QObject::tr("%1 %2").arg(QObject::tr(keyName.left(keyName.indexOf(" ")), "note name" ))
+    return QObject::tr("%1 %2").arg(QObject::tr(keyName.left(keyName.indexOf(" ")).toStdString().c_str(), "note name" ))
                                .arg(key.isMinor() ? QObject::tr("minor")
                                                   : QObject::tr("major"));
 }

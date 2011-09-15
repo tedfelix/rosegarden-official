@@ -73,7 +73,7 @@ GuitarChordInserter::slotSelectSelected()
 void
 GuitarChordInserter::ready()
 {
-    m_widget->setCanvasCursor(Qt::crossCursor);
+    m_widget->setCanvasCursor(Qt::CrossCursor);
 //!!!    m_nParentView->setHeightTracking(false);
 }
 

@@ -67,7 +67,8 @@ NoteFontFactory::getFontNames(bool forceRescan)
 
     NOTATION_DEBUG << "NoteFontFactory::getFontNames: read from cache: " << fontNameList << endl;
 
-    QStringList names = QStringList::split(",", fontNameList);
+    //QStringList names = QStringList::split(",", fontNameList);
+    QStringList names = fontNameList.split(",", QString::SkipEmptyParts);
 
     ResourceFinder rf;
 

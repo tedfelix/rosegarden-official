@@ -60,7 +60,7 @@ public:
     NotationHLayout(Composition *c,
                     NotePixmapFactory *npf,
                     const NotationProperties &properties,
-                    QObject* parent, const char* name = 0);
+                    QObject* parent);
 
     virtual ~NotationHLayout();
 

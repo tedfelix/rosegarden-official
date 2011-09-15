@@ -193,12 +193,13 @@ NoteFont::lookupDrawRep(QPixmap *pixmap) const
 
     } else {
 
-        QImage image = pixmap->convertToImage();
+        QImage image = pixmap->toImage();
         if (image.isNull())
             return 0;
 
         if (image.depth() > 1) {
-            image = image.convertDepth(1, Qt::MonoOnly | Qt::ThresholdDither);
+//            image = image.convertDepth(1, Qt::MonoOnly | Qt::ThresholdDither);
+              image.convertToFormat(QImage::Format_Mono, Qt::ThresholdDither);
         }
 
         NoteCharacterDrawRep *a = new NoteCharacterDrawRep();
@@ -214,7 +215,7 @@ NoteFont::lookupDrawRep(QPixmap *pixmap) const
                 bool pixel = false;
 
                 if (xi < image.width()) {
-                    if (image.bitOrder() == QImage::LittleEndian) {
+                    if (image.format() == QImage::Format_Mono) { //!!! mono == LittleEndian or do I have it backwards?
                         if (*(line + (xi >> 3)) & 1 << (xi & 7))
                             pixel = true;
                     } else {

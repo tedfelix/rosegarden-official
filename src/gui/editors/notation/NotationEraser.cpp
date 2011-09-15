@@ -55,7 +55,7 @@ NotationEraser::NotationEraser(NotationWidget *widget) :
 void
 NotationEraser::ready()
 {
-    m_widget->setCanvasCursor(Qt::pointingHandCursor);
+    m_widget->setCanvasCursor(Qt::PointingHandCursor);
 //!!!    m_nParentView->setHeightTracking(false);
 }
 

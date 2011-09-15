@@ -61,7 +61,7 @@ ClefInserter::slotSelectSelected()
 void
 ClefInserter::ready()
 {
-    m_widget->setCanvasCursor(Qt::crossCursor);
+    m_widget->setCanvasCursor(Qt::CrossCursor);
 //!!!    m_nParentView->setHeightTracking(false);
 }
 

@@ -85,13 +85,20 @@ public:
 	m_painter->drawArc(x, y, w, h, a, alen);
     }
 
-    void drawPolygon(const QPolygon &a, bool winding = false,
-		     int index = 0, int n = -1) {
-	m_painter->drawPolygon(a, winding, index, n);
+    void drawPolygon(const QPolygon &polygon, bool winding = false,
+		     int index = 0, int count = -1) {
+
+        int pointCount = (count == -1) ?  polygon.size() - index : count;
+        Qt::FillRule fillRule = winding ? Qt::WindingFill : Qt::OddEvenFill;
+
+        m_painter->drawPolygon(polygon.constData() + index, pointCount, fillRule);
     }
 
-    void drawPolyline(const QPolygon &a, int index = 0, int n = -1) {
-	m_painter->drawPolyline(a, index, n);
+    void drawPolyline(const QPolygon &polygon, int index = 0, int count = -1) {
+
+        int pointCount = (count == -1) ?  polygon.size() - index : count;
+
+        m_painter->drawPolyline(polygon.constData() + index, pointCount);
     }
 
     void drawPixmap(int x, int y, const QPixmap &pm,

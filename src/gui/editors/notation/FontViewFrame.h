@@ -37,7 +37,7 @@ class FontViewFrame : public QFrame
     Q_OBJECT
 
 public:
-    FontViewFrame(int pixelSize, QWidget *parent = 0, const char *name = 0);
+    FontViewFrame(int pixelSize, QWidget *parent = 0);
     virtual ~FontViewFrame();
 
     QSize sizeHint() const;

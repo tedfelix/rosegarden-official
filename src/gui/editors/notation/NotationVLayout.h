@@ -57,7 +57,7 @@ class NotationVLayout : public ProgressReporter,
 public:
     NotationVLayout(Composition *c, NotePixmapFactory *npf,
                     const NotationProperties &properties,
-                    QObject* parent, const char* name = 0);
+                    QObject* parent);
 
     virtual ~NotationVLayout();
 

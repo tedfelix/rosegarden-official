@@ -698,7 +698,7 @@ void NotationSelector::dragFine(int x, int y, bool final)
 
 void NotationSelector::ready()
 {
-    m_widget->setCanvasCursor(Qt::arrowCursor);
+    m_widget->setCanvasCursor(Qt::ArrowCursor);
 }
 
 void NotationSelector::stow()

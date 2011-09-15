@@ -52,7 +52,7 @@ NotationTool::~NotationTool()
 void
 NotationTool::ready()
 {
-    m_widget->setCursor(Qt::arrowCursor);
+    m_widget->setCursor(Qt::ArrowCursor);
 //!!!    m_widget->setHeightTracking(false);
 }
 

@@ -149,7 +149,7 @@ qfont:
         qFontMap[name] = new QFont(qfont);
         return new SystemFontQt(qfont);
     } else {
-        int bracket = family.find(" [");
+        int bracket = family.indexOf(" [");
         if (bracket > 1) family = family.left(bracket);
         if (family == name.toLower()) {
             qFontMap[name] = new QFont(qfont);

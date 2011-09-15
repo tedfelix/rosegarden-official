@@ -197,7 +197,7 @@ NotationView::NotationView(RosegardenDocument *doc,
     slotUpdateMenuStates();
     slotTestClipboard();
 
-    setIcon(IconLoader().loadPixmap("window-notation"));
+    setWindowIcon(IconLoader().loadPixmap("window-notation"));
 
     connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
             this, SLOT(slotUpdateMenuStates()));
@@ -776,7 +776,7 @@ NotationView::setupActions()
 
             // strings extracted from data files must be QObject::tr()
             itemStr = QObject::tr("%1 Controller %2 %3")
-                .arg(QObject::tr(strtoqstr(it->getName())))
+                .arg(QObject::tr(it->getName().c_str()))
                 .arg(it->getControllerValue())
                 .arg(hexValue);
 
@@ -1233,7 +1233,12 @@ void
 NotationView::setCurrentNotePixmapFrom(QAction *a)
 {
     if (!a) return;
-    setCurrentNotePixmap(a->icon().pixmap());
+    //setCurrentNotePixmap(a->icon().pixmap());
+    // QT3: You have to use one of the ctors that takes a QSize() argument now,
+    // but I only have the vaguest idea what this code does.  I pulled 32x32 out
+    // my ass to get the code compiling, but there's a 99.99% chance this is
+    // wrong, and even if it's right, it's still wrong to write code this way.
+    setCurrentNotePixmap(a->icon().pixmap(QSize(32,32)));
 }
 
 bool
@@ -3545,10 +3550,10 @@ NotationView::slotTranspose()
     int dialogDefault = settings.value("lasttransposition", 0).toInt() ;
 
     bool ok = false;
-    int semitones = QInputDialog::getInteger
-            (tr("Transpose"),
+    int semitones = QInputDialog::getInt
+            (this, tr("Transpose"),
              tr("By number of semitones: "),
-                dialogDefault, -127, 127, 1, &ok, this);
+                dialogDefault, -127, 127, 1, &ok);
     if (!ok || semitones == 0) return;
 
     settings.setValue("lasttransposition", semitones);

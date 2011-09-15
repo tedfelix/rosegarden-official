@@ -255,14 +255,12 @@ NotationScene::setStaffs(RosegardenDocument *document,
     m_hlayout = new NotationHLayout(&m_document->getComposition(),
                                     m_notePixmapFactory,
                                     *m_properties,
-                                    this,
-                                    "NotationHLayout");
+                                    this);
 
     m_vlayout = new NotationVLayout(&m_document->getComposition(),
                                     m_notePixmapFactory,
                                     *m_properties,
-                                    this,
-                                    "NotationVLayout");
+                                    this);
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
         delete m_staffs[i];

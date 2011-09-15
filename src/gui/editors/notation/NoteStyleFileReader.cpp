@@ -56,7 +56,7 @@ NoteStyleFileReader::NoteStyleFileReader(QString name) :
 
     QFile styleFile(styleFileName);
 
-    QXmlInputSource source(styleFile);
+    QXmlInputSource source(&styleFile);
     QXmlSimpleReader reader;
     reader.setContentHandler(this);
     reader.setErrorHandler(this);

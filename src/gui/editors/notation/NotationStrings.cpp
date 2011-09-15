@@ -85,11 +85,11 @@ NotationStrings::getNoteName(Note note, bool plural, bool triplet)
                                          };
 
     if (plural && triplet) {
-        return addDots(tr("%1 triplets", names[type]), dots, false, true); // TODO PLURAL - this is broken because it assumes there's only 1 plural form
+        return addDots(tr("%1 triplets").arg(names[type].toStdString().c_str()), dots, false, true); // TODO PLURAL - this is broken because it assumes there's only 1 plural form
     } else if (plural) {
         return addDots(pluralnames[type], dots, false, true);
     } else if (triplet) {
-        return addDots(tr("%1 triplet").arg(names[type]), dots, false, true);
+        return addDots(tr("%1 triplet").arg(names[type].toStdString().c_str()), dots, false, true);
     } else {
         return addDots(names[type], dots, false, true);
     }
@@ -173,7 +173,7 @@ Note
 NotationStrings::getNoteForName(QString name)
 {
     std::string origName(qstrtostr(name));
-    int pos = name.find('-');
+    int pos = name.indexOf('-');
     int dots = 0;
 
     if (pos > 0 && pos < 6 && pos < name.length() - 1) {

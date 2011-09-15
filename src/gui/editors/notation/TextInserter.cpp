@@ -63,7 +63,7 @@ TextInserter::slotSelectSelected()
 void
 TextInserter::ready()
 {
-    m_widget->setCanvasCursor(Qt::crossCursor);
+    m_widget->setCanvasCursor(Qt::CrossCursor);
 //!!!    m_nParentView->setHeightTracking(false);
 }
 
