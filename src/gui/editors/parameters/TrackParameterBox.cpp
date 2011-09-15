@@ -515,8 +515,8 @@ TrackParameterBox::populatePlaybackDeviceList()
         if (! (*it))
             continue; // sanity check
 
-        QString iname(QObject::tr(QString::fromStdString((*it)->getName())));
-        QString pname(QObject::tr(strtoqstr((*it)->getProgramName())));
+        QString iname(QObject::tr((*it)->getName().c_str()));
+        QString pname(QObject::tr((*it)->getProgramName().c_str()));
         Device *device = (*it)->getDevice();
         DeviceId devId = device->getId();
 
@@ -546,7 +546,7 @@ TrackParameterBox::populatePlaybackDeviceList()
 
         if (devId != (DeviceId)(currentDevId)) {
             currentDevId = int(devId);
-            QString deviceName = QObject::tr(strtoqstr(device->getName()));
+            QString deviceName = QObject::tr(device->getName().c_str());
             m_playDevice->addItem(deviceName);
             m_playDeviceIds.push_back(currentDevId);
         }
@@ -616,7 +616,7 @@ TrackParameterBox::populateRecordingDeviceList()
                 if (dev) {
                     if (dev->getDirection() == MidiDevice::Record
                         && dev->isRecording()) {
-                        QString deviceName = QObject::tr(strtoqstr(dev->getName()));
+                        QString deviceName = QObject::tr(dev->getName().c_str());
                         m_recDevice->addItem(deviceName);
                         m_recDeviceIds.push_back(dev->getId());
                     }
@@ -679,11 +679,11 @@ TrackParameterBox::updateHighLow()
     // Separate the note letter from the octave to avoid undue burden on
     // translators having to retranslate the same thing but for a number
     // difference
-    QString tmp = QObject::tr(strtoqstr(highest.getAsString(includeOctave, base)), "note name");
+    QString tmp = QObject::tr(highest.getAsString(includeOctave, base).c_str(), "note name");
     tmp += tr(" %1").arg(highest.getOctave(base));
     m_highButton->setText(tmp);
 
-    tmp = QObject::tr(strtoqstr(lowest.getAsString(includeOctave, base)), "note name");
+    tmp = QObject::tr(lowest.getAsString(includeOctave, base).c_str(), "note name");
     tmp += tr(" %1").arg(lowest.getOctave(base));
     m_lowButton->setText(tmp);
 
@@ -708,7 +708,7 @@ TrackParameterBox::slotUpdateControls(int /*dummy*/)
     Track *trk = comp.getTrackById(m_selectedTrackId);
 
     m_defClef->setCurrentIndex(trk->getClef());
-    m_defTranspose->setCurrentText(QString("%1").arg(trk->getTranspose()));
+    m_defTranspose->setItemText(m_defTranspose->currentIndex(), QString("%1").arg(trk->getTranspose()));
     m_defColor->setCurrentIndex(trk->getColor());
     m_highestPlayable = trk->getHighestPlayable();
     m_lowestPlayable = trk->getLowestPlayable();
@@ -979,7 +979,7 @@ TrackParameterBox::slotTransposeChanged(int transpose)
 void
 TrackParameterBox::slotTransposeIndexChanged(int index)
 {
-    slotTransposeTextChanged(m_defTranspose->text(index));
+    slotTransposeTextChanged(m_defTranspose->itemText(index));
 }
 
 void
@@ -1003,7 +1003,7 @@ TrackParameterBox::slotDocColoursChanged()
     unsigned int i = 0;
 
     for (RCMap::const_iterator it = temp.begin(); it != temp.end(); ++it) {
-        QString qtrunc(QObject::tr(strtoqstr(it->second.second)));
+        QString qtrunc(QObject::tr(it->second.second.c_str()));
         QPixmap colour(15, 15);
         colour.fill(GUIPalette::convertColour(it->second.first));
         if (qtrunc == "") {
@@ -1153,7 +1153,9 @@ TrackParameterBox::slotPresetPressed()
             m_defClef->setCurrentIndex(dialog.getClef());
 //             m_defTranspose->setCurrentIndex(QString("%1").arg
 //                     (dialog.getTranspose()), true);
-            m_defTranspose->setCurrentText(QString("%1").arg
+
+                     
+            m_defTranspose->setItemText(m_defTranspose->currentIndex(), QString("%1").arg
                     (dialog.getTranspose()));
 
             m_highestPlayable = dialog.getHighRange();

@@ -35,9 +35,8 @@ namespace Rosegarden
 
 RosegardenParameterBox::RosegardenParameterBox(const QString &shortLabel,
         const QString &longLabel,
-        QWidget *parent,
-        const char *name) :
-        QFrame(parent, name),
+        QWidget *parent) :
+        QFrame(parent),
         m_shortLabel(shortLabel),
         m_longLabel(longLabel),
         m_mode(LANDSCAPE_MODE)

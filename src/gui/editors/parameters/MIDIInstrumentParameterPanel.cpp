@@ -289,7 +289,7 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
         }
 
         if (text.length() > origText.length() - 7) text = origText;*/
-        m_connectionLabel->setText(QObject::tr(text));
+        m_connectionLabel->setText(QObject::tr(text.toStdString().c_str()));
     }
 
     // Enable all check boxes
@@ -443,7 +443,7 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
             // with the existing rotary widget.
 
             QLabel *label = rmi->second.second;
-            label->setText(QObject::tr(strtoqstr(it->getName())));
+            label->setText(QObject::tr(it->getName().c_str()));
 
             ++rmi;
 
@@ -479,7 +479,7 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
             rotary->setKnobColour(knobColour);
 
             // Add a label
-            QLabel *label = new SqueezedLabel(QObject::tr(strtoqstr(it->getName())), hbox);
+            QLabel *label = new SqueezedLabel(QObject::tr(it->getName().c_str()), hbox);
             label->setFont(f);
             hboxLayout->addWidget(label);
 
@@ -644,7 +644,7 @@ MIDIInstrumentParameterPanel::populateBankList()
     for (BankList::const_iterator i = banks.begin();
             i != banks.end(); ++i) {
         m_banks.push_back(*i);
-        m_bankValue->addItem(QObject::tr(strtoqstr(i->getName())));
+        m_bankValue->addItem(QObject::tr(i->getName().c_str()));
     }
 
     // Keep bank value enabled if percussion map is in use
@@ -717,7 +717,7 @@ MIDIInstrumentParameterPanel::populateProgramList()
         if (programName != "") {
             m_programValue->addItem(QObject::tr("%1. %2")
                                        .arg(programs[i].getProgram() + 1)
-                                       .arg(QObject::tr(strtoqstr(programName))));
+                                       .arg(QObject::tr(programName.c_str())));
             if (m_selectedInstrument->getProgram() == programs[i]) {
                 currentProgram = m_programs.size();
             }
@@ -844,7 +844,7 @@ MIDIInstrumentParameterPanel::populateVariationList()
             */
             m_variationValue->addItem(QObject::tr("%1. %2")
                                          .arg(variations[i] + 1)
-                                         .arg(QObject::tr(strtoqstr(programName))));
+                                         .arg(QObject::tr(programName.c_str())));
             if (m_selectedInstrument->getProgram() == program) {
                 currentVariation = m_variations.size();
             }
@@ -911,8 +911,8 @@ MIDIInstrumentParameterPanel::slotTogglePercussion(bool value)
     sendBankAndProgram();
 
     emit changeInstrumentLabel(m_selectedInstrument->getId(),
-                               strtoqstr(m_selectedInstrument->
-                                         getProgramName()));
+                               m_selectedInstrument->
+                                         getProgramName().c_str());
     emit updateAllBoxes();
 
     emit instrumentParametersChanged(m_selectedInstrument->getId());
@@ -945,8 +945,8 @@ MIDIInstrumentParameterPanel::slotToggleBank(bool value)
         sendBankAndProgram();
 
     emit changeInstrumentLabel(m_selectedInstrument->getId(),
-                               strtoqstr(m_selectedInstrument->
-                                         getProgramName()));
+                               m_selectedInstrument->
+                                         getProgramName().c_str());
     emit updateAllBoxes();
 
     emit instrumentParametersChanged(m_selectedInstrument->getId());
@@ -977,8 +977,8 @@ MIDIInstrumentParameterPanel::slotToggleProgramChange(bool value)
         sendBankAndProgram();
 
     emit changeInstrumentLabel(m_selectedInstrument->getId(),
-                               strtoqstr(m_selectedInstrument->
-                                         getProgramName()));
+                               m_selectedInstrument->
+                                         getProgramName().c_str());
     emit updateAllBoxes();
 
     emit instrumentParametersChanged(m_selectedInstrument->getId());
@@ -1009,8 +1009,8 @@ MIDIInstrumentParameterPanel::slotToggleVariation(bool value)
 //        sendBankAndProgram();
 
     emit changeInstrumentLabel(m_selectedInstrument->getId(),
-                               strtoqstr(m_selectedInstrument->
-                                         getProgramName()));
+                               m_selectedInstrument->
+                                         getProgramName().c_str());
     emit updateAllBoxes();
 
     emit instrumentParametersChanged(m_selectedInstrument->getId());
@@ -1160,8 +1160,8 @@ MIDIInstrumentParameterPanel::slotSelectProgram(int index)
     if (change) {
         sendBankAndProgram();
         emit changeInstrumentLabel(m_selectedInstrument->getId(),
-                                   strtoqstr(m_selectedInstrument->
-                                             getProgramName()));
+                                   m_selectedInstrument->
+                                             getProgramName().c_str());
         emit updateAllBoxes();
     }
 

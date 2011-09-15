@@ -147,7 +147,7 @@ void RosegardenParameterArea::moveWidget(QWidget *old_container,
     if (old_container == m_classic) {
         ;
     } else if (old_container == m_tabBox) {
-        m_tabBox->removePage(box);
+        m_tabBox->removeTab(indexOf(box));
     }
 
     // Reparent the parameter box, and perform any container-specific
@@ -161,11 +161,15 @@ void RosegardenParameterArea::moveWidget(QWidget *old_container,
             ++index;
         }
         if (index < m_parameterBoxes.size()) {
-            box->reparent(m_groupBoxes[index], 0, QPoint(0, 0), FALSE);
+            //box->reparent(m_groupBoxes[index], 0, QPoint(0, 0), FALSE);
+            m_groupBoxes[index]->setParent(this, 0);
+            m_groupBoxes[index]->move(QPoint(0,0));
         }
     } else if (new_container == m_tabBox) {
-        box->reparent(new_container, 0, QPoint(0, 0), FALSE);
-        m_tabBox->insertTab(box, box->getShortLabel());
+        //box->reparent(new_container, 0, QPoint(0, 0), FALSE);
+        new_container->setParent(this, 0);
+        new_container->move(QPoint(0,0));
+        m_tabBox->insertTab(-1, box, box->getShortLabel());
     }
 }
 

@@ -46,8 +46,7 @@ class RosegardenParameterBox : public QFrame
 public:
     RosegardenParameterBox(const QString &shortLabel, // e.g. tr("Track")
                            const QString &longLabel,  // e.g. tr("Track Parameters")
-                           QWidget *parent = 0,
-                           const char *name = 0);
+                           QWidget *parent = 0);
 
     // Ask for a one-word string that can be used to label the widget.
     QString getShortLabel() const;

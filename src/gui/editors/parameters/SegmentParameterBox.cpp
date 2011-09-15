@@ -393,7 +393,7 @@ SegmentParameterBox::slotDocColoursChanged()
     for (RCMap::const_iterator it = temp.begin(); it != temp.end(); ++it) {
         // wrap in tr() call in case the color is on the list of translated ones
         // we're including since 09.10
-        QString qtrunc(QObject::tr(strtoqstr(it->second.second)));
+        QString qtrunc(QObject::tr(it->second.second.c_str()));
         QPixmap colour(15, 15);
         colour.fill(GUIPalette::convertColour(it->second.first));
         if (qtrunc == "") {
@@ -471,7 +471,7 @@ SegmentParameterBox::populateBoxFromSegments()
     if (m_segments.size() == 0)
         m_label->setText("");
     else 
-        m_label->setText(QObject::tr(strtoqstr(m_segments[0]->getLabel())));
+        m_label->setText(QObject::tr(m_segments[0]->getLabel().c_str()));
 
     // I never noticed this after all this time, but it seems to go all the way
     // back to the "..." button that this was never disabled if there was no
@@ -504,7 +504,7 @@ SegmentParameterBox::populateBoxFromSegments()
 
         // Set label to "*" when multiple labels don't match
         //
-        if (QObject::tr(strtoqstr((*it)->getLabel())) != m_label->text())
+        if (QObject::tr((*it)->getLabel().c_str()) != m_label->text())
             m_label->setText("*");
 
         // Are all, some or none of the Segments repeating?
@@ -611,7 +611,7 @@ SegmentParameterBox::populateBoxFromSegments()
         break;
 
     case Some:
-        m_repeatValue->setNoChange();
+        m_repeatValue->setCheckState(Qt::PartiallyChecked);
         break;
 
     case None:
@@ -656,18 +656,18 @@ SegmentParameterBox::populateBoxFromSegments()
     case All:
         m_transposeValue->
 //           setCurrentIndex(QString("%1").arg(transposeLevel), true);
-          setCurrentText( QString("%1").arg(transposeLevel) );
+          setItemText(m_transposeValue->currentIndex(), QString("%1").arg(transposeLevel) );
           break;
 
     case Some:
 //           m_transposeValue->setCurrentIndex(QString(""), true);
-          m_transposeValue->setCurrentText(QString(""));
+          m_transposeValue->setItemText(m_transposeValue->currentIndex(), QString(""));
           break;
 
     case None:
     default:
 //           m_transposeValue->setCurrentIndex("0");
-          m_transposeValue->setCurrentText("0");
+          m_transposeValue->setItemText(m_delayValue->currentIndex(), "0");
           break;
     }
 
@@ -683,19 +683,19 @@ SegmentParameterBox::populateBoxFromSegments()
                             true,
                             error);
 //                m_delayValue->setCurrentIndex(label, true);
-               m_delayValue->setCurrentText(label);
+               m_delayValue->setItemText(m_delayValue->currentIndex(), label);
 
         } else if (delayLevel < 0) {
 
 //                m_delayValue->setCurrentIndex(tr("%1 ms").arg(-delayLevel),true);
-               m_delayValue->setCurrentText( tr("%1 ms").arg(-delayLevel) );
+               m_delayValue->setItemText(m_delayValue->currentIndex(), tr("%1 ms").arg(-delayLevel) );
           }
 
         break;
 
     case Some:
 //           m_delayValue->setCurrentIndex("", true);
-          m_delayValue->setCurrentText("");
+          m_delayValue->setItemText(m_delayValue->currentIndex(), "");
           break;
 
     case None:
@@ -737,13 +737,13 @@ void SegmentParameterBox::slotRepeatPressed()
 
     bool state = false;
 
-    switch (m_repeatValue->state()) {
-    case QCheckBox::Off:
+    switch (m_repeatValue->checkState()) {
+    case Qt::Unchecked:
         state = true;
         break;
 
-    case QCheckBox::NoChange:
-    case QCheckBox::On:
+    case Qt::PartiallyChecked:
+    case Qt::Checked:
     default:
         state = false;
         break;
@@ -799,7 +799,7 @@ SegmentParameterBox::slotTransposeTextChanged(const QString &text)
 void
 SegmentParameterBox::slotTransposeSelected(int value)
 {
-    slotTransposeTextChanged(m_transposeValue->text(value));
+    slotTransposeTextChanged(m_transposeValue->itemText(value));
 }
 
 void
