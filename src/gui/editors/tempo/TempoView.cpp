@@ -61,7 +61,7 @@ namespace Rosegarden
 {
 
 TempoView::TempoView(RosegardenDocument *doc, QWidget *parent, timeT openTime):
-        ListEditView(doc, std::vector<Segment *>(), 2, parent, "tempoview"),
+        ListEditView(doc, std::vector<Segment *>(), 2, parent),
         m_filter(Tempo | TimeSignature),
         m_ignoreUpdates(true)
 {
