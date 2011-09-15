@@ -137,7 +137,7 @@ and its absence is troubling.
 	fi
 fi
 
-QT_CXXFLAGS="-I$QT_INCLUDES/Qt3Support -I$QT_INCLUDES/QtGui -I$QT_INCLUDES/QtXml -I$QT_INCLUDES/QtNetwork -I$QT_INCLUDES/QtCore -I$QT_INCLUDES -DQT3_SUPPORT"
+QT_CXXFLAGS="-I$QT_INCLUDES/QtGui -I$QT_INCLUDES/QtXml -I$QT_INCLUDES/QtNetwork -I$QT_INCLUDES/QtCore -I$QT_INCLUDES"
 
 AC_MSG_CHECKING([QTLIBDIR])
 AC_ARG_WITH([qtlibdir], [  --with-qtlibdir=DIR     Qt library directory [default=$QTLIBDIR]], QTLIBDIR=$withval)
@@ -145,7 +145,7 @@ if test x"$QTLIBDIR" = x ; then
    	# bin is included because that's where Qt DLLs hide on Windows
     # On Mandriva Qt libraries are in /usr/lib or /usr/lib64 although
     # QTDIR is /usr/lib/qt4
-	QTLIB_SEARCH="$QTDIR/lib $QTDIR/lib64 $QTDIR/lib32 $QTDIR/bin /usr/lib /usr/lib/${build_alias} /usr/lib64"
+	QTLIB_SEARCH="$QTDIR/lib $QTDIR/lib64 $QTDIR/lib32 $QTDIR/bin /usr/lib /usr/lib64"
 else
 	case "$QTLIBDIR" in *3*)
 	     AC_MSG_WARN([
@@ -179,30 +179,12 @@ Failed to find required Qt4 GUI link entry point (libQtGui.so or equivalent).
 Define QTLIBDIR or use --with-qtlibdir to specify the library location.
 ])
 fi
-QT3SUPPORT_PATH=""
-for j in $QTLIB_EXTS ; do
-    if test -f $QTLIBDIR/libQt3Support$j ; then
-        QT3SUPPORT_PATH=$QTLIBDIR
-	break
-    elif test -f $QTLIBDIR/Qt3Support$j ; then
-        QT3SUPPORT_PATH=$QTLIBDIR
-	break
-    fi
-done
-if test x"$QT3SUPPORT_PATH" = x ; then
-	AC_MSG_ERROR([
-Failed to find required Qt3 support library (libQt3Support) in
-the Qt4 library directory $QTLIBDIR.
-Please ensure you have the Qt3 compatibility library installed,
-and if necessary set QTDIR to the location of your Qt4 installation.
-])
-fi
 AC_MSG_RESULT([$QTLIBDIR])
 
 if test x$QTLIB_NEED_4 = x ; then
-	QT_LIBS="-L$QTLIBDIR -lQt3Support -lQtGui -lQtXml -lQtNetwork -lQtCore"
+	QT_LIBS="-L$QTLIBDIR -lQtGui -lQtXml -lQtNetwork -lQtCore"
 else
-	QT_LIBS="-L$QTLIBDIR -lQt3Support4 -lQtGui4 -lQtXml4 -lQtNetwork4 -lQtCore4"
+	QT_LIBS="-L$QTLIBDIR -lQtGui4 -lQtXml4 -lQtNetwork4 -lQtCore4"
 fi
 
 AC_MSG_CHECKING([QT_CXXFLAGS])
