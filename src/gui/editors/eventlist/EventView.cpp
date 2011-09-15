@@ -90,7 +90,7 @@ namespace Rosegarden
 EventView::EventView(RosegardenDocument *doc,
                      std::vector<Segment *> segments,
                      QWidget *parent):
-        ListEditView(doc, segments, 2, parent, "eventview"),
+        ListEditView(doc, segments, 2, parent),
         m_eventFilter(Note | Text | SystemExclusive | Controller |
                       ProgramChange | PitchBend | Indication | Other),
         m_menu(0)
@@ -1565,7 +1565,7 @@ EventView::updateWindowTitle(bool m)
                        .arg(m_segments.size()));
     }
 
-    setIcon(IconLoader().loadPixmap("window-eventlist"));
+    setWindowIcon(IconLoader().loadPixmap("window-eventlist"));
 
 }
 
