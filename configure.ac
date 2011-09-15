@@ -42,6 +42,8 @@ AC_CHECK_LIB([dl],[dlopen],[LIBS="$LIBS -ldl"],[AC_MSG_ERROR(Failed to find requ
 PKG_CHECK_MODULES([JACK],[jack >= 0.100],[HAVES="$HAVES -DHAVE_LIBJACK"],[
 AC_MSG_WARN(No JACK library found: audio will be unavailable!)])
 
+AC_CHECK_HEADER([ladspa.h],[],[AC_MSG_ERROR(Failed to find required LADSPA header ladspa.h)])
+
 # This little bit of juggling is to enable DSSI to be included even on
 # systems without ALSA (dssi.h includes an ALSA header, but we can
 # fill in the gap if ALSA itself is not present)
@@ -54,7 +56,6 @@ CXXFLAGS="$CXXFLAGS $DSSI_LOCALFLAGS"
 ])
 AC_CHECK_HEADER([dssi.h],[],[AC_MSG_ERROR(Failed to find required DSSI header dssi.h)])
 
-AC_CHECK_HEADER([ladspa.h],[],[AC_MSG_ERROR(Failed to find required LADSPA header ladspa.h)])
 AC_CHECK_HEADER([X11/SM/SMlib.h],[],[AC_MSG_ERROR(Failed to find required X11 header X11/SM/SMlib.h)])
 
 AC_C_BIGENDIAN([AC_SUBST(ENDIANNESS,"-DBIG_ENDIAN=1")],[AC_SUBST(ENDIANNESS,"-DLITTLE_ENDIAN=1")],[AC_MSG_ERROR(Could not find system endianess)])
