@@ -121,16 +121,16 @@ RemapInstrumentDialog::populateCombo()
             if (md) {
                 if (md->getDirection() == MidiDevice::Play) {
                     m_devices.push_back(*it);
-                    m_fromCombo->addItem(QObject::tr(strtoqstr((*it)->getName())));
-                    m_toCombo->addItem(QObject::tr(strtoqstr((*it)->getName())));
+                    m_fromCombo->addItem(QObject::tr((*it)->getName().c_str()));
+                    m_toCombo->addItem(QObject::tr((*it)->getName().c_str()));
                 }
             } else {
                 SoftSynthDevice *sd =
                     dynamic_cast<SoftSynthDevice *>(*it);
                 if (sd) {
                     m_devices.push_back(*it);
-                    m_fromCombo->addItem(QObject::tr(strtoqstr((*it)->getName())));
-                    m_toCombo->addItem(QObject::tr(strtoqstr((*it)->getName())));
+                    m_fromCombo->addItem(QObject::tr((*it)->getName().c_str()));
+                    m_toCombo->addItem(QObject::tr((*it)->getName().c_str()));
                 }
             }
         }

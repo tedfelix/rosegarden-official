@@ -28,9 +28,8 @@ namespace Rosegarden
 MidiMixerVUMeter::MidiMixerVUMeter(QWidget *parent,
                                    VUMeterType type,
                                    int width,
-                                   int height,
-                                   const char *name):
-        VUMeter(parent, type, false, false, width, height, VUMeter::Vertical, name)
+                                   int height):
+        VUMeter(parent, type, false, false, width, height, VUMeter::Vertical)
 {
     setAlignment(Qt::AlignCenter);
 }

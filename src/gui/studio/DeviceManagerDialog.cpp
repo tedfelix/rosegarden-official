@@ -138,7 +138,7 @@ DeviceManagerDialog::slotClose()
        }
      */
     emit closing();
-    close(0);
+    close();
 }
 
 
@@ -455,7 +455,7 @@ DeviceManagerDialog::updateDevicesList(QTreeWidget * treeWid,
             // "General MIDI Device")
             std::string name = mdev->getName();
             QString nameStr = QObject::tr("%1").arg(strtoqstr(name));
-            nameStr = QObject::tr(nameStr);
+            nameStr = QObject::tr(nameStr.toStdString().c_str());
             twItem =  new QTreeWidgetItem(treeWid, QStringList() << nameStr);
             // set port text
             twItem->setText(1, outPort);

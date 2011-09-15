@@ -53,6 +53,7 @@ NameSetEditor::NameSetEditor(BankEditorDialog* bankEditor,
     m_bankEditor(bankEditor),
     m_mainFrame(new QFrame(this))
 {
+    setObjectName(name);  // probably not needed, but too lazy to research this time
     QVBoxLayout *layout = new QVBoxLayout;
 
     m_mainFrame->setContentsMargins(0, 1, 0, 1);
@@ -89,8 +90,6 @@ NameSetEditor::NameSetEditor(BankEditorDialog* bankEditor,
     layout->addWidget(tabw);
 
     setLayout(layout);
-
-    tabw->setMargin(5);
 
     QWidget *h;
     QHBoxLayout *hLayout;
@@ -197,7 +196,7 @@ NameSetEditor::slotToggleInitialLabel()
 
     if (!ok) {
         std::cerr << "conversion of '"
-        << initial.ascii()
+        << initial.toStdString().c_str()
         << "' to number failed"
         << std::endl;
         return ;

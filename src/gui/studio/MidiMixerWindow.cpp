@@ -112,9 +112,9 @@ MidiMixerWindow::setupTabs()
 
     connect(m_tabWidget, SIGNAL(currentChanged(QWidget *)),
             this, SLOT(slotCurrentTabChanged(QWidget *)));
-    m_tabWidget->setTabPosition(QTabWidget::Bottom);
+    m_tabWidget->setTabPosition(QTabWidget::South);
     setWindowTitle(tr("MIDI Mixer"));
-    setIcon(IconLoader().loadPixmap("window-midimixer"));
+    setWindowIcon(IconLoader().loadPixmap("window-midimixer"));
 
 
     for (it = m_studio->begin(); it != m_studio->end(); ++it) {
@@ -145,9 +145,7 @@ MidiMixerWindow::setupTabs()
 
             // control labels
             for (size_t i = 0; i < controls.size(); ++i) {
-                label = new QLabel(QObject::tr(
-                            QString::fromStdString(
-                                controls[i].getName())), m_tabFrame);
+                label = new QLabel(QObject::tr(controls[i].getName().c_str()), m_tabFrame);
                 mainLayout->addWidget(label, i + 1, 0, Qt::AlignCenter);
             }
 
@@ -267,7 +265,7 @@ MidiMixerWindow::setupTabs()
             }
 
             QString name = QString("%1 (%2)")
-                           .arg(QObject::tr(QString::fromStdString(dev->getName())))
+                           .arg(QObject::tr(dev->getName().c_str()))
                            .arg(deviceCount++);
 
             addTab(m_tabFrame, name);
@@ -304,7 +302,7 @@ MidiMixerWindow::slotFaderLevelChanged(float value)
 
                 // send out to external controllers as well.
                 //!!! really want some notification of whether we have any!
-                int tabIndex = m_tabWidget->currentPageIndex();
+                int tabIndex = m_tabWidget->currentIndex();
                 if (tabIndex < 0)
                     tabIndex = 0;
                 int i = 0;
@@ -378,7 +376,7 @@ MidiMixerWindow::slotControllerChanged(float value)
                        MidiByte(value));
         StudioControl::sendMappedEvent(mE);
 
-        int tabIndex = m_tabWidget->currentPageIndex();
+        int tabIndex = m_tabWidget->currentIndex();
         if (tabIndex < 0)
             tabIndex = 0;
         int k = 0;
@@ -544,7 +542,7 @@ MidiMixerWindow::slotControllerDeviceEventReceived(MappedEvent *e,
     MidiByte controller = e->getData1();
     MidiByte value = e->getData2();
 
-    int tabIndex = m_tabWidget->currentPageIndex();
+    int tabIndex = m_tabWidget->currentIndex();
 
     int i = 0;
 
@@ -607,7 +605,7 @@ MidiMixerWindow::sendControllerRefresh()
     //!!! need to know if we have a current external controller device,
     // as this is expensive
 
-    int tabIndex = m_tabWidget->currentPageIndex();
+    int tabIndex = m_tabWidget->currentIndex();
     RG_DEBUG << "MidiMixerWindow::slotCurrentTabChanged: current is " << tabIndex << endl;
 
     if (tabIndex < 0)

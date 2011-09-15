@@ -36,8 +36,7 @@ public:
     MidiMixerVUMeter(QWidget *parent = 0,
                      VUMeterType type = Plain,
                      int width = 0,
-                     int height = 0,
-                     const char *name = 0);
+                     int height = 0);
 
 protected:
      virtual void meterStart();

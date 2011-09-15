@@ -237,7 +237,7 @@ AudioMixerWindow::populate()
     QGridLayout *mainLayout = new QGridLayout(m_mainBox);
 
     setWindowTitle(tr("Audio Mixer"));
-    setIcon(IconLoader().loadPixmap("window-audiomixer"));
+    setWindowIcon(IconLoader().loadPixmap("window-audiomixer"));
 
     int count = 1;
     int col = 0;
@@ -303,7 +303,7 @@ AudioMixerWindow::populate()
         rec.m_meter->setToolTip(tr("Audio level"));
 
         rec.m_stereoButton = new QPushButton(m_mainBox);
-        rec.m_stereoButton->setPixmap(m_monoPixmap);
+        rec.m_stereoButton->setIcon(m_monoPixmap);
         rec.m_stereoButton->setFixedSize(20, 20);
         rec.m_stereoButton->setFlat(true);
         rec.m_stereoness = false;
@@ -311,7 +311,7 @@ AudioMixerWindow::populate()
 
         rec.m_recordButton = new QPushButton(m_mainBox);
         rec.m_recordButton->setText("R");
-        rec.m_recordButton->setToggleButton(true);
+        rec.m_recordButton->setCheckable(true);
         rec.m_recordButton->setFixedWidth(rec.m_stereoButton->width());
         rec.m_recordButton->setFixedHeight(rec.m_stereoButton->height());
         rec.m_recordButton->setFlat(true);
@@ -349,16 +349,24 @@ AudioMixerWindow::populate()
         connect (aliasButton, SIGNAL(changed()), this, SLOT(slotRepopulate()));
         mainLayout->addWidget(aliasButton, 0, col, 1, 2, Qt::AlignLeft);
 
+        //NB. The objectName property is used to address widgets in a nice piece
+        // of old school Qt2 style faffery, so we DO need to set these.
         if ((*i)->getType() == Instrument::Audio) {
-            if (alias.size()) idString = strtoqstr(alias);
-            else idString = tr("Audio %1").arg((*i)->getId() -
-                                            AudioInstrumentBase + 1);
-            idLabel = new QLabel(idString, m_mainBox, "audioIdLabel");
+            if (alias.size()) {
+                idString = strtoqstr(alias);
+            } else {
+                idString = tr("Audio %1").arg((*i)->getId() - AudioInstrumentBase + 1);
+                idLabel = new QLabel(idString, m_mainBox);
+                idLabel->setObjectName("audioIdLabel");
+            }
         } else {
-            if (alias.size()) idString = strtoqstr(alias);
-            else idString = tr("Synth %1").arg((*i)->getId() -
-                                            SoftSynthInstrumentBase + 1);
-            idLabel = new QLabel(idString, m_mainBox, "synthIdLabel");
+            if (alias.size()) {
+                idString = strtoqstr(alias);
+            } else {
+                idString = tr("Synth %1").arg((*i)->getId() - SoftSynthInstrumentBase + 1);
+                idLabel = new QLabel(idString, m_mainBox);
+                idLabel->setObjectName("synthIdLabel");
+            }
         }
         idLabel->setFont(boldFont);
         idLabel->setToolTip(tr("Click the button above to rename this instrument"));
@@ -457,8 +465,10 @@ AudioMixerWindow::populate()
 
         rec.m_pluginBox->setLayout(pluginBoxLayout);
 
-        QLabel *idLabel = new QLabel(tr("Sub %1").arg(count), m_mainBox, "subMaster");
+        QLabel *idLabel = new QLabel(tr("Sub %1").arg(count), m_mainBox);
         idLabel->setFont(boldFont);
+        //NB. objectName matters here:
+        idLabel->setObjectName("subMaster");
 
         mainLayout->addWidget(idLabel, 1, col, 1, 2, Qt::AlignLeft);
 
@@ -591,9 +601,11 @@ AudioMixerWindow::slotPluginSelected(InstrumentId id,
             rec.m_plugins[index]->setText(tr("<none>"));
             rec.m_plugins[index]->setToolTip(tr("<no plugin>"));
 
-            rec.m_plugins[index]->setPaletteBackgroundColor
-            (qApp->palette().
-             color(QPalette::Active, QColorGroup::Button));
+            //QT3: color hackery simply ignored here.  
+            //
+//            rec.m_plugins[index]->setPaletteBackgroundColor
+//            (qApp->palette().
+//             color(QPalette::Active, QColorGroup::Button));
 
         } else {
 
@@ -646,17 +658,22 @@ AudioMixerWindow::slotPluginSelected(InstrumentId id,
             rec.m_plugins[index]->setText(tr("<none>"));
             rec.m_plugins[index]->setToolTip(tr("<no plugin>"));
 
-            rec.m_plugins[index]->setPaletteBackgroundColor
-            (qApp->palette().
-             color(QPalette::Active, QColorGroup::Button));
+            //QT3: color hackery just plowed through and glossed over all
+            // through here...  It's all too complicated to sort out without
+            // being able to run and look at things, so this will just have to
+            // be something where we take a look back and figure it out later.
+
+//            rec.m_plugins[index]->setPaletteBackgroundColor
+//            (qApp->palette().
+//             color(QPalette::Active, QColorGroup::Button));
 
         } else {
 
             AudioPlugin *pluginClass
             = m_document->getPluginManager()->getPlugin(plugin);
 
-            QColor pluginBgColour =
-                qApp->palette().color(QPalette::Active, QColorGroup::Light);
+            QColor pluginBgColour = Qt::yellow; // QT3: junk color replaces following:
+//                qApp->palette().color(QPalette::Active, QColorGroup::Light);
 
             if (pluginClass) {
                 rec.m_plugins[index]->
@@ -667,8 +684,8 @@ AudioMixerWindow::slotPluginSelected(InstrumentId id,
             }
 
 
-            rec.m_plugins[index]->setPaletteForegroundColor(QColor(Qt::white));
-            rec.m_plugins[index]->setPaletteBackgroundColor(pluginBgColour);
+//            rec.m_plugins[index]->setPaletteForegroundColor(QColor(Qt::white));
+//            rec.m_plugins[index]->setPaletteBackgroundColor(pluginBgColour);
         }
     }
 }
@@ -753,9 +770,9 @@ AudioMixerWindow::updateStereoButton(int id)
         rec.m_stereoness = stereo;
 
         if (stereo)
-            rec.m_stereoButton->setPixmap(m_stereoPixmap);
+            rec.m_stereoButton->setIcon(m_stereoPixmap);
         else
-            rec.m_stereoButton->setPixmap(m_monoPixmap);
+            rec.m_stereoButton->setIcon(m_monoPixmap);
     }
 }
 
@@ -796,8 +813,8 @@ AudioMixerWindow::updatePluginButtons(int id)
 
             bool used = false;
             bool bypass = false;
-            QColor pluginBgColour =
-                qApp->palette().color(QPalette::Active, QColorGroup::Light);
+            QColor pluginBgColour = Qt::green;
+//                qApp->palette().color(QPalette::Active, QColorGroup::Light);
 
             rec->m_plugins[i]->show();
 
@@ -1612,9 +1629,11 @@ AudioMixerWindow::slotToggleUnassignedFaders()
 void
 AudioMixerWindow::toggleNamedWidgets(bool show, const char* const name)
 {
-    QLayoutIterator it = m_mainBox->layout()->iterator();
+    //NB. Completely rewritten to get around the disappearance of
+    // QLayoutIterator.
+    int i = 0;
     QLayoutItem *child;
-    while ((child = it.current()) != 0) {
+    while ((child = layout()->itemAt(i)) != 0) {
         QWidget *widget = child->widget();
         if (widget &&
             widget->objectName() == QString::fromUtf8(name)) {
@@ -1624,9 +1643,8 @@ AudioMixerWindow::toggleNamedWidgets(bool show, const char* const name)
                 widget->hide();
         }
 
-        ++it;
+        ++i;
     }
-
 }
 
 void

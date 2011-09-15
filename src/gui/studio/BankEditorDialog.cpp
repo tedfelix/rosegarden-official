@@ -76,7 +76,7 @@ namespace Rosegarden
 BankEditorDialog::BankEditorDialog(QWidget *parent,
                                    RosegardenDocument *doc,
                                    DeviceId defaultDevice):
-        QMainWindow(parent, "bankeditordialog"),
+        QMainWindow(parent),
         m_studio(&doc->getStudio()),
         m_doc(doc),
         m_copyBank(Device::NO_DEVICE, -1),
@@ -1811,11 +1811,11 @@ BankEditorDialog::slotExport()
         if (errMsg != "") {
             QMessageBox::critical
                 (0, tr("Rosegarden"), tr(QString("Could not export studio to file at %1\n(%2)")
-                           .arg(name).arg(errMsg)));
+                           .arg(name).arg(errMsg).toStdString().c_str()));
         } else {
             QMessageBox::critical
                 (0, tr("Rosegarden"), tr(QString("Could not export studio to file at %1")
-                           .arg(name)));
+                           .arg(name).toStdString().c_str()));
         }
     }
 }

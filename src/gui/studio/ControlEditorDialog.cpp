@@ -72,7 +72,7 @@ ControlEditorDialog::ControlEditorDialog
             RosegardenDocument *doc,
             DeviceId device
        ):
-        QMainWindow(parent, "controleditordialog"),
+        QMainWindow(parent),
         m_studio(&doc->getStudio()),
         m_doc(doc),
         m_device(device),
@@ -128,7 +128,11 @@ ControlEditorDialog::ControlEditorDialog
     btnBox->setSizePolicy(
         QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed));
 
-    QHBoxLayout* layout = new QHBoxLayout(btnBox, 4, 10);
+    // QT3: I don't think it's necessary to replace the following ",4, 10" with
+    // anything to explicitly set the dimensions of the HBox, but there might be
+    // some compatibility trickery I'm not remembering, etc.  Leaving as a
+    // reminder in case the layout turns out broken:
+    QHBoxLayout* layout = new QHBoxLayout(btnBox /*, 4, 10 */);
 
     m_addButton = new QPushButton(tr("Add"), btnBox);
     m_deleteButton = new QPushButton(tr("Delete"), btnBox);

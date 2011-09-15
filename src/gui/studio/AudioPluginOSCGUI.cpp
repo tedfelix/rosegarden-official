@@ -95,7 +95,7 @@ AudioPluginOSCGUI::getGUIFilePath(QString identifier)
     }
 
     QDir dir(soInfo.dir());
-    QString fileBase(soInfo.baseName(TRUE));
+    QString fileBase(soInfo.completeBaseName());
 
     if (!dir.cd(fileBase)) {
         RG_DEBUG << "AudioPluginOSCGUI::AudioPluginOSCGUI: No GUI subdir for plugin .so " << soName << endl;

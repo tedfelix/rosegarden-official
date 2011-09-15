@@ -515,7 +515,7 @@ MidiProgramsEditor::slotKeyMapButtonPressed()
     connect(menu, SIGNAL(triggered(QAction *)),
             this, SLOT(slotKeyMapMenuItemSelected(QAction *)));
 
-    int itemHeight = menu->itemHeight(0) + 2;
+    int itemHeight = menu->actionGeometry(actions().value(0)).height() + 2;
     QPoint pos = QCursor::pos();
 
     pos.rx() -= 10;
